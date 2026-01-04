@@ -35191,6 +35191,1005 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 96: UK Electrical Safety Standards Guide
+  {
+    slug: 'uk-electrical-safety-guide',
+    title: 'UK Electrical Safety Standards - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to electrical safety requirements for UK landlords. EICR obligations, testing schedules, and compliance requirements explained.',
+    metaDescription: 'UK electrical safety guide for landlords 2026. EICR requirements, testing obligations, and compliance tips for rental properties.',
+    date: '2026-01-04',
+    readTime: '12 min read',
+    wordCount: 1480,
+    category: 'Compliance',
+    tags: ['electrical safety', 'EICR', 'landlord compliance', 'electrical testing', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Compliance Team',
+      role: 'Safety Compliance Specialists',
+    },
+    heroImage: '/images/blog/placeholder-electrical-safety.svg',
+    heroImageAlt: 'UK Electrical Safety Standards Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'electrical safety landlord UK',
+    secondaryKeywords: ['EICR landlord', 'electrical inspection', 'electrical certificate rental', 'landlord electrical obligations'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'what-is-eicr', title: 'What is an EICR?', level: 2 },
+      { id: 'when-needed', title: 'When EICR is Needed', level: 2 },
+      { id: 'what-inspected', title: 'What Gets Inspected', level: 2 },
+      { id: 'codes-classifications', title: 'Codes and Classifications', level: 2 },
+      { id: 'electrical-faq', title: 'Electrical Safety FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-smoke-co-alarm-regulations-guide', 'uk-gas-safety-guide', 'uk-property-maintenance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Electrical safety is a critical landlord responsibility. The Electrical Safety
+          Standards in the Private Rented Sector (England) Regulations 2020 introduced
+          mandatory testing requirements. This guide explains your obligations in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-electrical-safety.svg"
+          alt="Electrical safety inspection for rental properties"
+          caption="Regular electrical inspections keep tenants safe and ensure compliance"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          Requirements vary by UK nation:
+        </p>
+
+        <h3>England</h3>
+
+        <ul>
+          <li>EICR required at least every 5 years</li>
+          <li>Must have satisfactory report before new tenancy</li>
+          <li>Copy to tenant within 28 days of inspection</li>
+          <li>Copy to local authority on request within 7 days</li>
+          <li>Remedial work must be completed within 28 days</li>
+        </ul>
+
+        <h3>Scotland</h3>
+
+        <ul>
+          <li>EICR required at least every 5 years</li>
+          <li>Part of Repairing Standard requirements</li>
+          <li>Must be provided to tenant before tenancy starts</li>
+        </ul>
+
+        <h3>Wales</h3>
+
+        <ul>
+          <li>Electrical installations must be safe (Fitness for Human Habitation)</li>
+          <li>EICR recommended every 5 years</li>
+          <li>Mandatory EICR requirements expected to align with England</li>
+        </ul>
+
+        <h3>Northern Ireland</h3>
+
+        <ul>
+          <li>No mandatory EICR requirement currently</li>
+          <li>Landlords must ensure electrical safety</li>
+          <li>EICR strongly recommended as best practice</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Penalties</h4>
+          <p className="text-red-800">
+            In England, failing to comply can result in fines up to £30,000. Local
+            authorities can also arrange inspections themselves and charge the cost
+            to the landlord.
+          </p>
+        </div>
+
+        <h2 id="what-is-eicr" className="scroll-mt-24">What is an EICR?</h2>
+
+        <p>
+          An Electrical Installation Condition Report (EICR) is a formal document produced
+          after inspection and testing of a property&apos;s electrical installation.
+        </p>
+
+        <h3>Who Can Issue an EICR?</h3>
+
+        <ul>
+          <li>Qualified and competent electrician</li>
+          <li>Registered with a government-approved scheme</li>
+          <li>Common schemes: NICEIC, NAPIT, ELECSA, BSI</li>
+          <li>Check registration before booking</li>
+        </ul>
+
+        <h3>What the Report Shows</h3>
+
+        <ul>
+          <li>Overall assessment (satisfactory or unsatisfactory)</li>
+          <li>Details of any defects found</li>
+          <li>Classification codes for each issue</li>
+          <li>Recommended timeframes for remedial work</li>
+          <li>Date of next inspection</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-eicr-report.svg"
+          alt="EICR electrical inspection report"
+          caption="The EICR documents the condition of your electrical installation"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-needed" className="scroll-mt-24">When EICR is Needed</h2>
+
+        <p>
+          Key timings for electrical inspections:
+        </p>
+
+        <h3>Regular Inspections</h3>
+
+        <ul>
+          <li>Every 5 years (or more frequently if recommended)</li>
+          <li>At change of occupancy if approaching due date</li>
+          <li>Before the previous report expires</li>
+        </ul>
+
+        <h3>Additional Inspections</h3>
+
+        <ul>
+          <li>After significant electrical work</li>
+          <li>If concerns about installation safety</li>
+          <li>After flood or fire damage</li>
+          <li>On purchase of rental property</li>
+        </ul>
+
+        <h3>Before New Tenancy</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Scenario</th>
+                <th className="border p-3 text-left font-semibold">EICR Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">New tenancy, no existing EICR</td>
+                <td className="border p-3">Must obtain before tenant moves in</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">New tenancy, valid EICR exists</td>
+                <td className="border p-3">Provide copy to new tenant</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Renewal, EICR within 5 years</td>
+                <td className="border p-3">No new inspection needed</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Periodic tenancy</td>
+                <td className="border p-3">Maintain valid EICR throughout</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="what-inspected" className="scroll-mt-24">What Gets Inspected</h2>
+
+        <p>
+          The EICR inspection covers the fixed electrical installation:
+        </p>
+
+        <h3>Included</h3>
+
+        <ul>
+          <li>Consumer unit (fuse box)</li>
+          <li>Wiring and cables</li>
+          <li>Sockets and switches</li>
+          <li>Light fittings</li>
+          <li>Electric shower installations</li>
+          <li>Outdoor sockets and lighting</li>
+          <li>Smoke alarm wiring</li>
+        </ul>
+
+        <h3>Not Included</h3>
+
+        <ul>
+          <li>Portable appliances (these need separate PAT testing)</li>
+          <li>Appliances plugged into sockets</li>
+          <li>Tenant&apos;s own equipment</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Furnished Properties</h4>
+          <p className="text-blue-800">
+            If you provide electrical appliances (washing machine, fridge, etc.),
+            consider Portable Appliance Testing (PAT) to ensure they&apos;re safe.
+            This is separate from the EICR requirement.
+          </p>
+        </div>
+
+        <h2 id="codes-classifications" className="scroll-mt-24">Codes and Classifications</h2>
+
+        <p>
+          EICR reports use classification codes to indicate severity:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Code</th>
+                <th className="border p-3 text-left font-semibold">Meaning</th>
+                <th className="border p-3 text-left font-semibold">Action Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">C1</td>
+                <td className="border p-3">Danger present - risk of injury</td>
+                <td className="border p-3">Immediate action required</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">C2</td>
+                <td className="border p-3">Potentially dangerous</td>
+                <td className="border p-3">Urgent remedial action</td>
+              </tr>
+              <tr>
+                <td className="border p-3">C3</td>
+                <td className="border p-3">Improvement recommended</td>
+                <td className="border p-3">Advisory, not mandatory</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">FI</td>
+                <td className="border p-3">Further investigation needed</td>
+                <td className="border p-3">Investigate and reclassify</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>What Makes It Unsatisfactory?</h3>
+
+        <p>
+          An EICR is marked unsatisfactory if there are any C1, C2, or FI codes. You must:
+        </p>
+
+        <ul>
+          <li>Complete remedial work within 28 days (or as specified)</li>
+          <li>Obtain written confirmation work is complete</li>
+          <li>Supply confirmation to tenant within 28 days</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Electrical Safety Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides EICR tracking templates, electrician checklists,
+            and compliance documentation for electrical safety management.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Electrical Resources →
+          </Link>
+        </div>
+
+        <h2 id="electrical-faq" className="scroll-mt-24">Electrical Safety FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How much does an EICR cost?</h3>
+            <p className="text-gray-600">
+              Typical costs range from £100-250 depending on property size and location.
+              Larger properties with more circuits cost more. Always get quotes from
+              registered electricians.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant won&apos;t allow access?</h3>
+            <p className="text-gray-600">
+              Include access provisions in your tenancy agreement. Give reasonable notice.
+              If access is repeatedly refused, document your attempts. The law provides
+              landlords with a defence if they can show they took reasonable steps.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I do electrical work myself?</h3>
+            <p className="text-gray-600">
+              Minor work like changing sockets is permitted, but notifiable work must
+              be done by a registered electrician or certified by Building Control.
+              For rental properties, using registered electricians is always safest.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is the EICR tax deductible?</h3>
+            <p className="text-gray-600">
+              Yes, EICR inspections and any resulting repairs are allowable expenses
+              for income tax purposes. Keep receipts and invoices for your records.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 97: UK Furnished vs Unfurnished Letting Guide
+  {
+    slug: 'uk-furnished-unfurnished-letting-guide',
+    title: 'UK Furnished vs Unfurnished Letting - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide comparing furnished and unfurnished rentals for UK landlords. Pros, cons, tax implications, and choosing the right approach.',
+    metaDescription: 'UK furnished vs unfurnished letting guide 2026. Compare options, understand tax implications, and choose the right approach for your rental property.',
+    date: '2026-01-04',
+    readTime: '11 min read',
+    wordCount: 1420,
+    category: 'Property Management',
+    tags: ['furnished letting', 'unfurnished rental', 'rental options', 'landlord decisions', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-furnished.svg',
+    heroImageAlt: 'UK Furnished vs Unfurnished Letting Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'furnished vs unfurnished rental UK',
+    secondaryKeywords: ['furnished letting', 'unfurnished property', 'landlord furniture', 'rental furnishing'],
+    tableOfContents: [
+      { id: 'definitions', title: 'What Counts as Furnished?', level: 2 },
+      { id: 'pros-cons', title: 'Pros and Cons', level: 2 },
+      { id: 'rent-differences', title: 'Rent Differences', level: 2 },
+      { id: 'tenant-preferences', title: 'Tenant Preferences', level: 2 },
+      { id: 'tax-implications', title: 'Tax Implications', level: 2 },
+      { id: 'furnished-faq', title: 'Furnished Letting FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-inventory-guide', 'uk-tenant-move-in-checklist-guide', 'uk-property-marketing-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Choosing between furnished and unfurnished lettings affects rent levels, tenant
+          type, maintenance burden, and tax treatment. This guide helps UK landlords
+          make the right decision for their property and circumstances in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-furnished.svg"
+          alt="Furnished and unfurnished rental property comparison"
+          caption="The right furnishing choice depends on property, location, and target tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="definitions" className="scroll-mt-24">What Counts as Furnished?</h2>
+
+        <p>
+          There are three main categories:
+        </p>
+
+        <h3>Unfurnished</h3>
+
+        <p>
+          Minimum provision only:
+        </p>
+
+        <ul>
+          <li>Basic fixtures (kitchen units, bathroom suite)</li>
+          <li>Flooring (carpet or hard floor)</li>
+          <li>Light fittings</li>
+          <li>Curtain poles/blinds</li>
+          <li>Built-in wardrobes (if present)</li>
+        </ul>
+
+        <h3>Part-Furnished</h3>
+
+        <p>
+          Includes major items only:
+        </p>
+
+        <ul>
+          <li>White goods (washing machine, fridge, oven)</li>
+          <li>Sometimes includes beds</li>
+          <li>No soft furnishings</li>
+        </ul>
+
+        <h3>Fully Furnished</h3>
+
+        <p>
+          Complete living setup:
+        </p>
+
+        <ul>
+          <li>All white goods</li>
+          <li>Beds with mattresses</li>
+          <li>Sofas and chairs</li>
+          <li>Dining table and chairs</li>
+          <li>Wardrobes and storage</li>
+          <li>Curtains and soft furnishings</li>
+          <li>Sometimes kitchenware and linens</li>
+        </ul>
+
+        <h2 id="pros-cons" className="scroll-mt-24">Pros and Cons</h2>
+
+        <h3>Furnished Properties</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Pros</th>
+                <th className="border p-3 text-left font-semibold">Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Higher rent achievable</td>
+                <td className="border p-3">Higher initial investment</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Attracts professionals and students</td>
+                <td className="border p-3">Furniture maintenance/replacement</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Faster lettings in some markets</td>
+                <td className="border p-3">Shorter average tenancies</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Control over property appearance</td>
+                <td className="border p-3">Wear and tear on furniture</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Unfurnished Properties</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Pros</th>
+                <th className="border p-3 text-left font-semibold">Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Lower upfront costs</td>
+                <td className="border p-3">Lower rent potential</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Less maintenance responsibility</td>
+                <td className="border p-3">Smaller tenant pool</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Longer tenancies typical</td>
+                <td className="border p-3">Tenants may not care for property</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Attracts families settling long-term</td>
+                <td className="border p-3">Empty property can be harder to show</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="rent-differences" className="scroll-mt-24">Rent Differences</h2>
+
+        <p>
+          Furnished properties typically command 5-15% higher rent:
+        </p>
+
+        <h3>Premium Factors</h3>
+
+        <ul>
+          <li><strong>Location</strong> - higher premium in city centres</li>
+          <li><strong>Quality</strong> - modern furniture commands more</li>
+          <li><strong>Completeness</strong> - fully equipped attracts most</li>
+          <li><strong>Tenant type</strong> - professionals pay more for convenience</li>
+        </ul>
+
+        <h3>Calculating Value</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <p className="font-semibold mb-2">Example calculation:</p>
+          <ul className="text-gray-600 mt-2">
+            <li>Unfurnished rent: £1,000/month</li>
+            <li>Furnished premium: £100/month (+10%)</li>
+            <li>Annual extra income: £1,200</li>
+            <li>Furniture cost: £3,000</li>
+            <li>Payback period: 2.5 years</li>
+          </ul>
+        </div>
+
+        <p>
+          Consider furniture lifespan (5-10 years) versus payback period when deciding.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rental-comparison.svg"
+          alt="Comparing furnished and unfurnished rental returns"
+          caption="Calculate whether the extra rent justifies furniture investment"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="tenant-preferences" className="scroll-mt-24">Tenant Preferences</h2>
+
+        <p>
+          Different tenant types have different preferences:
+        </p>
+
+        <h3>Prefer Furnished</h3>
+
+        <ul>
+          <li>Young professionals</li>
+          <li>Students</li>
+          <li>Relocating workers</li>
+          <li>Corporate tenants</li>
+          <li>International arrivals</li>
+          <li>Short-term tenants</li>
+        </ul>
+
+        <h3>Prefer Unfurnished</h3>
+
+        <ul>
+          <li>Families with children</li>
+          <li>Long-term renters</li>
+          <li>People with existing furniture</li>
+          <li>Those wanting to personalise</li>
+          <li>Pet owners (easier to manage damage)</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Market Research</h4>
+          <p className="text-blue-800">
+            Check what similar properties in your area offer. In student areas,
+            furnished is standard. In family suburbs, unfurnished may be normal.
+            Match your offering to local demand.
+          </p>
+        </div>
+
+        <h2 id="tax-implications" className="scroll-mt-24">Tax Implications</h2>
+
+        <p>
+          The tax treatment differs slightly:
+        </p>
+
+        <h3>Replacement Furniture Relief</h3>
+
+        <p>
+          For furnished lettings, you can claim relief when replacing furniture:
+        </p>
+
+        <ul>
+          <li>Claim cost of replacement (not improvement)</li>
+          <li>Deduct from rental income for tax</li>
+          <li>Applies to domestic items (furniture, furnishings, appliances)</li>
+          <li>Cannot claim for initial furniture purchase</li>
+        </ul>
+
+        <h3>Capital Allowances</h3>
+
+        <p>
+          Initial furniture costs cannot be deducted directly but:
+        </p>
+
+        <ul>
+          <li>Considered when calculating capital gains</li>
+          <li>Added to property cost base</li>
+          <li>Reduces CGT when you sell</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Furnishing Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides furnished property checklists, inventory templates,
+            and furnishing guides for landlords setting up rental properties.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Furnishing Resources →
+          </Link>
+        </div>
+
+        <h2 id="furnished-faq" className="scroll-mt-24">Furnished Letting FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who is responsible for furniture repairs?</h3>
+            <p className="text-gray-600">
+              Landlords are responsible for maintaining furniture they provide in safe,
+              usable condition. Normal wear and tear is your responsibility. Damage
+              beyond normal wear can be deducted from deposit with evidence.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can tenants remove or change furniture?</h3>
+            <p className="text-gray-600">
+              Include terms in your tenancy agreement. Generally, tenants should not
+              remove or dispose of provided furniture. They may store it with your
+              permission, but must return items at the end of tenancy.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What furniture quality should I provide?</h3>
+            <p className="text-gray-600">
+              Match quality to your target market and rent level. Durable, neutral
+              furniture works best. Avoid very cheap items that won&apos;t last, or
+              expensive items you&apos;ll worry about. Mid-range, practical choices usually work best.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do furnished properties need fire safety labels?</h3>
+            <p className="text-gray-600">
+              Yes. Upholstered furniture in rental properties must comply with fire
+              safety regulations and display appropriate labels. This includes sofas,
+              mattresses, and padded chairs. Check for permanent labels.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 98: UK HMO Management Guide
+  {
+    slug: 'uk-hmo-management-guide',
+    title: 'UK HMO Management - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to managing Houses in Multiple Occupation in the UK. Licensing, safety requirements, and operational best practices for HMO landlords.',
+    metaDescription: 'UK HMO management guide 2026. Licensing requirements, safety obligations, and best practices for managing Houses in Multiple Occupation.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1580,
+    category: 'Property Management',
+    tags: ['HMO', 'house share', 'HMO licensing', 'HMO management', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-hmo.svg',
+    heroImageAlt: 'UK HMO Management Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'HMO management UK',
+    secondaryKeywords: ['HMO licensing', 'house in multiple occupation', 'HMO landlord', 'HMO regulations'],
+    tableOfContents: [
+      { id: 'what-is-hmo', title: 'What is an HMO?', level: 2 },
+      { id: 'licensing-requirements', title: 'Licensing Requirements', level: 2 },
+      { id: 'safety-standards', title: 'Safety Standards', level: 2 },
+      { id: 'management-regulations', title: 'Management Regulations', level: 2 },
+      { id: 'operational-tips', title: 'Operational Tips', level: 2 },
+      { id: 'hmo-faq', title: 'HMO FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-licensing-guide', 'uk-smoke-co-alarm-regulations-guide', 'uk-electrical-safety-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Houses in Multiple Occupation (HMOs) offer higher yields but come with additional
+          regulations and management complexity. This guide covers everything UK HMO
+          landlords need to know about compliance and operations in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo.svg"
+          alt="Managing Houses in Multiple Occupation"
+          caption="HMOs require careful management to meet regulatory requirements"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="what-is-hmo" className="scroll-mt-24">What is an HMO?</h2>
+
+        <p>
+          A property is an HMO if:
+        </p>
+
+        <ul>
+          <li>3 or more tenants live there forming 2 or more households</li>
+          <li>Tenants share facilities (kitchen, bathroom, toilet)</li>
+          <li>At least one tenant pays rent</li>
+        </ul>
+
+        <h3>Common HMO Types</h3>
+
+        <ul>
+          <li>Student house shares</li>
+          <li>Professional house shares</li>
+          <li>Bedsits with shared facilities</li>
+          <li>Some hostels and B&Bs</li>
+        </ul>
+
+        <h3>Large vs Small HMOs</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Type</th>
+                <th className="border p-3 text-left font-semibold">Definition</th>
+                <th className="border p-3 text-left font-semibold">Mandatory Licence?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Large HMO</td>
+                <td className="border p-3">5+ occupiers, 2+ households, 3+ storeys</td>
+                <td className="border p-3">Yes, across UK</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Small HMO</td>
+                <td className="border p-3">3-4 occupiers or 2 storeys</td>
+                <td className="border p-3">Depends on local schemes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Definition Changes</h4>
+          <p className="text-blue-800">
+            Since 2018, mandatory licensing applies to HMOs with 5+ occupiers from 2+
+            households, regardless of storeys. Previously, it required 3+ storeys.
+            Check current requirements with your local council.
+          </p>
+        </div>
+
+        <h2 id="licensing-requirements" className="scroll-mt-24">Licensing Requirements</h2>
+
+        <p>
+          HMO licensing varies by location and property type:
+        </p>
+
+        <h3>Mandatory Licensing (England)</h3>
+
+        <p>
+          Required for properties with:
+        </p>
+
+        <ul>
+          <li>5 or more occupiers</li>
+          <li>Forming 2 or more households</li>
+          <li>Sharing facilities</li>
+          <li>No storey requirement (changed 2018)</li>
+        </ul>
+
+        <h3>Additional Licensing</h3>
+
+        <p>
+          Many councils have additional schemes covering:
+        </p>
+
+        <ul>
+          <li>Smaller HMOs (3-4 occupiers)</li>
+          <li>All HMOs in certain areas</li>
+          <li>Specific property types</li>
+        </ul>
+
+        <h3>Application Process</h3>
+
+        <ol>
+          <li>Check if licence required with local council</li>
+          <li>Complete application form</li>
+          <li>Pay application fee (typically £500-1,500)</li>
+          <li>Property inspection arranged</li>
+          <li>Fit and proper person test</li>
+          <li>Licence issued (usually 5 years)</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-licence.svg"
+          alt="HMO licensing process"
+          caption="HMO licensing ensures properties meet required standards"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="safety-standards" className="scroll-mt-24">Safety Standards</h2>
+
+        <p>
+          HMOs have enhanced safety requirements:
+        </p>
+
+        <h3>Fire Safety</h3>
+
+        <ul>
+          <li>Interlinked smoke alarms on each floor</li>
+          <li>Fire doors to kitchens and bedrooms</li>
+          <li>Emergency lighting in some cases</li>
+          <li>Fire blanket in kitchen</li>
+          <li>Fire risk assessment required</li>
+          <li>Clear escape routes maintained</li>
+        </ul>
+
+        <h3>Minimum Room Sizes</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Room Type</th>
+                <th className="border p-3 text-left font-semibold">Minimum Size</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Single bedroom (1 person over 10)</td>
+                <td className="border p-3">6.51 sq metres</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Double bedroom (2 persons over 10)</td>
+                <td className="border p-3">10.22 sq metres</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Child under 10</td>
+                <td className="border p-3">4.64 sq metres</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Kitchen Facilities</h3>
+
+        <ul>
+          <li>Kitchen sink with hot and cold water</li>
+          <li>Cooker (hob and oven)</li>
+          <li>Adequate worktop space</li>
+          <li>Food storage (cupboards, fridge)</li>
+          <li>Requirements scale with occupier numbers</li>
+        </ul>
+
+        <h3>Bathroom Facilities</h3>
+
+        <ul>
+          <li>Minimum 1 bathroom per 5 occupiers</li>
+          <li>Some councils require 1:4 ratio</li>
+          <li>Separate toilet may be required</li>
+          <li>Hot and cold running water</li>
+        </ul>
+
+        <h2 id="management-regulations" className="scroll-mt-24">Management Regulations</h2>
+
+        <p>
+          The Management of Houses in Multiple Occupation Regulations set requirements:
+        </p>
+
+        <h3>Manager Duties</h3>
+
+        <ul>
+          <li>Display name and contact details in property</li>
+          <li>Maintain common areas in good repair</li>
+          <li>Keep escape routes clear</li>
+          <li>Maintain fire safety equipment</li>
+          <li>Ensure adequate waste facilities</li>
+          <li>Supply water, gas, electricity properly</li>
+        </ul>
+
+        <h3>Maintenance Requirements</h3>
+
+        <ul>
+          <li>Regular inspections of property condition</li>
+          <li>Prompt repair of defects</li>
+          <li>Annual gas safety checks</li>
+          <li>Regular electrical checks (5-yearly EICR)</li>
+          <li>Pest control if needed</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Penalties</h4>
+          <p className="text-amber-800">
+            Operating an unlicensed HMO can result in unlimited fines, rent repayment
+            orders covering up to 12 months&apos; rent, and criminal prosecution.
+            Council can also issue improvement notices.
+          </p>
+        </div>
+
+        <h2 id="operational-tips" className="scroll-mt-24">Operational Tips</h2>
+
+        <p>
+          Successful HMO management requires attention to detail:
+        </p>
+
+        <h3>Tenant Selection</h3>
+
+        <ul>
+          <li>Reference all tenants thoroughly</li>
+          <li>Consider compatibility in house shares</li>
+          <li>Clear house rules from the start</li>
+          <li>Individual tenancy agreements for each room</li>
+        </ul>
+
+        <h3>Cleaning and Maintenance</h3>
+
+        <ul>
+          <li>Regular professional cleaning of common areas</li>
+          <li>Clear cleaning rotas for tenants</li>
+          <li>Responsive maintenance for shared facilities</li>
+          <li>Regular property inspections</li>
+        </ul>
+
+        <h3>Managing Disputes</h3>
+
+        <ul>
+          <li>Clear house rules about noise, guests, cleaning</li>
+          <li>Act quickly on complaints</li>
+          <li>Document issues and resolutions</li>
+          <li>Be prepared to evict problematic tenants</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">HMO Management Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides HMO compliance checklists, fire safety guides,
+            and room tenancy agreement templates for professional HMO management.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View HMO Resources →
+          </Link>
+        </div>
+
+        <h2 id="hmo-faq" className="scroll-mt-24">HMO FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is a couple counted as one or two occupiers?</h3>
+            <p className="text-gray-600">
+              A couple sharing a bedroom are usually counted as one household but two
+              occupiers. The room size requirements would apply for two people, but
+              they only count as one household for the household count.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission for an HMO?</h3>
+            <p className="text-gray-600">
+              Small HMOs (3-6 people) may be permitted development. Large HMOs (7+)
+              typically need planning permission. Many councils have Article 4 directions
+              requiring permission for all HMOs. Check with your local planning authority.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I convert a house to an HMO?</h3>
+            <p className="text-gray-600">
+              You may need planning permission, building regulations approval for
+              alterations, and an HMO licence. Consider costs of fire doors, additional
+              bathrooms, and kitchen upgrades. Some areas restrict new HMOs.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What mortgage do I need for an HMO?</h3>
+            <p className="text-gray-600">
+              You need an HMO-specific buy-to-let mortgage. Not all lenders offer these,
+              and they often have higher rates than standard BTL mortgages. Lenders
+              will want to see the licence or licence application.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-success.svg"
+          alt="Successful HMO management"
+          caption="Well-managed HMOs provide higher yields with proper compliance"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
