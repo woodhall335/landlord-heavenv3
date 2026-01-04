@@ -15,7 +15,7 @@ import {
   BadgePoundSterling,
   FileCheck
 } from "lucide-react";
-import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
@@ -68,6 +68,11 @@ export default function NoticeOnlyPage() {
         url: "https://landlordheaven.co.uk/products/notice-only"
       })} />
       <StructuredData data={faqPageSchema(faqs)} />
+      <StructuredData data={breadcrumbSchema([
+        { name: "Home", url: "https://landlordheaven.co.uk" },
+        { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
+        { name: "Notice Only Pack", url: "https://landlordheaven.co.uk/products/notice-only" }
+      ])} />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
