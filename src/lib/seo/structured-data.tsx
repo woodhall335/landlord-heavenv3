@@ -99,6 +99,46 @@ export function productSchema(product: Product) {
       "seller": {
         "@type": "Organization",
         "name": "Landlord Heaven"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "GBP"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "GB"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "GB",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": "14",
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn",
+        "returnPolicySeasonalOverride": {
+          "@type": "MerchantReturnPolicySeasonalOverride",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+          "merchantReturnDays": "0"
+        }
       }
     },
     "aggregateRating": {
@@ -144,6 +184,41 @@ export function subscriptionProductSchema(product: Product) {
       "seller": {
         "@type": "Organization",
         "name": "Landlord Heaven"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "GBP"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "GB"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "GB",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": "14",
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
       }
     }
   };
