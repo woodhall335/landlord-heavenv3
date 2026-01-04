@@ -2,9 +2,12 @@
  * Tracking Pixels Component
  *
  * Loads all analytics scripts with optimized loading strategies:
- * - GA4: lazyOnload (lowest priority, loads after page is interactive)
- * - FB Pixel: afterInteractive (loads after hydration)
- * - Google Ads: afterInteractive (loads after hydration)
+ * - Google (GA4 + Ads): Single gtag.js load with lazyOnload
+ * - FB Pixel: lazyOnload (lowest priority)
+ *
+ * Key optimizations:
+ * - Loads gtag.js ONCE and configures both GA4 and Google Ads
+ * - All scripts use lazyOnload to avoid blocking LCP
  *
  * Environment variables:
  * - NEXT_PUBLIC_GA_MEASUREMENT_ID: Google Analytics 4 ID (G-XXXXXXXXX)
@@ -24,30 +27,34 @@ export function TrackingPixels() {
   // Don't render if no tracking IDs configured
   if (!gaMeasurementId && !fbPixelId && !googleAdsId) return null;
 
+  // Use GA4 ID for gtag.js, fall back to Google Ads ID
+  const gtagId = gaMeasurementId || googleAdsId;
+
   return (
     <>
-      {/* Google Analytics 4 - lazyOnload for best performance */}
-      {gaMeasurementId && (
+      {/* Google Analytics 4 + Google Ads - Single gtag.js load */}
+      {gtagId && (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}
             strategy="lazyOnload"
           />
-          <Script id="ga4-config" strategy="lazyOnload">
+          <Script id="gtag-config" strategy="lazyOnload">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${gaMeasurementId}');
+              ${gaMeasurementId ? `gtag('config', '${gaMeasurementId}');` : ''}
+              ${googleAdsId ? `gtag('config', '${googleAdsId}');` : ''}
             `}
           </Script>
         </>
       )}
 
-      {/* Facebook Pixel */}
+      {/* Facebook Pixel - lazyOnload for performance */}
       {fbPixelId && (
         <>
-          <Script id="fb-pixel" strategy="afterInteractive">
+          <Script id="fb-pixel" strategy="lazyOnload">
             {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -70,23 +77,6 @@ export function TrackingPixels() {
               alt=""
             />
           </noscript>
-        </>
-      )}
-
-      {/* Google Ads (if separate from GA4) */}
-      {googleAdsId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-ads" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('config', '${googleAdsId}');
-            `}
-          </Script>
         </>
       )}
     </>

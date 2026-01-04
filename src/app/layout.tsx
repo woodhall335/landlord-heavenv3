@@ -43,6 +43,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* DNS Prefetch for third-party domains (preconnect is too aggressive for lazy-loaded scripts) */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://www.facebook.com" />
+
         {/* JSON-LD Structured Data for SEO */}
         <script
           type="application/ld+json"
