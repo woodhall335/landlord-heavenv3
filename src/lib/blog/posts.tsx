@@ -30985,6 +30985,920 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 84: UK Rent Collection Methods Guide
+  {
+    slug: 'uk-rent-collection-methods-guide',
+    title: 'UK Rent Collection Methods - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to rent collection methods for UK landlords. Optimize your payment processes for reliable income and efficient administration.',
+    metaDescription: 'UK rent collection guide for landlords 2026. Payment methods, standing orders, direct debits, online platforms, and best practices for reliable rent collection.',
+    date: '2026-01-04',
+    readTime: '13 min read',
+    wordCount: 1550,
+    category: 'Property Management',
+    tags: ['rent collection', 'payment methods', 'standing order', 'landlord payments', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Finance Team',
+      role: 'Property Finance Specialists',
+    },
+    heroImage: '/images/blog/placeholder-rent-collection.svg',
+    heroImageAlt: 'UK Rent Collection Methods Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'rent collection methods UK',
+    secondaryKeywords: ['landlord payment methods', 'standing order rent', 'collect rent online', 'tenant payments'],
+    tableOfContents: [
+      { id: 'payment-options', title: 'Payment Options', level: 2 },
+      { id: 'best-methods', title: 'Best Collection Methods', level: 2 },
+      { id: 'setting-up', title: 'Setting Up Payments', level: 2 },
+      { id: 'tracking-payments', title: 'Tracking Payments', level: 2 },
+      { id: 'collection-faq', title: 'Collection FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-rent-arrears-guide', 'uk-landlord-software-tools-guide', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Efficient rent collection is fundamental to successful property investment.
+          This guide explores the payment methods available to UK landlords and how
+          to set up reliable collection processes.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rent-collection.svg"
+          alt="Rent collection payment methods"
+          caption="The right collection method ensures reliable, predictable income"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="payment-options" className="scroll-mt-24">Available Payment Options</h2>
+
+        <p>
+          UK landlords have several options for collecting rent. Each has advantages
+          and considerations.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Method</th>
+                <th className="border p-3 text-left font-semibold">Reliability</th>
+                <th className="border p-3 text-left font-semibold">Admin Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Standing Order</td>
+                <td className="border p-3 text-green-600">High</td>
+                <td className="border p-3">Low once set up</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Direct Debit</td>
+                <td className="border p-3 text-green-600">High</td>
+                <td className="border p-3">Medium (requires setup)</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Bank Transfer</td>
+                <td className="border p-3 text-amber-600">Medium</td>
+                <td className="border p-3">Low</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Online Platform</td>
+                <td className="border p-3 text-green-600">High</td>
+                <td className="border p-3">Low (automated)</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Cash/Cheque</td>
+                <td className="border p-3 text-red-600">Low</td>
+                <td className="border p-3">High</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Standing Orders</h3>
+
+        <p>
+          Standing orders are the most popular method for private landlords. The tenant
+          sets up a recurring payment from their bank account to yours.
+        </p>
+
+        <ul>
+          <li>Tenant controls the payment (they can cancel)</li>
+          <li>Fixed amount on fixed date each month</li>
+          <li>No fees for landlord or tenant</li>
+          <li>Easy to set up through online banking</li>
+        </ul>
+
+        <h3>Direct Debits</h3>
+
+        <p>
+          Direct debits give landlords more control - you request payment rather than
+          the tenant sending it. However, setting up requires more administration.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Direct Debit Requirements</h4>
+          <p className="text-blue-800">
+            To collect rent by direct debit, you need a Direct Debit facility with
+            your bank, which involves credit checks and setup fees. Most private
+            landlords find standing orders simpler.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-payment-methods.svg"
+          alt="Different rent payment methods comparison"
+          caption="Standing orders offer the best balance of reliability and simplicity"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="best-methods" className="scroll-mt-24">Recommended Collection Methods</h2>
+
+        <p>
+          For most private landlords, standing orders remain the best option, but
+          online platforms are increasingly popular.
+        </p>
+
+        <h3>Online Rent Collection Platforms</h3>
+
+        <p>
+          Purpose-built platforms offer advantages:
+        </p>
+
+        <ul>
+          <li><strong>Automated reminders</strong> - notifications before due date</li>
+          <li><strong>Payment tracking</strong> - instant visibility of received payments</li>
+          <li><strong>Multiple payment options</strong> - card, bank transfer, etc.</li>
+          <li><strong>Tenant convenience</strong> - easy payment interface</li>
+          <li><strong>Record keeping</strong> - automatic payment history</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Cash Payments - Avoid</h3>
+
+        <p>
+          Cash payments should be avoided due to:
+        </p>
+
+        <ul>
+          <li>No automatic payment trail</li>
+          <li>Receipt disputes possible</li>
+          <li>Physical collection required</li>
+          <li>Security concerns</li>
+          <li>Money laundering regulations</li>
+        </ul>
+
+        <h2 id="setting-up" className="scroll-mt-24">Setting Up Payment Collection</h2>
+
+        <p>
+          Establishing reliable payment processes from the start prevents problems later.
+        </p>
+
+        <h3>At Tenancy Start</h3>
+
+        <ol>
+          <li>Specify payment method in tenancy agreement</li>
+          <li>Provide bank details securely</li>
+          <li>Confirm payment amount and due date</li>
+          <li>Help tenant set up standing order if needed</li>
+          <li>Confirm first payment received</li>
+        </ol>
+
+        <h3>Bank Account Considerations</h3>
+
+        <ul>
+          <li><strong>Separate account</strong> - keep rental income separate for tax clarity</li>
+          <li><strong>Clear reference</strong> - ask tenants to use property address as reference</li>
+          <li><strong>Regular monitoring</strong> - check payments on due date</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-payment-setup.svg"
+          alt="Setting up rent payment collection"
+          caption="Clear setup at tenancy start prevents payment confusion"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="tracking-payments" className="scroll-mt-24">Tracking Payments</h2>
+
+        <p>
+          Good record keeping protects you in disputes and simplifies tax returns.
+        </p>
+
+        <h3>What to Record</h3>
+
+        <ul>
+          <li>Date received</li>
+          <li>Amount received</li>
+          <li>Property and tenant identification</li>
+          <li>Running balance (for any arrears)</li>
+          <li>Late payment notes</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Rent Tracking Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides rent tracking spreadsheets, receipt templates,
+            and payment logging tools to keep your records organized.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Tracking Tools →
+          </Link>
+        </div>
+
+        <h2 id="collection-faq" className="scroll-mt-24">Rent Collection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I provide receipts for rent?</h3>
+            <p className="text-gray-600">
+              If requested, you must provide a receipt. Bank transfers create their own
+              record, but it&apos;s good practice to confirm receipt, especially for the
+              first payment or if there have been any issues.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if rent arrives late?</h3>
+            <p className="text-gray-600">
+              Contact the tenant promptly to understand why. A one-off delay may be
+              innocent, but repeated lateness needs addressing. Follow your arrears
+              procedure if payment doesn&apos;t arrive.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I charge for late payment?</h3>
+            <p className="text-gray-600">
+              Under the Tenant Fees Act, you can only charge interest on late rent
+              at 3% above Bank of England base rate. You cannot charge flat fees
+              for late payment.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I handle Housing Benefit/UC payments?</h3>
+            <p className="text-gray-600">
+              Payments usually go to the tenant first. In some cases, you can request
+              direct payment to landlord if tenant is 8+ weeks in arrears or vulnerable.
+              Payment timing differs from private tenants.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 85: UK EPC Requirements Guide
+  {
+    slug: 'uk-epc-requirements-guide',
+    title: 'UK EPC Requirements - Complete Landlord Guide 2026',
+    description: 'Essential guide to Energy Performance Certificates for UK landlords. Understand current requirements, upcoming changes, and how to improve your property rating.',
+    metaDescription: 'UK EPC requirements for landlords 2026. MEES regulations, minimum ratings, exemptions, improvement options, and upcoming changes to energy efficiency rules.',
+    date: '2026-01-04',
+    readTime: '16 min read',
+    wordCount: 1820,
+    category: 'Legal Compliance',
+    tags: ['EPC', 'energy efficiency', 'MEES regulations', 'EPC rating', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Compliance Team',
+      role: 'Property Compliance Specialists',
+    },
+    heroImage: '/images/blog/placeholder-epc.svg',
+    heroImageAlt: 'UK EPC Requirements Guide',
+    showUrgencyBanner: true,
+    targetKeyword: 'EPC requirements landlords UK',
+    secondaryKeywords: ['landlord EPC rating', 'MEES regulations', 'EPC minimum rating', 'energy efficiency landlord'],
+    tableOfContents: [
+      { id: 'epc-basics', title: 'EPC Basics', level: 2 },
+      { id: 'current-requirements', title: 'Current Requirements', level: 2 },
+      { id: 'upcoming-changes', title: 'Upcoming Changes', level: 2 },
+      { id: 'improving-rating', title: 'Improving Your Rating', level: 2 },
+      { id: 'exemptions', title: 'Exemptions', level: 2 },
+      { id: 'epc-faq', title: 'EPC FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-maintenance-obligations', 'uk-landlord-insurance-guide', 'uk-buy-to-let-investment-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Energy Performance Certificates are now essential for UK landlords. With minimum
+          standards rising, understanding EPC requirements and how to improve your property&apos;s
+          rating is crucial for compliance and letting success.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-epc.svg"
+          alt="Energy Performance Certificate example"
+          caption="EPCs rate properties from A (most efficient) to G (least efficient)"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="epc-basics" className="scroll-mt-24">EPC Basics</h2>
+
+        <p>
+          An Energy Performance Certificate rates a property&apos;s energy efficiency on a
+          scale from A to G, with A being the most efficient. The certificate also
+          provides recommendations for improvement.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">What the EPC Shows</h4>
+          <p className="text-blue-800">
+            EPCs display two ratings: current efficiency and potential efficiency if
+            improvements are made. They also estimate running costs and show the
+            property&apos;s environmental impact.
+          </p>
+        </div>
+
+        <h3>When You Need an EPC</h3>
+
+        <ul>
+          <li>Before marketing a property for rent</li>
+          <li>Before a new tenancy starts</li>
+          <li>When an existing EPC expires (10-year validity)</li>
+          <li>If significant improvements have been made</li>
+        </ul>
+
+        <h3>EPC Assessors</h3>
+
+        <p>
+          EPCs must be produced by accredited assessors. They inspect the property,
+          assess insulation, heating, lighting, and other factors, then produce
+          the certificate and recommendations.
+        </p>
+
+        <h2 id="current-requirements" className="scroll-mt-24">Current Requirements (2026)</h2>
+
+        <p>
+          The Minimum Energy Efficiency Standards (MEES) set the baseline for rental
+          properties in England and Wales.
+        </p>
+
+        <h3>Current Minimum: E Rating</h3>
+
+        <p>
+          Since April 2020, it has been illegal to let a property with an EPC rating
+          below E in England and Wales, whether to new or existing tenants.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Rating</th>
+                <th className="border p-3 text-left font-semibold">Status</th>
+                <th className="border p-3 text-left font-semibold">Action Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium text-green-600">A-C</td>
+                <td className="border p-3">Future-proof</td>
+                <td className="border p-3">None required currently</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium text-amber-600">D</td>
+                <td className="border p-3">Compliant now, changes coming</td>
+                <td className="border p-3">Plan improvements before 2028</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium text-amber-600">E</td>
+                <td className="border p-3">Minimum acceptable</td>
+                <td className="border p-3">Urgent improvements needed</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium text-red-600">F-G</td>
+                <td className="border p-3">Non-compliant</td>
+                <td className="border p-3">Cannot legally let</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Penalties for Non-Compliance</h3>
+
+        <p>
+          Letting a non-compliant property can result in penalties:
+        </p>
+
+        <ul>
+          <li><strong>Up to £5,000</strong> per property for renting out F/G rated property</li>
+          <li><strong>Publication</strong> on public register of non-compliant landlords</li>
+          <li><strong>Tenant claims</strong> for substandard accommodation</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-epc-ratings.svg"
+          alt="EPC rating bands explained"
+          caption="Understanding where your property sits helps plan improvements"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="upcoming-changes" className="scroll-mt-24">Upcoming Changes</h2>
+
+        <p>
+          The government has proposed raising the minimum EPC rating for rental
+          properties. While exact dates have been delayed, the direction is clear.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Proposed Changes</h4>
+          <p className="text-red-800">
+            The government has indicated that rental properties will need a minimum
+            C rating in the future. Originally proposed for 2025 (new tenancies) and
+            2028 (all tenancies), exact implementation dates are subject to consultation.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Scotland and Northern Ireland</h3>
+
+        <p>
+          Scotland and Northern Ireland have their own energy efficiency requirements:
+        </p>
+
+        <ul>
+          <li><strong>Scotland</strong> - working toward minimum E, with C rating ambitions</li>
+          <li><strong>Northern Ireland</strong> - currently minimum E required</li>
+        </ul>
+
+        <h2 id="improving-rating" className="scroll-mt-24">Improving Your EPC Rating</h2>
+
+        <p>
+          Various improvements can boost your rating. Start with recommendations
+          on your current EPC.
+        </p>
+
+        <h3>Common Improvements</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Improvement</th>
+                <th className="border p-3 text-left font-semibold">Typical Cost</th>
+                <th className="border p-3 text-left font-semibold">Rating Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Loft insulation (270mm)</td>
+                <td className="border p-3">£300-500</td>
+                <td className="border p-3">Up to +10 points</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Cavity wall insulation</td>
+                <td className="border p-3">£500-1,500</td>
+                <td className="border p-3">Up to +15 points</td>
+              </tr>
+              <tr>
+                <td className="border p-3">LED lighting throughout</td>
+                <td className="border p-3">£100-300</td>
+                <td className="border p-3">+3-5 points</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">New condensing boiler</td>
+                <td className="border p-3">£2,000-3,500</td>
+                <td className="border p-3">Up to +20 points</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Double glazing</td>
+                <td className="border p-3">£3,000-8,000</td>
+                <td className="border p-3">+5-10 points</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Smart heating controls</td>
+                <td className="border p-3">£200-400</td>
+                <td className="border p-3">+3-5 points</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Cost-Effective First Steps</h3>
+
+        <ul>
+          <li>Install LED bulbs throughout</li>
+          <li>Top up loft insulation to 270mm</li>
+          <li>Draught-proof doors and windows</li>
+          <li>Install smart thermostat</li>
+          <li>Lag hot water cylinder and pipes</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-epc-improvements.svg"
+          alt="Common EPC improvement options"
+          caption="Strategic improvements offer best value for rating gains"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="exemptions" className="scroll-mt-24">Exemptions</h2>
+
+        <p>
+          In certain circumstances, properties can be exempt from MEES requirements.
+        </p>
+
+        <h3>Available Exemptions</h3>
+
+        <ul>
+          <li><strong>Cost cap exemption</strong> - if no improvements under the cost cap would raise rating to E</li>
+          <li><strong>All improvements made</strong> - if all relevant improvements already done</li>
+          <li><strong>Wall insulation exemption</strong> - if this would damage the property</li>
+          <li><strong>Third party consent</strong> - if consent for improvements is refused</li>
+          <li><strong>Devaluation exemption</strong> - if improvements would devalue by 5%+</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Exemption Registration</h4>
+          <p className="text-amber-800">
+            Exemptions must be registered on the PRS Exemptions Register. They typically
+            last 5 years before reassessment is needed. Simply claiming exemption
+            without registration is not valid.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">EPC Improvement Planning</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides EPC assessment checklists, improvement cost
+            calculators, and guidance on meeting current and future requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View EPC Resources →
+          </Link>
+        </div>
+
+        <h2 id="epc-faq" className="scroll-mt-24">EPC Requirements FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long is an EPC valid?</h3>
+            <p className="text-gray-600">
+              EPCs are valid for 10 years. However, if you make significant improvements,
+              getting a new EPC can demonstrate the higher rating to prospective tenants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a new EPC for every tenancy?</h3>
+            <p className="text-gray-600">
+              No, as long as the EPC is still valid (within 10 years). However, you must
+              provide the EPC to prospective and new tenants at the start of each tenancy.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I challenge an EPC rating?</h3>
+            <p className="text-gray-600">
+              If you believe the assessment was inaccurate, you can commission a new
+              assessment from a different assessor. Ratings can vary slightly between
+              assessors based on their observations.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What grants are available for improvements?</h3>
+            <p className="text-gray-600">
+              Various grants exist depending on your location and circumstances. Check
+              the Energy Company Obligation (ECO) scheme and local authority grants.
+              Eligibility varies by property and owner situation.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 86: UK Landlord Licensing Guide
+  {
+    slug: 'uk-landlord-licensing-guide',
+    title: 'UK Landlord Licensing - Complete Guide 2026',
+    description: 'Essential guide to landlord licensing schemes across the UK. Understand mandatory, selective, and additional licensing requirements for rental properties.',
+    metaDescription: 'UK landlord licensing guide 2026. HMO licensing, selective licensing, additional licensing, Scotland registration, and local authority scheme requirements.',
+    date: '2026-01-04',
+    readTime: '17 min read',
+    wordCount: 1950,
+    category: 'Legal Compliance',
+    tags: ['landlord licensing', 'HMO license', 'selective licensing', 'landlord registration', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-licensing.svg',
+    heroImageAlt: 'UK Landlord Licensing Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord licensing UK',
+    secondaryKeywords: ['HMO license', 'selective licensing scheme', 'landlord registration', 'property license'],
+    tableOfContents: [
+      { id: 'licensing-overview', title: 'Licensing Overview', level: 2 },
+      { id: 'mandatory-hmo', title: 'Mandatory HMO Licensing', level: 2 },
+      { id: 'selective-licensing', title: 'Selective Licensing', level: 2 },
+      { id: 'scotland-registration', title: 'Scotland Registration', level: 2 },
+      { id: 'application-process', title: 'Application Process', level: 2 },
+      { id: 'licensing-faq', title: 'Licensing FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-hmo-regulations-guide', 'uk-fire-safety-landlords', 'uk-property-inspections-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Landlord licensing requirements vary across the UK, with different schemes
+          applying to different property types and locations. This guide helps you
+          understand what licenses you may need and how to obtain them.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-licensing.svg"
+          alt="Landlord licensing schemes explained"
+          caption="Understanding licensing requirements is essential for legal letting"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="licensing-overview" className="scroll-mt-24">Licensing Overview</h2>
+
+        <p>
+          Several types of landlord licensing exist in the UK. The requirements depend
+          on property type, location, and how many tenants live there.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">License Type</th>
+                <th className="border p-3 text-left font-semibold">Applies To</th>
+                <th className="border p-3 text-left font-semibold">Where</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Mandatory HMO</td>
+                <td className="border p-3">5+ people, 2+ households</td>
+                <td className="border p-3">England & Wales</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Additional HMO</td>
+                <td className="border p-3">Smaller HMOs</td>
+                <td className="border p-3">Selected council areas</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Selective</td>
+                <td className="border p-3">All private rentals in area</td>
+                <td className="border p-3">Designated areas only</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Scotland Registration</td>
+                <td className="border p-3">All landlords</td>
+                <td className="border p-3">Scotland only</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Rent Smart Wales</td>
+                <td className="border p-3">All landlords</td>
+                <td className="border p-3">Wales only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Penalties for Unlicensed Letting</h4>
+          <p className="text-red-800">
+            Letting without required licenses is a criminal offense. Penalties include
+            fines up to £30,000, rent repayment orders, and inability to use Section 21
+            for possession. Some councils actively enforce licensing requirements.
+          </p>
+        </div>
+
+        <h2 id="mandatory-hmo" className="scroll-mt-24">Mandatory HMO Licensing</h2>
+
+        <p>
+          Properties meeting the HMO definition with 5 or more people from 2 or more
+          households must have a mandatory HMO license throughout England and Wales.
+        </p>
+
+        <h3>When You Need a License</h3>
+
+        <ul>
+          <li>5 or more people living in the property</li>
+          <li>People form 2 or more separate households</li>
+          <li>They share facilities (bathroom, kitchen, toilet)</li>
+          <li>Property is their main residence</li>
+          <li>Rent is payable</li>
+        </ul>
+
+        <h3>License Conditions</h3>
+
+        <p>
+          HMO licenses come with conditions covering:
+        </p>
+
+        <ul>
+          <li>Maximum occupancy limits</li>
+          <li>Fire safety requirements</li>
+          <li>Kitchen and bathroom ratios</li>
+          <li>Minimum room sizes</li>
+          <li>Management standards</li>
+          <li>Waste disposal arrangements</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-licensing.svg"
+          alt="HMO licensing requirements"
+          caption="HMO licenses ensure properties meet safety and amenity standards"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="selective-licensing" className="scroll-mt-24">Selective Licensing</h2>
+
+        <p>
+          Selective licensing schemes require all private rented properties in designated
+          areas to be licensed, regardless of property type or occupancy.
+        </p>
+
+        <h3>Why Councils Introduce Selective Licensing</h3>
+
+        <ul>
+          <li>Areas with significant anti-social behavior</li>
+          <li>High proportion of private rented properties</li>
+          <li>Low housing demand areas</li>
+          <li>Poor property conditions</li>
+          <li>High levels of migration or deprivation</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Checking if You Need a License</h3>
+
+        <ol>
+          <li>Identify your local council</li>
+          <li>Check their website for licensing schemes</li>
+          <li>Confirm if your property&apos;s postcode is in a scheme area</li>
+          <li>Apply before letting if required</li>
+        </ol>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">London Licensing</h4>
+          <p className="text-blue-800">
+            Many London boroughs have extensive licensing schemes. Some have borough-wide
+            selective or additional licensing. Always check before letting property
+            in London - requirements vary significantly between boroughs.
+          </p>
+        </div>
+
+        <h2 id="scotland-registration" className="scroll-mt-24">Scotland Landlord Registration</h2>
+
+        <p>
+          All landlords letting property in Scotland must register with their local
+          council. This is a mandatory requirement - not optional.
+        </p>
+
+        <h3>Registration Requirements</h3>
+
+        <ul>
+          <li>Register before letting begins</li>
+          <li>Pass &quot;fit and proper person&quot; test</li>
+          <li>Renew every 3 years</li>
+          <li>Update when circumstances change</li>
+          <li>Display registration number on advertisements</li>
+        </ul>
+
+        <h3>Fit and Proper Person Test</h3>
+
+        <p>
+          Councils consider:
+        </p>
+
+        <ul>
+          <li>Relevant criminal convictions</li>
+          <li>Previous housing-related offenses</li>
+          <li>Unlawful discrimination</li>
+          <li>Anti-social behavior connections</li>
+          <li>Agent conduct (if using one)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-scotland-registration.svg"
+          alt="Scotland landlord registration process"
+          caption="Scotland requires all landlords to register - it's a legal requirement"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="application-process" className="scroll-mt-24">License Application Process</h2>
+
+        <p>
+          While specifics vary, most licensing applications follow a similar process.
+        </p>
+
+        <h3>Typical Steps</h3>
+
+        <ol>
+          <li><strong>Gather documents</strong> - ID, proof of ownership, floor plans</li>
+          <li><strong>Complete application</strong> - online or paper form</li>
+          <li><strong>Pay fee</strong> - varies by council and license type</li>
+          <li><strong>Property inspection</strong> - may be required</li>
+          <li><strong>Fit and proper check</strong> - on applicant and any manager</li>
+          <li><strong>License issued</strong> - typically valid 5 years</li>
+        </ol>
+
+        <h3>Application Costs</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">License Type</th>
+                <th className="border p-3 text-left font-semibold">Typical Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Mandatory HMO</td>
+                <td className="border p-3">£500 - £1,500</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Selective License</td>
+                <td className="border p-3">£400 - £900</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Scotland Registration</td>
+                <td className="border p-3">£68 (first property), £15 per additional</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Rent Smart Wales</td>
+                <td className="border p-3">£45 (registration), licensing varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Licensing Checklists</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides licensing requirement checklists, application
+            guides, and document templates for various licensing schemes.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Licensing Resources →
+          </Link>
+        </div>
+
+        <h2 id="licensing-faq" className="scroll-mt-24">Landlord Licensing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I know if I need a license?</h3>
+            <p className="text-gray-600">
+              Check with your local council. Their website should show HMO and selective
+              licensing requirements. For Scotland, registration is always required.
+              For Wales, register with Rent Smart Wales.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I let while my application is pending?</h3>
+            <p className="text-gray-600">
+              Generally yes, if you&apos;ve submitted a valid application before letting.
+              However, you should apply in good time. Councils can take months to process
+              applications.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my license application is refused?</h3>
+            <p className="text-gray-600">
+              You can appeal the decision. However, you cannot legally let the property
+              without a license. Common refusal reasons include failing fit and proper
+              test or property not meeting standards.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Are licensing fees tax deductible?</h3>
+            <p className="text-gray-600">
+              Yes, licensing fees are an allowable expense for income tax purposes.
+              Keep receipts for your records and include in your rental accounts.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
