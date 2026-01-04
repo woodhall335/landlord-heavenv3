@@ -36190,6 +36190,1977 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+  {
+    slug: 'uk-student-letting-guide',
+    title: 'UK Student Letting Guide - Complete Landlord Handbook 2026',
+    description: 'Comprehensive guide to student letting in the UK. Learn about the student rental market, term-time tenancies, guarantor requirements, and maximising returns from student properties.',
+    metaDescription: 'UK student letting guide 2026. Student rental market, term-time tenancies, guarantor requirements, and maximising returns from student accommodation.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1620,
+    category: 'Landlord Guides',
+    tags: ['student letting', 'student accommodation', 'student tenants', 'university rentals', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Investment Specialists',
+    },
+    heroImage: '/images/blog/placeholder-student-letting.svg',
+    heroImageAlt: 'UK Student Letting Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'student letting UK',
+    secondaryKeywords: ['student accommodation', 'student rental market', 'university letting', 'student tenants', 'student property investment'],
+    tableOfContents: [
+      { id: 'student-market', title: 'The Student Rental Market', level: 2 },
+      { id: 'property-requirements', title: 'Property Requirements', level: 2 },
+      { id: 'marketing-students', title: 'Marketing to Students', level: 2 },
+      { id: 'tenancy-structures', title: 'Tenancy Structures', level: 2 },
+      { id: 'guarantors', title: 'Guarantor Requirements', level: 2 },
+      { id: 'management', title: 'Managing Student Properties', level: 2 },
+      { id: 'summer-periods', title: 'Managing Summer Periods', level: 2 },
+      { id: 'returns', title: 'Maximising Returns', level: 2 },
+      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+    ],
+    relatedPosts: ['uk-guarantor-agreements-guide', 'uk-hmo-management-guide', 'uk-tenant-referencing-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Student letting represents a significant sector of the UK rental market, with over
+          2.5 million students requiring accommodation each year. This guide covers everything
+          landlords need to know about successfully letting to students, from property
+          requirements to managing the unique challenges of the academic calendar.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="student-market">The Student Rental Market</h2>
+
+        <p>
+          The UK student rental market offers consistent demand and potentially higher yields
+          than traditional letting. Understanding this unique market is essential for success.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-market.svg"
+          alt="UK student rental market overview"
+          caption="Student accommodation demand remains strong across university towns"
+          aspectRatio="16:9"
+        />
+
+        <h3>Market Characteristics</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Factor</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Student Letting</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Standard Letting</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Demand cycle</td>
+                <td className="border border-gray-200 px-4 py-2">Academic year driven</td>
+                <td className="border border-gray-200 px-4 py-2">Year-round</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Tenancy length</td>
+                <td className="border border-gray-200 px-4 py-2">10-12 months typically</td>
+                <td className="border border-gray-200 px-4 py-2">12+ months</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Yield potential</td>
+                <td className="border border-gray-200 px-4 py-2">Often higher per room</td>
+                <td className="border border-gray-200 px-4 py-2">Lower but stable</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Wear and tear</td>
+                <td className="border border-gray-200 px-4 py-2">Generally higher</td>
+                <td className="border border-gray-200 px-4 py-2">Variable</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Guarantor</td>
+                <td className="border border-gray-200 px-4 py-2">Usually required</td>
+                <td className="border border-gray-200 px-4 py-2">Sometimes required</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key University Cities</h3>
+
+        <p>
+          Location significantly impacts student letting success. Top university cities
+          include London, Manchester, Birmingham, Leeds, Edinburgh, Glasgow, Bristol,
+          Nottingham, Sheffield, and Liverpool. Each has different demand patterns and
+          rental values based on student population and housing supply.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Market Insight</p>
+          <p className="text-blue-800">
+            Russell Group universities typically generate the most consistent demand,
+            with students often booking accommodation 6-12 months in advance.
+          </p>
+        </div>
+
+        <h2 id="property-requirements">Property Requirements</h2>
+
+        <p>
+          Student properties must meet specific standards and often require adaptations
+          to suit shared living arrangements.
+        </p>
+
+        <h3>Essential Property Features</h3>
+
+        <ul>
+          <li><strong>Multiple bedrooms</strong> - 3-6 bedrooms is ideal for shared houses</li>
+          <li><strong>Good-sized kitchen</strong> - Adequate space for multiple people cooking</li>
+          <li><strong>Sufficient bathrooms</strong> - Ideally 1 bathroom per 3-4 students</li>
+          <li><strong>Study space</strong> - Desk areas in bedrooms or communal study room</li>
+          <li><strong>Fast broadband</strong> - Essential for modern students</li>
+          <li><strong>Washing machine</strong> - Tumble dryer also valuable</li>
+          <li><strong>Secure bike storage</strong> - Many students cycle</li>
+          <li><strong>Good transport links</strong> - Or walking distance to campus</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-property.svg"
+          alt="Ideal student property features"
+          caption="Well-configured student properties attract quality tenants"
+          aspectRatio="16:9"
+        />
+
+        <h3>HMO Licensing</h3>
+
+        <p>
+          Most student shared houses qualify as HMOs (Houses in Multiple Occupation).
+          If 5 or more students from 2+ households share facilities, mandatory licensing
+          applies. Smaller HMOs may require additional licensing depending on your council.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
+          <p className="font-semibold text-amber-900">Licensing Warning</p>
+          <p className="text-amber-800">
+            Operating an unlicensed HMO can result in fines up to £30,000, rent repayment
+            orders, and inability to serve Section 21 notices. Always verify licensing
+            requirements with your local council.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="marketing-students">Marketing to Students</h2>
+
+        <p>
+          Effective marketing to students requires understanding their search patterns
+          and preferred platforms.
+        </p>
+
+        <h3>Timing Your Marketing</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Period</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Activity</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Target Students</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">October-December</td>
+                <td className="border border-gray-200 px-4 py-2">Peak search season</td>
+                <td className="border border-gray-200 px-4 py-2">Second/third years for next year</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">January-March</td>
+                <td className="border border-gray-200 px-4 py-2">Active viewings</td>
+                <td className="border border-gray-200 px-4 py-2">Late planners, postgraduates</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">April-June</td>
+                <td className="border border-gray-200 px-4 py-2">Last-minute bookings</td>
+                <td className="border border-gray-200 px-4 py-2">Clearing students, erasmus</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">July-September</td>
+                <td className="border border-gray-200 px-4 py-2">Emergency lets</td>
+                <td className="border border-gray-200 px-4 py-2">International students</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Effective Marketing Channels</h3>
+
+        <ul>
+          <li><strong>Student-specific portals</strong> - Rightmove Student, SpareRoom, Unipol</li>
+          <li><strong>University accommodation offices</strong> - Many maintain landlord registers</li>
+          <li><strong>Student union noticeboards</strong> - Physical and digital</li>
+          <li><strong>Social media</strong> - Facebook groups, Instagram</li>
+          <li><strong>Word of mouth</strong> - Current tenants recommending to friends</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-marketing.svg"
+          alt="Marketing student properties effectively"
+          caption="Multi-channel marketing reaches students at different search stages"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="tenancy-structures">Tenancy Structures</h2>
+
+        <p>
+          Choosing the right tenancy structure affects your management workload,
+          risk exposure, and flexibility.
+        </p>
+
+        <h3>Joint Tenancy</h3>
+
+        <p>
+          All students sign one tenancy agreement with joint and several liability.
+          Each tenant is responsible for the whole rent if others default. This
+          simplifies management but can create complications if one tenant leaves
+          mid-term.
+        </p>
+
+        <h3>Individual Room Tenancies</h3>
+
+        <p>
+          Each student has a separate agreement for their room. More paperwork but
+          greater flexibility. If one tenant leaves, you can replace them without
+          affecting other tenancies. Each tenant is only liable for their own rent.
+        </p>
+
+        <h3>Tenancy Length Options</h3>
+
+        <ul>
+          <li><strong>12-month tenancy</strong> - Maximum income, students pay over summer</li>
+          <li><strong>10-month tenancy</strong> - Academic year only, void period in summer</li>
+          <li><strong>44-week tenancy</strong> - Common compromise, minimal void</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
+          <p className="font-semibold text-green-900">Tenancy Tip</p>
+          <p className="text-green-800">
+            12-month tenancies provide stable income and students often store belongings
+            over summer even if not present. Consider offering a summer rent discount
+            to encourage 12-month commitments.
+          </p>
+        </div>
+
+        <h2 id="guarantors">Guarantor Requirements</h2>
+
+        <p>
+          Guarantors are essential for student lettings as most students have limited
+          income and no rental history.
+        </p>
+
+        <h3>Guarantor Criteria</h3>
+
+        <ul>
+          <li>UK homeowner (ideally)</li>
+          <li>Income sufficient to cover rent (typically 3x annual rent)</li>
+          <li>Good credit history</li>
+          <li>Willing to guarantee full joint and several liability</li>
+        </ul>
+
+        <h3>International Students</h3>
+
+        <p>
+          International students may struggle to provide UK-based guarantors. Consider
+          rent guarantee services (Housing Hand, UK Guarantor), advance rent payment
+          (up to 6 months permitted), or university guarantee schemes where available.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-guarantor.svg"
+          alt="Student guarantor arrangements"
+          caption="Proper guarantor arrangements protect rental income"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="management">Managing Student Properties</h2>
+
+        <p>
+          Student properties require specific management approaches to address the
+          unique challenges of this tenant group.
+        </p>
+
+        <h3>Communication Best Practices</h3>
+
+        <ul>
+          <li>Use platforms students prefer (WhatsApp, email)</li>
+          <li>Create a tenant group chat for household communications</li>
+          <li>Respond quickly to issues - students may lack DIY skills</li>
+          <li>Provide clear written house rules and expectations</li>
+          <li>Conduct termly check-ins to catch issues early</li>
+        </ul>
+
+        <h3>Common Challenges</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Challenge</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Prevention</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Cleaning standards</td>
+                <td className="border border-gray-200 px-4 py-2">Clear expectations, photos</td>
+                <td className="border border-gray-200 px-4 py-2">Termly inspections</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Neighbour complaints</td>
+                <td className="border border-gray-200 px-4 py-2">Noise rules in contract</td>
+                <td className="border border-gray-200 px-4 py-2">Mediation, warnings</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Bin management</td>
+                <td className="border border-gray-200 px-4 py-2">Collection day reminders</td>
+                <td className="border border-gray-200 px-4 py-2">Rota system</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Garden maintenance</td>
+                <td className="border border-gray-200 px-4 py-2">Low-maintenance landscaping</td>
+                <td className="border border-gray-200 px-4 py-2">Include in rent</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Energy waste</td>
+                <td className="border border-gray-200 px-4 py-2">Smart thermostats</td>
+                <td className="border border-gray-200 px-4 py-2">Bills-included caps</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="summer-periods">Managing Summer Periods</h2>
+
+        <p>
+          The summer vacation period presents both challenges and opportunities
+          for student landlords.
+        </p>
+
+        <h3>Options for Summer</h3>
+
+        <ul>
+          <li><strong>12-month tenancies</strong> - Students retain rooms over summer</li>
+          <li><strong>Summer sublets</strong> - Market to interns, temporary workers</li>
+          <li><strong>Maintenance focus</strong> - Use empty period for major works</li>
+          <li><strong>Short-term lets</strong> - Festival, conference accommodation</li>
+        </ul>
+
+        <h3>Changeover Management</h3>
+
+        <p>
+          The changeover between academic years requires careful planning. Allow time
+          for professional cleaning between tenancies. Conduct thorough check-out
+          inspections with departing tenants. Complete any necessary repairs before
+          new tenants arrive. Prepare welcome packs for incoming students.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-changeover.svg"
+          alt="Student property changeover process"
+          caption="Efficient changeovers minimise void periods and prepare for new tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="returns">Maximising Returns</h2>
+
+        <p>
+          Student properties can generate excellent returns when managed effectively.
+        </p>
+
+        <h3>Yield Optimisation Strategies</h3>
+
+        <ul>
+          <li><strong>Room reconfiguration</strong> - Convert lounges to additional bedrooms</li>
+          <li><strong>En-suite additions</strong> - Command premium rents</li>
+          <li><strong>Bills-inclusive packages</strong> - Add management margin</li>
+          <li><strong>Multi-year deals</strong> - Reduce marketing costs with returning groups</li>
+          <li><strong>Summer lets</strong> - Generate additional income</li>
+        </ul>
+
+        <h3>Cost Control</h3>
+
+        <p>
+          Control costs through durable furnishings that withstand student use,
+          energy-efficient appliances reducing bills-inclusive costs, preventative
+          maintenance reducing emergency repairs, and efficient changeover processes
+          minimising void periods.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Return Insight</p>
+          <p className="text-blue-800">
+            Student HMOs typically yield 8-12% compared to 4-6% for single lets.
+            Higher management intensity is offset by significantly better returns
+            per property.
+          </p>
+        </div>
+
+        <h2 id="faqs">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need an HMO licence for student properties?</h3>
+            <p className="text-gray-600">
+              If 5+ students from 2+ households share, mandatory licensing applies.
+              Some councils have additional licensing for smaller HMOs. Check with
+              your local authority as requirements vary.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I handle students who want to leave mid-tenancy?</h3>
+            <p className="text-gray-600">
+              With joint tenancies, they remain liable unless you agree otherwise.
+              Consider allowing room replacements if they find a suitable replacement
+              tenant who passes referencing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I include bills in the rent?</h3>
+            <p className="text-gray-600">
+              Bills-inclusive is popular with students as it simplifies budgeting.
+              Consider capping usage or using fair-use clauses to protect against
+              excessive consumption.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How early do students book for the next year?</h3>
+            <p className="text-gray-600">
+              Peak booking is October-December for the following September. Marketing
+              should begin as early as October for properties coming available the
+              following academic year.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What insurance do I need for student lets?</h3>
+            <p className="text-gray-600">
+              Standard landlord insurance covering buildings, contents (if furnished),
+              and liability. Ensure your policy covers HMO letting if applicable.
+              Consider rent guarantee insurance given guarantor reliance.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-student-success.svg"
+          alt="Successful student letting"
+          caption="Well-managed student properties deliver consistent returns"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+  {
+    slug: 'uk-holiday-let-regulations-guide',
+    title: 'UK Holiday Let Regulations - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to holiday let regulations in the UK. Learn about planning permission, licensing requirements, tax rules, and compliance for short-term rental properties.',
+    metaDescription: 'UK holiday let regulations 2026. Planning permission, licensing, tax rules, and compliance requirements for short-term rental properties.',
+    date: '2026-01-04',
+    readTime: '15 min read',
+    wordCount: 1680,
+    category: 'Landlord Guides',
+    tags: ['holiday let', 'short-term rental', 'Airbnb regulations', 'planning permission', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Investment Specialists',
+    },
+    heroImage: '/images/blog/placeholder-holiday-let.svg',
+    heroImageAlt: 'UK Holiday Let Regulations Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'holiday let regulations UK',
+    secondaryKeywords: ['short-term rental rules', 'Airbnb planning permission', 'holiday let tax', 'furnished holiday let', 'holiday rental compliance'],
+    tableOfContents: [
+      { id: 'overview', title: 'Holiday Let Overview', level: 2 },
+      { id: 'planning-rules', title: 'Planning Permission Rules', level: 2 },
+      { id: 'licensing', title: 'Licensing Requirements', level: 2 },
+      { id: 'tax-treatment', title: 'Tax Treatment', level: 2 },
+      { id: 'safety-compliance', title: 'Safety Compliance', level: 2 },
+      { id: 'insurance', title: 'Insurance Requirements', level: 2 },
+      { id: 'management', title: 'Management Considerations', level: 2 },
+      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-licensing-guide', 'uk-property-marketing-guide', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Holiday letting has grown substantially with platforms like Airbnb and Booking.com.
+          However, regulations are tightening across the UK. This guide covers the planning,
+          licensing, tax, and safety requirements landlords must understand before entering
+          the short-term rental market.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="overview">Holiday Let Overview</h2>
+
+        <p>
+          A holiday let (or short-term let) is a furnished property rented out for short
+          periods, typically to holidaymakers or business travellers. Unlike assured
+          shorthold tenancies, these bookings don't create long-term tenant rights.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-overview.svg"
+          alt="Holiday let property types"
+          caption="Holiday lets range from city apartments to rural cottages"
+          aspectRatio="16:9"
+        />
+
+        <h3>Types of Holiday Accommodation</h3>
+
+        <ul>
+          <li><strong>Entire properties</strong> - Houses, flats, cottages let exclusively</li>
+          <li><strong>Rooms in occupied homes</strong> - Spare room letting</li>
+          <li><strong>Annexes and outbuildings</strong> - Converted spaces</li>
+          <li><strong>Unique properties</strong> - Boats, treehouses, glamping</li>
+        </ul>
+
+        <h3>Market Considerations</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Factor</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Holiday Let</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Long-Term Let</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Income potential</td>
+                <td className="border border-gray-200 px-4 py-2">Higher (if well-occupied)</td>
+                <td className="border border-gray-200 px-4 py-2">Stable, predictable</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Occupancy</td>
+                <td className="border border-gray-200 px-4 py-2">Variable, seasonal</td>
+                <td className="border border-gray-200 px-4 py-2">Continuous</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Management</td>
+                <td className="border border-gray-200 px-4 py-2">Intensive</td>
+                <td className="border border-gray-200 px-4 py-2">Lower touch</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Wear and tear</td>
+                <td className="border border-gray-200 px-4 py-2">Higher turnover impact</td>
+                <td className="border border-gray-200 px-4 py-2">Lower frequency</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Regulation</td>
+                <td className="border border-gray-200 px-4 py-2">Increasing complexity</td>
+                <td className="border border-gray-200 px-4 py-2">Established framework</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
+          <p className="font-semibold text-amber-900">Regulatory Trend</p>
+          <p className="text-amber-800">
+            Holiday let regulations are tightening across the UK. New registration schemes,
+            planning restrictions, and tax changes are making this sector more complex.
+            Stay informed about changes affecting your area.
+          </p>
+        </div>
+
+        <h2 id="planning-rules">Planning Permission Rules</h2>
+
+        <p>
+          Planning requirements for holiday lets vary by location and intensity of use.
+          Understanding when permission is needed prevents enforcement action.
+        </p>
+
+        <h3>The 90-Day Rule (London)</h3>
+
+        <p>
+          In Greater London, you can let your entire home for up to 90 nights per calendar
+          year without planning permission. Beyond 90 nights requires a material change of
+          use application. This applies to the property, not the platform used.
+        </p>
+
+        <h3>Outside London</h3>
+
+        <p>
+          Most areas outside London don't have specific day limits, but converting a
+          residential property to exclusive holiday let use may constitute a material
+          change of use requiring permission. The key factors are frequency and exclusivity
+          of holiday use.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-planning.svg"
+          alt="Holiday let planning considerations"
+          caption="Planning requirements vary significantly by location"
+          aspectRatio="16:9"
+        />
+
+        <h3>Scotland's Licensing Scheme</h3>
+
+        <p>
+          Scotland introduced mandatory licensing for all short-term lets from October 2023.
+          Hosts must apply to their local council for a licence. Requirements include
+          safety compliance, insurance, and planning permission where needed. Operating
+          without a licence is a criminal offence.
+        </p>
+
+        <h3>Wales Registration</h3>
+
+        <p>
+          Wales introduced a statutory licensing scheme requiring all holiday let operators
+          to register and meet safety standards. Properties must also meet the 182-day
+          letting threshold to avoid domestic rates.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Planning Tip</p>
+          <p className="text-blue-800">
+            Check with your local planning authority before starting holiday letting.
+            Some councils actively enforce against unlicensed short-term lets, especially
+            in areas with housing pressure.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="licensing">Licensing Requirements</h2>
+
+        <p>
+          Licensing requirements for holiday lets have expanded significantly and vary
+          by nation and local authority.
+        </p>
+
+        <h3>England - Proposed Registration</h3>
+
+        <p>
+          The UK Government has announced plans for a mandatory registration scheme
+          for short-term lets in England. This will require all operators to register
+          with a central database and display a registration number on listings.
+          Implementation timing and details are still being finalised.
+        </p>
+
+        <h3>Scotland - Mandatory Licensing</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Requirement</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Application</td>
+                <td className="border border-gray-200 px-4 py-2">Apply to local council with required documentation</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Safety standards</td>
+                <td className="border border-gray-200 px-4 py-2">Fire, gas, electrical safety certificates</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Insurance</td>
+                <td className="border border-gray-200 px-4 py-2">Public liability insurance required</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Planning</td>
+                <td className="border border-gray-200 px-4 py-2">Confirmation of permitted use</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Fees</td>
+                <td className="border border-gray-200 px-4 py-2">Vary by council, typically £200-500</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Wales - Licensing Scheme</h3>
+
+        <p>
+          Wales requires all visitor accommodation to register. Properties must meet
+          fire safety requirements, have appropriate insurance, and comply with
+          planning rules. The scheme helps ensure consistent standards across the sector.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-licensing.svg"
+          alt="Holiday let licensing requirements"
+          caption="Licensing requirements are expanding across the UK"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="tax-treatment">Tax Treatment</h2>
+
+        <p>
+          Holiday let taxation changed significantly from April 2025 with the abolition
+          of the Furnished Holiday Lettings (FHL) tax regime.
+        </p>
+
+        <h3>Changes from April 2025</h3>
+
+        <ul>
+          <li><strong>Mortgage interest</strong> - Now restricted to basic rate tax relief</li>
+          <li><strong>Capital allowances</strong> - No longer available for FHL furniture</li>
+          <li><strong>Capital gains</strong> - Business Asset Disposal Relief removed</li>
+          <li><strong>Pension contributions</strong> - FHL income no longer counts as earnings</li>
+          <li><strong>Loss relief</strong> - Cannot offset against other income</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 my-6">
+          <p className="font-semibold text-red-900">Tax Impact</p>
+          <p className="text-red-800">
+            The FHL tax regime abolition significantly increases tax liability for many
+            holiday let owners. Review your financial projections and consider whether
+            holiday letting remains viable for your situation.
+          </p>
+        </div>
+
+        <h3>Business Rates vs Council Tax</h3>
+
+        <p>
+          Properties available for holiday letting 140+ days per year and actually let
+          70+ days may qualify for business rates instead of council tax. Business rates
+          may offer small business rate relief, potentially reducing the bill to zero.
+          However, stricter enforcement means you must demonstrate genuine availability
+          and lettings.
+        </p>
+
+        <h3>VAT Considerations</h3>
+
+        <p>
+          Holiday accommodation is subject to VAT if your total taxable turnover exceeds
+          £90,000. This affects pricing and potentially makes your offering less competitive
+          compared to non-VAT registered operators.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="safety-compliance">Safety Compliance</h2>
+
+        <p>
+          Holiday lets must meet comprehensive safety requirements to protect guests
+          and operators.
+        </p>
+
+        <h3>Fire Safety</h3>
+
+        <ul>
+          <li>Smoke alarms on every floor (interlinked if new installation)</li>
+          <li>Carbon monoxide alarms near any fuel-burning appliance</li>
+          <li>Fire risk assessment recommended (required in Scotland)</li>
+          <li>Fire blanket in kitchen</li>
+          <li>Clear escape routes with fire action notices</li>
+          <li>Fire-retardant soft furnishings</li>
+        </ul>
+
+        <h3>Gas Safety</h3>
+
+        <p>
+          Annual gas safety checks are legally required. All gas appliances must be
+          checked by a Gas Safe registered engineer. The certificate must be available
+          to guests and displayed in the property.
+        </p>
+
+        <h3>Electrical Safety</h3>
+
+        <p>
+          While not legally mandatory for holiday lets in all areas, an Electrical
+          Installation Condition Report (EICR) is strongly recommended. PAT testing
+          of portable appliances demonstrates due diligence. Scotland requires
+          electrical safety certificates for licensing.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-safety.svg"
+          alt="Holiday let safety requirements"
+          caption="Comprehensive safety compliance protects guests and operators"
+          aspectRatio="16:9"
+        />
+
+        <h3>Water Safety</h3>
+
+        <p>
+          Legionella risk assessments are recommended, especially for properties with
+          complex water systems or infrequent use. Water temperature should be controlled
+          to prevent scalding risks.
+        </p>
+
+        <h2 id="insurance">Insurance Requirements</h2>
+
+        <p>
+          Standard home insurance does not cover holiday letting. Specialist insurance
+          is essential.
+        </p>
+
+        <h3>Essential Coverage</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Coverage</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Purpose</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Typical Limit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Public liability</td>
+                <td className="border border-gray-200 px-4 py-2">Guest injury claims</td>
+                <td className="border border-gray-200 px-4 py-2">£2-5 million</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Buildings</td>
+                <td className="border border-gray-200 px-4 py-2">Structure damage</td>
+                <td className="border border-gray-200 px-4 py-2">Rebuild cost</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Contents</td>
+                <td className="border border-gray-200 px-4 py-2">Furnishings, equipment</td>
+                <td className="border border-gray-200 px-4 py-2">Replacement value</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Loss of income</td>
+                <td className="border border-gray-200 px-4 py-2">Cancellation costs</td>
+                <td className="border border-gray-200 px-4 py-2">12 months income</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Guest damage</td>
+                <td className="border border-gray-200 px-4 py-2">Malicious damage</td>
+                <td className="border border-gray-200 px-4 py-2">Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Platform Insurance</h3>
+
+        <p>
+          Platforms like Airbnb offer host protection programmes, but these have
+          limitations and exclusions. They should supplement, not replace, comprehensive
+          holiday let insurance. Read the terms carefully to understand coverage gaps.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
+          <p className="font-semibold text-green-900">Insurance Tip</p>
+          <p className="text-green-800">
+            Disclose holiday letting to your insurer. Undisclosed commercial use can
+            void your policy entirely, leaving you unprotected for any claims.
+          </p>
+        </div>
+
+        <h2 id="management">Management Considerations</h2>
+
+        <p>
+          Holiday lets require active management far beyond traditional rentals.
+        </p>
+
+        <h3>Operational Requirements</h3>
+
+        <ul>
+          <li><strong>Check-in/out</strong> - Key handover, property access</li>
+          <li><strong>Cleaning</strong> - Turnover cleaning between guests</li>
+          <li><strong>Maintenance</strong> - Quick response to issues during stays</li>
+          <li><strong>Guest communication</strong> - Pre-arrival, during stay, reviews</li>
+          <li><strong>Booking management</strong> - Calendar, pricing, enquiries</li>
+          <li><strong>Supplies</strong> - Linen, toiletries, consumables</li>
+        </ul>
+
+        <h3>Self-Management vs Agent</h3>
+
+        <p>
+          Self-management suits local owners with time and hospitality inclination.
+          Property management companies charge 15-25% of revenue but handle all
+          operational aspects. Consider the value of your time and distance from
+          the property.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-management.svg"
+          alt="Holiday let management approach"
+          caption="Effective management drives guest satisfaction and returns"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="faqs">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission for Airbnb?</h3>
+            <p className="text-gray-600">
+              In London, you can let for up to 90 nights without permission. Elsewhere,
+              occasional letting usually doesn't require permission, but full-time holiday
+              letting may constitute a change of use. Check with your local planning authority.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is holiday letting still profitable after tax changes?</h3>
+            <p className="text-gray-600">
+              It depends on your circumstances. The FHL abolition increased tax liability.
+              Properties with strong occupancy in prime locations may remain profitable.
+              Run detailed financial projections before investing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a licence to run a holiday let?</h3>
+            <p className="text-gray-600">
+              In Scotland, yes - mandatory licensing applies. In Wales, registration is
+              required. In England, a registration scheme is planned. Check current
+              requirements for your location.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I switch between holiday let and long-term rental?</h3>
+            <p className="text-gray-600">
+              Yes, but consider planning implications if the property has been primarily
+              used as a holiday let. Also ensure your mortgage and insurance permit the
+              intended use.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What's the difference between holiday let and serviced accommodation?</h3>
+            <p className="text-gray-600">
+              These terms are often used interchangeably. Serviced accommodation typically
+              implies additional services like cleaning and linen changes during stays.
+              Both face similar regulatory requirements.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-holiday-success.svg"
+          alt="Successful holiday let operations"
+          caption="Compliance and quality drive holiday let success"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+  {
+    slug: 'uk-corporate-letting-guide',
+    title: 'UK Corporate Letting Guide - Complete Landlord Handbook 2026',
+    description: 'Comprehensive guide to corporate letting in the UK. Learn about company tenants, serviced accommodation, contract negotiations, and maximising returns from corporate rentals.',
+    metaDescription: 'UK corporate letting guide 2026. Company tenants, contract terms, serviced accommodation, and maximising returns from corporate rental properties.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1640,
+    category: 'Landlord Guides',
+    tags: ['corporate letting', 'company tenants', 'serviced accommodation', 'relocation', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Investment Specialists',
+    },
+    heroImage: '/images/blog/placeholder-corporate-let.svg',
+    heroImageAlt: 'UK Corporate Letting Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'corporate letting UK',
+    secondaryKeywords: ['company let', 'corporate tenant', 'serviced accommodation', 'relocation housing', 'business rentals'],
+    tableOfContents: [
+      { id: 'overview', title: 'Corporate Letting Overview', level: 2 },
+      { id: 'tenant-types', title: 'Corporate Tenant Types', level: 2 },
+      { id: 'property-requirements', title: 'Property Requirements', level: 2 },
+      { id: 'legal-framework', title: 'Legal Framework', level: 2 },
+      { id: 'finding-tenants', title: 'Finding Corporate Tenants', level: 2 },
+      { id: 'pricing-strategy', title: 'Pricing Strategy', level: 2 },
+      { id: 'management', title: 'Property Management', level: 2 },
+      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+    ],
+    relatedPosts: ['uk-property-marketing-guide', 'uk-tenant-referencing-guide', 'uk-furnished-vs-unfurnished-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Corporate letting offers landlords the opportunity to achieve premium rents with
+          reliable tenants. Whether housing relocating executives, project teams, or providing
+          serviced accommodation, corporate lets command higher prices and typically involve
+          lower-risk tenants. This guide covers everything you need to know about this
+          lucrative market segment.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="overview">Corporate Letting Overview</h2>
+
+        <p>
+          Corporate letting involves renting property to companies rather than individuals.
+          The company becomes the tenant, providing stronger covenant and typically paying
+          premium rates for quality accommodation.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-overview.svg"
+          alt="Corporate letting market overview"
+          caption="Corporate letting offers premium returns with lower-risk tenants"
+          aspectRatio="16:9"
+        />
+
+        <h3>Benefits of Corporate Letting</h3>
+
+        <ul>
+          <li><strong>Higher rents</strong> - Typically 20-40% above standard market rent</li>
+          <li><strong>Reliable payment</strong> - Companies have payment processes and credit</li>
+          <li><strong>Professional tenants</strong> - Employees maintain properties well</li>
+          <li><strong>Guaranteed occupancy</strong> - Contract terms provide security</li>
+          <li><strong>Lower void risk</strong> - Renewals and extensions common</li>
+          <li><strong>Reduced wear</strong> - Short stays, professional occupants</li>
+        </ul>
+
+        <h3>Market Comparison</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Factor</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Corporate Let</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Standard AST</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Rent level</td>
+                <td className="border border-gray-200 px-4 py-2">Premium (20-40% higher)</td>
+                <td className="border border-gray-200 px-4 py-2">Market rate</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Payment reliability</td>
+                <td className="border border-gray-200 px-4 py-2">Very high</td>
+                <td className="border border-gray-200 px-4 py-2">Variable</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Tenant type</td>
+                <td className="border border-gray-200 px-4 py-2">Company (employees occupy)</td>
+                <td className="border border-gray-200 px-4 py-2">Individual/s</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Legal framework</td>
+                <td className="border border-gray-200 px-4 py-2">Contract law</td>
+                <td className="border border-gray-200 px-4 py-2">Housing Act 1988</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Furnishing</td>
+                <td className="border border-gray-200 px-4 py-2">Fully furnished essential</td>
+                <td className="border border-gray-200 px-4 py-2">Often unfurnished</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Market Insight</p>
+          <p className="text-blue-800">
+            Corporate letting works best in locations with strong business activity:
+            city centres, near major employers, transport hubs, and areas with
+            international business presence.
+          </p>
+        </div>
+
+        <h2 id="tenant-types">Corporate Tenant Types</h2>
+
+        <p>
+          Understanding different corporate tenant categories helps you target
+          marketing and tailor your offering.
+        </p>
+
+        <h3>Relocation Tenants</h3>
+
+        <p>
+          Companies relocating employees for new roles or projects. These tenants need
+          furnished, move-in ready accommodation. Stays typically range from 3 months
+          to 2 years while employees find permanent housing or complete assignments.
+        </p>
+
+        <h3>Project Teams</h3>
+
+        <p>
+          Construction, engineering, and consulting firms often need accommodation for
+          teams working on fixed-term projects. These bookings can be substantial (multiple
+          units) but are time-limited. Teams may rotate, with different individuals
+          occupying throughout the project.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-tenants.svg"
+          alt="Corporate tenant types"
+          caption="Different corporate tenants have varying needs and timelines"
+          aspectRatio="16:9"
+        />
+
+        <h3>Business Travellers</h3>
+
+        <p>
+          Executives and professionals needing accommodation for regular business visits.
+          They prefer serviced accommodation to hotels for extended stays. Bookings may
+          be recurring with the same individuals returning regularly.
+        </p>
+
+        <h3>Insurance Placements</h3>
+
+        <p>
+          Insurance companies place policyholders whose homes are uninhabitable due to
+          fire, flood, or other damage. These placements are typically fully managed
+          through relocation agents and can last several months.
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="property-requirements">Property Requirements</h2>
+
+        <p>
+          Corporate tenants have specific expectations that differ from standard
+          residential lettings.
+        </p>
+
+        <h3>Essential Features</h3>
+
+        <ul>
+          <li><strong>Fully furnished</strong> - High-quality, coordinated furniture throughout</li>
+          <li><strong>Equipped kitchen</strong> - All appliances, cookware, crockery, cutlery</li>
+          <li><strong>Quality linens</strong> - Hotel-standard bedding and towels</li>
+          <li><strong>Fast broadband</strong> - Essential for remote working</li>
+          <li><strong>Smart TV</strong> - Modern entertainment systems</li>
+          <li><strong>Washer/dryer</strong> - Laundry facilities within the property</li>
+          <li><strong>Parking</strong> - Secure parking where possible</li>
+          <li><strong>Workspace</strong> - Desk area suitable for working</li>
+        </ul>
+
+        <h3>Location Priorities</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Priority</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Importance</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Transport links</td>
+                <td className="border border-gray-200 px-4 py-2">Critical</td>
+                <td className="border border-gray-200 px-4 py-2">Near stations, airports</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Business proximity</td>
+                <td className="border border-gray-200 px-4 py-2">High</td>
+                <td className="border border-gray-200 px-4 py-2">Near major employers</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Amenities</td>
+                <td className="border border-gray-200 px-4 py-2">Medium</td>
+                <td className="border border-gray-200 px-4 py-2">Shops, restaurants, gyms</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Safety</td>
+                <td className="border border-gray-200 px-4 py-2">High</td>
+                <td className="border border-gray-200 px-4 py-2">Low crime areas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-property.svg"
+          alt="Corporate let property standards"
+          caption="High-quality furnishing and presentation attract corporate clients"
+          aspectRatio="16:9"
+        />
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
+          <p className="font-semibold text-green-900">Property Tip</p>
+          <p className="text-green-800">
+            Invest in quality basics: good mattresses, proper workspaces, and reliable
+            WiFi. These details matter more to corporate tenants than decorative extras.
+          </p>
+        </div>
+
+        <h2 id="legal-framework">Legal Framework</h2>
+
+        <p>
+          Corporate lets operate under different legal rules than standard residential
+          tenancies, offering advantages for landlords.
+        </p>
+
+        <h3>Company Let Agreements</h3>
+
+        <p>
+          When a company is the tenant, the agreement falls outside the Housing Act 1988.
+          This means no automatic assured shorthold tenancy protections apply. The
+          tenancy is governed by standard contract law, giving both parties more
+          flexibility in terms.
+        </p>
+
+        <h3>Key Legal Differences</h3>
+
+        <ul>
+          <li><strong>No Section 21 required</strong> - Contract termination clauses apply</li>
+          <li><strong>No deposit protection</strong> - Not required for company tenants</li>
+          <li><strong>Flexible terms</strong> - Parties can agree any reasonable terms</li>
+          <li><strong>Break clauses</strong> - More commonly used and flexible</li>
+          <li><strong>Notice periods</strong> - As agreed in contract, not statutory</li>
+        </ul>
+
+        <h3>Important Considerations</h3>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
+          <p className="font-semibold text-amber-900">Legal Caution</p>
+          <p className="text-amber-800">
+            If the company lets the property to an individual who makes it their only
+            or principal home, an AST may be created. Ensure contracts clearly specify
+            that the property is not intended as the occupier's principal residence.
+          </p>
+        </div>
+
+        <h3>Contract Essentials</h3>
+
+        <p>
+          Corporate let agreements should clearly specify the company as tenant, named
+          permitted occupiers, rent and payment terms, duration and renewal options,
+          break clauses, responsibilities for bills and services, and any included
+          services like cleaning.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="finding-tenants">Finding Corporate Tenants</h2>
+
+        <p>
+          Reaching corporate clients requires different marketing approaches than
+          standard residential letting.
+        </p>
+
+        <h3>Marketing Channels</h3>
+
+        <ul>
+          <li><strong>Relocation agencies</strong> - Register with companies that manage corporate moves</li>
+          <li><strong>Serviced apartment platforms</strong> - SITU, SilverDoor, Citybase</li>
+          <li><strong>Direct employer contact</strong> - Approach HR departments of major employers</li>
+          <li><strong>Agent networks</strong> - Corporate letting specialists</li>
+          <li><strong>LinkedIn</strong> - Professional networking and content</li>
+          <li><strong>Industry events</strong> - Relocation and HR conferences</li>
+        </ul>
+
+        <h3>Professional Presentation</h3>
+
+        <p>
+          Corporate clients expect professional marketing materials. Invest in professional
+          photography, create detailed property specifications, prepare a downloadable
+          PDF brochure, and ensure your website or listing looks professional.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-marketing.svg"
+          alt="Marketing to corporate clients"
+          caption="Professional presentation attracts corporate clients"
+          aspectRatio="16:9"
+        />
+
+        <h3>Building Relationships</h3>
+
+        <p>
+          Corporate letting often works on relationships. A satisfied client returns
+          repeatedly and refers colleagues. Focus on exceeding expectations and
+          building long-term partnerships with relocation agencies and employers.
+        </p>
+
+        <h2 id="pricing-strategy">Pricing Strategy</h2>
+
+        <p>
+          Corporate rents justify premiums through quality, service, and convenience.
+        </p>
+
+        <h3>Premium Pricing Elements</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Element</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Typical Premium</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Justification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Base premium</td>
+                <td className="border border-gray-200 px-4 py-2">20-30%</td>
+                <td className="border border-gray-200 px-4 py-2">Furnished, quality, flexibility</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Bills included</td>
+                <td className="border border-gray-200 px-4 py-2">10-15%</td>
+                <td className="border border-gray-200 px-4 py-2">Convenience, no setup</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Cleaning service</td>
+                <td className="border border-gray-200 px-4 py-2">5-10%</td>
+                <td className="border border-gray-200 px-4 py-2">Regular housekeeping</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Short-term premium</td>
+                <td className="border border-gray-200 px-4 py-2">20-50%</td>
+                <td className="border border-gray-200 px-4 py-2">Under 6 months</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>All-Inclusive Packages</h3>
+
+        <p>
+          Corporate clients often prefer all-inclusive pricing covering rent, utilities,
+          broadband, council tax, and regular cleaning. This simplifies their budgeting
+          and administration. Build appropriate margins into inclusive rates.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Pricing Tip</p>
+          <p className="text-blue-800">
+            Research competitor rates on serviced apartment platforms. Corporate clients
+            compare your offering against hotels and serviced apartments, not standard
+            rental properties.
+          </p>
+        </div>
+
+        <h2 id="management">Property Management</h2>
+
+        <p>
+          Corporate tenants expect higher service levels than standard residential tenants.
+        </p>
+
+        <h3>Service Standards</h3>
+
+        <ul>
+          <li><strong>Responsive maintenance</strong> - Same-day response, rapid resolution</li>
+          <li><strong>Regular cleaning</strong> - Weekly or fortnightly housekeeping</li>
+          <li><strong>Linen service</strong> - Fresh towels and bedding provided</li>
+          <li><strong>24/7 contact</strong> - Emergency support available</li>
+          <li><strong>Smooth check-in</strong> - Professional meet and greet</li>
+          <li><strong>Quality consumables</strong> - Toiletries, cleaning supplies</li>
+        </ul>
+
+        <h3>Self-Management vs Specialist Agent</h3>
+
+        <p>
+          Corporate letting requires more intensive management than standard lets.
+          Consider whether you can deliver the service levels expected. Specialist
+          corporate letting agents charge 15-25% but handle all operational aspects
+          and often have established client relationships.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-management.svg"
+          alt="Corporate property management"
+          caption="High service standards drive repeat bookings and referrals"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="faqs">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a special licence for corporate letting?</h3>
+            <p className="text-gray-600">
+              No special licence is required specifically for corporate letting. However,
+              if the property is used for short-term holiday-style bookings, normal
+              planning and licensing requirements apply based on the nature of use.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I protect my deposit without protection schemes?</h3>
+            <p className="text-gray-600">
+              While deposit protection isn't required for company lets, you can still
+              hold a deposit against damage. The amount and terms are agreed in the
+              contract. Companies typically accept this as a standard business arrangement.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the occupier claims tenant rights?</h3>
+            <p className="text-gray-600">
+              Ensure contracts clearly state the arrangement and that the property isn't
+              the occupier's principal home. Include regular changes of occupier if
+              appropriate. If concerned, take legal advice before the tenancy starts.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I find relocation agencies to work with?</h3>
+            <p className="text-gray-600">
+              Search for "corporate relocation agents" in your area. Major agencies
+              include Santa Fe Relocation, Cartus, and SIRVA. Register your property
+              and specify your rates and availability. Building relationships takes time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What insurance do I need for corporate letting?</h3>
+            <p className="text-gray-600">
+              Standard landlord insurance usually covers corporate letting, but confirm
+              with your insurer. Ensure you have adequate public liability cover given
+              higher footfall. Contents insurance should reflect the higher value of
+              furnished corporate properties.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-corporate-success.svg"
+          alt="Successful corporate letting"
+          caption="Quality service and presentation drive corporate letting success"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+  {
+    slug: 'uk-property-portfolio-growth-guide',
+    title: 'UK Property Portfolio Growth - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to growing a property portfolio in the UK. Learn about financing strategies, portfolio structuring, scaling operations, and building long-term wealth through property.',
+    metaDescription: 'UK property portfolio growth guide 2026. Financing, portfolio structure, scaling strategies, and building wealth through property investment.',
+    date: '2026-01-04',
+    readTime: '16 min read',
+    wordCount: 1750,
+    category: 'Landlord Guides',
+    tags: ['property portfolio', 'portfolio growth', 'property investment', 'landlord strategy', 'wealth building'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Investment Specialists',
+    },
+    heroImage: '/images/blog/placeholder-portfolio-growth.svg',
+    heroImageAlt: 'UK Property Portfolio Growth Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'property portfolio growth UK',
+    secondaryKeywords: ['growing property portfolio', 'property investment strategy', 'portfolio landlord', 'property wealth', 'buy to let portfolio'],
+    tableOfContents: [
+      { id: 'overview', title: 'Portfolio Growth Overview', level: 2 },
+      { id: 'financing', title: 'Financing Strategies', level: 2 },
+      { id: 'structuring', title: 'Portfolio Structuring', level: 2 },
+      { id: 'acquisition', title: 'Acquisition Strategy', level: 2 },
+      { id: 'scaling', title: 'Scaling Operations', level: 2 },
+      { id: 'risk-management', title: 'Risk Management', level: 2 },
+      { id: 'exit-planning', title: 'Exit Planning', level: 2 },
+      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+    ],
+    relatedPosts: ['uk-buy-to-let-guide', 'uk-landlord-licensing-guide', 'uk-letting-agent-selection-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Building a property portfolio remains one of the most reliable paths to wealth
+          creation in the UK. From acquiring your first investment property to managing a
+          substantial portfolio, growth requires strategic planning, appropriate financing,
+          and efficient operations. This guide covers everything you need to know about
+          scaling your property business.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="overview">Portfolio Growth Overview</h2>
+
+        <p>
+          Growing a property portfolio is not simply about buying more properties. Success
+          requires understanding financing constraints, structuring for tax efficiency,
+          building systems for scale, and managing increasing complexity.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-overview.svg"
+          alt="Property portfolio growth journey"
+          caption="Strategic growth builds sustainable property wealth"
+          aspectRatio="16:9"
+        />
+
+        <h3>Growth Stages</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Stage</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Properties</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Key Focus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Foundation</td>
+                <td className="border border-gray-200 px-4 py-2">1-3</td>
+                <td className="border border-gray-200 px-4 py-2">Learning, systems, cash flow</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Growth</td>
+                <td className="border border-gray-200 px-4 py-2">4-10</td>
+                <td className="border border-gray-200 px-4 py-2">Financing, efficiency, scaling</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Established</td>
+                <td className="border border-gray-200 px-4 py-2">11-25</td>
+                <td className="border border-gray-200 px-4 py-2">Professional management, diversification</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Institutional</td>
+                <td className="border border-gray-200 px-4 py-2">25+</td>
+                <td className="border border-gray-200 px-4 py-2">Team building, asset management</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key Success Factors</h3>
+
+        <ul>
+          <li><strong>Clear strategy</strong> - Know your investment thesis and stick to it</li>
+          <li><strong>Financing access</strong> - Multiple lender relationships</li>
+          <li><strong>Efficient operations</strong> - Systems that scale</li>
+          <li><strong>Risk management</strong> - Diversification and reserves</li>
+          <li><strong>Professional support</strong> - Advisors who understand property</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Growth Principle</p>
+          <p className="text-blue-800">
+            Sustainable growth comes from compounding equity and reinvesting cash flow.
+            Avoid the temptation to grow too fast at the expense of cash reserves and
+            operational capability.
+          </p>
+        </div>
+
+        <h2 id="financing">Financing Strategies</h2>
+
+        <p>
+          Access to finance is typically the primary constraint on portfolio growth.
+          Understanding financing options and lender requirements is essential.
+        </p>
+
+        <h3>Portfolio Landlord Rules</h3>
+
+        <p>
+          Since 2017, lenders apply "portfolio landlord" rules to borrowers with 4+
+          mortgaged properties. These require more detailed information about your
+          entire portfolio, income, and business plan. Lenders stress-test the whole
+          portfolio, not just the new property.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-financing.svg"
+          alt="Property portfolio financing"
+          caption="Understanding financing opens growth opportunities"
+          aspectRatio="16:9"
+        />
+
+        <h3>Financing Options</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Option</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Best For</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Considerations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Standard BTL mortgages</td>
+                <td className="border border-gray-200 px-4 py-2">Most purchases</td>
+                <td className="border border-gray-200 px-4 py-2">Product choice narrows with portfolio size</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Portfolio mortgages</td>
+                <td className="border border-gray-200 px-4 py-2">Larger portfolios</td>
+                <td className="border border-gray-200 px-4 py-2">Single facility, cross-charging</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Bridging finance</td>
+                <td className="border border-gray-200 px-4 py-2">Fast purchases, refurbs</td>
+                <td className="border border-gray-200 px-4 py-2">High cost, short term</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Development finance</td>
+                <td className="border border-gray-200 px-4 py-2">Conversions, new builds</td>
+                <td className="border border-gray-200 px-4 py-2">Complex, staged drawdowns</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Commercial mortgages</td>
+                <td className="border border-gray-200 px-4 py-2">Mixed-use, large portfolios</td>
+                <td className="border border-gray-200 px-4 py-2">More flexible, higher rates</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Equity Recycling</h3>
+
+        <p>
+          As properties appreciate and mortgages reduce, equity builds in your portfolio.
+          Remortgaging to release equity provides capital for further acquisitions.
+          This "velocity of capital" accelerates growth without requiring new savings.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
+          <p className="font-semibold text-green-900">Financing Tip</p>
+          <p className="text-green-800">
+            Build relationships with multiple brokers and lenders. Portfolio landlords
+            find that lender appetite varies. Having options prevents growth stalling
+            when one lender's criteria change.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="structuring">Portfolio Structuring</h2>
+
+        <p>
+          How you structure ownership affects tax efficiency, liability protection,
+          and ease of management.
+        </p>
+
+        <h3>Ownership Options</h3>
+
+        <ul>
+          <li><strong>Personal ownership</strong> - Simple but less tax-efficient for higher earners</li>
+          <li><strong>Limited company (SPV)</strong> - Corporation tax rates, mortgage interest deductible</li>
+          <li><strong>Partnership</strong> - Flexibility but complexity</li>
+          <li><strong>Multiple companies</strong> - Separate risk, optimise small company reliefs</li>
+        </ul>
+
+        <h3>Personal vs Limited Company</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Factor</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Personal</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Limited Company</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Tax on profits</td>
+                <td className="border border-gray-200 px-4 py-2">Income tax (20-45%)</td>
+                <td className="border border-gray-200 px-4 py-2">Corporation tax (25%)</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Mortgage interest</td>
+                <td className="border border-gray-200 px-4 py-2">20% tax credit only</td>
+                <td className="border border-gray-200 px-4 py-2">Fully deductible</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Extracting profits</td>
+                <td className="border border-gray-200 px-4 py-2">Direct access</td>
+                <td className="border border-gray-200 px-4 py-2">Dividends/salary (additional tax)</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">CGT on sale</td>
+                <td className="border border-gray-200 px-4 py-2">CGT rates apply</td>
+                <td className="border border-gray-200 px-4 py-2">Corp tax, then extraction tax</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Mortgage rates</td>
+                <td className="border border-gray-200 px-4 py-2">Generally lower</td>
+                <td className="border border-gray-200 px-4 py-2">Typically 0.5-1% higher</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-structure.svg"
+          alt="Portfolio ownership structure"
+          caption="Correct structuring optimises tax and manages risk"
+          aspectRatio="16:9"
+        />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
+          <p className="font-semibold text-amber-900">Structuring Warning</p>
+          <p className="text-amber-800">
+            Transferring existing properties to a company triggers CGT and Stamp Duty.
+            This is rarely cost-effective. Consider company ownership for new acquisitions
+            rather than restructuring existing holdings.
+          </p>
+        </div>
+
+        <h2 id="acquisition">Acquisition Strategy</h2>
+
+        <p>
+          Consistent acquisition requires a clear strategy and efficient processes
+          for finding, evaluating, and completing on properties.
+        </p>
+
+        <h3>Sourcing Properties</h3>
+
+        <ul>
+          <li><strong>Estate agents</strong> - Build relationships for early access</li>
+          <li><strong>Property sourcers</strong> - Pay fees for off-market deals</li>
+          <li><strong>Auctions</strong> - Below market value opportunities</li>
+          <li><strong>Direct to vendor</strong> - Leaflet drops, approaching owners</li>
+          <li><strong>Network</strong> - Other investors, solicitors, accountants</li>
+        </ul>
+
+        <h3>Due Diligence Process</h3>
+
+        <p>
+          Develop a systematic due diligence process covering financial analysis (yield,
+          cash flow, stress testing), legal checks (title, planning, compliance), physical
+          inspection (condition, required works), and market research (comparable rents,
+          demand drivers).
+        </p>
+
+        <h3>Investment Criteria</h3>
+
+        <p>
+          Define clear criteria for purchases: minimum yield, maximum price, acceptable
+          locations, property types, and condition requirements. Clear criteria speed
+          decision-making and prevent emotional purchases that don't fit your strategy.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-acquisition.svg"
+          alt="Property acquisition strategy"
+          caption="Systematic acquisition builds a quality portfolio"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="scaling">Scaling Operations</h2>
+
+        <p>
+          Operational efficiency becomes critical as the portfolio grows. What works
+          for 3 properties fails at 30.
+        </p>
+
+        <h3>Property Management</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Approach</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Suits</th>
+                <th className="border border-gray-200 px-4 py-2 text-left font-semibold">Considerations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Self-management</td>
+                <td className="border border-gray-200 px-4 py-2">Small portfolios, local</td>
+                <td className="border border-gray-200 px-4 py-2">Time intensive, learning curve</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Letting agents</td>
+                <td className="border border-gray-200 px-4 py-2">Growing portfolios</td>
+                <td className="border border-gray-200 px-4 py-2">Cost 8-15%, variable quality</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">In-house team</td>
+                <td className="border border-gray-200 px-4 py-2">Large portfolios (25+)</td>
+                <td className="border border-gray-200 px-4 py-2">Fixed costs, control</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-200 px-4 py-2">Hybrid</td>
+                <td className="border border-gray-200 px-4 py-2">Most portfolios</td>
+                <td className="border border-gray-200 px-4 py-2">Strategic oversight, outsourced operations</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Systems and Technology</h3>
+
+        <ul>
+          <li><strong>Property management software</strong> - Track rent, maintenance, documents</li>
+          <li><strong>Accounting systems</strong> - Proper bookkeeping from the start</li>
+          <li><strong>Document management</strong> - Digital storage for all records</li>
+          <li><strong>Tenant portals</strong> - Self-service rent payments, requests</li>
+          <li><strong>Contractor management</strong> - Approved supplier lists, scheduling</li>
+        </ul>
+
+        <h3>Building Your Team</h3>
+
+        <p>
+          As you scale, build a professional team including a property-specialist
+          accountant, responsive solicitor, reliable contractors, mortgage broker
+          with portfolio experience, and potentially property manager or VA for
+          administrative tasks.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+          <p className="font-semibold text-blue-900">Scaling Tip</p>
+          <p className="text-blue-800">
+            Build systems before you need them. Implementing processes at 5 properties
+            is easier than retrofitting at 20. Document everything to enable delegation.
+          </p>
+        </div>
+
+        <h2 id="risk-management">Risk Management</h2>
+
+        <p>
+          Portfolio scale amplifies risks. Systematic risk management protects against
+          adverse events.
+        </p>
+
+        <h3>Key Risk Areas</h3>
+
+        <ul>
+          <li><strong>Void risk</strong> - Empty properties drain cash flow</li>
+          <li><strong>Interest rate risk</strong> - Rising rates squeeze margins</li>
+          <li><strong>Regulatory risk</strong> - Changing rules increase costs</li>
+          <li><strong>Tenant default</strong> - Non-payment affects cash flow</li>
+          <li><strong>Capital value</strong> - Market corrections reduce equity</li>
+          <li><strong>Concentration</strong> - Single location or tenant type exposure</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-risk.svg"
+          alt="Portfolio risk management"
+          caption="Systematic risk management protects portfolio value"
+          aspectRatio="16:9"
+        />
+
+        <h3>Mitigation Strategies</h3>
+
+        <ul>
+          <li><strong>Cash reserves</strong> - Minimum 3-6 months expenses</li>
+          <li><strong>Interest rate hedging</strong> - Fixed rate mortgages</li>
+          <li><strong>Geographic diversification</strong> - Multiple locations</li>
+          <li><strong>Property type mix</strong> - Houses, flats, HMOs</li>
+          <li><strong>Insurance</strong> - Comprehensive landlord cover, rent guarantee</li>
+          <li><strong>LTV discipline</strong> - Conservative leverage maintains buffer</li>
+        </ul>
+
+        <h3>Stress Testing</h3>
+
+        <p>
+          Regularly stress test your portfolio against scenarios including interest rate
+          rises of 2-3%, vacancy rates of 10-20%, rent reductions of 10-15%, and major
+          repair costs. Understanding vulnerabilities enables proactive management.
+        </p>
+
+        <h2 id="exit-planning">Exit Planning</h2>
+
+        <p>
+          Building a portfolio is only valuable if you can extract the wealth created.
+          Consider exit strategies from the outset.
+        </p>
+
+        <h3>Exit Options</h3>
+
+        <ul>
+          <li><strong>Individual sales</strong> - Sell properties gradually for income</li>
+          <li><strong>Portfolio sale</strong> - Sell entire portfolio to institutional buyer</li>
+          <li><strong>Refinance and hold</strong> - Release equity, retain ownership</li>
+          <li><strong>Family succession</strong> - Transfer to next generation</li>
+          <li><strong>REIT contribution</strong> - Exchange for shares in larger vehicle</li>
+        </ul>
+
+        <h3>Tax Planning</h3>
+
+        <p>
+          Exit tax planning should start early. Consider using annual CGT allowances,
+          timing sales across tax years, spousal transfers before sale, principal private
+          residence elections where applicable, and company liquidation strategies.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
+          <p className="font-semibold text-green-900">Exit Tip</p>
+          <p className="text-green-800">
+            The most tax-efficient exit is often no exit. Properties passing on death
+            receive base cost uplift, eliminating CGT on lifetime gains. Consider
+            inter-generational wealth transfer as part of your strategy.
+          </p>
+        </div>
+
+        <h2 id="faqs">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How many properties do I need before it's worth setting up a company?</h3>
+            <p className="text-gray-600">
+              There's no magic number. Company ownership typically benefits higher-rate
+              taxpayers or those planning significant growth and profit retention. Many
+              start using companies from their first or second property if they fit
+              these criteria.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need more deposit as my portfolio grows?</h3>
+            <p className="text-gray-600">
+              Individual property deposits remain similar (typically 25%). However,
+              portfolio landlord rules mean lenders assess your whole portfolio. You
+              may need to demonstrate stronger overall finances and cash reserves.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">When should I start using a property manager?</h3>
+            <p className="text-gray-600">
+              Consider management when the portfolio reaches 5-10 properties, when you
+              can't respond promptly to issues, when properties are distant, or when
+              you want to focus on acquisitions rather than operations.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I concentrate in one area or diversify?</h3>
+            <p className="text-gray-600">
+              Both strategies work. Concentration builds local expertise and efficient
+              management. Diversification reduces location-specific risks. Many investors
+              start concentrated then diversify as they grow.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I finance growth without new capital?</h3>
+            <p className="text-gray-600">
+              Equity recycling through remortgaging releases capital as properties
+              appreciate. BRRR (Buy, Refurbish, Refinance, Rent) strategies maximise
+              this approach. Cash flow from existing properties can also fund deposits.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-portfolio-success.svg"
+          alt="Successful property portfolio"
+          caption="Strategic growth builds sustainable property wealth"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
