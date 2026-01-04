@@ -27783,6 +27783,1003 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 74: UK Property Maintenance Obligations
+  {
+    slug: 'uk-property-maintenance-obligations',
+    title: 'UK Property Maintenance Obligations - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to landlord property maintenance obligations across the UK. Understand your legal responsibilities for repairs, safety, and property standards.',
+    metaDescription: 'UK landlord maintenance obligations 2026. Complete guide to repair responsibilities, safety requirements, response times, and compliance across England, Wales, Scotland & NI.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1780,
+    category: 'Property Management',
+    tags: ['property maintenance', 'landlord repairs', 'property obligations', 'maintenance responsibilities', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-maintenance.svg',
+    heroImageAlt: 'UK Property Maintenance Obligations Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord maintenance obligations UK',
+    secondaryKeywords: ['property repairs landlord', 'landlord repair responsibilities', 'rental property maintenance', 'maintenance requirements UK'],
+    tableOfContents: [
+      { id: 'legal-framework', title: 'Legal Framework', level: 2 },
+      { id: 'repair-categories', title: 'Repair Categories', level: 2 },
+      { id: 'response-times', title: 'Response Times', level: 2 },
+      { id: 'regional-variations', title: 'Regional Variations', level: 2 },
+      { id: 'documentation', title: 'Documentation', level: 2 },
+      { id: 'maintenance-faq', title: 'Maintenance FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-gas-safety-landlords', 'uk-electrical-safety-landlords', 'uk-fire-safety-landlords'],
+    content: (
+      <>
+        <p className="lead">
+          Understanding your maintenance obligations as a UK landlord is essential for legal
+          compliance, tenant satisfaction, and protecting your property investment. This guide
+          covers everything landlords need to know about repairs and maintenance in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-maintenance.svg"
+          alt="Property maintenance tools and checklist"
+          caption="Proper maintenance protects both your property and your tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="legal-framework" className="scroll-mt-24">Legal Framework for Landlord Maintenance</h2>
+
+        <p>
+          Landlord maintenance obligations arise from multiple sources: statute, common law,
+          and the tenancy agreement. Understanding each is crucial for compliance.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Legislation</h4>
+          <p className="text-blue-800">
+            The Landlord and Tenant Act 1985 (Sections 11-14) creates implied repairing
+            obligations for residential tenancies. The Homes (Fitness for Human Habitation)
+            Act 2018 strengthens tenant protections further.
+          </p>
+        </div>
+
+        <h3>Statutory Repair Obligations</h3>
+
+        <p>
+          Under Section 11 of the Landlord and Tenant Act 1985, landlords must keep in
+          repair and proper working order:
+        </p>
+
+        <ul>
+          <li><strong>Structure and exterior</strong> - walls, roof, windows, doors, drains, gutters</li>
+          <li><strong>Water supply</strong> - pipes, tanks, boilers, basins, sinks, baths</li>
+          <li><strong>Gas installations</strong> - pipes, flues, appliances, ventilation</li>
+          <li><strong>Electrical systems</strong> - wiring, sockets, light fittings</li>
+          <li><strong>Space heating</strong> - central heating, water heating systems</li>
+          <li><strong>Sanitation</strong> - toilets, sewage disposal</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-repair-categories.svg"
+          alt="Categories of landlord repair responsibilities"
+          caption="Clear categorization helps prioritize maintenance work"
+          aspectRatio="4:3"
+        />
+
+        <h3>Fitness for Human Habitation</h3>
+
+        <p>
+          The 2018 Act requires properties to be fit for habitation throughout the tenancy.
+          Factors assessed include:
+        </p>
+
+        <ul>
+          <li>Freedom from damp and condensation</li>
+          <li>Adequate natural lighting and ventilation</li>
+          <li>Safe water supply and drainage</li>
+          <li>Stability of the building structure</li>
+          <li>Freedom from hazards under the HHSRS</li>
+        </ul>
+
+        <h2 id="repair-categories" className="scroll-mt-24">Repair Categories and Priorities</h2>
+
+        <p>
+          Repairs fall into different categories based on urgency. Understanding these
+          helps you respond appropriately and demonstrate compliance.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Category</th>
+                <th className="border p-3 text-left font-semibold">Examples</th>
+                <th className="border p-3 text-left font-semibold">Target Response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium text-red-600">Emergency</td>
+                <td className="border p-3">Gas leak, flooding, no heating in winter, total power failure</td>
+                <td className="border p-3">24 hours or less</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium text-amber-600">Urgent</td>
+                <td className="border p-3">Partial heating failure, blocked drain, broken lock</td>
+                <td className="border p-3">3-5 working days</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium text-blue-600">Routine</td>
+                <td className="border p-3">Cracked tiles, worn carpets, cosmetic damage</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium text-green-600">Planned</td>
+                <td className="border p-3">Decoration, kitchen replacement, bathroom upgrade</td>
+                <td className="border p-3">As scheduled</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="response-times" className="scroll-mt-24">Response Times and Best Practice</h2>
+
+        <p>
+          While legislation doesn&apos;t specify exact timeframes, courts and tribunals expect
+          reasonable response times based on the nature and severity of issues.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Emergency Response</h4>
+          <p className="text-red-800">
+            For genuine emergencies (gas leaks, major flooding, complete loss of heating
+            in winter), aim to respond within 24 hours. Have emergency contractor contacts
+            ready at all times.
+          </p>
+        </div>
+
+        <h3>Acknowledgment and Communication</h3>
+
+        <p>
+          Best practice for handling repair requests:
+        </p>
+
+        <ol>
+          <li><strong>Acknowledge receipt</strong> - within 24 hours of receiving notification</li>
+          <li><strong>Assess urgency</strong> - categorize and prioritize appropriately</li>
+          <li><strong>Communicate timeline</strong> - inform tenant of expected response</li>
+          <li><strong>Arrange access</strong> - coordinate convenient inspection times</li>
+          <li><strong>Complete repairs</strong> - use qualified contractors where required</li>
+          <li><strong>Document completion</strong> - obtain tenant confirmation</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-contractor.svg"
+          alt="Professional contractor performing property repairs"
+          caption="Using qualified professionals ensures repairs meet required standards"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="regional-variations" className="scroll-mt-24">Regional Variations Across the UK</h2>
+
+        <p>
+          While core maintenance obligations are similar, each UK nation has specific
+          requirements landlords must understand.
+        </p>
+
+        <h3>England</h3>
+
+        <p>
+          Electrical safety certificates (EICR) required every 5 years. Smoke alarms on
+          every floor, carbon monoxide alarms where solid fuel appliances exist. The
+          Decent Homes Standard applies to social housing.
+        </p>
+
+        <h3>Wales</h3>
+
+        <p>
+          The Renting Homes (Wales) Act 2016 creates comprehensive fitness requirements.
+          EICR required at start of tenancy and every 5 years. Smoke alarms required in
+          living areas, not just escape routes.
+        </p>
+
+        <h3>Scotland</h3>
+
+        <p>
+          The Repairing Standard is stricter than England. Properties must have satisfactory
+          heating (not just working), adequate ventilation, and thermal insulation meeting
+          the tolerable standard.
+        </p>
+
+        <h3>Northern Ireland</h3>
+
+        <p>
+          The Fitness Standard under the Private Tenancies (Northern Ireland) Order 2006
+          applies. Landlords must ensure properties meet all fitness criteria throughout
+          tenancy.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Maintenance Management Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides maintenance tracking templates, repair checklists,
+            and documentation tools to help you stay compliant and organized.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Maintenance Tools →
+          </Link>
+        </div>
+
+        <h2 id="documentation" className="scroll-mt-24">Documentation and Record Keeping</h2>
+
+        <p>
+          Proper documentation protects you in disputes and demonstrates compliance.
+          Essential records include:
+        </p>
+
+        <ul>
+          <li><strong>Repair logs</strong> - date reported, nature of issue, actions taken</li>
+          <li><strong>Communication records</strong> - emails, messages with tenants</li>
+          <li><strong>Contractor invoices</strong> - proof of work and expenditure</li>
+          <li><strong>Photographs</strong> - before and after images of repairs</li>
+          <li><strong>Safety certificates</strong> - gas, electrical, EPC documents</li>
+          <li><strong>Inspection reports</strong> - periodic property inspections</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-documentation.svg"
+          alt="Property maintenance documentation and records"
+          caption="Comprehensive documentation protects you in disputes"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="maintenance-faq" className="scroll-mt-24">Maintenance Obligations FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What repairs are the tenant&apos;s responsibility?</h3>
+            <p className="text-gray-600">
+              Tenants are typically responsible for minor repairs caused by their own
+              actions, keeping the property clean and ventilated, changing light bulbs,
+              and reporting issues promptly. The agreement should specify.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I charge tenants for repairs they caused?</h3>
+            <p className="text-gray-600">
+              Yes, if damage is caused by tenant negligence or deliberate action, you can
+              claim the cost from them or deduct from the deposit at tenancy end (with
+              proper evidence and dispute resolution process).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant refuses access for repairs?</h3>
+            <p className="text-gray-600">
+              Give written notice (typically 24-48 hours for non-emergencies). If access
+              is still refused, document everything. You cannot force entry except in
+              genuine emergencies. Seek legal advice if the situation persists.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long do I have to complete repairs?</h3>
+            <p className="text-gray-600">
+              There&apos;s no fixed legal timeframe, but &quot;reasonable&quot; time applies.
+              Emergency repairs should be addressed within 24 hours, urgent within 3-5 days,
+              and routine within 28 days. Document your efforts.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 75: UK End of Tenancy Guide
+  {
+    slug: 'uk-end-of-tenancy-guide',
+    title: 'UK End of Tenancy Guide - Complete Process for Landlords 2026',
+    description: 'Complete guide to managing end of tenancy in the UK. From notice periods to deposit returns, inspections to checkout procedures.',
+    metaDescription: 'UK end of tenancy guide for landlords 2026. Complete process for notices, inspections, checkout procedures, deposit deductions, and handover across all UK regions.',
+    date: '2026-01-03',
+    readTime: '16 min read',
+    wordCount: 1850,
+    category: 'Property Management',
+    tags: ['end of tenancy', 'checkout process', 'tenant handover', 'deposit returns', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-end-tenancy.svg',
+    heroImageAlt: 'UK End of Tenancy Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'end of tenancy UK landlords',
+    secondaryKeywords: ['checkout process landlord', 'tenancy handover', 'deposit deductions', 'tenant checkout'],
+    tableOfContents: [
+      { id: 'tenancy-ending', title: 'How Tenancies End', level: 2 },
+      { id: 'checkout-inspection', title: 'Checkout Inspection', level: 2 },
+      { id: 'deposit-process', title: 'Deposit Return Process', level: 2 },
+      { id: 'cleaning-standards', title: 'Cleaning Standards', level: 2 },
+      { id: 'final-accounts', title: 'Final Accounts', level: 2 },
+      { id: 'end-tenancy-faq', title: 'End of Tenancy FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-deposit-protection-guide', 'uk-tenancy-agreements-guide', 'uk-property-maintenance-obligations'],
+    content: (
+      <>
+        <p className="lead">
+          The end of tenancy process requires careful management to protect your interests,
+          return deposits fairly, and prepare for new tenants. This comprehensive guide
+          covers every step for UK landlords in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-end-tenancy.svg"
+          alt="End of tenancy checklist and keys"
+          caption="A structured checkout process protects both landlord and tenant"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="tenancy-ending" className="scroll-mt-24">How Tenancies End</h2>
+
+        <p>
+          Understanding how tenancies legally end is essential for a smooth transition.
+          Different scenarios require different approaches.
+        </p>
+
+        <h3>Fixed Term Ending</h3>
+
+        <p>
+          When a fixed-term tenancy reaches its end date:
+        </p>
+
+        <ul>
+          <li>Neither party needs to give notice if the tenancy simply ends</li>
+          <li>The tenancy automatically becomes periodic if the tenant remains</li>
+          <li>You can offer a new fixed term before expiry</li>
+          <li>Checkout should be arranged for the final day</li>
+        </ul>
+
+        <h3>Notice to Quit (Periodic Tenancy)</h3>
+
+        <p>
+          For rolling periodic tenancies, proper notice is required:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Notice Type</th>
+                <th className="border p-3 text-left font-semibold">Period Required</th>
+                <th className="border p-3 text-left font-semibold">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Tenant notice (monthly)</td>
+                <td className="border p-3">1 month</td>
+                <td className="border p-3">Must end on rent due date</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Section 21 (England)</td>
+                <td className="border p-3">2 months</td>
+                <td className="border p-3">Being reformed - check current requirements</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Wales notice</td>
+                <td className="border p-3">6 months (no-fault)</td>
+                <td className="border p-3">Under Renting Homes Act</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Scotland notice</td>
+                <td className="border p-3">28-84 days</td>
+                <td className="border p-3">Depends on ground and length of tenancy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Important: Section 21 Changes</h4>
+          <p className="text-amber-800">
+            Section 21 &quot;no-fault&quot; evictions are being reformed. Always check current
+            requirements before serving notice, as rules are changing in England.
+          </p>
+        </div>
+
+        <h3>Mutual Agreement</h3>
+
+        <p>
+          Landlord and tenant can agree to end a tenancy at any time by mutual consent.
+          This should be documented in writing as a &quot;surrender&quot; of the tenancy.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-types.svg"
+          alt="Types of tenancy ending notices"
+          caption="Different situations require different notice procedures"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="checkout-inspection" className="scroll-mt-24">Checkout Inspection</h2>
+
+        <p>
+          The checkout inspection is crucial for assessing property condition and
+          determining any deposit deductions. Conduct it thoroughly and fairly.
+        </p>
+
+        <h3>Preparing for Checkout</h3>
+
+        <ol>
+          <li><strong>Schedule the inspection</strong> - ideally on the last day of tenancy</li>
+          <li><strong>Review inventory</strong> - have check-in report and photos ready</li>
+          <li><strong>Prepare checkout form</strong> - comprehensive room-by-room checklist</li>
+          <li><strong>Arrange attendance</strong> - tenant should be present if possible</li>
+          <li><strong>Gather equipment</strong> - camera, meter reading form, key list</li>
+        </ol>
+
+        <BlogCTA variant="inline" />
+
+        <h3>During the Inspection</h3>
+
+        <p>
+          Work through each room systematically, comparing current condition to the
+          inventory. Document everything:
+        </p>
+
+        <ul>
+          <li>Check walls, ceilings, floors for damage beyond fair wear and tear</li>
+          <li>Test all appliances and fixtures</li>
+          <li>Inspect furniture and furnishings condition</li>
+          <li>Note cleanliness levels throughout</li>
+          <li>Check gardens and external areas</li>
+          <li>Take meter readings (gas, electricity, water)</li>
+          <li>Collect all keys and access devices</li>
+        </ul>
+
+        <h3>Fair Wear and Tear</h3>
+
+        <p>
+          Distinguishing between fair wear and tear versus damage is often contentious.
+          Fair wear and tear includes:
+        </p>
+
+        <ul>
+          <li>Minor scuffs on walls from normal furniture placement</li>
+          <li>Fading of carpets or curtains from sunlight</li>
+          <li>Small marks on woodwork from everyday use</li>
+          <li>Worn areas on carpets in high-traffic zones</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Not Fair Wear and Tear</h4>
+          <p className="text-red-800">
+            Burns, stains, holes, broken fixtures, missing items, pet damage, and
+            damage from neglect (like limescale buildup or mould from poor ventilation)
+            are not fair wear and tear.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-checkout-inspection.svg"
+          alt="Landlord conducting checkout inspection"
+          caption="Thorough documentation during checkout protects both parties"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="deposit-process" className="scroll-mt-24">Deposit Return Process</h2>
+
+        <p>
+          Deposit returns must follow legal processes. Failure to comply can result
+          in penalties and inability to serve Section 21 notices.
+        </p>
+
+        <h3>Timeline for Return</h3>
+
+        <p>
+          After the tenancy ends and checkout is complete:
+        </p>
+
+        <ol>
+          <li><strong>Review checkout report</strong> - compare against inventory</li>
+          <li><strong>Calculate deductions</strong> - itemize any claims with evidence</li>
+          <li><strong>Propose split</strong> - send tenant your proposal within 10 days</li>
+          <li><strong>Negotiate if needed</strong> - agree final amounts</li>
+          <li><strong>Process return</strong> - release funds through scheme</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900 mb-2">Best Practice Timeline</h4>
+          <p className="text-green-800">
+            Aim to return deposits within 10 days of tenancy end if there are no
+            deductions, or within 10 days of agreeing deductions. Delays damage your
+            reputation and may breach scheme rules.
+          </p>
+        </div>
+
+        <h3>Making Deductions</h3>
+
+        <p>
+          If you&apos;re claiming deductions, you need evidence:
+        </p>
+
+        <ul>
+          <li><strong>Checkout report</strong> - with photographs</li>
+          <li><strong>Check-in inventory</strong> - proving original condition</li>
+          <li><strong>Invoices or quotes</strong> - for repairs or cleaning</li>
+          <li><strong>Calculations</strong> - showing how amounts were determined</li>
+        </ul>
+
+        <h2 id="cleaning-standards" className="scroll-mt-24">Cleaning Standards</h2>
+
+        <p>
+          Cleaning expectations are a common source of disputes. Set clear standards
+          from the start and apply them fairly at checkout.
+        </p>
+
+        <h3>Reasonable Expectations</h3>
+
+        <p>
+          Tenants should return the property in a similar condition to check-in,
+          accounting for fair wear and tear. This typically means:
+        </p>
+
+        <ul>
+          <li>All surfaces wiped down and clean</li>
+          <li>Floors vacuumed/mopped</li>
+          <li>Kitchen appliances cleaned (inside and out)</li>
+          <li>Bathroom fixtures cleaned and limescale-free</li>
+          <li>Windows cleaned internally</li>
+          <li>Rubbish removed</li>
+          <li>Gardens maintained to reasonable standard</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-cleaning-standards.svg"
+          alt="Property cleaning checklist standards"
+          caption="Clear cleaning standards reduce disputes at checkout"
+          aspectRatio="4:3"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">End of Tenancy Documentation</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides checkout checklists, deposit deduction calculators,
+            and letter templates to streamline your end of tenancy process.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Checkout Templates →
+          </Link>
+        </div>
+
+        <h2 id="final-accounts" className="scroll-mt-24">Final Accounts and Handover</h2>
+
+        <p>
+          Complete these final steps to conclude the tenancy properly:
+        </p>
+
+        <h3>Utilities and Council Tax</h3>
+
+        <ol>
+          <li>Take final meter readings on checkout day</li>
+          <li>Notify utility companies of tenancy end</li>
+          <li>Inform council of tenant departure date</li>
+          <li>Provide forwarding address if tenant consents</li>
+        </ol>
+
+        <h3>Key Return</h3>
+
+        <ul>
+          <li>Collect all keys at checkout</li>
+          <li>Check against key list from check-in</li>
+          <li>Consider changing locks between tenancies (recommended)</li>
+          <li>Issue receipt for returned keys</li>
+        </ul>
+
+        <h2 id="end-tenancy-faq" className="scroll-mt-24">End of Tenancy FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant leaves belongings behind?</h3>
+            <p className="text-gray-600">
+              You must make reasonable efforts to return them. Write to the tenant
+              giving 14-28 days to collect. If unclaimed, you can dispose of items
+              but keep records of your attempts to return them.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I deduct for professional cleaning?</h3>
+            <p className="text-gray-600">
+              Only if the property was professionally cleaned at check-in and the
+              tenant was informed they must do the same. You cannot charge for cleaning
+              that wasn&apos;t required at the start.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant disagrees with deductions?</h3>
+            <p className="text-gray-600">
+              Use the deposit scheme&apos;s Alternative Dispute Resolution (ADR) service.
+              An independent adjudicator will review evidence and make a binding
+              decision on how the deposit should be split.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I do a pre-checkout inspection?</h3>
+            <p className="text-gray-600">
+              A pre-checkout visit 1-2 weeks before the end date is recommended.
+              It allows you to flag any issues the tenant can address before final
+              checkout, reducing disputes.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 76: UK Property Inspections Guide
+  {
+    slug: 'uk-property-inspections-guide',
+    title: 'UK Property Inspections - Complete Landlord Guide 2026',
+    description: 'Essential guide to conducting property inspections as a UK landlord. Learn about legal requirements, best practices, and inspection procedures.',
+    metaDescription: 'UK property inspections guide for landlords 2026. Legal requirements, notice periods, inspection checklists, and best practices for England, Wales, Scotland & NI.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1680,
+    category: 'Property Management',
+    tags: ['property inspections', 'landlord inspections', 'tenant rights', 'property visits', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-inspections.svg',
+    heroImageAlt: 'UK Property Inspections Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'property inspections UK landlords',
+    secondaryKeywords: ['landlord inspection rights', 'property visit notice', 'rental inspections', 'routine inspections'],
+    tableOfContents: [
+      { id: 'legal-framework', title: 'Legal Framework', level: 2 },
+      { id: 'inspection-types', title: 'Types of Inspections', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'inspection-checklist', title: 'Inspection Checklist', level: 2 },
+      { id: 'documentation', title: 'Documentation', level: 2 },
+      { id: 'inspections-faq', title: 'Inspections FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-maintenance-obligations', 'uk-end-of-tenancy-guide', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Regular property inspections help landlords maintain their investment, identify
+          issues early, and ensure tenants are complying with tenancy terms. This guide
+          covers everything UK landlords need to know about conducting inspections legally
+          and effectively.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inspections.svg"
+          alt="Landlord conducting property inspection"
+          caption="Regular inspections protect your property and identify issues early"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="legal-framework" className="scroll-mt-24">Legal Framework for Property Inspections</h2>
+
+        <p>
+          While landlords have legitimate reasons to inspect their properties, tenant
+          rights to &quot;quiet enjoyment&quot; must be respected. Finding the right balance
+          is essential.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Tenant&apos;s Right to Quiet Enjoyment</h4>
+          <p className="text-blue-800">
+            Tenants have a legal right to enjoy the property without unreasonable
+            interference from the landlord. Excessive inspections or turning up
+            unannounced can breach this right.
+          </p>
+        </div>
+
+        <h3>Your Rights as a Landlord</h3>
+
+        <p>
+          Landlords have legitimate interests in inspecting their property to:
+        </p>
+
+        <ul>
+          <li>Check the property&apos;s condition and maintenance needs</li>
+          <li>Ensure the tenant is not breaching tenancy terms</li>
+          <li>Carry out or arrange repairs</li>
+          <li>Show prospective tenants or buyers (with proper notice)</li>
+          <li>Conduct gas and electrical safety checks</li>
+        </ul>
+
+        <h3>Inspection Frequency</h3>
+
+        <p>
+          What&apos;s reasonable for routine inspections?
+        </p>
+
+        <ul>
+          <li><strong>Every 3-6 months</strong> - generally accepted as reasonable</li>
+          <li><strong>Quarterly</strong> - common for HMO properties or new tenants</li>
+          <li><strong>Every 6 months</strong> - appropriate for long-term, trusted tenants</li>
+          <li><strong>More frequent</strong> - only with valid reason (ongoing repairs, issues)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inspection-schedule.svg"
+          alt="Property inspection schedule calendar"
+          caption="Schedule inspections at reasonable intervals to maintain good tenant relations"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="inspection-types" className="scroll-mt-24">Types of Property Inspections</h2>
+
+        <p>
+          Different inspection types serve different purposes. Understanding each
+          helps you plan effectively.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Inspection Type</th>
+                <th className="border p-3 text-left font-semibold">Purpose</th>
+                <th className="border p-3 text-left font-semibold">Typical Frequency</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Check-in inventory</td>
+                <td className="border p-3">Document condition at tenancy start</td>
+                <td className="border p-3">Once (tenancy start)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Routine inspection</td>
+                <td className="border p-3">General property condition check</td>
+                <td className="border p-3">Every 3-6 months</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Safety check</td>
+                <td className="border p-3">Gas, electrical, fire safety</td>
+                <td className="border p-3">Annually (gas), 5-yearly (EICR)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Maintenance visit</td>
+                <td className="border p-3">Carry out or assess repairs</td>
+                <td className="border p-3">As needed</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Checkout inspection</td>
+                <td className="border p-3">Document condition at tenancy end</td>
+                <td className="border p-3">Once (tenancy end)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <p>
+          Proper notice is legally required except in genuine emergencies. Always
+          give appropriate notice and document it.
+        </p>
+
+        <h3>Standard Notice Period</h3>
+
+        <p>
+          For routine inspections:
+        </p>
+
+        <ul>
+          <li><strong>Minimum 24 hours</strong> - legal minimum for most visits</li>
+          <li><strong>48 hours+</strong> - better practice, shows respect</li>
+          <li><strong>Written notice</strong> - email or letter preferred for records</li>
+          <li><strong>Reasonable times</strong> - typically between 9am-8pm</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Notice Exceptions</h4>
+          <p className="text-amber-800">
+            In genuine emergencies (gas leak, fire, flooding, structural danger),
+            you may enter without notice. However, &quot;emergency&quot; is narrowly defined -
+            suspected rent arrears or routine issues do not qualify.
+          </p>
+        </div>
+
+        <h3>What Notice Should Include</h3>
+
+        <ul>
+          <li>Purpose of the visit</li>
+          <li>Date and approximate time (or time range)</li>
+          <li>Who will attend (you, agent, contractor)</li>
+          <li>Estimated duration</li>
+          <li>Request for confirmation or alternative suggestion</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inspection-notice.svg"
+          alt="Property inspection notice letter"
+          caption="Professional written notices create a clear record"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="inspection-checklist" className="scroll-mt-24">Inspection Checklist</h2>
+
+        <p>
+          Use a comprehensive checklist to ensure consistent, thorough inspections.
+          Work through each area systematically.
+        </p>
+
+        <h3>Exterior Checks</h3>
+
+        <ul>
+          <li>Roof condition and guttering</li>
+          <li>Windows and frames condition</li>
+          <li>External doors and locks</li>
+          <li>Garden and outdoor areas</li>
+          <li>Boundary walls and fences</li>
+          <li>Driveway and paths</li>
+        </ul>
+
+        <h3>Interior - Room by Room</h3>
+
+        <ul>
+          <li>Walls and ceilings - cracks, damp, staining</li>
+          <li>Floors and carpets - wear, damage, cleanliness</li>
+          <li>Windows - operation, seals, locks</li>
+          <li>Doors - operation, locks, handles</li>
+          <li>Light fittings and switches</li>
+          <li>Power sockets</li>
+          <li>Radiators and heating controls</li>
+        </ul>
+
+        <h3>Kitchen</h3>
+
+        <ul>
+          <li>Appliances functioning correctly</li>
+          <li>Worktops and cabinets condition</li>
+          <li>Plumbing - taps, waste, leaks</li>
+          <li>Ventilation and extractor</li>
+          <li>General cleanliness</li>
+        </ul>
+
+        <h3>Bathroom</h3>
+
+        <ul>
+          <li>Toilet, bath, shower - operation and condition</li>
+          <li>Taps and waste - flow and drainage</li>
+          <li>Seals and grouting</li>
+          <li>Ventilation - extractor or windows</li>
+          <li>Signs of damp or mould</li>
+        </ul>
+
+        <h3>Safety Items</h3>
+
+        <ul>
+          <li>Smoke alarms - test and check batteries</li>
+          <li>Carbon monoxide alarms - test and check</li>
+          <li>Fire escape routes - clear and accessible</li>
+          <li>Boiler - visible issues, service date</li>
+          <li>Electrical safety - no visible hazards</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Property Inspection Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive inspection checklists, report
+            templates, and photo documentation tools for professional property inspections.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Inspection Templates →
+          </Link>
+        </div>
+
+        <h2 id="documentation" className="scroll-mt-24">Documentation and Reporting</h2>
+
+        <p>
+          Proper documentation protects you in disputes and creates a history of
+          property condition over time.
+        </p>
+
+        <h3>What to Document</h3>
+
+        <ul>
+          <li><strong>Date and time</strong> of inspection</li>
+          <li><strong>Attendees</strong> - landlord, agent, tenant</li>
+          <li><strong>Findings</strong> - room by room observations</li>
+          <li><strong>Photographs</strong> - of any issues or damage</li>
+          <li><strong>Actions needed</strong> - repairs, follow-ups</li>
+          <li><strong>Tenant comments</strong> - any issues they raised</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inspection-report.svg"
+          alt="Property inspection report documentation"
+          caption="Detailed reports with photos provide evidence if needed later"
+          aspectRatio="4:3"
+        />
+
+        <h3>Sharing Findings</h3>
+
+        <p>
+          After the inspection:
+        </p>
+
+        <ol>
+          <li>Write up findings within 48 hours while fresh</li>
+          <li>Add photos with descriptions</li>
+          <li>Send copy to tenant for their records</li>
+          <li>Note any actions you will take</li>
+          <li>Follow up on tenant-reported issues promptly</li>
+        </ol>
+
+        <h2 id="inspections-faq" className="scroll-mt-24">Property Inspections FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I inspect if the tenant refuses access?</h3>
+            <p className="text-gray-600">
+              No - you cannot force entry except in genuine emergencies. If access
+              is repeatedly refused, write formally reminding them of their contractual
+              obligations. Persistent refusal may be a breach of tenancy.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Must the tenant be present during inspections?</h3>
+            <p className="text-gray-600">
+              Not legally required, but recommended. Many tenants prefer to be there.
+              If they can&apos;t attend, they may authorize you to enter or leave keys.
+              Get written consent if entering while they&apos;re absent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I take photos during inspections?</h3>
+            <p className="text-gray-600">
+              Yes, photographs are an important part of documentation. Focus on the
+              property condition rather than personal belongings. Inform the tenant
+              that photos will be taken for records.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I find unauthorized occupants?</h3>
+            <p className="text-gray-600">
+              Address it promptly but calmly. The tenancy agreement should specify who
+              can live there. Unauthorized occupants may breach the agreement and affect
+              your insurance. Write to the tenant formally about the situation.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
