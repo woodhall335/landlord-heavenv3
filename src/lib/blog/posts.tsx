@@ -27864,7 +27864,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-repair-categories.svg"
           alt="Categories of landlord repair responsibilities"
           caption="Clear categorization helps prioritize maintenance work"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h3>Fitness for Human Habitation</h3>
@@ -28036,7 +28036,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-documentation.svg"
           alt="Property maintenance documentation and records"
           caption="Comprehensive documentation protects you in disputes"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="maintenance-faq" className="scroll-mt-24">Maintenance Obligations FAQ</h2>
@@ -28207,7 +28207,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-notice-types.svg"
           alt="Types of tenancy ending notices"
           caption="Different situations require different notice procedures"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="checkout-inspection" className="scroll-mt-24">Checkout Inspection</h2>
@@ -28347,7 +28347,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-cleaning-standards.svg"
           alt="Property cleaning checklist standards"
           caption="Clear cleaning standards reduce disputes at checkout"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -28526,7 +28526,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inspection-schedule.svg"
           alt="Property inspection schedule calendar"
           caption="Schedule inspections at reasonable intervals to maintain good tenant relations"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="inspection-types" className="scroll-mt-24">Types of Property Inspections</h2>
@@ -28719,7 +28719,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inspection-report.svg"
           alt="Property inspection report documentation"
           caption="Detailed reports with photos provide evidence if needed later"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h3>Sharing Findings</h3>
@@ -28900,7 +28900,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-channels.svg"
           alt="Communication channel options"
           caption="Choose the right channel for each type of communication"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="key-communications" className="scroll-mt-24">Key Communications Throughout Tenancy</h2>
@@ -29162,7 +29162,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-market-analysis.svg"
           alt="Property market analysis charts"
           caption="Understanding market conditions helps inform investment decisions"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="financing" className="scroll-mt-24">Financing Options</h2>
@@ -29342,7 +29342,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-property-selection.svg"
           alt="Property selection criteria checklist"
           caption="Systematic property evaluation improves investment outcomes"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -29522,7 +29522,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-letter-before-action.svg"
           alt="Letter before action template"
           caption="A proper letter before action is required before issuing court proceedings"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="making-claim" className="scroll-mt-24">Making a Claim</h2>
@@ -29884,7 +29884,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-software-types.svg"
           alt="Different types of landlord software"
           caption="Choose software that matches your specific management needs"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="key-features" className="scroll-mt-24">Key Features to Look For</h2>
@@ -30136,7 +30136,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inventory-checklist.svg"
           alt="Property inventory checklist example"
           caption="A systematic approach ensures nothing is missed"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h3>Condition Descriptions</h3>
@@ -30460,7 +30460,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-payment-methods.svg"
           alt="Different rent payment methods comparison"
           caption="Standing orders offer the best balance of reliability and simplicity"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="best-methods" className="scroll-mt-24">Recommended Collection Methods</h2>
@@ -30748,7 +30748,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-ratings.svg"
           alt="EPC rating bands explained"
           caption="Understanding where your property sits helps plan improvements"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="upcoming-changes" className="scroll-mt-24">Upcoming Changes</h2>
@@ -31067,7 +31067,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hmo-licensing.svg"
           alt="HMO licensing requirements"
           caption="HMO licenses ensure properties meet safety and amenity standards"
-          aspectRatio="4:3"
+          aspectRatio="inline"
         />
 
         <h2 id="selective-licensing" className="scroll-mt-24">Selective Licensing</h2>
