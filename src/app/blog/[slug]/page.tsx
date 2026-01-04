@@ -28,8 +28,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return { title: 'Post Not Found' };
   }
 
+  // Truncate title to fit within 70 characters for SEO
+  const siteNameSuffix = ' | Landlord Heaven';
+  const maxTitleLength = 70 - siteNameSuffix.length;
+  const truncatedTitle = post.title.length > maxTitleLength
+    ? post.title.substring(0, maxTitleLength - 3) + '...'
+    : post.title;
+
   return {
-    title: `${post.title} | Landlord Heaven`,
+    title: `${truncatedTitle}${siteNameSuffix}`,
     description: post.metaDescription,
     keywords: [post.targetKeyword, ...post.secondaryKeywords],
     openGraph: {

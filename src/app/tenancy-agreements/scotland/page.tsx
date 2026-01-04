@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Private Residential Tenancy Agreement (PRT) | Scotland | Landlord Heaven',
+  title: 'PRT Agreement Scotland | Landlord Heaven',
   description: 'Create a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Complies with Private Housing (Tenancies) (Scotland) Act 2016 and Repairing Standard. Standard and Premium options available.',
   keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
   openGraph: {
