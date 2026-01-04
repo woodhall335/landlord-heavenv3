@@ -2,9 +2,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
+import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { FileText, Scale, Clock, ArrowRight, Zap, ShieldCheck, Globe } from 'lucide-react';
+import { FileText, Scale, Clock, Zap, ShieldCheck, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Landlord Guides & Legal Resources | Landlord Heaven Blog',
@@ -50,6 +51,21 @@ export default function BlogPage() {
 
   const featuredPost = blogPosts[0];
   const remainingPosts = blogPosts.slice(1);
+
+  // Extract unique categories sorted alphabetically
+  const categories = [...new Set(blogPosts.map((post) => post.category))].sort();
+
+  // Prepare posts data for client component (without JSX content)
+  const postsForFilter = remainingPosts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    readTime: post.readTime,
+    category: post.category,
+    heroImage: post.heroImage,
+    heroImageAlt: post.heroImageAlt,
+  }));
 
   return (
     <>
@@ -127,26 +143,12 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* All Guides */}
+        {/* All Guides with Search & Filter */}
         {remainingPosts.length > 0 && (
           <section className="py-12 lg:py-16 bg-gray-50">
             <div className="container mx-auto px-4">
               <h2 className="text-2xl font-bold text-gray-900 mb-8">All Guides</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {remainingPosts.map((post) => (
-                  <BlogCard
-                    key={post.slug}
-                    slug={post.slug}
-                    title={post.title}
-                    description={post.description}
-                    date={post.date}
-                    readTime={post.readTime}
-                    category={post.category}
-                    heroImage={post.heroImage}
-                    heroImageAlt={post.heroImageAlt}
-                  />
-                ))}
-              </div>
+              <BlogFilteredList posts={postsForFilter} categories={categories} />
             </div>
           </section>
         )}
