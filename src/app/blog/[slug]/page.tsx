@@ -220,7 +220,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
                 <span className="font-semibold">Section 21 ends 1 May 2026 —</span>
                 <Section21Countdown variant="compact" className="text-white font-bold" />
-                <Link href="/products/notice-only" className="underline hover:no-underline font-medium">
+                <Link href="/products/notice-only" className="text-white underline hover:no-underline font-medium">
                   Serve Your Notice Now
                 </Link>
               </div>
