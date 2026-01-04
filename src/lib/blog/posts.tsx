@@ -16467,7 +16467,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-contract-overview.svg"
           alt="Wales Standard Occupation Contract Overview"
           caption="Standard Occupation Contracts replaced ASTs in Wales from December 2022"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-soc" className="scroll-mt-24">What is a Standard Occupation Contract?</h2>
@@ -16566,7 +16566,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fundamental-terms.svg"
           alt="Fundamental Terms in Welsh Occupation Contracts"
           caption="Fundamental terms are set by law and protect both parties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="supplementary-terms" className="scroll-mt-24">Supplementary Terms</h2>
@@ -16654,7 +16654,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-habitation.svg"
           alt="Fitness for Human Habitation Requirements Wales"
           caption="Properties must meet 29 fitness standards under Welsh law"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Repair Obligations</h3>
@@ -16849,7 +16849,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-act-overview.svg"
           alt="Renting Homes Wales Act Overview"
           caption="The Renting Homes Act 2016 transformed Welsh tenancy law from December 2022"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="act-overview" className="scroll-mt-24">Overview of the Act</h2>
@@ -16947,7 +16947,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-written-statement.svg"
           alt="Written Statement Requirements Wales"
           caption="A written statement must be provided within 14 days of occupation"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Rent Smart Wales Registration</h3>
@@ -17066,7 +17066,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-notice-periods.svg"
           alt="Notice Periods Under Renting Homes Wales Act"
           caption="Notice periods vary depending on the grounds for possession"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="deposit-rules" className="scroll-mt-24">Deposit Rules</h2>
@@ -17240,7 +17240,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-eviction-overview.svg"
           alt="Wales Eviction Process Overview"
           caption="Welsh eviction follows the Renting Homes Act procedures"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="eviction-overview" className="scroll-mt-24">Eviction in Wales Overview</h2>
@@ -17301,7 +17301,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-section-173.svg"
           alt="Section 173 Notice Requirements Wales"
           caption="Section 173 requires 6 months notice after an initial 6-month protected period"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Section 173 Timeline</h3>
@@ -17442,7 +17442,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-possession-grounds.svg"
           alt="Possession Grounds Under Welsh Law"
           caption="Different grounds have different notice periods and court requirements"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Estate Management Grounds</h3>
@@ -17676,7 +17676,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-overview.svg"
           alt="Wales Deposit Protection Overview"
           caption="All deposits in Wales must be protected within 30 days"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
@@ -17760,7 +17760,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-timeline.svg"
           alt="Deposit Protection Timeline Wales"
           caption="The 30-day deadline starts from when you receive the deposit"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -17856,7 +17856,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-penalties.svg"
           alt="Penalties for Deposit Non-Compliance Wales"
           caption="Non-compliance can result in compensation of up to 3x the deposit"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -17976,7 +17976,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-overview.svg"
           alt="Rent Smart Wales Overview"
           caption="Rent Smart Wales has been mandatory since November 2016"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="rsw-overview" className="scroll-mt-24">What is Rent Smart Wales?</h2>
@@ -18069,7 +18069,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-license-activities.svg"
           alt="Rent Smart Wales Licensed Activities"
           caption="Any hands-on landlord activities require a licence"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -18202,7 +18202,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-penalties.svg"
           alt="Rent Smart Wales Penalties"
           caption="Non-compliance can result in significant fines and loss of rent"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -18320,7 +18320,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-overview.svg"
           alt="Wales HMO Licensing Overview"
           caption="HMOs face stricter regulation due to higher occupancy and shared facilities"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="hmo-definition" className="scroll-mt-24">What is an HMO?</h2>
@@ -18379,7 +18379,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-mandatory.svg"
           alt="Mandatory HMO Licensing Criteria Wales"
           caption="The 5+ person threshold triggers mandatory licensing"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="additional-licensing" className="scroll-mt-24">Additional Licensing Schemes</h2>
@@ -18485,7 +18485,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-standards.svg"
           alt="HMO Standards and Requirements Wales"
           caption="HMOs must meet specific standards for fire safety, facilities, and room sizes"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="application-process" className="scroll-mt-24">How to Apply</h2>
@@ -18654,7 +18654,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-overview.svg"
           alt="Wales Fitness for Human Habitation Overview"
           caption="Properties must meet 29 specific fitness matters under Welsh law"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="fitness-overview" className="scroll-mt-24">Fitness Requirements Overview</h2>
@@ -18766,7 +18766,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-inspection.svg"
           alt="Property Inspection for Fitness Wales"
           caption="Regular inspections help identify and address fitness issues"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -18938,7 +18938,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-grounds-overview.svg"
           alt="Wales Possession Grounds Overview"
           caption="Different grounds have different requirements and notice periods"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="grounds-overview" className="scroll-mt-24">Possession Grounds Overview</h2>
@@ -19002,7 +19002,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-discretionary.svg"
           alt="Discretionary Grounds Wales"
           caption="Courts weigh up all circumstances with discretionary grounds"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Breach of Contract (Ground 12)</h3>
@@ -19272,7 +19272,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-before-letting.svg"
           alt="Before Letting Checklist Wales"
           caption="Complete all pre-letting requirements before the tenant moves in"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="at-start" className="scroll-mt-24">At Start of Tenancy</h2>
@@ -19511,7 +19511,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-rent-overview.svg"
           alt="Wales Rent Increase Overview"
           caption="Rent increases must follow the Renting Homes Act procedures"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="rent-overview" className="scroll-mt-24">Rent Increase Rules Overview</h2>
@@ -19580,7 +19580,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-rent-timeline.svg"
           alt="Rent Increase Timeline Wales"
           caption="You can only increase rent once per year"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tenant-rights" className="scroll-mt-24">Contract-Holder Rights</h2>
@@ -19710,7 +19710,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-abandoned-overview.svg"
           alt="Wales Abandoned Property Overview"
           caption="A formal process must be followed for abandoned properties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="abandonment-overview" className="scroll-mt-24">Abandonment Overview</h2>
@@ -19797,7 +19797,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-belongings.svg"
           alt="Dealing with Abandoned Belongings Wales"
           caption="Store belongings safely and give reasonable time for collection"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -19897,7 +19897,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-joint-overview.svg"
           alt="Wales Joint Occupation Contracts Overview"
           caption="Joint contract-holders share rights and responsibilities equally"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="joint-overview" className="scroll-mt-24">Joint Contracts Overview</h2>
@@ -19969,7 +19969,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-joint-changes.svg"
           alt="Adding and Removing Contract-Holders Wales"
           caption="Changes to joint contracts require agreement from all parties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="one-leaves" className="scroll-mt-24">When One Contract-Holder Leaves</h2>
@@ -20096,7 +20096,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-safety-hero.svg"
           alt="Wales Gas and Electrical Safety Requirements"
           caption="Gas and electrical safety certificates are mandatory for Welsh landlords"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="safety-overview" className="scroll-mt-24">Safety Requirements Overview</h2>
@@ -20205,7 +20205,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-eicr-wales.svg"
           alt="EICR Requirements Wales"
           caption="EICRs must be obtained every 5 years or when specified"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>EICR Classification Codes</h3>
@@ -20297,7 +20297,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-safety-calendar.svg"
           alt="Safety Check Calendar Wales"
           caption="Set reminders to ensure safety certificates don't expire"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="certificate-requirements" className="scroll-mt-24">Certificate Requirements</h2>
@@ -20377,7 +20377,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-compliance-penalties.svg"
           alt="Non-Compliance Penalties Wales"
           caption="Penalties for non-compliance can be severe"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -20481,7 +20481,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-hero.svg"
           alt="Wales EPC Requirements"
           caption="EPCs rate properties from A (most efficient) to G (least efficient)"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="epc-overview" className="scroll-mt-24">EPC Overview</h2>
@@ -20606,7 +20606,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-mees-wales.svg"
           alt="MEES Requirements Wales"
           caption="Properties must meet minimum energy efficiency standards"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Penalties for Non-Compliance</h3>
@@ -20675,7 +20675,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-exemptions.svg"
           alt="EPC Exemptions Wales"
           caption="Exemptions must be properly registered with supporting evidence"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="improving-rating" className="scroll-mt-24">Improving Your Rating</h2>
@@ -20837,7 +20837,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-hero.svg"
           alt="Anti-Social Behaviour Eviction Wales"
           caption="ASB can be grounds for possession but requires proper evidence"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="asb-overview" className="scroll-mt-24">Anti-Social Behaviour Overview</h2>
@@ -20906,7 +20906,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-grounds.svg"
           alt="ASB Possession Grounds Wales"
           caption="Multiple grounds may apply in ASB cases"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -21010,7 +21010,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-notice.svg"
           alt="ASB Notice Requirements Wales"
           caption="Correct notice must be served before court proceedings"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="court-process" className="scroll-mt-24">Court Process</h2>
@@ -21100,7 +21100,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-serious-asb.svg"
           alt="Serious ASB Cases Wales"
           caption="Serious ASB cases may involve multiple agencies"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
@@ -21221,7 +21221,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-notice-periods-hero.svg"
           alt="Wales Landlord Notice Periods"
           caption="Different situations require different notice periods under Welsh law"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="notice-overview" className="scroll-mt-24">Notice Periods Overview</h2>
@@ -21307,7 +21307,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-section-173.svg"
           alt="Section 173 Notice Requirements"
           caption="Section 173 notices require 6 months notice and full compliance"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -21409,7 +21409,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ground-notices.svg"
           alt="Possession Ground Notice Periods"
           caption="Notice periods vary depending on the ground for possession"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="other-notices" className="scroll-mt-24">Other Important Notices</h2>
@@ -21501,7 +21501,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-serving-notices.svg"
           alt="Serving Notices Wales"
           caption="Keep proof of service for all notices"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -21604,7 +21604,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rights-hero.svg"
           alt="Contract-Holder Rights Wales"
           caption="Understanding rights helps landlords avoid disputes"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="rights-overview" className="scroll-mt-24">Rights Overview</h2>
@@ -21669,7 +21669,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-fundamental-terms.svg"
           alt="Fundamental Terms Wales"
           caption="Fundamental terms provide core protections that cannot be removed"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -21750,7 +21750,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-quiet-enjoyment.svg"
           alt="Right to Quiet Enjoyment"
           caption="Contract-holders have the right to enjoy their home without interference"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="security-tenure" className="scroll-mt-24">Security of Tenure</h2>
@@ -21844,7 +21844,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-avoiding-disputes.svg"
           alt="Avoiding Disputes Wales"
           caption="Clear communication and proper processes prevent most disputes"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -21956,7 +21956,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-hero.svg"
           alt="Residential Property Tribunal Wales"
           caption="The RPT handles specific types of landlord-tenant disputes"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tribunal-overview" className="scroll-mt-24">Tribunal Overview</h2>
@@ -22020,7 +22020,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-cases.svg"
           alt="Types of Tribunal Cases"
           caption="The RPT handles various housing disputes"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -22111,7 +22111,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hearing-process.svg"
           alt="Tribunal Hearing Process"
           caption="Tribunal hearings are less formal than court"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="costs" className="scroll-mt-24">Costs and Fees</h2>
@@ -22199,7 +22199,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-appeals.svg"
           alt="Tribunal Appeals"
           caption="Appeals are limited to points of law"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -22311,7 +22311,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-pto-hero.svg"
           alt="Northern Ireland Private Tenancies Order"
           caption="The PTO sets out the legal framework for private lettings in NI"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="pto-overview" className="scroll-mt-24">Order Overview</h2>
@@ -22376,7 +22376,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-obligations.svg"
           alt="NI Landlord Obligations"
           caption="NI landlords have specific legal obligations under the PTO"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -22465,7 +22465,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-rent-book.svg"
           alt="NI Rent Book Requirements"
           caption="Written documentation must be provided within 28 days"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="fitness-standard" className="scroll-mt-24">Fitness Standard</h2>
@@ -22595,7 +22595,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-enforcement.svg"
           alt="NI Enforcement and Penalties"
           caption="Councils have significant enforcement powers under the PTO"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -22699,7 +22699,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-reg-hero.svg"
           alt="NI Landlord Registration"
           caption="Registration is mandatory for all NI landlords"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="registration-overview" className="scroll-mt-24">Registration Overview</h2>
@@ -22764,7 +22764,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-who-registers.svg"
           alt="Who Must Register NI"
           caption="Most private landlords must register with the scheme"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -22869,7 +22869,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-renewal.svg"
           alt="NI Registration Renewal"
           caption="Set reminders to renew registration before expiry"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="non-registration" className="scroll-mt-24">Non-Registration Consequences</h2>
@@ -23011,7 +23011,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-deposit-hero.svg"
           alt="NI Tenancy Deposit Protection"
           caption="Deposits must be protected in an approved scheme within 14 days"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
@@ -23071,7 +23071,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-protect-deposit.svg"
           alt="How to Protect Deposit NI"
           caption="Follow the scheme process to protect deposits correctly"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -23151,7 +23151,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-returning-deposit.svg"
           alt="Returning Deposit NI"
           caption="Document property condition at start and end of tenancy"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="disputes" className="scroll-mt-24">Deposit Disputes</h2>
@@ -23304,7 +23304,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-eviction-hero.svg"
           alt="NI Eviction Process"
           caption="Follow the legal process carefully to avoid illegal eviction"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="eviction-overview" className="scroll-mt-24">Eviction Overview</h2>
@@ -23386,7 +23386,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-ntq.svg"
           alt="Notice to Quit NI"
           caption="Use the correct notice period and format"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -23474,7 +23474,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-court.svg"
           alt="NI Court Process"
           caption="The court will decide whether to grant possession"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="enforcement" className="scroll-mt-24">Enforcement</h2>
@@ -23611,7 +23611,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-insurance-hero.svg"
           alt="UK Landlord Insurance"
           caption="Proper insurance protects your rental investment"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="insurance-overview" className="scroll-mt-24">Insurance Overview</h2>
@@ -23714,7 +23714,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-buildings-cover.svg"
           alt="Buildings Insurance Cover"
           caption="Buildings insurance covers the structure and fixtures"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Rebuild Value</h3>
@@ -23797,7 +23797,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rent-guarantee.svg"
           alt="Rent Guarantee Insurance"
           caption="RGI protects your income if tenants stop paying"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-expenses" className="scroll-mt-24">Legal Expenses Cover</h2>
@@ -23933,7 +23933,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tax-hero.svg"
           alt="UK Landlord Tax"
           caption="Understanding tax helps you maximize rental profits"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tax-overview" className="scroll-mt-24">Tax Overview</h2>
@@ -24018,7 +24018,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-income-tax.svg"
           alt="Rental Income Tax"
           caption="Tax is calculated on rental profit after expenses"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -24100,7 +24100,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-mortgage-interest.svg"
           alt="Mortgage Interest Relief"
           caption="Mortgage interest now gives a 20% tax credit"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="capital-gains" className="scroll-mt-24">Capital Gains Tax</h2>
@@ -24262,7 +24262,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safety-check.svg"
           alt="Gas Safe engineer conducting safety check"
           caption="Annual gas safety checks must be conducted by Gas Safe registered engineers"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -24337,7 +24337,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/cp12-certificate.svg"
           alt="Example Gas Safety Certificate CP12"
           caption="A valid CP12 certificate is essential documentation for landlords"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -24387,7 +24387,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safe-id.svg"
           alt="Gas Safe Register ID card"
           caption="Always verify your engineer's Gas Safe credentials before any work"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -24544,7 +24544,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safety-compliance.svg"
           alt="Gas safety compliance checklist"
           caption="Stay compliant with regular checks and proper documentation"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -24658,7 +24658,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/electrical-inspection.svg"
           alt="Electrician conducting EICR inspection"
           caption="Electrical inspections must be conducted by qualified persons"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -24742,7 +24742,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/eicr-report.svg"
           alt="Example EICR report document"
           caption="An EICR report details the condition of all electrical installations"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="testing-frequency" className="scroll-mt-24">Testing Frequency</h2>
@@ -24869,7 +24869,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/eicr-codes.svg"
           alt="EICR classification codes explained"
           caption="Understanding EICR codes helps prioritize remedial work"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="remedial-work" className="scroll-mt-24">Remedial Work Requirements</h2>
@@ -25073,7 +25073,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/fire-safety-equipment.svg"
           alt="Fire safety equipment including smoke and CO alarms"
           caption="Proper fire safety equipment is essential in every rental property"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-framework" className="scroll-mt-24">Legal Framework</h2>
@@ -25152,7 +25152,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/smoke-alarm-placement.svg"
           alt="Correct smoke alarm placement diagram"
           caption="Smoke alarms should be ceiling-mounted in optimal positions"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -25261,7 +25261,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/furniture-label.svg"
           alt="Fire safety furniture label example"
           caption="Check for fire safety labels on all upholstered furniture"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="escape-routes" className="scroll-mt-24">Escape Routes</h2>
@@ -25354,7 +25354,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-fire-safety.svg"
           alt="HMO fire safety requirements diagram"
           caption="HMOs require comprehensive fire safety measures throughout"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="fire-risk-assessment" className="scroll-mt-24">Fire Risk Assessments</h2>
@@ -25503,7 +25503,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenant-referencing-process.svg"
           alt="Tenant referencing process flowchart"
           caption="A thorough referencing process protects landlords from problematic tenancies"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="why-reference" className="scroll-mt-24">Why Reference Tenants</h2>
@@ -25589,7 +25589,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/credit-check-report.svg"
           alt="Example credit check report elements"
           caption="Credit reports show financial history and payment behavior"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="overflow-x-auto my-8">
@@ -25674,7 +25674,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/landlord-reference.svg"
           alt="Landlord reference form example"
           caption="Previous landlord references reveal actual tenancy behavior"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -25790,7 +25790,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gdpr-tenant-data.svg"
           alt="GDPR compliance for tenant data"
           caption="Handle tenant data responsibly under GDPR requirements"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -25904,7 +25904,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/right-to-rent-documents.svg"
           alt="Right to Rent acceptable documents"
           caption="Various documents can prove right to rent in the UK"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-right-to-rent" className="scroll-mt-24">What is Right to Rent</h2>
@@ -26010,7 +26010,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/document-verification.svg"
           alt="Document verification process"
           caption="Carefully verify all documents match the tenant"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="how-to-check" className="scroll-mt-24">How to Conduct Checks</h2>
@@ -26137,7 +26137,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/equal-treatment.svg"
           alt="Equal treatment in tenant screening"
           caption="Apply Right to Rent checks equally to all prospective tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
@@ -26289,7 +26289,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-property.svg"
           alt="Typical HMO property layout"
           caption="HMOs require specific licensing and safety measures"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-hmo" className="scroll-mt-24">What is an HMO</h2>
@@ -26387,7 +26387,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-licensing-map.svg"
           alt="HMO licensing schemes vary by local authority"
           caption="Check your local council for additional licensing requirements"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -26460,7 +26460,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/room-size-measurement.svg"
           alt="How to measure room sizes for HMO compliance"
           caption="Measure usable floor space for room size calculations"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -26598,7 +26598,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-compliance-checklist.svg"
           alt="HMO compliance checklist"
           caption="Regular compliance checks help avoid penalties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -26728,7 +26728,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-protection-schemes.svg"
           alt="UK deposit protection schemes"
           caption="All AST deposits must be protected in a government-approved scheme"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -26811,7 +26811,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-protection-process.svg"
           alt="Deposit protection process steps"
           caption="Follow these steps to protect deposits correctly"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <ol className="list-decimal ml-6 space-y-3 my-4">
@@ -26905,7 +26905,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-timeline.svg"
           alt="Deposit protection timeline"
           caption="Key deadlines for deposit protection compliance"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="returning-deposits" className="scroll-mt-24">Returning Deposits</h2>
@@ -26979,7 +26979,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-penalties.svg"
           alt="Deposit protection penalties"
           caption="Non-compliance can result in penalties of 1-3x the deposit"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <p>
@@ -27098,7 +27098,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/rent-arrears-process.svg"
           alt="Rent arrears recovery process"
           caption="A structured approach helps resolve arrears efficiently"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="early-intervention" className="scroll-mt-24">Early Intervention</h2>
@@ -27173,7 +27173,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenant-communication.svg"
           alt="Professional tenant communication"
           caption="Document all communication about rent arrears"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="payment-plans" className="scroll-mt-24">Payment Plans</h2>
@@ -27270,7 +27270,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/section-8-notice.svg"
           alt="Section 8 notice form"
           caption="Section 8 notices require specific grounds to be cited"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="court-action" className="scroll-mt-24">Court Action</h2>
@@ -27358,7 +27358,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/rent-arrears-prevention.svg"
           alt="Preventing rent arrears"
           caption="Good tenant selection is the best arrears prevention"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -27473,7 +27473,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenancy-agreement-signing.svg"
           alt="Signing a tenancy agreement"
           caption="Written tenancy agreements protect both landlords and tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="types-of-tenancy" className="scroll-mt-24">Types of Tenancy</h2>
@@ -27547,7 +27547,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenancy-essential-terms.svg"
           alt="Essential tenancy agreement terms"
           caption="Include all essential terms to create a valid agreement"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="key-clauses" className="scroll-mt-24">Key Clauses Explained</h2>
@@ -27643,7 +27643,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/fair-tenancy-terms.svg"
           alt="Fair vs unfair tenancy terms"
           caption="Ensure your agreement contains only fair, enforceable terms"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="how-to-rent" className="scroll-mt-24">How to Rent Guide</h2>
@@ -27825,7 +27825,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-maintenance.svg"
           alt="Property maintenance tools and checklist"
           caption="Proper maintenance protects both your property and your tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-framework" className="scroll-mt-24">Legal Framework for Landlord Maintenance</h2>
@@ -27960,7 +27960,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-contractor.svg"
           alt="Professional contractor performing property repairs"
           caption="Using qualified professionals ensures repairs meet required standards"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="regional-variations" className="scroll-mt-24">Regional Variations Across the UK</h2>
@@ -28125,7 +28125,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-end-tenancy.svg"
           alt="End of tenancy checklist and keys"
           caption="A structured checkout process protects both landlord and tenant"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tenancy-ending" className="scroll-mt-24">How Tenancies End</h2>
@@ -28273,7 +28273,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-checkout-inspection.svg"
           alt="Landlord conducting checkout inspection"
           caption="Thorough documentation during checkout protects both parties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="deposit-process" className="scroll-mt-24">Deposit Return Process</h2>
@@ -28475,7 +28475,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inspections.svg"
           alt="Landlord conducting property inspection"
           caption="Regular inspections protect your property and identify issues early"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-framework" className="scroll-mt-24">Legal Framework for Property Inspections</h2>
@@ -28620,7 +28620,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inspection-notice.svg"
           alt="Property inspection notice letter"
           caption="Professional written notices create a clear record"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="inspection-checklist" className="scroll-mt-24">Inspection Checklist</h2>
@@ -28822,7 +28822,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-communication.svg"
           alt="Landlord and tenant communication"
           caption="Professional communication builds trust and prevents problems"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="communication-importance" className="scroll-mt-24">Why Communication Matters</h2>
@@ -28983,7 +28983,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-dispute-handling.svg"
           alt="Handling landlord-tenant disputes professionally"
           caption="Professional dispute handling protects both parties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="documentation" className="scroll-mt-24">Documentation and Record Keeping</h2>
@@ -29111,7 +29111,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-investment.svg"
           alt="Property investment portfolio"
           caption="Strategic property investment can build long-term wealth"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="investment-basics" className="scroll-mt-24">Buy-to-Let Investment Basics</h2>
@@ -29271,7 +29271,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-yield-calculation.svg"
           alt="Property yield calculation example"
           caption="Understanding yield calculations helps compare investment opportunities"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="costs-analysis" className="scroll-mt-24">Complete Costs Analysis</h2>
@@ -29446,7 +29446,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-money-claims.svg"
           alt="Money Claims Online court process"
           caption="MCOL provides an accessible route to recover money owed by former tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-mcol" className="scroll-mt-24">What is Money Claims Online?</h2>
@@ -29623,7 +29623,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-mcol-process.svg"
           alt="Money Claims Online claim process steps"
           caption="The MCOL process is designed to be user-friendly for claimants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="after-judgment" className="scroll-mt-24">After Judgment</h2>
@@ -29797,7 +29797,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-software.svg"
           alt="Property management software dashboard"
           caption="Modern software streamlines every aspect of property management"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="software-benefits" className="scroll-mt-24">Benefits of Using Landlord Software</h2>
@@ -29934,7 +29934,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-software-features.svg"
           alt="Key landlord software features"
           caption="Prioritize features that solve your biggest management challenges"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="implementation" className="scroll-mt-24">Implementation Tips</h2>
@@ -30070,7 +30070,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inventory.svg"
           alt="Property inventory documentation"
           caption="Detailed inventories protect both landlords and tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="inventory-importance" className="scroll-mt-24">Why Inventories Matter</h2>
@@ -30215,7 +30215,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-inventory-photography.svg"
           alt="Property inventory photography examples"
           caption="Comprehensive photography supports written descriptions"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="check-in-process" className="scroll-mt-24">Check-In Process</h2>
@@ -30377,7 +30377,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rent-collection.svg"
           alt="Rent collection payment methods"
           caption="The right collection method ensures reliable, predictable income"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="payment-options" className="scroll-mt-24">Available Payment Options</h2>
@@ -30528,7 +30528,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-payment-setup.svg"
           alt="Setting up rent payment collection"
           caption="Clear setup at tenancy start prevents payment confusion"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tracking-payments" className="scroll-mt-24">Tracking Payments</h2>
@@ -30647,7 +30647,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc.svg"
           alt="Energy Performance Certificate example"
           caption="EPCs rate properties from A (most efficient) to G (least efficient)"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="epc-basics" className="scroll-mt-24">EPC Basics</h2>
@@ -30847,7 +30847,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-improvements.svg"
           alt="Common EPC improvement options"
           caption="Strategic improvements offer best value for rating gains"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="exemptions" className="scroll-mt-24">Exemptions</h2>
@@ -30973,7 +30973,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-licensing.svg"
           alt="Landlord licensing schemes explained"
           caption="Understanding licensing requirements is essential for legal letting"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="licensing-overview" className="scroll-mt-24">Licensing Overview</h2>
@@ -31142,7 +31142,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-scotland-registration.svg"
           alt="Scotland landlord registration process"
           caption="Scotland requires all landlords to register - it's a legal requirement"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="application-process" className="scroll-mt-24">License Application Process</h2>
@@ -31293,7 +31293,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-guarantor.svg"
           alt="Understanding guarantor agreements for rental properties"
           caption="Guarantor agreements add financial security to tenancy arrangements"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-guarantor" className="scroll-mt-24">What is a Guarantor?</h2>
@@ -31366,7 +31366,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-guarantor-situations.svg"
           alt="Common situations requiring rental guarantors"
           caption="Various tenant circumstances where guarantors provide necessary security"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="guarantor-requirements" className="scroll-mt-24">Guarantor Requirements</h2>
@@ -31470,7 +31470,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-agreement-drafting.svg"
           alt="Key elements of guarantor agreement drafting"
           caption="Proper drafting ensures the agreement is legally enforceable"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-enforceability" className="scroll-mt-24">Legal Enforceability</h2>
@@ -31605,7 +31605,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-guarantor-protection.svg"
           alt="Full protection through proper guarantor agreements"
           caption="Well-drafted guarantor agreements provide essential landlord protection"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -31655,7 +31655,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-letting-agent.svg"
           alt="Choosing a letting agent for your rental property"
           caption="The right letting agent partnership can maximise your rental returns"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="self-manage-vs-agent" className="scroll-mt-24">Self-Manage vs Agent</h2>
@@ -31750,7 +31750,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-service-comparison.svg"
           alt="Comparing letting agent service levels"
           caption="Different service levels suit different landlord needs and budgets"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="typical-fees" className="scroll-mt-24">Typical Agent Fees</h2>
@@ -31859,7 +31859,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-agent-comparison.svg"
           alt="Comparing different letting agents"
           caption="Take time to properly compare agents before committing"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="agent-regulations" className="scroll-mt-24">Agent Regulations</h2>
@@ -32036,7 +32036,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-void-period.svg"
           alt="Managing void periods in rental properties"
           caption="Effective void management protects your rental income"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="understanding-voids" className="scroll-mt-24">Understanding Void Periods</h2>
@@ -32136,7 +32136,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-void-costs.svg"
           alt="True costs of property void periods"
           caption="Empty properties drain income from multiple sources"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="minimising-voids" className="scroll-mt-24">Minimising Void Periods</h2>
@@ -32260,7 +32260,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-property-marketing.svg"
           alt="Effective property marketing strategies"
           caption="Good marketing reduces time on market significantly"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="void-insurance" className="scroll-mt-24">Void Period Insurance</h2>
@@ -32364,7 +32364,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-successful-letting.svg"
           alt="Successfully minimising void periods"
           caption="Proactive management keeps properties occupied and income flowing"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -32414,7 +32414,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-property-marketing.svg"
           alt="Marketing rental properties effectively"
           caption="Professional marketing attracts better tenants and reduces void periods"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="preparing-property" className="scroll-mt-24">Preparing Your Property</h2>
@@ -32534,7 +32534,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-property-photos.svg"
           alt="Professional property photography tips"
           caption="Quality photography can double your enquiry rate"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -32620,7 +32620,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-advertising-platforms.svg"
           alt="Property advertising platform options"
           caption="Choose platforms based on your property type and target tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="pricing-strategy" className="scroll-mt-24">Pricing Strategy</h2>
@@ -32771,7 +32771,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-successful-marketing.svg"
           alt="Successful property marketing results"
           caption="Effective marketing fills properties with quality tenants quickly"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -32821,7 +32821,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-move-in.svg"
           alt="Tenant move-in process for landlords"
           caption="A smooth move-in creates a positive start to the tenancy relationship"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="before-move-in" className="scroll-mt-24">Before Move-In Day</h2>
@@ -32925,7 +32925,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-key-handover.svg"
           alt="Professional key handover process"
           caption="Document keys provided and get tenant acknowledgment"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -33009,7 +33009,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-meter-readings.svg"
           alt="Recording utility meter readings"
           caption="Document meter readings with photos and written records"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="inventory-checkin" className="scroll-mt-24">Inventory and Check-In</h2>
@@ -33132,7 +33132,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-successful-move-in.svg"
           alt="Successful tenant move-in completion"
           caption="A thorough move-in process sets up both parties for success"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -33181,7 +33181,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-landlord-associations.svg"
           alt="UK landlord associations and organisations"
           caption="Professional associations support landlords with advice and advocacy"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="why-join" className="scroll-mt-24">Why Join an Association?</h2>
@@ -33282,7 +33282,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-nrla.svg"
           alt="NRLA landlord association benefits"
           caption="The NRLA is the UK's largest landlord membership organisation"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -33385,7 +33385,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-local-associations.svg"
           alt="Local landlord association meetings"
           caption="Local associations provide networking and area-specific knowledge"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="choosing-association" className="scroll-mt-24">Choosing the Right Association</h2>
@@ -33495,7 +33495,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-landlord-support.svg"
           alt="Landlord association support and advice"
           caption="Association membership provides valuable ongoing support for landlords"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -33544,7 +33544,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tenant-retention.svg"
           alt="Retaining quality tenants in rental properties"
           caption="Good tenant retention protects your income and reduces costs"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="why-retention-matters" className="scroll-mt-24">Why Retention Matters</h2>
@@ -33657,7 +33657,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-landlord-communication.svg"
           alt="Good landlord-tenant communication"
           caption="Strong communication builds lasting tenant relationships"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -33751,7 +33751,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rent-discussion.svg"
           alt="Discussing rent with tenants"
           caption="Handle rent increases with sensitivity and clear communication"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="renewal-strategies" className="scroll-mt-24">Renewal Strategies</h2>
@@ -33887,7 +33887,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-right-to-rent.svg"
           alt="Right to Rent document checking"
           caption="Proper Right to Rent checks protect landlords from civil penalties"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-right-to-rent" className="scroll-mt-24">What is Right to Rent?</h2>
@@ -33954,7 +33954,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-document-check.svg"
           alt="Checking tenant documents for Right to Rent"
           caption="All adult occupiers must have their right to rent verified"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="acceptable-documents" className="scroll-mt-24">Acceptable Documents</h2>
@@ -34072,7 +34072,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-online-check.svg"
           alt="Using Home Office online checking service"
           caption="Online checks are required for EU Settlement Scheme status holders"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="follow-up-checks" className="scroll-mt-24">Follow-Up Checks</h2>
@@ -34245,7 +34245,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-smoke-alarm.svg"
           alt="Smoke and CO alarm installations"
           caption="Proper alarm installation is a legal requirement for UK landlords"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -34408,7 +34408,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-co-alarm.svg"
           alt="Carbon monoxide alarm installation"
           caption="CO alarms must be positioned correctly in rooms with combustion appliances"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="installation-tips" className="scroll-mt-24">Installation Tips</h2>
@@ -34535,7 +34535,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-alarm-compliance.svg"
           alt="Smoke and CO alarm compliance"
           caption="Proper alarm installation protects tenants and ensures legal compliance"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -34584,7 +34584,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-electrical-safety.svg"
           alt="Electrical safety inspection for rental properties"
           caption="Regular electrical inspections keep tenants safe and ensure compliance"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -34666,7 +34666,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-eicr-report.svg"
           alt="EICR electrical inspection report"
           caption="The EICR documents the condition of your electrical installation"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -34911,7 +34911,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-furnished.svg"
           alt="Furnished and unfurnished rental property comparison"
           caption="The right furnishing choice depends on property, location, and target tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="definitions" className="scroll-mt-24">What Counts as Furnished?</h2>
@@ -35064,7 +35064,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rental-comparison.svg"
           alt="Comparing furnished and unfurnished rental returns"
           caption="Calculate whether the extra rent justifies furniture investment"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tenant-preferences" className="scroll-mt-24">Tenant Preferences</h2>
@@ -35234,7 +35234,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hmo.svg"
           alt="Managing Houses in Multiple Occupation"
           caption="HMOs require careful management to meet regulatory requirements"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-hmo" className="scroll-mt-24">What is an HMO?</h2>
@@ -35339,7 +35339,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hmo-licence.svg"
           alt="HMO licensing process"
           caption="HMO licensing ensures properties meet required standards"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -35534,7 +35534,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hmo-success.svg"
           alt="Successful HMO management"
           caption="Well-managed HMOs provide higher yields with proper compliance"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -35594,7 +35594,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-market.svg"
           alt="UK student rental market overview"
           caption="Student accommodation demand remains strong across university towns"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Market Characteristics</h3>
@@ -35679,7 +35679,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-property.svg"
           alt="Ideal student property features"
           caption="Well-configured student properties attract quality tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>HMO Licensing</h3>
@@ -35758,7 +35758,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-marketing.svg"
           alt="Marketing student properties effectively"
           caption="Multi-channel marketing reaches students at different search stages"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tenancy-structures">Tenancy Structures</h2>
@@ -35830,7 +35830,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-guarantor.svg"
           alt="Student guarantor arrangements"
           caption="Proper guarantor arrangements protect rental income"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -35922,7 +35922,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-changeover.svg"
           alt="Student property changeover process"
           caption="Efficient changeovers minimise void periods and prepare for new tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="returns">Maximising Returns</h2>
@@ -36012,7 +36012,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-student-success.svg"
           alt="Successful student letting"
           caption="Well-managed student properties deliver consistent returns"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -36072,7 +36072,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-overview.svg"
           alt="Holiday let property types"
           caption="Holiday lets range from city apartments to rural cottages"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Types of Holiday Accommodation</h3>
@@ -36162,7 +36162,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-planning.svg"
           alt="Holiday let planning considerations"
           caption="Planning requirements vary significantly by location"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Scotland's Licensing Scheme</h3>
@@ -36256,7 +36256,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-licensing.svg"
           alt="Holiday let licensing requirements"
           caption="Licensing requirements are expanding across the UK"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="tax-treatment">Tax Treatment</h2>
@@ -36344,7 +36344,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-safety.svg"
           alt="Holiday let safety requirements"
           caption="Comprehensive safety compliance protects guests and operators"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Water Safety</h3>
@@ -36449,7 +36449,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-management.svg"
           alt="Holiday let management approach"
           caption="Effective management drives guest satisfaction and returns"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="faqs">Frequently Asked Questions</h2>
@@ -36505,7 +36505,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-holiday-success.svg"
           alt="Successful holiday let operations"
           caption="Compliance and quality drive holiday let success"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -36566,7 +36566,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-overview.svg"
           alt="Corporate letting market overview"
           caption="Corporate letting offers premium returns with lower-risk tenants"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Benefits of Corporate Letting</h3>
@@ -36658,7 +36658,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-tenants.svg"
           alt="Corporate tenant types"
           caption="Different corporate tenants have varying needs and timelines"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Business Travellers</h3>
@@ -36739,7 +36739,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-property.svg"
           alt="Corporate let property standards"
           caption="High-quality furnishing and presentation attract corporate clients"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-4 my-6">
@@ -36828,7 +36828,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-marketing.svg"
           alt="Marketing to corporate clients"
           caption="Professional presentation attracts corporate clients"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Building Relationships</h3>
@@ -36928,7 +36928,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-management.svg"
           alt="Corporate property management"
           caption="High service standards drive repeat bookings and referrals"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h2 id="faqs">Frequently Asked Questions</h2>
@@ -36985,7 +36985,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-corporate-success.svg"
           alt="Successful corporate letting"
           caption="Quality service and presentation drive corporate letting success"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
@@ -37046,7 +37046,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-overview.svg"
           alt="Property portfolio growth journey"
           caption="Strategic growth builds sustainable property wealth"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Growth Stages</h3>
@@ -37124,7 +37124,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-financing.svg"
           alt="Property portfolio financing"
           caption="Understanding financing opens growth opportunities"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Financing Options</h3>
@@ -37248,7 +37248,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-structure.svg"
           alt="Portfolio ownership structure"
           caption="Correct structuring optimises tax and manages risk"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
@@ -37298,7 +37298,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-acquisition.svg"
           alt="Property acquisition strategy"
           caption="Systematic acquisition builds a quality portfolio"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="inline" />
@@ -37395,7 +37395,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-risk.svg"
           alt="Portfolio risk management"
           caption="Systematic risk management protects portfolio value"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <h3>Mitigation Strategies</h3>
@@ -37505,7 +37505,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-portfolio-success.svg"
           alt="Successful property portfolio"
           caption="Strategic growth builds sustainable property wealth"
-          aspectRatio="16:9"
+          aspectRatio="hero"
         />
 
         <BlogCTA variant="urgency" />
