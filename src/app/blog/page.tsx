@@ -108,16 +108,16 @@ export default function BlogPage() {
         </section>
 
         {/* Urgency Banner */}
-        <section className="bg-primary text-white py-6">
+        <section className="bg-primary py-6">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-              <p className="font-semibold text-lg">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white">
+              <p className="font-semibold text-lg text-white">
                 Section 21 ends 1 May 2026
               </p>
               <Section21Countdown variant="compact" className="text-white font-bold" />
               <Link
                 href="/section-21-ban"
-                className="underline hover:no-underline font-medium"
+                className="text-white underline hover:no-underline font-medium"
               >
                 Learn what this means for you
               </Link>
