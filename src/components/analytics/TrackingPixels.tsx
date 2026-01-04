@@ -1,10 +1,13 @@
 /**
  * Tracking Pixels Component
  *
- * Loads Facebook Pixel and Google Ads tracking scripts.
- * GA4 is already loaded in the layout head, but we can add Google Ads here.
+ * Loads all analytics scripts with optimized loading strategies:
+ * - GA4: lazyOnload (lowest priority, loads after page is interactive)
+ * - FB Pixel: afterInteractive (loads after hydration)
+ * - Google Ads: afterInteractive (loads after hydration)
  *
  * Environment variables:
+ * - NEXT_PUBLIC_GA_MEASUREMENT_ID: Google Analytics 4 ID (G-XXXXXXXXX)
  * - NEXT_PUBLIC_FB_PIXEL_ID: Facebook Pixel ID
  * - NEXT_PUBLIC_GOOGLE_ADS_ID: Google Ads conversion ID (AW-XXXXXXXXX)
  */
@@ -14,14 +17,33 @@
 import Script from 'next/script';
 
 export function TrackingPixels() {
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const fbPixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
   const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
 
   // Don't render if no tracking IDs configured
-  if (!fbPixelId && !googleAdsId) return null;
+  if (!gaMeasurementId && !fbPixelId && !googleAdsId) return null;
 
   return (
     <>
+      {/* Google Analytics 4 - lazyOnload for best performance */}
+      {gaMeasurementId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            strategy="lazyOnload"
+          />
+          <Script id="ga4-config" strategy="lazyOnload">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gaMeasurementId}');
+            `}
+          </Script>
+        </>
+      )}
+
       {/* Facebook Pixel */}
       {fbPixelId && (
         <>
