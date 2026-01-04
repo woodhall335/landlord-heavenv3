@@ -26672,6 +26672,1117 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 71: UK Deposit Protection Guide
+  {
+    slug: 'uk-deposit-protection-guide',
+    title: 'UK Deposit Protection - Complete Landlord Guide 2026',
+    description: 'Essential guide to tenant deposit protection for UK landlords. Learn about government-approved schemes, prescribed information, deadlines, and dispute resolution.',
+    metaDescription: 'UK deposit protection guide 2026. Government schemes, prescribed information, 30-day deadlines, dispute resolution, and penalties explained for landlords.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Legal Compliance',
+    tags: ['deposit protection', 'tenancy deposits', 'landlord obligations', 'TDS', 'DPS', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImageAlt: 'UK Deposit Protection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'deposit protection UK landlords',
+    secondaryKeywords: ['tenancy deposit scheme', 'deposit protection rules', 'TDS DPS', 'deposit disputes'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'approved-schemes', title: 'Government-Approved Schemes', level: 2 },
+      { id: 'protecting-deposits', title: 'How to Protect Deposits', level: 2 },
+      { id: 'prescribed-information', title: 'Prescribed Information', level: 2 },
+      { id: 'deadlines', title: 'Critical Deadlines', level: 2 },
+      { id: 'returning-deposits', title: 'Returning Deposits', level: 2 },
+      { id: 'dispute-resolution', title: 'Dispute Resolution', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'deposit-faq', title: 'Deposit Protection FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-tenant-referencing-guide', 'uk-tenancy-agreements-guide', 'england-section-21-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Deposit protection is a legal requirement for all assured shorthold tenancies in
+          England and Wales. As a landlord, you must protect tenant deposits in a government-
+          approved scheme and provide prescribed information within strict deadlines. Failure
+          to comply can result in penalties of up to three times the deposit and inability
+          to serve Section 21 notices.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Critical 30-Day Deadline</h4>
+          <p className="text-red-800">
+            You must protect the deposit AND provide prescribed information within 30 days
+            of receiving it. Missing this deadline has serious legal consequences, including
+            potential penalties of 1-3x the deposit amount.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/deposit-protection-schemes.svg"
+          alt="UK deposit protection schemes"
+          caption="All AST deposits must be protected in a government-approved scheme"
+          aspectRatio="video"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          The Housing Act 2004 (as amended) requires landlords to protect deposits taken for
+          assured shorthold tenancies. This applies in England and Wales - Scotland and Northern
+          Ireland have separate systems.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">When Deposit Protection Applies</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Assured shorthold tenancies (ASTs) in England and Wales</li>
+            <li>Any deposit taken as security for the tenancy</li>
+            <li>Deposits held by landlord or letting agent</li>
+            <li>All deposit amounts, regardless of value</li>
+          </ul>
+        </div>
+
+        <p>
+          The requirement applies regardless of whether you're a private landlord with one
+          property or a portfolio landlord with many. It also applies to deposits held by
+          letting agents on your behalf.
+        </p>
+
+        <h2 id="approved-schemes" className="scroll-mt-24">Government-Approved Schemes</h2>
+
+        <p>
+          There are three government-approved tenancy deposit protection schemes in England.
+          Each offers both custodial (free) and insured (paid) options.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Scheme</th>
+                <th className="border p-3 text-left font-semibold">Custodial</th>
+                <th className="border p-3 text-left font-semibold">Insured</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Deposit Protection Service (DPS)</td>
+                <td className="border p-3">Free - scheme holds deposit</td>
+                <td className="border p-3">Fee-based - you hold deposit</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Tenancy Deposit Scheme (TDS)</td>
+                <td className="border p-3">Free - scheme holds deposit</td>
+                <td className="border p-3">Fee-based - you hold deposit</td>
+              </tr>
+              <tr>
+                <td className="border p-3">mydeposits</td>
+                <td className="border p-3">Free - scheme holds deposit</td>
+                <td className="border p-3">Fee-based - you hold deposit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Custodial vs Insured</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li><strong>Custodial:</strong> Free, scheme holds money, but you can't use it</li>
+            <li><strong>Insured:</strong> You hold deposit but pay annual fee per tenancy</li>
+            <li>Both offer same tenant protection and dispute resolution</li>
+            <li>Choose based on cash flow preferences</li>
+          </ul>
+        </div>
+
+        <h2 id="protecting-deposits" className="scroll-mt-24">How to Protect Deposits</h2>
+
+        <p>
+          The process for protecting a deposit is straightforward but must be followed precisely.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/deposit-protection-process.svg"
+          alt="Deposit protection process steps"
+          caption="Follow these steps to protect deposits correctly"
+          aspectRatio="video"
+        />
+
+        <ol className="list-decimal ml-6 space-y-3 my-4">
+          <li>
+            <strong>Choose a scheme:</strong> Register with one of the three approved schemes
+            before the tenancy starts.
+          </li>
+          <li>
+            <strong>Receive the deposit:</strong> Collect the deposit from your tenant (maximum
+            5 weeks' rent for most tenancies).
+          </li>
+          <li>
+            <strong>Protect within 30 days:</strong> Register the deposit with your chosen
+            scheme within 30 days of receipt.
+          </li>
+          <li>
+            <strong>Provide prescribed information:</strong> Give the tenant the required
+            documentation within the same 30-day period.
+          </li>
+          <li>
+            <strong>Keep records:</strong> Retain proof of protection and delivery of
+            prescribed information throughout the tenancy.
+          </li>
+        </ol>
+
+        <h2 id="prescribed-information" className="scroll-mt-24">Prescribed Information</h2>
+
+        <p>
+          Protecting the deposit alone isn't enough - you must also provide specific
+          "prescribed information" to your tenant within 30 days.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Required Prescribed Information</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Amount of deposit protected</li>
+            <li>Address of the rented property</li>
+            <li>Name and contact details of landlord/agent</li>
+            <li>Name and contact details of tenant</li>
+            <li>Details of the protection scheme used</li>
+            <li>Information about the scheme's dispute resolution service</li>
+            <li>Circumstances when deductions may be made</li>
+            <li>How to apply to get the deposit back</li>
+          </ul>
+        </div>
+
+        <p>
+          Most schemes provide standard prescribed information documents that meet legal
+          requirements. Always use the current version and keep signed copies.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="deadlines" className="scroll-mt-24">Critical Deadlines</h2>
+
+        <p>
+          The 30-day deadline runs from when you receive the deposit, not from when the
+          tenancy starts. Understanding this is crucial for compliance.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Action</th>
+                <th className="border p-3 text-left font-semibold">Deadline</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Protect deposit in scheme</td>
+                <td className="border p-3">30 days from receipt</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Serve prescribed information</td>
+                <td className="border p-3">30 days from receipt</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Return deposit after tenancy</td>
+                <td className="border p-3">10 days after agreement (single claim)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Raise a dispute</td>
+                <td className="border p-3">Within 3 months of tenancy ending</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/deposit-timeline.svg"
+          alt="Deposit protection timeline"
+          caption="Key deadlines for deposit protection compliance"
+          aspectRatio="video"
+        />
+
+        <h2 id="returning-deposits" className="scroll-mt-24">Returning Deposits</h2>
+
+        <p>
+          At the end of the tenancy, the deposit should be returned promptly unless there
+          are legitimate deductions for damage, cleaning, or unpaid rent.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Valid Deduction Reasons</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-2">
+            <li>Damage beyond fair wear and tear</li>
+            <li>Missing items from the inventory</li>
+            <li>Unpaid rent or bills (if agreed in tenancy)</li>
+            <li>Professional cleaning if specified and needed</li>
+            <li>Garden maintenance if required and neglected</li>
+          </ul>
+        </div>
+
+        <p>
+          Document everything with photographs, dated inventories, and receipts for any
+          work carried out. The burden of proof for deductions lies with you as landlord.
+        </p>
+
+        <h2 id="dispute-resolution" className="scroll-mt-24">Dispute Resolution</h2>
+
+        <p>
+          If you and your tenant can't agree on deductions, either party can use the scheme's
+          free alternative dispute resolution (ADR) service.
+        </p>
+
+        <ol className="list-decimal ml-6 space-y-2 my-4">
+          <li>Attempt to negotiate directly with tenant first</li>
+          <li>If unsuccessful, either party raises a formal dispute</li>
+          <li>Submit evidence (inventory, photos, receipts, correspondence)</li>
+          <li>Adjudicator reviews evidence and makes binding decision</li>
+          <li>Scheme releases deposit according to decision</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Winning Deposit Disputes</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>Detailed check-in inventory with photos</li>
+            <li>Check-out inventory showing changes</li>
+            <li>Dated photographs of damage</li>
+            <li>Quotes and invoices for repair costs</li>
+            <li>Correspondence about issues during tenancy</li>
+            <li>Copy of signed tenancy agreement</li>
+          </ul>
+        </div>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Failing to protect deposits or provide prescribed information carries serious
+          penalties that can be enforced by tenants through the courts.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Potential Penalties</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-2">
+            <li><strong>Financial penalty:</strong> 1-3 times the deposit amount</li>
+            <li><strong>Section 21 blocked:</strong> Cannot serve valid Section 21 notice</li>
+            <li><strong>Deposit return:</strong> Must return deposit before Section 21</li>
+            <li><strong>No limitation:</strong> Claims can be made years after tenancy ends</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/deposit-penalties.svg"
+          alt="Deposit protection penalties"
+          caption="Non-compliance can result in penalties of 1-3x the deposit"
+          aspectRatio="video"
+        />
+
+        <p>
+          Even if you eventually protect the deposit, late protection can still result in
+          penalties. The 30-day deadline is strictly enforced.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Deposit Protection Management</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides deposit protection reminders, prescribed information
+            templates, and compliance tracking to ensure you never miss a deadline.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Deposit Tools →
+          </Link>
+        </div>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Deposit Protection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What's the maximum deposit I can take?</h3>
+            <p className="text-gray-600">
+              For most tenancies, the maximum deposit is 5 weeks' rent. For tenancies with
+              annual rent over £50,000, the maximum is 6 weeks' rent. This was introduced
+              by the Tenant Fees Act 2019.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect when renewing?</h3>
+            <p className="text-gray-600">
+              If the deposit remains protected and the tenancy continues (even as a periodic
+              tenancy), you don't need to re-protect. However, you must re-serve prescribed
+              information if the terms change or you switch schemes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use a holding deposit instead?</h3>
+            <p className="text-gray-600">
+              Holding deposits (maximum one week's rent) don't need to be protected as
+              they're taken before the tenancy. However, once converted to a tenancy deposit,
+              protection rules apply within 30 days.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my agent is supposed to protect it?</h3>
+            <p className="text-gray-600">
+              Ultimately, the legal responsibility rests with you as landlord. If your agent
+              fails to protect the deposit, you could face penalties. Verify protection and
+              get proof from your agent.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 72: UK Rent Arrears Guide
+  {
+    slug: 'uk-rent-arrears-guide',
+    title: 'UK Rent Arrears - Landlord Recovery Guide 2026',
+    description: 'Comprehensive guide to handling rent arrears for UK landlords. Learn about communication strategies, legal options, Section 8 notices, and debt recovery.',
+    metaDescription: 'UK rent arrears guide 2026. Communication strategies, Section 8 notices, Ground 8, 10, 11, debt recovery, and eviction process explained for landlords.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1850,
+    category: 'Property Management',
+    tags: ['rent arrears', 'debt recovery', 'Section 8', 'eviction', 'landlord rights', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-rent-arrears.svg',
+    heroImageAlt: 'UK Rent Arrears Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'rent arrears UK landlords',
+    secondaryKeywords: ['rent arrears recovery', 'Section 8 notice', 'tenant debt', 'eviction rent arrears'],
+    tableOfContents: [
+      { id: 'early-intervention', title: 'Early Intervention', level: 2 },
+      { id: 'communication', title: 'Communication Strategies', level: 2 },
+      { id: 'payment-plans', title: 'Payment Plans', level: 2 },
+      { id: 'formal-notices', title: 'Formal Notices', level: 2 },
+      { id: 'section-8', title: 'Section 8 Notices', level: 2 },
+      { id: 'court-action', title: 'Court Action', level: 2 },
+      { id: 'debt-recovery', title: 'Debt Recovery After Eviction', level: 2 },
+      { id: 'prevention', title: 'Preventing Rent Arrears', level: 2 },
+      { id: 'arrears-faq', title: 'Rent Arrears FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-section-21-guide', 'uk-tenant-referencing-guide', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Rent arrears are one of the most common and stressful issues landlords face. How
+          you handle arrears from the first missed payment can determine whether you recover
+          the money owed and how quickly you can resolve the situation. This guide provides
+          a systematic approach to dealing with non-paying tenants.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Act Early</h4>
+          <p className="text-amber-800">
+            The sooner you address arrears, the better your chances of recovery. Most tenants
+            who fall behind want to resolve the situation - early, supportive contact often
+            prevents escalation to legal action.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/rent-arrears-process.svg"
+          alt="Rent arrears recovery process"
+          caption="A structured approach helps resolve arrears efficiently"
+          aspectRatio="video"
+        />
+
+        <h2 id="early-intervention" className="scroll-mt-24">Early Intervention</h2>
+
+        <p>
+          The first missed payment requires immediate attention. Waiting and hoping the
+          tenant will catch up often leads to mounting arrears that become unrecoverable.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Day</th>
+                <th className="border p-3 text-left font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Day 1</td>
+                <td className="border p-3">Rent due - check if payment received</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Day 2-3</td>
+                <td className="border p-3">Friendly reminder by text/email</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Day 7</td>
+                <td className="border p-3">Phone call to discuss</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Day 14</td>
+                <td className="border p-3">Formal letter requesting payment</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Day 21+</td>
+                <td className="border p-3">Consider formal legal action</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Keep records of all communication attempts, including dates, times, and what was
+          discussed. This documentation is essential if you later need to take legal action.
+        </p>
+
+        <h2 id="communication" className="scroll-mt-24">Communication Strategies</h2>
+
+        <p>
+          Effective communication can resolve many arrears situations without legal action.
+          The goal is to understand the problem and find a solution.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Questions to Ask</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Is this a temporary issue or ongoing problem?</li>
+            <li>When can you realistically make a payment?</li>
+            <li>Are you receiving any benefits that could help?</li>
+            <li>Would a payment plan help you catch up?</li>
+            <li>Have you contacted any support organizations?</li>
+          </ul>
+        </div>
+
+        <p>
+          Remain professional but firm. Express willingness to work with the tenant while
+          being clear about the seriousness of the situation and potential consequences.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/tenant-communication.svg"
+          alt="Professional tenant communication"
+          caption="Document all communication about rent arrears"
+          aspectRatio="video"
+        />
+
+        <h2 id="payment-plans" className="scroll-mt-24">Payment Plans</h2>
+
+        <p>
+          A structured payment plan can help tenants catch up on arrears while maintaining
+          the tenancy. Put any agreement in writing.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Payment Plan Essentials</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>Total arrears amount agreed</li>
+            <li>Regular rent continues to be paid on time</li>
+            <li>Additional amount toward arrears each payment</li>
+            <li>Clear timescale to clear the debt</li>
+            <li>Consequences if the plan isn't followed</li>
+            <li>Both parties sign and keep copies</li>
+          </ul>
+        </div>
+
+        <p>
+          Be realistic about what the tenant can afford. A plan they can't stick to wastes
+          time and delays proper action. Review progress regularly.
+        </p>
+
+        <h2 id="formal-notices" className="scroll-mt-24">Formal Notices</h2>
+
+        <p>
+          If informal approaches fail, formal written notices demonstrate the seriousness
+          of the situation and create a paper trail for potential court action.
+        </p>
+
+        <ul className="list-disc ml-6 space-y-2 my-4">
+          <li>State the exact amount owed with breakdown</li>
+          <li>Reference the tenancy agreement clause on rent</li>
+          <li>Give a clear deadline for payment (usually 7-14 days)</li>
+          <li>Explain consequences of non-payment</li>
+          <li>Send by recorded delivery and keep proof</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="section-8" className="scroll-mt-24">Section 8 Notices</h2>
+
+        <p>
+          Section 8 of the Housing Act 1988 allows landlords to seek possession for rent
+          arrears using mandatory and discretionary grounds.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Ground</th>
+                <th className="border p-3 text-left font-semibold">Type</th>
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-bold">Ground 8</td>
+                <td className="border p-3 text-green-600">Mandatory</td>
+                <td className="border p-3">2+ months' arrears at notice AND hearing</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-bold">Ground 10</td>
+                <td className="border p-3 text-amber-600">Discretionary</td>
+                <td className="border p-3">Some rent is due and unpaid</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-bold">Ground 11</td>
+                <td className="border p-3 text-amber-600">Discretionary</td>
+                <td className="border p-3">Persistently late payment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Ground 8 - Mandatory Possession</h4>
+          <p className="text-red-800 mb-2">
+            Ground 8 requires at least 2 months' (8 weeks') arrears at both the time
+            you serve the Section 8 notice AND at the court hearing. If the tenant
+            pays down to less than 2 months before the hearing, Ground 8 fails.
+          </p>
+          <p className="text-red-800">
+            Using Grounds 10 and 11 as backup gives the court discretion to award
+            possession even if Ground 8 doesn't apply at the hearing.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/section-8-notice.svg"
+          alt="Section 8 notice form"
+          caption="Section 8 notices require specific grounds to be cited"
+          aspectRatio="video"
+        />
+
+        <h2 id="court-action" className="scroll-mt-24">Court Action</h2>
+
+        <p>
+          If the tenant doesn't leave after the Section 8 notice expires, you'll need to
+          apply to the court for a possession order.
+        </p>
+
+        <ol className="list-decimal ml-6 space-y-2 my-4">
+          <li>Complete possession claim form (N5 and N119)</li>
+          <li>Pay court fee (currently £355 for standard claims)</li>
+          <li>Attend hearing and present evidence</li>
+          <li>If successful, court grants possession order</li>
+          <li>If tenant still doesn't leave, apply for warrant/bailiffs</li>
+        </ol>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Court Track</th>
+                <th className="border p-3 text-left font-semibold">Typical Timeframe</th>
+                <th className="border p-3 text-left font-semibold">When Used</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Standard</td>
+                <td className="border p-3">8-12 weeks to hearing</td>
+                <td className="border p-3">Most possession claims</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Accelerated</td>
+                <td className="border p-3">6-10 weeks (no hearing)</td>
+                <td className="border p-3">Section 21 only (not rent arrears)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="debt-recovery" className="scroll-mt-24">Debt Recovery After Eviction</h2>
+
+        <p>
+          Eviction doesn't end your right to recover the money owed. You can pursue the
+          debt through the courts even after the tenant has left.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Debt Recovery Options</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li><strong>Money Claim Online:</strong> For debts under £10,000</li>
+            <li><strong>County Court Judgment (CCJ):</strong> Formal court debt order</li>
+            <li><strong>High Court Enforcement:</strong> For larger debts</li>
+            <li><strong>Debt Collection Agencies:</strong> Third-party recovery</li>
+            <li><strong>Attachment of Earnings:</strong> Deductions from wages</li>
+          </ul>
+        </div>
+
+        <p>
+          Consider whether recovery is cost-effective. If the tenant has no assets or income,
+          pursuing the debt may be futile. Sometimes accepting the loss is the pragmatic choice.
+        </p>
+
+        <h2 id="prevention" className="scroll-mt-24">Preventing Rent Arrears</h2>
+
+        <p>
+          Prevention is always better than cure. Good practices at the start of a tenancy
+          significantly reduce arrears risk.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Prevention Strategies</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>Thorough tenant referencing before letting</li>
+            <li>Affordability checks (rent no more than 40% of income)</li>
+            <li>Request a guarantor for higher-risk tenants</li>
+            <li>Set up standing order on the day rent is paid</li>
+            <li>Consider rent guarantee insurance</li>
+            <li>Build good landlord-tenant relationship</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/rent-arrears-prevention.svg"
+          alt="Preventing rent arrears"
+          caption="Good tenant selection is the best arrears prevention"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Rent Arrears Management Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides rent tracking, arrears alerts, letter templates, and
+            guidance to help you manage rent collection and address arrears promptly.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Rent Management Tools →
+          </Link>
+        </div>
+
+        <h2 id="arrears-faq" className="scroll-mt-24">Rent Arrears FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I change the locks if rent isn't paid?</h3>
+            <p className="text-gray-600">
+              No. Changing locks or forcing a tenant out is illegal eviction, regardless
+              of rent arrears. You must follow the legal process through the courts.
+              Illegal eviction is a criminal offense.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I accept partial payment?</h3>
+            <p className="text-gray-600">
+              Generally yes - any payment reduces your loss. However, be clear in writing
+              that accepting partial payment doesn't waive your right to pursue the full
+              amount or take possession action.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use the deposit for unpaid rent?</h3>
+            <p className="text-gray-600">
+              Only at the end of the tenancy. During the tenancy, the deposit should remain
+              protected. At the end, you can claim for unpaid rent through the deposit
+              scheme's dispute process.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if Universal Credit is paid late?</h3>
+            <p className="text-gray-600">
+              Consider requesting an Alternative Payment Arrangement (APA) where housing
+              element is paid directly to you. This requires tenant consent or specific
+              circumstances like 2+ months' arrears.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 73: UK Tenancy Agreements Guide
+  {
+    slug: 'uk-tenancy-agreements-guide',
+    title: 'UK Tenancy Agreements - Complete Landlord Guide 2026',
+    description: 'Essential guide to tenancy agreements for UK landlords. Learn about AST terms, clauses, legal requirements, and how to create enforceable contracts.',
+    metaDescription: 'UK tenancy agreement guide 2026. AST essentials, key clauses, legal requirements, break clauses, and creating enforceable contracts explained.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Legal Compliance',
+    tags: ['tenancy agreements', 'AST', 'landlord contracts', 'tenancy terms', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-tenancy-agreement.svg',
+    heroImageAlt: 'UK Tenancy Agreement Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'tenancy agreement UK landlords',
+    secondaryKeywords: ['AST agreement', 'tenancy contract', 'tenancy clauses', 'rental agreement UK'],
+    tableOfContents: [
+      { id: 'types-of-tenancy', title: 'Types of Tenancy', level: 2 },
+      { id: 'essential-terms', title: 'Essential Terms', level: 2 },
+      { id: 'key-clauses', title: 'Key Clauses Explained', level: 2 },
+      { id: 'break-clauses', title: 'Break Clauses', level: 2 },
+      { id: 'unfair-terms', title: 'Unfair Terms to Avoid', level: 2 },
+      { id: 'how-to-rent', title: 'How to Rent Guide', level: 2 },
+      { id: 'signing-process', title: 'Signing Process', level: 2 },
+      { id: 'renewals', title: 'Renewals and Periodic Tenancies', level: 2 },
+      { id: 'agreement-faq', title: 'Tenancy Agreement FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-deposit-protection-guide', 'uk-tenant-referencing-guide', 'england-section-21-guide'],
+    content: (
+      <>
+        <p className="lead">
+          A well-drafted tenancy agreement is the foundation of a successful landlord-tenant
+          relationship. It sets out the rights and responsibilities of both parties and provides
+          the framework for managing the tenancy. This guide covers everything you need to know
+          about creating enforceable, compliant tenancy agreements in the UK.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Why Written Agreements Matter</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-1">
+            <li>Clear expectations for both parties</li>
+            <li>Evidence in case of disputes</li>
+            <li>Required for certain legal processes</li>
+            <li>Protection for landlord and tenant</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/tenancy-agreement-signing.svg"
+          alt="Signing a tenancy agreement"
+          caption="Written tenancy agreements protect both landlords and tenants"
+          aspectRatio="video"
+        />
+
+        <h2 id="types-of-tenancy" className="scroll-mt-24">Types of Tenancy</h2>
+
+        <p>
+          Understanding the type of tenancy you're creating determines which laws apply and
+          what rights exist. The most common type for private rentals is the Assured Shorthold
+          Tenancy (AST).
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Tenancy Type</th>
+                <th className="border p-3 text-left font-semibold">When It Applies</th>
+                <th className="border p-3 text-left font-semibold">Key Features</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Assured Shorthold (AST)</td>
+                <td className="border p-3">Most private lets in England</td>
+                <td className="border p-3">Section 21 available, deposit protection required</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Assured Tenancy</td>
+                <td className="border p-3">Older tenancies, some housing associations</td>
+                <td className="border p-3">Greater tenant security, limited grounds for possession</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Excluded Tenancy/Licence</td>
+                <td className="border p-3">Lodgers in your home</td>
+                <td className="border p-3">Less tenant protection, easier to end</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Company Let</td>
+                <td className="border p-3">Tenant is a company</td>
+                <td className="border p-3">Not an AST, contractual terms govern</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          If you let to an individual who pays rent, the property is their only or main home,
+          and you don't live there, it's almost certainly an AST unless specific exclusions apply.
+        </p>
+
+        <h2 id="essential-terms" className="scroll-mt-24">Essential Terms</h2>
+
+        <p>
+          Every tenancy agreement should include certain fundamental terms that define the
+          basic parameters of the tenancy.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Must-Have Information</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>Full names of landlord and all tenants</li>
+            <li>Property address and description</li>
+            <li>Start date and duration (fixed term or periodic)</li>
+            <li>Rent amount, payment date, and method</li>
+            <li>Deposit amount and protection scheme details</li>
+            <li>Who is responsible for bills and council tax</li>
+            <li>Landlord's contact address for notices</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/tenancy-essential-terms.svg"
+          alt="Essential tenancy agreement terms"
+          caption="Include all essential terms to create a valid agreement"
+          aspectRatio="video"
+        />
+
+        <h2 id="key-clauses" className="scroll-mt-24">Key Clauses Explained</h2>
+
+        <p>
+          Beyond the essentials, specific clauses address important aspects of the tenancy
+          relationship.
+        </p>
+
+        <div className="space-y-4 my-6">
+          <div className="border-l-4 border-blue-500 pl-4">
+            <h4 className="font-semibold">Rent Review Clause</h4>
+            <p className="text-gray-600">Explains how and when rent can be increased. For fixed terms,
+            rent usually can't increase unless the agreement specifically allows it.</p>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4">
+            <h4 className="font-semibold">Pets Clause</h4>
+            <p className="text-gray-600">States whether pets are allowed and any conditions. Consider
+            the Tenant Fees Act limits on pet deposits (can't charge extra deposit, but can
+            require pet damage insurance).</p>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4">
+            <h4 className="font-semibold">Subletting Clause</h4>
+            <p className="text-gray-600">Usually prohibits subletting without landlord consent.
+            Important for maintaining control over who occupies the property.</p>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4">
+            <h4 className="font-semibold">Maintenance Responsibilities</h4>
+            <p className="text-gray-600">Clarifies who handles what repairs. Landlord responsibilities
+            under statute (structure, utilities) can't be contracted out.</p>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4">
+            <h4 className="font-semibold">Access Clause</h4>
+            <p className="text-gray-600">Outlines landlord's right to access with reasonable notice
+            (typically 24-48 hours) for inspections, repairs, or viewings.</p>
+          </div>
+        </div>
+
+        <h2 id="break-clauses" className="scroll-mt-24">Break Clauses</h2>
+
+        <p>
+          Break clauses allow either party to end the tenancy before the fixed term expires.
+          They must be drafted carefully to be enforceable.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Break Clause Requirements</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-2">
+            <li>Specify the earliest date the break can be exercised</li>
+            <li>State the notice period required (commonly 2 months)</li>
+            <li>Be clear about who can exercise it (landlord, tenant, or both)</li>
+            <li>Specify any conditions (e.g., rent up to date)</li>
+            <li>Match the notice to what's legally required for Section 21</li>
+          </ul>
+        </div>
+
+        <p>
+          Be cautious with conditions - if a break clause requires "strict compliance" with
+          all terms, minor breaches might prevent its use.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="unfair-terms" className="scroll-mt-24">Unfair Terms to Avoid</h2>
+
+        <p>
+          The Consumer Rights Act 2015 protects tenants from unfair contract terms. Unfair
+          terms are not enforceable and can damage your case in court.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Potentially Unfair Terms</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-2">
+            <li>Excessive penalty fees (e.g., £100 for late rent)</li>
+            <li>Requiring professional cleaning regardless of condition</li>
+            <li>Forfeiting deposit for early departure</li>
+            <li>Banning all visitors or overnight guests</li>
+            <li>Requiring permission for minor decoration</li>
+            <li>Excessive restrictions on reasonable lifestyle</li>
+          </ul>
+        </div>
+
+        <p>
+          Courts will consider whether terms create a significant imbalance between landlord
+          and tenant rights. Stick to reasonable, proportionate clauses.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/fair-tenancy-terms.svg"
+          alt="Fair vs unfair tenancy terms"
+          caption="Ensure your agreement contains only fair, enforceable terms"
+          aspectRatio="video"
+        />
+
+        <h2 id="how-to-rent" className="scroll-mt-24">How to Rent Guide</h2>
+
+        <p>
+          In England, you must provide tenants with the government's "How to Rent" guide
+          before or at the start of the tenancy. This is a Section 21 requirement.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">How to Rent Compliance</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Provide the current version (check gov.uk for latest)</li>
+            <li>Give a paper copy or email with link to the online version</li>
+            <li>Provide before the tenancy starts or on the day it starts</li>
+            <li>Keep proof of when and how you provided it</li>
+            <li>Re-provide if the guide is updated during periodic tenancy</li>
+          </ul>
+        </div>
+
+        <p>
+          Without proof of providing this document, you cannot serve a valid Section 21
+          notice to end the tenancy.
+        </p>
+
+        <h2 id="signing-process" className="scroll-mt-24">Signing Process</h2>
+
+        <p>
+          A properly executed agreement requires attention to detail. Follow these steps
+          to ensure your agreement is valid and enforceable.
+        </p>
+
+        <ol className="list-decimal ml-6 space-y-3 my-4">
+          <li>
+            <strong>Review with tenant:</strong> Go through the agreement together,
+            explaining key terms and answering questions.
+          </li>
+          <li>
+            <strong>Sign all copies:</strong> Both parties sign and date every copy.
+            Each tenant should sign if multiple tenants.
+          </li>
+          <li>
+            <strong>Witness signatures:</strong> Not legally required but adds evidential weight.
+          </li>
+          <li>
+            <strong>Provide copies:</strong> Give each tenant a signed copy immediately.
+          </li>
+          <li>
+            <strong>Store securely:</strong> Keep your signed copy with other tenancy documents.
+          </li>
+        </ol>
+
+        <h2 id="renewals" className="scroll-mt-24">Renewals and Periodic Tenancies</h2>
+
+        <p>
+          When a fixed-term ends, the tenancy typically becomes periodic (rolling monthly)
+          unless a new fixed term is signed.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Option</th>
+                <th className="border p-3 text-left font-semibold">Advantages</th>
+                <th className="border p-3 text-left font-semibold">Disadvantages</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">New fixed term</td>
+                <td className="border p-3">Certainty, locked-in tenant, can update terms</td>
+                <td className="border p-3">Less flexibility, renewal admin</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Allow periodic</td>
+                <td className="border p-3">Flexibility, no admin, same terms continue</td>
+                <td className="border p-3">Tenant can leave with notice, less certainty</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Professional Tenancy Agreements</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides professionally drafted tenancy agreement templates,
+            customizable clauses, and compliance checklists to protect your interests.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Agreement Templates →
+          </Link>
+        </div>
+
+        <h2 id="agreement-faq" className="scroll-mt-24">Tenancy Agreement FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is a verbal agreement valid?</h3>
+            <p className="text-gray-600">
+              Legally, yes - an AST can be verbal. However, without written evidence, proving
+              terms becomes extremely difficult. Always use a written agreement to protect
+              both parties.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I change terms during a tenancy?</h3>
+            <p className="text-gray-600">
+              Not unilaterally during a fixed term. Both parties must agree to any changes
+              in writing. For periodic tenancies, you can propose changes, but the tenant
+              can refuse.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant breaks agreement terms?</h3>
+            <p className="text-gray-600">
+              Address breaches promptly in writing. Depending on severity, you may seek
+              possession under Section 8 grounds. However, minor breaches rarely justify
+              ending the tenancy.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor to draft agreements?</h3>
+            <p className="text-gray-600">
+              Not necessarily. Many landlords use quality template agreements. However,
+              for complex situations (company lets, unusual terms), legal advice is valuable
+              to ensure enforceability.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
