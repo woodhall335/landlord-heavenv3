@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/tenancy-agreements',
-        destination: '/tenancy-agreements/england-wales',
+        destination: '/pricing',
         permanent: true,
       },
       {
