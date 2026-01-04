@@ -8,6 +8,16 @@ import React from 'react';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 
+/**
+ * Get a date 1 year from now in ISO format (YYYY-MM-DD)
+ * Used for priceValidUntil in product offers
+ */
+function getDefaultPriceValidUntil(): string {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + 1);
+  return date.toISOString().split('T')[0];
+}
+
 export interface Product {
   name: string;
   description: string;
@@ -16,6 +26,7 @@ export interface Product {
   availability?: string;
   url: string;
   image?: string;
+  priceValidUntil?: string;
 }
 
 export interface FAQItem {
@@ -82,6 +93,7 @@ export function productSchema(product: Product) {
       "@type": "Offer",
       "price": product.price,
       "priceCurrency": product.currency || "GBP",
+      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
       "availability": product.availability || "https://schema.org/InStock",
       "url": product.url,
       "seller": {
@@ -116,6 +128,7 @@ export function subscriptionProductSchema(product: Product) {
       "@type": "Offer",
       "price": product.price,
       "priceCurrency": product.currency || "GBP",
+      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
       "availability": "https://schema.org/InStock",
       "url": product.url,
       "priceSpecification": {

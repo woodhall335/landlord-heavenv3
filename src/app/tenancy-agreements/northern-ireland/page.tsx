@@ -64,12 +64,14 @@ export default function NorthernIrelandTenancyPage() {
         name: 'Standard Private Tenancy',
         price: '9.99',
         priceCurrency: 'GBP',
+        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       },
       {
         '@type': 'Offer',
         name: 'Premium Private Tenancy',
         price: '14.99',
         priceCurrency: 'GBP',
+        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       },
     ],
   };
