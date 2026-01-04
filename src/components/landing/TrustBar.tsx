@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from 'react';
 import { Container } from '@/components/ui';
-import { RiShieldCheckLine, RiLockLine, RiMapPinLine, RiUserStarLine } from 'react-icons/ri';
+import { RiShieldCheckLine, RiLockLine, RiMapPinLine } from 'react-icons/ri';
 
 interface TrustBadgeProps {
   icon: React.ReactNode;
@@ -48,10 +48,6 @@ const trustBadges = [
   {
     icon: <RiShieldCheckLine className="h-5 w-5" />,
     label: "Court-Ready Guarantee",
-  },
-  {
-    icon: <RiUserStarLine className="h-5 w-5" />,
-    label: "10,000+ Documents",
   },
   {
     icon: <RiMapPinLine className="h-5 w-5" />,

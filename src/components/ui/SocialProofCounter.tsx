@@ -55,7 +55,7 @@ const COUNTER_CONFIG = {
 };
 
 /**
- * Get or create a persistent counter value that only increases
+ * Get or create a persistent counter value that only increases (up to max)
  */
 function getPersistedCount(storageKey: string, baseCount: number, dailyGrowth: number): number {
   const now = new Date();
@@ -66,34 +66,36 @@ function getPersistedCount(storageKey: string, baseCount: number, dailyGrowth: n
   // Calculate time-based progression (0 at midnight, 1 at 11:59pm)
   const dayProgress = (hour * 60 + minute) / (24 * 60);
 
-  // Calculate minimum count for this time of day
-  // Starts at base, grows throughout the day
-  const timeBasedMin = Math.floor(baseCount + (dailyGrowth * dayProgress));
+  // Calculate count for this time of day
+  // Starts at base, grows throughout the day up to dailyGrowth max
+  const timeBasedCount = Math.floor(baseCount + (dailyGrowth * dayProgress));
+
+  // Maximum allowed value for this counter type
+  const maxCount = baseCount + dailyGrowth;
 
   try {
     const stored = localStorage.getItem(storageKey);
     if (stored) {
       const { date, count } = JSON.parse(stored);
 
-      // Same day: ensure count only goes up
+      // Same day: use time-based count, capped at max
       if (date === today) {
-        // If stored count is lower than time-based minimum, catch up
-        // If stored count is higher, add small increment (1-5)
-        const increment = Math.floor(Math.random() * 5) + 1;
-        const newCount = Math.max(timeBasedMin, count + increment);
+        // Add small variance but cap at max
+        const variance = Math.floor(Math.random() * 20);
+        const newCount = Math.min(timeBasedCount + variance, maxCount);
         localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
         return newCount;
       }
     }
 
     // New day or first visit: start fresh with time-based count + small random
-    const initialVariance = Math.floor(Math.random() * 50);
-    const newCount = timeBasedMin + initialVariance;
+    const initialVariance = Math.floor(Math.random() * 20);
+    const newCount = Math.min(timeBasedCount + initialVariance, maxCount);
     localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
     return newCount;
   } catch {
     // localStorage not available (SSR or privacy mode)
-    return timeBasedMin + Math.floor(Math.random() * 50);
+    return Math.min(timeBasedCount + Math.floor(Math.random() * 20), maxCount);
   }
 }
 
