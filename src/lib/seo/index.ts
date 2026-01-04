@@ -32,3 +32,10 @@ export {
   rentArrearsRelatedLinks,
   tenancyRelatedLinks,
 } from './internal-links';
+
+export {
+  submitUrlToIndexNow,
+  submitUrlsToIndexNow,
+  submitSitemapToIndexNow,
+  getKeyPageUrls,
+} from './indexnow';
