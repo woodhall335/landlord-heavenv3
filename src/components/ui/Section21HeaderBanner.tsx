@@ -67,7 +67,7 @@ export function Section21HeaderBanner() {
 
           <Link
             href="/products/notice-only"
-            className="underline hover:no-underline font-medium ml-1"
+            className="text-white underline hover:no-underline font-medium ml-1"
           >
             <span className="hidden sm:inline">Serve Your Notice Now →</span>
             <span className="sm:hidden">Act Now →</span>

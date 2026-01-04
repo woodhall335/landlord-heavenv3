@@ -42,20 +42,23 @@ export function Section21Countdown({ variant, className = '' }: Section21Countdo
   }
 
   // Large variant - for popup modal and landing page hero
+  // Check if white text is requested via className
+  const isWhite = className.includes('text-white');
+
   if (variant === 'large') {
     return (
       <div className={`flex justify-center gap-4 sm:gap-6 ${className}`}>
         <div className="text-center">
-          <div className="text-4xl sm:text-5xl font-bold text-primary font-mono">{timeLeft.days}</div>
-          <div className="text-sm text-gray-500 mt-1">days</div>
+          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.days}</div>
+          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>days</div>
         </div>
         <div className="text-center">
-          <div className="text-4xl sm:text-5xl font-bold text-primary font-mono">{timeLeft.hours}</div>
-          <div className="text-sm text-gray-500 mt-1">hours</div>
+          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.hours}</div>
+          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>hours</div>
         </div>
         <div className="text-center">
-          <div className="text-4xl sm:text-5xl font-bold text-primary font-mono">{timeLeft.minutes}</div>
-          <div className="text-sm text-gray-500 mt-1">mins</div>
+          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.minutes}</div>
+          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>mins</div>
         </div>
       </div>
     );
