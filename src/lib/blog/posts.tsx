@@ -31899,6 +31899,1127 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 87: UK Guarantor Agreements Guide
+  {
+    slug: 'uk-guarantor-agreements-guide',
+    title: 'UK Guarantor Agreements - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to guarantor agreements for UK landlords. Learn when to require guarantors, legal requirements, drafting agreements, and enforcing guarantor obligations.',
+    metaDescription: 'UK guarantor agreements guide 2026. When to require guarantors, legal drafting tips, and enforcement advice for landlords across England, Scotland, Wales & NI.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1580,
+    category: 'Legal',
+    tags: ['guarantor agreement', 'tenant guarantor', 'rental guarantee', 'landlord protection', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-guarantor.svg',
+    heroImageAlt: 'UK Guarantor Agreements Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'guarantor agreement UK',
+    secondaryKeywords: ['tenant guarantor', 'rental guarantor', 'guarantor deed', 'guarantor liability'],
+    tableOfContents: [
+      { id: 'what-is-guarantor', title: 'What is a Guarantor?', level: 2 },
+      { id: 'when-require-guarantor', title: 'When to Require a Guarantor', level: 2 },
+      { id: 'guarantor-requirements', title: 'Guarantor Requirements', level: 2 },
+      { id: 'drafting-agreement', title: 'Drafting the Agreement', level: 2 },
+      { id: 'legal-enforceability', title: 'Legal Enforceability', level: 2 },
+      { id: 'enforcing-guarantee', title: 'Enforcing the Guarantee', level: 2 },
+      { id: 'guarantor-faq', title: 'Guarantor FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-tenant-referencing-guide', 'uk-tenancy-agreements-guide', 'uk-rent-arrears-guide'],
+    content: (
+      <>
+        <p className="lead">
+          A guarantor agreement provides valuable security for landlords when tenants lack
+          financial strength or rental history. This guide covers everything UK landlords
+          need to know about requiring, drafting, and enforcing guarantor agreements in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-guarantor.svg"
+          alt="Understanding guarantor agreements for rental properties"
+          caption="Guarantor agreements add financial security to tenancy arrangements"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="what-is-guarantor" className="scroll-mt-24">What is a Guarantor?</h2>
+
+        <p>
+          A guarantor is a third party who agrees to cover the tenant&apos;s obligations
+          if the tenant fails to meet them. This typically includes unpaid rent and property
+          damage beyond normal wear and tear.
+        </p>
+
+        <h3>Guarantor vs. Co-signer</h3>
+
+        <p>
+          While often used interchangeably, there are distinctions:
+        </p>
+
+        <ul>
+          <li><strong>Guarantor</strong> - liable only if tenant defaults; secondary liability</li>
+          <li><strong>Co-signer/Joint tenant</strong> - equally liable throughout; primary liability</li>
+        </ul>
+
+        <p>
+          Most landlords use guarantor agreements, where the guarantor is only called upon
+          if the tenant fails to pay. The tenant remains primarily responsible.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Note on Terminology</h4>
+          <p className="text-blue-800">
+            Some agreements create &quot;indemnity&quot; rather than guarantee obligations,
+            which can affect enforceability. Proper legal drafting is essential.
+          </p>
+        </div>
+
+        <h2 id="when-require-guarantor" className="scroll-mt-24">When to Require a Guarantor</h2>
+
+        <p>
+          Guarantors are commonly required in these situations:
+        </p>
+
+        <h3>Student Tenants</h3>
+
+        <p>
+          Students typically have limited income and no rental history. Requiring a parent
+          or family member as guarantor is standard practice in student lettings.
+        </p>
+
+        <h3>First-Time Renters</h3>
+
+        <p>
+          Tenants with no previous rental history can&apos;t provide landlord references.
+          A guarantor provides assurance until they establish a track record.
+        </p>
+
+        <h3>Low or Irregular Income</h3>
+
+        <p>
+          Self-employed tenants, those on benefits, or those with income below typical
+          thresholds (usually 2.5-3x annual rent) may need guarantor support.
+        </p>
+
+        <h3>Poor Credit History</h3>
+
+        <p>
+          Applicants with CCJs, defaults, or low credit scores represent higher risk.
+          A guarantor with good credit offsets this concern.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-guarantor-situations.svg"
+          alt="Common situations requiring rental guarantors"
+          caption="Various tenant circumstances where guarantors provide necessary security"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="guarantor-requirements" className="scroll-mt-24">Guarantor Requirements</h2>
+
+        <p>
+          Not everyone can serve as an effective guarantor. Landlords should verify:
+        </p>
+
+        <h3>Financial Capacity</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+                <th className="border p-3 text-left font-semibold">Typical Standard</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Annual Income</td>
+                <td className="border p-3">3x annual rent minimum</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Credit Score</td>
+                <td className="border p-3">Good credit history, no CCJs</td>
+              </tr>
+              <tr>
+                <td className="border p-3">UK Residence</td>
+                <td className="border p-3">Usually required for enforcement</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Homeowner Status</td>
+                <td className="border p-3">Preferred but not essential</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Age</td>
+                <td className="border p-3">Over 18 (over 21 preferred)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Referencing the Guarantor</h3>
+
+        <p>
+          Treat guarantor referencing as seriously as tenant referencing:
+        </p>
+
+        <ul>
+          <li>Credit check with major reference agencies</li>
+          <li>Proof of income (payslips, accounts, tax returns)</li>
+          <li>Proof of identity and address</li>
+          <li>Employment verification where applicable</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="drafting-agreement" className="scroll-mt-24">Drafting the Agreement</h2>
+
+        <p>
+          A properly drafted guarantor agreement is essential for enforceability. Key elements include:
+        </p>
+
+        <h3>Essential Clauses</h3>
+
+        <ul>
+          <li><strong>Parties identified</strong> - full names, addresses of landlord, tenant, guarantor</li>
+          <li><strong>Property description</strong> - clear identification of the rental property</li>
+          <li><strong>Tenancy reference</strong> - link to the specific tenancy agreement</li>
+          <li><strong>Scope of guarantee</strong> - what obligations are covered</li>
+          <li><strong>Duration</strong> - how long the guarantee lasts</li>
+          <li><strong>Cap on liability</strong> - maximum amount guarantor will pay (optional)</li>
+          <li><strong>Notice requirements</strong> - how landlord must notify guarantor of claims</li>
+        </ul>
+
+        <h3>Scope of Obligations</h3>
+
+        <p>
+          Specify exactly what the guarantor is liable for:
+        </p>
+
+        <ul>
+          <li>Unpaid rent and service charges</li>
+          <li>Damage beyond fair wear and tear</li>
+          <li>Cleaning costs if property left unacceptably dirty</li>
+          <li>Legal costs for enforcement</li>
+          <li>Rent for period until property re-let (if applicable)</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Duration Warning</h4>
+          <p className="text-amber-800">
+            If the tenancy becomes periodic or is renewed, the guarantee may not automatically
+            continue. Include explicit wording covering periodic tenancies and any renewals
+            or variations.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-agreement-drafting.svg"
+          alt="Key elements of guarantor agreement drafting"
+          caption="Proper drafting ensures the agreement is legally enforceable"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="legal-enforceability" className="scroll-mt-24">Legal Enforceability</h2>
+
+        <p>
+          Several factors affect whether a guarantor agreement can be enforced:
+        </p>
+
+        <h3>Signature Requirements</h3>
+
+        <p>
+          The guarantor must sign the agreement. Electronic signatures are generally
+          acceptable, but for maximum security, obtain a witnessed wet signature.
+          Some agreements are executed as deeds, requiring witness signatures.
+        </p>
+
+        <h3>Independent Legal Advice</h3>
+
+        <p>
+          While not legally required, advising the guarantor to seek independent legal
+          advice (and documenting this) strengthens enforceability. It prevents claims
+          they didn&apos;t understand their obligations.
+        </p>
+
+        <h3>Material Variations</h3>
+
+        <p>
+          If the tenancy is materially varied without the guarantor&apos;s consent, the
+          guarantee may become unenforceable. This includes:
+        </p>
+
+        <ul>
+          <li>Significant rent increases</li>
+          <li>Changes to tenant (adding or removing joint tenants)</li>
+          <li>Major changes to tenancy terms</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Critical Point</h4>
+          <p className="text-red-800">
+            Always obtain guarantor consent for any tenancy variations. A simple variation
+            agreement signed by the guarantor preserves their liability.
+          </p>
+        </div>
+
+        <h3>Consumer Rights Act 2015</h3>
+
+        <p>
+          The Consumer Rights Act applies to guarantor agreements. Terms must be fair
+          and transparent. Unduly onerous or surprising terms may be unenforceable.
+        </p>
+
+        <h2 id="enforcing-guarantee" className="scroll-mt-24">Enforcing the Guarantee</h2>
+
+        <p>
+          When a tenant defaults, follow these steps to enforce the guarantee:
+        </p>
+
+        <h3>Step-by-Step Process</h3>
+
+        <ol>
+          <li><strong>Document the default</strong> - record unpaid rent, damage, etc.</li>
+          <li><strong>Notify the guarantor</strong> - formal written notice of default</li>
+          <li><strong>Calculate the claim</strong> - itemise amounts owed with evidence</li>
+          <li><strong>Demand payment</strong> - formal demand letter with deadline</li>
+          <li><strong>Negotiate if needed</strong> - payment plan may be acceptable</li>
+          <li><strong>Court action</strong> - Money Claims Online or County Court</li>
+        </ol>
+
+        <h3>Time Limits</h3>
+
+        <p>
+          You have 6 years to bring a claim for breach of a simple contract guarantee.
+          However, act promptly - delays can complicate enforcement and recovery.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Guarantor Agreement Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides professionally drafted guarantor agreement templates
+            covering all essential clauses for maximum protection.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Legal Templates →
+          </Link>
+        </div>
+
+        <h2 id="guarantor-faq" className="scroll-mt-24">Guarantor FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can a guarantor be released during the tenancy?</h3>
+            <p className="text-gray-600">
+              Only if the landlord agrees. You can release a guarantor if the tenant&apos;s
+              circumstances improve or a new guarantor is provided. Always document
+              any release in writing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does the guarantor need to sign the tenancy agreement?</h3>
+            <p className="text-gray-600">
+              No, the guarantor signs a separate guarantor agreement that references
+              the tenancy. They should receive a copy of the tenancy agreement so they
+              understand what they&apos;re guaranteeing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I require multiple guarantors?</h3>
+            <p className="text-gray-600">
+              Yes, especially for joint tenancies. You can require each tenant to have
+              a guarantor, or have guarantors liable for specific tenants only. Clarify
+              in the agreement whether guarantors are jointly and severally liable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the guarantor is overseas?</h3>
+            <p className="text-gray-600">
+              Overseas guarantors are harder to reference and enforce against. Preferably
+              require a UK-based guarantor. If you accept overseas guarantors, consider
+              additional security like larger deposits or rent in advance.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-guarantor-protection.svg"
+          alt="Full protection through proper guarantor agreements"
+          caption="Well-drafted guarantor agreements provide essential landlord protection"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 88: UK Letting Agent Selection Guide
+  {
+    slug: 'uk-letting-agent-selection-guide',
+    title: 'UK Letting Agent Selection - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to choosing letting agents in the UK. Compare full management vs let-only services, understand fees, and find the right agent for your property.',
+    metaDescription: 'UK letting agent selection guide 2026. Compare services, fees, and find the best letting agent for your rental property across England, Scotland, Wales & NI.',
+    date: '2026-01-04',
+    readTime: '15 min read',
+    wordCount: 1620,
+    category: 'Property Management',
+    tags: ['letting agent', 'property management', 'agent fees', 'landlord services', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-letting-agent.svg',
+    heroImageAlt: 'UK Letting Agent Selection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'letting agent UK',
+    secondaryKeywords: ['property management agent', 'letting agent fees', 'full management service', 'let only agent'],
+    tableOfContents: [
+      { id: 'self-manage-vs-agent', title: 'Self-Manage vs Agent', level: 2 },
+      { id: 'service-levels', title: 'Service Levels Explained', level: 2 },
+      { id: 'typical-fees', title: 'Typical Agent Fees', level: 2 },
+      { id: 'choosing-agent', title: 'Choosing the Right Agent', level: 2 },
+      { id: 'agent-regulations', title: 'Agent Regulations', level: 2 },
+      { id: 'contract-terms', title: 'Contract Terms to Check', level: 2 },
+      { id: 'letting-agent-faq', title: 'Letting Agent FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-software-tools-guide', 'uk-property-marketing-guide', 'uk-tenant-referencing-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Choosing the right letting agent can significantly impact your rental income and
+          landlord experience. This guide helps UK landlords understand agent services,
+          compare fees, and select the best agent for their needs in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-letting-agent.svg"
+          alt="Choosing a letting agent for your rental property"
+          caption="The right letting agent partnership can maximise your rental returns"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="self-manage-vs-agent" className="scroll-mt-24">Self-Manage vs Agent</h2>
+
+        <p>
+          Before selecting an agent, consider whether you need one at all. Both approaches
+          have advantages and disadvantages.
+        </p>
+
+        <h3>Self-Management Benefits</h3>
+
+        <ul>
+          <li>No management fees - keep 100% of rent</li>
+          <li>Direct relationship with tenants</li>
+          <li>Full control over property and decisions</li>
+          <li>Can be rewarding and educational</li>
+        </ul>
+
+        <h3>Agent Management Benefits</h3>
+
+        <ul>
+          <li>Professional expertise and local knowledge</li>
+          <li>Time savings - especially for busy landlords</li>
+          <li>Legal compliance assistance</li>
+          <li>Contractor networks for maintenance</li>
+          <li>Tenant vetting and reference checking</li>
+          <li>Essential for distant or overseas landlords</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Time vs Money</h4>
+          <p className="text-blue-800">
+            The decision often comes down to time versus money. If you have time and are
+            near your property, self-management can work well. If time is limited or you&apos;re
+            far away, an agent may be worth the cost.
+          </p>
+        </div>
+
+        <h2 id="service-levels" className="scroll-mt-24">Service Levels Explained</h2>
+
+        <p>
+          Letting agents typically offer different service tiers:
+        </p>
+
+        <h3>Tenant Find Only</h3>
+
+        <p>
+          The most basic service - the agent finds a tenant then you take over:
+        </p>
+
+        <ul>
+          <li>Property marketing and advertising</li>
+          <li>Conducting viewings</li>
+          <li>Tenant referencing and vetting</li>
+          <li>Preparing tenancy agreement</li>
+          <li>Collecting first month&apos;s rent and deposit</li>
+          <li>Handing over keys</li>
+        </ul>
+
+        <h3>Rent Collection Service</h3>
+
+        <p>
+          Adds ongoing rent collection to tenant find:
+        </p>
+
+        <ul>
+          <li>Everything in tenant find</li>
+          <li>Monthly rent collection</li>
+          <li>Chasing late payments</li>
+          <li>Providing rent statements</li>
+        </ul>
+
+        <h3>Full Management</h3>
+
+        <p>
+          Comprehensive service handling everything:
+        </p>
+
+        <ul>
+          <li>Everything above plus:</li>
+          <li>Property inspections</li>
+          <li>Maintenance coordination</li>
+          <li>24/7 emergency response</li>
+          <li>Inventory and check-out</li>
+          <li>Deposit disputes</li>
+          <li>Tenancy renewals</li>
+          <li>Serving notices</li>
+          <li>Legal compliance monitoring</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-service-comparison.svg"
+          alt="Comparing letting agent service levels"
+          caption="Different service levels suit different landlord needs and budgets"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="typical-fees" className="scroll-mt-24">Typical Agent Fees</h2>
+
+        <p>
+          Agent fees vary by location, property type, and service level:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Service Level</th>
+                <th className="border p-3 text-left font-semibold">Typical Fee</th>
+                <th className="border p-3 text-left font-semibold">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Tenant Find Only</td>
+                <td className="border p-3">4-8 weeks&apos; rent</td>
+                <td className="border p-3">One-off payment</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Rent Collection</td>
+                <td className="border p-3">5-8% monthly rent</td>
+                <td className="border p-3">Plus tenant find fee</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Full Management</td>
+                <td className="border p-3">8-15% monthly rent</td>
+                <td className="border p-3">Varies by location</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Premium/Guaranteed Rent</td>
+                <td className="border p-3">15-20% monthly rent</td>
+                <td className="border p-3">Includes void coverage</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Additional Fees to Watch</h3>
+
+        <ul>
+          <li><strong>Inventory fees</strong> - £75-200 for check-in inventory</li>
+          <li><strong>Check-out fees</strong> - £50-150</li>
+          <li><strong>Tenancy renewal fees</strong> - £50-150 per renewal</li>
+          <li><strong>Property visit fees</strong> - some charge per inspection</li>
+          <li><strong>Maintenance commission</strong> - mark-up on contractor costs</li>
+          <li><strong>Court attendance fees</strong> - if eviction needed</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Fee Transparency</h4>
+          <p className="text-amber-800">
+            Since 2019, agents must publish full fee schedules. Get a complete fee list
+            before signing. Hidden fees can significantly erode your returns.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="choosing-agent" className="scroll-mt-24">Choosing the Right Agent</h2>
+
+        <p>
+          Finding the right agent requires research and comparison:
+        </p>
+
+        <h3>Research Steps</h3>
+
+        <ol>
+          <li><strong>Check local agents</strong> - visit their offices, review websites</li>
+          <li><strong>Read reviews</strong> - Google, AllAgents, TrustPilot</li>
+          <li><strong>Ask other landlords</strong> - local landlord forums and associations</li>
+          <li><strong>Compare fee structures</strong> - get quotes from 3-5 agents</li>
+          <li><strong>View their current listings</strong> - quality of photos, descriptions</li>
+          <li><strong>Check memberships</strong> - ARLA Propertymark, NALS, etc.</li>
+        </ol>
+
+        <h3>Questions to Ask</h3>
+
+        <ul>
+          <li>What is your current void rate?</li>
+          <li>How quickly do you typically let properties?</li>
+          <li>How do you handle maintenance emergencies?</li>
+          <li>What referencing checks do you perform?</li>
+          <li>Can I see a sample property report?</li>
+          <li>What happens if I&apos;m unhappy with service?</li>
+          <li>Who will be my main point of contact?</li>
+        </ul>
+
+        <h3>Red Flags to Avoid</h3>
+
+        <ul>
+          <li>Vague or unclear fee structures</li>
+          <li>No professional body membership</li>
+          <li>Poor communication during enquiry</li>
+          <li>Pressure to sign quickly</li>
+          <li>Very long tie-in periods</li>
+          <li>No client money protection</li>
+          <li>Negative reviews mentioning same issues repeatedly</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-agent-comparison.svg"
+          alt="Comparing different letting agents"
+          caption="Take time to properly compare agents before committing"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="agent-regulations" className="scroll-mt-24">Agent Regulations</h2>
+
+        <p>
+          Letting agents face various regulatory requirements:
+        </p>
+
+        <h3>England</h3>
+
+        <ul>
+          <li>Must belong to approved redress scheme (Property Ombudsman or PRS)</li>
+          <li>Must have Client Money Protection insurance</li>
+          <li>Must display fees prominently</li>
+          <li>Tenant Fee Act 2019 limits what they can charge tenants</li>
+        </ul>
+
+        <h3>Scotland</h3>
+
+        <ul>
+          <li>Must be registered with Scottish Letting Agent Register</li>
+          <li>Must comply with Letting Agent Code of Practice</li>
+          <li>Stricter regulations on fees and conduct</li>
+        </ul>
+
+        <h3>Wales</h3>
+
+        <ul>
+          <li>Must be licensed with Rent Smart Wales</li>
+          <li>Must complete approved training</li>
+          <li>Renting Homes (Fees etc.) (Wales) Act limits tenant fees</li>
+        </ul>
+
+        <h3>Northern Ireland</h3>
+
+        <ul>
+          <li>Currently less regulated than other regions</li>
+          <li>No mandatory registration or licensing yet</li>
+          <li>Check for voluntary professional memberships</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Verify Registration</h4>
+          <p className="text-green-800">
+            Always verify agent registration. In Scotland, check the Letting Agent Register.
+            In Wales, check Rent Smart Wales. In England, verify CMP and redress membership.
+          </p>
+        </div>
+
+        <h2 id="contract-terms" className="scroll-mt-24">Contract Terms to Check</h2>
+
+        <p>
+          Before signing with an agent, carefully review contract terms:
+        </p>
+
+        <h3>Key Terms</h3>
+
+        <ul>
+          <li><strong>Tie-in period</strong> - how long you&apos;re committed (avoid 12+ months)</li>
+          <li><strong>Notice period</strong> - how to end the agreement</li>
+          <li><strong>Sole agency vs multi-agency</strong> - can you use other agents?</li>
+          <li><strong>Continuation clause</strong> - fees if tenant renews after you leave</li>
+          <li><strong>Maintenance spending limits</strong> - when they can spend without approval</li>
+          <li><strong>Payment terms</strong> - when you receive rent</li>
+          <li><strong>Insurance requirements</strong> - what cover they require</li>
+        </ul>
+
+        <h3>Negotiation Points</h3>
+
+        <ul>
+          <li>Fee percentages are often negotiable</li>
+          <li>Multiple property discounts are common</li>
+          <li>Tie-in periods can often be reduced</li>
+          <li>Renewal fees may be waived</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Agent Comparison Toolkit</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides agent comparison checklists, interview questions,
+            and contract review guides to help you choose the right agent.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Comparison Tools →
+          </Link>
+        </div>
+
+        <h2 id="letting-agent-faq" className="scroll-mt-24">Letting Agent FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use online-only agents?</h3>
+            <p className="text-gray-600">
+              Online agents can offer lower fees but typically provide reduced services.
+              They work best for landlords comfortable managing viewings and tenant
+              communication themselves. They may struggle with local market knowledge.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I&apos;m unhappy with my agent?</h3>
+            <p className="text-gray-600">
+              First raise concerns formally in writing. If unresolved, check your contract
+              for termination terms. You can complain to their redress scheme if they
+              breach standards. Consider ARLA/NALS disciplinary procedures for serious breaches.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I switch agents mid-tenancy?</h3>
+            <p className="text-gray-600">
+              Yes, subject to contract terms. You&apos;ll need to notify your tenant and
+              arrange transfer of deposit, documents, and keys. Some agents charge
+              handover fees. Ensure seamless transition for rent payments.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Are agent fees tax deductible?</h3>
+            <p className="text-gray-600">
+              Yes, letting agent fees are fully deductible against rental income for
+              tax purposes. Keep all invoices and statements for your records.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 89: UK Void Period Management Guide
+  {
+    slug: 'uk-void-period-management-guide',
+    title: 'UK Void Period Management - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to minimising void periods for UK landlords. Strategies to reduce empty property time, market effectively, and maintain rental income.',
+    metaDescription: 'UK void period management guide 2026. Minimise empty property time, reduce lost rent, and find tenants faster with expert strategies for UK landlords.',
+    date: '2026-01-04',
+    readTime: '13 min read',
+    wordCount: 1540,
+    category: 'Property Management',
+    tags: ['void periods', 'empty property', 'tenant turnover', 'property marketing', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-void-period.svg',
+    heroImageAlt: 'UK Void Period Management Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'void period landlord UK',
+    secondaryKeywords: ['empty property costs', 'reduce void periods', 'tenant turnover', 'quick relet'],
+    tableOfContents: [
+      { id: 'understanding-voids', title: 'Understanding Void Periods', level: 2 },
+      { id: 'void-costs', title: 'True Cost of Voids', level: 2 },
+      { id: 'minimising-voids', title: 'Minimising Void Periods', level: 2 },
+      { id: 'quick-turnaround', title: 'Quick Turnaround Process', level: 2 },
+      { id: 'marketing-empty-property', title: 'Marketing Empty Properties', level: 2 },
+      { id: 'void-insurance', title: 'Void Period Insurance', level: 2 },
+      { id: 'void-faq', title: 'Void Period FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-marketing-guide', 'uk-tenant-retention-guide', 'uk-letting-agent-selection-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Void periods - when your property sits empty between tenants - are one of the
+          biggest threats to rental income. This guide provides practical strategies for
+          UK landlords to minimise voids and maintain consistent returns in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-void-period.svg"
+          alt="Managing void periods in rental properties"
+          caption="Effective void management protects your rental income"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="understanding-voids" className="scroll-mt-24">Understanding Void Periods</h2>
+
+        <p>
+          A void period is any time your property is unoccupied and not generating rent.
+          This includes:
+        </p>
+
+        <ul>
+          <li><strong>Between tenancies</strong> - after one tenant leaves, before next moves in</li>
+          <li><strong>Renovation periods</strong> - property works requiring vacancy</li>
+          <li><strong>Marketing time</strong> - finding suitable new tenant</li>
+          <li><strong>Eviction periods</strong> - property empty after possession obtained</li>
+        </ul>
+
+        <h3>Average Void Periods</h3>
+
+        <p>
+          Industry averages vary by location and property type:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Location Type</th>
+                <th className="border p-3 text-left font-semibold">Average Void</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">London & major cities</td>
+                <td className="border p-3">2-3 weeks</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Towns & suburbs</td>
+                <td className="border p-3">3-4 weeks</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Rural areas</td>
+                <td className="border p-3">4-6 weeks</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Student properties (summer)</td>
+                <td className="border p-3">8-12 weeks</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Benchmark Your Performance</h4>
+          <p className="text-blue-800">
+            Track your void rate as percentage of available days. Target under 5% for
+            well-managed properties in good locations. Above 10% indicates issues needing
+            attention.
+          </p>
+        </div>
+
+        <h2 id="void-costs" className="scroll-mt-24">True Cost of Voids</h2>
+
+        <p>
+          Empty properties cost more than just lost rent:
+        </p>
+
+        <h3>Direct Costs</h3>
+
+        <ul>
+          <li><strong>Lost rent</strong> - the obvious cost</li>
+          <li><strong>Council tax</strong> - usually payable after 1-2 months empty</li>
+          <li><strong>Utilities</strong> - standing charges, heating to prevent damage</li>
+          <li><strong>Insurance</strong> - may increase for unoccupied properties</li>
+          <li><strong>Maintenance</strong> - problems develop unnoticed</li>
+        </ul>
+
+        <h3>Example Void Cost</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <p className="font-semibold mb-2">Property: 2-bed flat, £1,200/month rent</p>
+          <p className="text-gray-700">One month void:</p>
+          <ul className="text-gray-600 mt-2">
+            <li>Lost rent: £1,200</li>
+            <li>Council tax: £150</li>
+            <li>Utilities: £80</li>
+            <li>Insurance uplift: £30</li>
+            <li><strong>Total: £1,460</strong></li>
+          </ul>
+        </div>
+
+        <p>
+          This demonstrates why even one extra week of void represents significant lost income.
+          Reducing void by just one week per year on this property saves around £365.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-void-costs.svg"
+          alt="True costs of property void periods"
+          caption="Empty properties drain income from multiple sources"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="minimising-voids" className="scroll-mt-24">Minimising Void Periods</h2>
+
+        <p>
+          Prevention is better than cure. These strategies reduce voids:
+        </p>
+
+        <h3>Tenant Retention</h3>
+
+        <p>
+          Keeping good tenants is the best void prevention:
+        </p>
+
+        <ul>
+          <li>Respond promptly to maintenance requests</li>
+          <li>Keep rent increases reasonable</li>
+          <li>Respect tenant privacy</li>
+          <li>Consider long-term incentives (minor improvements, flexibility)</li>
+          <li>Start renewal discussions 3 months before tenancy ends</li>
+        </ul>
+
+        <h3>Property Condition</h3>
+
+        <ul>
+          <li>Maintain property to high standard throughout tenancy</li>
+          <li>Address wear and tear promptly</li>
+          <li>Update dated features between tenancies</li>
+          <li>Ensure property shows well for viewings</li>
+        </ul>
+
+        <h3>Competitive Pricing</h3>
+
+        <ul>
+          <li>Research local market regularly</li>
+          <li>Price realistically - overpricing extends voids</li>
+          <li>Consider time value of money (£50 less rent vs 1 month void)</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="quick-turnaround" className="scroll-mt-24">Quick Turnaround Process</h2>
+
+        <p>
+          When tenants do leave, execute a fast turnaround:
+        </p>
+
+        <h3>Pre-Notice Preparation</h3>
+
+        <ul>
+          <li>Know tenant&apos;s likely departure date (fixed term end, lease break)</li>
+          <li>Check in with tenants about their plans 3+ months ahead</li>
+          <li>Line up contractors for anticipated works</li>
+        </ul>
+
+        <h3>Notice Period Actions</h3>
+
+        <ol>
+          <li>Begin marketing immediately upon receiving notice</li>
+          <li>Conduct viewings during notice period (with tenant agreement)</li>
+          <li>Arrange inventory/check-out appointment</li>
+          <li>Book cleaning and maintenance</li>
+          <li>Order replacement items if needed</li>
+        </ol>
+
+        <h3>Between Tenancies</h3>
+
+        <ul>
+          <li>Complete check-out same day tenant leaves</li>
+          <li>Cleaners in immediately</li>
+          <li>Address any damage or wear issues fast</li>
+          <li>Safety checks (gas, electrical) if due</li>
+          <li>Fresh photography if needed</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Overlap Strategy</h4>
+          <p className="text-green-800">
+            The most effective landlords market properties before they become vacant,
+            aiming to have new tenants moving in within days of the old tenant leaving.
+            This requires tenant cooperation and good planning.
+          </p>
+        </div>
+
+        <h2 id="marketing-empty-property" className="scroll-mt-24">Marketing Empty Properties</h2>
+
+        <p>
+          Effective marketing fills properties faster:
+        </p>
+
+        <h3>Listing Best Practices</h3>
+
+        <ul>
+          <li><strong>Professional photos</strong> - bright, clean, well-staged</li>
+          <li><strong>Video tours</strong> - increasingly expected by tenants</li>
+          <li><strong>Detailed descriptions</strong> - highlight features, local amenities</li>
+          <li><strong>Accurate information</strong> - EPC rating, council tax band, deposit</li>
+        </ul>
+
+        <h3>Platform Selection</h3>
+
+        <ul>
+          <li>Rightmove - largest UK property portal</li>
+          <li>Zoopla - second largest, good reach</li>
+          <li>OnTheMarket - growing platform</li>
+          <li>OpenRent - direct landlord platform</li>
+          <li>Local Facebook groups - neighbourhood focus</li>
+          <li>Spareroom - for room rentals/HMOs</li>
+        </ul>
+
+        <h3>Viewing Availability</h3>
+
+        <ul>
+          <li>Offer flexible viewing times including evenings and weekends</li>
+          <li>Respond to enquiries within hours, not days</li>
+          <li>Consider open house viewings for popular properties</li>
+          <li>Virtual viewings for initial screening</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-property-marketing.svg"
+          alt="Effective property marketing strategies"
+          caption="Good marketing reduces time on market significantly"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="void-insurance" className="scroll-mt-24">Void Period Insurance</h2>
+
+        <p>
+          Some insurance products protect against void periods:
+        </p>
+
+        <h3>Rent Guarantee Insurance</h3>
+
+        <p>
+          Covers rent if tenant defaults but typically doesn&apos;t cover voids between tenants.
+          Useful for tenant default but not a void period solution.
+        </p>
+
+        <h3>Guaranteed Rent Schemes</h3>
+
+        <p>
+          Some letting agents and companies offer guaranteed rent:
+        </p>
+
+        <ul>
+          <li>You receive fixed rent regardless of occupancy</li>
+          <li>Provider takes the void risk</li>
+          <li>Usually 10-20% below market rent</li>
+          <li>Long contracts (3-5 years typical)</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Guaranteed Rent Caution</h4>
+          <p className="text-amber-800">
+            Research guaranteed rent providers carefully. Some have failed, leaving landlords
+            without promised income. Check company finances, read contracts thoroughly,
+            and understand what happens if the provider becomes insolvent.
+          </p>
+        </div>
+
+        <h3>Unoccupied Property Insurance</h3>
+
+        <p>
+          Standard landlord insurance often excludes or limits cover for unoccupied properties.
+          If expecting extended voids, arrange specific unoccupied property cover.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Void Reduction Toolkit</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides void tracking spreadsheets, quick turnaround checklists,
+            and marketing templates to minimise your empty property time.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Void Management Tools →
+          </Link>
+        </div>
+
+        <h2 id="void-faq" className="scroll-mt-24">Void Period FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">When do I need to pay council tax on empty property?</h3>
+            <p className="text-gray-600">
+              Rules vary by council. Most offer exemption for the first 1-2 months of
+              vacancy, after which full council tax applies. Some councils charge premiums
+              (up to 300%) on long-term empty properties.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I reduce rent to fill a void quickly?</h3>
+            <p className="text-gray-600">
+              Calculate the break-even point. If reducing rent by £50/month fills the
+              property 3 weeks faster, you save around £500 (3 weeks&apos; rent lost vs
+              £600/year reduction). Usually, quick letting at slightly lower rent beats
+              long voids at higher rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim void period costs against tax?</h3>
+            <p className="text-gray-600">
+              Yes, costs incurred during voids (insurance, council tax, utilities,
+              maintenance) are deductible against rental income in the same tax year.
+              Keep records of all void-period expenses.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I secure an empty property?</h3>
+            <p className="text-gray-600">
+              Ensure all locks work and doors/windows are secure. Consider timer lights.
+              Ask neighbours to watch for issues. Visit regularly (insurance may require
+              weekly visits). Forward post to prevent build-up showing vacancy.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-successful-letting.svg"
+          alt="Successfully minimising void periods"
+          caption="Proactive management keeps properties occupied and income flowing"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
