@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Occupation Contract | Wales | Renting Homes Act 2016 | Landlord Heaven',
+  title: 'Wales Occupation Contract | Landlord Heaven',
   description: 'Create a legally compliant Occupation Contract for Wales under the Renting Homes (Wales) Act 2016. Standard and Secure contracts available. Standard (£9.99) and Premium (£14.99) options.',
   keywords: 'occupation contract Wales, renting homes Wales act 2016, Welsh tenancy agreement, standard occupation contract, secure occupation contract, Wales landlord, Welsh rental agreement',
   openGraph: {

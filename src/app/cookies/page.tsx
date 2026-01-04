@@ -14,7 +14,7 @@ export default function CookiesPage() {
       <TealHero title="Cookie Policy" subtitle="How we use cookies to provide the best experience." eyebrow="Compliance" />
       <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
-          <h1 className="text-4xl font-bold text-charcoal mb-2">Cookie Policy</h1>
+          <h2 className="text-4xl font-bold text-charcoal mb-2">Cookie Policy</h2>
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="bg-primary-subtle border-l-4 border-primary p-4 mb-8">

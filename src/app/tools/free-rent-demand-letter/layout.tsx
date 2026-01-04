@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Rent Demand Letter Generator | Formal Arrears Demand | Landlord Heaven',
+  title: 'Free Rent Demand Letter Generator | Landlord Heaven',
   description:
     'Generate a free rent demand letter template for UK landlords. Professional arrears demand letters for unpaid rent with formal legal warning.',
   keywords: [
