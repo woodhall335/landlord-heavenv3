@@ -97,6 +97,22 @@ export default function EnglandWalesASTPage() {
         price: '9.99',
         priceCurrency: 'GBP',
         priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        availability: 'https://schema.org/InStock',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
+          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'GB',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+        },
       },
       {
         '@type': 'Offer',
@@ -104,6 +120,22 @@ export default function EnglandWalesASTPage() {
         price: '14.99',
         priceCurrency: 'GBP',
         priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        availability: 'https://schema.org/InStock',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
+          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'GB',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+        },
       },
     ],
   };
