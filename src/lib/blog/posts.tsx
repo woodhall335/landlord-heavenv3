@@ -28780,6 +28780,1279 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 77: UK Landlord Insurance Guide
+  {
+    slug: 'uk-landlord-insurance-guide',
+    title: 'UK Landlord Insurance - Complete Guide 2026',
+    description: 'Comprehensive guide to landlord insurance in the UK. Understand coverage types, policy options, and how to protect your rental property investment.',
+    metaDescription: 'UK landlord insurance guide 2026. Essential coverage types, policy comparison, legal requirements, and tips for protecting your rental property investment.',
+    date: '2026-01-04',
+    readTime: '15 min read',
+    wordCount: 1760,
+    category: 'Property Management',
+    tags: ['landlord insurance', 'property insurance', 'rental insurance', 'insurance coverage', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-insurance.svg',
+    heroImageAlt: 'UK Landlord Insurance Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord insurance UK',
+    secondaryKeywords: ['rental property insurance', 'buy to let insurance', 'landlord buildings insurance', 'landlord contents insurance'],
+    tableOfContents: [
+      { id: 'why-insurance', title: 'Why Landlord Insurance', level: 2 },
+      { id: 'coverage-types', title: 'Coverage Types', level: 2 },
+      { id: 'policy-options', title: 'Policy Options', level: 2 },
+      { id: 'cost-factors', title: 'Cost Factors', level: 2 },
+      { id: 'claims-process', title: 'Claims Process', level: 2 },
+      { id: 'insurance-faq', title: 'Insurance FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-maintenance-obligations', 'uk-tenancy-agreements-guide', 'uk-deposit-protection-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Landlord insurance protects your property investment from a wide range of risks
+          that standard home insurance doesn&apos;t cover. This guide explains everything UK
+          landlords need to know about protecting their rental properties in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-insurance.svg"
+          alt="Landlord insurance policy documents"
+          caption="Proper insurance coverage protects your investment and provides peace of mind"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="why-insurance" className="scroll-mt-24">Why You Need Landlord Insurance</h2>
+
+        <p>
+          Standard home insurance policies don&apos;t cover rental properties. When you let
+          a property, the risks change significantly, and you need specialized coverage.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Important Warning</h4>
+          <p className="text-red-800">
+            If you let a property on standard home insurance, your policy will likely be
+            invalid. Any claims could be rejected, leaving you financially exposed for
+            potentially devastating losses.
+          </p>
+        </div>
+
+        <h3>Key Risks for Landlords</h3>
+
+        <ul>
+          <li><strong>Property damage</strong> - fire, flood, storm, subsidence</li>
+          <li><strong>Tenant damage</strong> - malicious or accidental harm to property</li>
+          <li><strong>Rent loss</strong> - income lost during uninhabitable periods</li>
+          <li><strong>Legal liability</strong> - tenant or visitor injury claims</li>
+          <li><strong>Legal expenses</strong> - eviction proceedings, disputes</li>
+          <li><strong>Theft</strong> - contents or fixtures stolen by tenants</li>
+        </ul>
+
+        <h3>Legal Requirements</h3>
+
+        <p>
+          While landlord insurance isn&apos;t legally mandatory, if you have a buy-to-let
+          mortgage, your lender will almost certainly require buildings insurance as a
+          condition of the loan.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-insurance-risks.svg"
+          alt="Common landlord risks requiring insurance"
+          caption="Understanding risks helps you choose appropriate coverage"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="coverage-types" className="scroll-mt-24">Types of Coverage</h2>
+
+        <p>
+          Landlord insurance policies offer various types of coverage. Understanding each
+          helps you build a policy that matches your needs.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Coverage Type</th>
+                <th className="border p-3 text-left font-semibold">What It Covers</th>
+                <th className="border p-3 text-left font-semibold">Recommended?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Buildings insurance</td>
+                <td className="border p-3">Structure, fixtures, permanent fittings</td>
+                <td className="border p-3 text-green-600 font-medium">Essential</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Contents insurance</td>
+                <td className="border p-3">Furniture, appliances, carpets you provide</td>
+                <td className="border p-3 text-green-600 font-medium">If furnished</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Liability insurance</td>
+                <td className="border p-3">Injury claims from tenants or visitors</td>
+                <td className="border p-3 text-green-600 font-medium">Essential</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Rent guarantee</td>
+                <td className="border p-3">Lost rent if tenant defaults</td>
+                <td className="border p-3 text-amber-600 font-medium">Recommended</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Legal expenses</td>
+                <td className="border p-3">Eviction, disputes, tribunal costs</td>
+                <td className="border p-3 text-amber-600 font-medium">Recommended</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Loss of rent</td>
+                <td className="border p-3">Income during repairs after insured event</td>
+                <td className="border p-3 text-green-600 font-medium">Essential</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Buildings Insurance</h3>
+
+        <p>
+          Buildings insurance covers the structure itself - walls, roof, floors, windows,
+          doors, fitted kitchens, bathrooms, and permanent fixtures. It protects against:
+        </p>
+
+        <ul>
+          <li>Fire, lightning, explosion</li>
+          <li>Storm, flood, escape of water</li>
+          <li>Subsidence, landslip, heave</li>
+          <li>Impact damage (vehicles, aircraft)</li>
+          <li>Theft and vandalism damage</li>
+          <li>Malicious damage by tenants</li>
+        </ul>
+
+        <h3>Contents Insurance</h3>
+
+        <p>
+          If you provide furnishings, appliances, or other items, contents insurance
+          protects these against damage, theft, or destruction.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Tenant&apos;s Belongings</h4>
+          <p className="text-blue-800">
+            Your landlord contents insurance does not cover your tenant&apos;s personal
+            belongings. Tenants should arrange their own contents insurance to protect
+            their possessions.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-coverage-types.svg"
+          alt="Landlord insurance coverage breakdown"
+          caption="Choose coverage that matches your property and letting situation"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="policy-options" className="scroll-mt-24">Policy Options and Add-Ons</h2>
+
+        <p>
+          Beyond standard coverage, various add-ons can enhance your protection.
+          Consider which are relevant to your situation.
+        </p>
+
+        <h3>Rent Guarantee Insurance</h3>
+
+        <p>
+          Covers lost rent if your tenant stops paying. Typically pays out for 6-12 months
+          while you pursue eviction and find new tenants.
+        </p>
+
+        <h3>Legal Expenses Cover</h3>
+
+        <p>
+          Covers legal costs for eviction proceedings, disputes with tenants, and tribunal
+          representation. Given rising legal costs, this is increasingly valuable.
+        </p>
+
+        <h3>Emergency Assistance</h3>
+
+        <p>
+          24/7 helpline for emergencies like boiler breakdown, burst pipes, or security
+          issues. Often includes call-out cover for emergency repairs.
+        </p>
+
+        <h2 id="cost-factors" className="scroll-mt-24">Factors Affecting Premium Cost</h2>
+
+        <p>
+          Understanding what affects your premium helps you shop smarter and potentially
+          reduce costs.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Factor</th>
+                <th className="border p-3 text-left font-semibold">Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Property location</td>
+                <td className="border p-3">Higher crime/flood risk areas cost more</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Property value</td>
+                <td className="border p-3">Higher rebuild cost means higher premium</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Property type</td>
+                <td className="border p-3">Flats, HMOs, older properties may cost more</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Tenant type</td>
+                <td className="border p-3">Students, DSS tenants may increase premium</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Claims history</td>
+                <td className="border p-3">Previous claims increase future costs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Insurance Comparison Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides insurance comparison guides, coverage checklists,
+            and resources to help you find the right policy for your portfolio.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Insurance Resources →
+          </Link>
+        </div>
+
+        <h2 id="claims-process" className="scroll-mt-24">Making a Claim</h2>
+
+        <p>
+          If you need to claim, following the correct process ensures your claim isn&apos;t
+          rejected or delayed.
+        </p>
+
+        <ol>
+          <li><strong>Report immediately</strong> - notify your insurer as soon as possible</li>
+          <li><strong>Document everything</strong> - photos, receipts, witness statements</li>
+          <li><strong>Prevent further damage</strong> - take reasonable steps to limit loss</li>
+          <li><strong>Keep records</strong> - log all communications and expenses</li>
+          <li><strong>Get quotes</strong> - obtain repair estimates as required</li>
+          <li><strong>Cooperate fully</strong> - provide all requested information promptly</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-claims-process.svg"
+          alt="Insurance claims process steps"
+          caption="Following the correct process ensures smooth claim resolution"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="insurance-faq" className="scroll-mt-24">Landlord Insurance FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use standard home insurance for a rental?</h3>
+            <p className="text-gray-600">
+              No. Standard home insurance excludes rental activities. If you let a property
+              on home insurance, your policy will be invalid and claims rejected.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is landlord insurance tax deductible?</h3>
+            <p className="text-gray-600">
+              Yes. Landlord insurance premiums are an allowable expense and can be deducted
+              from your rental income for tax purposes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my property is unoccupied?</h3>
+            <p className="text-gray-600">
+              Most policies have void period limits (typically 30-60 days). If your property
+              will be empty longer, inform your insurer or risk voiding coverage.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does insurance cover tenant damage?</h3>
+            <p className="text-gray-600">
+              Malicious damage by tenants is usually covered, but accidental damage or
+              &quot;fair wear and tear&quot; is not. Check your policy wording for exclusions.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 78: UK Landlord Tax Guide
+  {
+    slug: 'uk-landlord-tax-guide',
+    title: 'UK Landlord Tax Guide - Complete Guide 2026',
+    description: 'Essential tax guide for UK landlords. Understand income tax, allowable expenses, capital gains, and tax-efficient strategies for rental properties.',
+    metaDescription: 'UK landlord tax guide 2026. Income tax on rent, allowable expenses, capital gains tax, mortgage interest relief changes, and tax planning strategies.',
+    date: '2026-01-04',
+    readTime: '17 min read',
+    wordCount: 1920,
+    category: 'Tax & Finance',
+    tags: ['landlord tax', 'rental income tax', 'property tax', 'capital gains', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Finance Team',
+      role: 'Property Tax Specialists',
+    },
+    heroImage: '/images/blog/placeholder-tax.svg',
+    heroImageAlt: 'UK Landlord Tax Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord tax UK',
+    secondaryKeywords: ['rental income tax', 'property tax landlord', 'landlord allowable expenses', 'capital gains tax property'],
+    tableOfContents: [
+      { id: 'income-tax', title: 'Income Tax on Rent', level: 2 },
+      { id: 'allowable-expenses', title: 'Allowable Expenses', level: 2 },
+      { id: 'mortgage-interest', title: 'Mortgage Interest Relief', level: 2 },
+      { id: 'capital-gains', title: 'Capital Gains Tax', level: 2 },
+      { id: 'tax-planning', title: 'Tax Planning Strategies', level: 2 },
+      { id: 'tax-faq', title: 'Tax FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-insurance-guide', 'uk-property-maintenance-obligations', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Understanding your tax obligations as a UK landlord is essential for compliance
+          and maximizing your returns. This comprehensive guide covers everything you need
+          to know about landlord taxation in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tax.svg"
+          alt="Landlord tax documents and calculator"
+          caption="Proper tax planning helps maximize your rental property returns"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="income-tax" className="scroll-mt-24">Income Tax on Rental Income</h2>
+
+        <p>
+          Rental income is taxable. You must declare all rent received from UK properties
+          to HMRC, regardless of whether you make a profit after expenses.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Taxable Rental Income</h4>
+          <p className="text-blue-800">
+            Taxable rental income includes: rent payments, fees for additional services
+            (parking, cleaning), any non-refundable deposits kept, and income from any
+            additional charges to tenants.
+          </p>
+        </div>
+
+        <h3>Tax Rates</h3>
+
+        <p>
+          Rental income is added to your other income and taxed at your marginal rate:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Tax Band</th>
+                <th className="border p-3 text-left font-semibold">Taxable Income</th>
+                <th className="border p-3 text-left font-semibold">Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Personal Allowance</td>
+                <td className="border p-3">Up to £12,570</td>
+                <td className="border p-3">0%</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Basic Rate</td>
+                <td className="border p-3">£12,571 - £50,270</td>
+                <td className="border p-3">20%</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Higher Rate</td>
+                <td className="border p-3">£50,271 - £125,140</td>
+                <td className="border p-3">40%</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Additional Rate</td>
+                <td className="border p-3">Over £125,140</td>
+                <td className="border p-3">45%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Self Assessment</h3>
+
+        <p>
+          If you earn more than £1,000 from property income, you must register for
+          Self Assessment and file a tax return each year. Key dates:
+        </p>
+
+        <ul>
+          <li><strong>5 October</strong> - deadline to register for first time</li>
+          <li><strong>31 October</strong> - paper return deadline</li>
+          <li><strong>31 January</strong> - online return and payment deadline</li>
+          <li><strong>31 July</strong> - second payment on account (if applicable)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-self-assessment.svg"
+          alt="HMRC Self Assessment tax return"
+          caption="Self Assessment registration is required for landlords earning over £1,000"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="allowable-expenses" className="scroll-mt-24">Allowable Expenses</h2>
+
+        <p>
+          You can deduct legitimate expenses from your rental income before calculating
+          tax. Keeping good records is essential for claiming all allowable expenses.
+        </p>
+
+        <h3>Deductible Expenses</h3>
+
+        <ul>
+          <li><strong>Letting agent fees</strong> - management charges, tenant finding</li>
+          <li><strong>Legal fees</strong> - evictions, contract drafting (not property purchase)</li>
+          <li><strong>Accountant fees</strong> - preparing rental accounts, tax returns</li>
+          <li><strong>Insurance</strong> - landlord buildings, contents, rent guarantee</li>
+          <li><strong>Repairs and maintenance</strong> - fixing, replacing like-for-like</li>
+          <li><strong>Utility bills</strong> - if you pay them (not recharged to tenant)</li>
+          <li><strong>Ground rent and service charges</strong> - leasehold properties</li>
+          <li><strong>Council tax</strong> - during void periods</li>
+          <li><strong>Advertising</strong> - for finding tenants</li>
+          <li><strong>Travel costs</strong> - to and from property for landlord duties</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Repairs vs Improvements</h4>
+          <p className="text-amber-800">
+            Only repairs are deductible as expenses. Improvements (upgrading a kitchen,
+            adding an extension) are capital expenditure - not deductible from income but
+            can reduce Capital Gains Tax when you sell.
+          </p>
+        </div>
+
+        <h2 id="mortgage-interest" className="scroll-mt-24">Mortgage Interest Relief Changes</h2>
+
+        <p>
+          The rules for mortgage interest relief changed significantly. Individual landlords
+          can no longer deduct mortgage interest as an expense.
+        </p>
+
+        <h3>How It Works Now</h3>
+
+        <p>
+          Instead of deducting mortgage interest from rental income, you receive a 20%
+          tax credit on your mortgage interest payments. This affects higher-rate taxpayers
+          significantly.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Scenario</th>
+                <th className="border p-3 text-left font-semibold">Old Rules</th>
+                <th className="border p-3 text-left font-semibold">Current Rules</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Rental Income</td>
+                <td className="border p-3">£15,000</td>
+                <td className="border p-3">£15,000</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Mortgage Interest</td>
+                <td className="border p-3">Deducted: -£8,000</td>
+                <td className="border p-3">Not deducted</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Taxable Income</td>
+                <td className="border p-3">£7,000</td>
+                <td className="border p-3">£15,000</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Tax Credit</td>
+                <td className="border p-3">N/A</td>
+                <td className="border p-3">£8,000 × 20% = £1,600</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mortgage-tax.svg"
+          alt="Mortgage interest tax relief calculation"
+          caption="Understanding the new rules helps with tax planning"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="capital-gains" className="scroll-mt-24">Capital Gains Tax</h2>
+
+        <p>
+          When you sell a rental property, you may owe Capital Gains Tax (CGT) on any
+          profit. Understanding the rules helps with planning.
+        </p>
+
+        <h3>CGT Rates for Property</h3>
+
+        <ul>
+          <li><strong>18%</strong> - basic rate taxpayers</li>
+          <li><strong>24%</strong> - higher and additional rate taxpayers</li>
+          <li><strong>Annual Exempt Amount</strong> - currently £3,000 (reduced from £12,300)</li>
+        </ul>
+
+        <h3>Reducing CGT</h3>
+
+        <p>
+          Legitimate ways to reduce your CGT liability include:
+        </p>
+
+        <ul>
+          <li><strong>Deduct purchase costs</strong> - stamp duty, legal fees, surveys</li>
+          <li><strong>Deduct selling costs</strong> - estate agent, legal, EPC</li>
+          <li><strong>Claim improvement costs</strong> - extensions, renovations (not repairs)</li>
+          <li><strong>Private Residence Relief</strong> - if you lived there at some point</li>
+          <li><strong>Lettings Relief</strong> - limited circumstances where property was let</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">CGT Reporting Deadline</h4>
+          <p className="text-red-800">
+            You must report and pay CGT on UK property sales within 60 days of completion.
+            Late reporting results in penalties and interest charges.
+          </p>
+        </div>
+
+        <h2 id="tax-planning" className="scroll-mt-24">Tax Planning Strategies</h2>
+
+        <p>
+          Legitimate tax planning can significantly reduce your overall tax burden.
+          Consider these strategies with professional advice.
+        </p>
+
+        <h3>Limited Company Structure</h3>
+
+        <p>
+          Some landlords hold properties through a limited company. Benefits include:
+        </p>
+
+        <ul>
+          <li>Full mortgage interest deduction against profits</li>
+          <li>Lower corporation tax rate (currently 19-25%)</li>
+          <li>More control over when you extract profits</li>
+          <li>Potential for family salary/dividend planning</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Tax Planning Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides tax calculators, expense tracking templates, and
+            resources to help you understand and manage your tax obligations.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Tax Tools →
+          </Link>
+        </div>
+
+        <h2 id="tax-faq" className="scroll-mt-24">Landlord Tax FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I pay tax on the deposit?</h3>
+            <p className="text-gray-600">
+              No, deposits held in protection schemes are not taxable income. However,
+              if you keep part of the deposit (for damages), that retained amount may
+              be taxable as it offsets expenses.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I offset losses against other income?</h3>
+            <p className="text-gray-600">
+              Rental losses can only be carried forward against future rental profits from
+              the same property business. They cannot be offset against employment income.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What records must I keep?</h3>
+            <p className="text-gray-600">
+              Keep all receipts, invoices, bank statements, tenancy agreements, and
+              correspondence for at least 5 years after the 31 January deadline for that
+              tax year. Digital records are acceptable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use an accountant?</h3>
+            <p className="text-gray-600">
+              For simple single-property situations, self-filing is manageable. As your
+              portfolio grows or if considering company structures, professional advice
+              is valuable and the fees are tax-deductible.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 79: UK Landlord-Tenant Communication Guide
+  {
+    slug: 'uk-landlord-tenant-communication',
+    title: 'UK Landlord-Tenant Communication - Best Practice Guide 2026',
+    description: 'Essential guide to effective landlord-tenant communication. Build better relationships, handle issues professionally, and maintain legal compliance.',
+    metaDescription: 'UK landlord-tenant communication guide 2026. Best practices for professional communication, handling disputes, notice requirements, and building relationships.',
+    date: '2026-01-04',
+    readTime: '13 min read',
+    wordCount: 1580,
+    category: 'Property Management',
+    tags: ['landlord communication', 'tenant relations', 'property management', 'landlord tips', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-communication.svg',
+    heroImageAlt: 'UK Landlord-Tenant Communication Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord tenant communication',
+    secondaryKeywords: ['tenant relations', 'landlord communication tips', 'professional landlord', 'tenant disputes'],
+    tableOfContents: [
+      { id: 'communication-importance', title: 'Why Communication Matters', level: 2 },
+      { id: 'communication-channels', title: 'Communication Channels', level: 2 },
+      { id: 'key-communications', title: 'Key Communications', level: 2 },
+      { id: 'handling-issues', title: 'Handling Issues', level: 2 },
+      { id: 'documentation', title: 'Documentation', level: 2 },
+      { id: 'communication-faq', title: 'Communication FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-inspections-guide', 'uk-tenancy-agreements-guide', 'uk-rent-arrears-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Effective communication with tenants is fundamental to successful property
+          management. Good communication prevents disputes, ensures compliance, and
+          creates positive long-term relationships that benefit everyone.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-communication.svg"
+          alt="Landlord and tenant communication"
+          caption="Professional communication builds trust and prevents problems"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="communication-importance" className="scroll-mt-24">Why Communication Matters</h2>
+
+        <p>
+          The quality of your communication directly impacts your success as a landlord.
+          Good communication:
+        </p>
+
+        <ul>
+          <li><strong>Prevents disputes</strong> - clear expectations reduce misunderstandings</li>
+          <li><strong>Ensures compliance</strong> - proper notices meet legal requirements</li>
+          <li><strong>Protects your property</strong> - tenants report issues promptly</li>
+          <li><strong>Reduces void periods</strong> - happy tenants stay longer</li>
+          <li><strong>Provides evidence</strong> - written records support your position</li>
+          <li><strong>Builds reputation</strong> - good reviews attract quality tenants</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Professional Standards</h4>
+          <p className="text-blue-800">
+            Always maintain professional, respectful communication even when dealing with
+            difficult situations. Your communications may be used as evidence in disputes,
+            so keep them factual and courteous.
+          </p>
+        </div>
+
+        <h2 id="communication-channels" className="scroll-mt-24">Choosing Communication Channels</h2>
+
+        <p>
+          Different situations call for different communication methods. Choose
+          appropriately based on urgency, formality, and record-keeping needs.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Channel</th>
+                <th className="border p-3 text-left font-semibold">Best For</th>
+                <th className="border p-3 text-left font-semibold">Record Keeping</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Email</td>
+                <td className="border p-3">Most communications, creates written record</td>
+                <td className="border p-3 text-green-600">Excellent</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Text/WhatsApp</td>
+                <td className="border p-3">Quick updates, appointment confirmations</td>
+                <td className="border p-3 text-amber-600">Good</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Phone</td>
+                <td className="border p-3">Urgent matters, complex discussions</td>
+                <td className="border p-3 text-red-600">Poor (follow up in writing)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Letter</td>
+                <td className="border p-3">Formal notices, legal documents</td>
+                <td className="border p-3 text-green-600">Excellent</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">In-person</td>
+                <td className="border p-3">Sensitive discussions, inspections</td>
+                <td className="border p-3 text-red-600">Poor (follow up in writing)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-channels.svg"
+          alt="Communication channel options"
+          caption="Choose the right channel for each type of communication"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="key-communications" className="scroll-mt-24">Key Communications Throughout Tenancy</h2>
+
+        <p>
+          Certain communications are essential at different stages of the tenancy.
+          Ensure you cover these key touchpoints.
+        </p>
+
+        <h3>Before Tenancy Starts</h3>
+
+        <ul>
+          <li>Property viewing arrangements and follow-up</li>
+          <li>Application process and referencing requirements</li>
+          <li>Offer terms and conditions</li>
+          <li>Tenancy agreement explanation</li>
+          <li>Move-in date and arrangements</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h3>At Tenancy Start</h3>
+
+        <ul>
+          <li>How to Rent guide (England) or equivalent</li>
+          <li>Deposit protection certificate and prescribed information</li>
+          <li>Gas safety certificate</li>
+          <li>EPC certificate</li>
+          <li>EICR (electrical safety) certificate</li>
+          <li>Emergency contact information</li>
+          <li>Property inventory and condition report</li>
+        </ul>
+
+        <h3>During Tenancy</h3>
+
+        <ul>
+          <li>Inspection arrangements and findings</li>
+          <li>Repair reports and updates</li>
+          <li>Rent payment confirmations or reminders</li>
+          <li>Annual certificate renewals (gas safety)</li>
+          <li>Rent review notifications (if applicable)</li>
+        </ul>
+
+        <h2 id="handling-issues" className="scroll-mt-24">Handling Difficult Communications</h2>
+
+        <p>
+          Even with good relationships, issues arise. Handle them professionally to
+          prevent escalation.
+        </p>
+
+        <h3>Late Rent Payments</h3>
+
+        <ol>
+          <li><strong>Day 1-3</strong> - friendly reminder, may be oversight</li>
+          <li><strong>Day 4-7</strong> - firmer reminder, request contact</li>
+          <li><strong>Day 8-14</strong> - formal letter, reference agreement terms</li>
+          <li><strong>Day 14+</strong> - final warning before formal action</li>
+        </ol>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Tone Matters</h4>
+          <p className="text-amber-800">
+            Start friendly and escalate gradually. Many late payments are genuine
+            oversights or temporary difficulties. Aggressive early communication
+            damages relationships unnecessarily.
+          </p>
+        </div>
+
+        <h3>Repair Disputes</h3>
+
+        <ul>
+          <li>Acknowledge the issue promptly and professionally</li>
+          <li>Explain what you&apos;ll do and expected timeframe</li>
+          <li>Keep tenant updated on progress</li>
+          <li>If disagreeing with responsibility, explain clearly with evidence</li>
+          <li>Document everything in writing</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-dispute-handling.svg"
+          alt="Handling landlord-tenant disputes professionally"
+          caption="Professional dispute handling protects both parties"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="documentation" className="scroll-mt-24">Documentation and Record Keeping</h2>
+
+        <p>
+          Keep comprehensive records of all communications. These protect you in
+          disputes and demonstrate compliance.
+        </p>
+
+        <h3>What to Keep</h3>
+
+        <ul>
+          <li>All emails and text messages</li>
+          <li>Copies of all letters sent</li>
+          <li>Notes from phone calls (with date, time, content)</li>
+          <li>Records of in-person discussions</li>
+          <li>Proof of delivery for important notices</li>
+        </ul>
+
+        <h3>How Long to Keep Records</h3>
+
+        <ul>
+          <li><strong>During tenancy</strong> - everything</li>
+          <li><strong>After tenancy</strong> - 6 years minimum (limitation period)</li>
+          <li><strong>Deposit disputes</strong> - until fully resolved</li>
+          <li><strong>Tax records</strong> - 5 years from relevant tax year</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Communication Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides professional letter and email templates for every
+            stage of the tenancy, from welcome letters to deposit return communications.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Communication Templates →
+          </Link>
+        </div>
+
+        <h2 id="communication-faq" className="scroll-mt-24">Communication FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How quickly should I respond to tenants?</h3>
+            <p className="text-gray-600">
+              For general queries, aim for 24-48 hours. For emergencies (no heating,
+              water leak, security issues), respond within hours. Quick responses show
+              professionalism and build trust.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can tenants insist on email-only communication?</h3>
+            <p className="text-gray-600">
+              You should respect reasonable preferences, but some legal notices require
+              specific delivery methods. Explain that certain formal communications may
+              require letters for legal validity.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant is unresponsive?</h3>
+            <p className="text-gray-600">
+              Try multiple channels. Send emails, texts, and letters. For urgent matters,
+              visit the property (with proper notice). Keep records of all attempts.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I communicate through letting agents?</h3>
+            <p className="text-gray-600">
+              If using a managing agent, all routine communication should go through them.
+              This provides consistency and professionalism. Only communicate directly
+              if specifically agreed or in genuine emergencies.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 80: UK Buy-to-Let Investment Guide
+  {
+    slug: 'uk-buy-to-let-investment-guide',
+    title: 'UK Buy-to-Let Investment - Complete Guide 2026',
+    description: 'Comprehensive guide to buy-to-let property investment in the UK. Understand financing, yields, costs, and strategies for building a property portfolio.',
+    metaDescription: 'UK buy-to-let investment guide 2026. Property selection, financing options, yield calculations, costs analysis, and portfolio building strategies.',
+    date: '2026-01-04',
+    readTime: '18 min read',
+    wordCount: 2050,
+    category: 'Property Investment',
+    tags: ['buy to let', 'property investment', 'rental yield', 'property portfolio', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Investment Team',
+      role: 'Property Investment Specialists',
+    },
+    heroImage: '/images/blog/placeholder-investment.svg',
+    heroImageAlt: 'UK Buy-to-Let Investment Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'buy to let investment UK',
+    secondaryKeywords: ['property investment UK', 'rental yield calculator', 'buy to let mortgage', 'property portfolio'],
+    tableOfContents: [
+      { id: 'investment-basics', title: 'Investment Basics', level: 2 },
+      { id: 'financing', title: 'Financing Options', level: 2 },
+      { id: 'yield-calculations', title: 'Yield Calculations', level: 2 },
+      { id: 'costs-analysis', title: 'Costs Analysis', level: 2 },
+      { id: 'property-selection', title: 'Property Selection', level: 2 },
+      { id: 'investment-faq', title: 'Investment FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-tax-guide', 'uk-landlord-insurance-guide', 'uk-tenant-referencing-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Buy-to-let remains a popular investment strategy despite regulatory changes and
+          tax reforms. This guide covers everything you need to know about property
+          investment in the UK in 2026, from financing to portfolio building.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-investment.svg"
+          alt="Property investment portfolio"
+          caption="Strategic property investment can build long-term wealth"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="investment-basics" className="scroll-mt-24">Buy-to-Let Investment Basics</h2>
+
+        <p>
+          Buy-to-let involves purchasing property specifically to rent out to tenants.
+          Returns come from two sources: rental income and capital appreciation.
+        </p>
+
+        <h3>Is Buy-to-Let Right for You?</h3>
+
+        <p>
+          Consider these factors before investing:
+        </p>
+
+        <ul>
+          <li><strong>Capital required</strong> - typically 25%+ deposit plus costs</li>
+          <li><strong>Income stream</strong> - rental income less expenses and mortgage</li>
+          <li><strong>Time commitment</strong> - management responsibilities</li>
+          <li><strong>Risk tolerance</strong> - void periods, bad tenants, market changes</li>
+          <li><strong>Long-term outlook</strong> - property is an illiquid, long-term investment</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Investment Mindset</h4>
+          <p className="text-blue-800">
+            Successful property investment requires treating it as a business, not a
+            passive hobby. Plan carefully, understand the numbers, and be prepared
+            for the responsibilities of being a landlord.
+          </p>
+        </div>
+
+        <h3>Market Conditions 2026</h3>
+
+        <p>
+          Current factors affecting the buy-to-let market:
+        </p>
+
+        <ul>
+          <li>Interest rates stabilizing but higher than pre-2022 levels</li>
+          <li>Strong rental demand in most areas</li>
+          <li>Regulatory requirements increasing compliance costs</li>
+          <li>Tax changes affecting individual landlord profitability</li>
+          <li>Energy efficiency requirements driving upgrade costs</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-market-analysis.svg"
+          alt="Property market analysis charts"
+          caption="Understanding market conditions helps inform investment decisions"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="financing" className="scroll-mt-24">Financing Options</h2>
+
+        <p>
+          Most investors use buy-to-let mortgages, though other options exist.
+          Understanding your financing options is crucial.
+        </p>
+
+        <h3>Buy-to-Let Mortgages</h3>
+
+        <p>
+          Key features of buy-to-let mortgages:
+        </p>
+
+        <ul>
+          <li><strong>Deposit</strong> - typically 25% minimum (some require 40%)</li>
+          <li><strong>Interest rates</strong> - usually 0.5-1% higher than residential</li>
+          <li><strong>Assessment</strong> - based on rental income, not your salary</li>
+          <li><strong>Stress testing</strong> - rent must cover mortgage at higher rates</li>
+          <li><strong>Interest-only</strong> - most BTL mortgages are interest-only</li>
+        </ul>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Product Type</th>
+                <th className="border p-3 text-left font-semibold">Features</th>
+                <th className="border p-3 text-left font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Fixed rate</td>
+                <td className="border p-3">Locked rate for 2-5 years</td>
+                <td className="border p-3">Budget certainty, rising rate concerns</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Tracker</td>
+                <td className="border p-3">Follows base rate + margin</td>
+                <td className="border p-3">Falling rate expectations</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Discounted variable</td>
+                <td className="border p-3">Below SVR for set period</td>
+                <td className="border p-3">Flexibility with lower initial cost</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Portfolio mortgage</td>
+                <td className="border p-3">Multiple properties under one loan</td>
+                <td className="border p-3">Established portfolio landlords</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="yield-calculations" className="scroll-mt-24">Understanding Yield Calculations</h2>
+
+        <p>
+          Yield measures the return on your investment. Understanding different yield
+          calculations helps you compare opportunities accurately.
+        </p>
+
+        <h3>Gross Yield</h3>
+
+        <p>
+          The simplest calculation - annual rent divided by property price:
+        </p>
+
+        <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
+          Gross Yield = (Annual Rent ÷ Property Price) × 100
+        </div>
+
+        <p>
+          Example: £12,000 annual rent ÷ £200,000 property = 6% gross yield
+        </p>
+
+        <h3>Net Yield</h3>
+
+        <p>
+          More realistic - accounts for costs:
+        </p>
+
+        <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
+          Net Yield = ((Annual Rent - Annual Costs) ÷ Property Price) × 100
+        </div>
+
+        <p>
+          Example: (£12,000 - £4,000 costs) ÷ £200,000 = 4% net yield
+        </p>
+
+        <h3>Return on Investment (ROI)</h3>
+
+        <p>
+          Measures return on your actual cash invested:
+        </p>
+
+        <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
+          ROI = (Annual Profit ÷ Cash Invested) × 100
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-yield-calculation.svg"
+          alt="Property yield calculation example"
+          caption="Understanding yield calculations helps compare investment opportunities"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="costs-analysis" className="scroll-mt-24">Complete Costs Analysis</h2>
+
+        <p>
+          Many new investors underestimate costs. A thorough analysis is essential
+          for accurate profitability projections.
+        </p>
+
+        <h3>Purchase Costs</h3>
+
+        <ul>
+          <li><strong>Stamp Duty</strong> - 3% surcharge on additional properties</li>
+          <li><strong>Legal fees</strong> - £800-1,500 typically</li>
+          <li><strong>Survey</strong> - £300-600 depending on type</li>
+          <li><strong>Mortgage fees</strong> - arrangement, valuation, broker</li>
+          <li><strong>Initial repairs/renovation</strong> - varies significantly</li>
+        </ul>
+
+        <h3>Ongoing Costs</h3>
+
+        <ul>
+          <li><strong>Mortgage payments</strong> - usually the largest expense</li>
+          <li><strong>Insurance</strong> - buildings, contents, rent guarantee</li>
+          <li><strong>Management fees</strong> - 8-15% if using agent</li>
+          <li><strong>Maintenance</strong> - budget 10-15% of rent</li>
+          <li><strong>Safety certificates</strong> - gas, electrical, EPC</li>
+          <li><strong>Void periods</strong> - budget 4-8% for empty periods</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Hidden Costs Warning</h4>
+          <p className="text-amber-800">
+            Don&apos;t forget: void periods between tenants, emergency repairs, potential
+            legal costs, and the time you invest. Many landlords underestimate these
+            and overestimate their returns.
+          </p>
+        </div>
+
+        <h2 id="property-selection" className="scroll-mt-24">Property Selection Strategy</h2>
+
+        <p>
+          Choosing the right property is crucial for investment success. Consider
+          multiple factors beyond just purchase price.
+        </p>
+
+        <h3>Location Factors</h3>
+
+        <ul>
+          <li><strong>Tenant demand</strong> - employment, universities, transport</li>
+          <li><strong>Rental yields</strong> - research local market rates</li>
+          <li><strong>Capital growth potential</strong> - regeneration, infrastructure</li>
+          <li><strong>Crime rates</strong> - affects demand and insurance</li>
+          <li><strong>School catchments</strong> - important for family lets</li>
+        </ul>
+
+        <h3>Property Factors</h3>
+
+        <ul>
+          <li><strong>Property type</strong> - flats, houses, HMOs have different dynamics</li>
+          <li><strong>Condition</strong> - ready to let vs renovation project</li>
+          <li><strong>EPC rating</strong> - minimum C required by 2028 (proposed)</li>
+          <li><strong>Maintenance needs</strong> - age, construction type</li>
+          <li><strong>Layout efficiency</strong> - does it maximize rental potential?</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-property-selection.svg"
+          alt="Property selection criteria checklist"
+          caption="Systematic property evaluation improves investment outcomes"
+          aspectRatio="4:3"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Investment Analysis Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides yield calculators, property analysis templates,
+            and investment comparison tools to help you make informed decisions.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Investment Tools →
+          </Link>
+        </div>
+
+        <h2 id="investment-faq" className="scroll-mt-24">Buy-to-Let Investment FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is buy-to-let still worth it in 2026?</h3>
+            <p className="text-gray-600">
+              It can be, but requires more careful analysis than before. Higher interest
+              rates, increased regulation, and tax changes mean margins are tighter.
+              Success depends on buying right, managing efficiently, and taking a
+              long-term view.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I buy personally or through a company?</h3>
+            <p className="text-gray-600">
+              It depends on your circumstances. Company ownership offers full mortgage
+              interest relief and lower tax rates, but has higher mortgage costs and
+              extraction complexities. Get professional advice for your specific situation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What yield should I aim for?</h3>
+            <p className="text-gray-600">
+              Gross yields of 6-8% are generally considered good, but location matters.
+              London yields are lower (3-5%) but offer capital growth potential. Northern
+              cities often offer higher yields (7-10%) with less capital growth.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How many properties should I start with?</h3>
+            <p className="text-gray-600">
+              Start with one property and learn the business before expanding. Understand
+              the responsibilities, costs, and time involved. Once comfortable, you can
+              grow strategically using equity and experience gained.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
