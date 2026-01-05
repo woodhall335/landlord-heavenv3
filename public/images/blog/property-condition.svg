@@ -7,40 +7,136 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- House -->
-  <g transform="translate(250, 100)">
-    <!-- Roof -->
-    <path d="M-20 150 L150 30 L320 150" fill="none" stroke="#7C3AED" stroke-width="8" stroke-linecap="round"/>
-    <path d="M0 150 L150 50 L300 150" fill="#6D28D9"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">PROPERTY CONDITION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Ground 13 - Property deterioration by tenant</text>
 
-    <!-- Chimney -->
-    <rect x="220" y="60" width="40" height="70" fill="#7C3AED"/>
+  <!-- House condition comparison -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="330" height="180" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="330" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="330" height="12" fill="#22C55E"/>
+    <text x="165" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEFORE - ACCEPTABLE CONDITION</text>
 
-    <!-- Main building -->
-    <rect x="30" y="150" width="240" height="180" fill="white" stroke="#7C3AED" stroke-width="3"/>
-
-    <!-- Door -->
-    <rect x="120" y="220" width="60" height="110" rx="5" fill="#7C3AED"/>
-    <circle cx="165" cy="275" r="5" fill="#A78BFA"/>
-
-    <!-- Windows -->
-    <rect x="55" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="80" y1="180" x2="80" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="55" y1="205" x2="105" y2="205" stroke="#7C3AED" stroke-width="2"/>
-
-    <rect x="195" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="220" y1="180" x2="220" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="195" y1="205" x2="245" y2="205" stroke="#7C3AED" stroke-width="2"/>
+    <!-- Good house -->
+    <g transform="translate(50, 50)">
+      <path d="M50 20 L95 55 L95 120 L5 120 L5 55 Z" fill="#F3F1FF" stroke="#22C55E" stroke-width="2"/>
+      <rect x="38" y="80" width="24" height="40" rx="2" fill="#22C55E"/>
+      <rect x="15" y="70" width="18" height="18" rx="2" fill="white" stroke="#22C55E"/>
+      <rect x="67" y="70" width="18" height="18" rx="2" fill="white" stroke="#22C55E"/>
+    </g>
+    <g transform="translate(155, 60)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Clean walls</text>
+    </g>
+    <g transform="translate(155, 85)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Undamaged fixtures</text>
+    </g>
+    <g transform="translate(155, 110)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Garden maintained</text>
+    </g>
+    <g transform="translate(155, 135)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Normal wear only</text>
+    </g>
   </g>
 
-  <!-- Trees -->
-  <g transform="translate(550, 200)">
-    <rect x="20" y="100" width="20" height="60" fill="#6D28D9" opacity="0.7"/>
-    <circle cx="30" cy="80" r="50" fill="#7C3AED" opacity="0.3"/>
-    <circle cx="15" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
-    <circle cx="45" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
+  <!-- After - deteriorated -->
+  <g transform="translate(410, 80)">
+    <rect x="0" y="0" width="330" height="180" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="330" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="330" height="12" fill="#EF4444"/>
+    <text x="165" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">AFTER - DETERIORATION</text>
+
+    <!-- Damaged house -->
+    <g transform="translate(50, 50)">
+      <path d="M50 20 L95 55 L95 120 L5 120 L5 55 Z" fill="#F3F1FF" stroke="#EF4444" stroke-width="2"/>
+      <rect x="38" y="80" width="24" height="40" rx="2" fill="#EF4444" opacity="0.6"/>
+      <path d="M15 70 L33 88 M33 70 L15 88" stroke="#EF4444" stroke-width="2"/>
+      <rect x="67" y="70" width="18" height="18" rx="2" fill="white" stroke="#EF4444"/>
+      <path d="M20 40 L30 60 L25 80" stroke="#EF4444" stroke-width="2" fill="none"/>
+      <path d="M75 35 L85 50" stroke="#EF4444" stroke-width="2" fill="none"/>
+    </g>
+    <g transform="translate(155, 60)">
+      <polygon points="8,0 16,14 0,14" fill="#EF4444"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Damaged walls</text>
+    </g>
+    <g transform="translate(155, 85)">
+      <polygon points="8,0 16,14 0,14" fill="#EF4444"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Broken fixtures</text>
+    </g>
+    <g transform="translate(155, 110)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Garden neglected</text>
+    </g>
+    <g transform="translate(155, 135)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Excessive damage</text>
+    </g>
   </g>
 
-  <!-- Ground -->
-  <ellipse cx="400" cy="430" rx="350" ry="30" fill="#7C3AED" opacity="0.1"/>
+  <!-- Ground 13 info -->
+  <g transform="translate(60, 280)">
+    <rect x="0" y="0" width="330" height="165" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="330" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="330" height="12" fill="#7C3AED"/>
+    <text x="165" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GROUND 13 REQUIREMENTS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#7C3AED"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Condition has deteriorated</text>
+    </g>
+    <g transform="translate(20, 75)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#6D28D9"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Caused by tenant or lodger</text>
+    </g>
+    <g transform="translate(20, 102)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#A78BFA"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Not fair wear and tear</text>
+    </g>
+
+    <rect x="15" y="130" width="300" height="25" rx="5" fill="#F3F1FF"/>
+    <text x="165" y="147" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">DISCRETIONARY - Court decides</text>
+  </g>
+
+  <!-- Evidence -->
+  <g transform="translate(410, 280)">
+    <rect x="0" y="0" width="330" height="165" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="330" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="330" height="12" fill="#6D28D9"/>
+    <text x="165" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EVIDENCE NEEDED</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Check-in inventory photos</text>
+    </g>
+    <g transform="translate(20, 73)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Current condition photos</text>
+    </g>
+    <g transform="translate(20, 98)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Repair invoices/quotes</text>
+    </g>
+    <g transform="translate(20, 123)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Inspection reports</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

@@ -7,51 +7,151 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">ENERGY PERFORMANCE CERTIFICATE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">EPC ratings explained for landlords</text>
+
   <!-- EPC Rating Scale -->
-  <g transform="translate(250, 60)">
-    <!-- Rating bars -->
-    <g>
-      <rect x="0" y="0" width="180" height="35" rx="5" fill="#1B8720"/>
-      <text x="15" y="25" fill="white" font-weight="bold" font-size="18">A</text>
-      <text x="140" y="25" fill="white" font-size="14">1-20</text>
+  <g transform="translate(60, 75)">
+    <rect x="0" y="0" width="280" height="290" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="280" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="280" height="12" fill="#7C3AED"/>
+    <text x="140" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EPC RATING SCALE</text>
+
+    <g transform="translate(20, 45)">
+      <rect x="0" y="0" width="110" height="28" rx="4" fill="#1B8720"/>
+      <text x="12" y="19" fill="white" font-weight="bold" font-size="14">A</text>
+      <text x="85" y="19" fill="white" font-size="10">1-20</text>
     </g>
-    <g>
-      <rect x="20" y="45" width="180" height="35" rx="5" fill="#3B9B1B"/>
-      <text x="35" y="70" fill="white" font-weight="bold" font-size="18">B</text>
-      <text x="160" y="70" fill="white" font-size="14">21-38</text>
+    <g transform="translate(20, 80)">
+      <rect x="12" y="0" width="110" height="28" rx="4" fill="#3B9B1B"/>
+      <text x="24" y="19" fill="white" font-weight="bold" font-size="14">B</text>
+      <text x="97" y="19" fill="white" font-size="10">21-38</text>
     </g>
-    <g>
-      <rect x="40" y="90" width="180" height="35" rx="5" fill="#88B520"/>
-      <text x="55" y="115" fill="white" font-weight="bold" font-size="18">C</text>
-      <text x="180" y="115" fill="white" font-size="14">39-54</text>
+    <g transform="translate(20, 115)">
+      <rect x="24" y="0" width="110" height="28" rx="4" fill="#88B520"/>
+      <text x="36" y="19" fill="white" font-weight="bold" font-size="14">C</text>
+      <text x="109" y="19" fill="white" font-size="10">39-54</text>
+      <circle cx="155" cy="14" r="10" fill="#22C55E"/>
+      <path d="M150 14 L154 18 L162 10" stroke="white" stroke-width="2" fill="none"/>
     </g>
-    <g>
-      <rect x="60" y="135" width="180" height="35" rx="5" fill="#7C3AED"/>
-      <text x="75" y="160" fill="white" font-weight="bold" font-size="18">D</text>
-      <text x="200" y="160" fill="white" font-size="14">55-68</text>
-      <!-- Arrow indicator -->
-      <polygon points="250,152 280,152 280,145 300,155 280,165 280,158 250,158" fill="#6D28D9"/>
+    <g transform="translate(20, 150)">
+      <rect x="36" y="0" width="110" height="28" rx="4" fill="#F5D020"/>
+      <text x="48" y="19" fill="white" font-weight="bold" font-size="14">D</text>
+      <text x="121" y="19" fill="white" font-size="10">55-68</text>
     </g>
-    <g>
-      <rect x="80" y="180" width="180" height="35" rx="5" fill="#F5A623"/>
-      <text x="95" y="205" fill="white" font-weight="bold" font-size="18">E</text>
-      <text x="220" y="205" fill="white" font-size="14">69-80</text>
+    <g transform="translate(20, 185)">
+      <rect x="48" y="0" width="110" height="28" rx="4" fill="#F5A623"/>
+      <text x="60" y="19" fill="white" font-weight="bold" font-size="14">E</text>
+      <text x="133" y="19" fill="white" font-size="10">69-80</text>
+      <polygon points="175,0 195,14 175,28" fill="#EF4444"/>
+      <text x="195" y="17" fill="#EF4444" font-size="8" font-weight="bold">MIN</text>
     </g>
-    <g>
-      <rect x="100" y="225" width="180" height="35" rx="5" fill="#E6781E"/>
-      <text x="115" y="250" fill="white" font-weight="bold" font-size="18">F</text>
-      <text x="240" y="250" fill="white" font-size="14">81-91</text>
+    <g transform="translate(20, 220)">
+      <rect x="60" y="0" width="110" height="28" rx="4" fill="#E6781E"/>
+      <text x="72" y="19" fill="white" font-weight="bold" font-size="14">F</text>
+      <text x="145" y="19" fill="white" font-size="10">81-91</text>
     </g>
-    <g>
-      <rect x="120" y="270" width="180" height="35" rx="5" fill="#D0021B"/>
-      <text x="135" y="295" fill="white" font-weight="bold" font-size="18">G</text>
-      <text x="260" y="295" fill="white" font-size="14">92+</text>
+    <g transform="translate(20, 255)">
+      <rect x="72" y="0" width="110" height="28" rx="4" fill="#D0021B"/>
+      <text x="84" y="19" fill="white" font-weight="bold" font-size="14">G</text>
+      <text x="157" y="19" fill="white" font-size="10">92+</text>
     </g>
   </g>
 
-  <!-- House icon -->
-  <g transform="translate(550, 150)">
-    <path d="M80 0 L160 60 L160 150 L0 150 L0 60 Z" fill="white" stroke="#7C3AED" stroke-width="3"/>
-    <rect x="55" y="90" width="50" height="60" rx="3" fill="#7C3AED"/>
+  <!-- MEES Requirements -->
+  <g transform="translate(360, 75)">
+    <rect x="0" y="0" width="370" height="145" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="370" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="370" height="12" fill="#7C3AED"/>
+    <text x="185" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MEES REQUIREMENTS FOR LANDLORDS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="165" height="85" rx="8" fill="#F3F1FF"/>
+      <text x="82" y="18" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">MINIMUM STANDARD</text>
+      <text x="82" y="42" text-anchor="middle" fill="#6D28D9" font-size="24" font-weight="bold">E</text>
+      <text x="82" y="60" text-anchor="middle" fill="#6D28D9" font-size="8">For new and existing</text>
+      <text x="82" y="72" text-anchor="middle" fill="#6D28D9" font-size="8">tenancies</text>
+    </g>
+
+    <g transform="translate(190, 45)">
+      <rect x="0" y="0" width="165" height="85" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="82" y="18" text-anchor="middle" fill="#EF4444" font-size="9" font-weight="bold">F OR G RATING</text>
+      <text x="82" y="42" text-anchor="middle" fill="#EF4444" font-size="14" font-weight="bold">Cannot Let</text>
+      <text x="82" y="60" text-anchor="middle" fill="#6D28D9" font-size="8">Unless exemption</text>
+      <text x="82" y="72" text-anchor="middle" fill="#6D28D9" font-size="8">registered</text>
+    </g>
   </g>
+
+  <!-- Validity and requirements -->
+  <g transform="translate(360, 235)">
+    <rect x="0" y="0" width="180" height="130" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="180" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="180" height="12" fill="#6D28D9"/>
+    <text x="90" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EPC VALIDITY</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Valid for 10 years</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Required at marketing</text>
+    </g>
+    <g transform="translate(15, 95)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Must give to tenant</text>
+    </g>
+  </g>
+
+  <!-- Penalties -->
+  <g transform="translate(550, 235)">
+    <rect x="0" y="0" width="180" height="130" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="180" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="180" height="12" fill="#EF4444"/>
+    <text x="90" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PENALTIES</text>
+
+    <g transform="translate(15, 45)">
+      <text x="0" y="0" fill="#EF4444" font-size="9" font-weight="bold">No EPC:</text>
+      <text x="0" y="15" fill="#6D28D9" font-size="9">£200 fine</text>
+    </g>
+    <g transform="translate(15, 75)">
+      <text x="0" y="0" fill="#EF4444" font-size="9" font-weight="bold">F/G let:</text>
+      <text x="0" y="15" fill="#6D28D9" font-size="9">Up to £5,000</text>
+    </g>
+    <g transform="translate(15, 105)">
+      <text x="0" y="0" fill="#EF4444" font-size="9" font-weight="bold">False info:</text>
+      <text x="0" y="15" fill="#6D28D9" font-size="9">Up to £200</text>
+    </g>
+  </g>
+
+  <!-- Bottom - Improvements -->
+  <g transform="translate(60, 385)">
+    <rect x="0" y="0" width="670" height="70" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="335" y="22" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">COMMON IMPROVEMENTS TO BOOST RATING</text>
+
+    <g transform="translate(30, 38)">
+      <rect x="0" y="0" width="120" height="22" rx="5" fill="#F3F1FF"/>
+      <text x="60" y="15" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Loft insulation</text>
+    </g>
+    <g transform="translate(165, 38)">
+      <rect x="0" y="0" width="120" height="22" rx="5" fill="#F3F1FF"/>
+      <text x="60" y="15" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Double glazing</text>
+    </g>
+    <g transform="translate(300, 38)">
+      <rect x="0" y="0" width="120" height="22" rx="5" fill="#F3F1FF"/>
+      <text x="60" y="15" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Boiler upgrade</text>
+    </g>
+    <g transform="translate(435, 38)">
+      <rect x="0" y="0" width="120" height="22" rx="5" fill="#F3F1FF"/>
+      <text x="60" y="15" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">LED lighting</text>
+    </g>
+    <g transform="translate(570, 38)">
+      <rect x="0" y="0" width="80" height="22" rx="5" fill="#F3F1FF"/>
+      <text x="40" y="15" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">+More</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

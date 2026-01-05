@@ -7,42 +7,158 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Document stack -->
-  <g transform="translate(250, 80)">
-    <!-- Back document -->
-    <rect x="30" y="30" width="250" height="320" rx="8" fill="white" stroke="#94A3B8" stroke-width="1" opacity="0.5"/>
-    <!-- Middle document -->
-    <rect x="15" y="15" width="250" height="320" rx="8" fill="white" stroke="#94A3B8" stroke-width="1" opacity="0.7"/>
-    <!-- Front document -->
-    <rect x="0" y="0" width="250" height="320" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">FORM N5 - CLAIM FORM</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Starting possession proceedings in the County Court</text>
 
-    <!-- Document content -->
-    <rect x="20" y="20" width="60" height="8" rx="4" fill="#7C3AED"/>
-    <rect x="20" y="40" width="210" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="20" y="55" width="180" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="20" y="70" width="200" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
+  <!-- Form illustration -->
+  <g transform="translate(60, 75)">
+    <rect x="0" y="0" width="280" height="350" rx="8" fill="white" stroke="#7C3AED" stroke-width="3"/>
 
-    <!-- Divider -->
-    <line x1="20" y1="95" x2="230" y2="95" stroke="#F3F1FF" stroke-width="2"/>
+    <!-- Header -->
+    <rect x="0" y="0" width="280" height="50" rx="8" fill="#7C3AED"/>
+    <rect x="0" y="38" width="280" height="12" fill="#7C3AED"/>
+    <text x="140" y="25" text-anchor="middle" fill="white" font-size="14" font-weight="bold">N5</text>
+    <text x="140" y="42" text-anchor="middle" fill="white" font-size="9">Claim form for possession of property</text>
 
-    <!-- More content -->
-    <rect x="20" y="110" width="190" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="20" y="125" width="210" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="20" y="140" width="170" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
+    <!-- Court reference -->
+    <rect x="15" y="60" width="250" height="25" rx="4" fill="#F3F1FF"/>
+    <text x="25" y="77" fill="#6D28D9" font-size="8" font-weight="bold">Claim number:</text>
+    <rect x="100" y="67" width="150" height="12" rx="2" fill="white" stroke="#7C3AED" stroke-width="1"/>
 
-    <!-- Checkbox items -->
-    <rect x="20" y="170" width="16" height="16" rx="3" stroke="#7C3AED" stroke-width="2" fill="none"/>
-    <rect x="45" y="173" width="140" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="20" y="195" width="16" height="16" rx="3" stroke="#7C3AED" stroke-width="2" fill="#7C3AED"/>
-    <path d="M24 203 L28 207 L36 199" stroke="white" stroke-width="2" fill="none"/>
-    <rect x="45" y="198" width="160" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
+    <!-- Claimant section -->
+    <text x="15" y="105" fill="#7C3AED" font-size="9" font-weight="bold">CLAIMANT (Landlord)</text>
+    <rect x="15" y="110" width="250" height="50" rx="4" fill="#F3F1FF"/>
+    <rect x="25" y="118" width="200" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+    <rect x="25" y="130" width="180" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+    <rect x="25" y="142" width="150" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
 
-    <!-- Signature area -->
-    <rect x="20" y="260" width="100" height="40" rx="4" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4" fill="none"/>
-    <path d="M40 285 Q60 270 80 285 Q100 300 120 280" stroke="#7C3AED" stroke-width="2" fill="none" opacity="0.6"/>
+    <!-- Defendant section -->
+    <text x="15" y="180" fill="#7C3AED" font-size="9" font-weight="bold">DEFENDANT (Tenant)</text>
+    <rect x="15" y="185" width="250" height="50" rx="4" fill="#F3F1FF"/>
+    <rect x="25" y="193" width="200" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+    <rect x="25" y="205" width="180" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+    <rect x="25" y="217" width="150" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+
+    <!-- Property section -->
+    <text x="15" y="255" fill="#7C3AED" font-size="9" font-weight="bold">PROPERTY ADDRESS</text>
+    <rect x="15" y="260" width="250" height="35" rx="4" fill="#F3F1FF"/>
+    <rect x="25" y="268" width="220" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+    <rect x="25" y="280" width="180" height="6" rx="2" fill="#A78BFA" opacity="0.5"/>
+
+    <!-- Ground section -->
+    <text x="15" y="315" fill="#7C3AED" font-size="9" font-weight="bold">GROUNDS FOR POSSESSION</text>
+    <rect x="15" y="320" width="14" height="14" rx="2" fill="#7C3AED"/>
+    <path d="M18 327 L21 330 L28 323" stroke="white" stroke-width="2" fill="none"/>
+    <text x="35" y="331" fill="#6D28D9" font-size="8">Section 8 / Section 21</text>
   </g>
 
-  <!-- Decorative elements -->
-  <circle cx="650" cy="100" r="60" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="100" cy="400" r="80" fill="#A78BFA" opacity="0.1"/>
+  <!-- Key sections -->
+  <g transform="translate(360, 75)">
+    <rect x="0" y="0" width="370" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="370" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="370" height="12" fill="#7C3AED"/>
+    <text x="185" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHAT YOU NEED TO COMPLETE N5</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Your full name and address</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenant's full name and address</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Property address (full)</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Grounds relied upon</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Daily rate of rent (for arrears calculation)</text>
+    </g>
+
+    <g transform="translate(195, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#A78BFA"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenancy start date</text>
+    </g>
+    <g transform="translate(195, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#A78BFA"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Amount of arrears</text>
+    </g>
+    <g transform="translate(195, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#A78BFA"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Notice details</text>
+    </g>
+    <g transform="translate(195, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#A78BFA"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Statement of truth</text>
+    </g>
+  </g>
+
+  <!-- Court fees -->
+  <g transform="translate(360, 260)">
+    <rect x="0" y="0" width="180" height="165" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="180" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="180" height="12" fill="#6D28D9"/>
+    <text x="90" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COURT FEES</text>
+
+    <g transform="translate(15, 45)">
+      <text x="0" y="0" fill="#7C3AED" font-size="9" font-weight="bold">Standard N5:</text>
+      <text x="0" y="18" fill="#6D28D9" font-size="14" font-weight="bold">£355</text>
+    </g>
+
+    <g transform="translate(15, 85)">
+      <text x="0" y="0" fill="#7C3AED" font-size="9" font-weight="bold">Accelerated procedure:</text>
+      <text x="0" y="18" fill="#6D28D9" font-size="14" font-weight="bold">£355</text>
+    </g>
+
+    <g transform="translate(15, 125)">
+      <text x="0" y="0" fill="#A78BFA" font-size="9" font-weight="bold">Warrant (N325):</text>
+      <text x="0" y="18" fill="#6D28D9" font-size="14" font-weight="bold">£130</text>
+    </g>
+  </g>
+
+  <!-- Submission methods -->
+  <g transform="translate(550, 260)">
+    <rect x="0" y="0" width="180" height="165" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="180" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="180" height="12" fill="#7C3AED"/>
+    <text x="90" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">HOW TO SUBMIT</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Online via PCOL</text>
+    </g>
+    <g transform="translate(15, 73)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Post to court</text>
+    </g>
+    <g transform="translate(15, 98)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">In person at court</text>
+    </g>
+    <g transform="translate(15, 123)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Via solicitor</text>
+    </g>
+
+    <rect x="15" y="145" width="150" height="14" rx="4" fill="#F3F1FF"/>
+    <text x="90" y="155" text-anchor="middle" fill="#7C3AED" font-size="7" font-weight="bold">Keep proof of submission</text>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

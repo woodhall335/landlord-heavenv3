@@ -4,40 +4,100 @@
       <stop offset="0%" style="stop-color:#F3F1FF"/>
       <stop offset="100%" style="stop-color:#E9E5FF"/>
     </linearGradient>
+    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#A78BFA"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Money/coins stack -->
-  <g transform="translate(300, 150)">
-    <!-- Coin stack 1 -->
-    <ellipse cx="0" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="-60" y="160" width="120" height="40" fill="#7C3AED"/>
-    <ellipse cx="0" cy="160" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="0" y="185" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
+  <!-- Main coin stack with decreasing trend -->
+  <g transform="translate(100, 100)">
+    <!-- Stack 1 - Tall (expected rent) -->
+    <ellipse cx="60" cy="280" rx="50" ry="12" fill="#6D28D9"/>
+    <rect x="10" y="160" width="100" height="120" fill="url(#coinGrad)"/>
+    <ellipse cx="60" cy="160" rx="50" ry="12" fill="#A78BFA"/>
+    <text x="60" y="220" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Arial">£</text>
+    <text x="60" y="310" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Expected</text>
 
-    <!-- Coin stack 2 -->
-    <ellipse cx="100" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="40" y="130" width="120" height="70" fill="#7C3AED"/>
-    <ellipse cx="100" cy="130" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="100" y="165" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
+    <!-- Stack 2 - Medium -->
+    <ellipse cx="180" cy="280" rx="50" ry="12" fill="#6D28D9"/>
+    <rect x="130" y="200" width="100" height="80" fill="url(#coinGrad)"/>
+    <ellipse cx="180" cy="200" rx="50" ry="12" fill="#A78BFA"/>
+    <text x="180" y="250" text-anchor="middle" fill="white" font-size="24" font-weight="bold" font-family="Arial">£</text>
+    <text x="180" y="310" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Month 1</text>
 
-    <!-- Coin stack 3 -->
-    <ellipse cx="200" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="140" y="100" width="120" height="100" fill="#7C3AED"/>
-    <ellipse cx="200" cy="100" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="200" y="145" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
+    <!-- Stack 3 - Short -->
+    <ellipse cx="300" cy="280" rx="50" ry="12" fill="#6D28D9"/>
+    <rect x="250" y="230" width="100" height="50" fill="url(#coinGrad)"/>
+    <ellipse cx="300" cy="230" rx="50" ry="12" fill="#A78BFA"/>
+    <text x="300" y="265" text-anchor="middle" fill="white" font-size="20" font-weight="bold" font-family="Arial">£</text>
+    <text x="300" y="310" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Month 2</text>
+
+    <!-- Stack 4 - Very short (arrears) -->
+    <ellipse cx="420" cy="280" rx="50" ry="12" fill="#6D28D9" opacity="0.5"/>
+    <rect x="370" y="260" width="100" height="20" fill="url(#coinGrad)" opacity="0.6"/>
+    <ellipse cx="420" cy="260" rx="50" ry="12" fill="#A78BFA" opacity="0.6"/>
+    <text x="420" y="310" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Month 3</text>
+
+    <!-- Downward trend arrow -->
+    <path d="M70 140 Q250 100 430 250" stroke="#6D28D9" stroke-width="4" fill="none" stroke-dasharray="8"/>
+    <polygon points="430,250 420,235 440,240" fill="#6D28D9"/>
   </g>
 
-  <!-- Rising arrow -->
-  <g transform="translate(550, 120)">
-    <line x1="0" y1="150" x2="120" y2="30" stroke="#7C3AED" stroke-width="6" stroke-linecap="round"/>
-    <polygon points="120,30 90,40 110,60" fill="#7C3AED"/>
+  <!-- Warning badge -->
+  <g transform="translate(550, 100)">
+    <rect x="0" y="0" width="200" height="120" rx="12" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <circle cx="100" cy="45" r="30" fill="#7C3AED"/>
+    <text x="100" y="55" text-anchor="middle" fill="white" font-size="30" font-weight="bold" font-family="Arial">!</text>
+    <text x="100" y="90" text-anchor="middle" fill="#6D28D9" font-size="14" font-weight="bold" font-family="Arial">RENT ARREARS</text>
+    <text x="100" y="108" text-anchor="middle" fill="#A78BFA" font-size="11" font-family="Arial">Action Required</text>
   </g>
 
-  <!-- Chart bars in background -->
-  <g transform="translate(100, 250)" opacity="0.3">
-    <rect x="0" y="80" width="40" height="100" rx="5" fill="#7C3AED"/>
-    <rect x="60" y="50" width="40" height="130" rx="5" fill="#7C3AED"/>
-    <rect x="120" y="100" width="40" height="80" rx="5" fill="#7C3AED"/>
+  <!-- Calendar showing missed payments -->
+  <g transform="translate(550, 240)">
+    <rect x="0" y="0" width="200" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="40" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="28" width="200" height="12" fill="#7C3AED"/>
+    <text x="100" y="28" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">Payment History</text>
+
+    <!-- Payment rows -->
+    <g transform="translate(15, 55)">
+      <circle cx="12" cy="12" r="10" fill="#7C3AED"/>
+      <path d="M7 12 L10 15 L17 8" stroke="white" stroke-width="2" fill="none"/>
+      <text x="35" y="16" fill="#6D28D9" font-size="11" font-family="Arial">Jan - Paid</text>
+      <text x="150" y="16" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">£1,200</text>
+    </g>
+    <g transform="translate(15, 85)">
+      <circle cx="12" cy="12" r="10" fill="#7C3AED"/>
+      <path d="M7 12 L10 15 L17 8" stroke="white" stroke-width="2" fill="none"/>
+      <text x="35" y="16" fill="#6D28D9" font-size="11" font-family="Arial">Feb - Paid</text>
+      <text x="150" y="16" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">£1,200</text>
+    </g>
+    <g transform="translate(15, 115)">
+      <circle cx="12" cy="12" r="10" fill="#A78BFA" opacity="0.5"/>
+      <line x1="7" y1="7" x2="17" y2="17" stroke="white" stroke-width="2"/>
+      <line x1="17" y1="7" x2="7" y2="17" stroke="white" stroke-width="2"/>
+      <text x="35" y="16" fill="#A78BFA" font-size="11" font-family="Arial">Mar - Missed</text>
+      <text x="150" y="16" fill="#A78BFA" font-size="11" font-weight="bold" font-family="Arial">£0</text>
+    </g>
+    <g transform="translate(15, 145)">
+      <circle cx="12" cy="12" r="10" fill="#A78BFA" opacity="0.5"/>
+      <line x1="7" y1="7" x2="17" y2="17" stroke="white" stroke-width="2"/>
+      <line x1="17" y1="7" x2="7" y2="17" stroke="white" stroke-width="2"/>
+      <text x="35" y="16" fill="#A78BFA" font-size="11" font-family="Arial">Apr - Missed</text>
+      <text x="150" y="16" fill="#A78BFA" font-size="11" font-weight="bold" font-family="Arial">£0</text>
+    </g>
   </g>
+
+  <!-- Total arrears box -->
+  <g transform="translate(100, 400)">
+    <rect x="0" y="0" width="350" height="60" rx="30" fill="#7C3AED"/>
+    <text x="175" y="25" text-anchor="middle" fill="white" font-size="12" font-family="Arial">Total Arrears</text>
+    <text x="175" y="48" text-anchor="middle" fill="white" font-size="20" font-weight="bold" font-family="Arial">£2,400 Outstanding</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="30" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="35" fill="#A78BFA" opacity="0.12"/>
 </svg>

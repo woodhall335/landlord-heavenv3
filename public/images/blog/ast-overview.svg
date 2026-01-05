@@ -7,37 +7,112 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Timeline line -->
-  <line x1="100" y1="250" x2="700" y2="250" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  <!-- Main AST Document -->
+  <g transform="translate(240, 40)">
+    <rect x="0" y="0" width="320" height="380" rx="15" fill="white" stroke="#7C3AED" stroke-width="4"/>
 
-  <!-- Timeline points -->
-  <g>
-    <!-- Point 1 -->
-    <circle cx="150" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="150" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="115" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="125" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="125" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <!-- Header -->
+    <rect x="0" y="0" width="320" height="70" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="55" width="320" height="15" fill="#7C3AED"/>
+    <text x="160" y="30" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">ASSURED SHORTHOLD</text>
+    <text x="160" y="50" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">TENANCY AGREEMENT</text>
 
-    <!-- Point 2 -->
-    <circle cx="325" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="325" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="290" y="280" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="300" y="295" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="300" y="308" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <!-- Key sections -->
+    <g transform="translate(20, 90)">
+      <rect x="0" y="0" width="280" height="55" rx="8" fill="#F3F1FF"/>
+      <circle cx="25" cy="27" r="18" fill="#7C3AED"/>
+      <text x="25" y="33" text-anchor="middle" fill="white" font-size="14" font-weight="bold">1</text>
+      <text x="55" y="22" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">PARTIES</text>
+      <text x="55" y="40" fill="#A78BFA" font-size="10" font-family="Arial">Landlord and tenant details</text>
+    </g>
 
-    <!-- Point 3 -->
-    <circle cx="500" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="500" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="465" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="475" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="475" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <g transform="translate(20, 155)">
+      <rect x="0" y="0" width="280" height="55" rx="8" fill="#F3F1FF"/>
+      <circle cx="25" cy="27" r="18" fill="#7C3AED"/>
+      <text x="25" y="33" text-anchor="middle" fill="white" font-size="14" font-weight="bold">2</text>
+      <text x="55" y="22" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">PROPERTY</text>
+      <text x="55" y="40" fill="#A78BFA" font-size="10" font-family="Arial">Address and description</text>
+    </g>
 
-    <!-- Point 4 (current/highlight) -->
-    <circle cx="650" cy="250" r="25" fill="#7C3AED"/>
-    <path d="M640 250 L648 258 L665 241" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <rect x="615" y="280" width="70" height="50" rx="8" fill="#7C3AED"/>
-    <rect x="625" y="295" width="50" height="6" rx="3" fill="white" opacity="0.6"/>
-    <rect x="625" y="308" width="35" height="6" rx="3" fill="white" opacity="0.6"/>
+    <g transform="translate(20, 220)">
+      <rect x="0" y="0" width="280" height="55" rx="8" fill="#F3F1FF"/>
+      <circle cx="25" cy="27" r="18" fill="#7C3AED"/>
+      <text x="25" y="33" text-anchor="middle" fill="white" font-size="14" font-weight="bold">3</text>
+      <text x="55" y="22" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">TERM</text>
+      <text x="55" y="40" fill="#A78BFA" font-size="10" font-family="Arial">Start date and duration</text>
+    </g>
+
+    <g transform="translate(20, 285)">
+      <rect x="0" y="0" width="280" height="55" rx="8" fill="#F3F1FF"/>
+      <circle cx="25" cy="27" r="18" fill="#7C3AED"/>
+      <text x="25" y="33" text-anchor="middle" fill="white" font-size="14" font-weight="bold">4</text>
+      <text x="55" y="22" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">RENT</text>
+      <text x="55" y="40" fill="#A78BFA" font-size="10" font-family="Arial">Amount and payment terms</text>
+    </g>
+
+    <!-- Signature line -->
+    <line x1="20" y1="355" x2="300" y2="355" stroke="#A78BFA" stroke-width="1" stroke-dasharray="4"/>
+    <text x="160" y="370" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Signatures required</text>
   </g>
+
+  <!-- Key features on left -->
+  <g transform="translate(40, 100)">
+    <rect x="0" y="0" width="170" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="85" y="25" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">KEY FEATURES</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Fixed term</text>
+    </g>
+
+    <g transform="translate(15, 75)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Deposit protected</text>
+    </g>
+
+    <g transform="translate(15, 105)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Clear obligations</text>
+    </g>
+
+    <g transform="translate(15, 135)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Legal protection</text>
+    </g>
+  </g>
+
+  <!-- Duration info on right -->
+  <g transform="translate(590, 100)">
+    <rect x="0" y="0" width="170" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="85" y="25" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">TYPICAL TERMS</text>
+
+    <g transform="translate(25, 50)">
+      <rect x="0" y="0" width="120" height="40" rx="6" fill="#F3F1FF"/>
+      <text x="60" y="18" text-anchor="middle" fill="#7C3AED" font-size="16" font-weight="bold" font-family="Arial">6</text>
+      <text x="60" y="32" text-anchor="middle" fill="#6D28D9" font-size="10" font-family="Arial">months</text>
+    </g>
+
+    <g transform="translate(25, 100)">
+      <rect x="0" y="0" width="120" height="40" rx="6" fill="#7C3AED"/>
+      <text x="60" y="18" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">12</text>
+      <text x="60" y="32" text-anchor="middle" fill="#F3F1FF" font-size="10" font-family="Arial">months</text>
+    </g>
+
+    <text x="85" y="165" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Most common duration</text>
+  </g>
+
+  <!-- Bottom info bar -->
+  <g transform="translate(100, 440)">
+    <rect x="0" y="0" width="600" height="45" rx="22" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="300" y="18" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">Most Common Tenancy Type in England</text>
+    <text x="300" y="35" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Provides security for both landlord and tenant</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
 </svg>

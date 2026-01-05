@@ -7,18 +7,140 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">MARKETING CHANNELS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Where to advertise your rental property</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Online icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Computer/monitor -->
+    <g transform="translate(40, 15)">
+      <rect x="0" y="0" width="120" height="75" rx="5" fill="#7C3AED"/>
+      <rect x="5" y="5" width="110" height="60" rx="3" fill="#F3F1FF"/>
+      <rect x="45" y="75" width="30" height="8" fill="#6D28D9"/>
+      <rect x="30" y="83" width="60" height="5" rx="2" fill="#6D28D9"/>
+
+      <!-- Website content -->
+      <rect x="15" y="15" width="40" height="25" rx="2" fill="#A78BFA"/>
+      <rect x="60" y="15" width="50" height="8" rx="1" fill="#7C3AED"/>
+      <rect x="60" y="28" width="40" height="5" rx="1" fill="#A78BFA"/>
+      <rect x="60" y="38" width="45" height="5" rx="1" fill="#A78BFA"/>
+      <rect x="15" y="48" width="90" height="10" rx="2" fill="#7C3AED"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">ONLINE PORTALS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Rightmove, Zoopla</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">OpenRent, SpareRoom</text>
+  </g>
+
+  <!-- Channel comparison -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">TOP CHANNELS</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">Rightmove</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Largest reach - via agent</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="8" cy="8" r="6" fill="#22C55E"/>
+      <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">Zoopla</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Strong UK coverage</text>
+    </g>
+    <g transform="translate(15, 95)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">OpenRent</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">DIY landlords - from £29</text>
+    </g>
+    <g transform="translate(15, 120)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">SpareRoom</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Room rentals & HMOs</text>
+    </g>
+    <g transform="translate(15, 145)">
+      <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+      <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">Facebook</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Marketplace & groups</text>
+    </g>
+  </g>
+
+  <!-- Traditional channels -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="200" height="12" fill="#6D28D9"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">OTHER CHANNELS</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Letting agents</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">To Let boards</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Word of mouth</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Local newspapers</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#A78BFA"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">University boards</text>
+    </g>
+  </g>
+
+  <!-- Cost comparison -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COST &amp; REACH COMPARISON</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">VIA AGENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Cost: 4-12% of annual rent</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Reach: Rightmove + Zoopla</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">Effort: Low (managed)</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Viewings: Handled by agent</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Best for: Busy landlords</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">DIY - OPENRENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Cost: £29-99 (one-off)</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Reach: Major portals inc.</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">Effort: Medium</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Viewings: Self-managed</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Best for: Value seekers</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold">FREE OPTIONS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Cost: Free</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Reach: Limited/local</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">Effort: High</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Viewings: Self-managed</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8" font-weight="bold">Best for: Quick lets</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

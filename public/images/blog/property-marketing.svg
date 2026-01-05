@@ -7,40 +7,130 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- House -->
-  <g transform="translate(250, 100)">
-    <!-- Roof -->
-    <path d="M-20 150 L150 30 L320 150" fill="none" stroke="#7C3AED" stroke-width="8" stroke-linecap="round"/>
-    <path d="M0 150 L150 50 L300 150" fill="#6D28D9"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">PROPERTY MARKETING</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Attract quality tenants with effective marketing</text>
 
-    <!-- Chimney -->
-    <rect x="220" y="60" width="40" height="70" fill="#7C3AED"/>
+  <!-- Photography icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-    <!-- Main building -->
-    <rect x="30" y="150" width="240" height="180" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <!-- Camera -->
+    <g transform="translate(45, 20)">
+      <rect x="0" y="25" width="110" height="70" rx="10" fill="#7C3AED"/>
+      <rect x="35" y="10" width="40" height="20" rx="4" fill="#6D28D9"/>
+      <circle cx="55" cy="60" r="25" fill="#6D28D9"/>
+      <circle cx="55" cy="60" r="18" fill="white"/>
+      <circle cx="55" cy="60" r="10" fill="#7C3AED"/>
+      <circle cx="90" cy="40" r="5" fill="#A78BFA"/>
+    </g>
 
-    <!-- Door -->
-    <rect x="120" y="220" width="60" height="110" rx="5" fill="#7C3AED"/>
-    <circle cx="165" cy="275" r="5" fill="#A78BFA"/>
-
-    <!-- Windows -->
-    <rect x="55" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="80" y1="180" x2="80" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="55" y1="205" x2="105" y2="205" stroke="#7C3AED" stroke-width="2"/>
-
-    <rect x="195" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="220" y1="180" x2="220" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="195" y1="205" x2="245" y2="205" stroke="#7C3AED" stroke-width="2"/>
+    <text x="100" y="130" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">PHOTOGRAPHY</text>
+    <text x="100" y="148" text-anchor="middle" fill="#6D28D9" font-size="8">Professional photos</text>
+    <text x="100" y="162" text-anchor="middle" fill="#6D28D9" font-size="8">get 2x more views</text>
   </g>
 
-  <!-- Trees -->
-  <g transform="translate(550, 200)">
-    <rect x="20" y="100" width="20" height="60" fill="#6D28D9" opacity="0.7"/>
-    <circle cx="30" cy="80" r="50" fill="#7C3AED" opacity="0.3"/>
-    <circle cx="15" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
-    <circle cx="45" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
+  <!-- Marketing channels -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MARKETING CHANNELS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rightmove & Zoopla</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">OpenRent / SpareRoom</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Social media</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Local letting agents</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Word of mouth</text>
+    </g>
   </g>
 
-  <!-- Ground -->
-  <ellipse cx="400" cy="430" rx="350" ry="30" fill="#7C3AED" opacity="0.1"/>
+  <!-- Key elements -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">LISTING ESSENTIALS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Clear photos (10+)</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Accurate floor plan</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Detailed description</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">EPC rating displayed</text>
+    </g>
+    <g transform="translate(15, 136)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Transport links noted</text>
+    </g>
+  </g>
+
+  <!-- Best practices -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MARKETING BEST PRACTICES</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="22" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">PHOTOS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Natural daylight</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Wide angle lens</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Declutter first</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Show outdoor space</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Include local area</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="22" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold">DESCRIPTION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Lead with highlights</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Be specific (not 'nice')</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Include nearby schools</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Mention parking</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• State bills included</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="22" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">PRICING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Research comparable</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Consider timing</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Factor in demand</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Be competitive</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Include fees clearly</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

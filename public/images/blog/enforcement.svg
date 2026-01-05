@@ -7,18 +7,120 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">COUNCIL ENFORCEMENT</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Housing standards and local authority powers</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Warning sign -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Warning triangle -->
+    <g transform="translate(50, 15)">
+      <path d="M50 10 L95 85 L5 85 Z" fill="#EF4444" stroke="#EF4444" stroke-width="2"/>
+      <text x="50" y="65" text-anchor="middle" fill="white" font-size="35" font-weight="bold">!</text>
+    </g>
+
+    <text x="100" y="120" text-anchor="middle" fill="#EF4444" font-size="11" font-weight="bold">ENFORCEMENT</text>
+    <text x="100" y="138" text-anchor="middle" fill="#6D28D9" font-size="9">Council powers to</text>
+    <text x="100" y="153" text-anchor="middle" fill="#6D28D9" font-size="9">enforce housing standards</text>
+    <text x="100" y="168" text-anchor="middle" fill="#EF4444" font-size="9" font-weight="bold">Penalties apply</text>
+  </g>
+
+  <!-- Types of enforcement -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ENFORCEMENT ACTIONS</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Improvement notices</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Prohibition orders</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Emergency remedial action</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Civil penalty notices</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Rent repayment orders</text>
+    </g>
+  </g>
+
+  <!-- Common triggers -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON TRIGGERS</text>
+
+    <g transform="translate(15, 48)">
+      <line x1="0" y1="7" x2="12" y2="7" stroke="#EF4444" stroke-width="2"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Unlicensed HMO</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <line x1="0" y1="7" x2="12" y2="7" stroke="#EF4444" stroke-width="2"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Fire safety failures</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <line x1="0" y1="7" x2="12" y2="7" stroke="#EF4444" stroke-width="2"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Damp and mould</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <line x1="0" y1="7" x2="12" y2="7" stroke="#F59E0B" stroke-width="2"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">No gas certificate</text>
+    </g>
+    <g transform="translate(15, 136)">
+      <line x1="0" y1="7" x2="12" y2="7" stroke="#F59E0B" stroke-width="2"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Overcrowding</text>
+    </g>
+  </g>
+
+  <!-- Penalties and appeals -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PENALTIES AND PROCESS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">CIVIL PENALTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Housing Act offences:</text>
+      <text x="100" y="58" text-anchor="middle" fill="#EF4444" font-size="14" font-weight="bold">Up to £30,000</text>
+      <text x="100" y="78" text-anchor="middle" fill="#6D28D9" font-size="8">Banning orders possible</text>
+      <text x="100" y="93" text-anchor="middle" fill="#6D28D9" font-size="8">Published on database</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">RENT REPAYMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Tenants can reclaim:</text>
+      <text x="100" y="58" text-anchor="middle" fill="#F59E0B" font-size="14" font-weight="bold">Up to 12 months</text>
+      <text x="100" y="78" text-anchor="middle" fill="#6D28D9" font-size="8">of rent paid during offence</text>
+      <text x="100" y="93" text-anchor="middle" fill="#6D28D9" font-size="8">Tribunal application</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">APPEAL RIGHTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Challenge via FTT</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• 28 days to appeal</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Full rehearing possible</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Penalty stayed during</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Legal advice crucial</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
