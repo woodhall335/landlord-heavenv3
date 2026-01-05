@@ -481,6 +481,18 @@
     {{/if}}
   </p>
 
+  {{!-- Legal validation: expiry must be at least two months after service (HA 1988 s.21(1B)/(4D)) --}}
+  {{#if notice_date}}
+    {{#if notice_expiry_date}}
+      {{#unless (gte (days_between notice_date notice_expiry_date) 56)}}
+        <div class="section-text legal-notice" style="margin-top: 0.75em;">
+          ⚠️ <strong>Check the possession date.</strong> The date above is less than two months after the notice date ({{format_date notice_date 'long'}}), so it may be invalid under Housing Act 1988 section 21(1B)/(4D).
+          Use a date on or after {{format_date (add_days notice_date 56) 'long'}} and ensure it aligns with the tenancy period or any contractual break clause.
+        </div>
+      {{/unless}}
+    {{/if}}
+  {{/if}}
+
   <p class="section-text" style="margin-top: 1em;">If you do not leave, your landlord may apply to the court for an order under Section 21(1) or (4) of the Housing Act 1988 requiring you to give up possession of:</p>
   
   <p class="section-value address">{{#if property_address}}{{{property_address}}}{{else}}<em style="color: #888;">(insert address of the property)</em>{{/if}}</p>
