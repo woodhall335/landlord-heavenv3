@@ -7,44 +7,119 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Clipboard -->
-  <g transform="translate(250, 50)">
-    <!-- Clipboard board -->
-    <rect x="0" y="30" width="300" height="380" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">INVENTORY PHOTOGRAPHY GUIDE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Capturing evidence for your property inventory</text>
 
-    <!-- Clip -->
-    <rect x="100" y="10" width="100" height="40" rx="5" fill="#7C3AED"/>
-    <rect x="120" y="20" width="60" height="25" rx="5" fill="#6D28D9"/>
-
-    <!-- Checklist items -->
-    <!-- Item 1 - checked -->
-    <rect x="30" y="80" width="30" height="30" rx="6" fill="#7C3AED"/>
-    <path d="M38 95 L45 102 L58 88" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <rect x="80" y="88" width="180" height="10" rx="5" fill="#94A3B8" opacity="0.3"/>
-
-    <!-- Item 2 - checked -->
-    <rect x="30" y="140" width="30" height="30" rx="6" fill="#7C3AED"/>
-    <path d="M38 155 L45 162 L58 148" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <rect x="80" y="148" width="160" height="10" rx="5" fill="#94A3B8" opacity="0.3"/>
-
-    <!-- Item 3 - checked -->
-    <rect x="30" y="200" width="30" height="30" rx="6" fill="#7C3AED"/>
-    <path d="M38 215 L45 222 L58 208" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <rect x="80" y="208" width="190" height="10" rx="5" fill="#94A3B8" opacity="0.3"/>
-
-    <!-- Item 4 - unchecked -->
-    <rect x="30" y="260" width="30" height="30" rx="6" fill="none" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="80" y="268" width="140" height="10" rx="5" fill="#94A3B8" opacity="0.3"/>
-
-    <!-- Item 5 - unchecked -->
-    <rect x="30" y="320" width="30" height="30" rx="6" fill="none" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="80" y="328" width="170" height="10" rx="5" fill="#94A3B8" opacity="0.3"/>
+  <!-- Camera icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Camera body -->
+      <rect x="20" y="25" width="100" height="60" rx="8" fill="#E9E5FF" stroke="#7C3AED" stroke-width="2"/>
+      <rect x="45" y="15" width="50" height="15" rx="3" fill="#7C3AED"/>
+      <!-- Lens -->
+      <circle cx="70" cy="55" r="22" fill="white" stroke="#6D28D9" stroke-width="3"/>
+      <circle cx="70" cy="55" r="14" fill="#6D28D9"/>
+      <circle cx="70" cy="55" r="8" fill="#7C3AED"/>
+      <!-- Flash -->
+      <rect x="100" y="30" width="15" height="10" rx="2" fill="#7C3AED"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">PHOTOS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Property</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">evidence</text>
   </g>
 
-  <!-- Pencil decoration -->
-  <g transform="translate(580, 200) rotate(30)">
-    <rect x="0" y="0" width="15" height="100" fill="#A78BFA"/>
-    <polygon points="0,100 7.5,130 15,100" fill="#6D28D9"/>
-    <rect x="0" y="0" width="15" height="15" fill="#6D28D9"/>
+  <!-- What to photograph -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHAT TO PHOTOGRAPH</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Every room overview</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Walls, floors, ceilings</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Appliances and fixtures</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Existing damage close-ups</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Meter readings</text>
+    </g>
   </g>
+
+  <!-- Best practices -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEST PRACTICES</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Good natural lighting</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Date stamp photos</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">High resolution images</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Multiple angles</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Organize by room</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PHOTOGRAPHY ESSENTIALS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">CHECK-IN</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Before tenant moves in</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Document current condition</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Tenant signs agreement</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Keep copies safe</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">CHECK-OUT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Compare to check-in</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Document any changes</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Fair wear and tear</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Evidence for disputes</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">STORAGE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Cloud backup</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Organized folders</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Keep 6+ years</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Easy to retrieve</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
 </svg>

@@ -7,34 +7,119 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Courthouse building -->
-  <g transform="translate(200, 80)">
-    <!-- Pediment (triangular top) -->
-    <path d="M0 130 L200 30 L400 130" fill="#6D28D9"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">STANDARD POSSESSION PROCEDURE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">The court process for eviction claims</text>
 
-    <!-- Main building -->
-    <rect x="20" y="130" width="360" height="250" fill="white" stroke="#7C3AED" stroke-width="3"/>
-
-    <!-- Columns -->
-    <rect x="50" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="120" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="250" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="320" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-
-    <!-- Door -->
-    <rect x="165" y="250" width="70" height="120" rx="35" fill="#7C3AED"/>
-
-    <!-- Steps -->
-    <rect x="100" y="380" width="200" height="15" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
-    <rect x="80" y="395" width="240" height="15" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+  <!-- Court building icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(35, 8)">
+      <!-- Courthouse with gavel -->
+      <path d="M65 15 L10 45 L10 75 L120 75 L120 45 Z" fill="#7C3AED"/>
+      <rect x="20" y="50" width="10" height="25" fill="#E9E5FF"/>
+      <rect x="40" y="50" width="10" height="25" fill="#E9E5FF"/>
+      <rect x="80" y="50" width="10" height="25" fill="#E9E5FF"/>
+      <rect x="100" y="50" width="10" height="25" fill="#E9E5FF"/>
+      <!-- Gavel -->
+      <rect x="45" y="82" width="40" height="10" rx="2" fill="#6D28D9"/>
+      <rect x="60" y="78" width="10" height="18" rx="2" fill="#6D28D9"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">COURT PROCESS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Section 8 claims</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">and hearings</text>
   </g>
 
-  <!-- Scales of justice icon -->
-  <g transform="translate(350, 25)">
-    <circle cx="50" cy="25" r="20" fill="#7C3AED" opacity="0.2"/>
-    <line x1="50" y1="25" x2="50" y2="65" stroke="#7C3AED" stroke-width="3"/>
-    <line x1="20" y1="45" x2="80" y2="45" stroke="#7C3AED" stroke-width="3"/>
-    <path d="M20 50 L15 70 L40 70 L35 50" fill="#A78BFA" stroke="#7C3AED" stroke-width="2"/>
-    <path d="M80 50 L75 70 L100 70 L95 50" fill="#A78BFA" stroke="#7C3AED" stroke-width="2"/>
+  <!-- When to use -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHEN TO USE</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Section 8 claims</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rent arrears claims</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Disputed cases</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Complex situations</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Requires court hearing</text>
+    </g>
   </g>
+
+  <!-- Timeline -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">TYPICAL TIMELINE</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">4-8 weeks to hearing</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">14-42 days to leave</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Bailiff if needed</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Total: 3-6 months</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#F59E0B" font-size="9" font-weight="bold">Varies by court</text>
+    </g>
+  </g>
+
+  <!-- Process steps -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">STANDARD PROCEDURE STEPS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">1. FILE CLAIM</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Complete Form N5</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Pay court fee (£355)</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Include evidence</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Serve on tenant</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">2. HEARING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Attend court date</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Present case to judge</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Tenant can defend</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Order made/refused</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">3. ENFORCEMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">If tenant doesn't leave</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Apply for warrant</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Bailiff eviction</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Extra fee (£130+)</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
 </svg>

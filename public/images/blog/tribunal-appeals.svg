@@ -1,40 +1,125 @@
 <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#F3F1FF"/>
-      <stop offset="100%" style="stop-color:#E9E5FF"/>
+      <stop offset="0%" style="stop-color:#EFF6FF"/>
+      <stop offset="100%" style="stop-color:#DBEAFE"/>
     </linearGradient>
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Courthouse building -->
-  <g transform="translate(200, 80)">
-    <!-- Pediment (triangular top) -->
-    <path d="M0 130 L200 30 L400 130" fill="#6D28D9"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#1E40AF" font-size="22" font-weight="bold" font-family="Arial">TRIBUNAL APPEALS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#3B82F6" font-size="11" font-family="Arial">Appealing a First-tier Tribunal decision</text>
 
-    <!-- Main building -->
-    <rect x="20" y="130" width="360" height="250" fill="white" stroke="#7C3AED" stroke-width="3"/>
-
-    <!-- Columns -->
-    <rect x="50" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="120" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="250" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="320" y="140" width="30" height="230" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-
-    <!-- Door -->
-    <rect x="165" y="250" width="70" height="120" rx="35" fill="#7C3AED"/>
-
-    <!-- Steps -->
-    <rect x="100" y="380" width="200" height="15" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
-    <rect x="80" y="395" width="240" height="15" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+  <!-- Appeals icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <g transform="translate(30, 8)">
+      <!-- Document with arrow up -->
+      <rect x="25" y="20" width="90" height="70" rx="5" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/>
+      <rect x="35" y="32" width="50" height="5" rx="2" fill="#1E40AF"/>
+      <rect x="35" y="43" width="70" height="4" rx="2" fill="#3B82F6"/>
+      <rect x="35" y="52" width="60" height="4" rx="2" fill="#3B82F6"/>
+      <rect x="35" y="61" width="70" height="4" rx="2" fill="#3B82F6"/>
+      <!-- Up arrow -->
+      <path d="M70 5 L70 20" stroke="#1E40AF" stroke-width="3"/>
+      <path d="M60 15 L70 5 L80 15" fill="none" stroke="#1E40AF" stroke-width="3"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#1E40AF" font-size="11" font-weight="bold">APPEAL</text>
+    <text x="100" y="143" text-anchor="middle" fill="#3B82F6" font-size="9">To Upper</text>
+    <text x="100" y="158" text-anchor="middle" fill="#3B82F6" font-size="9">Tribunal</text>
   </g>
 
-  <!-- Scales of justice icon -->
-  <g transform="translate(350, 25)">
-    <circle cx="50" cy="25" r="20" fill="#7C3AED" opacity="0.2"/>
-    <line x1="50" y1="25" x2="50" y2="65" stroke="#7C3AED" stroke-width="3"/>
-    <line x1="20" y1="45" x2="80" y2="45" stroke="#7C3AED" stroke-width="3"/>
-    <path d="M20 50 L15 70 L40 70 L35 50" fill="#A78BFA" stroke="#7C3AED" stroke-width="2"/>
-    <path d="M80 50 L75 70 L100 70 L95 50" fill="#A78BFA" stroke="#7C3AED" stroke-width="2"/>
+  <!-- Grounds for appeal -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="240" height="12" fill="#1E40AF"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GROUNDS FOR APPEAL</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Error in law</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Procedural unfairness</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Ignored evidence</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Incorrect findings</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Permission required</text>
+    </g>
   </g>
+
+  <!-- Time limits -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="200" height="12" fill="#EF4444"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">TIME LIMITS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">28 days from decision</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Apply to FTT first</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Or to Upper Tribunal</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Extensions possible</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#EF4444" font-size="9" font-weight="bold">Strict deadlines</text>
+    </g>
+  </g>
+
+  <!-- Process -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="680" height="12" fill="#1E40AF"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">APPEAL PROCESS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">1. PERMISSION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Apply to FTT first</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">If refused, to UT</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">State grounds clearly</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Need good reason</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">2. UPPER TRIBUNAL</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Submit full grounds</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Pay any fee required</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Hearing scheduled</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Legal help advised</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">3. DECISION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">May uphold/overturn</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">May remit to FTT</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Further appeal rare</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Usually final</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#1E40AF" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#3B82F6" opacity="0.12"/>
 </svg>

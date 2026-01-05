@@ -1,43 +1,126 @@
 <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#F3F1FF"/>
-      <stop offset="100%" style="stop-color:#E9E5FF"/>
+      <stop offset="0%" style="stop-color:#EFF6FF"/>
+      <stop offset="100%" style="stop-color:#DBEAFE"/>
     </linearGradient>
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Timeline line -->
-  <line x1="100" y1="250" x2="700" y2="250" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#1E40AF" font-size="22" font-weight="bold" font-family="Arial">STANDARD TENANCY OVERVIEW</text>
+  <text x="400" y="55" text-anchor="middle" fill="#3B82F6" font-size="11" font-family="Arial">Key components of a standard assured shorthold tenancy</text>
 
-  <!-- Timeline points -->
-  <g>
-    <!-- Point 1 -->
-    <circle cx="150" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="150" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="115" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="125" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="125" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-
-    <!-- Point 2 -->
-    <circle cx="325" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="325" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="290" y="280" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="300" y="295" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="300" y="308" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-
-    <!-- Point 3 -->
-    <circle cx="500" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
-    <circle cx="500" cy="250" r="10" fill="#7C3AED"/>
-    <rect x="465" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
-    <rect x="475" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-    <rect x="475" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
-
-    <!-- Point 4 (current/highlight) -->
-    <circle cx="650" cy="250" r="25" fill="#7C3AED"/>
-    <path d="M640 250 L648 258 L665 241" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <rect x="615" y="280" width="70" height="50" rx="8" fill="#7C3AED"/>
-    <rect x="625" y="295" width="50" height="6" rx="3" fill="white" opacity="0.6"/>
-    <rect x="625" y="308" width="35" height="6" rx="3" fill="white" opacity="0.6"/>
+  <!-- Contract icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <g transform="translate(30, 8)">
+      <!-- Document with tick -->
+      <rect x="25" y="15" width="90" height="70" rx="5" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/>
+      <rect x="35" y="27" width="50" height="5" rx="2" fill="#1E40AF"/>
+      <rect x="35" y="38" width="70" height="4" rx="2" fill="#3B82F6"/>
+      <rect x="35" y="48" width="60" height="4" rx="2" fill="#3B82F6"/>
+      <rect x="35" y="58" width="70" height="4" rx="2" fill="#3B82F6"/>
+      <rect x="35" y="68" width="45" height="4" rx="2" fill="#3B82F6"/>
+      <!-- Checkmark -->
+      <circle cx="105" cy="25" r="15" fill="#22C55E"/>
+      <path d="M98 25 L103 30 L113 20" stroke="white" stroke-width="3" fill="none"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#1E40AF" font-size="11" font-weight="bold">STANDARD</text>
+    <text x="100" y="143" text-anchor="middle" fill="#3B82F6" font-size="9">AST tenancy</text>
+    <text x="100" y="158" text-anchor="middle" fill="#3B82F6" font-size="9">agreement</text>
   </g>
+
+  <!-- Key terms -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="240" height="12" fill="#1E40AF"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY TERMS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Fixed term (6-12 months)</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Monthly rent amount</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Deposit amount (max 5 weeks)</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Landlord and tenant details</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Written agreement essential</text>
+    </g>
+  </g>
+
+  <!-- Legal requirements -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">LEGAL REQUIREMENTS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Deposit protection</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Gas safety certificate</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">EPC rating</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">How to Rent guide</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">EICR electrical check</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="680" height="12" fill="#1E40AF"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">STANDARD TENANCY ESSENTIALS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">PARTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Landlord name and address</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Tenant name(s)</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Property address</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">All joint tenants listed</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">OBLIGATIONS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Pay rent on time</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Maintain property condition</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Report repairs promptly</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">No sub-letting without consent</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">ENDING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Notice periods apply</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Section 21 or Section 8</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Deposit return process</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Check-out inspection</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#1E40AF" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#3B82F6" opacity="0.12"/>
 </svg>
