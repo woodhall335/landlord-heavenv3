@@ -7,18 +7,138 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">SIMPLE PROCEDURE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Scotland's small claims court process for landlords</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Gavel/court icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Gavel -->
+    <g transform="translate(35, 10)">
+      <!-- Gavel head -->
+      <rect x="40" y="10" width="50" height="25" rx="5" fill="#6D28D9"/>
+      <rect x="35" y="12" width="60" height="8" rx="4" fill="#7C3AED"/>
+      <rect x="35" y="25" width="60" height="8" rx="4" fill="#7C3AED"/>
+      <!-- Handle -->
+      <rect x="60" y="35" width="10" height="40" rx="3" fill="#F59E0B"/>
+      <!-- Sound block -->
+      <ellipse cx="65" cy="85" rx="35" ry="10" fill="#7C3AED"/>
+      <rect x="30" y="75" width="70" height="10" fill="#7C3AED"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">COURT</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Simple claims</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">process</text>
+  </g>
+
+  <!-- What it covers -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHAT IT COVERS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Claims up to £5,000</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rent arrears recovery</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Property damage claims</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Unpaid bills recovery</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">No lawyer usually needed</text>
+    </g>
+  </g>
+
+  <!-- Key facts -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY FACTS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="7" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Fee: £19 - £106</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">T</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Usually 8-12 weeks</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Online or paper forms</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">C</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Sheriff Court</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">i</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Informal hearing</text>
+    </g>
+  </g>
+
+  <!-- Process steps -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">THE PROCESS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">STEP 1: CLAIM</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Complete claim form</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• State amount owed</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Provide evidence</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Pay court fee</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Submit to court</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">STEP 2: RESPONSE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Court serves defender</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• 21 days to respond</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• May dispute or admit</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• No response = default</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Wait for reply</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">STEP 3: DECISION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Hearing if disputed</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Present your case</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Sheriff makes decision</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Enforce if needed</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Get your order</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
