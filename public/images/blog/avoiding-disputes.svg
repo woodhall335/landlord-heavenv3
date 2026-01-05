@@ -7,18 +7,178 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">AVOIDING TENANT DISPUTES</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Best practices for a smooth landlord-tenant relationship</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Shield icon - prevention -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="170" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <path d="M100 25 L155 50 L155 100 C155 135 100 160 100 160 C100 160 45 135 45 100 L45 50 Z" fill="#22C55E" opacity="0.15" stroke="#22C55E" stroke-width="2"/>
+    <path d="M85 90 L95 100 L120 75" stroke="#22C55E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <text x="100" y="160" text-anchor="middle" fill="#22C55E" font-size="9" font-weight="bold">PREVENTION</text>
+  </g>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+  <!-- Key prevention tips -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="450" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="450" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="450" height="12" fill="#7C3AED"/>
+    <text x="225" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY PREVENTION STRATEGIES</text>
+
+    <!-- Column 1 -->
+    <g transform="translate(15, 45)">
+      <g transform="translate(0, 0)">
+        <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Clear written agreements</text>
+      </g>
+      <g transform="translate(0, 25)">
+        <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Detailed inventory</text>
+      </g>
+      <g transform="translate(0, 50)">
+        <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Regular inspections</text>
+      </g>
+      <g transform="translate(0, 75)">
+        <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Document everything</text>
+      </g>
+    </g>
+
+    <!-- Column 2 -->
+    <g transform="translate(160, 45)">
+      <g transform="translate(0, 0)">
+        <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Prompt repairs</text>
+      </g>
+      <g transform="translate(0, 25)">
+        <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Respect privacy (24hr notice)</text>
+      </g>
+      <g transform="translate(0, 50)">
+        <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Open communication</text>
+      </g>
+      <g transform="translate(0, 75)">
+        <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Fair rent reviews</text>
+      </g>
+    </g>
+
+    <!-- Column 3 -->
+    <g transform="translate(315, 45)">
+      <g transform="translate(0, 0)">
+        <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Deposit protected</text>
+      </g>
+      <g transform="translate(0, 25)">
+        <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Right to Rent check</text>
+      </g>
+      <g transform="translate(0, 50)">
+        <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">Safety certificates</text>
+      </g>
+      <g transform="translate(0, 75)">
+        <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+        <text x="22" y="12" fill="#6D28D9" font-size="9">How to Rent given</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Common dispute areas -->
+  <g transform="translate(60, 270)">
+    <rect x="0" y="0" width="330" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="330" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="330" height="12" fill="#EF4444"/>
+    <text x="165" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON DISPUTE AREAS</text>
+
+    <g transform="translate(15, 45)">
+      <polygon points="10,0 20,18 0,18" fill="#EF4444" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Deposit deductions</text>
+    </g>
+    <g transform="translate(15, 72)">
+      <polygon points="10,0 20,18 0,18" fill="#EF4444" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Repairs and maintenance</text>
+    </g>
+    <g transform="translate(15, 99)">
+      <polygon points="10,0 20,18 0,18" fill="#EF4444" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Access and inspections</text>
+    </g>
+    <g transform="translate(15, 126)">
+      <polygon points="10,0 20,18 0,18" fill="#EF4444" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Rent arrears</text>
+    </g>
+    <g transform="translate(15, 153)">
+      <polygon points="10,0 20,18 0,18" fill="#EF4444" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">End of tenancy condition</text>
+    </g>
+
+    <g transform="translate(175, 45)">
+      <polygon points="10,0 20,18 0,18" fill="#F59E0B" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Noise complaints</text>
+    </g>
+    <g transform="translate(175, 72)">
+      <polygon points="10,0 20,18 0,18" fill="#F59E0B" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Rent increases</text>
+    </g>
+    <g transform="translate(175, 99)">
+      <polygon points="10,0 20,18 0,18" fill="#F59E0B" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Utilities/bills</text>
+    </g>
+    <g transform="translate(175, 126)">
+      <polygon points="10,0 20,18 0,18" fill="#F59E0B" opacity="0.8"/>
+      <text x="10" y="13" text-anchor="middle" fill="white" font-size="9" font-weight="bold">!</text>
+      <text x="30" y="14" fill="#6D28D9" font-size="9" font-weight="bold">Garden maintenance</text>
+    </g>
+  </g>
+
+  <!-- Resolution options -->
+  <g transform="translate(410, 270)">
+    <rect x="0" y="0" width="320" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="320" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="320" height="12" fill="#7C3AED"/>
+    <text x="160" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">IF DISPUTES ARISE</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="140" height="55" rx="6" fill="#F3F1FF"/>
+      <circle cx="70" cy="20" r="12" fill="#22C55E"/>
+      <text x="70" y="24" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="70" y="42" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">COMMUNICATE</text>
+      <text x="70" y="52" text-anchor="middle" fill="#6D28D9" font-size="7">Talk it through first</text>
+    </g>
+    <g transform="translate(165, 48)">
+      <rect x="0" y="0" width="140" height="55" rx="6" fill="#F3F1FF"/>
+      <circle cx="70" cy="20" r="12" fill="#7C3AED"/>
+      <text x="70" y="24" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="70" y="42" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">MEDIATE</text>
+      <text x="70" y="52" text-anchor="middle" fill="#6D28D9" font-size="7">Use dispute service</text>
+    </g>
+    <g transform="translate(15, 110)">
+      <rect x="0" y="0" width="140" height="55" rx="6" fill="#F3F1FF"/>
+      <circle cx="70" cy="20" r="12" fill="#6D28D9"/>
+      <text x="70" y="24" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="70" y="42" text-anchor="middle" fill="#6D28D9" font-size="8" font-weight="bold">TDS/DPS</text>
+      <text x="70" y="52" text-anchor="middle" fill="#6D28D9" font-size="7">Deposit scheme ADR</text>
+    </g>
+    <g transform="translate(165, 110)">
+      <rect x="0" y="0" width="140" height="55" rx="6" fill="#F3F1FF"/>
+      <circle cx="70" cy="20" r="12" fill="#EF4444"/>
+      <text x="70" y="24" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+      <text x="70" y="42" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">COURT</text>
+      <text x="70" y="52" text-anchor="middle" fill="#6D28D9" font-size="7">Last resort only</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
