@@ -7,36 +7,119 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Person 1 (landlord) -->
-  <g transform="translate(250, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#7C3AED"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#7C3AED"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">LANDLORD-TENANT COMMUNICATION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Effective communication strategies for landlords</text>
+
+  <!-- Communication icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Speech bubbles -->
+      <rect x="10" y="15" width="55" height="35" rx="8" fill="#E9E5FF" stroke="#6D28D9" stroke-width="2"/>
+      <polygon points="40,50 45,60 55,50" fill="#E9E5FF" stroke="#6D28D9" stroke-width="2"/>
+      <rect x="55" y="45" width="55" height="35" rx="8" fill="#7C3AED"/>
+      <polygon points="85,80 90,90 80,80" fill="#7C3AED"/>
+      <line x1="20" y1="28" x2="55" y2="28" stroke="#6D28D9" stroke-width="2"/>
+      <line x1="20" y1="38" x2="45" y2="38" stroke="#6D28D9" stroke-width="2"/>
+      <line x1="65" y1="58" x2="100" y2="58" stroke="white" stroke-width="2"/>
+      <line x1="65" y1="68" x2="90" y2="68" stroke="white" stroke-width="2"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">COMMUNICATION</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Landlord</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">tenant</text>
   </g>
 
-  <!-- Handshake in middle -->
-  <g transform="translate(350, 200)">
-    <circle cx="50" cy="50" r="60" fill="white" stroke="#7C3AED" stroke-width="3"/>
-    <path d="M20 50 L40 50 L50 40 L60 50 L80 50" stroke="#7C3AED" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M40 50 L40 70 M60 50 L60 70" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  <!-- Communication methods -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMUNICATION METHODS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Written notices (formal)</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Email correspondence</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Phone calls</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Text messages</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Always keep records</text>
+    </g>
   </g>
 
-  <!-- Person 2 (tenant) -->
-  <g transform="translate(450, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#6D28D9"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#6D28D9"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#6D28D9"/>
+  <!-- Best practices -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEST PRACTICES</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Respond promptly</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Be professional</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Document everything</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Follow up in writing</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Set clear expectations</text>
+    </g>
   </g>
 
-  <!-- Keys -->
-  <g transform="translate(380, 330)">
-    <circle cx="20" cy="20" r="15" fill="none" stroke="#7C3AED" stroke-width="3"/>
-    <rect x="30" y="15" width="40" height="10" rx="3" fill="#7C3AED"/>
-    <rect x="55" y="25" width="10" height="15" rx="2" fill="#7C3AED"/>
-    <rect x="65" y="25" width="10" height="10" rx="2" fill="#7C3AED"/>
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMUNICATION ESSENTIALS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">NOTICE REQUIREMENTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">24-48 hours for access</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Written notice preferred</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Reasonable time of day</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Emergency exceptions</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">RECORD KEEPING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Save all emails</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Log phone calls</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Keep copies of letters</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Date stamp everything</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">DISPUTE RESOLUTION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Communicate calmly</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Seek to understand</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Offer solutions</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Consider mediation</text>
+    </g>
   </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
 </svg>

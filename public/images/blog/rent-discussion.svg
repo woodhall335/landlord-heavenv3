@@ -1,43 +1,126 @@
 <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#F3F1FF"/>
-      <stop offset="100%" style="stop-color:#E9E5FF"/>
+      <stop offset="0%" style="stop-color:#ECFDF5"/>
+      <stop offset="100%" style="stop-color:#D1FAE5"/>
     </linearGradient>
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Money/coins stack -->
-  <g transform="translate(300, 150)">
-    <!-- Coin stack 1 -->
-    <ellipse cx="0" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="-60" y="160" width="120" height="40" fill="#7C3AED"/>
-    <ellipse cx="0" cy="160" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="0" y="185" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#065F46" font-size="22" font-weight="bold" font-family="Arial">RENT DISCUSSIONS WITH TENANTS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#22C55E" font-size="11" font-family="Arial">Negotiating rent levels and handling requests</text>
 
-    <!-- Coin stack 2 -->
-    <ellipse cx="100" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="40" y="130" width="120" height="70" fill="#7C3AED"/>
-    <ellipse cx="100" cy="130" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="100" y="165" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
-
-    <!-- Coin stack 3 -->
-    <ellipse cx="200" cy="200" rx="60" ry="15" fill="#6D28D9"/>
-    <rect x="140" y="100" width="120" height="100" fill="#7C3AED"/>
-    <ellipse cx="200" cy="100" rx="60" ry="15" fill="#A78BFA"/>
-    <text x="200" y="145" text-anchor="middle" fill="white" font-size="24" font-weight="bold">£</text>
+  <!-- Discussion icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Two people talking -->
+      <circle cx="40" cy="35" r="15" fill="#065F46"/>
+      <rect x="28" y="52" width="24" height="30" rx="5" fill="#22C55E"/>
+      <circle cx="90" cy="35" r="15" fill="#22C55E"/>
+      <rect x="78" y="52" width="24" height="30" rx="5" fill="#065F46"/>
+      <!-- Speech bubbles -->
+      <ellipse cx="30" cy="20" rx="18" ry="12" fill="#D1FAE5" stroke="#065F46" stroke-width="1"/>
+      <text x="30" y="24" text-anchor="middle" fill="#065F46" font-size="10">£?</text>
+      <ellipse cx="100" cy="20" rx="18" ry="12" fill="#D1FAE5" stroke="#22C55E" stroke-width="1"/>
+      <text x="100" y="24" text-anchor="middle" fill="#22C55E" font-size="10">OK</text>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#065F46" font-size="11" font-weight="bold">DISCUSSION</text>
+    <text x="100" y="143" text-anchor="middle" fill="#22C55E" font-size="9">Rent</text>
+    <text x="100" y="158" text-anchor="middle" fill="#22C55E" font-size="9">negotiation</text>
   </g>
 
-  <!-- Rising arrow -->
-  <g transform="translate(550, 120)">
-    <line x1="0" y1="150" x2="120" y2="30" stroke="#7C3AED" stroke-width="6" stroke-linecap="round"/>
-    <polygon points="120,30 90,40 110,60" fill="#7C3AED"/>
+  <!-- Discussion topics -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#065F46" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#065F46"/>
+    <rect x="0" y="20" width="240" height="12" fill="#065F46"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON DISCUSSIONS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Rent increase requests</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Tenant financial hardship</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#065F46"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Market rate adjustments</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#065F46"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Renewal negotiations</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Keep dialogue open</text>
+    </g>
   </g>
 
-  <!-- Chart bars in background -->
-  <g transform="translate(100, 250)" opacity="0.3">
-    <rect x="0" y="80" width="40" height="100" rx="5" fill="#7C3AED"/>
-    <rect x="60" y="50" width="40" height="130" rx="5" fill="#7C3AED"/>
-    <rect x="120" y="100" width="40" height="80" rx="5" fill="#7C3AED"/>
+  <!-- Best practices -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#3B82F6" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#3B82F6"/>
+    <rect x="0" y="20" width="200" height="12" fill="#3B82F6"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEST PRACTICES</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#3B82F6"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Research market rates</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#3B82F6"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Listen to concerns</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Find compromise</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#065F46" font-size="9">Document agreement</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Value good tenants</text>
+    </g>
   </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#065F46" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#065F46"/>
+    <rect x="0" y="20" width="680" height="12" fill="#065F46"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">RENT NEGOTIATION STRATEGIES</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">RENT INCREASE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#065F46" font-size="8">Give adequate notice</text>
+      <text x="100" y="55" text-anchor="middle" fill="#065F46" font-size="8">Explain cost reasons</text>
+      <text x="100" y="75" text-anchor="middle" fill="#065F46" font-size="8">Show market evidence</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Consider phased rises</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">TENANT REQUEST</text>
+      <text x="100" y="42" text-anchor="middle" fill="#065F46" font-size="8">Understand their situation</text>
+      <text x="100" y="55" text-anchor="middle" fill="#065F46" font-size="8">Assess tenant history</text>
+      <text x="100" y="75" text-anchor="middle" fill="#065F46" font-size="8">Consider void costs</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Temporary reduction?</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">RETENTION VALUE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#065F46" font-size="8">Reletting costs: £500-1500</text>
+      <text x="100" y="55" text-anchor="middle" fill="#065F46" font-size="8">Void period losses</text>
+      <text x="100" y="75" text-anchor="middle" fill="#065F46" font-size="8">Good tenant premium</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Long-term thinking</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#22C55E" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#065F46" opacity="0.12"/>
 </svg>
