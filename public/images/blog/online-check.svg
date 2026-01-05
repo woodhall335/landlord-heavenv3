@@ -7,18 +7,133 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">ONLINE RIGHT TO RENT CHECK</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Digital verification of tenant immigration status</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Computer screen icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Monitor -->
+    <g transform="translate(30, 8)">
+      <rect x="0" y="0" width="140" height="85" rx="6" fill="#6D28D9"/>
+      <rect x="5" y="5" width="130" height="70" rx="3" fill="white"/>
+      <!-- Screen content -->
+      <circle cx="70" cy="35" r="15" fill="#22C55E" opacity="0.2"/>
+      <path d="M62 35 L68 41 L78 30" stroke="#22C55E" stroke-width="3" fill="none"/>
+      <rect x="25" y="55" width="90" height="8" rx="2" fill="#22C55E"/>
+      <!-- Stand -->
+      <rect x="55" y="85" width="30" height="8" fill="#6D28D9"/>
+      <rect x="40" y="93" width="60" height="5" rx="2" fill="#7C3AED"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">DIGITAL CHECK</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Verify right to rent</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">online</text>
+  </g>
+
+  <!-- When to use -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHEN TO USE</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Biometric residence permit</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Biometric residence card</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">EU Settlement Status</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Frontier worker permit</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">eVisa holders</text>
+    </g>
+  </g>
+
+  <!-- Process steps -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">HOW IT WORKS</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#22C55E"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Tenant shares code</text>
+    </g>
+    <g transform="translate(15, 75)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#7C3AED"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Enter on GOV.UK</text>
+    </g>
+    <g transform="translate(15, 102)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#6D28D9"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">View status online</text>
+    </g>
+    <g transform="translate(15, 129)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#A78BFA"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="9">Save/print result</text>
+    </g>
+  </g>
+
+  <!-- Important info -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">IMPORTANT INFORMATION</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">SHARE CODE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Tenant generates code</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Valid for 90 days</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• 9 character alphanumeric</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Plus date of birth</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">gov.uk/view-right-to-rent</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">ADVANTAGES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Real-time verification</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Direct from Home Office</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Cannot be forged</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Remote checking possible</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Most reliable method</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">RECORD KEEPING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Screenshot/print result</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Record date of check</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Note share code used</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Keep for tenancy + 1yr</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Evidence of compliance</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>

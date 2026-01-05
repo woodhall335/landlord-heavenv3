@@ -7,18 +7,136 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">PROPERTY DEVELOPMENT PLANS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Planning and executing property improvements</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Blueprint icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Blueprint drawing -->
+    <g transform="translate(30, 15)">
+      <rect x="0" y="0" width="140" height="90" rx="3" fill="#6D28D9"/>
+      <rect x="5" y="5" width="130" height="80" fill="#7C3AED"/>
+      <!-- House plan lines -->
+      <rect x="15" y="15" width="50" height="40" fill="none" stroke="white" stroke-width="1"/>
+      <rect x="75" y="15" width="50" height="40" fill="none" stroke="white" stroke-width="1"/>
+      <rect x="15" y="60" width="110" height="15" fill="none" stroke="white" stroke-width="1"/>
+      <line x1="40" y1="15" x2="40" y2="55" stroke="white" stroke-width="1"/>
+      <circle cx="35" cy="30" r="6" fill="none" stroke="white" stroke-width="1"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">DEVELOPMENT</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Plan renovations</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">and extensions</text>
+  </g>
+
+  <!-- Types of development -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON PROJECTS</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Loft conversions</text>
+    </g>
+    <g transform="translate(15, 67)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Extensions (rear/side)</text>
+    </g>
+    <g transform="translate(15, 89)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Garage conversions</text>
+    </g>
+    <g transform="translate(15, 111)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Kitchen/bathroom refit</text>
+    </g>
+    <g transform="translate(15, 133)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">HMO conversion</text>
+    </g>
+    <g transform="translate(15, 155)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Energy efficiency upgrades</text>
+    </g>
+  </g>
+
+  <!-- Planning permission -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PERMISSIONS NEEDED</text>
+
+    <g transform="translate(15, 48)">
+      <polygon points="8,0 16,14 0,14" fill="#EF4444"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Planning permission</text>
+    </g>
+    <g transform="translate(15, 73)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Building regulations</text>
+    </g>
+    <g transform="translate(15, 98)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Party wall agreement</text>
+    </g>
+    <g transform="translate(15, 123)">
+      <polygon points="8,0 16,14 0,14" fill="#7C3AED"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Listed building consent</text>
+    </g>
+    <g transform="translate(15, 148)">
+      <polygon points="8,0 16,14 0,14" fill="#7C3AED"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Conservation area rules</text>
+    </g>
+  </g>
+
+  <!-- Timeline and costs -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PROJECT PLANNING</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">TYPICAL TIMELINE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Planning: 8-12 weeks</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Building regs: 4-8 weeks</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">Contractor quotes: 2-4 weeks</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Works: varies by scope</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Total: 4-12 months typical</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold">BUDGET AREAS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Planning fees: £200-500</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Architect: 5-15% of build</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Contingency: 10-20%</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Professional fees</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• VAT considerations</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">ROI CONSIDERATIONS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Increased rental yield</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Property value uplift</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• EPC improvements</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Tenant appeal</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Aim: £2 return per £1 spent</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
