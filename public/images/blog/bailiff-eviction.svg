@@ -7,18 +7,94 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- House with door being approached -->
+  <g transform="translate(80, 120)">
+    <!-- House structure -->
+    <polygon points="150,50 280,130 20,130" fill="#6D28D9"/>
+    <rect x="20" y="130" width="260" height="200" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Roof detail -->
+    <polygon points="150,50 150,90 200,115 100,115" fill="#7C3AED" opacity="0.3"/>
+
+    <!-- Windows -->
+    <rect x="50" y="160" width="50" height="50" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="75" y1="160" x2="75" y2="210" stroke="#7C3AED" stroke-width="1"/>
+    <line x1="50" y1="185" x2="100" y2="185" stroke="#7C3AED" stroke-width="1"/>
+
+    <rect x="200" y="160" width="50" height="50" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="225" y1="160" x2="225" y2="210" stroke="#7C3AED" stroke-width="1"/>
+    <line x1="200" y1="185" x2="250" y2="185" stroke="#7C3AED" stroke-width="1"/>
+
+    <!-- Door -->
+    <rect x="120" y="230" width="60" height="100" fill="#7C3AED" rx="4"/>
+    <circle cx="165" cy="280" r="5" fill="#A78BFA"/>
+
+    <!-- Door being opened indication -->
+    <path d="M180 230 Q200 280 180 330" stroke="#6D28D9" stroke-width="2" stroke-dasharray="5" fill="none"/>
+  </g>
+
+  <!-- Bailiff figure -->
+  <g transform="translate(380, 180)">
+    <!-- Body -->
+    <ellipse cx="60" cy="40" rx="30" ry="35" fill="#7C3AED"/>
+    <!-- Head -->
+    <circle cx="60" cy="-10" r="25" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <!-- Badge -->
+    <circle cx="85" cy="30" r="15" fill="#6D28D9"/>
+    <text x="85" y="35" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">HCE</text>
+    <!-- Uniform details -->
+    <rect x="45" y="60" width="30" height="8" rx="2" fill="#6D28D9"/>
+    <!-- Legs -->
+    <rect x="45" y="75" width="12" height="70" fill="#6D28D9"/>
+    <rect x="63" y="75" width="12" height="70" fill="#6D28D9"/>
+  </g>
+
+  <!-- Official document/warrant -->
+  <g transform="translate(480, 150)">
+    <rect x="0" y="0" width="140" height="180" rx="8" fill="white" stroke="#7C3AED" stroke-width="3" transform="rotate(5)"/>
+    <rect x="20" y="20" width="100" height="12" rx="4" fill="#7C3AED" transform="rotate(5)"/>
+    <text x="70" y="30" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial" transform="rotate(5)">WARRANT</text>
+    <rect x="20" y="45" width="80" height="5" rx="2" fill="#A78BFA" transform="rotate(5)"/>
+    <rect x="20" y="55" width="90" height="5" rx="2" fill="#A78BFA" transform="rotate(5)"/>
+    <rect x="20" y="65" width="70" height="5" rx="2" fill="#A78BFA" transform="rotate(5)"/>
+    <!-- Court seal -->
+    <circle cx="70" cy="110" r="25" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2" transform="rotate(5)"/>
+    <circle cx="70" cy="110" r="18" fill="#7C3AED" transform="rotate(5)"/>
+    <text x="70" y="115" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="Arial" transform="rotate(5)">COURT</text>
+    <!-- Signature -->
+    <path d="M30 145 Q50 135 70 145 Q90 155 100 140" stroke="#6D28D9" stroke-width="2" fill="none" transform="rotate(5)"/>
+  </g>
+
+  <!-- Timeline at bottom -->
+  <g transform="translate(100, 400)">
+    <line x1="0" y1="30" x2="600" y2="30" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Step 1 -->
+    <circle cx="0" cy="30" r="15" fill="#7C3AED"/>
+    <text x="0" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">1</text>
+    <text x="0" y="60" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Warrant</text>
+    <text x="0" y="72" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Issued</text>
+
+    <!-- Step 2 -->
+    <circle cx="200" cy="30" r="15" fill="#7C3AED"/>
+    <text x="200" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">2</text>
+    <text x="200" y="60" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Notice</text>
+    <text x="200" y="72" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Given</text>
+
+    <!-- Step 3 -->
+    <circle cx="400" cy="30" r="15" fill="#7C3AED"/>
+    <text x="400" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">3</text>
+    <text x="400" y="60" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Eviction</text>
+    <text x="400" y="72" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Day</text>
+
+    <!-- Step 4 -->
+    <circle cx="600" cy="30" r="15" fill="#6D28D9"/>
+    <path d="M593 30 L598 35 L608 25" stroke="white" stroke-width="2" fill="none"/>
+    <text x="600" y="60" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Possession</text>
+    <text x="600" y="72" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">Returned</text>
+  </g>
 
   <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
-
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+  <circle cx="720" cy="80" r="40" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="50" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
 </svg>
