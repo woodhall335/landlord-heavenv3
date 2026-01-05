@@ -7,18 +7,132 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">SOFTWARE TYPES</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Different landlord software solutions compared</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Multiple devices icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Desktop, tablet, phone -->
+    <g transform="translate(20, 10)">
+      <!-- Desktop -->
+      <rect x="0" y="0" width="70" height="50" rx="3" fill="#7C3AED"/>
+      <rect x="5" y="5" width="60" height="35" fill="#F3F1FF"/>
+      <rect x="25" y="50" width="20" height="10" fill="#6D28D9"/>
+      <rect x="15" y="58" width="40" height="5" rx="2" fill="#7C3AED"/>
+      <!-- Tablet -->
+      <rect x="80" y="15" width="40" height="55" rx="3" fill="#22C55E"/>
+      <rect x="83" y="20" width="34" height="42" fill="#F3F1FF"/>
+      <circle cx="100" cy="66" r="3" fill="white"/>
+      <!-- Phone -->
+      <rect x="130" y="30" width="25" height="45" rx="3" fill="#F59E0B"/>
+      <rect x="133" y="35" width="19" height="32" fill="#F3F1FF"/>
+      <circle cx="142" cy="70" r="2" fill="white"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">PLATFORMS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Web, desktop</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">and mobile</text>
+  </g>
+
+  <!-- Software types -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SOFTWARE CATEGORIES</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="210" height="30" rx="4" fill="#7C3AED" opacity="0.1"/>
+      <text x="10" y="13" fill="#7C3AED" font-size="9" font-weight="bold">All-in-one platforms</text>
+      <text x="10" y="24" fill="#6D28D9" font-size="7">Complete property management</text>
+    </g>
+    <g transform="translate(15, 83)">
+      <rect x="0" y="0" width="210" height="30" rx="4" fill="#22C55E" opacity="0.1"/>
+      <text x="10" y="13" fill="#22C55E" font-size="9" font-weight="bold">Accounting focused</text>
+      <text x="10" y="24" fill="#6D28D9" font-size="7">Financial tracking and reports</text>
+    </g>
+    <g transform="translate(15, 121)">
+      <rect x="0" y="0" width="210" height="30" rx="4" fill="#F59E0B" opacity="0.1"/>
+      <text x="10" y="13" fill="#F59E0B" font-size="9" font-weight="bold">Tenant communication</text>
+      <text x="10" y="24" fill="#6D28D9" font-size="7">Messaging and portals</text>
+    </g>
+  </g>
+
+  <!-- Pricing models -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PRICING MODELS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Free (basic features)</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Per property/month</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Flat monthly fee</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Annual subscription</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">£</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Pay per transaction</text>
+    </g>
+  </g>
+
+  <!-- Comparison detail -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">CHOOSING THE RIGHT TYPE</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">1-3 PROPERTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Spreadsheet may suffice</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Free software options</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Basic tracking needed</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Simple is better</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Start simple</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">4-10 PROPERTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Dedicated software worth it</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Automation saves time</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Per-property pricing</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Tenant portal helpful</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Growing landlord</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">10+ PROPERTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Full platform essential</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Team features needed</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Integration capabilities</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Flat fee better value</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Professional landlord</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
