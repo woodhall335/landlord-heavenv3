@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template - Free Download (Form 6A) | Landlord Heaven',
+  title: 'Section 21 Notice Template - Form 6A Free',
   description: 'Download a free Section 21 notice template or generate a court-ready Form 6A in minutes. Valid until May 2026. Trusted by 10,000+ UK landlords.',
   keywords: [
     'section 21 notice template',

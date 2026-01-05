@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Rent Arrears Calculator | Calculate Outstanding Rent & Interest | Landlord Heaven',
+  title: 'Free Rent Arrears Calculator',
   description:
     'Calculate rent arrears and 8% statutory interest for UK landlords. Free arrears schedule generator with PDF download. Court-ready money claim upgrade available.',
   keywords: [

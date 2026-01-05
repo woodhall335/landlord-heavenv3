@@ -40,11 +40,13 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     keywords = []
   } = config;
 
-  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  // Don't add site name suffix to title - layout template already adds "| Landlord Heaven"
+  // But still use full title for OG/Twitter which don't inherit template
+  const fullTitleForSocial = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   const url = `${SITE_URL}${path}`;
 
   return {
-    title: fullTitle,
+    title: title, // Layout template will add "| Landlord Heaven"
     description,
     keywords: keywords.length > 0 ? keywords : undefined,
     authors: [{ name: SITE_NAME }],
@@ -55,7 +57,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     // Open Graph
     openGraph: {
       type,
-      title: fullTitle,
+      title: fullTitleForSocial,
       description,
       url,
       siteName: SITE_NAME,
@@ -73,7 +75,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     // Twitter Card
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
+      title: fullTitleForSocial,
       description,
       images: [image],
       creator: '@LandlordHeaven',

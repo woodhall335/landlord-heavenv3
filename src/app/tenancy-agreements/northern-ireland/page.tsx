@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Private Tenancy Agreement | Northern Ireland | Landlord Heaven',
+  title: 'Private Tenancy | Northern Ireland',
   description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Fully compliant with Private Tenancies Act (NI) 2022 and 2025 legal updates including mandatory EICR. Standard and Premium options.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {

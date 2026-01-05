@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Section 21 Notice Generator | Landlord Heaven',
+  title: 'Free Section 21 Notice Generator',
   description:
     'Generate a free Section 21 notice template for England & Wales. Get a court-ready version with legal validation for £14.99. Free landlord tool.',
   keywords: [

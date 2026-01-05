@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Eviction Notice Template UK - Free Download | Landlord Heaven',
+  title: 'Eviction Notice Template UK - Free Download',
   description: 'Download free UK eviction notice templates. Section 21 (no-fault) and Section 8 (grounds-based) notices. Court-ready documents trusted by 10,000+ landlords.',
   keywords: [
     'eviction notice template uk',

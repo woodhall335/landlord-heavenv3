@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 import { ShieldCheck, Database, CreditCard, Sparkles, Mail, Send } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Landlord Heaven",
+  title: "Privacy Policy",
   description: "How Landlord Heaven collects, uses, and protects your personal data. GDPR compliant.",
 };
 
@@ -43,12 +43,26 @@ export default function PrivacyPage() {
           <div className="prose prose-gray max-w-none">
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">1. Data Controller</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Landlord Heaven is the data controller responsible for your personal data. Contact us at{" "}
-              <a href="mailto:privacy@landlordheaven.co.uk" className="text-primary hover:underline">
-                privacy@landlordheaven.co.uk
-              </a>
-              .
+              Landlord Heaven is the data controller responsible for your personal data.
             </p>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+              <p className="text-charcoal font-semibold mb-2">Landlord Heaven</p>
+              <p className="text-gray-700 text-sm mb-2">
+                Bradford Chamber Business Park, New Lane, Bradford, BD4 8BX
+              </p>
+              <p className="text-gray-700 text-sm mb-2">
+                Phone:{" "}
+                <a href="tel:08712340832" className="text-primary hover:underline">
+                  0871 234 0832
+                </a>
+              </p>
+              <p className="text-gray-700 text-sm">
+                Email:{" "}
+                <a href="mailto:privacy@landlordheaven.co.uk" className="text-primary hover:underline">
+                  privacy@landlordheaven.co.uk
+                </a>
+              </p>
+            </div>
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. What Data We Collect</h2>
 

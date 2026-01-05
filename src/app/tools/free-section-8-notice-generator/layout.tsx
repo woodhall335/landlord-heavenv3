@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Generator | Landlord Heaven',
+  title: 'Free Section 8 Notice Generator',
   description:
     'Generate a free Section 8 notice with grounds for possession. Court-ready version with ground-specific validation for £14.99. Free landlord tool.',
   keywords: [

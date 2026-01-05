@@ -8,7 +8,7 @@ import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { FileText, Scale, Clock, Zap, ShieldCheck, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Landlord Guides & Legal Resources | Landlord Heaven Blog',
+  title: 'Landlord Guides & Legal Resources',
   description: 'Expert guides for UK landlords on evictions, Section 21, Section 8, tenancy law, rent arrears, and property management. Free legal advice from property experts.',
   keywords: [
     'landlord guides',

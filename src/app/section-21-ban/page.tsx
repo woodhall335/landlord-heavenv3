@@ -6,7 +6,7 @@ import { AlertTriangle, Calendar, Scale, CheckCircle } from 'lucide-react';
 import { StructuredData, faqPageSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
-  title: 'Section 21 Ban 2026 - Last Chance for No-Fault Evictions',
+  title: 'Section 21 Ban 2026 - Act Before May',
   description: 'Section 21 no-fault evictions end 1 May 2026. Generate your court-ready notice before the deadline. Only days left to act.',
   openGraph: {
     title: 'Section 21 Ends 1 May 2026 - Act Now',

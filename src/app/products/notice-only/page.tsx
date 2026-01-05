@@ -20,7 +20,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
-  title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
+  title: "Section 21 & 8 Eviction Notices - £29.99",
   description:
     "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £29.99 one-time. England, Wales & Scotland.",
   openGraph: {

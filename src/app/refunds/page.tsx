@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | Landlord Heaven",
+  title: "Refund Policy",
   description: "Learn about our refund policy for digital products and terms.",
 };
 
@@ -254,6 +254,15 @@ export default function RefundsPage() {
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">8. Contact Information</h2>
             <div className="bg-primary-subtle border border-primary/20 rounded-lg p-4">
               <p className="text-charcoal font-semibold mb-2">Need Help?</p>
+              <p className="text-gray-700 text-sm mb-2">
+                Bradford Chamber Business Park, New Lane, Bradford, BD4 8BX
+              </p>
+              <p className="text-gray-700 text-sm mb-2">
+                <strong>Phone:</strong>{" "}
+                <a href="tel:08712340832" className="text-primary hover:underline">
+                  0871 234 0832
+                </a>
+              </p>
               <p className="text-gray-700 text-sm mb-2">
                 <strong>Technical Issues & Support:</strong>{" "}
                 <a href="mailto:support@landlordheaven.co.uk" className="text-primary hover:underline">
