@@ -7,36 +7,130 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Person 1 (landlord) -->
-  <g transform="translate(250, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#7C3AED"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#7C3AED"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">GUARANTOR PROTECTION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Additional security for your rental income</text>
+
+  <!-- Shield with person -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+
+    <!-- Shield -->
+    <g transform="translate(50, 15)">
+      <path d="M50 5 L95 20 L95 70 Q95 100 50 115 Q5 100 5 70 L5 20 Z" fill="#22C55E" opacity="0.2" stroke="#22C55E" stroke-width="2"/>
+      <!-- Person inside shield -->
+      <circle cx="50" cy="45" r="15" fill="#7C3AED"/>
+      <ellipse cx="50" cy="75" rx="20" ry="12" fill="#7C3AED"/>
+      <!-- Checkmark -->
+      <circle cx="75" cy="85" r="12" fill="#22C55E"/>
+      <path d="M69 85 L73 89 L81 80" stroke="white" stroke-width="2.5" fill="none"/>
+    </g>
+
+    <text x="100" y="145" text-anchor="middle" fill="#22C55E" font-size="12" font-weight="bold">GUARANTEED</text>
+    <text x="100" y="162" text-anchor="middle" fill="#6D28D9" font-size="9">Extra layer of security</text>
   </g>
 
-  <!-- Handshake in middle -->
-  <g transform="translate(350, 200)">
-    <circle cx="50" cy="50" r="60" fill="white" stroke="#7C3AED" stroke-width="3"/>
-    <path d="M20 50 L40 50 L50 40 L60 50 L80 50" stroke="#7C3AED" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M40 50 L40 70 M60 50 L60 70" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  <!-- What guarantor covers -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHAT GUARANTOR COVERS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Unpaid rent</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Property damage</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Utility arrears</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Early termination costs</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Legal costs (if agreed)</text>
+    </g>
   </g>
 
-  <!-- Person 2 (tenant) -->
-  <g transform="translate(450, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#6D28D9"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#6D28D9"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#6D28D9"/>
+  <!-- Guarantor requirements -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="200" height="12" fill="#6D28D9"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">IDEAL GUARANTOR</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">UK homeowner</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Good credit history</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Income 30x monthly rent</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Close family member</text>
+    </g>
+    <g transform="translate(15, 136)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Willing to be referenced</text>
+    </g>
   </g>
 
-  <!-- Keys -->
-  <g transform="translate(380, 330)">
-    <circle cx="20" cy="20" r="15" fill="none" stroke="#7C3AED" stroke-width="3"/>
-    <rect x="30" y="15" width="40" height="10" rx="3" fill="#7C3AED"/>
-    <rect x="55" y="25" width="10" height="15" rx="2" fill="#7C3AED"/>
-    <rect x="65" y="25" width="10" height="10" rx="2" fill="#7C3AED"/>
+  <!-- Process and tips -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GUARANTOR AGREEMENT ESSENTIALS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">MUST INCLUDE</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="8">• Full liability details</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Duration of guarantee</text>
+      <text x="100" y="70" text-anchor="middle" fill="#6D28D9" font-size="8">• Property address</text>
+      <text x="100" y="85" text-anchor="middle" fill="#6D28D9" font-size="8">• Signed as deed</text>
+      <text x="100" y="100" text-anchor="middle" fill="#6D28D9" font-size="8">• Witnessed signature</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">COMMON MISTAKES</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="8">• Not referencing guarantor</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Vague terms</text>
+      <text x="100" y="70" text-anchor="middle" fill="#6D28D9" font-size="8">• Missing signatures</text>
+      <text x="100" y="85" text-anchor="middle" fill="#6D28D9" font-size="8">• No witness</text>
+      <text x="100" y="100" text-anchor="middle" fill="#6D28D9" font-size="8">• Incorrect address</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">BEST PRACTICE</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="8">• Full credit check</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Verify employment</text>
+      <text x="100" y="70" text-anchor="middle" fill="#6D28D9" font-size="8">• Confirm homeowner</text>
+      <text x="100" y="85" text-anchor="middle" fill="#6D28D9" font-size="8">• Independent legal advice</text>
+      <text x="100" y="100" text-anchor="middle" fill="#6D28D9" font-size="8">• Keep original signed copy</text>
+    </g>
   </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
