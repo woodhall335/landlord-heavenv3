@@ -15,7 +15,9 @@ import { Metadata } from 'next';
 import { HomeContent } from '@/components/landing';
 
 export const metadata: Metadata = {
-  title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
+  title: {
+    absolute: 'Landlord Heaven - UK Landlord Legal Documents'
+  },
   description:
     'Generate court-ready eviction notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by UK landlords.',
   keywords: [

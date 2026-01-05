@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template UK - Free Download | Landlord Heaven',
+  title: 'Tenancy Agreement Template UK - Free Download',
   description: 'Download a free UK tenancy agreement template. AST templates for England, Wales, Scotland. Legally compliant contracts trusted by 10,000+ landlords.',
   keywords: [
     'tenancy agreement template',

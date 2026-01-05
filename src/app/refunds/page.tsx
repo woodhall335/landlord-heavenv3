@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | Landlord Heaven",
+  title: "Refund Policy",
   description: "Learn about our refund policy for digital products and terms.",
 };
 

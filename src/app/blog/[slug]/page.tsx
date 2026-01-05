@@ -29,14 +29,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   // Truncate title to fit within 70 characters for SEO
-  const siteNameSuffix = ' | Landlord Heaven';
-  const maxTitleLength = 70 - siteNameSuffix.length;
+  // Layout template adds "| Landlord Heaven" (18 chars), so max title length is 52
+  const maxTitleLength = 52;
   const truncatedTitle = post.title.length > maxTitleLength
     ? post.title.substring(0, maxTitleLength - 3) + '...'
     : post.title;
 
   return {
-    title: `${truncatedTitle}${siteNameSuffix}`,
+    title: truncatedTitle, // Layout template adds "| Landlord Heaven"
     description: post.metaDescription,
     keywords: [post.targetKeyword, ...post.secondaryKeywords],
     openGraph: {

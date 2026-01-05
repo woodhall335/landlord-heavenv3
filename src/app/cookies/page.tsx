@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Cookie, Lock, CreditCard, BarChart3, AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Landlord Heaven",
+  title: "Cookie Policy",
   description: "How Landlord Heaven uses cookies to improve your experience. Manage your cookie preferences.",
 };
 

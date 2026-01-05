@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Rent Arrears Letter Template - Free Download | Landlord Heaven',
+  title: 'Rent Arrears Letter Template - Free Download',
   description: 'Download a free rent arrears letter template. Formal demand letters for unpaid rent. Escalate to money claim or eviction. Trusted by 10,000+ UK landlords.',
   keywords: [
     'rent arrears letter template',

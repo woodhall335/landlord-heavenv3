@@ -14,7 +14,7 @@ import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-li
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = {
-  title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
+  title: "Tenancy Agreements - AST, PRT, NI",
   description:
     "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£9.99) or Premium (£14.99). Covers England, Wales, Scotland, and Northern Ireland.",
 };

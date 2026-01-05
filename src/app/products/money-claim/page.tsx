@@ -18,7 +18,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
-  title: "Money Claim Pack - Recover Rent Arrears Through Courts",
+  title: "Money Claim Pack - Recover Rent Arrears",
   description:
     "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim saves £300-600. PAP-DEBT compliance, N1 form, interest calculator. £179.99 one-time.",
   openGraph: {

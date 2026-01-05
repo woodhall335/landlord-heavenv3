@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Help Center | Landlord Heaven",
+  title: "Help Center",
   description:
     "Get help with Landlord Heaven. FAQs about eviction notices, tenancy agreements, court claims, and HMO compliance.",
 };

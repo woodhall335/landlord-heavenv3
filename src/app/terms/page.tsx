@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 import { AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Landlord Heaven",
+  title: "Terms & Conditions",
   description: "Terms and conditions for using Landlord Heaven's legal document services.",
 };
 

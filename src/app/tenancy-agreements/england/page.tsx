@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'AST Agreement England | Landlord Heaven',
+  title: 'AST Agreement England',
   description: 'Create a legally compliant Assured Shorthold Tenancy Agreement for England. Covers Housing Act 1988, Tenant Fees Act 2019, and all legal requirements. Standard (£9.99) and Premium (£14.99) options available.',
   keywords: 'AST, Assured Shorthold Tenancy, tenancy agreement England, AST agreement, residential tenancy UK, landlord forms, rental agreement, housing act 1988, tenant fees act 2019',
   openGraph: {

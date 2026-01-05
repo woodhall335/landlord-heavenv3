@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreements | England & Wales | Landlord Heaven',
+  title: 'Tenancy Agreements | England & Wales',
   description: 'Choose your jurisdiction: England (Assured Shorthold Tenancy) or Wales (Occupation Contract under Renting Homes Wales Act 2016). Create legally compliant tenancy agreements.',
   robots: 'noindex, follow', // Don't index this disambiguation page
 };

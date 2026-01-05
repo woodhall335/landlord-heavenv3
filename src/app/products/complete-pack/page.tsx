@@ -24,7 +24,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
-  title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
+  title: "Complete Eviction Pack - Section 21 Deadline",
   description:
     "Last chance for Section 21. Complete eviction pack with all court forms before no-fault evictions banned 1 May 2026. £149.99 one-time. Notices + N5 + N119 forms.",
   openGraph: {

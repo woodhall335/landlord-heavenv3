@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 import { ShieldCheck, Database, CreditCard, Sparkles, Mail, Send } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Landlord Heaven",
+  title: "Privacy Policy",
   description: "How Landlord Heaven collects, uses, and protects your personal data. GDPR compliant.",
 };
 

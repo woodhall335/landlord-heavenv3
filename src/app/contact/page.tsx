@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Landlord Heaven",
+  title: "Contact Us",
   description:
     "Get in touch with Landlord Heaven. Support, refunds, sales inquiries. Average response time: 24 hours.",
 };

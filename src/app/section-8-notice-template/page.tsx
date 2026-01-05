@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice Template - Free Download | Landlord Heaven',
+  title: 'Section 8 Notice Template - Free Download',
   description: 'Download a free Section 8 notice template for grounds-based eviction. Rent arrears, antisocial behaviour, property damage. Court-ready documents for UK landlords.',
   keywords: [
     'section 8 notice template',
