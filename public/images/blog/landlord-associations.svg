@@ -7,36 +7,125 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Person 1 (landlord) -->
-  <g transform="translate(250, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#7C3AED"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#7C3AED"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">LANDLORD ASSOCIATIONS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Professional bodies and membership benefits</text>
+
+  <!-- Network icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Network of people -->
+    <g transform="translate(30, 20)">
+      <!-- Central node -->
+      <circle cx="70" cy="45" r="18" fill="#7C3AED"/>
+      <!-- Connected nodes -->
+      <circle cx="25" cy="25" r="14" fill="#6D28D9"/>
+      <circle cx="115" cy="25" r="14" fill="#6D28D9"/>
+      <circle cx="25" cy="75" r="14" fill="#A78BFA"/>
+      <circle cx="115" cy="75" r="14" fill="#A78BFA"/>
+      <!-- Connection lines -->
+      <line x1="52" y1="35" x2="35" y2="30" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="88" y1="35" x2="105" y2="30" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="52" y1="55" x2="35" y2="65" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="88" y1="55" x2="105" y2="65" stroke="#A78BFA" stroke-width="2"/>
+    </g>
+
+    <text x="100" y="130" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">NETWORK</text>
+    <text x="100" y="148" text-anchor="middle" fill="#6D28D9" font-size="9">Join professional bodies</text>
+    <text x="100" y="162" text-anchor="middle" fill="#6D28D9" font-size="9">for support & resources</text>
   </g>
 
-  <!-- Handshake in middle -->
-  <g transform="translate(350, 200)">
-    <circle cx="50" cy="50" r="60" fill="white" stroke="#7C3AED" stroke-width="3"/>
-    <path d="M20 50 L40 50 L50 40 L60 50 L80 50" stroke="#7C3AED" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <path d="M40 50 L40 70 M60 50 L60 70" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  <!-- Main associations -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY ASSOCIATIONS</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#F3F1FF"/>
+      <text x="10" y="12" fill="#7C3AED" font-size="9" font-weight="bold">NRLA</text>
+      <text x="10" y="23" fill="#6D28D9" font-size="7">National Residential Landlords Assoc.</text>
+    </g>
+    <g transform="translate(15, 82)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#F3F1FF"/>
+      <text x="10" y="12" fill="#6D28D9" font-size="9" font-weight="bold">SAL</text>
+      <text x="10" y="23" fill="#6D28D9" font-size="7">Scottish Association of Landlords</text>
+    </g>
+    <g transform="translate(15, 116)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#F3F1FF"/>
+      <text x="10" y="12" fill="#A78BFA" font-size="9" font-weight="bold">Local LLAs</text>
+      <text x="10" y="23" fill="#6D28D9" font-size="7">Regional landlord associations</text>
+    </g>
   </g>
 
-  <!-- Person 2 (tenant) -->
-  <g transform="translate(450, 120)">
-    <circle cx="60" cy="50" r="45" fill="#A78BFA"/>
-    <circle cx="60" cy="50" r="40" fill="white"/>
-    <circle cx="60" cy="45" r="20" fill="#6D28D9"/>
-    <ellipse cx="60" cy="85" rx="30" ry="15" fill="#6D28D9"/>
-    <rect x="20" y="100" width="80" height="120" rx="10" fill="#6D28D9"/>
+  <!-- Benefits -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MEMBER BENEFITS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Legal advice helpline</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Template documents</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Training & webinars</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Insurance discounts</text>
+    </g>
+    <g transform="translate(15, 136)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Lobbying government</text>
+    </g>
   </g>
 
-  <!-- Keys -->
-  <g transform="translate(380, 330)">
-    <circle cx="20" cy="20" r="15" fill="none" stroke="#7C3AED" stroke-width="3"/>
-    <rect x="30" y="15" width="40" height="10" rx="3" fill="#7C3AED"/>
-    <rect x="55" y="25" width="10" height="15" rx="2" fill="#7C3AED"/>
-    <rect x="65" y="25" width="10" height="10" rx="2" fill="#7C3AED"/>
+  <!-- Why join section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHY JOIN AN ASSOCIATION</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">SUPPORT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Expert legal guidance</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Tax advice access</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Mediation services</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Compliance checklists</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Regulatory updates</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold">RESOURCES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• AST templates</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Notice forms</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Inventory templates</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Reference letters</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• How-to guides</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">COSTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">NRLA: from £85/year</text>
+      <text x="100" y="58" text-anchor="middle" fill="#6D28D9" font-size="8">Local: £30-100/year</text>
+      <text x="100" y="78" text-anchor="middle" fill="#22C55E" font-size="9" font-weight="bold">Tax deductible</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">as business expense</text>
+    </g>
   </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
