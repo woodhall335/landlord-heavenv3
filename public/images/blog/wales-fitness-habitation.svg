@@ -7,41 +7,127 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Wales outline (simplified) -->
-  <g transform="translate(280, 60)">
-    <path d="M80 0 L120 30 L150 20 L180 50 L200 80 L180 130 L200 180 L180 230 L160 280
-             L120 320 L80 350 L40 320 L20 270 L40 220 L20 170 L40 120 L20 70 L40 40 Z"
-          fill="#F3F1FF" stroke="#7C3AED" stroke-width="3"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">FITNESS FOR HUMAN HABITATION - WALES</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Property standards required under Welsh law</text>
 
-    <!-- Dragon silhouette (simplified) -->
-    <g transform="translate(50, 100)">
-      <path d="M0 80 C20 60 40 70 60 50 L80 60 C90 40 100 50 110 30 L100 50 L120 60 L100 70
-               C80 80 60 75 40 90 L60 100 C40 110 20 100 0 120 L20 100 C10 90 5 85 0 80 Z"
-            fill="#7C3AED" opacity="0.3"/>
+  <!-- House with health check icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <g transform="translate(40, 5)">
+      <!-- House outline -->
+      <polygon points="60,20 110,45 110,90 10,90 10,45" fill="white" stroke="#22C55E" stroke-width="2"/>
+      <polygon points="60,10 120,50 0,50" fill="#22C55E"/>
+      <!-- Door -->
+      <rect x="45" y="60" width="30" height="30" fill="#7C3AED"/>
+      <!-- Windows -->
+      <rect x="20" y="55" width="15" height="15" fill="#22C55E" opacity="0.3"/>
+      <rect x="85" y="55" width="15" height="15" fill="#22C55E" opacity="0.3"/>
+      <!-- Check badge -->
+      <circle cx="95" cy="30" r="18" fill="#22C55E"/>
+      <path d="M87 30 L93 36 L105 24" stroke="white" stroke-width="3" fill="none"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#22C55E" font-size="11" font-weight="bold">FIT FOR HABITATION</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Landlord's fundamental</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">obligation</text>
+  </g>
+
+  <!-- What must be provided -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#22C55E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MUST BE PROVIDED</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Safe water supply</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Working heating</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Safe electrical installations</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Working drainage</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Structural soundness</text>
     </g>
   </g>
 
-  <!-- Welsh legal document -->
-  <g transform="translate(480, 100)">
-    <rect x="0" y="0" width="200" height="280" rx="10" fill="white" stroke="#7C3AED" stroke-width="2"/>
-
-    <!-- Header with dragon accent -->
-    <rect x="0" y="0" width="200" height="50" rx="10" fill="#7C3AED" opacity="0.1"/>
-    <rect x="15" y="20" width="80" height="8" rx="4" fill="#7C3AED"/>
-
-    <!-- Content lines -->
-    <rect x="15" y="70" width="170" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="15" y="90" width="150" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="15" y="110" width="160" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-
-    <rect x="15" y="145" width="170" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-    <rect x="15" y="165" width="140" height="6" rx="3" fill="#94A3B8" opacity="0.3"/>
-
-    <!-- Signature area -->
-    <rect x="15" y="210" width="100" height="50" rx="5" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4" fill="none"/>
+  <!-- Hazards to avoid -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="200" height="12" fill="#EF4444"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">HAZARDS TO AVOID</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6">X</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Damp and mould</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6">X</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Inadequate ventilation</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6">X</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Cold indoor temperature</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Fire safety issues</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#EF4444" font-size="9" font-weight="bold">29 hazard categories</text>
+    </g>
   </g>
 
-  <!-- Celtic knot decoration -->
-  <circle cx="150" cy="400" r="40" fill="none" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <circle cx="150" cy="400" r="25" fill="none" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+  <!-- Enforcement and rights -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ENFORCEMENT AND TENANT RIGHTS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">TENANT CAN</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Report to local authority</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Request inspection</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Apply to court</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Claim compensation</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">LOCAL AUTHORITY</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Inspect property</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Issue improvement notice</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Prohibition order</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Prosecute landlord</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">LANDLORD MUST</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Maintain property</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Fix problems promptly</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Meet all standards</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Cannot contract out</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
