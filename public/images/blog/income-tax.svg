@@ -82,7 +82,7 @@
     </g>
     <g transform="translate(15, 68)">
       <circle cx="7" cy="7" r="5" fill="#22C55E"/>
-      <text x="20" y="11" fill="#6D28D9" font-size="9">Repairs & maintenance</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Repairs &amp; maintenance</text>
     </g>
     <g transform="translate(15, 88)">
       <circle cx="7" cy="7" r="5" fill="#22C55E"/>

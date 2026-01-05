@@ -47,19 +47,19 @@
     <g transform="translate(15, 55)">
       <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
       <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
-      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Structure & exterior</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Structure &amp; exterior</text>
     </g>
 
     <g transform="translate(15, 80)">
       <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
       <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
-      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Heating & hot water</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Heating &amp; hot water</text>
     </g>
 
     <g transform="translate(15, 105)">
       <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
       <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
-      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Plumbing & drainage</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Plumbing &amp; drainage</text>
     </g>
 
     <g transform="translate(15, 130)">

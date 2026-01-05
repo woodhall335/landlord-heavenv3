@@ -44,22 +44,22 @@
     <g transform="translate(15, 45)">
       <rect x="0" y="0" width="14" height="14" rx="3" fill="#EF4444"/>
       <text x="4" y="11" fill="white" font-size="10" font-weight="bold">!</text>
-      <text x="22" y="11" fill="#6D28D9" font-size="9">Names & property address</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Names &amp; property address</text>
     </g>
     <g transform="translate(15, 68)">
       <rect x="0" y="0" width="14" height="14" rx="3" fill="#EF4444"/>
       <text x="4" y="11" fill="white" font-size="10" font-weight="bold">!</text>
-      <text x="22" y="11" fill="#6D28D9" font-size="9">Rent amount & payment date</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rent amount &amp; payment date</text>
     </g>
     <g transform="translate(15, 91)">
       <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
       <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
-      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenancy start & end dates</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenancy start &amp; end dates</text>
     </g>
     <g transform="translate(15, 114)">
       <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
       <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
-      <text x="22" y="11" fill="#6D28D9" font-size="9">Deposit amount & scheme</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Deposit amount &amp; scheme</text>
     </g>
     <g transform="translate(15, 137)">
       <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>

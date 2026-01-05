@@ -17,7 +17,7 @@
     <polygon points="100,30 150,120 50,120" fill="#EF4444" opacity="0.1" stroke="#EF4444" stroke-width="3"/>
     <text x="100" y="100" text-anchor="middle" fill="#EF4444" font-size="40" font-weight="bold">!</text>
     <text x="100" y="145" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">NUISANCE BEHAVIOUR</text>
-    <text x="100" y="160" text-anchor="middle" fill="#6D28D9" font-size="8">Grounds 14 & 14A</text>
+    <text x="100" y="160" text-anchor="middle" fill="#6D28D9" font-size="8">Grounds 14 &amp; 14A</text>
   </g>
 
   <!-- Types of ASB -->
