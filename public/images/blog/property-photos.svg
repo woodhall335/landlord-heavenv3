@@ -7,40 +7,120 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- House -->
-  <g transform="translate(250, 100)">
-    <!-- Roof -->
-    <path d="M-20 150 L150 30 L320 150" fill="none" stroke="#7C3AED" stroke-width="8" stroke-linecap="round"/>
-    <path d="M0 150 L150 50 L300 150" fill="#6D28D9"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">PROPERTY PHOTOGRAPHY GUIDE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Professional photos for letting your property</text>
 
-    <!-- Chimney -->
-    <rect x="220" y="60" width="40" height="70" fill="#7C3AED"/>
-
-    <!-- Main building -->
-    <rect x="30" y="150" width="240" height="180" fill="white" stroke="#7C3AED" stroke-width="3"/>
-
-    <!-- Door -->
-    <rect x="120" y="220" width="60" height="110" rx="5" fill="#7C3AED"/>
-    <circle cx="165" cy="275" r="5" fill="#A78BFA"/>
-
-    <!-- Windows -->
-    <rect x="55" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="80" y1="180" x2="80" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="55" y1="205" x2="105" y2="205" stroke="#7C3AED" stroke-width="2"/>
-
-    <rect x="195" y="180" width="50" height="50" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="220" y1="180" x2="220" y2="230" stroke="#7C3AED" stroke-width="2"/>
-    <line x1="195" y1="205" x2="245" y2="205" stroke="#7C3AED" stroke-width="2"/>
+  <!-- Camera icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Camera body -->
+      <rect x="20" y="30" width="80" height="55" rx="8" fill="#E9E5FF" stroke="#6D28D9" stroke-width="2"/>
+      <!-- Lens -->
+      <circle cx="60" cy="55" r="20" fill="#7C3AED"/>
+      <circle cx="60" cy="55" r="12" fill="#6D28D9"/>
+      <circle cx="60" cy="55" r="5" fill="#E9E5FF"/>
+      <!-- Flash -->
+      <rect x="70" y="22" width="20" height="12" rx="3" fill="#6D28D9"/>
+      <!-- Viewfinder -->
+      <rect x="50" y="22" width="15" height="10" rx="2" fill="#7C3AED"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">PHOTOGRAPHY</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Property</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">photos</text>
   </g>
 
-  <!-- Trees -->
-  <g transform="translate(550, 200)">
-    <rect x="20" y="100" width="20" height="60" fill="#6D28D9" opacity="0.7"/>
-    <circle cx="30" cy="80" r="50" fill="#7C3AED" opacity="0.3"/>
-    <circle cx="15" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
-    <circle cx="45" cy="95" r="35" fill="#7C3AED" opacity="0.4"/>
+  <!-- Photo tips -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PHOTO ESSENTIALS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Natural daylight</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Wide-angle lens</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Declutter all rooms</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Corner shots work best</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Show every room</text>
+    </g>
   </g>
 
-  <!-- Ground -->
-  <ellipse cx="400" cy="430" rx="350" ry="30" fill="#7C3AED" opacity="0.1"/>
+  <!-- What to photograph -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MUST CAPTURE</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Living areas</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Kitchen and appliances</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Bedrooms</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Bathroom</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Exterior and garden</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PROPERTY PHOTOGRAPHY TIPS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">PREPARATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Deep clean property</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Remove personal items</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Stage with neutral decor</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Open curtains/blinds</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">TECHNIQUE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Use tripod for stability</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Shoot from hip height</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Keep verticals straight</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">HDR mode helps</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">RESULTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">More viewings</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Higher quality tenants</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Faster lettings</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Better rental prices</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
 </svg>
