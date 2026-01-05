@@ -144,14 +144,14 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
   // Build addresses from CaseFacts
   const property_address = buildAddress(
     caseFacts.property.address_line1,
-    caseFacts.property.address_line1,
+    caseFacts.property.address_line2 ?? null,
     caseFacts.property.city,
     caseFacts.property.postcode
   );
 
   const landlord_address = buildAddress(
     caseFacts.parties.landlord.address_line1,
-    caseFacts.parties.landlord.address_line1,
+    caseFacts.parties.landlord.address_line2 ?? null,
     caseFacts.parties.landlord.city,
     caseFacts.parties.landlord.postcode
   );
@@ -311,17 +311,17 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
 
     // Premium Enhanced Features - Late Payment Interest
     late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
-    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')),
-    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')),
-    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')),
+    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')) ?? 0,
+    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')) ?? 0,
+    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) ?? 0,
 
     // Premium Enhanced Features - Key Schedule
-    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')),
-    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')),
-    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')),
-    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')),
-    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')),
-    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')),
+    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')) ?? 0,
+    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')) ?? 0,
+    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')) ?? 0,
+    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')) ?? 0,
+    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')) ?? 0,
+    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')) ?? 0,
     other_keys_notes: getValueAtPath(wizardFacts, 'other_keys_notes'),
 
     // Premium Enhanced Features - Contractor Access
@@ -377,7 +377,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     regular_cleaning_expectations: getValueAtPath(wizardFacts, 'regular_cleaning_expectations'),
     deep_cleaning_areas: getValueAtPath(wizardFacts, 'deep_cleaning_areas'),
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
-    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')),
+    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) ?? 0,
 
     // Jurisdiction
     jurisdiction_england: true,
