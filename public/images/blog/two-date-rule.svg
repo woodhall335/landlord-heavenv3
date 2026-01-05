@@ -7,18 +7,129 @@
   </defs>
   <rect width="800" height="500" fill="url(#bgGrad)"/>
 
-  <!-- Abstract geometric shapes -->
-  <circle cx="400" cy="250" r="120" fill="white" stroke="#7C3AED" stroke-width="4"/>
-  <circle cx="400" cy="250" r="80" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
-  <circle cx="400" cy="250" r="40" fill="#7C3AED"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">THE TWO DATE RULE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Critical timing for Section 21 notices</text>
 
-  <!-- Decorative elements -->
-  <circle cx="180" cy="150" r="60" fill="#7C3AED" opacity="0.15"/>
-  <circle cx="620" cy="350" r="80" fill="#A78BFA" opacity="0.2"/>
-  <circle cx="650" cy="100" r="40" fill="#7C3AED" opacity="0.1"/>
-  <circle cx="150" cy="380" r="50" fill="#6D28D9" opacity="0.1"/>
+  <!-- Calendar icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
 
-  <!-- Abstract lines -->
-  <line x1="250" y1="200" x2="300" y2="150" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
-  <line x1="500" y1="300" x2="550" y2="350" stroke="#7C3AED" stroke-width="3" opacity="0.3"/>
+    <!-- Calendar -->
+    <g transform="translate(35, 10)">
+      <rect x="0" y="0" width="130" height="95" rx="6" fill="#7C3AED"/>
+      <rect x="0" y="0" width="130" height="25" rx="6" fill="#6D28D9"/>
+      <!-- Calendar rings -->
+      <rect x="25" y="-5" width="8" height="15" rx="2" fill="#A78BFA"/>
+      <rect x="97" y="-5" width="8" height="15" rx="2" fill="#A78BFA"/>
+      <!-- Dates -->
+      <rect x="8" y="30" width="16" height="16" rx="2" fill="white"/>
+      <text x="16" y="43" text-anchor="middle" fill="#6D28D9" font-size="10">1</text>
+      <rect x="106" y="70" width="16" height="16" rx="2" fill="#EF4444"/>
+      <text x="114" y="83" text-anchor="middle" fill="white" font-size="10">28</text>
+      <!-- Arrow between dates -->
+      <path d="M32 38 L100 78" stroke="#22C55E" stroke-width="2" stroke-dasharray="4"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">TWO DATES</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Both must be</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">correct</text>
+  </g>
+
+  <!-- The two dates explained -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="240" height="12" fill="#EF4444"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">THE TWO DATES</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="210" height="55" rx="6" fill="#F3F1FF"/>
+      <text x="105" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">DATE 1: Notice Period</text>
+      <text x="105" y="38" text-anchor="middle" fill="#6D28D9" font-size="9">At least 2 months from</text>
+      <text x="105" y="52" text-anchor="middle" fill="#6D28D9" font-size="9">date notice is served</text>
+    </g>
+
+    <g transform="translate(15, 112)">
+      <rect x="0" y="0" width="210" height="55" rx="6" fill="#EF4444" opacity="0.1"/>
+      <text x="105" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">DATE 2: End of Period</text>
+      <text x="105" y="38" text-anchor="middle" fill="#6D28D9" font-size="9">Last day of a period of</text>
+      <text x="105" y="52" text-anchor="middle" fill="#6D28D9" font-size="9">tenancy (e.g., rent day)</text>
+    </g>
+  </g>
+
+  <!-- Why it matters -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHY IT MATTERS</text>
+
+    <g transform="translate(15, 48)">
+      <polygon points="8,0 16,14 0,14" fill="#EF4444"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Invalid = Start again</text>
+    </g>
+    <g transform="translate(15, 73)">
+      <polygon points="8,0 16,14 0,14" fill="#EF4444"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Case thrown out</text>
+    </g>
+    <g transform="translate(15, 98)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Months of delay</text>
+    </g>
+    <g transform="translate(15, 123)">
+      <polygon points="8,0 16,14 0,14" fill="#F59E0B"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Extra costs</text>
+    </g>
+    <g transform="translate(15, 148)">
+      <polygon points="8,0 16,14 0,14" fill="#7C3AED"/>
+      <text x="8" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="12" fill="#6D28D9" font-size="9">Common mistake</text>
+    </g>
+  </g>
+
+  <!-- Examples -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PRACTICAL EXAMPLE</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">SCENARIO</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Rent due: 1st of month</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Serving notice: 15th Jan</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">2 months later: 15th March</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">BUT 15th not end of period!</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Must use 31st March</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">CORRECT CALCULATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">1. Find 2 months from serve</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">2. Find next rent due date</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">3. Go to day BEFORE it</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">= Last day of period</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Use later of two dates</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">SAFE APPROACH</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Always round UP</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Add extra days if unsure</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Check rent date carefully</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Use a calculator tool</text>
+      <text x="100" y="94" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">When in doubt, add time</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
 </svg>
