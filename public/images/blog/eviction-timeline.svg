@@ -1,0 +1,43 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Timeline line -->
+  <line x1="100" y1="250" x2="700" y2="250" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Timeline points -->
+  <g>
+    <!-- Point 1 -->
+    <circle cx="150" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="150" cy="250" r="10" fill="#7C3AED"/>
+    <rect x="115" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="125" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <rect x="125" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+
+    <!-- Point 2 -->
+    <circle cx="325" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="325" cy="250" r="10" fill="#7C3AED"/>
+    <rect x="290" y="280" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="300" y="295" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <rect x="300" y="308" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+
+    <!-- Point 3 -->
+    <circle cx="500" cy="250" r="20" fill="white" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="500" cy="250" r="10" fill="#7C3AED"/>
+    <rect x="465" y="180" width="70" height="50" rx="8" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="475" y="195" width="50" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+    <rect x="475" y="208" width="35" height="6" rx="3" fill="#94A3B8" opacity="0.4"/>
+
+    <!-- Point 4 (current/highlight) -->
+    <circle cx="650" cy="250" r="25" fill="#7C3AED"/>
+    <path d="M640 250 L648 258 L665 241" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="615" y="280" width="70" height="50" rx="8" fill="#7C3AED"/>
+    <rect x="625" y="295" width="50" height="6" rx="3" fill="white" opacity="0.6"/>
+    <rect x="625" y="308" width="35" height="6" rx="3" fill="white" opacity="0.6"/>
+  </g>
+</svg>
