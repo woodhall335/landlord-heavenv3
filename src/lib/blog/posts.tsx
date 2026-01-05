@@ -23,7 +23,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-renters-reform-bill.svg',
+    heroImage: '/images/blog/renters-reform-bill.svg',
     heroImageAlt: 'Renters Reform Bill 2025 - Complete Guide for UK Landlords',
     showUrgencyBanner: true,
     targetKeyword: 'renters reform bill',
@@ -61,7 +61,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-renters-reform-overview.svg"
+          src="/images/blog/renters-reform-overview.svg"
           alt="Renters Reform Bill Overview - Key Changes for UK Landlords"
           caption="The Renters Reform Bill introduces sweeping changes affecting every private landlord in England"
           aspectRatio="hero"
@@ -107,7 +107,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-key-changes-timeline.svg"
+          src="/images/blog/key-changes-timeline.svg"
           alt="Renters Reform Bill Key Changes Timeline"
           caption="Implementation timeline for the Renters Rights Act 2025"
         />
@@ -203,7 +203,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-21-end.svg"
+          src="/images/blog/section-21-end.svg"
           alt="Section 21 Abolition Impact on Landlords"
           caption="The end of no-fault evictions fundamentally changes landlord-tenant dynamics"
         />
@@ -286,7 +286,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-8-grounds.svg"
+          src="/images/blog/section-8-grounds.svg"
           alt="New Section 8 Grounds Under Renters Reform Bill"
           caption="New mandatory grounds partially compensate for Section 21 loss, but with limitations"
         />
@@ -379,7 +379,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-pet-rights.svg"
+          src="/images/blog/pet-rights.svg"
           alt="Tenant Pet Rights Under Renters Reform Bill"
           caption="Tenants can request pets and landlords cannot unreasonably refuse"
         />
@@ -599,7 +599,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-section-21.svg',
+    heroImage: '/images/blog/section-21.svg',
     heroImageAlt: 'Section 21 Notice Explained - Complete Guide for UK Landlords',
     showUrgencyBanner: true,
     targetKeyword: 'section 21 notice',
@@ -634,7 +634,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-21-overview.svg"
+          src="/images/blog/section-21-overview.svg"
           alt="Section 21 Notice Overview - Key Facts for Landlords"
           caption="Section 21 allows landlords to recover possession without proving tenant fault"
           aspectRatio="inline"
@@ -682,7 +682,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-21-process.svg"
+          src="/images/blog/section-21-process.svg"
           alt="Section 21 Eviction Process - Step by Step Timeline"
           caption="The Section 21 process typically takes 4-6 months from notice to possession"
         />
@@ -817,7 +817,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-21-ban-timeline.svg"
+          src="/images/blog/section-21-ban-timeline.svg"
           alt="Section 21 Ban Timeline - Key Dates for Landlords"
           caption="Key dates every landlord needs to know about the Section 21 ban"
         />
@@ -975,7 +975,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-section-21-vs-8.svg',
+    heroImage: '/images/blog/section-21-vs-8.svg',
     heroImageAlt: 'Section 21 vs Section 8 Comparison Guide for UK Landlords',
     showUrgencyBanner: true,
     targetKeyword: 'section 21 vs section 8',
@@ -1009,7 +1009,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-s21-vs-s8-overview.svg"
+          src="/images/blog/s21-vs-s8-overview.svg"
           alt="Section 21 vs Section 8 Eviction Notice Comparison"
           caption="Understanding the differences between Section 21 and Section 8 notices"
         />
@@ -1090,7 +1090,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-8-grounds.svg"
+          src="/images/blog/section-8-grounds.svg"
           alt="Section 8 Grounds for Possession - Mandatory vs Discretionary"
           caption="Section 8 has 17 grounds, split between mandatory and discretionary"
         />
@@ -1281,7 +1281,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-serve-notice.svg',
+    heroImage: '/images/blog/serve-notice.svg',
     heroImageAlt: 'How to Serve an Eviction Notice - Complete Guide',
     showUrgencyBanner: true,
     targetKeyword: 'how to serve eviction notice',
@@ -1314,7 +1314,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-serving-process.svg"
+          src="/images/blog/serving-process.svg"
           alt="Eviction Notice Service Process - Step by Step"
           caption="Following the correct service procedure ensures your notice is legally valid"
         />
@@ -1406,7 +1406,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-delivery-methods.svg"
+          src="/images/blog/delivery-methods.svg"
           alt="Valid Methods to Serve Eviction Notices"
           caption="Hand delivery with a witness provides the strongest proof of service"
         />
@@ -1601,7 +1601,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-eviction-timeline.svg',
+    heroImage: '/images/blog/eviction-timeline.svg',
     heroImageAlt: 'UK Eviction Timeline - How Long Does It Take',
     showUrgencyBanner: true,
     targetKeyword: 'how long does eviction take uk',
@@ -1635,7 +1635,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-timeline-overview.svg"
+          src="/images/blog/timeline-overview.svg"
           alt="UK Eviction Timeline Overview"
           caption="Average eviction timelines for Section 21 and Section 8 notices"
         />
@@ -1762,7 +1762,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-process.svg"
+          src="/images/blog/court-process.svg"
           alt="Eviction Court Process Timeline"
           caption="Court processing times can vary significantly by location"
         />
@@ -1919,7 +1919,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-rent-arrears.svg',
+    heroImage: '/images/blog/rent-arrears.svg',
     heroImageAlt: 'Rent Arrears Eviction Guide for UK Landlords',
     showUrgencyBanner: false,
     targetKeyword: 'rent arrears eviction',
@@ -1953,7 +1953,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-arrears-process.svg"
+          src="/images/blog/rent-arrears-process.svg"
           alt="Rent Arrears Eviction Process Overview"
           caption="The rent arrears eviction process from first missed payment to possession"
         />
@@ -2034,7 +2034,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-pre-action.svg"
+          src="/images/blog/pre-action.svg"
           alt="Pre-Action Steps Before Eviction"
           caption="Following pre-action steps strengthens your case at court"
         />
@@ -2188,7 +2188,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-prevent-arrears.svg"
+          src="/images/blog/prevent-arrears.svg"
           alt="Preventing Rent Arrears - Best Practices"
           caption="Thorough tenant referencing is your first line of defense"
         />
@@ -2276,7 +2276,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ast-england.svg',
+    heroImage: '/images/blog/ast-england.svg',
     heroImageAlt: 'Assured Shorthold Tenancy Guide England 2026',
     showUrgencyBanner: false,
     targetKeyword: 'assured shorthold tenancy',
@@ -2311,7 +2311,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ast-overview.svg"
+          src="/images/blog/ast-overview.svg"
           alt="Assured Shorthold Tenancy Overview - England"
           caption="The AST has been the standard tenancy type in England since 1997"
           aspectRatio="hero"
@@ -2409,7 +2409,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ast-document.svg"
+          src="/images/blog/ast-document.svg"
           alt="AST Tenancy Agreement Document"
           caption="A well-drafted AST protects both landlord and tenant"
         />
@@ -2467,7 +2467,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-landlord-checklist.svg"
+          src="/images/blog/landlord-checklist.svg"
           alt="Landlord Obligations Checklist"
           caption="Compliance checklist for landlords with AST tenancies"
         />
@@ -2618,7 +2618,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-2026-changes.svg"
+          src="/images/blog/2026-changes.svg"
           alt="AST Changes 2026 - Renters Rights Act"
           caption="Major changes to ASTs coming in May 2026"
         />
@@ -2716,7 +2716,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-section-21-process.svg',
+    heroImage: '/images/blog/section-21-process.svg',
     heroImageAlt: 'Section 21 Eviction Process England 2026',
     showUrgencyBanner: true,
     targetKeyword: 'section 21 eviction process',
@@ -2752,7 +2752,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-21-flowchart.svg"
+          src="/images/blog/section-21-flowchart.svg"
           alt="Section 21 Eviction Process Flowchart"
           caption="The Section 21 process from notice to possession"
           aspectRatio="hero"
@@ -2863,7 +2863,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-compliance-checklist.svg"
+          src="/images/blog/compliance-checklist.svg"
           alt="Section 21 Compliance Checklist"
           caption="Ensure all compliance requirements are met before serving notice"
         />
@@ -3018,7 +3018,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-forms.svg"
+          src="/images/blog/court-forms.svg"
           alt="Section 21 Court Forms N5B"
           caption="Form N5B is used for accelerated possession claims"
         />
@@ -3174,7 +3174,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-section-8-process.svg',
+    heroImage: '/images/blog/section-8-process.svg',
     heroImageAlt: 'Section 8 Eviction Process England 2026',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 eviction',
@@ -3210,7 +3210,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-8-overview.svg"
+          src="/images/blog/section-8-overview.svg"
           alt="Section 8 Eviction Overview England"
           caption="Section 8 requires proving specific grounds for possession"
           aspectRatio="hero"
@@ -3392,7 +3392,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-8-grounds.svg"
+          src="/images/blog/section-8-grounds.svg"
           alt="Section 8 Grounds Overview"
           caption="The 17 grounds for possession under Section 8"
         />
@@ -3527,7 +3527,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-hearing.svg"
+          src="/images/blog/court-hearing.svg"
           alt="Section 8 Possession Hearing"
           caption="Section 8 claims usually require a court hearing"
         />
@@ -3662,7 +3662,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-8.svg',
+    heroImage: '/images/blog/ground-8.svg',
     heroImageAlt: 'Section 8 Ground 8 Rent Arrears Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 8',
@@ -3699,7 +3699,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-8-overview.svg"
+          src="/images/blog/ground-8-overview.svg"
           alt="Ground 8 Mandatory Rent Arrears Eviction Overview"
           caption="Ground 8 provides mandatory possession for serious rent arrears"
           aspectRatio="hero"
@@ -3792,7 +3792,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-two-date-rule.svg"
+          src="/images/blog/two-date-rule.svg"
           alt="Ground 8 Two Date Rule Explained"
           caption="The arrears threshold must be met on both dates"
         />
@@ -3939,7 +3939,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-ledger.svg"
+          src="/images/blog/rent-ledger.svg"
           alt="Rent Ledger for Ground 8 Evidence"
           caption="A clear rent ledger is essential evidence for Ground 8"
         />
@@ -4091,7 +4091,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-accelerated-possession.svg',
+    heroImage: '/images/blog/accelerated-possession.svg',
     heroImageAlt: 'Accelerated Possession Procedure - England Landlord Guide',
     showUrgencyBanner: true,
     targetKeyword: 'accelerated possession procedure',
@@ -4128,7 +4128,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-accelerated-overview.svg"
+          src="/images/blog/accelerated-overview.svg"
           alt="Accelerated Possession Procedure Overview"
           caption="Accelerated possession offers a paper-based route to eviction without court hearings"
           aspectRatio="hero"
@@ -4243,7 +4243,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-comparison.svg"
+          src="/images/blog/court-comparison.svg"
           alt="Accelerated vs Standard Possession Comparison"
           caption="Accelerated procedure is faster but limited to possession-only claims"
         />
@@ -4340,7 +4340,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-accelerated-timeline.svg"
+          src="/images/blog/accelerated-timeline.svg"
           alt="Accelerated Possession Timeline"
           caption="Typical timeline for accelerated possession claims"
         />
@@ -4462,7 +4462,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-n5b-form.svg"
+          src="/images/blog/n5b-form.svg"
           alt="Form N5B Accelerated Possession Claim"
           caption="Form N5B must be completed accurately for accelerated claims"
         />
@@ -4593,7 +4593,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-standard-possession.svg',
+    heroImage: '/images/blog/standard-possession.svg',
     heroImageAlt: 'Standard Possession Procedure - England Court Guide',
     showUrgencyBanner: false,
     targetKeyword: 'standard possession procedure',
@@ -4630,7 +4630,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-standard-overview.svg"
+          src="/images/blog/standard-overview.svg"
           alt="Standard Possession Procedure Overview"
           caption="Standard possession involves a court hearing where both parties present their case"
           aspectRatio="hero"
@@ -4743,7 +4743,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-form-n5.svg"
+          src="/images/blog/form-n5.svg"
           alt="Form N5 Possession Claim"
           caption="Form N5 is the standard possession claim form for county court"
         />
@@ -4839,7 +4839,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-hearing.svg"
+          src="/images/blog/court-hearing.svg"
           alt="County Court Possession Hearing"
           caption="Standard possession hearings are usually held in county court before a district judge"
         />
@@ -5103,7 +5103,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-10-11.svg',
+    heroImage: '/images/blog/ground-10-11.svg',
     heroImageAlt: 'Section 8 Ground 10 and 11 - Discretionary Rent Arrears',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 10 ground 11',
@@ -5139,7 +5139,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-10-11-overview.svg"
+          src="/images/blog/ground-10-11-overview.svg"
           alt="Ground 10 and 11 Overview"
           caption="Grounds 10 and 11 provide flexibility when mandatory Ground 8 isn't available"
           aspectRatio="hero"
@@ -5247,7 +5247,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-payment-history.svg"
+          src="/images/blog/payment-history.svg"
           alt="Rent Payment History Chart"
           caption="Ground 11 focuses on the pattern of persistent late payment"
         />
@@ -5374,7 +5374,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-bundle.svg"
+          src="/images/blog/evidence-bundle.svg"
           alt="Evidence Bundle for Ground 10/11"
           caption="A clear rent ledger is your most important evidence for discretionary grounds"
         />
@@ -5551,7 +5551,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-14-asb.svg',
+    heroImage: '/images/blog/ground-14-asb.svg',
     heroImageAlt: 'Section 8 Ground 14 - Antisocial Behaviour Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 14 antisocial behaviour',
@@ -5586,7 +5586,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-asb-overview.svg"
+          src="/images/blog/asb-overview.svg"
           alt="Ground 14 Antisocial Behaviour Overview"
           caption="Ground 14 covers a wide range of antisocial conduct including nuisance and illegal activity"
           aspectRatio="hero"
@@ -5659,7 +5659,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-asb-examples.svg"
+          src="/images/blog/asb-examples.svg"
           alt="Examples of Antisocial Behaviour"
           caption="Ground 14 covers nuisance, harassment, and criminal activity"
         />
@@ -5768,7 +5768,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-gathering.svg"
+          src="/images/blog/evidence-gathering.svg"
           alt="Evidence Gathering for Ground 14"
           caption="Systematic evidence collection is essential for Ground 14 success"
         />
@@ -5988,7 +5988,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-17.svg',
+    heroImage: '/images/blog/ground-17.svg',
     heroImageAlt: 'Section 8 Ground 17 - False Statement by Tenant',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 17 false statement',
@@ -6021,7 +6021,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-17-overview.svg"
+          src="/images/blog/ground-17-overview.svg"
           alt="Ground 17 False Statement Overview"
           caption="Ground 17 addresses tenancy fraud and misrepresentation"
           aspectRatio="hero"
@@ -6092,7 +6092,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-false-references.svg"
+          src="/images/blog/false-references.svg"
           alt="Fake References and False Statements"
           caption="Fake references are one of the most common forms of tenant fraud"
         />
@@ -6179,7 +6179,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inducement-evidence.svg"
+          src="/images/blog/inducement-evidence.svg"
           alt="Proving Inducement"
           caption="Documenting your letting criteria helps prove inducement"
         />
@@ -6322,7 +6322,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-1.svg',
+    heroImage: '/images/blog/ground-1.svg',
     heroImageAlt: 'Section 8 Ground 1 - Landlord Returning to Property',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 1 landlord returning',
@@ -6354,7 +6354,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-1-overview.svg"
+          src="/images/blog/ground-1-overview.svg"
           alt="Ground 1 Landlord Returning Overview"
           caption="Ground 1 allows you to recover your property for your own occupation"
           aspectRatio="hero"
@@ -6441,7 +6441,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-prior-notice.svg"
+          src="/images/blog/prior-notice.svg"
           alt="Prior Notice Requirement"
           caption="Prior notice should be given before or at the start of the tenancy"
         />
@@ -6553,7 +6553,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-mandatory.svg"
+          src="/images/blog/court-mandatory.svg"
           alt="Ground 1 Court Process"
           caption="Ground 1 is mandatory—the court must grant possession if conditions are met"
         />
@@ -6651,7 +6651,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-2.svg',
+    heroImage: '/images/blog/ground-2.svg',
     heroImageAlt: 'Section 8 Ground 2 - Mortgage Lender Repossession',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 2 mortgage lender',
@@ -6683,7 +6683,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-2-overview.svg"
+          src="/images/blog/ground-2-overview.svg"
           alt="Ground 2 Mortgage Lender Repossession"
           caption="Ground 2 enables lenders to recover properties when landlords default"
           aspectRatio="hero"
@@ -6830,7 +6830,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tenant-rights.svg"
+          src="/images/blog/tenant-rights.svg"
           alt="Tenant Rights Under Ground 2"
           caption="Tenants have rights to proper notice and court process"
         />
@@ -6962,7 +6962,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-7.svg',
+    heroImage: '/images/blog/ground-7.svg',
     heroImageAlt: 'Section 8 Ground 7 - Death of Tenant',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 7 death tenant',
@@ -6995,7 +6995,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-7-overview.svg"
+          src="/images/blog/ground-7-overview.svg"
           alt="Ground 7 Death of Tenant Overview"
           caption="Ground 7 applies when the tenant has died and no succession has occurred"
           aspectRatio="hero"
@@ -7144,7 +7144,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-7-process.svg"
+          src="/images/blog/ground-7-process.svg"
           alt="Ground 7 Process Timeline"
           caption="Act quickly to stay within the 12-month window"
         />
@@ -7284,7 +7284,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-12.svg',
+    heroImage: '/images/blog/ground-12.svg',
     heroImageAlt: 'Section 8 Ground 12 - Breach of Tenancy Terms',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 12 breach tenancy',
@@ -7318,7 +7318,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-12-overview.svg"
+          src="/images/blog/ground-12-overview.svg"
           alt="Ground 12 Breach of Tenancy Overview"
           caption="Ground 12 covers any breach of tenancy terms except non-payment of rent"
           aspectRatio="hero"
@@ -7386,7 +7386,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-common-breaches.svg"
+          src="/images/blog/common-breaches.svg"
           alt="Common Tenancy Breaches for Ground 12"
           caption="Ground 12 covers a wide range of tenancy agreement violations"
         />
@@ -7503,7 +7503,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-gathering.svg"
+          src="/images/blog/evidence-gathering.svg"
           alt="Evidence Gathering for Ground 12"
           caption="Thorough documentation significantly improves your chances in court"
         />
@@ -7641,7 +7641,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-combining-grounds.svg"
+          src="/images/blog/combining-grounds.svg"
           alt="Combining Section 8 Grounds"
           caption="Using multiple grounds where applicable strengthens your possession claim"
         />
@@ -7757,7 +7757,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-possession-hearing.svg',
+    heroImage: '/images/blog/possession-hearing.svg',
     heroImageAlt: 'Possession Hearing - What to Expect in Court',
     showUrgencyBanner: false,
     targetKeyword: 'possession hearing landlord',
@@ -7791,7 +7791,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-building.svg"
+          src="/images/blog/court-building.svg"
           alt="County Court Building - Possession Hearing"
           caption="Possession hearings take place at your local county court"
           aspectRatio="hero"
@@ -7851,7 +7851,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-document-preparation.svg"
+          src="/images/blog/document-preparation.svg"
           alt="Document Preparation for Possession Hearing"
           caption="Well-organised documentation makes a strong impression"
         />
@@ -7941,7 +7941,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-courtroom.svg"
+          src="/images/blog/courtroom.svg"
           alt="Courtroom Layout for Possession Hearing"
           caption="Understanding the courtroom layout helps you feel more prepared"
         />
@@ -8067,7 +8067,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-after-hearing.svg"
+          src="/images/blog/after-hearing.svg"
           alt="Steps After Possession Hearing"
           caption="A possession order is often not the final step—be prepared for enforcement"
         />
@@ -8165,7 +8165,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-bailiff-eviction.svg',
+    heroImage: '/images/blog/bailiff-eviction.svg',
     heroImageAlt: 'Bailiff Eviction Day - What to Expect',
     showUrgencyBanner: false,
     targetKeyword: 'bailiff eviction day',
@@ -8198,7 +8198,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-bailiff-process.svg"
+          src="/images/blog/bailiff-process.svg"
           alt="Bailiff Eviction Process Overview"
           caption="Bailiff enforcement is the final step in the eviction process"
           aspectRatio="hero"
@@ -8287,7 +8287,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-preparation-checklist.svg"
+          src="/images/blog/preparation-checklist.svg"
           alt="Eviction Day Preparation Checklist"
           caption="Proper preparation ensures a smoother eviction process"
         />
@@ -8416,7 +8416,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tenant-belongings.svg"
+          src="/images/blog/tenant-belongings.svg"
           alt="Handling Tenant Belongings After Eviction"
           caption="Follow proper procedures when dealing with items left behind"
         />
@@ -8553,7 +8553,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-court-forms.svg',
+    heroImage: '/images/blog/court-forms.svg',
     heroImageAlt: 'County Court Eviction Forms - N5, N5B, N119',
     showUrgencyBanner: false,
     targetKeyword: 'county court eviction forms',
@@ -8587,7 +8587,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-forms-overview.svg"
+          src="/images/blog/court-forms-overview.svg"
           alt="County Court Eviction Forms Overview"
           caption="Understanding which form to use is the first step in court proceedings"
           aspectRatio="hero"
@@ -8697,7 +8697,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-n5-form.svg"
+          src="/images/blog/n5-form.svg"
           alt="Form N5 - Claim for Possession"
           caption="Form N5 is the standard possession claim form for Section 8 cases"
         />
@@ -8805,7 +8805,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-n119-form.svg"
+          src="/images/blog/n119-form.svg"
           alt="Form N119 - Particulars of Claim"
           caption="N119 is where you detail your grounds and evidence"
         />
@@ -8887,7 +8887,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-filing-forms.svg"
+          src="/images/blog/filing-forms.svg"
           alt="Filing Court Forms Correctly"
           caption="Accurate completion and proper filing prevents delays"
         />
@@ -8983,7 +8983,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImage: '/images/blog/deposit-protection.svg',
     heroImageAlt: 'Deposit Protection Schemes England',
     showUrgencyBanner: false,
     targetKeyword: 'deposit protection england',
@@ -9018,7 +9018,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-deposit-schemes.svg"
+          src="/images/blog/deposit-schemes.svg"
           alt="Deposit Protection Schemes England"
           caption="Three government-approved schemes protect tenant deposits in England"
           aspectRatio="hero"
@@ -9136,7 +9136,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-scheme-comparison.svg"
+          src="/images/blog/scheme-comparison.svg"
           alt="Deposit Scheme Comparison"
           caption="All three schemes offer free custodial protection"
         />
@@ -9254,7 +9254,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-deposit-penalties.svg"
+          src="/images/blog/deposit-penalties.svg"
           alt="Deposit Protection Penalties"
           caption="Non-compliance can cost up to 3x the deposit amount"
         />
@@ -9393,7 +9393,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-hmo-licensing.svg',
+    heroImage: '/images/blog/hmo-licensing.svg',
     heroImageAlt: 'HMO Licensing England Guide',
     showUrgencyBanner: false,
     targetKeyword: 'hmo licensing england',
@@ -9428,7 +9428,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-overview.svg"
+          src="/images/blog/hmo-overview.svg"
           alt="HMO Licensing Overview"
           caption="HMO licensing protects tenants and ensures property safety standards"
           aspectRatio="hero"
@@ -9555,7 +9555,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mandatory-licensing.svg"
+          src="/images/blog/mandatory-licensing.svg"
           alt="Mandatory HMO Licensing Requirements"
           caption="5+ occupants from 2+ households requires mandatory licensing"
         />
@@ -9673,7 +9673,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-application.svg"
+          src="/images/blog/hmo-application.svg"
           alt="HMO Licence Application Process"
           caption="Allow 2-6 months for application processing"
         />
@@ -9845,7 +9845,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-mcol.svg',
+    heroImage: '/images/blog/mcol.svg',
     heroImageAlt: 'Money Claim Online Guide for Landlords',
     showUrgencyBanner: false,
     targetKeyword: 'money claim online landlord',
@@ -9881,7 +9881,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mcol-overview.svg"
+          src="/images/blog/mcol-overview.svg"
           alt="Money Claim Online Overview"
           caption="MCOL provides a straightforward online process for landlords to recover money owed"
         />
@@ -9997,7 +9997,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-gather.svg"
+          src="/images/blog/evidence-gather.svg"
           alt="Gathering Evidence for Money Claim"
           caption="Thorough evidence gathering is essential before making a claim"
         />
@@ -10148,7 +10148,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mcol-response.svg"
+          src="/images/blog/mcol-response.svg"
           alt="Possible Defendant Responses"
           caption="The defendant has 14-28 days to respond to your claim"
         />
@@ -10227,7 +10227,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-enforcement.svg"
+          src="/images/blog/enforcement.svg"
           alt="Judgment Enforcement Options"
           caption="Multiple enforcement options are available if the defendant doesn&apos;t pay voluntarily"
         />
@@ -10323,7 +10323,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-particulars.svg',
+    heroImage: '/images/blog/particulars.svg',
     heroImageAlt: 'How to Write Particulars of Claim',
     showUrgencyBanner: false,
     targetKeyword: 'particulars of claim rent arrears',
@@ -10359,7 +10359,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-particulars-intro.svg"
+          src="/images/blog/particulars-intro.svg"
           alt="Particulars of Claim Introduction"
           caption="Clear, well-drafted particulars are essential for successful money claims"
         />
@@ -10493,7 +10493,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-arrears-template.svg"
+          src="/images/blog/rent-arrears-template.svg"
           alt="Rent Arrears Particulars Template"
           caption="A clear structure makes your claim easier to understand"
         />
@@ -10619,7 +10619,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-common-mistakes.svg"
+          src="/images/blog/common-mistakes.svg"
           alt="Common Mistakes in Particulars of Claim"
           caption="Avoid these common errors to strengthen your case"
         />
@@ -10742,7 +10742,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-prt.svg',
+    heroImage: '/images/blog/prt.svg',
     heroImageAlt: 'Private Residential Tenancy Scotland Guide',
     showUrgencyBanner: false,
     targetKeyword: 'private residential tenancy scotland',
@@ -10778,7 +10778,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-prt-overview.svg"
+          src="/images/blog/prt-overview.svg"
           alt="Private Residential Tenancy Overview"
           caption="PRTs provide open-ended tenancies with enhanced tenant security"
         />
@@ -10879,7 +10879,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-prt-terms.svg"
+          src="/images/blog/prt-terms.svg"
           alt="PRT Tenancy Terms"
           caption="PRTs include mandatory statutory terms that cannot be overridden"
         />
@@ -10953,7 +10953,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-landlord-duties.svg"
+          src="/images/blog/landlord-duties.svg"
           alt="Landlord Obligations in Scotland"
           caption="Scottish landlords have specific legal duties to tenants"
         />
@@ -11078,7 +11078,7 @@ export const blogPosts: BlogPost[] = [
         <p className="text-sm text-gray-600">* Ground 12 is mandatory if arrears are 3+ months; discretionary otherwise</p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-eviction-grounds-scotland.svg"
+          src="/images/blog/eviction-grounds-scotland.svg"
           alt="Scotland Eviction Grounds Overview"
           caption="Landlords must prove one of 18 grounds to evict a PRT tenant"
         />
@@ -11174,7 +11174,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-scotland-eviction.svg',
+    heroImage: '/images/blog/scotland-eviction.svg',
     heroImageAlt: 'Scotland Eviction Process Guide',
     showUrgencyBanner: false,
     targetKeyword: 'scotland eviction process',
@@ -11210,7 +11210,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-scotland-eviction-overview.svg"
+          src="/images/blog/scotland-eviction-overview.svg"
           alt="Scotland Eviction Process Overview"
           caption="The Scottish eviction process has several mandatory steps"
         />
@@ -11364,7 +11364,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-to-leave.svg"
+          src="/images/blog/notice-to-leave.svg"
           alt="Notice to Leave Scotland"
           caption="The notice period varies by ground and tenancy length"
         />
@@ -11423,7 +11423,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-sheriff-officer.svg"
+          src="/images/blog/sheriff-officer.svg"
           alt="Sheriff Officer Enforcement"
           caption="Only sheriff officers can enforce an eviction order"
         />
@@ -11508,7 +11508,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-notice-leave.svg',
+    heroImage: '/images/blog/notice-leave.svg',
     heroImageAlt: 'Scotland Notice to Leave Guide',
     showUrgencyBanner: false,
     targetKeyword: 'notice to leave scotland',
@@ -11543,7 +11543,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-overview.svg"
+          src="/images/blog/notice-overview.svg"
           alt="Notice to Leave Overview"
           caption="The Notice to Leave is the essential first step to eviction in Scotland"
         />
@@ -11620,7 +11620,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-calculation.svg"
+          src="/images/blog/notice-calculation.svg"
           alt="Notice Period Calculation"
           caption="Calculate the notice period carefully"
         />
@@ -11663,7 +11663,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-serving-notice.svg"
+          src="/images/blog/serving-notice.svg"
           alt="Serving Notice to Leave"
           caption="Keep proof of service for the Tribunal"
         />
@@ -11763,7 +11763,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-tribunal.svg',
+    heroImage: '/images/blog/tribunal.svg',
     heroImageAlt: 'Scotland First-tier Tribunal Guide',
     showUrgencyBanner: false,
     targetKeyword: 'first tier tribunal scotland landlord',
@@ -11798,7 +11798,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ftt-overview.svg"
+          src="/images/blog/ftt-overview.svg"
           alt="First-tier Tribunal Overview"
           caption="The First-tier Tribunal handles all PRT eviction applications"
         />
@@ -11851,7 +11851,7 @@ export const blogPosts: BlogPost[] = [
         <p>Typically £50-100 - check current fees on the Scottish Courts website.</p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-application.svg"
+          src="/images/blog/tribunal-application.svg"
           alt="Tribunal Application"
           caption="Submit your application online with supporting evidence"
         />
@@ -11898,7 +11898,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-cmd.svg"
+          src="/images/blog/cmd.svg"
           alt="Case Management Discussion"
           caption="CMDs are usually by phone or video"
         />
@@ -12028,7 +12028,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-12-scotland.svg',
+    heroImage: '/images/blog/ground-12-scotland.svg',
     heroImageAlt: 'Scotland Ground 12 Rent Arrears Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 12 rent arrears',
@@ -12063,7 +12063,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-12-overview.svg"
+          src="/images/blog/ground-12-overview.svg"
           alt="Ground 12 Rent Arrears Overview"
           caption="Ground 12 is the primary ground for rent arrears evictions in Scotland"
         />
@@ -12141,7 +12141,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mandatory-discretionary.svg"
+          src="/images/blog/mandatory-discretionary.svg"
           alt="Mandatory vs Discretionary Ground 12"
           caption="The 3-month threshold determines whether Ground 12 is mandatory"
         />
@@ -12210,7 +12210,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-ground-12.svg"
+          src="/images/blog/notice-ground-12.svg"
           alt="Notice to Leave for Ground 12"
           caption="Use the prescribed form and specify the arrears amount"
         />
@@ -12344,7 +12344,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-1.svg',
+    heroImage: '/images/blog/ground-1.svg',
     heroImageAlt: 'Scotland Ground 1 Landlord Selling Property',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 1 selling property',
@@ -12378,7 +12378,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-selling-property.svg"
+          src="/images/blog/selling-property.svg"
           alt="Selling Rental Property"
           caption="Ground 1 is mandatory if you prove genuine intention to sell"
         />
@@ -12458,7 +12458,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-sale.svg"
+          src="/images/blog/evidence-sale.svg"
           alt="Evidence for Ground 1"
           caption="Estate agent instructions and marketing materials support your application"
         />
@@ -12609,7 +12609,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-4.svg',
+    heroImage: '/images/blog/ground-4.svg',
     heroImageAlt: 'Scotland Ground 4 Landlord Moving In',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 4 landlord moving in',
@@ -12643,7 +12643,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-moving-in.svg"
+          src="/images/blog/moving-in.svg"
           alt="Landlord Moving In"
           caption="Ground 4 is mandatory if you prove genuine intention to live in the property"
         />
@@ -12729,7 +12729,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-family-move.svg"
+          src="/images/blog/family-move.svg"
           alt="Family Moving In"
           caption="Prove a genuine intention with concrete plans and circumstances"
         />
@@ -12872,7 +12872,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-11.svg',
+    heroImage: '/images/blog/ground-11.svg',
     heroImageAlt: 'Scotland Ground 11 Breach of Tenancy',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 11 breach tenancy',
@@ -12907,7 +12907,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-breach-tenancy.svg"
+          src="/images/blog/breach-tenancy.svg"
           alt="Breach of Tenancy Agreement"
           caption="Ground 11 covers all breaches of tenancy terms"
         />
@@ -12968,7 +12968,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-breach-types.svg"
+          src="/images/blog/breach-types.svg"
           alt="Types of Tenancy Breach"
           caption="Different breaches have different levels of severity"
         />
@@ -13042,7 +13042,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-ground-11.svg"
+          src="/images/blog/tribunal-ground-11.svg"
           alt="Tribunal Hearing for Ground 11"
           caption="The Tribunal weighs breach severity against tenant circumstances"
         />
@@ -13139,7 +13139,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-3.svg',
+    heroImage: '/images/blog/ground-3.svg',
     heroImageAlt: 'Scotland Ground 3 - Landlord Refurbishment Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 3 refurbishment eviction',
@@ -13173,7 +13173,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-refurbishment.svg"
+          src="/images/blog/refurbishment.svg"
           alt="Property Refurbishment"
           caption="Ground 3 requires works that necessitate vacant possession"
         />
@@ -13265,7 +13265,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-building-plans.svg"
+          src="/images/blog/building-plans.svg"
           alt="Building Plans and Evidence"
           caption="Professional plans and contractor quotes strengthen your application"
         />
@@ -13385,7 +13385,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-14.svg',
+    heroImage: '/images/blog/ground-14.svg',
     heroImageAlt: 'Scotland Ground 14 - Antisocial Behaviour Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 14 antisocial behaviour eviction',
@@ -13420,7 +13420,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-antisocial.svg"
+          src="/images/blog/antisocial.svg"
           alt="Antisocial Behaviour"
           caption="Ground 14 covers behaviour that causes nuisance or harm"
         />
@@ -13481,7 +13481,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-noise-complaints.svg"
+          src="/images/blog/noise-complaints.svg"
           alt="Recording Antisocial Behaviour"
           caption="Document incidents thoroughly with dates, times, and witnesses"
         />
@@ -13560,7 +13560,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-asb.svg"
+          src="/images/blog/tribunal-asb.svg"
           alt="Tribunal Hearing for Antisocial Behaviour"
           caption="Present a clear timeline of incidents and evidence"
         />
@@ -13665,7 +13665,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-6.svg',
+    heroImage: '/images/blog/ground-6.svg',
     heroImageAlt: 'Scotland Ground 6 - Non-Residential Purpose Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 6 non-residential eviction',
@@ -13699,7 +13699,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-change-of-use.svg"
+          src="/images/blog/change-of-use.svg"
           alt="Property Change of Use"
           caption="Ground 6 applies when converting residential property to non-residential use"
         />
@@ -13822,7 +13822,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-planning-documents.svg"
+          src="/images/blog/planning-documents.svg"
           alt="Planning Documents"
           caption="Planning applications and business plans strengthen your Ground 6 case"
         />
@@ -13915,7 +13915,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-hearing.svg"
+          src="/images/blog/tribunal-hearing.svg"
           alt="First-tier Tribunal Hearing"
           caption="The Tribunal will assess whether your intention is genuine"
         />
@@ -13998,7 +13998,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-7.svg',
+    heroImage: '/images/blog/ground-7.svg',
     heroImageAlt: 'Scotland Ground 7 - Property Demolition Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 7 demolition eviction',
@@ -14031,7 +14031,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-demolition.svg"
+          src="/images/blog/demolition.svg"
           alt="Property Demolition"
           caption="Ground 7 applies when you intend to demolish the let property"
         />
@@ -14148,7 +14148,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-development-plans.svg"
+          src="/images/blog/development-plans.svg"
           alt="Development Plans"
           caption="Clear development plans strengthen your Ground 7 application"
         />
@@ -14278,7 +14278,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-13.svg',
+    heroImage: '/images/blog/ground-13.svg',
     heroImageAlt: 'Scotland Ground 13 - Criminal Behaviour Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 13 criminal behaviour eviction',
@@ -14312,7 +14312,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-criminal-eviction.svg"
+          src="/images/blog/criminal-eviction.svg"
           alt="Criminal Behaviour Eviction"
           caption="Ground 13 applies when a tenant is convicted of a relevant criminal offence"
         />
@@ -14383,7 +14383,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-conviction.svg"
+          src="/images/blog/court-conviction.svg"
           alt="Court Conviction"
           caption="A court conviction is required - not just an arrest or charge"
         />
@@ -14555,7 +14555,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ground-15.svg',
+    heroImage: '/images/blog/ground-15.svg',
     heroImageAlt: 'Scotland Ground 15 - Antisocial Association Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'scotland ground 15 antisocial association eviction',
@@ -14588,7 +14588,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-antisocial-association.svg"
+          src="/images/blog/antisocial-association.svg"
           alt="Antisocial Association"
           caption="Ground 15 covers tenant associations with antisocial individuals"
         />
@@ -14694,7 +14694,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-evidence-gathering.svg"
+          src="/images/blog/evidence-gathering.svg"
           alt="Gathering Evidence"
           caption="Document both the antisocial behaviour and the pattern of association"
         />
@@ -14836,7 +14836,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-simple-procedure.svg',
+    heroImage: '/images/blog/simple-procedure.svg',
     heroImageAlt: 'Scotland Simple Procedure - Rent Recovery',
     showUrgencyBanner: false,
     targetKeyword: 'scotland simple procedure rent arrears',
@@ -14871,7 +14871,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-sheriff-court.svg"
+          src="/images/blog/sheriff-court.svg"
           alt="Sheriff Court Scotland"
           caption="Simple Procedure claims are heard in the Sheriff Court"
         />
@@ -15024,7 +15024,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-court-forms.svg"
+          src="/images/blog/court-forms.svg"
           alt="Simple Procedure Forms"
           caption="Forms can be completed online through the Scottish Courts website"
         />
@@ -15177,7 +15177,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImage: '/images/blog/deposit-protection.svg',
     heroImageAlt: 'Scotland Deposit Protection Guide',
     showUrgencyBanner: false,
     targetKeyword: 'scotland deposit protection tenancy',
@@ -15212,7 +15212,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-deposit-schemes.svg"
+          src="/images/blog/deposit-schemes.svg"
           alt="Tenancy Deposit Schemes"
           caption="All Scottish landlords must use an approved deposit protection scheme"
         />
@@ -15316,7 +15316,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-calendar-deadline.svg"
+          src="/images/blog/calendar-deadline.svg"
           alt="Deposit Protection Deadline"
           caption="Mark your 30 working day deadline as soon as you receive a deposit"
         />
@@ -15501,7 +15501,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-landlord-registration.svg',
+    heroImage: '/images/blog/landlord-registration.svg',
     heroImageAlt: 'Scotland Landlord Registration Guide',
     showUrgencyBanner: false,
     targetKeyword: 'scotland landlord registration requirements',
@@ -15536,7 +15536,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-registration.svg"
+          src="/images/blog/registration.svg"
           alt="Landlord Registration"
           caption="Registration is mandatory for all private landlords in Scotland"
         />
@@ -15664,7 +15664,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-registration-fees.svg"
+          src="/images/blog/registration-fees.svg"
           alt="Registration Fees"
           caption="Fees are based on the number of landlords and properties"
         />
@@ -15813,7 +15813,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-hmo-licensing.svg',
+    heroImage: '/images/blog/hmo-licensing.svg',
     heroImageAlt: 'Scotland HMO Licensing Guide',
     showUrgencyBanner: false,
     targetKeyword: 'scotland hmo licensing requirements',
@@ -15848,7 +15848,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-property.svg"
+          src="/images/blog/hmo-property.svg"
           alt="HMO Property"
           caption="HMOs require a licence from the local council before letting"
         />
@@ -15996,7 +15996,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-inspection.svg"
+          src="/images/blog/hmo-inspection.svg"
           alt="HMO Inspection"
           caption="Council officers will inspect your property before granting a licence"
         />
@@ -16157,7 +16157,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-repairing-standard.svg',
+    heroImage: '/images/blog/repairing-standard.svg',
     heroImageAlt: 'Scotland Repairing Standard Guide',
     showUrgencyBanner: false,
     targetKeyword: 'scotland repairing standard landlord',
@@ -16191,7 +16191,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-property-condition.svg"
+          src="/images/blog/property-condition.svg"
           alt="Property Condition"
           caption="Properties must meet the Repairing Standard throughout any tenancy"
         />
@@ -16263,7 +16263,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-smoke-alarms.svg"
+          src="/images/blog/smoke-alarms.svg"
           alt="Smoke Alarms"
           caption="Interlinked smoke and heat alarms are now mandatory in Scotland"
         />
@@ -16428,7 +16428,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-contract.svg',
+    heroImage: '/images/blog/wales-contract.svg',
     heroImageAlt: 'Wales Standard Occupation Contract Guide',
     showUrgencyBanner: false,
     targetKeyword: 'standard occupation contract wales',
@@ -16464,7 +16464,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-contract-overview.svg"
+          src="/images/blog/wales-contract-overview.svg"
           alt="Wales Standard Occupation Contract Overview"
           caption="Standard Occupation Contracts replaced ASTs in Wales from December 2022"
           aspectRatio="hero"
@@ -16563,7 +16563,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-fundamental-terms.svg"
+          src="/images/blog/wales-fundamental-terms.svg"
           alt="Fundamental Terms in Welsh Occupation Contracts"
           caption="Fundamental terms are set by law and protect both parties"
           aspectRatio="hero"
@@ -16651,7 +16651,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-fitness-habitation.svg"
+          src="/images/blog/wales-fitness-habitation.svg"
           alt="Fitness for Human Habitation Requirements Wales"
           caption="Properties must meet 29 fitness standards under Welsh law"
           aspectRatio="hero"
@@ -16812,7 +16812,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-renting-act.svg',
+    heroImage: '/images/blog/wales-renting-act.svg',
     heroImageAlt: 'Renting Homes Wales Act 2016 Guide',
     showUrgencyBanner: false,
     targetKeyword: 'renting homes wales act 2016',
@@ -16846,7 +16846,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-act-overview.svg"
+          src="/images/blog/wales-act-overview.svg"
           alt="Renting Homes Wales Act Overview"
           caption="The Renting Homes Act 2016 transformed Welsh tenancy law from December 2022"
           aspectRatio="hero"
@@ -16944,7 +16944,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-written-statement.svg"
+          src="/images/blog/wales-written-statement.svg"
           alt="Written Statement Requirements Wales"
           caption="A written statement must be provided within 14 days of occupation"
           aspectRatio="hero"
@@ -17063,7 +17063,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-notice-periods.svg"
+          src="/images/blog/wales-notice-periods.svg"
           alt="Notice Periods Under Renting Homes Wales Act"
           caption="Notice periods vary depending on the grounds for possession"
           aspectRatio="hero"
@@ -17203,7 +17203,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-eviction.svg',
+    heroImage: '/images/blog/wales-eviction.svg',
     heroImageAlt: 'Wales Eviction Process Guide',
     showUrgencyBanner: true,
     targetKeyword: 'wales eviction process',
@@ -17237,7 +17237,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-eviction-overview.svg"
+          src="/images/blog/wales-eviction-overview.svg"
           alt="Wales Eviction Process Overview"
           caption="Welsh eviction follows the Renting Homes Act procedures"
           aspectRatio="hero"
@@ -17298,7 +17298,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-section-173.svg"
+          src="/images/blog/wales-section-173.svg"
           alt="Section 173 Notice Requirements Wales"
           caption="Section 173 requires 6 months notice after an initial 6-month protected period"
           aspectRatio="hero"
@@ -17439,7 +17439,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-possession-grounds.svg"
+          src="/images/blog/wales-possession-grounds.svg"
           alt="Possession Grounds Under Welsh Law"
           caption="Different grounds have different notice periods and court requirements"
           aspectRatio="hero"
@@ -17639,7 +17639,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-deposit.svg',
+    heroImage: '/images/blog/wales-deposit.svg',
     heroImageAlt: 'Wales Deposit Protection Guide',
     showUrgencyBanner: false,
     targetKeyword: 'deposit protection wales',
@@ -17673,7 +17673,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-deposit-overview.svg"
+          src="/images/blog/wales-deposit-overview.svg"
           alt="Wales Deposit Protection Overview"
           caption="All deposits in Wales must be protected within 30 days"
           aspectRatio="hero"
@@ -17757,7 +17757,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-deposit-timeline.svg"
+          src="/images/blog/wales-deposit-timeline.svg"
           alt="Deposit Protection Timeline Wales"
           caption="The 30-day deadline starts from when you receive the deposit"
           aspectRatio="hero"
@@ -17853,7 +17853,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-deposit-penalties.svg"
+          src="/images/blog/wales-deposit-penalties.svg"
           alt="Penalties for Deposit Non-Compliance Wales"
           caption="Non-compliance can result in compensation of up to 3x the deposit"
           aspectRatio="hero"
@@ -17940,7 +17940,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-rent-smart-wales.svg',
+    heroImage: '/images/blog/rent-smart-wales.svg',
     heroImageAlt: 'Rent Smart Wales Registration Guide',
     showUrgencyBanner: false,
     targetKeyword: 'rent smart wales registration',
@@ -17973,7 +17973,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rsw-overview.svg"
+          src="/images/blog/rsw-overview.svg"
           alt="Rent Smart Wales Overview"
           caption="Rent Smart Wales has been mandatory since November 2016"
           aspectRatio="hero"
@@ -18066,7 +18066,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rsw-license-activities.svg"
+          src="/images/blog/rsw-license-activities.svg"
           alt="Rent Smart Wales Licensed Activities"
           caption="Any hands-on landlord activities require a licence"
           aspectRatio="hero"
@@ -18199,7 +18199,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rsw-penalties.svg"
+          src="/images/blog/rsw-penalties.svg"
           alt="Rent Smart Wales Penalties"
           caption="Non-compliance can result in significant fines and loss of rent"
           aspectRatio="hero"
@@ -18284,7 +18284,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-hmo.svg',
+    heroImage: '/images/blog/wales-hmo.svg',
     heroImageAlt: 'Wales HMO Licensing Guide',
     showUrgencyBanner: false,
     targetKeyword: 'hmo licensing wales',
@@ -18317,7 +18317,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-hmo-overview.svg"
+          src="/images/blog/wales-hmo-overview.svg"
           alt="Wales HMO Licensing Overview"
           caption="HMOs face stricter regulation due to higher occupancy and shared facilities"
           aspectRatio="hero"
@@ -18376,7 +18376,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-hmo-mandatory.svg"
+          src="/images/blog/wales-hmo-mandatory.svg"
           alt="Mandatory HMO Licensing Criteria Wales"
           caption="The 5+ person threshold triggers mandatory licensing"
           aspectRatio="hero"
@@ -18482,7 +18482,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-hmo-standards.svg"
+          src="/images/blog/wales-hmo-standards.svg"
           alt="HMO Standards and Requirements Wales"
           caption="HMOs must meet specific standards for fire safety, facilities, and room sizes"
           aspectRatio="hero"
@@ -18619,7 +18619,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-fitness.svg',
+    heroImage: '/images/blog/wales-fitness.svg',
     heroImageAlt: 'Wales Fitness for Human Habitation Guide',
     showUrgencyBanner: false,
     targetKeyword: 'fitness for human habitation wales',
@@ -18651,7 +18651,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-fitness-overview.svg"
+          src="/images/blog/wales-fitness-overview.svg"
           alt="Wales Fitness for Human Habitation Overview"
           caption="Properties must meet 29 specific fitness matters under Welsh law"
           aspectRatio="hero"
@@ -18763,7 +18763,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-fitness-inspection.svg"
+          src="/images/blog/wales-fitness-inspection.svg"
           alt="Property Inspection for Fitness Wales"
           caption="Regular inspections help identify and address fitness issues"
           aspectRatio="hero"
@@ -18903,7 +18903,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-grounds.svg',
+    heroImage: '/images/blog/wales-grounds.svg',
     heroImageAlt: 'Wales Possession Grounds Guide',
     showUrgencyBanner: true,
     targetKeyword: 'wales possession grounds eviction',
@@ -18935,7 +18935,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-grounds-overview.svg"
+          src="/images/blog/wales-grounds-overview.svg"
           alt="Wales Possession Grounds Overview"
           caption="Different grounds have different requirements and notice periods"
           aspectRatio="hero"
@@ -18999,7 +18999,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-discretionary.svg"
+          src="/images/blog/wales-discretionary.svg"
           alt="Discretionary Grounds Wales"
           caption="Courts weigh up all circumstances with discretionary grounds"
           aspectRatio="hero"
@@ -19197,7 +19197,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-checklist.svg',
+    heroImage: '/images/blog/wales-checklist.svg',
     heroImageAlt: 'Wales Landlord Obligations Checklist',
     showUrgencyBanner: false,
     targetKeyword: 'wales landlord obligations checklist',
@@ -19269,7 +19269,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-before-letting.svg"
+          src="/images/blog/wales-before-letting.svg"
           alt="Before Letting Checklist Wales"
           caption="Complete all pre-letting requirements before the tenant moves in"
           aspectRatio="hero"
@@ -19477,7 +19477,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-rent.svg',
+    heroImage: '/images/blog/wales-rent.svg',
     heroImageAlt: 'Wales Rent Increases Guide',
     showUrgencyBanner: false,
     targetKeyword: 'rent increase wales',
@@ -19508,7 +19508,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-rent-overview.svg"
+          src="/images/blog/wales-rent-overview.svg"
           alt="Wales Rent Increase Overview"
           caption="Rent increases must follow the Renting Homes Act procedures"
           aspectRatio="hero"
@@ -19577,7 +19577,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-rent-timeline.svg"
+          src="/images/blog/wales-rent-timeline.svg"
           alt="Rent Increase Timeline Wales"
           caption="You can only increase rent once per year"
           aspectRatio="hero"
@@ -19676,7 +19676,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-abandoned.svg',
+    heroImage: '/images/blog/wales-abandoned.svg',
     heroImageAlt: 'Wales Abandoned Property Guide',
     showUrgencyBanner: false,
     targetKeyword: 'abandoned property wales landlord',
@@ -19707,7 +19707,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-abandoned-overview.svg"
+          src="/images/blog/wales-abandoned-overview.svg"
           alt="Wales Abandoned Property Overview"
           caption="A formal process must be followed for abandoned properties"
           aspectRatio="hero"
@@ -19794,7 +19794,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-belongings.svg"
+          src="/images/blog/wales-belongings.svg"
           alt="Dealing with Abandoned Belongings Wales"
           caption="Store belongings safely and give reasonable time for collection"
           aspectRatio="hero"
@@ -19862,7 +19862,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-joint.svg',
+    heroImage: '/images/blog/wales-joint.svg',
     heroImageAlt: 'Wales Joint Occupation Contracts Guide',
     showUrgencyBanner: false,
     targetKeyword: 'joint occupation contract wales',
@@ -19894,7 +19894,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-joint-overview.svg"
+          src="/images/blog/wales-joint-overview.svg"
           alt="Wales Joint Occupation Contracts Overview"
           caption="Joint contract-holders share rights and responsibilities equally"
           aspectRatio="hero"
@@ -19966,7 +19966,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-joint-changes.svg"
+          src="/images/blog/wales-joint-changes.svg"
           alt="Adding and Removing Contract-Holders Wales"
           caption="Changes to joint contracts require agreement from all parties"
           aspectRatio="hero"
@@ -20068,7 +20068,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-safety.svg',
+    heroImage: '/images/blog/wales-safety.svg',
     heroImageAlt: 'Wales Gas and Electrical Safety Guide',
     showUrgencyBanner: false,
     targetKeyword: 'wales landlord gas electrical safety',
@@ -20093,7 +20093,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-wales-safety-hero.svg"
+          src="/images/blog/wales-safety-hero.svg"
           alt="Wales Gas and Electrical Safety Requirements"
           caption="Gas and electrical safety certificates are mandatory for Welsh landlords"
           aspectRatio="hero"
@@ -20202,7 +20202,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-eicr-wales.svg"
+          src="/images/blog/eicr-wales.svg"
           alt="EICR Requirements Wales"
           caption="EICRs must be obtained every 5 years or when specified"
           aspectRatio="hero"
@@ -20294,7 +20294,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-safety-calendar.svg"
+          src="/images/blog/safety-calendar.svg"
           alt="Safety Check Calendar Wales"
           caption="Set reminders to ensure safety certificates don't expire"
           aspectRatio="hero"
@@ -20374,7 +20374,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-compliance-penalties.svg"
+          src="/images/blog/compliance-penalties.svg"
           alt="Non-Compliance Penalties Wales"
           caption="Penalties for non-compliance can be severe"
           aspectRatio="hero"
@@ -20452,7 +20452,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-epc.svg',
+    heroImage: '/images/blog/wales-epc.svg',
     heroImageAlt: 'Wales EPC Requirements Guide',
     showUrgencyBanner: false,
     targetKeyword: 'wales landlord epc requirements',
@@ -20478,7 +20478,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-epc-hero.svg"
+          src="/images/blog/epc-hero.svg"
           alt="Wales EPC Requirements"
           caption="EPCs rate properties from A (most efficient) to G (least efficient)"
           aspectRatio="hero"
@@ -20603,7 +20603,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mees-wales.svg"
+          src="/images/blog/mees-wales.svg"
           alt="MEES Requirements Wales"
           caption="Properties must meet minimum energy efficiency standards"
           aspectRatio="hero"
@@ -20672,7 +20672,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-epc-exemptions.svg"
+          src="/images/blog/epc-exemptions.svg"
           alt="EPC Exemptions Wales"
           caption="Exemptions must be properly registered with supporting evidence"
           aspectRatio="hero"
@@ -20809,7 +20809,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-asb.svg',
+    heroImage: '/images/blog/wales-asb.svg',
     heroImageAlt: 'Wales Anti-Social Behaviour Eviction Guide',
     showUrgencyBanner: false,
     targetKeyword: 'wales anti social behaviour eviction',
@@ -20834,7 +20834,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-asb-hero.svg"
+          src="/images/blog/asb-hero.svg"
           alt="Anti-Social Behaviour Eviction Wales"
           caption="ASB can be grounds for possession but requires proper evidence"
           aspectRatio="hero"
@@ -20903,7 +20903,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-asb-grounds.svg"
+          src="/images/blog/asb-grounds.svg"
           alt="ASB Possession Grounds Wales"
           caption="Multiple grounds may apply in ASB cases"
           aspectRatio="hero"
@@ -21007,7 +21007,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-asb-notice.svg"
+          src="/images/blog/asb-notice.svg"
           alt="ASB Notice Requirements Wales"
           caption="Correct notice must be served before court proceedings"
           aspectRatio="hero"
@@ -21097,7 +21097,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-serious-asb.svg"
+          src="/images/blog/serious-asb.svg"
           alt="Serious ASB Cases Wales"
           caption="Serious ASB cases may involve multiple agencies"
           aspectRatio="hero"
@@ -21193,7 +21193,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-notices.svg',
+    heroImage: '/images/blog/wales-notices.svg',
     heroImageAlt: 'Wales Notice Periods Guide',
     showUrgencyBanner: false,
     targetKeyword: 'wales landlord notice periods',
@@ -21218,7 +21218,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-periods-hero.svg"
+          src="/images/blog/notice-periods-hero.svg"
           alt="Wales Landlord Notice Periods"
           caption="Different situations require different notice periods under Welsh law"
           aspectRatio="hero"
@@ -21304,7 +21304,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-section-173.svg"
+          src="/images/blog/section-173.svg"
           alt="Section 173 Notice Requirements"
           caption="Section 173 notices require 6 months notice and full compliance"
           aspectRatio="hero"
@@ -21406,7 +21406,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ground-notices.svg"
+          src="/images/blog/ground-notices.svg"
           alt="Possession Ground Notice Periods"
           caption="Notice periods vary depending on the ground for possession"
           aspectRatio="hero"
@@ -21498,7 +21498,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-serving-notices.svg"
+          src="/images/blog/serving-notices.svg"
           alt="Serving Notices Wales"
           caption="Keep proof of service for all notices"
           aspectRatio="hero"
@@ -21576,7 +21576,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-rights.svg',
+    heroImage: '/images/blog/wales-rights.svg',
     heroImageAlt: 'Wales Contract-Holder Rights Guide',
     showUrgencyBanner: false,
     targetKeyword: 'wales contract holder rights',
@@ -21601,7 +21601,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rights-hero.svg"
+          src="/images/blog/rights-hero.svg"
           alt="Contract-Holder Rights Wales"
           caption="Understanding rights helps landlords avoid disputes"
           aspectRatio="hero"
@@ -21666,7 +21666,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-fundamental-terms.svg"
+          src="/images/blog/fundamental-terms.svg"
           alt="Fundamental Terms Wales"
           caption="Fundamental terms provide core protections that cannot be removed"
           aspectRatio="hero"
@@ -21747,7 +21747,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-quiet-enjoyment.svg"
+          src="/images/blog/quiet-enjoyment.svg"
           alt="Right to Quiet Enjoyment"
           caption="Contract-holders have the right to enjoy their home without interference"
           aspectRatio="hero"
@@ -21841,7 +21841,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-avoiding-disputes.svg"
+          src="/images/blog/avoiding-disputes.svg"
           alt="Avoiding Disputes Wales"
           caption="Clear communication and proper processes prevent most disputes"
           aspectRatio="hero"
@@ -21928,7 +21928,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-wales-tribunal.svg',
+    heroImage: '/images/blog/wales-tribunal.svg',
     heroImageAlt: 'Wales Residential Property Tribunal Guide',
     showUrgencyBanner: false,
     targetKeyword: 'residential property tribunal wales',
@@ -21953,7 +21953,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-hero.svg"
+          src="/images/blog/tribunal-hero.svg"
           alt="Residential Property Tribunal Wales"
           caption="The RPT handles specific types of landlord-tenant disputes"
           aspectRatio="hero"
@@ -22017,7 +22017,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-cases.svg"
+          src="/images/blog/tribunal-cases.svg"
           alt="Types of Tribunal Cases"
           caption="The RPT handles various housing disputes"
           aspectRatio="hero"
@@ -22108,7 +22108,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hearing-process.svg"
+          src="/images/blog/hearing-process.svg"
           alt="Tribunal Hearing Process"
           caption="Tribunal hearings are less formal than court"
           aspectRatio="hero"
@@ -22196,7 +22196,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tribunal-appeals.svg"
+          src="/images/blog/tribunal-appeals.svg"
           alt="Tribunal Appeals"
           caption="Appeals are limited to points of law"
           aspectRatio="hero"
@@ -22283,7 +22283,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ni-tenancies.svg',
+    heroImage: '/images/blog/ni-tenancies.svg',
     heroImageAlt: 'Northern Ireland Private Tenancies Order Guide',
     showUrgencyBanner: false,
     targetKeyword: 'private tenancies order northern ireland',
@@ -22308,7 +22308,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-pto-hero.svg"
+          src="/images/blog/ni-pto-hero.svg"
           alt="Northern Ireland Private Tenancies Order"
           caption="The PTO sets out the legal framework for private lettings in NI"
           aspectRatio="hero"
@@ -22373,7 +22373,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-obligations.svg"
+          src="/images/blog/ni-obligations.svg"
           alt="NI Landlord Obligations"
           caption="NI landlords have specific legal obligations under the PTO"
           aspectRatio="hero"
@@ -22462,7 +22462,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-rent-book.svg"
+          src="/images/blog/ni-rent-book.svg"
           alt="NI Rent Book Requirements"
           caption="Written documentation must be provided within 28 days"
           aspectRatio="hero"
@@ -22592,7 +22592,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-enforcement.svg"
+          src="/images/blog/ni-enforcement.svg"
           alt="NI Enforcement and Penalties"
           caption="Councils have significant enforcement powers under the PTO"
           aspectRatio="hero"
@@ -22672,7 +22672,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ni-registration.svg',
+    heroImage: '/images/blog/ni-registration.svg',
     heroImageAlt: 'Northern Ireland Landlord Registration Guide',
     showUrgencyBanner: false,
     targetKeyword: 'northern ireland landlord registration',
@@ -22696,7 +22696,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-reg-hero.svg"
+          src="/images/blog/ni-reg-hero.svg"
           alt="NI Landlord Registration"
           caption="Registration is mandatory for all NI landlords"
           aspectRatio="hero"
@@ -22761,7 +22761,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-who-registers.svg"
+          src="/images/blog/who-registers.svg"
           alt="Who Must Register NI"
           caption="Most private landlords must register with the scheme"
           aspectRatio="hero"
@@ -22866,7 +22866,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-renewal.svg"
+          src="/images/blog/ni-renewal.svg"
           alt="NI Registration Renewal"
           caption="Set reminders to renew registration before expiry"
           aspectRatio="hero"
@@ -22984,7 +22984,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ni-deposit.svg',
+    heroImage: '/images/blog/ni-deposit.svg',
     heroImageAlt: 'Northern Ireland Deposit Protection Guide',
     showUrgencyBanner: false,
     targetKeyword: 'northern ireland deposit protection',
@@ -23008,7 +23008,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-deposit-hero.svg"
+          src="/images/blog/ni-deposit-hero.svg"
           alt="NI Tenancy Deposit Protection"
           caption="Deposits must be protected in an approved scheme within 14 days"
           aspectRatio="hero"
@@ -23068,7 +23068,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-protect-deposit.svg"
+          src="/images/blog/protect-deposit.svg"
           alt="How to Protect Deposit NI"
           caption="Follow the scheme process to protect deposits correctly"
           aspectRatio="hero"
@@ -23148,7 +23148,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-returning-deposit.svg"
+          src="/images/blog/returning-deposit.svg"
           alt="Returning Deposit NI"
           caption="Document property condition at start and end of tenancy"
           aspectRatio="hero"
@@ -23277,7 +23277,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-ni-eviction.svg',
+    heroImage: '/images/blog/ni-eviction.svg',
     heroImageAlt: 'Northern Ireland Eviction Process Guide',
     showUrgencyBanner: false,
     targetKeyword: 'northern ireland eviction process',
@@ -23301,7 +23301,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-eviction-hero.svg"
+          src="/images/blog/ni-eviction-hero.svg"
           alt="NI Eviction Process"
           caption="Follow the legal process carefully to avoid illegal eviction"
           aspectRatio="hero"
@@ -23383,7 +23383,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-ntq.svg"
+          src="/images/blog/ni-ntq.svg"
           alt="Notice to Quit NI"
           caption="Use the correct notice period and format"
           aspectRatio="hero"
@@ -23471,7 +23471,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-ni-court.svg"
+          src="/images/blog/ni-court.svg"
           alt="NI Court Process"
           caption="The court will decide whether to grant possession"
           aspectRatio="hero"
@@ -23583,7 +23583,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-uk-insurance.svg',
+    heroImage: '/images/blog/uk-insurance.svg',
     heroImageAlt: 'UK Landlord Insurance Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord insurance uk',
@@ -23608,7 +23608,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-insurance-hero.svg"
+          src="/images/blog/insurance-hero.svg"
           alt="UK Landlord Insurance"
           caption="Proper insurance protects your rental investment"
           aspectRatio="hero"
@@ -23711,7 +23711,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-buildings-cover.svg"
+          src="/images/blog/buildings-cover.svg"
           alt="Buildings Insurance Cover"
           caption="Buildings insurance covers the structure and fixtures"
           aspectRatio="hero"
@@ -23794,7 +23794,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-guarantee.svg"
+          src="/images/blog/rent-guarantee.svg"
           alt="Rent Guarantee Insurance"
           caption="RGI protects your income if tenants stop paying"
           aspectRatio="hero"
@@ -23906,7 +23906,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-uk-tax.svg',
+    heroImage: '/images/blog/uk-tax.svg',
     heroImageAlt: 'UK Landlord Tax Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord tax uk',
@@ -23930,7 +23930,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tax-hero.svg"
+          src="/images/blog/tax-hero.svg"
           alt="UK Landlord Tax"
           caption="Understanding tax helps you maximize rental profits"
           aspectRatio="hero"
@@ -24015,7 +24015,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-income-tax.svg"
+          src="/images/blog/income-tax.svg"
           alt="Rental Income Tax"
           caption="Tax is calculated on rental profit after expenses"
           aspectRatio="hero"
@@ -24097,7 +24097,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mortgage-interest.svg"
+          src="/images/blog/mortgage-interest.svg"
           alt="Mortgage Interest Relief"
           caption="Mortgage interest now gives a 20% tax credit"
           aspectRatio="hero"
@@ -24224,7 +24224,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Safety Team',
       role: 'Property Safety Specialists',
     },
-    heroImage: '/images/blog/placeholder-gas-safety.svg',
+    heroImage: '/images/blog/gas-safety.svg',
     heroImageAlt: 'UK Gas Safety Requirements for Landlords',
     showUrgencyBanner: false,
     targetKeyword: 'landlord gas safety requirements UK',
@@ -24619,7 +24619,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Safety Team',
       role: 'Property Safety Specialists',
     },
-    heroImage: '/images/blog/placeholder-electrical-safety.svg',
+    heroImage: '/images/blog/electrical-safety.svg',
     heroImageAlt: 'UK Electrical Safety Requirements for Landlords',
     showUrgencyBanner: false,
     targetKeyword: 'landlord electrical safety requirements UK',
@@ -25033,7 +25033,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Safety Team',
       role: 'Property Safety Specialists',
     },
-    heroImage: '/images/blog/placeholder-fire-safety.svg',
+    heroImage: '/images/blog/fire-safety.svg',
     heroImageAlt: 'UK Fire Safety Requirements for Landlords',
     showUrgencyBanner: false,
     targetKeyword: 'landlord fire safety requirements UK',
@@ -25462,7 +25462,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-tenant-referencing.svg',
+    heroImage: '/images/blog/tenant-referencing.svg',
     heroImageAlt: 'UK Tenant Referencing Guide',
     showUrgencyBanner: false,
     targetKeyword: 'tenant referencing UK landlords',
@@ -25865,7 +25865,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-right-to-rent.svg',
+    heroImage: '/images/blog/right-to-rent.svg',
     heroImageAlt: 'UK Right to Rent Checks Guide',
     showUrgencyBanner: false,
     targetKeyword: 'right to rent checks UK landlords',
@@ -26249,7 +26249,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-hmo-regulations.svg',
+    heroImage: '/images/blog/hmo-regulations.svg',
     heroImageAlt: 'UK HMO Regulations Guide',
     showUrgencyBanner: false,
     targetKeyword: 'HMO regulations UK landlords',
@@ -26688,7 +26688,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImage: '/images/blog/deposit-protection.svg',
     heroImageAlt: 'UK Deposit Protection Guide',
     showUrgencyBanner: false,
     targetKeyword: 'deposit protection UK landlords',
@@ -27059,7 +27059,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-rent-arrears.svg',
+    heroImage: '/images/blog/rent-arrears.svg',
     heroImageAlt: 'UK Rent Arrears Guide',
     showUrgencyBanner: false,
     targetKeyword: 'rent arrears UK landlords',
@@ -27433,7 +27433,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-tenancy-agreement.svg',
+    heroImage: '/images/blog/tenancy-agreement.svg',
     heroImageAlt: 'UK Tenancy Agreement Guide',
     showUrgencyBanner: false,
     targetKeyword: 'tenancy agreement UK landlords',
@@ -27799,7 +27799,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Property Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-maintenance.svg',
+    heroImage: '/images/blog/maintenance.svg',
     heroImageAlt: 'UK Property Maintenance Obligations Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord maintenance obligations UK',
@@ -27822,7 +27822,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-maintenance.svg"
+          src="/images/blog/maintenance.svg"
           alt="Property maintenance tools and checklist"
           caption="Proper maintenance protects both your property and your tenants"
           aspectRatio="hero"
@@ -27861,7 +27861,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-repair-categories.svg"
+          src="/images/blog/repair-categories.svg"
           alt="Categories of landlord repair responsibilities"
           caption="Clear categorization helps prioritize maintenance work"
           aspectRatio="inline"
@@ -27957,7 +27957,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-contractor.svg"
+          src="/images/blog/contractor.svg"
           alt="Professional contractor performing property repairs"
           caption="Using qualified professionals ensures repairs meet required standards"
           aspectRatio="hero"
@@ -28033,7 +28033,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-documentation.svg"
+          src="/images/blog/documentation.svg"
           alt="Property maintenance documentation and records"
           caption="Comprehensive documentation protects you in disputes"
           aspectRatio="inline"
@@ -28099,7 +28099,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Property Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-end-tenancy.svg',
+    heroImage: '/images/blog/end-tenancy.svg',
     heroImageAlt: 'UK End of Tenancy Guide',
     showUrgencyBanner: false,
     targetKeyword: 'end of tenancy UK landlords',
@@ -28122,7 +28122,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-end-tenancy.svg"
+          src="/images/blog/end-tenancy.svg"
           alt="End of tenancy checklist and keys"
           caption="A structured checkout process protects both landlord and tenant"
           aspectRatio="hero"
@@ -28204,7 +28204,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-notice-types.svg"
+          src="/images/blog/notice-types.svg"
           alt="Types of tenancy ending notices"
           caption="Different situations require different notice procedures"
           aspectRatio="inline"
@@ -28270,7 +28270,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-checkout-inspection.svg"
+          src="/images/blog/checkout-inspection.svg"
           alt="Landlord conducting checkout inspection"
           caption="Thorough documentation during checkout protects both parties"
           aspectRatio="hero"
@@ -28344,7 +28344,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-cleaning-standards.svg"
+          src="/images/blog/cleaning-standards.svg"
           alt="Property cleaning checklist standards"
           caption="Clear cleaning standards reduce disputes at checkout"
           aspectRatio="inline"
@@ -28448,7 +28448,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Property Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-inspections.svg',
+    heroImage: '/images/blog/inspections.svg',
     heroImageAlt: 'UK Property Inspections Guide',
     showUrgencyBanner: false,
     targetKeyword: 'property inspections UK landlords',
@@ -28472,7 +28472,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inspections.svg"
+          src="/images/blog/inspections.svg"
           alt="Landlord conducting property inspection"
           caption="Regular inspections protect your property and identify issues early"
           aspectRatio="hero"
@@ -28523,7 +28523,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inspection-schedule.svg"
+          src="/images/blog/inspection-schedule.svg"
           alt="Property inspection schedule calendar"
           caption="Schedule inspections at reasonable intervals to maintain good tenant relations"
           aspectRatio="inline"
@@ -28617,7 +28617,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inspection-notice.svg"
+          src="/images/blog/inspection-notice.svg"
           alt="Property inspection notice letter"
           caption="Professional written notices create a clear record"
           aspectRatio="hero"
@@ -28716,7 +28716,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inspection-report.svg"
+          src="/images/blog/inspection-report.svg"
           alt="Property inspection report documentation"
           caption="Detailed reports with photos provide evidence if needed later"
           aspectRatio="inline"
@@ -28796,7 +28796,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Property Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-communication.svg',
+    heroImage: '/images/blog/communication.svg',
     heroImageAlt: 'UK Landlord-Tenant Communication Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord tenant communication',
@@ -28819,7 +28819,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-communication.svg"
+          src="/images/blog/communication.svg"
           alt="Landlord and tenant communication"
           caption="Professional communication builds trust and prevents problems"
           aspectRatio="hero"
@@ -28897,7 +28897,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-channels.svg"
+          src="/images/blog/channels.svg"
           alt="Communication channel options"
           caption="Choose the right channel for each type of communication"
           aspectRatio="inline"
@@ -28980,7 +28980,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-dispute-handling.svg"
+          src="/images/blog/dispute-handling.svg"
           alt="Handling landlord-tenant disputes professionally"
           caption="Professional dispute handling protects both parties"
           aspectRatio="hero"
@@ -29085,7 +29085,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Investment Team',
       role: 'Property Investment Specialists',
     },
-    heroImage: '/images/blog/placeholder-investment.svg',
+    heroImage: '/images/blog/investment.svg',
     heroImageAlt: 'UK Buy-to-Let Investment Guide',
     showUrgencyBanner: false,
     targetKeyword: 'buy to let investment UK',
@@ -29108,7 +29108,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-investment.svg"
+          src="/images/blog/investment.svg"
           alt="Property investment portfolio"
           caption="Strategic property investment can build long-term wealth"
           aspectRatio="hero"
@@ -29159,7 +29159,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-market-analysis.svg"
+          src="/images/blog/market-analysis.svg"
           alt="Property market analysis charts"
           caption="Understanding market conditions helps inform investment decisions"
           aspectRatio="inline"
@@ -29268,7 +29268,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-yield-calculation.svg"
+          src="/images/blog/yield-calculation.svg"
           alt="Property yield calculation example"
           caption="Understanding yield calculations helps compare investment opportunities"
           aspectRatio="hero"
@@ -29339,7 +29339,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-property-selection.svg"
+          src="/images/blog/property-selection.svg"
           alt="Property selection criteria checklist"
           caption="Systematic property evaluation improves investment outcomes"
           aspectRatio="inline"
@@ -29420,7 +29420,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-money-claims.svg',
+    heroImage: '/images/blog/money-claims.svg',
     heroImageAlt: 'UK Money Claims Online Guide',
     showUrgencyBanner: false,
     targetKeyword: 'money claims online landlords',
@@ -29443,7 +29443,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-money-claims.svg"
+          src="/images/blog/money-claims.svg"
           alt="Money Claims Online court process"
           caption="MCOL provides an accessible route to recover money owed by former tenants"
           aspectRatio="hero"
@@ -29519,7 +29519,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-letter-before-action.svg"
+          src="/images/blog/letter-before-action.svg"
           alt="Letter before action template"
           caption="A proper letter before action is required before issuing court proceedings"
           aspectRatio="inline"
@@ -29620,7 +29620,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-mcol-process.svg"
+          src="/images/blog/mcol-process.svg"
           alt="Money Claims Online claim process steps"
           caption="The MCOL process is designed to be user-friendly for claimants"
           aspectRatio="hero"
@@ -29772,7 +29772,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Tech Team',
       role: 'Property Technology Specialists',
     },
-    heroImage: '/images/blog/placeholder-software.svg',
+    heroImage: '/images/blog/software.svg',
     heroImageAlt: 'UK Landlord Software Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord software UK',
@@ -29794,7 +29794,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-software.svg"
+          src="/images/blog/software.svg"
           alt="Property management software dashboard"
           caption="Modern software streamlines every aspect of property management"
           aspectRatio="hero"
@@ -29881,7 +29881,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-software-types.svg"
+          src="/images/blog/software-types.svg"
           alt="Different types of landlord software"
           caption="Choose software that matches your specific management needs"
           aspectRatio="inline"
@@ -29931,7 +29931,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-software-features.svg"
+          src="/images/blog/software-features.svg"
           alt="Key landlord software features"
           caption="Prioritize features that solve your biggest management challenges"
           aspectRatio="hero"
@@ -30044,7 +30044,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Property Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-inventory.svg',
+    heroImage: '/images/blog/inventory.svg',
     heroImageAlt: 'UK Property Inventory Guide',
     showUrgencyBanner: false,
     targetKeyword: 'property inventory landlords',
@@ -30067,7 +30067,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inventory.svg"
+          src="/images/blog/inventory.svg"
           alt="Property inventory documentation"
           caption="Detailed inventories protect both landlords and tenants"
           aspectRatio="hero"
@@ -30133,7 +30133,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inventory-checklist.svg"
+          src="/images/blog/inventory-checklist.svg"
           alt="Property inventory checklist example"
           caption="A systematic approach ensures nothing is missed"
           aspectRatio="inline"
@@ -30212,7 +30212,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-inventory-photography.svg"
+          src="/images/blog/inventory-photography.svg"
           alt="Property inventory photography examples"
           caption="Comprehensive photography supports written descriptions"
           aspectRatio="hero"
@@ -30352,7 +30352,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Finance Team',
       role: 'Property Finance Specialists',
     },
-    heroImage: '/images/blog/placeholder-rent-collection.svg',
+    heroImage: '/images/blog/rent-collection.svg',
     heroImageAlt: 'UK Rent Collection Methods Guide',
     showUrgencyBanner: false,
     targetKeyword: 'rent collection methods UK',
@@ -30374,7 +30374,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-collection.svg"
+          src="/images/blog/rent-collection.svg"
           alt="Rent collection payment methods"
           caption="The right collection method ensures reliable, predictable income"
           aspectRatio="hero"
@@ -30457,7 +30457,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-payment-methods.svg"
+          src="/images/blog/payment-methods.svg"
           alt="Different rent payment methods comparison"
           caption="Standing orders offer the best balance of reliability and simplicity"
           aspectRatio="inline"
@@ -30525,7 +30525,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-payment-setup.svg"
+          src="/images/blog/payment-setup.svg"
           alt="Setting up rent payment collection"
           caption="Clear setup at tenancy start prevents payment confusion"
           aspectRatio="hero"
@@ -30621,7 +30621,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Compliance Team',
       role: 'Property Compliance Specialists',
     },
-    heroImage: '/images/blog/placeholder-epc.svg',
+    heroImage: '/images/blog/epc.svg',
     heroImageAlt: 'UK EPC Requirements Guide',
     showUrgencyBanner: true,
     targetKeyword: 'EPC requirements landlords UK',
@@ -30644,7 +30644,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-epc.svg"
+          src="/images/blog/epc.svg"
           alt="Energy Performance Certificate example"
           caption="EPCs rate properties from A (most efficient) to G (least efficient)"
           aspectRatio="hero"
@@ -30745,7 +30745,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-epc-ratings.svg"
+          src="/images/blog/epc-ratings.svg"
           alt="EPC rating bands explained"
           caption="Understanding where your property sits helps plan improvements"
           aspectRatio="inline"
@@ -30844,7 +30844,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-epc-improvements.svg"
+          src="/images/blog/epc-improvements.svg"
           alt="Common EPC improvement options"
           caption="Strategic improvements offer best value for rating gains"
           aspectRatio="hero"
@@ -30947,7 +30947,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-licensing.svg',
+    heroImage: '/images/blog/licensing.svg',
     heroImageAlt: 'UK Landlord Licensing Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord licensing UK',
@@ -30970,7 +30970,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-licensing.svg"
+          src="/images/blog/licensing.svg"
           alt="Landlord licensing schemes explained"
           caption="Understanding licensing requirements is essential for legal letting"
           aspectRatio="hero"
@@ -31064,7 +31064,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-licensing.svg"
+          src="/images/blog/hmo-licensing.svg"
           alt="HMO licensing requirements"
           caption="HMO licenses ensure properties meet safety and amenity standards"
           aspectRatio="inline"
@@ -31139,7 +31139,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-scotland-registration.svg"
+          src="/images/blog/scotland-registration.svg"
           alt="Scotland landlord registration process"
           caption="Scotland requires all landlords to register - it's a legal requirement"
           aspectRatio="hero"
@@ -31266,7 +31266,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-guarantor.svg',
+    heroImage: '/images/blog/guarantor.svg',
     heroImageAlt: 'UK Guarantor Agreements Guide',
     showUrgencyBanner: false,
     targetKeyword: 'guarantor agreement UK',
@@ -31290,7 +31290,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-guarantor.svg"
+          src="/images/blog/guarantor.svg"
           alt="Understanding guarantor agreements for rental properties"
           caption="Guarantor agreements add financial security to tenancy arrangements"
           aspectRatio="hero"
@@ -31363,7 +31363,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-guarantor-situations.svg"
+          src="/images/blog/guarantor-situations.svg"
           alt="Common situations requiring rental guarantors"
           caption="Various tenant circumstances where guarantors provide necessary security"
           aspectRatio="hero"
@@ -31467,7 +31467,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-agreement-drafting.svg"
+          src="/images/blog/agreement-drafting.svg"
           alt="Key elements of guarantor agreement drafting"
           caption="Proper drafting ensures the agreement is legally enforceable"
           aspectRatio="hero"
@@ -31602,7 +31602,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-guarantor-protection.svg"
+          src="/images/blog/guarantor-protection.svg"
           alt="Full protection through proper guarantor agreements"
           caption="Well-drafted guarantor agreements provide essential landlord protection"
           aspectRatio="hero"
@@ -31628,7 +31628,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-letting-agent.svg',
+    heroImage: '/images/blog/letting-agent.svg',
     heroImageAlt: 'UK Letting Agent Selection Guide',
     showUrgencyBanner: false,
     targetKeyword: 'letting agent UK',
@@ -31652,7 +31652,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-letting-agent.svg"
+          src="/images/blog/letting-agent.svg"
           alt="Choosing a letting agent for your rental property"
           caption="The right letting agent partnership can maximise your rental returns"
           aspectRatio="hero"
@@ -31747,7 +31747,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-service-comparison.svg"
+          src="/images/blog/service-comparison.svg"
           alt="Comparing letting agent service levels"
           caption="Different service levels suit different landlord needs and budgets"
           aspectRatio="hero"
@@ -31856,7 +31856,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-agent-comparison.svg"
+          src="/images/blog/agent-comparison.svg"
           alt="Comparing different letting agents"
           caption="Take time to properly compare agents before committing"
           aspectRatio="hero"
@@ -32009,7 +32009,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-void-period.svg',
+    heroImage: '/images/blog/void-period.svg',
     heroImageAlt: 'UK Void Period Management Guide',
     showUrgencyBanner: false,
     targetKeyword: 'void period landlord UK',
@@ -32033,7 +32033,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-void-period.svg"
+          src="/images/blog/void-period.svg"
           alt="Managing void periods in rental properties"
           caption="Effective void management protects your rental income"
           aspectRatio="hero"
@@ -32133,7 +32133,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-void-costs.svg"
+          src="/images/blog/void-costs.svg"
           alt="True costs of property void periods"
           caption="Empty properties drain income from multiple sources"
           aspectRatio="hero"
@@ -32257,7 +32257,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-property-marketing.svg"
+          src="/images/blog/property-marketing.svg"
           alt="Effective property marketing strategies"
           caption="Good marketing reduces time on market significantly"
           aspectRatio="hero"
@@ -32361,7 +32361,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-successful-letting.svg"
+          src="/images/blog/successful-letting.svg"
           alt="Successfully minimising void periods"
           caption="Proactive management keeps properties occupied and income flowing"
           aspectRatio="hero"
@@ -32387,7 +32387,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-property-marketing.svg',
+    heroImage: '/images/blog/property-marketing.svg',
     heroImageAlt: 'UK Property Marketing Guide',
     showUrgencyBanner: false,
     targetKeyword: 'property marketing UK landlord',
@@ -32411,7 +32411,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-property-marketing.svg"
+          src="/images/blog/property-marketing.svg"
           alt="Marketing rental properties effectively"
           caption="Professional marketing attracts better tenants and reduces void periods"
           aspectRatio="hero"
@@ -32531,7 +32531,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-property-photos.svg"
+          src="/images/blog/property-photos.svg"
           alt="Professional property photography tips"
           caption="Quality photography can double your enquiry rate"
           aspectRatio="hero"
@@ -32617,7 +32617,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-advertising-platforms.svg"
+          src="/images/blog/advertising-platforms.svg"
           alt="Property advertising platform options"
           caption="Choose platforms based on your property type and target tenants"
           aspectRatio="hero"
@@ -32768,7 +32768,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-successful-marketing.svg"
+          src="/images/blog/successful-marketing.svg"
           alt="Successful property marketing results"
           caption="Effective marketing fills properties with quality tenants quickly"
           aspectRatio="hero"
@@ -32794,7 +32794,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-move-in.svg',
+    heroImage: '/images/blog/move-in.svg',
     heroImageAlt: 'UK Tenant Move-In Checklist',
     showUrgencyBanner: false,
     targetKeyword: 'tenant move in checklist UK',
@@ -32818,7 +32818,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-move-in.svg"
+          src="/images/blog/move-in.svg"
           alt="Tenant move-in process for landlords"
           caption="A smooth move-in creates a positive start to the tenancy relationship"
           aspectRatio="hero"
@@ -32922,7 +32922,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-key-handover.svg"
+          src="/images/blog/key-handover.svg"
           alt="Professional key handover process"
           caption="Document keys provided and get tenant acknowledgment"
           aspectRatio="hero"
@@ -33006,7 +33006,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-meter-readings.svg"
+          src="/images/blog/meter-readings.svg"
           alt="Recording utility meter readings"
           caption="Document meter readings with photos and written records"
           aspectRatio="hero"
@@ -33129,7 +33129,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-successful-move-in.svg"
+          src="/images/blog/successful-move-in.svg"
           alt="Successful tenant move-in completion"
           caption="A thorough move-in process sets up both parties for success"
           aspectRatio="hero"
@@ -33155,7 +33155,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Industry Specialists',
     },
-    heroImage: '/images/blog/placeholder-landlord-associations.svg',
+    heroImage: '/images/blog/landlord-associations.svg',
     heroImageAlt: 'UK Landlord Associations Guide',
     showUrgencyBanner: false,
     targetKeyword: 'landlord associations UK',
@@ -33178,7 +33178,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-landlord-associations.svg"
+          src="/images/blog/landlord-associations.svg"
           alt="UK landlord associations and organisations"
           caption="Professional associations support landlords with advice and advocacy"
           aspectRatio="hero"
@@ -33279,7 +33279,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-nrla.svg"
+          src="/images/blog/nrla.svg"
           alt="NRLA landlord association benefits"
           caption="The NRLA is the UK's largest landlord membership organisation"
           aspectRatio="hero"
@@ -33382,7 +33382,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-local-associations.svg"
+          src="/images/blog/local-associations.svg"
           alt="Local landlord association meetings"
           caption="Local associations provide networking and area-specific knowledge"
           aspectRatio="hero"
@@ -33492,7 +33492,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-landlord-support.svg"
+          src="/images/blog/landlord-support.svg"
           alt="Landlord association support and advice"
           caption="Association membership provides valuable ongoing support for landlords"
           aspectRatio="hero"
@@ -33518,7 +33518,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-tenant-retention.svg',
+    heroImage: '/images/blog/tenant-retention.svg',
     heroImageAlt: 'UK Tenant Retention Guide',
     showUrgencyBanner: false,
     targetKeyword: 'tenant retention UK landlord',
@@ -33541,7 +33541,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-tenant-retention.svg"
+          src="/images/blog/tenant-retention.svg"
           alt="Retaining quality tenants in rental properties"
           caption="Good tenant retention protects your income and reduces costs"
           aspectRatio="hero"
@@ -33654,7 +33654,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-landlord-communication.svg"
+          src="/images/blog/landlord-communication.svg"
           alt="Good landlord-tenant communication"
           caption="Strong communication builds lasting tenant relationships"
           aspectRatio="hero"
@@ -33748,7 +33748,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rent-discussion.svg"
+          src="/images/blog/rent-discussion.svg"
           alt="Discussing rent with tenants"
           caption="Handle rent increases with sensitivity and clear communication"
           aspectRatio="hero"
@@ -33860,7 +33860,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
-    heroImage: '/images/blog/placeholder-right-to-rent.svg',
+    heroImage: '/images/blog/right-to-rent.svg',
     heroImageAlt: 'UK Right to Rent Checks Guide',
     showUrgencyBanner: false,
     targetKeyword: 'right to rent check UK',
@@ -33884,7 +33884,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-right-to-rent.svg"
+          src="/images/blog/right-to-rent.svg"
           alt="Right to Rent document checking"
           caption="Proper Right to Rent checks protect landlords from civil penalties"
           aspectRatio="hero"
@@ -33951,7 +33951,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-document-check.svg"
+          src="/images/blog/document-check.svg"
           alt="Checking tenant documents for Right to Rent"
           caption="All adult occupiers must have their right to rent verified"
           aspectRatio="hero"
@@ -34069,7 +34069,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-online-check.svg"
+          src="/images/blog/online-check.svg"
           alt="Using Home Office online checking service"
           caption="Online checks are required for EU Settlement Scheme status holders"
           aspectRatio="hero"
@@ -34219,7 +34219,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Compliance Team',
       role: 'Safety Compliance Specialists',
     },
-    heroImage: '/images/blog/placeholder-smoke-alarm.svg',
+    heroImage: '/images/blog/smoke-alarm.svg',
     heroImageAlt: 'UK Smoke and CO Alarm Regulations Guide',
     showUrgencyBanner: false,
     targetKeyword: 'smoke alarm regulations landlord UK',
@@ -34242,7 +34242,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-smoke-alarm.svg"
+          src="/images/blog/smoke-alarm.svg"
           alt="Smoke and CO alarm installations"
           caption="Proper alarm installation is a legal requirement for UK landlords"
           aspectRatio="hero"
@@ -34405,7 +34405,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-co-alarm.svg"
+          src="/images/blog/co-alarm.svg"
           alt="Carbon monoxide alarm installation"
           caption="CO alarms must be positioned correctly in rooms with combustion appliances"
           aspectRatio="hero"
@@ -34532,7 +34532,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-alarm-compliance.svg"
+          src="/images/blog/alarm-compliance.svg"
           alt="Smoke and CO alarm compliance"
           caption="Proper alarm installation protects tenants and ensures legal compliance"
           aspectRatio="hero"
@@ -34558,7 +34558,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Compliance Team',
       role: 'Safety Compliance Specialists',
     },
-    heroImage: '/images/blog/placeholder-electrical-safety.svg',
+    heroImage: '/images/blog/electrical-safety.svg',
     heroImageAlt: 'UK Electrical Safety Standards Guide',
     showUrgencyBanner: false,
     targetKeyword: 'electrical safety landlord UK',
@@ -34581,7 +34581,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-electrical-safety.svg"
+          src="/images/blog/electrical-safety.svg"
           alt="Electrical safety inspection for rental properties"
           caption="Regular electrical inspections keep tenants safe and ensure compliance"
           aspectRatio="hero"
@@ -34663,7 +34663,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-eicr-report.svg"
+          src="/images/blog/eicr-report.svg"
           alt="EICR electrical inspection report"
           caption="The EICR documents the condition of your electrical installation"
           aspectRatio="hero"
@@ -34885,7 +34885,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-furnished.svg',
+    heroImage: '/images/blog/furnished.svg',
     heroImageAlt: 'UK Furnished vs Unfurnished Letting Guide',
     showUrgencyBanner: false,
     targetKeyword: 'furnished vs unfurnished rental UK',
@@ -34908,7 +34908,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-furnished.svg"
+          src="/images/blog/furnished.svg"
           alt="Furnished and unfurnished rental property comparison"
           caption="The right furnishing choice depends on property, location, and target tenants"
           aspectRatio="hero"
@@ -35061,7 +35061,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-rental-comparison.svg"
+          src="/images/blog/rental-comparison.svg"
           alt="Comparing furnished and unfurnished rental returns"
           caption="Calculate whether the extra rent justifies furniture investment"
           aspectRatio="hero"
@@ -35208,7 +35208,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Management Specialists',
     },
-    heroImage: '/images/blog/placeholder-hmo.svg',
+    heroImage: '/images/blog/hmo.svg',
     heroImageAlt: 'UK HMO Management Guide',
     showUrgencyBanner: false,
     targetKeyword: 'HMO management UK',
@@ -35231,7 +35231,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo.svg"
+          src="/images/blog/hmo.svg"
           alt="Managing Houses in Multiple Occupation"
           caption="HMOs require careful management to meet regulatory requirements"
           aspectRatio="hero"
@@ -35336,7 +35336,7 @@ export const blogPosts: BlogPost[] = [
         </ol>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-licence.svg"
+          src="/images/blog/hmo-licence.svg"
           alt="HMO licensing process"
           caption="HMO licensing ensures properties meet required standards"
           aspectRatio="hero"
@@ -35531,7 +35531,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-hmo-success.svg"
+          src="/images/blog/hmo-success.svg"
           alt="Successful HMO management"
           caption="Well-managed HMOs provide higher yields with proper compliance"
           aspectRatio="hero"
@@ -35555,7 +35555,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Investment Specialists',
     },
-    heroImage: '/images/blog/placeholder-student-letting.svg',
+    heroImage: '/images/blog/student-letting.svg',
     heroImageAlt: 'UK Student Letting Guide',
     showUrgencyBanner: false,
     targetKeyword: 'student letting UK',
@@ -35591,7 +35591,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-market.svg"
+          src="/images/blog/student-market.svg"
           alt="UK student rental market overview"
           caption="Student accommodation demand remains strong across university towns"
           aspectRatio="hero"
@@ -35676,7 +35676,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-property.svg"
+          src="/images/blog/student-property.svg"
           alt="Ideal student property features"
           caption="Well-configured student properties attract quality tenants"
           aspectRatio="hero"
@@ -35755,7 +35755,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-marketing.svg"
+          src="/images/blog/student-marketing.svg"
           alt="Marketing student properties effectively"
           caption="Multi-channel marketing reaches students at different search stages"
           aspectRatio="hero"
@@ -35827,7 +35827,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-guarantor.svg"
+          src="/images/blog/student-guarantor.svg"
           alt="Student guarantor arrangements"
           caption="Proper guarantor arrangements protect rental income"
           aspectRatio="hero"
@@ -35919,7 +35919,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-changeover.svg"
+          src="/images/blog/student-changeover.svg"
           alt="Student property changeover process"
           caption="Efficient changeovers minimise void periods and prepare for new tenants"
           aspectRatio="hero"
@@ -36009,7 +36009,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-student-success.svg"
+          src="/images/blog/student-success.svg"
           alt="Successful student letting"
           caption="Well-managed student properties deliver consistent returns"
           aspectRatio="hero"
@@ -36033,7 +36033,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Investment Specialists',
     },
-    heroImage: '/images/blog/placeholder-holiday-let.svg',
+    heroImage: '/images/blog/holiday-let.svg',
     heroImageAlt: 'UK Holiday Let Regulations Guide',
     showUrgencyBanner: false,
     targetKeyword: 'holiday let regulations UK',
@@ -36069,7 +36069,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-overview.svg"
+          src="/images/blog/holiday-overview.svg"
           alt="Holiday let property types"
           caption="Holiday lets range from city apartments to rural cottages"
           aspectRatio="hero"
@@ -36159,7 +36159,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-planning.svg"
+          src="/images/blog/holiday-planning.svg"
           alt="Holiday let planning considerations"
           caption="Planning requirements vary significantly by location"
           aspectRatio="hero"
@@ -36253,7 +36253,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-licensing.svg"
+          src="/images/blog/holiday-licensing.svg"
           alt="Holiday let licensing requirements"
           caption="Licensing requirements are expanding across the UK"
           aspectRatio="hero"
@@ -36341,7 +36341,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-safety.svg"
+          src="/images/blog/holiday-safety.svg"
           alt="Holiday let safety requirements"
           caption="Comprehensive safety compliance protects guests and operators"
           aspectRatio="hero"
@@ -36446,7 +36446,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-management.svg"
+          src="/images/blog/holiday-management.svg"
           alt="Holiday let management approach"
           caption="Effective management drives guest satisfaction and returns"
           aspectRatio="hero"
@@ -36502,7 +36502,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-holiday-success.svg"
+          src="/images/blog/holiday-success.svg"
           alt="Successful holiday let operations"
           caption="Compliance and quality drive holiday let success"
           aspectRatio="hero"
@@ -36526,7 +36526,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Investment Specialists',
     },
-    heroImage: '/images/blog/placeholder-corporate-let.svg',
+    heroImage: '/images/blog/corporate-let.svg',
     heroImageAlt: 'UK Corporate Letting Guide',
     showUrgencyBanner: false,
     targetKeyword: 'corporate letting UK',
@@ -36563,7 +36563,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-overview.svg"
+          src="/images/blog/corporate-overview.svg"
           alt="Corporate letting market overview"
           caption="Corporate letting offers premium returns with lower-risk tenants"
           aspectRatio="hero"
@@ -36655,7 +36655,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-tenants.svg"
+          src="/images/blog/corporate-tenants.svg"
           alt="Corporate tenant types"
           caption="Different corporate tenants have varying needs and timelines"
           aspectRatio="hero"
@@ -36736,7 +36736,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-property.svg"
+          src="/images/blog/corporate-property.svg"
           alt="Corporate let property standards"
           caption="High-quality furnishing and presentation attract corporate clients"
           aspectRatio="hero"
@@ -36825,7 +36825,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-marketing.svg"
+          src="/images/blog/corporate-marketing.svg"
           alt="Marketing to corporate clients"
           caption="Professional presentation attracts corporate clients"
           aspectRatio="hero"
@@ -36925,7 +36925,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-management.svg"
+          src="/images/blog/corporate-management.svg"
           alt="Corporate property management"
           caption="High service standards drive repeat bookings and referrals"
           aspectRatio="hero"
@@ -36982,7 +36982,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-corporate-success.svg"
+          src="/images/blog/corporate-success.svg"
           alt="Successful corporate letting"
           caption="Quality service and presentation drive corporate letting success"
           aspectRatio="hero"
@@ -37006,7 +37006,7 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Team',
       role: 'Property Investment Specialists',
     },
-    heroImage: '/images/blog/placeholder-portfolio-growth.svg',
+    heroImage: '/images/blog/portfolio-growth.svg',
     heroImageAlt: 'UK Property Portfolio Growth Guide',
     showUrgencyBanner: false,
     targetKeyword: 'property portfolio growth UK',
@@ -37043,7 +37043,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-overview.svg"
+          src="/images/blog/portfolio-overview.svg"
           alt="Property portfolio growth journey"
           caption="Strategic growth builds sustainable property wealth"
           aspectRatio="hero"
@@ -37121,7 +37121,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-financing.svg"
+          src="/images/blog/portfolio-financing.svg"
           alt="Property portfolio financing"
           caption="Understanding financing opens growth opportunities"
           aspectRatio="hero"
@@ -37245,7 +37245,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-structure.svg"
+          src="/images/blog/portfolio-structure.svg"
           alt="Portfolio ownership structure"
           caption="Correct structuring optimises tax and manages risk"
           aspectRatio="hero"
@@ -37295,7 +37295,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-acquisition.svg"
+          src="/images/blog/portfolio-acquisition.svg"
           alt="Property acquisition strategy"
           caption="Systematic acquisition builds a quality portfolio"
           aspectRatio="hero"
@@ -37392,7 +37392,7 @@ export const blogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-risk.svg"
+          src="/images/blog/portfolio-risk.svg"
           alt="Portfolio risk management"
           caption="Systematic risk management protects portfolio value"
           aspectRatio="hero"
@@ -37502,7 +37502,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <ImagePlaceholder
-          src="/images/blog/placeholder-portfolio-success.svg"
+          src="/images/blog/portfolio-success.svg"
           alt="Successful property portfolio"
           caption="Strategic growth builds sustainable property wealth"
           aspectRatio="hero"
