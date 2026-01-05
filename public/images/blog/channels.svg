@@ -60,12 +60,12 @@
     <g transform="translate(15, 120)">
       <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
       <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">SpareRoom</text>
-      <text x="22" y="17" fill="#6D28D9" font-size="8">Room rentals & HMOs</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Room rentals &amp; HMOs</text>
     </g>
     <g transform="translate(15, 145)">
       <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
       <text x="22" y="5" fill="#7C3AED" font-size="9" font-weight="bold">Facebook</text>
-      <text x="22" y="17" fill="#6D28D9" font-size="8">Marketplace & groups</text>
+      <text x="22" y="17" fill="#6D28D9" font-size="8">Marketplace &amp; groups</text>
     </g>
   </g>
 

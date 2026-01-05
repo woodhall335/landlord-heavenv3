@@ -124,7 +124,7 @@
         <circle cx="0" cy="30" r="18" fill="#A78BFA"/>
         <text x="0" y="35" text-anchor="middle" fill="white" font-size="12" font-weight="bold">3</text>
         <text x="0" y="65" text-anchor="middle" fill="#A78BFA" font-size="8" font-weight="bold">READINGS</text>
-        <text x="0" y="78" text-anchor="middle" fill="#6D28D9" font-size="7">Gas & electric</text>
+        <text x="0" y="78" text-anchor="middle" fill="#6D28D9" font-size="7">Gas &amp; electric</text>
         <text x="0" y="90" text-anchor="middle" fill="#6D28D9" font-size="7">Water meters</text>
       </g>
 

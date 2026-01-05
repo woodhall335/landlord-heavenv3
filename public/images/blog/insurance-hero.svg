@@ -73,7 +73,7 @@
     </g>
     <g transform="translate(15, 68)">
       <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
-      <text x="20" y="11" fill="#6D28D9" font-size="9">Flood & water</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Flood &amp; water</text>
     </g>
     <g transform="translate(15, 91)">
       <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
@@ -81,7 +81,7 @@
     </g>
     <g transform="translate(15, 114)">
       <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
-      <text x="20" y="11" fill="#6D28D9" font-size="9">Theft & burglary</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Theft &amp; burglary</text>
     </g>
     <g transform="translate(15, 137)">
       <circle cx="7" cy="7" r="5" fill="#6D28D9"/>

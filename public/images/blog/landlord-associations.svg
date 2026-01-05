@@ -33,7 +33,7 @@
 
     <text x="100" y="130" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">NETWORK</text>
     <text x="100" y="148" text-anchor="middle" fill="#6D28D9" font-size="9">Join professional bodies</text>
-    <text x="100" y="162" text-anchor="middle" fill="#6D28D9" font-size="9">for support & resources</text>
+    <text x="100" y="162" text-anchor="middle" fill="#6D28D9" font-size="9">for support &amp; resources</text>
   </g>
 
   <!-- Main associations -->
@@ -77,7 +77,7 @@
     </g>
     <g transform="translate(15, 92)">
       <circle cx="7" cy="7" r="5" fill="#22C55E"/>
-      <text x="20" y="11" fill="#6D28D9" font-size="9">Training & webinars</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Training &amp; webinars</text>
     </g>
     <g transform="translate(15, 114)">
       <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
