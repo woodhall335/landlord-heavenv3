@@ -228,18 +228,19 @@ function WizardFlowContent() {
     );
   }
 
-  // 🟩 NEW: For eviction complete_pack in England/Wales, use the redesigned section-based flow
+  // 🟩 NEW: For eviction complete_pack in England/Wales/Scotland, use the redesigned section-based flow
   // This provides a logical, court-ready, jurisdiction-aware wizard experience.
+  // Scotland support added: uses Scotland-specific sections (grounds, tribunal) and 6-month rule validation.
   if (
     type === 'eviction' &&
     askHeavenProduct === 'complete_pack' &&
     USE_EVICTION_SECTION_FLOW &&
-    (jurisdiction === 'england' || jurisdiction === 'wales')
+    (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <EvictionSectionFlow
         caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales'}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
     );
   }
@@ -280,7 +281,8 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for Scotland/NI tenancy agreements and Scotland eviction flows
+  // Use existing StructuredWizard for NI/Scotland tenancy agreements and NI eviction flows
+  // Note: Scotland eviction complete_pack now uses EvictionSectionFlow (above)
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard
