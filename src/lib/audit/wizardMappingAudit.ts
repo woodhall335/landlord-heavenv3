@@ -251,7 +251,7 @@ export function collectPdfCoverage(templatePaths: Iterable<string>, additionalRe
   return { referenced, existing, missing, orphaned };
 }
 
-function findAllPdfFiles(): Set<string> {
+export function findAllPdfFiles(): Set<string> {
   const results = new Set<string>();
   const roots = [path.join(process.cwd(), "config", "jurisdictions"), path.join(process.cwd(), "public", "official-forms")];
 
@@ -334,7 +334,7 @@ export function loadOfficialFormsRegistry(): OfficialFormRegistryEntry[] {
     }));
 }
 
-function normalizePdfPath(pdfPath: string): string {
+export function normalizePdfPath(pdfPath: string): string {
   const normalized = path.normalize(pdfPath);
   if (normalized.startsWith("config") || normalized.startsWith("public")) return normalized;
   return path.join("public", "official-forms", normalized);

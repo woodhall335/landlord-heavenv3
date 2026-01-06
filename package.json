@@ -20,7 +20,8 @@
     "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
     "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts",
     "validate:wizard-mappings": "./node_modules/.bin/ts-node --transpile-only scripts/validate-wizard-mappings.ts",
-    "ci": "npm run test && npm run validate:wizard-mappings"
+    "audit:legal-v2": "./node_modules/.bin/ts-node --transpile-only scripts/legal-validity-audit-v2.1.ts",
+    "ci": "npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

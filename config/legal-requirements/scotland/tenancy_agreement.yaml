@@ -1,0 +1,21 @@
+requiredOfficialForms: []
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: prt_terms
+    description: "Private Residential Tenancy terms"
+    mustAppearIn: template
+    match: "private residential tenancy"
+    regex: true
+    minOccurrences: 0
+requiredPreconditions:
+  - id: written_terms
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Private Housing (Tenancies) (Scotland) Act 2016"
