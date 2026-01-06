@@ -964,15 +964,15 @@ questions:
         width: half
     maps_to:
       - gas_safety_certificate
-      - gas_safety_certificate_date
-      - gas_safety_certificate_expiry
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
       - electrical_safety_certificate
-      - eicr_certificate_date
-      - eicr_next_inspection_date
+      - compliance.eicr_date
+      - compliance.eicr_next_inspection_date
       - epc_rating
-      - epc_certificate_date
+      - compliance.epc_certificate_date
       - smoke_alarms_fitted
-      - smoke_alarm_test_date
+      - compliance.smoke_alarm_check_date
       - carbon_monoxide_alarms
       - repairing_standard_compliance
 

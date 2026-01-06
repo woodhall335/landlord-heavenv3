@@ -3265,6 +3265,8 @@
     "section21.eicr_provided": { "type": "boolean", "required": false },
     "section21.eicr_date": { "type": "date", "required": false },
     "section21.eicr_expiry": { "type": "date", "required": false },
+    "compliance.eicr_next_inspection_date": { "type": "date", "required": false },
+    "deposit.prescribed_information_date": { "type": "date", "required": false },
     "risk.disrepair_complaint_date": { "type": "date", "required": false },
     "risk.disrepair_issues_list": { "type": "string", "required": false },
     "risk.previous_court_proceedings": { "type": "boolean", "required": false },
