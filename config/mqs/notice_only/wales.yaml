@@ -117,6 +117,28 @@ questions:
 
       **Please select "Fault-based - Grounds required" instead.**
 
+  # BLOCKER: Section 173 cannot be served in first 6 months
+  - id: section_173_six_month_blocker
+    section: Notice Type
+    question: "Section 173 - 6 Month Rule"
+    inputType: info
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    content: |
+      ⚠️ **SECTION 173 - 6 MONTH OCCUPATION REQUIREMENT**
+
+      Under the Renting Homes (Wales) Act 2016, Section 173(3):
+
+      **You CANNOT serve a Section 173 notice until the contract holder has occupied
+      the dwelling for at least 6 MONTHS from the occupation date.**
+
+      Please verify:
+      - Contract start date was at least 6 months ago
+      - If not, you must wait until the 6-month period has passed
+
+      **Penalty:** A Section 173 notice served before 6 months occupation is INVALID.
+
   - id: contract_holder_full_name
     section: Contract Holder Details
     question: "Contract holder's full name"
@@ -379,6 +401,55 @@ questions:
     maps_to:
       - deposit_paid_date
       - deposit_protection_date
+
+  # ============================================================
+  # FITNESS FOR HUMAN HABITATION (Wales)
+  # ============================================================
+
+  - id: fitness_for_habitation
+    section: Property Compliance
+    question: "Does the property meet fitness for human habitation requirements?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: true
+        label: "Yes - property meets fitness standards"
+      - value: false
+        label: "No - there are outstanding fitness issues"
+    helperText: |
+      Under the Renting Homes (Wales) Act 2016, Section 91-92:
+      The dwelling must be fit for human habitation at the start of the contract
+      and throughout the occupation.
+    maps_to:
+      - wales_compliance.property_fit_for_habitation
+
+  - id: fitness_habitation_blocker
+    section: Property Compliance
+    question: "Fitness for Habitation Warning"
+    inputType: info
+    dependsOn:
+      questionId: fitness_for_habitation
+      value: false
+    content: |
+      ⛔ **WARNING: NOTICE MAY BE CHALLENGED**
+
+      Under the Renting Homes (Wales) Act 2016, the landlord has an implied obligation
+      to keep the dwelling fit for human habitation (Section 91).
+
+      **If the property does not meet fitness standards:**
+      - The contract holder may have a defence to possession proceedings
+      - The court may refuse to grant possession
+      - You may be liable for breach of contract
+
+      **Fitness requirements include:**
+      - Structural stability
+      - Freedom from serious damp
+      - Adequate heating, lighting, ventilation
+      - Safe water supply and drainage
+      - Safe gas and electrical installations
+
+      **Recommendation:** Address any fitness issues before serving notice.
 
   # ============================================================
   # COMPLIANCE CERTIFICATE DATES (Wales)

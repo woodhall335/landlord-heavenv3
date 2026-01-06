@@ -681,6 +681,7 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
+        helperText: "⚠️ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds £50,000). Excess deposits are unlawful."
         validation:
           required: true
           min: 0
