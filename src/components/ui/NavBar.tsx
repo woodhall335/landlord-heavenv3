@@ -33,6 +33,7 @@ const primaryLinks: NavItem[] = [
 ];
 
 const freeToolsLinks: NavItem[] = [
+  { href: "/ask-heaven", label: "Ask Heaven" },
   { href: "/tools/validators", label: "Validators" },
   { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
   { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
