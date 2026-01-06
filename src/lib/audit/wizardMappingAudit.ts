@@ -321,8 +321,8 @@ export function loadOfficialFormsRegistry(): OfficialFormRegistryEntry[] {
   const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
   return entries
     .filter(
-      (entry): entry is OfficialFormRegistryEntry =>
-        Boolean(entry?.jurisdiction && entry?.product && entry?.route && entry?.officialFormKey && entry?.pdfPath),
+      (entry: unknown): entry is OfficialFormRegistryEntry =>
+        Boolean((entry as OfficialFormRegistryEntry)?.jurisdiction && (entry as OfficialFormRegistryEntry)?.product && (entry as OfficialFormRegistryEntry)?.route && (entry as OfficialFormRegistryEntry)?.officialFormKey && (entry as OfficialFormRegistryEntry)?.pdfPath),
     )
     .map((entry) => ({
       ...entry,
