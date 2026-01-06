@@ -702,7 +702,7 @@ questions:
     section: Deposit
     question: "Deposit and protection"
     inputType: group
-    helperText: "We include deposit scheme details and certificate."
+    helperText: "IMPORTANT: In Scotland, deposits must be protected within 30 WORKING DAYS (not calendar days) of receipt. This is approximately 6 weeks. Failure to protect on time can result in being ordered to pay 3x the deposit amount to the tenant."
     fields:
       - id: deposit_amount
         label: "Deposit amount"
@@ -719,17 +719,23 @@ questions:
           - "SafeDeposits Scotland"
           - "MyDeposits Scotland"
           - "Letting Protection Service Scotland"
-          - "Other"
+        helperText: "Only these 3 schemes are approved in Scotland"
         validation:
           required: true
         width: half
       - id: deposit_paid_date
-        label: "Date deposit will be paid"
+        label: "Date deposit was/will be received"
         inputType: date
+        helperText: "Protection deadline is 30 WORKING DAYS from this date"
+        validation:
+          required: true
         width: half
       - id: deposit_protection_date
-        label: "Date you will protect the deposit"
+        label: "Date deposit was/will be protected"
         inputType: date
+        helperText: "Must be within 30 WORKING DAYS of receiving the deposit"
+        validation:
+          required: true
         width: half
       - id: deposit_already_protected
         label: "Is the deposit already protected?"
@@ -752,11 +758,24 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "Will the deposit prescribed information be (or has it been) served within 30 days of receipt?"
+    helperText: "MANDATORY: You must serve prescribed information within 30 WORKING DAYS of receiving the deposit. This includes details about the protection scheme and how to apply for deposit release."
     validation:
       required: true
     maps_to:
       - deposit.prescribed_information_served
+
+  - id: prescribed_information_date
+    section: Deposit
+    question: "When was/will prescribed information be served?"
+    inputType: date
+    helperText: "CRITICAL: Must be within 30 WORKING DAYS of receiving the deposit."
+    dependsOn:
+      questionId: prescribed_information_served
+      value: true
+    validation:
+      required: true
+    maps_to:
+      - deposit.prescribed_information_date
 
   # 7. Bills & utilities
   - id: bills_utilities
@@ -842,7 +861,7 @@ questions:
     section: Safety & Compliance
     question: "Certificates and legal pack items"
     inputType: group
-    helperText: "These drive the legal validity summary."
+    helperText: "These drive the legal validity summary. Certificate dates are critical for compliance verification."
     fields:
       - id: epc_rating
         label: "EPC rating"
@@ -858,21 +877,75 @@ questions:
         validation:
           required: true
         width: half
+      - id: epc_certificate_date
+        label: "EPC certificate date"
+        inputType: date
+        helperText: "EPCs are valid for 10 years from issue date"
+        validation:
+          required: true
+        width: half
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
         inputType: yes_no
         validation:
           required: true
         width: half
+      - id: gas_safety_certificate_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Gas certificates are valid for 12 months from issue date"
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: gas_safety_certificate_expiry
+        label: "Gas safety certificate expiry"
+        inputType: date
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
       - id: electrical_safety_certificate
         label: "Electrical safety (EICR) provided?"
         inputType: yes_no
+        helperText: "EICR is required for all rental properties in Scotland"
         validation:
           required: true
+        width: half
+      - id: eicr_certificate_date
+        label: "EICR certificate date"
+        inputType: date
+        helperText: "EICRs are typically valid for 5 years"
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: eicr_next_inspection_date
+        label: "EICR next inspection due"
+        inputType: date
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
         width: half
       - id: smoke_alarms_fitted
         label: "Smoke alarms fitted and tested?"
         inputType: yes_no
+        helperText: "Scotland requires interlinked fire, smoke and heat alarms in all rental properties"
+        validation:
+          required: true
+        width: half
+      - id: smoke_alarm_test_date
+        label: "Smoke/heat alarm last test date"
+        inputType: date
+        dependsOn:
+          questionId: smoke_alarms_fitted
+          value: true
         validation:
           required: true
         width: half
@@ -885,14 +958,21 @@ questions:
       - id: repairing_standard_compliance
         label: "Property meets Scottish Repairing Standard?"
         inputType: yes_no
+        helperText: "The property must meet the Repairing Standard at the start of and throughout the tenancy"
         validation:
           required: true
         width: half
     maps_to:
       - gas_safety_certificate
+      - gas_safety_certificate_date
+      - gas_safety_certificate_expiry
       - electrical_safety_certificate
+      - eicr_certificate_date
+      - eicr_next_inspection_date
       - epc_rating
+      - epc_certificate_date
       - smoke_alarms_fitted
+      - smoke_alarm_test_date
       - carbon_monoxide_alarms
       - repairing_standard_compliance
 
