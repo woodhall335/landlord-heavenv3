@@ -298,9 +298,9 @@ questions:
           required: true
         width: half
     maps_to:
-      - rent_smart_wales_registered
-      - rent_smart_wales_number
-      - rent_smart_wales_expiry
+      - wales_compliance.rent_smart_wales_registered
+      - wales_compliance.rent_smart_wales_number
+      - wales_compliance.rent_smart_wales_expiry
 
   - id: agent_usage
     section: Landlord Details
@@ -634,8 +634,8 @@ questions:
           required: true
         width: half
     maps_to:
-      - written_statement_provided
-      - written_statement_date
+      - wales_compliance.written_statement_provided
+      - wales_compliance.written_statement_date
 
   # 5. Rent & payment details
   - id: rent_details
@@ -917,8 +917,8 @@ questions:
           required: true
         width: half
     maps_to:
-      - property_fit_for_habitation
-      - ffhh_inspection_date
+      - wales_compliance.property_fit_for_habitation
+      - wales_compliance.ffhh_inspection_date
 
   - id: safety_compliance
     section: Safety & Compliance
@@ -1012,13 +1012,13 @@ questions:
       # Note: 'How to Rent' guide is England-only. Wales has separate requirements under the Renting Homes (Wales) Act 2016
     maps_to:
       - gas_safety_certificate
-      - gas_safety_certificate_date
-      - gas_safety_certificate_expiry
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
       - electrical_safety_certificate
-      - eicr_certificate_date
-      - eicr_next_inspection_date
+      - compliance.eicr_date
+      - compliance.eicr_next_inspection_date
       - epc_rating
-      - epc_certificate_date
+      - compliance.epc_certificate_date
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
 

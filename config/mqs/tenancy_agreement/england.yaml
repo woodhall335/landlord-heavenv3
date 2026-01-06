@@ -941,17 +941,17 @@ questions:
         width: half
     maps_to:
       - gas_safety_certificate
-      - gas_safety_certificate_date
-      - gas_safety_certificate_expiry
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
       - electrical_safety_certificate
-      - eicr_certificate_date
-      - eicr_next_inspection_date
+      - compliance.eicr_date
+      - compliance.eicr_next_inspection_date
       - epc_rating
-      - epc_certificate_date
+      - compliance.epc_certificate_date
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
       - how_to_rent_guide_provided
-      - how_to_rent_guide_date
+      - compliance.how_to_rent_date
       - right_to_rent_check_date
 
   # 9. Maintenance & repairs

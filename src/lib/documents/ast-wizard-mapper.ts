@@ -263,12 +263,23 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     how_to_rent_provision_date: getValueAtPath(wizardFacts, 'how_to_rent_provision_date'),
     how_to_rent_guide_provided: coerceBoolean(getValueAtPath(wizardFacts, 'how_to_rent_guide_provided')),
 
-    // Safety Certificates
+    // Safety Certificates - boolean flags
     gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
     epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
     electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
     smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
     carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
+
+    // Safety Certificate Dates - for compliance verification
+    gas_safety_certificate_date: getValueAtPath(wizardFacts, 'gas_safety_certificate_date'),
+    gas_safety_certificate_expiry: getValueAtPath(wizardFacts, 'gas_safety_certificate_expiry'),
+    epc_certificate_date: getValueAtPath(wizardFacts, 'epc_certificate_date'),
+    eicr_certificate_date: getValueAtPath(wizardFacts, 'eicr_certificate_date'),
+    eicr_next_inspection_date: getValueAtPath(wizardFacts, 'eicr_next_inspection_date'),
+    how_to_rent_guide_date: getValueAtPath(wizardFacts, 'how_to_rent_guide_date'),
+
+    // Prescribed Information Date
+    prescribed_information_date: getValueAtPath(wizardFacts, 'prescribed_information_date'),
 
     // Maintenance
     landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),

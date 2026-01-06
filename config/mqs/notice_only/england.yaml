@@ -293,6 +293,59 @@ questions:
     maps_to:
       - deposit_scheme
 
+  # CRITICAL: Deposit protection dates for compliance verification
+  - id: deposit_protection_dates
+    section: Deposit & Compliance
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    helperText: "CRITICAL: These dates verify compliance with the 30-day protection requirement."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by tenant"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "MUST be within 30 days of receiving deposit"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
+
+  # CROSS-FIELD VALIDATION: Info panel explaining 30-day compliance timeline
+  - id: deposit_compliance_timeline_info
+    section: Deposit & Compliance
+    question: "30-Day Compliance Timeline"
+    inputType: info
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    content: |
+      **📅 CRITICAL: 30-Day Deposit Compliance Timeline**
+
+      From the date the deposit was **paid by tenant**, you must:
+
+      1. **Protect the deposit** in approved scheme (within 30 days)
+      2. **Serve prescribed information** (within 30 days)
+
+      **Example timeline:**
+      - Deposit paid: 1st January
+      - Protection deadline: 31st January
+      - Prescribed info deadline: 31st January
+
+      ⚠️ **If either deadline is missed, your Section 21 notice is INVALID.**
+
+      The system will validate these dates when generating documents.
+
   # UPDATED: prescribed_info_given now depends on BOTH deposit_taken AND deposit_protected_scheme
   # Prescribed information can only be given if the deposit was first protected in an approved scheme
   - id: prescribed_info_given
@@ -310,6 +363,30 @@ questions:
     helperText: "Prescribed information about the deposit protection scheme. This is a legal requirement for Section 21 notices, but not required for Section 8."
     maps_to:
       - prescribed_info_given
+
+  # CRITICAL: Prescribed info date - required for Section 21 validity
+  - id: prescribed_info_served_date
+    section: Deposit & Compliance
+    question: "When was prescribed information served?"
+    inputType: date
+    dependsOn:
+      allOf:
+        - questionId: prescribed_info_given
+          value: true
+        - questionId: deposit_protected_scheme
+          value: true
+    validation:
+      required: true
+    helperText: |
+      CRITICAL FOR SECTION 21: Must be served within 30 days of receiving deposit.
+
+      **Section 21 is INVALID if:**
+      - Prescribed info served more than 30 days after deposit received
+      - Prescribed info never served
+
+      **Tip:** This date should be between deposit_paid_date and deposit_paid_date + 30 days.
+    maps_to:
+      - prescribed_info_date
 
   - id: gas_safety_certificate
     section: Deposit & Compliance

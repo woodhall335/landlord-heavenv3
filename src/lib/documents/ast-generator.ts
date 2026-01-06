@@ -153,11 +153,20 @@ export interface ASTData {
 
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
+  gas_safety_certificate_date?: string;
+  gas_safety_certificate_expiry?: string;
   epc_rating?: string;
+  epc_certificate_date?: string;
   electrical_safety_certificate?: boolean;
+  eicr_certificate_date?: string;
+  eicr_next_inspection_date?: string;
   smoke_alarms_fitted?: boolean;
   carbon_monoxide_alarms?: boolean;
   how_to_rent_guide_provided?: boolean;
+  how_to_rent_guide_date?: string;
+
+  // Deposit Compliance Dates
+  prescribed_information_date?: string;
 
   // Maintenance & Repairs
   landlord_maintenance_responsibilities?: string;

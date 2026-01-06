@@ -112,12 +112,23 @@ export interface PRTData {
 
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
+  gas_safety_certificate_date?: string;
+  gas_safety_certificate_expiry?: string;
   epc_rating?: string; // e.g., "C", "D" (minimum E required)
+  epc_certificate_date?: string;
   epc_expiry?: string;
   electrical_safety_certificate?: boolean;
+  eicr_certificate_date?: string;
+  eicr_next_inspection_date?: string;
   smoke_alarms_fitted?: boolean;
+  smoke_alarm_test_date?: string;
   carbon_monoxide_alarms?: boolean;
   repairing_standard_statement?: boolean; // Scotland-specific
+
+  // Deposit Compliance Dates - 30 WORKING DAYS requirement
+  deposit_paid_date?: string;
+  deposit_protection_date?: string;
+  prescribed_information_date?: string;
 
   // Maintenance & Repairs
   landlord_maintenance_responsibilities?: string;
