@@ -179,7 +179,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     agent_name: caseFacts.parties.agent.name ?? undefined,
     agent_address: buildAddress(
       caseFacts.parties.agent.address_line1,
-      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.address_line2 ?? null,
       caseFacts.parties.agent.city,
       caseFacts.parties.agent.postcode
     ),

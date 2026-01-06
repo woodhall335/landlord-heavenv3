@@ -79,7 +79,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     service_address_line1: facts.service_contact.service_address_line1 || undefined,
     service_address_line2: facts.service_contact.service_address_line2 || undefined,
     service_address_town: facts.service_contact.service_city || undefined,
-    service_address_county: facts.service_contact.service_city || undefined,
+    service_address_county: facts.service_contact.service_address_county || undefined,
     service_postcode: facts.service_contact.service_postcode || undefined,
     service_phone: facts.service_contact.service_phone || facts.parties.landlord.phone || undefined,
     service_email: facts.service_contact.service_email || facts.parties.landlord.email || undefined,
