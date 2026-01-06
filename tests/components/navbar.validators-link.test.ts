@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 
 // We'll extract the menu configuration to test it
 const freeToolsLinks = [
+  { href: "/ask-heaven", label: "Ask Heaven" },
   { href: "/tools/validators", label: "Validators" },
   { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
   { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
@@ -26,15 +27,18 @@ describe('NavBar Configuration', () => {
     expect(validatorsLink?.label).toBe('Validators');
   });
 
-  it('Validators link is positioned at the top of free tools', () => {
+  it('Ask Heaven sits above Validators in free tools', () => {
+    const askHeavenIndex = freeToolsLinks.findIndex((link) => link.href === '/ask-heaven');
     const validatorsIndex = freeToolsLinks.findIndex((link) => link.href === '/tools/validators');
-    // Should be at index 0 (first in list)
-    expect(validatorsIndex).toBe(0);
+
+    expect(askHeavenIndex).toBe(0);
+    expect(validatorsIndex).toBe(1);
   });
 
   it('contains all expected free tool links', () => {
     const hrefs = freeToolsLinks.map((link) => link.href);
 
+    expect(hrefs).toContain('/ask-heaven');
     expect(hrefs).toContain('/tools/validators');
     expect(hrefs).toContain('/tools/free-section-21-notice-generator');
     expect(hrefs).toContain('/tools/free-section-8-notice-generator');

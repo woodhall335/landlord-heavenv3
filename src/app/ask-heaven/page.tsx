@@ -3,6 +3,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
@@ -11,6 +12,20 @@ import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 import { Container } from '@/components/ui';
 import { RiSendPlaneFill, RiCheckLine, RiQuestionLine, RiBookLine } from 'react-icons/ri';
 import ReactMarkdown from 'react-markdown';
+import { StructuredData, faqPageSchema } from '@/lib/seo/structured-data';
+
+export const metadata: Metadata = {
+  title: 'Ask Heaven – Free UK Landlord Law Assistant',
+  description: 'Get instant answers to landlord-tenant questions and generate the right notices and court documents.',
+  keywords: [
+    'landlord law',
+    'section 21',
+    'section 8',
+    'eviction',
+    'rent arrears',
+    'tenancy agreement',
+  ],
+};
 
 type ChatRole = 'user' | 'assistant';
 
@@ -116,6 +131,33 @@ const jurisdictionWelcome: Record<Jurisdiction, { title: string; subtitle: strin
     subtitle: "Notice to Quit, tenancy agreements, and more",
   },
 };
+
+const faqItems = [
+  {
+    question: 'How does Ask Heaven help with eviction notices?',
+    answer: 'It explains whether Section 21, Section 8 or Section 173 (Wales) fits your situation and links you to the right generator.',
+  },
+  {
+    question: 'Can it advise on rent arrears and repayment plans?',
+    answer: 'Yes, it outlines arrears options, pre-action steps, and when to move to a money claim.',
+  },
+  {
+    question: 'Does Ask Heaven cover tenancy agreements?',
+    answer: 'It provides guidance on ASTs and Scottish PRTs, highlights common errors, and links to compliant templates.',
+  },
+  {
+    question: 'Will it warn me about illegal eviction risks?',
+    answer: 'Yes, it flags when you must avoid lock changes or harassment and signposts lawful possession routes.',
+  },
+  {
+    question: 'Which jurisdictions does it cover?',
+    answer: 'England, Wales and Scotland are supported today; Northern Ireland will be added later.',
+  },
+  {
+    question: 'Can I generate documents from Ask Heaven?',
+    answer: 'You can jump straight into our notice, money-claim and pricing funnels to generate the right paperwork.',
+  },
+];
 
 export default function AskHeavenPage(): React.ReactElement {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
@@ -421,6 +463,7 @@ export default function AskHeavenPage(): React.ReactElement {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24">
+      <StructuredData data={faqPageSchema(faqItems)} />
       <Container>
         <div className="max-w-4xl mx-auto pb-6">
           {/* Page Header */}
@@ -783,6 +826,58 @@ export default function AskHeavenPage(): React.ReactElement {
               <RiCheckLine className="w-4 h-4 text-green-500" />
               No sign-up required
             </span>
+          </div>
+
+          {/* SEO Content */}
+          <div className="mt-10 grid gap-6 rounded-2xl bg-white p-6 shadow-sm border border-gray-200">
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold text-gray-900">What is Ask Heaven?</h2>
+              <p className="text-sm text-gray-700">
+                Ask Heaven is your free, plain-English guide for UK landlords. It helps you choose the right route—whether that is
+                eviction advice, Section 21 or Section 8 in England, Section 173 in Wales, Scottish Notice to Leave, tackling rent
+                arrears, checking tenancy agreements, keeping deposits compliant, or spotting illegal eviction risks. We speak in
+                a firm landlord tone and cover England, Wales, and Scotland today (Northern Ireland coming soon).
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                  <h3 className="text-sm font-semibold text-gray-900">Common problems it solves</h3>
+                  <ul className="mt-2 space-y-2 text-sm text-gray-700 list-disc list-inside">
+                    <li>Choosing the correct notice (Section 21, Section 8, or Section 173 Wales)</li>
+                    <li>Explaining rent arrears steps, repayment offers, and money-claim escalation</li>
+                    <li>Spotting errors in tenancy agreements and renewals</li>
+                    <li>Deposit protection, prescribed information, and penalty warnings</li>
+                    <li>Flagging harassment or illegal eviction risks before you act</li>
+                  </ul>
+                </div>
+                <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                  <h3 className="text-sm font-semibold text-gray-900">Move from advice to action</h3>
+                  <p className="mt-2 text-sm text-gray-700">
+                    When you are ready to take the next step, jump straight into our document flows tailored for landlords in England,
+                    Wales, and Scotland. Each pathway keeps you compliant, cuts out guesswork, and makes court preparation smoother.
+                  </p>
+                  <div className="mt-3 grid grid-cols-1 gap-2 text-sm font-semibold text-primary">
+                    <Link href="/wizard" className="hover:underline">Start the guided wizard</Link>
+                    <Link href="/products/notice-only" className="hover:underline">Serve a notice only</Link>
+                    <Link href="/products/complete-pack" className="hover:underline">Get the complete eviction pack</Link>
+                    <Link href="/products/money-claim" className="hover:underline">Chase arrears with a money claim</Link>
+                    <Link href="/pricing" className="hover:underline">View landlord pricing</Link>
+                    <Link href="/tools/validators" className="hover:underline">Check documents in Validators</Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">Ask Heaven FAQ</h3>
+              <div className="mt-3 space-y-3">
+                {faqItems.map((item) => (
+                  <div key={item.question} className="rounded-lg border border-gray-100 bg-gray-50 p-4">
+                    <p className="text-sm font-semibold text-gray-900">{item.question}</p>
+                    <p className="mt-1 text-sm text-gray-700">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </Container>
