@@ -56,11 +56,21 @@ questions:
         validation:
           required: true
         width: half
+      # MANDATORY: Scottish Landlord Registration (all landlords must register)
+      - id: landlord_registration_number
+        label: Scottish Landlord Registration Number
+        inputType: text
+        placeholder: "e.g., 123456/130/12345"
+        helperText: "MANDATORY: All landlords in Scotland must be registered. Check www.landlordregistrationscotland.gov.uk"
+        validation:
+          required: true
+        width: full
     maps_to:
       - landlord_full_name
       - landlord_address
       - landlord_email
       - landlord_phone
+      - landlord_registration_number
 
   # 2. Tenant details
   - id: tenant_details
@@ -313,14 +323,16 @@ questions:
     section: Deposit Protection
     question: "Deposit details"
     inputType: group
-    helperText: "Scotland deposits must be protected in an approved scheme."
+    helperText: "Scotland deposits must be protected in an approved scheme within 30 WORKING DAYS (not calendar days)."
     fields:
       - id: deposit_amount
         label: "Deposit amount"
         inputType: currency
+        width: half
       - id: deposit_protected
         label: "Is the deposit protected?"
         inputType: yes_no
+        width: half
       - id: deposit_scheme_name
         label: "Which approved scheme?"
         inputType: select
@@ -328,11 +340,34 @@ questions:
           - "SafeDeposits Scotland"
           - "Letting Protection Service Scotland"
           - "mydeposits Scotland"
-          - "Not protected / unsure"
+        helperText: "Only these 3 schemes are approved in Scotland"
+        width: full
+        dependsOn:
+          fieldId: deposit_protected
+          value: true
+      # CRITICAL: Deposit protection dates for compliance verification
+      - id: deposit_paid_date
+        label: "Date deposit was paid by tenant"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        width: half
+        dependsOn:
+          fieldId: deposit_protected
+          value: true
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "SCOTLAND: Must be within 30 WORKING DAYS (not calendar days)"
+        width: half
+        dependsOn:
+          fieldId: deposit_protected
+          value: true
     maps_to:
       - tenancy.deposit_amount
       - tenancy.deposit_protected
       - tenancy.deposit_scheme_name
+      - deposit_paid_date
+      - deposit_protection_date
     suggestion_prompt: >
       Remind the landlord to provide proof of deposit protection and prescribed information where applicable.
 

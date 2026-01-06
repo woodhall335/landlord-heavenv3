@@ -286,9 +286,39 @@ questions:
       - "Deposit Protection Service (DPS) Custodial"
       - "MyDeposits Wales"
       - "Tenancy Deposit Scheme (TDS)"
-      - "Other / not sure"
     maps_to:
       - deposit_scheme
+
+  # CRITICAL: Deposit protection dates for Section 173 compliance
+  - id: deposit_protection_dates_s173
+    section: Section 173 Compliance
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: deposit_protected_wales
+          value: true
+    helperText: "CRITICAL: Verify deposit was protected within 30 days - required for valid Section 173."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by contract holder"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "MUST be within 30 days of receiving deposit"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
 
   # ============================================================
   # COMPLIANCE CERTIFICATE DATES (Wales)
@@ -510,9 +540,35 @@ questions:
       - "Deposit Protection Service (DPS) Custodial"
       - "MyDeposits Wales"
       - "Tenancy Deposit Scheme (TDS)"
-      - "Other / not sure"
     maps_to:
       - deposit_scheme
+
+  # Deposit protection dates for fault-based (optional but recommended)
+  - id: deposit_protection_dates_fault
+    section: Fault-Based Grounds
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_fault_based
+        - questionId: deposit_protected_fault
+          value: true
+    helperText: "Record deposit compliance dates - strengthens your case at court."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by contract holder"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "Should be within 30 days of receiving deposit"
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
 
   - id: rent_arrears_amount
     section: Fault-Based Grounds
