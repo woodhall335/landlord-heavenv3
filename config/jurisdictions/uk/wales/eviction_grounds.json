@@ -152,7 +152,7 @@
   "section_173_no_fault": {
     "description": "Section 173 notices are no-fault notices available after the fixed term ends. They do not require grounds to be specified, only proper notice period.",
     "legal_reference": "Renting Homes (Wales) Act 2016, Section 173",
-    "minimum_notice_period_days": 6,
+    "minimum_notice_period_days": 182,
     "notes": "Section 173 replaced Section 21 in Wales. Unlike fault-based grounds above, no reason required. Notice period depends on occupation contract type and length of occupation. Standard contracts: 6 months minimum occupation before notice can be served, then 6 months' notice required. Cannot be used in first 6 months of occupation."
   },
 
