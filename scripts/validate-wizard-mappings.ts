@@ -208,6 +208,17 @@ function main() {
     ...coverageIssues.officialFormOrphans,
   ];
 
+  if (coverageIssues.officialFormOrphans.length > 0) {
+    console.error(
+      'Found generated/timestamped PDF in canonical official forms dir. Remove it and re-run. This directory must contain only stable official PDFs.',
+    );
+    console.error('Offending files:');
+    for (const orphan of coverageIssues.officialFormOrphans) {
+      console.error(`- ${orphan}`);
+    }
+    console.error('');
+  }
+
   if (blocking.length > 0) {
     console.error("Validation failed:\n" + blocking.join("\n"));
     process.exit(1);

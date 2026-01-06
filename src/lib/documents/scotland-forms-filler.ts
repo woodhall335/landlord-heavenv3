@@ -17,6 +17,9 @@ import { PDFDocument, PDFForm, PDFName, PDFDict, PDFBool } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
+const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
+const SCOTLAND_FORM_OUTPUT_ROOT = path.join(process.cwd(), '.tmp', 'official-form-output');
+
 export interface ScotlandCaseData {
   // Landlord details
   landlord_full_name: string;
@@ -908,10 +911,31 @@ export async function fillScotlandOfficialForm(
   }
 }
 
+function assertNotInOfficialFormsDir(targetPath: string) {
+  const normalizedTarget = path.resolve(targetPath);
+  const normalizedRoot = path.resolve(OFFICIAL_FORMS_ROOT);
+
+  if (normalizedTarget === normalizedRoot || normalizedTarget.startsWith(`${normalizedRoot}${path.sep}`)) {
+    throw new Error(
+      `Refusing to write generated output inside public/official-forms. Use a tmp path such as ${path.join(
+        SCOTLAND_FORM_OUTPUT_ROOT,
+        '<filename>.pdf',
+      )}.`,
+    );
+  }
+}
+
 /**
  * Save filled form to file (for testing)
  */
-export async function saveFilledForm(pdfBytes: Uint8Array, outputPath: string): Promise<void> {
-  await fs.writeFile(outputPath, pdfBytes);
-  console.log(`💾 Saved filled form to: ${outputPath}`);
+export async function saveFilledForm(pdfBytes: Uint8Array, outputPath?: string): Promise<void> {
+  const targetPath = outputPath ?? path.join(SCOTLAND_FORM_OUTPUT_ROOT, `filled-scotland-form-${Date.now()}.pdf`);
+  assertNotInOfficialFormsDir(targetPath);
+
+  const resolvedTarget = path.resolve(targetPath);
+  const dir = path.dirname(resolvedTarget);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(resolvedTarget, pdfBytes);
+  console.log(`💾 Saved filled form to: ${resolvedTarget}`);
+  console.log(`📁 Note: official form outputs are restricted to tmp/test directories (not public/official-forms).`);
 }
