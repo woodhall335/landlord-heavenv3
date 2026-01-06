@@ -1,0 +1,24 @@
+requiredOfficialForms:
+  - public/official-forms/N5_WALES_1222.pdf
+  - public/official-forms/N119_WALES_1222.pdf
+  - public/official-forms/N5B_WALES_0323.pdf
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: section_173_notice
+    description: "Section 173 notice wording"
+    mustAppearIn: template
+    match: "Section 173"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: written_statement
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: true
+  mustShowUserWarningIfInvalid: true
+legislationReferences:
+  - "Renting Homes (Wales) Act 2016"
