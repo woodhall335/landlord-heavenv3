@@ -81,6 +81,7 @@ function ReviewPageInner() {
   // Detect flow type based on product
   const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
   const isNoticeOnlyFlow = product === 'notice_only';
+  const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
 
   const hasBlockingIssues = isMoneyClaimFlow
     ? (analysis.case_health?.blockers?.length ?? 0) > 0
@@ -206,6 +207,18 @@ function ReviewPageInner() {
       redFlags={redFlags}
       complianceIssues={complianceIssues}
       hasBlockingIssues={hasBlockingIssues}
+      onEdit={handleEdit}
+      onProceed={handleProceed}
+    />;
+  }
+
+  // Render Tenancy Agreement specific content
+  if (isTenancyFlow) {
+    return <TenancyReviewContent
+      caseId={caseId}
+      analysis={analysis}
+      jurisdiction={jurisdiction}
+      product={product}
       onEdit={handleEdit}
       onProceed={handleProceed}
     />;
@@ -1410,6 +1423,536 @@ function NoticeOnlyReviewContent({
         <p className="text-center text-sm text-gray-500 pb-4">
           By proceeding, you acknowledge the issues above. We recommend resolving compliance issues
           before serving your notice.
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// TENANCY AGREEMENT REVIEW CONTENT
+// ============================================================================
+interface TenancyReviewContentProps {
+  caseId: string;
+  analysis: any;
+  jurisdiction: string;
+  product: string;
+  onEdit: () => void;
+  onProceed: () => void;
+}
+
+/**
+ * Build validation checks for tenancy agreement
+ * Returns blockers (critical issues) and warnings (non-blocking)
+ */
+function buildTenancyValidation(facts: any, jurisdiction: string) {
+  const blockers: Array<{ title: string; message: string }> = [];
+  const warnings: Array<{ title: string; message: string }> = [];
+
+  // 1. Property address check
+  if (!facts.property_address && !facts.property_full_address) {
+    blockers.push({
+      title: 'Property address missing',
+      message: 'The tenancy agreement requires a valid property address.',
+    });
+  }
+
+  // 2. Landlord details check
+  if (!facts.landlord_name && !facts.landlord_full_name) {
+    blockers.push({
+      title: 'Landlord name missing',
+      message: 'The landlord name is required for the agreement.',
+    });
+  }
+
+  // 3. Tenant details check
+  const tenantLabel = jurisdiction === 'wales' ? 'Contract holder' : 'Tenant';
+  if (!facts.tenant_names && !facts.tenant_1_name) {
+    blockers.push({
+      title: `${tenantLabel} name missing`,
+      message: `At least one ${tenantLabel.toLowerCase()} name is required.`,
+    });
+  }
+
+  // 4. Rent amount check
+  if (!facts.rent_amount && !facts.monthly_rent) {
+    blockers.push({
+      title: 'Rent amount not specified',
+      message: 'The rent amount must be specified in the agreement.',
+    });
+  }
+
+  // 5. Tenancy start date check
+  if (!facts.tenancy_start_date && !facts.start_date) {
+    blockers.push({
+      title: 'Start date missing',
+      message: 'The tenancy start date must be specified.',
+    });
+  }
+
+  // 6. Deposit protection warning (England/Wales only)
+  if ((jurisdiction === 'england' || jurisdiction === 'wales') && facts.deposit_amount && facts.deposit_amount > 0) {
+    if (!facts.deposit_protected) {
+      warnings.push({
+        title: 'Deposit protection reminder',
+        message: 'You must protect the deposit within 30 days of receiving it and provide prescribed information to the tenant.',
+      });
+    }
+  }
+
+  // 7. Scotland-specific: PRT terms
+  if (jurisdiction === 'scotland') {
+    if (facts.fixed_term_tenancy === true || facts.tenancy_type === 'fixed_term') {
+      warnings.push({
+        title: 'Fixed term not available for PRTs',
+        message: 'Private Residential Tenancies in Scotland cannot have a fixed term. The tenancy will be open-ended.',
+      });
+    }
+  }
+
+  // 8. HMO license check
+  if (facts.is_hmo && !facts.hmo_license_number) {
+    warnings.push({
+      title: 'HMO license required',
+      message: 'This property appears to be an HMO. Ensure you have a valid HMO license.',
+    });
+  }
+
+  return { blockers, warnings };
+}
+
+/**
+ * Get jurisdiction-specific landlord obligations
+ */
+function getJurisdictionObligations(jurisdiction: string): Array<{ title: string; items: string[] }> {
+  const commonObligations = [
+    'Keep the property in good repair and ensure all installations are safe',
+    'Carry out repairs promptly when notified of problems',
+    'Provide valid contact details for emergencies',
+    'Give proper notice before entering the property',
+  ];
+
+  switch (jurisdiction) {
+    case 'england':
+      return [
+        {
+          title: 'Before Tenancy Starts',
+          items: [
+            'Protect the deposit in a government-approved scheme within 30 days',
+            'Provide the tenant with prescribed deposit information',
+            'Give the tenant the "How to Rent" guide',
+            'Provide a valid Energy Performance Certificate (EPC)',
+            'Provide a valid Gas Safety Certificate (if gas appliances present)',
+            'Ensure all electrical installations are safe (EICR required)',
+          ],
+        },
+        {
+          title: 'During the Tenancy',
+          items: [
+            ...commonObligations,
+            'Renew Gas Safety Certificate annually',
+            'Ensure smoke and carbon monoxide alarms are fitted on each storey',
+            'Give at least 24 hours notice before inspections (in writing)',
+          ],
+        },
+        {
+          title: 'At the End of Tenancy',
+          items: [
+            'Return the deposit within 10 days of agreeing deductions (or referring to ADR)',
+            'Provide an itemised list of any proposed deductions',
+            'Allow the tenant to attend the checkout inspection',
+          ],
+        },
+      ];
+
+    case 'wales':
+      return [
+        {
+          title: 'Before Contract Starts',
+          items: [
+            'Register as a landlord with Rent Smart Wales',
+            'Ensure the property meets the Fitness for Human Habitation (FFHH) standards',
+            'Protect the deposit in a government-approved scheme',
+            'Provide a written statement of the occupation contract within 14 days',
+            'Provide a valid Energy Performance Certificate (EPC)',
+            'Provide a valid Gas Safety Certificate (if applicable)',
+            'Provide a valid EICR (Electrical Installation Condition Report)',
+          ],
+        },
+        {
+          title: 'During the Contract',
+          items: [
+            ...commonObligations,
+            'Keep the property fit for human habitation throughout',
+            'Ensure smoke alarms are installed on each storey',
+            'Ensure carbon monoxide alarms are installed where needed',
+            'Give at least 24 hours notice before entering the property',
+          ],
+        },
+        {
+          title: 'At the End of Contract',
+          items: [
+            'Return the deposit within the timeframe required by the scheme',
+            'Provide evidence for any proposed deductions',
+            'Issue proper notice using the correct RHW form',
+          ],
+        },
+      ];
+
+    case 'scotland':
+      return [
+        {
+          title: 'Before Tenancy Starts',
+          items: [
+            'Register with the Scottish Landlord Register',
+            'Provide the tenant with an Easy Read Notes document',
+            'Provide a valid Energy Performance Certificate (EPC - minimum band E)',
+            'Provide a valid Gas Safety Certificate (if applicable)',
+            'Ensure the property meets the Repairing Standard',
+            'Provide a Legionella risk assessment',
+          ],
+        },
+        {
+          title: 'During the Tenancy',
+          items: [
+            ...commonObligations,
+            'Maintain the property to the Repairing Standard',
+            'Install smoke alarms, heat alarms and carbon monoxide detectors',
+            'Give reasonable notice before inspections (usually 48 hours)',
+          ],
+        },
+        {
+          title: 'At the End of Tenancy',
+          items: [
+            'Serve a Notice to Leave using the correct form',
+            'Give proper notice periods based on eviction ground',
+            'Apply to the First-tier Tribunal for eviction (not the courts)',
+          ],
+        },
+      ];
+
+    case 'northern-ireland':
+      return [
+        {
+          title: 'Before Tenancy Starts',
+          items: [
+            'Register with the Landlord Registration Scheme',
+            'Provide a valid Gas Safety Certificate (if applicable)',
+            'Provide a valid Energy Performance Certificate (EPC)',
+            'Ensure the property meets the Fitness Standard',
+          ],
+        },
+        {
+          title: 'During the Tenancy',
+          items: [
+            ...commonObligations,
+            'Maintain the property to the Fitness Standard',
+            'Give reasonable notice before inspections',
+          ],
+        },
+        {
+          title: 'At the End of Tenancy',
+          items: [
+            'Serve proper notice using the correct form',
+            'Give at least 4 weeks notice (or longer depending on circumstances)',
+            'Return any deposit with appropriate deductions documented',
+          ],
+        },
+      ];
+
+    default:
+      return [];
+  }
+}
+
+function TenancyReviewContent({
+  caseId,
+  analysis,
+  jurisdiction,
+  product,
+  onEdit,
+  onProceed,
+}: TenancyReviewContentProps) {
+  const facts = analysis.case_facts || {};
+  const validation = buildTenancyValidation(facts, jurisdiction);
+  const obligations = getJurisdictionObligations(jurisdiction);
+
+  // Determine if premium tier
+  const isPremium = product === 'ast_premium' || facts.product_tier?.includes('Premium');
+
+  // Get jurisdiction-specific terminology
+  const terminologyMap: Record<string, { agreementType: string; tenantLabel: string }> = {
+    england: { agreementType: 'Assured Shorthold Tenancy (AST)', tenantLabel: 'tenant' },
+    wales: { agreementType: 'Occupation Contract', tenantLabel: 'contract holder' },
+    scotland: { agreementType: 'Private Residential Tenancy (PRT)', tenantLabel: 'tenant' },
+    'northern-ireland': { agreementType: 'Private Tenancy', tenantLabel: 'tenant' },
+  };
+  const terminology = terminologyMap[jurisdiction] || terminologyMap.england;
+
+  // Jurisdiction display label
+  const jurisdictionLabel = {
+    england: 'England',
+    wales: 'Wales',
+    scotland: 'Scotland',
+    'northern-ireland': 'Northern Ireland',
+  }[jurisdiction] || jurisdiction;
+
+  // Documents included in pack
+  const standardDocs = [
+    { title: `${terminology.agreementType} Agreement`, included: true },
+    { title: 'Property Details Schedule', included: true },
+    { title: 'Deposit Protection Information', included: true },
+    { title: 'Prescribed Information Template', included: jurisdiction === 'england' || jurisdiction === 'wales' },
+    { title: 'Easy Read Notes', included: jurisdiction === 'scotland' },
+    { title: 'Landlord Obligations Checklist', included: true },
+  ].filter(d => d.included);
+
+  const premiumDocs = [
+    { title: 'Guarantor Agreement', included: true },
+    { title: 'Inventory Template', included: true },
+    { title: 'Check-in/Check-out Form', included: true },
+    { title: 'HMO Additional Terms', included: facts.is_hmo },
+    { title: 'Rent Review Schedule', included: true },
+    { title: 'Maintenance Request Form', included: true },
+    { title: 'Notice Templates Pack', included: true },
+  ].filter(d => d.included);
+
+  const hasBlockers = validation.blockers.length > 0;
+  const hasWarnings = validation.warnings.length > 0;
+
+  // Build summary from facts
+  const tenantNames = facts.tenant_names || facts.tenant_1_name || 'Not specified';
+  const propertyAddress = facts.property_address || facts.property_full_address || 'Not specified';
+  const rentAmount = facts.rent_amount || facts.monthly_rent;
+  const rentFrequency = facts.rent_frequency || 'monthly';
+  const depositAmount = facts.deposit_amount;
+  const startDate = facts.tenancy_start_date || facts.start_date;
+
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto p-6">
+      {/* Header */}
+      <div className="text-center pb-6 border-b">
+        <h1 className="text-3xl font-bold text-gray-900">Tenancy Agreement Review</h1>
+        <p className="text-gray-600 mt-2">
+          {jurisdictionLabel} • {terminology.agreementType}
+          {isPremium && <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm font-medium">Premium</span>}
+        </p>
+        <div className="mt-4">
+          {hasBlockers ? (
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 font-medium">
+              <RiErrorWarningLine className="w-4 h-4 mr-2" />
+              Issues to Fix
+            </span>
+          ) : hasWarnings ? (
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-800 font-medium">
+              <RiInformationLine className="w-4 h-4 mr-2" />
+              Warnings to Review
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 font-medium">
+              <RiCheckboxCircleLine className="w-4 h-4 mr-2" />
+              Ready to Generate
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Blockers */}
+      {hasBlockers && (
+        <Card className="border-red-200 bg-red-50 p-6">
+          <h2 className="text-lg font-semibold text-red-800 flex items-center gap-2 mb-4">
+            <RiErrorWarningLine className="w-5 h-5" />
+            Required Information Missing
+          </h2>
+          <p className="text-red-700 text-sm mb-4">
+            Please go back and complete these required fields:
+          </p>
+          <ul className="space-y-3">
+            {validation.blockers.map((blocker, index) => (
+              <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
+                <RiCloseLine className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-red-900">{blocker.title}</p>
+                  <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Agreement Summary */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiFileTextLine className="w-5 h-5 text-[#7C3AED]" />
+          Agreement Summary
+        </h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-500 mb-1">Property Address</p>
+            <p className="text-sm font-medium text-gray-900">{propertyAddress}</p>
+          </div>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-500 mb-1">{terminology.tenantLabel.charAt(0).toUpperCase() + terminology.tenantLabel.slice(1)}(s)</p>
+            <p className="text-sm font-medium text-gray-900">{tenantNames}</p>
+          </div>
+          {rentAmount && (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Rent</p>
+              <p className="text-sm font-medium text-gray-900">
+                £{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
+              </p>
+            </div>
+          )}
+          {depositAmount && (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Deposit</p>
+              <p className="text-sm font-medium text-gray-900">
+                £{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          )}
+          {startDate && (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Start Date</p>
+              <p className="text-sm font-medium text-gray-900">
+                {new Date(startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      {/* Pre-Tenancy Checklist */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiShieldCheckLine className="w-5 h-5 text-[#7C3AED]" />
+          Pre-Tenancy Checklist for {jurisdictionLabel}
+        </h2>
+        <p className="text-gray-600 text-sm mb-4">
+          Before the tenancy starts, ensure you have completed these legal requirements:
+        </p>
+        <div className="space-y-4">
+          {obligations.filter(o => o.title.toLowerCase().includes('before')).map((section, index) => (
+            <div key={index} className="space-y-2">
+              {section.items.map((item, itemIndex) => (
+                <div key={itemIndex} className="flex items-start gap-3">
+                  <div className="h-5 w-5 rounded-full border-2 border-gray-300 mt-0.5 shrink-0" />
+                  <span className="text-sm text-gray-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Warnings */}
+      {hasWarnings && (
+        <Card className="border-amber-200 bg-amber-50 p-6">
+          <h2 className="text-lg font-semibold text-amber-800 flex items-center gap-2 mb-4">
+            <RiInformationLine className="w-5 h-5" />
+            Things to Note
+          </h2>
+          <ul className="space-y-3">
+            {validation.warnings.map((warning, index) => (
+              <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-amber-100">
+                <RiErrorWarningLine className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-amber-900">{warning.title}</p>
+                  <p className="text-sm text-amber-700 mt-1">{warning.message}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Landlord Obligations Reminder */}
+      <Card className="p-6 border-blue-200 bg-blue-50">
+        <h2 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
+          <RiInformationLine className="w-5 h-5 text-[#7C3AED]" />
+          Your Obligations as a Landlord in {jurisdictionLabel}
+        </h2>
+        <div className="space-y-6">
+          {obligations.map((section, index) => (
+            <div key={index}>
+              <h3 className="font-medium text-blue-800 mb-2">{section.title}</h3>
+              <ul className="space-y-1">
+                {section.items.slice(0, 4).map((item, itemIndex) => (
+                  <li key={itemIndex} className="text-sm text-blue-700 flex items-start gap-2">
+                    <span>•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+                {section.items.length > 4 && (
+                  <li className="text-sm text-blue-600 italic ml-4">
+                    + {section.items.length - 4} more items in your pack
+                  </li>
+                )}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-blue-700 mt-4 pt-4 border-t border-blue-200">
+          Your pack includes a comprehensive landlord obligations checklist specific to {jurisdictionLabel}.
+        </p>
+      </Card>
+
+      {/* Documents in Pack */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiFileTextLine className="w-5 h-5 text-[#7C3AED]" />
+          Documents in Your Pack
+        </h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-medium text-gray-700 mb-2">Standard Documents</h3>
+            <ul className="space-y-2">
+              {standardDocs.map((doc, index) => (
+                <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                  <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                  {doc.title}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {isPremium && (
+            <div>
+              <h3 className="font-medium text-gray-700 mb-2 flex items-center gap-2">
+                Premium Documents
+                <span className="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-medium">Premium</span>
+              </h3>
+              <ul className="space-y-2">
+                {premiumDocs.map((doc, index) => (
+                  <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                    <RiCheckboxCircleLine className="w-4 h-4 text-purple-600" />
+                    {doc.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="mt-4 pt-4 border-t">
+          <p className="text-gray-600">
+            Price: <span className="font-semibold text-gray-900">{isPremium ? '£49.99' : '£29.99'}</span>
+          </p>
+        </div>
+      </Card>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
+          Go back &amp; edit answers
+        </Button>
+        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers}>
+          {hasBlockers ? 'Fix issues to proceed' : 'Proceed to payment & pack'}
+        </Button>
+      </div>
+
+      {hasBlockers && (
+        <p className="text-center text-sm text-gray-500 pb-4">
+          Please complete all required fields before generating your tenancy agreement.
         </p>
       )}
     </div>
