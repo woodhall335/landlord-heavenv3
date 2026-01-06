@@ -189,7 +189,13 @@ function WizardFlowContent() {
       return;
     }
 
-    // Navigate to preview/checkout page for other case types
+    // For money claim cases, go to review page (same as eviction complete_pack flow)
+    if (type === 'money_claim') {
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=money_claim`);
+      return;
+    }
+
+    // Navigate to preview/checkout page for other case types (tenancy agreements)
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 

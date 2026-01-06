@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
 interface SectionProps {
-  // We don’t currently use facts in this section, so make it optional
+  // We don't currently use facts in this section, so make it optional
   facts?: any;
   caseId: string;
   jurisdiction: Jurisdiction;
@@ -15,7 +16,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
   caseId,
   jurisdiction,
 }) => {
-  const [downloading, setDownloading] = useState(false);
+  const router = useRouter();
   const [previewing, setPreviewing] = useState(false);
 
   const handlePreview = async () => {
@@ -31,37 +32,17 @@ export const ReviewSection: React.FC<SectionProps> = ({
     }
   };
 
-  const handleGeneratePack = async () => {
-    try {
-      setDownloading(true);
-      const res = await fetch(
-        `/api/money-claim/pack/${encodeURIComponent(caseId)}`
-      );
-      if (!res.ok) {
-        console.error('Failed to generate money claim pack', await res.text());
-        alert('Sorry, there was a problem generating your pack.');
-        return;
-      }
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Money-Claim-Premium-${caseId}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } finally {
-      setDownloading(false);
-    }
+  const handleProceedToReview = () => {
+    // Navigate to the full review page with analysis
+    router.push(`/wizard/review?case_id=${caseId}&product=money_claim`);
   };
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        This is a high-level review step. You’ll get an Ask Heaven analysis and
-        a full document bundle (pre-action, claim pack and guidance) when you
-        generate the premium pack.
+        You've completed all the required sections. Before you purchase your pack,
+        we'll analyse your case against the Pre-Action Protocol for Debt Claims
+        and show you any issues that need attention.
       </p>
 
       <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
@@ -69,14 +50,14 @@ export const ReviewSection: React.FC<SectionProps> = ({
           <span className="font-semibold">Case ID:</span> {caseId}
         </p>
         <p>
-          <span className="font-semibold">Jurisdiction:</span> {jurisdiction}
+          <span className="font-semibold">Jurisdiction:</span>{' '}
+          {jurisdiction === 'scotland'
+            ? 'Scotland (Simple Procedure)'
+            : jurisdiction === 'wales'
+            ? 'Wales'
+            : 'England'}
         </p>
       </div>
-
-      <p className="text-sm text-gray-600">
-        Use the buttons below to preview the drafted documents and then download
-        your complete money-claim pack as a ZIP file.
-      </p>
 
       {/* Ask Heaven Features Banner */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
@@ -87,10 +68,41 @@ export const ReviewSection: React.FC<SectionProps> = ({
               Ask Heaven Legal Drafting Included
             </h4>
             <p className="text-sm text-gray-600">
-              Your Particulars of Claim and Letter Before Action will be professionally drafted by Ask Heaven, saving you £300-600 in solicitor fees. Generation takes 2-3 minutes.
+              Your Particulars of Claim and Letter Before Action will be professionally
+              drafted by Ask Heaven, saving you £300-600 in solicitor fees.
             </p>
           </div>
         </div>
+      </div>
+
+      {/* What's included summary */}
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <h4 className="font-semibold text-gray-900 mb-2">Your pack will include:</h4>
+        <ul className="text-sm text-gray-600 space-y-1">
+          {jurisdiction === 'scotland' ? (
+            <>
+              <li>• Form 3A - Simple Procedure Claim Form</li>
+              <li>• Particulars of Claim (AI-drafted)</li>
+              <li>• Schedule of Arrears</li>
+              <li>• Interest Calculation</li>
+              <li>• Pre-Action Letter</li>
+              <li>• Filing Guide</li>
+            </>
+          ) : (
+            <>
+              <li>• Form N1 - Money Claim Form (official PDF)</li>
+              <li>• Particulars of Claim (AI-drafted)</li>
+              <li>• Schedule of Arrears</li>
+              <li>• Interest Calculation</li>
+              <li>• Letter Before Claim (PAP-DEBT compliant)</li>
+              <li>• Information Sheet for Defendants</li>
+              <li>• Reply Form & Financial Statement Form</li>
+              <li>• Evidence Index</li>
+              <li>• Court Filing Guide</li>
+              <li>• Enforcement Guide</li>
+            </>
+          )}
+        </ul>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -100,18 +112,22 @@ export const ReviewSection: React.FC<SectionProps> = ({
           disabled={previewing}
           className="inline-flex items-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 disabled:opacity-60"
         >
-          {previewing ? 'Preparing preview…' : 'Preview drafted pack'}
+          {previewing ? 'Preparing preview…' : 'Preview draft documents'}
         </button>
 
         <button
           type="button"
-          onClick={handleGeneratePack}
-          disabled={downloading}
-          className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+          onClick={handleProceedToReview}
+          className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
         >
-          {downloading ? 'Ask Heaven is drafting your Particulars of Claim…' : 'Generate Ask Heaven-drafted claim pack'}
+          Continue to Full Analysis
         </button>
       </div>
+
+      <p className="text-xs text-gray-500 mt-2">
+        The full analysis will check your case against PAP-DEBT requirements and
+        highlight any issues before you proceed to payment.
+      </p>
     </div>
   );
 };
