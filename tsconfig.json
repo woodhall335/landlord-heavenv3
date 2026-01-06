@@ -21,8 +21,8 @@
       }
     ],
     "paths": {
-      "@/config/*": ["./config/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/config/*": ["./config/*"]
     }
   },
   "include": [
