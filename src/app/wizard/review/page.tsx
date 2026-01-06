@@ -5,12 +5,23 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
-import { RiErrorWarningLine, RiCheckboxCircleLine, RiFileTextLine, RiCloseLine, RiShieldCheckLine, RiInformationLine } from 'react-icons/ri';
+import {
+  RiErrorWarningLine,
+  RiCheckboxCircleLine,
+  RiFileTextLine,
+  RiCloseLine,
+  RiShieldCheckLine,
+  RiInformationLine,
+  RiMoneyPoundCircleLine,
+  RiCalendarCheckLine,
+  RiFileList3Line,
+} from 'react-icons/ri';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const caseId = searchParams.get('case_id');
+  const productParam = searchParams.get('product');
 
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -62,38 +73,26 @@ function ReviewPageInner() {
     );
   }
 
-  const hasBlockingIssues = analysis.decision_engine?.blocking_issues?.some(
-    (issue: any) => issue.severity === 'blocking'
-  );
-
   const jurisdiction = analysis.jurisdiction;
   const caseType = analysis.case_type ?? 'eviction';
-  const product: string = analysis.product || 'complete_pack';
+  const product: string = productParam || analysis.product || 'complete_pack';
 
-  // New fields from /api/wizard/analyze
-  const recommendedRouteLabel: string =
-    analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
+  // Detect if this is a money claim flow
+  const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
+
+  const hasBlockingIssues = isMoneyClaimFlow
+    ? (analysis.case_health?.blockers?.length ?? 0) > 0
+    : analysis.decision_engine?.blocking_issues?.some(
+        (issue: any) => issue.severity === 'blocking'
+      );
+
+  // Common fields from /api/wizard/analyze
   const caseStrengthBand: string = analysis.case_strength_band || 'unknown';
   const isCourtReady: boolean | null =
     typeof analysis.is_court_ready === 'boolean' ? analysis.is_court_ready : null;
   const readinessSummary: string | null = analysis.readiness_summary ?? null;
-
   const redFlags: string[] = analysis.red_flags || [];
   const complianceIssues: string[] = analysis.compliance_issues || [];
-  type PreviewDocument = {
-  id: string;
-  title?: string;
-  document_title?: string;
-  type: string;
-  jurisdiction: string;
-  requiredToFile?: boolean;
-};
-
-const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_documents)
-  ? analysis.preview_documents
-  : [];
-
-  // Evidence overview from analysis (booleans: tenancy_agreement_uploaded, etc.)
   const evidence = analysis.evidence_overview || {};
 
   const handleEdit = () => {
@@ -108,13 +107,30 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
   };
 
   const handleProceed = () => {
-    // VALIDATION: For eviction cases, ensure we have a recommended route before preview
-    if (caseType === 'eviction') {
+    // For money claim cases, check case health blockers
+    if (isMoneyClaimFlow) {
+      const caseHealth = analysis.case_health;
+      if (caseHealth?.blockers?.length > 0) {
+        const blockersList = caseHealth.blockers
+          .map((b: any) => b.message || b.title)
+          .join('\n• ');
+
+        const proceed = confirm(
+          `Warning: Your claim has issues that should be addressed:\n\n• ${blockersList}\n\n` +
+            'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
+        );
+
+        if (!proceed) {
+          return;
+        }
+      }
+    } else {
+      // For eviction cases, ensure we have a recommended route before preview
       const recommendedRoute = analysis.recommended_route;
       if (!recommendedRoute) {
         alert(
           'Cannot generate preview: The system needs more information to recommend the right notice type. ' +
-          'Please complete all required questions and try again.'
+            'Please complete all required questions and try again.'
         );
         return;
       }
@@ -128,7 +144,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
 
         const proceed = confirm(
           `Warning: Your case has blocking issues that may prevent successful document generation:\n\n${blockingIssuesList}\n\n` +
-          'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
+            'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
         );
 
         if (!proceed) {
@@ -145,7 +161,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
           <RiShieldCheckLine className="h-3 w-3 text-[#7C3AED]" />
-          Court-ready
+          {isMoneyClaimFlow ? 'Ready to issue' : 'Court-ready'}
         </span>
       );
     }
@@ -153,12 +169,531 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
           <RiErrorWarningLine className="h-3 w-3 text-[#7C3AED]" />
-          Not court-ready yet
+          {isMoneyClaimFlow ? 'Needs attention' : 'Not court-ready yet'}
         </span>
       );
     }
     return null;
   })();
+
+  // Render Money Claim specific content
+  if (isMoneyClaimFlow) {
+    return <MoneyClaimReviewContent
+      caseId={caseId}
+      analysis={analysis}
+      jurisdiction={jurisdiction}
+      readinessBadge={readinessBadge}
+      caseStrengthBand={caseStrengthBand}
+      readinessSummary={readinessSummary}
+      redFlags={redFlags}
+      complianceIssues={complianceIssues}
+      evidence={evidence}
+      hasBlockingIssues={hasBlockingIssues}
+      onEdit={handleEdit}
+      onProceed={handleProceed}
+    />;
+  }
+
+  // Render Eviction specific content
+  return <EvictionReviewContent
+    caseId={caseId}
+    analysis={analysis}
+    jurisdiction={jurisdiction}
+    product={product}
+    readinessBadge={readinessBadge}
+    caseStrengthBand={caseStrengthBand}
+    readinessSummary={readinessSummary}
+    redFlags={redFlags}
+    complianceIssues={complianceIssues}
+    evidence={evidence}
+    hasBlockingIssues={hasBlockingIssues}
+    onEdit={handleEdit}
+    onProceed={handleProceed}
+  />;
+}
+
+// ============================================================================
+// MONEY CLAIM REVIEW CONTENT
+// ============================================================================
+interface MoneyClaimReviewContentProps {
+  caseId: string;
+  analysis: any;
+  jurisdiction: string;
+  readinessBadge: React.ReactNode;
+  caseStrengthBand: string;
+  readinessSummary: string | null;
+  redFlags: string[];
+  complianceIssues: string[];
+  evidence: any;
+  hasBlockingIssues: boolean;
+  onEdit: () => void;
+  onProceed: () => void;
+}
+
+function MoneyClaimReviewContent({
+  caseId,
+  analysis,
+  jurisdiction,
+  readinessBadge,
+  caseStrengthBand,
+  readinessSummary,
+  redFlags,
+  complianceIssues,
+  evidence,
+  hasBlockingIssues,
+  onEdit,
+  onProceed,
+}: MoneyClaimReviewContentProps) {
+  const caseHealth = analysis.case_health;
+  const caseSummary = analysis.case_summary;
+
+  // Calculate claim totals from case_summary
+  const totalArrears = caseSummary?.total_arrears ?? 0;
+  const damages = caseSummary?.damages ?? 0;
+  const otherCharges = caseSummary?.other_charges ?? 0;
+  const interestRate = caseSummary?.interest_rate ?? 8;
+  const totalPrincipal = totalArrears + damages + otherCharges;
+
+  // Estimate interest (roughly 3 months worth for display)
+  const estimatedInterest = Number((totalPrincipal * (interestRate / 100) * 0.25).toFixed(2));
+  const totalClaim = totalPrincipal + estimatedInterest;
+
+  // Pre-action status
+  const preActionStatus = caseSummary?.pre_action_status ?? 'missing';
+  const preActionComplete = preActionStatus === 'complete';
+  const preActionPartial = preActionStatus === 'partial';
+
+  // Get blockers, risks, warnings from case_health
+  const blockers = caseHealth?.blockers ?? [];
+  const risks = caseHealth?.risks ?? [];
+  const warnings = caseHealth?.warnings ?? [];
+  const positives = caseHealth?.positives ?? [];
+
+  // Money claim specific documents
+  const moneyClaimDocs = jurisdiction === 'scotland'
+    ? [
+        { id: 'form_3a', title: 'Form 3A - Simple Procedure Claim', required: true },
+        { id: 'particulars', title: 'Particulars of Claim', required: true },
+        { id: 'schedule', title: 'Schedule of Arrears', required: true },
+        { id: 'interest', title: 'Interest Calculation', required: false },
+        { id: 'lba', title: 'Letter Before Claim', required: false },
+        { id: 'filing_guide', title: 'Filing Guide', required: false },
+      ]
+    : [
+        { id: 'form_n1', title: 'Form N1 - Money Claim Form', required: true },
+        { id: 'particulars', title: 'Particulars of Claim', required: true },
+        { id: 'schedule', title: 'Schedule of Arrears', required: true },
+        { id: 'interest', title: 'Interest Calculation', required: false },
+        { id: 'lba', title: 'Letter Before Claim (PAP-DEBT)', required: true },
+        { id: 'info_sheet', title: 'Information Sheet for Defendants', required: true },
+        { id: 'reply_form', title: 'Reply Form', required: false },
+        { id: 'financial_statement', title: 'Financial Statement Form', required: false },
+        { id: 'evidence_index', title: 'Evidence Index', required: false },
+        { id: 'filing_guide', title: 'Court Filing Guide', required: false },
+        { id: 'enforcement_guide', title: 'Enforcement Guide', required: false },
+      ];
+
+  return (
+    <div className="max-w-5xl mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Money Claim Analysis</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            We've analysed your claim against the Pre-Action Protocol for Debt Claims for{' '}
+            <span className="font-medium">
+              {jurisdiction === 'scotland'
+                ? 'Scotland (Simple Procedure)'
+                : jurisdiction === 'wales'
+                ? 'Wales'
+                : 'England'}
+            </span>
+            .
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          {readinessBadge}
+          {analysis.case_strength_score != null && (
+            <div className="text-right text-sm text-gray-600">
+              <div className="font-semibold">Claim strength: {analysis.case_strength_score}/100</div>
+              <div className="text-xs uppercase tracking-wide text-gray-500">{caseStrengthBand}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Readiness Summary */}
+      {readinessSummary && (
+        <Card className="p-4 border-blue-200 bg-blue-50">
+          <div className="flex items-start gap-3">
+            <RiInformationLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
+            <div>
+              <h2 className="text-sm font-semibold text-blue-900 mb-1">
+                What this means for your claim
+              </h2>
+              <p className="text-sm text-blue-800">{readinessSummary}</p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Claim Summary - Money amounts */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiMoneyPoundCircleLine className="h-5 w-5 text-[#7C3AED]" />
+          Claim Summary
+        </h2>
+        <div className="grid md:grid-cols-4 gap-4">
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-500 mb-1">Rent Arrears</p>
+            <p className="text-2xl font-bold text-gray-900">
+              £{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-500 mb-1">Damages</p>
+            <p className="text-2xl font-bold text-gray-900">
+              £{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
+            <p className="text-2xl font-bold text-gray-900">
+              £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
+          </div>
+          <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
+            <p className="text-sm text-gray-500 mb-1">Total Claim</p>
+            <p className="text-2xl font-bold text-primary">
+              £{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">Excluding court fees</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Blockers - Critical Issues */}
+      {blockers.length > 0 && (
+        <Card className="p-6 border-red-300 bg-red-50">
+          <div className="flex items-start gap-3">
+            <RiCloseLine className="h-6 w-6 text-red-600 mt-1" />
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-red-900 mb-2">
+                Issues to Fix Before Proceeding
+              </h2>
+              <p className="text-sm text-red-800 mb-3">
+                These issues should be resolved before issuing your claim to avoid delays or rejection.
+              </p>
+              {blockers.map((blocker: any, i: number) => (
+                <div key={i} className="mb-2 p-3 bg-white rounded border border-red-200">
+                  <p className="font-medium text-red-900">{blocker.title || 'Issue'}</p>
+                  <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Risks */}
+      {risks.length > 0 && (
+        <Card className="p-6 border-amber-300 bg-amber-50">
+          <div className="flex items-start gap-3">
+            <RiErrorWarningLine className="h-6 w-6 text-amber-600 mt-1" />
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-amber-900 mb-2">Risks to Consider</h2>
+              <ul className="space-y-2">
+                {risks.map((risk: any, i: number) => (
+                  <li key={i} className="text-sm text-amber-800">
+                    • {risk.message || risk.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Pre-Action Protocol Status */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiCalendarCheckLine className="h-5 w-5 text-[#7C3AED]" />
+          Pre-Action Protocol Status
+        </h2>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            {preActionComplete || preActionPartial ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600" />
+            ) : (
+              <RiErrorWarningLine className="h-5 w-5 text-amber-500" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Letter Before Claim sent</p>
+              <p className="text-xs text-gray-600">
+                {preActionComplete
+                  ? 'You have confirmed sending a pre-action demand letter.'
+                  : preActionPartial
+                  ? 'Partially complete - some details may be missing.'
+                  : 'Not confirmed yet - courts expect PAP-DEBT compliance.'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {preActionComplete ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600" />
+            ) : (
+              <RiErrorWarningLine className="h-5 w-5 text-amber-500" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">14-day response period</p>
+              <p className="text-xs text-gray-600">
+                {preActionComplete
+                  ? 'Response deadline has passed or been confirmed.'
+                  : 'Ensure you have given 14+ days to respond before issuing.'}
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 mt-4 border-t pt-3">
+          The Pre-Action Protocol for Debt Claims requires sending specific documents before issuing.
+          Your pack will include all required PAP-DEBT documents.
+        </p>
+      </Card>
+
+      {/* Evidence Checklist */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiFileList3Line className="h-5 w-5 text-[#7C3AED]" />
+          Evidence Checklist
+        </h2>
+        <p className="text-sm text-gray-600 mb-3">
+          Having these documents ready strengthens your claim and speeds up court processing.
+        </p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="flex items-start gap-3">
+            {evidence.tenancy_agreement_uploaded ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <RiErrorWarningLine className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Tenancy Agreement</p>
+              <p className="text-xs text-gray-600">
+                {evidence.tenancy_agreement_uploaded
+                  ? 'Available - proves the contractual terms.'
+                  : 'Not uploaded - essential for proving rent obligation.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            {evidence.rent_schedule_uploaded ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <RiErrorWarningLine className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Rent Schedule</p>
+              <p className="text-xs text-gray-600">
+                {evidence.rent_schedule_uploaded
+                  ? 'Available - shows payment history.'
+                  : 'Not uploaded - courts expect a clear arrears breakdown.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            {evidence.bank_statements_uploaded ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <div className="h-5 w-5 rounded-full border-2 border-gray-300 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Bank Statements</p>
+              <p className="text-xs text-gray-600">
+                {evidence.bank_statements_uploaded
+                  ? 'Available - supports payment records.'
+                  : 'Optional - can help prove payments received/missed.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            {evidence.correspondence_uploaded ? (
+              <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <div className="h-5 w-5 rounded-full border-2 border-gray-300 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Correspondence</p>
+              <p className="text-xs text-gray-600">
+                {evidence.correspondence_uploaded
+                  ? 'Available - shows communication history.'
+                  : 'Optional - emails/texts showing requests for payment.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Positives */}
+      {positives.length > 0 && (
+        <Card className="p-6 border-green-200 bg-green-50">
+          <h2 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
+            <RiCheckboxCircleLine className="h-5 w-5" />
+            What's Looking Good
+          </h2>
+          <ul className="space-y-1">
+            {positives.map((positive: string, i: number) => (
+              <li key={i} className="text-sm text-green-800">
+                ✓ {positive}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Things to Fix or Improve */}
+      {(redFlags.length > 0 || complianceIssues.length > 0) && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Things to Fix or Improve</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {redFlags.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
+                <ul className="space-y-1 text-sm text-amber-900">
+                  {redFlags.map((item, i) => (
+                    <li key={i}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {complianceIssues.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
+                <ul className="space-y-1 text-sm text-red-900">
+                  {complianceIssues.map((item, i) => (
+                    <li key={i}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </Card>
+      )}
+
+      {/* Documents to be generated */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiFileTextLine className="h-5 w-5 text-[#7C3AED]" />
+          Documents in Your Pack
+        </h2>
+        <p className="text-sm text-gray-600 mb-3">
+          Your money claim pack includes all documents needed for the Pre-Action Protocol
+          and court filing:
+        </p>
+        <ul className="grid md:grid-cols-2 gap-2">
+          {moneyClaimDocs.map((doc) => (
+            <li key={doc.id} className="flex items-center gap-2 text-sm">
+              <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
+              <span className="font-medium">{doc.title}</span>
+              {doc.required && (
+                <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+                  Required
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </Card>
+
+      {/* Warnings */}
+      {warnings.length > 0 && (
+        <Card className="p-6 border-yellow-300 bg-yellow-50">
+          <div className="flex items-start gap-3">
+            <RiErrorWarningLine className="h-6 w-6 text-yellow-600 mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-yellow-900 mb-2">Important Warnings</h2>
+              <ul className="space-y-1">
+                {warnings.map((warning: any, i: number) => (
+                  <li key={i} className="text-sm text-yellow-800">
+                    • {warning.message || warning}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
+          Go back &amp; edit answers
+        </Button>
+        <Button onClick={onProceed} className="flex-1">
+          Proceed to payment &amp; pack
+        </Button>
+      </div>
+
+      <p className="text-xs text-center text-gray-500 mt-2">
+        We will generate your complete money claim pack regardless of readiness status.
+        Your pack includes all PAP-DEBT documents and filing guides.
+      </p>
+    </div>
+  );
+}
+
+// ============================================================================
+// EVICTION REVIEW CONTENT (Original)
+// ============================================================================
+interface EvictionReviewContentProps {
+  caseId: string;
+  analysis: any;
+  jurisdiction: string;
+  product: string;
+  readinessBadge: React.ReactNode;
+  caseStrengthBand: string;
+  readinessSummary: string | null;
+  redFlags: string[];
+  complianceIssues: string[];
+  evidence: any;
+  hasBlockingIssues: boolean;
+  onEdit: () => void;
+  onProceed: () => void;
+}
+
+function EvictionReviewContent({
+  caseId,
+  analysis,
+  jurisdiction,
+  product,
+  readinessBadge,
+  caseStrengthBand,
+  readinessSummary,
+  redFlags,
+  complianceIssues,
+  evidence,
+  hasBlockingIssues,
+  onEdit,
+  onProceed,
+}: EvictionReviewContentProps) {
+  const recommendedRouteLabel: string =
+    analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
+
+  type PreviewDocument = {
+    id: string;
+    title?: string;
+    document_title?: string;
+    type: string;
+    jurisdiction: string;
+    requiredToFile?: boolean;
+  };
+
+  const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_documents)
+    ? analysis.preview_documents
+    : [];
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -228,8 +763,8 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
                 These issues may stop a judge granting possession unless they are fixed. Your
                 pack will include a procedural guide explaining how to deal with them.
               </p>
-              {analysis.decision_engine.blocking_issues
-                .filter((issue: any) => issue.severity === 'blocking')
+              {analysis.decision_engine?.blocking_issues
+                ?.filter((issue: any) => issue.severity === 'blocking')
                 .map((issue: any, i: number) => (
                   <div key={i} className="mb-2 p-3 bg-white rounded border border-red-200">
                     <p className="font-medium text-red-900">
@@ -430,11 +965,10 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
               <li key={doc.id} className="flex items-center gap-2 text-sm">
                 <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                 <span className="font-medium">
-  {doc.title ?? doc.document_title ?? 'Untitled document'}
-</span>
+                  {doc.title ?? doc.document_title ?? 'Untitled document'}
+                </span>
 
                 {doc.requiredToFile && (
-
                   <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-700">
                     Required for filing
                   </span>
@@ -458,14 +992,14 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
             <>
               {/* Route-specific notice display for England/Wales */}
               {analysis.recommended_route === 'section_21' ||
-               analysis.recommended_route === 'accelerated_possession' ||
-               analysis.recommended_route === 'accelerated_section21' ? (
+              analysis.recommended_route === 'accelerated_possession' ||
+              analysis.recommended_route === 'accelerated_section21' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Section 21 notice (Form 6A)
                 </li>
               ) : analysis.recommended_route === 'section_8' ||
-                   analysis.recommended_route === 'section8_notice' ? (
+                analysis.recommended_route === 'section8_notice' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Section 8 notice (Form 3)
@@ -514,10 +1048,10 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
-        <Button onClick={handleEdit} variant="outline" className="flex-1">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={handleProceed} className="flex-1">
+        <Button onClick={onProceed} className="flex-1">
           Proceed to payment &amp; pack
         </Button>
       </div>
