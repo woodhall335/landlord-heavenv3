@@ -16,7 +16,7 @@
   },
   "tribunal_application": {
     "form": "Form E - Application for an eviction order",
-    "fee": "\u00a3100 (as of 2024)",
+    "fee": "£100 (as of 2024)",
     "timeframe": "Can apply to tribunal once notice period expires. Tribunal usually schedules hearing within 8-12 weeks.",
     "evidence_requirements": [
       "Copy of Notice to Leave served on tenant",
@@ -54,7 +54,9 @@
       ],
       "typical_success_rate": "70%",
       "notes": "Cannot be used if landlord has already used this ground for the same property in the previous 5 years. Must actually put property on market within 3 months.",
-      "number": 1
+      "number": 1,
+      "description": "The landlord intends to sell the let property within 3 months of the termination date specified in the notice.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1"
     },
     "ground_2": {
       "code": "Ground 2",
@@ -78,7 +80,9 @@
       ],
       "typical_success_rate": "85%",
       "notes": "Usually granted when property is being repossessed by mortgage lender.",
-      "number": 2
+      "number": 2,
+      "description": "A lender who holds a standard security over the let property intends to sell it.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 2"
     },
     "ground_3": {
       "code": "Ground 3",
@@ -104,7 +108,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "Must be substantial refurbishment that genuinely requires vacant possession. Cosmetic works insufficient.",
-      "number": 3
+      "number": 3,
+      "description": "The landlord intends to refurbish the let property and cannot reasonably do so while tenant occupies it.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 3"
     },
     "ground_4": {
       "code": "Ground 4",
@@ -128,7 +134,9 @@
       ],
       "typical_success_rate": "75%",
       "notes": "Cannot be used if landlord has already used this ground for the same property in previous 5 years.",
-      "number": 4
+      "number": 4,
+      "description": "The landlord intends to occupy the let property as their only or principal home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 4"
     },
     "ground_5": {
       "code": "Ground 5",
@@ -152,7 +160,9 @@
       ],
       "typical_success_rate": "70%",
       "notes": "Family member includes spouse, civil partner, parent, child, sibling, grandparent, grandchild.",
-      "number": 5
+      "number": 5,
+      "description": "A member of the landlord's family intends to occupy the let property as their only or principal home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 5"
     },
     "ground_6": {
       "code": "Ground 6",
@@ -175,7 +185,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "84-day notice period. Requires credible plan to take property out of residential use.",
-      "number": 6
+      "number": 6,
+      "description": "The landlord intends to use the let property for a non-residential purpose.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 6"
     },
     "ground_7": {
       "code": "Ground 7",
@@ -198,7 +210,9 @@
       ],
       "typical_success_rate": "60%",
       "notes": "84-day notice period. Must show genuine requirement for a minister or missionary.",
-      "number": 7
+      "number": 7,
+      "description": "The property is required for use by a religious worker.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 7"
     },
     "ground_8": {
       "code": "Ground 8",
@@ -221,7 +235,9 @@
       ],
       "typical_success_rate": "70%",
       "notes": "84-day notice period. Often used for tied accommodation when employment ends.",
-      "number": 8
+      "number": 8,
+      "description": "Tenant is no longer an employee of the landlord and the tenancy was linked to employment.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 8"
     },
     "ground_9": {
       "code": "Ground 9",
@@ -244,7 +260,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "28-day notice period. Often used by supported accommodation providers when support ends.",
-      "number": 9
+      "number": 9,
+      "description": "The tenant no longer needs the supported accommodation provided at the let property.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 9"
     },
     "ground_10": {
       "code": "Ground 10",
@@ -270,7 +288,9 @@
       ],
       "typical_success_rate": "60%",
       "notes": "Shorter 28-day notice period. Breach must be material. Minor breaches unlikely to succeed.",
-      "number": 10
+      "number": 10,
+      "description": "The tenant has breached a term of the tenancy (other than rent payment).",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 10"
     },
     "ground_11": {
       "code": "Ground 11",
@@ -294,7 +314,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "28-day notice period. Often relies on circumstantial evidence of vacancy.",
-      "number": 11
+      "number": 11,
+      "description": "The tenant is no longer occupying the let property as their home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 11"
     },
     "ground_12": {
       "code": "Ground 12",
@@ -318,7 +340,9 @@
       ],
       "typical_success_rate": "85%",
       "notes": "28-day notice period. Must be actual criminal conviction.",
-      "number": 12
+      "number": 12,
+      "description": "The tenant has been convicted of using the let property, or allowing it to be used, for immoral or illegal purposes.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 12"
     },
     "ground_13": {
       "code": "Ground 13",
@@ -345,7 +369,9 @@
       ],
       "typical_success_rate": "80%",
       "notes": "28-day notice period. 'Relevant antisocial behaviour' includes causing alarm, distress, nuisance, or annoyance.",
-      "number": 13
+      "number": 13,
+      "description": "The tenant has engaged in antisocial behaviour.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 13"
     },
     "ground_14": {
       "code": "Ground 14",
@@ -371,7 +397,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "28-day notice period. Must show both association and antisocial behaviour.",
-      "number": 14
+      "number": 14,
+      "description": "The tenant associates in the let property with a person who has engaged in antisocial behaviour.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 14"
     },
     "ground_15": {
       "code": "Ground 15",
@@ -394,7 +422,9 @@
       ],
       "typical_success_rate": "70%",
       "notes": "28-day notice period. Tied to landlord registration compliance.",
-      "number": 15
+      "number": 15,
+      "description": "The landlord is not registered or has ceased to be registered.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 15"
     },
     "ground_16": {
       "code": "Ground 16",
@@ -417,7 +447,9 @@
       ],
       "typical_success_rate": "65%",
       "notes": "28-day notice period. Applies where HMO licence cannot be lawfully maintained.",
-      "number": 16
+      "number": 16,
+      "description": "The HMO licence for the property has been revoked or an application has been refused.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 16"
     },
     "ground_17": {
       "code": "Ground 17",
@@ -440,7 +472,9 @@
       ],
       "typical_success_rate": "60%",
       "notes": "28-day notice period. Used to address statutory overcrowding notices.",
-      "number": 17
+      "number": 17,
+      "description": "An overcrowding statutory notice has been served on the landlord or tenant.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 17"
     },
     "ground_18": {
       "code": "Ground 18",
@@ -467,7 +501,9 @@
       ],
       "typical_success_rate": "75%",
       "notes": "28-day notice period. Must be continuous arrears for 3 months. Tribunal will consider tenant's circumstances and whether eviction is reasonable.",
-      "number": 18
+      "number": 18,
+      "description": "The tenant has been in rent arrears for 3 or more consecutive months.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 18"
     }
   },
   "compliance_requirements": {
@@ -486,7 +522,7 @@
       "required": true,
       "certificate_type": "Gas Safety Certificate (CP12)",
       "renewal": "Annual",
-      "penalty": "\u00a35,000 fine and/or 6 months imprisonment",
+      "penalty": "£5,000 fine and/or 6 months imprisonment",
       "notes": "Must provide copy to tenant within 28 days of issue"
     },
     "epc": {
@@ -496,14 +532,14 @@
         "Listed buildings",
         "Buildings in conservation areas (with local authority consent)"
       ],
-      "penalty": "\u00a31,000 fine",
+      "penalty": "£1,000 fine",
       "notes": "Must be provided before marketing property"
     },
     "eicr": {
       "required": true,
       "renewal": "Every 5 years or on change of tenancy",
       "effective_from": "1 December 2020 (new tenancies) / 1 December 2022 (existing tenancies)",
-      "penalty": "Up to \u00a35,000 fine",
+      "penalty": "Up to £5,000 fine",
       "notes": "Electrical Installation Condition Report required for all private tenancies"
     },
     "repairing_standard": {
@@ -523,13 +559,13 @@
     "landlord_registration": {
       "required": true,
       "authority": "Local council",
-      "penalty": "\u00a35,000 fine and/or 3 months imprisonment",
+      "penalty": "£5,000 fine and/or 3 months imprisonment",
       "notes": "All private landlords in Scotland must register with local council"
     },
     "hmo_licensing": {
       "required_if": "3 or more unrelated tenants sharing facilities",
       "authority": "Local council",
-      "penalty": "\u00a35,000 fine",
+      "penalty": "£5,000 fine",
       "notes": "HMO license required before letting. Requirements vary by council."
     }
   }

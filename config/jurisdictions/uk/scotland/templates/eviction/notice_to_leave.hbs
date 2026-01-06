@@ -100,6 +100,10 @@ As required by the Pre-Action Requirements (Notice to Leave and Notice of Procee
 **Evidence of pre-action steps:** {{pre_action_evidence}}
 {{/if}}
 
+{{#if ground_1_details}}
+{{ground_1_details}}
+{{/if}}
+
 {{/if}}
 
 {{#if ground_2_claimed}}
@@ -127,6 +131,10 @@ The breach occurred on {{breach_date}} and has {{#if breach_remedied}}been remed
 {{#each warnings_list}}
 - **{{this.date}}** - {{this.method}}: {{this.description}}
 {{/each}}
+{{/if}}
+
+{{#if ground_2_details}}
+{{ground_2_details}}
 {{/if}}
 
 {{/if}}
@@ -166,6 +174,10 @@ Crime Reference Numbers: {{join police_crime_numbers ", "}}
 Reference: {{council_reference}}
 {{/if}}
 
+{{#if ground_3_details}}
+{{ground_3_details}}
+{{/if}}
+
 {{/if}}
 
 {{#if ground_4_claimed}}
@@ -186,6 +198,10 @@ I/we require the property as my/our only or principal home (or for my/our spouse
 {{/if}}
 
 **IMPORTANT:** Under section 19 of the Act, if I/we do not occupy the property as my/our only or principal home (or that of my/our spouse/civil partner) for at least 3 months beginning no later than 3 months after you leave, you may apply to the Tribunal for wrongful termination order. If granted, the Tribunal may order me/us to pay you up to 6 months' rent.
+
+{{#if ground_4_details}}
+{{ground_4_details}}
+{{/if}}
 
 {{/if}}
 
@@ -208,6 +224,10 @@ Date instructed: {{estate_agent_date}}
 {{/if}}
 
 **IMPORTANT:** Under section 19 of the Act, if the property is not marketed for sale within 3 months of you leaving, you may apply to the Tribunal for a wrongful termination order. If granted, the Tribunal may order me/us to pay you up to 6 months' rent.
+
+{{#if ground_5_details}}
+{{ground_5_details}}
+{{/if}}
 
 {{/if}}
 
@@ -238,6 +258,38 @@ Planning reference: {{planning_reference}}
 Estimated start date: {{works_start_date}}
 Estimated duration: {{works_duration}}
 {{/if}}
+
+{{#if ground_6_details}}
+{{ground_6_details}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_7_claimed}}
+## PARTICULARS OF GROUND 7 - RELIGIOUS WORKER ACCOMMODATION
+
+{{ground_7_details}}
+
+{{/if}}
+
+{{#if ground_8_claimed}}
+## PARTICULARS OF GROUND 8 - NO LONGER EMPLOYEE
+
+{{ground_8_details}}
+
+{{/if}}
+
+{{#if ground_9_claimed}}
+## PARTICULARS OF GROUND 9 - NO LONGER REQUIRES SUPPORTED ACCOMMODATION
+
+{{ground_9_details}}
+
+{{/if}}
+
+{{#if ground_10_claimed}}
+## PARTICULARS OF GROUND 10 - BREACH OF TENANCY
+
+{{ground_10_details}}
 
 {{/if}}
 
@@ -286,6 +338,10 @@ You are not occupying the property as your only or principal home.
 **You appear to be residing at:** {{alternative_residence}}
 {{/if}}
 
+{{#if ground_11_details}}
+{{ground_11_details}}
+{{/if}}
+
 {{/if}}
 
 {{#if ground_12_claimed}}
@@ -306,6 +362,10 @@ You are not occupying the property as your only or principal home.
 **Connection to property:** {{property_connection}}
 {{/if}}
 
+{{#if ground_12_details}}
+{{ground_12_details}}
+{{/if}}
+
 {{/if}}
 
 {{#if ground_13_claimed}}
@@ -322,6 +382,38 @@ The lender has served notice requiring vacant possession.
 
 Date of lender's notice: {{lender_notice_date}}
 {{/if}}
+
+{{#if ground_13_details}}
+{{ground_13_details}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_14_claimed}}
+## PARTICULARS OF GROUND 14 - ASSOCIATION WITH ANTISOCIAL PERSON
+
+{{ground_14_details}}
+
+{{/if}}
+
+{{#if ground_15_claimed}}
+## PARTICULARS OF GROUND 15 - LANDLORD REGISTRATION / FIT AND PROPER
+
+{{ground_15_details}}
+
+{{/if}}
+
+{{#if ground_16_claimed}}
+## PARTICULARS OF GROUND 16 - HMO LICENCE REVOKED OR REFUSED
+
+{{ground_16_details}}
+
+{{/if}}
+
+{{#if ground_17_claimed}}
+## PARTICULARS OF GROUND 17 - OVERCROWDING STATUTORY NOTICE
+
+{{ground_17_details}}
 
 {{/if}}
 
@@ -373,6 +465,10 @@ You made a false statement in order to obtain the tenancy.
 {{materiality_explanation}}
 
 I/we would not have granted the tenancy had we known the true facts.
+
+{{#if ground_18_details}}
+{{ground_18_details}}
+{{/if}}
 
 {{/if}}
 
