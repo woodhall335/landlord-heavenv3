@@ -327,14 +327,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [visibleSections]
   );
 
-  // Generate notice
+  // Generate notice - navigate to review page for analysis before payment
   const handleGenerateNotice = useCallback(async () => {
     try {
       setGenerating(true);
       setError(null);
 
-      // Navigate to preview page
-      router.push(`/wizard/preview/${caseId}`);
+      // Navigate to review page for compliance analysis
+      router.push(`/wizard/review?case_id=${caseId}&product=notice_only`);
     } catch (err) {
       console.error('Failed to generate notice:', err);
       setError('Failed to generate notice. Please try again.');

@@ -178,14 +178,10 @@ function WizardFlowContent() {
   }
 
   const handleComplete = (completedCaseId: string) => {
-    // For eviction cases, respect product so notice-only flows do not get sent to review
+    // For eviction cases, all products now go through the review page for analysis
     if (type === 'eviction') {
-      const destination =
-        askHeavenProduct === 'notice_only'
-          ? `/wizard/preview/${completedCaseId}`
-          : `/wizard/review?case_id=${completedCaseId}&product=${askHeavenProduct ?? 'complete_pack'}`;
-
-      router.push(destination);
+      const productParam = askHeavenProduct ?? 'complete_pack';
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
       return;
     }
 

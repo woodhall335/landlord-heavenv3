@@ -30,6 +30,8 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
+import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
 // Section components
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -257,6 +259,10 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Smart Review state (hydrated from persisted facts.__smart_review)
+  const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
+  const [smartReviewSummary, setSmartReviewSummary] = useState<SmartReviewSummary | null>(null);
+
   // Load existing facts on mount using the facts-client helper
   useEffect(() => {
     const loadFacts = async () => {
@@ -274,6 +280,13 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
               jurisdiction,
             },
           }));
+
+          // Hydrate Smart Review state from persisted data
+          const sr = (loadedFacts as any).__smart_review;
+          if (sr?.warnings) {
+            setSmartReviewWarnings(sr.warnings);
+            setSmartReviewSummary(sr.summary || null);
+          }
         }
       } catch (err) {
         console.error('Failed to load facts:', err);
@@ -529,6 +542,18 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
 
             {/* Section content */}
             {renderSection()}
+
+            {/* Smart Review Panel - Show in evidence and review sections */}
+            {(currentSection?.id === 'evidence' || currentSection?.id === 'review') &&
+              smartReviewWarnings.length > 0 && (
+                <div className="mt-6">
+                  <SmartReviewPanel
+                    warnings={smartReviewWarnings}
+                    summary={smartReviewSummary}
+                    defaultCollapsed={currentSection?.id !== 'evidence'}
+                  />
+                </div>
+              )}
           </div>
 
           {/* Navigation */}
