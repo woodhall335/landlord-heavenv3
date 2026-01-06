@@ -1536,6 +1536,10 @@
     "communication.acknowledgment_date": { "type": "date", "required": false },
     "communication.contract_holder_made_partial_payment": { "type": "boolean", "required": false },
     "communication.last_partial_payment_date": { "type": "date", "required": false },
-    "communication.last_partial_payment_amount": { "type": "number", "required": false }
+    "communication.last_partial_payment_amount": { "type": "number", "required": false },
+    "is_fixed_term": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - whether contract is fixed term" },
+    "contract_start_date": { "type": "date", "required": false, "description": "Flat mapping for wizard - contract start date" },
+    "rent_amount": { "type": "number", "required": false, "description": "Flat mapping for wizard - rent amount" },
+    "rent_frequency": { "type": "string", "required": false, "description": "Flat mapping for wizard - rent frequency" }
   }
 }

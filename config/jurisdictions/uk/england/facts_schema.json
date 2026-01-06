@@ -3358,6 +3358,11 @@
     "communication.acknowledgment_date": { "type": "date", "required": false },
     "communication.tenant_made_partial_payment": { "type": "boolean", "required": false },
     "communication.last_partial_payment_date": { "type": "date", "required": false },
-    "communication.last_partial_payment_amount": { "type": "number", "required": false }
+    "communication.last_partial_payment_amount": { "type": "number", "required": false },
+    "prescribed_info_date": { "type": "date", "required": false, "description": "Flat mapping for wizard - date prescribed info was served" },
+    "is_fixed_term": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - whether tenancy is fixed term" },
+    "fixed_term_end_date": { "type": "date", "required": false, "description": "Flat mapping for wizard - end date of fixed term" },
+    "epc_provided": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - EPC provided to tenant" },
+    "how_to_rent_provided": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - How to Rent guide provided" }
   }
 }
