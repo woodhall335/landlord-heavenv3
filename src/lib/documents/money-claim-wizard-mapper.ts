@@ -2,6 +2,7 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { MoneyClaimCase } from './money-claim-pack-generator';
 import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generator';
 import { mapArrearsItemsToEntries, getArrearsScheduleFromFacts } from './arrears-schedule-mapper';
+import { calculateMoneyClaimFee } from '@/lib/court-fees/hmcts-fees';
 
 function buildAddress(...parts: Array<string | null>): string {
   return parts.filter(Boolean).join(', ');
@@ -67,7 +68,23 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     interest_rate: facts.money_claim.interest_rate || undefined,
     interest_start_date: facts.money_claim.interest_start_date || undefined,
 
-    court_fee: facts.court.claim_amount_costs || undefined,
+    // =========================================================================
+    // COURT FEE AUTO-CALCULATION
+    // =========================================================================
+    // If no manual fee is provided, auto-calculate based on total claim amount.
+    // Uses HMCTS fee bands from hmcts-fees.ts.
+    // =========================================================================
+    court_fee: facts.court.claim_amount_costs || (() => {
+      // Calculate total claim amount (arrears + damages + other charges)
+      const arrearsTotal = facts.issues.rent_arrears.total_arrears || 0;
+      const damagesTotal = (facts.money_claim.damage_items || [])
+        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+      const otherChargesTotal = (facts.money_claim.other_charges || [])
+        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+      const totalClaimAmount = arrearsTotal + damagesTotal + otherChargesTotal;
+
+      return totalClaimAmount > 0 ? calculateMoneyClaimFee(totalClaimAmount) : undefined;
+    })(),
     solicitor_costs: facts.money_claim.solicitor_costs || undefined,
 
     court_name: facts.court.court_name || undefined,
@@ -140,7 +157,24 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     interest_rate: facts.money_claim.interest_rate || undefined,
     interest_start_date: facts.money_claim.interest_start_date || undefined,
 
-    court_fee: facts.court.claim_amount_costs || undefined,
+    // =========================================================================
+    // COURT FEE AUTO-CALCULATION (Scotland)
+    // =========================================================================
+    // Scotland Sheriff Court fees differ from England/Wales.
+    // If no manual fee is provided, auto-calculate based on total claim amount.
+    // Note: Scotland uses different fee bands - this uses HMCTS as approximation.
+    // =========================================================================
+    court_fee: facts.court.claim_amount_costs || (() => {
+      // Calculate total claim amount (arrears + damages + other charges)
+      const arrearsTotal = facts.issues.rent_arrears.total_arrears || 0;
+      const damagesTotal = (facts.money_claim.damage_items || [])
+        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+      const otherChargesTotal = (facts.money_claim.other_charges || [])
+        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+      const totalClaimAmount = arrearsTotal + damagesTotal + otherChargesTotal;
+
+      return totalClaimAmount > 0 ? calculateMoneyClaimFee(totalClaimAmount) : undefined;
+    })(),
     solicitor_costs: facts.money_claim.solicitor_costs || undefined,
 
     basis_of_claim: facts.money_claim.basis_of_claim || 'rent_arrears',
