@@ -18,6 +18,14 @@ import {
 } from 'react-icons/ri';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 
+// Scotland utilities
+import {
+  getScotlandGrounds,
+  getScotlandGroundByNumber,
+  getScotlandConfig,
+  validateSixMonthRule,
+} from '@/lib/scotland/grounds';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -827,7 +835,151 @@ function EvictionReviewContent({
       {/* Case Strength Widget */}
       {analysis.score_report && <CaseStrengthWidget scoreReport={analysis.score_report} />}
 
-      {/* Legal Assessment: routes & grounds */}
+      {/* Scotland-Specific Content */}
+      {jurisdiction === 'scotland' && (
+        <>
+          {/* Scotland 6-Month Rule Check */}
+          {(() => {
+            const tenancyStartDate = analysis.case_facts?.tenancy_start_date;
+            if (!tenancyStartDate) return null;
+            const validation = validateSixMonthRule(tenancyStartDate);
+            if (!validation.valid) {
+              return (
+                <Card className="p-6 border-red-300 bg-red-50">
+                  <div className="flex items-start gap-3">
+                    <RiCloseLine className="h-6 w-6 text-red-600 mt-1" />
+                    <div className="flex-1">
+                      <h2 className="text-lg font-semibold text-red-900 mb-2">
+                        Cannot Serve Notice Yet - 6-Month Rule
+                      </h2>
+                      <p className="text-sm text-red-800">
+                        {validation.message}
+                      </p>
+                      <p className="text-sm text-red-700 mt-2 font-medium">
+                        Earliest notice date: {validation.earliestNoticeDate}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              );
+            }
+            return null;
+          })()}
+
+          {/* Scotland Ground Display (from config) */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold mb-4">Notice to Leave</h2>
+            {(() => {
+              const selectedGroundNumber = analysis.case_facts?.scotland_eviction_ground;
+              const groundData = selectedGroundNumber
+                ? getScotlandGroundByNumber(selectedGroundNumber)
+                : null;
+
+              if (!groundData) {
+                return <p className="text-gray-500">No ground selected</p>;
+              }
+
+              return (
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3 p-4 bg-gray-50 rounded border">
+                    <span className="font-mono bg-gray-200 px-2 py-1 rounded text-sm shrink-0">
+                      {groundData.code}
+                    </span>
+                    <div>
+                      <p className="font-medium">{groundData.name}</p>
+                      <p className="text-sm text-gray-600 mt-1">{groundData.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 bg-gray-50 rounded">
+                      <p className="text-sm text-gray-500">Notice Period</p>
+                      <p className="font-medium">{groundData.noticePeriodDays} days</p>
+                    </div>
+                    <div className="p-3 bg-gray-50 rounded">
+                      <p className="text-sm text-gray-500">Ground Type</p>
+                      <p className="font-medium text-amber-700">Discretionary</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </Card>
+
+          {/* Discretionary Warning */}
+          <Card className="p-6 border-amber-200 bg-amber-50">
+            <div className="flex items-start gap-3">
+              <RiErrorWarningLine className="h-6 w-6 text-amber-600 mt-1" />
+              <div>
+                <h2 className="text-lg font-semibold text-amber-900 mb-2">
+                  All Grounds are Discretionary
+                </h2>
+                <p className="text-sm text-amber-800">
+                  Unlike England, Scotland has <strong>no mandatory grounds</strong> for eviction.
+                  Even if you prove your ground, the First-tier Tribunal may refuse the eviction
+                  order if it considers it unreasonable in the circumstances.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* First-tier Tribunal Info */}
+          <Card className="p-6 border-blue-200 bg-blue-50">
+            <h2 className="text-lg font-semibold text-blue-900 mb-3">First-tier Tribunal</h2>
+            {(() => {
+              const config = getScotlandConfig();
+              return (
+                <div className="space-y-3">
+                  <p className="text-sm text-blue-800">
+                    In Scotland, eviction cases are heard by the <strong>{config.tribunal}</strong>,
+                    not the county courts used in England.
+                  </p>
+                  <p className="text-sm text-blue-800">
+                    Your complete pack includes <strong>{config.tribunalApplication.form}</strong> for
+                    applying to the Tribunal. The application fee is {config.tribunalApplication.fee}.
+                  </p>
+                  <p className="text-xs text-blue-700 mt-2">
+                    {config.tribunalApplication.timeframe}
+                  </p>
+                </div>
+              );
+            })()}
+          </Card>
+
+          {/* Scotland Documents */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <RiFileTextLine className="h-5 w-5 text-[#7C3AED]" />
+              Documents in Your Pack
+            </h2>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2 text-sm text-gray-700">
+                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                Notice to Leave
+              </li>
+              <li className="flex items-center gap-2 text-sm text-gray-700">
+                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                Form E - Eviction Application
+              </li>
+              <li className="flex items-center gap-2 text-sm text-gray-700">
+                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                Grounds Evidence Summary
+              </li>
+              <li className="flex items-center gap-2 text-sm text-gray-700">
+                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                Service Instructions
+              </li>
+              <li className="flex items-center gap-2 text-sm text-gray-700">
+                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
+                Tribunal Process Guide
+              </li>
+            </ul>
+          </Card>
+        </>
+      )}
+
+      {/* Legal Assessment: routes & grounds (England/Wales only) */}
+      {jurisdiction !== 'scotland' && (
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Legal Assessment</h2>
 
@@ -883,6 +1035,7 @@ function EvictionReviewContent({
           )}
         </div>
       </Card>
+      )}
 
       {/* Things to Fix or Improve */}
       {(redFlags.length > 0 || complianceIssues.length > 0) && (
