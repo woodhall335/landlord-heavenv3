@@ -205,11 +205,10 @@ export function mapWizardToNoticeToLeave(wizardFacts: WizardFacts): NoticeToLeav
     grounds,
 
     // Deposit - use CaseFacts
-    // Output both deposit_scheme and deposit_scheme_name for template compatibility
+    // Scotland NoticeToLeaveData type only supports deposit_scheme
     deposit_protected: caseFacts.tenancy.deposit_protected ?? undefined,
     deposit_amount: caseFacts.tenancy.deposit_amount ?? undefined,
     deposit_scheme: caseFacts.tenancy.deposit_scheme_name ?? undefined,
-    deposit_scheme_name: caseFacts.tenancy.deposit_scheme_name ?? undefined,
 
     // Council - TODO: council_phone not yet in CaseFacts
     council_phone: getWizardValue(wizardFacts, 'council_phone') || '0131 200 2000', // Default Edinburgh
