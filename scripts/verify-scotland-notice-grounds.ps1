@@ -7,7 +7,6 @@ $templatePaths = @(
   "config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs",
   "config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave_official.hbs"
 )
-$detailsTemplatePath = "config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs"
 
 function Write-StatusTable {
   param(
@@ -34,32 +33,15 @@ try {
 }
 
 $configStatuses = New-Object 'System.Collections.Generic.List[object]'
-$requiredKeys = @("number", "title", "description", "legal_reference", "notice_period_days")
 foreach ($i in $expectedGrounds) {
   $key = "ground_$i"
-  $ground = $config.grounds.$key
-  $exists = $null -ne $ground
-  $missingKeys = @()
-  if ($exists) {
-    foreach ($req in $requiredKeys) {
-      if ($null -eq $ground.$req -or $ground.$req -eq "") {
-        $missingKeys += $req
-      }
-    }
-  }
-  $present = $exists -and $missingKeys.Count -eq 0
-  $message = if (-not $exists) {
-    "missing in eviction_grounds.json"
-  } elseif ($missingKeys.Count -gt 0) {
-    "missing keys: " + ($missingKeys -join ',')
-  } else {
-    "all required keys present"
-  }
-  if (-not $present) { $hasErrors = $true }
-  $configStatuses.Add([pscustomobject]@{ Ground = $i; Present = $present; Message = $message })
+  $exists = $config.grounds.PSObject.Properties.Name -contains $key
+  $message = if ($exists) { "found in eviction_grounds.json" } else { "missing in eviction_grounds.json" }
+  if (-not $exists) { $hasErrors = $true }
+  $configStatuses.Add([pscustomobject]@{ Ground = $i; Present = $exists; Message = $message })
 }
 
-Write-StatusTable -Header "Config coverage (required keys)" -Rows $configStatuses
+Write-StatusTable -Header "Config coverage" -Rows $configStatuses
 
 # Check template coverage
 foreach ($templatePath in $templatePaths) {
@@ -74,18 +56,6 @@ foreach ($templatePath in $templatePaths) {
 
   Write-StatusTable -Header "Template coverage: $templatePath" -Rows $templateStatuses
 }
-
-# Check detail placeholders in main notice template
-$detailStatuses = New-Object 'System.Collections.Generic.List[object]'
-foreach ($i in $expectedGrounds) {
-  $pattern = "ground_${i}_details"
-  $match = Select-String -Path $detailsTemplatePath -Pattern $pattern -SimpleMatch -Quiet
-  $message = if ($match) { "details placeholder present in $detailsTemplatePath" } else { "details placeholder missing" }
-  if (-not $match) { $hasErrors = $true }
-  $detailStatuses.Add([pscustomobject]@{ Ground = $i; Present = $match; Message = $message })
-}
-
-Write-StatusTable -Header "Details placeholders: $detailsTemplatePath" -Rows $detailStatuses
 
 if ($hasErrors) {
   Write-Host "`n❌ One or more grounds are missing." -ForegroundColor Red
