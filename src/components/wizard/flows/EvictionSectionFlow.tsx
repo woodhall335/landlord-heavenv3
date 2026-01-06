@@ -543,30 +543,37 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
       onUpdate: handleUpdate,
     };
 
+    // Type-narrowed props for England/Wales sections (jurisdiction is never 'scotland' for these cases)
+    const englandWalesProps = {
+      facts,
+      jurisdiction: jurisdiction as 'england' | 'wales',
+      onUpdate: handleUpdate,
+    };
+
     switch (currentSection.id) {
       // England/Wales sections
       case 'case_basics':
-        return <CaseBasicsSection {...sectionProps} />;
+        return <CaseBasicsSection {...englandWalesProps} />;
       case 'parties':
-        return <PartiesSection {...sectionProps} />;
+        return <PartiesSection {...englandWalesProps} />;
       case 'property':
-        return <PropertySection {...sectionProps} />;
+        return <PropertySection {...englandWalesProps} />;
       case 'tenancy':
-        return <TenancySection {...sectionProps} />;
+        return <TenancySection {...englandWalesProps} />;
       case 'notice':
-        return <NoticeSection {...sectionProps} />;
+        return <NoticeSection {...englandWalesProps} />;
       case 'section21_compliance':
-        return <Section21ComplianceSection {...sectionProps} />;
+        return <Section21ComplianceSection {...englandWalesProps} />;
       case 'section8_arrears':
-        return <Section8ArrearsSection {...sectionProps} />;
+        return <Section8ArrearsSection {...englandWalesProps} />;
       case 'evidence':
-        return <EvidenceSection {...sectionProps} caseId={caseId} />;
+        return <EvidenceSection {...englandWalesProps} caseId={caseId} />;
       case 'court_signing':
-        return <CourtSigningSection {...sectionProps} />;
+        return <CourtSigningSection {...englandWalesProps} />;
       case 'review':
         return (
           <ReviewSection
-            {...sectionProps}
+            {...englandWalesProps}
             caseId={caseId}
             sections={visibleSections}
             onComplete={handleComplete}
