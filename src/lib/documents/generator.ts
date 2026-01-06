@@ -10,7 +10,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
-import { SITE_CONFIG } from '@/config/site';
+import { SITE_CONFIG } from '@/lib/site-config';
 
 // ESM compatibility: Get __dirname equivalent
 const __filename_esm = typeof __filename !== 'undefined' ? __filename : fileURLToPath(import.meta.url);
