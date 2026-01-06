@@ -16,6 +16,7 @@ import {
   RiCalendarCheckLine,
   RiFileList3Line,
 } from 'react-icons/ri';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -77,8 +78,9 @@ function ReviewPageInner() {
   const caseType = analysis.case_type ?? 'eviction';
   const product: string = productParam || analysis.product || 'complete_pack';
 
-  // Detect if this is a money claim flow
+  // Detect flow type based on product
   const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
+  const isNoticeOnlyFlow = product === 'notice_only';
 
   const hasBlockingIssues = isMoneyClaimFlow
     ? (analysis.case_health?.blockers?.length ?? 0) > 0
@@ -194,7 +196,22 @@ function ReviewPageInner() {
     />;
   }
 
-  // Render Eviction specific content
+  // Render Notice Only specific content
+  if (isNoticeOnlyFlow) {
+    return <NoticeOnlyReviewContent
+      caseId={caseId}
+      analysis={analysis}
+      jurisdiction={jurisdiction}
+      readinessBadge={readinessBadge}
+      redFlags={redFlags}
+      complianceIssues={complianceIssues}
+      hasBlockingIssues={hasBlockingIssues}
+      onEdit={handleEdit}
+      onProceed={handleProceed}
+    />;
+  }
+
+  // Render Eviction Complete Pack content
   return <EvictionReviewContent
     caseId={caseId}
     analysis={analysis}
@@ -460,6 +477,18 @@ function MoneyClaimReviewContent({
           Your pack will include all required PAP-DEBT documents.
         </p>
       </Card>
+
+      {/* AI Document Analysis (Smart Review) */}
+      {analysis?.case_facts?.__smart_review?.warnings?.length > 0 && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">AI Document Analysis</h2>
+          <SmartReviewPanel
+            warnings={analysis.case_facts.__smart_review.warnings}
+            summary={analysis.case_facts.__smart_review.summary}
+            defaultCollapsed={false}
+          />
+        </Card>
+      )}
 
       {/* Evidence Checklist */}
       <Card className="p-6">
@@ -875,6 +904,18 @@ function EvictionReviewContent({
         </Card>
       )}
 
+      {/* AI Document Analysis (Smart Review) */}
+      {analysis?.case_facts?.__smart_review?.warnings?.length > 0 && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">AI Document Analysis</h2>
+          <SmartReviewPanel
+            warnings={analysis.case_facts.__smart_review.warnings}
+            summary={analysis.case_facts.__smart_review.summary}
+            defaultCollapsed={false}
+          />
+        </Card>
+      )}
+
       {/* Evidence & documents checklist */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Evidence &amp; documents checklist</h2>
@@ -1060,6 +1101,317 @@ function EvictionReviewContent({
         We will generate your full pack regardless of readiness. Use the guidance to reach a
         safe, court-ready position before issuing.
       </p>
+    </div>
+  );
+}
+
+// ============================================================================
+// NOTICE ONLY REVIEW CONTENT
+// ============================================================================
+interface NoticeOnlyReviewContentProps {
+  caseId: string;
+  analysis: any;
+  jurisdiction: string;
+  readinessBadge: React.ReactNode;
+  redFlags: string[];
+  complianceIssues: string[];
+  hasBlockingIssues: boolean;
+  onEdit: () => void;
+  onProceed: () => void;
+}
+
+function NoticeOnlyReviewContent({
+  caseId,
+  analysis,
+  jurisdiction,
+  readinessBadge,
+  redFlags,
+  complianceIssues,
+  hasBlockingIssues,
+  onEdit,
+  onProceed,
+}: NoticeOnlyReviewContentProps) {
+  // Extract decision engine data
+  const decisionEngine = analysis?.decision_engine;
+  const blockingIssues = decisionEngine?.blocking_issues?.filter((i: any) => i.severity === 'blocking') || [];
+  const warnings = decisionEngine?.warnings || [];
+  const recommendedRoute = analysis?.recommended_route;
+  const recommendedRouteLabel = analysis?.recommended_route_label || 'Notice';
+
+  const isSection21 = recommendedRoute === 'section_21';
+  const isSection8 = recommendedRoute === 'section_8';
+  const isWales = jurisdiction === 'wales';
+  const isScotland = jurisdiction === 'scotland';
+
+  const hasComplianceIssues = complianceIssues.length > 0;
+  const hasWarnings = warnings.length > 0 || redFlags.length > 0;
+
+  // Jurisdiction display label
+  const jurisdictionLabel = jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1);
+
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto p-6">
+      {/* Header */}
+      <div className="text-center pb-6 border-b">
+        <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
+        <p className="text-gray-600 mt-2">
+          {jurisdictionLabel} • {recommendedRouteLabel}
+        </p>
+        <div className="mt-4">
+          {readinessBadge || (
+            hasBlockingIssues || (isSection21 && hasComplianceIssues) ? (
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 font-medium">
+                ⚠️ Issues Found - Review Required
+              </span>
+            ) : hasWarnings || hasComplianceIssues ? (
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-800 font-medium">
+                ⚡ Warnings to Review
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 font-medium">
+                ✓ Ready to Generate
+              </span>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Blocking Issues */}
+      {blockingIssues.length > 0 && (
+        <Card className="border-red-200 bg-red-50 p-6">
+          <h2 className="text-lg font-semibold text-red-800 flex items-center gap-2 mb-4">
+            <RiErrorWarningLine className="w-5 h-5" />
+            Critical Issues
+          </h2>
+          <p className="text-red-700 text-sm mb-4">
+            These issues may make your notice invalid or unenforceable:
+          </p>
+          <ul className="space-y-3">
+            {blockingIssues.map((issue: any, index: number) => (
+              <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
+                <span className="text-red-500 mt-0.5">✕</span>
+                <div>
+                  <p className="font-medium text-red-900">{issue.description || issue}</p>
+                  {issue.action_required && (
+                    <p className="text-sm text-red-700 mt-1">
+                      <strong>Action:</strong> {issue.action_required}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Section 21 Compliance Checklist */}
+      {isSection21 && !isWales && !isScotland && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-2">Section 21 Compliance Checklist</h2>
+          <p className="text-gray-600 text-sm mb-4">
+            A Section 21 notice is only valid if ALL requirements are met:
+          </p>
+          <div className="space-y-3">
+            {[
+              {
+                label: 'Deposit protected in government scheme within 30 days',
+                failed: complianceIssues.some((i) => i.toLowerCase().includes('deposit')),
+              },
+              {
+                label: 'Prescribed information given to tenant',
+                failed: complianceIssues.some((i) => i.toLowerCase().includes('prescribed')),
+              },
+              {
+                label: 'Valid EPC provided to tenant',
+                failed: complianceIssues.some((i) => i.toLowerCase().includes('epc')),
+              },
+              {
+                label: '"How to Rent" guide provided',
+                failed: complianceIssues.some((i) => i.toLowerCase().includes('how to rent')),
+                show: jurisdiction === 'england',
+              },
+              {
+                label: 'Gas safety certificate provided (if applicable)',
+                failed: complianceIssues.some((i) => i.toLowerCase().includes('gas')),
+              },
+            ]
+              .filter((item) => item.show !== false)
+              .map((item, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  {item.failed ? (
+                    <span className="text-red-500 text-xl">✕</span>
+                  ) : (
+                    <span className="text-green-500 text-xl">✓</span>
+                  )}
+                  <span className={item.failed ? 'text-red-700 font-medium' : 'text-gray-700'}>
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+          </div>
+          {hasComplianceIssues && (
+            <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
+              <strong>⚠️ Warning:</strong> If any requirements are not met, your Section 21 notice
+              will be invalid and the court will not grant possession.
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* Section 8 Grounds Summary */}
+      {isSection8 && decisionEngine?.recommended_grounds?.length > 0 && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Section 8 Grounds</h2>
+          <ul className="space-y-3">
+            {decisionEngine.recommended_grounds.map((ground: any, index: number) => (
+              <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
+                <span className="font-mono text-sm bg-gray-200 px-2 py-1 rounded shrink-0">
+                  {ground.code}
+                </span>
+                <div>
+                  <p className="font-medium">{ground.title}</p>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${
+                      ground.type === 'mandatory'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-amber-100 text-amber-800'
+                    }`}
+                  >
+                    {ground.type}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Wales-specific notice info */}
+      {isWales && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Wales Notice Information</h2>
+          <p className="text-gray-600 text-sm">
+            Your notice will be served under the Renting Homes (Wales) Act 2016 using the
+            appropriate RHW form.
+          </p>
+        </Card>
+      )}
+
+      {/* Scotland-specific notice info */}
+      {isScotland && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Scotland Notice Information</h2>
+          <p className="text-gray-600 text-sm">
+            Your Notice to Leave will be served under the Private Housing (Tenancies) (Scotland)
+            Act 2016.
+          </p>
+        </Card>
+      )}
+
+      {/* Compliance Issues (non-S21) */}
+      {hasComplianceIssues && !isSection21 && (
+        <Card className="border-amber-200 bg-amber-50 p-6">
+          <h2 className="text-lg font-semibold text-amber-800 mb-3">⚠️ Compliance Warnings</h2>
+          <ul className="space-y-2">
+            {complianceIssues.map((issue: string, index: number) => (
+              <li key={index} className="flex items-start gap-2 text-amber-900">
+                <span>•</span>
+                <span>{issue}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Red Flags */}
+      {redFlags.length > 0 && (
+        <Card className="border-amber-200 bg-amber-50 p-6">
+          <h2 className="text-lg font-semibold text-amber-800 mb-3">⚡ Things to Check</h2>
+          <ul className="space-y-2">
+            {redFlags.map((flag: string, index: number) => (
+              <li key={index} className="flex items-start gap-2 text-amber-900">
+                <span>•</span>
+                <span>{flag}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Warnings from decision engine */}
+      {warnings.length > 0 && (
+        <Card className="border-blue-200 bg-blue-50 p-6">
+          <h2 className="text-lg font-semibold text-blue-800 mb-3">ℹ️ Important Notes</h2>
+          <ul className="space-y-2">
+            {warnings.map((warning: string, index: number) => (
+              <li key={index} className="flex items-start gap-2 text-blue-900">
+                <span>•</span>
+                <span>{warning}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Documents in Pack */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Documents in Your Pack</h2>
+        <ul className="space-y-2">
+          {isSection21 ? (
+            <>
+              <li className="flex items-center gap-2 text-gray-700">📄 Form 6A - Section 21 Notice</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Compliance Checklist</li>
+            </>
+          ) : isSection8 ? (
+            <>
+              <li className="flex items-center gap-2 text-gray-700">📄 Form 3 - Section 8 Notice</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Grounds Summary</li>
+            </>
+          ) : isWales ? (
+            <>
+              <li className="flex items-center gap-2 text-gray-700">📄 RHW Notice Form</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Compliance Checklist</li>
+            </>
+          ) : isScotland ? (
+            <>
+              <li className="flex items-center gap-2 text-gray-700">📄 Notice to Leave</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Eviction Grounds Summary</li>
+            </>
+          ) : (
+            <>
+              <li className="flex items-center gap-2 text-gray-700">📄 Eviction Notice</li>
+              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+            </>
+          )}
+        </ul>
+        <div className="mt-4 pt-4 border-t">
+          <p className="text-gray-600">
+            Price: <span className="font-semibold text-gray-900">£29.99</span>
+          </p>
+        </div>
+      </Card>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
+          Go back &amp; edit answers
+        </Button>
+        <Button onClick={onProceed} className="flex-1">
+          Proceed to payment &amp; pack
+        </Button>
+      </div>
+
+      {/* Disclaimer for issues */}
+      {(hasBlockingIssues || (isSection21 && hasComplianceIssues)) && (
+        <p className="text-center text-sm text-gray-500 pb-4">
+          By proceeding, you acknowledge the issues above. We recommend resolving compliance issues
+          before serving your notice.
+        </p>
+      )}
     </div>
   );
 }

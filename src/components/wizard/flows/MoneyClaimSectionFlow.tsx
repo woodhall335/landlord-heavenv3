@@ -26,6 +26,8 @@ import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
+import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
@@ -181,6 +183,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Smart Review state (hydrated from persisted facts.__smart_review)
+  const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
+  const [smartReviewSummary, setSmartReviewSummary] = useState<SmartReviewSummary | null>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -198,6 +204,13 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               jurisdiction,
             },
           }));
+
+          // Hydrate Smart Review state from persisted data
+          const sr = (loadedFacts as any).__smart_review;
+          if (sr?.warnings) {
+            setSmartReviewWarnings(sr.warnings);
+            setSmartReviewSummary(sr.summary || null);
+          }
         }
       } catch (err) {
         console.error('Failed to load facts:', err);
@@ -495,6 +508,18 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
             {/* Section content */}
             {renderSection()}
+
+            {/* Smart Review Panel - Show in evidence and review sections */}
+            {(currentSection?.id === 'evidence' || currentSection?.id === 'review') &&
+              smartReviewWarnings.length > 0 && (
+                <div className="mt-6">
+                  <SmartReviewPanel
+                    warnings={smartReviewWarnings}
+                    summary={smartReviewSummary}
+                    defaultCollapsed={currentSection?.id !== 'evidence'}
+                  />
+                </div>
+              )}
           </div>
 
           {/* Navigation */}

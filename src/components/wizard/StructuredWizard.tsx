@@ -1589,8 +1589,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // ====================================================================================
       // SMART REVIEW: Update warnings from backend response (complete_pack only)
       // ====================================================================================
-      // Smart Review runs after evidence uploads for complete_pack/eviction_pack + England
-      if (data.smart_review && product === 'complete_pack' && jurisdiction === 'england') {
+      // Smart Review runs after evidence uploads for complete_pack/eviction_pack (all jurisdictions)
+      if (data.smart_review && product === 'complete_pack') {
         const sr = data.smart_review;
         setSmartReviewWarnings(sr.warnings || []);
         if (sr.summary) {
@@ -3296,8 +3296,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               caseType={caseType}
             />
 
-            {/* Smart Review Panel - Evidence document analysis warnings (complete_pack + England only) */}
-            {product === 'complete_pack' && jurisdiction === 'england' && (
+            {/* Smart Review Panel - Evidence document analysis warnings (complete_pack, all jurisdictions) */}
+            {product === 'complete_pack' && (
               <SmartReviewPanel
                 warnings={smartReviewWarnings}
                 summary={smartReviewSummary}
