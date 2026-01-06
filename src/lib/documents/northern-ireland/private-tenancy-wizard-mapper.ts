@@ -195,9 +195,10 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
     rent_excludes: getValueAtPath(wizardFacts, 'rent_excludes'),
 
     // Deposit - use CaseFacts for core fields
+    // Output both deposit_scheme and deposit_scheme_name for template compatibility
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
-    // TODO: deposit_scheme (flat field) not yet in CaseFacts
     deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name || getValueAtPath(wizardFacts, 'deposit_scheme_name') || getValueAtPath(wizardFacts, 'deposit_scheme')),
+    deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name || getValueAtPath(wizardFacts, 'deposit_scheme_name') || getValueAtPath(wizardFacts, 'deposit_scheme')),
 
     // Bills & Utilities - TODO: not yet in CaseFacts
     council_tax_responsibility: getValueAtPath(wizardFacts, 'council_tax_responsibility'),

@@ -179,7 +179,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     agent_name: caseFacts.parties.agent.name ?? undefined,
     agent_address: buildAddress(
       caseFacts.parties.agent.address_line1,
-      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.address_line2 ?? null,
       caseFacts.parties.agent.city,
       caseFacts.parties.agent.postcode
     ),
@@ -222,7 +222,9 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
 
     // Deposit - use CaseFacts
+    // Output both deposit_scheme and deposit_scheme_name for template compatibility
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
+    deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
     deposit_protection_date: caseFacts.tenancy.deposit_protection_date ?? undefined,
