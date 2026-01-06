@@ -324,7 +324,7 @@ export function loadOfficialFormsRegistry(): OfficialFormRegistryEntry[] {
       (entry: unknown): entry is OfficialFormRegistryEntry =>
         Boolean((entry as OfficialFormRegistryEntry)?.jurisdiction && (entry as OfficialFormRegistryEntry)?.product && (entry as OfficialFormRegistryEntry)?.route && (entry as OfficialFormRegistryEntry)?.officialFormKey && (entry as OfficialFormRegistryEntry)?.pdfPath),
     )
-    .map((entry) => ({
+    .map((entry: OfficialFormRegistryEntry) => ({
       ...entry,
       jurisdiction: entry.jurisdiction as Jurisdiction,
       product: entry.product as Product,
