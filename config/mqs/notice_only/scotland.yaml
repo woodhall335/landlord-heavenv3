@@ -407,6 +407,55 @@ questions:
       Highlight any missing safety documentation needed for tribunal compliance.
 
   # ============================================================
+  # REPAIRING STANDARD (Scotland)
+  # ============================================================
+
+  - id: repairing_standard_met
+    section: Property Compliance
+    question: "Does the property meet the Repairing Standard?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: true
+        label: "Yes - property meets Repairing Standard"
+      - value: false
+        label: "No - there are outstanding repair issues"
+    helperText: |
+      Under Housing (Scotland) Act 2006, Section 13:
+      All private landlords must ensure their property meets the Repairing Standard.
+    maps_to:
+      - scotland_compliance.repairing_standard_met
+
+  - id: repairing_standard_warning
+    section: Property Compliance
+    question: "Repairing Standard Warning"
+    inputType: info
+    dependsOn:
+      questionId: repairing_standard_met
+      value: false
+    content: |
+      ⛔ **WARNING: NOTICE TO LEAVE MAY BE CHALLENGED**
+
+      Under Housing (Scotland) Act 2006, Section 13, landlords must ensure their
+      property meets the **Repairing Standard** throughout the tenancy.
+
+      **The Repairing Standard requires:**
+      - Wind and watertight structure
+      - Safe gas, electrical, water and drainage installations
+      - Satisfactory heating/hot water
+      - Safe food preparation facilities
+      - Adequate fire detection (linked interlinked smoke/heat alarms from Feb 2022)
+      - Carbon monoxide detectors where required
+
+      **If the tenant has applied to the Housing and Property Chamber:**
+      - The Tribunal may issue a Repairing Standard Enforcement Order
+      - This may affect your ability to evict
+      - Consider resolving repair issues first
+
+      **Recommendation:** Address any Repairing Standard issues before serving notice.
+
+  # ============================================================
   # COMPLIANCE CERTIFICATE DATES
   # ============================================================
 
