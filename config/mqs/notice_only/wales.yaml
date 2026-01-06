@@ -61,6 +61,24 @@ questions:
       - landlord_postcode
       - landlord_phone
 
+  # Contract term type - needed for Section 173 validation
+  - id: is_fixed_term_contract
+    section: Contract Details
+    question: "Is this a fixed-term or periodic contract?"
+    inputType: radio
+    validation:
+      required: true
+    helperText: "This affects which notice types are available to you."
+    options:
+      - value: true
+        label: "Fixed-term (has end date)"
+        helperText: "Contract runs for a set period"
+      - value: false
+        label: "Periodic (rolling)"
+        helperText: "Contract continues month-to-month or week-to-week"
+    maps_to:
+      - is_fixed_term
+
   # TASK B: Route selection EARLY (before route-dependent questions)
   - id: selected_notice_route
     section: Notice Type
@@ -71,13 +89,33 @@ questions:
     helperText: "Select your notice type first. System will ask relevant questions based on your selection."
     options:
       - value: "wales_section_173"
-        label: "Section 173 - No-fault"
-        helperText: "Minimum statutory period, no reason"
+        label: "Section 173 - No-fault (end of fixed term only)"
+        helperText: "6 MONTHS minimum notice. Valid ONLY at end of fixed term."
       - value: "wales_fault_based"
         label: "Fault-based - Grounds required"
-        helperText: "14-30 days, specific sections"
+        helperText: "14-30 days depending on ground, specific sections"
     maps_to:
       - selected_notice_route
+
+  # BLOCKER: Section 173 only valid for fixed-term contracts
+  - id: section_173_periodic_blocker
+    section: Notice Type
+    question: "Section 173 Restriction"
+    inputType: info
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: is_fixed_term_contract
+          value: false
+    content: |
+      ⚠️ **INVALID: Section 173 requires fixed-term contract**
+
+      Section 173 notices can ONLY be served at the end of a fixed-term contract.
+
+      For periodic contracts, you must use a fault-based notice under Section 157, 159, or 181.
+
+      **Please select "Fault-based - Grounds required" instead.**
 
   - id: contract_holder_full_name
     section: Contract Holder Details
@@ -237,9 +275,31 @@ questions:
       value: wales_section_173
     validation:
       required: true
-    helperText: "CRITICAL: Section 173 invalid without registration"
+    helperText: "CRITICAL: Section 173 invalid without registration. Register at rentsmartales.gov.wales"
     maps_to:
       - rent_smart_wales_registered
+
+  # BLOCKER: Cannot serve Section 173 without Rent Smart Wales registration
+  - id: rent_smart_wales_blocker
+    section: Section 173 Compliance
+    question: "Registration Required"
+    inputType: info
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: rent_smart_wales_registered
+          value: false
+    content: |
+      ⛔ **SECTION 173 INVALID WITHOUT REGISTRATION**
+
+      Under the Renting Homes (Wales) Act 2016, Section 16, landlords MUST be registered with Rent Smart Wales to serve a valid Section 173 notice.
+
+      **Your options:**
+      1. Register at https://rentsmart.gov.wales before serving notice
+      2. Use a fault-based notice instead (if grounds apply)
+
+      **Legal consequence:** An unregistered landlord's Section 173 notice is VOID and cannot be enforced by a court.
 
   # TASK A2: Deposit questions for Section 173
   - id: deposit_taken_wales

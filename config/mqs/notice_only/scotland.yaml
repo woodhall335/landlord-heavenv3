@@ -371,6 +371,30 @@ questions:
     suggestion_prompt: >
       Remind the landlord to provide proof of deposit protection and prescribed information where applicable.
 
+  # CRITICAL: Working days clarification for Scotland
+  - id: deposit_working_days_info
+    section: Deposit Protection
+    question: "Working Days Calculation"
+    inputType: info
+    dependsOn:
+      questionId: deposit_protected
+      value: true
+    content: |
+      ⚠️ **SCOTLAND: 30 WORKING DAYS (not calendar days)**
+
+      Under Housing (Scotland) Act 2014, deposits must be protected within **30 WORKING DAYS**.
+
+      **Working days = Monday to Friday, excluding:**
+      - Scottish bank holidays
+      - Christmas Day, Boxing Day, New Year's Day, 2nd January
+      - Good Friday, Early May, Spring & Autumn bank holidays
+
+      **This is approximately 6 calendar weeks.**
+
+      Example: Deposit received Friday 1st = Protected by Friday 12th (6 weeks later)
+
+      **Penalty for late protection:** Up to 3x deposit amount
+
   - id: safety_checks
     section: Safety Checks
     question: "Do you have up-to-date safety certificates (gas, electrical, smoke alarms)?"
