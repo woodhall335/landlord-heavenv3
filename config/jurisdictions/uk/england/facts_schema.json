@@ -3363,6 +3363,14 @@
     "is_fixed_term": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - whether tenancy is fixed term" },
     "fixed_term_end_date": { "type": "date", "required": false, "description": "Flat mapping for wizard - end date of fixed term" },
     "epc_provided": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - EPC provided to tenant" },
-    "how_to_rent_provided": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - How to Rent guide provided" }
+    "how_to_rent_provided": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - How to Rent guide provided" },
+    "parking_details": { "type": "string", "required": false, "description": "Flat mapping for wizard - parking details" },
+    "garden_maintenance": { "type": "string", "required": false, "description": "Flat mapping for wizard - garden maintenance responsibility" },
+    "number_of_tenants": { "type": "number", "required": false, "description": "Flat mapping for wizard - number of tenants" },
+    "council_tax_responsibility": { "type": "string", "required": false, "description": "Flat mapping for wizard - council tax responsibility" },
+    "pets_allowed": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - pets allowed" },
+    "smoking_allowed": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - smoking allowed" },
+    "break_clause": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - break clause included" },
+    "total_claim_amount": { "type": "currency", "required": false, "description": "Flat mapping for wizard - total money claim amount" }
   }
 }
