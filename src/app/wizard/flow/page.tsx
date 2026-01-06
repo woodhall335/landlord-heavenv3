@@ -191,7 +191,14 @@ function WizardFlowContent() {
       return;
     }
 
-    // Navigate to preview/checkout page for other case types (tenancy agreements)
+    // For tenancy agreements, go to review page for validation and obligations reminder
+    if (type === 'tenancy_agreement') {
+      const productParam = askHeavenProduct ?? 'ast_standard';
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
+      return;
+    }
+
+    // Navigate to preview/checkout page for any other case types
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 

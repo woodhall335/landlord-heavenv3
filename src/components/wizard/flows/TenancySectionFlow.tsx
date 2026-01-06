@@ -382,10 +382,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     }
   }, [currentSectionIndex]);
 
-  // Handle wizard completion
+  // Handle wizard completion - redirect to review page for validation
   const handleComplete = useCallback(async () => {
-    router.push(`/wizard/preview/${caseId}`);
-  }, [caseId, router]);
+    router.push(`/wizard/review?case_id=${caseId}&product=${product}`);
+  }, [caseId, product, router]);
 
   // Calculate progress
   const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
