@@ -134,6 +134,11 @@
       "required": false,
       "description": "Auto-generated placeholder to align MQS and validators"
     },
+    "scotland_compliance.repairing_standard_met": {
+      "type": "string",
+      "required": false,
+      "description": "Records whether repairing standard duties were met"
+    },
     "scotland_ground_codes": {
       "type": "string",
       "required": false,
