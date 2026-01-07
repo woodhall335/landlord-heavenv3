@@ -1,5 +1,8 @@
 import { SITE_ORIGIN, getCanonicalUrl } from '../src/lib/seo/urls';
 
+const BINGBOT_UA =
+  'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
+
 function normalizeRobotsContent(content: string) {
   return content.toLowerCase().replace(/\s+/g, '');
 }
@@ -14,10 +17,10 @@ function extractTagContent(html: string, tagName: string, attrName: string, attr
   return contentMatch?.[1] ?? null;
 }
 
-async function fetchText(url: string) {
+async function fetchText(url: string, userAgent: string) {
   const response = await fetch(url, {
     headers: {
-      'User-Agent': 'SEO-Audit/1.0',
+      'User-Agent': userAgent,
     },
   });
   if (!response.ok) {
@@ -37,7 +40,7 @@ async function run() {
     ? input
     : new URL(input.startsWith('/') ? input : `/blog/${input}`, baseUrl).toString();
 
-  const html = await fetchText(resolvedUrl);
+  const html = await fetchText(resolvedUrl, BINGBOT_UA);
   const { pathname } = new URL(resolvedUrl);
   const expectedCanonical = getCanonicalUrl(pathname);
 
@@ -70,7 +73,7 @@ async function run() {
   }
 
   const robotsUrl = new URL('/robots.txt', baseUrl).toString();
-  const robotsTxt = await fetchText(robotsUrl);
+  const robotsTxt = await fetchText(robotsUrl, BINGBOT_UA);
   if (!robotsTxt.includes(`Sitemap: ${SITE_ORIGIN}/sitemap.xml`)) {
     throw new Error('robots.txt is missing the sitemap directive for the production origin');
   }
