@@ -330,6 +330,419 @@ describe('Section 21 Rules', () => {
     });
   });
 
+  describe('S21-DEPOSIT-CAP-EXCEEDED', () => {
+    describe('when no deposit taken', () => {
+      it('should pass when deposit_taken is false', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(false),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+        expect(capRule?.message).toContain('No deposit taken');
+      });
+    });
+
+    describe('when deposit is zero', () => {
+      it('should pass when deposit amount is zero', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(0),
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+        expect(capRule?.message).toContain('zero');
+      });
+    });
+
+    describe('5-week cap (annual rent < £50,000)', () => {
+      it('should pass when deposit equals 5-week cap exactly (monthly rent £1,000)', () => {
+        // Monthly rent £1,000 → weekly = £1000 * 12 / 52 = £230.769...
+        // 5-week cap = £1153.846...
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1153.85), // At cap (within penny tolerance)
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+        expect(capRule?.message).toContain('within the legal limit');
+      });
+
+      it('should fail when deposit exceeds 5-week cap (monthly rent £1,000)', () => {
+        // Monthly rent £1,000 → 5-week cap = £1153.846...
+        // Deposit £1200 exceeds cap
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1200),
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('fail');
+        expect(capRule?.message).toContain('exceeds the legal maximum');
+        expect(capRule?.message).toContain('5 weeks');
+        expect(capRule?.legalBasis).toContain('Tenant Fees Act 2019');
+        expect(result.status).toBe('invalid');
+      });
+
+      it('should pass when deposit is under 5-week cap (weekly rent £300)', () => {
+        // Weekly rent £300 → annual = £15,600 (under £50k)
+        // 5-week cap = £1500
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1500),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should fail when deposit is 1 penny over 5-week cap (weekly rent £300)', () => {
+        // Weekly rent £300 → 5-week cap = £1500
+        // Deposit £1500.02 is over by 2p (>1p tolerance)
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1500.02),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('fail');
+      });
+    });
+
+    describe('6-week cap (annual rent >= £50,000)', () => {
+      it('should use 6-week cap when annual rent is exactly £50,000', () => {
+        // Monthly rent = £50,000 / 12 = £4166.67
+        // Weekly rent = £4166.67 * 12 / 52 = £961.538...
+        // 6-week cap = £5769.23...
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(5769.23),
+            rent_amount: createFact(4166.67),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+        expect(capRule?.message).toContain('6 weeks');
+      });
+
+      it('should fail when deposit exceeds 6-week cap (monthly rent £4,500)', () => {
+        // Monthly rent £4,500 → annual = £54,000 (>= £50k)
+        // Weekly rent = £4500 * 12 / 52 = £1038.461...
+        // 6-week cap = £6230.77...
+        // Deposit £7000 exceeds cap
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(7000),
+            rent_amount: createFact(4500),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('fail');
+        expect(capRule?.message).toContain('6 weeks');
+        expect(capRule?.evidence).toContain('Annual rent: £54000.00');
+      });
+
+      it('should pass when deposit is under 6-week cap (monthly rent £4,500)', () => {
+        // 6-week cap = £6230.77...
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(6000),
+            rent_amount: createFact(4500),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+    });
+
+    describe('different rent frequencies', () => {
+      it('should handle weekly rent correctly', () => {
+        // Weekly £200 → annual = £10,400 → 5-week cap = £1000
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(200),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should handle fortnightly rent correctly', () => {
+        // Fortnightly £400 → weekly = £200 → 5-week cap = £1000
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(400),
+            rent_frequency: createFact('fortnightly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should handle quarterly rent correctly', () => {
+        // Quarterly £3000 → weekly = £3000 * 4 / 52 = £230.77 → 5-week cap = £1153.85
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1153),
+            rent_amount: createFact(3000),
+            rent_frequency: createFact('quarterly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should handle yearly rent correctly', () => {
+        // Yearly £12,000 → weekly = £230.77 → 5-week cap = £1153.85
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1153),
+            rent_amount: createFact(12000),
+            rent_frequency: createFact('yearly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+    });
+
+    describe('missing facts triggers needs_info', () => {
+      it('should return needs_info when deposit_taken is unknown', () => {
+        const result = runRules(SECTION21_RULES, createContext({}));
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.missingFacts).toContain('deposit_taken');
+      });
+
+      it('should return needs_info when deposit amount is missing', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.missingFacts).toContain('deposit_amount');
+      });
+
+      it('should return needs_info when rent amount is missing', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.missingFacts).toContain('rent_amount');
+      });
+
+      it('should return needs_info when rent frequency is missing', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(1000),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.missingFacts).toContain('rent_frequency');
+      });
+
+      it('should list all missing facts when multiple are missing', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.missingFacts).toContain('deposit_amount');
+        expect(capRule?.missingFacts).toContain('rent_amount');
+        expect(capRule?.missingFacts).toContain('rent_frequency');
+      });
+    });
+
+    describe('float precision tolerance', () => {
+      it('should pass when deposit is exactly at cap', () => {
+        // Weekly £300 → 5-week cap = £1500.00
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1500.00),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should pass when deposit is 1 penny under cap', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1499.99),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should pass when deposit is within 1 penny tolerance over cap', () => {
+        // 1 penny tolerance means deposit at cap + 0.01 should still pass
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1500.01),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('pass');
+      });
+
+      it('should fail when deposit is 2 pennies over cap (exceeds tolerance)', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1500.02),
+            rent_amount: createFact(300),
+            rent_frequency: createFact('weekly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('fail');
+      });
+    });
+
+    describe('evidence and calculations in output', () => {
+      it('should include detailed evidence when deposit exceeds cap', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(2000),
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.evidence).toBeDefined();
+        expect(capRule?.evidence).toContain('Deposit: £2000.00');
+        expect(capRule?.evidence?.some((e) => e.startsWith('Weekly rent:'))).toBe(true);
+        expect(capRule?.evidence?.some((e) => e.startsWith('Annual rent:'))).toBe(true);
+        expect(capRule?.evidence?.some((e) => e.startsWith('Maximum allowed:'))).toBe(true);
+        expect(capRule?.evidence?.some((e) => e.startsWith('Excess amount:'))).toBe(true);
+      });
+
+      it('should include evidence when deposit is within cap', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(1000),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.evidence).toBeDefined();
+        expect(capRule?.evidence?.length).toBeGreaterThanOrEqual(4);
+      });
+    });
+
+    describe('invalid rent amount', () => {
+      it('should return needs_info when rent amount is zero', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(0),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+        expect(capRule?.message).toContain('greater than zero');
+      });
+
+      it('should return needs_info when rent amount is negative', () => {
+        const result = runRules(
+          SECTION21_RULES,
+          createContext({
+            deposit_taken: createFact(true),
+            deposit_amount: createFact(1000),
+            rent_amount: createFact(-500),
+            rent_frequency: createFact('monthly'),
+          })
+        );
+        const capRule = result.results.find((r) => r.id === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capRule?.outcome).toBe('needs_info');
+      });
+    });
+  });
+
   describe('Full validation pass scenario', () => {
     it('should return pass status when all requirements are met', () => {
       const result = runRules(
@@ -342,6 +755,9 @@ describe('Section 21 Rules', () => {
           deposit_taken: createFact(true),
           deposit_protected: createFact(true),
           prescribed_info_served: createFact(true),
+          deposit_amount: createFact(1000),
+          rent_amount: createFact(1000),
+          rent_frequency: createFact('monthly'),
           gas_appliances_present: createFact(true),
           gas_safety_pre_move_in: createFact(true),
           epc_provided: createFact(true),
@@ -352,6 +768,7 @@ describe('Section 21 Rules', () => {
           property_address_present: createFact(true),
           tenant_names_present: createFact(true),
           landlord_name_present: createFact(true),
+          tenancy_status_known: createFact(true),
         })
       );
       expect(result.status).toBe('pass');
