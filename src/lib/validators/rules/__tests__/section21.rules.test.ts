@@ -397,7 +397,8 @@ describe('Section 21 Rules', () => {
         expect(capRule?.message).toContain('exceeds the legal maximum');
         expect(capRule?.message).toContain('5 weeks');
         expect(capRule?.legalBasis).toContain('Tenant Fees Act 2019');
-        expect(result.status).toBe('invalid');
+        // Note: Deposit cap is now a warning, not a blocker (doesn't automatically invalidate S21)
+        expect(capRule?.severity).toBe('warning');
       });
 
       it('should pass when deposit is under 5-week cap (weekly rent £300)', () => {

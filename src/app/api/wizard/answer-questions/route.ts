@@ -12,6 +12,84 @@ export const runtime = 'nodejs';
 
 type AnswerValidationError = { factKey: string; message: string };
 
+/**
+ * Get the most recent evidence analysis from the analysis map.
+ * This is used to preserve extracted fields across re-checks.
+ *
+ * The analysis map is keyed by evidence_id, with each entry containing
+ * the extraction results including detected_type, extracted_fields, confidence, etc.
+ */
+function getLatestEvidenceAnalysis(
+  analysisMap: Record<string, any>
+): { detected_type: string; extracted_fields: Record<string, any>; confidence: number; warnings: string[] } | null {
+  if (!analysisMap || Object.keys(analysisMap).length === 0) {
+    return null;
+  }
+
+  // Merge all extracted fields from all analyses, with later entries overwriting earlier ones
+  // Also track the most relevant analysis (highest confidence section_21 or section_8 detection)
+  const allAnalyses = Object.values(analysisMap);
+  if (allAnalyses.length === 0) {
+    return null;
+  }
+
+  // Prioritize section 21 or section 8 notice analyses
+  const noticeAnalyses = allAnalyses.filter(
+    (a) =>
+      a?.detected_type?.toLowerCase().includes('section_21') ||
+      a?.detected_type?.toLowerCase().includes('section_8') ||
+      a?.detected_type?.toLowerCase().includes('form_6a') ||
+      a?.detected_type?.toLowerCase().includes('form_3') ||
+      a?.extracted_fields?.form_6a_used === true ||
+      a?.extracted_fields?.form_6a_detected === true ||
+      a?.extracted_fields?.section_21_detected === true ||
+      a?.extracted_fields?.section_8_detected === true
+  );
+
+  // If we found notice analyses, use those; otherwise use all analyses
+  const relevantAnalyses = noticeAnalyses.length > 0 ? noticeAnalyses : allAnalyses;
+
+  // Merge all extracted fields, preferring higher confidence values
+  const mergedFields: Record<string, any> = {};
+  const allWarnings: string[] = [];
+  let bestConfidence = 0;
+  let bestDetectedType = 'unknown';
+
+  for (const analysis of relevantAnalyses) {
+    if (!analysis?.extracted_fields) continue;
+
+    // Track best detection type
+    const confidence = analysis.confidence ?? 0;
+    if (confidence > bestConfidence) {
+      bestConfidence = confidence;
+      bestDetectedType = analysis.detected_type || 'unknown';
+    }
+
+    // Merge fields - non-null values override previous
+    for (const [key, value] of Object.entries(analysis.extracted_fields)) {
+      if (value !== undefined && value !== null && value !== '') {
+        mergedFields[key] = value;
+      }
+    }
+
+    // Collect warnings
+    if (Array.isArray(analysis.warnings)) {
+      allWarnings.push(...analysis.warnings);
+    }
+  }
+
+  if (Object.keys(mergedFields).length === 0) {
+    return null;
+  }
+
+  return {
+    detected_type: bestDetectedType,
+    extracted_fields: mergedFields,
+    confidence: bestConfidence,
+    warnings: allWarnings,
+  };
+}
+
 function normalizeAnswer(question: QuestionDefinition, value: any): { value?: any; error?: string } {
   switch (question.type) {
     case 'yes_no': {
@@ -167,11 +245,15 @@ export async function POST(request: Request) {
       } as typeof current;
     });
 
+    // FIX: Get the most recent evidence analysis to pass to validator
+    // This preserves extracted fields (Form 6A, dates, names, etc.) across re-checks
+    const latestAnalysis = getLatestEvidenceAnalysis(analysisMap);
+
     const validationOutcome = runLegalValidator({
       product: (refreshedFacts as any)?.__meta?.product || (refreshedFacts as any)?.product,
       jurisdiction: caseRow.jurisdiction,
       facts: intelligence.facts as any,
-      analysis: null,
+      analysis: latestAnalysis,
     });
 
     const validationSummary = validationOutcome.result
