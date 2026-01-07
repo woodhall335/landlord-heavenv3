@@ -12,8 +12,10 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { UploadField } from '@/components/wizard/fields/UploadField';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { RiAlertLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
+import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 
 export interface ValidatorCTA {
   label: string;
@@ -61,6 +63,18 @@ const VALIDATOR_TO_EVIDENCE_CATEGORY: Record<string, string> = {
   scotland_notice_to_leave: 'correspondence',
   tenancy_agreement: 'tenancy_agreement',
   money_claim: 'rent_schedule',
+};
+
+/**
+ * Map validator keys to Ask Heaven topics for contextual help
+ */
+const VALIDATOR_TO_ASK_HEAVEN_TOPIC: Record<string, AskHeavenTopic> = {
+  section_21: 'section_21',
+  section_8: 'section_8',
+  wales_notice: 'eviction',
+  scotland_notice_to_leave: 'notice_to_leave',
+  tenancy_agreement: 'tenancy_agreement',
+  money_claim: 'money_claim',
 };
 
 export function ValidatorPage({
@@ -338,6 +352,17 @@ export function ValidatorPage({
                   </p>
                 </div>
               )}
+            </div>
+
+            {/* Ask Heaven Widget */}
+            <div className="mt-8">
+              <AskHeavenWidget
+                variant="card"
+                source="validator"
+                topic={VALIDATOR_TO_ASK_HEAVEN_TOPIC[validatorKey] ?? 'general'}
+                title="Have questions about your validation results?"
+                description="Ask Heaven can help you understand any issues found and what to do next."
+              />
             </div>
 
             {/* Back to Hub */}

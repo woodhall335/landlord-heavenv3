@@ -11,6 +11,7 @@ import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
 import { Calendar, Clock, Tag, ChevronLeft, Share2 } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -344,6 +345,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {/* Bottom CTA */}
               <BlogCTA variant="default" />
 
+              {/* Ask Heaven Widget (mobile-visible) */}
+              <div className="mt-8 lg:hidden">
+                <AskHeavenWidget
+                  variant="card"
+                  source="blog"
+                  topic="general"
+                />
+              </div>
+
               {/* Share */}
               <div className="flex items-center justify-between py-8 border-t border-gray-100 mt-12">
                 <Link
@@ -379,6 +389,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     Get Section 21 — £29.99
                   </Link>
                 </div>
+
+                {/* Ask Heaven Widget */}
+                <AskHeavenWidget
+                  variant="compact"
+                  source="blog"
+                  topic="general"
+                />
               </div>
             </aside>
           </div>

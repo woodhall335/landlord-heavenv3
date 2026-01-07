@@ -23,6 +23,7 @@ import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Section 21 Deadline",
@@ -950,6 +951,22 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="eviction"
+              product="complete_pack"
+              title="Have questions about the eviction process?"
+              description="Ask Heaven can help you understand court forms, timelines, and possession procedures."
+            />
           </div>
         </Container>
       </section>

@@ -19,6 +19,7 @@ import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 
 export const metadata: Metadata = {
   title: "Section 21 & 8 Eviction Notices - £29.99",
@@ -586,6 +587,22 @@ export default function NoticeOnlyPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="eviction"
+              product="notice_only"
+              title="Have questions about eviction notices?"
+              description="Ask Heaven can help you understand Section 21, Section 8, and Notice to Leave requirements."
+            />
           </div>
         </Container>
       </section>
