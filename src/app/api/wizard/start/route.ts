@@ -8,7 +8,8 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -22,6 +23,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 const startWizardSchema = z.object({
   product: z.enum([
@@ -119,6 +121,7 @@ function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuest
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/start', writesUsingAdmin: true });
     const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = startWizardSchema.safeParse(body);
@@ -175,7 +178,7 @@ export async function POST(request: Request) {
 
     // Admin client bypasses RLS - used for creating cases for anonymous users
     // The regular client would be blocked by RLS policies when user_id is null
-    const adminSupabase = createAdminClient();
+    const adminSupabase = createSupabaseAdminClient();
 
     let caseRecord: any = null;
 

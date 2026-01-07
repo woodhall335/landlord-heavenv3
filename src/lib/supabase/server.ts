@@ -13,6 +13,7 @@ import {
   warnSupabaseNotConfiguredOnce,
 } from './config';
 import type { Database } from './types';
+import { createSupabaseAdminClient } from './admin';
 
 /**
  * Creates a fully-typed Supabase client for server-side use.
@@ -36,26 +37,7 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
  * NEVER expose to client-side code
  */
 export function createAdminClient(): SupabaseClient<Database> {
-  const config = getSupabaseConfigForServerRuntime();
-
-  if (!config || !config.serviceRoleKey) {
-    warnSupabaseNotConfiguredOnce();
-    throw new Error('Supabase not configured');
-  }
-
-  return createServerClient<Database>(config.url, config.serviceRoleKey, {
-    cookies: {
-      get() {
-        return undefined;
-      },
-      set() {
-        // no-op for admin client
-      },
-      remove() {
-        // no-op for admin client
-      },
-    },
-  });
+  return createSupabaseAdminClient();
 }
 
 /**

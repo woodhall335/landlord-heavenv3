@@ -8,13 +8,16 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
+
+export const runtime = 'nodejs';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
@@ -576,6 +579,7 @@ function craftAskHeavenAnswer(
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/analyze', writesUsingAdmin: true });
     const user = await getServerUser();
     const body = await request.json();
     const validation = analyzeSchema.safeParse(body);
@@ -590,7 +594,7 @@ export async function POST(request: Request) {
     const { case_id, question } = validation.data;
 
     // Use admin client to bypass RLS - we do our own access control below
-    const adminSupabase = createAdminClient();
+    const adminSupabase = createSupabaseAdminClient();
 
     // Fetch the case using admin client (bypasses RLS)
     const { data, error: caseError } = await adminSupabase
