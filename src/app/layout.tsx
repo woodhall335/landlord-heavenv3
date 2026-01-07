@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header, Footer } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
 import { defaultMetadata } from "@/lib/seo";
+import { SITE_ORIGIN } from "@/lib/seo/urls";
 import {
   organizationSchema,
   websiteSchema,
@@ -20,7 +21,10 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = defaultMetadata;
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  metadataBase: new URL(SITE_ORIGIN),
+};
 
 export default async function RootLayout({
   children,
