@@ -42,6 +42,11 @@ export const SECTION_21_FACT_KEYS = {
   licence_held: 'licence_held',                   // boolean - Does landlord hold required licence?
   licence_applied: 'licence_applied',             // boolean - Has licence been applied for?
 
+  // Deposit cap (Tenant Fees Act 2019)
+  deposit_amount: 'deposit_amount',               // number - Amount of deposit taken (GBP)
+  rent_amount: 'rent_amount',                     // number - Periodic rent amount (GBP)
+  rent_frequency: 'rent_frequency',               // 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly'
+
   // Risk factors
   retaliatory_eviction_risk: 'retaliatory_eviction_risk', // boolean - Retaliatory eviction risk?
   rent_arrears_exist: 'rent_arrears_exist',       // boolean - Are there rent arrears?
@@ -193,6 +198,39 @@ export const FACT_QUESTIONS: FactQuestionConfig[] = [
     section: 'deposit',
     validatorKeys: ['section_21'],
   },
+  {
+    factKey: 'deposit_amount',
+    question: 'What is the deposit amount?',
+    helpText: 'The total deposit amount taken from the tenant at the start of the tenancy.',
+    type: 'currency',
+    section: 'deposit',
+    placeholder: '0.00',
+    validatorKeys: ['section_21'],
+  },
+  {
+    factKey: 'rent_amount',
+    question: 'What is the periodic rent amount?',
+    helpText: 'The rent amount paid each period (e.g., monthly rent).',
+    type: 'currency',
+    section: 'deposit',
+    placeholder: '0.00',
+    validatorKeys: ['section_21', 'section_8'],
+  },
+  {
+    factKey: 'rent_frequency',
+    question: 'How often is rent payable?',
+    helpText: 'The payment frequency determines how the deposit cap is calculated.',
+    type: 'select',
+    section: 'deposit',
+    options: [
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'fortnightly', label: 'Fortnightly' },
+      { value: 'monthly', label: 'Monthly' },
+      { value: 'quarterly', label: 'Quarterly' },
+      { value: 'yearly', label: 'Yearly' },
+    ],
+    validatorKeys: ['section_21', 'section_8'],
+  },
 
   // Compliance docs section
   {
@@ -291,26 +329,6 @@ export const FACT_QUESTIONS: FactQuestionConfig[] = [
   },
 
   // S8 Arrears section
-  {
-    factKey: 'rent_amount',
-    question: 'What is the periodic rent amount?',
-    type: 'currency',
-    section: 'arrears',
-    validatorKeys: ['section_8'],
-  },
-  {
-    factKey: 'rent_frequency',
-    question: 'How often is rent payable?',
-    type: 'select',
-    section: 'arrears',
-    options: [
-      { value: 'weekly', label: 'Weekly' },
-      { value: 'fortnightly', label: 'Fortnightly' },
-      { value: 'monthly', label: 'Monthly' },
-      { value: 'quarterly', label: 'Quarterly' },
-    ],
-    validatorKeys: ['section_8'],
-  },
   {
     factKey: 'arrears_amount',
     question: 'What is the current rent arrears amount?',

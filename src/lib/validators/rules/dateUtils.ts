@@ -310,3 +310,176 @@ export function isGround8Satisfied(
     description: thresholdResult.description,
   };
 }
+
+// ============================================
+// Deposit Cap Calculations (Tenant Fees Act 2019)
+// ============================================
+
+/**
+ * Valid rent frequencies for deposit cap calculation.
+ */
+export type RentFrequency = 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+
+/**
+ * Annual rent threshold for 6-week deposit cap (TFA 2019).
+ * If annual rent >= £50,000, landlord may take 6 weeks' deposit.
+ * If annual rent < £50,000, landlord may only take 5 weeks' deposit.
+ */
+export const ANNUAL_RENT_THRESHOLD = 50000;
+
+/**
+ * Tolerance in pounds for floating point comparisons (1 penny).
+ */
+const PENNY_TOLERANCE = 0.01;
+
+/**
+ * Convert rent to weekly amount based on frequency.
+ *
+ * LEGAL BASIS: Tenant Fees Act 2019 s.3
+ * Deposit cap is calculated based on weekly rent.
+ *
+ * Conversion formulas:
+ * - weekly → rent (no conversion)
+ * - fortnightly → rent / 2
+ * - monthly → rent * 12 / 52
+ * - quarterly → rent * 4 / 52
+ * - yearly → rent / 52
+ */
+export function convertToWeeklyRent(
+  rentAmount: number,
+  frequency: RentFrequency | string
+): number | null {
+  if (!rentAmount || rentAmount <= 0) {
+    return null;
+  }
+
+  const freq = frequency.toLowerCase() as RentFrequency;
+
+  switch (freq) {
+    case 'weekly':
+      return rentAmount;
+    case 'fortnightly':
+      return rentAmount / 2;
+    case 'monthly':
+      return (rentAmount * 12) / 52;
+    case 'quarterly':
+      return (rentAmount * 4) / 52;
+    case 'yearly':
+    case 'annual' as RentFrequency:
+      return rentAmount / 52;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Calculate annual rent from weekly rent.
+ */
+export function calculateAnnualRent(weeklyRent: number): number {
+  return weeklyRent * 52;
+}
+
+/**
+ * Calculate the deposit cap based on annual rent.
+ *
+ * LEGAL BASIS: Tenant Fees Act 2019 s.3
+ * - If annual rent >= £50,000: max deposit = 6 weeks' rent
+ * - If annual rent < £50,000: max deposit = 5 weeks' rent
+ *
+ * @returns The maximum deposit allowed in pounds, or null if invalid input
+ */
+export function calculateDepositCap(
+  rentAmount: number,
+  frequency: RentFrequency | string
+): {
+  cap: number;
+  weeklyRent: number;
+  annualRent: number;
+  weeks: 5 | 6;
+  description: string;
+} | null {
+  const weeklyRent = convertToWeeklyRent(rentAmount, frequency);
+  if (weeklyRent === null) {
+    return null;
+  }
+
+  const annualRent = calculateAnnualRent(weeklyRent);
+  const weeks = annualRent >= ANNUAL_RENT_THRESHOLD ? 6 : 5;
+  const cap = weeklyRent * weeks;
+
+  return {
+    cap,
+    weeklyRent,
+    annualRent,
+    weeks,
+    description:
+      weeks === 6
+        ? `6 weeks' rent (annual rent ≥ £50,000)`
+        : `5 weeks' rent (annual rent < £50,000)`,
+  };
+}
+
+/**
+ * Check if a deposit amount exceeds the legal cap.
+ *
+ * LEGAL BASIS: Tenant Fees Act 2019 s.3
+ * Deposits exceeding the cap are prohibited payments under the Act.
+ *
+ * Uses 1 penny tolerance for floating point comparisons to avoid
+ * false positives due to rounding differences.
+ *
+ * @returns Object with exceeded status and calculation details, or null if invalid input
+ */
+export function isDepositExceedingCap(
+  depositAmount: number,
+  rentAmount: number,
+  frequency: RentFrequency | string
+): {
+  exceeded: boolean;
+  depositAmount: number;
+  cap: number;
+  weeklyRent: number;
+  annualRent: number;
+  weeks: 5 | 6;
+  excessAmount: number;
+  description: string;
+} | null {
+  if (depositAmount === undefined || depositAmount === null || depositAmount < 0) {
+    return null;
+  }
+
+  const capResult = calculateDepositCap(rentAmount, frequency);
+  if (!capResult) {
+    return null;
+  }
+
+  // Use penny tolerance for comparison
+  // Deposit exceeds cap only if it's more than 1 penny over
+  const excessAmount = depositAmount - capResult.cap;
+  const exceeded = excessAmount > PENNY_TOLERANCE;
+
+  return {
+    exceeded,
+    depositAmount,
+    cap: capResult.cap,
+    weeklyRent: capResult.weeklyRent,
+    annualRent: capResult.annualRent,
+    weeks: capResult.weeks,
+    excessAmount: exceeded ? excessAmount : 0,
+    description: capResult.description,
+  };
+}
+
+/**
+ * Format a monetary value to 2 decimal places for display.
+ */
+export function formatMoney(amount: number): string {
+  return amount.toFixed(2);
+}
+
+/**
+ * Format a monetary value as GBP for display.
+ */
+export function formatGBP(amount: number): string {
+  return `£${formatMoney(amount)}`;
+}

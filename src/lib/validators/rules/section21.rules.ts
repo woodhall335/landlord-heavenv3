@@ -14,11 +14,17 @@ import {
   getFact,
   getYesNoFact,
   getStringFact,
+  getNumericFact,
   hasFact,
   createRuleResult,
   getMissingFacts,
 } from './runRules';
-import { checkTwoMonthNoticePeriod, parseUKDate } from './dateUtils';
+import {
+  checkTwoMonthNoticePeriod,
+  parseUKDate,
+  isDepositExceedingCap,
+  formatGBP,
+} from './dateUtils';
 import { SECTION_21_FACT_KEYS } from '../facts/factKeys';
 
 /**
@@ -308,6 +314,129 @@ export const SECTION21_RULES: Rule[] = [
         'pass',
         'Prescribed information was served within the required timeframe.',
         { evidence: ['Prescribed information service confirmed'] }
+      );
+    },
+  },
+
+  // ============================================
+  // BLOCKER: Deposit Cap (Tenant Fees Act 2019)
+  // ============================================
+  {
+    id: 'S21-DEPOSIT-CAP-EXCEEDED',
+    title: 'Deposit Cap (Tenant Fees Act 2019)',
+    severity: 'blocker',
+    requiredFacts: [
+      SECTION_21_FACT_KEYS.deposit_taken,
+      SECTION_21_FACT_KEYS.deposit_amount,
+      SECTION_21_FACT_KEYS.rent_amount,
+      SECTION_21_FACT_KEYS.rent_frequency,
+    ],
+    applies: (ctx) => ctx.jurisdiction === 'england',
+    evaluate: (ctx): RuleResult => {
+      const depositTaken = getYesNoFact(ctx, SECTION_21_FACT_KEYS.deposit_taken);
+
+      // If no deposit taken, rule doesn't apply
+      if (depositTaken === false) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'pass',
+          'No deposit taken, so deposit cap rules do not apply.'
+        );
+      }
+
+      // If deposit status unknown, check if we should ask about it
+      if (depositTaken === undefined) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'needs_info',
+          'Please confirm whether a deposit was taken from the tenant.',
+          { missingFacts: [SECTION_21_FACT_KEYS.deposit_taken] }
+        );
+      }
+
+      // Deposit was taken - get the required values
+      const depositAmount = getNumericFact(ctx, SECTION_21_FACT_KEYS.deposit_amount);
+      const rentAmount = getNumericFact(ctx, SECTION_21_FACT_KEYS.rent_amount);
+      const rentFrequency = getStringFact(ctx, SECTION_21_FACT_KEYS.rent_frequency);
+
+      // Check for missing facts
+      const missingFacts: string[] = [];
+      if (depositAmount === undefined) missingFacts.push(SECTION_21_FACT_KEYS.deposit_amount);
+      if (rentAmount === undefined) missingFacts.push(SECTION_21_FACT_KEYS.rent_amount);
+      if (!rentFrequency) missingFacts.push(SECTION_21_FACT_KEYS.rent_frequency);
+
+      if (missingFacts.length > 0) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'needs_info',
+          'A deposit was taken. Please provide the deposit amount and rent details to check if the deposit complies with the Tenant Fees Act 2019 cap.',
+          { missingFacts }
+        );
+      }
+
+      // Validate rent amount is positive
+      if (rentAmount! <= 0) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'needs_info',
+          'Rent amount must be greater than zero. Please provide a valid rent amount.',
+          { missingFacts: [SECTION_21_FACT_KEYS.rent_amount] }
+        );
+      }
+
+      // If deposit is zero, rule passes (no prohibited payment)
+      if (depositAmount === 0) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'pass',
+          'Deposit amount is zero, so no deposit cap check is required.'
+        );
+      }
+
+      // Calculate deposit cap and check if exceeded
+      const capResult = isDepositExceedingCap(depositAmount!, rentAmount!, rentFrequency!);
+
+      if (!capResult) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'needs_info',
+          'Unable to calculate deposit cap. Please check the rent frequency is valid (weekly, fortnightly, monthly, quarterly, or yearly).',
+          { missingFacts: [SECTION_21_FACT_KEYS.rent_frequency] }
+        );
+      }
+
+      if (capResult.exceeded) {
+        return createRuleResult(
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          'fail',
+          `Deposit of ${formatGBP(capResult.depositAmount)} exceeds the legal maximum of ${formatGBP(capResult.cap)} (${capResult.description}). ` +
+            `The excess of ${formatGBP(capResult.excessAmount)} must be refunded before serving a valid Section 21 notice. ` +
+            `Until the excess is refunded (or the entire deposit returned), the Section 21 notice is invalid.`,
+          {
+            legalBasis: 'Tenant Fees Act 2019 s.3 - prohibited payments',
+            evidence: [
+              `Deposit: ${formatGBP(capResult.depositAmount)}`,
+              `Weekly rent: ${formatGBP(capResult.weeklyRent)}`,
+              `Annual rent: ${formatGBP(capResult.annualRent)}`,
+              `Maximum allowed: ${formatGBP(capResult.cap)} (${capResult.weeks} weeks)`,
+              `Excess amount: ${formatGBP(capResult.excessAmount)}`,
+            ],
+          }
+        );
+      }
+
+      return createRuleResult(
+        { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+        'pass',
+        `Deposit of ${formatGBP(capResult.depositAmount)} is within the legal limit of ${formatGBP(capResult.cap)} (${capResult.description}).`,
+        {
+          evidence: [
+            `Deposit: ${formatGBP(capResult.depositAmount)}`,
+            `Weekly rent: ${formatGBP(capResult.weeklyRent)}`,
+            `Annual rent: ${formatGBP(capResult.annualRent)}`,
+            `Maximum allowed: ${formatGBP(capResult.cap)} (${capResult.weeks} weeks)`,
+          ],
+        }
       );
     },
   },
