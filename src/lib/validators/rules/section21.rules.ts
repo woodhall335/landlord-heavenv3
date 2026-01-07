@@ -319,12 +319,16 @@ export const SECTION21_RULES: Rule[] = [
   },
 
   // ============================================
-  // BLOCKER: Deposit Cap (Tenant Fees Act 2019)
+  // WARNING: Deposit Cap (Tenant Fees Act 2019)
+  // Note: Changed from blocker to warning because while exceeding the cap
+  // is a prohibited payment under TFA 2019, it doesn't automatically
+  // invalidate a Section 21 notice. Courts may still consider the notice
+  // valid while the landlord could face separate enforcement action.
   // ============================================
   {
     id: 'S21-DEPOSIT-CAP-EXCEEDED',
     title: 'Deposit Cap (Tenant Fees Act 2019)',
-    severity: 'blocker',
+    severity: 'warning',
     requiredFacts: [
       SECTION_21_FACT_KEYS.deposit_taken,
       SECTION_21_FACT_KEYS.deposit_amount,
@@ -338,7 +342,7 @@ export const SECTION21_RULES: Rule[] = [
       // If no deposit taken, rule doesn't apply
       if (depositTaken === false) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'pass',
           'No deposit taken, so deposit cap rules do not apply.'
         );
@@ -347,7 +351,7 @@ export const SECTION21_RULES: Rule[] = [
       // If deposit status unknown, check if we should ask about it
       if (depositTaken === undefined) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'needs_info',
           'Please confirm whether a deposit was taken from the tenant.',
           { missingFacts: [SECTION_21_FACT_KEYS.deposit_taken] }
@@ -367,7 +371,7 @@ export const SECTION21_RULES: Rule[] = [
 
       if (missingFacts.length > 0) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'needs_info',
           'A deposit was taken. Please provide the deposit amount and rent details to check if the deposit complies with the Tenant Fees Act 2019 cap.',
           { missingFacts }
@@ -377,7 +381,7 @@ export const SECTION21_RULES: Rule[] = [
       // Validate rent amount is positive
       if (rentAmount! <= 0) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'needs_info',
           'Rent amount must be greater than zero. Please provide a valid rent amount.',
           { missingFacts: [SECTION_21_FACT_KEYS.rent_amount] }
@@ -387,7 +391,7 @@ export const SECTION21_RULES: Rule[] = [
       // If deposit is zero, rule passes (no prohibited payment)
       if (depositAmount === 0) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'pass',
           'Deposit amount is zero, so no deposit cap check is required.'
         );
@@ -398,7 +402,7 @@ export const SECTION21_RULES: Rule[] = [
 
       if (!capResult) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'needs_info',
           'Unable to calculate deposit cap. Please check the rent frequency is valid (weekly, fortnightly, monthly, quarterly, or yearly).',
           { missingFacts: [SECTION_21_FACT_KEYS.rent_frequency] }
@@ -407,11 +411,11 @@ export const SECTION21_RULES: Rule[] = [
 
       if (capResult.exceeded) {
         return createRuleResult(
-          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+          { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
           'fail',
           `Deposit of ${formatGBP(capResult.depositAmount)} exceeds the legal maximum of ${formatGBP(capResult.cap)} (${capResult.description}). ` +
-            `The excess of ${formatGBP(capResult.excessAmount)} must be refunded before serving a valid Section 21 notice. ` +
-            `Until the excess is refunded (or the entire deposit returned), the Section 21 notice is invalid.`,
+            `The excess of ${formatGBP(capResult.excessAmount)} is a prohibited payment under the Tenant Fees Act 2019. ` +
+            `Consider refunding the excess before relying on the Section 21 notice.`,
           {
             legalBasis: 'Tenant Fees Act 2019 s.3 - prohibited payments',
             evidence: [
@@ -426,7 +430,7 @@ export const SECTION21_RULES: Rule[] = [
       }
 
       return createRuleResult(
-        { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'blocker' },
+        { id: 'S21-DEPOSIT-CAP-EXCEEDED', title: 'Deposit Cap (Tenant Fees Act 2019)', severity: 'warning' },
         'pass',
         `Deposit of ${formatGBP(capResult.depositAmount)} is within the legal limit of ${formatGBP(capResult.cap)} (${capResult.description}).`,
         {

@@ -343,19 +343,94 @@ function buildSection8Answers(facts: Record<string, any>, extracted?: Record<str
   };
 }
 
+/**
+ * Extract fields from facts that may have been previously extracted from documents.
+ * This allows validation to work even when analysis is null (e.g., during Q&A re-check).
+ *
+ * These fields are typically populated by mergeExtractedFacts() during document upload,
+ * so they persist in the case facts even after the original analysis is no longer passed.
+ */
+function extractFieldsFromFacts(facts: Record<string, any>): Record<string, any> {
+  const extracted: Record<string, any> = {};
+
+  // Form detection fields
+  if (facts.form_6a_used !== undefined) extracted.form_6a_used = facts.form_6a_used;
+  if (facts.form_6a_detected !== undefined) extracted.form_6a_detected = facts.form_6a_detected;
+  if (facts.section_21_detected !== undefined) extracted.section_21_detected = facts.section_21_detected;
+  if (facts.form_3_detected !== undefined) extracted.form_3_detected = facts.form_3_detected;
+  if (facts.section_8_detected !== undefined) extracted.section_8_detected = facts.section_8_detected;
+
+  // Notice type
+  if (facts.notice_type !== undefined) extracted.notice_type = facts.notice_type;
+
+  // Dates
+  if (facts.date_served !== undefined) extracted.date_served = facts.date_served;
+  if (facts.service_date !== undefined) extracted.service_date = facts.service_date;
+  if (facts.notice_date !== undefined) extracted.notice_date = facts.notice_date;
+  if (facts.expiry_date !== undefined) extracted.expiry_date = facts.expiry_date;
+  if (facts.notice_expiry_date !== undefined) extracted.notice_expiry_date = facts.notice_expiry_date;
+
+  // Names
+  if (facts.tenant_names !== undefined) extracted.tenant_names = facts.tenant_names;
+  if (facts.tenant_name !== undefined) extracted.tenant_name = facts.tenant_name;
+  if (facts.tenant_full_name !== undefined) extracted.tenant_full_name = facts.tenant_full_name;
+  if (facts.landlord_name !== undefined) extracted.landlord_name = facts.landlord_name;
+  if (facts.landlord_full_name !== undefined) extracted.landlord_full_name = facts.landlord_full_name;
+
+  // Address
+  if (facts.property_address !== undefined) extracted.property_address = facts.property_address;
+  if (facts.property_address_line1 !== undefined) extracted.property_address_line1 = facts.property_address_line1;
+  if (facts.address !== undefined) extracted.address = facts.address;
+
+  // Signature
+  if (facts.signature_present !== undefined) extracted.signature_present = facts.signature_present;
+
+  // Compliance fields (may be extracted from notice or confirmed by user)
+  if (facts.deposit_protected !== undefined) extracted.deposit_protected = facts.deposit_protected;
+  if (facts.prescribed_info_served !== undefined) extracted.prescribed_info_served = facts.prescribed_info_served;
+  if (facts.gas_safety_mentioned !== undefined) extracted.gas_safety_mentioned = facts.gas_safety_mentioned;
+  if (facts.epc_mentioned !== undefined) extracted.epc_mentioned = facts.epc_mentioned;
+  if (facts.how_to_rent_mentioned !== undefined) extracted.how_to_rent_mentioned = facts.how_to_rent_mentioned;
+
+  // Section 8 specific
+  if (facts.grounds_cited !== undefined) extracted.grounds_cited = facts.grounds_cited;
+  if (facts.rent_arrears_stated !== undefined) extracted.rent_arrears_stated = facts.rent_arrears_stated;
+  if (facts.tenant_details !== undefined) extracted.tenant_details = facts.tenant_details;
+  if (facts.notice_period !== undefined) extracted.notice_period = facts.notice_period;
+
+  // Rent/deposit
+  if (facts.rent_amount !== undefined) extracted.rent_amount = facts.rent_amount;
+  if (facts.rent_frequency !== undefined) extracted.rent_frequency = facts.rent_frequency;
+  if (facts.deposit_amount !== undefined) extracted.deposit_amount = facts.deposit_amount;
+
+  return extracted;
+}
 
 export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValidatorResult {
   const product = resolveProduct(input.facts, input.product);
   const jurisdiction = resolveJurisdiction(input.facts, input.jurisdiction);
-  // Normalize extracted field names to handle LLM variations (camelCase, singular/plural, etc.)
+
+  // FIX: Build extracted fields from BOTH analysis.extracted_fields AND facts
+  // This ensures extracted values are not lost when analysis is null (e.g., after Q&A re-check)
   const rawExtracted = input.analysis?.extracted_fields || {};
-  const extracted = normalizeExtractedFields(rawExtracted);
+  const factsBasedExtracted = extractFieldsFromFacts(input.facts);
+
+  // Merge: analysis.extracted_fields takes precedence, but facts fills in gaps
+  const mergedExtracted = { ...factsBasedExtracted, ...rawExtracted };
+  const extracted = normalizeExtractedFields(mergedExtracted);
   const extractionQuality = input.analysis?.extraction_quality || undefined;
 
   // Debug logging for field normalization
   const rawKeys = Object.keys(rawExtracted);
+  const factsKeys = Object.keys(factsBasedExtracted);
   const normalizedKeys = Object.keys(extracted);
-  const newKeys = normalizedKeys.filter(k => !rawKeys.includes(k));
+  if (factsKeys.length > 0 && rawKeys.length === 0) {
+    console.log('[runLegalValidator] Using facts-based extracted fields (analysis was null):', {
+      factsFieldCount: factsKeys.length,
+      factsFields: factsKeys.slice(0, 10),
+    });
+  }
+  const newKeys = normalizedKeys.filter(k => !rawKeys.includes(k) && !factsKeys.includes(k));
   if (newKeys.length > 0) {
     console.log('[runLegalValidator] Field normalization applied:', {
       rawFieldCount: rawKeys.length,
