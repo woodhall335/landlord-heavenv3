@@ -12,11 +12,22 @@ import {
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
+import { getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI",
   description:
     "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£9.99) or Premium (£14.99). Covers England, Wales, Scotland, and Northern Ireland.",
+  openGraph: {
+    title: "Tenancy Agreements - AST, PRT, NI",
+    description:
+      "Legally compliant tenancy agreements for UK landlords. Covers England, Wales, Scotland, and Northern Ireland.",
+    type: 'website',
+    url: getCanonicalUrl('/products/ast'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/ast'),
+  },
 };
 
 export default function ASTPage() {

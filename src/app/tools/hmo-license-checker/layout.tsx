@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Free HMO License Checker',
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
     description:
       'Check if your property needs HMO licensing. Free instant assessment tool for UK landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/hmo-license-checker'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/hmo-license-checker'),
   },
 };
 

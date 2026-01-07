@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Free Section 21 Notice Generator',
@@ -18,6 +19,10 @@ export const metadata: Metadata = {
     description:
       'Generate a free Section 21 notice template. Upgrade for court-ready version.',
     type: 'website',
+    url: getCanonicalUrl('/tools/free-section-21-notice-generator'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-section-21-notice-generator'),
   },
 };
 

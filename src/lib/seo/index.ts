@@ -6,6 +6,7 @@
 
 export { generateMetadata, defaultMetadata } from './metadata';
 export type { SEOMetadataConfig } from './metadata';
+export { SITE_ORIGIN, getCanonicalUrl } from './urls';
 
 export {
   organizationSchema,

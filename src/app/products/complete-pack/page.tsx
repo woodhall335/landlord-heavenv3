@@ -22,6 +22,7 @@ import {
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Section 21 Deadline",
@@ -30,6 +31,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
     description: "Last chance for Section 21. Complete eviction pack before no-fault evictions banned 1 May 2026. £149.99.",
+    url: getCanonicalUrl('/products/complete-pack'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/complete-pack'),
   },
   keywords: [
     "complete eviction pack",

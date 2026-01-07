@@ -18,6 +18,7 @@ import {
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Section 21 & 8 Eviction Notices - £29.99",
@@ -26,6 +27,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
     description: "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes.",
+    url: getCanonicalUrl('/products/notice-only'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/notice-only'),
   },
 };
 

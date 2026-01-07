@@ -9,6 +9,7 @@ import { BlogCard } from '@/components/blog/BlogCard';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { Calendar, Clock, Tag, ChevronLeft, Share2 } from 'lucide-react';
+import { getCanonicalUrl } from '@/lib/seo';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -34,15 +35,21 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const truncatedTitle = post.title.length > maxTitleLength
     ? post.title.substring(0, maxTitleLength - 3) + '...'
     : post.title;
+  const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
 
   return {
     title: truncatedTitle, // Layout template adds "| Landlord Heaven"
     description: post.metaDescription,
     keywords: [post.targetKeyword, ...post.secondaryKeywords],
+    robots: 'index,follow',
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.metaDescription,
       type: 'article',
+      url: canonicalUrl,
       publishedTime: post.date,
       modifiedTime: post.updatedDate || post.date,
       authors: [post.author.name],
