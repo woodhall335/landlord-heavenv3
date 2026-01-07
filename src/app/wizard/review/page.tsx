@@ -34,6 +34,7 @@ function ReviewPageInner() {
 
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [hasAcknowledgedBlockers, setHasAcknowledgedBlockers] = useState(false);
 
   useEffect(() => {
     const fetchAnalysis = async () => {
@@ -96,6 +97,9 @@ function ReviewPageInner() {
     : analysis.decision_engine?.blocking_issues?.some(
         (issue: any) => issue.severity === 'blocking'
       );
+  useEffect(() => {
+    setHasAcknowledgedBlockers(false);
+  }, [caseId, hasBlockingIssues]);
 
   // Common fields from /api/wizard/analyze
   const caseStrengthBand: string = analysis.case_strength_band || 'unknown';
@@ -117,26 +121,17 @@ function ReviewPageInner() {
     router.push(`/wizard/flow?${params.toString()}`);
   };
 
+  const handleFixIssues = () => {
+    document.getElementById('critical-issues')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleProceed = () => {
-    // For money claim cases, check case health blockers
-    if (isMoneyClaimFlow) {
-      const caseHealth = analysis.case_health;
-      if (caseHealth?.blockers?.length > 0) {
-        const blockersList = caseHealth.blockers
-          .map((b: any) => b.message || b.title)
-          .join('\n• ');
+    if (hasBlockingIssues && !hasAcknowledgedBlockers) {
+      return;
+    }
 
-        const proceed = confirm(
-          `Warning: Your claim has issues that should be addressed:\n\n• ${blockersList}\n\n` +
-            'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
-        );
-
-        if (!proceed) {
-          return;
-        }
-      }
-    } else {
-      // For eviction cases, ensure we have a recommended route before preview
+    // For eviction cases, ensure we have a recommended route before preview
+    if (!isMoneyClaimFlow) {
       const recommendedRoute = analysis.recommended_route;
       if (!recommendedRoute) {
         alert(
@@ -144,23 +139,6 @@ function ReviewPageInner() {
             'Please complete all required questions and try again.'
         );
         return;
-      }
-
-      // Check for blocking issues that would prevent document generation
-      if (hasBlockingIssues) {
-        const blockingIssuesList = analysis.decision_engine?.blocking_issues
-          ?.filter((issue: any) => issue.severity === 'blocking')
-          .map((issue: any) => issue.description)
-          .join(', ');
-
-        const proceed = confirm(
-          `Warning: Your case has blocking issues that may prevent successful document generation:\n\n${blockingIssuesList}\n\n` +
-            'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
-        );
-
-        if (!proceed) {
-          return;
-        }
       }
     }
 
@@ -200,6 +178,9 @@ function ReviewPageInner() {
       complianceIssues={complianceIssues}
       evidence={evidence}
       hasBlockingIssues={hasBlockingIssues}
+      hasAcknowledgedBlockers={hasAcknowledgedBlockers}
+      onAcknowledgeBlockers={setHasAcknowledgedBlockers}
+      onFixIssues={handleFixIssues}
       onEdit={handleEdit}
       onProceed={handleProceed}
     />;
@@ -215,6 +196,9 @@ function ReviewPageInner() {
       redFlags={redFlags}
       complianceIssues={complianceIssues}
       hasBlockingIssues={hasBlockingIssues}
+      hasAcknowledgedBlockers={hasAcknowledgedBlockers}
+      onAcknowledgeBlockers={setHasAcknowledgedBlockers}
+      onFixIssues={handleFixIssues}
       onEdit={handleEdit}
       onProceed={handleProceed}
     />;
@@ -245,6 +229,9 @@ function ReviewPageInner() {
     complianceIssues={complianceIssues}
     evidence={evidence}
     hasBlockingIssues={hasBlockingIssues}
+    hasAcknowledgedBlockers={hasAcknowledgedBlockers}
+    onAcknowledgeBlockers={setHasAcknowledgedBlockers}
+    onFixIssues={handleFixIssues}
     onEdit={handleEdit}
     onProceed={handleProceed}
   />;
@@ -264,6 +251,9 @@ interface MoneyClaimReviewContentProps {
   complianceIssues: string[];
   evidence: any;
   hasBlockingIssues: boolean;
+  hasAcknowledgedBlockers: boolean;
+  onAcknowledgeBlockers: (acknowledged: boolean) => void;
+  onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
 }
@@ -279,6 +269,9 @@ function MoneyClaimReviewContent({
   complianceIssues,
   evidence,
   hasBlockingIssues,
+  hasAcknowledgedBlockers,
+  onAcknowledgeBlockers,
+  onFixIssues,
   onEdit,
   onProceed,
 }: MoneyClaimReviewContentProps) {
@@ -413,7 +406,7 @@ function MoneyClaimReviewContent({
 
       {/* Blockers - Critical Issues */}
       {blockers.length > 0 && (
-        <Card className="p-6 border-red-300 bg-red-50">
+        <Card id="critical-issues" className="p-6 border-red-300 bg-red-50">
           <div className="flex items-start gap-3">
             <RiCloseLine className="h-6 w-6 text-red-600 mt-1" />
             <div className="flex-1">
@@ -677,12 +670,50 @@ function MoneyClaimReviewContent({
         </Card>
       )}
 
+      {hasBlockingIssues && (
+        <Card className="p-6 border-red-200 bg-red-50">
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <p className="text-sm text-red-800 mb-4">
+            These issues may prevent your document from being valid or court-ready. Fix them first,
+            or acknowledge and continue.
+          </p>
+          <label className="flex items-start gap-3 text-sm text-red-900">
+            <input
+              type="checkbox"
+              checked={hasAcknowledgedBlockers}
+              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
+              aria-label="Acknowledge critical issues"
+            />
+            <span>
+              I understand these issues may prevent the document being court-ready, and I want to
+              proceed.
+            </span>
+          </label>
+        </Card>
+      )}
+
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1">
+        {hasBlockingIssues && (
+          <Button
+            onClick={onFixIssues}
+            variant="outline"
+            className="flex-1"
+            aria-label="Fix critical issues first"
+          >
+            Fix issues first
+          </Button>
+        )}
+        <Button
+          onClick={onProceed}
+          className="flex-1"
+          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+        >
           Proceed to payment &amp; pack
         </Button>
       </div>
@@ -710,6 +741,9 @@ interface EvictionReviewContentProps {
   complianceIssues: string[];
   evidence: any;
   hasBlockingIssues: boolean;
+  hasAcknowledgedBlockers: boolean;
+  onAcknowledgeBlockers: (acknowledged: boolean) => void;
+  onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
 }
@@ -726,6 +760,9 @@ function EvictionReviewContent({
   complianceIssues,
   evidence,
   hasBlockingIssues,
+  hasAcknowledgedBlockers,
+  onAcknowledgeBlockers,
+  onFixIssues,
   onEdit,
   onProceed,
 }: EvictionReviewContentProps) {
@@ -800,9 +837,9 @@ function EvictionReviewContent({
         </Card>
       )}
 
-      {/* Blocking Issues - still surfaced, but NOT gating payment */}
+      {/* Blocking Issues */}
       {hasBlockingIssues && (
-        <Card className="p-6 border-red-300 bg-red-50">
+        <Card id="critical-issues" className="p-6 border-red-300 bg-red-50">
           <div className="flex items-start gap-3">
             <RiCloseLine className="h-6 w-6 text-[#7C3AED] mt-1" />
             <div className="flex-1">
@@ -829,6 +866,29 @@ function EvictionReviewContent({
                 ))}
             </div>
           </div>
+        </Card>
+      )}
+
+      {hasBlockingIssues && (
+        <Card className="p-6 border-red-200 bg-red-50">
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <p className="text-sm text-red-800 mb-4">
+            These issues may prevent your document from being valid or court-ready. Fix them first,
+            or acknowledge and continue.
+          </p>
+          <label className="flex items-start gap-3 text-sm text-red-900">
+            <input
+              type="checkbox"
+              checked={hasAcknowledgedBlockers}
+              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
+              aria-label="Acknowledge critical issues"
+            />
+            <span>
+              I understand these issues may prevent the document being court-ready, and I want to
+              proceed.
+            </span>
+          </label>
         </Card>
       )}
 
@@ -1258,7 +1318,22 @@ function EvictionReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1">
+        {hasBlockingIssues && (
+          <Button
+            onClick={onFixIssues}
+            variant="outline"
+            className="flex-1"
+            aria-label="Fix critical issues first"
+          >
+            Fix issues first
+          </Button>
+        )}
+        <Button
+          onClick={onProceed}
+          className="flex-1"
+          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+        >
           Proceed to payment &amp; pack
         </Button>
       </div>
@@ -1282,6 +1357,9 @@ interface NoticeOnlyReviewContentProps {
   redFlags: string[];
   complianceIssues: string[];
   hasBlockingIssues: boolean;
+  hasAcknowledgedBlockers: boolean;
+  onAcknowledgeBlockers: (acknowledged: boolean) => void;
+  onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
 }
@@ -1294,6 +1372,9 @@ function NoticeOnlyReviewContent({
   redFlags,
   complianceIssues,
   hasBlockingIssues,
+  hasAcknowledgedBlockers,
+  onAcknowledgeBlockers,
+  onFixIssues,
   onEdit,
   onProceed,
 }: NoticeOnlyReviewContentProps) {
@@ -1344,7 +1425,7 @@ function NoticeOnlyReviewContent({
 
       {/* Blocking Issues */}
       {blockingIssues.length > 0 && (
-        <Card className="border-red-200 bg-red-50 p-6">
+        <Card id="critical-issues" className="border-red-200 bg-red-50 p-6">
           <h2 className="text-lg font-semibold text-red-800 flex items-center gap-2 mb-4">
             <RiErrorWarningLine className="w-5 h-5" />
             Critical Issues
@@ -1519,6 +1600,29 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
+      {hasBlockingIssues && (
+        <Card className="p-6 border-red-200 bg-red-50">
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <p className="text-sm text-red-800 mb-4">
+            These issues may prevent your document from being valid or court-ready. Fix them first,
+            or acknowledge and continue.
+          </p>
+          <label className="flex items-start gap-3 text-sm text-red-900">
+            <input
+              type="checkbox"
+              checked={hasAcknowledgedBlockers}
+              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
+              aria-label="Acknowledge critical issues"
+            />
+            <span>
+              I understand these issues may prevent the document being court-ready, and I want to
+              proceed.
+            </span>
+          </label>
+        </Card>
+      )}
+
       {/* Documents in Pack */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Documents in Your Pack</h2>
@@ -1566,7 +1670,22 @@ function NoticeOnlyReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1">
+        {hasBlockingIssues && (
+          <Button
+            onClick={onFixIssues}
+            variant="outline"
+            className="flex-1"
+            aria-label="Fix critical issues first"
+          >
+            Fix issues first
+          </Button>
+        )}
+        <Button
+          onClick={onProceed}
+          className="flex-1"
+          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+        >
           Proceed to payment &amp; pack
         </Button>
       </div>
