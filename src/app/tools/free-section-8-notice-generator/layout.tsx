@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Free Section 8 Notice Generator',
@@ -12,6 +13,16 @@ export const metadata: Metadata = {
     'landlord tools UK',
     'free section 8 form',
   ],
+  openGraph: {
+    title: 'Free Section 8 Notice Generator | Landlord Heaven',
+    description:
+      'Generate a free Section 8 notice with grounds for possession. Court-ready version with ground-specific validation.',
+    type: 'website',
+    url: getCanonicalUrl('/tools/free-section-8-notice-generator'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-section-8-notice-generator'),
+  },
 };
 
 export default function FreeSection8Layout({ children }: { children: React.ReactNode }) {

@@ -177,6 +177,15 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/ask-heaven"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
+                >
+                  Ask Heaven
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contact"
                   className="text-sm transition-colors inline-block"
                   style={{ color: '#bdbdbd' }}

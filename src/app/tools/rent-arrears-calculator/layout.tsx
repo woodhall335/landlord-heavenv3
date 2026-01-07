@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Free Rent Arrears Calculator',
@@ -18,6 +19,10 @@ export const metadata: Metadata = {
     description:
       'Calculate rent arrears and statutory interest. Free PDF schedule for UK landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/rent-arrears-calculator'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/rent-arrears-calculator'),
   },
 };
 

@@ -16,6 +16,7 @@ import {
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears",
@@ -24,6 +25,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Money Claim Pack - Recover Rent Arrears Through Courts",
     description: "Recover unpaid rent arrears through UK courts. AI-drafted documents save £300-600. £179.99 one-time.",
+    url: getCanonicalUrl('/products/money-claim'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/money-claim'),
   },
 };
 

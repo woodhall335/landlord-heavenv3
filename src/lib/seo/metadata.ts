@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_ORIGIN, getCanonicalUrl } from "./urls";
 
 /**
  * SEO Metadata Helper
@@ -23,8 +24,7 @@ export interface SEOMetadataConfig {
 }
 
 const SITE_NAME = "Landlord Heaven";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 /**
  * Generate comprehensive SEO metadata for a page
@@ -43,7 +43,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
   // Don't add site name suffix to title - layout template already adds "| Landlord Heaven"
   // But still use full title for OG/Twitter which don't inherit template
   const fullTitleForSocial = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-  const url = `${SITE_URL}${path}`;
+  const url = getCanonicalUrl(path);
 
   return {
     title: title, // Layout template will add "| Landlord Heaven"
@@ -88,7 +88,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     },
 
     // Additional metadata
-    metadataBase: new URL(SITE_URL),
+    metadataBase: new URL(SITE_ORIGIN),
   };
 }
 
@@ -120,7 +120,7 @@ export const defaultMetadata: Metadata = {
   authors: [{ name: "Landlord Heaven" }],
   creator: "Landlord Heaven",
   publisher: "Landlord Heaven",
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(SITE_ORIGIN),
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
@@ -129,7 +129,7 @@ export const defaultMetadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: SITE_URL,
+    url: SITE_ORIGIN,
     siteName: SITE_NAME,
     title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
     description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",

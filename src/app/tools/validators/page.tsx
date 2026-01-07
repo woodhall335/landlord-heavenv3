@@ -5,8 +5,24 @@
  */
 
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { Container } from '@/components/ui/Container';
 import { RiFileCheckLine, RiAlertLine } from 'react-icons/ri';
+import { getCanonicalUrl } from '@/lib/seo';
+
+export const metadata: Metadata = {
+  title: 'Document Validators for Landlords',
+  description: 'Free AI-powered validators for landlord notices, tenancy agreements, and rent arrears documents.',
+  openGraph: {
+    title: 'Document Validators for Landlords | Landlord Heaven',
+    description: 'Free AI-powered validators for landlord notices, tenancy agreements, and rent arrears documents.',
+    type: 'website',
+    url: getCanonicalUrl('/tools/validators'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/validators'),
+  },
+};
 
 const validators = [
   {

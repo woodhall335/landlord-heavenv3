@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Free Rent Demand Letter Generator',
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
     description:
       'Generate professional rent demand letters for unpaid rent. Free template for UK landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/free-rent-demand-letter'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-rent-demand-letter'),
   },
 };
 

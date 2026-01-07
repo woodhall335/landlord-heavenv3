@@ -6,12 +6,11 @@
  */
 
 import { MetadataRoute } from 'next';
+import { SITE_ORIGIN } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
   const isProduction = process.env.VERCEL_ENV === 'production' ||
     (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV);
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk';
 
   if (!isProduction) {
     // Staging/Preview/Development: Block all crawlers
@@ -28,17 +27,16 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: ['/', '/blog/', '/_next/'],
         disallow: [
           '/api/',
           '/dashboard/',
           '/auth/',
           '/wizard/',
-          '/_next/',
           '/admin/',
         ],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${SITE_ORIGIN}/sitemap.xml`,
   };
 }

@@ -21,6 +21,8 @@
     "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
 
     "audit:official-forms-clean": "npx tsx scripts/audit-official-forms-clean.ts",
+    "audit:seo": "npx tsx scripts/seo-audit.ts",
+    "audit:sitemap": "npx tsx scripts/sitemap-audit.ts",
 
     "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
     "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts",

@@ -6,6 +6,7 @@ import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { FileText, Scale, Clock, Zap, ShieldCheck, Globe } from 'lucide-react';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Landlord Guides & Legal Resources',
@@ -24,7 +25,10 @@ export const metadata: Metadata = {
     title: 'Landlord Guides & Legal Resources | Landlord Heaven',
     description: 'Expert guides for UK landlords on evictions, tenancy law, and property management.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/blog',
+    url: getCanonicalUrl('/blog'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/blog'),
   },
 };
 

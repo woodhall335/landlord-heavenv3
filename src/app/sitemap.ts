@@ -7,9 +7,9 @@
 
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
+import { SITE_ORIGIN } from '@/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk';
   const now = new Date();
 
   // Core marketing pages
@@ -74,7 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Blog pages with explicit lastModified dates
   const blogPostPages = blogPosts.map((post) => ({
-    url: `${siteUrl}/blog/${post.slug}`,
+    url: `${SITE_ORIGIN}/blog/${post.slug}`,
     lastModified: new Date(post.updatedDate || post.date),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
@@ -92,7 +92,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...allPages.map((page) => ({
-      url: `${siteUrl}${page.path}`,
+      url: `${SITE_ORIGIN}${page.path}`,
       lastModified: now,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
