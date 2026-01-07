@@ -2,10 +2,6 @@ import type { EvidenceAnalysisResult } from '@/lib/evidence/analyze-evidence';
 import {
   validateSection21Notice,
   validateSection8Notice,
-  validateWalesNotice,
-  validateScotlandNoticeToLeave,
-  validateTenancyAgreement,
-  validateMoneyClaim,
   type ValidatorKey,
   type ValidatorResult,
 } from '@/lib/validators/legal-validators';
@@ -347,58 +343,6 @@ function buildSection8Answers(facts: Record<string, any>, extracted?: Record<str
   };
 }
 
-function buildWalesAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
-  const ext = extracted || {};
-  return {
-    written_statement_provided: toYesNo(ext.written_statement_referenced ?? getFactValue(facts, ['written_statement_provided'])),
-    fitness_for_habitation: toYesNo(ext.fitness_for_habitation_confirmed ?? getFactValue(facts, ['fitness_for_habitation'])),
-    deposit_protected: toYesNo(ext.deposit_protection_confirmed ?? getFactValue(facts, ['deposit_protected'])),
-    occupation_type_confirmed: toYesNo(ext.occupation_type ? true : getFactValue(facts, ['occupation_type_confirmed'])),
-    retaliatory_eviction: toYesNo(getFactValue(facts, ['retaliatory_eviction'])),
-    council_involvement: toYesNo(getFactValue(facts, ['council_involvement'])),
-  };
-}
-
-function buildScotlandAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
-  const ext = extracted || {};
-  return {
-    ground_evidence: toYesNo(ext.ground_evidence_mentioned ?? getFactValue(facts, ['ground_evidence'])),
-    tenancy_length_confirmed: toYesNo(ext.tenancy_start_date ? true : getFactValue(facts, ['tenancy_length_confirmed'])),
-    tribunal_served: toYesNo(ext.tribunal_reference ? true : getFactValue(facts, ['tribunal_served'])),
-    covid_protections: toYesNo(getFactValue(facts, ['covid_protections'])),
-    rent_pressure_zone: toYesNo(getFactValue(facts, ['rent_pressure_zone'])),
-    disrepair: toYesNo(getFactValue(facts, ['disrepair'])),
-    ground_mandatory: toYesNo(ext.ground_mandatory ?? getFactValue(facts, ['ground_mandatory'])),
-  };
-}
-
-function buildTenancyAgreementAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
-  // Merge facts with AI-extracted fields - extracted takes precedence for compliance checks
-  const ext = extracted || {};
-  return {
-    jurisdiction: resolveJurisdiction(facts, null) || ext.jurisdiction,
-    intended_use: getFactValue(facts, ['intended_use', 'tenancy_type']) || ext.tenancy_type,
-    // Compliance flags - check extracted fields first (from AI analysis), then facts
-    prohibited_fees_present: toYesNo(
-      ext.prohibited_fees_present ?? getFactValue(facts, ['prohibited_fees_present'])
-    ),
-    missing_clauses: toYesNo(
-      ext.missing_clauses ?? getFactValue(facts, ['missing_clauses'])
-    ),
-    unfair_terms_present: toYesNo(
-      ext.unfair_terms_present ?? getFactValue(facts, ['unfair_terms_present'])
-    ),
-  };
-}
-
-function buildMoneyClaimAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
-  const ext = extracted || {};
-  return {
-    pre_action_steps: toYesNo(ext.lba_sent ?? getFactValue(facts, ['pre_action_steps'])),
-    joint_liability_confirmed: toYesNo(getFactValue(facts, ['joint_liability_confirmed'])),
-    payments_since: toYesNo(ext.payment_plan_offered ?? getFactValue(facts, ['payments_since'])),
-  };
-}
 
 export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValidatorResult {
   const product = resolveProduct(input.facts, input.product);
@@ -431,91 +375,9 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     return { validator_key: null, result: null };
   }
 
-  if (product === 'tenancy_agreement') {
-    const answers = buildTenancyAgreementAnswers(input.facts, extracted);
-    const result = validateTenancyAgreement({
-      jurisdiction: jurisdiction ?? undefined,
-      extracted,
-      answers,
-      extractionQuality,
-    });
-    const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
-    if (result && !result.upsell) {
-      result.upsell = buildUpsell(product, input.facts);
-    }
-    return {
-      validator_key: 'tenancy_agreement',
-      result,
-      missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-      recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-      required_evidence_missing: missingEvidence,
-    };
-  }
-
-  if (product === 'money_claim') {
-    const answers = buildMoneyClaimAnswers(input.facts, extracted);
-    const result = validateMoneyClaim({
-      jurisdiction: jurisdiction ?? undefined,
-      extracted,
-      answers,
-      extractionQuality,
-    });
-    const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
-    if (result && !result.upsell) {
-      result.upsell = buildUpsell(product, input.facts);
-    }
-    return {
-      validator_key: 'money_claim',
-      result,
-      missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-      recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-      required_evidence_missing: missingEvidence,
-    };
-  }
-
+  // Only support Section 21 and Section 8 validators for England
   if (product === 'notice_only' || product === 'complete_pack') {
     const route = resolveNoticeRoute(input.facts).toLowerCase();
-    if ((jurisdiction || '').toLowerCase() === 'wales') {
-      const answers = buildWalesAnswers(input.facts, extracted);
-      const result = validateWalesNotice({
-        jurisdiction: 'wales',
-        extracted,
-        answers,
-        extractionQuality,
-      });
-      const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
-      if (result && !result.upsell) {
-        result.upsell = buildUpsell(product, input.facts);
-      }
-      return {
-        validator_key: 'wales_notice',
-        result,
-        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-        required_evidence_missing: missingEvidence,
-      };
-    }
-
-    if ((jurisdiction || '').toLowerCase() === 'scotland') {
-      const answers = buildScotlandAnswers(input.facts, extracted);
-      const result = validateScotlandNoticeToLeave({
-        jurisdiction: 'scotland',
-        extracted,
-        answers,
-        extractionQuality,
-      });
-      const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
-      if (result && !result.upsell) {
-        result.upsell = buildUpsell(product, input.facts);
-      }
-      return {
-        validator_key: 'scotland_notice_to_leave',
-        result,
-        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-        required_evidence_missing: missingEvidence,
-      };
-    }
 
     if (route.includes('section_21') || route.includes('section 21')) {
       const answers = buildSection21Answers(input.facts, extracted);

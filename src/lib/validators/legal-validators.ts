@@ -1,15 +1,21 @@
-export type ValidatorKey =
-  | 'section_21'
-  | 'section_8'
-  | 'wales_notice'
-  | 'scotland_notice_to_leave'
-  | 'tenancy_agreement'
-  | 'money_claim';
+import {
+  runRules,
+  SECTION21_RULES,
+  SECTION8_RULES,
+  type RuleContext,
+  type RulesEngineResult,
+  type ValidatorStatus as RulesValidatorStatus,
+} from './rules';
+import { resolveFacts, type FactResolutionInput } from './facts';
+import { VALIDATOR_RULESET_VERSION } from './rules/version';
+
+export type ValidatorKey = 'section_21' | 'section_8';
 
 export type ValidatorStatus =
   | 'pass'
   | 'warning'
   | 'invalid'
+  | 'needs_info'
   | 'unsupported'
   | 'ground_8_satisfied'
   | 'discretionary_only'
@@ -52,7 +58,19 @@ export interface ValidatorResult {
   status: ValidatorStatus;
   blockers: ValidationIssue[];
   warnings: ValidationIssue[];
+  info?: ValidationIssue[];
   upsell?: UpsellRecommendation;
+  /** Ruleset version used for this validation */
+  rulesetVersion?: string;
+  /** Missing fact keys that need user confirmation */
+  missingFacts?: string[];
+  /** Provenance metadata for report display */
+  provenanceMetadata?: Array<{
+    factKey: string;
+    value: unknown;
+    provenance: string;
+    sourceLabel?: string;
+  }>;
 }
 
 export interface ValidatorDefinition {
@@ -211,6 +229,197 @@ export const sharedFactTypes = [
   'deposit_status',
   'certificate_delivery_timing',
 ];
+
+/**
+ * Convert extracted fields to fact format for the rules engine.
+ * Maps from legacy extracted field names to standardized fact keys.
+ */
+function mapExtractedToFacts(extracted: Record<string, any>, answers: Record<string, any>): Record<string, unknown> {
+  const facts: Record<string, unknown> = { ...answers };
+
+  // Map extracted fields to standardized fact keys
+  const fieldMappings: Record<string, string> = {
+    // Form detection
+    form_6a_used: 'form_6a_present',
+    form_6a_detected: 'form_6a_present',
+    section_21_detected: 'form_6a_present',
+    form_3_detected: 'form_3_present',
+    section_8_detected: 'form_3_present',
+
+    // Dates
+    date_served: 'service_date',
+
+    // Signature
+    signature_present: 'signature_present',
+
+    // Names/addresses
+    property_address: 'property_address_present',
+    property_address_line1: 'property_address_present',
+    address: 'property_address_present',
+    tenant_names: 'tenant_names_present',
+    tenant_name: 'tenant_names_present',
+    tenant_full_name: 'tenant_names_present',
+    landlord_name: 'landlord_name_present',
+    landlord_full_name: 'landlord_name_present',
+
+    // Grounds
+    grounds_cited: 'grounds_cited',
+
+    // Rent/Arrears
+    rent_amount: 'rent_amount',
+    rent_frequency: 'rent_frequency',
+    rent_arrears_stated: 'arrears_amount',
+    current_arrears: 'arrears_amount',
+  };
+
+  for (const [extractedKey, factKey] of Object.entries(fieldMappings)) {
+    if (extractedKey in extracted && extracted[extractedKey] !== undefined) {
+      // For presence fields, convert to boolean
+      if (factKey.endsWith('_present')) {
+        facts[factKey] = !isMissing(extracted[extractedKey]);
+      } else {
+        facts[factKey] = extracted[extractedKey];
+      }
+    }
+  }
+
+  // Also pass through expiry_date
+  if (extracted.expiry_date || extracted.notice_expiry_date) {
+    facts['expiry_date'] = extracted.expiry_date || extracted.notice_expiry_date;
+  }
+
+  return facts;
+}
+
+/**
+ * Convert rules engine result to legacy ValidatorResult format.
+ */
+function rulesResultToValidatorResult(rulesResult: RulesEngineResult): ValidatorResult {
+  const blockers: ValidationIssue[] = rulesResult.blockers
+    .filter((r) => r.outcome === 'fail')
+    .map((r) => ({
+      code: r.id,
+      message: r.message,
+      severity: 'blocking' as const,
+    }));
+
+  const warnings: ValidationIssue[] = rulesResult.warnings
+    .filter((r) => r.outcome === 'fail')
+    .map((r) => ({
+      code: r.id,
+      message: r.message,
+      severity: 'warning' as const,
+    }));
+
+  const info: ValidationIssue[] = rulesResult.info
+    .filter((r) => r.outcome !== 'pass')
+    .map((r) => ({
+      code: r.id,
+      message: r.message,
+      severity: 'warning' as const,
+    }));
+
+  // Collect all missing facts
+  const missingFacts = rulesResult.results
+    .filter((r) => r.outcome === 'needs_info' && r.missingFacts)
+    .flatMap((r) => r.missingFacts || []);
+
+  // Map rules engine status to legacy status
+  let status: ValidatorStatus = rulesResult.status as ValidatorStatus;
+
+  return {
+    status,
+    blockers,
+    warnings,
+    info,
+    rulesetVersion: rulesResult.rulesetVersion,
+    missingFacts: [...new Set(missingFacts)],
+    upsell: determineUpsell(status, rulesResult),
+  };
+}
+
+/**
+ * Determine upsell recommendation based on status.
+ */
+function determineUpsell(status: ValidatorStatus, rulesResult: RulesEngineResult): UpsellRecommendation | undefined {
+  if (status === 'invalid' || status === 'warning' || status === 'needs_info') {
+    return {
+      product: 'complete_eviction_pack',
+      reason: 'Complete Eviction Pack recommended to address validation issues.',
+    };
+  }
+  if (status === 'pass') {
+    return {
+      product: 'notice_only',
+      reason: 'Notice Only Pack suitable for a compliant notice.',
+    };
+  }
+  return undefined;
+}
+
+/**
+ * Validate Section 21 Notice using the deterministic rules engine.
+ * This is the new rules-based validation that should be used going forward.
+ */
+export function validateSection21WithRules(
+  input: ValidatorInput,
+  factInput?: FactResolutionInput
+): ValidatorResult {
+  // Build facts from input
+  const extractedFacts = mapExtractedToFacts(input.extracted, input.answers);
+
+  // Resolve facts with provenance
+  const resolvedFacts = resolveFacts({
+    extracted: extractedFacts,
+    userAnswers: input.answers,
+    ...factInput,
+  });
+
+  // Build rule context
+  const ctx: RuleContext = {
+    jurisdiction: input.jurisdiction || 'england',
+    validatorKey: 'section_21',
+    facts: resolvedFacts,
+  };
+
+  // Run rules
+  const rulesResult = runRules(SECTION21_RULES, ctx);
+
+  // Convert to legacy format
+  return rulesResultToValidatorResult(rulesResult);
+}
+
+/**
+ * Validate Section 8 Notice using the deterministic rules engine.
+ * This is the new rules-based validation that should be used going forward.
+ */
+export function validateSection8WithRules(
+  input: ValidatorInput,
+  factInput?: FactResolutionInput
+): ValidatorResult {
+  // Build facts from input
+  const extractedFacts = mapExtractedToFacts(input.extracted, input.answers);
+
+  // Resolve facts with provenance
+  const resolvedFacts = resolveFacts({
+    extracted: extractedFacts,
+    userAnswers: input.answers,
+    ...factInput,
+  });
+
+  // Build rule context
+  const ctx: RuleContext = {
+    jurisdiction: input.jurisdiction || 'england',
+    validatorKey: 'section_8',
+    facts: resolvedFacts,
+  };
+
+  // Run rules
+  const rulesResult = runRules(SECTION8_RULES, ctx);
+
+  // Convert to legacy format
+  return rulesResultToValidatorResult(rulesResult);
+}
 
 export function validateSection21Notice(input: ValidatorInput): ValidatorResult {
   if (hasUnsupportedJurisdiction(input, 'england')) {
@@ -473,309 +682,7 @@ export function validateSection8Notice(input: ValidatorInput): ValidatorResult {
   };
 }
 
-export function validateWalesNotice(input: ValidatorInput): ValidatorResult {
-  if (hasUnsupportedJurisdiction(input, 'wales')) {
-    return {
-      status: 'unsupported',
-      blockers: [
-        {
-          code: 'WLS-JURISDICTION-UNSUPPORTED',
-          message: 'Wales notice validation is only supported for Wales.',
-          severity: 'blocking',
-        },
-      ],
-      warnings: [],
-    };
-  }
 
-  const blockers: ValidationIssue[] = [];
-  const warnings: ValidationIssue[] = [];
-  const quality = input.extractionQuality;
-
-  const bilingual = normalizeBoolean(input.extracted.bilingual_text_present);
-  if (bilingual === 'no') {
-    addIssue(blockers, 'WLS-BILINGUAL', 'Bilingual notice text is required in Wales.', 'blocking');
-  } else if (bilingual === 'unknown') {
-    addTruthfulIssue(warnings, 'WLS-BILINGUAL-UNKNOWN', 'Bilingual text presence could not be confirmed', 'warning', quality);
-  }
-
-  const requiredChecks: Array<[string, string, string]> = [
-    ['written_statement_provided', 'WLS-WRITTEN-STATEMENT', 'Written occupation contract statement must be provided.'],
-    ['deposit_protected', 'WLS-DEPOSIT', 'Deposit must be protected and prescribed information served.'],
-    ['occupation_type_confirmed', 'WLS-OCCUPATION-TYPE', 'Occupation contract type must be confirmed.'],
-  ];
-
-  requiredChecks.forEach(([key, code, message]) => {
-    const status = normalizeBoolean(input.answers[key]);
-    if (status === 'no') {
-      addIssue(blockers, code, message, 'blocking');
-    } else if (status === 'unknown') {
-      addIssue(warnings, `${code}-UNKNOWN`, `${message} Confirm this before relying on the notice.`, 'warning');
-    }
-  });
-
-  const fitnessIssues = normalizeBoolean(input.answers.fitness_for_habitation);
-  if (fitnessIssues === 'yes') {
-    addIssue(blockers, 'WLS-FITNESS', 'Unresolved fitness issues can block notice validity.', 'blocking');
-  } else if (fitnessIssues === 'unknown') {
-    addIssue(warnings, 'WLS-FITNESS-UNKNOWN', 'Confirm whether any fitness issues remain unresolved.', 'warning');
-  }
-
-  const retaliatory = normalizeBoolean(input.answers.retaliatory_eviction);
-  if (retaliatory === 'yes') {
-    addIssue(warnings, 'WLS-RETALIATORY', 'Retaliatory eviction risks may apply.', 'warning');
-  }
-
-  const council = normalizeBoolean(input.answers.council_involvement);
-  if (council === 'yes') {
-    addIssue(warnings, 'WLS-COUNCIL', 'Council involvement may delay possession proceedings.', 'warning');
-  }
-
-  const status = blockers.length > 0
-    ? 'invalid'
-    : warnings.length > 0
-      ? 'procedural_risk'
-      : 'likely_valid';
-
-  return {
-    status,
-    blockers,
-    warnings,
-    upsell: buildUpsell(status, {
-      invalid: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Eviction Pack recommended when procedural issues exist.',
-      },
-      procedural_risk: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Eviction Pack recommended due to procedural risks.',
-      },
-      likely_valid: {
-        product: 'notice_only',
-        reason: 'Notice Only is suitable when the notice appears compliant.',
-      },
-    } as Record<ValidatorStatus, UpsellRecommendation>),
-  };
-}
-
-export function validateScotlandNoticeToLeave(input: ValidatorInput): ValidatorResult {
-  if (hasUnsupportedJurisdiction(input, 'scotland')) {
-    return {
-      status: 'unsupported',
-      blockers: [
-        {
-          code: 'NTL-JURISDICTION-UNSUPPORTED',
-          message: 'Notice to Leave validation is only supported for Scotland.',
-          severity: 'blocking',
-        },
-      ],
-      warnings: [],
-    };
-  }
-
-  const blockers: ValidationIssue[] = [];
-  const warnings: ValidationIssue[] = [];
-  const quality = input.extractionQuality;
-
-  if (isMissing(input.extracted.ground_cited)) {
-    addTruthfulIssue(blockers, 'NTL-GROUND-MISSING', 'Notice to Leave ground not found', 'blocking', quality);
-  }
-
-  if (isMissing(input.extracted.notice_period)) {
-    addTruthfulIssue(warnings, 'NTL-PERIOD-MISSING', 'Notice period not found in notice', 'warning', quality);
-  }
-
-  // Accept various address field names
-  const propertyAddress =
-    input.extracted.property_address ||
-    input.extracted.property_address_line1 ||
-    input.extracted.address;
-  if (isMissing(propertyAddress)) {
-    addTruthfulIssue(warnings, 'NTL-ADDRESS-MISSING', 'Property address not found in notice', 'warning', quality);
-  }
-
-  // Accept various tenant name field variants
-  const tenantName =
-    input.extracted.tenant_name ||
-    input.extracted.tenant_names ||
-    input.extracted.tenant_full_name;
-  if (isMissing(tenantName)) {
-    addTruthfulIssue(warnings, 'NTL-TENANT-MISSING', 'Tenant name not found in notice', 'warning', quality);
-  }
-
-  const evidence = normalizeBoolean(input.answers.ground_evidence);
-  if (evidence === 'no') {
-    addIssue(warnings, 'NTL-EVIDENCE-MISSING', 'Evidence supporting the ground is required.', 'warning');
-  } else if (evidence === 'unknown') {
-    addIssue(warnings, 'NTL-EVIDENCE-UNKNOWN', 'Confirm evidence supporting the ground.', 'warning');
-  }
-
-  const length = normalizeBoolean(input.answers.tenancy_length_confirmed);
-  if (length === 'unknown') {
-    addIssue(warnings, 'NTL-TENANCY-LENGTH', 'Tenancy length impacts notice period; confirm the start date.', 'warning');
-  }
-
-  const tribunal = normalizeBoolean(input.answers.tribunal_served);
-  if (tribunal === 'no') {
-    addIssue(blockers, 'NTL-TRIBUNAL-SERVICE', 'Notice must be served correctly to proceed.', 'blocking');
-  } else if (tribunal === 'unknown') {
-    addIssue(warnings, 'NTL-TRIBUNAL-UNKNOWN', 'Confirm proper service before proceeding.', 'warning');
-  }
-
-  const covid = normalizeBoolean(input.answers.covid_protections);
-  if (covid === 'yes') {
-    addIssue(warnings, 'NTL-COVID', 'Covid protections may affect notice periods.', 'warning');
-  }
-
-  const rentPressure = normalizeBoolean(input.answers.rent_pressure_zone);
-  if (rentPressure === 'yes') {
-    addIssue(warnings, 'NTL-RPZ', 'Rent pressure zone rules may affect notice periods.', 'warning');
-  }
-
-  const disrepair = normalizeBoolean(input.answers.disrepair);
-  if (disrepair === 'yes') {
-    addIssue(warnings, 'NTL-DISREPAIR', 'Disrepair issues can weaken eviction grounds.', 'warning');
-  }
-
-  const groundMandatory = normalizeBoolean(input.answers.ground_mandatory);
-
-  let status: ValidatorStatus = 'ground_discretionary';
-  if (blockers.length > 0) {
-    status = 'invalid';
-  } else if (evidence !== 'yes') {
-    status = 'insufficient_evidence';
-  } else if (groundMandatory === 'yes') {
-    status = 'ground_mandatory';
-  } else {
-    status = 'ground_discretionary';
-  }
-
-  return {
-    status,
-    blockers,
-    warnings,
-    upsell: buildUpsell(status, {
-      ground_mandatory: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Pack recommended for tribunal-ready evidence.',
-      },
-      ground_discretionary: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Pack recommended to strengthen discretionary grounds.',
-      },
-      insufficient_evidence: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Pack recommended to address evidence gaps.',
-      },
-      invalid: {
-        product: 'complete_eviction_pack',
-        reason: 'Complete Pack recommended to resolve procedural issues.',
-      },
-    } as Record<ValidatorStatus, UpsellRecommendation>),
-  };
-}
-
-export function validateTenancyAgreement(input: ValidatorInput): ValidatorResult {
-  const blockers: ValidationIssue[] = [];
-  const warnings: ValidationIssue[] = [];
-
-  const jurisdiction = input.answers.jurisdiction || input.extracted.jurisdiction;
-  if (isMissing(jurisdiction)) {
-    addIssue(warnings, 'TA-JURISDICTION-MISSING', 'Jurisdiction must be confirmed.', 'warning');
-  }
-
-  const intendedUse = input.answers.intended_use;
-  if (isMissing(intendedUse)) {
-    addIssue(warnings, 'TA-INTENDED-USE', 'Intended tenancy use (AST/PRT/occupation contract) must be confirmed.', 'warning');
-  }
-
-  const prohibitedFees = normalizeBoolean(input.answers.prohibited_fees_present);
-  if (prohibitedFees === 'yes') {
-    addIssue(blockers, 'TA-PROHIBITED-FEES', 'Prohibited fees make the agreement non-compliant.', 'blocking');
-  }
-
-  const unfairTerms = normalizeBoolean(input.answers.unfair_terms_present);
-  if (unfairTerms === 'yes') {
-    addIssue(blockers, 'TA-UNFAIR-TERMS', 'Unfair terms should be removed before relying on the agreement.', 'blocking');
-  }
-
-  const missingClauses = normalizeBoolean(input.answers.missing_clauses);
-  if (missingClauses === 'yes') {
-    addIssue(warnings, 'TA-MISSING-CLAUSES', 'Important clauses appear to be missing.', 'warning');
-  }
-
-  const status = blockers.length > 0
-    ? 'non_compliant'
-    : warnings.length > 0
-      ? 'needs_update'
-      : 'compliant';
-
-  return {
-    status,
-    blockers,
-    warnings,
-    upsell: buildUpsell(status, {
-      needs_update: {
-        product: 'premium_tenancy_agreement',
-        reason: 'Premium Tenancy Agreement recommended to update clauses.',
-      },
-      compliant: {
-        product: 'no_hard_sell',
-        reason: 'Agreement appears compliant; no hard sell required.',
-      },
-      non_compliant: {
-        product: 'premium_tenancy_agreement',
-        reason: 'Premium Tenancy Agreement recommended due to compliance risks.',
-      },
-    } as Record<ValidatorStatus, UpsellRecommendation>),
-  };
-}
-
-export function validateMoneyClaim(input: ValidatorInput): ValidatorResult {
-  const blockers: ValidationIssue[] = [];
-  const warnings: ValidationIssue[] = [];
-
-  const preAction = normalizeBoolean(input.answers.pre_action_steps);
-  if (preAction !== 'yes') {
-    addIssue(blockers, 'MC-PRE-ACTION', 'Pre-action steps (rent demand/LBA) must be completed.', 'blocking');
-  }
-
-  const jointLiability = normalizeBoolean(input.answers.joint_liability_confirmed);
-  if (jointLiability === 'unknown') {
-    addIssue(warnings, 'MC-JOINT-LIABILITY', 'Confirm joint tenant liability to avoid claim defects.', 'warning');
-  }
-
-  const paymentsSince = normalizeBoolean(input.answers.payments_since);
-  if (paymentsSince === 'yes') {
-    addIssue(warnings, 'MC-PAYMENTS-SINCE', 'Payments since notice may affect the claim value.', 'warning');
-  }
-
-  const status = blockers.length > 0
-    ? 'missing_steps'
-    : warnings.length > 0
-      ? 'high_risk'
-      : 'claim_ready';
-
-  return {
-    status,
-    blockers,
-    warnings,
-    upsell: buildUpsell(status, {
-      claim_ready: {
-        product: 'money_claim_pack',
-        reason: 'Money Claim Pack recommended for court-ready filing.',
-      },
-      missing_steps: {
-        product: 'guidance_checklist',
-        reason: 'Guidance and checklist recommended before filing.',
-      },
-      high_risk: {
-        product: 'guidance_checklist',
-        reason: 'Guidance recommended to reduce claim risks.',
-      },
-    } as Record<ValidatorStatus, UpsellRecommendation>),
-  };
-}
 
 export const validatorDefinitions: ValidatorDefinition[] = [
   {
@@ -792,7 +699,7 @@ export const validatorDefinitions: ValidatorDefinition[] = [
       { id: 'signature_present', label: 'Signature present', reason: 'Formal validity' },
     ],
     requiredQuestions: [
-      { id: 'deposit_protected', question: 'Was the tenant’s deposit protected in a government-approved scheme?' },
+      { id: 'deposit_protected', question: 'Was the tenant\'s deposit protected in a government-approved scheme?' },
       { id: 'prescribed_info_served', question: 'Was the deposit prescribed information given within 30 days?' },
       { id: 'gas_safety_pre_move_in', question: 'Was the gas safety certificate given before the tenant moved in?' },
       { id: 'epc_provided', question: 'Was a valid EPC given to the tenant?' },
@@ -841,95 +748,6 @@ export const validatorDefinitions: ValidatorDefinition[] = [
     ],
     requiredEvidence: ['bank_statements', 'correspondence'],
     evaluate: validateSection8Notice,
-  },
-  {
-    key: 'wales_notice',
-    title: 'Wales Notice Validator (RHW16 / RHW17 / RHW23)',
-    jurisdiction: 'wales',
-    extractableFacts: [
-      { id: 'rhw_form_number', label: 'RHW form number' },
-      { id: 'bilingual_text_present', label: 'Bilingual text present' },
-      { id: 'service_date', label: 'Service date' },
-      { id: 'expiry_date', label: 'Expiry date' },
-      { id: 'contract_holder_details', label: 'Contract holder details' },
-    ],
-    requiredQuestions: [
-      { id: 'written_statement_provided', question: 'Was a written statement of occupation contract provided?' },
-      { id: 'fitness_for_habitation', question: 'Are there unresolved fitness issues?' },
-      { id: 'deposit_protected', question: 'Was the deposit protected and prescribed info served?' },
-      { id: 'occupation_type_confirmed', question: 'Is the occupation contract standard or secure?' },
-    ],
-    riskQuestions: [
-      { id: 'retaliatory_eviction', question: 'Is there a retaliatory eviction concern?' },
-      { id: 'council_involvement', question: 'Is there council involvement or enforcement action?' },
-    ],
-    requiredEvidence: ['tenancy_agreement'],
-    evaluate: validateWalesNotice,
-  },
-  {
-    key: 'scotland_notice_to_leave',
-    title: 'Scotland Notice to Leave Validator',
-    jurisdiction: 'scotland',
-    extractableFacts: [
-      { id: 'ground_cited', label: 'Ground cited' },
-      { id: 'notice_period', label: 'Notice period' },
-      { id: 'property_address', label: 'Property address' },
-      { id: 'tenant_name', label: 'Tenant name' },
-    ],
-    requiredQuestions: [
-      { id: 'ground_evidence', question: 'Do you have evidence supporting this ground?' },
-      { id: 'tenancy_length_confirmed', question: 'What is the length of tenancy (for notice period)?' },
-      { id: 'tribunal_served', question: 'Has this been served correctly?' },
-    ],
-    riskQuestions: [
-      { id: 'covid_protections', question: 'Do Covid protections apply?' },
-      { id: 'rent_pressure_zone', question: 'Is the property in a rent pressure zone?' },
-      { id: 'disrepair', question: 'Are there disrepair issues?' },
-    ],
-    requiredEvidence: ['correspondence'],
-    evaluate: validateScotlandNoticeToLeave,
-  },
-  {
-    key: 'tenancy_agreement',
-    title: 'Tenancy Agreement Validator (All Jurisdictions)',
-    jurisdiction: 'all',
-    extractableFacts: [
-      { id: 'tenancy_type', label: 'Tenancy type' },
-      { id: 'start_date', label: 'Start date' },
-      { id: 'rent', label: 'Rent' },
-      { id: 'deposit', label: 'Deposit' },
-      { id: 'parties', label: 'Parties' },
-      { id: 'address', label: 'Address' },
-    ],
-    requiredQuestions: [
-      { id: 'jurisdiction', question: 'Is this for England, Wales, Scotland, or NI?' },
-      { id: 'intended_use', question: 'Is the tenancy AST, PRT, or occupation contract?' },
-    ],
-    riskQuestions: [
-      { id: 'prohibited_fees_present', question: 'Are prohibited fees present?' },
-      { id: 'missing_clauses', question: 'Are any required clauses missing?' },
-      { id: 'unfair_terms_present', question: 'Are there unfair terms?' },
-    ],
-    requiredEvidence: ['tenancy_agreement'],
-    evaluate: validateTenancyAgreement,
-  },
-  {
-    key: 'money_claim',
-    title: 'Money Claim Validator (Arrears)',
-    jurisdiction: 'all',
-    extractableFacts: [
-      { id: 'claim_amount', label: 'Claim amount' },
-      { id: 'rent_schedule', label: 'Rent schedule' },
-      { id: 'parties', label: 'Parties' },
-    ],
-    requiredQuestions: [
-      { id: 'pre_action_steps', question: 'Have you sent a rent demand / LBA?' },
-      { id: 'joint_liability_confirmed', question: 'Are tenants jointly liable?' },
-      { id: 'payments_since', question: 'Any payments made since the notice?' },
-    ],
-    riskQuestions: [],
-    requiredEvidence: ['bank_statements', 'rent_schedule'],
-    evaluate: validateMoneyClaim,
   },
 ];
 

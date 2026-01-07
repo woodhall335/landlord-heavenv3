@@ -40,34 +40,6 @@ const validators = [
     jurisdiction: 'England',
     features: ['Ground validity checks', 'Notice period verification', 'Evidence requirements', 'Form 3 compliance'],
   },
-  {
-    slug: 'wales-notice',
-    title: 'Wales Notice Validator',
-    description: 'Validate Renting Homes (Wales) Act notices (RHW16/RHW17/RHW23).',
-    jurisdiction: 'Wales',
-    features: ['Contract compliance', 'Notice period checks', 'Form compliance', 'Written statement verification'],
-  },
-  {
-    slug: 'scotland-notice-to-leave',
-    title: 'Scotland Notice to Leave Validator',
-    description: 'Check your Notice to Leave under Private Residential Tenancy rules.',
-    jurisdiction: 'Scotland',
-    features: ['PRT compliance', 'Ground verification', 'Notice period checks', 'Tribunal readiness'],
-  },
-  {
-    slug: 'tenancy-agreement',
-    title: 'Tenancy Agreement Validator',
-    description: 'Validate your AST, PRT, or Occupation Contract clauses.',
-    jurisdiction: 'All UK',
-    features: ['Required clauses', 'Unfair terms check', 'Deposit terms', 'Break clause validation'],
-  },
-  {
-    slug: 'money-claim',
-    title: 'Money Claim Validator',
-    description: 'Check your rent arrears evidence and claim documents.',
-    jurisdiction: 'England, Wales, Scotland',
-    features: ['Arrears schedule', 'Pre-action protocol', 'Evidence completeness', 'Interest calculation'],
-  },
 ];
 
 export default function ValidatorsHubPage() {
@@ -114,7 +86,7 @@ export default function ValidatorsHubPage() {
       {/* Validators Grid */}
       <div className="py-16 md:py-20">
         <Container>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {validators.map((validator) => (
               <Link
                 key={validator.slug}

@@ -8,6 +8,8 @@ import { RiFileTextLine, RiCloseCircleLine } from 'react-icons/ri';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
+import { ValidationProgress } from '@/components/validators/ValidationProgress';
+import { trackValidatorUpload, trackValidatorResult } from '@/lib/analytics';
 
 export interface EvidenceFileSummary {
   id: string;
@@ -288,6 +290,20 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         if (data?.validation_summary || data?.validation) {
           const summary = (data.validation_summary ?? data.validation) as UploadValidationSummary;
           setValidationSummary(summary);
+
+          // Track upload and validation result
+          if (summary.validator_key) {
+            const documentType = data?.evidence?.analysis?.detected_type ||
+              data?.evidence?.classification?.docType || 'unknown';
+            trackValidatorUpload(summary.validator_key, documentType, jurisdiction);
+            trackValidatorResult(
+              summary.validator_key,
+              summary.status,
+              summary.blockers?.length || 0,
+              summary.warnings?.length || 0,
+              data?.rulesetVersion
+            );
+          }
         }
         if (Array.isArray(data?.recommendations)) {
           setValidationRecommendations(data.recommendations);
@@ -441,9 +457,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         </div>
       )}
 
-      {uploading && (
-        <p className="text-sm text-gray-600">Uploading files, please wait…</p>
-      )}
+      {/* Animated progress indicator during upload/analysis */}
+      <ValidationProgress isActive={uploading} />
 
       {analysisSummary && (
         <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">

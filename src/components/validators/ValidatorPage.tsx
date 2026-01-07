@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { UploadField } from '@/components/wizard/fields/UploadField';
@@ -16,6 +16,10 @@ import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { RiAlertLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
+import {
+  trackValidatorView,
+  trackValidatorReportRequested,
+} from '@/lib/analytics';
 
 export interface ValidatorCTA {
   label: string;
@@ -62,10 +66,6 @@ const JURISDICTION_OPTIONS: { value: Jurisdiction; label: string }[] = [
 const VALIDATOR_TO_EVIDENCE_CATEGORY: Record<string, string> = {
   section_21: 'notice_s21',
   section_8: 'notice_s8',
-  wales_notice: 'correspondence',
-  scotland_notice_to_leave: 'correspondence',
-  tenancy_agreement: 'tenancy_agreement',
-  money_claim: 'rent_schedule',
 };
 
 /**
@@ -74,10 +74,6 @@ const VALIDATOR_TO_EVIDENCE_CATEGORY: Record<string, string> = {
 const VALIDATOR_TO_ASK_HEAVEN_TOPIC: Record<string, AskHeavenTopic> = {
   section_21: 'section_21',
   section_8: 'section_8',
-  wales_notice: 'eviction',
-  scotland_notice_to_leave: 'notice_to_leave',
-  tenancy_agreement: 'tenancy_agreement',
-  money_claim: 'money_claim',
 };
 
 export function ValidatorPage({
@@ -100,9 +96,18 @@ export function ValidatorPage({
   const [error, setError] = useState<string | null>(null);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
+  const hasTrackedView = useRef(false);
 
   // Effective jurisdiction (either fixed or user-selected)
   const effectiveJurisdiction = selectedJurisdiction;
+
+  // Track page view on mount (once)
+  useEffect(() => {
+    if (!hasTrackedView.current) {
+      trackValidatorView(validatorKey, effectiveJurisdiction ?? undefined);
+      hasTrackedView.current = true;
+    }
+  }, [validatorKey, effectiveJurisdiction]);
 
   // Create anonymous case when jurisdiction is known
   useEffect(() => {
@@ -368,6 +373,7 @@ export function ValidatorPage({
         reportCaseId={caseId ?? undefined}
         onSuccess={() => {
           setEmailStatus('Report queued — check your inbox soon.');
+          trackValidatorReportRequested(validatorKey);
         }}
       />
     </div>
