@@ -5,7 +5,8 @@
 
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
-import { createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { isEvidenceCategory, EvidenceCategory } from '@/lib/evidence/schema';
 import { analyzeEvidence } from '@/lib/evidence/analyze-evidence';
@@ -120,7 +121,8 @@ function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: strin
 export async function POST(request: Request) {
   try {
     // Admin client bypasses Supabase RLS for this route
-    const supabase = createAdminClient();
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/upload-evidence', writesUsingAdmin: true });
+    const supabase = createSupabaseAdminClient();
 
     // Cookie-based server user (may be null if anonymous)
     const user = await getServerUser();

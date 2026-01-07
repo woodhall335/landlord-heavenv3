@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { runLegalValidator } from '@/lib/validators/run-legal-validator';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
@@ -74,7 +75,8 @@ function normalizeAnswer(question: QuestionDefinition, value: any): { value?: an
 
 export async function POST(request: Request) {
   try {
-    const supabase = createAdminClient();
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/answer-questions', writesUsingAdmin: true });
+    const supabase = createSupabaseAdminClient();
     const user = await getServerUser();
 
     const body = await request.json();

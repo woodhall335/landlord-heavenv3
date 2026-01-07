@@ -7,11 +7,15 @@
  * - cases.collected_facts (mirrored copy)
  */
 
-import { createServerSupabaseClient, createAdminClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
+
+export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/save-facts', writesUsingAdmin: true });
     const body = await request.json();
     const { case_id, facts } = body;
 
@@ -32,7 +36,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createServerSupabaseClient();
 
     // Admin client bypasses RLS - used for creating cases/case_facts for anonymous users
-    const adminSupabase = createAdminClient();
+    const adminSupabase = createSupabaseAdminClient();
 
     // Try to get the user (but don't require auth for wizard saves)
     const { data: { user } } = await supabase.auth.getUser();

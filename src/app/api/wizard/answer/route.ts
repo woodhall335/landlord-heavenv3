@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import {
   loadMQS,
   getNextMQSQuestion,
@@ -39,6 +39,7 @@ import {
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 // ==============================================================================
 // PHASE 1: DEBUG INSTRUMENTATION (behind NOTICE_ONLY_DEBUG=1 env flag)
@@ -558,7 +559,7 @@ function updateDerivedFacts(
 
 export async function POST(request: Request) {
   try {
-    await getServerUser().catch(() => null);
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/answer', writesUsingAdmin: true });
     const body = await request.json();
     const parsedBody = answerSchema.safeParse(body);
 
@@ -575,11 +576,8 @@ export async function POST(request: Request) {
     const isReviewMode =
       !isEnhanceOnly && (mode === 'edit' || include_answered === true || review_mode === true);
 
-    // Create properly typed Supabase client for user-scoped operations
-    const supabase = await createServerSupabaseClient();
-
     // Admin client bypasses RLS - used for case operations for anonymous users
-    const adminSupabase = createAdminClient();
+    const adminSupabase = createSupabaseAdminClient();
 
     // ---------------------------------------
     // 1. Load case - use admin client to support anonymous users
@@ -1348,7 +1346,7 @@ export async function POST(request: Request) {
     // ---------------------------------------
 
     try {
-      await supabase.from('conversations').insert({
+      await adminSupabase.from('conversations').insert({
         case_id,
         role: 'user',
         content: rawAnswerText,
@@ -1407,7 +1405,7 @@ export async function POST(request: Request) {
 
     if (enhanced) {
       try {
-        await supabase.from('conversations').insert({
+        await adminSupabase.from('conversations').insert({
           case_id,
           role: 'assistant',
           content: enhanced.suggested_wording,

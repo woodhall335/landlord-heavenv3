@@ -9,6 +9,7 @@ import {
   resetSupabaseWarningState,
   warnSupabaseNotConfiguredOnce,
 } from '@/lib/supabase/config';
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 
 const originalEnv = { ...process.env };
 
@@ -22,12 +23,13 @@ describe('supabase config', () => {
   it('detects server configuration when env vars are present', () => {
     process.env.SUPABASE_URL = 'https://example.supabase.co';
     process.env.SUPABASE_ANON_KEY = 'anon-key';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
 
     expect(isSupabaseConfiguredServer()).toBe(true);
     expect(getSupabaseConfigServer()).toEqual({
       url: 'https://example.supabase.co',
       anonKey: 'anon-key',
-      serviceRoleKey: originalEnv.SUPABASE_SERVICE_ROLE_KEY,
+      serviceRoleKey: 'service-role-key',
     });
   });
 
@@ -61,5 +63,29 @@ describe('supabase config', () => {
     );
 
     expect(typesFile).toContain('supabase_schema.MD');
+  });
+
+  it('throws when admin client env vars are missing', () => {
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    expect(() => createSupabaseAdminClient()).toThrow(
+      /SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY|Edge runtime/i,
+    );
+  });
+
+  it('creates admin client when env vars are present', () => {
+    process.env.SUPABASE_URL = 'https://example.supabase.co';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
+
+    expect(() => createSupabaseAdminClient()).not.toThrow();
+  });
+
+  it('throws when admin client is used in Edge runtime', () => {
+    process.env.SUPABASE_URL = 'https://example.supabase.co';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
+    process.env.NEXT_RUNTIME = 'edge';
+
+    expect(() => createSupabaseAdminClient()).toThrow(/Edge runtime/i);
   });
 });
