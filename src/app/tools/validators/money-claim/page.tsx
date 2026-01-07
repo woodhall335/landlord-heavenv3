@@ -23,9 +23,6 @@ export default function MoneyClaimValidatorPage() {
         'N1/Form 3A compliance',
         'Witness statement requirements',
       ]}
-      ctas={[
-        { label: 'Money Claim Pack', href: '/products/money-claim', price: 179.99, primary: true },
-      ]}
       additionalInfo="Before starting a money claim for rent arrears, you must follow the Pre-Action Protocol for Debt Claims. This includes sending a Letter Before Action and giving the debtor at least 30 days to respond. In England & Wales, claims are made using Form N1; in Scotland, Form 3A for the Simple Procedure."
     />
   );

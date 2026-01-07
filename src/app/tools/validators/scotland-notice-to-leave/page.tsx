@@ -23,10 +23,6 @@ export default function ScotlandNoticeValidatorPage() {
         'First-tier Tribunal readiness',
         'Evidence requirements',
       ]}
-      ctas={[
-        { label: 'Notice Only Pack', href: '/products/notice-only?jurisdiction=scotland', price: 29.99, primary: true },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack?jurisdiction=scotland', price: 149.99 },
-      ]}
       additionalInfo="Scotland uses the Private Housing (Tenancies) (Scotland) Act 2016 for most residential tenancies. There are 18 grounds for eviction, and cases are heard by the First-tier Tribunal for Scotland rather than the courts. Notice periods range from 28 days to 84 days depending on the ground and tenancy length."
     />
   );
