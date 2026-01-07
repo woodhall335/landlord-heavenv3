@@ -5,15 +5,81 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { TableOfContents } from '@/components/blog/TableOfContents';
 import { AuthorBox } from '@/components/blog/AuthorBox';
 import { BlogCTA } from '@/components/blog/BlogCTA';
-import { BlogCard } from '@/components/blog/BlogCard';
+import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
+import { BlogPost } from '@/lib/blog/types';
 import { Calendar, Clock, Tag, ChevronLeft, Share2 } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
+
+const MAX_RELATED_GUIDES = 12;
+
+const getRelatedGuides = (post: BlogPost) => {
+  const normalizedTags = new Set(post.tags.map((tag) => tag.toLowerCase()));
+  const candidates = blogPosts.filter((candidate) => candidate.slug !== post.slug);
+
+  const matchesTopic = (candidate: BlogPost) => {
+    const categoryMatch = candidate.category === post.category;
+    const tagMatch = candidate.tags.some((tag) => normalizedTags.has(tag.toLowerCase()));
+    return categoryMatch || tagMatch;
+  };
+
+  const getDateValue = (candidate: BlogPost) => {
+    const dateValue = candidate.updatedDate ?? candidate.date;
+    return new Date(dateValue).getTime();
+  };
+
+  const relatedByTopic = candidates
+    .filter(matchesTopic)
+    .map((candidate) => {
+      const tagMatchCount = candidate.tags.filter((tag) => normalizedTags.has(tag.toLowerCase())).length;
+      return {
+        candidate,
+        categoryMatch: candidate.category === post.category,
+        tagMatchCount,
+        dateValue: getDateValue(candidate),
+      };
+    })
+    .sort((a, b) => {
+      if (a.categoryMatch !== b.categoryMatch) {
+        return a.categoryMatch ? -1 : 1;
+      }
+      if (a.tagMatchCount !== b.tagMatchCount) {
+        return b.tagMatchCount - a.tagMatchCount;
+      }
+      if (a.dateValue !== b.dateValue) {
+        return b.dateValue - a.dateValue;
+      }
+      return a.candidate.slug.localeCompare(b.candidate.slug);
+    })
+    .map(({ candidate }) => candidate);
+
+  const relatedSlugs = new Set(relatedByTopic.map((candidate) => candidate.slug));
+  const remaining = candidates
+    .filter((candidate) => !relatedSlugs.has(candidate.slug))
+    .sort((a, b) => {
+      const dateDiff = getDateValue(b) - getDateValue(a);
+      if (dateDiff !== 0) {
+        return dateDiff;
+      }
+      return a.slug.localeCompare(b.slug);
+    });
+
+  return [...relatedByTopic, ...remaining].slice(0, MAX_RELATED_GUIDES).map((candidate) => ({
+    slug: candidate.slug,
+    title: candidate.title,
+    description: candidate.description,
+    date: candidate.date,
+    readTime: candidate.readTime,
+    category: candidate.category,
+    heroImage: candidate.heroImage,
+    heroImageAlt: candidate.heroImageAlt,
+  }));
+};
 
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
@@ -79,9 +145,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const relatedPosts = post.relatedPosts
-    .map((relatedSlug) => getBlogPost(relatedSlug))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const relatedGuides = getRelatedGuides(post);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -321,28 +385,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <section className="bg-gray-50 py-12 lg:py-16">
-            <div className="container mx-auto px-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Guides</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {relatedPosts.map((relatedPost) => (
-                  <BlogCard
-                    key={relatedPost.slug}
-                    slug={relatedPost.slug}
-                    title={relatedPost.title}
-                    description={relatedPost.description}
-                    date={relatedPost.date}
-                    readTime={relatedPost.readTime}
-                    category={relatedPost.category}
-                    heroImage={relatedPost.heroImage}
-                    heroImageAlt={relatedPost.heroImageAlt}
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} />}
       </article>
     </>
   );

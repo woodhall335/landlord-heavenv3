@@ -120,7 +120,7 @@ export default function HomeContent() {
             {/* Steps with connecting line */}
             <div className="relative">
               {/* Connecting line (desktop only) */}
-              <div className="hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-purple-200" />
+              <div className="hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-primary/20" />
 
               <div className="grid md:grid-cols-3 gap-8 md:gap-12">
                 <Step
