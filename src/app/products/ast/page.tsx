@@ -13,6 +13,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI",
@@ -552,6 +553,22 @@ export default function ASTPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="tenancy_agreement"
+              product="tenancy_agreement"
+              title="Have questions about tenancy agreements?"
+              description="Ask Heaven can help you understand AST, PRT, and occupation contract requirements."
+            />
           </div>
         </Container>
       </section>

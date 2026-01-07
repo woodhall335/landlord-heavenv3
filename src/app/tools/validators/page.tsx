@@ -9,6 +9,7 @@ import { Metadata } from 'next';
 import { Container } from '@/components/ui/Container';
 import { RiFileCheckLine, RiAlertLine } from 'react-icons/ri';
 import { getCanonicalUrl } from '@/lib/seo';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 
 export const metadata: Metadata = {
   title: 'Document Validators for Landlords',
@@ -183,6 +184,17 @@ export default function ValidatorsHubPage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Ask Heaven Widget */}
+          <div className="mt-12 max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="validator"
+              topic="general"
+              title="Have questions about your documents?"
+              description="Ask Heaven can help explain validation results and guide you on next steps."
+            />
           </div>
         </Container>
       </div>

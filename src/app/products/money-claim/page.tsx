@@ -17,6 +17,7 @@ import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears",
@@ -653,6 +654,22 @@ export default function MoneyClaimPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="money_claim"
+              product="money_claim"
+              title="Have questions about recovering rent arrears?"
+              description="Ask Heaven can help you understand PAP-DEBT requirements, court procedures, and enforcement options."
+            />
           </div>
         </Container>
       </section>

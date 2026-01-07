@@ -12,6 +12,11 @@ import { Container } from '@/components/ui';
 import { RiSendPlaneFill, RiCheckLine, RiQuestionLine, RiBookLine } from 'react-icons/ri';
 import ReactMarkdown from 'react-markdown';
 import { StructuredData, faqPageSchema } from '@/lib/seo/structured-data';
+import {
+  ASK_HEAVEN_RECOMMENDATION_MAP,
+  type AskHeavenRecommendation,
+  isValidAskHeavenRecommendation,
+} from '@/lib/pricing/products';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -25,28 +30,7 @@ interface ChatMessage {
   sources?: string[];
 }
 
-const PRODUCT_CTA_MAP: Record<string, { label: string; href: string; description: string }> = {
-  notice_only: {
-    label: 'Generate Eviction Notice',
-    href: '/wizard?product=notice_only',
-    description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
-  },
-  complete_pack: {
-    label: 'Get Complete Eviction Pack',
-    href: '/wizard?product=complete_pack',
-    description: 'Full bundle with notice, court forms, and guidance',
-  },
-  money_claim: {
-    label: 'Start Money Claim',
-    href: '/wizard?product=money_claim',
-    description: 'Recover rent arrears through the courts',
-  },
-  tenancy_agreement: {
-    label: 'Create Tenancy Agreement',
-    href: '/wizard?product=tenancy_agreement',
-    description: 'Generate a compliant AST or PRT',
-  },
-};
+// Product CTA config now imported from @/lib/pricing/products
 
 interface EvidenceSummary {
   id: string;
@@ -710,23 +694,34 @@ export default function AskHeavenPageClient(): React.ReactElement {
                       )}
 
                       {/* Product CTA */}
-                      {m.suggestedProduct && PRODUCT_CTA_MAP[m.suggestedProduct] && (
+                      {m.suggestedProduct && isValidAskHeavenRecommendation(m.suggestedProduct) && (
                         <div className="mt-4 pt-3 border-t border-gray-100">
-                          <Link
-                            href={PRODUCT_CTA_MAP[m.suggestedProduct].href}
-                            className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
-                                  {PRODUCT_CTA_MAP[m.suggestedProduct].label} →
-                                </p>
-                                <p className="text-xs text-gray-500 mt-0.5">
-                                  {PRODUCT_CTA_MAP[m.suggestedProduct].description}
-                                </p>
-                              </div>
-                            </div>
-                          </Link>
+                          {(() => {
+                            const cta = ASK_HEAVEN_RECOMMENDATION_MAP[m.suggestedProduct as AskHeavenRecommendation];
+                            return (
+                              <Link
+                                href={cta.wizardHref}
+                                className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
+                                      {cta.label} →
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      {cta.description}
+                                    </p>
+                                  </div>
+                                  <div className="flex flex-col items-end">
+                                    <span className="text-sm font-bold text-gray-900">{cta.displayPrice}</span>
+                                    {cta.priceNote && (
+                                      <span className="text-[10px] text-gray-400">{cta.priceNote}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })()}
                         </div>
                       )}
                     </div>
