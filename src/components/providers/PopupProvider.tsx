@@ -7,7 +7,7 @@
 
 'use client';
 
-import { ExitIntentPopup } from '@/components/ui/ExitIntentPopup';
+import { ExitIntentAskHeavenPopup } from '@/components/popups/ExitIntentAskHeavenPopup';
 import { Section21PopupModal } from '@/components/ui/Section21PopupModal';
 
 interface PopupProviderProps {
@@ -18,7 +18,7 @@ export function PopupProvider({ children }: PopupProviderProps) {
   return (
     <>
       {children}
-      <ExitIntentPopup />
+      <ExitIntentAskHeavenPopup />
       <Section21PopupModal />
     </>
   );
