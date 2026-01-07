@@ -162,6 +162,10 @@ export default function AskHeavenPageClient(): React.ReactElement {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoSubmitted = useRef(false);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
+
   const searchParams = useSearchParams();
   const caseId = searchParams.get('caseId');
   const initialQuestion = searchParams.get('q');
