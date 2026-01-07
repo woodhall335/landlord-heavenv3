@@ -245,41 +245,46 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=notice_only"
-                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start notice wizard"
                   >
-                    Get Started
+                    Start Notice Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=complete_pack"
-                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start eviction pack wizard"
                   >
-                    Get Started
+                    Start Eviction Pack Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=money_claim"
-                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start money claim wizard"
                   >
-                    Get Started
+                    Start Money Claim Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_standard"
-                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Create standard tenancy agreement"
                   >
-                    Get Started
+                    Create Tenancy Agreement →
                   </Link>
                 </td>
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_premium"
-                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Create premium tenancy agreement"
                   >
-                    Get Started
+                    Create Tenancy Agreement →
                   </Link>
                 </td>
               </tr>
@@ -301,9 +306,10 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=notice_only"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start notice wizard"
             >
-              Get Started
+              Start Notice Wizard →
             </Link>
           </div>
 
@@ -319,9 +325,10 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=complete_pack"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start eviction pack wizard"
             >
-              Get Started
+              Start Eviction Pack Wizard →
             </Link>
           </div>
 
@@ -337,9 +344,10 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=money_claim"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start money claim wizard"
             >
-              Get Started
+              Start Money Claim Wizard →
             </Link>
           </div>
 
@@ -355,9 +363,10 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=ast_standard"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Create standard tenancy agreement"
             >
-              Get Started
+              Create Tenancy Agreement →
             </Link>
           </div>
 
@@ -374,9 +383,10 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=ast_premium"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Create premium tenancy agreement"
             >
-              Get Started
+              Create Tenancy Agreement →
             </Link>
           </div>
 

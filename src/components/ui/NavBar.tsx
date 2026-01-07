@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { freeTools } from '@/lib/tools/tools';
 
 interface NavItem {
   href: string;
@@ -32,15 +33,10 @@ const primaryLinks: NavItem[] = [
   // { href: "/hmo-pro", label: "HMO Pro" },
 ];
 
-const freeToolsLinks: NavItem[] = [
-  { href: "/ask-heaven", label: "Ask Heaven" },
-  { href: "/tools/validators", label: "Validators" },
-  { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
-  { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
-  { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },
-  { href: "/tools/hmo-license-checker", label: "HMO License Checker" },
-  { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
-];
+const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
+  href: tool.href,
+  label: tool.label,
+}));
 
 export function NavBar({ user: serverUser }: NavBarProps) {
   const pathname = usePathname();
@@ -171,12 +167,14 @@ export function NavBar({ user: serverUser }: NavBarProps) {
             onMouseEnter={() => setShowFreeTools(true)}
             onMouseLeave={() => setShowFreeTools(false)}
           >
-            <button
+            <Link
+              href="/tools"
               className="text-sm font-semibold text-gray-700 hover:text-[#692ED4] transition-colors relative py-2 flex items-center gap-1"
+              aria-label="Free tools hub"
             >
               Free Tools
               <RiArrowDownSLine className="h-4 w-4 text-[#692ED4]" />
-            </button>
+            </Link>
 
             {showFreeTools && (
               <div
@@ -261,6 +259,13 @@ export function NavBar({ user: serverUser }: NavBarProps) {
             {/* Free Tools Section */}
             <div>
               <div className="mb-2 text-xs font-bold uppercase text-gray-500">Free Tools</div>
+              <Link
+                href="/tools"
+                className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
+                onClick={() => setOpen(false)}
+              >
+                Free Tools Hub
+              </Link>
               {freeToolsLinks.map((item) => (
                 <Link
                   key={item.href}
