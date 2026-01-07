@@ -225,3 +225,154 @@ export function trackDownload(
     item_id: documentId,
   });
 }
+
+// =============================================================================
+// VALIDATOR TRACKING
+// =============================================================================
+
+/**
+ * Validator event types for tracking
+ */
+export type ValidatorEventType =
+  | 'validator_view'
+  | 'validator_upload'
+  | 'validator_result'
+  | 'validator_question_answered'
+  | 'validator_cta_click'
+  | 'validator_report_requested';
+
+/**
+ * Track when a validator page is viewed
+ */
+export function trackValidatorView(
+  validatorKey: string,
+  jurisdiction?: string
+): void {
+  trackEvent('validator_view', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    jurisdiction: jurisdiction || 'unknown',
+  });
+
+  // Track as Facebook ViewContent for validator pages
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: `${validatorKey}_validator`,
+      content_category: 'free_tool',
+      content_type: 'validator',
+    });
+  }
+}
+
+/**
+ * Track when a document is uploaded to a validator
+ */
+export function trackValidatorUpload(
+  validatorKey: string,
+  documentType?: string,
+  jurisdiction?: string
+): void {
+  trackEvent('validator_upload', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    document_type: documentType || 'unknown',
+    jurisdiction: jurisdiction || 'unknown',
+  });
+}
+
+/**
+ * Track validation result
+ */
+export function trackValidatorResult(
+  validatorKey: string,
+  status: string,
+  blockerCount: number,
+  warningCount: number,
+  rulesetVersion?: string
+): void {
+  trackEvent('validator_result', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    validation_status: status,
+    blocker_count: blockerCount,
+    warning_count: warningCount,
+    ruleset_version: rulesetVersion || 'unknown',
+  });
+
+  // Track as lead if validation completed (user engaged with tool)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Lead', {
+      content_name: `${validatorKey}_validation`,
+      content_category: 'free_tool',
+      lead_type: 'validator_completion',
+    });
+  }
+}
+
+/**
+ * Track when a user answers a Q&A question
+ */
+export function trackValidatorQuestionAnswered(
+  validatorKey: string,
+  factKey: string,
+  questionIndex: number,
+  totalQuestions: number
+): void {
+  trackEvent('validator_question_answered', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    fact_key: factKey,
+    question_index: questionIndex,
+    total_questions: totalQuestions,
+  });
+}
+
+/**
+ * Track when a user clicks a CTA from the validator
+ */
+export function trackValidatorCtaClick(
+  validatorKey: string,
+  ctaType: 'primary' | 'secondary',
+  productSlug: string,
+  validationStatus?: string
+): void {
+  trackEvent('validator_cta_click', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    cta_type: ctaType,
+    product_slug: productSlug,
+    validation_status: validationStatus || 'unknown',
+  });
+
+  // Track as AddToCart intent
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: productSlug,
+      content_category: 'eviction_pack',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when a user requests their validation report by email
+ */
+export function trackValidatorReportRequested(
+  validatorKey: string,
+  validationStatus?: string
+): void {
+  trackEvent('validator_report_requested', {
+    event_category: 'validators',
+    validator_type: validatorKey,
+    validation_status: validationStatus || 'unknown',
+  });
+
+  // Track as Lead
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Lead', {
+      content_name: `${validatorKey}_report`,
+      content_category: 'free_tool',
+      lead_type: 'email_capture',
+    });
+  }
+}

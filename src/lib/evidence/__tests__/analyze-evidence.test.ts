@@ -1,16 +1,13 @@
 /**
  * Tests for Evidence Analysis
  *
- * Tests the regex extraction functions for Section 21, Section 8,
- * Wales, and Scotland notices.
+ * Tests the regex extraction functions for Section 21 and Section 8 notices.
  */
 
 import { describe, it, expect } from 'vitest';
 import {
   extractS21FieldsWithRegex,
   extractS8FieldsWithRegex,
-  extractWalesFieldsWithRegex,
-  extractScotlandFieldsWithRegex,
 } from '../analyze-evidence';
 
 describe('extractS21FieldsWithRegex', () => {
@@ -331,186 +328,6 @@ describe('extractS8FieldsWithRegex', () => {
       expect(result.rent_arrears_stated).toBe('3000.00');
       expect(result.date_served).toBe('01/04/2024');
       expect(result.property_address).toBeTruthy();
-    });
-  });
-});
-
-describe('extractWalesFieldsWithRegex', () => {
-  describe('RHW form detection', () => {
-    it('should detect RHW16 form', () => {
-      const text = 'This is form RHW16 under the Renting Homes (Wales) Act';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.rhw_form_detected).toBe(true);
-      expect(result.rhw_form_number).toBe('RHW16');
-      expect(result.renting_homes_act_mentioned).toBe(true);
-    });
-
-    it('should detect RHW17 form', () => {
-      const text = 'RHW17 notice';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.rhw_form_detected).toBe(true);
-      expect(result.rhw_form_number).toBe('RHW17');
-    });
-
-    it('should detect RHW23 form', () => {
-      const text = 'Form RHW23 for occupation contract termination';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.rhw_form_detected).toBe(true);
-      expect(result.rhw_form_number).toBe('RHW23');
-    });
-  });
-
-  describe('bilingual text detection', () => {
-    it('should detect bilingual Welsh/English text', () => {
-      const text = 'Hysbysiad / Notice to landlord regarding meddiannaeth property';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.bilingual_text_present).toBe(true);
-    });
-
-    it('should not flag English-only text as bilingual', () => {
-      const text = 'This is a standard English notice for the property';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.bilingual_text_present).toBe(false);
-    });
-  });
-
-  describe('occupation contract detection', () => {
-    it('should detect occupation contract reference', () => {
-      const text = 'Termination of occupation contract';
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.occupation_contract_mentioned).toBe(true);
-    });
-  });
-
-  describe('complete Wales notice example', () => {
-    it('should extract multiple fields from realistic Wales notice', () => {
-      const text = `
-        RHW16 - HYSBYSIAD / NOTICE
-        Renting Homes (Wales) Act 2016
-
-        Contract Holder: Jane Davies
-        Property: 45 Castle Street, Cardiff, CF10 1AA
-        Landlord: Welsh Lettings Ltd
-
-        Date of service: 01/04/2024
-        This occupation contract notice expires on 01/06/2024
-      `;
-
-      const result = extractWalesFieldsWithRegex(text);
-
-      expect(result.rhw_form_detected).toBe(true);
-      expect(result.rhw_form_number).toBe('RHW16');
-      expect(result.renting_homes_act_mentioned).toBe(true);
-      expect(result.bilingual_text_present).toBe(true);
-      expect(result.occupation_contract_mentioned).toBe(true);
-      expect(result.date_served).toBe('01/04/2024');
-      expect(result.expiry_date).toBe('01/06/2024');
-    });
-  });
-});
-
-describe('extractScotlandFieldsWithRegex', () => {
-  describe('Notice to Leave detection', () => {
-    it('should detect Notice to Leave', () => {
-      const text = 'This is a Notice to Leave under the Private Residential Tenancy';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.notice_to_leave_detected).toBe(true);
-      expect(result.prt_mentioned).toBe(true);
-      expect(result.notice_type).toBe('scotland_notice_to_leave');
-    });
-
-    it('should detect PRT reference', () => {
-      const text = 'Under the PRT regulations';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.prt_mentioned).toBe(true);
-    });
-  });
-
-  describe('ground extraction', () => {
-    it('should extract ground number', () => {
-      const text = 'Eviction Ground 12 for rent arrears';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.ground_cited).toBe(12);
-    });
-
-    it('should add ground description', () => {
-      const text = 'Ground 1 - Landlord intends to sell';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.ground_cited).toBe(1);
-      expect(result.ground_description).toBe('Landlord intends to sell');
-    });
-
-    it('should only accept valid ground numbers 1-18', () => {
-      const text = 'Ground 20 cited';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.ground_cited).toBeNull();
-    });
-  });
-
-  describe('tribunal detection', () => {
-    it('should detect First-tier Tribunal reference', () => {
-      const text = 'Application to the First-tier Tribunal';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.tribunal_mentioned).toBe(true);
-    });
-
-    it('should detect Housing and Property Chamber reference', () => {
-      const text = 'The Housing and Property Chamber will review';
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.tribunal_mentioned).toBe(true);
-    });
-  });
-
-  describe('complete Scotland Notice to Leave example', () => {
-    it('should extract multiple fields from realistic NTL', () => {
-      const text = `
-        NOTICE TO LEAVE
-        Private Residential Tenancy
-        Housing (Scotland) Act 2014
-
-        To the Tenant: James MacLeod
-        Property: 10 Royal Mile, Edinburgh, EH1 1AA
-
-        Ground 12 - Rent arrears
-        Notice period: 28 days
-
-        This notice is served on 01/04/2024
-        First-tier Tribunal application may be made
-      `;
-
-      const result = extractScotlandFieldsWithRegex(text);
-
-      expect(result.notice_to_leave_detected).toBe(true);
-      expect(result.prt_mentioned).toBe(true);
-      expect(result.housing_scotland_act_mentioned).toBe(true);
-      expect(result.ground_cited).toBe(12);
-      expect(result.ground_description).toBe('Rent arrears');
-      expect(result.notice_period).toContain('28 days');
-      expect(result.date_served).toBe('01/04/2024');
-      expect(result.tribunal_mentioned).toBe(true);
-    });
-  });
-
-  describe('edge cases', () => {
-    it('should handle empty text', () => {
-      const result = extractScotlandFieldsWithRegex('');
-
-      expect(result.notice_to_leave_detected).toBe(false);
-      expect(result.ground_cited).toBeNull();
-      expect(result.fields_found).toHaveLength(0);
     });
   });
 });

@@ -94,21 +94,8 @@ function mapUpsellProduct(product?: string | null): ProductKey | null {
   }
 }
 
-function isTenancyValidator(validatorKey?: string | null): boolean {
-  return validatorKey === 'tenancy_agreement';
-}
-
-function isMoneyClaimValidator(validatorKey?: string | null): boolean {
-  return validatorKey === 'money_claim';
-}
-
 function isEvictionValidator(validatorKey?: string | null): boolean {
-  return (
-    validatorKey === 'section_21' ||
-    validatorKey === 'section_8' ||
-    validatorKey === 'wales_notice' ||
-    validatorKey === 'scotland_notice_to_leave'
-  );
+  return validatorKey === 'section_21' || validatorKey === 'section_8';
 }
 
 export function getWizardCta(params: CtaInput): { primary: Cta; secondary?: Cta } {
@@ -116,38 +103,12 @@ export function getWizardCta(params: CtaInput): { primary: Cta; secondary?: Cta 
   const status = params.validation_summary?.status ?? 'warning';
   const upsellProduct = mapUpsellProduct(params.validation_summary?.upsell?.product ?? null);
 
-  if (jurisdiction === 'northern-ireland') {
-    const primary = buildCta('ast_premium', params.caseId, params.source, jurisdiction);
-    const secondary = buildCta('ast_standard', params.caseId, params.source, jurisdiction);
-    return { primary, secondary };
-  }
-
-  if (isTenancyValidator(params.validator_key)) {
-    const primary = buildCta('ast_premium', params.caseId, params.source, jurisdiction);
-    const secondary = buildCta('ast_standard', params.caseId, params.source, jurisdiction);
-    return { primary, secondary };
-  }
-
-  if (isMoneyClaimValidator(params.validator_key)) {
-    const primary = buildCta('money_claim', params.caseId, params.source, jurisdiction);
-    return { primary };
-  }
-
   if (upsellProduct) {
     const primary = buildCta(upsellProduct, params.caseId, params.source, jurisdiction);
     if (upsellProduct === 'complete_pack') {
       return {
         primary,
         secondary: buildCta('notice_only', params.caseId, params.source, jurisdiction),
-      };
-    }
-    if (upsellProduct === 'money_claim') {
-      return { primary };
-    }
-    if (upsellProduct === 'ast_premium') {
-      return {
-        primary,
-        secondary: buildCta('ast_standard', params.caseId, params.source, jurisdiction),
       };
     }
   }
