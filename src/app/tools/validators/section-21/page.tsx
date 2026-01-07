@@ -23,10 +23,6 @@ export default function Section21ValidatorPage() {
         'EPC validity check',
         'EICR requirements (post-2020)',
       ]}
-      ctas={[
-        { label: 'Notice Only Pack', href: '/products/notice-only?jurisdiction=england&product=section21', price: 29.99, primary: true },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack?jurisdiction=england', price: 149.99 },
-      ]}
       additionalInfo="A Section 21 notice (Form 6A) is used for 'no-fault' evictions in England under an Assured Shorthold Tenancy. Since October 2015, you must use the prescribed Form 6A and comply with various requirements including deposit protection, prescribed information, and providing the 'How to Rent' guide."
     />
   );

@@ -23,10 +23,6 @@ export default function Section8ValidatorPage() {
         'Anti-social behavior documentation',
         'Court hearing date calculation',
       ]}
-      ctas={[
-        { label: 'Notice Only Pack', href: '/products/notice-only?jurisdiction=england&product=section8', price: 29.99, primary: true },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack?jurisdiction=england', price: 149.99 },
-      ]}
       additionalInfo="A Section 8 notice (Form 3) is used when you have specific grounds for possession under Schedule 2 of the Housing Act 1988. Unlike Section 21, you must prove your grounds in court. Ground 8 (8+ weeks rent arrears) is mandatory if proved, while most other grounds are discretionary."
     />
   );

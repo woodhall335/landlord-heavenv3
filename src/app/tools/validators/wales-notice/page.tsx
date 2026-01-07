@@ -23,10 +23,6 @@ export default function WalesNoticeValidatorPage() {
         'Fitness for human habitation',
         'Deposit protection (Wales)',
       ]}
-      ctas={[
-        { label: 'Notice Only Pack', href: '/products/notice-only?jurisdiction=wales', price: 29.99, primary: true },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack?jurisdiction=wales', price: 149.99 },
-      ]}
       additionalInfo="Since December 2022, Wales uses the Renting Homes (Wales) Act 2016 instead of the Housing Act 1988. 'Tenants' are now 'contract-holders' and 'tenancy agreements' are 'occupation contracts'. Different notice forms apply: RHW16 for no-fault, RHW17 for breach, and RHW23 for landlord's notice."
     />
   );

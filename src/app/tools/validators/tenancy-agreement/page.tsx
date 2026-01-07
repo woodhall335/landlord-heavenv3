@@ -25,10 +25,6 @@ export default function TenancyAgreementValidatorPage() {
         'HMO-specific terms',
         'PRT/Occupation Contract compliance',
       ]}
-      ctas={[
-        { label: 'Standard AST', href: '/products/ast?tier=standard', price: 9.99, primary: true },
-        { label: 'Premium AST', href: '/products/ast?tier=premium', price: 14.99 },
-      ]}
       additionalInfo="A well-drafted tenancy agreement protects both landlord and tenant. Key elements include clear rent terms, deposit protection details, break clauses, and obligations for repairs and maintenance. Different rules apply in England, Wales (Occupation Contracts), Scotland (PRT), and Northern Ireland."
     />
   );
