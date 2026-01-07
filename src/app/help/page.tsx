@@ -126,8 +126,17 @@ export default function HelpPage() {
                       increases.
                     </li>
                     <li>
-                      <strong>HMO Pro (£29.99/mo):</strong> Manage HMO compliance (licenses, certificates, reminders).
-                      Free trial available.
+                      <strong>Free Tools:</strong> Use our notice generators, calculators, and validators to get
+                      answers quickly before you upgrade.
+                      <div className="mt-2">
+                        <Link href="/tools" className="text-primary hover:underline">
+                          Browse free tools
+                        </Link>
+                        <span className="mx-2 text-gray-400">•</span>
+                        <Link href="/ask-heaven" className="text-primary hover:underline">
+                          Ask Heaven guidance
+                        </Link>
+                      </div>
                     </li>
                   </ul>
                 </div>

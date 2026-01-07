@@ -29,7 +29,7 @@ export const productLinks = {
   tenancyAgreement: {
     href: '/products/ast',
     title: 'Tenancy Agreement',
-    description: 'AST templates for all UK regions — £39.99',
+    description: 'AST templates for all UK regions — from £9.99',
     icon: 'document' as const,
     type: 'product' as const,
   },

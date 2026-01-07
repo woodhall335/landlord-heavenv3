@@ -8,6 +8,7 @@
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
+import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -57,13 +58,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Tool pages - Free tools for SEO traffic
   const toolPages = [
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/tools/free-section-21-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/tools/free-section-8-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/tools/rent-arrears-calculator', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tools/hmo-license-checker', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tools/free-rent-demand-letter', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tools/validators', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/tools/validators/scotland-notice-to-leave', priority: 0.7, changeFrequency: 'monthly' as const },
+    ...freeTools
+      .filter((tool) => tool.href.startsWith('/tools'))
+      .map((tool) => ({
+        path: tool.href,
+        priority: 0.8,
+        changeFrequency: 'weekly' as const,
+      })),
+    ...validatorToolRoutes.map((path) => ({
+      path,
+      priority: 0.7,
+      changeFrequency: 'monthly' as const,
+    })),
   ];
 
   // Auth entry points (login/signup visible to crawlers)
