@@ -19,6 +19,89 @@ function debugLog(label: string, data: any, debugId?: string): void {
   }
 }
 
+/**
+ * Heuristic to determine if a string looks like a plausible human name.
+ * Used to filter out sentence fragments that get incorrectly extracted as names.
+ *
+ * @param value - The string to check
+ * @returns true if it looks like a name, false otherwise
+ */
+export function isNameLike(value: string | null | undefined): boolean {
+  if (!value || typeof value !== 'string') return false;
+
+  const trimmed = value.trim();
+
+  // Reject if too short or too long
+  if (trimmed.length < 2 || trimmed.length > 80) return false;
+
+  // Reject if contains newlines
+  if (trimmed.includes('\n') || trimmed.includes('\r')) return false;
+
+  // Reject if it's obviously a sentence (contains common verbs/sentence words)
+  const sentenceIndicators = [
+    'intends', 'begin', 'proceedings', 'possession', 'property', 'identified',
+    'section', 'notice', 'tenant', 'landlord', 'pursuant', 'hereby', 'whereas',
+    'therefore', 'housing', 'act', 'ground', 'arrears', 'rent', 'shall', 'will',
+    'must', 'should', 'may', 'can', 'the', 'this', 'that', 'which', 'under',
+    'above', 'below', 'within', 'without', 'between', 'through', 'during',
+    'before', 'after', 'against', 'into', 'onto', 'from', 'with', 'about',
+    'being', 'having', 'doing', 'requiring', 'seeking', 'giving', 'served',
+    'dated', 'signed', 'issued', 'received', 'delivered', 'provide', 'provided',
+  ];
+
+  const lowerTrimmed = trimmed.toLowerCase();
+  const words = lowerTrimmed.split(/\s+/);
+
+  // Count how many sentence indicator words are present
+  let indicatorCount = 0;
+  for (const word of words) {
+    if (sentenceIndicators.includes(word)) {
+      indicatorCount++;
+    }
+  }
+
+  // If more than 2 sentence indicators, it's probably not a name
+  if (indicatorCount > 2) return false;
+
+  // Reject if first word is a common sentence starter (lowercase)
+  const sentenceStarters = ['the', 'this', 'that', 'a', 'an', 'and', 'or', 'if', 'when', 'where', 'which', 'who'];
+  if (words.length > 0 && sentenceStarters.includes(words[0])) return false;
+
+  // Reject if has too many words (names typically 1-5 words)
+  if (words.length > 6) return false;
+
+  // Reject if contains typical legal/document patterns
+  const documentPatterns = [
+    /\bsection\s*\d/i,
+    /\bground\s*\d/i,
+    /\bform\s*\d/i,
+    /\bclause\s*\d/i,
+    /\bschedule\s*\d/i,
+    /\bparagraph\s*\d/i,
+    /housing\s*act/i,
+    /\d{4}/, // Year numbers - names rarely contain years
+    /£\d/, // Currency amounts
+    /\d+\.\d+/, // Decimal numbers
+  ];
+  for (const pattern of documentPatterns) {
+    if (pattern.test(trimmed)) return false;
+  }
+
+  // A valid name should have at least one word that starts with uppercase
+  // (unless it's all lowercase - some forms may have names in lowercase)
+  const hasProperNoun = /[A-Z][a-z]/.test(trimmed);
+  const allLower = trimmed === lowerTrimmed;
+
+  // If it's mixed case but no proper noun pattern, likely not a name
+  if (!hasProperNoun && !allLower) return false;
+
+  // Names are typically 1-5 words, each word being relatively short
+  const maxWordLength = Math.max(...words.map(w => w.length));
+  if (maxWordLength > 25) return false; // Individual name parts shouldn't be this long
+
+  return true;
+}
+
 /** Master timeout for entire analysis (30s) - prevents infinite hangs */
 const ANALYSIS_MASTER_TIMEOUT_MS = 30000;
 
@@ -829,17 +912,26 @@ export function extractS21FieldsWithRegex(text: string): RegexExtractionResult {
   result.tenant_names = Array.from(tenantNamesSet);
   if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
 
-  // Landlord name extraction
+  // Landlord name extraction - with improved patterns
+  // NOTE: We use spaces (not \s) in name capture to avoid matching across lines
   const landlordPatterns = [
-    /(?:landlord|landlord's?\s*name)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
-    /(?:signed|from|by)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)(?:\s*\(landlord\))?/i,
+    // Pattern 1: Explicit "Landlord:" label (most common and reliable)
+    /landlord\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 2: "Signed by:" pattern (must have colon after "by")
+    /signed\s+by\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 3: "Name:" in landlord section (landlord keyword must precede)
+    /landlord['']?s?\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
   ];
   for (const pattern of landlordPatterns) {
     const match = pattern.exec(originalText);
     if (match) {
-      result.landlord_name = match[1].trim();
-      result.fields_found.push('landlord_name');
-      break;
+      const candidate = match[1].trim();
+      // Validate that extracted value looks like a name
+      if (isNameLike(candidate)) {
+        result.landlord_name = candidate;
+        result.fields_found.push('landlord_name');
+        break;
+      }
     }
   }
 
@@ -1085,17 +1177,29 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   result.tenant_names = Array.from(tenantNamesSet);
   if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
 
-  // Landlord name extraction
+  // Landlord name extraction - with improved patterns
+  // NOTE: We use spaces (not \s) in name capture to avoid matching across lines
   const landlordPatterns = [
-    /(?:landlord|landlord's?\s*name)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
-    /(?:signed|from|by)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)(?:\s*\(landlord\))?/i,
+    // Pattern 1: Explicit "Landlord:" label (most common and reliable)
+    /landlord\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 2: "Signed by:" pattern (must have colon after "by")
+    /signed\s+by\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 3: "Name:" in landlord section (landlord keyword must precede)
+    /landlord['']?s?\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 4: Name near "or their agent" - common in Form 3
+    /([A-Z][a-z]+(?: [A-Z][a-z]+)+)\s*\(or\s+(?:their|his|her)\s+agent\)/,
   ];
+
   for (const pattern of landlordPatterns) {
     const match = pattern.exec(originalText);
     if (match) {
-      result.landlord_name = match[1].trim();
-      result.fields_found.push('landlord_name');
-      break;
+      const candidate = match[1].trim();
+      // Validate that extracted value looks like a name
+      if (isNameLike(candidate)) {
+        result.landlord_name = candidate;
+        result.fields_found.push('landlord_name');
+        break;
+      }
     }
   }
 
@@ -1508,6 +1612,9 @@ function parseAnalysisPayload(raw: string, source: EvidenceAnalysisResult['sourc
 /**
  * Merge regex extraction results with LLM results.
  * Regex provides high-confidence baseline, LLM enriches.
+ *
+ * For name fields (landlord_name, tenant_name), applies isNameLike() validation
+ * to prefer plausible names and reject sentence fragments.
  */
 function mergeExtractionResults(
   regexFields: Record<string, any>,
@@ -1515,8 +1622,37 @@ function mergeExtractionResults(
 ): Record<string, any> {
   const merged = { ...llmFields };
 
-  // Regex fields that we're confident about take precedence or fill gaps
+  // Fields that should be validated as names
+  const nameFields = ['landlord_name', 'landlord_full_name', 'tenant_name', 'tenant_full_name'];
+
+  // For name fields, apply special merge logic
+  for (const nameField of nameFields) {
+    const regexValue = regexFields[nameField];
+    const llmValue = llmFields[nameField];
+
+    const regexIsNameLike = isNameLike(regexValue);
+    const llmIsNameLike = isNameLike(llmValue);
+
+    if (regexIsNameLike && !llmIsNameLike) {
+      // Regex value is name-like, LLM value is not - use regex
+      merged[nameField] = regexValue;
+    } else if (!regexIsNameLike && llmIsNameLike) {
+      // LLM value is name-like, regex value is not - use LLM
+      merged[nameField] = llmValue;
+    } else if (regexIsNameLike && llmIsNameLike) {
+      // Both are name-like - prefer regex (more reliable for structured fields)
+      merged[nameField] = regexValue;
+    } else {
+      // Neither is name-like - set to null (don't keep junk)
+      merged[nameField] = null;
+    }
+  }
+
+  // Regex fields that we're confident about take precedence or fill gaps (non-name fields)
   for (const [key, value] of Object.entries(regexFields)) {
+    // Skip name fields - already handled above
+    if (nameFields.includes(key)) continue;
+
     if (value !== null && value !== undefined && value !== false) {
       // If LLM didn't find it, use regex
       if (merged[key] === null || merged[key] === undefined || merged[key] === '') {

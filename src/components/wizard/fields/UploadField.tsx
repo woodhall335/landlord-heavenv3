@@ -122,19 +122,61 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     const baseClassName =
       'mt-1 w-full rounded border border-gray-200 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500';
 
+    // Button styles for yes/no/unsure groups
+    const buttonBaseClass = 'flex-1 py-2 px-2 rounded border text-xs font-medium transition-colors';
+    const buttonUnselected = 'border-gray-300 text-gray-700 hover:bg-gray-50';
+    const buttonYes = 'bg-green-100 border-green-500 text-green-800';
+    const buttonNo = 'bg-red-100 border-red-500 text-red-800';
+    const buttonUnsure = 'bg-amber-100 border-amber-500 text-amber-800';
+
     switch (question.type) {
       case 'yes_no':
         return (
-          <select
-            className={baseClassName}
-            value={value ?? ''}
-            onChange={(event) => updateAnswer(question.factKey, event.target.value)}
-          >
-            <option value="">Select…</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'yes')}
+              className={`${buttonBaseClass} ${value === 'yes' ? buttonYes : buttonUnselected}`}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'no')}
+              className={`${buttonBaseClass} ${value === 'no' ? buttonNo : buttonUnselected}`}
+            >
+              No
+            </button>
+          </div>
         );
+
+      case 'yes_no_unsure':
+        return (
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'yes')}
+              className={`${buttonBaseClass} ${value === 'yes' ? buttonYes : buttonUnselected}`}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'no')}
+              className={`${buttonBaseClass} ${value === 'no' ? buttonNo : buttonUnselected}`}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'not_sure')}
+              className={`${buttonBaseClass} ${value === 'not_sure' ? buttonUnsure : buttonUnselected}`}
+            >
+              Not Sure
+            </button>
+          </div>
+        );
+
       case 'date':
         return (
           <input
@@ -144,16 +186,33 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             onChange={(event) => updateAnswer(question.factKey, event.target.value)}
           />
         );
+
       case 'currency':
+        return (
+          <div className="relative mt-1">
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500">£</span>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              className={`${baseClassName} pl-5`}
+              value={value ?? ''}
+              onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+              placeholder="0.00"
+            />
+          </div>
+        );
+
+      case 'number':
         return (
           <input
             type="number"
-            step="0.01"
             className={baseClassName}
             value={value ?? ''}
             onChange={(event) => updateAnswer(question.factKey, event.target.value)}
           />
         );
+
       case 'select':
         return (
           <select
@@ -169,6 +228,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             ))}
           </select>
         );
+
       case 'multi_select':
         return (
           <div className="mt-2 space-y-1">
@@ -195,6 +255,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             })}
           </div>
         );
+
       default:
         return (
           <input
@@ -692,13 +753,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
               )}
 
               {nextQuestions.length > 0 && (
-                <div className="mt-3 space-y-1 text-xs text-gray-600">
+                <div className="mt-3 space-y-2 text-xs text-gray-600">
                   <p className="font-semibold text-gray-700">Re-check document</p>
                   {nextQuestions.map((question) => (
-                    <label key={question.id} className="block">
-                      <span className="text-gray-700">• {question.question}</span>
+                    <div key={question.factKey} className="block rounded-md bg-gray-50 p-2">
+                      <span className="text-gray-700 font-medium">• {question.question}</span>
                       {question.helpText && (
-                        <span className="block text-[11px] text-gray-400">{question.helpText}</span>
+                        <span className="block text-[11px] text-gray-400 mt-1">{question.helpText}</span>
                       )}
                       {renderQuestionInput(question)}
                       {questionErrors[question.factKey] && (
@@ -706,7 +767,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                           {questionErrors[question.factKey]}
                         </span>
                       )}
-                    </label>
+                    </div>
                   ))}
                   <button
                     type="button"
