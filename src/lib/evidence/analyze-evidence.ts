@@ -1109,8 +1109,13 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   result.grounds_cited = Array.from(groundsSet).sort((a, b) => a - b);
   if (result.grounds_cited.length > 0) result.fields_found.push('grounds_cited');
 
-  // Date patterns (UK format)
+  // Date patterns (UK format) - Enhanced for Form 3
   const servedDatePatterns = [
+    // Form 3 specific: "This notice was served on: DD/MM/YYYY"
+    /(?:this\s*)?notice\s*was\s*served\s*(?:on)?[\s:]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // Form 3 signature block: "Date: DD/MM/YYYY"
+    /\bDate[\s:]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // Generic patterns
     /(?:served|service|dated|issued)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
     /(?:date\s*of\s*(?:service|issue))[\s:]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
   ];
@@ -1126,14 +1131,14 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   // Earliest proceedings date - Form 3 Section 5: "The court proceedings will not begin earlier than"
   // This is distinct from expiry_date - it's the earliest date court can begin
   const earliestProceedingsPatterns = [
-    // Form 3 exact phrase: "The court proceedings will not begin earlier than: DD/MM/YYYY"
-    /(?:proceedings?\s*will\s*not\s*begin\s*earlier\s*than|will\s*not\s*begin\s*(?:proceedings?\s*)?earlier\s*than)\s*[:;]?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // Form 3 Section 5 with date on same line or next line (multiline)
+    /(?:proceedings?\s*will\s*not\s*begin\s*earlier\s*than|will\s*not\s*begin\s*(?:proceedings?\s*)?earlier\s*than)\s*[:;]?\s*[\n\r]*\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/im,
     // Alternative: "not earlier than DD/MM/YYYY"
-    /(?:not\s*earlier\s*than)\s*[:;]?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:not\s*earlier\s*than)\s*[:;]?\s*[\n\r]*\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/im,
     // "proceedings after" pattern
-    /(?:proceedings?\s*after)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:proceedings?\s*after)\s*(?:on|:)?\s*[\n\r]*\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/im,
     // "on or after" pattern
-    /(?:on\s*or\s*after)\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:on\s*or\s*after)\s*[\n\r]*\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/im,
   ];
   for (const pattern of earliestProceedingsPatterns) {
     const match = pattern.exec(text);
@@ -1179,11 +1184,16 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     }
   }
 
-  // Rent arrears amount
+  // Rent arrears amount - Enhanced for Form 3 GBP format
   const arrearsPatterns = [
-    /(?:arrears|owed|outstanding|unpaid\s*rent)\s*(?:of|:)?\s*£?([\d,]+(?:\.\d{2})?)/i,
-    /£([\d,]+(?:\.\d{2})?)\s*(?:arrears|owed|outstanding)/i,
-    /(?:rent\s*arrears|amount\s*owed)\s*[:=]?\s*£?([\d,]+(?:\.\d{2})?)/i,
+    // Form 3: "Current rent arrears: GBP 3,000.00"
+    /(?:current\s*)?(?:rent\s*)?arrears[\s:]+(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)/i,
+    // Form 3: "rent arrears total GBP 3,000.00"
+    /arrears\s*(?:total|of)?\s*(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)/i,
+    // Generic patterns
+    /(?:arrears|owed|outstanding|unpaid\s*rent)\s*(?:of|:)?\s*(?:GBP|£)?\s*([\d,]+(?:\.\d{2})?)/i,
+    /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:arrears|owed|outstanding)/i,
+    /(?:rent\s*arrears|amount\s*owed)\s*[:=]?\s*(?:GBP|£)?\s*([\d,]+(?:\.\d{2})?)/i,
   ];
   for (const pattern of arrearsPatterns) {
     const match = pattern.exec(text);
@@ -1194,10 +1204,17 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     }
   }
 
-  // Rent amount
+  // Rent amount - Enhanced for Form 3 GBP format
   const rentPatterns = [
-    /(?:rent|monthly\s*rent|periodic\s*rent)\s*(?:of|:)?\s*£?([\d,]+(?:\.\d{2})?)/i,
-    /£([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*(?:month|week)/i,
+    // Form 3: "Monthly rent amount: GBP 1,500.00"
+    /monthly\s*rent\s*(?:amount)?[\s:]+(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)/i,
+    // Form 3: "GBP 1,500.00 per month"
+    /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*month/i,
+    // Form 3: "at GBP 1,500.00 per month" in arrears explanation
+    /at\s*(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*month/i,
+    // Generic patterns
+    /(?:rent|periodic\s*rent)\s*(?:amount)?[\s:]+(?:GBP|£)?\s*([\d,]+(?:\.\d{2})?)/i,
+    /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*(?:month|week)/i,
   ];
   for (const pattern of rentPatterns) {
     const match = pattern.exec(text);
@@ -1210,10 +1227,10 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
 
   // Rent frequency extraction - extract from text patterns like "per month", "monthly", etc.
   const frequencyPatterns = [
-    // Pattern: "£X per month" or "£X a month" - extract "monthly"
-    { pattern: /£[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*month/i, value: 'monthly' },
-    // Pattern: "£X per week" or "£X a week" - extract "weekly"
-    { pattern: /£[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*week/i, value: 'weekly' },
+    // Form 3: "GBP X per month" - extract "monthly"
+    { pattern: /(?:GBP|£)\s*[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*month/i, value: 'monthly' },
+    // Form 3: "GBP X per week" - extract "weekly"
+    { pattern: /(?:GBP|£)\s*[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*week/i, value: 'weekly' },
     // Pattern: "monthly rent" explicitly
     { pattern: /monthly\s*rent/i, value: 'monthly' },
     // Pattern: "weekly rent" explicitly
@@ -1239,8 +1256,16 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     }
   }
 
-  // Property address extraction (same as S21)
+  // Property address extraction - Enhanced for Form 3 section 2
+  // Form 3 has: "give up possession of:" followed by address on next line
   const addressPatterns = [
+    // Form 3 Section 2: "give up possession of:" followed by address
+    /give\s*up\s*possession\s*of[\s:]*[\n\r]+\s*(\d+[^\n]+)/im,
+    // Form 3 Section 2: Look for address after section 2 header
+    /2\.\s*Your\s*landlord.*?possession\s*of[\s:]*[\n\r]+\s*(\d+[^\n]+)/ims,
+    // Generic patterns - address with UK postcode
+    /(\d+\s*[A-Za-z][^\n,]+,\s*[^\n,]+,\s*[A-Z]{1,2}\d{1,2}\s*\d[A-Z]{2})/i,
+    // Generic patterns
     /(?:property|premises|dwelling|address)[\s:]+([^\n]{10,80})/i,
     /(?:at|of)\s+(\d+[^\n,]+(?:,\s*[^\n]+)?(?:,\s*[A-Z]{1,2}\d{1,2}\s*\d[A-Z]{2})?)/i,
   ];
@@ -1248,7 +1273,11 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     const match = pattern.exec(originalText);
     if (match) {
       const address = match[1].trim();
-      if (/\d/.test(address) || /[A-Z]{1,2}\d/.test(address)) {
+      // Validate address: must have digits and not be a section header or placeholder
+      if (/\d/.test(address) &&
+          !address.match(/^[123456789]\.\s/) &&
+          !address.match(/^--/) &&
+          address.length >= 10) {
         result.property_address = address;
         result.fields_found.push('property_address');
         break;
@@ -1256,19 +1285,32 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     }
   }
 
-  // Tenant name extraction
+  // Tenant name extraction - Enhanced for Form 3 section 1
+  // Form 3 has: "1. To:" followed by tenant name on next line(s)
+  const tenantNamesSet = new Set<string>();
+
+  // Form 3 specific: "1. To:" section with name on next line
+  const form3ToPattern = /1\.\s*To[\s:]*[\n\r]+\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/im;
+  const form3TenantMatch = form3ToPattern.exec(originalText);
+  if (form3TenantMatch) {
+    const name = form3TenantMatch[1].trim();
+    if (name.length >= 4 && name.length <= 60 && isNameLike(name)) {
+      tenantNamesSet.add(name);
+    }
+  }
+
+  // Generic tenant patterns
   const tenantPatterns = [
     /(?:tenant|tenants?)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
     /(?:to|addressed\s*to)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
     /(?:mr|mrs|ms|miss|dr)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi,
   ];
-  const tenantNamesSet = new Set<string>();
   for (const pattern of tenantPatterns) {
     let match;
     pattern.lastIndex = 0; // Reset to avoid stale state
     while ((match = pattern.exec(originalText)) !== null) {
       const name = match[1].trim();
-      if (name.length >= 4 && name.length <= 60) {
+      if (name.length >= 4 && name.length <= 60 && isNameLike(name)) {
         tenantNamesSet.add(name);
       }
     }

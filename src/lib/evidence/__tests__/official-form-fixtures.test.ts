@@ -42,45 +42,61 @@ describe('Official Form Fixtures Integration Tests', () => {
   let section21PdfText: string;
 
   beforeAll(async () => {
-    // For regex tests, we use the expected text content
-    // (PDF text extraction would require the full pipeline)
+    // For regex tests, we use text content matching actual PDF extraction
+    // This matches the structure of completed_section_8_form_3.pdf
     section8PdfText = `
-      FORM NO. 3
-      Housing Act 1988 section 8 (as amended)
-      NOTICE OF INTENTION TO BEGIN PROCEEDINGS FOR POSSESSION
-      OF A PROPERTY IN ENGLAND
-      let on an Assured Tenancy or an Assured Agricultural Occupancy
+FORM NO. 3
+Housing Act 1988 section 8 (as amended)
+NOTICE OF INTENTION TO BEGIN PROCEEDINGS FOR POSSESSION
+OF A PROPERTY IN ENGLAND
+let on an Assured Tenancy or an Assured Agricultural Occupancy
 
-      1. To: Sonia Shezadi
+1. To:
+Sonia Shezadi
 
-      2. Your landlord/licensor intends to apply to the court for an order requiring you to give up possession of:
-      35 Woodhall Park Avenue, Pudsey, LS28 7HF
+2. Your landlord/licensor intends to apply to the court for an order requiring you to give up possession of:
+35 Woodhall Park Avenue, Pudsey, LS28 7HF
 
-      3. Your landlord/licensor intends to seek possession on ground(s):
-      Grounds 8, 10 and 11
-      in Schedule 2 to the Housing Act 1988 (as amended)
+3. Your landlord/licensor intends to seek possession on ground(s):
+Grounds 8, 10 and 11
+in Schedule 2 to the Housing Act 1988 (as amended), which read(s):
 
-      Ground 8 - At both the date of the service of the notice and at the date of the hearing:
-      (a) if rent is payable weekly or fortnightly, at least eight weeks rent is unpaid;
-      (b) if rent is payable monthly, at least two months rent is unpaid.
+Ground 8 - At both the date of the service of the notice and at the date of the hearing:
+(a) if rent is payable weekly or fortnightly, at least eight weeks rent is unpaid;
+(b) if rent is payable monthly, at least two months rent is unpaid.
 
-      Ground 10 - Some rent lawfully due from the tenant is unpaid
+Ground 10 - Some rent lawfully due from the tenant is unpaid on the date on which the proceedings
+for possession are begun.
 
-      Ground 11 - tenant has persistently delayed paying rent
+Ground 11 - Whether or not any rent is in arrears on the date on which proceedings for possession
+are begun, the tenant has persistently delayed paying rent which has become lawfully due.
 
-      4. Full explanation:
-      rent arrears total GBP 3,000.00 (representing 2 months unpaid rent at GBP 1,500.00 per month)
+4. Full explanation of why each ground is being relied on:
+The tenant has failed to pay rent since October 2025. As of the date of this notice, rent arrears
+total GBP 3,000.00 (representing 2 months unpaid rent at GBP 1,500.00 per month).
 
-      5. The court proceedings will not begin earlier than: 15/01/2026
+The tenant has been in persistent arrears for the past 6 months despite multiple requests for
+payment.
 
-      7. Name and address of landlord:
-      Signed: [Signed]
-      Name: Tariq Mohammed
-      Address: 1 Example Street, Leeds, LS1 1AA
-      Telephone: 07123 456789
+Current rent arrears: GBP 3,000.00
+Monthly rent amount: GBP 1,500.00
 
-      Capacity: [X] landlord/licensor
-      Date: 01/01/2026
+5. The court proceedings will not begin earlier than:
+15/01/2026
+
+6. The latest date for court proceedings to begin is 12 months from the date of service of this notice.
+
+7. Name and address of landlord, licensor or landlords agent:
+Signed: [Signed]
+Name: Tariq Mohammed
+Address: 1 Example Street, Leeds, LS1 1AA
+Telephone: 07123 456789
+
+Capacity: [X] landlord/licensor
+
+Date: 01/01/2026
+
+This notice was served on: 01/01/2026
     `;
 
     section21PdfText = `
@@ -131,6 +147,54 @@ describe('Official Form Fixtures Integration Tests', () => {
       const result = extractS8FieldsWithRegex(section8PdfText);
 
       expect(result.housing_act_1988_mentioned).toBe(true);
+    });
+
+    /**
+     * COMPREHENSIVE FIELD EXTRACTION TESTS
+     * These tests verify all fields are correctly extracted from completed_section_8_form_3.pdf
+     */
+    it('should extract tenant name from Form 3 Section 1', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      expect(result.tenant_names).toContain('Sonia Shezadi');
+      expect(result.fields_found).toContain('tenant_names');
+    });
+
+    it('should extract property address from Form 3 Section 2', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      expect(result.property_address).toMatch(/35 Woodhall Park Avenue/i);
+      expect(result.property_address).toMatch(/LS28 7HF/i);
+      expect(result.fields_found).toContain('property_address');
+    });
+
+    it('should extract service date from Form 3 signature block', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      expect(result.date_served).toBe('01/01/2026');
+      expect(result.fields_found).toContain('date_served');
+    });
+
+    it('should extract landlord name from Form 3 Section 7', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      expect(result.landlord_name).toBe('Tariq Mohammed');
+      expect(result.fields_found).toContain('landlord_name');
+    });
+
+    it('should extract all required fields for Level A skip logic', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      // These are the key fields that should prevent Level A questions
+      expect(result.rent_amount).toBeDefined();
+      expect(parseFloat(result.rent_amount!)).toBe(1500);
+
+      expect(result.rent_frequency).toBe('monthly');
+
+      expect(result.rent_arrears_stated).toBeDefined();
+      expect(parseFloat(result.rent_arrears_stated!)).toBe(3000);
+
+      expect(result.earliest_proceedings_date).toBe('15/01/2026');
     });
   });
 
