@@ -17,6 +17,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { extractS8FieldsWithRegex, extractS21FieldsWithRegex } from '../analyze-evidence';
 import { validateSection8Notice, validateSection21Notice } from '@/lib/validators/legal-validators';
+import { getLevelAQuestions, getKnownFactKeysFromExtraction } from '@/lib/validators/facts/factKeys';
 
 // Path to the fixtures
 const FIXTURES_DIR = path.join(__dirname, '../../../../attached_assets/completed_notices');
@@ -468,6 +469,144 @@ describe('Official Form Fixtures Integration Tests', () => {
       const result = extractS8FieldsWithRegex(textWithOnOrAfter);
       expect(result.expiry_date).toBe('20/02/2026');
     });
+
+    /**
+     * REGRESSION: Issue 3 - Earliest Proceedings Date extraction
+     * Form 3 Section 5 uses "The court proceedings will not begin earlier than"
+     * This should be extracted as earliest_proceedings_date, NOT expiry_date
+     */
+    it('should extract earliest_proceedings_date from Form 3 Section 5 (Issue 3)', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      // The fixture text contains: "proceedings will not begin earlier than: 15/01/2026"
+      expect(result.earliest_proceedings_date).toBe('15/01/2026');
+      // expiry_date should also be set for backwards compatibility
+      expect(result.expiry_date).toBe('15/01/2026');
+      expect(result.fields_found).toContain('earliest_proceedings_date');
+    });
+
+    it('should extract rent_amount from Form 3 text (Issue 3)', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      // The fixture text contains: "GBP 1,500.00 per month"
+      expect(result.rent_amount).toBe('1500.00');
+      expect(result.fields_found).toContain('rent_amount');
+    });
+
+    it('should extract rent_frequency from Form 3 text (Issue 3)', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      // The fixture text contains: "per month" which implies monthly frequency
+      expect(result.rent_frequency).toBe('monthly');
+      expect(result.fields_found).toContain('rent_frequency');
+    });
+
+    it('should extract rent_arrears_stated from Form 3 text (Issue 3)', () => {
+      const result = extractS8FieldsWithRegex(section8PdfText);
+
+      // The fixture text contains: "arrears total GBP 3,000.00"
+      expect(result.rent_arrears_stated).toBe('3000.00');
+      expect(result.fields_found).toContain('rent_arrears_stated');
+    });
+  });
+
+  describe('Level A Question Skipping (Issue 4)', () => {
+    /**
+     * REGRESSION: Issue 4 - Level A questions should skip already-extracted values
+     * When Form 3 is uploaded and rent_amount, rent_frequency, current_arrears are extracted,
+     * the corresponding Level A questions should NOT be asked again.
+     * Only arrears_above_threshold_today and arrears_likely_at_hearing should remain.
+     */
+    it('should skip rent_amount_confirmed question when rent_amount is extracted', () => {
+      const extracted = {
+        rent_amount: 1500,
+        rent_frequency: 'monthly',
+        rent_arrears_stated: 3000,
+      };
+
+      // Get the Level A keys that should be considered "answered" based on extracted fields
+      const knownKeys = getKnownFactKeysFromExtraction(extracted);
+
+      // Should include the Level A versions of the extracted fields
+      expect(knownKeys).toContain('rent_amount_confirmed');
+      expect(knownKeys).toContain('rent_frequency_confirmed');
+      expect(knownKeys).toContain('current_arrears_amount');
+    });
+
+    it('should only ask threshold/hearing questions when rent values are already extracted', () => {
+      const extracted = {
+        rent_amount: 1500,
+        rent_frequency: 'monthly',
+        rent_arrears_stated: 3000,
+        current_arrears: 3000,
+      };
+
+      // Get the Level A keys that should be considered "answered" based on extracted fields
+      const knownKeys = getKnownFactKeysFromExtraction(extracted);
+
+      // Get remaining Level A questions for Section 8
+      const remainingQuestions = getLevelAQuestions('section_8', knownKeys);
+
+      // Should only have the 2 threshold/hearing questions remaining
+      const remainingFactKeys = remainingQuestions.map(q => q.factKey);
+      expect(remainingFactKeys).toContain('arrears_above_threshold_today');
+      expect(remainingFactKeys).toContain('arrears_likely_at_hearing');
+
+      // Should NOT include the rent-related questions (they were extracted)
+      expect(remainingFactKeys).not.toContain('rent_amount_confirmed');
+      expect(remainingFactKeys).not.toContain('rent_frequency_confirmed');
+      expect(remainingFactKeys).not.toContain('current_arrears_amount');
+
+      // Should have exactly 2 remaining questions
+      expect(remainingQuestions.length).toBe(2);
+    });
+
+    it('should ask all Level A questions when nothing is extracted', () => {
+      // No extraction data
+      const extracted = {};
+
+      // Get the Level A keys that should be considered "answered"
+      const knownKeys = getKnownFactKeysFromExtraction(extracted);
+
+      // Get remaining Level A questions for Section 8
+      const remainingQuestions = getLevelAQuestions('section_8', knownKeys);
+
+      // Should have all 5 Section 8 Level A questions
+      const remainingFactKeys = remainingQuestions.map(q => q.factKey);
+      expect(remainingFactKeys).toContain('arrears_above_threshold_today');
+      expect(remainingFactKeys).toContain('arrears_likely_at_hearing');
+      expect(remainingFactKeys).toContain('rent_amount_confirmed');
+      expect(remainingFactKeys).toContain('rent_frequency_confirmed');
+      expect(remainingFactKeys).toContain('current_arrears_amount');
+
+      expect(remainingQuestions.length).toBe(5);
+    });
+
+    it('should work with real S8 regex extraction result', () => {
+      // Use the actual fixture text extraction
+      const regexResult = extractS8FieldsWithRegex(section8PdfText);
+
+      // Build extracted fields object as it would be in the validator
+      const extracted: Record<string, any> = {
+        rent_amount: regexResult.rent_amount ? parseFloat(regexResult.rent_amount) : undefined,
+        rent_frequency: regexResult.rent_frequency,
+        rent_arrears_stated: regexResult.rent_arrears_stated ? parseFloat(regexResult.rent_arrears_stated) : undefined,
+      };
+
+      // Get the Level A keys that should be considered "answered"
+      const knownKeys = getKnownFactKeysFromExtraction(extracted);
+
+      // Get remaining Level A questions for Section 8
+      const remainingQuestions = getLevelAQuestions('section_8', knownKeys);
+      const remainingFactKeys = remainingQuestions.map(q => q.factKey);
+
+      // Since the fixture text has rent info, only threshold questions should remain
+      expect(remainingFactKeys).toContain('arrears_above_threshold_today');
+      expect(remainingFactKeys).toContain('arrears_likely_at_hearing');
+      expect(remainingFactKeys).not.toContain('rent_amount_confirmed');
+      expect(remainingFactKeys).not.toContain('rent_frequency_confirmed');
+      expect(remainingFactKeys).not.toContain('current_arrears_amount');
+    });
   });
 });
 
@@ -479,12 +618,22 @@ describe('Official Form Fixtures Integration Tests', () => {
  * 1. Navigate to /tools/validators/section-8
  *    - Upload completed_section_8_form_3.pdf
  *    - Verify: Document type detected as Section 8 / Form 3
- *    - Verify: Extracted fields show tenant (Sonia Shezadi), property address, grounds (8, 10, 11)
+ *    - Verify: Extracted fields show:
+ *      - Tenant: Sonia Shezadi
+ *      - Property address: 35 Woodhall Park Avenue, Pudsey, LS28 7HF
+ *      - Grounds: 8, 10, 11
+ *      - Rent Arrears: £3000
+ *      - Rent Amount: £1500
+ *      - Rent Frequency: Monthly
  *    - Verify: NO "Tenant details not found" warning appears
- *    - Verify: Dates display in UK format (DD/MM/YYYY): 01/01/2026
- *    - Verify: Labels show "Earliest Proceedings Date" and "Latest Proceedings Date" (NOT "Expiry Date")
- *    - Verify: Latest Proceedings Date = Service Date + 12 months (01/01/2027)
- *    - Verify: Level A questions appear for confirmation
+ *    - Verify: Dates display in UK format (DD/MM/YYYY)
+ *    - Verify: Earliest Proceedings Date = 15/01/2026 (Form 3 Section 5)
+ *    - Verify: Latest Proceedings Date = 01/01/2027 (Service Date + 12 months)
+ *    - Verify: Level A questions ONLY include:
+ *      - "Is the rent arrears currently above the Ground 8 threshold?"
+ *      - "Is the arrears likely to still be above the threshold at the court hearing?"
+ *    - Verify: Level A questions do NOT include rent_amount, rent_frequency, or current_arrears
+ *      (since these were already extracted from the document)
  *
  * 2. Navigate to /tools/validators/section-21
  *    - Upload completed_section_21_form_6a.pdf

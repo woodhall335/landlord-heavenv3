@@ -125,6 +125,9 @@ const EXTRACTION_TO_FACT_MAPPING: Array<{
   // Section 8 fields
   { sources: ['grounds_cited', 'grounds_listed', 'mandatory_grounds', 'discretionary_grounds'], target: 'grounds_selected', transform: normalizeGrounds },
   { sources: ['rent_arrears_stated', 'current_arrears', 'arrears_amount'], target: 'current_arrears', transform: normalizeAmount },
+  { sources: ['earliest_proceedings_date'], target: 'earliest_proceedings_date', transform: normalizeDate },
+  { sources: ['rent_frequency'], target: 'rent_frequency' },
+  { sources: ['rent_amount'], target: 'rent_amount', transform: normalizeAmount },
 
   // Wales notice fields
   { sources: ['rhw_form_number'], target: 'rhw_form_number' },

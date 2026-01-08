@@ -598,6 +598,74 @@ export const LEVEL_A_TO_CANONICAL_KEYS: Record<string, string> = {
 };
 
 /**
+ * Reverse mapping from canonical validator fact keys to Level A answer keys.
+ * Used to determine if an extracted fact corresponds to a Level A question.
+ */
+export const CANONICAL_TO_LEVEL_A_KEYS: Record<string, string> = Object.fromEntries(
+  Object.entries(LEVEL_A_TO_CANONICAL_KEYS).map(([levelA, canonical]) => [canonical, levelA])
+);
+
+/**
+ * Additional mappings from extraction field names to Level A fact keys.
+ * Some extraction fields use different names than canonical keys.
+ */
+export const EXTRACTION_TO_LEVEL_A_KEYS: Record<string, string> = {
+  // Section 8 extraction fields -> Level A keys
+  rent_frequency: 'rent_frequency_confirmed',
+  rent_amount: 'rent_amount_confirmed',
+  rent_arrears_stated: 'current_arrears_amount',
+  current_arrears: 'current_arrears_amount',
+  // Section 21 extraction fields -> Level A keys
+  deposit_protected: 'deposit_protected_within_30_days',
+  prescribed_info_served: 'prescribed_info_within_30_days',
+  gas_safety_pre_move_in: 'gas_safety_before_move_in',
+  gas_safety_mentioned: 'gas_safety_before_move_in',
+  epc_provided: 'epc_provided_to_tenant',
+  epc_mentioned: 'epc_provided_to_tenant',
+  how_to_rent_provided: 'how_to_rent_guide_provided',
+  how_to_rent_mentioned: 'how_to_rent_guide_provided',
+  licence_held: 'property_licensing_compliant',
+};
+
+/**
+ * Get the set of Level A fact keys that should be considered "answered"
+ * based on extracted fields from document analysis.
+ *
+ * This ensures we don't ask users to re-enter values that were already
+ * extracted from the uploaded document.
+ *
+ * @param extracted - The extracted fields from document analysis
+ * @returns Array of Level A fact keys that should be skipped
+ */
+export function getKnownFactKeysFromExtraction(extracted: Record<string, any>): string[] {
+  const knownKeys: string[] = [];
+
+  for (const [extractedKey, value] of Object.entries(extracted)) {
+    // Skip if value is empty/null/undefined
+    if (value === undefined || value === null || value === '' || value === 'unknown') {
+      continue;
+    }
+
+    // Check if this extraction field maps to a Level A key
+    const levelAKey = EXTRACTION_TO_LEVEL_A_KEYS[extractedKey];
+    if (levelAKey) {
+      knownKeys.push(levelAKey);
+    }
+
+    // Also check the canonical -> Level A mapping
+    const levelAKeyFromCanonical = CANONICAL_TO_LEVEL_A_KEYS[extractedKey];
+    if (levelAKeyFromCanonical) {
+      knownKeys.push(levelAKeyFromCanonical);
+    }
+
+    // Also include the extracted key itself (in case it matches a Level A key directly)
+    knownKeys.push(extractedKey);
+  }
+
+  return [...new Set(knownKeys)]; // Remove duplicates
+}
+
+/**
  * Normalize Level A answer keys to canonical validator fact keys.
  * Also parses numeric strings to numbers where appropriate.
  *

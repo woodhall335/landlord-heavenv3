@@ -972,9 +972,13 @@ export interface S8RegexExtractionResult {
   grounds_cited: number[];
   date_served: string | null;
   expiry_date: string | null;
+  /** Section 8 Form 3 Section 5: "The court proceedings will not begin earlier than" */
+  earliest_proceedings_date: string | null;
   notice_period: string | null;
   rent_arrears_stated: string | null;
   rent_amount: string | null;
+  /** Rent payment frequency extracted from the notice */
+  rent_frequency: string | null;
   property_address: string | null;
   tenant_names: string[];
   landlord_name: string | null;
@@ -992,9 +996,11 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     grounds_cited: [],
     date_served: null,
     expiry_date: null,
+    earliest_proceedings_date: null,
     notice_period: null,
     rent_arrears_stated: null,
     rent_amount: null,
+    rent_frequency: null,
     property_address: null,
     tenant_names: [],
     landlord_name: null,
@@ -1117,18 +1123,44 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     }
   }
 
-  // Expiry/possession date
-  const expiryDatePatterns = [
-    /(?:expire|expiry|expiration|proceedings?\s*after)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  // Earliest proceedings date - Form 3 Section 5: "The court proceedings will not begin earlier than"
+  // This is distinct from expiry_date - it's the earliest date court can begin
+  const earliestProceedingsPatterns = [
+    // Form 3 exact phrase: "The court proceedings will not begin earlier than: DD/MM/YYYY"
+    /(?:proceedings?\s*will\s*not\s*begin\s*earlier\s*than|will\s*not\s*begin\s*(?:proceedings?\s*)?earlier\s*than)\s*[:;]?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // Alternative: "not earlier than DD/MM/YYYY"
+    /(?:not\s*earlier\s*than)\s*[:;]?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // "proceedings after" pattern
+    /(?:proceedings?\s*after)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    // "on or after" pattern
     /(?:on\s*or\s*after)\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
   ];
-  for (const pattern of expiryDatePatterns) {
+  for (const pattern of earliestProceedingsPatterns) {
     const match = pattern.exec(text);
     if (match) {
-      result.expiry_date = match[1];
-      result.fields_found.push('expiry_date');
+      result.earliest_proceedings_date = match[1];
+      result.fields_found.push('earliest_proceedings_date');
       break;
     }
+  }
+
+  // Expiry/possession date (generic patterns, fallback)
+  // Note: For S8, earliest_proceedings_date is preferred over expiry_date
+  if (!result.earliest_proceedings_date) {
+    const expiryDatePatterns = [
+      /(?:expire|expiry|expiration)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    ];
+    for (const pattern of expiryDatePatterns) {
+      const match = pattern.exec(text);
+      if (match) {
+        result.expiry_date = match[1];
+        result.fields_found.push('expiry_date');
+        break;
+      }
+    }
+  } else {
+    // If we found earliest_proceedings_date, also set expiry_date for backwards compatibility
+    result.expiry_date = result.earliest_proceedings_date;
   }
 
   // Notice period
@@ -1172,6 +1204,37 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     if (match) {
       result.rent_amount = match[1].replace(/,/g, '');
       result.fields_found.push('rent_amount');
+      break;
+    }
+  }
+
+  // Rent frequency extraction - extract from text patterns like "per month", "monthly", etc.
+  const frequencyPatterns = [
+    // Pattern: "£X per month" or "£X a month" - extract "monthly"
+    { pattern: /£[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*month/i, value: 'monthly' },
+    // Pattern: "£X per week" or "£X a week" - extract "weekly"
+    { pattern: /£[\d,]+(?:\.\d{2})?\s*(?:per|a)\s*week/i, value: 'weekly' },
+    // Pattern: "monthly rent" explicitly
+    { pattern: /monthly\s*rent/i, value: 'monthly' },
+    // Pattern: "weekly rent" explicitly
+    { pattern: /weekly\s*rent/i, value: 'weekly' },
+    // Pattern: "rent is payable monthly"
+    { pattern: /rent\s*(?:is\s*)?payable\s*monthly/i, value: 'monthly' },
+    // Pattern: "rent is payable weekly"
+    { pattern: /rent\s*(?:is\s*)?payable\s*weekly/i, value: 'weekly' },
+    // Pattern: "fortnightly rent"
+    { pattern: /fortnightly\s*rent/i, value: 'fortnightly' },
+    // Pattern: "quarterly rent"
+    { pattern: /quarterly\s*rent/i, value: 'quarterly' },
+    // Pattern: "2 months unpaid rent" -> implies monthly
+    { pattern: /\d+\s*months?\s*(?:unpaid\s*)?rent/i, value: 'monthly' },
+    // Pattern: "8 weeks rent" -> implies weekly
+    { pattern: /\d+\s*weeks?\s*(?:unpaid\s*)?rent/i, value: 'weekly' },
+  ];
+  for (const { pattern, value } of frequencyPatterns) {
+    if (pattern.test(text)) {
+      result.rent_frequency = value;
+      result.fields_found.push('rent_frequency');
       break;
     }
   }
@@ -1321,6 +1384,9 @@ function s8RegexToExtractedFields(regex: S8RegexExtractionResult): Record<string
   if (regex.expiry_date) {
     fields.expiry_date = regex.expiry_date;
   }
+  if (regex.earliest_proceedings_date) {
+    fields.earliest_proceedings_date = regex.earliest_proceedings_date;
+  }
   if (regex.notice_period) {
     fields.notice_period = regex.notice_period;
   }
@@ -1329,6 +1395,9 @@ function s8RegexToExtractedFields(regex: S8RegexExtractionResult): Record<string
   }
   if (regex.rent_amount) {
     fields.rent_amount = parseFloat(regex.rent_amount);
+  }
+  if (regex.rent_frequency) {
+    fields.rent_frequency = regex.rent_frequency;
   }
   if (regex.property_address) {
     fields.property_address = regex.property_address;
