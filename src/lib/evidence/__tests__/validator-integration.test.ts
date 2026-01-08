@@ -563,6 +563,610 @@ describe('Validator Integration Tests', () => {
   });
 
   /**
+   * Structural Invalid Tests - Section 21 (Form 6A)
+   *
+   * These tests verify that validators catch missing mandatory fields and invalid
+   * structure within the CORRECT document type. The document IS recognized as
+   * Section 21 (Form 6A) but fails due to structural issues.
+   *
+   * IMPORTANT: These tests should NOT trigger S21-WRONG-DOC-TYPE since the
+   * document is correctly identified as a Section 21 notice.
+   */
+  describe('Section 21 Structural Invalid Tests', () => {
+    /**
+     * Test S21-SI-1: Missing property address
+     * Document is Form 6A but lacks property address field
+     */
+    it('S21-SI-1: Missing property address should fail with address-missing warning', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          date_served: '2026-01-01', // ISO format for reliable Date parsing
+          expiry_date: '2026-03-01', // ISO format - 2 months later
+          tenant_names: 'John Doe',
+          landlord_name: 'Jane Landlord',
+          signature_present: true,
+          // property_address: MISSING
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have property address warning
+      const addressWarning = result.warnings.find((w) => w.code === 'S21-PROPERTY-ADDRESS-MISSING');
+      expect(addressWarning).toBeDefined();
+      expect(addressWarning?.message).toContain('address');
+
+      console.log('S21-SI-1 (missing address):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        addressWarning: addressWarning?.message,
+      });
+    });
+
+    /**
+     * Test S21-SI-2: Missing service date and expiry date
+     * Document is Form 6A but lacks critical dates
+     */
+    it('S21-SI-2: Missing service date and expiry date should fail with date warnings', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_names: 'John Doe',
+          landlord_name: 'Jane Landlord',
+          signature_present: true,
+          // date_served: MISSING
+          // expiry_date: MISSING
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have service date and expiry date warnings
+      const serviceDateWarning = result.warnings.find((w) => w.code === 'S21-SERVICE-DATE-MISSING');
+      const expiryDateWarning = result.warnings.find((w) => w.code === 'S21-EXPIRY-DATE-MISSING');
+      expect(serviceDateWarning).toBeDefined();
+      expect(expiryDateWarning).toBeDefined();
+
+      // Status should be warning (not invalid since these are warnings)
+      expect(result.status).toBe('warning');
+
+      console.log('S21-SI-2 (missing dates):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        serviceDateWarning: serviceDateWarning?.message,
+        expiryDateWarning: expiryDateWarning?.message,
+      });
+    });
+
+    /**
+     * Test S21-SI-3: Missing signature
+     * Document is Form 6A but lacks landlord signature - this is a BLOCKER
+     */
+    it('S21-SI-3: Missing signature should fail with signature blocker', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          date_served: '2026-01-01', // ISO format
+          expiry_date: '2026-03-01', // ISO format - 2 months later
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_names: 'John Doe',
+          landlord_name: 'Jane Landlord',
+          signature_present: false, // Explicitly NOT signed
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have signature blocker
+      const signatureBlocker = result.blockers.find((b) => b.code === 'S21-SIGNATURE-MISSING');
+      expect(signatureBlocker).toBeDefined();
+      expect(signatureBlocker?.message).toContain('signed');
+
+      // Status should be invalid (blocker present)
+      expect(result.status).toBe('invalid');
+
+      console.log('S21-SI-3 (missing signature):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        signatureBlocker: signatureBlocker?.message,
+      });
+    });
+
+    /**
+     * Test S21-SI-4: Invalid notice period (less than 2 months)
+     * Document is Form 6A but expiry date is too soon
+     */
+    it('S21-SI-4: Insufficient notice period should fail with notice-period blocker', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          date_served: '2026-01-01', // ISO format
+          expiry_date: '2026-01-15', // Only 2 weeks - needs 2 months!
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_names: 'John Doe',
+          landlord_name: 'Jane Landlord',
+          signature_present: true,
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have notice period blocker
+      const noticePeriodBlocker = result.blockers.find((b) => b.code === 'S21-NOTICE-PERIOD');
+      expect(noticePeriodBlocker).toBeDefined();
+      expect(noticePeriodBlocker?.message).toContain('two-month');
+
+      // Status should be invalid (blocker present)
+      expect(result.status).toBe('invalid');
+
+      console.log('S21-SI-4 (insufficient notice period):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        noticePeriodBlocker: noticePeriodBlocker?.message,
+      });
+    });
+
+    /**
+     * Test S21-SI-5: Missing landlord name
+     * Document is Form 6A but lacks landlord name field
+     */
+    it('S21-SI-5: Missing landlord name should fail with landlord-name warning', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          date_served: '2026-01-01', // ISO format
+          expiry_date: '2026-03-01', // ISO format - 2 months later
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_names: 'John Doe',
+          // landlord_name: MISSING
+          signature_present: true,
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have landlord name warning
+      const landlordWarning = result.warnings.find((w) => w.code === 'S21-LANDLORD-NAME-MISSING');
+      expect(landlordWarning).toBeDefined();
+      expect(landlordWarning?.message).toContain('Landlord');
+
+      console.log('S21-SI-5 (missing landlord name):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        landlordWarning: landlordWarning?.message,
+      });
+    });
+
+    /**
+     * Test S21-SI-6: Multiple structural issues combined
+     * Document is Form 6A but has multiple problems
+     */
+    it('S21-SI-6: Multiple structural issues should accumulate', () => {
+      const result = validateSection21Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 21 Notice',
+          form_6a_detected: true,
+          section_21_detected: true,
+          date_served: '2026-01-01', // ISO format
+          expiry_date: '2026-01-20', // Only 19 days - insufficient notice period (blocker)
+          // property_address: MISSING (warning)
+          // tenant_names: MISSING (warning)
+          // landlord_name: MISSING (warning)
+          signature_present: false, // Missing (blocker)
+        },
+        answers: {
+          deposit_protected: 'yes',
+          prescribed_info_served: 'yes',
+          gas_safety_pre_move_in: 'yes',
+          epc_provided: 'yes',
+          how_to_rent_provided: 'yes',
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S21-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have multiple blockers (signature + notice period)
+      expect(result.blockers.length).toBeGreaterThanOrEqual(2);
+      expect(result.blockers.map((b) => b.code)).toContain('S21-SIGNATURE-MISSING');
+      expect(result.blockers.map((b) => b.code)).toContain('S21-NOTICE-PERIOD');
+
+      // Should have multiple warnings
+      expect(result.warnings.length).toBeGreaterThanOrEqual(2);
+
+      // Status should be invalid
+      expect(result.status).toBe('invalid');
+
+      console.log('S21-SI-6 (multiple issues):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        blockerCount: result.blockers.length,
+        warningCount: result.warnings.length,
+      });
+    });
+  });
+
+  /**
+   * Structural Invalid Tests - Section 8 (Form 3)
+   *
+   * These tests verify that validators catch missing mandatory fields and invalid
+   * structure within the CORRECT document type. The document IS recognized as
+   * Section 8 (Form 3) but fails due to structural issues.
+   *
+   * IMPORTANT: These tests should NOT trigger S8-WRONG-DOC-TYPE since the
+   * document is correctly identified as a Section 8 notice.
+   */
+  describe('Section 8 Structural Invalid Tests', () => {
+    /**
+     * Test S8-SI-1: Missing grounds section
+     * Document is Form 3 but no grounds are cited - BLOCKER
+     */
+    it('S8-SI-1: Missing grounds should fail with grounds-missing blocker', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          date_served: '2026-01-01', // ISO format
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_details: 'John Doe',
+          rent_arrears_stated: 5000,
+          // grounds_cited: MISSING - no grounds cited!
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500,
+          current_arrears: 5000,
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have grounds-missing blocker
+      const groundsBlocker = result.blockers.find((b) => b.code === 'S8-GROUNDS-MISSING');
+      expect(groundsBlocker).toBeDefined();
+      expect(groundsBlocker?.message).toContain('ground');
+
+      // Status should be invalid
+      expect(result.status).toBe('invalid');
+
+      console.log('S8-SI-1 (missing grounds):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        groundsBlocker: groundsBlocker?.message,
+      });
+    });
+
+    /**
+     * Test S8-SI-2: Missing service date
+     * Document is Form 3 but service date is missing
+     */
+    it('S8-SI-2: Missing service date should fail with service-date warning', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [8, 10],
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_details: 'John Doe',
+          rent_arrears_stated: 5000,
+          // date_served: MISSING
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500,
+          current_arrears: 5000,
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have service date warning
+      const serviceDateWarning = result.warnings.find((w) => w.code === 'S8-SERVICE-DATE-MISSING');
+      expect(serviceDateWarning).toBeDefined();
+      expect(serviceDateWarning?.message).toContain('Service date');
+
+      console.log('S8-SI-2 (missing service date):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        serviceDateWarning: serviceDateWarning?.message,
+      });
+    });
+
+    /**
+     * Test S8-SI-3: Missing tenant details
+     * Document is Form 3 but tenant details are missing
+     */
+    it('S8-SI-3: Missing tenant details should fail with tenant-details warning', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [10, 11],
+          date_served: '2026-01-01', // ISO format
+          property_address: '123 Test Street, London, SW1A 1AA',
+          rent_arrears_stated: 3000,
+          // tenant_details: MISSING
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500,
+          current_arrears: 3000,
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have tenant details warning
+      const tenantWarning = result.warnings.find((w) => w.code === 'S8-TENANT-DETAILS-MISSING');
+      expect(tenantWarning).toBeDefined();
+      expect(tenantWarning?.message).toContain('Tenant');
+
+      console.log('S8-SI-3 (missing tenant details):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        tenantWarning: tenantWarning?.message,
+      });
+    });
+
+    /**
+     * Test S8-SI-4: Ground 8 cited but arrears below threshold
+     * Document is Form 3 with Ground 8 but arrears don't meet 2-month threshold
+     */
+    it('S8-SI-4: Ground 8 with insufficient arrears should show high_risk status', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [8], // Ground 8 - mandatory ground requiring 2 months arrears
+          date_served: '2026-01-01', // ISO format
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_details: 'John Doe',
+          rent_arrears_stated: 1000, // Only £1000 arrears
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500, // £1500/month = £3000 threshold for Ground 8
+          current_arrears: 1000, // Below the 2-month threshold
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should NOT be ground_8_satisfied since arrears (£1000) < threshold (£3000)
+      expect(result.status).not.toBe('ground_8_satisfied');
+
+      // Status should be discretionary_only or high_risk (since Ground 8 threshold not met)
+      expect(['discretionary_only', 'high_risk', 'warning']).toContain(result.status);
+
+      console.log('S8-SI-4 (Ground 8 below threshold):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        note: 'Ground 8 requires £3000 (2x £1500), only £1000 arrears',
+      });
+    });
+
+    /**
+     * Test S8-SI-5: Missing rent arrears amount
+     * Document is Form 3 with Ground 8 but no arrears stated
+     */
+    it('S8-SI-5: Missing arrears amount should fail with arrears-missing warning', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [8, 10],
+          date_served: '2026-01-01', // ISO format
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_details: 'John Doe',
+          // rent_arrears_stated: MISSING
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500,
+          // current_arrears: MISSING
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have arrears warning
+      const arrearsWarning = result.warnings.find((w) => w.code === 'S8-ARREARS-MISSING');
+      expect(arrearsWarning).toBeDefined();
+      expect(arrearsWarning?.message).toContain('arrears');
+
+      // Should also have incomplete Ground 8 warning
+      const ground8Warning = result.warnings.find((w) => w.code === 'S8-GROUND8-INCOMPLETE');
+      expect(ground8Warning).toBeDefined();
+
+      console.log('S8-SI-5 (missing arrears):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        arrearsWarning: arrearsWarning?.message,
+        ground8Warning: ground8Warning?.message,
+      });
+    });
+
+    /**
+     * Test S8-SI-6: Multiple structural issues combined
+     * Document is Form 3 but has multiple problems
+     */
+    it('S8-SI-6: Multiple structural issues should accumulate', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [], // Empty grounds array - BLOCKER
+          // date_served: MISSING (warning)
+          // tenant_details: MISSING (warning)
+          // rent_arrears_stated: MISSING (warning)
+        },
+        answers: {},
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should have grounds-missing blocker
+      const groundsBlocker = result.blockers.find((b) => b.code === 'S8-GROUNDS-MISSING');
+      expect(groundsBlocker).toBeDefined();
+
+      // Should have multiple warnings
+      expect(result.warnings.length).toBeGreaterThanOrEqual(2);
+
+      // Status should be invalid
+      expect(result.status).toBe('invalid');
+
+      console.log('S8-SI-6 (multiple issues):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        blockerCount: result.blockers.length,
+        warningCount: result.warnings.length,
+      });
+    });
+
+    /**
+     * Test S8-SI-7: Valid Form 3 with Ground 8 satisfied
+     * Verify that a properly filled Form 3 passes when Ground 8 threshold IS met
+     */
+    it('S8-SI-7: Valid Form 3 with Ground 8 threshold met should pass', () => {
+      const result = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          form_3_detected: true,
+          section_8_detected: true,
+          grounds_cited: [8],
+          date_served: '2026-01-01', // ISO format
+          property_address: '123 Test Street, London, SW1A 1AA',
+          tenant_details: 'John Doe',
+          rent_arrears_stated: 5000,
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500, // £1500/month = £3000 threshold
+          current_arrears: 5000, // £5000 > £3000 - threshold met!
+        },
+      });
+
+      // Should NOT have wrong_doc_type blocker
+      const wrongDocTypeBlocker = result.blockers.find((b) => b.code === 'S8-WRONG-DOC-TYPE');
+      expect(wrongDocTypeBlocker).toBeUndefined();
+
+      // Should NOT have grounds-missing blocker
+      const groundsBlocker = result.blockers.find((b) => b.code === 'S8-GROUNDS-MISSING');
+      expect(groundsBlocker).toBeUndefined();
+
+      // Status should be ground_8_satisfied
+      expect(result.status).toBe('ground_8_satisfied');
+
+      console.log('S8-SI-7 (valid Form 3, Ground 8 met):', {
+        status: result.status,
+        blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+      });
+    });
+  });
+
+  /**
    * Artifact PDF Integration Test
    *
    * Tests the specific artifact PDF: f9a34a18-6b94-46eb-a58d-1d90c0875829.pdf
