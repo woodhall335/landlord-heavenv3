@@ -20,8 +20,8 @@ import { parseUKDate, formatUKDate, addCalendarMonths } from '@/lib/validators/r
  * Format a date string to UK format (DD/MM/YYYY).
  * Accepts various input formats and normalizes to UK display format.
  */
-function toUKDateDisplay(dateStr: string | null | undefined): string | null {
-  if (!dateStr) return null;
+function toUKDateDisplay(dateStr: string | null | undefined): string | undefined {
+  if (!dateStr) return undefined;
   const parsed = parseUKDate(dateStr);
   if (!parsed) return dateStr; // Return original if parsing fails
   return formatUKDate(parsed);
@@ -31,10 +31,10 @@ function toUKDateDisplay(dateStr: string | null | undefined): string | null {
  * Calculate latest proceedings date (12 months from service date).
  * Per Housing Act 1988, Section 8 proceedings must begin within 12 months.
  */
-function calculateLatestProceedingsDate(serviceDateStr: string | null | undefined): string | null {
-  if (!serviceDateStr) return null;
+function calculateLatestProceedingsDate(serviceDateStr: string | null | undefined): string | undefined {
+  if (!serviceDateStr) return undefined;
   const serviceDate = parseUKDate(serviceDateStr);
-  if (!serviceDate) return null;
+  if (!serviceDate) return undefined;
   const latestDate = addCalendarMonths(serviceDate, 12);
   return formatUKDate(latestDate);
 }
