@@ -12,7 +12,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import {
   RiCheckboxCircleFill,
   RiAlertFill,
@@ -25,6 +24,8 @@ import {
   RiFileTextLine,
   RiArrowRightLine,
 } from 'react-icons/ri';
+import { getWizardCta, type Cta } from '@/lib/checkout/cta-mapper';
+import { trackValidatorCtaClick } from '@/lib/analytics';
 
 interface ValidationIssue {
   code: string;
@@ -63,6 +64,12 @@ interface ValidationReportProps {
   provenanceMetadata?: ProvenanceItem[];
   extractedFields?: ExtractedFields;
   validatorKey: string;
+  /** Case ID for wizard flow continuation - required for proper CTA routing */
+  caseId?: string;
+  /** Jurisdiction for pricing/routing - defaults to 'england' */
+  jurisdiction?: string;
+  /** Upsell product recommendation from validation */
+  upsell?: { product: string; reason: string } | null;
   onAnswerQuestions?: () => void;
   className?: string;
 }
@@ -149,6 +156,9 @@ export function ValidationReport({
   provenanceMetadata = [],
   extractedFields,
   validatorKey,
+  caseId,
+  jurisdiction = 'england',
+  upsell,
   onAnswerQuestions,
   className = '',
 }: ValidationReportProps) {
@@ -161,6 +171,27 @@ export function ValidationReport({
   const hasWarnings = warnings.length > 0;
   const hasInfo = info.length > 0;
   const needsAnswers = missingFacts.length > 0;
+
+  // Generate dynamic CTAs using getWizardCta when case_id is available
+  // Falls back to null if no caseId (CTAs won't render without case context)
+  const ctas: { primary: Cta; secondary?: Cta } | null = caseId
+    ? getWizardCta({
+        jurisdiction,
+        validator_key: validatorKey,
+        validation_summary: {
+          status: normalizedStatus,
+          blockers,
+          warnings,
+          upsell,
+        },
+        caseId,
+        source: 'validator',
+      })
+    : null;
+
+  const handleCtaClick = (cta: Cta, ctaType: 'primary' | 'secondary') => {
+    trackValidatorCtaClick(validatorKey, ctaType, cta.productKey, normalizedStatus);
+  };
 
   return (
     <div className={`rounded-xl border bg-white shadow-sm overflow-hidden ${className}`}>
@@ -449,20 +480,34 @@ export function ValidationReport({
                 ? 'Consider our eviction packs for additional compliance checks.'
                 : 'Get court-ready documents with our eviction packs.'}
           </p>
-          <div className="flex gap-3">
-            <Link
-              href={`/products/notice-only?validator=${validatorKey}`}
-              className="inline-flex items-center gap-1 px-4 py-2 border border-purple-300 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-50 transition-colors"
-            >
-              Notice Pack
-            </Link>
-            <Link
-              href={`/products/complete-eviction-pack?validator=${validatorKey}`}
-              className="inline-flex items-center gap-1 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
-            >
-              Complete Pack <RiArrowRightLine className="h-4 w-4" />
-            </Link>
-          </div>
+          {ctas ? (
+            <div className="flex gap-3">
+              {ctas.secondary && (
+                <a
+                  href={ctas.secondary.href}
+                  onClick={() => handleCtaClick(ctas.secondary!, 'secondary')}
+                  className="inline-flex items-center gap-1 px-4 py-2 border border-purple-300 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-50 transition-colors"
+                >
+                  {ctas.secondary.label}
+                  <span className="text-xs text-purple-500">(£{ctas.secondary.price.toFixed(2)})</span>
+                </a>
+              )}
+              <a
+                href={ctas.primary.href}
+                onClick={() => handleCtaClick(ctas.primary, 'primary')}
+                className="inline-flex items-center gap-1 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
+              >
+                {ctas.primary.label}
+                <span className="text-xs text-purple-200">(£{ctas.primary.price.toFixed(2)})</span>
+                <RiArrowRightLine className="h-4 w-4" />
+              </a>
+            </div>
+          ) : (
+            /* Fallback: No CTA when caseId is missing - show informational message */
+            <p className="text-xs text-gray-400 italic">
+              Upload a document to get personalized recommendations
+            </p>
+          )}
         </div>
       </div>
     </div>
