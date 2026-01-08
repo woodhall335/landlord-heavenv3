@@ -25,6 +25,9 @@ const ANALYSIS_MASTER_TIMEOUT_MS = 30000;
 /** Hard timeout for OpenAI LLM calls (10s) - allows fallback to regex */
 const LLM_CALL_TIMEOUT_MS = 10000;
 
+/** Hard timeout for Level A validation calls (8s) - uses GPT-4o-mini for speed */
+const LEVEL_A_CALL_TIMEOUT_MS = 8000;
+
 /** Maximum characters to send to LLM - prevents slow responses on large docs */
 const LLM_MAX_TEXT_CHARS = 6000;
 
@@ -122,6 +125,315 @@ export interface EvidenceAnalysisResult {
   final_stage?: AnalysisStage;
   /** Total analysis duration in ms */
   duration_ms?: number;
+}
+
+/**
+ * Level A validation result - structure validity + follow-up questions
+ * Used by validators in Level A mode where no evidence uploads are required
+ */
+export interface LevelAValidationResult {
+  /** Whether the notice structure appears valid based on text alone */
+  structure_validity: 'valid' | 'likely_valid' | 'unclear' | 'invalid';
+  /** Reason for the structure validity assessment */
+  structure_reason: string;
+  /** Key fields extracted from the notice */
+  extracted_fields: {
+    property_address?: string | null;
+    tenant_names?: string[] | null;
+    landlord_name?: string | null;
+    service_date?: string | null;
+    expiry_date?: string | null;
+    grounds_cited?: number[] | null;
+    arrears_amount_stated?: number | null;
+    notice_type?: string | null;
+    form_detected?: string | null;
+    signature_present?: boolean | null;
+  };
+  /** Follow-up questions to clarify facts not determinable from the notice */
+  follow_up_questions: Array<{
+    fact_key: string;
+    question: string;
+    reason: string;
+  }>;
+  /** Warnings about issues found in the notice */
+  warnings: string[];
+  /** Confidence in the overall assessment (0-1) */
+  confidence: number;
+}
+
+/**
+ * Level A prompt for Section 21 notice validation
+ */
+const LEVEL_A_S21_PROMPT = `You are a UK landlord-tenant legal document analyzer specializing in Section 21 (Form 6A) notices.
+
+TASK: Analyze this Section 21 notice and provide:
+1. Structure validity assessment based strictly on the notice text
+2. Extract key fields
+3. Generate follow-up questions for compliance facts NOT determinable from the notice
+
+STRUCTURE VALIDITY RULES:
+- "valid": Notice is Section 21 Form 6A, has all required fields, dates look correct
+- "likely_valid": Appears to be S21/Form 6A but some fields unclear or dates need checking
+- "unclear": Cannot determine if this is a valid Section 21 notice
+- "invalid": Wrong form type (e.g., Section 8), obviously defective, or not a possession notice
+
+FOLLOW-UP QUESTIONS: Only ask about compliance facts that CANNOT be determined from the notice itself. Typical questions:
+- Deposit protection (scheme, timing)
+- Prescribed information service
+- Gas safety certificate provision
+- EPC provision
+- How to Rent guide provision
+- Property licensing compliance
+- Tenancy periodic/fixed-term status
+
+DO NOT ASK about facts that ARE visible in the notice (dates, names, address).
+
+Return ONLY valid JSON with this exact structure:
+{
+  "structure_validity": "valid" | "likely_valid" | "unclear" | "invalid",
+  "structure_reason": "Brief explanation of validity assessment",
+  "extracted_fields": {
+    "property_address": "Full address or null",
+    "tenant_names": ["Name1", "Name2"] or null,
+    "landlord_name": "Name or null",
+    "service_date": "YYYY-MM-DD or null",
+    "expiry_date": "YYYY-MM-DD or null",
+    "notice_type": "section_21" | "section_8" | "other" | null,
+    "form_detected": "form_6a" | "form_3" | null,
+    "signature_present": true | false | null
+  },
+  "follow_up_questions": [
+    {
+      "fact_key": "deposit_protected_within_30_days",
+      "question": "Was the tenant deposit protected in an approved scheme within 30 days?",
+      "reason": "Cannot determine from notice - required for S21 validity"
+    }
+  ],
+  "warnings": ["Any issues found in the notice structure"],
+  "confidence": 0.85
+}`;
+
+/**
+ * Level A prompt for Section 8 notice validation
+ */
+const LEVEL_A_S8_PROMPT = `You are a UK landlord-tenant legal document analyzer specializing in Section 8 (Form 3) notices.
+
+TASK: Analyze this Section 8 notice and provide:
+1. Structure validity assessment based strictly on the notice text
+2. Extract key fields including grounds cited and arrears
+3. Generate follow-up questions for facts NOT determinable from the notice
+
+STRUCTURE VALIDITY RULES:
+- "valid": Notice is Section 8 Form 3, grounds properly cited, dates/amounts clear
+- "likely_valid": Appears to be S8/Form 3 but some details unclear
+- "unclear": Cannot determine if this is a valid Section 8 notice
+- "invalid": Wrong form type (e.g., Section 21), no grounds cited, or not a possession notice
+
+FOLLOW-UP QUESTIONS: Only ask about facts that CANNOT be determined from the notice:
+- Current arrears amount (if not stated or may have changed)
+- Rent frequency (if not clear)
+- Rent amount (if not stated)
+- Whether arrears will remain above threshold at hearing
+- Any payments made since notice
+
+DO NOT ASK about facts visible in the notice (grounds, dates, stated arrears).
+
+Return ONLY valid JSON with this exact structure:
+{
+  "structure_validity": "valid" | "likely_valid" | "unclear" | "invalid",
+  "structure_reason": "Brief explanation of validity assessment",
+  "extracted_fields": {
+    "property_address": "Full address or null",
+    "tenant_names": ["Name1"] or null,
+    "landlord_name": "Name or null",
+    "service_date": "YYYY-MM-DD or null",
+    "expiry_date": "YYYY-MM-DD or null",
+    "grounds_cited": [8, 10, 11] or null,
+    "arrears_amount_stated": 2500.00 or null,
+    "notice_type": "section_8" | "section_21" | "other" | null,
+    "form_detected": "form_3" | "form_6a" | null
+  },
+  "follow_up_questions": [
+    {
+      "fact_key": "arrears_above_threshold_today",
+      "question": "Is the rent arrears currently above the Ground 8 threshold?",
+      "reason": "Arrears may have changed since notice was served"
+    }
+  ],
+  "warnings": ["Any issues found in the notice structure"],
+  "confidence": 0.85
+}`;
+
+/**
+ * Run Level A validation extraction using GPT-4o-mini
+ * This provides fast extraction + assessment in a single call
+ */
+export async function runLevelAExtraction(params: {
+  text: string;
+  validatorKey: 'section_21' | 'section_8';
+  client: ReturnType<typeof getOpenAIClient>;
+  debugId?: string;
+}): Promise<LevelAValidationResult> {
+  const { text, validatorKey, client, debugId } = params;
+  const startTime = Date.now();
+
+  // Select prompt based on validator type
+  const systemPrompt = validatorKey === 'section_21' ? LEVEL_A_S21_PROMPT : LEVEL_A_S8_PROMPT;
+
+  // Trim text for LLM processing
+  const trimmedText = trimTextForLLM(text, LLM_MAX_TEXT_CHARS);
+
+  const abortController = new AbortController();
+  const timeoutHandle = setTimeout(() => {
+    abortController.abort();
+  }, LEVEL_A_CALL_TIMEOUT_MS);
+
+  try {
+    const response = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+      max_tokens: 1500,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `NOTICE TEXT:\n${trimmedText}` },
+      ],
+    } as any, { signal: abortController.signal });
+
+    clearTimeout(timeoutHandle);
+
+    const duration = Date.now() - startTime;
+    debugLog('level_a_extraction_complete', { duration_ms: duration, debugId });
+
+    const raw = response.choices[0]?.message?.content ?? '{}';
+    return parseLevelAResult(raw, validatorKey);
+  } catch (error: any) {
+    clearTimeout(timeoutHandle);
+
+    const duration = Date.now() - startTime;
+    const isAborted = error.name === 'AbortError' || abortController.signal.aborted;
+    const isTimeout = isAborted || duration >= LEVEL_A_CALL_TIMEOUT_MS - 100;
+
+    if (isTimeout) {
+      console.error(`[runLevelAExtraction] Timed out after ${duration}ms`);
+    } else {
+      console.error('[runLevelAExtraction] Failed:', error.message);
+    }
+
+    // Return fallback result
+    return {
+      structure_validity: 'unclear',
+      structure_reason: isTimeout ? 'Analysis timed out' : `Analysis failed: ${error.message}`,
+      extracted_fields: {},
+      follow_up_questions: getDefaultFollowUpQuestions(validatorKey),
+      warnings: [isTimeout ? 'Analysis timed out - manual review recommended' : error.message],
+      confidence: 0.1,
+    };
+  }
+}
+
+/**
+ * Parse Level A extraction result from LLM response
+ */
+function parseLevelAResult(raw: string, validatorKey: 'section_21' | 'section_8'): LevelAValidationResult {
+  // Clean up potential markdown code blocks
+  let cleaned = raw.trim();
+  if (cleaned.startsWith('```json')) cleaned = cleaned.slice(7);
+  else if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
+  if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
+  cleaned = cleaned.trim();
+
+  try {
+    const parsed = JSON.parse(cleaned);
+
+    // Validate structure_validity
+    const validStatuses = ['valid', 'likely_valid', 'unclear', 'invalid'];
+    const structure_validity = validStatuses.includes(parsed.structure_validity)
+      ? parsed.structure_validity
+      : 'unclear';
+
+    return {
+      structure_validity,
+      structure_reason: parsed.structure_reason || 'No reason provided',
+      extracted_fields: parsed.extracted_fields || {},
+      follow_up_questions: Array.isArray(parsed.follow_up_questions)
+        ? parsed.follow_up_questions
+        : getDefaultFollowUpQuestions(validatorKey),
+      warnings: Array.isArray(parsed.warnings) ? parsed.warnings : [],
+      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.5,
+    };
+  } catch (error) {
+    console.error('[parseLevelAResult] Failed to parse JSON:', cleaned.slice(0, 200));
+    return {
+      structure_validity: 'unclear',
+      structure_reason: 'Failed to parse analysis result',
+      extracted_fields: {},
+      follow_up_questions: getDefaultFollowUpQuestions(validatorKey),
+      warnings: ['Analysis result could not be parsed'],
+      confidence: 0.1,
+    };
+  }
+}
+
+/**
+ * Get default follow-up questions for a validator when extraction fails
+ */
+function getDefaultFollowUpQuestions(validatorKey: 'section_21' | 'section_8'): Array<{
+  fact_key: string;
+  question: string;
+  reason: string;
+}> {
+  if (validatorKey === 'section_21') {
+    return [
+      {
+        fact_key: 'deposit_protected_within_30_days',
+        question: 'Was the tenant deposit protected in an approved scheme within 30 days of receipt?',
+        reason: 'Required for valid Section 21 notice',
+      },
+      {
+        fact_key: 'prescribed_info_within_30_days',
+        question: 'Was prescribed information about the deposit served within 30 days?',
+        reason: 'Required for valid Section 21 notice',
+      },
+      {
+        fact_key: 'gas_safety_before_move_in',
+        question: 'Was a valid gas safety certificate provided before move-in?',
+        reason: 'Required compliance document',
+      },
+      {
+        fact_key: 'epc_provided_to_tenant',
+        question: 'Was a valid EPC provided to the tenant?',
+        reason: 'Required compliance document',
+      },
+      {
+        fact_key: 'how_to_rent_guide_provided',
+        question: 'Was the "How to Rent" guide provided to the tenant?',
+        reason: 'Required for tenancies starting after Oct 2015',
+      },
+    ];
+  } else {
+    return [
+      {
+        fact_key: 'arrears_above_threshold_today',
+        question: 'Is the rent arrears currently above the Ground 8 threshold?',
+        reason: 'Arrears must be above threshold at notice AND hearing',
+      },
+      {
+        fact_key: 'arrears_likely_at_hearing',
+        question: 'Is the arrears likely to remain above threshold at court hearing?',
+        reason: 'Courts check arrears on hearing date',
+      },
+      {
+        fact_key: 'rent_frequency_confirmed',
+        question: 'What is the rent payment frequency (weekly/monthly)?',
+        reason: 'Determines Ground 8 threshold calculation',
+      },
+      {
+        fact_key: 'rent_amount_confirmed',
+        question: 'What is the rent amount per period?',
+        reason: 'Needed to calculate Ground 8 threshold',
+      },
+    ];
+  }
 }
 
 const AnalysisSchema = z.object({

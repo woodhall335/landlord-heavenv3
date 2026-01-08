@@ -13,6 +13,12 @@ export interface RequirementDefinition {
   key: RequirementKey;
   requiredFacts: QuestionDefinition[];
   requiredEvidence: string[];
+  /**
+   * Level A mode: Validation based on notice document + follow-up questions only.
+   * When true, no evidence uploads are required - compliance facts are captured
+   * via conversational yes/no/not-sure questions instead.
+   */
+  levelAMode?: boolean;
 }
 
 const yesNo = (input: Omit<QuestionDefinition, 'type'>): QuestionDefinition => ({
@@ -110,88 +116,109 @@ const tenancyAgreementPremiumExtras: QuestionDefinition[] = [
 export const REQUIREMENTS: Record<RequirementKey, RequirementDefinition> = {
   england_s21: {
     key: 'england_s21',
+    /**
+     * Level A Mode: No evidence uploads required.
+     * Validation based on notice document + follow-up questions.
+     */
+    levelAMode: true,
     requiredFacts: [
+      // These are the Level A follow-up questions (conversational, replace evidence uploads)
       yesNo({
-        id: 'deposit_protected',
-        factKey: 'deposit_protected',
-        question: 'Was the tenant deposit protected?',
+        id: 'deposit_protected_within_30_days',
+        factKey: 'deposit_protected_within_30_days',
+        question: 'Was the tenant deposit protected in an approved scheme within 30 days of receipt?',
         required: true,
       }),
       yesNo({
-        id: 'prescribed_info_served',
-        factKey: 'prescribed_info_served',
-        question: 'Was prescribed information served to the tenant?',
+        id: 'prescribed_info_within_30_days',
+        factKey: 'prescribed_info_within_30_days',
+        question: 'Was prescribed information about the deposit served within 30 days?',
         required: true,
       }),
       yesNo({
-        id: 'gas_safety_pre_move_in',
-        factKey: 'gas_safety_pre_move_in',
-        question: 'Was the gas safety certificate provided before move-in?',
+        id: 'gas_safety_before_move_in',
+        factKey: 'gas_safety_before_move_in',
+        question: 'Was a valid gas safety certificate provided before the tenant moved in?',
         required: true,
       }),
       yesNo({
-        id: 'epc_provided',
-        factKey: 'epc_provided',
-        question: 'Was the EPC provided to the tenant?',
+        id: 'epc_provided_to_tenant',
+        factKey: 'epc_provided_to_tenant',
+        question: 'Was a valid EPC provided to the tenant?',
         required: true,
       }),
       yesNo({
-        id: 'how_to_rent_provided',
-        factKey: 'how_to_rent_provided',
-        question: 'Was the How to Rent guide provided?',
+        id: 'how_to_rent_guide_provided',
+        factKey: 'how_to_rent_guide_provided',
+        question: 'Was the "How to Rent" guide provided to the tenant?',
         required: true,
+      }),
+      yesNo({
+        id: 'property_licensing_compliant',
+        factKey: 'property_licensing_compliant',
+        question: 'Is the property correctly licensed (if licensing applies in your area)?',
+        required: false,
+      }),
+      yesNo({
+        id: 'tenancy_periodic_not_fixed',
+        factKey: 'tenancy_periodic_not_fixed',
+        question: 'Is the tenancy currently periodic (i.e., has the fixed term ended)?',
+        required: false,
       }),
     ],
-    requiredEvidence: ['tenancy_agreement', 'deposit_protection', 'gas_safety', 'epc', 'how_to_rent', 'prescribed_info'],
+    // Level A mode: No evidence uploads required
+    requiredEvidence: [],
   },
   england_s8: {
     key: 'england_s8',
+    /**
+     * Level A Mode: No evidence uploads required.
+     * Validation based on notice document + follow-up questions.
+     */
+    levelAMode: true,
     requiredFacts: [
-      multiSelect({
-        id: 'grounds_selected',
-        factKey: 'grounds_selected',
-        question: 'Which Section 8 grounds are you relying on?',
+      // Grounds are extracted from notice, but we ask for confirmation if unclear
+      yesNo({
+        id: 'arrears_above_threshold_today',
+        factKey: 'arrears_above_threshold_today',
+        question: 'Is the rent arrears currently above the Ground 8 threshold?',
         required: true,
-        options: [
-          { label: 'Ground 8 (Serious arrears)', value: 'ground_8' },
-          { label: 'Ground 10 (Some arrears)', value: 'ground_10' },
-          { label: 'Ground 11 (Persistent delay)', value: 'ground_11' },
-          { label: 'Ground 12 (Breach of tenancy)', value: 'ground_12' },
-        ],
+      }),
+      yesNo({
+        id: 'arrears_likely_at_hearing',
+        factKey: 'arrears_likely_at_hearing',
+        question: 'Is the arrears likely to remain above the threshold at the court hearing?',
+        required: true,
       }),
       select({
-        id: 'rent_frequency',
-        factKey: 'rent_frequency',
-        question: 'How often is rent due?',
+        id: 'rent_frequency_confirmed',
+        factKey: 'rent_frequency_confirmed',
+        question: 'What is the rent payment frequency?',
         required: true,
         options: [
           { label: 'Weekly', value: 'weekly' },
+          { label: 'Fortnightly', value: 'fortnightly' },
           { label: 'Monthly', value: 'monthly' },
           { label: 'Quarterly', value: 'quarterly' },
         ],
       }),
       currency({
-        id: 'rent_amount',
-        factKey: 'rent_amount',
-        question: 'What is the current rent amount?',
+        id: 'rent_amount_confirmed',
+        factKey: 'rent_amount_confirmed',
+        question: 'What is the rent amount per period?',
         required: true,
         validation: { min: 0 },
       }),
       currency({
-        id: 'current_arrears',
-        factKey: 'current_arrears',
-        question: 'What is the total arrears amount today?',
+        id: 'current_arrears_amount',
+        factKey: 'current_arrears_amount',
+        question: 'What is the current total rent arrears?',
         required: true,
         validation: { min: 0 },
       }),
-      dateQuestion({
-        id: 'arrears_start_date',
-        factKey: 'arrears_start_date',
-        question: 'When did the arrears first reach the current level?',
-        required: true,
-      }),
     ],
-    requiredEvidence: ['notice_s8', 'rent_schedule', 'arrears_ledger', 'correspondence'],
+    // Level A mode: No evidence uploads required
+    requiredEvidence: [],
   },
   money_claim: {
     key: 'money_claim',

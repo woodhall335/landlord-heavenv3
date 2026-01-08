@@ -1,4 +1,4 @@
-import type { EvidenceAnalysisResult } from '@/lib/evidence/analyze-evidence';
+import type { EvidenceAnalysisResult, LevelAValidationResult } from '@/lib/evidence/analyze-evidence';
 import {
   validateSection21Notice,
   validateSection8Notice,
@@ -7,12 +7,15 @@ import {
 } from '@/lib/validators/legal-validators';
 import { resolveRequirementKey, REQUIREMENTS } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
+import { getLevelAQuestions, type FactQuestionConfig } from '@/lib/validators/facts/factKeys';
 
 export interface RunLegalValidatorInput {
   product?: string | null;
   jurisdiction?: string | null;
   facts: Record<string, any>;
   analysis?: EvidenceAnalysisResult | null;
+  /** Level A extraction result (if using Level A mode) */
+  levelAResult?: LevelAValidationResult | null;
 }
 
 export interface RunLegalValidatorResult {
@@ -21,6 +24,10 @@ export interface RunLegalValidatorResult {
   missing_questions?: QuestionDefinition[];
   recommendations?: Array<{ code: string; message: string }>;
   required_evidence_missing?: string[];
+  /** Level A follow-up questions (replaces evidence upload requirements) */
+  level_a_questions?: FactQuestionConfig[];
+  /** Whether validator is in Level A mode */
+  level_a_mode?: boolean;
 }
 
 function getFactValue(facts: Record<string, any>, paths: string[]): any {
@@ -206,6 +213,7 @@ function buildRecommendations(
   missingEvidence: string[],
   requirementKey: ReturnType<typeof resolveRequirementKey>,
   facts: Record<string, any>,
+  levelAMode?: boolean,
 ): Array<{ code: string; message: string }> {
   if (!result) return [];
   const recommendations: Array<{ code: string; message: string }> = [];
@@ -218,12 +226,16 @@ function buildRecommendations(
   if (result.upsell?.reason) {
     recommendations.push({ code: 'UPSELL_RECOMMENDED', message: result.upsell.reason });
   }
-  missingEvidence.forEach((item) => {
-    recommendations.push({
-      code: `EVIDENCE_MISSING_${item.toUpperCase()}`,
-      message: `Upload required evidence: ${item.replace(/_/g, ' ')}`,
+
+  // In Level A mode, don't recommend evidence uploads - use follow-up questions instead
+  if (!levelAMode) {
+    missingEvidence.forEach((item) => {
+      recommendations.push({
+        code: `EVIDENCE_MISSING_${item.toUpperCase()}`,
+        message: `Upload required evidence: ${item.replace(/_/g, ' ')}`,
+      });
     });
-  });
+  }
 
   if (requirementKey === 'money_claim') {
     const preAction = getFactValue(facts, ['pre_action_steps']);
@@ -445,10 +457,19 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     facts: input.facts,
   });
   const requirement = requirementKey ? REQUIREMENTS[requirementKey] : null;
+  const isLevelAMode = requirement?.levelAMode === true;
 
   if (!product) {
     return { validator_key: null, result: null };
   }
+
+  // Helper to get answered fact keys from input.facts
+  const getAnsweredFactKeys = (): string[] => {
+    return Object.keys(input.facts).filter((key) => {
+      const value = input.facts[key];
+      return value !== undefined && value !== null && value !== '' && value !== 'unknown';
+    });
+  };
 
   // Only support Section 21 and Section 8 validators for England
   if (product === 'notice_only' || product === 'complete_pack') {
@@ -462,16 +483,24 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         answers,
         extractionQuality,
       });
-      const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
+      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {
         result.upsell = buildUpsell(product, input.facts);
       }
+
+      // Get Level A follow-up questions (unanswered ones only)
+      const levelAQuestions = isLevelAMode
+        ? getLevelAQuestions('section_21', getAnsweredFactKeys())
+        : [];
+
       return {
         validator_key: 'section_21',
         result,
         missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-        required_evidence_missing: missingEvidence,
+        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts, isLevelAMode),
+        required_evidence_missing: isLevelAMode ? [] : missingEvidence,
+        level_a_questions: levelAQuestions,
+        level_a_mode: isLevelAMode,
       };
     }
 
@@ -483,16 +512,24 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         answers,
         extractionQuality,
       });
-      const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
+      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {
         result.upsell = buildUpsell(product, input.facts);
       }
+
+      // Get Level A follow-up questions (unanswered ones only)
+      const levelAQuestions = isLevelAMode
+        ? getLevelAQuestions('section_8', getAnsweredFactKeys())
+        : [];
+
       return {
         validator_key: 'section_8',
         result,
         missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts),
-        required_evidence_missing: missingEvidence,
+        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts, isLevelAMode),
+        required_evidence_missing: isLevelAMode ? [] : missingEvidence,
+        level_a_questions: levelAQuestions,
+        level_a_mode: isLevelAMode,
       };
     }
   }

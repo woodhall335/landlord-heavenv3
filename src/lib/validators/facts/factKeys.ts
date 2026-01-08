@@ -135,14 +135,16 @@ export interface FactQuestionConfig {
   factKey: string;
   question: string;
   helpText?: string;
-  type: 'yes_no' | 'date' | 'currency' | 'select' | 'text' | 'multi_select' | 'number';
-  section: 'dates' | 'deposit' | 'compliance_docs' | 'service' | 'tenancy' | 'grounds' | 'arrears' | 'risk';
+  type: 'yes_no' | 'yes_no_unsure' | 'date' | 'currency' | 'select' | 'text' | 'multi_select' | 'number';
+  section: 'dates' | 'deposit' | 'compliance_docs' | 'service' | 'tenancy' | 'grounds' | 'arrears' | 'risk' | 'level_a';
   options?: Array<{ value: string; label: string }>;
   validatorKeys: ('section_21' | 'section_8')[];
   /** Whether this question is required (defaults to true) */
   required?: boolean;
   /** Placeholder text for text/number inputs */
   placeholder?: string;
+  /** Whether this is a Level A follow-up question (conversational, replaces evidence uploads) */
+  isLevelA?: boolean;
 }
 
 /**
@@ -360,6 +362,133 @@ export const FACT_QUESTIONS: FactQuestionConfig[] = [
     section: 'risk',
     validatorKeys: ['section_8'],
   },
+
+  // ==========================================================================
+  // LEVEL A FOLLOW-UP QUESTIONS
+  // These replace evidence upload requirements for Level A validation mode.
+  // They are conversational yes/no/not-sure questions about compliance facts
+  // that cannot be determined from the notice document itself.
+  // ==========================================================================
+
+  // Section 21 Level A Questions
+  {
+    factKey: 'deposit_protected_within_30_days',
+    question: 'Was the tenant deposit protected in an approved scheme within 30 days of receipt?',
+    helpText: 'Government-approved schemes include TDS, DPS, and MyDeposits. The deposit must be protected within 30 days.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'prescribed_info_within_30_days',
+    question: 'Was prescribed information about the deposit served to the tenant within 30 days?',
+    helpText: 'This is a legal requirement - you must provide specific information about how the deposit is protected.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'gas_safety_before_move_in',
+    question: 'Was a valid gas safety certificate provided to the tenant before they moved in?',
+    helpText: 'If the property has gas appliances, a current gas safety certificate must be given before move-in.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'epc_provided_to_tenant',
+    question: 'Was a valid EPC (Energy Performance Certificate) provided to the tenant?',
+    helpText: 'An EPC rated E or better must be provided to the tenant.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'how_to_rent_guide_provided',
+    question: 'Was the government\'s "How to Rent" guide provided to the tenant?',
+    helpText: 'Required for all tenancies starting on or after 1 October 2015.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'property_licensing_compliant',
+    question: 'Is the property correctly licensed (if licensing applies in your area)?',
+    helpText: 'Some areas require landlord licensing. If required and not held, Section 21 cannot be used.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'tenancy_periodic_not_fixed',
+    question: 'Is the tenancy currently periodic (i.e., has the fixed term ended)?',
+    helpText: 'If still in a fixed term, the Section 21 expiry date must be the last day of the fixed term or later.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_21'],
+    isLevelA: true,
+  },
+
+  // Section 8 Level A Questions
+  {
+    factKey: 'arrears_above_threshold_today',
+    question: 'Is the rent arrears currently above the Ground 8 threshold?',
+    helpText: 'For monthly rent: 2 months arrears. For weekly rent: 8 weeks arrears. Must be met at notice AND hearing.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_8'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'arrears_likely_at_hearing',
+    question: 'Is the arrears likely to still be above the threshold at the court hearing?',
+    helpText: 'Courts will check arrears on the hearing date. If tenant pays down below threshold, Ground 8 fails.',
+    type: 'yes_no_unsure',
+    section: 'level_a',
+    validatorKeys: ['section_8'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'rent_frequency_confirmed',
+    question: 'What is the rent payment frequency?',
+    helpText: 'This determines the Ground 8 threshold calculation.',
+    type: 'select',
+    section: 'level_a',
+    options: [
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'fortnightly', label: 'Fortnightly' },
+      { value: 'monthly', label: 'Monthly' },
+      { value: 'quarterly', label: 'Quarterly' },
+    ],
+    validatorKeys: ['section_8'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'rent_amount_confirmed',
+    question: 'What is the rent amount per period?',
+    helpText: 'Enter the rent amount that matches the frequency above.',
+    type: 'currency',
+    section: 'level_a',
+    placeholder: '0.00',
+    validatorKeys: ['section_8'],
+    isLevelA: true,
+  },
+  {
+    factKey: 'current_arrears_amount',
+    question: 'What is the current total rent arrears?',
+    helpText: 'The total amount of unpaid rent as of today.',
+    type: 'currency',
+    section: 'level_a',
+    placeholder: '0.00',
+    validatorKeys: ['section_8'],
+    isLevelA: true,
+  },
 ];
 
 /**
@@ -410,4 +539,38 @@ export const SECTION_LABELS: Record<string, string> = {
   grounds: 'Grounds for Possession',
   arrears: 'Rent & Arrears',
   risk: 'Risk Factors',
+  level_a: 'Additional Questions',
 };
+
+/**
+ * Get Level A follow-up questions for a validator
+ * These are conversational questions that replace evidence upload requirements
+ */
+export function getLevelAQuestions(
+  validatorKey: 'section_21' | 'section_8',
+  answeredFactKeys?: string[]
+): FactQuestionConfig[] {
+  const answered = new Set(answeredFactKeys || []);
+  return FACT_QUESTIONS.filter(
+    (q) =>
+      q.isLevelA === true &&
+      q.validatorKeys.includes(validatorKey) &&
+      !answered.has(q.factKey)
+  );
+}
+
+/**
+ * Get the set of Level A fact keys for a validator
+ */
+export function getLevelAFactKeys(validatorKey: 'section_21' | 'section_8'): string[] {
+  return FACT_QUESTIONS
+    .filter((q) => q.isLevelA === true && q.validatorKeys.includes(validatorKey))
+    .map((q) => q.factKey);
+}
+
+/**
+ * Check if a fact key is a Level A question
+ */
+export function isLevelAFactKey(factKey: string): boolean {
+  return FACT_QUESTIONS.some((q) => q.factKey === factKey && q.isLevelA === true);
+}
