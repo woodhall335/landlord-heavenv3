@@ -3,6 +3,7 @@ export type QuestionType =
   | 'yes_no_unsure'
   | 'date'
   | 'currency'
+  | 'number'
   | 'text'
   | 'select'
   | 'multi_select';
