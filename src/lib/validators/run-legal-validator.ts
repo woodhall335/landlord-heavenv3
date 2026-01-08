@@ -7,7 +7,7 @@ import {
 } from '@/lib/validators/legal-validators';
 import { resolveRequirementKey, REQUIREMENTS } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
-import { getLevelAQuestions, type FactQuestionConfig } from '@/lib/validators/facts/factKeys';
+import { getLevelAQuestions, normalizeLevelAFactsToCanonical, type FactQuestionConfig } from '@/lib/validators/facts/factKeys';
 
 export interface RunLegalValidatorInput {
   product?: string | null;
@@ -333,9 +333,23 @@ function buildSection21Answers(facts: Record<string, any>, extracted?: Record<st
 
 function buildSection8Answers(facts: Record<string, any>, extracted?: Record<string, any>) {
   const ext = extracted || {};
-  const rentFrequency = ext.rent_frequency ?? getFactValue(facts, ['rent_frequency', 'tenancy.rent_frequency']);
-  const rentAmount = ext.rent_amount ?? getFactValue(facts, ['rent_amount', 'tenancy.rent_amount']);
+
+  // FIX: Include Level A keys in the lookup paths for rent_frequency, rent_amount, and arrears
+  // Level A answers are stored with keys like rent_frequency_confirmed, rent_amount_confirmed, current_arrears_amount
+  // but the validator expects canonical keys like rent_frequency, rent_amount, current_arrears
+  const rentFrequency = ext.rent_frequency ?? getFactValue(facts, [
+    'rent_frequency',
+    'rent_frequency_confirmed', // Level A key
+    'tenancy.rent_frequency',
+  ]);
+  const rentAmount = ext.rent_amount ?? getFactValue(facts, [
+    'rent_amount',
+    'rent_amount_confirmed', // Level A key
+    'tenancy.rent_amount',
+  ]);
   const arrearsTotal = ext.rent_arrears_stated ?? getFactValue(facts, [
+    'current_arrears',
+    'current_arrears_amount', // Level A key
     'arrears_amount',
     'arrears_total',
     'issues.rent_arrears.total_arrears',
@@ -422,10 +436,15 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   const product = resolveProduct(input.facts, input.product);
   const jurisdiction = resolveJurisdiction(input.facts, input.jurisdiction);
 
+  // FIX: Normalize Level A fact keys to canonical validator keys FIRST
+  // This ensures that Level A answers (e.g., rent_frequency_confirmed) are mapped to
+  // canonical keys (e.g., rent_frequency) that validators expect
+  const normalizedFacts = normalizeLevelAFactsToCanonical(input.facts);
+
   // FIX: Build extracted fields from BOTH analysis.extracted_fields AND facts
   // This ensures extracted values are not lost when analysis is null (e.g., after Q&A re-check)
   const rawExtracted = input.analysis?.extracted_fields || {};
-  const factsBasedExtracted = extractFieldsFromFacts(input.facts);
+  const factsBasedExtracted = extractFieldsFromFacts(normalizedFacts);
 
   // Merge: analysis.extracted_fields takes precedence, but facts fills in gaps
   const mergedExtracted = { ...factsBasedExtracted, ...rawExtracted };
@@ -454,7 +473,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   const requirementKey = resolveRequirementKey({
     product,
     jurisdiction,
-    facts: input.facts,
+    facts: normalizedFacts,
   });
   const requirement = requirementKey ? REQUIREMENTS[requirementKey] : null;
   const isLevelAMode = requirement?.levelAMode === true;
@@ -463,29 +482,29 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     return { validator_key: null, result: null };
   }
 
-  // Helper to get answered fact keys from input.facts
+  // Helper to get answered fact keys from normalizedFacts (includes both original and mapped keys)
   const getAnsweredFactKeys = (): string[] => {
-    return Object.keys(input.facts).filter((key) => {
-      const value = input.facts[key];
+    return Object.keys(normalizedFacts).filter((key) => {
+      const value = normalizedFacts[key];
       return value !== undefined && value !== null && value !== '' && value !== 'unknown';
     });
   };
 
   // Only support Section 21 and Section 8 validators for England
   if (product === 'notice_only' || product === 'complete_pack') {
-    const route = resolveNoticeRoute(input.facts).toLowerCase();
+    const route = resolveNoticeRoute(normalizedFacts).toLowerCase();
 
     if (route.includes('section_21') || route.includes('section 21')) {
-      const answers = buildSection21Answers(input.facts, extracted);
+      const answers = buildSection21Answers(normalizedFacts, extracted);
       const result = validateSection21Notice({
         jurisdiction: 'england',
         extracted,
         answers,
         extractionQuality,
       });
-      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, input.facts);
+      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, normalizedFacts);
       if (result && !result.upsell) {
-        result.upsell = buildUpsell(product, input.facts);
+        result.upsell = buildUpsell(product, normalizedFacts);
       }
 
       // Get Level A follow-up questions (unanswered ones only)
@@ -496,8 +515,8 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
       return {
         validator_key: 'section_21',
         result,
-        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts, isLevelAMode),
+        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, normalizedFacts) : [],
+        recommendations: buildRecommendations(result, missingEvidence, requirementKey, normalizedFacts, isLevelAMode),
         required_evidence_missing: isLevelAMode ? [] : missingEvidence,
         level_a_questions: levelAQuestions,
         level_a_mode: isLevelAMode,
@@ -505,16 +524,16 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     }
 
     if (route.includes('section_8') || route.includes('section 8')) {
-      const answers = buildSection8Answers(input.facts, extracted);
+      const answers = buildSection8Answers(normalizedFacts, extracted);
       const result = validateSection8Notice({
         jurisdiction: 'england',
         extracted,
         answers,
         extractionQuality,
       });
-      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, input.facts);
+      const missingEvidence = isLevelAMode ? [] : collectMissingEvidence(requirement?.requiredEvidence, normalizedFacts);
       if (result && !result.upsell) {
-        result.upsell = buildUpsell(product, input.facts);
+        result.upsell = buildUpsell(product, normalizedFacts);
       }
 
       // Get Level A follow-up questions (unanswered ones only)
@@ -525,8 +544,8 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
       return {
         validator_key: 'section_8',
         result,
-        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, input.facts) : [],
-        recommendations: buildRecommendations(result, missingEvidence, requirementKey, input.facts, isLevelAMode),
+        missing_questions: requirement ? collectMissingQuestions(requirement.requiredFacts, normalizedFacts) : [],
+        recommendations: buildRecommendations(result, missingEvidence, requirementKey, normalizedFacts, isLevelAMode),
         required_evidence_missing: isLevelAMode ? [] : missingEvidence,
         level_a_questions: levelAQuestions,
         level_a_mode: isLevelAMode,

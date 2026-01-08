@@ -574,3 +574,72 @@ export function getLevelAFactKeys(validatorKey: 'section_21' | 'section_8'): str
 export function isLevelAFactKey(factKey: string): boolean {
   return FACT_QUESTIONS.some((q) => q.factKey === factKey && q.isLevelA === true);
 }
+
+/**
+ * Mapping from Level A answer keys to canonical validator fact keys.
+ * This is the single source of truth for key normalization.
+ */
+export const LEVEL_A_TO_CANONICAL_KEYS: Record<string, string> = {
+  // Section 8 Level A keys -> canonical keys
+  rent_frequency_confirmed: 'rent_frequency',
+  rent_amount_confirmed: 'rent_amount',
+  current_arrears_amount: 'current_arrears',
+  // Note: arrears_above_threshold_today and arrears_likely_at_hearing are kept as-is
+  // since they are boolean flags that don't map to numeric canonical keys
+};
+
+/**
+ * Normalize Level A answer keys to canonical validator fact keys.
+ * Also parses numeric strings to numbers where appropriate.
+ *
+ * Example:
+ * - rent_frequency_confirmed -> rent_frequency
+ * - rent_amount_confirmed -> rent_amount (parsed as number)
+ * - current_arrears_amount -> current_arrears (parsed as number)
+ *
+ * @param facts - The facts object containing Level A answers
+ * @returns A new facts object with normalized keys and values
+ */
+export function normalizeLevelAFactsToCanonical(facts: Record<string, any>): Record<string, any> {
+  const normalized: Record<string, any> = { ...facts };
+
+  // Currency fields that should be parsed as numbers
+  const currencyFields = new Set([
+    'rent_amount_confirmed',
+    'current_arrears_amount',
+    'rent_amount',
+    'current_arrears',
+  ]);
+
+  // Apply key mappings
+  for (const [levelAKey, canonicalKey] of Object.entries(LEVEL_A_TO_CANONICAL_KEYS)) {
+    if (facts[levelAKey] !== undefined && facts[levelAKey] !== null) {
+      let value = facts[levelAKey];
+
+      // Parse currency fields as numbers
+      if (currencyFields.has(levelAKey)) {
+        const parsed = typeof value === 'number' ? value : parseFloat(String(value));
+        if (!Number.isNaN(parsed)) {
+          value = parsed;
+        }
+      }
+
+      // Set the canonical key if not already set or if Level A value is more specific
+      if (normalized[canonicalKey] === undefined || normalized[canonicalKey] === null) {
+        normalized[canonicalKey] = value;
+      }
+    }
+  }
+
+  // Also parse any existing canonical currency fields that might be strings
+  for (const key of ['rent_amount', 'current_arrears', 'arrears_amount']) {
+    if (normalized[key] !== undefined && typeof normalized[key] === 'string') {
+      const parsed = parseFloat(normalized[key]);
+      if (!Number.isNaN(parsed)) {
+        normalized[key] = parsed;
+      }
+    }
+  }
+
+  return normalized;
+}
