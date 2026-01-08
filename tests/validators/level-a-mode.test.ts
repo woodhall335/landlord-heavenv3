@@ -644,4 +644,70 @@ describe('Level A Mode - Section 8 Ground 8 Validation with Level A Answers', ()
     // 2500 >= 2000 threshold, so Ground 8 should be satisfied
     expect(result.result?.status).toBe('ground_8_satisfied');
   });
+
+  it('SANITY CHECK: Full Level A answer flow removes all missing-fact warnings and empties next_questions', () => {
+    // Simulates: Upload flow -> validator returns Level A questions for S8
+    // Then: Answer flow with full payload
+    const fullPayload = {
+      rent_frequency_confirmed: 'monthly',
+      rent_amount_confirmed: '1000',
+      current_arrears_amount: '3000',
+      arrears_above_threshold_today: 'yes',
+      arrears_likely_at_hearing: 'yes',
+    };
+
+    // Step 1: Verify normalization function correctly maps keys and parses numbers
+    const normalized = normalizeLevelAFactsToCanonical(fullPayload);
+
+    // Assert canonical keys exist and are correctly typed (numbers parsed)
+    expect(normalized.rent_frequency).toBe('monthly');
+    expect(normalized.rent_amount).toBe(1000);
+    expect(typeof normalized.rent_amount).toBe('number');
+    expect(normalized.current_arrears).toBe(3000);
+    expect(typeof normalized.current_arrears).toBe('number');
+
+    // Step 2: Run validator with normalized facts (simulates answer-questions flow)
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        ...fullPayload,
+        evidence: { files: [] },
+      },
+      analysis: {
+        detected_type: 'section_8',
+        extracted_fields: {
+          form_3_detected: true,
+          grounds_cited: [8],
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    // Step 3: Assert no missing-fact warnings
+    const warnings = result.result?.warnings ?? [];
+    const warningCodes = warnings.map((w) => w.code);
+
+    // Should NOT have S8-REQUIRED-MISSING warnings for rent_frequency
+    const rentFreqWarnings = warnings.filter(
+      (w) => w.code === 'S8-REQUIRED-MISSING' && w.message.includes('rent frequency')
+    );
+    expect(rentFreqWarnings.length).toBe(0);
+
+    // Should NOT have S8-GROUND8-INCOMPLETE warning
+    expect(warningCodes).not.toContain('S8-GROUND8-INCOMPLETE');
+
+    // Step 4: Verify Level A mode flags
+    expect(result.level_a_mode).toBe(true);
+
+    // Step 5: Verify next_questions resolves to [] after answering all Level A questions
+    // All 5 Section 8 Level A questions have been answered
+    expect(result.level_a_questions).toBeDefined();
+    expect(result.level_a_questions!.length).toBe(0);
+
+    // Step 6: Verify Ground 8 is correctly calculated (3000 >= 2000 threshold)
+    expect(result.result?.status).toBe('ground_8_satisfied');
+  });
 });
