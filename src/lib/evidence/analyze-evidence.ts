@@ -22,6 +22,12 @@ function debugLog(label: string, data: any, debugId?: string): void {
 /** Master timeout for entire analysis (30s) - prevents infinite hangs */
 const ANALYSIS_MASTER_TIMEOUT_MS = 30000;
 
+/** Hard timeout for OpenAI LLM calls (10s) - allows fallback to regex */
+const LLM_CALL_TIMEOUT_MS = 10000;
+
+/** Maximum characters to send to LLM - prevents slow responses on large docs */
+const LLM_MAX_TEXT_CHARS = 6000;
+
 /**
  * Analysis stages for observability
  */
@@ -29,11 +35,24 @@ type AnalysisStage =
   | 'init'
   | 'buffer_load'
   | 'pdf_parse'
-  | 'regex_extraction'
-  | 'llm_text_extraction'
-  | 'vision_extraction'
+  | 'pdf_parse_complete'
+  | 'regex_start'
+  | 'regex_complete'
+  | 'llm_start'
+  | 'llm_complete'
+  | 'llm_error'
+  | 'llm_timeout'
+  | 'vision_start'
+  | 'vision_complete'
+  | 'vision_error'
+  | 'vision_timeout'
+  | 'classify_start'
+  | 'classify_complete'
+  | 'validate_start'
+  | 'validate_complete'
   | 'result_merge'
   | 'complete'
+  | 'timeout'
   | 'error';
 
 /**
@@ -115,6 +134,67 @@ const AnalysisSchema = z.object({
 const MAX_TEXT_CHARS = 6000;
 // Use the threshold from extract-pdf-text module for consistency
 const MIN_TEXT_LENGTH = LOW_TEXT_THRESHOLD;
+
+/**
+ * Trim text intelligently for LLM processing.
+ * Prefers to keep the beginning of the document where Form markers typically appear.
+ * Avoids cutting mid-sentence if possible.
+ */
+function trimTextForLLM(text: string, maxChars: number = LLM_MAX_TEXT_CHARS): string {
+  if (text.length <= maxChars) {
+    return text;
+  }
+
+  // Look for key form markers in the text
+  const formMarkers = [
+    /form\s*6a/i,
+    /form\s*3\b/i,
+    /section\s*21/i,
+    /section\s*8/i,
+    /notice\s*requiring\s*possession/i,
+    /notice\s*seeking\s*possession/i,
+    /housing\s*act\s*1988/i,
+  ];
+
+  // Find the position of key markers
+  let lastMarkerPos = 0;
+  for (const marker of formMarkers) {
+    const match = marker.exec(text);
+    if (match && match.index !== undefined) {
+      lastMarkerPos = Math.max(lastMarkerPos, match.index + match[0].length);
+    }
+  }
+
+  // Ensure we capture at least to the last marker + 1000 chars for context
+  const minInclude = Math.min(lastMarkerPos + 1000, text.length);
+
+  // If markers are early, just take first maxChars
+  // If markers are beyond maxChars, prioritize including them
+  let cutPoint = maxChars;
+  if (lastMarkerPos > maxChars * 0.7) {
+    // Markers are late in the text - include them even if it means less trailing content
+    cutPoint = Math.max(maxChars, minInclude);
+  }
+
+  // Find a good break point (paragraph or sentence)
+  let breakPoint = cutPoint;
+  const searchStart = Math.max(0, cutPoint - 200);
+  const searchRegion = text.slice(searchStart, cutPoint);
+
+  // Look for paragraph break
+  const paragraphBreak = searchRegion.lastIndexOf('\n\n');
+  if (paragraphBreak > 0) {
+    breakPoint = searchStart + paragraphBreak;
+  } else {
+    // Look for sentence break
+    const sentenceBreak = searchRegion.lastIndexOf('. ');
+    if (sentenceBreak > 0) {
+      breakPoint = searchStart + sentenceBreak + 1;
+    }
+  }
+
+  return text.slice(0, breakPoint).trim();
+}
 
 /**
  * Validator-specific extraction instructions for compliance checks.
@@ -970,38 +1050,72 @@ async function extractViaVision(params: {
   }
 }
 
+/**
+ * Extract document information via text analysis with hard timeout.
+ * Uses AbortController to ensure the request is cancelled on timeout.
+ */
 async function extractViaText(params: {
   text: string;
   prompt: string;
   client: ReturnType<typeof getOpenAIClient>;
+  timeoutMs?: number;
+  debugId?: string;
 }): Promise<EvidenceAnalysisResult> {
-  const { client } = params;
+  const { client, timeoutMs = LLM_CALL_TIMEOUT_MS, debugId } = params;
+  const startTime = Date.now();
 
-  // Note: Using response_format can cause issues with some Zod versions
-  // Instead, we rely on strong prompting for JSON output
-  const response = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    temperature: 0,
-    max_tokens: 1200,
-    messages: [
-      {
-        role: 'system',
-        content:
-          'You are a document analyzer. Return ONLY valid JSON with keys: detected_type, extracted_fields, confidence, warnings. ' +
-          'Do not include markdown, code blocks, or explanations. Output pure JSON only.',
-      },
-      {
-        role: 'user',
-        content: `${params.prompt}\n\nExtract from text:\n${params.text}`,
-      },
-    ],
-    // Removed response_format to avoid Zod 4 compatibility issues with OpenAI SDK
-  } as any);
+  // Create abort controller for hard timeout
+  const abortController = new AbortController();
+  const timeoutHandle = setTimeout(() => {
+    abortController.abort();
+  }, timeoutMs);
 
-  const raw = response.choices[0]?.message?.content ?? '{}';
-  const parsed = parseAnalysisPayload(raw, 'pdf_text');
+  try {
+    // Note: Using response_format can cause issues with some Zod versions
+    // Instead, we rely on strong prompting for JSON output
+    const response = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+      max_tokens: 1200,
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a document analyzer. Return ONLY valid JSON with keys: detected_type, extracted_fields, confidence, warnings. ' +
+            'Do not include markdown, code blocks, or explanations. Output pure JSON only.',
+        },
+        {
+          role: 'user',
+          content: `${params.prompt}\n\nExtract from text:\n${params.text}`,
+        },
+      ],
+      // Pass abort signal to cancel request on timeout
+    } as any, { signal: abortController.signal });
 
-  return parsed;
+    clearTimeout(timeoutHandle);
+
+    const duration = Date.now() - startTime;
+    debugLog('llm_text_response', { duration_ms: duration, debugId });
+
+    const raw = response.choices[0]?.message?.content ?? '{}';
+    const parsed = parseAnalysisPayload(raw, 'pdf_text');
+
+    return parsed;
+  } catch (error: any) {
+    clearTimeout(timeoutHandle);
+
+    const duration = Date.now() - startTime;
+    const isAborted = error.name === 'AbortError' || abortController.signal.aborted;
+    const isTimeout = isAborted || duration >= timeoutMs - 100;
+
+    if (isTimeout) {
+      console.error(`[extractViaText] LLM call timed out after ${duration}ms (limit: ${timeoutMs}ms)`);
+      throw new Error(`LLM extraction timed out after ${timeoutMs}ms`);
+    }
+
+    console.error('[extractViaText] LLM call failed:', error.message);
+    throw error;
+  }
 }
 
 function parseAnalysisPayload(raw: string, source: EvidenceAnalysisResult['source']): EvidenceAnalysisResult {
@@ -1148,6 +1262,7 @@ async function analyzeEvidenceInternal(
       console.log('[analyzeEvidence] Processing PDF...');
 
       // Step 1: Extract text using pdf-parse (real text extraction, not just metadata)
+      logStage('pdf_parse', debugId, { filename: input.filename }, startTime);
       let pdfExtractionResult: PdfExtractionResult | null = null;
       try {
         pdfExtractionResult = await withTimeout(
@@ -1162,6 +1277,15 @@ async function analyzeEvidenceInternal(
           qualityMeta.is_low_text = pdfExtractionResult.isLowText;
           qualityMeta.is_metadata_only = pdfExtractionResult.isMetadataOnly;
         }
+
+        // Log pdf_parse_complete stage
+        logStage('pdf_parse_complete', debugId, {
+          textLength: pdfExtractionResult.text.length,
+          pageCount: pdfExtractionResult.pageCount,
+          isLowText: pdfExtractionResult.isLowText,
+          isMetadataOnly: pdfExtractionResult.isMetadataOnly,
+          method: pdfExtractionResult.method,
+        }, startTime);
 
         debugLog('pdf_parse_result', {
           textLength: pdfExtractionResult.text.length,
@@ -1190,9 +1314,15 @@ async function analyzeEvidenceInternal(
 
       // Step 2: Run regex extraction if we have text and a context-specific extractor
       // This provides baseline fields even without LLM
+      logStage('regex_start', debugId, { extractorType: regexExtractor?.type ?? 'none', textLength: extractedPdfText.length }, startTime);
       if (regexExtractor && extractedPdfText.length > 0) {
         regexResult = regexExtractor.extract(extractedPdfText);
         qualityMeta.regex_fields_found = regexResult.fields_found.length;
+        logStage('regex_complete', debugId, {
+          type: regexExtractor.type,
+          fields_found: regexResult.fields_found.length,
+          fields: regexResult.fields_found,
+        }, startTime);
         debugLog('regex_result', {
           type: regexExtractor.type,
           fields_found: regexResult.fields_found.length,
@@ -1214,22 +1344,31 @@ async function analyzeEvidenceInternal(
         // Use vision extraction if text is low quality, otherwise use text
         if (!shouldUseVision && extractedPdfText.length >= MIN_TEXT_LENGTH) {
           // Use text-based extraction - we have good extracted text
-          debugLog('llm_text_extraction', { textLength: extractedPdfText.length, shouldUseVision: false });
+          // Trim text intelligently, preferring Form markers
+          const trimmedText = trimTextForLLM(extractedPdfText, LLM_MAX_TEXT_CHARS);
+
+          logStage('llm_start', debugId, {
+            originalTextLength: extractedPdfText.length,
+            trimmedTextLength: trimmedText.length,
+            timeoutMs: LLM_CALL_TIMEOUT_MS,
+          }, startTime);
           console.log('[analyzeEvidence] Calling OpenAI text analysis (good text quality)...');
 
           try {
-            const trimmedText = extractedPdfText.slice(0, MAX_TEXT_CHARS);
-            const llmResult = await withTimeout(
-              extractViaText({ text: trimmedText, prompt, client }),
-              15000,
-              'Text analysis'
-            );
+            // Use extractViaText with built-in hard timeout
+            const llmResult = await extractViaText({
+              text: trimmedText,
+              prompt,
+              client,
+              timeoutMs: LLM_CALL_TIMEOUT_MS,
+              debugId,
+            });
 
-            debugLog('llm_text_result', {
+            logStage('llm_complete', debugId, {
               detected_type: llmResult.detected_type,
               confidence: llmResult.confidence,
               fieldsCount: Object.keys(llmResult.extracted_fields || {}).length,
-            });
+            }, startTime);
 
             console.log('[analyzeEvidence] Text analysis complete:', {
               detected_type: llmResult.detected_type,
@@ -1256,9 +1395,16 @@ async function analyzeEvidenceInternal(
               extraction_quality: qualityMeta,
             };
           } catch (error: any) {
-            debugLog('llm_text_error', { error: error.message });
-            console.error('[analyzeEvidence] Text analysis failed:', error.message);
-            warnings.push(`Text analysis failed: ${error.message}`);
+            const isTimeout = error.message?.includes('timed out');
+            if (isTimeout) {
+              logStage('llm_timeout', debugId, { error: error.message }, startTime);
+              console.error('[analyzeEvidence] LLM call timed out - falling back to regex/vision');
+              warnings.push(`LLM extraction timed out after ${LLM_CALL_TIMEOUT_MS}ms`);
+            } else {
+              logStage('llm_error', debugId, { error: error.message }, startTime);
+              console.error('[analyzeEvidence] Text analysis failed:', error.message);
+              warnings.push(`Text analysis failed: ${error.message}`);
+            }
           }
         }
 
@@ -1266,7 +1412,8 @@ async function analyzeEvidenceInternal(
         const visionReason = shouldUseVision
           ? (qualityMeta.is_metadata_only ? 'metadata_only' : 'low_text_detected')
           : 'text_extraction_failed';
-        debugLog('using_vision', { reason: visionReason, shouldUseVision, textLength: extractedPdfText.length });
+
+        logStage('vision_start', debugId, { reason: visionReason, textLength: extractedPdfText.length }, startTime);
         console.log('[analyzeEvidence] Starting vision analysis (reason: ' + visionReason + ')...');
 
         try {
@@ -1277,15 +1424,15 @@ async function analyzeEvidenceInternal(
               prompt,
               client,
             }),
-            25000,
+            20000, // 20s timeout for vision (reduced from 25s)
             'Vision analysis'
           );
 
-          debugLog('vision_result', {
+          logStage('vision_complete', debugId, {
             detected_type: visionResult.detected_type,
             confidence: visionResult.confidence,
             fieldsCount: Object.keys(visionResult.extracted_fields || {}).length,
-          });
+          }, startTime);
 
           console.log('[analyzeEvidence] Vision analysis complete:', {
             detected_type: visionResult.detected_type,
@@ -1315,9 +1462,16 @@ async function analyzeEvidenceInternal(
             extraction_quality: qualityMeta,
           };
         } catch (visionError: any) {
-          debugLog('vision_error', { error: visionError.message });
-          console.error('[analyzeEvidence] Vision analysis failed:', visionError.message);
-          warnings.push(`Vision analysis failed: ${visionError.message}`);
+          const isTimeout = visionError.message?.includes('timed out');
+          if (isTimeout) {
+            logStage('vision_timeout', debugId, { error: visionError.message }, startTime);
+            console.error('[analyzeEvidence] Vision analysis timed out - falling back to regex');
+            warnings.push('Vision analysis timed out');
+          } else {
+            logStage('vision_error', debugId, { error: visionError.message }, startTime);
+            console.error('[analyzeEvidence] Vision analysis failed:', visionError.message);
+            warnings.push(`Vision analysis failed: ${visionError.message}`);
+          }
         }
       } else {
         qualityMeta.llm_extraction_skipped_reason = 'OPENAI_API_KEY missing';
@@ -1496,19 +1650,30 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
     const duration = Date.now() - startTime;
     const isTimeout = error.message?.includes('timed out');
 
-    logStage('error', debugId, {
-      error: error.message,
-      isTimeout,
-    }, startTime);
+    // Log appropriate stage based on whether it was a timeout or error
+    if (isTimeout) {
+      logStage('timeout', debugId, {
+        error: error.message,
+        duration_ms: duration,
+        master_timeout_ms: ANALYSIS_MASTER_TIMEOUT_MS,
+      }, startTime);
+      console.error('[analyzeEvidence] MASTER TIMEOUT - analysis did not complete in time:', {
+        debug_id: debugId,
+        duration_ms: duration,
+        timeout_ms: ANALYSIS_MASTER_TIMEOUT_MS,
+      });
+    } else {
+      logStage('error', debugId, {
+        error: error.message,
+      }, startTime);
+      console.error('[analyzeEvidence] Analysis failed:', {
+        debug_id: debugId,
+        error: error.message,
+        duration_ms: duration,
+      });
+    }
 
-    console.error('[analyzeEvidence] Analysis failed:', {
-      debug_id: debugId,
-      error: error.message,
-      duration_ms: duration,
-      isTimeout,
-    });
-
-    // Return degraded result instead of throwing
+    // Return degraded result instead of throwing - ensures API always returns JSON
     return {
       detected_type: input.category || 'unknown',
       extracted_fields: {},
@@ -1525,7 +1690,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
         llm_extraction_ran: false,
       },
       debug_id: debugId,
-      final_stage: 'error',
+      final_stage: isTimeout ? 'timeout' : 'error',
       duration_ms: duration,
     };
   }
