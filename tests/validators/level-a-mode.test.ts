@@ -374,3 +374,70 @@ describe('Level A Mode - Question Content', () => {
     expect(arrearsQuestion?.question).toContain('Ground 8');
   });
 });
+
+describe('Level A Mode - Select Questions with Options', () => {
+  it('rent_frequency_confirmed question has options for dropdown', () => {
+    const questions = getLevelAQuestions('section_8');
+    const rentFreqQuestion = questions.find(
+      (q) => q.factKey === 'rent_frequency_confirmed'
+    );
+
+    expect(rentFreqQuestion).toBeDefined();
+    expect(rentFreqQuestion?.type).toBe('select');
+    expect(rentFreqQuestion?.options).toBeDefined();
+    expect(rentFreqQuestion?.options?.length).toBeGreaterThan(0);
+
+    // Verify specific options exist
+    const optionValues = rentFreqQuestion?.options?.map((o) => o.value);
+    expect(optionValues).toContain('weekly');
+    expect(optionValues).toContain('monthly');
+    expect(optionValues).toContain('quarterly');
+  });
+
+  it('validator returns rent_frequency_confirmed with options', () => {
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        evidence: { files: [] },
+      },
+      analysis: null,
+    });
+
+    expect(result.level_a_mode).toBe(true);
+    expect(result.level_a_questions).toBeDefined();
+
+    const rentFreqQuestion = result.level_a_questions?.find(
+      (q) => q.factKey === 'rent_frequency_confirmed'
+    );
+
+    expect(rentFreqQuestion).toBeDefined();
+    expect(rentFreqQuestion?.type).toBe('select');
+    expect(rentFreqQuestion?.options).toBeDefined();
+    expect(rentFreqQuestion?.options?.length).toBeGreaterThan(0);
+
+    // Verify the options have label and value properties
+    rentFreqQuestion?.options?.forEach((option) => {
+      expect(option.value).toBeDefined();
+      expect(option.label).toBeDefined();
+    });
+  });
+
+  it('select type Level A questions always include options', () => {
+    const s21Questions = getLevelAQuestions('section_21');
+    const s8Questions = getLevelAQuestions('section_8');
+    const allQuestions = [...s21Questions, ...s8Questions];
+
+    const selectQuestions = allQuestions.filter((q) => q.type === 'select');
+
+    selectQuestions.forEach((q) => {
+      expect(q.options).toBeDefined();
+      expect(q.options?.length).toBeGreaterThan(0);
+      q.options?.forEach((opt) => {
+        expect(opt.value).toBeDefined();
+        expect(opt.label).toBeDefined();
+      });
+    });
+  });
+});
