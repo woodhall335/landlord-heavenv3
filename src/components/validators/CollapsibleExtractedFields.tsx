@@ -212,9 +212,9 @@ function FieldRow({ label, value, fullWidth = false, valueClassName = 'text-blue
   if (!value) return null;
 
   return (
-    <div className={`flex justify-between gap-2 text-sm ${fullWidth ? 'sm:col-span-2' : ''}`}>
-      <span className="text-blue-700 shrink-0">{label}:</span>
-      <span className={`font-medium text-right ${valueClassName}`}>{value}</span>
+    <div className={`flex flex-col gap-0.5 text-sm text-left ${fullWidth ? 'sm:col-span-2' : ''}`}>
+      <span className="text-blue-700 text-xs">{label}</span>
+      <span className={`font-medium ${valueClassName}`}>{value}</span>
     </div>
   );
 }
