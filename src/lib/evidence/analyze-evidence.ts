@@ -444,6 +444,7 @@ export function extractS21FieldsWithRegex(text: string): RegexExtractionResult {
   const dates: string[] = [];
   for (const pattern of datePatterns) {
     let match;
+    pattern.lastIndex = 0; // Reset to avoid stale state
     while ((match = pattern.exec(text)) !== null) {
       dates.push(match[0]);
     }
@@ -505,6 +506,7 @@ export function extractS21FieldsWithRegex(text: string): RegexExtractionResult {
   const tenantNamesSet = new Set<string>();
   for (const pattern of tenantPatterns) {
     let match;
+    pattern.lastIndex = 0; // Reset to avoid stale state
     while ((match = pattern.exec(originalText)) !== null) {
       const name = match[1].trim();
       if (name.length >= 4 && name.length <= 60) {
@@ -617,14 +619,19 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   }
 
   // Extract grounds cited (Ground 1-17)
+  // IMPORTANT: All patterns must have 'g' flag when used with exec() in a while loop,
+  // otherwise it causes an infinite loop (exec returns same match forever)
   const groundPatterns = [
     /ground\s*(\d+)/gi,
-    /grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/i,
     /schedule\s*2\s*ground\s*(\d+)/gi,
   ];
   const groundsSet = new Set<number>();
+
+  // Process global patterns with while loop
   for (const pattern of groundPatterns) {
     let match;
+    // Reset lastIndex to ensure we start from beginning
+    pattern.lastIndex = 0;
     while ((match = pattern.exec(text)) !== null) {
       // Parse numbers from match
       const nums = match[1].match(/\d+/g);
@@ -636,6 +643,21 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
           }
         });
       }
+    }
+  }
+
+  // Single-match pattern for "grounds: 1, 2, 3 and 4" format (no g flag - only match once)
+  const groundsListPattern = /grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/i;
+  const groundsListMatch = groundsListPattern.exec(text);
+  if (groundsListMatch) {
+    const nums = groundsListMatch[1].match(/\d+/g);
+    if (nums) {
+      nums.forEach(n => {
+        const num = parseInt(n, 10);
+        if (num >= 1 && num <= 17) {
+          groundsSet.add(num);
+        }
+      });
     }
   }
   result.grounds_cited = Array.from(groundsSet).sort((a, b) => a - b);
@@ -740,6 +762,7 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   const tenantNamesSet = new Set<string>();
   for (const pattern of tenantPatterns) {
     let match;
+    pattern.lastIndex = 0; // Reset to avoid stale state
     while ((match = pattern.exec(originalText)) !== null) {
       const name = match[1].trim();
       if (name.length >= 4 && name.length <= 60) {
