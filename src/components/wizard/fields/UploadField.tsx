@@ -9,6 +9,8 @@ import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import { ValidationProgress } from '@/components/validators/ValidationProgress';
+import { ValidationResultBanner } from '@/components/validators/ValidationResultBanner';
+import { CollapsibleExtractedFields } from '@/components/validators/CollapsibleExtractedFields';
 import { trackValidatorUpload, trackValidatorResult } from '@/lib/analytics';
 
 export interface EvidenceFileSummary {
@@ -566,7 +568,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
       {/* Animated progress indicator during upload/analysis */}
       <ValidationProgress isActive={uploading} />
 
-      {analysisSummary && (
+      {/* Document classification - only show when no validation summary yet */}
+      {analysisSummary && !validationSummary && (
         <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
           <div className="flex items-center justify-between">
             <p className="font-medium text-charcoal">Document classification</p>
@@ -585,96 +588,36 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         </div>
       )}
 
-      {extractedFields && Object.keys(extractedFields).length > 0 && (
-        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm">
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-medium text-blue-900">Extracted fields</p>
-            {extractionQuality?.text_extraction_method === 'vision' && (
-              <span className="rounded bg-blue-200 px-2 py-0.5 text-[10px] font-medium text-blue-800">
-                AI Vision
-              </span>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            {(extractedFields.date_served || extractedFields.service_date) && (
-              <div>
-                <span className="text-gray-500">Service date:</span>
-                <span className="ml-1 text-gray-900">{extractedFields.date_served || extractedFields.service_date}</span>
-              </div>
-            )}
-            {extractedFields.expiry_date && (
-              <div>
-                <span className="text-gray-500">Expiry date:</span>
-                <span className="ml-1 text-gray-900">{extractedFields.expiry_date}</span>
-              </div>
-            )}
-            {extractedFields.property_address && (
-              <div className="col-span-2">
-                <span className="text-gray-500">Address:</span>
-                <span className="ml-1 text-gray-900">{extractedFields.property_address}</span>
-              </div>
-            )}
-            {extractedFields.tenant_names && (
-              <div>
-                <span className="text-gray-500">Tenant(s):</span>
-                <span className="ml-1 text-gray-900">
-                  {Array.isArray(extractedFields.tenant_names)
-                    ? extractedFields.tenant_names.join(', ')
-                    : extractedFields.tenant_names}
-                </span>
-              </div>
-            )}
-            {extractedFields.landlord_name && (
-              <div>
-                <span className="text-gray-500">Landlord:</span>
-                <span className="ml-1 text-gray-900">{extractedFields.landlord_name}</span>
-              </div>
-            )}
-            {extractedFields.signature_present !== undefined && (
-              <div>
-                <span className="text-gray-500">Signature:</span>
-                <span className={`ml-1 ${extractedFields.signature_present ? 'text-green-700' : 'text-amber-700'}`}>
-                  {extractedFields.signature_present ? 'Detected' : 'Not detected'}
-                </span>
-              </div>
-            )}
-            {(extractedFields.form_6a_used || extractedFields.section_21_detected) && (
-              <div>
-                <span className="text-gray-500">Form type:</span>
-                <span className="ml-1 text-green-700">
-                  {extractedFields.form_6a_used ? 'Form 6A' : 'Section 21'}
-                </span>
-              </div>
-            )}
-          </div>
-          {extractionQuality?.is_low_text && (
-            <p className="mt-2 text-[11px] text-blue-700">
-              Note: This document had limited text content. AI vision was used for extraction.
-            </p>
-          )}
-        </div>
-      )}
-
       {validationSummary && (
-        <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
-          <div className="flex items-center justify-between">
-            <p className="font-medium text-charcoal">Validation status</p>
-            <span className={`rounded-full px-2 py-1 text-xs ${
-              hasWrongDocTypeBlocker(validationSummary)
-                ? 'bg-red-100 text-red-700'
-                : 'bg-gray-100 text-gray-700'
-            }`}>
-              {hasWrongDocTypeBlocker(validationSummary) ? 'Wrong Document Type' : validationSummary.status}
-            </span>
-          </div>
+        <div className="space-y-4">
+          {/* Prominent Result Banner */}
+          <ValidationResultBanner
+            status={validationSummary.status}
+            blockersCount={validationSummary.blockers?.length || 0}
+            warningsCount={validationSummary.warnings?.length || 0}
+            isTerminalBlocker={hasWrongDocTypeBlocker(validationSummary)}
+            sticky={false}
+          />
 
-          {validationSummary.blockers && validationSummary.blockers.length > 0 && (
-            <div className="mt-3 space-y-1 text-red-700">
-              {validationSummary.blockers.map((issue, index) => (
-                <p key={`${issue.code}-${index}`}>• {issue.message}</p>
-              ))}
-            </div>
+          {/* Collapsible Extracted Fields */}
+          {extractedFields && Object.keys(extractedFields).length > 0 && (
+            <CollapsibleExtractedFields
+              fields={extractedFields}
+              quality={extractionQuality}
+              defaultCollapsed={true}
+            />
           )}
+
+          {/* Issues Details Card */}
+          <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
+            {validationSummary.blockers && validationSummary.blockers.length > 0 && (
+              <div className="space-y-1 text-red-700">
+                <p className="font-semibold text-red-800 mb-2">Critical Issues</p>
+                {validationSummary.blockers.map((issue, index) => (
+                  <p key={`${issue.code}-${index}`}>• {issue.message}</p>
+                ))}
+              </div>
+            )}
 
           {/* Terminal blocker OR wrong doc type: Show CTA to switch to correct validator */}
           {hasWrongDocTypeBlocker(validationSummary) && (
@@ -733,7 +676,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           {!hasWrongDocTypeBlocker(validationSummary) && (
             <>
               {validationSummary.warnings && validationSummary.warnings.length > 0 && (
-                <div className="mt-3 space-y-1 text-amber-700">
+                <div className={`space-y-1 text-amber-700 ${validationSummary.blockers?.length ? 'mt-4 pt-4 border-t border-gray-100' : ''}`}>
+                  <p className="font-semibold text-amber-800 mb-2">Warnings</p>
                   {validationSummary.warnings.map((issue, index) => (
                     <p key={`${issue.code}-${index}`}>• {issue.message}</p>
                   ))}
@@ -822,6 +766,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 </div>
               )}
 
+              {/* CTA Section - immediately below issues */}
               <div className="mt-4 space-y-2 rounded-md border border-purple-100 bg-purple-50 p-3 text-xs">
                 <p className="font-semibold text-purple-800">Recommended next step</p>
                 {(() => {
@@ -854,6 +799,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
               </div>
             </>
           )}
+          </div>
         </div>
       )}
     </div>
