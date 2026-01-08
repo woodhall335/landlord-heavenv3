@@ -16,6 +16,8 @@ import {
   getLevelAFactKeys,
   isLevelAFactKey,
   FACT_QUESTIONS,
+  normalizeLevelAFactsToCanonical,
+  LEVEL_A_TO_CANONICAL_KEYS,
 } from '@/lib/validators/facts/factKeys';
 
 describe('Level A Mode - Requirements', () => {
@@ -439,5 +441,207 @@ describe('Level A Mode - Select Questions with Options', () => {
         expect(opt.label).toBeDefined();
       });
     });
+  });
+});
+
+describe('Level A Mode - Fact Key Normalization', () => {
+  it('LEVEL_A_TO_CANONICAL_KEYS maps Level A keys to canonical keys', () => {
+    expect(LEVEL_A_TO_CANONICAL_KEYS.rent_frequency_confirmed).toBe('rent_frequency');
+    expect(LEVEL_A_TO_CANONICAL_KEYS.rent_amount_confirmed).toBe('rent_amount');
+    expect(LEVEL_A_TO_CANONICAL_KEYS.current_arrears_amount).toBe('current_arrears');
+  });
+
+  it('normalizeLevelAFactsToCanonical maps Level A keys to canonical keys', () => {
+    const facts = {
+      rent_frequency_confirmed: 'monthly',
+      rent_amount_confirmed: '1000',
+      current_arrears_amount: '2000',
+      arrears_above_threshold_today: 'yes',
+      arrears_likely_at_hearing: 'yes',
+    };
+
+    const normalized = normalizeLevelAFactsToCanonical(facts);
+
+    // Original keys should still exist
+    expect(normalized.rent_frequency_confirmed).toBe('monthly');
+    expect(normalized.arrears_above_threshold_today).toBe('yes');
+
+    // Canonical keys should now exist
+    expect(normalized.rent_frequency).toBe('monthly');
+    expect(normalized.rent_amount).toBe(1000); // Parsed as number
+    expect(normalized.current_arrears).toBe(2000); // Parsed as number
+  });
+
+  it('normalizeLevelAFactsToCanonical parses currency strings to numbers', () => {
+    const facts = {
+      rent_amount_confirmed: '1500.50',
+      current_arrears_amount: '3000',
+    };
+
+    const normalized = normalizeLevelAFactsToCanonical(facts);
+
+    expect(normalized.rent_amount).toBe(1500.5);
+    expect(normalized.current_arrears).toBe(3000);
+    expect(typeof normalized.rent_amount).toBe('number');
+    expect(typeof normalized.current_arrears).toBe('number');
+  });
+
+  it('normalizeLevelAFactsToCanonical does not overwrite existing canonical keys', () => {
+    const facts = {
+      rent_frequency: 'weekly', // Existing canonical key
+      rent_frequency_confirmed: 'monthly', // Level A key
+    };
+
+    const normalized = normalizeLevelAFactsToCanonical(facts);
+
+    // Should NOT overwrite existing canonical key
+    expect(normalized.rent_frequency).toBe('weekly');
+  });
+
+  it('normalizeLevelAFactsToCanonical preserves all original keys', () => {
+    const facts = {
+      selected_notice_route: 'section_8',
+      rent_frequency_confirmed: 'monthly',
+      some_other_key: 'value',
+    };
+
+    const normalized = normalizeLevelAFactsToCanonical(facts);
+
+    expect(normalized.selected_notice_route).toBe('section_8');
+    expect(normalized.rent_frequency_confirmed).toBe('monthly');
+    expect(normalized.some_other_key).toBe('value');
+    expect(normalized.rent_frequency).toBe('monthly');
+  });
+});
+
+describe('Level A Mode - Section 8 Ground 8 Validation with Level A Answers', () => {
+  it('Section 8 validator uses Level A answers for Ground 8 validation', () => {
+    // This test verifies the bug fix: Level A answers should be applied to validator facts
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        // Level A answers (as they come from the answer-questions API)
+        arrears_above_threshold_today: 'yes',
+        arrears_likely_at_hearing: 'yes',
+        current_arrears_amount: 2000, // Already parsed as number
+        rent_amount_confirmed: 1000, // Will be parsed
+        rent_frequency_confirmed: 'monthly',
+        evidence: { files: [] },
+      },
+      analysis: {
+        detected_type: 'section_8',
+        extracted_fields: {
+          form_3_detected: true,
+          grounds_cited: [8],
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    // The validator should NOT warn about missing rent_frequency or rent_amount
+    // because we provided them via Level A keys
+    const warnings = result.result?.warnings ?? [];
+    const warningCodes = warnings.map((w) => w.code);
+
+    // Should NOT have S8-REQUIRED-MISSING warnings for rent_frequency
+    const requiredMissingWarnings = warnings.filter(
+      (w) => w.code === 'S8-REQUIRED-MISSING' && w.message.includes('rent frequency')
+    );
+    expect(requiredMissingWarnings.length).toBe(0);
+
+    // Should NOT have S8-GROUND8-INCOMPLETE warning
+    expect(warningCodes).not.toContain('S8-GROUND8-INCOMPLETE');
+
+    // Should properly calculate Ground 8 status
+    // With 2000 arrears and 1000 monthly rent, threshold is 2000 (2 months)
+    // So 2000 >= 2000 means Ground 8 is satisfied
+    expect(result.result?.status).toBe('ground_8_satisfied');
+  });
+
+  it('Section 8 validator warns when Level A answers are missing', () => {
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        // No Level A answers provided
+        evidence: { files: [] },
+      },
+      analysis: {
+        detected_type: 'section_8',
+        extracted_fields: {
+          form_3_detected: true,
+          grounds_cited: [8],
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    // Should have warnings about missing required fields
+    const warnings = result.result?.warnings ?? [];
+    const warningCodes = warnings.map((w) => w.code);
+
+    // Should have S8-GROUND8-INCOMPLETE warning
+    expect(warningCodes).toContain('S8-GROUND8-INCOMPLETE');
+  });
+
+  it('Section 8 validator correctly detects Ground 8 NOT satisfied', () => {
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        // Arrears below threshold (1500 < 2000 for monthly)
+        current_arrears_amount: 1500,
+        rent_amount_confirmed: 1000,
+        rent_frequency_confirmed: 'monthly',
+        evidence: { files: [] },
+      },
+      analysis: {
+        detected_type: 'section_8',
+        extracted_fields: {
+          form_3_detected: true,
+          grounds_cited: [8],
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    // Ground 8 requires 2 months arrears for monthly rent
+    // 1500 < 2000 so Ground 8 is not satisfied
+    expect(result.result?.status).toBe('discretionary_only');
+  });
+
+  it('Section 8 validator correctly handles string currency values', () => {
+    // Test that string values like "2000" are properly parsed
+    const result = runLegalValidator({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      facts: {
+        selected_notice_route: 'section_8',
+        // String values (as they might come from form input)
+        current_arrears_amount: '2500',
+        rent_amount_confirmed: '1000',
+        rent_frequency_confirmed: 'monthly',
+        evidence: { files: [] },
+      },
+      analysis: {
+        detected_type: 'section_8',
+        extracted_fields: {
+          form_3_detected: true,
+          grounds_cited: [8],
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    // 2500 >= 2000 threshold, so Ground 8 should be satisfied
+    expect(result.result?.status).toBe('ground_8_satisfied');
   });
 });

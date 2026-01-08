@@ -7,7 +7,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import { REQUIREMENTS, resolveRequirementKey } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
-import { isLevelAFactKey, FACT_QUESTIONS } from '@/lib/validators/facts/factKeys';
+import { isLevelAFactKey, FACT_QUESTIONS, normalizeLevelAFactsToCanonical } from '@/lib/validators/facts/factKeys';
 
 export const runtime = 'nodejs';
 
@@ -266,11 +266,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid answers', errors }, { status: 400 });
     }
 
+    // FIX: Also persist canonical keys alongside Level A keys
+    // This ensures that validators can find values under canonical keys directly
+    // e.g., rent_frequency_confirmed -> rent_frequency, rent_amount_confirmed -> rent_amount
+    const canonicalAnswers = normalizeLevelAFactsToCanonical(normalizedAnswers);
+
     await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
       const current = (currentRaw as any) || {};
       return {
         ...current,
         ...normalizedAnswers,
+        ...canonicalAnswers, // Include normalized canonical keys
       } as typeof current;
     });
 
