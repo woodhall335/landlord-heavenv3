@@ -43,6 +43,8 @@ interface UploadValidationSummary {
   blockers?: Array<{ code: string; message: string }>;
   warnings?: Array<{ code: string; message: string }>;
   upsell?: { product: string; reason: string } | null;
+  /** When true, validation short-circuited due to wrong document type */
+  terminal_blocker?: boolean;
 }
 
 interface ExtractedFieldsSummary {
@@ -583,8 +585,12 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
           <div className="flex items-center justify-between">
             <p className="font-medium text-charcoal">Validation status</p>
-            <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700">
-              {validationSummary.status}
+            <span className={`rounded-full px-2 py-1 text-xs ${
+              validationSummary.terminal_blocker
+                ? 'bg-red-100 text-red-700'
+                : 'bg-gray-100 text-gray-700'
+            }`}>
+              {validationSummary.terminal_blocker ? 'Wrong Document Type' : validationSummary.status}
             </span>
           </div>
 
@@ -596,127 +602,184 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             </div>
           )}
 
-          {validationSummary.warnings && validationSummary.warnings.length > 0 && (
-            <div className="mt-3 space-y-1 text-amber-700">
-              {validationSummary.warnings.map((issue, index) => (
-                <p key={`${issue.code}-${index}`}>• {issue.message}</p>
-              ))}
-            </div>
-          )}
-
-          {validationSummary.upsell?.reason && (
-            <p className="mt-3 text-xs text-gray-600">{validationSummary.upsell.reason}</p>
-          )}
-
-          {validationRecommendations.length > 0 && (
-            <div className="mt-3 space-y-1 text-xs text-gray-600">
-              {validationRecommendations.map((rec, index) => (
-                <p key={`${rec.code}-${index}`}>• {rec.message}</p>
-              ))}
-            </div>
-          )}
-
-          {nextQuestions.length > 0 && (
-            <div className="mt-3 space-y-1 text-xs text-gray-600">
-              <p className="font-semibold text-gray-700">Re-check document</p>
-              {nextQuestions.map((question) => (
-                <label key={question.id} className="block">
-                  <span className="text-gray-700">• {question.question}</span>
-                  {question.helpText && (
-                    <span className="block text-[11px] text-gray-400">{question.helpText}</span>
-                  )}
-                  {renderQuestionInput(question)}
-                  {questionErrors[question.factKey] && (
-                    <span className="mt-1 block text-[11px] text-red-600">
-                      {questionErrors[question.factKey]}
-                    </span>
-                  )}
-                </label>
-              ))}
-              <button
-                type="button"
-                disabled={answerSubmitting}
-                onClick={async () => {
-                  setAnswerSubmitting(true);
-                  try {
-                    setQuestionErrors({});
-                    const response = await fetch('/api/wizard/answer-questions', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        caseId,
-                        answers: questionAnswers,
-                      }),
-                    });
-                    const data = await response.json();
-                    if (!response.ok) {
-                      if (Array.isArray(data?.errors)) {
-                        const errorMap: Record<string, string> = {};
-                        data.errors.forEach((item: { factKey: string; message: string }) => {
-                          errorMap[item.factKey] = item.message;
-                        });
-                        setQuestionErrors(errorMap);
-                      }
-                      return;
-                    }
-                    if (data.validation_summary || data.validation) {
-                      const summary = (data.validation_summary ?? data.validation) as UploadValidationSummary;
-                      setValidationSummary(summary);
-                    }
-                    if (Array.isArray(data?.recommendations)) {
-                      setValidationRecommendations(data.recommendations);
-                    } else if (Array.isArray(data?.validation?.recommendations)) {
-                      setValidationRecommendations(data.validation.recommendations);
-                    }
-                    if (Array.isArray(data?.next_questions)) {
-                      setNextQuestions(data.next_questions);
-                    } else if (Array.isArray(data?.validation?.next_questions)) {
-                      setNextQuestions(data.validation.next_questions);
-                    }
-                  } catch (err) {
-                    console.error('Failed to submit answers', err);
-                  } finally {
-                    setAnswerSubmitting(false);
-                  }
-                }}
-                className="mt-2 rounded bg-purple-600 px-2 py-1 text-xs text-white disabled:opacity-50"
-              >
-                {answerSubmitting ? 'Re-checking…' : 'Save answers & re-check'}
-              </button>
-            </div>
-          )}
-
-          <div className="mt-4 space-y-2 rounded-md border border-purple-100 bg-purple-50 p-3 text-xs">
-            <p className="font-semibold text-purple-800">Recommended next step</p>
-            {(() => {
-              const ctas = getWizardCta({
-                jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
-                validator_key: validationSummary.validator_key,
-                validation_summary: validationSummary,
-                caseId,
-                source: 'validator',
-              });
-              return (
-                <div className="flex flex-wrap gap-2">
-                  <a
-                    href={ctas.primary.href}
-                    className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white"
-                  >
-                    {ctas.primary.label} (£{ctas.primary.price.toFixed(2)})
-                  </a>
-                  {ctas.secondary && (
+          {/* Terminal blocker: Show CTA to switch to correct validator */}
+          {validationSummary.terminal_blocker && (
+            <div className="mt-4 space-y-3 rounded-md border border-amber-200 bg-amber-50 p-4">
+              <p className="font-semibold text-amber-900">Upload the correct document</p>
+              <p className="text-xs text-amber-800">
+                {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE')
+                  ? 'You uploaded a Section 8 notice (Form 3) but this validator requires a Section 21 notice (Form 6A).'
+                  : 'You uploaded a Section 21 notice (Form 6A) but this validator requires a Section 8 notice (Form 3).'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE') ? (
+                  <>
                     <a
-                      href={ctas.secondary.href}
-                      className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700"
+                      href={`/wizard/eviction?caseId=${caseId}&route=section_8`}
+                      className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
                     >
-                      {ctas.secondary.label} (£{ctas.secondary.price.toFixed(2)})
+                      Switch to Section 8 Validator
                     </a>
-                  )}
-                </div>
-              );
-            })()}
-          </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValidationSummary(null);
+                        setUploadedFiles([]);
+                      }}
+                      className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700 hover:bg-purple-50"
+                    >
+                      Upload a different file
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href={`/wizard/eviction?caseId=${caseId}&route=section_21`}
+                      className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+                    >
+                      Switch to Section 21 Validator
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValidationSummary(null);
+                        setUploadedFiles([]);
+                      }}
+                      className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700 hover:bg-purple-50"
+                    >
+                      Upload a different file
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
+          {/* Only show warnings, recommendations, and questions if NOT a terminal blocker */}
+          {!validationSummary.terminal_blocker && (
+            <>
+              {validationSummary.warnings && validationSummary.warnings.length > 0 && (
+                <div className="mt-3 space-y-1 text-amber-700">
+                  {validationSummary.warnings.map((issue, index) => (
+                    <p key={`${issue.code}-${index}`}>• {issue.message}</p>
+                  ))}
+                </div>
+              )}
+
+              {validationSummary.upsell?.reason && (
+                <p className="mt-3 text-xs text-gray-600">{validationSummary.upsell.reason}</p>
+              )}
+
+              {validationRecommendations.length > 0 && (
+                <div className="mt-3 space-y-1 text-xs text-gray-600">
+                  {validationRecommendations.map((rec, index) => (
+                    <p key={`${rec.code}-${index}`}>• {rec.message}</p>
+                  ))}
+                </div>
+              )}
+
+              {nextQuestions.length > 0 && (
+                <div className="mt-3 space-y-1 text-xs text-gray-600">
+                  <p className="font-semibold text-gray-700">Re-check document</p>
+                  {nextQuestions.map((question) => (
+                    <label key={question.id} className="block">
+                      <span className="text-gray-700">• {question.question}</span>
+                      {question.helpText && (
+                        <span className="block text-[11px] text-gray-400">{question.helpText}</span>
+                      )}
+                      {renderQuestionInput(question)}
+                      {questionErrors[question.factKey] && (
+                        <span className="mt-1 block text-[11px] text-red-600">
+                          {questionErrors[question.factKey]}
+                        </span>
+                      )}
+                    </label>
+                  ))}
+                  <button
+                    type="button"
+                    disabled={answerSubmitting}
+                    onClick={async () => {
+                      setAnswerSubmitting(true);
+                      try {
+                        setQuestionErrors({});
+                        const response = await fetch('/api/wizard/answer-questions', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            caseId,
+                            answers: questionAnswers,
+                          }),
+                        });
+                        const data = await response.json();
+                        if (!response.ok) {
+                          if (Array.isArray(data?.errors)) {
+                            const errorMap: Record<string, string> = {};
+                            data.errors.forEach((item: { factKey: string; message: string }) => {
+                              errorMap[item.factKey] = item.message;
+                            });
+                            setQuestionErrors(errorMap);
+                          }
+                          return;
+                        }
+                        if (data.validation_summary || data.validation) {
+                          const summary = (data.validation_summary ?? data.validation) as UploadValidationSummary;
+                          setValidationSummary(summary);
+                        }
+                        if (Array.isArray(data?.recommendations)) {
+                          setValidationRecommendations(data.recommendations);
+                        } else if (Array.isArray(data?.validation?.recommendations)) {
+                          setValidationRecommendations(data.validation.recommendations);
+                        }
+                        if (Array.isArray(data?.next_questions)) {
+                          setNextQuestions(data.next_questions);
+                        } else if (Array.isArray(data?.validation?.next_questions)) {
+                          setNextQuestions(data.validation.next_questions);
+                        }
+                      } catch (err) {
+                        console.error('Failed to submit answers', err);
+                      } finally {
+                        setAnswerSubmitting(false);
+                      }
+                    }}
+                    className="mt-2 rounded bg-purple-600 px-2 py-1 text-xs text-white disabled:opacity-50"
+                  >
+                    {answerSubmitting ? 'Re-checking…' : 'Save answers & re-check'}
+                  </button>
+                </div>
+              )}
+
+              <div className="mt-4 space-y-2 rounded-md border border-purple-100 bg-purple-50 p-3 text-xs">
+                <p className="font-semibold text-purple-800">Recommended next step</p>
+                {(() => {
+                  const ctas = getWizardCta({
+                    jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
+                    validator_key: validationSummary.validator_key,
+                    validation_summary: validationSummary,
+                    caseId,
+                    source: 'validator',
+                  });
+                  return (
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href={ctas.primary.href}
+                        className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white"
+                      >
+                        {ctas.primary.label} (£{ctas.primary.price.toFixed(2)})
+                      </a>
+                      {ctas.secondary && (
+                        <a
+                          href={ctas.secondary.href}
+                          className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700"
+                        >
+                          {ctas.secondary.label} (£{ctas.secondary.price.toFixed(2)})
+                        </a>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

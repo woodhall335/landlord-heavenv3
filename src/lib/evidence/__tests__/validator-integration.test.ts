@@ -423,8 +423,9 @@ describe('Validator Integration Tests', () => {
     /**
      * Case B: Section 21 Incorrect - Section 8 Form 3 submitted for Section 21 validation
      * Should trigger S21-WRONG-DOC-TYPE blocker
+     * IMPORTANT: This is a TERMINAL blocker - no warnings or compliance questions shown
      */
-    it('Case B: Section 21 incorrect - Section 8 Form 3 should fail with wrong_doc_type', () => {
+    it('Case B: Section 21 incorrect - Section 8 Form 3 should fail with wrong_doc_type (terminal)', () => {
       const result = validateSection21Notice({
         jurisdiction: 'england',
         extracted: {
@@ -447,9 +448,20 @@ describe('Validator Integration Tests', () => {
       // Status should be invalid
       expect(result.status).toBe('invalid');
 
-      console.log('Case B (S21 incorrect - wrong doc type):', {
+      // TERMINAL BLOCKER: No warnings should be present (short-circuit)
+      expect(result.warnings).toHaveLength(0);
+
+      // TERMINAL BLOCKER: Flag should be set
+      expect(result.terminal_blocker).toBe(true);
+
+      // Should only have ONE blocker (the wrong_doc_type)
+      expect(result.blockers).toHaveLength(1);
+
+      console.log('Case B (S21 incorrect - wrong doc type, TERMINAL):', {
         status: result.status,
         blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        terminal_blocker: result.terminal_blocker,
         wrongDocTypeMessage: wrongDocTypeBlocker?.message,
       });
     });
@@ -499,8 +511,9 @@ describe('Validator Integration Tests', () => {
     /**
      * Case D: Section 8 Incorrect - Section 21 Form 6A submitted for Section 8 validation
      * Should trigger S8-WRONG-DOC-TYPE blocker
+     * IMPORTANT: This is a TERMINAL blocker - no warnings or compliance questions shown
      */
-    it('Case D: Section 8 incorrect - Section 21 Form 6A should fail with wrong_doc_type', () => {
+    it('Case D: Section 8 incorrect - Section 21 Form 6A should fail with wrong_doc_type (terminal)', () => {
       const result = validateSection8Notice({
         jurisdiction: 'england',
         extracted: {
@@ -526,9 +539,20 @@ describe('Validator Integration Tests', () => {
       // Status should be invalid
       expect(result.status).toBe('invalid');
 
-      console.log('Case D (S8 incorrect - wrong doc type):', {
+      // TERMINAL BLOCKER: No warnings should be present (short-circuit)
+      expect(result.warnings).toHaveLength(0);
+
+      // TERMINAL BLOCKER: Flag should be set
+      expect(result.terminal_blocker).toBe(true);
+
+      // Should only have ONE blocker (the wrong_doc_type)
+      expect(result.blockers).toHaveLength(1);
+
+      console.log('Case D (S8 incorrect - wrong doc type, TERMINAL):', {
         status: result.status,
         blockers: result.blockers.map((b) => b.code),
+        warnings: result.warnings.map((w) => w.code),
+        terminal_blocker: result.terminal_blocker,
         wrongDocTypeMessage: wrongDocTypeBlocker?.message,
       });
     });
