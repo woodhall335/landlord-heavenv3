@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
-import { RiFileTextLine, RiCloseCircleLine } from 'react-icons/ri';
+import { RiFileTextLine, RiCloseCircleLine, RiLightbulbLine } from 'react-icons/ri';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
@@ -68,6 +68,34 @@ interface ExtractionQualitySummary {
   is_low_text?: boolean;
   is_metadata_only?: boolean;
   document_markers?: string[];
+}
+
+/**
+ * Dedupe recommendations by message string to prevent duplicates.
+ */
+function dedupeRecommendations(
+  recommendations: Array<{ code: string; message: string }>,
+  upsellReason?: string | null
+): Array<{ code: string; message: string }> {
+  const seen = new Set<string>();
+  const result: Array<{ code: string; message: string }> = [];
+
+  // Add upsell reason first if it exists (as a recommendation)
+  if (upsellReason) {
+    seen.add(upsellReason.toLowerCase().trim());
+    result.push({ code: 'upsell', message: upsellReason });
+  }
+
+  // Add recommendations, skipping duplicates
+  for (const rec of recommendations) {
+    const normalized = rec.message.toLowerCase().trim();
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      result.push(rec);
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -692,22 +720,32 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 <div className={`space-y-1 text-amber-700 ${validationSummary.blockers?.length ? 'mt-4 pt-4 border-t border-gray-100' : ''}`}>
                   <p className="font-semibold text-amber-800 mb-2">Warnings</p>
                   {validationSummary.warnings.map((issue, index) => (
-                    <p key={`${issue.code}-${index}`}>• {issue.message}</p>
+                    <p key={`warning-${issue.code}-${index}`}>• {issue.message}</p>
                   ))}
                 </div>
               )}
 
-              {validationSummary.upsell?.reason && (
-                <p className="mt-3 text-xs text-gray-600">{validationSummary.upsell.reason}</p>
-              )}
-
-              {validationRecommendations.length > 0 && (
-                <div className="mt-3 space-y-1 text-xs text-gray-600">
-                  {validationRecommendations.map((rec, index) => (
-                    <p key={`${rec.code}-${index}`}>• {rec.message}</p>
-                  ))}
-                </div>
-              )}
+              {/* Recommendations section - separate from warnings, with deduplication */}
+              {(() => {
+                const dedupedRecs = dedupeRecommendations(
+                  validationRecommendations,
+                  validationSummary.upsell?.reason
+                );
+                if (dedupedRecs.length === 0) return null;
+                return (
+                  <div className={`space-y-1.5 ${validationSummary.warnings?.length || validationSummary.blockers?.length ? 'mt-4 pt-4 border-t border-gray-100' : ''}`}>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <RiLightbulbLine className="h-4 w-4 text-blue-600" />
+                      <p className="font-semibold text-blue-800 text-sm">Recommendations</p>
+                    </div>
+                    {dedupedRecs.map((rec, index) => (
+                      <p key={`rec-${rec.code}-${index}`} className="text-xs text-gray-600 pl-5">
+                        → {rec.message}
+                      </p>
+                    ))}
+                  </div>
+                );
+              })()}
 
               {nextQuestions.length > 0 && (
                 <div
