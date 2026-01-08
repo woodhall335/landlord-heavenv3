@@ -452,7 +452,24 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
     hasForm6aFlag ||
     hasSection21Flag;
 
-  if (!isValidNoticeType) {
+  // Check for wrong document type - detect if this is a Section 8 (Form 3) instead of Section 21
+  const hasForm3Flag = input.extracted.form_3_detected === true || input.extracted.form_3_present === true;
+  const hasSection8Flag = input.extracted.section_8_detected === true;
+  const groundsCited = input.extracted.grounds_cited;
+  const hasGrounds = Array.isArray(groundsCited) ? groundsCited.length > 0 : !!groundsCited;
+  const isSection8Notice =
+    noticeType.includes('section 8') ||
+    noticeType.includes('section_8') ||
+    noticeType.includes('s8') ||
+    noticeType.includes('form 3') ||
+    noticeType.includes('form_3') ||
+    hasForm3Flag ||
+    hasSection8Flag ||
+    (hasGrounds && !isValidNoticeType); // Has grounds cited but no S21 indicators = likely S8
+
+  if (isSection8Notice) {
+    addIssue(blockers, 'S21-WRONG-DOC-TYPE', 'This appears to be a Section 8 notice (Form 3), not a Section 21 notice. Please upload a Section 21 (Form 6A) notice for no-fault possession.', 'blocking');
+  } else if (!isValidNoticeType) {
     addIssue(blockers, 'S21-WRONG-FORM', 'Notice must be a Section 21 Form 6A notice.', 'blocking');
   }
 
@@ -580,8 +597,25 @@ export function validateSection8Notice(input: ValidatorInput): ValidatorResult {
   const warnings: ValidationIssue[] = [];
   const quality = input.extractionQuality;
 
+  // Check for wrong document type - detect if this is a Section 21 (Form 6A) instead of Section 8
+  const noticeType = String(input.extracted.notice_type || '').toLowerCase();
+  const hasForm6aFlag = input.extracted.form_6a_used === true || input.extracted.form_6a_detected === true;
+  const hasSection21Flag = input.extracted.section_21_detected === true;
+  const isSection21Notice =
+    noticeType.includes('section 21') ||
+    noticeType.includes('section_21') ||
+    noticeType.includes('s21') ||
+    noticeType.includes('form 6a') ||
+    noticeType.includes('form_6a') ||
+    hasForm6aFlag ||
+    hasSection21Flag;
+
+  if (isSection21Notice) {
+    addIssue(blockers, 'S8-WRONG-DOC-TYPE', 'This appears to be a Section 21 notice (Form 6A), not a Section 8 notice. Please upload a Section 8 (Form 3) notice for rent arrears possession.', 'blocking');
+  }
+
   const groundCodes = extractGroundCodes(input.extracted.grounds_cited);
-  if (groundCodes.length === 0) {
+  if (groundCodes.length === 0 && !isSection21Notice) {
     addTruthfulIssue(blockers, 'S8-GROUNDS-MISSING', 'At least one Section 8 ground must be cited', 'blocking', quality);
   }
 
