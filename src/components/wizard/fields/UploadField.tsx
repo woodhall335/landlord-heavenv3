@@ -803,11 +803,31 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                         } else if (Array.isArray(data?.validation?.recommendations)) {
                           setValidationRecommendations(data.validation.recommendations);
                         }
-                        if (Array.isArray(data?.next_questions)) {
-                          setNextQuestions(data.next_questions);
-                        } else if (Array.isArray(data?.validation?.next_questions)) {
-                          setNextQuestions(data.validation.next_questions);
-                        }
+
+                        // Get new next_questions
+                        const newNextQuestions: QuestionDefinition[] = Array.isArray(data?.next_questions)
+                          ? data.next_questions
+                          : Array.isArray(data?.validation?.next_questions)
+                            ? data.validation.next_questions
+                            : [];
+
+                        // FIX: Clear answered questions from local state
+                        // Keep only answers for questions that are still in next_questions
+                        // This prevents stale state and ensures clean UI
+                        const nextQuestionKeys = new Set(newNextQuestions.map((q: QuestionDefinition) => q.factKey));
+                        setQuestionAnswers((prev) => {
+                          const filtered: Record<string, any> = {};
+                          for (const key of Object.keys(prev)) {
+                            if (nextQuestionKeys.has(key)) {
+                              // Keep answer if question is still showing (e.g., validation error)
+                              filtered[key] = prev[key];
+                            }
+                            // Otherwise, answer was accepted and persisted server-side, so we can drop it
+                          }
+                          return filtered;
+                        });
+
+                        setNextQuestions(newNextQuestions);
                       } catch (err) {
                         console.error('Failed to submit answers', err);
                       } finally {
