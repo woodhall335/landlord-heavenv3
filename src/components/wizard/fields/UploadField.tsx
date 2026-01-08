@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
 import { RiFileTextLine, RiCloseCircleLine } from 'react-icons/ri';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
@@ -112,6 +112,17 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   const [questionAnswers, setQuestionAnswers] = useState<Record<string, any>>({});
   const [questionErrors, setQuestionErrors] = useState<Record<string, string>>({});
   const [answerSubmitting, setAnswerSubmitting] = useState(false);
+
+  // Ref for questions section - used for "Jump to Questions" scroll
+  const questionsSectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll handler for "Jump to Questions" button
+  const handleJumpToQuestions = useCallback(() => {
+    questionsSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, []);
 
   const updateAnswer = (factKey: string, value: any) => {
     setQuestionAnswers((prev) => ({ ...prev, [factKey]: value }));
@@ -597,6 +608,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             warningsCount={validationSummary.warnings?.length || 0}
             isTerminalBlocker={hasWrongDocTypeBlocker(validationSummary)}
             sticky={false}
+            questionsCount={hasWrongDocTypeBlocker(validationSummary) ? 0 : nextQuestions.length}
+            onJumpToQuestions={nextQuestions.length > 0 && !hasWrongDocTypeBlocker(validationSummary) ? handleJumpToQuestions : undefined}
           />
 
           {/* Collapsible Extracted Fields */}
@@ -697,7 +710,11 @@ export const UploadField: React.FC<UploadFieldProps> = ({
               )}
 
               {nextQuestions.length > 0 && (
-                <div className="mt-3 space-y-2 text-xs text-gray-600">
+                <div
+                  ref={questionsSectionRef}
+                  id="questions-section"
+                  className="mt-3 space-y-2 text-xs text-gray-600 scroll-mt-4"
+                >
                   <p className="font-semibold text-gray-700">Re-check document</p>
                   {nextQuestions.map((question) => (
                     <div key={question.factKey} className="block rounded-md bg-gray-50 p-2">
