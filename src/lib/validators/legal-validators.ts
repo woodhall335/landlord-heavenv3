@@ -651,7 +651,11 @@ export function validateSection8Notice(input: ValidatorInput): ValidatorResult {
     addTruthfulIssue(warnings, 'S8-ARREARS-MISSING', 'Rent arrears amount not found in notice', 'warning', quality);
   }
 
-  if (isMissing(input.extracted.tenant_details)) {
+  // Check tenant_names array (from regex extraction) OR tenant_details (from LLM extraction)
+  // Official Form 3 provides tenant names, not a "tenant details" paragraph
+  const hasTenantNames = Array.isArray(input.extracted.tenant_names) && input.extracted.tenant_names.length > 0;
+  const hasTenantDetails = !isMissing(input.extracted.tenant_details);
+  if (!hasTenantNames && !hasTenantDetails) {
     addTruthfulIssue(warnings, 'S8-TENANT-DETAILS-MISSING', 'Tenant details not found in notice', 'warning', quality);
   }
 

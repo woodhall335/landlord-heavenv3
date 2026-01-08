@@ -14,12 +14,38 @@ import {
   RiArrowUpSLine,
   RiEyeLine,
 } from 'react-icons/ri';
+import { parseUKDate, formatUKDate, addCalendarMonths } from '@/lib/validators/rules/dateUtils';
+
+/**
+ * Format a date string to UK format (DD/MM/YYYY).
+ * Accepts various input formats and normalizes to UK display format.
+ */
+function toUKDateDisplay(dateStr: string | null | undefined): string | null {
+  if (!dateStr) return null;
+  const parsed = parseUKDate(dateStr);
+  if (!parsed) return dateStr; // Return original if parsing fails
+  return formatUKDate(parsed);
+}
+
+/**
+ * Calculate latest proceedings date (12 months from service date).
+ * Per Housing Act 1988, Section 8 proceedings must begin within 12 months.
+ */
+function calculateLatestProceedingsDate(serviceDateStr: string | null | undefined): string | null {
+  if (!serviceDateStr) return null;
+  const serviceDate = parseUKDate(serviceDateStr);
+  if (!serviceDate) return null;
+  const latestDate = addCalendarMonths(serviceDate, 12);
+  return formatUKDate(latestDate);
+}
 
 interface ExtractedFieldsSummary {
   notice_type?: string;
   date_served?: string;
   service_date?: string;
   expiry_date?: string;
+  /** Section 8: Earliest date court proceedings may begin (Form 3 Section 5) */
+  earliest_proceedings_date?: string;
   property_address?: string;
   tenant_names?: string | string[];
   landlord_name?: string;
@@ -118,17 +144,55 @@ export function CollapsibleExtractedFields({
       >
         <div className="px-4 pb-4 pt-0 border-t border-blue-100">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-            {/* Service Date */}
+            {/* Service Date - applies to both S8 and S21 */}
             {(fields.date_served || fields.service_date) && (
               <FieldRow
                 label="Service Date"
-                value={fields.date_served || fields.service_date}
+                value={toUKDateDisplay(fields.date_served || fields.service_date)}
               />
             )}
 
-            {/* Expiry Date */}
-            {fields.expiry_date && (
-              <FieldRow label="Expiry Date" value={fields.expiry_date} />
+            {/* Section 8: Show Earliest Proceedings Date + Latest Proceedings Date */}
+            {(fields.section_8_detected || fields.form_3_detected) && (
+              <>
+                {/* Earliest Proceedings Date (Form 3 Section 5) */}
+                <FieldRow
+                  label="Earliest Proceedings Date"
+                  value={
+                    fields.earliest_proceedings_date
+                      ? toUKDateDisplay(fields.earliest_proceedings_date)
+                      : fields.expiry_date
+                        ? toUKDateDisplay(fields.expiry_date)
+                        : 'Not stated in notice'
+                  }
+                  valueClassName={
+                    (fields.earliest_proceedings_date || fields.expiry_date)
+                      ? 'text-blue-900'
+                      : 'text-amber-700'
+                  }
+                  showAlways
+                />
+
+                {/* Latest Proceedings Date (12 months from service date) */}
+                <FieldRow
+                  label="Latest Proceedings Date"
+                  value={
+                    calculateLatestProceedingsDate(fields.date_served || fields.service_date)
+                      || 'Cannot calculate (service date required)'
+                  }
+                  valueClassName={
+                    (fields.date_served || fields.service_date)
+                      ? 'text-blue-900'
+                      : 'text-amber-700'
+                  }
+                  showAlways
+                />
+              </>
+            )}
+
+            {/* Section 21: Show Expiry Date (original behavior) */}
+            {!(fields.section_8_detected || fields.form_3_detected) && fields.expiry_date && (
+              <FieldRow label="Expiry Date" value={toUKDateDisplay(fields.expiry_date)} />
             )}
 
             {/* Property Address */}
