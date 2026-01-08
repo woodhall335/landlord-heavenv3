@@ -16,6 +16,7 @@ import {
   RiQuestionFill,
   RiShieldCheckLine,
   RiErrorWarningFill,
+  RiArrowDownLine,
 } from 'react-icons/ri';
 
 interface ValidationResultBannerProps {
@@ -28,6 +29,10 @@ interface ValidationResultBannerProps {
   summaryMessage?: string;
   /** Whether to make the banner sticky */
   sticky?: boolean;
+  /** Number of follow-up questions available */
+  questionsCount?: number;
+  /** Callback when user clicks "Jump to Questions" */
+  onJumpToQuestions?: () => void;
   className?: string;
 }
 
@@ -153,6 +158,55 @@ function normalizeStatus(
   return 'unknown';
 }
 
+/**
+ * Generate a deterministic action summary based on validation state.
+ * Returns a short, actionable sentence guiding the user on next steps.
+ */
+export function getActionSummary(
+  normalizedStatus: BannerStatus,
+  blockersCount: number,
+  warningsCount: number,
+  questionsCount: number
+): string {
+  // Wrong document type - immediate action needed
+  if (normalizedStatus === 'wrong_doc_type') {
+    return 'Please upload the correct document type.';
+  }
+
+  // Has blockers - needs attention
+  if (blockersCount > 0) {
+    if (questionsCount > 0) {
+      return `Address ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below, then answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} for full validation.`;
+    }
+    return `Address ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below to proceed.`;
+  }
+
+  // Has questions to answer
+  if (questionsCount > 0) {
+    if (warningsCount > 0) {
+      return `Answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} below and review ${warningsCount} warning${warningsCount > 1 ? 's' : ''}.`;
+    }
+    return `Answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} below for complete validation.`;
+  }
+
+  // Warnings only
+  if (warningsCount > 0) {
+    return `Review ${warningsCount} warning${warningsCount > 1 ? 's' : ''} below before proceeding.`;
+  }
+
+  // All good
+  if (normalizedStatus === 'valid') {
+    return 'Your document is ready. Proceed to generate court forms.';
+  }
+
+  // Needs more info
+  if (normalizedStatus === 'needs_info') {
+    return 'Additional information is required to complete validation.';
+  }
+
+  return '';
+}
+
 export function ValidationResultBanner({
   status,
   blockersCount,
@@ -160,10 +214,13 @@ export function ValidationResultBanner({
   isTerminalBlocker = false,
   summaryMessage,
   sticky = true,
+  questionsCount = 0,
+  onJumpToQuestions,
   className = '',
 }: ValidationResultBannerProps) {
   const normalizedStatus = normalizeStatus(status, blockersCount, warningsCount, isTerminalBlocker);
   const config = STATUS_CONFIG[normalizedStatus];
+  const actionSummary = getActionSummary(normalizedStatus, blockersCount, warningsCount, questionsCount);
 
   const stickyClass = sticky ? 'sticky top-0 z-10' : '';
 
@@ -190,6 +247,23 @@ export function ValidationResultBanner({
           <p className={`mt-1 text-sm md:text-base ${config.textColor} opacity-80`}>
             {summaryMessage || config.summary}
           </p>
+          {/* Action Summary */}
+          {actionSummary && (
+            <p className={`mt-2 text-xs md:text-sm font-medium ${config.textColor}`}>
+              {actionSummary}
+              {/* Jump to Questions link - only when questions exist */}
+              {questionsCount > 0 && onJumpToQuestions && (
+                <button
+                  type="button"
+                  onClick={onJumpToQuestions}
+                  className="ml-2 inline-flex items-center gap-1 underline hover:no-underline"
+                >
+                  Jump to questions
+                  <RiArrowDownLine className="h-3 w-3" />
+                </button>
+              )}
+            </p>
+          )}
         </div>
 
         {/* Stats badges */}
