@@ -1,7 +1,6 @@
 // src/app/api/wizard/upload-evidence/route.ts
-// Thin wrapper that re-uses the canonical API implementation.
-// This keeps any legacy /wizard/upload-evidence calls working,
-// but ensures all logic lives in one place.      
+// Evidence upload endpoint with robust error handling and correlation IDs.
+// All errors return structured JSON responses with debug_id for tracing.
 
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
@@ -21,6 +20,49 @@ import {
 } from '@/lib/evidence/merge-extracted-facts';
 
 export const runtime = 'nodejs';
+
+/**
+ * Structured error response format for tracing
+ */
+interface ErrorResponse {
+  ok: false;
+  error: string;
+  error_code: string;
+  stage: string;
+  debug_id: string;
+  details?: Record<string, any>;
+}
+
+/**
+ * Create a structured error response with correlation ID
+ */
+function createErrorResponse(
+  error: string,
+  errorCode: string,
+  stage: string,
+  debugId: string,
+  status: number,
+  details?: Record<string, any>
+): NextResponse<ErrorResponse> {
+  const body: ErrorResponse = {
+    ok: false,
+    error,
+    error_code: errorCode,
+    stage,
+    debug_id: debugId,
+    ...(details && { details }),
+  };
+
+  console.error('[upload-evidence][error]', JSON.stringify({
+    ...body,
+    status,
+  }));
+
+  return NextResponse.json(body, {
+    status,
+    headers: { 'x-debug-id': debugId },
+  });
+}
 
 function sanitizeFilename(name: string) {
   const trimmed = name?.trim() || 'upload';
@@ -119,6 +161,16 @@ function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: strin
 }
 
 export async function POST(request: Request) {
+  // Generate correlation ID for this request (use client-provided or generate new)
+  const clientDebugId = request.headers.get('x-debug-id');
+  const debugId = clientDebugId || randomUUID().slice(0, 8);
+  const startTime = Date.now();
+
+  console.log('[upload-evidence][start]', JSON.stringify({
+    debug_id: debugId,
+    timestamp: new Date().toISOString(),
+  }));
+
   try {
     // Admin client bypasses Supabase RLS for this route
     logSupabaseAdminDiagnostics({ route: '/api/wizard/upload-evidence', writesUsingAdmin: true });
@@ -134,15 +186,33 @@ export async function POST(request: Request) {
     const file = formData.get('file');
 
     if (typeof caseId !== 'string' || !caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
+      return createErrorResponse(
+        'caseId is required',
+        'MISSING_CASE_ID',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     if (typeof questionId !== 'string' || !questionId) {
-      return NextResponse.json({ error: 'questionId is required' }, { status: 400 });
+      return createErrorResponse(
+        'questionId is required',
+        'MISSING_QUESTION_ID',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'file is required' }, { status: 400 });
+      return createErrorResponse(
+        'file is required',
+        'MISSING_FILE',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     // =========================================================================
@@ -153,14 +223,13 @@ export async function POST(request: Request) {
     const categoryString = typeof category === 'string' && category.length > 0 ? category : undefined;
 
     if (categoryString && !isEvidenceCategory(categoryString)) {
-      const validCategories = Object.values(EvidenceCategory).join(', ');
-      return NextResponse.json(
-        {
-          error: `Invalid evidence category: "${categoryString}". ` +
-                 `Must be one of: ${validCategories}`,
-          valid_categories: Object.values(EvidenceCategory),
-        },
-        { status: 400 }
+      return createErrorResponse(
+        `Invalid evidence category: "${categoryString}"`,
+        'INVALID_CATEGORY',
+        'validation',
+        debugId,
+        400,
+        { valid_categories: Object.values(EvidenceCategory) }
       );
     }
 
@@ -181,19 +250,25 @@ export async function POST(request: Request) {
 
     const fileSize = (file as any).size;
     if (typeof fileSize === 'number' && fileSize > MAX_FILE_SIZE_BYTES) {
-      return NextResponse.json(
-        { error: `File too large. Maximum size is 10MB, received ${(fileSize / 1024 / 1024).toFixed(2)}MB` },
-        { status: 400 }
+      return createErrorResponse(
+        `File too large. Maximum size is 10MB, received ${(fileSize / 1024 / 1024).toFixed(2)}MB`,
+        'FILE_TOO_LARGE',
+        'validation',
+        debugId,
+        400,
+        { max_size_mb: 10, received_size_mb: fileSize / 1024 / 1024 }
       );
     }
 
     const mimeType = ((file as any).type || '').toLowerCase();
     if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
-      return NextResponse.json(
-        {
-          error: `File type not allowed. Accepted types: PDF, JPEG, PNG, WebP, GIF. Received: ${mimeType || 'unknown'}`,
-        },
-        { status: 400 }
+      return createErrorResponse(
+        `File type not allowed. Accepted types: PDF, JPEG, PNG, WebP, GIF. Received: ${mimeType || 'unknown'}`,
+        'INVALID_FILE_TYPE',
+        'validation',
+        debugId,
+        400,
+        { allowed_types: ALLOWED_MIME_TYPES, received_type: mimeType }
       );
     }
 
@@ -205,20 +280,45 @@ export async function POST(request: Request) {
 
     if (caseError) {
       console.error('Failed to load case', caseError);
-      return NextResponse.json({ error: 'Could not load case' }, { status: 500 });
+      return createErrorResponse(
+        'Could not load case',
+        'CASE_LOAD_ERROR',
+        'case_lookup',
+        debugId,
+        500,
+        { supabase_error: caseError.message }
+      );
     }
 
     if (!caseRow) {
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      return createErrorResponse(
+        'Case not found',
+        'CASE_NOT_FOUND',
+        'case_lookup',
+        debugId,
+        404
+      );
     }
 
     // If the case is owned, enforce that only the owning user can upload to it
     if (caseRow.user_id) {
       if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return createErrorResponse(
+          'Please sign in to upload evidence for this case',
+          'UNAUTHORIZED',
+          'auth',
+          debugId,
+          401
+        );
       }
       if (caseRow.user_id !== user.id) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        return createErrorResponse(
+          'You do not have permission to upload evidence to this case',
+          'FORBIDDEN',
+          'auth',
+          debugId,
+          403
+        );
       }
     }
 
@@ -238,7 +338,14 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error('Failed to upload file to storage', uploadError);
-      return NextResponse.json({ error: 'Could not upload file' }, { status: 500 });
+      return createErrorResponse(
+        'Could not upload file to storage',
+        'STORAGE_UPLOAD_ERROR',
+        'storage_upload',
+        debugId,
+        500,
+        { storage_error: uploadError.message }
+      );
     }
 
     // SECURITY: Do NOT use getPublicUrl() for evidence files.
@@ -261,7 +368,14 @@ export async function POST(request: Request) {
 
     if (documentError || !documentRow) {
       console.error('Failed to insert document record', documentError);
-      return NextResponse.json({ error: 'Could not save document' }, { status: 500 });
+      return createErrorResponse(
+        'Could not save document record',
+        'DOCUMENT_INSERT_ERROR',
+        'document_insert',
+        debugId,
+        500,
+        { db_error: documentError?.message }
+      );
     }
 
     const evidenceEntry = {
@@ -352,6 +466,13 @@ export async function POST(request: Request) {
         ? questionId.replace('validator_', '')
         : validatedCategory ?? null;
 
+      console.log('[upload-evidence][analysis_start]', JSON.stringify({
+        debug_id: debugId,
+        filename: file.name,
+        mimeType: (file as any).type,
+        validatorKey,
+      }));
+
       const analysis = await analyzeEvidence({
         storageBucket: 'documents',
         storagePath: objectKey,
@@ -364,7 +485,17 @@ export async function POST(request: Request) {
         fileBuffer,
         validatorKey,
         jurisdiction: caseRow.jurisdiction,
+        debugId, // Pass correlation ID for tracing
       });
+
+      console.log('[upload-evidence][analysis_complete]', JSON.stringify({
+        debug_id: debugId,
+        analysis_debug_id: analysis.debug_id,
+        detected_type: analysis.detected_type,
+        confidence: analysis.confidence,
+        duration_ms: analysis.duration_ms,
+        final_stage: analysis.final_stage,
+      }));
 
       analysisResult = analysis;
 
@@ -568,8 +699,17 @@ export async function POST(request: Request) {
     const latestFacts = await getOrCreateWizardFacts(supabase as any, caseId);
     const latestEvidenceFacts: any = (latestFacts as any).evidence || evidenceFacts;
 
+    const totalDuration = Date.now() - startTime;
+    console.log('[upload-evidence][success]', JSON.stringify({
+      debug_id: debugId,
+      duration_ms: totalDuration,
+      validator_key: validationKey,
+      validation_status: validationResult?.status,
+    }));
+
     return NextResponse.json({
       success: true,
+      debug_id: debugId,
       document: documentRow,
       evidence: {
         files: latestEvidenceFacts.files || evidenceFacts.files || [],
@@ -603,11 +743,26 @@ export async function POST(request: Request) {
       next_questions: validationNextQuestions,
       document_intel: documentIntel,
       fact_snapshot: intelligenceSnapshot,
-      // New: extraction metadata for transparency
       extraction: extractionMeta,
+      duration_ms: totalDuration,
+    }, {
+      headers: { 'x-debug-id': debugId },
     });
   } catch (error) {
-    console.error('Unexpected error in upload-evidence route', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const duration = Date.now() - startTime;
+    console.error('[upload-evidence][unexpected_error]', JSON.stringify({
+      debug_id: debugId,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      duration_ms: duration,
+    }));
+
+    return createErrorResponse(
+      'Internal server error',
+      'INTERNAL_ERROR',
+      'unknown',
+      debugId,
+      500,
+      { error_message: error instanceof Error ? error.message : 'Unknown error' }
+    );
   }
 }

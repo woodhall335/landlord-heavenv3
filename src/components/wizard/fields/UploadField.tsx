@@ -245,6 +245,9 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     setUploading(true);
     setError(null);
 
+    // Generate client-side correlation ID for tracing
+    const clientDebugId = `client-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+
     try {
       let latestSummaries: EvidenceFileSummary[] = uploadedFiles;
 
@@ -263,28 +266,55 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         // Actual file
         formData.append('file', file);
 
-        const response = await fetch('/api/wizard/upload-evidence', {
-          method: 'POST',
-          body: formData,
-        });
+        let response: Response;
+        try {
+          response = await fetch('/api/wizard/upload-evidence', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'x-debug-id': clientDebugId,
+            },
+          });
+        } catch (networkError) {
+          // Network error (Failed to fetch, CORS, connection refused, etc.)
+          console.error('Network error during upload:', networkError);
+          throw new Error(
+            'Network error: Unable to connect to the server. Please check your internet connection and try again. ' +
+            `(debug_id: ${clientDebugId})`
+          );
+        }
 
         let data: any = null;
         try {
           data = await response.json();
         } catch {
           // Non-JSON or empty body – we'll fall back to generic messages below
+          console.warn('Failed to parse response JSON, status:', response.status);
         }
 
+        // Extract debug_id from response for error messages
+        const serverDebugId = data?.debug_id || response.headers.get('x-debug-id') || clientDebugId;
+
         if (response.status === 401) {
-          throw new Error('Please sign in to upload evidence for this case.');
+          throw new Error(
+            data?.error || 'Please sign in to upload evidence for this case.'
+          );
         }
 
         if (response.status === 403) {
-          throw new Error("You don't have permission to upload evidence to this case.");
+          throw new Error(
+            data?.error || "You don't have permission to upload evidence to this case."
+          );
         }
 
         if (!response.ok || !data?.success) {
-          throw new Error(data?.error || 'Failed to upload file');
+          // Build detailed error message
+          const errorMessage = data?.error || 'Failed to upload file';
+          const errorCode = data?.error_code || 'UNKNOWN';
+          const stage = data?.stage || 'unknown';
+          throw new Error(
+            `${errorMessage} (code: ${errorCode}, stage: ${stage}, debug_id: ${serverDebugId})`
+          );
         }
 
         if (data?.validation_summary || data?.validation) {

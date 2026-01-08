@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { randomUUID } from 'node:crypto';
 import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
 import { PDFDocument } from 'pdf-lib';
@@ -11,10 +12,47 @@ import {
 
 // Debug logging helper - controlled by DEBUG_EVIDENCE env var
 const DEBUG = process.env.DEBUG_EVIDENCE === 'true';
-function debugLog(label: string, data: any): void {
+function debugLog(label: string, data: any, debugId?: string): void {
   if (DEBUG) {
-    console.log(`[DEBUG_EVIDENCE][${label}]`, typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+    const prefix = debugId ? `[DEBUG_EVIDENCE][${debugId}][${label}]` : `[DEBUG_EVIDENCE][${label}]`;
+    console.log(prefix, typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
   }
+}
+
+/** Master timeout for entire analysis (30s) - prevents infinite hangs */
+const ANALYSIS_MASTER_TIMEOUT_MS = 30000;
+
+/**
+ * Analysis stages for observability
+ */
+type AnalysisStage =
+  | 'init'
+  | 'buffer_load'
+  | 'pdf_parse'
+  | 'regex_extraction'
+  | 'llm_text_extraction'
+  | 'vision_extraction'
+  | 'result_merge'
+  | 'complete'
+  | 'error';
+
+/**
+ * Log stage transition with timing
+ */
+function logStage(
+  stage: AnalysisStage,
+  debugId: string,
+  details?: Record<string, any>,
+  startTime?: number
+): void {
+  const elapsed = startTime ? Date.now() - startTime : 0;
+  const message = {
+    stage,
+    debug_id: debugId,
+    elapsed_ms: elapsed,
+    ...details,
+  };
+  console.log(`[analyzeEvidence][${stage}]`, JSON.stringify(message));
 }
 
 export interface EvidenceAnalysisInput {
@@ -32,6 +70,8 @@ export interface EvidenceAnalysisInput {
   validatorKey?: string | null;
   /** Jurisdiction for context-specific rules */
   jurisdiction?: string | null;
+  /** Correlation ID for tracing (auto-generated if not provided) */
+  debugId?: string | null;
 }
 
 export interface ExtractionQualityMeta {
@@ -57,6 +97,12 @@ export interface EvidenceAnalysisResult {
   raw_text?: string;
   source?: 'pdf_text' | 'vision' | 'image' | 'regex';
   extraction_quality?: ExtractionQualityMeta;
+  /** Correlation ID for tracing */
+  debug_id?: string;
+  /** Stage where analysis ended (for debugging failures) */
+  final_stage?: AnalysisStage;
+  /** Total analysis duration in ms */
+  duration_ms?: number;
 }
 
 const AnalysisSchema = z.object({
@@ -1037,7 +1083,15 @@ function mergeExtractionResults(
   return merged;
 }
 
-export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<EvidenceAnalysisResult> {
+/**
+ * Internal implementation of analyzeEvidence (without master timeout).
+ * This is wrapped by analyzeEvidence with a master timeout.
+ */
+async function analyzeEvidenceInternal(
+  input: EvidenceAnalysisInput,
+  debugId: string,
+  startTime: number
+): Promise<EvidenceAnalysisResult> {
   const warnings: string[] = [];
   const qualityMeta: ExtractionQualityMeta = {
     text_extraction_method: 'failed',
@@ -1046,6 +1100,15 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
     llm_extraction_ran: false,
   };
 
+  logStage('init', debugId, {
+    filename: input.filename,
+    mimeType: input.mimeType,
+    category: input.category,
+    validatorKey: input.validatorKey,
+    hasSignedUrl: !!input.signedUrl,
+    hasFileBuffer: !!input.fileBuffer,
+  }, startTime);
+
   debugLog('analyze_start', {
     filename: input.filename,
     mimeType: input.mimeType,
@@ -1053,16 +1116,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
     validatorKey: input.validatorKey,
     hasSignedUrl: !!input.signedUrl,
     hasFileBuffer: !!input.fileBuffer,
-  });
-
-  console.log('[analyzeEvidence] Starting analysis for:', {
-    filename: input.filename,
-    mimeType: input.mimeType,
-    category: input.category,
-    validatorKey: input.validatorKey,
-    hasSignedUrl: !!input.signedUrl,
-    hasFileBuffer: !!input.fileBuffer,
-  });
+  }, debugId);
 
   // Track regex extraction results even if LLM fails
   let regexResult: AnyRegexResult | null = null;
@@ -1376,7 +1430,9 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       extraction_quality: qualityMeta,
     };
   } catch (error: any) {
-    debugLog('analysis_error', { error: error.message });
+    const duration = Date.now() - startTime;
+    debugLog('analysis_error', { error: error.message, durationMs: duration }, debugId);
+    logStage('error', debugId, { error: error.message }, startTime);
     console.error('[analyzeEvidence] Analysis error:', error.message);
 
     return {
@@ -1385,6 +1441,92 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       confidence: 0.1,
       warnings: [`Evidence analysis failed: ${error.message}`, ...warnings],
       extraction_quality: qualityMeta,
+      debug_id: debugId,
+      final_stage: 'error',
+      duration_ms: duration,
+    };
+  }
+}
+
+/**
+ * Analyze evidence document (PDF or image) with extraction and classification.
+ *
+ * This is the main entry point for evidence analysis. It wraps the internal
+ * implementation with a master timeout to ensure the function always returns
+ * within a reasonable time (30s max).
+ *
+ * @param input - Evidence analysis input
+ * @returns Analysis result with extracted fields, confidence, and quality metadata
+ */
+export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<EvidenceAnalysisResult> {
+  const startTime = Date.now();
+  const debugId = input.debugId || randomUUID().slice(0, 8);
+
+  console.log('[analyzeEvidence] Starting analysis:', {
+    debug_id: debugId,
+    filename: input.filename,
+    mimeType: input.mimeType,
+    category: input.category,
+    validatorKey: input.validatorKey,
+  });
+
+  try {
+    // Run analysis with master timeout
+    const result = await withTimeout(
+      analyzeEvidenceInternal(input, debugId, startTime),
+      ANALYSIS_MASTER_TIMEOUT_MS,
+      'Evidence analysis'
+    );
+
+    // Add debug_id and timing if not already present
+    const duration = Date.now() - startTime;
+    logStage('complete', debugId, {
+      detected_type: result.detected_type,
+      confidence: result.confidence,
+      fieldsCount: Object.keys(result.extracted_fields || {}).length,
+    }, startTime);
+
+    return {
+      ...result,
+      debug_id: result.debug_id || debugId,
+      final_stage: result.final_stage || 'complete',
+      duration_ms: result.duration_ms || duration,
+    };
+  } catch (error: any) {
+    const duration = Date.now() - startTime;
+    const isTimeout = error.message?.includes('timed out');
+
+    logStage('error', debugId, {
+      error: error.message,
+      isTimeout,
+    }, startTime);
+
+    console.error('[analyzeEvidence] Analysis failed:', {
+      debug_id: debugId,
+      error: error.message,
+      duration_ms: duration,
+      isTimeout,
+    });
+
+    // Return degraded result instead of throwing
+    return {
+      detected_type: input.category || 'unknown',
+      extracted_fields: {},
+      confidence: 0.1,
+      warnings: [
+        isTimeout
+          ? `Evidence analysis timed out after ${ANALYSIS_MASTER_TIMEOUT_MS}ms`
+          : `Evidence analysis failed: ${error.message}`,
+      ],
+      extraction_quality: {
+        text_extraction_method: 'failed',
+        text_length: 0,
+        regex_fields_found: 0,
+        llm_extraction_ran: false,
+      },
+      debug_id: debugId,
+      final_stage: 'error',
+      duration_ms: duration,
     };
   }
 }
