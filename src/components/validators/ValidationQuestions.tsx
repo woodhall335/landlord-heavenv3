@@ -21,7 +21,7 @@ interface ValidationQuestionsProps {
   className?: string;
 }
 
-type QuestionInputType = 'yes_no' | 'date' | 'currency' | 'select' | 'multi_select' | 'text' | 'number';
+type QuestionInputType = 'yes_no' | 'yes_no_unsure' | 'date' | 'currency' | 'select' | 'multi_select' | 'text' | 'number';
 
 interface QuestionOption {
   value: string;
@@ -78,6 +78,45 @@ function QuestionInput({
             }`}
           >
             No
+          </button>
+        </div>
+      );
+
+    case 'yes_no_unsure':
+      return (
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => onChange('yes')}
+            className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
+              value === 'yes'
+                ? 'bg-green-100 border-green-500 text-green-800'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange('no')}
+            className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
+              value === 'no'
+                ? 'bg-red-100 border-red-500 text-red-800'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            No
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange('not_sure')}
+            className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
+              value === 'not_sure'
+                ? 'bg-amber-100 border-amber-500 text-amber-800'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Not Sure
           </button>
         </div>
       );

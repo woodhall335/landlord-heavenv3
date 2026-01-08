@@ -7,6 +7,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import { REQUIREMENTS, resolveRequirementKey } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
+import { isLevelAFactKey, FACT_QUESTIONS } from '@/lib/validators/facts/factKeys';
 
 export const runtime = 'nodejs';
 
@@ -100,6 +101,19 @@ function normalizeAnswer(question: QuestionDefinition, value: any): { value?: an
         if (['no', 'n', 'false'].includes(normalized)) return { value: 'no' };
       }
       return { error: 'Answer must be yes or no.' };
+    }
+    case 'yes_no_unsure': {
+      // Level A questions: yes/no/not_sure (or unsure)
+      if (typeof value === 'boolean') return { value: value ? 'yes' : 'no' };
+      if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        if (['yes', 'y', 'true'].includes(normalized)) return { value: 'yes' };
+        if (['no', 'n', 'false'].includes(normalized)) return { value: 'no' };
+        if (['not_sure', 'unsure', 'unknown', 'not sure', 'notsure'].includes(normalized)) {
+          return { value: 'not_sure' };
+        }
+      }
+      return { error: 'Answer must be yes, no, or not sure.' };
     }
     case 'date': {
       if (typeof value !== 'string') return { error: 'Date must be a string.' };
@@ -195,14 +209,48 @@ export async function POST(request: Request) {
     });
     const requirement = requirementKey ? REQUIREMENTS[requirementKey] : null;
     const questions = requirement?.requiredFacts || [];
+    const isLevelAMode = requirement?.levelAMode === true;
 
     const errors: AnswerValidationError[] = [];
     // Answers must be keyed by factKey (not question id).
     const normalizedAnswers: Record<string, any> = {};
 
     Object.entries(answers).forEach(([factKey, value]) => {
+      // First check if it's a Level A fact key
+      if (isLevelAFactKey(factKey)) {
+        // Find the Level A question config
+        const levelAQuestion = FACT_QUESTIONS.find(
+          (q) => q.factKey === factKey && q.isLevelA === true
+        );
+        if (levelAQuestion) {
+          // Create a QuestionDefinition-like object for normalization
+          const pseudoQuestion: QuestionDefinition = {
+            id: factKey,
+            factKey,
+            question: levelAQuestion.question,
+            type: levelAQuestion.type as any,
+            required: levelAQuestion.required ?? true,
+            options: levelAQuestion.options,
+          };
+          const result = normalizeAnswer(pseudoQuestion, value);
+          if (result.error) {
+            errors.push({ factKey, message: result.error });
+            return;
+          }
+          normalizedAnswers[factKey] = result.value;
+          return;
+        }
+      }
+
+      // Fall back to standard requirement questions
       const question = questions.find((item) => item.factKey === factKey);
       if (!question) {
+        // If not found in requirements, check if it's a known Level A key we should accept anyway
+        if (isLevelAMode && isLevelAFactKey(factKey)) {
+          // Accept the answer as-is for Level A mode
+          normalizedAnswers[factKey] = value;
+          return;
+        }
         errors.push({ factKey, message: 'Unknown question key.' });
         return;
       }
@@ -256,6 +304,25 @@ export async function POST(request: Request) {
       analysis: latestAnalysis,
     });
 
+    // Level A mode: Use level_a_questions instead of missing_questions
+    const levelAQuestions = validationOutcome.level_a_questions ?? [];
+    const isResultLevelAMode = validationOutcome.level_a_mode === true;
+
+    // Build next_questions based on mode
+    let nextQuestions: any[];
+    if (isResultLevelAMode && levelAQuestions.length > 0) {
+      nextQuestions = levelAQuestions.map((q: any) => ({
+        id: q.factKey,
+        factKey: q.factKey,
+        question: q.question,
+        type: q.type || 'yes_no_unsure',
+        helpText: q.helpText,
+        isLevelA: true,
+      }));
+    } else {
+      nextQuestions = validationOutcome.missing_questions ?? [];
+    }
+
     const validationSummary = validationOutcome.result
       ? {
           validator_key: validationOutcome.validator_key,
@@ -263,6 +330,7 @@ export async function POST(request: Request) {
           blockers: validationOutcome.result?.blockers,
           warnings: validationOutcome.result?.warnings,
           upsell: validationOutcome.result?.upsell ?? null,
+          level_a_mode: isResultLevelAMode,
         }
       : null;
 
@@ -273,8 +341,9 @@ export async function POST(request: Request) {
           ...current,
           validation_summary: validationSummary,
           recommendations: validationOutcome.recommendations ?? [],
-          next_questions: validationOutcome.missing_questions ?? [],
+          next_questions: nextQuestions,
           validation_version: 'answer_questions_v1',
+          level_a_mode: isResultLevelAMode,
         } as typeof current;
       });
     }
@@ -289,12 +358,14 @@ export async function POST(request: Request) {
             warnings: validationOutcome.result.warnings,
             upsell: validationOutcome.result.upsell ?? null,
             recommendations: validationOutcome.recommendations ?? [],
-            next_questions: validationOutcome.missing_questions ?? [],
+            next_questions: nextQuestions,
+            level_a_mode: isResultLevelAMode,
           }
         : null,
       validation_summary: validationSummary,
       recommendations: validationOutcome.recommendations ?? [],
-      next_questions: validationOutcome.missing_questions ?? [],
+      next_questions: nextQuestions,
+      level_a_mode: isResultLevelAMode,
     });
   } catch (error) {
     console.error('answer-questions route error', error);

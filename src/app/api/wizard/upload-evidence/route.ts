@@ -700,19 +700,37 @@ export async function POST(request: Request) {
       validationResult = validatorOutcome.result;
       validationKey = validatorOutcome.validator_key;
       validationRecommendations = validatorOutcome.recommendations ?? [];
-      // Merge validator questions with low-confidence confirmation questions
-      const validatorQuestions = validatorOutcome.missing_questions ?? [];
-      // Filter out confirmation questions for facts that validator already has questions for
-      const validatorFactKeys = new Set(validatorQuestions.map((q: any) => q.factKey || q.id));
-      const filteredConfirmationQuestions = confirmationQuestions.filter(
-        q => !validatorFactKeys.has(q.factKey)
-      );
-      // Map confirmation questions to have id property for compatibility
-      const mappedConfirmationQuestions = filteredConfirmationQuestions.map(q => ({
-        id: q.factKey,
-        question: q.question,
-      }));
-      validationNextQuestions = [...validatorQuestions, ...mappedConfirmationQuestions];
+
+      // Level A mode: Use follow-up questions instead of evidence upload requirements
+      const isLevelAMode = validatorOutcome.level_a_mode === true;
+      const levelAQuestions = validatorOutcome.level_a_questions ?? [];
+
+      if (isLevelAMode && levelAQuestions.length > 0) {
+        // In Level A mode, use the Level A questions as next questions
+        // Map them to have id property for compatibility
+        validationNextQuestions = levelAQuestions.map((q: any) => ({
+          id: q.factKey,
+          factKey: q.factKey,
+          question: q.question,
+          type: q.type || 'yes_no_unsure',
+          helpText: q.helpText,
+          isLevelA: true,
+        }));
+      } else {
+        // Legacy mode: Merge validator questions with low-confidence confirmation questions
+        const validatorQuestions = validatorOutcome.missing_questions ?? [];
+        // Filter out confirmation questions for facts that validator already has questions for
+        const validatorFactKeys = new Set(validatorQuestions.map((q: any) => q.factKey || q.id));
+        const filteredConfirmationQuestions = confirmationQuestions.filter(
+          q => !validatorFactKeys.has(q.factKey)
+        );
+        // Map confirmation questions to have id property for compatibility
+        const mappedConfirmationQuestions = filteredConfirmationQuestions.map(q => ({
+          id: q.factKey,
+          question: q.question,
+        }));
+        validationNextQuestions = [...validatorQuestions, ...mappedConfirmationQuestions];
+      }
 
       if (validationResult) {
         validationSummary = {
@@ -722,6 +740,7 @@ export async function POST(request: Request) {
           warnings: validationResult.warnings,
           upsell: validationResult.upsell ?? null,
           terminal_blocker: validationResult.terminal_blocker ?? false,
+          level_a_mode: isLevelAMode,
         };
 
         await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
@@ -732,6 +751,7 @@ export async function POST(request: Request) {
             recommendations: validationRecommendations,
             next_questions: validationNextQuestions,
             validation_version: 'upload_v1',
+            level_a_mode: isLevelAMode,
           } as typeof current;
         });
       }
@@ -813,6 +833,7 @@ export async function POST(request: Request) {
             recommendations: validationRecommendations,
             next_questions: validationNextQuestions,
             terminal_blocker: validationResult.terminal_blocker ?? false,
+            level_a_mode: validationSummary?.level_a_mode ?? false,
           }
         : null,
       validation_summary: validationSummary,
