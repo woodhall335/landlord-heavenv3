@@ -586,6 +586,15 @@ export const LEVEL_A_TO_CANONICAL_KEYS: Record<string, string> = {
   current_arrears_amount: 'current_arrears',
   // Note: arrears_above_threshold_today and arrears_likely_at_hearing are kept as-is
   // since they are boolean flags that don't map to numeric canonical keys
+
+  // Section 21 Level A keys -> canonical keys
+  deposit_protected_within_30_days: 'deposit_protected',
+  prescribed_info_within_30_days: 'prescribed_info_served',
+  gas_safety_before_move_in: 'gas_safety_pre_move_in',
+  epc_provided_to_tenant: 'epc_provided',
+  how_to_rent_guide_provided: 'how_to_rent_provided',
+  property_licensing_compliant: 'licence_held',
+  // tenancy_periodic_not_fixed is kept as-is since it's used directly in rules
 };
 
 /**
@@ -596,6 +605,7 @@ export const LEVEL_A_TO_CANONICAL_KEYS: Record<string, string> = {
  * - rent_frequency_confirmed -> rent_frequency
  * - rent_amount_confirmed -> rent_amount (parsed as number)
  * - current_arrears_amount -> current_arrears (parsed as number)
+ * - deposit_protected_within_30_days -> deposit_protected (yes/no/not_sure -> boolean)
  *
  * @param facts - The facts object containing Level A answers
  * @returns A new facts object with normalized keys and values
@@ -611,6 +621,34 @@ export function normalizeLevelAFactsToCanonical(facts: Record<string, any>): Rec
     'current_arrears',
   ]);
 
+  // Yes/No/Unsure fields that should be converted to booleans for validator
+  // These are Section 21 Level A keys that map to boolean canonical keys
+  const yesNoUnsureFields = new Set([
+    'deposit_protected_within_30_days',
+    'prescribed_info_within_30_days',
+    'gas_safety_before_move_in',
+    'epc_provided_to_tenant',
+    'how_to_rent_guide_provided',
+    'property_licensing_compliant',
+  ]);
+
+  /**
+   * Convert yes/no/not_sure string to boolean-compatible value for validator
+   * - 'yes' -> true (validator sees as compliant)
+   * - 'no' -> false (validator sees as non-compliant, blocker)
+   * - 'not_sure' -> undefined (validator treats as unknown, asks for info)
+   */
+  function normalizeYesNoUnsure(value: any): boolean | undefined {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      const lower = value.toLowerCase().trim();
+      if (lower === 'yes' || lower === 'y' || lower === 'true') return true;
+      if (lower === 'no' || lower === 'n' || lower === 'false') return false;
+      if (lower === 'not_sure' || lower === 'unsure' || lower === 'unknown') return undefined;
+    }
+    return undefined;
+  }
+
   // Apply key mappings
   for (const [levelAKey, canonicalKey] of Object.entries(LEVEL_A_TO_CANONICAL_KEYS)) {
     if (facts[levelAKey] !== undefined && facts[levelAKey] !== null) {
@@ -621,6 +659,16 @@ export function normalizeLevelAFactsToCanonical(facts: Record<string, any>): Rec
         const parsed = typeof value === 'number' ? value : parseFloat(String(value));
         if (!Number.isNaN(parsed)) {
           value = parsed;
+        }
+      }
+
+      // Convert yes/no/not_sure to boolean for validator
+      if (yesNoUnsureFields.has(levelAKey)) {
+        value = normalizeYesNoUnsure(value);
+        // Only set canonical key if value is definitive (true/false)
+        // If not_sure, leave canonical key undefined so validator asks for info
+        if (value === undefined) {
+          continue; // Don't set canonical key for 'not_sure' answers
         }
       }
 

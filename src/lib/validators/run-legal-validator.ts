@@ -289,26 +289,51 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
 
 function buildSection21Answers(facts: Record<string, any>, extracted?: Record<string, any>) {
   const ext = extracted || {};
-  const depositProtected = ext.deposit_protected ?? getFactValue(facts, ['deposit_protected', 'tenancy.deposit_protected']);
+
+  // FIX: Include Level A keys in the lookup paths for S21 compliance facts
+  // Level A answers are stored with keys like deposit_protected_within_30_days
+  // but the validator expects canonical keys like deposit_protected
+  const depositProtected = ext.deposit_protected ?? getFactValue(facts, [
+    'deposit_protected',
+    'deposit_protected_within_30_days', // Level A key
+    'tenancy.deposit_protected',
+  ]);
   const prescribedInfo = ext.prescribed_info_served ?? getFactValue(facts, [
+    'prescribed_info_served',
+    'prescribed_info_within_30_days', // Level A key
     'prescribed_info_given',
     'prescribed_info_provided',
-    'prescribed_info_served',
     'tenancy.prescribed_info_given',
   ]);
   const gasCert = ext.gas_safety_mentioned ?? getFactValue(facts, [
+    'gas_safety_pre_move_in',
+    'gas_safety_before_move_in', // Level A key
     'gas_certificate_provided',
     'gas_safety_cert_provided',
     'property.gas_certificate_provided',
   ]);
-  const epcProvided = ext.epc_mentioned ?? getFactValue(facts, ['epc_provided', 'property.epc_provided']);
-  const howToRent = ext.how_to_rent_mentioned ?? getFactValue(facts, ['how_to_rent_provided', 'tenancy.how_to_rent_provided']);
+  const epcProvided = ext.epc_mentioned ?? getFactValue(facts, [
+    'epc_provided',
+    'epc_provided_to_tenant', // Level A key
+    'property.epc_provided',
+  ]);
+  const howToRent = ext.how_to_rent_mentioned ?? getFactValue(facts, [
+    'how_to_rent_provided',
+    'how_to_rent_guide_provided', // Level A key
+    'tenancy.how_to_rent_provided',
+  ]);
+
+  // For licensing, check both canonical and Level A keys
   const licensingStatus = getFactValue(facts, ['property_licensing_status', 'property.licensing_status']);
   const propertyLicensed = licensingStatus === 'unlicensed'
     ? 'no'
     : licensingStatus
       ? 'yes'
-      : getFactValue(facts, ['property_licensed']);
+      : getFactValue(facts, [
+          'licence_held',
+          'property_licensing_compliant', // Level A key
+          'property_licensed',
+        ]);
 
   const arrearsTotal = getFactValue(facts, [
     'arrears_amount',
