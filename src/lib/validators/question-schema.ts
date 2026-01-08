@@ -1,5 +1,6 @@
 export type QuestionType =
   | 'yes_no'
+  | 'yes_no_unsure'
   | 'date'
   | 'currency'
   | 'text'
