@@ -317,6 +317,7 @@ export async function POST(request: Request) {
         question: q.question,
         type: q.type || 'yes_no_unsure',
         helpText: q.helpText,
+        options: q.options, // Include options for select/multi_select types
         isLevelA: true,
       }));
     } else {
