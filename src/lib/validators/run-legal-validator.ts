@@ -7,7 +7,7 @@ import {
 } from '@/lib/validators/legal-validators';
 import { resolveRequirementKey, REQUIREMENTS } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
-import { getLevelAQuestions, normalizeLevelAFactsToCanonical, type FactQuestionConfig } from '@/lib/validators/facts/factKeys';
+import { getLevelAQuestions, normalizeLevelAFactsToCanonical, getKnownFactKeysFromExtraction, type FactQuestionConfig } from '@/lib/validators/facts/factKeys';
 
 export interface RunLegalValidatorInput {
   product?: string | null;
@@ -420,6 +420,7 @@ function extractFieldsFromFacts(facts: Record<string, any>): Record<string, any>
   if (facts.notice_date !== undefined) extracted.notice_date = facts.notice_date;
   if (facts.expiry_date !== undefined) extracted.expiry_date = facts.expiry_date;
   if (facts.notice_expiry_date !== undefined) extracted.notice_expiry_date = facts.notice_expiry_date;
+  if (facts.earliest_proceedings_date !== undefined) extracted.earliest_proceedings_date = facts.earliest_proceedings_date;
 
   // Names
   if (facts.tenant_names !== undefined) extracted.tenant_names = facts.tenant_names;
@@ -507,12 +508,20 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     return { validator_key: null, result: null };
   }
 
-  // Helper to get answered fact keys from normalizedFacts (includes both original and mapped keys)
+  // Helper to get answered fact keys from normalizedFacts AND extracted fields
+  // This ensures we don't ask Level A questions for values already extracted from documents
   const getAnsweredFactKeys = (): string[] => {
-    return Object.keys(normalizedFacts).filter((key) => {
+    // Get keys from user-provided facts
+    const userAnsweredKeys = Object.keys(normalizedFacts).filter((key) => {
       const value = normalizedFacts[key];
       return value !== undefined && value !== null && value !== '' && value !== 'unknown';
     });
+
+    // Get Level A keys that correspond to extracted fields from document
+    const extractedLevelAKeys = getKnownFactKeysFromExtraction(extracted);
+
+    // Combine and deduplicate
+    return [...new Set([...userAnsweredKeys, ...extractedLevelAKeys])];
   };
 
   // Only support Section 21 and Section 8 validators for England
