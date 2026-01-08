@@ -373,6 +373,102 @@ describe('Official Form Fixtures Integration Tests', () => {
       expect(s21Validation.status).toBeDefined();
     });
   });
+
+  describe('Regression Tests - Issue Fixes', () => {
+    /**
+     * REGRESSION: Issue 1 - Incorrect "Tenant details not found" warning
+     * The S8 validator was checking tenant_details instead of tenant_names.
+     * Official Form 3 only provides tenant names, not a "tenant details" paragraph.
+     * Fix: Check tenant_names array in addition to tenant_details.
+     */
+    it('should NOT produce tenant details warning when tenant_names is provided (Issue 1)', () => {
+      const validation = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          section_8_detected: true,
+          form_3_detected: true,
+          grounds_cited: [8, 10, 11],
+          // tenant_names is populated from regex extraction
+          tenant_names: ['Sonia Shezadi'],
+          // tenant_details is NOT populated (as official Form 3 doesn't have this format)
+          tenant_details: undefined,
+          property_address: '35 Woodhall Park Avenue, Pudsey, LS28 7HF',
+          landlord_name: 'Tariq Mohammed',
+          signature_present: true,
+          date_served: '01/01/2026',
+          rent_arrears_stated: 3000,
+        },
+        answers: {
+          rent_frequency: 'monthly',
+          rent_amount: 1500,
+          current_arrears: 3000,
+        },
+      });
+
+      // Should NOT have tenant details missing warning
+      const tenantWarning = validation.warnings.find(
+        w => w.code === 'S8-TENANT-DETAILS-MISSING'
+      );
+      expect(tenantWarning).toBeUndefined();
+    });
+
+    it('should produce tenant details warning when NEITHER tenant_names nor tenant_details is provided', () => {
+      const validation = validateSection8Notice({
+        jurisdiction: 'england',
+        extracted: {
+          notice_type: 'Section 8 Notice',
+          section_8_detected: true,
+          form_3_detected: true,
+          grounds_cited: [8, 10, 11],
+          // Neither tenant field is populated
+          tenant_names: [],
+          tenant_details: undefined,
+          property_address: '35 Woodhall Park Avenue, Pudsey, LS28 7HF',
+        },
+        answers: {},
+      });
+
+      // SHOULD have tenant details missing warning
+      const tenantWarning = validation.warnings.find(
+        w => w.code === 'S8-TENANT-DETAILS-MISSING'
+      );
+      expect(tenantWarning).toBeDefined();
+    });
+
+    /**
+     * REGRESSION: Issue 2 - Date extraction patterns and UI label mapping
+     * Form 3 Section 5 = earliest proceedings date
+     * Service date + 12 months = latest proceedings date (computed in UI)
+     *
+     * Note: Date extraction uses specific patterns (e.g., "served on DD/MM/YYYY").
+     * The UI correctly labels S8 dates as "Earliest/Latest Proceedings Date"
+     * instead of "Expiry Date" - this is validated via manual testing.
+     */
+    it('should extract date when using served on format (Issue 2)', () => {
+      // Test with explicit "served on" format that matches extraction patterns
+      const textWithServedFormat = `
+        Form 3 Section 8 Notice
+        Housing Act 1988
+        served on 01/01/2026
+        proceedings after 15/01/2026
+      `;
+      const result = extractS8FieldsWithRegex(textWithServedFormat);
+      expect(result.date_served).toBe('01/01/2026');
+      expect(result.expiry_date).toBe('15/01/2026');
+    });
+
+    it('should extract date when using on or after format (Issue 2)', () => {
+      // Test with "on or after" format
+      const textWithOnOrAfter = `
+        Form 3 Section 8 Notice
+        Housing Act 1988
+        on or after 20/02/2026
+      `;
+      const result = extractS8FieldsWithRegex(textWithOnOrAfter);
+      expect(result.expiry_date).toBe('20/02/2026');
+    });
+  });
 });
 
 /**
@@ -384,12 +480,18 @@ describe('Official Form Fixtures Integration Tests', () => {
  *    - Upload completed_section_8_form_3.pdf
  *    - Verify: Document type detected as Section 8 / Form 3
  *    - Verify: Extracted fields show tenant (Sonia Shezadi), property address, grounds (8, 10, 11)
+ *    - Verify: NO "Tenant details not found" warning appears
+ *    - Verify: Dates display in UK format (DD/MM/YYYY): 01/01/2026
+ *    - Verify: Labels show "Earliest Proceedings Date" and "Latest Proceedings Date" (NOT "Expiry Date")
+ *    - Verify: Latest Proceedings Date = Service Date + 12 months (01/01/2027)
  *    - Verify: Level A questions appear for confirmation
  *
  * 2. Navigate to /tools/validators/section-21
  *    - Upload completed_section_21_form_6a.pdf
  *    - Verify: Document type detected as Section 21 / Form 6A
- *    - Verify: Extracted fields show tenant (Sonia Shezadi), property address, expiry date
+ *    - Verify: Extracted fields show tenant (Sonia Shezadi), property address
+ *    - Verify: Dates display in UK format (DD/MM/YYYY): 22/12/2025, 14/07/2026
+ *    - Verify: Labels show "Service Date" and "Expiry Date" (standard S21 labels)
  *    - Verify: Level A questions appear for confirmation
  *
  * 3. Cross-validation tests:
