@@ -8,6 +8,7 @@ import {
 } from './rules';
 import { resolveFacts, type FactResolutionInput } from './facts';
 import { VALIDATOR_RULESET_VERSION } from './rules/version';
+import { parseUKDate, addCalendarMonths } from './rules/dateUtils';
 
 export type ValidatorKey = 'section_21' | 'section_8';
 
@@ -126,16 +127,13 @@ function isMissing(value: any): boolean {
 }
 
 function parseDate(value?: string): Date | null {
-  if (!value) return null;
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return parsed;
+  // Use UK date parser to properly handle DD/MM/YYYY format
+  return parseUKDate(value);
 }
 
 function addMonths(date: Date, months: number): Date {
-  const copy = new Date(date);
-  copy.setMonth(copy.getMonth() + months);
-  return copy;
+  // Use proper calendar month addition from dateUtils
+  return addCalendarMonths(date, months);
 }
 
 function toNumber(value: any): number | null {
