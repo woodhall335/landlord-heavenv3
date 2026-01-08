@@ -646,6 +646,7 @@ export async function POST(request: Request) {
           blockers: validationResult.blockers,
           warnings: validationResult.warnings,
           upsell: validationResult.upsell ?? null,
+          terminal_blocker: validationResult.terminal_blocker ?? false,
         };
 
         await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
@@ -736,6 +737,7 @@ export async function POST(request: Request) {
             upsell: validationResult.upsell ?? null,
             recommendations: validationRecommendations,
             next_questions: validationNextQuestions,
+            terminal_blocker: validationResult.terminal_blocker ?? false,
           }
         : null,
       validation_summary: validationSummary,

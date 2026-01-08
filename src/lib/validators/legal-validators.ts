@@ -72,6 +72,12 @@ export interface ValidatorResult {
     provenance: string;
     sourceLabel?: string;
   }>;
+  /**
+   * Terminal blocker flag - when true, validation short-circuited due to
+   * a fundamental issue (e.g., wrong document type). UI should hide
+   * compliance questions and only show the blocker message.
+   */
+  terminal_blocker?: boolean;
 }
 
 export interface ValidatorDefinition {
@@ -467,6 +473,14 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
 
   if (isSection8Notice) {
     addIssue(blockers, 'S21-WRONG-DOC-TYPE', 'This appears to be a Section 8 notice (Form 3), not a Section 21 notice. Please upload a Section 21 (Form 6A) notice for no-fault possession.', 'blocking');
+    // TERMINAL: Short-circuit validation - don't ask S21 compliance questions for wrong doc type
+    return {
+      status: 'invalid',
+      blockers,
+      warnings: [],
+      upsell: undefined,
+      terminal_blocker: true,
+    };
   } else if (!isValidNoticeType) {
     addIssue(blockers, 'S21-WRONG-FORM', 'Notice must be a Section 21 Form 6A notice.', 'blocking');
   }
@@ -610,10 +624,18 @@ export function validateSection8Notice(input: ValidatorInput): ValidatorResult {
 
   if (isSection21Notice) {
     addIssue(blockers, 'S8-WRONG-DOC-TYPE', 'This appears to be a Section 21 notice (Form 6A), not a Section 8 notice. Please upload a Section 8 (Form 3) notice for rent arrears possession.', 'blocking');
+    // TERMINAL: Short-circuit validation - don't ask S8 compliance questions for wrong doc type
+    return {
+      status: 'invalid',
+      blockers,
+      warnings: [],
+      upsell: undefined,
+      terminal_blocker: true,
+    };
   }
 
   const groundCodes = extractGroundCodes(input.extracted.grounds_cited);
-  if (groundCodes.length === 0 && !isSection21Notice) {
+  if (groundCodes.length === 0) {
     addTruthfulIssue(blockers, 'S8-GROUNDS-MISSING', 'At least one Section 8 ground must be cited', 'blocking', quality);
   }
 
