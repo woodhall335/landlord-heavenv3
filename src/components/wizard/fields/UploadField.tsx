@@ -673,7 +673,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE') ? (
                   <>
                     <a
-                      href={`/wizard/eviction?caseId=${caseId}&route=section_8`}
+                      href={`/tools/validators/section-8${caseId ? `?caseId=${caseId}` : ''}`}
                       className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
                     >
                       Switch to Section 8 Validator
@@ -692,7 +692,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 ) : (
                   <>
                     <a
-                      href={`/wizard/eviction?caseId=${caseId}&route=section_21`}
+                      href={`/tools/validators/section-21${caseId ? `?caseId=${caseId}` : ''}`}
                       className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
                     >
                       Switch to Section 21 Validator
