@@ -584,8 +584,8 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 21 Notice',
           form_6a_detected: true,
           section_21_detected: true,
-          date_served: '2026-01-01', // ISO format for reliable Date parsing
-          expiry_date: '2026-03-01', // ISO format - 2 months later
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
+          expiry_date: '01/03/2026', // UK format - 2 months later (1 March)
           tenant_names: 'John Doe',
           landlord_name: 'Jane Landlord',
           signature_present: true,
@@ -677,8 +677,8 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 21 Notice',
           form_6a_detected: true,
           section_21_detected: true,
-          date_served: '2026-01-01', // ISO format
-          expiry_date: '2026-03-01', // ISO format - 2 months later
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
+          expiry_date: '01/03/2026', // UK format - 2 months later (1 March)
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_names: 'John Doe',
           landlord_name: 'Jane Landlord',
@@ -724,8 +724,8 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 21 Notice',
           form_6a_detected: true,
           section_21_detected: true,
-          date_served: '2026-01-01', // ISO format
-          expiry_date: '2026-01-15', // Only 2 weeks - needs 2 months!
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
+          expiry_date: '15/01/2026', // Only 2 weeks - needs 2 months!
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_names: 'John Doe',
           landlord_name: 'Jane Landlord',
@@ -771,8 +771,8 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 21 Notice',
           form_6a_detected: true,
           section_21_detected: true,
-          date_served: '2026-01-01', // ISO format
-          expiry_date: '2026-03-01', // ISO format - 2 months later
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
+          expiry_date: '01/03/2026', // UK format - 2 months later (1 March)
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_names: 'John Doe',
           // landlord_name: MISSING
@@ -815,8 +815,8 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 21 Notice',
           form_6a_detected: true,
           section_21_detected: true,
-          date_served: '2026-01-01', // ISO format
-          expiry_date: '2026-01-20', // Only 19 days - insufficient notice period (blocker)
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
+          expiry_date: '20/01/2026', // Only 19 days - insufficient notice period (blocker)
           // property_address: MISSING (warning)
           // tenant_names: MISSING (warning)
           // landlord_name: MISSING (warning)
@@ -878,7 +878,7 @@ describe('Validator Integration Tests', () => {
           notice_type: 'Section 8 Notice',
           form_3_detected: true,
           section_8_detected: true,
-          date_served: '2026-01-01', // ISO format
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_details: 'John Doe',
           rent_arrears_stated: 5000,
@@ -964,7 +964,7 @@ describe('Validator Integration Tests', () => {
           form_3_detected: true,
           section_8_detected: true,
           grounds_cited: [10, 11],
-          date_served: '2026-01-01', // ISO format
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
           property_address: '123 Test Street, London, SW1A 1AA',
           rent_arrears_stated: 3000,
           // tenant_details: MISSING
@@ -1005,7 +1005,7 @@ describe('Validator Integration Tests', () => {
           form_3_detected: true,
           section_8_detected: true,
           grounds_cited: [8], // Ground 8 - mandatory ground requiring 2 months arrears
-          date_served: '2026-01-01', // ISO format
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_details: 'John Doe',
           rent_arrears_stated: 1000, // Only £1000 arrears
@@ -1047,7 +1047,7 @@ describe('Validator Integration Tests', () => {
           form_3_detected: true,
           section_8_detected: true,
           grounds_cited: [8, 10],
-          date_served: '2026-01-01', // ISO format
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_details: 'John Doe',
           // rent_arrears_stated: MISSING
@@ -1135,7 +1135,7 @@ describe('Validator Integration Tests', () => {
           form_3_detected: true,
           section_8_detected: true,
           grounds_cited: [8],
-          date_served: '2026-01-01', // ISO format
+          date_served: '01/01/2026', // UK format DD/MM/YYYY
           property_address: '123 Test Street, London, SW1A 1AA',
           tenant_details: 'John Doe',
           rent_arrears_stated: 5000,
