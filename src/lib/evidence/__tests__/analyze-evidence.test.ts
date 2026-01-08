@@ -300,6 +300,67 @@ describe('extractS8FieldsWithRegex', () => {
       expect(result.grounds_cited).toContain(8);
       expect(result.grounds_cited).not.toContain(25);
     });
+
+    // Enhanced grounds parsing tests - issue #hardening
+    it('should extract "Ground 8 and Ground 10" format (repeated Ground keyword)', () => {
+      const text = 'This notice relies on Ground 8 and Ground 10 for possession';
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(8);
+      expect(result.grounds_cited).toContain(10);
+    });
+
+    it('should extract "Mandatory grounds: 8" format', () => {
+      const text = 'Mandatory grounds: 8\nDiscretionary grounds: 10, 11';
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(8);
+      expect(result.grounds_cited).toContain(10);
+      expect(result.grounds_cited).toContain(11);
+    });
+
+    it('should extract "Discretionary grounds: 9, 10, 11" format', () => {
+      const text = 'Discretionary grounds: 9, 10 and 11 are relied upon';
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(9);
+      expect(result.grounds_cited).toContain(10);
+      expect(result.grounds_cited).toContain(11);
+    });
+
+    it('should extract grounds from "Schedule 2 Ground X" references', () => {
+      const text = 'Pursuant to Schedule 2 Ground 8 of the Housing Act 1988';
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(8);
+    });
+
+    it('should handle complex multi-ground scenarios', () => {
+      const text = `
+        This notice is served under Section 8 of the Housing Act 1988.
+        Mandatory grounds: 8
+        Discretionary grounds: 10 and 11
+        Schedule 2 Ground 14 is also cited.
+      `;
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(8);
+      expect(result.grounds_cited).toContain(10);
+      expect(result.grounds_cited).toContain(11);
+      expect(result.grounds_cited).toContain(14);
+      expect(result.grounds_cited.length).toBe(4);
+    });
+
+    it('should deduplicate grounds mentioned multiple times', () => {
+      const text = 'Ground 8 for arrears. Grounds 8, 10 cited. Mandatory grounds: 8';
+      const result = extractS8FieldsWithRegex(text);
+
+      expect(result.grounds_cited).toContain(8);
+      expect(result.grounds_cited).toContain(10);
+      // Ground 8 should only appear once despite being mentioned 3 times
+      const count8 = result.grounds_cited.filter(g => g === 8).length;
+      expect(count8).toBe(1);
+    });
   });
 
   describe('arrears extraction', () => {
@@ -547,6 +608,70 @@ describe('Level A Mode - landlord_name extraction', () => {
         expect(result.landlord_name).not.toContain('begin');
         expect(result.landlord_name).not.toContain('proceedings');
       }
+    });
+  });
+
+  // Enhanced landlord name extraction tests - issue #hardening
+  describe('Enhanced landlord name extraction from signature blocks', () => {
+    it('should extract landlord from "Name of landlord:" pattern', () => {
+      const text = `
+        7. Signature
+        Name of landlord: Robert Smith
+        Signature: [signed]
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      expect(result.landlord_name).toBe('Robert Smith');
+    });
+
+    it('should extract landlord from "Print name:" pattern', () => {
+      const text = `
+        Signature Block
+        Signed: [signature]
+        Print name: Elizabeth Jones
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      expect(result.landlord_name).toBe('Elizabeth Jones');
+    });
+
+    it('should extract landlord from "on behalf of" pattern', () => {
+      const text = `
+        This notice is served on behalf of Michael Brown
+        the registered landlord of the property.
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      expect(result.landlord_name).toBe('Michael Brown');
+    });
+
+    it('should extract landlord from Form 3 section 7 style format', () => {
+      const text = `
+        7. Name(s) of landlord(s)/licensor(s)
+        Landlord: Patricia Williams
+        Address: 123 Main Street
+        Signature: [signed]
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      expect(result.landlord_name).toBe('Patricia Williams');
+    });
+
+    it('should extract licensor name as landlord', () => {
+      const text = `
+        Form 3 Notice
+        Licensor: Thomas Anderson
+        Address: 456 Oak Avenue
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      expect(result.landlord_name).toBe('Thomas Anderson');
+    });
+
+    it('should prefer "Landlord:" pattern over "on behalf of"', () => {
+      const text = `
+        This notice is served on behalf of Some Property Ltd
+        Landlord: Sarah Parker
+        Address: 789 High Street
+      `;
+      const result = extractS8FieldsWithRegex(text);
+      // Should extract Sarah Parker (valid name), not "Some Property Ltd"
+      expect(result.landlord_name).toBe('Sarah Parker');
     });
   });
 });

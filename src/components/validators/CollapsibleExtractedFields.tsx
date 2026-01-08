@@ -29,6 +29,12 @@ interface ExtractedFieldsSummary {
   section_21_detected?: boolean;
   section_8_detected?: boolean;
   grounds_cited?: (string | number)[];
+  /** Rent amount stated in notice (Section 8) */
+  rent_amount?: number | string;
+  /** Rent payment frequency (Section 8) */
+  rent_frequency?: string;
+  /** Rent arrears stated in notice (Section 8) */
+  rent_arrears_stated?: number | string;
   [key: string]: any;
 }
 
@@ -187,6 +193,53 @@ export function CollapsibleExtractedFields({
                 fullWidth
               />
             )}
+
+            {/* Section 8 specific fields - show "Not stated" fallback for rent info */}
+            {(fields.section_8_detected || fields.form_3_detected) && (
+              <>
+                {/* Rent Arrears */}
+                <FieldRow
+                  label="Rent Arrears Stated"
+                  value={
+                    fields.rent_arrears_stated
+                      ? `£${fields.rent_arrears_stated}`
+                      : 'Not stated in notice'
+                  }
+                  valueClassName={
+                    fields.rent_arrears_stated ? 'text-blue-900' : 'text-amber-700'
+                  }
+                  showAlways
+                />
+
+                {/* Rent Amount */}
+                <FieldRow
+                  label="Rent Amount"
+                  value={
+                    fields.rent_amount
+                      ? `£${fields.rent_amount}`
+                      : 'Not stated in notice (confirm below)'
+                  }
+                  valueClassName={
+                    fields.rent_amount ? 'text-blue-900' : 'text-amber-700'
+                  }
+                  showAlways
+                />
+
+                {/* Rent Frequency */}
+                <FieldRow
+                  label="Rent Frequency"
+                  value={
+                    fields.rent_frequency
+                      ? fields.rent_frequency.charAt(0).toUpperCase() + fields.rent_frequency.slice(1)
+                      : 'Not stated in notice (confirm below)'
+                  }
+                  valueClassName={
+                    fields.rent_frequency ? 'text-blue-900' : 'text-amber-700'
+                  }
+                  showAlways
+                />
+              </>
+            )}
           </div>
 
           {/* Vision extraction note */}
@@ -206,15 +259,17 @@ interface FieldRowProps {
   value: string | undefined;
   fullWidth?: boolean;
   valueClassName?: string;
+  /** Force display even when value is empty/undefined (for "Not stated" fallbacks) */
+  showAlways?: boolean;
 }
 
-function FieldRow({ label, value, fullWidth = false, valueClassName = 'text-blue-900' }: FieldRowProps) {
-  if (!value) return null;
+function FieldRow({ label, value, fullWidth = false, valueClassName = 'text-blue-900', showAlways = false }: FieldRowProps) {
+  if (!value && !showAlways) return null;
 
   return (
     <div className={`flex flex-col gap-0.5 text-sm text-left ${fullWidth ? 'sm:col-span-2' : ''}`}>
       <span className="text-blue-700 text-xs">{label}</span>
-      <span className={`font-medium ${valueClassName}`}>{value}</span>
+      <span className={`font-medium ${valueClassName}`}>{value || '—'}</span>
     </div>
   );
 }

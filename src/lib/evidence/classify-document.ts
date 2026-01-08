@@ -47,15 +47,22 @@ interface StrongMarkerRule {
 }
 
 const STRONG_MARKER_RULES: StrongMarkerRule[] = [
-  // Section 21 (England)
+  // Section 21 (England) - Official Form 6A markers from GOV.UK Form_6A_1_Oct_2021.odt
+  { docType: 'notice_s21', markers: ['form no 6a', 'section 21'], confidence: 0.95, description: 'Official Form 6A Section 21' },
+  { docType: 'notice_s21', markers: ['form 6a', 'section 21(1) and (4)'], confidence: 0.95, description: 'Form 6A with section ref' },
   { docType: 'notice_s21', markers: ['form 6a', 'section 21'], confidence: 0.92, description: 'Form 6A Section 21' },
   { docType: 'notice_s21', markers: ['form 6a', 's21'], confidence: 0.90, description: 'Form 6A S21' },
   { docType: 'notice_s21', markers: ['section 21', 'housing act 1988'], confidence: 0.88, description: 'Section 21 Housing Act' },
-  { docType: 'notice_s21', markers: ['notice requiring possession', 'assured shorthold'], confidence: 0.85, description: 'AST Possession Notice' },
-  // Section 8 (England)
+  { docType: 'notice_s21', markers: ['notice requiring possession', 'assured shorthold'], confidence: 0.88, description: 'AST Possession Notice' },
+  { docType: 'notice_s21', markers: ['you are required to leave', 'assured shorthold'], confidence: 0.85, description: 'Form 6A leave requirement' },
+  // Section 8 (England) - Official Form 3 markers from GOV.UK Form_3_1_Oct_2021.odt
+  { docType: 'notice_s8', markers: ['form no 3', 'section 8'], confidence: 0.95, description: 'Official Form 3 Section 8' },
+  { docType: 'notice_s8', markers: ['form 3', 'section 8 (as amended)'], confidence: 0.95, description: 'Form 3 with section ref' },
   { docType: 'notice_s8', markers: ['form 3', 'section 8'], confidence: 0.92, description: 'Form 3 Section 8' },
+  { docType: 'notice_s8', markers: ['notice seeking possession', 'section 8'], confidence: 0.90, description: 'Notice seeking possession S8' },
   { docType: 'notice_s8', markers: ['section 8', 'grounds for possession'], confidence: 0.88, description: 'Section 8 Grounds' },
   { docType: 'notice_s8', markers: ['notice seeking possession', 'ground 8'], confidence: 0.90, description: 'Ground 8 Notice' },
+  { docType: 'notice_s8', markers: ['intention to begin proceedings', 'assured tenancy'], confidence: 0.85, description: 'Form 3 proceedings notice' },
   // Scotland
   { docType: 'scotland_notice_to_leave', markers: ['notice to leave', 'first-tier tribunal'], confidence: 0.90, description: 'Scotland Notice to Leave' },
   { docType: 'scotland_notice_to_leave', markers: ['notice to leave', 'private residential tenancy'], confidence: 0.88, description: 'Scotland PRT Notice' },

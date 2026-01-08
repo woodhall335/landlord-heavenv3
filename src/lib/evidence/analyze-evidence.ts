@@ -912,15 +912,22 @@ export function extractS21FieldsWithRegex(text: string): RegexExtractionResult {
   result.tenant_names = Array.from(tenantNamesSet);
   if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
 
-  // Landlord name extraction - with improved patterns
+  // Landlord name extraction - enhanced patterns for Form 6A signature blocks
+  // Form 6A Section 3 typically has landlord name near signature area
   // NOTE: We use spaces (not \s) in name capture to avoid matching across lines
   const landlordPatterns = [
-    // Pattern 1: Explicit "Landlord:" label (most common and reliable)
-    /landlord\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 2: "Signed by:" pattern (must have colon after "by")
+    // Pattern 1: Explicit "Landlord:" or "Landlord's name:" label (most reliable)
+    /landlord['']?s?\s*(?:name)?\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 2: "Name of landlord" - common in official forms
+    /name\s*(?:of\s+)?landlord['']?s?\s*[:=]?\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 3: "Signed by:" pattern (must have colon after "by")
     /signed\s+by\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 3: "Name:" in landlord section (landlord keyword must precede)
-    /landlord['']?s?\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 4: "Name:" near signature area (look for name after "3." or "signature" context)
+    /(?:3\.|signature)\s*[\s\S]{0,50}name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 5: "Print name:" pattern - common in signature blocks
+    /print\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 6: After "on behalf of" followed by name
+    /on\s+behalf\s+of\s+([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
   ];
   for (const pattern of landlordPatterns) {
     const match = pattern.exec(originalText);
@@ -1023,38 +1030,41 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   }
 
   // Extract grounds cited (Ground 1-17)
-  // IMPORTANT: All patterns must have 'g' flag when used with exec() in a while loop,
-  // otherwise it causes an infinite loop (exec returns same match forever)
-  const groundPatterns = [
-    /ground\s*(\d+)/gi,
-    /schedule\s*2\s*ground\s*(\d+)/gi,
-  ];
+  // Enhanced patterns to handle multiple formats:
+  // - "Ground 8", "Ground 10 and 11"
+  // - "Grounds 8, 10 and 11"
+  // - "Ground 8 and Ground 10"
+  // - "Mandatory grounds: 8" / "Discretionary grounds: 9, 10"
+  // - "Schedule 2 Ground 8"
+  // IMPORTANT: All patterns with 'g' flag must reset lastIndex before while loop
   const groundsSet = new Set<number>();
 
-  // Process global patterns with while loop
-  for (const pattern of groundPatterns) {
-    let match;
-    // Reset lastIndex to ensure we start from beginning
-    pattern.lastIndex = 0;
-    while ((match = pattern.exec(text)) !== null) {
-      // Parse numbers from match
-      const nums = match[1].match(/\d+/g);
-      if (nums) {
-        nums.forEach(n => {
-          const num = parseInt(n, 10);
-          if (num >= 1 && num <= 17) {
-            groundsSet.add(num);
-          }
-        });
-      }
+  // Pattern 1: Individual "Ground X" mentions (global - catches all individual mentions)
+  const singleGroundPattern = /ground\s*(\d+)/gi;
+  singleGroundPattern.lastIndex = 0;
+  let match;
+  while ((match = singleGroundPattern.exec(text)) !== null) {
+    const num = parseInt(match[1], 10);
+    if (num >= 1 && num <= 17) {
+      groundsSet.add(num);
     }
   }
 
-  // Single-match pattern for "grounds: 1, 2, 3 and 4" format (no g flag - only match once)
-  const groundsListPattern = /grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/i;
-  const groundsListMatch = groundsListPattern.exec(text);
-  if (groundsListMatch) {
-    const nums = groundsListMatch[1].match(/\d+/g);
+  // Pattern 2: Schedule 2 ground references
+  const scheduleGroundPattern = /schedule\s*2\s*ground\s*(\d+)/gi;
+  scheduleGroundPattern.lastIndex = 0;
+  while ((match = scheduleGroundPattern.exec(text)) !== null) {
+    const num = parseInt(match[1], 10);
+    if (num >= 1 && num <= 17) {
+      groundsSet.add(num);
+    }
+  }
+
+  // Pattern 3: "Grounds 8, 10 and 11" or "Grounds: 8, 10, 11" list format
+  const groundsListPattern = /grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/gi;
+  groundsListPattern.lastIndex = 0;
+  while ((match = groundsListPattern.exec(text)) !== null) {
+    const nums = match[1].match(/\d+/g);
     if (nums) {
       nums.forEach(n => {
         const num = parseInt(n, 10);
@@ -1064,6 +1074,32 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
       });
     }
   }
+
+  // Pattern 4: "Mandatory grounds: X, Y" or "Discretionary grounds: X, Y"
+  const categorizedGroundsPattern = /(?:mandatory|discretionary)\s*grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/gi;
+  categorizedGroundsPattern.lastIndex = 0;
+  while ((match = categorizedGroundsPattern.exec(text)) !== null) {
+    const nums = match[1].match(/\d+/g);
+    if (nums) {
+      nums.forEach(n => {
+        const num = parseInt(n, 10);
+        if (num >= 1 && num <= 17) {
+          groundsSet.add(num);
+        }
+      });
+    }
+  }
+
+  // Pattern 5: "Ground 8 and Ground 10" - explicit repeated Ground keyword
+  const groundAndGroundPattern = /ground\s*(\d+)\s*(?:,\s*|\s+and\s+)(?:ground\s*)?(\d+)/gi;
+  groundAndGroundPattern.lastIndex = 0;
+  while ((match = groundAndGroundPattern.exec(text)) !== null) {
+    const num1 = parseInt(match[1], 10);
+    const num2 = parseInt(match[2], 10);
+    if (num1 >= 1 && num1 <= 17) groundsSet.add(num1);
+    if (num2 >= 1 && num2 <= 17) groundsSet.add(num2);
+  }
+
   result.grounds_cited = Array.from(groundsSet).sort((a, b) => a - b);
   if (result.grounds_cited.length > 0) result.fields_found.push('grounds_cited');
 
@@ -1177,17 +1213,26 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   result.tenant_names = Array.from(tenantNamesSet);
   if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
 
-  // Landlord name extraction - with improved patterns
+  // Landlord name extraction - enhanced patterns for Form 3 signature blocks
+  // Form 3 Section 7 typically has: "Name(s) of landlord(s)/licensor(s)" followed by signature/name
   // NOTE: We use spaces (not \s) in name capture to avoid matching across lines
   const landlordPatterns = [
-    // Pattern 1: Explicit "Landlord:" label (most common and reliable)
-    /landlord\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 2: "Signed by:" pattern (must have colon after "by")
+    // Pattern 1: Explicit "Landlord:" or "Landlord's name:" label (most reliable)
+    /landlord['']?s?\s*(?:name)?\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 2: "Name of landlord" - common in Form 3 section 7
+    /name\s*(?:of\s+)?landlord['']?s?\s*[:=]?\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 3: "Signed by:" pattern (must have colon after "by")
     /signed\s+by\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 3: "Name:" in landlord section (landlord keyword must precede)
-    /landlord['']?s?\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 4: Name near "or their agent" - common in Form 3
+    // Pattern 4: "Name:" near signature area (look for name after "7." or "signature" context)
+    /(?:7\.|signature)\s*[\s\S]{0,50}name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 5: "Print name:" pattern - common in signature blocks
+    /print\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 6: Name near "or their agent" - common in Form 3
     /([A-Z][a-z]+(?: [A-Z][a-z]+)+)\s*\(or\s+(?:their|his|her)\s+agent\)/,
+    // Pattern 7: "Licensor:" pattern (Form 3 also covers licenses)
+    /licensor['']?s?\s*(?:name)?\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 8: After "on behalf of" followed by name
+    /on\s+behalf\s+of\s+([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
   ];
 
   for (const pattern of landlordPatterns) {
