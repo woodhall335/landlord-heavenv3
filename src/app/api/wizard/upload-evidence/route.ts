@@ -519,6 +519,81 @@ export async function POST(request: Request) {
         categoryHint: validatedCategory,
       });
 
+      // =========================================================================
+      // EARLY TERMINAL BLOCKER: Wrong document type detection
+      // Short-circuit immediately if classification detects wrong doc type
+      // with high confidence (>= 0.70). This prevents Q&A block from rendering.
+      // =========================================================================
+      const WRONG_DOC_CONFIDENCE_THRESHOLD = 0.70;
+      const classifiedDocType = docClassification.docType?.toLowerCase() ?? '';
+      const normalizedValidatorKey = validatorKey?.toLowerCase() ?? '';
+
+      // Check for S21 validator receiving S8 notice
+      const isS21ValidatorWithS8Doc =
+        (normalizedValidatorKey === 'notice_s21' || normalizedValidatorKey.includes('section_21')) &&
+        (classifiedDocType === 'notice_s8' || classifiedDocType.includes('section_8') || classifiedDocType.includes('section 8'));
+
+      // Check for S8 validator receiving S21 notice
+      const isS8ValidatorWithS21Doc =
+        (normalizedValidatorKey === 'notice_s8' || normalizedValidatorKey.includes('section_8')) &&
+        (classifiedDocType === 'notice_s21' || classifiedDocType.includes('section_21') || classifiedDocType.includes('section 21'));
+
+      if ((isS21ValidatorWithS8Doc || isS8ValidatorWithS21Doc) && docClassification.confidence >= WRONG_DOC_CONFIDENCE_THRESHOLD) {
+        const blockerCode = isS21ValidatorWithS8Doc ? 'S21-WRONG-DOC-TYPE' : 'S8-WRONG-DOC-TYPE';
+        const blockerMessage = isS21ValidatorWithS8Doc
+          ? 'This appears to be a Section 8 notice (Form 3), but you are using the Section 21 validator. Please use the Section 8 validator instead.'
+          : 'This appears to be a Section 21 notice (Form 6A), but you are using the Section 8 validator. Please use the Section 21 validator instead.';
+
+        console.log('[upload-evidence][terminal_blocker] Wrong document type detected early:', {
+          debug_id: debugId,
+          validatorKey,
+          classifiedDocType: docClassification.docType,
+          confidence: docClassification.confidence,
+          blockerCode,
+        });
+
+        const totalDuration = Date.now() - startTime;
+
+        // Return terminal_blocker response immediately - no questions, no evidence list, no upsell
+        return NextResponse.json({
+          success: true,
+          debug_id: debugId,
+          document: documentRow,
+          evidence: {
+            files: [evidenceEntry],
+            flags: {},
+            analysis: analysisResult,
+            classification: docClassification,
+          },
+          validation: {
+            validator_key: validatorKey,
+            status: 'invalid',
+            blockers: [{ code: blockerCode, message: blockerMessage }],
+            warnings: [],
+            upsell: null,
+            recommendations: [],
+            next_questions: [], // CRITICAL: Empty - no Q&A block
+            terminal_blocker: true,
+          },
+          validation_summary: {
+            validator_key: validatorKey,
+            status: 'invalid',
+            blockers: [{ code: blockerCode, message: blockerMessage }],
+            warnings: [],
+            upsell: null,
+            terminal_blocker: true,
+          },
+          recommendations: [],
+          next_questions: [], // CRITICAL: Empty - no Q&A block
+          document_intel: null,
+          fact_snapshot: null,
+          extraction: null,
+          duration_ms: totalDuration,
+        }, {
+          headers: { 'x-debug-id': debugId },
+        });
+      }
+
       await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
         const current = (currentRaw as any) || {};
         const existingEvidence = (current as any).evidence || {};

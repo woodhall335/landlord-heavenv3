@@ -68,6 +68,19 @@ interface ExtractionQualitySummary {
   document_markers?: string[];
 }
 
+/**
+ * Check if validation has a wrong document type blocker.
+ * This is a hard guard - if true, Q&A blocks must NEVER render.
+ */
+function hasWrongDocTypeBlocker(summary: UploadValidationSummary | null): boolean {
+  if (!summary) return false;
+  if (summary.terminal_blocker) return true;
+  if (!summary.blockers || summary.blockers.length === 0) return false;
+  return summary.blockers.some(
+    (b) => b.code === 'S21-WRONG-DOC-TYPE' || b.code === 'S8-WRONG-DOC-TYPE' || b.code === 'wrong_doc_type'
+  );
+}
+
 export const UploadField: React.FC<UploadFieldProps> = ({
   caseId,
   questionId,
@@ -586,11 +599,11 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           <div className="flex items-center justify-between">
             <p className="font-medium text-charcoal">Validation status</p>
             <span className={`rounded-full px-2 py-1 text-xs ${
-              validationSummary.terminal_blocker
+              hasWrongDocTypeBlocker(validationSummary)
                 ? 'bg-red-100 text-red-700'
                 : 'bg-gray-100 text-gray-700'
             }`}>
-              {validationSummary.terminal_blocker ? 'Wrong Document Type' : validationSummary.status}
+              {hasWrongDocTypeBlocker(validationSummary) ? 'Wrong Document Type' : validationSummary.status}
             </span>
           </div>
 
@@ -602,8 +615,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             </div>
           )}
 
-          {/* Terminal blocker: Show CTA to switch to correct validator */}
-          {validationSummary.terminal_blocker && (
+          {/* Terminal blocker OR wrong doc type: Show CTA to switch to correct validator */}
+          {hasWrongDocTypeBlocker(validationSummary) && (
             <div className="mt-4 space-y-3 rounded-md border border-amber-200 bg-amber-50 p-4">
               <p className="font-semibold text-amber-900">Upload the correct document</p>
               <p className="text-xs text-amber-800">
@@ -655,8 +668,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             </div>
           )}
 
-          {/* Only show warnings, recommendations, and questions if NOT a terminal blocker */}
-          {!validationSummary.terminal_blocker && (
+          {/* HARD GUARD: Only show warnings, recommendations, and questions if NOT wrong doc type */}
+          {!hasWrongDocTypeBlocker(validationSummary) && (
             <>
               {validationSummary.warnings && validationSummary.warnings.length > 0 && (
                 <div className="mt-3 space-y-1 text-amber-700">
