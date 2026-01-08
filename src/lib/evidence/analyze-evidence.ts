@@ -1208,10 +1208,14 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   const rentPatterns = [
     // Form 3: "Monthly rent amount: GBP 1,500.00"
     /monthly\s*rent\s*(?:amount)?[\s:]+(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)/i,
+    // Common: "Monthly rent of £1,200" - rent followed by "of" and amount
+    /(?:monthly|weekly|fortnightly)\s*rent\s*(?:of|is)\s*(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)/i,
     // Form 3: "GBP 1,500.00 per month"
     /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*month/i,
     // Form 3: "at GBP 1,500.00 per month" in arrears explanation
     /at\s*(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*month/i,
+    // Weekly/fortnightly rent per period
+    /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*(?:week|fortnight)/i,
     // Generic patterns
     /(?:rent|periodic\s*rent)\s*(?:amount)?[\s:]+(?:GBP|£)?\s*([\d,]+(?:\.\d{2})?)/i,
     /(?:GBP|£)\s*([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*(?:month|week)/i,
@@ -1286,14 +1290,24 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
   }
 
   // Tenant name extraction - Enhanced for Form 3 section 1
-  // Form 3 has: "1. To:" followed by tenant name on next line(s)
+  // Form 3 has: "1. To:" followed by tenant name on next line(s) OR inline
   const tenantNamesSet = new Set<string>();
 
   // Form 3 specific: "1. To:" section with name on next line
-  const form3ToPattern = /1\.\s*To[\s:]*[\n\r]+\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/im;
-  const form3TenantMatch = form3ToPattern.exec(originalText);
-  if (form3TenantMatch) {
-    const name = form3TenantMatch[1].trim();
+  const form3ToPatternNextLine = /1\.\s*To[\s:]*[\n\r]+\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/im;
+  const form3TenantMatchNextLine = form3ToPatternNextLine.exec(originalText);
+  if (form3TenantMatchNextLine) {
+    const name = form3TenantMatchNextLine[1].trim();
+    if (name.length >= 4 && name.length <= 60 && isNameLike(name)) {
+      tenantNamesSet.add(name);
+    }
+  }
+
+  // Form 3 specific: "1. To:" with name on same line (condensed format)
+  const form3ToPatternInline = /1\.\s*To[\s:]+([A-Z][a-z]+(?:\s+(?:and\s+)?[A-Z][a-z]+)*)/im;
+  const form3TenantMatchInline = form3ToPatternInline.exec(originalText);
+  if (form3TenantMatchInline) {
+    const name = form3TenantMatchInline[1].trim();
     if (name.length >= 4 && name.length <= 60 && isNameLike(name)) {
       tenantNamesSet.add(name);
     }
@@ -1328,16 +1342,23 @@ export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult 
     /name\s*(?:of\s+)?landlord['']?s?\s*[:=]?\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
     // Pattern 3: "Signed by:" pattern (must have colon after "by")
     /signed\s+by\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 4: "Name:" near signature area (look for name after "7." or "signature" context)
-    /(?:7\.|signature)\s*[\s\S]{0,50}name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 5: "Print name:" pattern - common in signature blocks
+    // Pattern 4: "Name:" standalone in signature block (after "Signed:" line)
+    // This handles Form 3 format: "Signed: [Signed]\nName: Tariq Mohammed"
+    /Signed\s*[:=][^\n]*[\n\r]+\s*Name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/im,
+    // Pattern 5: "Name:" on its own line followed by name (common in signature blocks)
+    /^Name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/im,
+    // Pattern 6: "Name:" with optional whitespace variations
+    /\bName\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 7: "Print name:" pattern - common in signature blocks
     /print\s*name\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 6: Name near "or their agent" - common in Form 3
+    // Pattern 8: Name near "or their agent" - common in Form 3
     /([A-Z][a-z]+(?: [A-Z][a-z]+)+)\s*\(or\s+(?:their|his|her)\s+agent\)/,
-    // Pattern 7: "Licensor:" pattern (Form 3 also covers licenses)
+    // Pattern 9: "Licensor:" pattern (Form 3 also covers licenses)
     /licensor['']?s?\s*(?:name)?\s*[:=]\s*([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
-    // Pattern 8: After "on behalf of" followed by name
+    // Pattern 10: After "on behalf of" followed by name
     /on\s+behalf\s+of\s+([A-Z][a-z]+(?: [A-Z][a-z]+)*)/i,
+    // Pattern 11: Company name pattern (e.g., "Premier Property Management Ltd")
+    /Name\s*[:=]\s*([A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+)*(?: (?:Ltd|Limited|LLP|PLC|Inc|Company|Co)))/i,
   ];
 
   for (const pattern of landlordPatterns) {
