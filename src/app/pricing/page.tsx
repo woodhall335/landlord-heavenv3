@@ -224,11 +224,11 @@ export default function PricingPage() {
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Document Storage</td>
-                <td className="text-center p-4">12 months</td>
-                <td className="text-center p-4">12 months</td>
-                <td className="text-center p-4">12 months</td>
-                <td className="text-center p-4">Lifetime</td>
-                <td className="text-center p-4">Lifetime</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
               </tr>
 
               <tr className="border-t bg-gray-100">
@@ -359,7 +359,7 @@ export default function PricingPage() {
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
               <li>✅ Full UK Coverage</li>
-              <li>✅ Lifetime Storage</li>
+              <li>✅ 12+ Month Storage</li>
             </ul>
             <Link
               href="/wizard?product=ast_standard&src=pricing&topic=tenancy"

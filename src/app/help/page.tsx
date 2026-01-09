@@ -232,7 +232,7 @@ export default function HelpPage() {
                       <strong>Notices & Money Claims:</strong> 12 months from purchase
                     </li>
                     <li>
-                      <strong>Tenancy Agreements:</strong> Lifetime access (as long as account is active)
+                      <strong>Tenancy Agreements:</strong> Available while your account is active
                     </li>
                     <li>
                       <strong>HMO Pro:</strong> While subscription active + 30 days after cancellation
@@ -513,7 +513,7 @@ export default function HelpPage() {
                   </p>
                   <p className="mt-3">
                     <strong>Best value:</strong>
-                    <br />• HMO Pro (from £19.99/month) covers unlimited compliance tracking
+                    <br />• HMO Pro (£29.99/month) covers unlimited compliance tracking
                     <br />• Volume discounts available for portfolio landlords
                   </p>
                   <p className="mt-3 text-sm text-gray-600">

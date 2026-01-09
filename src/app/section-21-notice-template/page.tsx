@@ -104,7 +104,7 @@ export default function Section21NoticeTemplatePage() {
         name: 'Is the Section 21 notice template free?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version that is guaranteed to be accepted, the cost is £39.99.',
+          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version using the official Form 6A format, the cost is £39.99.',
         },
       },
       {
@@ -212,7 +212,7 @@ export default function Section21NoticeTemplatePage() {
                 </span>
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-green-500" />
-                  Court-Ready Guaranteed
+                  Official Form 6A Format
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-green-500" />
@@ -239,7 +239,7 @@ export default function Section21NoticeTemplatePage() {
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Our free Section 21 template is great for understanding the process, but for
-                guaranteed court acceptance, choose our court-ready version.
+                proper compliance with current requirements, choose our court-ready version.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -301,7 +301,7 @@ export default function Section21NoticeTemplatePage() {
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700 font-medium">Guaranteed court acceptance</span>
+                      <span className="text-gray-700 font-medium">Designed to reduce rejection risk</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -420,7 +420,7 @@ export default function Section21NoticeTemplatePage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Court-Ready Format</h3>
                     <p className="text-gray-600 text-sm">
-                      Guaranteed to be accepted by county courts
+                      Uses official prescribed Form 6A format
                     </p>
                   </div>
                 </div>
@@ -477,8 +477,8 @@ export default function Section21NoticeTemplatePage() {
                   </h3>
                   <p className="text-gray-600">
                     Yes, we offer a free Section 21 notice template that you can preview and use
-                    for educational purposes. For a court-ready version that is guaranteed to be
-                    accepted, the cost is £39.99.
+                    for educational purposes. For a court-ready version using the official Form 6A
+                    format, the cost is £39.99.
                   </p>
                 </div>
 
@@ -569,7 +569,7 @@ export default function Section21NoticeTemplatePage() {
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Official Form 6A &bull; AI Compliance Check &bull; Court-Ready Guaranteed
+                Official Form 6A &bull; AI Compliance Check &bull; Designed for Court Acceptance
               </p>
             </div>
           </div>

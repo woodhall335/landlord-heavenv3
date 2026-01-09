@@ -20,6 +20,8 @@ export interface ProductConfig {
   label: string;
   shortLabel: string;
   description: string;
+  /** Numeric price in GBP (e.g., 39.99) */
+  price: number;
   displayPrice: string;
   priceNote?: string;
   wizardHref: string;
@@ -32,6 +34,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Eviction Notice Pack',
     shortLabel: 'Notice Only',
     description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
+    price: 39.99,
     displayPrice: '£39.99',
     wizardHref: '/wizard?product=notice_only',
     productPageHref: '/notice-only',
@@ -41,6 +44,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Complete Eviction Pack',
     shortLabel: 'Complete Pack',
     description: 'Full bundle with notice, court forms, and guidance',
+    price: 199.99,
     displayPrice: '£199.99',
     wizardHref: '/wizard?product=complete_pack',
     productPageHref: '/complete-pack',
@@ -50,6 +54,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Money Claim Pack',
     shortLabel: 'Money Claim',
     description: 'Recover rent arrears through the courts',
+    price: 199.99,
     displayPrice: '£199.99',
     wizardHref: '/wizard?product=money_claim',
     productPageHref: '/money-claim-pack',
@@ -59,6 +64,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Scotland Money Claim Pack',
     shortLabel: 'Scotland Money Claim',
     description: 'Recover rent arrears through Simple Procedure',
+    price: 199.99,
     displayPrice: '£199.99',
     wizardHref: '/wizard?product=sc_money_claim',
     productPageHref: '/money-claim-pack',
@@ -68,6 +74,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Standard Tenancy Agreement',
     shortLabel: 'Standard AST',
     description: 'Government-compliant AST or PRT for your letting',
+    price: 9.99,
     displayPrice: '£9.99',
     wizardHref: '/wizard?product=ast_standard',
     productPageHref: '/ast',
@@ -77,6 +84,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Premium Tenancy Agreement',
     shortLabel: 'Premium AST',
     description: 'Enhanced AST with additional clauses and protections',
+    price: 14.99,
     displayPrice: '£14.99',
     wizardHref: '/wizard?product=ast_premium',
     productPageHref: '/ast',

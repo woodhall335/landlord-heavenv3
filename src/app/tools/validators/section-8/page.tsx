@@ -97,7 +97,7 @@ const faqSchema = {
       name: 'Can I use Section 8 and Section 21 together?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes, many landlords serve both notices together as a "belt and braces" approach. Section 21 provides a guaranteed route to possession (if valid) while Section 8 may allow faster possession for serious breaches. If using both, ensure each notice is separately valid and meets its own requirements.',
+        text: 'Yes, many landlords serve both notices together as a "belt and braces" approach. A valid Section 21 leads to a mandatory possession order while Section 8 may allow faster possession for serious breaches. If using both, ensure each notice is separately valid and meets its own requirements.',
       },
     },
     {
