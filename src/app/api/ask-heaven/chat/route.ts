@@ -95,6 +95,22 @@ When the landlord's question indicates they need a specific document or service,
 
 Only suggest ONE product per response if clearly relevant. Use null if the question is general.
 
+NEXT STEP RECOMMENDATIONS:
+Analyse the user's intent and suggest the best next step:
+- "wizard" - User has transactional intent (wants to serve notice, file claim, create agreement, etc.)
+- "checklist" - User is asking informational compliance questions (deposit protection, EPC, gas safety, EICR, smoke alarms, right to rent)
+- "guide" - User wants to understand a topic better (general education, not ready for action)
+- "none" - General question or unclear intent
+
+TOPIC DETECTION:
+Identify the primary topic from: eviction, arrears, tenancy, deposit, epc, gas_safety, eicr, smoke_alarms, right_to_rent, compliance, general
+
+COMPLIANCE-SPECIFIC RULES:
+For compliance topics (deposit, EPC, gas safety, EICR, smoke alarms, right to rent):
+- suggested_product should usually be null OR tenancy_agreement (for setup-related)
+- suggested_next_step should usually be "checklist" unless strong transactional intent
+- Do NOT push eviction products for pure compliance questions
+
 Context:
 ${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : '- Jurisdiction: Not specified (assume England unless user indicates otherwise)'}
 ${case_id ? '- You are chatting about a specific internal case. NEVER show the case_id or any internal IDs to the user.' : ''}
@@ -109,6 +125,8 @@ You MUST respond with a JSON object containing exactly these fields:
 {
   "reply": "Your helpful response with **markdown** formatting",
   "suggested_product": "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement" | null,
+  "suggested_next_step": "wizard" | "checklist" | "guide" | "none",
+  "suggested_topic": "eviction" | "arrears" | "tenancy" | "deposit" | "epc" | "gas_safety" | "eicr" | "smoke_alarms" | "right_to_rent" | "compliance" | "general",
   "follow_up_questions": ["Question 1?", "Question 2?"],
   "sources": ["Housing Act 1988 s.21", "Deregulation Act 2015"]
 }
@@ -116,6 +134,8 @@ You MUST respond with a JSON object containing exactly these fields:
 Field requirements:
 - "reply" (REQUIRED): Your full response to the landlord with markdown formatting
 - "suggested_product": One of the product codes above, or null if no product is relevant
+- "suggested_next_step" (REQUIRED): Best next action for the user
+- "suggested_topic" (REQUIRED): Primary topic detected from the question
 - "follow_up_questions": Array of 2-3 relevant follow-up questions the landlord might ask
 - "sources": Array of legislation/regulations cited in your answer (empty array if none)
 `.trim();
@@ -139,6 +159,16 @@ Field requirements:
           enum: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', null],
           description: 'Product code or null',
         },
+        suggested_next_step: {
+          type: 'string',
+          enum: ['wizard', 'checklist', 'guide', 'none'],
+          description: 'Best next action for the user',
+        },
+        suggested_topic: {
+          type: 'string',
+          enum: ['eviction', 'arrears', 'tenancy', 'deposit', 'epc', 'gas_safety', 'eicr', 'smoke_alarms', 'right_to_rent', 'compliance', 'general'],
+          description: 'Primary topic detected from question',
+        },
         follow_up_questions: {
           type: 'array',
           items: { type: 'string' },
@@ -150,7 +180,7 @@ Field requirements:
           description: 'Legislation/regulations cited',
         },
       },
-      required: ['reply'],
+      required: ['reply', 'suggested_next_step', 'suggested_topic'],
       additionalProperties: false,
     };
 
@@ -171,6 +201,8 @@ Field requirements:
     interface AskHeavenResponse {
       reply: string;
       suggested_product?: string | null;
+      suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none';
+      suggested_topic?: string;
       follow_up_questions?: string[];
       sources?: string[];
     }
@@ -190,6 +222,8 @@ Field requirements:
 
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
     let suggestedProduct = result.json?.suggested_product ?? null;
+    const suggestedNextStep = result.json?.suggested_next_step ?? 'none';
+    const suggestedTopic = result.json?.suggested_topic ?? 'general';
     const followUpQuestions = result.json?.follow_up_questions ?? [];
     const sources = result.json?.sources ?? [];
 
@@ -218,6 +252,8 @@ Field requirements:
     return NextResponse.json({
       reply,
       suggested_product: suggestedProduct,
+      suggested_next_step: suggestedNextStep,
+      suggested_topic: suggestedTopic,
       follow_up_questions: followUpQuestions,
       sources,
     }, { status: 200 });

@@ -14,6 +14,7 @@ interface ComplianceTopic {
   title: string;
   description: string;
   questions: string[];
+  checklist: string[];
 }
 
 const complianceTopics: ComplianceTopic[] = [
@@ -28,6 +29,15 @@ const complianceTopics: ComplianceTopic[] = [
       'What is prescribed information for deposit protection?',
       'What if I protected the deposit late?',
     ],
+    checklist: [
+      'Protect deposit within 30 days of receipt (England/Wales/Scotland; NI has different rules)',
+      'Use a government-approved scheme: DPS, TDS, or mydeposits',
+      'Serve prescribed information to tenant within 30 days',
+      'Provide certificate from the scheme',
+      'Keep records of protection and prescribed info service',
+      'Late protection may block Section 21 and lead to penalties (up to 3x deposit)',
+      'Always check current guidance for your jurisdiction',
+    ],
   },
   {
     id: 'epc',
@@ -39,6 +49,16 @@ const complianceTopics: ComplianceTopic[] = [
       'Do I need an EPC for an existing tenancy?',
       'Can I evict if the EPC was not provided?',
       'What are EPC exemptions for landlords?',
+    ],
+    checklist: [
+      'Obtain valid EPC before marketing or letting property',
+      'Minimum rating of E required in England and Wales (exemptions may apply)',
+      'Provide copy to tenants before move-in',
+      'EPC valid for 10 years',
+      'Keep copy of EPC and evidence of when provided',
+      'Missing EPC may block Section 21 in England',
+      'Scotland and Wales have their own rules - check specific requirements',
+      'Always check current guidance for your jurisdiction',
     ],
   },
   {
@@ -52,6 +72,16 @@ const complianceTopics: ComplianceTopic[] = [
       'How often do I need a gas safety check?',
       'What if the property has no gas supply?',
     ],
+    checklist: [
+      'Annual gas safety check by Gas Safe registered engineer',
+      'Provide CP12 certificate to existing tenants within 28 days of check',
+      'Provide to new tenants before move-in',
+      'Keep records for 2 years',
+      'Missing or late gas safety may invalidate Section 21 in England',
+      'No gas supply = no gas safety certificate required (keep evidence)',
+      'Check engineer\'s Gas Safe registration before appointment',
+      'Always check current guidance for your jurisdiction',
+    ],
   },
   {
     id: 'eicr',
@@ -63,6 +93,16 @@ const complianceTopics: ComplianceTopic[] = [
       'Can I serve notice without an EICR?',
       'What EICR grade means I need repairs?',
       'When did EICR become mandatory for landlords?',
+    ],
+    checklist: [
+      'EICR required every 5 years in England (from July 2020 for new tenancies)',
+      'Provide copy to new tenants before move-in',
+      'Provide to existing tenants within 28 days of inspection',
+      'C1 (danger present) and C2 (potentially dangerous) require remedial works',
+      'Complete remedial works within 28 days or as specified',
+      'Provide updated report or certificate after remedial works',
+      'Keep records of all inspections and remedial works',
+      'Always check current guidance for your jurisdiction',
     ],
   },
   {
@@ -76,6 +116,16 @@ const complianceTopics: ComplianceTopic[] = [
       'What changed in the Smoke and Carbon Monoxide Alarm Regulations 2022?',
       'Where must smoke alarms be installed in a rental?',
     ],
+    checklist: [
+      'Smoke alarm on every storey with living accommodation',
+      'CO alarm in any room with fixed combustion appliance (excluding gas cookers)',
+      'Check alarms are working on the first day of new tenancy',
+      'Repair or replace faulty alarms within reasonable time',
+      '2022 regulations extended CO alarm requirements in England',
+      'Keep records of installation and testing',
+      'Scotland and Wales have similar but distinct rules',
+      'Always check current guidance for your jurisdiction',
+    ],
   },
   {
     id: 'right_to_rent',
@@ -87,6 +137,17 @@ const complianceTopics: ComplianceTopic[] = [
       'What documents are acceptable for right to rent?',
       'How do I do a right to rent check online?',
       'What are the penalties for not doing right to rent checks?',
+    ],
+    checklist: [
+      'Applies in England only (not Wales, Scotland, or NI)',
+      'Check original documents for all adult occupiers before tenancy starts',
+      'Accept List A or List B documents from Home Office guidance',
+      'Online checking service available for biometric residence permits/cards',
+      'Keep copies of documents for duration of tenancy + 1 year',
+      'Conduct follow-up checks for time-limited right to rent',
+      'Civil penalties up to £20,000 for non-compliance',
+      'Avoid discrimination - check all prospective tenants equally',
+      'Always check current guidance from the Home Office',
     ],
   },
 ];
@@ -403,6 +464,25 @@ export default function AskHeavenPage(): React.ReactElement {
                         </li>
                       ))}
                     </ul>
+
+                    {/* Quick Checklist - SSR collapsible */}
+                    <details className="mb-4 group">
+                      <summary className="cursor-pointer text-sm font-medium text-green-700 hover:text-green-800 flex items-center gap-1.5 select-none">
+                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600 text-xs group-open:rotate-90 transition-transform">
+                          ▶
+                        </span>
+                        Quick checklist (free)
+                      </summary>
+                      <ul className="mt-3 ml-6 space-y-1.5 text-xs text-gray-600">
+                        {topic.checklist.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-green-500 mt-0.5">✓</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+
                     <Link
                       href={buildAskHeavenLink({
                         source: 'seo',

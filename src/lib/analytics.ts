@@ -776,6 +776,8 @@ export interface AskHeavenTrackingParams {
   jurisdiction?: string;
   src: string;
   topic: string;
+  landing_topic?: string;
+  current_topic?: string;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -783,6 +785,9 @@ export interface AskHeavenTrackingParams {
   first_seen_at?: string;
   question_count: number;
   suggested_product?: string | null;
+  suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none' | string | null;
+  suggested_topic?: string | null;
+  reason?: 'compliance_checklist' | 'threshold_gate' | 'manual' | string;
   email_captured?: boolean;
 }
 
@@ -840,6 +845,8 @@ export function trackAskHeavenAnswerReceived(params: AskHeavenTrackingParams): v
     jurisdiction: params.jurisdiction || 'not_selected',
     source: params.src || 'direct',
     topic: params.topic || 'general',
+    landing_topic: params.landing_topic,
+    current_topic: params.current_topic,
     utm_source: params.utm_source,
     utm_medium: params.utm_medium,
     utm_campaign: params.utm_campaign,
@@ -847,6 +854,8 @@ export function trackAskHeavenAnswerReceived(params: AskHeavenTrackingParams): v
     first_seen_at: params.first_seen_at,
     question_count: params.question_count,
     suggested_product: params.suggested_product || 'none',
+    suggested_next_step: params.suggested_next_step || 'none',
+    suggested_topic: params.suggested_topic || 'general',
   });
 }
 
@@ -939,11 +948,14 @@ export function trackAskHeavenEmailGateShown(params: AskHeavenTrackingParams): v
     jurisdiction: params.jurisdiction || 'not_selected',
     source: params.src || 'direct',
     topic: params.topic || 'general',
+    landing_topic: params.landing_topic,
+    current_topic: params.current_topic,
     utm_source: params.utm_source,
     utm_medium: params.utm_medium,
     utm_campaign: params.utm_campaign,
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
     question_count: params.question_count,
+    reason: params.reason || 'threshold_gate',
   });
 }

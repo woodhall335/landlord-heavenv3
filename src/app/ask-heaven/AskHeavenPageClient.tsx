@@ -48,6 +48,8 @@ interface ChatMessage {
   content: string;
   createdAt: string;
   suggestedProduct?: string | null;
+  suggestedNextStep?: 'wizard' | 'checklist' | 'guide' | 'none' | null;
+  suggestedTopic?: string | null;
   followUpQuestions?: string[];
   sources?: string[];
 }
@@ -139,7 +141,10 @@ export default function AskHeavenPageClient(): React.ReactElement {
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
   const [emailGateOpen, setEmailGateOpen] = useState(false);
+  const [emailGateReason, setEmailGateReason] = useState<'compliance_checklist' | 'threshold_gate' | 'manual'>('threshold_gate');
   const [detectedTopic, setDetectedTopic] = useState<Topic | null>(null);
+  const [suggestedNextStep, setSuggestedNextStep] = useState<'wizard' | 'checklist' | 'guide' | 'none' | null>(null);
+  const [lastQuestion, setLastQuestion] = useState<string>('');
   const [attributionInitialized, setAttributionInitialized] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -258,6 +263,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
     setChatMessages([userMsg]);
     setInput('');
+    setLastQuestion(trimmed);
 
     try {
       const res = await fetch('/api/ask-heaven/chat', {
@@ -316,11 +322,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
         content: body.reply,
         createdAt: new Date().toISOString(),
         suggestedProduct: body.suggested_product,
+        suggestedNextStep: body.suggested_next_step,
+        suggestedTopic: body.suggested_topic,
         followUpQuestions: body.follow_up_questions,
         sources: body.sources,
       };
 
       setChatMessages([userMsg, assistantMsg]);
+
+      // Set suggested next step from API
+      if (body.suggested_next_step) {
+        setSuggestedNextStep(body.suggested_next_step);
+      }
 
       // Detect topics from response as well
       const responseTopics = detectTopics(body.reply);
@@ -329,11 +342,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
         setDetectedTopic(responsePrimaryTopic);
         updateCurrentTopic(responsePrimaryTopic);
       }
+      // Also use API-suggested topic if available
+      if (body.suggested_topic && !responsePrimaryTopic && !primaryTopic) {
+        setDetectedTopic(body.suggested_topic as Topic);
+        updateCurrentTopic(body.suggested_topic);
+      }
 
       // Track answer received
       trackAskHeavenAnswerReceived({
         ...trackingParams,
         suggested_product: body.suggested_product,
+        suggested_next_step: body.suggested_next_step,
+        suggested_topic: body.suggested_topic,
       });
     } catch (err) {
       console.error('Ask Heaven error:', err);
@@ -513,6 +533,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
     const nextMessages = [...chatMessages, userMsg];
     setChatMessages(nextMessages);
     setInput('');
+    setLastQuestion(trimmed);
 
     try {
       const res = await fetch('/api/ask-heaven/chat', {
@@ -550,6 +571,8 @@ export default function AskHeavenPageClient(): React.ReactElement {
       const body = (await res.json()) as {
         reply: string;
         suggested_product?: string | null;
+        suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none';
+        suggested_topic?: string;
         follow_up_questions?: string[];
         sources?: string[];
         requires_email?: boolean;
@@ -557,6 +580,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
       // Handle email gate response
       if (body.requires_email) {
+        setEmailGateReason('threshold_gate');
         trackAskHeavenEmailGateShown(trackingParams);
         setEmailGateOpen(true);
         setIsSending(false);
@@ -574,11 +598,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
         content: body.reply,
         createdAt: new Date().toISOString(),
         suggestedProduct: body.suggested_product,
+        suggestedNextStep: body.suggested_next_step,
+        suggestedTopic: body.suggested_topic,
         followUpQuestions: body.follow_up_questions,
         sources: body.sources,
       };
 
       setChatMessages((prev) => [...prev, assistantMsg]);
+
+      // Set suggested next step from API
+      if (body.suggested_next_step) {
+        setSuggestedNextStep(body.suggested_next_step);
+      }
 
       // Detect topics from response as well
       const responseTopics = detectTopics(body.reply);
@@ -587,11 +618,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
         setDetectedTopic(responsePrimaryTopic);
         updateCurrentTopic(responsePrimaryTopic);
       }
+      // Also use API-suggested topic if available
+      if (body.suggested_topic && !responsePrimaryTopic && !primaryTopic) {
+        setDetectedTopic(body.suggested_topic as Topic);
+        updateCurrentTopic(body.suggested_topic);
+      }
 
       // Track answer received
       trackAskHeavenAnswerReceived({
         ...trackingParams,
         suggested_product: body.suggested_product,
+        suggested_next_step: body.suggested_next_step,
+        suggested_topic: body.suggested_topic,
       });
     } catch (err) {
       console.error('Ask Heaven error:', err);
@@ -971,6 +1009,9 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 <NextBestActionCard
                   topic={detectedTopic}
                   jurisdiction={jurisdiction as WizardJurisdiction}
+                  suggestedNextStep={suggestedNextStep}
+                  lastQuestion={lastQuestion}
+                  questionCount={getQuestionCount()}
                   attribution={{
                     src: getAskHeavenAttribution().src,
                     utm_source: getAskHeavenAttribution().utm_source,
@@ -979,6 +1020,14 @@ export default function AskHeavenPageClient(): React.ReactElement {
                   }}
                   onCtaClick={(ctaType, targetUrl, ctaLabel) => {
                     handleCtaClick(ctaType as any, targetUrl, ctaLabel);
+                  }}
+                  onRequestEmailCapture={(reason) => {
+                    setEmailGateReason(reason);
+                    setEmailGateOpen(true);
+                    trackAskHeavenEmailGateShown({
+                      ...buildTrackingParams(),
+                      reason,
+                    } as AskHeavenTrackingParams & { reason: string });
                   }}
                 />
               </div>
