@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
-import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine, RiDashboardLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { freeTools } from '@/lib/tools/tools';
 
@@ -219,13 +219,16 @@ export function NavBar({ user: serverUser }: NavBarProps) {
           "hidden"
         )}>
           {user ? (
-            <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
+            <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </span>
-              <span className="max-w-[140px] truncate font-semibold">{user.name || user.email}</span>
-              <Link href="/dashboard" className="text-primary hover:text-primary-dark font-semibold">
-                Dashboard
+              <Link
+                href="/dashboard"
+                className="text-gray-500 hover:text-primary transition-colors"
+                title="Dashboard"
+              >
+                <RiDashboardLine className="h-5 w-5" />
               </Link>
               <button
                 onClick={handleLogout}
