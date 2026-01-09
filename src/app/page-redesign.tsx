@@ -283,7 +283,7 @@ export default function Home() {
 
             {/* Final trust indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Court-ready documents • Expert guidance • Lifetime storage
+              Court-ready documents • Expert guidance • 12+ months secure storage
             </p>
           </div>
         </Container>

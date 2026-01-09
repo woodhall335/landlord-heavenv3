@@ -234,8 +234,8 @@ export default function Section21BanPage() {
               <div className="flex items-start gap-4">
                 <CheckCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
-                  <div className="font-semibold text-gray-900">Guaranteed outcome</div>
-                  <p className="text-gray-600">Valid Section 21 = mandatory possession order</p>
+                  <div className="font-semibold text-gray-900">Clear legal outcome</div>
+                  <p className="text-gray-600">Valid Section 21 leads to mandatory possession order</p>
                 </div>
               </div>
             </div>

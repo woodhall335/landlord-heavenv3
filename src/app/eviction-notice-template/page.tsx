@@ -178,7 +178,7 @@ export default function EvictionNoticeTemplatePage() {
                 </span>
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-green-500" />
-                  Court-Ready Guaranteed
+                  Official Format Used
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-green-500" />
@@ -311,7 +311,7 @@ export default function EvictionNoticeTemplatePage() {
                 Free Template vs Court-Ready Notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Our free templates help you understand the process. For guaranteed court acceptance,
+                Our free templates help you understand the process. For proper compliance,
                 choose our court-ready version with AI compliance checking.
               </p>
 
@@ -374,7 +374,7 @@ export default function EvictionNoticeTemplatePage() {
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700 font-medium">Guaranteed court acceptance</span>
+                      <span className="text-gray-700 font-medium">Designed for court acceptance</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -588,7 +588,7 @@ export default function EvictionNoticeTemplatePage() {
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Section 21 & 8 Included &bull; AI Compliance Check &bull; Court-Ready Guaranteed
+                Section 21 & 8 Included &bull; AI Compliance Check &bull; Designed for Court Acceptance
               </p>
             </div>
           </div>

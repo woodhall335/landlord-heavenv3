@@ -200,7 +200,7 @@ export default function Section8NoticeTemplatePage() {
                 </span>
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-green-500" />
-                  Court-Ready Guaranteed
+                  Designed for Court Acceptance
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-green-500" />
@@ -690,7 +690,7 @@ export default function Section8NoticeTemplatePage() {
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                17 Grounds Covered &bull; AI Recommendations &bull; Court-Ready Guaranteed
+                17 Grounds Covered &bull; AI Recommendations &bull; Designed for Court Acceptance
               </p>
             </div>
           </div>
