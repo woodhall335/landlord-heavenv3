@@ -13,6 +13,7 @@
 
 import { Metadata } from 'next';
 import { HomeContent } from '@/components/landing';
+import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
   title: {
@@ -51,5 +52,11 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomeContent />;
+  return (
+    <>
+      {/* WebSite schema - homepage only */}
+      <StructuredData data={websiteSchema()} />
+      <HomeContent />
+    </>
+  );
 }

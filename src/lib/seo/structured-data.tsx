@@ -233,23 +233,16 @@ export function faqPageSchema(faqs: FAQItem[]) {
 }
 
 /**
- * WebSite structured data with search action
- * Use this on the homepage
+ * WebSite structured data
+ * Use this on the homepage only (not globally)
  */
 export function websiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Landlord Heaven",
-    "url": SITE_URL,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${SITE_URL}/search?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
+    "url": SITE_URL
+    // SearchAction removed - no search page exists
   };
 }
 
@@ -273,6 +266,7 @@ export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
 /**
  * LocalBusiness structured data
  * For UK-based business
+ * Note: Not used globally - Organization schema is preferred for online businesses
  */
 export function localBusinessSchema() {
   return {
@@ -281,31 +275,13 @@ export function localBusinessSchema() {
     "name": "Landlord Heaven",
     "image": `${SITE_URL}/logo.png`,
     "url": SITE_URL,
-    "telephone": "",
     "email": "support@landlordheaven.co.uk",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "GB"
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "addressCountry": "GB"
-    },
-    "priceRange": "££",
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "09:00",
-        "closes": "17:30"
-      }
-    ]
+    // geo field removed - invalid without actual coordinates
+    "priceRange": "££"
   };
 }
 
