@@ -6,6 +6,7 @@
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { sendWelcomeEmail } from '@/lib/email/resend';
@@ -81,17 +82,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create user profile in public.users table
-    const { error: profileError } = await supabase.from('users').insert({
-      id: authData.user.id,
+    // Create user profile in public.users table using service role
+    // This bypasses RLS which can fail during signup flow
+    const profileResult = await ensureUserProfileExists({
+      userId: authData.user.id,
       email: authData.user.email!,
-      full_name: full_name || null,
+      fullName: full_name || null,
       phone: phone || null,
     });
 
-    if (profileError) {
-      logger.warn('Profile creation error', { error: profileError.message });
-      // Don't fail - auth user created successfully
+    if (!profileResult.success) {
+      logger.error('Profile creation error', { error: profileResult.error });
+      // This is now a critical error - user profile is required for checkout
+      // But don't fail signup as auth user was created successfully
+      // The profile will be created on next login or checkout attempt
+    } else if (profileResult.created) {
+      logger.info('User profile created during signup', { userId: authData.user.id });
     }
 
     // Send welcome email

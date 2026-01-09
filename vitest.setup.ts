@@ -10,6 +10,11 @@ import '@testing-library/jest-dom/vitest';
 // Load environment variables from .env.local file for tests
 loadEnv({ path: path.resolve(__dirname, '.env.local') });
 
+// Mock 'server-only' package used by Next.js for server-only code
+// This package throws an error when imported in client code, but in tests
+// we need to mock it to allow testing server-side functions
+vi.mock('server-only', () => ({}));
+
 // Global mock cleanup to prevent mock bleed between test files
 // This fixes issues where tests pass individually but fail when run together
 beforeEach(() => {
