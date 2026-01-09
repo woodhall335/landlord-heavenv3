@@ -6,6 +6,108 @@ import Link from 'next/link';
 import AskHeavenPageClient from './AskHeavenPageClient';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
+
+// Compliance topics data for SSR section
+interface ComplianceTopic {
+  id: AskHeavenTopic;
+  title: string;
+  description: string;
+  questions: string[];
+}
+
+const complianceTopics: ComplianceTopic[] = [
+  {
+    id: 'deposit',
+    title: 'Deposit Protection',
+    description:
+      'Landlords must protect tenancy deposits in a government-approved scheme (DPS, TDS, or mydeposits) within 30 days and provide prescribed information to tenants.',
+    questions: [
+      'Do I need to protect a tenancy deposit and when?',
+      'Which deposit protection scheme should I use?',
+      'What is prescribed information for deposit protection?',
+      'What if I protected the deposit late?',
+    ],
+  },
+  {
+    id: 'epc',
+    title: 'EPC Rules',
+    description:
+      'Energy Performance Certificates are required before letting a property. From April 2020, rental properties in England and Wales must have an EPC rating of E or above.',
+    questions: [
+      'What EPC rating is required to let a property?',
+      'Do I need an EPC for an existing tenancy?',
+      'Can I evict if the EPC was not provided?',
+      'What are EPC exemptions for landlords?',
+    ],
+  },
+  {
+    id: 'gas_safety',
+    title: 'Gas Safety Certificate',
+    description:
+      'Landlords must have gas appliances checked annually by a Gas Safe registered engineer and provide tenants with a copy of the Gas Safety Certificate (CP12) within 28 days.',
+    questions: [
+      'When must a landlord provide a gas safety certificate?',
+      'Does missing gas safety invalidate a Section 21?',
+      'How often do I need a gas safety check?',
+      'What if the property has no gas supply?',
+    ],
+  },
+  {
+    id: 'eicr',
+    title: 'EICR Electrical Safety',
+    description:
+      'Electrical Installation Condition Reports (EICRs) are required every 5 years for rental properties in England. Landlords must provide a copy to tenants before they move in.',
+    questions: [
+      'Do landlords need an EICR and how often?',
+      'Can I serve notice without an EICR?',
+      'What EICR grade means I need repairs?',
+      'When did EICR become mandatory for landlords?',
+    ],
+  },
+  {
+    id: 'smoke_alarms',
+    title: 'Smoke & CO Alarms',
+    description:
+      'Under the Smoke and Carbon Monoxide Alarm Regulations 2022, landlords must install smoke alarms on every floor and CO alarms in rooms with fixed combustion appliances.',
+    questions: [
+      'What are the smoke alarm rules for landlords in England?',
+      'Do I need carbon monoxide alarms in rental property?',
+      'What changed in the Smoke and Carbon Monoxide Alarm Regulations 2022?',
+      'Where must smoke alarms be installed in a rental?',
+    ],
+  },
+  {
+    id: 'right_to_rent',
+    title: 'Right to Rent Checks',
+    description:
+      'Landlords in England must verify that tenants have the right to rent in the UK before letting a property. Failure to check can result in civil penalties up to £20,000.',
+    questions: [
+      'Do I need to do right to rent checks and how?',
+      'What documents are acceptable for right to rent?',
+      'How do I do a right to rent check online?',
+      'What are the penalties for not doing right to rent checks?',
+    ],
+  },
+];
+
+// Generate ItemList schema for compliance topics
+function complianceTopicsItemListSchema() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Landlord Compliance Topics',
+    description: 'Common landlord compliance questions answered free by Ask Heaven',
+    numberOfItems: complianceTopics.length,
+    itemListElement: complianceTopics.map((topic, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: topic.title,
+      url: `${siteUrl}${buildAskHeavenLink({ source: 'seo', topic: topic.id, prompt: topic.questions[0] })}`,
+    })),
+  };
+}
 
 // FAQ items for both schema and visible content - defined at module level for SSR
 const faqItems = [
@@ -44,7 +146,7 @@ const faqItems = [
 export const metadata: Metadata = {
   title: 'Ask Heaven – Free UK Landlord Q&A Tool',
   description:
-    'Get instant answers to landlord-tenant questions for England, Wales, Scotland, and Northern Ireland. Free advice on eviction notices, rent arrears, tenancy agreements, and more.',
+    'Free landlord advice for England, Wales, Scotland and NI. Get answers on evictions, deposit protection, EPC rules, gas safety, EICR, smoke alarms and right to rent.',
   keywords: [
     'landlord advice',
     'landlord Q&A',
@@ -58,6 +160,13 @@ export const metadata: Metadata = {
     'notice to leave scotland',
     'occupation contract wales',
     'landlord tenant law',
+    'deposit protection advice',
+    'EPC rules landlord',
+    'gas safety certificate landlord',
+    'EICR landlord requirements',
+    'smoke alarm regulations landlord',
+    'carbon monoxide alarm landlord',
+    'right to rent checks landlord',
   ],
   openGraph: {
     title: 'Ask Heaven – Free UK Landlord Q&A Tool',
@@ -83,6 +192,7 @@ export default function AskHeavenPage(): React.ReactElement {
           { name: 'Ask Heaven', url: 'https://landlordheaven.co.uk/ask-heaven' },
         ])}
       />
+      <StructuredData data={complianceTopicsItemListSchema()} />
 
       {/* SSR Content Section - visible to Googlebot without hydration */}
       <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24">
@@ -255,6 +365,56 @@ export default function AskHeavenPage(): React.ReactElement {
                   <span className="font-medium text-gray-900 block">Rent Arrears Letter</span>
                   <span className="text-xs text-gray-500">Demand letter template</span>
                 </Link>
+              </div>
+            </div>
+
+            {/* Compliance Topics Section - SSR for SEO */}
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-8 shadow-sm">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Landlord Compliance Help (Free Answers)
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Get instant answers to common landlord compliance questions. Click any question below
+                to ask Ask Heaven directly.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {complianceTopics.map((topic) => (
+                  <div
+                    key={topic.id}
+                    className="bg-gray-50 rounded-xl border border-gray-200 p-4"
+                  >
+                    <h3 className="font-semibold text-gray-900 mb-2">{topic.title}</h3>
+                    <p className="text-sm text-gray-600 mb-4">{topic.description}</p>
+                    <ul className="space-y-2 mb-4">
+                      {topic.questions.map((question) => (
+                        <li key={question}>
+                          <Link
+                            href={buildAskHeavenLink({
+                              source: 'seo',
+                              topic: topic.id,
+                              prompt: question,
+                            })}
+                            className="text-sm text-primary hover:text-primary-700 hover:underline flex items-start gap-1.5"
+                          >
+                            <span className="text-primary/60 mt-0.5">?</span>
+                            {question}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href={buildAskHeavenLink({
+                        source: 'seo',
+                        topic: topic.id,
+                      })}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-700"
+                    >
+                      Ask a question
+                      <span aria-hidden="true">&rarr;</span>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

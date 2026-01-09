@@ -9,6 +9,8 @@
 export interface AskHeavenAttributionPayload {
   src: string;
   topic: string;
+  landing_topic?: string; // Original topic from URL (never overwritten)
+  current_topic?: string; // Topic detected from conversation (can be updated)
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -101,13 +103,14 @@ export function setAskHeavenAttribution(
 
   const existing = getAskHeavenAttribution();
 
-  // Keep original first_seen_at and landing_url
+  // Keep original first_seen_at, landing_url, and landing_topic
   const updated: AskHeavenAttributionPayload = {
     ...existing,
     ...payload,
     // Never overwrite these once set
     first_seen_at: existing.first_seen_at,
     landing_url: existing.landing_url,
+    landing_topic: existing.landing_topic || payload.landing_topic,
   };
 
   try {
@@ -218,6 +221,12 @@ export function initializeAskHeavenAttribution(): AskHeavenAttributionPayload {
     payload.landing_url = window.location.href;
   }
 
+  // Set landing_topic from URL topic if this is first visit with a topic
+  if (urlAttribution.topic && !existing.landing_topic) {
+    payload.landing_topic = urlAttribution.topic;
+    payload.current_topic = urlAttribution.topic;
+  }
+
   return setAskHeavenAttribution(payload);
 }
 
@@ -231,6 +240,8 @@ export function getAskHeavenAttributionForAnalytics(): Record<string, string | n
   return {
     source: attribution.src,
     topic: attribution.topic,
+    landing_topic: attribution.landing_topic,
+    current_topic: attribution.current_topic,
     utm_source: attribution.utm_source,
     utm_medium: attribution.utm_medium,
     utm_campaign: attribution.utm_campaign,
@@ -240,4 +251,12 @@ export function getAskHeavenAttributionForAnalytics(): Record<string, string | n
     question_count: attribution.question_count,
     email_captured: attribution.email_captured,
   };
+}
+
+/**
+ * Update current topic (detected from conversation)
+ * Preserves landing_topic but updates current_topic
+ */
+export function updateCurrentTopic(topic: string): void {
+  setAskHeavenAttribution({ current_topic: topic, topic });
 }
