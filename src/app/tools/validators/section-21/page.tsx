@@ -9,11 +9,12 @@ import type { Metadata } from 'next';
 import { ValidatorPage } from '@/components/validators/ValidatorPage';
 import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'Free Section 21 Notice Checker | Validate Form 6A Online | Landlord Heaven',
   description:
-    'Check your Section 21 notice is valid before court. Our free tool verifies Form 6A compliance, deposit protection, prescribed information, gas safety, EPC, and notice period requirements.',
+    'Check your Section 21 notice is valid before court. Our free tool verifies Form 6A compliance, deposit protection, prescribed information, gas safety, EPC, and notice period requirements. England only.',
   keywords: [
     'section 21 notice checker',
     'form 6a validator',
@@ -25,11 +26,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free Section 21 Notice Checker | Landlord Heaven',
     description:
-      'Instantly check if your Section 21 notice is court-ready. Free validation tool for landlords.',
+      'Instantly check if your Section 21 notice is court-ready. Free validation tool for England landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/validators/section-21'),
   },
   alternates: {
-    canonical: '/tools/validators/section-21',
+    canonical: getCanonicalUrl('/tools/validators/section-21'),
   },
 };
 

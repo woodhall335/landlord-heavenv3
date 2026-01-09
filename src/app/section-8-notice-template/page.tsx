@@ -133,6 +133,21 @@ export default function Section8NoticeTemplatePage() {
                 </span>
               </div>
 
+              {/* Jurisdiction Notice - England Only */}
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg max-w-2xl mx-auto">
+                <p className="text-amber-900 text-sm">
+                  <strong>England only:</strong> Section 8 notices apply to <strong>England only</strong>.
+                  Different eviction grounds and processes apply in{' '}
+                  <Link href="/wales-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
+                    Wales (Renting Homes Act)
+                  </Link>{' '}
+                  and{' '}
+                  <Link href="/scotland-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
+                    Scotland (PRT eviction grounds)
+                  </Link>.
+                </p>
+              </div>
+
               {/* H1 with target keyword */}
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-6">
                 Section 8 Notice Template

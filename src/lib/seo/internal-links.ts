@@ -115,7 +115,7 @@ export const landingPageLinks = {
   section21Template: {
     href: '/section-21-notice-template',
     title: 'Section 21 Notice Template',
-    description: 'Free template download',
+    description: 'Free template download (England)',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -129,7 +129,7 @@ export const landingPageLinks = {
   section8Template: {
     href: '/section-8-notice-template',
     title: 'Section 8 Notice Template',
-    description: 'Grounds-based eviction template',
+    description: 'Grounds-based eviction (England)',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -149,40 +149,97 @@ export const landingPageLinks = {
   },
 };
 
+// New guide pages for SEO authority
+export const guideLinks = {
+  howToEvictTenant: {
+    href: '/how-to-evict-tenant',
+    title: 'How to Evict a Tenant UK',
+    description: 'Complete UK eviction guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  walesEviction: {
+    href: '/wales-eviction-notices',
+    title: 'Wales Eviction Guide',
+    description: 'Renting Homes Act notices',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  scotlandEviction: {
+    href: '/scotland-eviction-notices',
+    title: 'Scotland Eviction Guide',
+    description: 'Notice to Leave & PRT',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  moneyClaimGuide: {
+    href: '/money-claim-unpaid-rent',
+    title: 'Claim Unpaid Rent Guide',
+    description: 'MCOL & Simple Procedure',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
 // Pre-built link groups for common use cases
 export const evictionRelatedLinks = [
+  guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
-  toolLinks.section21Generator,
-  blogLinks.whatIsSection21,
-  blogLinks.section21VsSection8,
+  guideLinks.walesEviction,
+  guideLinks.scotlandEviction,
 ];
 
 export const section21RelatedLinks = [
+  guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   toolLinks.section21Generator,
   blogLinks.whatIsSection21,
-  blogLinks.howToServeNotice,
-  landingPageLinks.evictionTemplate,
+  guideLinks.walesEviction,
+  guideLinks.scotlandEviction,
 ];
 
 export const section8RelatedLinks = [
+  guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
   toolLinks.section8Generator,
-  blogLinks.section21VsSection8,
   blogLinks.rentArrearsEviction,
+  guideLinks.walesEviction,
 ];
 
 export const rentArrearsRelatedLinks = [
+  guideLinks.moneyClaimGuide,
   productLinks.moneyClaim,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
-  blogLinks.rentArrearsEviction,
   landingPageLinks.rentArrearsTemplate,
 ];
 
 export const tenancyRelatedLinks = [
   productLinks.tenancyAgreement,
   landingPageLinks.tenancyTemplate,
+];
+
+// Jurisdiction-specific link groups
+export const walesRelatedLinks = [
+  guideLinks.walesEviction,
+  guideLinks.howToEvictTenant,
+  productLinks.noticeOnly,
+  productLinks.completePack,
+];
+
+export const scotlandRelatedLinks = [
+  guideLinks.scotlandEviction,
+  guideLinks.howToEvictTenant,
+  productLinks.noticeOnly,
+  productLinks.completePack,
+];
+
+export const moneyClaimRelatedLinks = [
+  guideLinks.moneyClaimGuide,
+  productLinks.moneyClaim,
+  toolLinks.rentArrearsCalculator,
+  toolLinks.rentDemandLetter,
+  landingPageLinks.rentArrearsTemplate,
 ];
