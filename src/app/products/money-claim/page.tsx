@@ -97,7 +97,7 @@ export default function MoneyClaimPage() {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=money_claim"
+                href="/wizard?product=money_claim&src=product_page&topic=arrears"
                 className="hero-btn-primary"
               >
                 Start Money Claim →
@@ -456,7 +456,7 @@ export default function MoneyClaimPage() {
 
             <div className="mt-8 text-center">
               <Link
-                href="/wizard?product=money_claim"
+                href="/wizard?product=money_claim&src=product_page&topic=arrears"
                 className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 Start Money Claim - £179.99 →
@@ -703,7 +703,7 @@ export default function MoneyClaimPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=money_claim"
+                href="/wizard?product=money_claim&src=product_page&topic=arrears"
                 className="hero-btn-primary"
               >
                 Start Money Claim - £179.99 →

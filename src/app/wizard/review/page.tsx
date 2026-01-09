@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -17,6 +17,7 @@ import {
   RiFileList3Line,
 } from 'react-icons/ri';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
+import { trackWizardReviewView, markWizardCompleted } from '@/lib/analytics';
 
 // Scotland utilities
 import {
@@ -87,6 +88,22 @@ function ReviewPageInner() {
   useEffect(() => {
     setHasAcknowledgedBlockers(false);
   }, [caseId, hasBlockingIssues]);
+
+  // Track review page view when analysis loads
+  const hasTrackedReview = useRef(false);
+  useEffect(() => {
+    if (analysis && !hasTrackedReview.current) {
+      hasTrackedReview.current = true;
+      trackWizardReviewView({
+        product: product,
+        jurisdiction: jurisdiction || 'unknown',
+        hasBlockers: hasBlockingIssues,
+        hasWarnings: analysis.decision_engine?.blocking_issues?.some(
+          (issue: any) => issue.severity === 'warning'
+        ) ?? false,
+      });
+    }
+  }, [analysis, product, jurisdiction, hasBlockingIssues]);
 
   // Conditional returns AFTER all hooks
   if (loading) {

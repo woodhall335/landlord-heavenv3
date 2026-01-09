@@ -244,7 +244,7 @@ export default function PricingPage() {
                 <td className="p-6"></td>
                 <td className="text-center p-6">
                   <Link
-                    href="/wizard?product=notice_only"
+                    href="/wizard?product=notice_only&src=pricing&topic=eviction"
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start notice wizard"
                   >
@@ -253,7 +253,7 @@ export default function PricingPage() {
                 </td>
                 <td className="text-center p-6">
                   <Link
-                    href="/wizard?product=complete_pack"
+                    href="/wizard?product=complete_pack&src=pricing&topic=eviction"
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start eviction pack wizard"
                   >
@@ -262,7 +262,7 @@ export default function PricingPage() {
                 </td>
                 <td className="text-center p-6">
                   <Link
-                    href="/wizard?product=money_claim"
+                    href="/wizard?product=money_claim&src=pricing&topic=arrears"
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start money claim wizard"
                   >
@@ -271,7 +271,7 @@ export default function PricingPage() {
                 </td>
                 <td className="text-center p-6">
                   <Link
-                    href="/wizard?product=ast_standard"
+                    href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Create standard tenancy agreement"
                   >
@@ -280,7 +280,7 @@ export default function PricingPage() {
                 </td>
                 <td className="text-center p-6">
                   <Link
-                    href="/wizard?product=ast_premium"
+                    href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Create premium tenancy agreement"
                   >
@@ -305,7 +305,7 @@ export default function PricingPage() {
               <li>✅ 12-Month Storage</li>
             </ul>
             <Link
-              href="/wizard?product=notice_only"
+              href="/wizard?product=notice_only&src=pricing&topic=eviction"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start notice wizard"
             >
@@ -324,7 +324,7 @@ export default function PricingPage() {
               <li>✅ Full Eviction Bundle</li>
             </ul>
             <Link
-              href="/wizard?product=complete_pack"
+              href="/wizard?product=complete_pack&src=pricing&topic=eviction"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start eviction pack wizard"
             >
@@ -343,7 +343,7 @@ export default function PricingPage() {
               <li>✅ Enforcement Tools</li>
             </ul>
             <Link
-              href="/wizard?product=money_claim"
+              href="/wizard?product=money_claim&src=pricing&topic=arrears"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start money claim wizard"
             >
@@ -362,7 +362,7 @@ export default function PricingPage() {
               <li>✅ Lifetime Storage</li>
             </ul>
             <Link
-              href="/wizard?product=ast_standard"
+              href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
               className="hero-btn-primary block w-full text-center"
               aria-label="Create standard tenancy agreement"
             >
@@ -382,7 +382,7 @@ export default function PricingPage() {
               <li>✅ Advanced Protection</li>
             </ul>
             <Link
-              href="/wizard?product=ast_premium"
+              href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
               className="hero-btn-primary block w-full text-center"
               aria-label="Create premium tenancy agreement"
             >
