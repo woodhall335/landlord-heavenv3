@@ -298,6 +298,8 @@ export default function AskHeavenPageClient(): React.ReactElement {
       const body = (await res.json()) as {
         reply: string;
         suggested_product?: string | null;
+        suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none' | null;
+        suggested_topic?: string | null;
         follow_up_questions?: string[];
         sources?: string[];
         requires_email?: boolean;
@@ -571,8 +573,8 @@ export default function AskHeavenPageClient(): React.ReactElement {
       const body = (await res.json()) as {
         reply: string;
         suggested_product?: string | null;
-        suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none';
-        suggested_topic?: string;
+        suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none' | null;
+        suggested_topic?: string | null;
         follow_up_questions?: string[];
         sources?: string[];
         requires_email?: boolean;
