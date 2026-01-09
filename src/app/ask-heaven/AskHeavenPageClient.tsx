@@ -1027,7 +1027,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                     setEmailGateReason(reason);
                     setEmailGateOpen(true);
                     trackAskHeavenEmailGateShown({
-                      ...buildTrackingParams(),
+                      ...getTrackingParams(),
                       reason,
                     } as AskHeavenTrackingParams & { reason: string });
                   }}
