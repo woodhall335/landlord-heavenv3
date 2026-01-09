@@ -365,7 +365,7 @@ export default function ASTPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
               How We Compare
             </h2>
-            <VsSolicitorComparison product="ast" />
+            <VsSolicitorComparison product="ast_standard" />
           </div>
         </Container>
       </section>
