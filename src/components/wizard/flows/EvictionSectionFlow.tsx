@@ -36,7 +36,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -400,6 +400,10 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Debounce ref for save operations to prevent excessive API calls
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<WizardFacts | null>(null);
+
   // Smart Review state (hydrated from persisted facts.__smart_review)
   const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
   const [smartReviewSummary, setSmartReviewSummary] = useState<SmartReviewSummary | null>(null);
@@ -438,6 +442,15 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
 
     void loadFacts();
   }, [caseId, jurisdiction]);
+
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
@@ -482,12 +495,27 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
     [caseId, jurisdiction]
   );
 
-  // Update facts and save
+  // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
-    async (updates: Record<string, any>) => {
+    (updates: Record<string, any>) => {
       const updatedFacts = { ...facts, ...updates };
       setFacts(updatedFacts);
-      await saveFactsToServer(updatedFacts);
+
+      // Store the latest facts to save
+      pendingFactsRef.current = updatedFacts;
+
+      // Clear any existing debounce timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Debounce the save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
     },
     [facts, saveFactsToServer]
   );

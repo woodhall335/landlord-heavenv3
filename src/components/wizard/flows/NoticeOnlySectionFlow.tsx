@@ -20,7 +20,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
@@ -230,6 +230,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
 
+  // Debounce ref for save operations to prevent excessive API calls
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<WizardFacts | null>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -257,6 +261,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
     void loadFacts();
   }, [caseId, jurisdiction]);
+
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Get visible sections based on eviction route
   const visibleSections = useMemo(() => {
@@ -292,12 +305,27 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [caseId, jurisdiction]
   );
 
-  // Update facts and save
+  // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
-    async (updates: Record<string, any>) => {
+    (updates: Record<string, any>) => {
       const updatedFacts = { ...facts, ...updates };
       setFacts(updatedFacts);
-      await saveFactsToServer(updatedFacts);
+
+      // Store the latest facts to save
+      pendingFactsRef.current = updatedFacts;
+
+      // Clear any existing debounce timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Debounce the save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
     },
     [facts, saveFactsToServer]
   );

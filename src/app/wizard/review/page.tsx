@@ -36,6 +36,27 @@ function ReviewPageInner() {
   const [loading, setLoading] = useState(true);
   const [hasAcknowledgedBlockers, setHasAcknowledgedBlockers] = useState(false);
 
+  // Compute derived values BEFORE any conditional returns (null-safe)
+  // This ensures hooks are called in the same order on every render
+  const jurisdiction = analysis?.jurisdiction;
+  const caseType = analysis?.case_type ?? 'eviction';
+  const product: string = productParam || analysis?.product || 'complete_pack';
+
+  // Detect flow type based on product
+  const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
+  const isNoticeOnlyFlow = product === 'notice_only';
+  const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
+
+  // Compute hasBlockingIssues safely (false when analysis is null)
+  const hasBlockingIssues = analysis
+    ? isMoneyClaimFlow
+      ? (analysis.case_health?.blockers?.length ?? 0) > 0
+      : analysis.decision_engine?.blocking_issues?.some(
+          (issue: any) => issue.severity === 'blocking'
+        )
+    : false;
+
+  // All useEffect hooks must be called unconditionally BEFORE any returns
   useEffect(() => {
     const fetchAnalysis = async () => {
       if (!caseId) {
@@ -62,6 +83,12 @@ function ReviewPageInner() {
     fetchAnalysis();
   }, [caseId]);
 
+  // Reset acknowledgement when case or blocking issues change
+  useEffect(() => {
+    setHasAcknowledgedBlockers(false);
+  }, [caseId, hasBlockingIssues]);
+
+  // Conditional returns AFTER all hooks
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -82,24 +109,6 @@ function ReviewPageInner() {
       </div>
     );
   }
-
-  const jurisdiction = analysis.jurisdiction;
-  const caseType = analysis.case_type ?? 'eviction';
-  const product: string = productParam || analysis.product || 'complete_pack';
-
-  // Detect flow type based on product
-  const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
-  const isNoticeOnlyFlow = product === 'notice_only';
-  const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
-
-  const hasBlockingIssues = isMoneyClaimFlow
-    ? (analysis.case_health?.blockers?.length ?? 0) > 0
-    : analysis.decision_engine?.blocking_issues?.some(
-        (issue: any) => issue.severity === 'blocking'
-      );
-  useEffect(() => {
-    setHasAcknowledgedBlockers(false);
-  }, [caseId, hasBlockingIssues]);
 
   // Common fields from /api/wizard/analyze
   const caseStrengthBand: string = analysis.case_strength_band || 'unknown';
