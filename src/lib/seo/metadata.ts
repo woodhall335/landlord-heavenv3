@@ -52,7 +52,9 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
     publisher: SITE_NAME,
-    robots: noindex ? 'noindex,nofollow' : 'index,follow',
+    robots: noindex
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
 
     // Open Graph
     openGraph: {
@@ -86,9 +88,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     alternates: {
       canonical: url,
     },
-
-    // Additional metadata
-    metadataBase: new URL(SITE_ORIGIN),
+    // Note: metadataBase is set globally in RootLayout
   };
 }
 

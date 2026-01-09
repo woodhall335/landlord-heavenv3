@@ -27,13 +27,15 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/blog/', '/_next/'],
+        allow: ['/', '/blog/'],
         disallow: [
           '/api/',
           '/dashboard/',
           '/auth/',
           '/wizard/',
           '/admin/',
+          '/checkout/',
+          '/_next/',
         ],
       },
     ],

@@ -36,11 +36,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
-  // Tenancy agreement pages
+  // Tenancy agreement pages (only canonical 200 URLs - excludes redirect targets)
   const tenancyPages = [
-    { path: '/tenancy-agreements', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreements/standard', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreements/premium', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/england-wales', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/scotland', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -72,11 +69,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  // Auth entry points (login/signup visible to crawlers)
-  const authEntryPages = [
-    { path: '/auth/login', priority: 0.5, changeFrequency: 'monthly' as const },
-    { path: '/auth/signup', priority: 0.5, changeFrequency: 'monthly' as const },
-  ];
+  // Auth entry points excluded - these pages are noindex
+  // /auth/login and /auth/signup are not in sitemap
 
   // Blog pages with explicit lastModified dates
   const blogPostPages = blogPosts.map((post) => ({
@@ -92,7 +86,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...tenancyPages,
     ...landingPages,
     ...toolPages,
-    ...authEntryPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
   ];
 

@@ -7,9 +7,7 @@ import { defaultMetadata } from "@/lib/seo";
 import { SITE_ORIGIN } from "@/lib/seo/urls";
 import {
   organizationSchema,
-  websiteSchema,
-  softwareApplicationSchema,
-  localBusinessSchema
+  softwareApplicationSchema
 } from "@/lib/seo/structured-data";
 import { PopupProvider } from "@/components/providers/PopupProvider";
 import { TrackingPixels } from "@/components/analytics/TrackingPixels";
@@ -52,22 +50,15 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.facebook.com" />
 
-        {/* JSON-LD Structured Data for SEO */}
+        {/* JSON-LD Structured Data for SEO - Organization + SoftwareApplication globally */}
+        {/* WebSite schema is injected on homepage only */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
-        />
-        <script
-          type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema()) }}
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
