@@ -344,24 +344,10 @@ async function generateScotlandMoneyClaimPack(
     ask_heaven: askHeavenDrafts,
   };
 
-  // 1. Pack cover
-  const packCover = await generateDocument({
-    templatePath: 'uk/scotland/templates/money_claims/pack_cover.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // PACK COVER - Removed as of Jan 2026 pack restructure
+  // Pack summary document no longer included in the money claim pack (aligned with England/Wales)
 
-  documents.push({
-    title: 'Simple Procedure claim pack summary',
-    description: 'Explains the contents of the bundle, claim totals and lodging steps.',
-    category: 'guidance',
-    html: packCover.html,
-    pdf: packCover.pdf,
-    file_name: 'scotland-money-claim-pack-summary.pdf',
-  });
-
-  // 2. Particulars of claim
+  // 1. Particulars of claim
   const particulars = await generateDocument({
     templatePath: 'uk/scotland/templates/money_claims/simple_procedure_particulars.hbs',
     data: baseTemplateData,
@@ -416,40 +402,11 @@ async function generateScotlandMoneyClaimPack(
     });
   }
 
-  // 5. Evidence index
-  const evidence = await generateDocument({
-    templatePath: 'uk/scotland/templates/money_claims/evidence_index.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
+  // Evidence index document no longer included in the money claim pack (aligned with England/Wales)
 
-  documents.push({
-    title: 'Evidence index',
-    description: 'Checklist of supporting documents to attach to the claim form.',
-    category: 'evidence',
-    html: evidence.html,
-    pdf: evidence.pdf,
-    file_name: 'evidence-index.pdf',
-  });
-
-  // 5b. Court Hearing Preparation Sheet (NEW)
-  const hearingPrep = await generateDocument({
-    templatePath: 'uk/scotland/templates/money_claims/hearing_prep_sheet.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Court Hearing Preparation Sheet',
-    description:
-      'Structured guidance on what to say, what to bring, and how to present your Simple Procedure case if the claim is defended.',
-    category: 'guidance',
-    html: hearingPrep.html,
-    pdf: hearingPrep.pdf,
-    file_name: 'hearing-prep-sheet-scotland.pdf',
-  });
+  // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
+  // Hearing prep sheet document no longer included in the money claim pack (aligned with England/Wales)
 
   // PRE-ACTION DOCUMENTS (Required by Simple Procedure Rule 3.1)
   const responseDeadline = new Date();
