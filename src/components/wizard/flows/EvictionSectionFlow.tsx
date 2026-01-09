@@ -69,6 +69,10 @@ import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 
+// Analytics and attribution
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { getWizardAttribution, isStepCompleted, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
 // Section definition type
 interface WizardSection {
   id: string;
@@ -520,12 +524,36 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
     [facts, saveFactsToServer]
   );
 
-  // Navigate to next section
+  // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < visibleSections.length - 1) {
+      // Track step completion if the current section is complete
+      const current = visibleSections[currentSectionIndex];
+      if (current && current.isComplete(facts, jurisdiction)) {
+        // Only fire if not already tracked for this step
+        const shouldTrack = markStepCompleted(current.id);
+        if (shouldTrack) {
+          const attribution = getWizardAttribution();
+          trackWizardStepCompleteWithAttribution({
+            product: 'complete_pack',
+            jurisdiction: jurisdiction,
+            step: current.id,
+            stepIndex: currentSectionIndex,
+            totalSteps: visibleSections.length,
+            src: attribution.src,
+            topic: attribution.topic,
+            utm_source: attribution.utm_source,
+            utm_medium: attribution.utm_medium,
+            utm_campaign: attribution.utm_campaign,
+            landing_url: attribution.landing_url,
+            first_seen_at: attribution.first_seen_at,
+          });
+        }
+      }
+
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections.length]);
+  }, [currentSectionIndex, visibleSections, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {

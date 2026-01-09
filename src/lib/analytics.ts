@@ -563,3 +563,204 @@ export function isWizardCompleted(): boolean {
 export function resetWizardCompletedState(): void {
   wizardCompleted = false;
 }
+
+// =============================================================================
+// ENHANCED WIZARD TRACKING WITH FULL ATTRIBUTION
+// =============================================================================
+
+/**
+ * Full attribution payload for wizard events
+ */
+export interface WizardFullAttributionParams {
+  product: string;
+  jurisdiction: string;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}
+
+/**
+ * Track wizard entry view with full attribution
+ */
+export function trackWizardEntryViewWithAttribution(params: WizardFullAttributionParams): void {
+  trackEvent('wizard_entry_view', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  });
+
+  // Track as Facebook ViewContent
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: `wizard_entry_${params.product}`,
+      content_category: 'wizard',
+      content_type: 'product_selection',
+    });
+  }
+}
+
+/**
+ * Track wizard start with full attribution (fires on /wizard/flow mount)
+ */
+export function trackWizardStartWithAttribution(params: WizardFullAttributionParams): void {
+  trackEvent('wizard_start', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction || 'unknown',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  });
+
+  // Track as Facebook AddToCart (intent signal)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: params.product,
+      content_category: 'wizard',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track wizard step completion with full attribution
+ */
+export function trackWizardStepCompleteWithAttribution(params: {
+  product: string;
+  jurisdiction: string;
+  step: string;
+  stepIndex?: number;
+  totalSteps?: number;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}): void {
+  trackEvent('wizard_step_complete', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    step_name: params.step,
+    step_index: params.stepIndex ?? 0,
+    total_steps: params.totalSteps ?? 0,
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  });
+}
+
+/**
+ * Track wizard review view with full attribution
+ */
+export function trackWizardReviewViewWithAttribution(params: {
+  product: string;
+  jurisdiction: string;
+  hasBlockers?: boolean;
+  hasWarnings?: boolean;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}): void {
+  trackEvent('wizard_review_view', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    has_blockers: params.hasBlockers ?? false,
+    has_warnings: params.hasWarnings ?? false,
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  });
+
+  // Track as Facebook InitiateCheckout (high intent signal)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'InitiateCheckout', {
+      content_name: params.product,
+      content_category: 'wizard',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track wizard abandon with full attribution
+ */
+export function trackWizardAbandonWithAttribution(params: {
+  product: string;
+  jurisdiction: string;
+  lastStep: string;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}): void {
+  trackEvent('wizard_abandon', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    last_step: params.lastStep,
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  });
+}
+
+/**
+ * Track when a user selects an incompatible product/jurisdiction combination
+ * (e.g., eviction in Northern Ireland)
+ */
+export function trackWizardIncompatibleChoice(params: {
+  attemptedProduct: string;
+  jurisdiction: string;
+  resolvedProduct: string;
+  action: 'auto_switch' | 'redirect' | 'blocked';
+  src?: string;
+  topic?: string;
+}): void {
+  trackEvent('wizard_incompatible_choice', {
+    event_category: 'wizard',
+    attempted_product: params.attemptedProduct,
+    jurisdiction: params.jurisdiction,
+    resolved_product: params.resolvedProduct,
+    action: params.action,
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+  });
+}

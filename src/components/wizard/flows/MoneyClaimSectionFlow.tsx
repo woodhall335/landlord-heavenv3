@@ -29,6 +29,10 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
+// Analytics and attribution
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
 import { TenancySection } from '@/components/wizard/money-claim/TenancySection';
@@ -269,12 +273,36 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     [facts, saveFactsToServer]
   );
 
-  // Navigate to next section
+  // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < SECTIONS.length - 1) {
+      // Track step completion if the current section is complete
+      const current = SECTIONS[currentSectionIndex];
+      if (current && current.isComplete(facts)) {
+        // Only fire if not already tracked for this step
+        const shouldTrack = markStepCompleted(current.id);
+        if (shouldTrack) {
+          const attribution = getWizardAttribution();
+          trackWizardStepCompleteWithAttribution({
+            product: 'money_claim',
+            jurisdiction: jurisdiction,
+            step: current.id,
+            stepIndex: currentSectionIndex,
+            totalSteps: SECTIONS.length,
+            src: attribution.src,
+            topic: attribution.topic,
+            utm_source: attribution.utm_source,
+            utm_medium: attribution.utm_medium,
+            utm_campaign: attribution.utm_campaign,
+            landing_url: attribution.landing_url,
+            first_seen_at: attribution.first_seen_at,
+          });
+        }
+      }
+
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex]);
+  }, [currentSectionIndex, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {

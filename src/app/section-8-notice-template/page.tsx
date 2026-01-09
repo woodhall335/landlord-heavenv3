@@ -4,6 +4,7 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import {
   CheckCircle,
   FileText,
@@ -19,6 +20,21 @@ import {
   Home,
   Ban
 } from 'lucide-react';
+
+// Pre-built wizard links for Section 8 template page
+const wizardLinkCompletePack = buildWizardLink({
+  product: 'complete_pack',
+  jurisdiction: 'england',
+  src: 'template',
+  topic: 'eviction',
+});
+
+const wizardLinkNoticeOnly = buildWizardLink({
+  product: 'notice_only',
+  jurisdiction: 'england',
+  src: 'template',
+  topic: 'eviction',
+});
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template - Free Download',
@@ -168,7 +184,7 @@ export default function Section8NoticeTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/complete-pack"
+                  href={wizardLinkCompletePack}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Complete Pack — £49.99
@@ -365,7 +381,7 @@ export default function Section8NoticeTemplatePage() {
                   together for maximum flexibility.
                 </p>
                 <Link
-                  href="/products/notice-only"
+                  href={wizardLinkNoticeOnly}
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
                   Get both notices for £29.99
@@ -467,7 +483,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/complete-pack"
+                    href={wizardLinkCompletePack}
                     className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                   >
                     Get Complete Pack
@@ -479,7 +495,7 @@ export default function Section8NoticeTemplatePage() {
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
                   Just need the notice? Get{' '}
-                  <Link href="/products/notice-only" className="text-primary font-medium hover:underline">
+                  <Link href={wizardLinkNoticeOnly} className="text-primary font-medium hover:underline">
                     Notice Only for £29.99
                   </Link>
                   {' '}(Section 8 + Section 21 included)
@@ -557,7 +573,7 @@ export default function Section8NoticeTemplatePage() {
                 Understanding Section 8 is essential for all future evictions in England.
               </p>
               <Link
-                href="/products/complete-pack"
+                href={wizardLinkCompletePack}
                 className="inline-flex items-center gap-2 bg-white text-green-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
               >
                 Get Your Section 8 Notice Now
@@ -666,7 +682,7 @@ export default function Section8NoticeTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/complete-pack"
+                  href={wizardLinkCompletePack}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Complete Pack — £49.99

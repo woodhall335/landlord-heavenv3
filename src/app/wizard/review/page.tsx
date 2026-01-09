@@ -17,7 +17,8 @@ import {
   RiFileList3Line,
 } from 'react-icons/ri';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
-import { trackWizardReviewView, markWizardCompleted } from '@/lib/analytics';
+import { trackWizardReviewViewWithAttribution, markWizardCompleted } from '@/lib/analytics';
+import { getWizardAttribution } from '@/lib/wizard/wizardAttribution';
 
 // Scotland utilities
 import {
@@ -94,13 +95,21 @@ function ReviewPageInner() {
   useEffect(() => {
     if (analysis && !hasTrackedReview.current) {
       hasTrackedReview.current = true;
-      trackWizardReviewView({
+      const attribution = getWizardAttribution();
+      trackWizardReviewViewWithAttribution({
         product: product,
         jurisdiction: jurisdiction || 'unknown',
         hasBlockers: hasBlockingIssues,
         hasWarnings: analysis.decision_engine?.blocking_issues?.some(
           (issue: any) => issue.severity === 'warning'
         ) ?? false,
+        src: attribution.src,
+        topic: attribution.topic,
+        utm_source: attribution.utm_source,
+        utm_medium: attribution.utm_medium,
+        utm_campaign: attribution.utm_campaign,
+        landing_url: attribution.landing_url,
+        first_seen_at: attribution.first_seen_at,
       });
     }
   }, [analysis, product, jurisdiction, hasBlockingIssues]);

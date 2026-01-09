@@ -15,6 +15,14 @@ import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFl
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
 import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { trackWizardStartWithAttribution } from '@/lib/analytics';
+import {
+  getWizardAttribution,
+  setWizardAttribution,
+  hasWizardStarted,
+  markWizardStarted,
+  extractAttributionFromUrl,
+} from '@/lib/wizard/wizardAttribution';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -70,6 +78,47 @@ function WizardFlowContent() {
 
     return null;
   })();
+
+  // Track wizard_start on mount with dedupe
+  // This fires when user actually reaches the flow page (not just clicks start)
+  const hasTrackedStartRef = useRef(false);
+
+  useEffect(() => {
+    // Only track once per component mount AND per session
+    if (hasTrackedStartRef.current) return;
+    if (!hasRequiredParams || !product || !jurisdiction) return;
+
+    // Check if wizard_start was already fired this session (prevents duplicate on refresh)
+    if (hasWizardStarted()) {
+      hasTrackedStartRef.current = true;
+      return;
+    }
+
+    // Update attribution with URL params (in case user deep-linked directly to /wizard/flow)
+    const urlAttribution = extractAttributionFromUrl(searchParams);
+    const attribution = setWizardAttribution({
+      ...urlAttribution,
+      product: product,
+      jurisdiction: jurisdiction,
+    });
+
+    // Track wizard_start with full attribution
+    trackWizardStartWithAttribution({
+      product: product,
+      jurisdiction: jurisdiction,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+
+    // Mark as started to prevent duplicates
+    markWizardStarted();
+    hasTrackedStartRef.current = true;
+  }, [hasRequiredParams, product, jurisdiction, searchParams]);
 
   // Initialize case for structured wizard / section flows
   const startStructuredWizard = useCallback(async () => {

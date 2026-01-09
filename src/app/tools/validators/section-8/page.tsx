@@ -11,6 +11,22 @@ import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+
+// Pre-built wizard links for Section 8 validator page
+const wizardLinkNoticeOnly = buildWizardLink({
+  product: 'notice_only',
+  jurisdiction: 'england',
+  src: 'validator',
+  topic: 'eviction',
+});
+
+const wizardLinkCompletePack = buildWizardLink({
+  product: 'complete_pack',
+  jurisdiction: 'england',
+  src: 'validator',
+  topic: 'eviction',
+});
 
 export const metadata: Metadata = {
   title: 'Section 8 Grounds Checker – Is My Notice Valid? | Free Tool',
@@ -709,13 +725,13 @@ export default function Section8ValidatorPage() {
               </ul>
               <div className="flex flex-wrap gap-4 mt-6">
                 <Link
-                  href="/products/notice-only"
+                  href={wizardLinkNoticeOnly}
                   className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   Notice Only Pack - £29.99
                 </Link>
                 <Link
-                  href="/products/complete-eviction-pack"
+                  href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
                   Complete Eviction Pack - £149.99

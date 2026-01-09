@@ -20,9 +20,23 @@ import Image from 'next/image';
 import { Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
 import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
-import { trackWizardEntryView, trackWizardStart } from '@/lib/analytics';
+import {
+  trackWizardEntryViewWithAttribution,
+  trackWizardStartWithAttribution,
+  trackWizardIncompatibleChoice,
+} from '@/lib/analytics';
 import type { WizardJurisdiction, WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
-import { isProductSupportedInJurisdiction, getUnsupportedProductMessage } from '@/lib/wizard/buildWizardLink';
+import {
+  isProductSupportedInJurisdiction,
+  getUnsupportedProductMessage,
+  getFallbackProduct,
+} from '@/lib/wizard/buildWizardLink';
+import {
+  initializeAttribution,
+  setWizardAttribution,
+  getWizardAttribution,
+  resetCompletedSteps,
+} from '@/lib/wizard/wizardAttribution';
 
 // Product-specific hero content (jurisdiction-neutral)
 interface HeroContent {
@@ -279,19 +293,56 @@ function WizardPageInner() {
     );
   }, [productParam, jurisdictionParam]);
 
+  // Handle NI incompatibility with auto-fallback
+  const [autoSwitchedProduct, setAutoSwitchedProduct] = useState<string | null>(null);
+
   useEffect(() => {
     if (incompatibilityMessage) {
       setShowIncompatibilityWarning(true);
-    }
-  }, [incompatibilityMessage]);
 
-  // Track entry view on mount
+      // Auto-switch to tenancy agreement for NI
+      if (jurisdictionParam === 'northern-ireland' && productParam) {
+        const fallbackProduct = getFallbackProduct(productParam as any, 'northern-ireland');
+
+        // Track the incompatible choice
+        trackWizardIncompatibleChoice({
+          attemptedProduct: productParam,
+          jurisdiction: 'northern-ireland',
+          resolvedProduct: fallbackProduct,
+          action: 'auto_switch',
+          src: srcParam || undefined,
+          topic: topicParam || undefined,
+        });
+
+        // Auto-select tenancy agreement
+        const tenancyDoc = documentOptions.find((d) => d.type === 'tenancy_agreement');
+        if (tenancyDoc) {
+          setSelectedDocument(tenancyDoc);
+          setAutoSwitchedProduct(fallbackProduct);
+        }
+      }
+    }
+  }, [incompatibilityMessage, jurisdictionParam, productParam, srcParam, topicParam]);
+
+  // Initialize attribution and track entry view on mount
   useEffect(() => {
-    trackWizardEntryView({
+    // Initialize attribution from URL params
+    const attribution = initializeAttribution();
+
+    // Reset completed steps for fresh wizard session
+    resetCompletedSteps();
+
+    // Track entry view with full attribution
+    trackWizardEntryViewWithAttribution({
       product: productParam || 'not_selected',
-      jurisdiction: jurisdictionParam || undefined,
-      src: srcParam || undefined,
-      topic: topicParam || undefined,
+      jurisdiction: jurisdictionParam || 'not_selected',
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -329,19 +380,35 @@ function WizardPageInner() {
     if (selectedDocument && selectedJurisdiction) {
       const flowType = getWizardFlowType(selectedDocument.type);
 
-      // Track wizard start
-      trackWizardStart({
-        product: productParam || selectedDocument.type,
+      // Get the product to use (may have been auto-switched)
+      const effectiveProduct = autoSwitchedProduct || productParam || selectedDocument.type;
+
+      // Update attribution with selected product and jurisdiction
+      const attribution = setWizardAttribution({
+        product: effectiveProduct,
         jurisdiction: selectedJurisdiction.value,
-        src: srcParam || undefined,
-        topic: topicParam || undefined,
+      });
+
+      // Track wizard start with full attribution
+      // Note: The actual wizard_start will fire on /wizard/flow mount with dedupe
+      // This is click-based tracking for backwards compatibility
+      trackWizardStartWithAttribution({
+        product: effectiveProduct,
+        jurisdiction: selectedJurisdiction.value,
+        src: attribution.src,
+        topic: attribution.topic,
+        utm_source: attribution.utm_source,
+        utm_medium: attribution.utm_medium,
+        utm_campaign: attribution.utm_campaign,
+        landing_url: attribution.landing_url,
+        first_seen_at: attribution.first_seen_at,
       });
 
       // Build URL with tracking params preserved
       const urlParams = new URLSearchParams({
         type: flowType,
         jurisdiction: selectedJurisdiction.value,
-        product: productParam || selectedDocument.type,
+        product: effectiveProduct,
       });
 
       // Preserve tracking params for the flow page
@@ -379,8 +446,13 @@ function WizardPageInner() {
             <div className="flex items-start gap-3">
               <RiAlertLine className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-amber-800 font-medium">Product Not Available</p>
+                <p className="text-amber-800 font-medium">Product Not Available for Northern Ireland</p>
                 <p className="text-amber-700 text-sm mt-1">{incompatibilityMessage}</p>
+                {autoSwitchedProduct && (
+                  <p className="text-amber-700 text-sm mt-2">
+                    <strong>We&apos;ve automatically selected Tenancy Agreements</strong> which is available for Northern Ireland properties.
+                  </p>
+                )}
                 <button
                   onClick={() => setShowIncompatibilityWarning(false)}
                   className="text-amber-600 text-sm underline mt-2 hover:text-amber-800"
