@@ -5,6 +5,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import {
   CheckCircle,
   FileText,
@@ -27,6 +28,40 @@ const wizardLinkAST = buildWizardLink({
   src: 'template',
   topic: 'tenancy',
 });
+
+// Pre-built Ask Heaven compliance links for tenancy agreement page
+const complianceLinks = {
+  deposit: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'deposit',
+    prompt: 'How do I protect a tenancy deposit in a government scheme?',
+    utm_campaign: 'tenancy-agreement-template',
+  }),
+  gasSafety: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'gas_safety',
+    prompt: 'Do I need a gas safety certificate before tenant moves in?',
+    utm_campaign: 'tenancy-agreement-template',
+  }),
+  epc: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'epc',
+    prompt: 'Do I need to give tenant EPC before they sign tenancy agreement?',
+    utm_campaign: 'tenancy-agreement-template',
+  }),
+  rightToRent: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'right_to_rent',
+    prompt: 'What Right to Rent checks do I need to do before tenancy starts?',
+    utm_campaign: 'tenancy-agreement-template',
+  }),
+  smokeAlarms: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'smoke_alarms',
+    prompt: 'What are the smoke and CO alarm requirements for landlords?',
+    utm_campaign: 'tenancy-agreement-template',
+  }),
+};
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template UK - Free Download',
@@ -570,6 +605,61 @@ export default function TenancyAgreementTemplatePage() {
                   <h4 className="font-semibold mb-1">How to Rent</h4>
                   <p className="text-white/80 text-sm">Government guide for tenants</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Ask Heaven Compliance CTA */}
+        <section className="py-8 bg-purple-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-start gap-4 mb-4">
+                <span className="text-4xl">☁️</span>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    Questions about landlord compliance?
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    Our free{' '}
+                    <Link href="/ask-heaven?src=page_cta&topic=tenancy" className="text-primary font-medium hover:underline">
+                      Ask Heaven Q&amp;A tool
+                    </Link>{' '}
+                    can help you understand your legal obligations before the tenancy starts.
+                  </p>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-5 gap-2 ml-14">
+                <Link
+                  href={complianceLinks.deposit}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Deposit rules →
+                </Link>
+                <Link
+                  href={complianceLinks.epc}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  EPC rules →
+                </Link>
+                <Link
+                  href={complianceLinks.gasSafety}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Gas safety →
+                </Link>
+                <Link
+                  href={complianceLinks.smokeAlarms}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Smoke alarms →
+                </Link>
+                <Link
+                  href={complianceLinks.rightToRent}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Right to Rent →
+                </Link>
               </div>
             </div>
           </div>

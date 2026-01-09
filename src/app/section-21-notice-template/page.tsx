@@ -6,6 +6,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import {
   CheckCircle,
   FileText,
@@ -26,6 +27,34 @@ const wizardLink = buildWizardLink({
   src: 'template',
   topic: 'eviction',
 });
+
+// Pre-built Ask Heaven compliance links for Section 21 page
+const complianceLinks = {
+  deposit: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'deposit',
+    prompt: 'Can I serve Section 21 if deposit is not protected?',
+    utm_campaign: 'section-21-notice-template',
+  }),
+  gasSafety: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'gas_safety',
+    prompt: 'Do I need gas safety certificate for Section 21?',
+    utm_campaign: 'section-21-notice-template',
+  }),
+  epc: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'epc',
+    prompt: 'Is EPC required before serving Section 21 notice?',
+    utm_campaign: 'section-21-notice-template',
+  }),
+  howToRent: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'eviction',
+    prompt: 'Do I need to provide How to Rent guide for Section 21?',
+    utm_campaign: 'section-21-notice-template',
+  }),
+};
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice Template - Form 6A Free',
@@ -569,24 +598,51 @@ export default function Section21NoticeTemplatePage() {
           </div>
         </section>
 
-        {/* Ask Heaven callout */}
+        {/* Ask Heaven compliance callout */}
         <section className="py-8 bg-purple-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4">
+              <div className="flex items-start gap-4 mb-4">
                 <span className="text-4xl">☁️</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
-                    Need help choosing the right eviction notice?
+                    Before serving Section 21, check your compliance
                   </p>
-                  <p className="text-gray-600">
-                    Our free{' '}
-                    <Link href="/ask-heaven" className="text-primary font-medium hover:underline">
-                      Ask Heaven landlord Q&amp;A tool
+                  <p className="text-gray-600 text-sm">
+                    A Section 21 notice can be invalid if you haven&apos;t met all compliance requirements.
+                    Ask our free{' '}
+                    <Link href="/ask-heaven?src=page_cta&topic=eviction" className="text-primary font-medium hover:underline">
+                      Ask Heaven Q&amp;A tool
                     </Link>{' '}
-                    explains when to use Section 21 vs Section 8 and covers all UK jurisdictions.
+                    about your specific situation.
                   </p>
                 </div>
+              </div>
+              <div className="grid sm:grid-cols-4 gap-2 ml-14">
+                <Link
+                  href={complianceLinks.deposit}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Deposit rules →
+                </Link>
+                <Link
+                  href={complianceLinks.gasSafety}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  Gas safety →
+                </Link>
+                <Link
+                  href={complianceLinks.epc}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  EPC rules →
+                </Link>
+                <Link
+                  href={complianceLinks.howToRent}
+                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                >
+                  How to Rent →
+                </Link>
               </div>
             </div>
           </div>

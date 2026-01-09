@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import {
   AlertTriangle,
   CheckCircle,
@@ -12,6 +13,34 @@ import {
   MapPin,
   Info,
 } from 'lucide-react';
+
+// Pre-built Ask Heaven compliance links for eviction page
+const complianceLinks = {
+  deposit: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'deposit',
+    prompt: 'What are the deposit protection rules for eviction?',
+    utm_campaign: 'how-to-evict-tenant',
+  }),
+  gasSafety: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'gas_safety',
+    prompt: 'Do I need a gas safety certificate to evict my tenant?',
+    utm_campaign: 'how-to-evict-tenant',
+  }),
+  epc: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'epc',
+    prompt: 'Is an EPC required before serving eviction notice?',
+    utm_campaign: 'how-to-evict-tenant',
+  }),
+  compliance: buildAskHeavenLink({
+    source: 'page_cta',
+    topic: 'eviction',
+    prompt: 'What compliance documents do I need before evicting a tenant?',
+    utm_campaign: 'how-to-evict-tenant',
+  }),
+};
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in the UK - Complete Guide 2026',
@@ -220,21 +249,41 @@ export default function HowToEvictTenantPage() {
               </div>
 
               {/* Ask Heaven callout */}
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-8">
-                <div className="flex items-start gap-3">
+              <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-8">
+                <div className="flex items-start gap-3 mb-4">
                   <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure which eviction route to use?
                     </p>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm text-gray-600">
                       Our free{' '}
-                      <Link href="/ask-heaven" className="text-primary font-medium hover:underline">
+                      <Link href={complianceLinks.compliance} className="text-primary font-medium hover:underline">
                         Ask Heaven landlord Q&amp;A tool
                       </Link>{' '}
                       can help you understand your options for England, Wales, Scotland, or Northern Ireland.
                     </p>
                   </div>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-2 ml-9">
+                  <Link
+                    href={complianceLinks.deposit}
+                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                  >
+                    Deposit rules for eviction →
+                  </Link>
+                  <Link
+                    href={complianceLinks.gasSafety}
+                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                  >
+                    Gas safety requirements →
+                  </Link>
+                  <Link
+                    href={complianceLinks.epc}
+                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                  >
+                    EPC requirements →
+                  </Link>
                 </div>
               </div>
 
