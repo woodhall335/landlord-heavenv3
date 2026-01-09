@@ -1,8 +1,16 @@
 /**
- * Notice Only Preview API
+ * Notice Only Pack Generation API (POST-PAYMENT ENDPOINT)
  *
  * GET /api/notice-only/preview/[caseId]
- * Generates a preview of the complete Notice Only pack (watermarks removed as part of simplified UX)
+ *
+ * ⚠️ SECURITY NOTE: Despite the "preview" name (historical), this is a PAID endpoint.
+ * - Requires `assertPaidEntitlement()` before returning any documents
+ * - Returns complete, final PDFs suitable for court use
+ * - No watermarks (removed as part of simplified UX post-payment)
+ *
+ * This endpoint generates the complete Notice Only pack after payment has been verified.
+ * The "preview" route name is legacy; consider renaming to /api/notice-only/pack/[caseId]
+ * in a future refactor for clarity.
  */
 
 import { NextResponse } from 'next/server';
@@ -66,8 +74,10 @@ export async function GET(
   try {
     const resolvedParams = await params;
     caseId = resolvedParams.caseId;
-    console.log('[NOTICE-PREVIEW-API] Generating preview for case:', caseId);
+    console.log('[NOTICE-PREVIEW-API] Generating pack for case:', caseId);
 
+    // CRITICAL: Payment verification MUST happen before returning any documents.
+    // This prevents free access to final PDFs. Do NOT remove or bypass this check.
     await assertPaidEntitlement({ caseId, product: 'notice_only' });
 
     const user = await tryGetServerUser();
