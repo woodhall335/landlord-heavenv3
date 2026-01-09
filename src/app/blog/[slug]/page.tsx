@@ -12,9 +12,84 @@ import { BlogPost } from '@/lib/blog/types';
 import { Calendar, Clock, Tag, ChevronLeft, Share2 } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
+}
+
+// Map blog post slugs/tags to Ask Heaven topics for compliance posts
+const COMPLIANCE_TOPIC_MAP: Record<string, { topic: AskHeavenTopic; prompt: string; title: string }> = {
+  // Deposit protection
+  'uk-deposit-protection-guide': {
+    topic: 'deposit',
+    prompt: 'Do I need to protect a tenancy deposit and when?',
+    title: 'Question about deposit protection?',
+  },
+  'england-deposit-protection': {
+    topic: 'deposit',
+    prompt: 'What are the deposit protection rules in England?',
+    title: 'Question about deposit protection?',
+  },
+  'scotland-deposit-protection': {
+    topic: 'deposit',
+    prompt: 'How does deposit protection work in Scotland?',
+    title: 'Question about deposit protection?',
+  },
+  'wales-deposit-protection': {
+    topic: 'deposit',
+    prompt: 'What are the deposit rules under the Renting Homes Act?',
+    title: 'Question about deposit protection?',
+  },
+  'northern-ireland-deposit-protection': {
+    topic: 'deposit',
+    prompt: 'How does tenancy deposit protection work in Northern Ireland?',
+    title: 'Question about deposit protection?',
+  },
+  // Gas safety
+  'uk-gas-safety-landlords': {
+    topic: 'gas_safety',
+    prompt: 'When must a landlord provide a gas safety certificate?',
+    title: 'Question about gas safety?',
+  },
+  // Fire safety (smoke & CO alarms)
+  'uk-fire-safety-landlords': {
+    topic: 'smoke_alarms',
+    prompt: 'What are the smoke alarm rules for landlords?',
+    title: 'Question about fire safety?',
+  },
+  'uk-smoke-co-alarm-regulations-guide': {
+    topic: 'smoke_alarms',
+    prompt: 'What changed in the Smoke and Carbon Monoxide Alarm Regulations 2022?',
+    title: 'Question about smoke or CO alarms?',
+  },
+  // Right to rent
+  'uk-right-to-rent-checks': {
+    topic: 'right_to_rent',
+    prompt: 'Do I need to do right to rent checks and how?',
+    title: 'Question about right to rent?',
+  },
+  'uk-right-to-rent-guide': {
+    topic: 'right_to_rent',
+    prompt: 'What documents are acceptable for right to rent checks?',
+    title: 'Question about right to rent?',
+  },
+  // EPC
+  'uk-epc-guide': {
+    topic: 'epc',
+    prompt: 'What EPC rating is required to let a property?',
+    title: 'Question about EPC rules?',
+  },
+  // EICR / Electrical safety
+  'uk-electrical-safety-landlords': {
+    topic: 'eicr',
+    prompt: 'Do landlords need an EICR and how often?',
+    title: 'Question about electrical safety?',
+  },
+};
+
+function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; prompt: string; title: string } | null {
+  return COMPLIANCE_TOPIC_MAP[slug] || null;
 }
 
 const MAX_RELATED_GUIDES = 12;
@@ -147,6 +222,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const relatedGuides = getRelatedGuides(post);
+  const complianceTopic = getComplianceTopicForPost(slug);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -350,7 +426,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <AskHeavenWidget
                   variant="card"
                   source="blog"
-                  topic="general"
+                  topic={complianceTopic?.topic ?? 'general'}
+                  prompt={complianceTopic?.prompt}
+                  title={complianceTopic?.title ?? 'Have a landlord question?'}
+                  utm_campaign={slug}
                 />
               </div>
 
@@ -394,7 +473,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <AskHeavenWidget
                   variant="compact"
                   source="blog"
-                  topic="general"
+                  topic={complianceTopic?.topic ?? 'general'}
+                  prompt={complianceTopic?.prompt}
+                  title={complianceTopic?.title ?? 'Have a landlord question?'}
+                  utm_campaign={slug}
                 />
               </div>
             </aside>

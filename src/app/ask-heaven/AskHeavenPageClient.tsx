@@ -25,6 +25,7 @@ import {
   markEmailCaptured,
   hasEmailBeenCaptured,
   getQuestionCount,
+  updateCurrentTopic,
 } from '@/lib/ask-heaven/askHeavenAttribution';
 import {
   trackAskHeavenView,
@@ -245,7 +246,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
     const primaryTopic = getPrimaryTopic(topics);
     if (primaryTopic) {
       setDetectedTopic(primaryTopic);
-      setAskHeavenAttribution({ topic: primaryTopic });
+      updateCurrentTopic(primaryTopic);
     }
 
     const userMsg: ChatMessage = {
@@ -326,7 +327,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
       const responsePrimaryTopic = getPrimaryTopic(responseTopics);
       if (responsePrimaryTopic && !primaryTopic) {
         setDetectedTopic(responsePrimaryTopic);
-        setAskHeavenAttribution({ topic: responsePrimaryTopic });
+        updateCurrentTopic(responsePrimaryTopic);
       }
 
       // Track answer received
@@ -499,7 +500,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
     const primaryTopic = getPrimaryTopic(topics);
     if (primaryTopic) {
       setDetectedTopic(primaryTopic);
-      setAskHeavenAttribution({ topic: primaryTopic });
+      updateCurrentTopic(primaryTopic);
     }
 
     const userMsg: ChatMessage = {
@@ -584,7 +585,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
       const responsePrimaryTopic = getPrimaryTopic(responseTopics);
       if (responsePrimaryTopic && !primaryTopic) {
         setDetectedTopic(responsePrimaryTopic);
-        setAskHeavenAttribution({ topic: responsePrimaryTopic });
+        updateCurrentTopic(responsePrimaryTopic);
       }
 
       // Track answer received

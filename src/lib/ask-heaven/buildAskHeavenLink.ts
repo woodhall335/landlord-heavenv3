@@ -9,7 +9,9 @@ export type AskHeavenSource =
   | 'nav'
   | 'footer'
   | 'popup'
-  | 'widget';
+  | 'widget'
+  | 'seo'
+  | 'page_cta';
 
 export type AskHeavenTopic =
   | 'eviction'
@@ -24,6 +26,8 @@ export type AskHeavenTopic =
   | 'epc'
   | 'gas_safety'
   | 'eicr'
+  | 'smoke_alarms'
+  | 'right_to_rent'
   | 'general';
 
 export interface AskHeavenLinkParams {

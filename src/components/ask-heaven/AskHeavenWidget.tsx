@@ -18,6 +18,7 @@ export interface AskHeavenWidgetProps {
   source?: AskHeavenSource;
   topic?: AskHeavenTopic;
   product?: string;
+  prompt?: string;
   title?: string;
   description?: string;
   ctaText?: string;
@@ -54,6 +55,7 @@ export function AskHeavenWidget({
   source = 'widget',
   topic,
   product,
+  prompt,
   title = DEFAULT_CONTENT.title,
   description = DEFAULT_CONTENT.description,
   ctaText = DEFAULT_CONTENT.ctaText,
@@ -67,6 +69,7 @@ export function AskHeavenWidget({
     source,
     topic,
     product,
+    prompt,
     jurisdiction,
     utm_source,
     utm_medium,
