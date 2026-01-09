@@ -27,19 +27,19 @@ export function Footer() {
             <div className="flex flex-wrap gap-3 text-xs">
               <div className="flex items-center gap-1">
                 <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}>ENG</span>
+                <span style={{ color: '#bdbdbd' }}></span>
               </div>
               <div className="flex items-center gap-1">
                 <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}>WAL</span>
+                <span style={{ color: '#bdbdbd' }}></span>
               </div>
               <div className="flex items-center gap-1">
                 <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}>SCO</span>
+                <span style={{ color: '#bdbdbd' }}></span>
               </div>
               <div className="flex items-center gap-1">
                 <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}>NI</span>
+                <span style={{ color: '#bdbdbd' }}></span>
               </div>
             </div>
           </div>
