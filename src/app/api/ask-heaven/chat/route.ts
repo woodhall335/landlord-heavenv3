@@ -189,7 +189,7 @@ Field requirements:
     });
 
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
-    const suggestedProduct = result.json?.suggested_product ?? null;
+    let suggestedProduct = result.json?.suggested_product ?? null;
     const followUpQuestions = result.json?.follow_up_questions ?? [];
     const sources = result.json?.sources ?? [];
 
@@ -199,6 +199,20 @@ Field requirements:
         rawJson: JSON.stringify(result.json),
         content: result.content,
       });
+    }
+
+    // Jurisdiction-aware product filtering for Northern Ireland
+    // NI does not support eviction packs or money claim packs
+    if (jurisdiction === 'northern-ireland' && suggestedProduct) {
+      const niUnsupportedProducts = ['notice_only', 'complete_pack', 'money_claim'];
+      if (niUnsupportedProducts.includes(suggestedProduct)) {
+        // For NI, only recommend tenancy agreements - or null if not relevant
+        suggestedProduct = suggestedProduct === 'money_claim' ? null : 'tenancy_agreement';
+        logger.info('Filtered unsupported product for NI', {
+          originalProduct: result.json?.suggested_product,
+          filteredProduct: suggestedProduct,
+        });
+      }
     }
 
     return NextResponse.json({

@@ -5,23 +5,45 @@
  * Maps topics to relevant product CTAs based on jurisdiction.
  */
 
-export type Topic = 'eviction' | 'arrears' | 'tenancy' | 'deposit';
+import { buildWizardLink, type WizardJurisdiction, type WizardProduct } from '@/lib/wizard/buildWizardLink';
+
+export type Topic =
+  | 'eviction'
+  | 'arrears'
+  | 'tenancy'
+  | 'deposit'
+  | 'compliance'
+  | 'epc'
+  | 'gas_safety'
+  | 'eicr'
+  | 'smoke_alarm'
+  | 'carbon_monoxide'
+  | 'right_to_rent';
 
 export interface SuggestedCTA {
   label: string;
   href: string;
   price?: number;
   topic?: Topic;
+  type: 'wizard' | 'validator' | 'template' | 'guide';
 }
 
 /**
  * Topic patterns - lightweight regex-based detection.
+ * Extended to include compliance queries.
  */
 const TOPIC_PATTERNS: Record<Topic, RegExp> = {
-  eviction: /evict|possession|section 21|s21|section 8|s8|notice to leave|remove tenant|end.+tenancy|terminate.+tenant/i,
-  arrears: /arrears|rent owed|unpaid|debt|money claim|recover money|lba|letter before action|outstanding rent/i,
-  tenancy: /tenancy agreement|ast|prt|occupation contract|new tenant|lease|rental agreement|assured shorthold/i,
-  deposit: /deposit|protection|tds|dps|mydeposits|prescribed information|deposit scheme/i,
+  eviction: /evict|possession|section 21|s21|section 8|s8|notice to leave|remove tenant|end.+tenancy|terminate.+tenant|section 173|s173/i,
+  arrears: /arrears|rent owed|unpaid|debt|money claim|recover money|lba|letter before action|outstanding rent|didn't pay|hasn't paid|not paying rent/i,
+  tenancy: /tenancy agreement|ast|prt|occupation contract|new tenant|lease|rental agreement|assured shorthold|draft.+agreement|create.+tenancy/i,
+  deposit: /deposit|protection|tds|dps|mydeposits|prescribed information|deposit scheme|tenant.+deposit|security deposit|tenancy deposit/i,
+  compliance: /complian|legal requirements|landlord obligations|what do i need|checklist|requirements/i,
+  epc: /epc|energy performance|energy certificate|energy rating|energy efficiency/i,
+  gas_safety: /gas safe|gas certificate|gas safety|cp12|gas check|gas inspection|gas engineer/i,
+  eicr: /eicr|electrical safety|electrical certificate|electrical inspection|electrical test|electrical check/i,
+  smoke_alarm: /smoke alarm|smoke detector|fire alarm|working alarm/i,
+  carbon_monoxide: /carbon monoxide|co alarm|co detector|co2 alarm/i,
+  right_to_rent: /right to rent|immigration check|right to reside|passport check|visa check/i,
 };
 
 /**
@@ -41,6 +63,31 @@ export function detectTopics(text: string): Topic[] {
 }
 
 /**
+ * Map topic to WizardTopic for buildWizardLink
+ */
+export function mapTopicToWizardTopic(topic: Topic): 'eviction' | 'arrears' | 'tenancy' | 'deposit' | 'compliance' | 'general' {
+  switch (topic) {
+    case 'eviction':
+      return 'eviction';
+    case 'arrears':
+      return 'arrears';
+    case 'tenancy':
+      return 'tenancy';
+    case 'deposit':
+    case 'epc':
+    case 'gas_safety':
+    case 'eicr':
+    case 'smoke_alarm':
+    case 'carbon_monoxide':
+    case 'right_to_rent':
+    case 'compliance':
+      return 'compliance';
+    default:
+      return 'general';
+  }
+}
+
+/**
  * CTA definitions by topic and jurisdiction.
  */
 interface TopicCTAConfig {
@@ -53,26 +100,70 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'eviction' },
-      { label: 'Complete Pack', href: '/products/complete-pack', price: 149.99, topic: 'eviction' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Complete Pack', href: '/products/complete-pack', price: 149.99, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Money Claim Pack', href: '/products/money-claim', price: 179.99, topic: 'arrears' },
-      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'arrears' },
+      { label: 'Money Claim Pack', href: '/products/money-claim', price: 179.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
   {
     topics: ['tenancy', 'deposit'],
     ctas: [
-      { label: 'Premium AST', href: '/products/ast?tier=premium', price: 14.99, topic: 'tenancy' },
-      { label: 'Standard AST', href: '/products/ast?tier=standard', price: 9.99, topic: 'tenancy' },
+      { label: 'Premium AST', href: '/products/ast?tier=premium', price: 14.99, topic: 'tenancy', type: 'wizard' },
+      { label: 'Standard AST', href: '/products/ast?tier=standard', price: 9.99, topic: 'tenancy', type: 'wizard' },
     ],
     // Tenancy agreements are allowed in NI
+  },
+  // Compliance topics - push to validators first
+  {
+    topics: ['deposit'],
+    ctas: [
+      { label: 'Deposit Checker', href: '/tools/validators/deposit', topic: 'deposit', type: 'validator' },
+    ],
+  },
+  {
+    topics: ['epc'],
+    ctas: [
+      { label: 'EPC Checker', href: '/tools/validators/epc', topic: 'epc', type: 'validator' },
+    ],
+  },
+  {
+    topics: ['gas_safety'],
+    ctas: [
+      { label: 'Gas Safety Checker', href: '/tools/validators/gas-safety', topic: 'gas_safety', type: 'validator' },
+    ],
+  },
+  {
+    topics: ['eicr'],
+    ctas: [
+      { label: 'EICR Checker', href: '/tools/validators/eicr', topic: 'eicr', type: 'validator' },
+    ],
+  },
+  {
+    topics: ['smoke_alarm', 'carbon_monoxide'],
+    ctas: [
+      { label: 'Smoke & CO Alarms Guide', href: '/guides/smoke-co-alarms', topic: 'smoke_alarm', type: 'guide' },
+    ],
+  },
+  {
+    topics: ['right_to_rent'],
+    ctas: [
+      { label: 'Right to Rent Guide', href: '/guides/right-to-rent', topic: 'right_to_rent', type: 'guide' },
+    ],
+    excludeJurisdictions: ['scotland'], // Right to Rent doesn't apply in Scotland
+  },
+  {
+    topics: ['compliance'],
+    ctas: [
+      { label: 'Compliance Checklist', href: '/tools/compliance-checklist', topic: 'compliance', type: 'validator' },
+    ],
   },
 ];
 
@@ -122,4 +213,98 @@ export function hasActionableTopics(topics: Topic[]): boolean {
  */
 export function getPrimaryTopic(topics: Topic[]): Topic | null {
   return topics[0] ?? null;
+}
+
+/**
+ * Determine if the detected topic is a compliance-related topic.
+ */
+export function isComplianceTopic(topic: Topic): boolean {
+  const complianceTopics: Topic[] = ['deposit', 'epc', 'gas_safety', 'eicr', 'smoke_alarm', 'carbon_monoxide', 'right_to_rent', 'compliance'];
+  return complianceTopics.includes(topic);
+}
+
+/**
+ * Get the recommended product for a topic and jurisdiction.
+ * Returns null if the product is not supported in the jurisdiction.
+ */
+export function getRecommendedProduct(
+  topic: Topic,
+  jurisdiction?: WizardJurisdiction
+): { product: WizardProduct; label: string; description: string } | null {
+  // Northern Ireland constraints
+  if (jurisdiction === 'northern-ireland') {
+    // NI only supports tenancy agreements
+    if (topic === 'tenancy' || topic === 'deposit') {
+      return {
+        product: 'tenancy_agreement',
+        label: 'Tenancy Agreement',
+        description: 'Create a compliant tenancy agreement for Northern Ireland',
+      };
+    }
+    // Don't recommend eviction or money claim products for NI
+    if (topic === 'eviction' || topic === 'arrears') {
+      return null;
+    }
+  }
+
+  // Standard product recommendations
+  switch (topic) {
+    case 'eviction':
+      return {
+        product: 'notice_only',
+        label: jurisdiction === 'wales' ? 'Section 173 Notice' : jurisdiction === 'scotland' ? 'Notice to Leave' : 'Eviction Notice',
+        description: jurisdiction === 'wales'
+          ? 'Generate a Renting Homes Act compliant notice'
+          : jurisdiction === 'scotland'
+          ? 'Create a Notice to Leave for PRT tenancies'
+          : 'Create a compliant Section 21 or Section 8 notice',
+      };
+    case 'arrears':
+      return {
+        product: 'money_claim',
+        label: 'Money Claim Pack',
+        description: jurisdiction === 'scotland'
+          ? 'Recover rent arrears through Simple Procedure'
+          : 'Recover rent arrears through the courts',
+      };
+    case 'tenancy':
+      return {
+        product: 'ast_standard',
+        label: jurisdiction === 'scotland' ? 'PRT Agreement' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Tenancy Agreement',
+        description: jurisdiction === 'scotland'
+          ? 'Create a compliant Private Residential Tenancy'
+          : jurisdiction === 'wales'
+          ? 'Generate a Renting Homes Act occupation contract'
+          : 'Create an Assured Shorthold Tenancy agreement',
+      };
+    default:
+      return null;
+  }
+}
+
+/**
+ * Build a wizard link for a detected topic with full attribution.
+ */
+export function buildWizardLinkForTopic(
+  topic: Topic,
+  jurisdiction?: WizardJurisdiction,
+  attribution?: {
+    src?: string;
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+  }
+): string | null {
+  const recommendation = getRecommendedProduct(topic, jurisdiction);
+  if (!recommendation) return null;
+
+  return buildWizardLink({
+    product: recommendation.product,
+    jurisdiction,
+    src: (attribution?.src as any) || 'ask_heaven',
+    topic: mapTopicToWizardTopic(topic),
+    utm_source: attribution?.utm_source,
+    utm_medium: attribution?.utm_medium,
+    utm_campaign: attribution?.utm_campaign,
+  });
 }

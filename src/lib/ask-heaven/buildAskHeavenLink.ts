@@ -32,6 +32,8 @@ export interface AskHeavenLinkParams {
   product?: string;
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   prompt?: string;
+  utm_source?: string;
+  utm_medium?: string;
   utm_campaign?: string;
   utm_content?: string;
 }
@@ -68,6 +70,14 @@ export function buildAskHeavenLink(params: AskHeavenLinkParams = {}): string {
 
   if (params.prompt) {
     searchParams.set('q', params.prompt);
+  }
+
+  if (params.utm_source) {
+    searchParams.set('utm_source', params.utm_source);
+  }
+
+  if (params.utm_medium) {
+    searchParams.set('utm_medium', params.utm_medium);
   }
 
   if (params.utm_campaign) {
