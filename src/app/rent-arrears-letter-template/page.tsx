@@ -658,6 +658,29 @@ export default function RentArrearsLetterTemplatePage() {
         </section>
 
         {/* Related Resources */}
+        {/* Ask Heaven callout */}
+        <section className="py-8 bg-purple-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-4">
+                <span className="text-4xl">☁️</span>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    Questions about dealing with rent arrears?
+                  </p>
+                  <p className="text-gray-600">
+                    Our free{' '}
+                    <Link href="/ask-heaven" className="text-primary font-medium hover:underline">
+                      Ask Heaven landlord Q&amp;A tool
+                    </Link>{' '}
+                    can help you understand your options — from payment plans to money claims and eviction.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">

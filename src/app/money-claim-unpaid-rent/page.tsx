@@ -219,6 +219,25 @@ export default function MoneyClaimUnpaidRentPage() {
                 </p>
               </div>
 
+              {/* Ask Heaven callout */}
+              <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">☁️</span>
+                  <div>
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Have questions about rent arrears recovery?
+                    </p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Use our free{' '}
+                      <Link href="/ask-heaven" className="text-primary font-medium hover:underline">
+                        Ask Heaven landlord Q&amp;A tool
+                      </Link>{' '}
+                      to get instant answers about MCOL, Simple Procedure, or your legal options.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">

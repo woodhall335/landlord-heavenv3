@@ -243,3 +243,44 @@ export const moneyClaimRelatedLinks = [
   toolLinks.rentDemandLetter,
   landingPageLinks.rentArrearsTemplate,
 ];
+
+// Ask Heaven - Free Q&A tool
+export const askHeavenLink = {
+  href: '/ask-heaven',
+  title: 'Ask Heaven',
+  description: 'Free UK landlord Q&A tool',
+  icon: 'legal' as const,
+  type: 'tool' as const,
+};
+
+// Ask Heaven related links group
+export const askHeavenRelatedLinks = [
+  askHeavenLink,
+  guideLinks.howToEvictTenant,
+  guideLinks.moneyClaimGuide,
+  guideLinks.walesEviction,
+  guideLinks.scotlandEviction,
+  toolLinks.rentArrearsCalculator,
+  toolLinks.section21Generator,
+  toolLinks.section8Generator,
+];
+
+// Updated eviction links to include Ask Heaven
+export const evictionWithAdviceLinks = [
+  askHeavenLink,
+  guideLinks.howToEvictTenant,
+  productLinks.noticeOnly,
+  productLinks.completePack,
+  guideLinks.walesEviction,
+  guideLinks.scotlandEviction,
+];
+
+// Updated rent arrears links to include Ask Heaven
+export const rentArrearsWithAdviceLinks = [
+  askHeavenLink,
+  guideLinks.moneyClaimGuide,
+  productLinks.moneyClaim,
+  toolLinks.rentDemandLetter,
+  toolLinks.rentArrearsCalculator,
+  landingPageLinks.rentArrearsTemplate,
+];
