@@ -63,13 +63,13 @@ export default function ASTPage() {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=ast_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="hero-btn-primary"
               >
                 Standard - £9.99 →
               </Link>
               <Link
-                href="/wizard?product=ast_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="hero-btn-secondary"
               >
                 Premium - £14.99 →
@@ -140,7 +140,7 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/wizard?product=ast_standard"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                     className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
                   >
                     Get Standard - £9.99
@@ -230,7 +230,7 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/wizard?product=ast_premium"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                     className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors"
                   >
                     Get Premium - £14.99
@@ -601,13 +601,13 @@ export default function ASTPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=ast_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="hero-btn-primary"
               >
                 Standard - £9.99 →
               </Link>
               <Link
-                href="/wizard?product=ast_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="hero-btn-secondary"
               >
                 Premium - £14.99 →

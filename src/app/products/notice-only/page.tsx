@@ -98,7 +98,7 @@ export default function NoticeOnlyPage() {
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
             </div>
             <Link
-              href="/wizard?product=notice_only"
+              href="/wizard?product=notice_only&src=product_page&topic=eviction"
               className="hero-btn-primary"
             >
               Get Your Notice Now →
@@ -424,7 +424,7 @@ export default function NoticeOnlyPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/wizard?product=notice_only"
+                href="/wizard?product=notice_only&src=product_page&topic=eviction"
                 className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 Start Your Notice Now →
@@ -636,7 +636,7 @@ export default function NoticeOnlyPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=notice_only"
+                href="/wizard?product=notice_only&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Start Your Notice - £29.99 →

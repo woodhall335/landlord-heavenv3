@@ -376,3 +376,190 @@ export function trackValidatorReportRequested(
     });
   }
 }
+
+// =============================================================================
+// WIZARD FUNNEL TRACKING
+// =============================================================================
+
+/**
+ * Wizard tracking event parameters
+ */
+export interface WizardTrackingParams {
+  product: string;
+  jurisdiction?: string;
+  src?: string;
+  topic?: string;
+}
+
+/**
+ * Track when a user views the wizard entry/selection page
+ */
+export function trackWizardEntryView(params: WizardTrackingParams): void {
+  trackEvent('wizard_entry_view', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+  });
+
+  // Track as Facebook ViewContent
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: `wizard_entry_${params.product}`,
+      content_category: 'wizard',
+      content_type: 'product_selection',
+    });
+  }
+}
+
+/**
+ * Track when a user actually starts the wizard flow (after selecting product + jurisdiction)
+ */
+export function trackWizardStart(params: WizardTrackingParams): void {
+  trackEvent('wizard_start', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction || 'unknown',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+  });
+
+  // Track as Facebook AddToCart (intent signal)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: params.product,
+      content_category: 'wizard',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when a user completes a wizard step/section
+ */
+export function trackWizardStepComplete(params: {
+  product: string;
+  jurisdiction: string;
+  step: string;
+  stepIndex?: number;
+  totalSteps?: number;
+}): void {
+  trackEvent('wizard_step_complete', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    step_name: params.step,
+    step_index: params.stepIndex ?? 0,
+    total_steps: params.totalSteps ?? 0,
+  });
+}
+
+/**
+ * Track when a user reaches the review page
+ */
+export function trackWizardReviewView(params: {
+  product: string;
+  jurisdiction: string;
+  hasBlockers?: boolean;
+  hasWarnings?: boolean;
+}): void {
+  trackEvent('wizard_review_view', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    has_blockers: params.hasBlockers ?? false,
+    has_warnings: params.hasWarnings ?? false,
+  });
+
+  // Track as Facebook InitiateCheckout (high intent signal)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'InitiateCheckout', {
+      content_name: params.product,
+      content_category: 'wizard',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when a user abandons the wizard (best effort using beforeunload)
+ * Call this to set up the abandon tracking - it will fire on page unload
+ */
+export function trackWizardAbandon(params: {
+  product: string;
+  jurisdiction: string;
+  lastStep: string;
+}): void {
+  trackEvent('wizard_abandon', {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    last_step: params.lastStep,
+  });
+}
+
+/**
+ * Set up wizard abandon tracking using visibilitychange and beforeunload
+ * Returns a cleanup function to remove the listeners
+ */
+export function setupWizardAbandonTracking(params: {
+  product: string;
+  jurisdiction: string;
+  getCurrentStep: () => string;
+}): () => void {
+  if (typeof window === 'undefined') {
+    return () => {};
+  }
+
+  let hasTrackedAbandon = false;
+
+  const handleAbandon = () => {
+    if (hasTrackedAbandon) return;
+    hasTrackedAbandon = true;
+
+    trackWizardAbandon({
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      lastStep: params.getCurrentStep(),
+    });
+  };
+
+  // Track on visibility change (tab switch/close)
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+      handleAbandon();
+    }
+  };
+
+  // Track on page unload
+  const handleBeforeUnload = () => {
+    handleAbandon();
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  // Return cleanup function
+  return () => {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}
+
+/**
+ * Mark wizard as completed (call this to prevent abandon tracking from firing)
+ */
+let wizardCompleted = false;
+
+export function markWizardCompleted(): void {
+  wizardCompleted = true;
+}
+
+export function isWizardCompleted(): boolean {
+  return wizardCompleted;
+}
+
+export function resetWizardCompletedState(): void {
+  wizardCompleted = false;
+}

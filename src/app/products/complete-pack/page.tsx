@@ -126,7 +126,7 @@ export default function CompleteEvictionPackPage() {
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£149.99</span>
             </div>
             <Link
-              href="/wizard?product=complete_pack"
+              href="/wizard?product=complete_pack&src=product_page&topic=eviction"
               className="hero-btn-primary"
             >
               Start Your Eviction Pack →
@@ -516,7 +516,7 @@ export default function CompleteEvictionPackPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/wizard?product=complete_pack"
+                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Start Your Complete Pack →
@@ -822,7 +822,7 @@ export default function CompleteEvictionPackPage() {
             <div className="mt-12 text-center">
               <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
-                href="/wizard?product=complete_pack"
+                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Get Complete Eviction Pack - £149.99 →
@@ -1000,7 +1000,7 @@ export default function CompleteEvictionPackPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=complete_pack"
+                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Get Complete Pack - £149.99 →
