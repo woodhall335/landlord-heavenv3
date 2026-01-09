@@ -1,11 +1,16 @@
 /**
  * Scotland Money Claim Pack Generator
  *
- * Builds a complete Simple Procedure money-claim bundle including:
- * - Official Simple Procedure claim form (PDF fill)
- * - Particulars of claim and arrears schedule
- * - Interest calculations and evidence index
- * - Cover sheet describing what is inside the pack
+ * Builds a streamlined Simple Procedure money-claim bundle including:
+ * - Official Simple Procedure claim form (Form 3A) (PDF fill)
+ * - Statement of claim (particulars)
+ * - Pre-action letter (Rule 3.1)
+ * - Filing guide + enforcement guide
+ * - Optional arrears schedule + interest calculation (when applicable)
+ *
+ * NOTE:
+ * - Evidence Index, Hearing Prep Sheet, and Pack Cover were removed as part of the Jan 2026 pack restructure
+ *   to align with the streamlined England/Wales Money Claim Pack.
  */
 
 import { generateDocument } from './generator';
@@ -223,7 +228,9 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     steps.push(`Included reply/financial forms: ${claim.pap_documents_sent.join(', ')}.`);
   }
   if (claim.second_demand_date) {
-    const methods = (claim.lba_second_method || []).length ? ` via ${(claim.lba_second_method || []).join(', ')}` : '';
+    const methods = (claim.lba_second_method || []).length
+      ? ` via ${(claim.lba_second_method || []).join(', ')}`
+      : '';
     steps.push(`Follow-up demand on ${claim.second_demand_date}${methods}.`);
   }
   if (claim.lba_second_response_deadline) {
@@ -237,11 +244,10 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     );
   }
   if (claim.pap_documents_served) {
-  const methodsArray = claim.pap_service_method ?? [];
-  const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
-  steps.push(`Pre-action letter served (${methods}).`);
-}
-
+    const methodsArray = claim.pap_service_method ?? [];
+    const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
+    steps.push(`Pre-action letter served (${methods}).`);
+  }
   if (claim.pap_service_proof) {
     steps.push(`Proof of service: ${claim.pap_service_proof}.`);
   }
@@ -307,13 +313,13 @@ async function generateScotlandMoneyClaimPack(
   const generationDate = new Date().toISOString();
   const documents: ScotlandMoneyClaimPackDocument[] = [];
 
-  // Generate AI-drafted content for premium pack (LBA, PoC, Evidence Index)
+  // Generate AI-drafted content for templates (embedded into docs via templates)
   let askHeavenDrafts;
   if (caseFacts) {
     try {
       askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
         includePostIssue: true,
-        includeRiskReport: false, // Can be enabled for premium users
+        includeRiskReport: false,
         jurisdiction: 'scotland',
       });
     } catch (error) {
@@ -331,7 +337,7 @@ async function generateScotlandMoneyClaimPack(
     other_charges: claim.other_charges || [],
     sheriffdom: claim.sheriffdom || 'Edinburgh Sheriff Court',
     document_id: claim.case_id || `SC-MONEY-${Date.now()}`,
-    days_accrued: 90, // Default for template
+    days_accrued: 90,
     pre_action_summary: buildScotlandPreActionSummary(claim),
     enforcement_preferences: claim.enforcement_preferences || [],
     enforcement_notes: claim.enforcement_notes,
@@ -340,14 +346,41 @@ async function generateScotlandMoneyClaimPack(
     help_with_fees_needed: claim.help_with_fees_needed,
     lodging_method: claim.lodging_method,
     court_jurisdiction_confirmed: claim.court_jurisdiction_confirmed,
-    // Add AI-drafted content if available
     ask_heaven: askHeavenDrafts,
   };
 
-  // PACK COVER - Removed as of Jan 2026 pack restructure
-  // Pack summary document no longer included in the money claim pack (aligned with England/Wales)
+  // Pre-action documents (Rule 3.1) - kept intentionally
+  const responseDeadline = new Date();
+  responseDeadline.setDate(responseDeadline.getDate() + 14);
+  const extendedData = {
+    ...baseTemplateData,
+    response_deadline: responseDeadline.toISOString().split('T')[0],
+    demand_letter_date:
+      claim.demand_letter_date ||
+      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    second_demand_date:
+      claim.second_demand_date ||
+      new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+  };
 
-  // 1. Particulars of claim
+  // 1) Pre-Action Letter
+  const preActionLetter = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/pre_action_letter.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Pre-Action Letter',
+    description: 'Formal demand for payment before raising Simple Procedure proceedings.',
+    category: 'guidance',
+    html: preActionLetter.html,
+    pdf: preActionLetter.pdf,
+    file_name: '01-pre-action-letter.pdf',
+  });
+
+  // 2) Statement of claim (Particulars)
   const particulars = await generateDocument({
     templatePath: 'uk/scotland/templates/money_claims/simple_procedure_particulars.hbs',
     data: baseTemplateData,
@@ -361,10 +394,10 @@ async function generateScotlandMoneyClaimPack(
     category: 'particulars',
     html: particulars.html,
     pdf: particulars.pdf,
-    file_name: 'simple-procedure-particulars.pdf',
+    file_name: '02-simple-procedure-particulars.pdf',
   });
 
-  // 3. Schedule of arrears
+  // 3) Schedule of arrears (optional, only if a breakdown exists)
   if (claim.arrears_schedule && claim.arrears_schedule.length > 0) {
     const arrears = await generateDocument({
       templatePath: 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs',
@@ -379,11 +412,11 @@ async function generateScotlandMoneyClaimPack(
       category: 'schedule',
       html: arrears.html,
       pdf: arrears.pdf,
-      file_name: 'schedule-of-arrears.pdf',
+      file_name: '03-schedule-of-arrears.pdf',
     });
   }
 
-  // 4. Interest calculation
+  // 4) Interest calculation (optional)
   if (totals.interest_to_date > 0) {
     const interest = await generateDocument({
       templatePath: 'uk/scotland/templates/money_claims/interest_calculation.hbs',
@@ -398,64 +431,23 @@ async function generateScotlandMoneyClaimPack(
       category: 'guidance',
       html: interest.html,
       pdf: interest.pdf,
-      file_name: 'interest-calculation.pdf',
+      file_name: '04-interest-calculation.pdf',
     });
   }
 
-  // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
-  // Evidence index document no longer included in the money claim pack (aligned with England/Wales)
-
-  // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
-  // Hearing prep sheet document no longer included in the money claim pack (aligned with England/Wales)
-
-  // PRE-ACTION DOCUMENTS (Required by Simple Procedure Rule 3.1)
-  const responseDeadline = new Date();
-  responseDeadline.setDate(responseDeadline.getDate() + 14);
-  const extendedData = {
-    ...baseTemplateData,
-    response_deadline: responseDeadline.toISOString().split('T')[0],
-    demand_letter_date:
-      claim['demand_letter_date'] ||
-      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    second_demand_date:
-      claim['second_demand_date'] ||
-      new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  };
-
-  const preActionLetter = await generateDocument({
-    templatePath: 'uk/scotland/templates/money_claims/pre_action_letter.hbs',
-    data: extendedData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // 5) Official Simple Procedure claim form (Form 3A)
+  await assertOfficialFormExists('scotland/form-3a.pdf');
+  const simpleProcedurePdf = await fillSimpleProcedureClaim(buildSimpleProcedurePayload(claim, totals));
 
   documents.push({
-    title: 'Pre-Action Letter',
-    description: 'Formal demand for payment before raising Simple Procedure proceedings.',
-    category: 'guidance',
-    html: preActionLetter.html,
-    pdf: preActionLetter.pdf,
-    file_name: 'pre-action-letter.pdf',
+    title: 'Simple Procedure Claim Form (Form 3A) - Official PDF',
+    description: 'Completed claim form ready for Sheriff Court lodging.',
+    category: 'court_form',
+    pdf: Buffer.from(simpleProcedurePdf),
+    file_name: '05-simple-procedure-claim-form.pdf',
   });
 
-  // ENFORCEMENT GUIDE (Post-Decree)
-  const enforcementGuide = await generateDocument({
-    templatePath: 'uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Enforcement Guide (Diligence)',
-    description: 'Explains enforcement (diligence) options after obtaining a Sheriff Court decree.',
-    category: 'guidance',
-    html: enforcementGuide.html,
-    pdf: enforcementGuide.pdf,
-    file_name: 'enforcement-guide-scotland.pdf',
-  });
-
-  // FILING GUIDE
+  // 6) Filing Guide
   const filingGuide = await generateDocument({
     templatePath: 'uk/scotland/templates/money_claims/filing_guide_scotland.hbs',
     data: extendedData,
@@ -469,21 +461,24 @@ async function generateScotlandMoneyClaimPack(
     category: 'guidance',
     html: filingGuide.html,
     pdf: filingGuide.pdf,
-    file_name: 'filing-guide-scotland.pdf',
+    file_name: '06-filing-guide-scotland.pdf',
   });
 
-  // 6. Official Simple Procedure claim form
-  await assertOfficialFormExists('scotland/form-3a.pdf');
-  const simpleProcedurePdf = await fillSimpleProcedureClaim(
-    buildSimpleProcedurePayload(claim, totals)
-  );
+  // 7) Enforcement Guide (Post-Decree)
+  const enforcementGuide = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs',
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
 
   documents.push({
-    title: 'Simple Procedure Claim Form (Form 3A) - Official PDF',
-    description: 'Completed claim form ready for Sheriff Court lodging.',
-    category: 'court_form',
-    pdf: Buffer.from(simpleProcedurePdf),
-    file_name: 'simple-procedure-claim-form.pdf',
+    title: 'Enforcement Guide (Diligence)',
+    description: 'Explains enforcement (diligence) options after obtaining a Sheriff Court decree.',
+    category: 'guidance',
+    html: enforcementGuide.html,
+    pdf: enforcementGuide.pdf,
+    file_name: '07-enforcement-guide-scotland.pdf',
   });
 
   const caseId = claim.case_id || `SC-MONEY-${Date.now()}`;
