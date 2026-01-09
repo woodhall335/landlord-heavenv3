@@ -3,28 +3,62 @@
  *
  * POST /api/checkout/create
  * Creates a Stripe checkout session for one-time purchases
+ *
+ * IMPORTANT: Prices are controlled in Stripe Dashboard.
+ * Product metadata comes from src/lib/pricing/products.ts (source of truth).
+ * Stripe Price IDs come from environment variables via src/lib/stripe/index.ts.
  */
 
 import { createServerSupabaseClient, createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import Stripe from 'stripe';
+import { stripe, PRICE_IDS } from '@/lib/stripe';
+import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 import { logger } from '@/lib/logger';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-15.clover',
-});
+/**
+ * Map product types to Stripe Price IDs
+ * Note: sc_money_claim uses the same Stripe price as money_claim (both £199.99)
+ */
+const PRODUCT_TO_PRICE_ID: Record<string, string> = {
+  notice_only: PRICE_IDS.NOTICE_ONLY,
+  complete_pack: PRICE_IDS.EVICTION_PACK,
+  money_claim: PRICE_IDS.MONEY_CLAIM,
+  sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
+  ast_standard: PRICE_IDS.STANDARD_AST,
+  ast_premium: PRICE_IDS.PREMIUM_AST,
+};
 
-// Product pricing configuration
-const PRODUCT_PRICES = {
-  notice_only: { amount: 2999, name: 'Notice Only Pack', description: 'Single eviction notice generation', jurisdiction: 'england' },
-  complete_pack: { amount: 14999, name: 'Complete Eviction Pack', description: 'All eviction documents + N5 claim form', jurisdiction: 'england' },
-  money_claim: { amount: 17999, name: 'Money Claim Pack (England & Wales)', description: 'Complete money claim documents for England & Wales', jurisdiction: 'england' },
-  sc_money_claim: { amount: 17999, name: 'Simple Procedure Pack (Scotland)', description: 'Complete Simple Procedure money claim documents for Scotland', jurisdiction: 'scotland' },
-  ast_standard: { amount: 999, name: 'Standard AST Agreement', description: 'Basic assured shorthold tenancy agreement', jurisdiction: 'england' },
-  ast_premium: { amount: 1499, name: 'Premium AST Agreement', description: 'Comprehensive AST with all clauses', jurisdiction: 'england' },
-} as const;
+/**
+ * Validate required Stripe price environment variables on startup (dev-only)
+ */
+function validateStripePriceIds(): void {
+  if (process.env.NODE_ENV === 'production') return;
+
+  const requiredPriceIds = [
+    { key: 'STRIPE_PRICE_ID_NOTICE_ONLY', value: PRICE_IDS.NOTICE_ONLY },
+    { key: 'STRIPE_PRICE_ID_EVICTION_PACK', value: PRICE_IDS.EVICTION_PACK },
+    { key: 'STRIPE_PRICE_ID_MONEY_CLAIM', value: PRICE_IDS.MONEY_CLAIM },
+    { key: 'STRIPE_PRICE_ID_STANDARD_AST', value: PRICE_IDS.STANDARD_AST },
+    { key: 'STRIPE_PRICE_ID_PREMIUM_AST', value: PRICE_IDS.PREMIUM_AST },
+  ];
+
+  const missingIds = requiredPriceIds.filter(({ value }) => !value || value === 'undefined');
+
+  if (missingIds.length > 0) {
+    logger.warn('[Stripe] Missing required price ID environment variables', {
+      missing: missingIds.map(({ key }) => key),
+    });
+    console.warn(
+      `[Stripe Checkout] WARNING: Missing Stripe price IDs: ${missingIds.map(({ key }) => key).join(', ')}. ` +
+      'Checkout will fail until these are configured in .env.local'
+    );
+  }
+}
+
+// Run validation on module load (dev-only)
+validateStripePriceIds();
 
 // Validation schema
 const createCheckoutSchema = z.object({
@@ -103,8 +137,20 @@ export async function POST(request: Request) {
         .eq('id', user.id);
     }
 
-    // Get product details
-    const product = PRODUCT_PRICES[product_type];
+    // Get Stripe price ID for this product
+    const priceId = PRODUCT_TO_PRICE_ID[product_type];
+    if (!priceId) {
+      logger.error('Missing Stripe price ID for product', { productType: product_type });
+      return NextResponse.json(
+        { error: 'Product configuration error. Please contact support.' },
+        { status: 500 }
+      );
+    }
+
+    // Get product details from source of truth (products.ts)
+    // Map sc_money_claim to money_claim for product config lookup
+    const productSku: ProductSku = product_type === 'sc_money_claim' ? 'sc_money_claim' : product_type as ProductSku;
+    const product = PRODUCTS[productSku];
 
     // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
@@ -162,16 +208,17 @@ export async function POST(request: Request) {
     }
 
     // Create order record using admin client to avoid RLS issues
+    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
     const { data: order, error: orderError } = await adminSupabase
       .from('orders')
       .insert({
         user_id: user.id,
         case_id: case_id || null,
         product_type,
-        product_name: product.name,
-        amount: product.amount / 100,
+        product_name: product.label,
+        amount: product.price,
         currency: 'GBP',
-        total_amount: product.amount / 100,
+        total_amount: product.price,
         payment_status: 'pending',
         fulfillment_status: 'pending',
       })
@@ -201,8 +248,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create Stripe checkout session
-    // Use NEXT_PUBLIC_APP_URL in production, fallback to localhost only in development
+    // Create Stripe checkout session using Stripe Price ID
+    // Price is controlled in Stripe Dashboard - no hardcoded amounts
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
@@ -213,14 +260,7 @@ export async function POST(request: Request) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'gbp',
-            product_data: {
-              name: product.name,
-              description: product.description,
-            },
-            unit_amount: product.amount,
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
@@ -232,6 +272,7 @@ export async function POST(request: Request) {
       },
       success_url: success_url || `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancel_url || `${baseUrl}/dashboard`,
+      allow_promotion_codes: true,
     });
 
     // Update order with Stripe session ID (use admin client)
