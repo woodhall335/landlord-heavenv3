@@ -85,14 +85,13 @@ export default function WizardPreviewPage() {
       }
 
       // AI-generated documents
+      // Note: compliance_audit and risk_assessment removed as of Jan 2026 pack restructure
       types.push('witness_statement');
-      types.push('compliance_audit');
-      types.push('risk_assessment');
 
-      // Guidance documents (consolidated - expert guidance, timeline, case summary merged into roadmap)
+      // Guidance documents
+      // Note: eviction_roadmap removed as of Jan 2026 pack restructure
       types.push('service_instructions');
       types.push('service_checklist');
-      types.push('eviction_roadmap');
 
       if (jurisdiction === 'england' || jurisdiction === 'wales') {
         types.push('court_filing_guide');

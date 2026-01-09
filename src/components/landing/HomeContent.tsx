@@ -177,7 +177,7 @@ export default function HomeContent() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£29.99"
+              price="£39.99"
               solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
@@ -185,7 +185,7 @@ export default function HomeContent() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£149.99"
+              price="£199.99"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular={true}
             />
@@ -193,7 +193,7 @@ export default function HomeContent() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£179.99"
+              price="£199.99"
               solicitorPrice="£400-600"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />

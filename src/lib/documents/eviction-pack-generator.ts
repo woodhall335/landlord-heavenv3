@@ -926,14 +926,8 @@ export async function generateCompleteEvictionPack(
   }
 
   // 2. Generate expert guidance documents
-  const roadmap = await generateEvictionRoadmap(evictionCase, groundsData);
-  documents.push(roadmap);
-
-  const guidance = await generateExpertGuidance(evictionCase, groundsData);
-  documents.push(guidance);
-
-  const timeline = await generateTimelineExpectations(evictionCase, groundsData);
-  documents.push(timeline);
+  // Note: Eviction Roadmap, Expert Guidance, and Timeline removed as of Jan 2026 pack restructure
+  // Keeping court filing guide and evidence tools only
 
   // 3. Generate evidence tools
   const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
@@ -974,68 +968,8 @@ export async function generateCompleteEvictionPack(
     // Don't fail the entire pack if witness statement generation fails
   }
 
-  // 3.2 Generate compliance audit (AI-powered premium feature)
-  try {
-    const complianceAuditContext = extractComplianceAuditContext(wizardFacts);
-    const complianceAuditContent = await generateComplianceAudit(wizardFacts, complianceAuditContext);
-
-    const complianceAuditDoc = await generateDocument({
-      templatePath: `uk/${jurisdiction}/templates/eviction/compliance-audit.hbs`,
-      data: {
-        ...evictionCase,
-        compliance_audit: complianceAuditContent,
-        current_date: new Date().toISOString().split('T')[0],
-        notice_type: evictionCase.grounds[0]?.code || 'Not specified',
-      },
-      isPreview: false,
-      outputFormat: 'both',
-    });
-
-    documents.push({
-      title: 'Compliance Audit Report',
-      description: 'AI-powered compliance check for eviction proceedings',
-      category: 'guidance',
-      html: complianceAuditDoc.html,
-      pdf: complianceAuditDoc.pdf,
-      file_name: 'compliance_audit.pdf',
-    });
-
-    console.log('✅ Generated compliance audit');
-  } catch (error) {
-    console.error('⚠️  Failed to generate compliance audit:', error);
-    // Don't fail the entire pack if compliance audit generation fails
-  }
-
-  // 3.3 Generate risk report (premium feature)
-  try {
-    const riskAssessment = computeRiskAssessment(wizardFacts);
-
-    const riskReportDoc = await generateDocument({
-      templatePath: `uk/${jurisdiction}/templates/eviction/risk-report.hbs`,
-      data: {
-        ...evictionCase,
-        risk_assessment: riskAssessment,
-        current_date: new Date().toISOString().split('T')[0],
-        case_type: evictionCase.case_type.replace('_', ' ').toUpperCase(),
-      },
-      isPreview: false,
-      outputFormat: 'both',
-    });
-
-    documents.push({
-      title: 'Case Risk Assessment Report',
-      description: 'Comprehensive risk analysis and success probability assessment',
-      category: 'guidance',
-      html: riskReportDoc.html,
-      pdf: riskReportDoc.pdf,
-      file_name: 'risk_assessment.pdf',
-    });
-
-    console.log('✅ Generated risk assessment report');
-  } catch (error) {
-    console.error('⚠️  Failed to generate risk report:', error);
-    // Don't fail the entire pack if risk report generation fails
-  }
+  // 3.2 Compliance audit and risk assessment removed as of Jan 2026 pack restructure
+  // These documents are no longer included in the Complete Pack
 
   // 4. Generate case summary document
   const caseSummaryDoc = await generateDocument({

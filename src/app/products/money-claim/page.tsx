@@ -22,10 +22,10 @@ import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears",
   description:
-    "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim saves £300-600. PAP-DEBT compliance, N1 form, interest calculator. £179.99 one-time.",
+    "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim saves £300-600. PAP-DEBT compliance, N1 form, interest calculator. £199.99 one-time.",
   openGraph: {
     title: "Money Claim Pack - Recover Rent Arrears Through Courts",
-    description: "Recover unpaid rent arrears through UK courts. AI-drafted documents save £300-600. £179.99 one-time.",
+    description: "Recover unpaid rent arrears through UK courts. AI-drafted documents save £300-600. £199.99 one-time.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -68,7 +68,7 @@ export default function MoneyClaimPage() {
       <StructuredData data={productSchema({
         name: "Money Claim Pack - Recover Rent Arrears Through Courts",
         description: "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim and Letter Before Action. PAP-DEBT compliance, N1 form, interest calculator, and enforcement guidance included.",
-        price: "179.99",
+        price: "199.99",
         url: "https://landlordheaven.co.uk/products/money-claim"
       })} />
       <StructuredData data={faqPageSchema(faqs)} />
@@ -93,7 +93,7 @@ export default function MoneyClaimPage() {
               AI-drafted claim documents + UK Court claim forms
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£179.99</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£199.99</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -222,7 +222,7 @@ export default function MoneyClaimPage() {
                 Solicitors charge £300-600 to draft Particulars of Claim and Letters Before Action
               </p>
               <p className="text-gray-600 text-base">
-                With Ask Heaven at £179.99, you get AI-drafted documents PLUS all court forms, arrears schedules, and filing guides
+                With Ask Heaven at £199.99, you get AI-drafted documents PLUS all court forms, arrears schedules, and filing guides
               </p>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function MoneyClaimPage() {
                 href="/wizard?product=money_claim&src=product_page&topic=arrears"
                 className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
-                Start Money Claim - £179.99 →
+                Start Money Claim - £199.99 →
               </Link>
             </div>
           </div>
@@ -645,7 +645,7 @@ export default function MoneyClaimPage() {
                   When should I use Money Claims?
                 </h3>
                 <p className="text-gray-700">
-                  Use <strong>Money Claims (£179.99)</strong> when you need to recover rent arrears through the county court.
+                  Use <strong>Money Claims (£199.99)</strong> when you need to recover rent arrears through the county court.
                   This product focuses specifically on the financial claim process. If your tenant is still in the property
                   and you need to evict them first, start with our{" "}
                   <Link href="/products/notice-only" className="text-primary hover:underline">
@@ -706,7 +706,7 @@ export default function MoneyClaimPage() {
                 href="/wizard?product=money_claim&src=product_page&topic=arrears"
                 className="hero-btn-primary"
               >
-                Start Money Claim - £179.99 →
+                Start Money Claim - £199.99 →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>

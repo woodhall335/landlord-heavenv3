@@ -104,7 +104,7 @@ export function CostComparison() {
                   Landlord Heaven
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-900">
-                  £29.99
+                  £39.99
                 </div>
                 <div className="text-gray-500 mt-1">for eviction notices</div>
               </div>
@@ -142,24 +142,24 @@ export function CostComparison() {
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
               product="Eviction Notices"
-              ourPrice="£29.99"
+              ourPrice="£39.99"
               solicitorPrice="£200-300"
-              savings="£170+"
+              savings="£160+"
               href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete Pack"
-              ourPrice="£149.99"
+              ourPrice="£199.99"
               solicitorPrice="£1,500-2,500"
-              savings="£1,350+"
+              savings="£1,300+"
               href="/products/complete-pack"
               highlighted
             />
             <PriceAnchor
               product="Money Claims"
-              ourPrice="£179.99"
+              ourPrice="£199.99"
               solicitorPrice="£400-600"
-              savings="£220+"
+              savings="£200+"
               href="/products/money-claim"
             />
             <PriceAnchor

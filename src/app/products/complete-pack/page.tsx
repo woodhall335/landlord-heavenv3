@@ -28,10 +28,10 @@ import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Section 21 Deadline",
   description:
-    "Last chance for Section 21. Complete eviction pack with all court forms before no-fault evictions banned 1 May 2026. £149.99 one-time. Notices + N5 + N119 forms.",
+    "Last chance for Section 21. Complete eviction pack with all court forms before no-fault evictions banned 1 May 2026. £199.99 one-time. Notices + N5 + N119 forms.",
   openGraph: {
     title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
-    description: "Last chance for Section 21. Complete eviction pack before no-fault evictions banned 1 May 2026. £149.99.",
+    description: "Last chance for Section 21. Complete eviction pack before no-fault evictions banned 1 May 2026. £199.99.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
   alternates: {
@@ -79,7 +79,7 @@ const faqs = [
   },
   {
     question: "Is this cheaper than using a solicitor?",
-    answer: "Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms, and representing you at hearings. The Complete Pack gives you all the documents and guidance for £149.99 one-time."
+    answer: "Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms, and representing you at hearings. The Complete Pack gives you all the documents and guidance for £199.99 one-time."
   },
   {
     question: "What if I make a mistake on the forms?",
@@ -98,7 +98,7 @@ export default function CompleteEvictionPackPage() {
       <StructuredData data={productSchema({
         name: "Complete Eviction Pack - Full DIY Eviction Bundle",
         description: "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N5B, N119 forms, AI-drafted witness statements, compliance audit, and step-by-step guidance. Save £1,000s vs solicitors.",
-        price: "149.99",
+        price: "199.99",
         url: "https://landlordheaven.co.uk/products/complete-pack"
       })} />
       <StructuredData data={faqPageSchema(faqs)} />
@@ -123,7 +123,7 @@ export default function CompleteEvictionPackPage() {
               AI-drafted documents + Everything from Notice to Possession Order
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£149.99</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£199.99</span>
             </div>
             <Link
               href="/wizard?product=complete_pack&src=product_page&topic=eviction"
@@ -642,7 +642,7 @@ export default function CompleteEvictionPackPage() {
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £1,000s vs Solicitors</h3>
                 <p className="text-gray-700">
                   Eviction solicitors charge £1,500-3,000+ for the same documents. Our Complete Pack gives you everything
-                  for £149.99 one-time.
+                  for £199.99 one-time.
                 </p>
               </div>
 
@@ -722,10 +722,10 @@ export default function CompleteEvictionPackPage() {
                       Feature
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-charcoal border-b border-gray-200">
-                      Notice Only<br />£29.99
+                      Notice Only<br />£39.99
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-primary border-b border-gray-200">
-                      Complete Pack<br />£149.99
+                      Complete Pack<br />£199.99
                     </th>
                   </tr>
                 </thead>
@@ -825,7 +825,7 @@ export default function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Pack - £149.99 →
+                Get Complete Eviction Pack - £199.99 →
               </Link>
             </div>
           </div>
@@ -924,7 +924,7 @@ export default function CompleteEvictionPackPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms,
-                  and representing you at hearings. The Complete Pack gives you all the documents and guidance for £149.99
+                  and representing you at hearings. The Complete Pack gives you all the documents and guidance for £199.99
                   one-time. You save £1,300-2,800+ by doing it yourself with our step-by-step guidance.
                 </div>
               </details>
@@ -1003,13 +1003,13 @@ export default function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Pack - £149.99 →
+                Get Complete Pack - £199.99 →
               </Link>
               <Link
                 href="/products/notice-only"
                 className="hero-btn-secondary"
               >
-                Or Just Get Notice - £29.99
+                Or Just Get Notice - £39.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">

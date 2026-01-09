@@ -455,13 +455,12 @@ export async function generateStandardAST(
   };
 
   // List of all templates to merge (in order)
+  // Note: certificate_of_curation, ast_legal_validity_summary, and deposit_protection_certificate
+  // removed as of Jan 2026 pack restructure
   const templatePaths = [
     'uk/england/templates/standard_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
-    'shared/templates/certificate_of_curation.hbs',
-    'uk/england/templates/ast_legal_validity_summary.hbs',
     'uk/england/templates/government_model_clauses.hbs',
-    'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
   ];
 
@@ -522,19 +521,16 @@ export async function generatePremiumAST(
   };
 
   // Premium includes all standard docs PLUS exclusive premium documents
+  // Note: certificate_of_curation, ast_legal_validity_summary, deposit_protection_certificate,
+  // tenant_welcome_pack, and move_in_condition_report removed as of Jan 2026 pack restructure
   const templatePaths = [
     'uk/england/templates/premium_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
-    'shared/templates/certificate_of_curation.hbs',
-    'uk/england/templates/ast_legal_validity_summary.hbs',
     'uk/england/templates/government_model_clauses.hbs',
-    'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
-    // Premium-exclusive documents (Option 2 enhancement)
+    // Premium-exclusive documents
     'uk/england/templates/premium/key_schedule.hbs',
-    'uk/england/templates/premium/tenant_welcome_pack.hbs',
     'uk/england/templates/premium/property_maintenance_guide.hbs',
-    'uk/england/templates/premium/move_in_condition_report.hbs',
     'uk/england/templates/premium/checkout_procedure.hbs',
   ];
 
@@ -655,45 +651,8 @@ export async function generateStandardASTDocuments(
     console.warn('Failed to generate terms and conditions:', err);
   }
 
-  // 3. Certificate of Curation
-  try {
-    const certDoc = await generateDocument({
-      templatePath: 'shared/templates/certificate_of_curation.hbs',
-      data: enrichedData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Certificate of Curation',
-      description: 'Verification certificate confirming agreement completeness',
-      category: 'checklist',
-      html: certDoc.html,
-      pdf: certDoc.pdf,
-      file_name: 'certificate_of_curation.pdf',
-    });
-  } catch (err) {
-    console.warn('Failed to generate certificate:', err);
-  }
-
-  // 4. Legal Validity Summary
-  try {
-    const validityDoc = await generateDocument({
-      templatePath: 'uk/england/templates/ast_legal_validity_summary.hbs',
-      data: enrichedData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Legal Validity Summary',
-      description: 'Summary of legal compliance with current legislation',
-      category: 'guidance',
-      html: validityDoc.html,
-      pdf: validityDoc.pdf,
-      file_name: 'legal_validity_summary.pdf',
-    });
-  } catch (err) {
-    console.warn('Failed to generate validity summary:', err);
-  }
+  // 3. Certificate of Curation - Removed as of Jan 2026 pack restructure
+  // 4. Legal Validity Summary - Removed as of Jan 2026 pack restructure
 
   // 5. Government Model Clauses
   try {
@@ -715,25 +674,7 @@ export async function generateStandardASTDocuments(
     console.warn('Failed to generate model clauses:', err);
   }
 
-  // 6. Deposit Protection Certificate
-  try {
-    const depositDoc = await generateDocument({
-      templatePath: 'shared/templates/deposit_protection_certificate.hbs',
-      data: enrichedData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Deposit Protection Certificate',
-      description: 'Template for recording deposit protection details',
-      category: 'checklist',
-      html: depositDoc.html,
-      pdf: depositDoc.pdf,
-      file_name: 'deposit_protection_certificate.pdf',
-    });
-  } catch (err) {
-    console.warn('Failed to generate deposit certificate:', err);
-  }
+  // 6. Deposit Protection Certificate - Removed as of Jan 2026 pack restructure
 
   // 7. Inventory Template
   try {
@@ -815,25 +756,7 @@ export async function generatePremiumASTDocuments(
     console.warn('Failed to generate key schedule:', err);
   }
 
-  // 9. Tenant Welcome Pack
-  try {
-    const welcomeDoc = await generateDocument({
-      templatePath: 'uk/england/templates/premium/tenant_welcome_pack.hbs',
-      data: enrichedData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Tenant Welcome Pack',
-      description: 'Comprehensive move-in guide with property information',
-      category: 'guidance',
-      html: welcomeDoc.html,
-      pdf: welcomeDoc.pdf,
-      file_name: 'tenant_welcome_pack.pdf',
-    });
-  } catch (err) {
-    console.warn('Failed to generate welcome pack:', err);
-  }
+  // 9. Tenant Welcome Pack - Removed as of Jan 2026 pack restructure
 
   // 10. Property Maintenance Guide
   try {
@@ -855,25 +778,7 @@ export async function generatePremiumASTDocuments(
     console.warn('Failed to generate maintenance guide:', err);
   }
 
-  // 11. Move-In Condition Report
-  try {
-    const conditionDoc = await generateDocument({
-      templatePath: 'uk/england/templates/premium/move_in_condition_report.hbs',
-      data: enrichedData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Move-In Condition Report',
-      description: 'Detailed room-by-room property condition assessment',
-      category: 'checklist',
-      html: conditionDoc.html,
-      pdf: conditionDoc.pdf,
-      file_name: 'move_in_condition_report.pdf',
-    });
-  } catch (err) {
-    console.warn('Failed to generate condition report:', err);
-  }
+  // 11. Move-In Condition Report - Removed as of Jan 2026 pack restructure
 
   // 12. Checkout Procedure
   try {
