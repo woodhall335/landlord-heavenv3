@@ -1,17 +1,20 @@
 /**
  * Scotland Money Claim Pack Generator
  *
- * Builds a streamlined Simple Procedure money-claim bundle including:
+ * Builds a Simple Procedure money-claim bundle for Scotland, including:
  * - Official Simple Procedure claim form (Form 3A) (PDF fill)
- * - Statement of claim (particulars)
- * - Pre-action letter (Rule 3.1)
- * - Filing guide + enforcement guide
- * - Optional arrears schedule + interest calculation (when applicable)
+ * - Statement of claim / particulars (template)
+ * - Schedule of rent arrears (template, only if arrears schedule provided)
+ * - Interest calculation (template, only if interest applies)
+ * - Pre-Action Letter (required before raising Simple Procedure proceedings)
+ * - Simple Procedure filing guide (how to lodge the claim)
+ * - Enforcement guide (diligence options after decree)
  *
- * NOTE:
- * - Evidence Index, Hearing Prep Sheet, and Pack Cover were removed as part of the Jan 2026 pack restructure
- *   to align with the streamlined England/Wales Money Claim Pack.
+ * Note:
+ * - This pack is aligned with the Jan 2026 restructure:
+ *   Removed pack cover/summary, evidence index, and hearing prep documents.
  */
+
 
 import { generateDocument } from './generator';
 import { fillSimpleProcedureClaim, ScotlandMoneyClaimData } from './scotland-forms-filler';

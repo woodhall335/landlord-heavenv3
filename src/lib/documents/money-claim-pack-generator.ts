@@ -1,18 +1,24 @@
 /**
  * Money Claim Pack Generator (England & Wales)
  *
- * Builds a streamlined money-claim bundle including:
+ * Builds a complete England & Wales money-claim bundle including:
  * - Official N1 claim form (PDF fill)
- * - Particulars of claim
- * - Schedule of arrears
- * - Interest calculation
- * - Pre-Action Protocol for Debt Claims (PAP-DEBT) documents
- * - Filing guide
- * - Enforcement guide
+ * - Particulars of claim (template)
+ * - Schedule of arrears (template)
+ * - Interest calculation (template)
+ * - Pre-Action Protocol for Debt Claims documents (PAP-DEBT), including:
+ *   - Letter Before Claim
+ *   - Information Sheet for Defendants
+ *   - Reply Form
+ *   - Financial Statement Form
+ * - Filing guide (MCOL or paper)
+ * - Enforcement guide (post-judgment options)
  *
- * NOTE:
- * - Pack cover, Evidence Index, and Hearing Prep Sheet were removed as part of the Jan 2026 pack restructure.
+ * Note:
+ * - This pack is aligned with the Jan 2026 restructure:
+ *   Removed pack cover/summary, evidence index, and hearing prep documents.
  */
+
 
 import { generateDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
