@@ -207,6 +207,20 @@ export default function AskHeavenPage(): React.ReactElement {
                   <span className="text-xs text-gray-500">Complete UK guide</span>
                 </Link>
                 <Link
+                  href="/tools/validators/section-21"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Section 21 Validity Checker</span>
+                  <span className="text-xs text-gray-500">Check if your notice is valid</span>
+                </Link>
+                <Link
+                  href="/tools/validators/section-8"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Section 8 Grounds Checker</span>
+                  <span className="text-xs text-gray-500">Verify grounds &amp; notice periods</span>
+                </Link>
+                <Link
                   href="/money-claim-unpaid-rent"
                   className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
                 >

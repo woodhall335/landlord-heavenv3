@@ -250,6 +250,74 @@ export default function Section8ValidatorPage() {
         </Container>
       </section>
 
+      {/* Quick Checklist - SSR for SEO */}
+      <section className="bg-white py-8 border-b border-gray-100">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Section 8 Quick Notice Checklist
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Before serving your Section 8 notice, ensure these key requirements are met:
+            </p>
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Correct Form 3</strong> — Using the current prescribed form
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Grounds stated correctly</strong> — Schedule 2 reference and wording
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Ground 8 threshold</strong> — 2+ months/8 weeks arrears at service
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Notice period correct</strong> — 2 weeks (Gr 8,10,11,14) or 2 months
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Evidence gathered</strong> — Rent statements, photos, witness statements
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Multiple grounds compatible</strong> — Notice periods don&apos;t conflict
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Service evidence</strong> — Proof of delivery method
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Arrears maintained</strong> — For Ground 8, arrears at hearing too
+                </span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-4">
+              <strong>Tip:</strong> For rent arrears, always combine Ground 8 (mandatory) with
+              Grounds 10/11 (discretionary) as a backup in case arrears drop below the threshold.
+            </p>
+          </div>
+        </Container>
+      </section>
+
       {/* Validator Component - Client rendered */}
       <ValidatorPage
         validatorKey="section_8"
@@ -494,6 +562,99 @@ export default function Section8ValidatorPage() {
             </ul>
 
             <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
+              Evidence Checklist for Court (Section 8)
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Courts require documentary evidence to prove your grounds. Here&apos;s what to prepare:
+            </p>
+            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+              <h3 className="text-lg font-semibold text-charcoal mb-4">
+                For Rent Arrears (Grounds 8, 10, 11)
+              </h3>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+                <li>Rent account/ledger showing all payments and arrears</li>
+                <li>Tenancy agreement showing rent amount and due dates</li>
+                <li>Bank statements showing (non-)receipt of rent</li>
+                <li>All rent demand letters sent (with proof of service)</li>
+                <li>Any communication about payment plans or disputes</li>
+                <li>Housing benefit/UC payment records (if applicable)</li>
+              </ul>
+              <h3 className="text-lg font-semibold text-charcoal mb-4">
+                For Anti-Social Behaviour (Ground 14)
+              </h3>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+                <li>Contemporaneous diary of incidents (dates, times, descriptions)</li>
+                <li>Written complaints from neighbours (ideally signed)</li>
+                <li>Police incident numbers and crime reference numbers</li>
+                <li>Council ASB case officer correspondence</li>
+                <li>Photos or videos of damage/incidents (if safe to obtain)</li>
+                <li>Witness statements willing to attend court</li>
+              </ul>
+              <h3 className="text-lg font-semibold text-charcoal mb-4">
+                For Property Damage/Breach (Grounds 12, 13)
+              </h3>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Check-in inventory with photos/condition</li>
+                <li>Current photos showing damage or breach</li>
+                <li>Repair quotes or invoices</li>
+                <li>Written warnings to tenant about the breach</li>
+                <li>Tenancy agreement clause that has been breached</li>
+              </ul>
+            </div>
+
+            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
+              Section 8 vs Section 21: Which Should You Use?
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Not sure whether to use Section 8 or Section 21? Here&apos;s a quick decision guide:
+            </p>
+            <div className="bg-blue-50 rounded-lg p-6 mb-6">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <span className="text-blue-600 font-bold text-lg">→</span>
+                  <div>
+                    <p className="text-gray-900 font-medium">
+                      Use <strong>Section 8</strong> if:
+                    </p>
+                    <ul className="text-sm text-gray-700 mt-1 space-y-1">
+                      <li>• Tenant owes 2+ months rent (Ground 8 = faster, 2 weeks notice)</li>
+                      <li>• There is serious anti-social behaviour or property damage</li>
+                      <li>• You need possession after May 2026 (Section 21 ends)</li>
+                      <li>• You have clear evidence to prove your grounds in court</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-blue-600 font-bold text-lg">→</span>
+                  <div>
+                    <p className="text-gray-900 font-medium">
+                      Use <strong>Section 21</strong> if:
+                    </p>
+                    <ul className="text-sm text-gray-700 mt-1 space-y-1">
+                      <li>• No specific breach — you simply want possession</li>
+                      <li>• You want to avoid proving grounds in court</li>
+                      <li>• You&apos;re selling the property or moving back in</li>
+                      <li>• You&apos;re serving before 1 May 2026 deadline</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-green-600 font-bold text-lg">→</span>
+                  <div>
+                    <p className="text-gray-900 font-medium">
+                      Use <strong>both together</strong> if:
+                    </p>
+                    <ul className="text-sm text-gray-700 mt-1 space-y-1">
+                      <li>• You want maximum flexibility (&quot;belt and braces&quot;)</li>
+                      <li>• Rent arrears exist but might drop below threshold</li>
+                      <li>• You want the faster Section 8 route with Section 21 backup</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
               What to Do If Your Notice Is Invalid
             </h2>
             <p className="text-gray-700 mb-4">
@@ -560,6 +721,24 @@ export default function Section8ValidatorPage() {
                   Complete Eviction Pack - £149.99
                 </Link>
               </div>
+            </div>
+
+            {/* Legal basis and last updated */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <h2 className="text-xl font-bold text-charcoal mb-4">
+                Legal Basis &amp; Last Updated
+              </h2>
+              <p className="text-gray-700 mb-4">
+                This Section 8 grounds checker is based on the requirements set out in Schedule 2
+                of the Housing Act 1988 (as amended), including the grounds for possession and
+                associated notice periods. Ground availability and procedures are specific to
+                England only.
+              </p>
+              <p className="text-sm text-gray-500">
+                <strong>Last updated:</strong> January 2025. We review this tool regularly to
+                reflect changes in housing law, including upcoming changes from the Renters&apos;
+                Rights Act. Always verify current requirements for your specific situation.
+              </p>
             </div>
           </div>
         </Container>

@@ -55,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Tool pages - Free tools for SEO traffic
   const toolPages = [
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/tools/validators', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tools/validators', priority: 0.85, changeFrequency: 'weekly' as const },
     ...freeTools
       .filter((tool) => tool.href.startsWith('/tools'))
       .map((tool) => ({
@@ -63,9 +63,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
         changeFrequency: 'weekly' as const,
       })),
+    // Validator pages get higher priority (0.9) for SEO ranking
     ...validatorToolRoutes.map((path) => ({
       path,
-      priority: 0.8,
+      priority: 0.9,
       changeFrequency: 'weekly' as const,
     })),
   ];
