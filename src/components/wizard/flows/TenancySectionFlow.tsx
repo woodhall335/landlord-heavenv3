@@ -35,6 +35,10 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
+// Analytics and attribution
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
 
@@ -368,12 +372,36 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     [facts, saveFactsToServer]
   );
 
-  // Navigate to next section
+  // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < visibleSections.length - 1) {
+      // Track step completion if the current section is complete
+      const current = visibleSections[currentSectionIndex];
+      if (current && current.isComplete(facts)) {
+        // Only fire if not already tracked for this step
+        const shouldTrack = markStepCompleted(current.id);
+        if (shouldTrack) {
+          const attribution = getWizardAttribution();
+          trackWizardStepCompleteWithAttribution({
+            product: product || 'tenancy_agreement',
+            jurisdiction: jurisdiction,
+            step: current.id,
+            stepIndex: currentSectionIndex,
+            totalSteps: visibleSections.length,
+            src: attribution.src,
+            topic: attribution.topic,
+            utm_source: attribution.utm_source,
+            utm_medium: attribution.utm_medium,
+            utm_campaign: attribution.utm_campaign,
+            landing_url: attribution.landing_url,
+            first_seen_at: attribution.first_seen_at,
+          });
+        }
+      }
+
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections.length]);
+  }, [currentSectionIndex, visibleSections, facts, jurisdiction, product]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {

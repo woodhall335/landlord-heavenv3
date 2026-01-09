@@ -4,6 +4,7 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import {
   CheckCircle,
   FileText,
@@ -19,6 +20,19 @@ import {
   TrendingUp,
   Scale
 } from 'lucide-react';
+
+// Pre-built wizard links for rent arrears template page
+const wizardLinkMoneyClaim = buildWizardLink({
+  product: 'money_claim',
+  src: 'template',
+  topic: 'arrears',
+});
+
+const wizardLinkNoticeOnly = buildWizardLink({
+  product: 'notice_only',
+  src: 'template',
+  topic: 'arrears',
+});
 
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template - Free Download',
@@ -153,7 +167,7 @@ export default function RentArrearsLetterTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/money-claim"
+                  href={wizardLinkMoneyClaim}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Money Claim Pack — £79.99
@@ -310,7 +324,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/money-claim"
+                    href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     Get Money Claim Pack — £79.99
@@ -348,7 +362,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/notice-only"
+                    href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     Get Eviction Notice — £29.99
@@ -451,7 +465,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/money-claim"
+                    href={wizardLinkMoneyClaim}
                     className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                   >
                     Get Money Claim Pack
@@ -643,7 +657,7 @@ export default function RentArrearsLetterTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/money-claim"
+                  href={wizardLinkMoneyClaim}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Money Claim Pack — £79.99

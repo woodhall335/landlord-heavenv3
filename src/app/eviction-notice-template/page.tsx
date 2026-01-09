@@ -5,6 +5,7 @@ import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import {
   CheckCircle,
   FileText,
@@ -19,6 +20,13 @@ import {
   Home,
   Users
 } from 'lucide-react';
+
+// Pre-built wizard link for eviction template page (jurisdiction unspecified)
+const wizardLinkNoticeOnly = buildWizardLink({
+  product: 'notice_only',
+  src: 'template',
+  topic: 'eviction',
+});
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Free Download',
@@ -154,7 +162,7 @@ export default function EvictionNoticeTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/notice-only"
+                  href={wizardLinkNoticeOnly}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Court-Ready Notice — £29.99
@@ -386,7 +394,7 @@ export default function EvictionNoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/notice-only"
+                    href={wizardLinkNoticeOnly}
                     className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                   >
                     Get Court-Ready Notice
@@ -464,7 +472,7 @@ export default function EvictionNoticeTemplatePage() {
               </p>
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
               <Link
-                href="/products/notice-only"
+                href={wizardLinkNoticeOnly}
                 className="inline-flex items-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
               >
                 Serve Your Notice Before the Deadline
@@ -572,7 +580,7 @@ export default function EvictionNoticeTemplatePage() {
                   Try Free Template
                 </Link>
                 <Link
-                  href="/products/notice-only"
+                  href={wizardLinkNoticeOnly}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Court-Ready — £29.99

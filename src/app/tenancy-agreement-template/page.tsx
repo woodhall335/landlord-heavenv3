@@ -4,6 +4,7 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import {
   CheckCircle,
   FileText,
@@ -19,6 +20,13 @@ import {
   Lock,
   Banknote
 } from 'lucide-react';
+
+// Pre-built wizard link for tenancy agreement template page
+const wizardLinkAST = buildWizardLink({
+  product: 'ast_standard',
+  src: 'template',
+  topic: 'tenancy',
+});
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template UK - Free Download',
@@ -153,7 +161,7 @@ export default function TenancyAgreementTemplatePage() {
                   View Free Templates
                 </Link>
                 <Link
-                  href="/products/ast"
+                  href={wizardLinkAST}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Premium AST — £39.99
@@ -466,7 +474,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/products/ast"
+                    href={wizardLinkAST}
                     className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                   >
                     Get Premium AST
@@ -667,7 +675,7 @@ export default function TenancyAgreementTemplatePage() {
                   View Free Templates
                 </Link>
                 <Link
-                  href="/products/ast"
+                  href={wizardLinkAST}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
                   Get Premium AST — £39.99
