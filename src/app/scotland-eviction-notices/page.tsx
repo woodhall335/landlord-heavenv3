@@ -161,7 +161,7 @@ export default function ScotlandEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £29.99
+                  Get Scotland Notice — £39.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -670,13 +670,13 @@ export default function ScotlandEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £29.99
+                  Get Scotland Notice — £39.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £149.99
+                  Complete Pack — £199.99
                 </Link>
               </div>
             </div>

@@ -96,7 +96,7 @@ export default function TenancyAgreementTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '49.99',
+        highPrice: '14.99',
         priceCurrency: 'GBP',
         offerCount: '3',
       },
@@ -199,7 +199,7 @@ export default function TenancyAgreementTemplatePage() {
                   href={wizardLinkAST}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
-                  Get Premium AST — £39.99
+                  Get Premium AST — £14.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -480,7 +480,7 @@ export default function TenancyAgreementTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Premium AST</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£39.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£14.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -768,7 +768,7 @@ export default function TenancyAgreementTemplatePage() {
                   href={wizardLinkAST}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
-                  Get Premium AST — £39.99
+                  Get Premium AST — £14.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

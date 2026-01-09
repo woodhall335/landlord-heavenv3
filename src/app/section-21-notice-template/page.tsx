@@ -88,7 +88,7 @@ export default function Section21NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '29.99',
+        highPrice: '39.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -104,7 +104,7 @@ export default function Section21NoticeTemplatePage() {
         name: 'Is the Section 21 notice template free?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version that is guaranteed to be accepted, the cost is £29.99.',
+          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version that is guaranteed to be accepted, the cost is £39.99.',
         },
       },
       {
@@ -199,7 +199,7 @@ export default function Section21NoticeTemplatePage() {
                   href={wizardLink}
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
-                  Get Court-Ready Notice — £29.99
+                  Get Court-Ready Notice — £39.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -292,7 +292,7 @@ export default function Section21NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£29.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£39.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -478,7 +478,7 @@ export default function Section21NoticeTemplatePage() {
                   <p className="text-gray-600">
                     Yes, we offer a free Section 21 notice template that you can preview and use
                     for educational purposes. For a court-ready version that is guaranteed to be
-                    accepted, the cost is £29.99.
+                    accepted, the cost is £39.99.
                   </p>
                 </div>
 
@@ -564,7 +564,7 @@ export default function Section21NoticeTemplatePage() {
                   href={wizardLink}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
                 >
-                  Get Court-Ready — £29.99
+                  Get Court-Ready — £39.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

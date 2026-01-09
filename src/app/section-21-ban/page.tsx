@@ -69,13 +69,13 @@ export default function Section21BanPage() {
                 href="/products/notice-only"
                 className="bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-lg transition-colors text-lg"
               >
-                Generate Section 21 Notice — £29.99
+                Generate Section 21 Notice — £39.99
               </Link>
               <Link
                 href="/products/complete-pack"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg transition-colors text-lg border border-white/30"
               >
-                Complete Eviction Pack — £149.99
+                Complete Eviction Pack — £199.99
               </Link>
             </div>
           </div>
@@ -194,8 +194,8 @@ export default function Section21BanPage() {
                 </tr>
                 <tr>
                   <td className="p-4 font-medium">Cost with us</td>
-                  <td className="p-4 text-primary font-semibold">From £29.99</td>
-                  <td className="p-4">From £149.99</td>
+                  <td className="p-4 text-primary font-semibold">From £39.99</td>
+                  <td className="p-4">From £199.99</td>
                 </tr>
               </tbody>
             </table>
@@ -228,7 +228,7 @@ export default function Section21BanPage() {
                 <CheckCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
                   <div className="font-semibold text-gray-900">Lower costs</div>
-                  <p className="text-gray-600">Section 21 notices from £29.99 vs £149.99+ for Section 8</p>
+                  <p className="text-gray-600">Section 21 notices from £39.99 vs £199.99+ for Section 8</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -259,13 +259,13 @@ export default function Section21BanPage() {
                 href="/products/notice-only"
                 className="bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-lg transition-colors text-lg"
               >
-                Serve Your Notice Now — £29.99
+                Serve Your Notice Now — £39.99
               </Link>
               <Link
                 href="/products/complete-pack"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg transition-colors text-lg border border-white/30"
               >
-                Complete Eviction Pack — £149.99
+                Complete Eviction Pack — £199.99
               </Link>
             </div>
           </div>

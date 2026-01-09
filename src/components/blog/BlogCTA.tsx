@@ -53,7 +53,7 @@ export function BlogCTA({
               href="/products/notice-only"
               className="inline-flex items-center text-primary font-medium text-sm hover:underline"
             >
-              Get Section 21 Notice — £29.99
+              Get Section 21 Notice — £39.99
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
@@ -79,14 +79,14 @@ export function BlogCTA({
             href="/products/notice-only"
             className="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-lg transition-colors inline-flex items-center justify-center"
           >
-            Section 21 Notice — £29.99
+            Section 21 Notice — £39.99
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
           <Link
             href="/products/complete-pack"
             className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-3 px-8 rounded-lg border border-gray-200 transition-colors"
           >
-            Complete Pack — £149.99
+            Complete Pack — £199.99
           </Link>
         </div>
         <p className="mt-6 text-sm text-gray-500">
