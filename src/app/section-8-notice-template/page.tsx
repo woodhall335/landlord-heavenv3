@@ -680,7 +680,29 @@ export default function Section8NoticeTemplatePage() {
           </div>
         </section>
 
-        {/* Related Resources */}
+        {/* Already have a notice? Validator callout */}
+        <section className="py-8 bg-blue-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-4">
+                <span className="text-4xl">✅</span>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    Already have a Section 8 notice?
+                  </p>
+                  <p className="text-gray-600">
+                    Use our free{' '}
+                    <Link href="/tools/validators/section-8" className="text-primary font-medium hover:underline">
+                      Section 8 grounds checker
+                    </Link>{' '}
+                    to verify your grounds are properly stated and your notice is court-ready.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Ask Heaven callout */}
         <section className="py-8 bg-purple-50">
           <div className="container mx-auto px-4">
@@ -712,6 +734,7 @@ export default function Section8NoticeTemplatePage() {
                 links={[
                   productLinks.noticeOnly,
                   productLinks.completePack,
+                  toolLinks.section8Validator,
                   toolLinks.section8Generator,
                   blogLinks.section21VsSection8,
                   blogLinks.rentArrearsEviction,

@@ -55,6 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Tool pages - Free tools for SEO traffic
   const toolPages = [
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/tools/validators', priority: 0.8, changeFrequency: 'weekly' as const },
     ...freeTools
       .filter((tool) => tool.href.startsWith('/tools'))
       .map((tool) => ({
@@ -64,8 +65,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
     ...validatorToolRoutes.map((path) => ({
       path,
-      priority: 0.7,
-      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+      changeFrequency: 'weekly' as const,
     })),
   ];
 

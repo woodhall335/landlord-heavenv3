@@ -9,29 +9,34 @@ import type { Metadata } from 'next';
 import { ValidatorPage } from '@/components/validators/ValidatorPage';
 import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Checker | Validate Form 3 Online | Landlord Heaven',
+  title: 'Section 8 Grounds Checker – Is My Notice Valid? | Free Tool',
   description:
-    'Check your Section 8 notice is valid before court. Our free tool verifies Form 3 compliance, grounds for possession, notice periods, rent arrears calculations for Ground 8, and evidence requirements.',
+    'Free Section 8 notice checker for England. Upload your notice for an instant validity report. Checks Form 3 compliance, grounds for possession (8, 10, 11), notice periods, and evidence requirements. England only.',
   keywords: [
     'section 8 notice checker',
+    'section 8 grounds checker',
+    'is my section 8 notice valid',
+    'section 8 validator',
     'form 3 validator',
     'grounds for possession',
     'eviction notice check',
     'ground 8 rent arrears',
     'mandatory grounds eviction',
     'discretionary grounds eviction',
-    'housing act 1988 schedule 2',
   ],
   openGraph: {
-    title: 'Free Section 8 Notice Checker | Landlord Heaven',
+    title: 'Section 8 Grounds Checker – Is My Notice Valid? | Free Tool',
     description:
-      'Instantly check if your Section 8 notice is court-ready. Free validation tool for landlords with grounds verification.',
+      'Free online Section 8 notice checker for England landlords. Upload your notice for instant grounds and validity verification.',
     type: 'website',
+    url: getCanonicalUrl('/tools/validators/section-8'),
   },
   alternates: {
-    canonical: '/tools/validators/section-8',
+    canonical: getCanonicalUrl('/tools/validators/section-8'),
   },
 };
 
@@ -106,19 +111,152 @@ const faqSchema = {
   ],
 };
 
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to Check if Your Section 8 Notice is Valid',
+  description:
+    'Use our free Section 8 grounds checker to verify your notice meets all legal requirements for court proceedings in England.',
+  totalTime: 'PT5M',
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Locate your Section 8 notice',
+      text: 'Find the Section 8 notice (Form 3) you want to check. This should be the notice you plan to serve or have already served on your tenant.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Upload to the checker',
+      text: 'Upload your Section 8 notice document (PDF or image) to our free online checker.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Answer questions about your grounds',
+      text: 'Provide information about your chosen grounds for possession, arrears amounts if applicable, and tenancy details.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Review your validity report',
+      text: 'Receive an instant report showing any issues with your notice, including ground-specific requirements and notice period calculations.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Fix issues or generate correct notice',
+      text: 'Use the report to fix any issues, or generate a court-ready Section 8 notice using our Notice Only Pack.',
+    },
+  ],
+};
+
 export default function Section8ValidatorPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      {/* Structured Data */}
+      <StructuredData data={faqSchema} />
+      <StructuredData data={howToSchema} />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Tools', url: 'https://landlordheaven.co.uk/tools' },
+          { name: 'Validators', url: 'https://landlordheaven.co.uk/tools/validators' },
+          {
+            name: 'Section 8 Grounds Checker',
+            url: 'https://landlordheaven.co.uk/tools/validators/section-8',
+          },
+        ])}
       />
 
+      {/* SSR Above-the-Fold Content */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-8 md:pt-32">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            {/* H1 - SSR Rendered */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
+              Section 8 Grounds Checker – Is My Notice Valid?
+            </h1>
+
+            {/* Intro paragraph with target keywords */}
+            <p className="text-lg md:text-xl text-gray-600 mb-6">
+              Free online <strong>Section 8 notice checker</strong> for England landlords. Upload
+              your notice to check if it&apos;s valid for court. Get an instant report on Form 3
+              compliance, grounds for possession, notice periods, and evidence requirements.
+            </p>
+
+            {/* England-only disclaimer - SSR visible */}
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg text-left max-w-2xl mx-auto">
+              <p className="text-amber-900 text-sm">
+                <strong>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England only:</strong> Section 8 notices apply to{' '}
+                <strong>England only</strong>. Different eviction rules apply in{' '}
+                <Link
+                  href="/wales-eviction-notices"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Wales (Renting Homes Act)
+                </Link>
+                ,{' '}
+                <Link
+                  href="/scotland-eviction-notices"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Scotland (Notice to Leave)
+                </Link>
+                , and{' '}
+                <Link
+                  href="/how-to-evict-tenant#northern-ireland"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Northern Ireland
+                </Link>
+                .
+              </p>
+            </div>
+
+            {/* Quick internal links - SSR */}
+            <div className="flex flex-wrap gap-2 justify-center text-sm mb-6">
+              <Link
+                href="/section-8-notice-template"
+                className="text-primary hover:underline font-medium"
+              >
+                Section 8 notice template
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/section-21-notice-template"
+                className="text-primary hover:underline font-medium"
+              >
+                Section 21 template
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/how-to-evict-tenant"
+                className="text-primary hover:underline font-medium"
+              >
+                How to evict a tenant
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/rent-arrears-letter-template"
+                className="text-primary hover:underline font-medium"
+              >
+                Rent arrears letter
+              </Link>
+            </div>
+
+            {/* Trust signals */}
+            <p className="text-xs text-gray-500">
+              Not legal advice. This tool checks key legal requirements but cannot guarantee court
+              outcomes.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Validator Component - Client rendered */}
       <ValidatorPage
         validatorKey="section_8"
-        title="Free Section 8 Notice Checker"
+        title="Upload Your Section 8 Notice"
         description="Upload your Section 8 notice to instantly check if it's valid and grounds are properly stated"
         jurisdiction="england"
+        allowedJurisdictions={['england']}
         caseType="eviction"
         productVariant="section8_england"
         features={[
@@ -132,6 +270,7 @@ export default function Section8ValidatorPage() {
           'Court hearing date estimation',
         ]}
         additionalInfo="Our Section 8 checker validates all legal requirements under Schedule 2 of the Housing Act 1988. Upload your notice to get instant feedback on compliance issues and ground-specific requirements that could affect your court case."
+        hideHeroSection
       />
 
       {/* SEO Content Section */}
@@ -144,23 +283,25 @@ export default function Section8ValidatorPage() {
             <p className="text-gray-700 mb-6">
               Our free Section 8 notice validator uses a deterministic rules engine to check your
               notice against all legal requirements under Schedule 2 of the Housing Act 1988. Unlike
-              generic document checkers, our tool understands the complex interplay between different
-              grounds, notice periods, and evidence requirements that landlords must navigate.
+              generic document checkers, our tool understands the complex interplay between
+              different grounds, notice periods, and evidence requirements that landlords must
+              navigate.
             </p>
             <p className="text-gray-700 mb-6">
-              Simply upload your Section 8 notice and answer a few questions about your circumstances.
-              The checker will instantly identify any issues that could weaken your case in court,
-              including ground-specific threshold requirements and notice period calculations.
+              Simply upload your Section 8 notice and answer a few questions about your
+              circumstances. The checker will instantly identify any issues that could weaken your
+              case in court, including ground-specific threshold requirements and notice period
+              calculations.
             </p>
 
             <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
               Understanding Section 8 Notices
             </h2>
             <p className="text-gray-700 mb-4">
-              A Section 8 notice is fundamentally different from a Section 21 notice. While Section 21
-              allows &quot;no-fault&quot; eviction, Section 8 requires you to prove specific grounds for
-              possession in court. This means your notice must be carefully prepared, and you must
-              have evidence to support your claimed grounds at the hearing.
+              A Section 8 notice is fundamentally different from a Section 21 notice. While Section
+              21 allows &quot;no-fault&quot; eviction, Section 8 requires you to prove specific
+              grounds for possession in court. This means your notice must be carefully prepared,
+              and you must have evidence to support your claimed grounds at the hearing.
             </p>
             <p className="text-gray-700 mb-4">
               Section 8 notices use the prescribed Form 3 and must clearly state which grounds from
@@ -172,9 +313,9 @@ export default function Section8ValidatorPage() {
               Mandatory Grounds (Grounds 1-8)
             </h2>
             <p className="text-gray-700 mb-4">
-              Mandatory grounds are powerful because the court <strong>must</strong> grant possession
-              if you prove the ground applies. The court has no discretion to refuse, even if it would
-              cause hardship to the tenant.
+              Mandatory grounds are powerful because the court <strong>must</strong> grant
+              possession if you prove the ground applies. The court has no discretion to refuse,
+              even if it would cause hardship to the tenant.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
@@ -182,42 +323,67 @@ export default function Section8ValidatorPage() {
             </h3>
             <p className="text-gray-700 mb-4">
               Ground 8 is the most frequently used mandatory ground. It requires the tenant to be in
-              serious arrears <strong>both</strong> when you serve the notice <strong>and</strong> at
-              the court hearing. The threshold depends on how rent is paid:
+              serious arrears <strong>both</strong> when you serve the notice{' '}
+              <strong>and</strong> at the court hearing. The threshold depends on how rent is paid:
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-              <li><strong>Weekly rent:</strong> at least 8 weeks&apos; rent outstanding</li>
-              <li><strong>Fortnightly rent:</strong> at least 4 fortnightly payments (8 weeks)</li>
-              <li><strong>Monthly rent:</strong> at least 2 months&apos; rent outstanding</li>
-              <li><strong>Quarterly/yearly rent:</strong> at least 2 months&apos; equivalent outstanding</li>
+              <li>
+                <strong>Weekly rent:</strong> at least 8 weeks&apos; rent outstanding
+              </li>
+              <li>
+                <strong>Fortnightly rent:</strong> at least 4 fortnightly payments (8 weeks)
+              </li>
+              <li>
+                <strong>Monthly rent:</strong> at least 2 months&apos; rent outstanding
+              </li>
+              <li>
+                <strong>Quarterly/yearly rent:</strong> at least 2 months&apos; equivalent
+                outstanding
+              </li>
             </ul>
             <p className="text-gray-700 mb-4">
               <strong>Critical warning:</strong> If the tenant pays down their arrears below the
-              threshold before your court hearing, Ground 8 will fail. Many landlords combine Ground 8
-              with discretionary grounds (10 and 11) as a backup.
+              threshold before your court hearing, Ground 8 will fail. Many landlords combine Ground
+              8 with discretionary grounds (10 and 11) as a backup.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
               Other Mandatory Grounds
             </h3>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-              <li><strong>Ground 1:</strong> Landlord previously occupied as their only or principal home</li>
-              <li><strong>Ground 2:</strong> Mortgage lender requires possession to sell</li>
-              <li><strong>Ground 3:</strong> Out of season holiday let</li>
-              <li><strong>Ground 4:</strong> Student accommodation out of term</li>
-              <li><strong>Ground 5:</strong> Property needed for minister of religion</li>
-              <li><strong>Ground 6:</strong> Landlord intends to demolish or reconstruct</li>
-              <li><strong>Ground 7:</strong> Inherited tenancy and landlord wants possession within 12 months</li>
+              <li>
+                <strong>Ground 1:</strong> Landlord previously occupied as their only or principal
+                home
+              </li>
+              <li>
+                <strong>Ground 2:</strong> Mortgage lender requires possession to sell
+              </li>
+              <li>
+                <strong>Ground 3:</strong> Out of season holiday let
+              </li>
+              <li>
+                <strong>Ground 4:</strong> Student accommodation out of term
+              </li>
+              <li>
+                <strong>Ground 5:</strong> Property needed for minister of religion
+              </li>
+              <li>
+                <strong>Ground 6:</strong> Landlord intends to demolish or reconstruct
+              </li>
+              <li>
+                <strong>Ground 7:</strong> Inherited tenancy and landlord wants possession within 12
+                months
+              </li>
             </ul>
 
             <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
               Discretionary Grounds (Grounds 9-17)
             </h2>
             <p className="text-gray-700 mb-4">
-              With discretionary grounds, even if you prove the ground applies, the court will consider
-              whether it is &quot;reasonable&quot; to grant possession. Factors include: the severity of the
-              breach, the tenant&apos;s circumstances, whether they have children or disabilities, and
-              whether the behavior is likely to continue.
+              With discretionary grounds, even if you prove the ground applies, the court will
+              consider whether it is &quot;reasonable&quot; to grant possession. Factors include:
+              the severity of the breach, the tenant&apos;s circumstances, whether they have
+              children or disabilities, and whether the behavior is likely to continue.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
@@ -226,7 +392,8 @@ export default function Section8ValidatorPage() {
             <p className="text-gray-700 mb-4">
               Ground 10 applies when any rent is outstanding both when you serve the notice and at
               the hearing. Unlike Ground 8, there is no minimum threshold. However, courts are
-              reluctant to grant possession for small arrears unless there is a history of late payment.
+              reluctant to grant possession for small arrears unless there is a history of late
+              payment.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
@@ -235,7 +402,8 @@ export default function Section8ValidatorPage() {
             <p className="text-gray-700 mb-4">
               Ground 11 covers tenants who regularly pay late, even if they eventually pay. You need
               to demonstrate a pattern of late payment (typically 6+ months of late payments). This
-              ground does not require any arrears at the hearing - the pattern of behavior is enough.
+              ground does not require any arrears at the hearing - the pattern of behavior is
+              enough.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
@@ -251,18 +419,30 @@ export default function Section8ValidatorPage() {
               Other Discretionary Grounds
             </h3>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-              <li><strong>Ground 9:</strong> Suitable alternative accommodation available</li>
-              <li><strong>Ground 12:</strong> Breach of tenancy obligation (not rent)</li>
-              <li><strong>Ground 13:</strong> Deterioration of property due to neglect</li>
-              <li><strong>Ground 14A:</strong> Domestic violence (partner left)</li>
-              <li><strong>Ground 15:</strong> Deterioration of furniture</li>
-              <li><strong>Ground 16:</strong> Employee tenancy ended</li>
-              <li><strong>Ground 17:</strong> Tenancy obtained by false statement</li>
+              <li>
+                <strong>Ground 9:</strong> Suitable alternative accommodation available
+              </li>
+              <li>
+                <strong>Ground 12:</strong> Breach of tenancy obligation (not rent)
+              </li>
+              <li>
+                <strong>Ground 13:</strong> Deterioration of property due to neglect
+              </li>
+              <li>
+                <strong>Ground 14A:</strong> Domestic violence (partner left)
+              </li>
+              <li>
+                <strong>Ground 15:</strong> Deterioration of furniture
+              </li>
+              <li>
+                <strong>Ground 16:</strong> Employee tenancy ended
+              </li>
+              <li>
+                <strong>Ground 17:</strong> Tenancy obtained by false statement
+              </li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
-              Notice Periods by Ground
-            </h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">Notice Periods by Ground</h2>
             <p className="text-gray-700 mb-4">
               Different grounds require different notice periods. Getting this wrong will invalidate
               your notice:
@@ -272,7 +452,9 @@ export default function Section8ValidatorPage() {
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-left font-semibold text-charcoal">Grounds</th>
-                    <th className="px-4 py-2 text-left font-semibold text-charcoal">Notice Period</th>
+                    <th className="px-4 py-2 text-left font-semibold text-charcoal">
+                      Notice Period
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -281,7 +463,9 @@ export default function Section8ValidatorPage() {
                     <td className="px-4 py-2 text-gray-700">2 months</td>
                   </tr>
                   <tr className="border-t bg-gray-50">
-                    <td className="px-4 py-2 text-gray-700">3, 4, 8, 10, 11, 12, 13, 14, 14A, 15, 17</td>
+                    <td className="px-4 py-2 text-gray-700">
+                      3, 4, 8, 10, 11, 12, 13, 14, 14A, 15, 17
+                    </td>
                     <td className="px-4 py-2 text-gray-700">2 weeks</td>
                   </tr>
                 </tbody>
@@ -289,8 +473,8 @@ export default function Section8ValidatorPage() {
             </div>
             <p className="text-gray-700 mb-6">
               <strong>Important:</strong> If you use multiple grounds with different notice periods,
-              you must use the longest required period. For example, if using Grounds 8 and 10 (2 weeks)
-              alongside Ground 9 (2 months), you need 2 months&apos; notice.
+              you must use the longest required period. For example, if using Grounds 8 and 10 (2
+              weeks) alongside Ground 9 (2 months), you need 2 months&apos; notice.
             </p>
 
             <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
@@ -310,27 +494,27 @@ export default function Section8ValidatorPage() {
             </ul>
 
             <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
-              Building a Strong Section 8 Case
+              What to Do If Your Notice Is Invalid
             </h2>
             <p className="text-gray-700 mb-4">
-              Unlike Section 21, Section 8 requires you to prove your case. Preparation is essential:
+              If our checker identifies issues with your Section 8 notice, here are your options:
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
               <li>
-                <strong>Rent arrears:</strong> Keep detailed payment records, send formal rent demands,
-                document all communication about arrears.
+                <strong>Wrong grounds cited:</strong> Serve a new notice with the correct grounds
+                and appropriate notice period.
               </li>
               <li>
-                <strong>Anti-social behavior:</strong> Maintain a diary of incidents with dates, times,
-                and witnesses. Report to police and council. Collect written complaints from neighbors.
+                <strong>Insufficient notice period:</strong> Wait for the correct period or serve a
+                new notice.
               </li>
               <li>
-                <strong>Property damage:</strong> Take dated photographs, obtain repair quotes, document
-                the condition at tenancy start vs. current state.
+                <strong>Missing evidence:</strong> Gather required evidence before proceeding to
+                court.
               </li>
               <li>
-                <strong>Breach of terms:</strong> Keep copies of the tenancy agreement highlighting
-                breached clauses. Document warnings given to the tenant.
+                <strong>Arrears below threshold:</strong> Wait for arrears to reach Ground 8
+                threshold, or proceed on discretionary grounds only.
               </li>
             </ul>
 
