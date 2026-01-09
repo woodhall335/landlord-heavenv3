@@ -764,3 +764,186 @@ export function trackWizardIncompatibleChoice(params: {
     topic: params.topic || 'general',
   });
 }
+
+// =============================================================================
+// ASK HEAVEN TRACKING
+// =============================================================================
+
+/**
+ * Full attribution payload for Ask Heaven events
+ */
+export interface AskHeavenTrackingParams {
+  jurisdiction?: string;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+  question_count: number;
+  suggested_product?: string | null;
+  email_captured?: boolean;
+}
+
+/**
+ * Track Ask Heaven page view
+ */
+export function trackAskHeavenView(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_view', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+  });
+
+  // Track as Facebook ViewContent
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: 'ask_heaven',
+      content_category: 'free_tool',
+      content_type: 'ask_heaven',
+    });
+  }
+}
+
+/**
+ * Track when a question is submitted in Ask Heaven
+ */
+export function trackAskHeavenQuestionSubmitted(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_question_submitted', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+  });
+}
+
+/**
+ * Track when an answer is received in Ask Heaven
+ */
+export function trackAskHeavenAnswerReceived(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_answer_received', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+    suggested_product: params.suggested_product || 'none',
+  });
+}
+
+/**
+ * Track when a CTA is clicked in Ask Heaven (e.g., Start Wizard, Buy Pack)
+ */
+export function trackAskHeavenCtaClick(params: AskHeavenTrackingParams & {
+  cta_type: 'wizard' | 'product' | 'validator' | 'template' | 'next_best_action';
+  cta_label?: string;
+  target_url?: string;
+}): void {
+  trackEvent('ask_heaven_cta_click', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+    suggested_product: params.suggested_product || 'none',
+    cta_type: params.cta_type,
+    cta_label: params.cta_label,
+    target_url: params.target_url,
+  });
+
+  // Track as AddToCart intent for wizard/product CTAs
+  if (typeof window !== 'undefined' && window.fbq && (params.cta_type === 'wizard' || params.cta_type === 'product')) {
+    window.fbq('track', 'AddToCart', {
+      content_name: params.suggested_product || 'ask_heaven_cta',
+      content_category: 'ask_heaven',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when a follow-up question is clicked
+ */
+export function trackAskHeavenFollowupClick(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_followup_click', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+  });
+}
+
+/**
+ * Track when email is captured in Ask Heaven
+ */
+export function trackAskHeavenEmailCapture(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_email_capture', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+  });
+
+  // Track as Lead
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Lead', {
+      content_name: 'ask_heaven_email',
+      content_category: 'ask_heaven',
+      lead_type: 'email_capture',
+    });
+  }
+}
+
+/**
+ * Track when email gate is shown
+ */
+export function trackAskHeavenEmailGateShown(params: AskHeavenTrackingParams): void {
+  trackEvent('ask_heaven_email_gate_shown', {
+    event_category: 'ask_heaven',
+    jurisdiction: params.jurisdiction || 'not_selected',
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+    question_count: params.question_count,
+  });
+}

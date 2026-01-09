@@ -16,6 +16,28 @@ import {
   type AskHeavenRecommendation,
   isValidAskHeavenRecommendation,
 } from '@/lib/pricing/products';
+import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
+import {
+  initializeAskHeavenAttribution,
+  getAskHeavenAttribution,
+  setAskHeavenAttribution,
+  incrementQuestionCount,
+  markEmailCaptured,
+  hasEmailBeenCaptured,
+  getQuestionCount,
+} from '@/lib/ask-heaven/askHeavenAttribution';
+import {
+  trackAskHeavenView,
+  trackAskHeavenQuestionSubmitted,
+  trackAskHeavenAnswerReceived,
+  trackAskHeavenCtaClick,
+  trackAskHeavenFollowupClick,
+  trackAskHeavenEmailCapture,
+  trackAskHeavenEmailGateShown,
+  type AskHeavenTrackingParams,
+} from '@/lib/analytics';
+import { detectTopics, getPrimaryTopic, type Topic } from '@/lib/ask-heaven/topic-detection';
+import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -28,8 +50,6 @@ interface ChatMessage {
   followUpQuestions?: string[];
   sources?: string[];
 }
-
-// Product CTA config now imported from @/lib/pricing/products
 
 interface EvidenceSummary {
   id: string;
@@ -101,7 +121,8 @@ const jurisdictionWelcome: Record<Jurisdiction, { title: string; subtitle: strin
   },
 };
 
-// FAQ items moved to page.tsx for SSR - schema and visible FAQ now server-rendered
+// Email gate threshold
+const EMAIL_GATE_THRESHOLD = 3;
 
 export default function AskHeavenPageClient(): React.ReactElement {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
@@ -116,9 +137,13 @@ export default function AskHeavenPageClient(): React.ReactElement {
   const [answersSubmitting, setAnswersSubmitting] = useState(false);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
+  const [emailGateOpen, setEmailGateOpen] = useState(false);
+  const [detectedTopic, setDetectedTopic] = useState<Topic | null>(null);
+  const [attributionInitialized, setAttributionInitialized] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoSubmitted = useRef(false);
+  const hasFiredView = useRef(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -127,6 +152,64 @@ export default function AskHeavenPageClient(): React.ReactElement {
   const searchParams = useSearchParams();
   const caseId = searchParams.get('caseId');
   const initialQuestion = searchParams.get('q');
+
+  // Initialize attribution on page load
+  useEffect(() => {
+    if (!attributionInitialized) {
+      const attribution = initializeAskHeavenAttribution();
+
+      // Also store jurisdiction if from URL
+      const jurisdictionParam = searchParams.get('jurisdiction');
+      if (jurisdictionParam) {
+        const normalizedJurisdiction = normalizeJurisdiction(jurisdictionParam);
+        if (normalizedJurisdiction) {
+          setJurisdiction(normalizedJurisdiction as Jurisdiction);
+          setAskHeavenAttribution({ jurisdiction: normalizedJurisdiction });
+        }
+      }
+
+      setAttributionInitialized(true);
+
+      // Fire view event (only once)
+      if (!hasFiredView.current) {
+        hasFiredView.current = true;
+        trackAskHeavenView({
+          jurisdiction: jurisdiction,
+          src: attribution.src,
+          topic: attribution.topic,
+          utm_source: attribution.utm_source,
+          utm_medium: attribution.utm_medium,
+          utm_campaign: attribution.utm_campaign,
+          landing_url: attribution.landing_url,
+          first_seen_at: attribution.first_seen_at,
+          question_count: attribution.question_count,
+        });
+      }
+    }
+  }, [attributionInitialized, searchParams, jurisdiction]);
+
+  // Update attribution when jurisdiction changes
+  useEffect(() => {
+    if (attributionInitialized) {
+      setAskHeavenAttribution({ jurisdiction });
+    }
+  }, [jurisdiction, attributionInitialized]);
+
+  // Helper to get current tracking params
+  const getTrackingParams = useCallback((): AskHeavenTrackingParams => {
+    const attribution = getAskHeavenAttribution();
+    return {
+      jurisdiction,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+      question_count: attribution.question_count,
+    };
+  }, [jurisdiction]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -138,8 +221,32 @@ export default function AskHeavenPageClient(): React.ReactElement {
     const trimmed = questionText.trim();
     if (!trimmed) return;
 
+    // Check email gate before submitting
+    const currentCount = getQuestionCount();
+    const emailCaptured = hasEmailBeenCaptured();
+
+    if (currentCount >= EMAIL_GATE_THRESHOLD && !emailCaptured && !caseId) {
+      trackAskHeavenEmailGateShown(getTrackingParams());
+      setEmailGateOpen(true);
+      return;
+    }
+
     setError(null);
     setIsSending(true);
+
+    // Increment question count and track
+    const newCount = incrementQuestionCount();
+    const trackingParams = getTrackingParams();
+    trackingParams.question_count = newCount;
+    trackAskHeavenQuestionSubmitted(trackingParams);
+
+    // Detect topics from the question
+    const topics = detectTopics(trimmed);
+    const primaryTopic = getPrimaryTopic(topics);
+    if (primaryTopic) {
+      setDetectedTopic(primaryTopic);
+      setAskHeavenAttribution({ topic: primaryTopic });
+    }
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -161,11 +268,22 @@ export default function AskHeavenPageClient(): React.ReactElement {
           case_id: caseId ?? undefined,
           jurisdiction,
           messages: [{ role: userMsg.role, content: userMsg.content }],
+          messageCount: newCount,
+          emailCaptured: hasEmailBeenCaptured(),
         }),
       });
 
       if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        const body = (await res.json().catch(() => null)) as { error?: string; requires_email?: boolean } | null;
+
+        // Handle email gate from API
+        if (body?.requires_email) {
+          trackAskHeavenEmailGateShown(trackingParams);
+          setEmailGateOpen(true);
+          setIsSending(false);
+          return;
+        }
+
         setError(body?.error ?? 'Ask Heaven could not reply right now. Please try again.');
         return;
       }
@@ -175,7 +293,16 @@ export default function AskHeavenPageClient(): React.ReactElement {
         suggested_product?: string | null;
         follow_up_questions?: string[];
         sources?: string[];
+        requires_email?: boolean;
       };
+
+      // Handle email gate response
+      if (body.requires_email) {
+        trackAskHeavenEmailGateShown(trackingParams);
+        setEmailGateOpen(true);
+        setIsSending(false);
+        return;
+      }
 
       if (!body.reply) {
         setError('Ask Heaven returned an empty response. Please try again.');
@@ -193,13 +320,27 @@ export default function AskHeavenPageClient(): React.ReactElement {
       };
 
       setChatMessages([userMsg, assistantMsg]);
+
+      // Detect topics from response as well
+      const responseTopics = detectTopics(body.reply);
+      const responsePrimaryTopic = getPrimaryTopic(responseTopics);
+      if (responsePrimaryTopic && !primaryTopic) {
+        setDetectedTopic(responsePrimaryTopic);
+        setAskHeavenAttribution({ topic: responsePrimaryTopic });
+      }
+
+      // Track answer received
+      trackAskHeavenAnswerReceived({
+        ...trackingParams,
+        suggested_product: body.suggested_product,
+      });
     } catch (err) {
       console.error('Ask Heaven error:', err);
       setError('Unable to reach Ask Heaven. Please check your connection and try again.');
     } finally {
       setIsSending(false);
     }
-  }, [caseId, jurisdiction]);
+  }, [caseId, jurisdiction, getTrackingParams]);
 
   useEffect(() => {
     if (initialQuestion && !hasAutoSubmitted.current && chatMessages.length === 0) {
@@ -334,8 +475,32 @@ export default function AskHeavenPageClient(): React.ReactElement {
     const trimmed = questionText.trim();
     if (!trimmed) return;
 
+    // Check email gate before submitting
+    const currentCount = getQuestionCount();
+    const emailCaptured = hasEmailBeenCaptured();
+
+    if (currentCount >= EMAIL_GATE_THRESHOLD && !emailCaptured && !caseId) {
+      trackAskHeavenEmailGateShown(getTrackingParams());
+      setEmailGateOpen(true);
+      return;
+    }
+
     setError(null);
     setIsSending(true);
+
+    // Increment question count and track
+    const newCount = incrementQuestionCount();
+    const trackingParams = getTrackingParams();
+    trackingParams.question_count = newCount;
+    trackAskHeavenQuestionSubmitted(trackingParams);
+
+    // Detect topics from the question
+    const topics = detectTopics(trimmed);
+    const primaryTopic = getPrimaryTopic(topics);
+    if (primaryTopic) {
+      setDetectedTopic(primaryTopic);
+      setAskHeavenAttribution({ topic: primaryTopic });
+    }
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -361,11 +526,22 @@ export default function AskHeavenPageClient(): React.ReactElement {
             role: m.role,
             content: m.content,
           })),
+          messageCount: newCount,
+          emailCaptured: hasEmailBeenCaptured(),
         }),
       });
 
       if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        const body = (await res.json().catch(() => null)) as { error?: string; requires_email?: boolean } | null;
+
+        // Handle email gate from API
+        if (body?.requires_email) {
+          trackAskHeavenEmailGateShown(trackingParams);
+          setEmailGateOpen(true);
+          setIsSending(false);
+          return;
+        }
+
         setError(body?.error ?? 'Ask Heaven could not reply right now. Please try again.');
         return;
       }
@@ -375,7 +551,16 @@ export default function AskHeavenPageClient(): React.ReactElement {
         suggested_product?: string | null;
         follow_up_questions?: string[];
         sources?: string[];
+        requires_email?: boolean;
       };
+
+      // Handle email gate response
+      if (body.requires_email) {
+        trackAskHeavenEmailGateShown(trackingParams);
+        setEmailGateOpen(true);
+        setIsSending(false);
+        return;
+      }
 
       if (!body.reply) {
         setError('Ask Heaven returned an empty response. Please try again.');
@@ -393,13 +578,27 @@ export default function AskHeavenPageClient(): React.ReactElement {
       };
 
       setChatMessages((prev) => [...prev, assistantMsg]);
+
+      // Detect topics from response as well
+      const responseTopics = detectTopics(body.reply);
+      const responsePrimaryTopic = getPrimaryTopic(responseTopics);
+      if (responsePrimaryTopic && !primaryTopic) {
+        setDetectedTopic(responsePrimaryTopic);
+        setAskHeavenAttribution({ topic: responsePrimaryTopic });
+      }
+
+      // Track answer received
+      trackAskHeavenAnswerReceived({
+        ...trackingParams,
+        suggested_product: body.suggested_product,
+      });
     } catch (err) {
       console.error('Ask Heaven error:', err);
       setError('Unable to reach Ask Heaven. Please check your connection and try again.');
     } finally {
       setIsSending(false);
     }
-  }, [chatMessages, jurisdiction, caseId]);
+  }, [chatMessages, jurisdiction, caseId, getTrackingParams]);
 
   const handleSend = useCallback(async () => {
     await submitQuestion(input);
@@ -409,9 +608,47 @@ export default function AskHeavenPageClient(): React.ReactElement {
     setInput(question);
   };
 
+  const handleFollowupClick = (question: string) => {
+    trackAskHeavenFollowupClick(getTrackingParams());
+    setInput(question);
+  };
+
+  // Build wizard link with attribution
+  const buildWizardLinkWithAttribution = useCallback((product: string) => {
+    const attribution = getAskHeavenAttribution();
+    return buildWizardLink({
+      product: product as any,
+      jurisdiction: jurisdiction as WizardJurisdiction,
+      src: 'ask_heaven',
+      topic: (attribution.topic as any) || 'general',
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+    });
+  }, [jurisdiction]);
+
+  // Handle CTA click with tracking
+  const handleCtaClick = useCallback((ctaType: 'wizard' | 'product' | 'validator' | 'template' | 'next_best_action', targetUrl: string, ctaLabel: string, suggestedProduct?: string) => {
+    const trackingParams = getTrackingParams();
+    trackAskHeavenCtaClick({
+      ...trackingParams,
+      suggested_product: suggestedProduct,
+      cta_type: ctaType,
+      cta_label: ctaLabel,
+      target_url: targetUrl,
+    });
+  }, [getTrackingParams]);
+
+  // Handle email capture success
+  const handleEmailCaptured = useCallback(() => {
+    markEmailCaptured();
+    trackAskHeavenEmailCapture(getTrackingParams());
+    setEmailGateOpen(false);
+    setEmailStatus('Thanks! You can continue your conversation.');
+  }, [getTrackingParams]);
+
   return (
     <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pb-8">
-      {/* StructuredData moved to page.tsx for SSR */}
       <Container>
         <div className="max-w-4xl mx-auto pb-6">
           {/* Chat Widget Header - H1 is in SSR page.tsx */}
@@ -452,7 +689,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 </span>
               </div>
 
-              {/* Compact case context UI - keeping existing functionality */}
+              {/* Compact case context UI */}
               <div className="space-y-3">
                 {caseContext.evidence.length > 0 && (
                   <div className="flex flex-col gap-2">
@@ -657,7 +894,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                               <button
                                 key={idx}
                                 type="button"
-                                onClick={() => setInput(question)}
+                                onClick={() => handleFollowupClick(question)}
                                 className="text-left text-xs px-3 py-2 bg-primary/5 hover:bg-primary/10 text-primary rounded-lg border border-primary/20 transition-colors"
                               >
                                 {question}
@@ -667,14 +904,16 @@ export default function AskHeavenPageClient(): React.ReactElement {
                         </div>
                       )}
 
-                      {/* Product CTA */}
+                      {/* Product CTA - updated with buildWizardLink */}
                       {m.suggestedProduct && isValidAskHeavenRecommendation(m.suggestedProduct) && (
                         <div className="mt-4 pt-3 border-t border-gray-100">
                           {(() => {
                             const cta = ASK_HEAVEN_RECOMMENDATION_MAP[m.suggestedProduct as AskHeavenRecommendation];
+                            const wizardUrl = buildWizardLinkWithAttribution(cta.primarySku);
                             return (
                               <Link
-                                href={cta.wizardHref}
+                                href={wizardUrl}
+                                onClick={() => handleCtaClick('wizard', wizardUrl, cta.label, m.suggestedProduct ?? undefined)}
                                 className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
                               >
                                 <div className="flex items-center justify-between">
@@ -724,6 +963,25 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
               <div ref={chatEndRef} />
             </div>
+
+            {/* Next Best Action Card - shown after first answer */}
+            {chatMessages.some(m => m.role === 'assistant') && detectedTopic && (
+              <div className="px-4 md:px-6 pb-4">
+                <NextBestActionCard
+                  topic={detectedTopic}
+                  jurisdiction={jurisdiction as WizardJurisdiction}
+                  attribution={{
+                    src: getAskHeavenAttribution().src,
+                    utm_source: getAskHeavenAttribution().utm_source,
+                    utm_medium: getAskHeavenAttribution().utm_medium,
+                    utm_campaign: getAskHeavenAttribution().utm_campaign,
+                  }}
+                  onCtaClick={(ctaType, targetUrl, ctaLabel) => {
+                    handleCtaClick(ctaType as any, targetUrl, ctaLabel);
+                  }}
+                />
+              </div>
+            )}
 
             {/* Error Message */}
             {error && (
@@ -786,8 +1044,6 @@ export default function AskHeavenPageClient(): React.ReactElement {
               No sign-up required
             </span>
           </div>
-
-          {/* SEO Content moved to page.tsx for SSR */}
         </div>
       </Container>
 
@@ -807,6 +1063,20 @@ export default function AskHeavenPageClient(): React.ReactElement {
         onSuccess={() => {
           setEmailStatus('Report queued — check your inbox soon.');
         }}
+      />
+
+      {/* Email Gate Modal - blocks chat after 3 questions */}
+      <EmailCaptureModal
+        open={emailGateOpen}
+        onClose={() => setEmailGateOpen(false)}
+        source="ask_heaven_gate"
+        jurisdiction={jurisdiction}
+        tags={['ask_heaven', 'email_gate']}
+        title="Continue your conversation"
+        description="Enter your email to continue chatting with Ask Heaven. We'll also send you a summary of your conversation."
+        primaryLabel="Continue"
+        includeEmailReport={false}
+        onSuccess={handleEmailCaptured}
       />
     </div>
   );

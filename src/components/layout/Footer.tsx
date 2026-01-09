@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import { buildAskHeavenLink } from "@/lib/ask-heaven/buildAskHeavenLink";
 
 export function Footer() {
+  const askHeavenLink = buildAskHeavenLink({ source: 'footer' });
   const currentYear = new Date().getFullYear();
 
   return (
@@ -190,7 +192,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/ask-heaven" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href={askHeavenLink} className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Ask Heaven
                 </Link>
               </li>

@@ -22,6 +22,10 @@ export interface AskHeavenWidgetProps {
   description?: string;
   ctaText?: string;
   className?: string;
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
 }
 
 const DEFAULT_CONTENT = {
@@ -54,8 +58,20 @@ export function AskHeavenWidget({
   description = DEFAULT_CONTENT.description,
   ctaText = DEFAULT_CONTENT.ctaText,
   className,
+  jurisdiction,
+  utm_source,
+  utm_medium,
+  utm_campaign,
 }: AskHeavenWidgetProps) {
-  const href = buildAskHeavenLink({ source, topic, product });
+  const href = buildAskHeavenLink({
+    source,
+    topic,
+    product,
+    jurisdiction,
+    utm_source,
+    utm_medium,
+    utm_campaign,
+  });
 
   if (variant === 'inline') {
     return (
