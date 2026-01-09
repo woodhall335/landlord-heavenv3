@@ -50,6 +50,20 @@ export const toolLinks = {
     icon: 'document' as const,
     type: 'tool' as const,
   },
+  section21Validator: {
+    href: '/tools/validators/section-21',
+    title: 'Section 21 Validity Checker',
+    description: 'Check if your Section 21 notice is valid (England)',
+    icon: 'legal' as const,
+    type: 'tool' as const,
+  },
+  section8Validator: {
+    href: '/tools/validators/section-8',
+    title: 'Section 8 Grounds Checker',
+    description: 'Check your Section 8 notice grounds (England)',
+    icon: 'legal' as const,
+    type: 'tool' as const,
+  },
   rentDemandLetter: {
     href: '/tools/free-rent-demand-letter',
     title: 'Free Rent Demand Letter',
@@ -186,6 +200,8 @@ export const evictionRelatedLinks = [
   guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
+  toolLinks.section21Validator,
+  toolLinks.section8Validator,
   guideLinks.walesEviction,
   guideLinks.scotlandEviction,
 ];
@@ -193,6 +209,7 @@ export const evictionRelatedLinks = [
 export const section21RelatedLinks = [
   guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
+  toolLinks.section21Validator,
   toolLinks.section21Generator,
   blogLinks.whatIsSection21,
   guideLinks.walesEviction,
@@ -203,6 +220,7 @@ export const section8RelatedLinks = [
   guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
+  toolLinks.section8Validator,
   toolLinks.section8Generator,
   blogLinks.rentArrearsEviction,
   guideLinks.walesEviction,
@@ -261,6 +279,8 @@ export const askHeavenRelatedLinks = [
   guideLinks.walesEviction,
   guideLinks.scotlandEviction,
   toolLinks.rentArrearsCalculator,
+  toolLinks.section21Validator,
+  toolLinks.section8Validator,
   toolLinks.section21Generator,
   toolLinks.section8Generator,
 ];

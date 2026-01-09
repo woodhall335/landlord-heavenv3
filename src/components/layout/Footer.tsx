@@ -57,8 +57,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/tools/validators/section-21" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Section 21 Validity Checker
+                </Link>
+              </li>
+              <li>
                 <Link href="/section-8-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Section 8 Template
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/validators/section-8" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Section 8 Grounds Checker
                 </Link>
               </li>
               <li>
@@ -69,11 +79,6 @@ export function Footer() {
               <li>
                 <Link href="/scotland-eviction-notices" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Scotland Eviction Guide
-                </Link>
-              </li>
-              <li>
-                <Link href="/eviction-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Eviction Templates
                 </Link>
               </li>
             </ul>

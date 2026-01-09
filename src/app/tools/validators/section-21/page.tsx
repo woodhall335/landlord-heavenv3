@@ -10,13 +10,17 @@ import { ValidatorPage } from '@/components/validators/ValidatorPage';
 import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
-  title: 'Free Section 21 Notice Checker | Validate Form 6A Online | Landlord Heaven',
+  title: 'Section 21 Validity Checker – Is My Notice Valid? | Free Tool',
   description:
-    'Check your Section 21 notice is valid before court. Our free tool verifies Form 6A compliance, deposit protection, prescribed information, gas safety, EPC, and notice period requirements. England only.',
+    'Free Section 21 notice checker for England. Upload your Form 6A for an instant validity report. Checks deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and notice periods. England only.',
   keywords: [
+    'section 21 validity checker',
     'section 21 notice checker',
+    'is my section 21 notice valid',
+    'section 21 validator',
     'form 6a validator',
     'section 21 validity',
     'eviction notice check',
@@ -24,9 +28,9 @@ export const metadata: Metadata = {
     'assured shorthold tenancy eviction',
   ],
   openGraph: {
-    title: 'Free Section 21 Notice Checker | Landlord Heaven',
+    title: 'Section 21 Validity Checker – Is My Notice Valid? | Free Tool',
     description:
-      'Instantly check if your Section 21 notice is court-ready. Free validation tool for England landlords.',
+      'Free online Section 21 notice checker for England landlords. Upload your Form 6A for instant validity verification.',
     type: 'website',
     url: getCanonicalUrl('/tools/validators/section-21'),
   },
@@ -106,19 +110,152 @@ const faqSchema = {
   ],
 };
 
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to Check if Your Section 21 Notice is Valid',
+  description:
+    'Use our free Section 21 validity checker to verify your Form 6A notice meets all legal requirements for court proceedings in England.',
+  totalTime: 'PT5M',
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Locate your Section 21 notice',
+      text: 'Find the Section 21 notice (Form 6A) you want to check. This should be the notice you plan to serve or have already served on your tenant.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Upload to the checker',
+      text: 'Upload your Section 21 notice document (PDF or image) to our free online validity checker.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Answer compliance questions',
+      text: 'Provide information about deposit protection, gas safety, EPC, How to Rent guide, and other compliance requirements.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Review your validity report',
+      text: 'Receive an instant report showing any issues with your notice, including specific compliance failures and how to fix them.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Fix issues or generate correct notice',
+      text: 'Use the report to fix any issues, or generate a court-ready Section 21 notice using our Notice Only Pack.',
+    },
+  ],
+};
+
 export default function Section21ValidatorPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      {/* Structured Data */}
+      <StructuredData data={faqSchema} />
+      <StructuredData data={howToSchema} />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Tools', url: 'https://landlordheaven.co.uk/tools' },
+          { name: 'Validators', url: 'https://landlordheaven.co.uk/tools/validators' },
+          {
+            name: 'Section 21 Validity Checker',
+            url: 'https://landlordheaven.co.uk/tools/validators/section-21',
+          },
+        ])}
       />
 
+      {/* SSR Above-the-Fold Content */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-8 md:pt-32">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            {/* H1 - SSR Rendered */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
+              Section 21 Validity Checker – Is My Notice Valid?
+            </h1>
+
+            {/* Intro paragraph with target keywords */}
+            <p className="text-lg md:text-xl text-gray-600 mb-6">
+              Free online <strong>Section 21 notice checker</strong> for England landlords. Upload
+              your Form 6A to check if it&apos;s valid for court. Get an instant report on deposit
+              protection, prescribed information, gas safety, EPC, and notice period compliance.
+            </p>
+
+            {/* England-only disclaimer - SSR visible */}
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg text-left max-w-2xl mx-auto">
+              <p className="text-amber-900 text-sm">
+                <strong>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England only:</strong> Section 21 notices apply to{' '}
+                <strong>England only</strong>. Different eviction rules apply in{' '}
+                <Link
+                  href="/wales-eviction-notices"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Wales (Renting Homes Act)
+                </Link>
+                ,{' '}
+                <Link
+                  href="/scotland-eviction-notices"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Scotland (Notice to Leave)
+                </Link>
+                , and{' '}
+                <Link
+                  href="/how-to-evict-tenant#northern-ireland"
+                  className="text-amber-700 underline hover:text-amber-900"
+                >
+                  Northern Ireland
+                </Link>
+                .
+              </p>
+            </div>
+
+            {/* Quick internal links - SSR */}
+            <div className="flex flex-wrap gap-2 justify-center text-sm mb-6">
+              <Link
+                href="/section-21-notice-template"
+                className="text-primary hover:underline font-medium"
+              >
+                Section 21 notice template
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/section-8-notice-template"
+                className="text-primary hover:underline font-medium"
+              >
+                Section 8 template
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/how-to-evict-tenant"
+                className="text-primary hover:underline font-medium"
+              >
+                How to evict a tenant
+              </Link>
+              <span className="text-gray-400">•</span>
+              <Link
+                href="/tools/validators/section-8"
+                className="text-primary hover:underline font-medium"
+              >
+                Section 8 checker
+              </Link>
+            </div>
+
+            {/* Trust signals */}
+            <p className="text-xs text-gray-500">
+              Not legal advice. This tool checks key legal requirements but cannot guarantee court
+              outcomes.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Validator Component - Client rendered */}
       <ValidatorPage
         validatorKey="section_21"
-        title="Free Section 21 Notice Checker"
+        title="Upload Your Section 21 Notice"
         description="Upload your Section 21 notice to instantly check if it's valid and court-ready"
         jurisdiction="england"
+        allowedJurisdictions={['england']}
         caseType="eviction"
         productVariant="section21_england"
         features={[
@@ -132,6 +269,7 @@ export default function Section21ValidatorPage() {
           'Licensing requirement check',
         ]}
         additionalInfo="Our Section 21 checker validates all legal requirements under the Housing Act 1988 (as amended by the Deregulation Act 2015). Upload your notice to get instant feedback on compliance issues that could make your notice invalid in court."
+        hideHeroSection
       />
 
       {/* SEO Content Section */}
@@ -208,9 +346,9 @@ export default function Section21ValidatorPage() {
             </h3>
             <p className="text-gray-700 mb-4">
               For tenancies starting on or after 1 October 2015, landlords must provide tenants with
-              the current version of the government's "How to Rent" guide. This can be provided
-              electronically (e.g., by email) or as a hard copy. Using an outdated version may
-              invalidate your notice.
+              the current version of the government&apos;s &quot;How to Rent&quot; guide. This can
+              be provided electronically (e.g., by email) or as a hard copy. Using an outdated
+              version may invalidate your notice.
             </p>
 
             <h3 className="text-xl font-semibold text-charcoal mb-4 mt-8">
@@ -243,7 +381,7 @@ export default function Section21ValidatorPage() {
               What to Do If Your Notice Is Invalid
             </h2>
             <p className="text-gray-700 mb-4">
-              If our checker identifies issues with your Section 21 notice, don't panic. Many
+              If our checker identifies issues with your Section 21 notice, don&apos;t panic. Many
               problems can be fixed:
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
