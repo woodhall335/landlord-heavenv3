@@ -41,7 +41,7 @@ const faqs: FAQItem[] = [
   },
   {
     question: "What's included in each pack?",
-    answer: "Notice Only (£29.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£149.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£179.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+    answer: "Notice Only (£39.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£199.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£199.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
   },
 ];
 

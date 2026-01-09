@@ -22,11 +22,11 @@ import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 
 export const metadata: Metadata = {
-  title: "Section 21 & 8 Eviction Notices - £29.99",
+  title: "Section 21 & 8 Eviction Notices - £39.99",
   description:
-    "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £29.99 one-time. England, Wales & Scotland.",
+    "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £39.99 one-time. England, Wales & Scotland.",
   openGraph: {
-    title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
+    title: "Section 21 & 8 Eviction Notices - Court-Ready from £39.99",
     description: "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes.",
     url: getCanonicalUrl('/products/notice-only'),
   },
@@ -59,7 +59,7 @@ const faqs = [
   },
   {
     question: "Can I generate multiple notices?",
-    answer: "£29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional notices as needed. Each purchase includes unlimited regenerations before final download for that specific case."
+    answer: "£39.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional notices as needed. Each purchase includes unlimited regenerations before final download for that specific case."
   }
 ];
 
@@ -70,7 +70,7 @@ export default function NoticeOnlyPage() {
       <StructuredData data={productSchema({
         name: "Notice Only Pack - Section 21 & 8 Eviction Notices",
         description: "Court-ready eviction notices for UK landlords. Section 21 (Form 6A), Section 8, and Notice to Leave for Scotland. AI-powered route selection and compliance checking included.",
-        price: "29.99",
+        price: "39.99",
         url: "https://landlordheaven.co.uk/products/notice-only"
       })} />
       <StructuredData data={faqPageSchema(faqs)} />
@@ -95,7 +95,7 @@ export default function NoticeOnlyPage() {
               AI-powered route selection + Court-Ready Eviction Notices
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£39.99</span>
             </div>
             <Link
               href="/wizard?product=notice_only&src=product_page&topic=eviction"
@@ -492,7 +492,7 @@ export default function NoticeOnlyPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £170+</h3>
                 <p className="text-gray-700">
-                  Solicitors charge £200-300 per notice. Our £29.99 one-time fee saves you money with no quality
+                  Solicitors charge £200-300 per notice. Our £39.99 one-time fee saves you money with no quality
                   compromise.
                 </p>
               </div>
@@ -582,7 +582,7 @@ export default function NoticeOnlyPage() {
                   Can I generate multiple notices?
                 </h3>
                 <p className="text-gray-700">
-                  £29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional
+                  £39.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional
                   notices as needed. Each purchase includes unlimited regenerations before final download for that specific case.
                 </p>
               </div>
@@ -639,7 +639,7 @@ export default function NoticeOnlyPage() {
                 href="/wizard?product=notice_only&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Start Your Notice - £29.99 →
+                Start Your Notice - £39.99 →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">

@@ -342,22 +342,8 @@ async function generateEnglandWalesMoneyClaimPack(
     ask_heaven: askHeavenDrafts,
   };
 
-  // PACK COVER
-  const packCover = await generateDocument({
-    templatePath: `${templateBase}/templates/money_claims/pack_cover.hbs`,
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Money claim pack summary',
-    description: 'Explains the contents of the bundle, claim totals and filing steps.',
-    category: 'guidance',
-    html: packCover.html,
-    pdf: packCover.pdf,
-    file_name: 'money-claim-pack-summary.pdf',
-  });
+  // PACK COVER - Removed as of Jan 2026 pack restructure
+  // Pack summary document no longer included in the money claim pack
 
   // PARTICULARS OF CLAIM
   const particulars = await generateDocument({
@@ -410,39 +396,11 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'interest-calculation.pdf',
   });
 
-  // EVIDENCE INDEX
-  const evidence = await generateDocument({
-    templatePath: `${templateBase}/templates/money_claims/evidence_index.hbs`,
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
+  // Evidence index document no longer included in the money claim pack
 
-  documents.push({
-    title: 'Evidence index',
-    description: 'Checklist of attachments to staple behind the N1 form.',
-    category: 'evidence',
-    html: evidence.html,
-    pdf: evidence.pdf,
-    file_name: 'evidence-index.pdf',
-  });
-
-  // COURT HEARING PREPARATION SHEET (NEW)
-  const hearingPrep = await generateDocument({
-    templatePath: `${templateBase}/templates/money_claims/hearing_prep_sheet.hbs`,
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Court Hearing Preparation Sheet',
-    description: 'Structured guidance on what to say, what to bring, and how to present your case if the claim is defended.',
-    category: 'guidance',
-    html: hearingPrep.html,
-    pdf: hearingPrep.pdf,
-    file_name: 'hearing-prep-sheet.pdf',
-  });
+  // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
+  // Hearing prep sheet document no longer included in the money claim pack
 
   // PRE-ACTION PROTOCOL DOCUMENTS (Legally Required)
   const responseDeadline = new Date();

@@ -369,26 +369,25 @@ export function getEvictionPackContents(options: PackContentsOptions): PackCateg
 
   // ==========================================================================
   // AI-GENERATED DOCUMENTS (Complete Pack only)
+  // Note: Compliance Audit and Risk Assessment removed as of Jan 2026 pack restructure
   // ==========================================================================
   if (packType === 'complete_pack') {
     categories.push({
       id: 'ai_generated',
       title: 'Ask Heaven AI Documents',
       icon: '☁️',
-      documents: [WITNESS_STATEMENT, COMPLIANCE_AUDIT, RISK_ASSESSMENT],
+      documents: [WITNESS_STATEMENT],
     });
   }
 
   // ==========================================================================
   // GUIDANCE DOCUMENTS
+  // Note: Eviction Roadmap removed as of Jan 2026 pack restructure
   // ==========================================================================
   const guidance: PackDocument[] = [SERVICE_INSTRUCTIONS, SERVICE_VALIDITY_CHECKLIST];
 
   if (packType === 'complete_pack') {
     // Add guidance documents for complete pack
-    // Eviction Roadmap now includes timeline and expert tips (consolidated)
-    guidance.unshift(EVICTION_ROADMAP);
-
     if (jurisdiction === 'scotland') {
       guidance.push(TRIBUNAL_LODGING_GUIDE);
     } else {

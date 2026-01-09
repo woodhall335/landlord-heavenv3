@@ -244,6 +244,7 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
   }
 
   // AI-Generated Documents
+  // Note: Compliance Audit and Risk Assessment removed as of Jan 2026 pack restructure
   documents.push(
     {
       id: 'witness-statement',
@@ -252,36 +253,11 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
       icon: 'ai-generated',
       pages: '3-5 pages',
       category: 'AI-Generated',
-    },
-    {
-      id: 'compliance-audit',
-      title: 'AI Compliance Audit',
-      description: '15-point legal compliance check identifying potential issues with your case',
-      icon: 'ai-generated',
-      pages: '3-4 pages',
-      category: 'AI-Generated',
-    },
-    {
-      id: 'risk-assessment',
-      title: 'Case Risk Assessment',
-      description: 'Analysis of case strength, potential defences, and success probability',
-      icon: 'ai-generated',
-      pages: '2-3 pages',
-      category: 'AI-Generated',
     }
   );
 
-  // Guidance Documents - Eviction Roadmap consolidates timeline and expert tips
-  documents.push(
-    {
-      id: 'eviction-roadmap',
-      title: 'Eviction Roadmap & Timeline',
-      description: 'Complete visual guide with step-by-step stages, timelines, costs, and expert tips',
-      icon: 'guidance',
-      pages: '5-7 pages',
-      category: 'Guidance',
-    }
-  );
+  // Guidance Documents
+  // Note: Eviction Roadmap removed as of Jan 2026 pack restructure
 
   // Court filing guide based on jurisdiction
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
@@ -424,15 +400,8 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
   );
 
   // Guidance
+  // Note: pack-summary, hearing-prep, and evidence-index removed as of Jan 2026 pack restructure
   documents.push(
-    {
-      id: 'pack-summary',
-      title: 'Pack Summary & Totals',
-      description: 'Overview of your claim with calculated totals',
-      icon: 'guidance',
-      pages: '2 pages',
-      category: 'Guidance',
-    },
     {
       id: 'filing-guide',
       title: 'Court Filing Guide',
@@ -442,28 +411,12 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
       category: 'Guidance',
     },
     {
-      id: 'hearing-prep',
-      title: 'Court Hearing Prep Sheet',
-      description: "What to say and bring to your court hearing",
-      icon: 'guidance',
-      pages: '2 pages',
-      category: 'Guidance',
-    },
-    {
       id: 'enforcement-guide',
       title: 'Enforcement Guide',
       description: "Options for enforcing judgment if tenant doesn't pay",
       icon: 'guidance',
       pages: '3 pages',
       category: 'Guidance',
-    },
-    {
-      id: 'evidence-index',
-      title: 'Evidence Index',
-      description: 'Checklist of supporting evidence to include',
-      icon: 'evidence',
-      pages: '1 page',
-      category: 'Evidence',
     }
   );
 
@@ -509,6 +462,8 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
   });
 
   // Standard Tier Documents
+  // Note: certificate-of-curation, legal-validity-summary, and deposit-protection-cert
+  // removed as of Jan 2026 pack restructure
   documents.push(
     {
       id: 'terms-and-conditions',
@@ -519,36 +474,12 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
       category: 'Schedules',
     },
     {
-      id: 'certificate-of-curation',
-      title: 'Certificate of Curation',
-      description: 'Verification certificate confirming agreement completeness',
-      icon: 'compliance',
-      pages: '1 page',
-      category: 'Verification',
-    },
-    {
-      id: 'legal-validity-summary',
-      title: 'Legal Validity Summary',
-      description: 'Summary of legal compliance with current legislation',
-      icon: 'compliance',
-      pages: '2 pages',
-      category: 'Verification',
-    },
-    {
       id: 'government-model-clauses',
       title: 'Government Model Clauses',
       description: 'Recommended clauses from official government guidance',
       icon: 'guidance',
       pages: '3-4 pages',
       category: 'Schedules',
-    },
-    {
-      id: 'deposit-protection-cert',
-      title: 'Deposit Protection Certificate',
-      description: 'Template for recording deposit protection details',
-      icon: 'compliance',
-      pages: '1 page',
-      category: 'Compliance',
     },
     {
       id: 'inventory-template',
@@ -561,6 +492,7 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
   );
 
   // Premium Tier Additional Documents
+  // Note: welcome-pack and condition-report removed as of Jan 2026 pack restructure
   if (tier === 'premium') {
     documents.push(
       {
@@ -572,27 +504,11 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
         category: 'Premium Extras',
       },
       {
-        id: 'welcome-pack',
-        title: 'Tenant Welcome Pack',
-        description: 'Comprehensive move-in guide with property information',
-        icon: 'guidance',
-        pages: '4-6 pages',
-        category: 'Premium Extras',
-      },
-      {
         id: 'maintenance-guide',
         title: 'Property Maintenance Guide',
         description: 'Clear breakdown of tenant and landlord responsibilities',
         icon: 'guidance',
         pages: '3-4 pages',
-        category: 'Premium Extras',
-      },
-      {
-        id: 'condition-report',
-        title: 'Move-In Condition Report',
-        description: 'Detailed room-by-room property condition assessment',
-        icon: 'checklist',
-        pages: '6-10 pages',
         category: 'Premium Extras',
       },
       {
@@ -625,35 +541,33 @@ export function getProductMeta(product: string): ProductMeta {
   const products: Record<string, ProductMeta> = {
     'notice_only': {
       name: 'Notice Only Pack',
-      price: '£29.99',
+      price: '£39.99',
       originalPrice: '£150+',
-      savings: 'Save £120+ vs solicitors',
+      savings: 'Save £110+ vs solicitors',
       features: [
         'Legally compliant eviction notice',
         'Service instructions',
         'Validity checklist',
-        'Compliance declaration',
         'Instant PDF download',
       ],
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£149.99',
+      price: '£199.99',
       originalPrice: '£2,500+',
-      savings: 'Save £2,350+ vs solicitors',
+      savings: 'Save £2,300+ vs solicitors',
       features: [
         'Everything in Notice Only',
         'Court forms (N5, N119, N5B)',
         'AI witness statement',
-        'AI compliance audit',
-        'Case risk assessment',
-        'Complete eviction roadmap',
+        'Court filing guide',
         'Evidence checklist',
+        'Proof of service template',
       ],
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£179.99',
+      price: '£199.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,800+ vs solicitors',
       features: [
@@ -663,12 +577,13 @@ export function getProductMeta(product: string): ProductMeta {
         'Interest calculation',
         'Letter before claim',
         'Pre-action protocol docs',
+        'Filing guide',
         'Enforcement guide',
       ],
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£179.99',
+      price: '£199.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,800+ vs solicitors',
       features: [
@@ -689,7 +604,6 @@ export function getProductMeta(product: string): ProductMeta {
       features: [
         'Legally compliant agreement',
         'Terms & conditions',
-        'Deposit protection cert',
         'Inventory template',
         'Government model clauses',
       ],
@@ -702,7 +616,6 @@ export function getProductMeta(product: string): ProductMeta {
       features: [
         'Legally compliant agreement',
         'Terms & conditions',
-        'Deposit protection cert',
         'Inventory template',
         'Government model clauses',
       ],
@@ -714,9 +627,7 @@ export function getProductMeta(product: string): ProductMeta {
       savings: 'Save £185+ vs solicitors',
       features: [
         'Everything in Standard',
-        'Tenant welcome pack',
         'Property maintenance guide',
-        'Move-in condition report',
         'Key schedule',
         'Checkout procedure',
       ],
