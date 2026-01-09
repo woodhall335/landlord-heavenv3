@@ -6,6 +6,7 @@
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
@@ -70,6 +71,28 @@ export async function POST(request: NextRequest) {
         { error: 'Login failed' },
         { status: 500 }
       );
+    }
+
+    // Ensure user profile exists in public.users table
+    // This is a safety net for users who signed up before the profile creation fix
+    // or for users created via OAuth/social login
+    const profileResult = await ensureUserProfileExists({
+      userId: authData.user.id,
+      email: authData.user.email!,
+      fullName: authData.user.user_metadata?.full_name || null,
+      phone: authData.user.user_metadata?.phone || null,
+    });
+
+    if (!profileResult.success) {
+      logger.error('Failed to ensure user profile exists during login', {
+        userId: authData.user.id,
+        error: profileResult.error,
+      });
+      // Don't fail login - the profile might be created later
+    } else if (profileResult.created) {
+      logger.info('User profile created during login (was missing)', {
+        userId: authData.user.id,
+      });
     }
 
     // Update last login timestamp

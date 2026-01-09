@@ -5,10 +5,12 @@
  * Creates a Stripe checkout session for one-time purchases
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import Stripe from 'stripe';
+import { logger } from '@/lib/logger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -50,10 +52,32 @@ export async function POST(request: Request) {
     }
 
     const { product_type, case_id, success_url, cancel_url } = validationResult.data;
-    const supabase = await createServerSupabaseClient();
 
-    // Get or create Stripe customer
-    const { data: userData } = await supabase
+    // CRITICAL: Ensure user profile exists before creating order
+    // This prevents foreign key constraint violations on orders table
+    const profileResult = await ensureUserProfileExists({
+      userId: user.id,
+      email: user.email!,
+      fullName: user.user_metadata?.full_name || null,
+      phone: user.user_metadata?.phone || null,
+    });
+
+    if (!profileResult.success) {
+      logger.error('Failed to ensure user profile exists during checkout', {
+        userId: user.id,
+        error: profileResult.error,
+      });
+      return NextResponse.json(
+        { error: 'Unable to prepare your account for checkout. Please refresh and try again.' },
+        { status: 500 }
+      );
+    }
+
+    const supabase = await createServerSupabaseClient();
+    const adminSupabase = createAdminClient();
+
+    // Get or create Stripe customer (use admin client to ensure we can read user data)
+    const { data: userData } = await adminSupabase
       .from('users')
       .select('stripe_customer_id, email')
       .eq('id', user.id)
@@ -72,8 +96,8 @@ export async function POST(request: Request) {
 
       customerId = customer.id;
 
-      // Update user with Stripe customer ID
-      await supabase
+      // Update user with Stripe customer ID (use admin client to bypass RLS)
+      await adminSupabase
         .from('users')
         .update({ stripe_customer_id: customerId })
         .eq('id', user.id);
@@ -82,14 +106,35 @@ export async function POST(request: Request) {
     // Get product details
     const product = PRODUCT_PRICES[product_type];
 
-    // If case_id provided, validate jurisdiction match
+    // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
-      const { data: caseData } = await supabase
+      // Use admin client for case lookup - case might have just been linked
+      const { data: caseData, error: caseError } = await adminSupabase
         .from('cases')
-        .select('jurisdiction, case_type')
+        .select('jurisdiction, case_type, user_id')
         .eq('id', case_id)
-        .eq('user_id', user.id)
         .single();
+
+      if (caseError || !caseData) {
+        logger.warn('Case not found for checkout', { caseId: case_id, userId: user.id });
+        return NextResponse.json(
+          { error: 'Case not found. Please ensure the case is linked to your account.' },
+          { status: 404 }
+        );
+      }
+
+      // Verify ownership - case must be linked to this user
+      if (caseData.user_id !== user.id) {
+        logger.warn('User attempted checkout for unowned case', {
+          caseId: case_id,
+          userId: user.id,
+          caseOwnerId: caseData.user_id,
+        });
+        return NextResponse.json(
+          { error: 'Case not found. Please ensure the case is linked to your account.' },
+          { status: 404 }
+        );
+      }
 
       if (caseData) {
         // Check money claim jurisdiction restrictions
@@ -116,8 +161,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create order record
-    const { data: order, error: orderError } = await supabase
+    // Create order record using admin client to avoid RLS issues
+    const { data: order, error: orderError } = await adminSupabase
       .from('orders')
       .insert({
         user_id: user.id,
@@ -134,9 +179,24 @@ export async function POST(request: Request) {
       .single();
 
     if (orderError) {
-      console.error('Failed to create order:', orderError);
+      logger.error('Failed to create order', {
+        userId: user.id,
+        caseId: case_id,
+        productType: product_type,
+        error: orderError.message,
+        code: orderError.code,
+        details: orderError.details,
+      });
+
+      // Provide actionable error message
+      let errorMessage = 'Failed to create order. Please try again.';
+      if (orderError.code === '23503') {
+        // Foreign key violation
+        errorMessage = 'Your account is not fully set up. Please refresh the page and try again.';
+      }
+
       return NextResponse.json(
-        { error: 'Failed to create order' },
+        { error: errorMessage },
         { status: 500 }
       );
     }
@@ -174,8 +234,8 @@ export async function POST(request: Request) {
       cancel_url: cancel_url || `${baseUrl}/dashboard`,
     });
 
-    // Update order with Stripe session ID
-    await supabase
+    // Update order with Stripe session ID (use admin client)
+    await adminSupabase
       .from('orders')
       .update({ stripe_session_id: session.id })
       .eq('id', (order as any).id);
