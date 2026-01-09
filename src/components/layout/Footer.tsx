@@ -7,9 +7,9 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
           {/* Column 1: About */}
-          <div>
+          <div className="sm:col-span-2 lg:col-span-1">
             <div className="mb-6">
               <Image
                 src="/footerlogo3.png"
@@ -19,186 +19,183 @@ export function Footer() {
                 className="h-8 w-auto"
               />
             </div>
-            <p className="text-base leading-relaxed mb-6" style={{ color: '#bdbdbd' }}>
-              Professional legal documents for UK landlords. Court-ready, compliant, instantly delivered.
+            <p className="text-sm leading-relaxed mb-4" style={{ color: '#bdbdbd' }}>
+              Court-ready legal documents for UK landlords.
             </p>
-            <div className="flex flex-col gap-2 text-sm">
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-eng.svg"
-                  alt="England"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
-                <span style={{ color: '#bdbdbd' }}>England</span>
+            <div className="flex flex-wrap gap-3 text-xs">
+              <div className="flex items-center gap-1">
+                <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-3" />
+                <span style={{ color: '#bdbdbd' }}>ENG</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-wls.svg"
-                  alt="Wales"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
-                <span style={{ color: '#bdbdbd' }}>Wales</span>
+              <div className="flex items-center gap-1">
+                <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-3" />
+                <span style={{ color: '#bdbdbd' }}>WAL</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-sct.svg"
-                  alt="Scotland"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
-                <span style={{ color: '#bdbdbd' }}>Scotland</span>
+              <div className="flex items-center gap-1">
+                <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-3" />
+                <span style={{ color: '#bdbdbd' }}>SCO</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-nir.svg"
-                  alt="Northern Ireland"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
-                <span style={{ color: '#bdbdbd' }}>Northern Ireland</span>
+              <div className="flex items-center gap-1">
+                <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-3" />
+                <span style={{ color: '#bdbdbd' }}>NI</span>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Products */}
+          {/* Column 2: Evictions & Notices */}
           <div>
-            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Products</u></h5>
-            <ul className="space-y-3.5">
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Evictions</u></h5>
+            <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/products/notice-only"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Notice Only
+                <Link href="/how-to-evict-tenant" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  How to Evict (UK Guide)
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/products/complete-pack"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/section-21-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Section 21 Template
+                </Link>
+              </li>
+              <li>
+                <Link href="/section-8-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Section 8 Template
+                </Link>
+              </li>
+              <li>
+                <Link href="/wales-eviction-notices" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Wales Eviction Guide
+                </Link>
+              </li>
+              <li>
+                <Link href="/scotland-eviction-notices" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Scotland Eviction Guide
+                </Link>
+              </li>
+              <li>
+                <Link href="/eviction-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Eviction Templates
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Rent Arrears & Claims */}
+          <div>
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Rent Arrears</u></h5>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/money-claim-unpaid-rent" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Claim Unpaid Rent Guide
+                </Link>
+              </li>
+              <li>
+                <Link href="/rent-arrears-letter-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Rent Arrears Letter
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/rent-arrears-calculator" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Arrears Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/free-rent-demand-letter" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Free Demand Letter
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/money-claim" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Money Claim Pack
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Products */}
+          <div>
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Products</u></h5>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/products/notice-only" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Notice Only Pack
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/complete-pack" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Complete Eviction Pack
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/products/money-claim"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/products/money-claim" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Money Claim Pack
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/products/ast"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/products/ast" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Tenancy Agreements
                 </Link>
               </li>
-{/* HMO Pro removed - parked for later review */}
+              <li>
+                <Link href="/pricing" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  View All Pricing
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Column 3: Legal */}
+          {/* Column 5: Legal */}
           <div>
-            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
-            <ul className="space-y-3.5">
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
+            <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/terms"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/terms" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/privacy" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/refunds"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/refunds" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Refund Policy
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/cookies"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/cookies" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Cookie Policy
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Account */}
+          {/* Column 6: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
-            <ul className="space-y-3.5">
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
+            <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/auth/login"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/auth/login" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Login
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/auth/signup"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/auth/signup" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Register
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/ask-heaven"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/ask-heaven" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Ask Heaven
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/contact" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/about"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
+                <Link href="/about" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   About Us
                 </Link>
               </li>

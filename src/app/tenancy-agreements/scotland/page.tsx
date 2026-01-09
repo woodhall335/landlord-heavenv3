@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'PRT Agreement Scotland',
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
     title: 'Private Residential Tenancy Agreement (PRT) | Scotland',
     description: 'Create a legally compliant PRT for Scotland. Open-ended tenancy with full legal compliance.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/tenancy-agreements/scotland',
+    url: getCanonicalUrl('/tenancy-agreements/scotland'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tenancy-agreements/scotland'),
   },
 };
 

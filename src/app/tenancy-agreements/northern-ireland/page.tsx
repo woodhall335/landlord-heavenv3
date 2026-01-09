@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'Private Tenancy | Northern Ireland',
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
     title: 'Private Tenancy Agreement | Northern Ireland',
     description: 'Create a legally compliant Private Tenancy Agreement for NI. Includes 2025 EICR requirements and rent increase restrictions.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/tenancy-agreements/northern-ireland',
+    url: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
   },
 };
 
