@@ -174,13 +174,13 @@ export default function BlogPage() {
                   href="/products/notice-only"
                   className="hero-btn-primary"
                 >
-                  Section 21 Notice — £29.99 →
+                  Section 21 Notice — £39.99 →
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="hero-btn-secondary"
                 >
-                  Complete Pack — £149.99 →
+                  Complete Pack — £199.99 →
                 </Link>
               </div>
 

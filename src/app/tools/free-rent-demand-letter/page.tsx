@@ -689,7 +689,7 @@ URL.revokeObjectURL(url);
           court action. Our Complete Money Claims Pack includes everything you need.
         </p>
         <div className="mb-4">
-          <p className="text-2xl font-bold text-blue-600">£179.99</p>
+          <p className="text-2xl font-bold text-blue-600">£199.99</p>
           <ul className="mt-3 space-y-2 text-sm text-gray-700">
             <li className="flex items-start gap-2">
               <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
@@ -853,7 +853,7 @@ URL.revokeObjectURL(url);
                 (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10,
                 or 11. (2) Start a money claim through the courts to recover the debt (without seeking
                 possession). (3) Continue to pursue payment informally while considering your options.
-                Our Complete Eviction Pack (£149.99) includes Section 8 notices with compliance checks.
+                Our Complete Eviction Pack (£199.99) includes Section 8 notices with compliance checks.
               </p>
             </div>
 

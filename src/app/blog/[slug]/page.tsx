@@ -465,7 +465,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     href="/products/notice-only"
                     className="block w-full bg-primary hover:bg-primary/90 text-white text-center font-medium py-2.5 px-4 rounded-lg transition-colors text-sm"
                   >
-                    Get Section 21 — £29.99
+                    Get Section 21 — £39.99
                   </Link>
                 </div>
 
