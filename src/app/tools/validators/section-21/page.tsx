@@ -249,6 +249,87 @@ export default function Section21ValidatorPage() {
         </Container>
       </section>
 
+      {/* Quick Checklist - SSR for SEO */}
+      <section className="bg-white py-8 border-b border-gray-100">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Section 21 Quick Validity Checklist
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Before serving your Section 21 notice, ensure you can tick off these requirements:
+            </p>
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Form 6A</strong> — Using the prescribed form (not old-style letter)
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Deposit protected</strong> — In TDS, DPS, or MyDeposits scheme
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Prescribed information</strong> — Served within 30 days of deposit
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Gas Safety Certificate</strong> — Given before move-in (if gas appliances)
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>EPC served</strong> — Valid Energy Performance Certificate provided
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>How to Rent guide</strong> — Current version given to tenant
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Property licensed</strong> — If selective/HMO licensing applies
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Notice period</strong> — At least 2 calendar months
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>No retaliatory eviction</strong> — No council complaint in last 6 months
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-primary font-bold">✓</span>
+                <span className="text-gray-700">
+                  <strong>Service evidence</strong> — Proof of how notice was delivered
+                </span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-4">
+              <strong>Note:</strong> EICR (electrical safety) is a landlord compliance requirement
+              but does not currently invalidate Section 21 notices. However, always ensure EICR
+              compliance for safety and other legal obligations.
+            </p>
+          </div>
+        </Container>
+      </section>
+
       {/* Validator Component - Client rendered */}
       <ValidatorPage
         validatorKey="section_21"
@@ -423,6 +504,23 @@ export default function Section21ValidatorPage() {
               ))}
             </div>
 
+            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
+              What You Need to Run the Section 21 Check
+            </h2>
+            <p className="text-gray-700 mb-4">
+              To get the most accurate validation results, have these documents ready:
+            </p>
+            <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+              <li>Your Section 21 notice (Form 6A) — PDF or clear photo</li>
+              <li>Tenancy start date and whether it&apos;s fixed-term or periodic</li>
+              <li>Deposit protection certificate and prescribed information dates</li>
+              <li>Date gas safety certificate was provided (if applicable)</li>
+              <li>EPC date and rating</li>
+              <li>How to Rent guide — version and date given to tenant</li>
+              <li>Details of any local licensing schemes</li>
+              <li>Service method (hand delivery, post, email)</li>
+            </ul>
+
             <div className="mt-12 p-6 bg-purple-50 rounded-lg">
               <h3 className="text-xl font-semibold text-charcoal mb-4">
                 Need Help With Your Eviction?
@@ -452,6 +550,24 @@ export default function Section21ValidatorPage() {
                   Complete Eviction Pack - £149.99
                 </Link>
               </div>
+            </div>
+
+            {/* Legal basis and last updated */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <h2 className="text-xl font-bold text-charcoal mb-4">
+                Legal Basis &amp; Last Updated
+              </h2>
+              <p className="text-gray-700 mb-4">
+                This Section 21 validity checker is based on the requirements set out in the
+                Housing Act 1988 (as amended), the Deregulation Act 2015, and related statutory
+                instruments including the Assured Shorthold Tenancy Notices and Prescribed
+                Requirements (England) Regulations 2015.
+              </p>
+              <p className="text-sm text-gray-500">
+                <strong>Last updated:</strong> January 2025. We review this tool regularly to
+                reflect changes in housing law. Always verify current requirements for your
+                specific situation.
+              </p>
             </div>
           </div>
         </Container>
