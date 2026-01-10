@@ -155,8 +155,13 @@ export function Footer() {
             <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Tenancy Agreements</u></h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/tenancy-agreements/england-wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  England & Wales
+                <Link href="/tenancy-agreements/england" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  England
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreements/wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Wales
                 </Link>
               </li>
               <li>

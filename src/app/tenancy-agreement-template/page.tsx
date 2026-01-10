@@ -268,7 +268,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/england-wales"
+                    href="/tenancy-agreements/england"
                     className="text-primary font-medium text-sm hover:underline"
                   >
                     Get England AST →
@@ -300,7 +300,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/england-wales"
+                    href="/tenancy-agreements/wales"
                     className="text-primary font-medium text-sm hover:underline"
                   >
                     Get Wales Contract →

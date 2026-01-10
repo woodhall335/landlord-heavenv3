@@ -152,13 +152,13 @@ export default function NorthernIrelandTenancyPage() {
             </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-red-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-lg"
               >
                 Create Standard - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium - £14.99
@@ -712,7 +712,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
@@ -733,9 +733,10 @@ export default function NorthernIrelandTenancyPage() {
                     <li>✓ Rights of change clauses for flexibility</li>
                     <li>✓ Detailed repair obligations</li>
                     <li>✓ Superior professional presentation</li>
+                    <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium
@@ -1059,13 +1060,13 @@ export default function NorthernIrelandTenancyPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 Standard - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium - £14.99 ⭐
@@ -1082,8 +1083,11 @@ export default function NorthernIrelandTenancyPage() {
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
-              <Link href="/tenancy-agreements/england-wales" className="text-red-600 hover:underline font-semibold">
-                England & Wales Assured Shorthold Tenancy (AST) →
+              <Link href="/tenancy-agreements/england" className="text-red-600 hover:underline font-semibold">
+                England Assured Shorthold Tenancy (AST) →
+              </Link>
+              <Link href="/tenancy-agreements/wales" className="text-red-600 hover:underline font-semibold">
+                Wales Occupation Contract →
               </Link>
               <Link href="/tenancy-agreements/scotland" className="text-red-600 hover:underline font-semibold">
                 Scotland Private Residential Tenancy (PRT) →
