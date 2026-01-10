@@ -177,33 +177,183 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 6: Account */}
+          {/* Column 6: Resources & Guides */}
           <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
+            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Resources</u></h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/auth/login" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Login
+                <Link href="/blog" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  All Landlord Guides
                 </Link>
               </li>
               <li>
-                <Link href="/auth/signup" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Register
+                <Link href="/blog/england" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  England Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/scotland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Scotland Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Wales Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/northern-ireland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  N. Ireland Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/uk" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  UK-Wide Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                  Free Tools
                 </Link>
               </li>
               <li>
                 <Link href={askHeavenLink} className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Ask Heaven
+                  Ask Heaven AI
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Additional Links Row */}
+        <div className="mt-10 pt-8 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6">
+          {/* Tenancy Agreements */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Tenancy Agreements</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/tenancy-agreements/england-wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  England & Wales
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/tenancy-agreements/scotland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Scotland
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreements/northern-ireland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Northern Ireland
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Templates */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Templates</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/section-21-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Section 21 Notice
+                </Link>
+              </li>
+              <li>
+                <Link href="/section-8-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Section 8 Notice
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Tenancy Agreement
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Account */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Account</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/auth/login" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/signup" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Register
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Company</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/about" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  About Us
+                <Link href="/help" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Help Centre
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Legal</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/terms" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Terms
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookies" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Cookies
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Pricing & Products */}
+          <div>
+            <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Pricing</h5>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/pricing" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  All Products
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/complete-pack" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Eviction Pack
+                </Link>
+              </li>
+              <li>
+                <Link href="/ask-heaven" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Ask Heaven AI
                 </Link>
               </li>
             </ul>

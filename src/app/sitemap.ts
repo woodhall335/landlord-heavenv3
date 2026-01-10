@@ -53,26 +53,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Tool pages - Free tools for SEO traffic
-  const toolPages = [
-    { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/tools/validators', priority: 0.85, changeFrequency: 'weekly' as const },
-    ...freeTools
-      .filter((tool) => tool.href.startsWith('/tools'))
-      .map((tool) => ({
+  // Use a Set to prevent duplicate URLs
+  const toolPaths = new Set<string>();
+  const toolPagesList: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [];
+
+  // Add main tools page
+  toolPagesList.push({ path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const });
+  toolPaths.add('/tools');
+
+  // Add validators hub page (high priority)
+  toolPagesList.push({ path: '/tools/validators', priority: 0.85, changeFrequency: 'weekly' as const });
+  toolPaths.add('/tools/validators');
+
+  // Add individual free tools (excluding duplicates)
+  freeTools
+    .filter((tool) => tool.href.startsWith('/tools') && !toolPaths.has(tool.href))
+    .forEach((tool) => {
+      toolPagesList.push({
         path: tool.href,
         priority: 0.8,
         changeFrequency: 'weekly' as const,
-      })),
-    // Validator pages get higher priority (0.9) for SEO ranking
-    ...validatorToolRoutes.map((path) => ({
-      path,
-      priority: 0.9,
-      changeFrequency: 'weekly' as const,
-    })),
-  ];
+      });
+      toolPaths.add(tool.href);
+    });
+
+  // Add validator pages with higher priority (0.9) for SEO ranking
+  validatorToolRoutes
+    .filter((path) => !toolPaths.has(path))
+    .forEach((path) => {
+      toolPagesList.push({
+        path,
+        priority: 0.9,
+        changeFrequency: 'weekly' as const,
+      });
+      toolPaths.add(path);
+    });
+
+  const toolPages = toolPagesList;
 
   // Auth entry points excluded - these pages are noindex
   // /auth/login and /auth/signup are not in sitemap
+
+  // Blog category pages for improved crawl paths
+  const blogCategoryPages = [
+    { path: '/blog/england', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/blog/scotland', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/blog/wales', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/blog/northern-ireland', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/blog/uk', priority: 0.85, changeFrequency: 'weekly' as const },
+  ];
 
   // Blog pages with explicit lastModified dates
   const blogPostPages = blogPosts.map((post) => ({
@@ -89,6 +118,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...landingPages,
     ...toolPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
+    ...blogCategoryPages,
   ];
 
   return [

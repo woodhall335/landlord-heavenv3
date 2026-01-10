@@ -6,11 +6,14 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { AuthorBox } from '@/components/blog/AuthorBox';
 import { BlogCTA } from '@/components/blog/BlogCTA';
 import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
+import { NextSteps } from '@/components/blog/NextSteps';
+import { Sources } from '@/components/blog/Sources';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
-import { Calendar, Clock, Tag, ChevronLeft, Share2 } from 'lucide-react';
-import { getCanonicalUrl } from '@/lib/seo';
+import { getPostRegion, BLOG_CATEGORIES, BlogRegion } from '@/lib/blog/categories';
+import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
+import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 
@@ -224,12 +227,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const relatedGuides = getRelatedGuides(post);
   const complianceTopic = getComplianceTopicForPost(slug);
 
+  // Determine the region for breadcrumb
+  const postRegion = getPostRegion(slug);
+  const regionConfig = postRegion ? BLOG_CATEGORIES[postRegion] : null;
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
     description: post.metaDescription,
-    image: post.heroImage || 'https://landlordheaven.co.uk/og-image.png',
+    image: post.heroImage || `${SITE_ORIGIN}/og-image.png`,
     datePublished: post.date,
     dateModified: post.updatedDate || post.date,
     author: {
@@ -240,43 +247,69 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     publisher: {
       '@type': 'Organization',
       name: 'Landlord Heaven',
-      url: 'https://landlordheaven.co.uk',
+      url: SITE_ORIGIN,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://landlordheaven.co.uk/logo.png',
+        url: `${SITE_ORIGIN}/logo.png`,
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://landlordheaven.co.uk/blog/${slug}`,
+      '@id': `${SITE_ORIGIN}/blog/${slug}`,
     },
     wordCount: post.wordCount,
     keywords: [post.targetKeyword, ...post.secondaryKeywords].join(', '),
+    ...(post.reviewer && {
+      reviewedBy: {
+        '@type': 'Person',
+        name: post.reviewer.name,
+        jobTitle: post.reviewer.role,
+      },
+    }),
   };
+
+  // Build breadcrumb items - include category if post belongs to a region
+  const breadcrumbItems = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: SITE_ORIGIN,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Landlord Guides',
+      item: `${SITE_ORIGIN}/blog`,
+    },
+  ];
+
+  if (regionConfig) {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: `${regionConfig.name} Guides`,
+      item: `${SITE_ORIGIN}/blog/${postRegion}`,
+    });
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 4,
+      name: post.title,
+      item: `${SITE_ORIGIN}/blog/${slug}`,
+    });
+  } else {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: post.title,
+      item: `${SITE_ORIGIN}/blog/${slug}`,
+    });
+  }
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: 'https://landlordheaven.co.uk',
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blog',
-        item: 'https://landlordheaven.co.uk/blog',
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: post.title,
-        item: `https://landlordheaven.co.uk/blog/${slug}`,
-      },
-    ],
+    itemListElement: breadcrumbItems,
   };
 
   // FAQ Schema for rich snippets (only if post has FAQs)
@@ -304,10 +337,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <header className="bg-gradient-to-br from-gray-50 to-white pt-8 pb-12 lg:pt-12 lg:pb-16">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
+            <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8 flex-wrap">
               <Link href="/" className="hover:text-primary transition-colors">Home</Link>
               <span>/</span>
-              <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
+              <Link href="/blog" className="hover:text-primary transition-colors">Landlord Guides</Link>
+              {regionConfig && (
+                <>
+                  <span>/</span>
+                  <Link href={`/blog/${postRegion}`} className="hover:text-primary transition-colors">
+                    {regionConfig.name}
+                  </Link>
+                </>
+              )}
               <span>/</span>
               <span className="text-gray-900 truncate max-w-[200px]">{post.title}</span>
             </nav>
@@ -318,6 +359,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <span className="bg-primary text-white px-3 py-1 rounded-full font-medium">
                   {post.category}
                 </span>
+                {regionConfig && (
+                  <Link
+                    href={`/blog/${postRegion}`}
+                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                  >
+                    {regionConfig.name}
+                  </Link>
+                )}
                 <span className="flex items-center gap-1.5 text-gray-500">
                   <Calendar className="w-4 h-4" />
                   {new Date(post.date).toLocaleDateString('en-GB', {
@@ -326,14 +375,32 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     year: 'numeric'
                   })}
                 </span>
+                {post.updatedDate && post.updatedDate !== post.date && (
+                  <span className="flex items-center gap-1.5 text-green-600 font-medium">
+                    <RefreshCw className="w-4 h-4" />
+                    Updated {new Date(post.updatedDate).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </span>
+                )}
                 <span className="flex items-center gap-1.5 text-gray-500">
                   <Clock className="w-4 h-4" />
                   {post.readTime}
                 </span>
-                <span className="text-gray-500">
-                  {post.wordCount.toLocaleString()} words
-                </span>
               </div>
+
+              {/* Reviewer badge if available */}
+              {post.reviewer && (
+                <div className="flex items-center gap-2 mb-4 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <span className="text-gray-600">
+                    Reviewed by <span className="font-medium text-gray-900">{post.reviewer.name}</span>
+                    {post.reviewer.role && <span className="text-gray-500"> ({post.reviewer.role})</span>}
+                  </span>
+                </div>
+              )}
 
               {/* Title */}
               <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -417,6 +484,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 </section>
               )}
+
+              {/* Sources Section */}
+              {post.sources && post.sources.length > 0 && (
+                <Sources sources={post.sources} />
+              )}
+
+              {/* Next Steps CTA */}
+              <NextSteps slug={slug} category={post.category} tags={post.tags} />
 
               {/* Bottom CTA */}
               <BlogCTA variant="default" />

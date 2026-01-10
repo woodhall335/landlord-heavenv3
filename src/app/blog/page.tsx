@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { FileText, Scale, Clock, Zap, ShieldCheck, Globe } from 'lucide-react';
+import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
+import { FileText, Scale, Clock, Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -125,6 +127,53 @@ export default function BlogPage() {
               >
                 Learn what this means for you
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Browse by Region */}
+        <section className="py-12 lg:py-16 bg-white border-b border-gray-100">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Browse Guides by Jurisdiction
+            </h2>
+            <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+              UK tenancy laws vary significantly between England, Scotland, Wales, and Northern Ireland.
+              Find guides specific to your property location.
+            </p>
+
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+              {Object.entries(BLOG_CATEGORIES).map(([key, config]) => {
+                const region = key as BlogRegion;
+                const postCounts = getPostCountsByRegion(blogPosts);
+                const count = postCounts[region];
+
+                return (
+                  <Link
+                    key={region}
+                    href={`/blog/${region}`}
+                    className="group bg-gray-50 rounded-xl border border-gray-200 p-6 hover:border-primary hover:bg-white hover:shadow-lg transition-all text-center"
+                  >
+                    <Image
+                      src={config.flag}
+                      alt={config.name}
+                      width={40}
+                      height={30}
+                      className="w-10 h-7 mx-auto mb-3 rounded shadow-sm"
+                    />
+                    <span className="block font-semibold text-gray-900 group-hover:text-primary transition-colors mb-1">
+                      {config.name}
+                    </span>
+                    <span className="text-sm text-gray-500 block mb-3">
+                      {count} guide{count !== 1 ? 's' : ''}
+                    </span>
+                    <span className="inline-flex items-center text-sm text-primary font-medium">
+                      View
+                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
