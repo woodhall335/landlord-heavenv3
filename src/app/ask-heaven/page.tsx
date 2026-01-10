@@ -256,33 +256,26 @@ export default function AskHeavenPage(): React.ReactElement {
       />
       <StructuredData data={complianceTopicsItemListSchema()} />
 
-      {/* Hero Section - Compact */}
-      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-24 pb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              Free UK Landlord Advice Tool
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Ask Heaven: Free UK Landlord Q&amp;A Tool
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Get instant, plain-English answers to your landlord-tenant questions. Whether you
-              need eviction advice, help with rent arrears, or guidance on tenancy agreements, Ask
-              Heaven covers <strong>England</strong>, <strong>Wales</strong>,{' '}
-              <strong>Scotland</strong>, and <strong>Northern Ireland</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Client-side interactive chat widget - positioned directly after hero */}
-      <AskHeavenPageClient />
-
-      {/* SSR Content Section - SEO content below the chat */}
-      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-12">
+      {/* SSR Content Section - visible to Googlebot without hydration */}
+      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            {/* H1 and intro - server rendered for SEO */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
+                Free UK Landlord Advice Tool
+              </div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Ask Heaven: Free UK Landlord Q&amp;A Tool
+              </h1>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Get instant, plain-English answers to your landlord-tenant questions. Whether you
+                need eviction advice, help with rent arrears, or guidance on tenancy agreements, Ask
+                Heaven covers <strong>England</strong>, <strong>Wales</strong>,{' '}
+                <strong>Scotland</strong>, and <strong>Northern Ireland</strong>.
+              </p>
+            </div>
+
             {/* Jurisdiction coverage - SSR for keyword targeting */}
             <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-8 shadow-sm">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -508,6 +501,9 @@ export default function AskHeavenPage(): React.ReactElement {
           </div>
         </div>
       </div>
+
+      {/* Client-side interactive widget */}
+      <AskHeavenPageClient />
 
       {/* SSR FAQ Section - visible to Googlebot without hydration */}
       <FAQSection
