@@ -29,6 +29,10 @@ import {
 } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
 import { assertPaidEntitlement } from '@/lib/payments/entitlement';
+import {
+  validateNoticeOnlyCase,
+  computeIncludedGrounds,
+} from '@/lib/validation/notice-only-case-validator';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -222,6 +226,52 @@ export async function GET(
         case_id: caseId,
       });
       return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
+    // ============================================================================
+    // NOTICE-ONLY SPECIFIC VALIDATION (Arrears Schedule Enforcement)
+    // ============================================================================
+    // For Section 8 route, enforce rent schedule data when arrears grounds are included
+    // This is critical for post-payment document generation to prevent blank documents
+    if (selected_route === 'section_8') {
+      const noticeValidation = validateNoticeOnlyCase(wizardFacts);
+
+      if (!noticeValidation.valid) {
+        const primaryError = noticeValidation.errors[0];
+        console.error('[NOTICE-PREVIEW-API] Notice-only validation failed (POST-PAYMENT):', {
+          case_id: caseId,
+          error_code: primaryError?.code,
+          included_grounds: noticeValidation.includedGrounds,
+          arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+          notice: 'This should not happen post-payment - checkout should have blocked',
+        });
+
+        return NextResponse.json(
+          {
+            code: primaryError?.code || 'NOTICE_ONLY_VALIDATION_FAILED',
+            error: primaryError?.message || 'Notice-only case validation failed',
+            user_message: 'Unable to generate your documents. Some required data is missing. Please contact support if this issue persists.',
+            blocking_issues: noticeValidation.errors.map(e => ({
+              code: e.code,
+              description: e.message,
+            })),
+            warnings: noticeValidation.warnings.map(w => ({
+              code: w.code,
+              description: w.message,
+            })),
+            included_grounds: noticeValidation.includedGrounds,
+            arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+            notice_period_days: noticeValidation.noticePeriodDays,
+            // Include helpful metadata for debugging
+            _debug: {
+              stage: 'post-payment-pack-generation',
+              jurisdiction,
+              route: selected_route,
+            },
+          },
+          { status: 422 }
+        );
+      }
     }
 
     // ========================================================================

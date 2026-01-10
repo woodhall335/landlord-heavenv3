@@ -292,4 +292,141 @@ describe('Arrears Schedule Mapper', () => {
       expect(data.arrears_total).toBe(1750);
     });
   });
+
+  // ============================================================================
+  // RENT SCHEDULE NON-BLANK TESTS
+  // Ensures rent schedule documents are never blank when valid data exists
+  // ============================================================================
+  describe('Rent schedule non-blank enforcement', () => {
+    it('should have at least one row when arrears_items exist', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2024-05-01', period_end: '2024-05-31', rent_due: 1200, rent_paid: 200, amount_owed: 1000 },
+      ];
+
+      const data = getArrearsScheduleData({
+        arrears_items: items,
+        total_arrears: null,
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      // CRITICAL: Schedule must have at least one row
+      expect(data.arrears_schedule.length).toBeGreaterThanOrEqual(1);
+      expect(data.include_schedule_pdf).toBe(true);
+    });
+
+    it('should populate all required fields for each row', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2024-06-01', period_end: '2024-06-30', rent_due: 850, rent_paid: 0, amount_owed: 850 },
+        { period_start: '2024-07-01', period_end: '2024-07-31', rent_due: 850, rent_paid: 400, amount_owed: 450 },
+      ];
+
+      const data = getArrearsScheduleData({
+        arrears_items: items,
+        total_arrears: null,
+        rent_amount: 850,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      // Each row must have all required fields for template rendering
+      for (const row of data.arrears_schedule) {
+        expect(row.period).toBeDefined();
+        expect(row.period).not.toBe('');
+        expect(row.due_date).toBeDefined();
+        expect(row.due_date).not.toBe('');
+        expect(typeof row.amount_due).toBe('number');
+        expect(typeof row.amount_paid).toBe('number');
+        expect(typeof row.arrears).toBe('number');
+      }
+    });
+
+    it('should have non-zero total when arrears exist', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2024-08-01', period_end: '2024-08-31', rent_due: 950, rent_paid: 0, amount_owed: 950 },
+      ];
+
+      const data = getArrearsScheduleData({
+        arrears_items: items,
+        total_arrears: null,
+        rent_amount: 950,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      expect(data.arrears_total).toBeGreaterThan(0);
+      expect(data.arrears_schedule.some(row => row.arrears > 0)).toBe(true);
+    });
+
+    it('should not include schedule PDF when arrears_items is empty', () => {
+      const data = getArrearsScheduleData({
+        arrears_items: [],
+        total_arrears: 1500, // Legacy flat total
+        rent_amount: 750,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      // Even with include_schedule=true, if no items, no PDF should be generated
+      // This prevents blank documents
+      expect(data.include_schedule_pdf).toBe(false);
+      expect(data.arrears_schedule.length).toBe(0);
+    });
+
+    it('should preserve user-entered data exactly in schedule rows', () => {
+      const userEnteredItems: ArrearsItem[] = [
+        {
+          period_start: '2024-03-15',
+          period_end: '2024-04-14',
+          rent_due: 1275.50,
+          rent_paid: 500,
+          amount_owed: 775.50,
+        },
+      ];
+
+      const data = getArrearsScheduleData({
+        arrears_items: userEnteredItems,
+        total_arrears: null,
+        rent_amount: 1275.50,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      // User-entered amounts must be preserved exactly
+      const row = data.arrears_schedule[0];
+      expect(row.amount_due).toBe(1275.50);
+      expect(row.amount_paid).toBe(500);
+      expect(row.arrears).toBe(775.50);
+      expect(row.period).toContain('2024-03-15');
+      expect(row.period).toContain('2024-04-14');
+    });
+
+    it('should correctly aggregate multiple periods for total arrears', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-02-01', period_end: '2024-02-29', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-03-01', period_end: '2024-03-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-04-01', period_end: '2024-04-30', rent_due: 1000, rent_paid: 500, amount_owed: 500 },
+      ];
+
+      const data = getArrearsScheduleData({
+        arrears_items: items,
+        total_arrears: null,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        include_schedule: true,
+      });
+
+      // Total should be sum of all rows
+      expect(data.arrears_total).toBe(3500);
+      expect(data.arrears_schedule.length).toBe(4);
+
+      // Individual row amounts should be preserved
+      expect(data.arrears_schedule[0].arrears).toBe(1000);
+      expect(data.arrears_schedule[1].arrears).toBe(1000);
+      expect(data.arrears_schedule[2].arrears).toBe(1000);
+      expect(data.arrears_schedule[3].arrears).toBe(500);
+    });
+  });
 });
