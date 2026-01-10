@@ -163,13 +163,13 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
               >
                 Create Standard PRT - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium PRT - £14.99
@@ -692,7 +692,7 @@ export default function ScotlandPRTPage() {
                     <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                     className="mt-4 block text-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                   >
                     Create Standard PRT
@@ -714,9 +714,10 @@ export default function ScotlandPRTPage() {
                     <li>✓ Detailed Repairing Standard explanation</li>
                     <li>✓ First-tier Tribunal process guidance</li>
                     <li>✓ Superior professional presentation</li>
+                    <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=scotland&document_type=prt_premium"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium PRT
@@ -1100,13 +1101,13 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
                 Standard PRT - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium PRT - £14.99 ⭐
@@ -1123,8 +1124,11 @@ export default function ScotlandPRTPage() {
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
-              <Link href="/tenancy-agreements/england-wales" className="text-blue-600 hover:underline font-semibold">
-                England & Wales Assured Shorthold Tenancy (AST) →
+              <Link href="/tenancy-agreements/england" className="text-blue-600 hover:underline font-semibold">
+                England Assured Shorthold Tenancy (AST) →
+              </Link>
+              <Link href="/tenancy-agreements/wales" className="text-blue-600 hover:underline font-semibold">
+                Wales Occupation Contract →
               </Link>
               <Link href="/tenancy-agreements/northern-ireland" className="text-blue-600 hover:underline font-semibold">
                 Northern Ireland Private Tenancy →

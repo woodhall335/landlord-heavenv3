@@ -165,13 +165,13 @@ export default function WalesOccupationContractPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=wales&document_type=occupation_contract_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-red-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-lg"
               >
                 Create Standard Contract - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=wales&document_type=occupation_contract_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium Contract - £14.99
@@ -314,7 +314,7 @@ export default function WalesOccupationContractPage() {
                   <li>✓ Fitness for habitation terms</li>
                 </ul>
                 <Link
-                  href="/wizard?jurisdiction=wales&document_type=occupation_contract_standard"
+                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                   className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
                 >
                   Create Standard Contract
@@ -333,9 +333,10 @@ export default function WalesOccupationContractPage() {
                   <li>✓ Additional supplementary terms</li>
                   <li>✓ Professional formatting</li>
                   <li>✓ Enhanced compliance information</li>
+                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
-                  href="/wizard?jurisdiction=wales&document_type=occupation_contract_premium"
+                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                   className="block text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
                 >
                   Create Premium Contract
@@ -426,13 +427,13 @@ export default function WalesOccupationContractPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=wales&document_type=occupation_contract_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 Standard Contract - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=wales&document_type=occupation_contract_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium Contract - £14.99

@@ -178,13 +178,13 @@ export default function EnglandASTPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=england&document_type=ast_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
               >
                 Create Standard AST - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=england&document_type=ast_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium AST - £14.99
@@ -288,7 +288,7 @@ export default function EnglandASTPage() {
                   <li>✓ Standard terms & conditions</li>
                 </ul>
                 <Link
-                  href="/wizard?jurisdiction=england&document_type=ast_standard"
+                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                   className="block text-center bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
                   Create Standard AST
@@ -308,9 +308,10 @@ export default function EnglandASTPage() {
                   <li>✓ Professional gradient styling</li>
                   <li>✓ Rights of change clauses</li>
                   <li>✓ Enhanced legal compliance boxes</li>
+                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
-                  href="/wizard?jurisdiction=england&document_type=ast_premium"
+                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                   className="block text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
                 >
                   Create Premium AST
@@ -356,13 +357,13 @@ export default function EnglandASTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=england&document_type=ast_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
                 Standard AST - £9.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=england&document_type=ast_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium AST - £14.99

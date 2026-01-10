@@ -36,11 +36,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
-  // Tenancy agreement pages (only canonical 200 URLs - excludes redirect targets)
+  // Tenancy agreement pages - individual jurisdiction pages
   const tenancyPages = [
-    { path: '/tenancy-agreements/england-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/wales', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/scotland', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
+    // england-wales is a selector hub page (noindex) - not included in sitemap
   ];
 
   // Long-tail landing pages - SEO targeted
