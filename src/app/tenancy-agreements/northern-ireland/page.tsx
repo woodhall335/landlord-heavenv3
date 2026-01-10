@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Private Tenancy | Northern Ireland',
@@ -936,120 +937,53 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
-
-            <div className="space-y-4">
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Is a Private Tenancy Agreement legally valid in Northern Ireland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes. Our Private Tenancy Agreements are drafted to comply with the Private Tenancies Order (Northern Ireland) 2006, Private Tenancies Act (Northern Ireland) 2022, and all 2025 legal updates including mandatory EICR requirements from 1 April 2025.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What changed in Northern Ireland tenancy law in 2025?
-                </summary>
-                <p className="mt-3 text-gray-700 mb-3">
-                  From <strong>1 April 2025</strong>, key changes include:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1">
-                  <li><strong>Mandatory EICR:</strong> All private rentals must have an Electrical Installation Condition Report (renewed every 5 years)</li>
-                  <li><strong>Rent Increase Limits:</strong> Once per year maximum, 12-month gap between increases</li>
-                  <li><strong>3-Month Notice:</strong> Required for all rent increases</li>
-                  <li><strong>Length-Based Notice Periods:</strong> 28/56/84 days depending on tenancy duration</li>
-                </ul>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the difference between Standard and Premium agreements?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  The <strong>Standard (£9.99)</strong> covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods.
-                </p>
-                <p className="mt-2 text-gray-700">
-                  The <strong>Premium (£14.99)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the maximum deposit I can charge in Northern Ireland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  In Northern Ireland, the maximum deposit is <strong>2 months' rent</strong>. Our wizard automatically validates your deposit amount to ensure compliance. You must also protect the deposit in an approved scheme (TDS Northern Ireland or MyDeposits Northern Ireland) within <strong>28 days</strong> of receipt.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How often can I increase rent in Northern Ireland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  From 2025, landlords can increase rent <strong>once per year</strong> with a minimum <strong>12-month gap</strong> between increases. You must give <strong>3 months' written notice</strong> of any rent increase. Tenants have the right to challenge excessive increases.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need an EICR certificate?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  <strong>Yes, from 1 April 2025.</strong> All private rental properties in Northern Ireland must have a valid <strong>Electrical Installation Condition Report (EICR)</strong> conducted by a qualified electrician. The EICR must be renewed every <strong>5 years</strong> or at each change of tenancy, whichever comes first. You must provide a copy to your tenants.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What are the length-based notice periods?
-                </summary>
-                <p className="mt-3 text-gray-700 mb-3">
-                  From 2025, when landlords end a periodic tenancy, notice periods are based on how long the tenancy has lasted:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1">
-                  <li><strong>Under 1 year:</strong> Minimum 28 days' notice</li>
-                  <li><strong>1 to 10 years:</strong> Minimum 56 days' notice (8 weeks)</li>
-                  <li><strong>Over 10 years:</strong> Minimum 84 days' notice (12 weeks)</li>
-                </ul>
-                <p className="mt-3 text-gray-700">
-                  Tenants typically give notice as specified in the agreement (commonly 1 month).
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can tenants have pets?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need to register as a landlord in Northern Ireland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Currently, landlord registration is <strong>not mandatory</strong> in Northern Ireland (unlike Scotland). However, you must comply with all other legal requirements including deposit protection, safety certificates (gas, EICR from 2025, EPC), and proper notice procedures.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How quickly can I get my agreement?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted tenancy agreement is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Frequently Asked Questions"
+          faqs={[
+            {
+              question: "Is a Private Tenancy Agreement legally valid in Northern Ireland?",
+              answer: "Yes. Our Private Tenancy Agreements are drafted to comply with the Private Tenancies Order (Northern Ireland) 2006, Private Tenancies Act (Northern Ireland) 2022, and all 2025 legal updates including mandatory EICR requirements from 1 April 2025."
+            },
+            {
+              question: "What changed in Northern Ireland tenancy law in 2025?",
+              answer: "From 1 April 2025, key changes include: Mandatory EICR (all private rentals must have an Electrical Installation Condition Report renewed every 5 years), Rent Increase Limits (once per year maximum, 12-month gap between increases), 3-Month Notice required for all rent increases, and Length-Based Notice Periods (28/56/84 days depending on tenancy duration)."
+            },
+            {
+              question: "What is the difference between Standard and Premium agreements?",
+              answer: "The Standard (£9.99) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (£14.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation."
+            },
+            {
+              question: "What is the maximum deposit I can charge in Northern Ireland?",
+              answer: "In Northern Ireland, the maximum deposit is 2 months' rent. Our wizard automatically validates your deposit amount to ensure compliance. You must also protect the deposit in an approved scheme (TDS Northern Ireland or MyDeposits Northern Ireland) within 28 days of receipt."
+            },
+            {
+              question: "How often can I increase rent in Northern Ireland?",
+              answer: "From 2025, landlords can increase rent once per year with a minimum 12-month gap between increases. You must give 3 months' written notice of any rent increase. Tenants have the right to challenge excessive increases."
+            },
+            {
+              question: "Do I need an EICR certificate?",
+              answer: "Yes, from 1 April 2025. All private rental properties in Northern Ireland must have a valid Electrical Installation Condition Report (EICR) conducted by a qualified electrician. The EICR must be renewed every 5 years or at each change of tenancy, whichever comes first. You must provide a copy to your tenants."
+            },
+            {
+              question: "What are the length-based notice periods?",
+              answer: "From 2025, when landlords end a periodic tenancy, notice periods are based on how long the tenancy has lasted: Under 1 year (minimum 28 days' notice), 1 to 10 years (minimum 56 days' notice / 8 weeks), Over 10 years (minimum 84 days' notice / 12 weeks). Tenants typically give notice as specified in the agreement (commonly 1 month)."
+            },
+            {
+              question: "Can tenants have pets?",
+              answer: "It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance."
+            },
+            {
+              question: "Do I need to register as a landlord in Northern Ireland?",
+              answer: "Currently, landlord registration is not mandatory in Northern Ireland (unlike Scotland). However, you must comply with all other legal requirements including deposit protection, safety certificates (gas, EICR from 2025, EPC), and proper notice procedures."
+            },
+            {
+              question: "How quickly can I get my agreement?",
+              answer: "Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted tenancy agreement is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services."
+            }
+          ]}
+          showContactCTA={false}
+          variant="gray"
+        />
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">

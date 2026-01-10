@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Wales Occupation Contract',
@@ -347,49 +348,29 @@ export default function WalesOccupationContractPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
-
-            <div className="space-y-4">
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can I use an AST for my Welsh property?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  No. Since 1 December 2022, all new tenancies in Wales must use Occupation Contracts under the Renting Homes (Wales) Act 2016. ASTs are only valid for properties in England.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What notice do I need to give to end a contract?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  For a Section 173 (no-fault) notice, you must give at least <strong>6 months notice</strong> and cannot serve it during the first 6 months of occupation. This is significantly longer than England's 2-month notice period.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need to provide a written statement?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes. You must provide a written statement of the occupation contract within <strong>14 days</strong> of the occupation date. Our contract includes this. Failure to provide it can restrict your ability to serve possession notices.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What happens to existing ASTs in Wales?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Existing ASTs that were in place before 1 December 2022 automatically converted to Standard Occupation Contracts. The core terms remained the same, but the new Welsh law now applies.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Frequently Asked Questions"
+          faqs={[
+            {
+              question: "Can I use an AST for my Welsh property?",
+              answer: "No. Since 1 December 2022, all new tenancies in Wales must use Occupation Contracts under the Renting Homes (Wales) Act 2016. ASTs are only valid for properties in England."
+            },
+            {
+              question: "What notice do I need to give to end a contract?",
+              answer: "For a Section 173 (no-fault) notice, you must give at least 6 months notice and cannot serve it during the first 6 months of occupation. This is significantly longer than England's 2-month notice period."
+            },
+            {
+              question: "Do I need to provide a written statement?",
+              answer: "Yes. You must provide a written statement of the occupation contract within 14 days of the occupation date. Our contract includes this. Failure to provide it can restrict your ability to serve possession notices."
+            },
+            {
+              question: "What happens to existing ASTs in Wales?",
+              answer: "Existing ASTs that were in place before 1 December 2022 automatically converted to Standard Occupation Contracts. The core terms remained the same, but the new Welsh law now applies."
+            }
+          ]}
+          showContactCTA={false}
+          variant="white"
+        />
 
         {/* Other Jurisdictions */}
         <section className="container mx-auto px-4 py-12">

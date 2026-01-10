@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'PRT Agreement Scotland',
@@ -963,134 +964,57 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
-
-            <div className="space-y-4">
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed by landlord and tenant(s).
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need to register as a landlord in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  <strong>Yes, it's mandatory.</strong> All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a <strong>criminal offense</strong> with fines up to <strong>£50,000</strong>. Register at least 4-6 weeks before your first tenancy starts at <a href="https://www.landlordregistrationscotland.gov.uk" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">landlordregistrationscotland.gov.uk</a>.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the difference between Standard and Premium PRT agreements?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  The <strong>Standard PRT (£9.99)</strong> covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration.
-                </p>
-                <p className="mt-2 text-gray-700">
-                  The <strong>Premium PRT (£14.99)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the maximum deposit I can charge in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  In Scotland, the maximum deposit is <strong>2 months' rent</strong>. This is lower than England & Wales. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law. You must also protect the deposit in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within <strong>30 working days</strong>.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Are PRTs fixed-term or open-ended?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  All PRTs in Scotland are <strong>open-ended (periodic)</strong> by law. There is no fixed end date like England & Wales ASTs. The tenancy continues indefinitely until either party ends it with proper notice. This gives tenants greater security while landlords retain the ability to end tenancies with valid grounds (e.g., selling, moving in, rent arrears).
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How do I evict a tenant under a PRT?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Landlords must have one of <strong>18 legal grounds</strong> for eviction. Common grounds include:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                  <li>Landlord intends to live in property (84 days' notice)</li>
-                  <li>Landlord intends to sell (84 days' notice)</li>
-                  <li>Rent arrears of 3+ consecutive months (28 days' notice)</li>
-                  <li>Breach of tenancy terms (28 days' notice)</li>
-                </ul>
-                <p className="mt-2 text-gray-700">
-                  You must serve a <strong>Notice to Leave</strong> with the correct notice period. If the tenant doesn't leave voluntarily, you must apply to the <strong>First-tier Tribunal for Scotland (Housing and Property Chamber)</strong> for an eviction order. You cannot forcibly remove tenants yourself.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the Repairing Standard?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  The <strong>Repairing Standard</strong> is the minimum legal standard for the physical condition of private rented properties in Scotland. Landlords must ensure:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                  <li>Property is wind and watertight, with sound structure and exterior</li>
-                  <li>All installations for water, gas, electricity, heating, and sanitation are safe and working</li>
-                  <li>Fixtures, fittings, and appliances provided are in reasonable state of repair</li>
-                  <li>Common areas are in reasonable state of repair and safe</li>
-                  <li>Residual current devices (RCDs) are installed for electrical safety</li>
-                </ul>
-                <p className="mt-2 text-gray-700">
-                  If your landlord fails to meet the Repairing Standard, you can apply to the First-tier Tribunal for enforcement.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can I increase the rent during a PRT?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes, but with restrictions. Landlords can increase rent <strong>once per year</strong> using the prescribed <strong>Rent Increase Notice</strong> form. You must give <strong>3 months' notice</strong>. Tenants can challenge the increase via the First-tier Tribunal if they believe the new rent is unreasonable compared to similar properties. The Tribunal can reduce the increase or reject it entirely.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can tenants have pets?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. The Scottish Government encourages landlords to consider pet requests positively. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance. You cannot charge additional "pet rent" or pet fees beyond the deposit cap.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need an HMO licence?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  If you're letting to <strong>3 or more unrelated tenants</strong> who share facilities (kitchen, bathroom), your property may be a <strong>House in Multiple Occupation (HMO)</strong> and require a licence from your local council. HMO licensing requirements vary by council. Check with your local authority before letting. Failure to licence an HMO is a criminal offense.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How quickly can I get my PRT agreement?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted PRT is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Frequently Asked Questions"
+          faqs={[
+            {
+              question: "Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?",
+              answer: "Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed by landlord and tenant(s)."
+            },
+            {
+              question: "Do I need to register as a landlord in Scotland?",
+              answer: "Yes, it's mandatory. All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a criminal offense with fines up to £50,000. Register at least 4-6 weeks before your first tenancy starts at landlordregistrationscotland.gov.uk."
+            },
+            {
+              question: "What is the difference between Standard and Premium PRT agreements?",
+              answer: "The Standard PRT (£9.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£14.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
+            },
+            {
+              question: "What is the maximum deposit I can charge in Scotland?",
+              answer: "In Scotland, the maximum deposit is 2 months' rent. This is lower than England & Wales. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law. You must also protect the deposit in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within 30 working days."
+            },
+            {
+              question: "Are PRTs fixed-term or open-ended?",
+              answer: "All PRTs in Scotland are open-ended (periodic) by law. There is no fixed end date like England & Wales ASTs. The tenancy continues indefinitely until either party ends it with proper notice. This gives tenants greater security while landlords retain the ability to end tenancies with valid grounds (e.g., selling, moving in, rent arrears)."
+            },
+            {
+              question: "How do I evict a tenant under a PRT?",
+              answer: "Landlords must have one of 18 legal grounds for eviction. Common grounds include: landlord intends to live in property (84 days' notice), landlord intends to sell (84 days' notice), rent arrears of 3+ consecutive months (28 days' notice), breach of tenancy terms (28 days' notice). You must serve a Notice to Leave with the correct notice period. If the tenant doesn't leave voluntarily, you must apply to the First-tier Tribunal for Scotland for an eviction order."
+            },
+            {
+              question: "What is the Repairing Standard?",
+              answer: "The Repairing Standard is the minimum legal standard for the physical condition of private rented properties in Scotland. Landlords must ensure: property is wind and watertight with sound structure, all installations for water, gas, electricity, heating, and sanitation are safe and working, fixtures and appliances are in reasonable state of repair, common areas are safe, and RCDs are installed for electrical safety. If your landlord fails to meet the Repairing Standard, you can apply to the First-tier Tribunal for enforcement."
+            },
+            {
+              question: "Can I increase the rent during a PRT?",
+              answer: "Yes, but with restrictions. Landlords can increase rent once per year using the prescribed Rent Increase Notice form. You must give 3 months' notice. Tenants can challenge the increase via the First-tier Tribunal if they believe the new rent is unreasonable compared to similar properties. The Tribunal can reduce the increase or reject it entirely."
+            },
+            {
+              question: "Can tenants have pets?",
+              answer: "It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. The Scottish Government encourages landlords to consider pet requests positively. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance. You cannot charge additional pet rent or pet fees beyond the deposit cap."
+            },
+            {
+              question: "Do I need an HMO licence?",
+              answer: "If you're letting to 3 or more unrelated tenants who share facilities (kitchen, bathroom), your property may be a House in Multiple Occupation (HMO) and require a licence from your local council. HMO licensing requirements vary by council. Check with your local authority before letting. Failure to licence an HMO is a criminal offense."
+            },
+            {
+              question: "How quickly can I get my PRT agreement?",
+              answer: "Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted PRT is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services."
+            }
+          ]}
+          showContactCTA={false}
+          variant="gray"
+        />
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">

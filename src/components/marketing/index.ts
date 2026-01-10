@@ -7,5 +7,5 @@
 export { Hero } from "./Hero";
 export type { HeroProps, HeroAction, TrustIndicator } from "./Hero";
 
-export { FAQSection, FAQList } from "./FAQSection";
+export { FAQSection, FAQInline } from "./FAQSection";
 export type { FAQSectionProps, FAQItem } from "./FAQSection";

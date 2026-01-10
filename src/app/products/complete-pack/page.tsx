@@ -24,6 +24,7 @@ import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 import { PRODUCTS } from "@/lib/pricing/products";
+import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
   AskHeavenSection,
@@ -491,27 +492,12 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-20 bg-white">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <details key={index} className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden group">
-                  <summary className="px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors list-none flex items-center justify-between">
-                    {faq.question}
-                    <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-                  </summary>
-                  <div className="px-6 pb-4 text-gray-600 leading-relaxed">{faq.answer}</div>
-                </details>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
 
       {/* Retention Policy Notice */}
       <section className="py-8">
