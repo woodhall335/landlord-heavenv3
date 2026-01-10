@@ -19,17 +19,29 @@ function VerifyEmailContent() {
   const email = searchParams.get('email');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Account Verification</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Check Your Email</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              We've sent you a verification link
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">
         <Card padding="large">
           <div className="text-center py-8">
             <div className="w-20 h-20 bg-primary-subtle rounded-full flex items-center justify-center mx-auto mb-6">
               <RiMailLine className="w-10 h-10 text-[#7C3AED]" />
             </div>
-
-            <h1 className="text-2xl font-extrabold text-charcoal mb-3">
-              Check Your Email
-            </h1>
 
             <p className="text-gray-600 mb-2">
               We've sent a verification link to:
@@ -63,6 +75,7 @@ function VerifyEmailContent() {
           </div>
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

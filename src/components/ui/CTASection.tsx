@@ -18,7 +18,7 @@ export function CTASection({
 }: CTASectionProps) {
   const bgClasses = {
     dark: "bg-gray-900",
-    gradient: "bg-linear-to-br from-gray-900 via-gray-800 to-gray-900",
+    gradient: "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900",
   };
 
   return (

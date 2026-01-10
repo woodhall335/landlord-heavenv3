@@ -190,14 +190,14 @@ export default function TenancyAgreementTemplatePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <Link
                   href="/tenancy-agreements"
-                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
                   View Free Templates
                 </Link>
                 <Link
                   href={wizardLinkAST}
-                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
+                  className="hero-btn-primary inline-flex items-center justify-center gap-2"
                 >
                   Get Premium AST — £14.99
                   <ArrowRight className="w-5 h-5" />

@@ -3,6 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
 import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
+import { FAQSection } from "@/components/marketing/FAQSection";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
@@ -393,55 +394,34 @@ export default function PricingPage() {
           {/* HMO Pro removed - parked for later review */}
         </div>
 
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-charcoal mb-8 text-center">Pricing FAQs</h2>
+      </Container>
 
-          <div className="space-y-4">
-            <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Are there any hidden fees?
-              </summary>
-              <div className="px-6 pb-4 text-gray-700">
-                <p>
-                  No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The
-                  only additional cost is court fees (paid directly to the court when filing).
-                </p>
-              </div>
-            </details>
-
-            <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                What is your refund policy?
-              </summary>
-              <div className="px-6 pb-4 text-gray-700">
-                <p>
-                  All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. HMO Pro offers a 7-day free trial - cancel before trial ends and pay nothing. See our{" "}
-                  <Link href="/refunds" className="text-primary hover:underline">
-                    full refund policy
-                  </Link>{" "}
-                  for details.
-                </p>
-              </div>
-            </details>
-
-            <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Do you offer discounts for multiple documents?
-              </summary>
-              <div className="px-6 pb-4 text-gray-700">
-                <p>
-                  For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom
-                  pricing and volume discounts.
-                </p>
-              </div>
-            </details>
-
-            <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                How much do solicitors charge for the same services?
-              </summary>
-              <div className="px-6 pb-4 text-gray-700">
+      {/* FAQ Section */}
+      <FAQSection
+        title="Pricing FAQs"
+        faqs={[
+          {
+            question: "Are there any hidden fees?",
+            answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+          },
+          {
+            question: "What is your refund policy?",
+            answer: (
+              <>
+                All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. See our{" "}
+                <Link href="/refunds" className="text-primary hover:underline">full refund policy</Link>{" "}
+                for details.
+              </>
+            )
+          },
+          {
+            question: "Do you offer discounts for multiple documents?",
+            answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+          },
+          {
+            question: "How much do solicitors charge for the same services?",
+            answer: (
+              <>
                 <p className="mb-2">Typical solicitor fees:</p>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>Eviction notice: £200-300</li>
@@ -450,27 +430,18 @@ export default function PricingPage() {
                   <li>Tenancy agreement: £150-400</li>
                   <li>HMO compliance consultation: £500+ per year</li>
                 </ul>
-                <p className="mt-2">
-                  <strong>You save £200-400 per case</strong> using Landlord Heaven.
-                </p>
-              </div>
-            </details>
-
-            <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Can I purchase additional products later?
-              </summary>
-              <div className="px-6 pb-4 text-gray-700">
-                <p>
-                  Yes! You can purchase any product at any time. Each product is independent and addresses different
-                  landlord needs. If you need assistance choosing the right products, contact
-                  support@landlordheaven.co.uk for guidance.
-                </p>
-              </div>
-            </details>
-          </div>
-        </div>
-      </Container>
+                <p className="mt-2"><strong>You save £200-400 per case</strong> using Landlord Heaven.</p>
+              </>
+            )
+          },
+          {
+            question: "Can I purchase additional products later?",
+            answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs. If you need assistance choosing the right products, contact support@landlordheaven.co.uk for guidance."
+          }
+        ]}
+        showContactCTA={false}
+        variant="white"
+      />
 
       {/* CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
