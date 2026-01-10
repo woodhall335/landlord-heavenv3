@@ -237,7 +237,7 @@ export default function ASTPage() {
                 <div className="mt-6">
                   <Link
                     href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                    className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors"
+                    className="hero-btn-primary block w-full text-center"
                   >
                     Get Premium - {premiumPrice}
                   </Link>
@@ -437,14 +437,15 @@ export default function ASTPage() {
               Frequently Asked Questions
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-6 bg-[#F7EFFF]">
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">
+                <details key={index} className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden group">
+                  <summary className="px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors list-none flex items-center justify-between">
                     {faq.question}
-                  </h3>
-                  <p className="text-gray-700">{faq.answer}</p>
-                </div>
+                    <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <div className="px-6 pb-4 text-gray-600 leading-relaxed">{faq.answer}</div>
+                </details>
               ))}
             </div>
           </div>

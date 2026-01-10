@@ -411,8 +411,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       {faqSchema && <StructuredData data={faqSchema} />}
 
       <article className="min-h-screen">
-        {/* Hero Section */}
-        <header className="bg-gradient-to-br from-gray-50 to-white pt-8 pb-12 lg:pt-12 lg:pb-16">
+        {/* Hero Section - matches homepage pastel gradient */}
+        <header className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8 flex-wrap">

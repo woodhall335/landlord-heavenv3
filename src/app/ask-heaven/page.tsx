@@ -256,7 +256,7 @@ export default function AskHeavenPage(): React.ReactElement {
       <StructuredData data={complianceTopicsItemListSchema()} />
 
       {/* SSR Content Section - visible to Googlebot without hydration */}
-      <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24">
+      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* H1 and intro - server rendered for SEO */}

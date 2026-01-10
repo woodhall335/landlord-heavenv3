@@ -165,7 +165,7 @@ export default function TenancyAgreementTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-50 to-white py-12 lg:py-20">
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               {/* Badge */}

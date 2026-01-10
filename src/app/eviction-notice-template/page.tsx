@@ -130,7 +130,7 @@ export default function EvictionNoticeTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-50 to-white py-12 lg:py-20">
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               {/* Urgency Badge */}
@@ -156,14 +156,14 @@ export default function EvictionNoticeTemplatePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <Link
                   href="/tools/free-section-21-notice-generator"
-                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
                   Try Free Template
                 </Link>
                 <Link
                   href={wizardLinkNoticeOnly}
-                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
+                  className="hero-btn-primary inline-flex items-center justify-center gap-2"
                 >
                   Get Court-Ready Notice — £39.99
                   <ArrowRight className="w-5 h-5" />
