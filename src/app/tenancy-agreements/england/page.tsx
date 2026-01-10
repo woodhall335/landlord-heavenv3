@@ -179,13 +179,13 @@ export default function EnglandASTPage() {
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
+                className="hero-btn-secondary"
               >
                 Create Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-colors text-lg"
+                className="hero-btn-primary"
               >
                 Create Premium AST - £14.99
               </Link>
@@ -289,7 +289,7 @@ export default function EnglandASTPage() {
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                  className="block text-center bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  className="hero-btn-secondary block text-center"
                 >
                   Create Standard AST
                 </Link>
@@ -312,7 +312,7 @@ export default function EnglandASTPage() {
                 </ul>
                 <Link
                   href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                  className="block text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+                  className="hero-btn-primary block text-center"
                 >
                   Create Premium AST
                 </Link>
@@ -358,13 +358,13 @@ export default function EnglandASTPage() {
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
+                className="hero-btn-secondary"
               >
                 Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
+                className="hero-btn-primary"
               >
                 Premium AST - £14.99
               </Link>

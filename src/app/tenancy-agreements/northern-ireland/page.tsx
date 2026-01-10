@@ -153,13 +153,13 @@ export default function NorthernIrelandTenancyPage() {
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                className="bg-red-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-lg"
+                className="hero-btn-secondary"
               >
                 Create Standard - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
+                className="hero-btn-primary"
               >
                 Create Premium - £14.99
               </Link>

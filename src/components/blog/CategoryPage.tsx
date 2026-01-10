@@ -88,8 +88,8 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
       <StructuredData data={collectionSchema} />
 
       <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-50 to-white py-16 lg:py-20">
+        {/* Hero Section - matches homepage pastel gradient */}
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">

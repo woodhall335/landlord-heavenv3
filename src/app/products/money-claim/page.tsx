@@ -342,7 +342,7 @@ export default function MoneyClaimPage() {
             <div className="mt-8 text-center">
               <Link
                 href="/wizard?product=money_claim&src=product_page&topic=arrears"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                className="hero-btn-primary"
               >
                 Start Money Claim - {price} →
               </Link>
@@ -484,14 +484,15 @@ export default function MoneyClaimPage() {
               Frequently Asked Questions
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-6 bg-[#F7EFFF]">
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">
+                <details key={index} className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden group">
+                  <summary className="px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors list-none flex items-center justify-between">
                     {faq.question}
-                  </h3>
-                  <p className="text-gray-700">{faq.answer}</p>
-                </div>
+                    <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <div className="px-6 pb-4 text-gray-600 leading-relaxed">{faq.answer}</div>
+                </details>
               ))}
             </div>
           </div>
