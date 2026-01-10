@@ -255,24 +255,89 @@ export default function AskHeavenPage(): React.ReactElement {
       />
       <StructuredData data={complianceTopicsItemListSchema()} />
 
-      {/* SSR Content Section - visible to Googlebot without hydration */}
-      <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24">
+      {/* A) Hero Section - SSR for SEO */}
+      <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24 pb-4">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* H1 and intro - server rendered for SEO */}
-            <div className="text-center mb-8">
+            <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
                 Free UK Landlord Advice Tool
               </div>
               <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                 Ask Heaven: Free UK Landlord Q&amp;A Tool
               </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
                 Get instant, plain-English answers to your landlord-tenant questions. Whether you
                 need eviction advice, help with rent arrears, or guidance on tenancy agreements, Ask
                 Heaven covers <strong>England</strong>, <strong>Wales</strong>,{' '}
                 <strong>Scotland</strong>, and <strong>Northern Ireland</strong>.
               </p>
+
+              {/* How It Works - 3 steps */}
+              <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto text-center mb-2">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm mb-2">1</div>
+                  <p className="text-xs text-gray-600">Select your jurisdiction</p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm mb-2">2</div>
+                  <p className="text-xs text-gray-600">Ask your question</p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm mb-2">3</div>
+                  <p className="text-xs text-gray-600">Get instant guidance</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* B) Client-side interactive chat widget - directly below hero */}
+      <AskHeavenPageClient />
+
+      {/* C) Popular Landlord Questions - SSR for long-tail keyword capture */}
+      <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Popular Landlord Questions We Help With
+              </h2>
+              <ul className="grid md:grid-cols-2 gap-3 text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  How do I evict a tenant who is not paying rent?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  Which eviction notice should I use — Section 21 or Section 8?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  How do I recover rent arrears through the courts?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  What notice period do I need to give my tenant?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  Is my tenancy agreement legally compliant?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  How does eviction work in Scotland with the PRT?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  What changed with the Renting Homes Act in Wales?
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  How do I protect my tenant&apos;s deposit correctly?
+                </li>
+              </ul>
             </div>
 
             {/* Jurisdiction coverage - SSR for keyword targeting */}
@@ -317,115 +382,6 @@ export default function AskHeavenPage(): React.ReactElement {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Popular questions - SSR for long-tail keyword capture */}
-            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Popular Landlord Questions We Help With
-              </h2>
-              <ul className="grid md:grid-cols-2 gap-3 text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  How do I evict a tenant who is not paying rent?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  Which eviction notice should I use — Section 21 or Section 8?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  How do I recover rent arrears through the courts?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  What notice period do I need to give my tenant?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  Is my tenancy agreement legally compliant?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  How does eviction work in Scotland with the PRT?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  What changed with the Renting Homes Act in Wales?
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  How do I protect my tenant&apos;s deposit correctly?
-                </li>
-              </ul>
-            </div>
-
-            {/* Internal links to authority pages - SSR for link equity */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-8 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Related Guides &amp; Tools
-              </h2>
-              <p className="text-gray-600 mb-4">
-                Need more than advice? Jump to our detailed guides and document generators:
-              </p>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <Link
-                  href="/how-to-evict-tenant"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">How to Evict a Tenant</span>
-                  <span className="text-xs text-gray-500">Complete UK guide</span>
-                </Link>
-                <Link
-                  href="/tools/validators/section-21"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Section 21 Validity Checker</span>
-                  <span className="text-xs text-gray-500">Check if your notice is valid</span>
-                </Link>
-                <Link
-                  href="/tools/validators/section-8"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Section 8 Grounds Checker</span>
-                  <span className="text-xs text-gray-500">Verify grounds &amp; notice periods</span>
-                </Link>
-                <Link
-                  href="/money-claim-unpaid-rent"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Claim Unpaid Rent</span>
-                  <span className="text-xs text-gray-500">MCOL &amp; Simple Procedure</span>
-                </Link>
-                <Link
-                  href="/wales-eviction-notices"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Wales Eviction Guide</span>
-                  <span className="text-xs text-gray-500">Renting Homes Act notices</span>
-                </Link>
-                <Link
-                  href="/scotland-eviction-notices"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Scotland Eviction Guide</span>
-                  <span className="text-xs text-gray-500">Notice to Leave &amp; PRT</span>
-                </Link>
-                <Link
-                  href="/tenancy-agreement-template"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Tenancy Agreement</span>
-                  <span className="text-xs text-gray-500">AST &amp; PRT templates</span>
-                </Link>
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900 block">Rent Arrears Letter</span>
-                  <span className="text-xs text-gray-500">Demand letter template</span>
-                </Link>
               </div>
             </div>
 
@@ -497,14 +453,79 @@ export default function AskHeavenPage(): React.ReactElement {
                 ))}
               </div>
             </div>
+
+            {/* Internal links to authority pages - SSR for link equity */}
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-8 shadow-sm">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Related Guides &amp; Tools
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Need more than advice? Jump to our detailed guides and document generators:
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <Link
+                  href="/how-to-evict-tenant"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">How to Evict a Tenant</span>
+                  <span className="text-xs text-gray-500">Complete UK guide</span>
+                </Link>
+                <Link
+                  href="/tools/validators/section-21"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Section 21 Validity Checker</span>
+                  <span className="text-xs text-gray-500">Check if your notice is valid</span>
+                </Link>
+                <Link
+                  href="/tools/validators/section-8"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Section 8 Grounds Checker</span>
+                  <span className="text-xs text-gray-500">Verify grounds &amp; notice periods</span>
+                </Link>
+                <Link
+                  href="/money-claim-unpaid-rent"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Claim Unpaid Rent</span>
+                  <span className="text-xs text-gray-500">MCOL &amp; Simple Procedure</span>
+                </Link>
+                <Link
+                  href="/wales-eviction-notices"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Wales Eviction Guide</span>
+                  <span className="text-xs text-gray-500">Renting Homes Act notices</span>
+                </Link>
+                <Link
+                  href="/scotland-eviction-notices"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Scotland Eviction Guide</span>
+                  <span className="text-xs text-gray-500">Notice to Leave &amp; PRT</span>
+                </Link>
+                <Link
+                  href="/tenancy-agreement-template"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Tenancy Agreement</span>
+                  <span className="text-xs text-gray-500">AST &amp; PRT templates</span>
+                </Link>
+                <Link
+                  href="/rent-arrears-letter-template"
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
+                >
+                  <span className="font-medium text-gray-900 block">Rent Arrears Letter</span>
+                  <span className="text-xs text-gray-500">Demand letter template</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Client-side interactive widget */}
-      <AskHeavenPageClient />
-
-      {/* SSR FAQ Section - visible to Googlebot without hydration */}
+      {/* D) SSR FAQ Section - visible to Googlebot without hydration */}
       <div className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
