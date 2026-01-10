@@ -6,19 +6,21 @@
  */
 
 import Handlebars from 'handlebars';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
-import type { Browser } from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+// Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
+type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
 
 /**
  * Get a browser instance that works in both local dev and Vercel serverless.
  * - Local: Uses system Chrome or puppeteer's bundled Chromium
  * - Vercel: Uses @sparticuz/chromium which bundles a serverless-compatible Chromium
  */
-async function getBrowser(): Promise<Browser> {
+async function getBrowser(): Promise<BrowserInstance> {
   const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
 
   if (isVercel) {
@@ -32,37 +34,38 @@ async function getBrowser(): Promise<Browser> {
       headless: true,
     });
   } else {
-    // Local development - use puppeteer's bundled Chromium or system Chrome
-    // Try to find Chrome in common locations
+    // Local development - try to find Chrome in common locations
     const possiblePaths = [
       '/usr/bin/google-chrome',
       '/usr/bin/chromium-browser',
       '/usr/bin/chromium',
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       process.env.PUPPETEER_EXECUTABLE_PATH,
-    ].filter(Boolean);
+    ].filter(Boolean) as string[];
 
     let executablePath: string | undefined;
     for (const path of possiblePaths) {
-      try {
-        if (path && require('fs').existsSync(path)) {
-          executablePath = path;
-          break;
-        }
-      } catch {
-        // Path doesn't exist, continue
+      if (existsSync(path)) {
+        executablePath = path;
+        break;
       }
     }
 
-    // If no system Chrome found, try using puppeteer's download
+    // If no system Chrome found, try using puppeteer's bundled version
     if (!executablePath) {
       try {
         const puppeteer = await import('puppeteer');
-        return puppeteer.default.launch({
+        const browser = await puppeteer.default.launch({
           headless: true,
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
-      } catch {
-        // Fall through to puppeteer-core with error
+        // Cast to our type - the APIs are compatible at runtime
+        return browser as unknown as BrowserInstance;
+      } catch (e) {
+        throw new Error(
+          'No Chrome browser found. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.'
+        );
       }
     }
 
