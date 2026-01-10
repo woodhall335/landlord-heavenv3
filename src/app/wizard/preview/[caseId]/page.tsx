@@ -314,7 +314,9 @@ export default function WizardPreviewPage() {
     const facts = caseData.collected_facts as any || {};
     const product = selectedProduct || facts.product || facts.__meta?.product || searchParams.get('product') || 'notice_only';
     const jurisdiction = caseData.jurisdiction || 'england';
-    const noticeRoute = caseData.recommended_route || facts.selected_notice_route || facts.eviction_route || 'section_21';
+    // Use section_8 as fallback since it's the safer default (fault-based requires proving grounds)
+    // Section 21 requires strict compliance which may not be met
+    const noticeRoute = caseData.recommended_route || facts.selected_notice_route || facts.eviction_route || 'section_8';
     const caseType = caseData.case_type;
 
     let baseDocuments: DocumentInfo[];
