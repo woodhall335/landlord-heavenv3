@@ -2,15 +2,77 @@
  * Document Generator
  *
  * Generates legal documents (Section 8 notices, ASTs, letters) from Handlebars templates.
- * Converts to PDF using Puppeteer.
+ * Converts to PDF using Puppeteer (with @sparticuz/chromium for serverless/Vercel).
  */
 
 import Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
+import type { Browser } from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+/**
+ * Get a browser instance that works in both local dev and Vercel serverless.
+ * - Local: Uses system Chrome or puppeteer's bundled Chromium
+ * - Vercel: Uses @sparticuz/chromium which bundles a serverless-compatible Chromium
+ */
+async function getBrowser(): Promise<Browser> {
+  const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+  if (isVercel) {
+    // Use @sparticuz/chromium for Vercel/AWS Lambda
+    const chromium = await import('@sparticuz/chromium');
+
+    return puppeteerCore.launch({
+      args: chromium.default.args,
+      defaultViewport: chromium.default.defaultViewport,
+      executablePath: await chromium.default.executablePath(),
+      headless: true,
+    });
+  } else {
+    // Local development - use puppeteer's bundled Chromium or system Chrome
+    // Try to find Chrome in common locations
+    const possiblePaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+      process.env.PUPPETEER_EXECUTABLE_PATH,
+    ].filter(Boolean);
+
+    let executablePath: string | undefined;
+    for (const path of possiblePaths) {
+      try {
+        if (path && require('fs').existsSync(path)) {
+          executablePath = path;
+          break;
+        }
+      } catch {
+        // Path doesn't exist, continue
+      }
+    }
+
+    // If no system Chrome found, try using puppeteer's download
+    if (!executablePath) {
+      try {
+        const puppeteer = await import('puppeteer');
+        return puppeteer.default.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
+      } catch {
+        // Fall through to puppeteer-core with error
+      }
+    }
+
+    return puppeteerCore.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath,
+    });
+  }
+}
 
 // ESM compatibility: Get __dirname equivalent
 const __filename_esm = typeof __filename !== 'undefined' ? __filename : fileURLToPath(import.meta.url);
@@ -700,10 +762,7 @@ export async function htmlToPdf(
   }
 
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await getBrowser();
 
     const page = await browser.newPage();
 
@@ -1096,10 +1155,7 @@ export async function htmlToPreviewThumbnail(
   let browser;
 
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await getBrowser();
 
     const page = await browser.newPage();
 
@@ -1291,10 +1347,7 @@ export async function pdfToPreviewThumbnail(
   let browser;
 
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await getBrowser();
 
     const page = await browser.newPage();
 
@@ -1330,10 +1383,7 @@ export async function pdfToPreviewThumbnail(
 
     // Now we need to add watermark to the screenshot
     // Re-open browser to add watermark overlay
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await getBrowser();
 
     const watermarkPage = await browser.newPage();
     await watermarkPage.setViewport({
