@@ -692,22 +692,29 @@ export default function AskHeavenPageClient(): React.ReactElement {
     <div className="bg-gradient-to-br from-purple-50 via-white to-purple-50 pb-8">
       <Container>
         <div className="max-w-4xl mx-auto pb-6">
-          {/* Compact jurisdiction selector - H1 is in SSR page.tsx */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <label htmlFor="jurisdiction-select" className="text-sm font-medium text-gray-600">
-              I&apos;m a landlord in:
-            </label>
-            <select
-              id="jurisdiction-select"
-              className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary bg-white shadow-sm"
-              value={jurisdiction}
-              onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
-            >
-              <option value="england">England</option>
-              <option value="wales">Wales</option>
-              <option value="scotland">Scotland</option>
-              <option value="northern-ireland">Northern Ireland</option>
-            </select>
+          {/* Chat Widget Header - H1 is in SSR page.tsx */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
+                ☁️
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-gray-900 block" aria-hidden="true">Ask Heaven</span>
+                <p className="text-sm text-gray-500">Select your jurisdiction and ask a question</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+                value={jurisdiction}
+                onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
+              >
+                <option value="england">England</option>
+                <option value="wales">Wales</option>
+                <option value="scotland">Scotland</option>
+                <option value="northern-ireland">Northern Ireland</option>
+              </select>
+            </div>
           </div>
 
           {/* Case Context Panel (if caseId present) */}
@@ -845,18 +852,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
             {/* Chat Messages */}
             <div className="min-h-[300px] max-h-[400px] overflow-y-auto p-4 md:p-6 space-y-4 bg-gradient-to-b from-gray-50 to-white">
               {chatMessages.length === 0 && !isSending && (
-                <div className="h-full flex flex-col items-center justify-center text-center px-4 py-6">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl mb-3">
+                <div className="h-full flex flex-col items-center justify-center text-center px-4">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mb-4">
                     ☁️
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-1">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">
                     {jurisdictionWelcome[jurisdiction].title}
                   </h2>
-                  <p className="text-sm text-primary font-medium mb-4">
+                  <p className="text-sm text-primary font-medium mb-2">
                     {jurisdictionWelcome[jurisdiction].subtitle}
                   </p>
-                  <p className="text-gray-500 mb-4 max-w-md text-xs">
-                    Or try one of these common questions:
+                  <p className="text-gray-500 mb-6 max-w-md text-sm">
+                    Get plain-English explanations about UK landlord problems. I help you understand notices, eviction routes, money claims, and tenancy agreements so you can speak to tenants, agents, or your own solicitor with confidence.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
                     {exampleQuestionsByJurisdiction[jurisdiction].map((question) => (
