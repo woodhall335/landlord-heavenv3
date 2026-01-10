@@ -7,6 +7,7 @@ import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { FileText, Scale, Clock, Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -78,40 +79,30 @@ export default function BlogPage() {
       <StructuredData data={blogSchema} />
 
       <main>
-        {/* Hero Section - matches homepage pastel gradient */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <FileText className="w-4 h-4" />
-                Free Landlord Resources
-              </div>
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Landlord Guides & Legal Resources
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Expert advice on evictions, tenancy law, and property management.
-                Written by legal professionals, trusted by thousands of UK landlords.
-              </p>
-
-              {/* Quick Stats */}
-              <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-primary" />
-                  <span>Legally Accurate</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-primary" />
-                  <span>Updated for 2026</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-primary" />
-                  <span>{blogPosts.length} Guides Available</span>
-                </div>
-              </div>
+        {/* Hero Section */}
+        <StandardHero
+          badge="Free Landlord Resources"
+          badgeIcon={<FileText className="w-4 h-4" />}
+          title="Landlord Guides & Legal Resources"
+          subtitle="Expert advice on evictions, tenancy law, and property management. Written by legal professionals, trusted by thousands of UK landlords."
+          variant="pastel"
+        >
+          {/* Quick Stats */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <Scale className="w-4 h-4 text-primary" />
+              <span>Legally Accurate</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-primary" />
+              <span>Updated for 2026</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FileText className="w-4 h-4 text-primary" />
+              <span>{blogPosts.length} Guides Available</span>
             </div>
           </div>
-        </section>
+        </StandardHero>
 
         {/* Urgency Banner */}
         <section className="bg-primary py-6">

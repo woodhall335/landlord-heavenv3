@@ -4,6 +4,7 @@ import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
 import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
 import { FAQSection } from "@/components/marketing/FAQSection";
+import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
@@ -50,20 +51,14 @@ export default function PricingPage() {
       <StructuredData data={faqPageSchema(faqs)} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Transparent Pricing</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              No hidden fees. No surprises. Choose the product that fits your needs.
-            </p>
-            <p className="text-sm text-gray-600">All prices are one-time payments</p>
-          </div>
-        </Container>
-      </section>
+      <StandardHero
+        badge="Transparent Pricing"
+        title="Simple, Transparent Pricing"
+        subtitle="No hidden fees. No surprises. Choose the product that fits your needs."
+        variant="pastel"
+      >
+        <p className="text-sm text-gray-600">All prices are one-time payments</p>
+      </StandardHero>
 
       <Container size="large" className="py-12">
 

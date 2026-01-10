@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiMailLine } from 'react-icons/ri';
 
 function VerifyEmailContent() {
@@ -21,19 +22,12 @@ function VerifyEmailContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Account Verification</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Check Your Email</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              We've sent you a verification link
-            </p>
-          </div>
-        </Container>
-      </section>
+      <StandardHero
+        badge="Account Verification"
+        title="Check Your Email"
+        subtitle="We've sent you a verification link"
+        variant="pastel"
+      />
 
       <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">

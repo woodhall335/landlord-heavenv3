@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { freeTools } from '@/lib/tools/tools';
 import { getCanonicalUrl } from '@/lib/seo';
+import { StandardHero } from '@/components/marketing/StandardHero';
 
 export const metadata: Metadata = {
   title: 'Free Tools for UK Landlords',
@@ -26,30 +27,14 @@ const otherTools = freeTools.filter((tool) => !tool.featured);
 export default function ToolsHubPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tools</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Free Tools for UK Landlords
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-600">
-              Use our free generators, calculators, and validators to get clarity fast — upgrade only
-              when you need court-ready documents.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="#tools" className="hero-btn-primary" aria-label="Browse free tools">
-                Explore Free Tools →
-              </Link>
-              <Link href="/ask-heaven" className="hero-btn-secondary" aria-label="Ask Heaven assistant">
-                Ask Heaven →
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <StandardHero
+        badge="Free Tools"
+        title="Free Tools for UK Landlords"
+        subtitle="Use our free generators, calculators, and validators to get clarity fast — upgrade only when you need court-ready documents."
+        primaryCTA={{ label: "Explore Free Tools →", href: "#tools" }}
+        secondaryCTA={{ label: "Ask Heaven →", href: "/ask-heaven" }}
+        variant="pastel"
+      />
 
       {featuredTools.length > 0 && (
         <section className="py-12 bg-white">

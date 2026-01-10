@@ -6,6 +6,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import {
   CheckCircle,
   FileText,
@@ -130,64 +131,36 @@ export default function EvictionNoticeTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Urgency Badge */}
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                  <AlertTriangle className="w-4 h-4" />
-                  Section 21 ends 1 May 2026
-                </span>
-                <Section21Countdown variant="badge" />
-              </div>
-
-              {/* H1 with target keyword */}
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-6">
-                Eviction Notice Template UK
-              </h1>
-
-              <p className="text-xl text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-                Download free <strong>eviction notice templates</strong> for Section 21 and Section 8.
-                Court-ready documents trusted by over 10,000 UK landlords.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <Link
-                  href="/tools/free-section-21-notice-generator"
-                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
-                >
-                  <Download className="w-5 h-5" />
-                  Try Free Template
-                </Link>
-                <Link
-                  href={wizardLinkNoticeOnly}
-                  className="hero-btn-primary inline-flex items-center justify-center gap-2"
-                >
-                  Get Court-Ready Notice — £39.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-
-              {/* Trust Signals */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-                <span className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  Section 21 & 8 Included
-                </span>
-                <span className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  Official Format Used
-                </span>
-                <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-green-500" />
-                  Ready in 5 Minutes
-                </span>
-              </div>
-            </div>
+        <StandardHero
+          badge="Section 21 ends 1 May 2026"
+          badgeIcon={<AlertTriangle className="w-4 h-4" />}
+          title="Eviction Notice Template UK"
+          subtitle={<>Download free <strong>eviction notice templates</strong> for Section 21 and Section 8. Court-ready documents trusted by over 10,000 UK landlords.</>}
+          primaryCTA={{ label: "Get Court-Ready Notice — £39.99", href: wizardLinkNoticeOnly }}
+          secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
+          variant="pastel"
+        >
+          {/* Countdown */}
+          <div className="mb-4">
+            <Section21Countdown variant="badge" />
           </div>
-        </section>
+
+          {/* Trust Signals */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+            <span className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              Section 21 & 8 Included
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-500" />
+              Official Format Used
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-green-500" />
+              Ready in 5 Minutes
+            </span>
+          </div>
+        </StandardHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
