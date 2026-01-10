@@ -5,6 +5,12 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface SourceLink {
+  title: string;
+  url: string;
+  type: 'legislation' | 'government' | 'official' | 'reference';
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -21,6 +27,10 @@ export interface BlogPost {
     role: string;
     image?: string;
   };
+  reviewer?: {
+    name: string;
+    role: string;
+  };
   heroImage: string;
   heroImageAlt: string;
   showUrgencyBanner: boolean;
@@ -30,4 +40,5 @@ export interface BlogPost {
   secondaryKeywords: string[];
   content: React.ReactNode;
   faqs?: FAQItem[]; // Optional FAQ section for rich snippets
+  sources?: SourceLink[]; // Official sources for EEAT
 }
