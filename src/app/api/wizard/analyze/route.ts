@@ -794,15 +794,57 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (product === 'notice_only' && decisionEngineOutput) {
-      // NOTICE_ONLY: Decision engine ALWAYS wins (no user override allowed)
-      // The decision engine auto-routes to the legally valid option
+      // NOTICE_ONLY: Respect user's explicit route selection when that route is allowed
+      // Only auto-route when user's selection is blocked or no explicit selection made
 
       const allowedRoutes = decisionEngineOutput.allowed_routes || [];
       const recommendedRoute = decisionEngineOutput.recommended_routes[0] || null;
       const blockedRoutes = decisionEngineOutput.blocked_routes || [];
 
-      // If S21 is blocked, auto-route to S8/Notice to Leave
-      if (blockedRoutes.includes('section_21')) {
+      // Check for user's explicit route selection (eviction_route from CaseBasicsSection)
+      const userExplicitRoute = (wizardFacts as any).eviction_route ||
+                                (wizardFacts as any).selected_notice_route ||
+                                null;
+
+      // If user explicitly selected a route and it's allowed, use it
+      if (userExplicitRoute && !blockedRoutes.includes(userExplicitRoute)) {
+        finalRecommendedRoute = userExplicitRoute;
+
+        // If decision engine recommended a different route, log it but respect user choice
+        if (recommendedRoute && recommendedRoute !== userExplicitRoute) {
+          console.log(`[NOTICE_ONLY] User explicitly selected ${userExplicitRoute}, respecting choice (decision engine recommended ${recommendedRoute})`);
+        }
+      }
+      // If user selected a blocked route, auto-route to alternative
+      else if (userExplicitRoute && blockedRoutes.includes(userExplicitRoute)) {
+        const fallbackRoute =
+          userExplicitRoute === 'section_21'
+            ? 'section_8'
+            : userExplicitRoute === 'section_8' && allowedRoutes.includes('section_21')
+            ? 'section_21'
+            : recommendedRoute || (canonicalJurisdiction === 'scotland'
+              ? 'notice_to_leave'
+              : canonicalJurisdiction === 'wales'
+              ? 'wales_section_173'
+              : 'section_8');
+        finalRecommendedRoute = fallbackRoute;
+
+        const blockingIssues = decisionEngineOutput.blocking_issues
+          .filter(b => b.route === userExplicitRoute && b.severity === 'blocking')
+          .map(b => b.description);
+
+        const routeExplanation = decisionEngineOutput.route_explanations?.[userExplicitRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+          `${userExplicitRoute.replace('_', ' ')} is not available due to compliance issues.`;
+
+        route_override = {
+          from: userExplicitRoute,
+          to: fallbackRoute,
+          reason: routeExplanation,
+          blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+        };
+      }
+      // If S21 is blocked (legacy check for when no explicit selection)
+      else if (blockedRoutes.includes('section_21')) {
         const fallbackRoute =
           canonicalJurisdiction === 'scotland'
             ? 'notice_to_leave'
@@ -825,24 +867,8 @@ export async function POST(request: Request) {
           blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
         };
       } else if (recommendedRoute) {
-        // Use decision engine recommendation
+        // No explicit user selection - use decision engine recommendation
         finalRecommendedRoute = recommendedRoute;
-
-        // Check if wizard has already auto-selected a route (selected_notice_route)
-        // This would be set by the answer endpoint after deposit_and_compliance
-        const wizardSelectedRoute = (wizardFacts as any).selected_notice_route || null;
-
-        // If wizard already selected a route that differs from decision engine, note the override
-        if (wizardSelectedRoute && wizardSelectedRoute !== recommendedRoute) {
-          const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
-            `Based on your case details, ${recommendedRoute.replace('_', ' ')} is the legally valid route.`;
-
-          route_override = {
-            from: wizardSelectedRoute,
-            to: recommendedRoute,
-            reason: routeExplanation,
-          };
-        }
       } else if (allowedRoutes.length > 0) {
         // Fallback to first allowed route
         finalRecommendedRoute = allowedRoutes[0];
