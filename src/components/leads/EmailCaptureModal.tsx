@@ -154,7 +154,7 @@ export const EmailCaptureModal: React.FC<EmailCaptureModalProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 rounded-lg bg-primary-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="hero-btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Saving...' : primaryLabel}
           </button>
