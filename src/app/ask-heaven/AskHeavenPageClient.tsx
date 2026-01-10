@@ -603,13 +603,10 @@ export default function AskHeavenPageClient(): React.ReactElement {
     inputRef.current?.focus();
   };
 
-  const handleFollowupClick = useCallback(async (question: string) => {
+  const handleFollowupClick = useCallback((question: string) => {
     trackAskHeavenFollowupClick(getTrackingParams());
-    // Set input first so user sees their question
-    setInput(question);
-    // Small delay to let React update the input, then submit
-    await new Promise(resolve => setTimeout(resolve, 50));
-    await submitQuestion(question);
+    // Directly submit the question
+    submitQuestion(question);
   }, [getTrackingParams, submitQuestion]);
 
   const buildWizardLinkWithAttribution = useCallback((product: string) => {
@@ -915,10 +912,10 @@ export default function AskHeavenPageClient(): React.ReactElement {
               </div>
             </div>
           ) : (
-            /* Chat State - Messages and input */
-            <>
-              {/* Messages Area */}
-              <div ref={chatContainerRef} className="min-h-[400px] max-h-[500px] overflow-y-auto p-6 space-y-6">
+            /* Chat State - Fixed container with scrollable messages */
+            <div className="flex flex-col h-[600px]">
+              {/* Messages Area - scrollable */}
+              <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
                 {chatMessages.map((m) => (
                   <div
                     key={m.id}
@@ -1117,7 +1114,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                   <Link href="/terms" className="text-primary hover:underline ml-1">Terms apply</Link>
                 </p>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
