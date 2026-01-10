@@ -117,8 +117,7 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
 
 RESPONSE FORMATTING:
 - Use markdown formatting in your reply: **bold** for emphasis, bullet points for lists
-- When citing legislation, include the specific section (e.g. "Section 21 of the Housing Act 1988")
-- At the end of detailed answers, include a "Sources" section listing relevant legislation
+- When citing legislation in your reply, include the specific section (e.g. "Section 21 of the Housing Act 1988")
 
 CRITICAL - JSON RESPONSE FORMAT:
 You MUST respond with a JSON object containing exactly these fields:
@@ -132,12 +131,12 @@ You MUST respond with a JSON object containing exactly these fields:
 }
 
 Field requirements:
-- "reply" (REQUIRED): Your full response to the landlord with markdown formatting
+- "reply" (REQUIRED): Your full response to the landlord with markdown formatting. DO NOT include "Follow-Up Questions:", "Sources:", "Suggested Product:", or "Suggested Topic:" sections in this text - use the structured fields below instead.
 - "suggested_product": One of the product codes above, or null if no product is relevant
 - "suggested_next_step" (REQUIRED): Best next action for the user
 - "suggested_topic" (REQUIRED): Primary topic detected from the question
-- "follow_up_questions": Array of 2-3 relevant follow-up questions the landlord might ask
-- "sources": Array of legislation/regulations cited in your answer (empty array if none)
+- "follow_up_questions": Array of 2-3 relevant follow-up questions the landlord might ask. These will be displayed as clickable buttons - do NOT include them in the reply text.
+- "sources": Array of legislation/regulations cited in your answer (empty array if none). These will be displayed separately - do NOT include a "Sources:" section in the reply text.
 `.trim();
 
     const systemMessage: ChatMessage = {

@@ -38,7 +38,6 @@ import {
   type AskHeavenTrackingParams,
 } from '@/lib/analytics';
 import { detectTopics, getPrimaryTopic, type Topic } from '@/lib/ask-heaven/topic-detection';
-import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -1040,36 +1039,6 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
                 <div ref={chatEndRef} />
               </div>
-
-              {/* Next Best Action Card */}
-              {chatMessages.some(m => m.role === 'assistant') && detectedTopic && (
-                <div className="px-6 pb-4">
-                  <NextBestActionCard
-                    topic={detectedTopic}
-                    jurisdiction={jurisdiction as WizardJurisdiction}
-                    suggestedNextStep={suggestedNextStep}
-                    lastQuestion={lastQuestion}
-                    questionCount={getQuestionCount()}
-                    attribution={{
-                      src: getAskHeavenAttribution().src,
-                      utm_source: getAskHeavenAttribution().utm_source,
-                      utm_medium: getAskHeavenAttribution().utm_medium,
-                      utm_campaign: getAskHeavenAttribution().utm_campaign,
-                    }}
-                    onCtaClick={(ctaType, targetUrl, ctaLabel) => {
-                      handleCtaClick(ctaType as any, targetUrl, ctaLabel);
-                    }}
-                    onRequestEmailCapture={(reason) => {
-                      setEmailGateReason(reason);
-                      setEmailGateOpen(true);
-                      trackAskHeavenEmailGateShown({
-                        ...getTrackingParams(),
-                        reason,
-                      } as AskHeavenTrackingParams & { reason: string });
-                    }}
-                  />
-                </div>
-              )}
 
               {/* Error Message */}
               {error && (
