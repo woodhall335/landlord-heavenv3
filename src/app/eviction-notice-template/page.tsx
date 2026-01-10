@@ -323,7 +323,7 @@ export default function EvictionNoticeTemplatePage() {
                   </ul>
                   <Link
                     href="/tools/free-section-21-notice-generator"
-                    className="block w-full text-center bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-secondary block w-full text-center"
                   >
                     Try Free Template
                   </Link>
@@ -368,7 +368,7 @@ export default function EvictionNoticeTemplatePage() {
                   </ul>
                   <Link
                     href={wizardLinkNoticeOnly}
-                    className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-primary block w-full text-center"
                   >
                     Get Court-Ready Notice
                   </Link>
@@ -446,7 +446,7 @@ export default function EvictionNoticeTemplatePage() {
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
               <Link
                 href={wizardLinkNoticeOnly}
-                className="inline-flex items-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
+                className="hero-btn-secondary inline-flex items-center gap-2"
               >
                 Serve Your Notice Before the Deadline
                 <ArrowRight className="w-5 h-5" />
@@ -547,14 +547,14 @@ export default function EvictionNoticeTemplatePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/tools/free-section-21-notice-generator"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl border border-white/30 transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
                   Try Free Template
                 </Link>
                 <Link
                   href={wizardLinkNoticeOnly}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Get Court-Ready — £39.99
                   <ArrowRight className="w-5 h-5" />

@@ -563,7 +563,7 @@ export default function HMOLicenseChecker() {
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Assessment...'

@@ -434,7 +434,7 @@ export default function TenancyAgreementTemplatePage() {
                   </ul>
                   <Link
                     href="/tenancy-agreements/standard"
-                    className="block w-full text-center bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-secondary block w-full text-center"
                   >
                     Get Free Template
                   </Link>
@@ -479,7 +479,7 @@ export default function TenancyAgreementTemplatePage() {
                   </ul>
                   <Link
                     href={wizardLinkAST}
-                    className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-primary block w-full text-center"
                   >
                     Get Premium AST
                   </Link>
@@ -728,14 +728,14 @@ export default function TenancyAgreementTemplatePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/tenancy-agreements"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl border border-white/30 transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
                   View Free Templates
                 </Link>
                 <Link
                   href={wizardLinkAST}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Get Premium AST — £14.99
                   <ArrowRight className="w-5 h-5" />

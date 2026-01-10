@@ -529,7 +529,7 @@ link.href = url;
             <button
               onClick={handleSavePDF}
               disabled={totals.totalOutstanding === 0}
-              className="mt-6 w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hero-btn-primary mt-6 w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Save Schedule as PDF
             </button>
@@ -551,13 +551,13 @@ link.href = url;
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <Link
                     href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                    className="flex-1 text-center bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition"
+                    className="hero-btn-primary flex-1 text-center"
                   >
                     Start Money Claim (E&W)
                   </Link>
                   <Link
                     href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                    className="flex-1 text-center bg-white text-primary border-2 border-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition"
+                    className="hero-btn-secondary flex-1 text-center"
                   >
                     Start Simple Procedure (Scotland)
                   </Link>

@@ -524,13 +524,13 @@ export default function HelpPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+                className="hero-btn-primary"
               >
                 Contact Support
               </Link>
               <a
                 href="mailto:support@landlordheaven.co.uk"
-                className="inline-block bg-white text-primary border-2 border-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                className="hero-btn-secondary"
               >
                 Email Us
               </a>
