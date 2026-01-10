@@ -1431,6 +1431,15 @@ function NoticeOnlyReviewContent({
   // Jurisdiction display label
   const jurisdictionLabel = jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1);
 
+  // For Notice Only flows, use the USER's explicitly selected grounds to filter recommended_grounds
+  const userSelectedGrounds: string[] = analysis?.user_selected_grounds || [];
+
+  // Check if user selected rent-related grounds (8, 10, 11) for rent schedule display
+  const hasRentRelatedGround = userSelectedGrounds.some((g: string) => {
+    const groundNum = g.replace(/^ground_?/i, '');
+    return ['8', '10', '11'].includes(groundNum);
+  });
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto p-6">
       {/* Header */}
@@ -1540,7 +1549,7 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Section 8 Grounds Summary */}
+      {/* Section 8 Grounds Summary - shows decision engine recommended grounds */}
       {isSection8 && decisionEngine?.recommended_grounds?.length > 0 && (
         <Card className="p-6">
           <h2 className="text-lg font-semibold mb-4">Section 8 Grounds</h2>
@@ -1590,13 +1599,16 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Compliance Issues (non-S21) */}
+      {/* Suggestions (for non-S21, using softer language for notice-only flows) */}
       {hasComplianceIssues && !isSection21 && (
-        <Card className="border-amber-200 bg-amber-50 p-6">
-          <h2 className="text-lg font-semibold text-amber-800 mb-3">⚠️ Compliance Warnings</h2>
+        <Card className="border-green-200 bg-green-50 p-6">
+          <h2 className="text-lg font-semibold text-green-800 mb-3">✅ Suggestions to strengthen your case</h2>
+          <p className="text-sm text-green-700 mb-3">
+            These are optional recommendations to improve your position. Your notice will still be valid without addressing them.
+          </p>
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
-              <li key={index} className="flex items-start gap-2 text-amber-900">
+              <li key={index} className="flex items-start gap-2 text-green-900">
                 <span>•</span>
                 <span>{issue}</span>
               </li>
@@ -1673,6 +1685,9 @@ function NoticeOnlyReviewContent({
               <li className="flex items-center gap-2 text-gray-700">📄 Form 3 - Section 8 Notice</li>
               <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
               <li className="flex items-center gap-2 text-gray-700">📄 Grounds Summary</li>
+              {hasRentRelatedGround && (
+                <li className="flex items-center gap-2 text-gray-700">📄 Rent Schedule (Arrears Schedule)</li>
+              )}
             </>
           ) : isWales ? (
             <>

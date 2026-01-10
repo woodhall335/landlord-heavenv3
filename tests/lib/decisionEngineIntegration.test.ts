@@ -383,3 +383,169 @@ describe('Decision Engine Integration with validateFlow', () => {
     });
   });
 });
+
+/**
+ * Regression test: Notice Only Section 8 Ground Selection
+ *
+ * Issue: When user selected only Ground 8 in Notice Only wizard,
+ * the decision engine was also recommending Ground 11 (and Ground 10)
+ * based on arrears amount, ignoring the user's explicit selection.
+ *
+ * Fix: For notice_only flows, decision engine now filters recommended_grounds
+ * to only include grounds the user explicitly selected.
+ */
+describe('Notice Only Section 8 Ground Selection (Regression)', () => {
+  it('should only recommend Ground 8 when user selects only Ground 8', () => {
+    // User has 2 months arrears (enough to recommend 8, 10, 11)
+    // but explicitly selected ONLY Ground 8
+    const input: DecisionInput = {
+      jurisdiction: 'england',
+      product: 'notice_only',
+      case_type: 'eviction',
+      facts: {
+        tenancy: {
+          deposit_amount: 1200,
+          deposit_protected: true,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+        issues: {
+          rent_arrears: {
+            total_arrears: 2000, // 2 months - enough to trigger grounds 8, 10, 11
+            has_arrears: true,
+          },
+          section8_grounds: {
+            selected_grounds: ['ground_8'], // User explicitly selected ONLY Ground 8
+          },
+        },
+      } as any,
+      stage: 'wizard',
+    };
+
+    const result = runDecisionEngine(input);
+
+    // Should ONLY include Ground 8, not Ground 10 or 11
+    expect(result.recommended_grounds.length).toBe(1);
+    expect(result.recommended_grounds[0].code).toBe('8');
+
+    // Verify Ground 10 and 11 are NOT included
+    const hasGround10 = result.recommended_grounds.some(g => g.code === '10');
+    const hasGround11 = result.recommended_grounds.some(g => g.code === '11');
+    expect(hasGround10).toBe(false);
+    expect(hasGround11).toBe(false);
+  });
+
+  it('should recommend all selected grounds when user selects multiple', () => {
+    const input: DecisionInput = {
+      jurisdiction: 'england',
+      product: 'notice_only',
+      case_type: 'eviction',
+      facts: {
+        tenancy: {
+          deposit_amount: 1200,
+          deposit_protected: true,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+        issues: {
+          rent_arrears: {
+            total_arrears: 2000, // 2 months
+            has_arrears: true,
+          },
+          section8_grounds: {
+            selected_grounds: ['ground_8', 'ground_11'], // User selected 8 AND 11
+          },
+        },
+      } as any,
+      stage: 'wizard',
+    };
+
+    const result = runDecisionEngine(input);
+
+    // Should include both Ground 8 and Ground 11
+    expect(result.recommended_grounds.length).toBe(2);
+
+    const groundCodes = result.recommended_grounds.map(g => g.code);
+    expect(groundCodes).toContain('8');
+    expect(groundCodes).toContain('11');
+
+    // Should NOT include Ground 10 (not selected)
+    expect(groundCodes).not.toContain('10');
+  });
+
+  it('should recommend all grounds for complete_pack (not notice_only)', () => {
+    // For complete_pack, the decision engine should recommend all applicable grounds
+    // based on facts, not filter by user selection
+    const input: DecisionInput = {
+      jurisdiction: 'england',
+      product: 'complete_pack',
+      case_type: 'eviction',
+      facts: {
+        tenancy: {
+          deposit_amount: 1200,
+          deposit_protected: true,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+        issues: {
+          rent_arrears: {
+            total_arrears: 2000, // 2 months - enough for grounds 8, 10, 11
+            has_arrears: true,
+          },
+          section8_grounds: {
+            selected_grounds: ['ground_8'], // User selected only Ground 8
+          },
+        },
+      } as any,
+      stage: 'wizard',
+    };
+
+    const result = runDecisionEngine(input);
+
+    // For complete_pack, should recommend ALL applicable grounds based on facts
+    // (Ground 8, 10, and 11 based on 2 months arrears)
+    expect(result.recommended_grounds.length).toBeGreaterThanOrEqual(2);
+
+    const groundCodes = result.recommended_grounds.map(g => g.code);
+    expect(groundCodes).toContain('8');
+    // Ground 11 is recommended when arrears >= 0.25 months
+    expect(groundCodes).toContain('11');
+  });
+
+  it('should show no grounds when user selects grounds that dont match facts', () => {
+    // User selects Ground 14 (ASB) but facts don't support it
+    const input: DecisionInput = {
+      jurisdiction: 'england',
+      product: 'notice_only',
+      case_type: 'eviction',
+      facts: {
+        tenancy: {
+          deposit_amount: 1200,
+          deposit_protected: true,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+        issues: {
+          rent_arrears: {
+            total_arrears: 2000,
+            has_arrears: true,
+          },
+          asb: {
+            has_asb: false, // No ASB
+          },
+          section8_grounds: {
+            selected_grounds: ['ground_14'], // User selected Ground 14 but no ASB facts
+          },
+        },
+      } as any,
+      stage: 'wizard',
+    };
+
+    const result = runDecisionEngine(input);
+
+    // Ground 14 requires ASB facts, so it won't be in the recommended list
+    // and user selection was only Ground 14
+    // Result should be empty (no grounds match both facts AND selection)
+    expect(result.recommended_grounds.length).toBe(0);
+  });
+});

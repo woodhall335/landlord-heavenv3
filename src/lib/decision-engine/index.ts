@@ -403,19 +403,35 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     });
   }
 
-  output.recommended_grounds = section8Grounds;
+  // For notice_only product, filter recommended grounds to only include what user explicitly selected
+  const userSelectedGrounds = facts.issues?.section8_grounds?.selected_grounds || [];
+  if (input.product === 'notice_only' && Array.isArray(userSelectedGrounds) && userSelectedGrounds.length > 0) {
+    // Filter to only show grounds the user selected
+    output.recommended_grounds = section8Grounds.filter(ground => {
+      const groundCode = String(ground.code).replace(/^ground_?/i, '');
+      return userSelectedGrounds.some((selected: string) => {
+        const selectedCode = String(selected).replace(/^ground_?/i, '');
+        return selectedCode === groundCode;
+      });
+    });
+  } else {
+    output.recommended_grounds = section8Grounds;
+  }
 
   // Section 8 is always allowed (you can always evict with valid grounds)
   output.allowed_routes.push('section_8');
 
-  if (section8Grounds.length > 0) {
+  if (output.recommended_grounds.length > 0) {
     // Only recommend Section 8 if we have grounds to suggest
     if (!output.recommended_routes.includes('section_21')) {
       // If S21 is blocked, S8 becomes the recommended route
       output.recommended_routes.push('section_8');
     }
     output.notice_period_suggestions.section_8 = 14; // Minimum for mandatory grounds
-    output.route_explanations.section_8 = `Section 8 (grounds-based eviction) is available. We've identified ${section8Grounds.length} potential ground(s).`;
+    output.route_explanations.section_8 = `Section 8 (grounds-based eviction) is available. We've identified ${output.recommended_grounds.length} potential ground(s).`;
+  } else if (section8Grounds.length > 0 && input.product === 'notice_only') {
+    // User selected grounds but none of the available grounds match their selection
+    output.route_explanations.section_8 = 'Section 8 is available. Your selected grounds will be included in the notice.';
   } else {
     output.route_explanations.section_8 = 'Section 8 is available but we haven\'t identified specific grounds yet. You can select grounds manually.';
   }

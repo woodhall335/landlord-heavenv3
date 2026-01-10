@@ -1028,6 +1028,24 @@ export async function POST(request: Request) {
           },
         );
 
+        // For Section 8 with Ground 8, 10, or 11 (rent-related grounds), include Rent Schedule
+        if (isSection8Route && isNoticeOnly) {
+          const userSelectedGrounds = facts.issues?.section8_grounds?.selected_grounds || [];
+          const hasRentRelatedGround = userSelectedGrounds.some((g: string) => {
+            const groundNum = g.replace(/^ground_?/i, '');
+            return ['8', '10', '11'].includes(groundNum);
+          });
+          if (hasRentRelatedGround) {
+            previewDocuments.push(
+              {
+                id: 'rent_schedule',
+                document_type: 'schedule',
+                document_title: 'Rent Schedule (Arrears Schedule)',
+              },
+            );
+          }
+        }
+
         if (!isNoticeOnly) {
           previewDocuments.push(
             {
@@ -1061,13 +1079,18 @@ export async function POST(request: Request) {
     let recommended_route_label: string = effectiveRoute;
 
     // Human-friendly route labels for the UI
+    // For notice_only product, labels should NOT include court form references
+    const isNoticeOnlyProduct = product === 'notice_only';
     if (caseData.case_type === 'eviction') {
       if (canonicalJurisdiction === 'england') {
         if (effectiveRoute === 'section_21') {
-          recommended_route_label =
-            'Section 21 possession (accelerated or standard, depending on compliance)';
+          recommended_route_label = isNoticeOnlyProduct
+            ? 'Section 21 Notice (Form 6A)'
+            : 'Section 21 possession (accelerated or standard, depending on compliance)';
         } else if (effectiveRoute === 'section_8') {
-          recommended_route_label = 'Section 8 standard possession (N5 + N119)';
+          recommended_route_label = isNoticeOnlyProduct
+            ? 'Section 8 Notice (Form 3)'
+            : 'Section 8 standard possession (N5 + N119)';
         } else if (effectiveRoute === 'notice_only') {
           recommended_route_label = 'Notice-only route (serve notice now, claim later)';
         } else if (effectiveRoute === 'standard_possession') {
@@ -1118,6 +1141,10 @@ export async function POST(request: Request) {
       }
     }
 
+    // Extract user-selected grounds for notice_only flows
+    // For Section 8 notice_only, we show the USER's explicit selections, not decision engine recommendations
+    const userSelectedGrounds = facts.issues?.section8_grounds?.selected_grounds || [];
+
     return NextResponse.json({
       case_id,
       jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
@@ -1141,6 +1168,8 @@ export async function POST(request: Request) {
       decision_engine: decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
+      // User's explicitly selected Section 8 grounds (for notice_only review)
+      user_selected_grounds: userSelectedGrounds,
     });
 
   } catch (error: any) {
