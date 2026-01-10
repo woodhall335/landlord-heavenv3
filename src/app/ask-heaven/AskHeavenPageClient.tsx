@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
@@ -109,6 +109,7 @@ const jurisdictionLabels: Record<Jurisdiction, string> = {
 const EMAIL_GATE_THRESHOLD = 3;
 
 export default function AskHeavenPageClient(): React.ReactElement {
+  const router = useRouter();
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -195,8 +196,14 @@ export default function AskHeavenPageClient(): React.ReactElement {
     };
   }, [jurisdiction]);
 
+  // Auto-scroll chat container (not page) when new messages arrive
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll only within the chat container, not the whole page
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [chatMessages]);
 
   const submitInitialQuestion = useCallback(async (questionText: string) => {
@@ -596,10 +603,13 @@ export default function AskHeavenPageClient(): React.ReactElement {
     inputRef.current?.focus();
   };
 
-  const handleFollowupClick = useCallback((question: string) => {
+  const handleFollowupClick = useCallback(async (question: string) => {
     trackAskHeavenFollowupClick(getTrackingParams());
-    // Auto-submit the follow-up question
-    void submitQuestion(question);
+    // Set input first so user sees their question
+    setInput(question);
+    // Small delay to let React update the input, then submit
+    await new Promise(resolve => setTimeout(resolve, 50));
+    await submitQuestion(question);
   }, [getTrackingParams, submitQuestion]);
 
   const buildWizardLinkWithAttribution = useCallback((product: string) => {
@@ -624,7 +634,9 @@ export default function AskHeavenPageClient(): React.ReactElement {
       cta_label: ctaLabel,
       target_url: targetUrl,
     });
-  }, [getTrackingParams]);
+    // Explicitly navigate to the target URL
+    router.push(targetUrl);
+  }, [getTrackingParams, router]);
 
   const handleEmailCaptured = useCallback(() => {
     markEmailCaptured();
@@ -906,7 +918,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
             /* Chat State - Messages and input */
             <>
               {/* Messages Area */}
-              <div className="min-h-[400px] max-h-[500px] overflow-y-auto p-6 space-y-6">
+              <div ref={chatContainerRef} className="min-h-[400px] max-h-[500px] overflow-y-auto p-6 space-y-6">
                 {chatMessages.map((m) => (
                   <div
                     key={m.id}
@@ -915,7 +927,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                     {m.role === 'user' ? (
                       <div className="max-w-[85%] md:max-w-[70%]">
                         <div className="rounded-2xl rounded-br-md px-5 py-3 bg-primary">
-                          <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">{m.content}</p>
+                          <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#ffffff' }}>{m.content}</p>
                         </div>
                       </div>
                     ) : (
@@ -976,10 +988,10 @@ export default function AskHeavenPageClient(): React.ReactElement {
                                   const cta = ASK_HEAVEN_RECOMMENDATION_MAP[m.suggestedProduct as AskHeavenRecommendation];
                                   const wizardUrl = buildWizardLinkWithAttribution(cta.primarySku);
                                   return (
-                                    <Link
-                                      href={wizardUrl}
+                                    <button
+                                      type="button"
                                       onClick={() => handleCtaClick('wizard', wizardUrl, cta.label, m.suggestedProduct ?? undefined)}
-                                      className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group"
+                                      className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group cursor-pointer text-left"
                                     >
                                       <div>
                                         <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
@@ -993,7 +1005,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
                                           <span className="block text-[10px] text-gray-400">{cta.priceNote}</span>
                                         )}
                                       </div>
-                                    </Link>
+                                    </button>
                                   );
                                 })()}
                               </div>
