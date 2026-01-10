@@ -78,7 +78,6 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
   const otherRegions = Object.entries(BLOG_CATEGORIES)
     .filter(([key]) => key !== region)
     .map(([key, value]) => ({
-      slug: key as BlogRegion,
       ...value,
       count: postCounts[key as BlogRegion],
     }));
