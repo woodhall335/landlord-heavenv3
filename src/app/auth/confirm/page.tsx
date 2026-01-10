@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
@@ -314,18 +315,24 @@ function ConfirmEmailContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Confirmed"
+        title="Email Confirmed!"
+        subtitle="Your email has been verified successfully"
+        variant="pastel"
+      />
+
+      <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">
         <Card padding="large">
           <div className="text-center py-8">
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <RiCheckLine className="w-8 h-8 text-[#7C3AED]" />
             </div>
-            <h2 className="text-xl font-semibold text-charcoal mb-2">
-              Email Confirmed!
-            </h2>
             <p className="text-gray-600 mb-6">
-              Your email has been verified. Redirecting to dashboard...
+              Redirecting to your dashboard...
             </p>
             <Link href="/dashboard">
               <Button variant="primary" fullWidth>
@@ -335,6 +342,7 @@ function ConfirmEmailContent() {
           </div>
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

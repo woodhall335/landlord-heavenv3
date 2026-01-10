@@ -2,16 +2,16 @@
  * Marketing FAQ Section Component
  *
  * Standardized FAQ accordion component with consistent styling.
- * Uses native HTML <details>/<summary> for accessibility and SSR compatibility.
+ * Unified FAQ component for all marketing pages.
  */
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { clsx } from "clsx";
-import { RiArrowDownSLine, RiCustomerService2Line } from "react-icons/ri";
+import { ChevronDown, Headphones } from "lucide-react";
 
 export interface FAQItem {
   question: string;
@@ -36,33 +36,44 @@ export interface FAQSectionProps {
 }
 
 /**
- * Single FAQ Accordion Item
+ * Single FAQ Accordion Item with proper accessibility
  */
 function FAQAccordionItem({
   item,
   isOpen,
   onToggle,
+  index,
 }: {
   item: FAQItem;
   isOpen: boolean;
   onToggle: () => void;
+  index: number;
 }) {
+  const baseId = useId();
+  const questionId = `faq-question-${baseId}-${index}`;
+  const answerId = `faq-answer-${baseId}-${index}`;
+
   return (
     <div className="border-b border-gray-200 last:border-b-0">
       <button
+        id={questionId}
         onClick={onToggle}
-        className="w-full py-5 flex items-start justify-between gap-4 text-left hover:text-primary transition-colors"
+        className="w-full py-5 flex items-start justify-between gap-4 text-left hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
         aria-expanded={isOpen}
+        aria-controls={answerId}
       >
         <span className="text-lg font-semibold text-gray-900">{item.question}</span>
-        <RiArrowDownSLine
+        <ChevronDown
           className={clsx(
-            "w-6 h-6 text-gray-400 shrink-0 transition-transform duration-200",
+            "w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200",
             isOpen && "rotate-180 text-primary"
           )}
         />
       </button>
       <div
+        id={answerId}
+        role="region"
+        aria-labelledby={questionId}
         className={clsx(
           "grid transition-all duration-200",
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
@@ -138,6 +149,7 @@ export function FAQSection({
               <FAQAccordionItem
                 key={index}
                 item={faq}
+                index={index}
                 isOpen={openIndex === index}
                 onToggle={() => handleToggle(index)}
               />
@@ -150,7 +162,7 @@ export function FAQSection({
               <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-purple-50 rounded-2xl px-8 py-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <RiCustomerService2Line className="w-6 h-6 text-primary" />
+                    <Headphones className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-left">
                     <div className="font-semibold text-gray-900">Still have questions?</div>
@@ -173,51 +185,31 @@ export function FAQSection({
 }
 
 /**
- * Simple FAQ List (non-accordion, all visible)
- * Used for product pages where we want all FAQs visible
+ * Inline FAQ Accordion (for embedding within page sections)
+ * Use FAQSection for standalone FAQ sections with full header/CTA.
+ * Use FAQInline when you need just the accordion items.
  */
-export function FAQList({
-  title = "Frequently Asked Questions",
+export function FAQInline({
   faqs,
-  variant = "white",
+  className,
 }: {
-  title?: string;
   faqs: FAQItem[];
-  variant?: "default" | "gray" | "white";
+  className?: string;
 }) {
-  const bgClass = {
-    default: "bg-white",
-    gray: "bg-gray-50",
-    white: "bg-white",
-  }[variant];
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className={clsx("py-16 md:py-20", bgClass)}>
-      <Container>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
-            {title}
-          </h2>
-
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden group"
-              >
-                <summary className="px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors list-none flex items-center justify-between">
-                  {faq.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">
-                    ▼
-                  </span>
-                </summary>
-                <div className="px-6 pb-4 text-gray-600 leading-relaxed">{faq.answer}</div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </Container>
-    </section>
+    <div className={clsx("bg-gray-50 rounded-2xl p-6 md:p-8", className)}>
+      {faqs.map((faq, index) => (
+        <FAQAccordionItem
+          key={index}
+          item={faq}
+          index={index}
+          isOpen={openIndex === index}
+          onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+        />
+      ))}
+    </div>
   );
 }
 

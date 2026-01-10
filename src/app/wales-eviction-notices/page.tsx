@@ -10,6 +10,7 @@ import {
   Info,
   Home,
 } from 'lucide-react';
+import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Eviction Notices in Wales - Renting Homes (Wales) Act Guide',
@@ -525,32 +526,12 @@ export default function WalesEvictionNoticesPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Frequently Asked Questions
-              </h2>
-
-              <div className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <details
-                    key={index}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow group"
-                  >
-                    <summary className="font-semibold text-gray-900 list-none flex items-center justify-between">
-                      {faq.question}
-                      <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">
-                        ▼
-                      </span>
-                    </summary>
-                    <p className="mt-4 text-gray-600">{faq.answer}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Frequently Asked Questions"
+          faqs={faqs}
+          showContactCTA={false}
+          variant="white"
+        />
 
         {/* Related Links */}
         <section className="py-12 bg-gray-100 border-t">

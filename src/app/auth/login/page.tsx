@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 interface UserProfile {
@@ -180,19 +181,12 @@ function LoginContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Account</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Welcome Back</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Log in to access your documents and cases
-            </p>
-          </div>
-        </Container>
-      </section>
+      <StandardHero
+        badge="Account"
+        title="Welcome Back"
+        subtitle="Log in to access your documents and cases"
+        variant="pastel"
+      />
 
       <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">

@@ -6,6 +6,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import {
   CheckCircle,
   FileText,
@@ -165,63 +166,31 @@ export default function TenancyAgreementTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Badge */}
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                  <FileText className="w-4 h-4" />
-                  Updated for 2025/2026
-                </span>
-              </div>
-
-              {/* H1 with target keyword */}
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-6">
-                Tenancy Agreement Template UK
-              </h1>
-
-              <p className="text-xl text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-                Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland.
-                Legally compliant contracts trusted by over 10,000 landlords.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <Link
-                  href="/tenancy-agreements"
-                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all"
-                >
-                  <Download className="w-5 h-5" />
-                  View Free Templates
-                </Link>
-                <Link
-                  href={wizardLinkAST}
-                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
-                >
-                  Get Premium AST — £14.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-
-              {/* Trust Signals */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-                <span className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  England, Wales & Scotland
-                </span>
-                <span className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  Legally Compliant
-                </span>
-                <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-green-500" />
-                  Ready in Minutes
-                </span>
-              </div>
-            </div>
+        <StandardHero
+          badge="Updated for 2025/2026"
+          badgeIcon={<FileText className="w-4 h-4" />}
+          title="Tenancy Agreement Template UK"
+          subtitle={<>Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
+          primaryCTA={{ label: "Get Premium AST — £14.99", href: wizardLinkAST }}
+          secondaryCTA={{ label: "View Free Templates", href: "/tenancy-agreements" }}
+          variant="pastel"
+        >
+          {/* Trust Signals */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+            <span className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              England, Wales & Scotland
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-500" />
+              Legally Compliant
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-green-500" />
+              Ready in Minutes
+            </span>
           </div>
-        </section>
+        </StandardHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

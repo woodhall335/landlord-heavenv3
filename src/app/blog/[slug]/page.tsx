@@ -24,6 +24,7 @@ import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } fro
 import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
+import { FAQInline } from '@/components/marketing/FAQSection';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -542,24 +543,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               {post.faqs && post.faqs.length > 0 && (
                 <section className="mt-12 pt-8 border-t border-gray-200">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-                  <div className="space-y-4">
-                    {post.faqs.map((faq, index) => (
-                      <details
-                        key={index}
-                        className="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
-                      >
-                        <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 hover:bg-gray-100 transition-colors">
-                          {faq.question}
-                          <span className="ml-4 flex-shrink-0 text-gray-500 group-open:rotate-180 transition-transform">
-                            ▼
-                          </span>
-                        </summary>
-                        <div className="p-4 pt-0 text-gray-600 leading-relaxed">
-                          {faq.answer}
-                        </div>
-                      </details>
-                    ))}
-                  </div>
+                  <FAQInline faqs={post.faqs} />
                 </section>
               )}
 

@@ -7,6 +7,7 @@ import AskHeavenPageClient from './AskHeavenPageClient';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
+import { FAQSection } from '@/components/marketing/FAQSection';
 
 // Compliance topics data for SSR section
 interface ComplianceTopic {
@@ -505,31 +506,12 @@ export default function AskHeavenPage(): React.ReactElement {
       <AskHeavenPageClient />
 
       {/* SSR FAQ Section - visible to Googlebot without hydration */}
-      <div className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Frequently Asked Questions About Ask Heaven
-            </h2>
-            <div className="space-y-4">
-              {faqItems.map((faq) => (
-                <details
-                  key={faq.question}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 cursor-pointer hover:shadow-md transition-shadow group"
-                >
-                  <summary className="font-semibold text-gray-900 list-none flex items-center justify-between">
-                    {faq.question}
-                    <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform">
-                      ▼
-                    </span>
-                  </summary>
-                  <p className="mt-3 text-gray-600">{faq.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <FAQSection
+        title="Frequently Asked Questions About Ask Heaven"
+        faqs={faqItems}
+        showContactCTA={false}
+        variant="gray"
+      />
     </>
   );
 }

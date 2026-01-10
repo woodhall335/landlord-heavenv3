@@ -27,10 +27,10 @@ export function HeroSection({
   const alignment = align === "center" ? "text-center items-center" : "text-left items-start";
   
   const bgClasses = {
-    lavender: "bg-linear-to-br from-lavender-100 via-lavender-200 to-lavender-100",
+    lavender: "bg-gradient-to-br from-lavender-100 via-lavender-200 to-lavender-100",
     white: "bg-white",
     cream: "bg-cream",
-    dark: "bg-linear-to-br from-gray-900 to-gray-800 text-white",
+    dark: "bg-gradient-to-br from-gray-900 to-gray-800 text-white",
   };
 
   const textColor = background === "dark" ? "text-white" : "text-gray-900";
@@ -101,7 +101,7 @@ export function HeroSection({
       </div>
 
       {background !== "dark" && (
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-white to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
       )}
     </section>
   );

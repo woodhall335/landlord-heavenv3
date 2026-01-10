@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
@@ -168,17 +169,17 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <Container size="small">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-charcoal mb-2">
-            Set New Password
-          </h1>
-          <p className="text-gray-600">
-            Enter your new password below
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Recovery"
+        title="Set New Password"
+        subtitle="Enter your new password below"
+        variant="pastel"
+      />
 
+      <div className="flex items-center justify-center py-12 px-4">
+      <Container size="small">
         <Card padding="large">
           {success ? (
             <div className="text-center py-8">
@@ -248,6 +249,7 @@ function ResetPasswordContent() {
           )}
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

@@ -16,7 +16,8 @@
 
 import Link from "next/link";
 import { Container } from "@/components/ui";
-import { TrustBar, CostComparison, Testimonials, FAQ } from "@/components/landing";
+import { TrustBar, CostComparison, Testimonials } from "@/components/landing";
+import { FAQSection } from "@/components/marketing/FAQSection";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
 
 export default function Home() {
@@ -254,7 +255,39 @@ export default function Home() {
           FAQ
           Purpose: Address objections, reduce friction
           ============================================================ */}
-      <FAQ />
+      <FAQSection
+        badge="Common Questions"
+        title="Frequently Asked Questions"
+        intro="Everything you need to know before getting started."
+        faqs={[
+          {
+            question: "Are these documents legally valid?",
+            answer: "Yes. Our documents are created by legal professionals and are fully compliant with current UK housing law. They use the correct prescribed forms (where required) and are structured to meet court requirements. We update templates whenever legislation changes."
+          },
+          {
+            question: "What if my case is complicated?",
+            answer: "Our wizard asks detailed questions to handle complex situations. For evictions, we cover rent arrears, antisocial behaviour, multiple grounds, and more. If your situation requires specialist legal advice, we'll tell you. Our documents are designed for the majority of standard landlord-tenant situations."
+          },
+          {
+            question: "How quickly can I get my documents?",
+            answer: "Documents are generated instantly. Complete our 5-10 minute wizard, make payment, and download your documents immediately. No waiting, no appointments needed."
+          },
+          {
+            question: "What jurisdictions do you cover?",
+            answer: "We cover all four UK jurisdictions: England, Wales, Scotland, and Northern Ireland. Each has different housing laws, and our system automatically generates the correct documents for your region. For example, we use Section 21/Section 8 for England, Section 173 for Wales, Notice to Leave for Scotland."
+          },
+          {
+            question: "Can I speak to someone if I need help?",
+            answer: "Yes. Our support team is available via email and responds within 24 hours. For document-specific questions, we also have our free Ask Heaven AI assistant that can answer landlord-tenant law questions instantly."
+          },
+          {
+            question: "What's included in each pack?",
+            answer: "Notice Only (£39.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£199.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£199.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+          },
+        ]}
+        showContactCTA={true}
+        variant="white"
+      />
 
       {/* ============================================================
           FINAL CTA

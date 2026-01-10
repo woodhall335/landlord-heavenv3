@@ -5,6 +5,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import {
   CheckCircle,
   FileText,
@@ -138,78 +139,46 @@ export default function Section8NoticeTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Future-proof Badge */}
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-                  <CheckCircle className="w-4 h-4" />
-                  Works after May 2026
-                </span>
-              </div>
-
-              {/* Jurisdiction Notice - England Only */}
-              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg max-w-2xl mx-auto">
-                <p className="text-amber-900 text-sm">
-                  <strong>England only:</strong> Section 8 notices apply to <strong>England only</strong>.
-                  Different eviction grounds and processes apply in{' '}
-                  <Link href="/wales-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                    Wales (Renting Homes Act)
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/scotland-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                    Scotland (PRT eviction grounds)
-                  </Link>.
-                </p>
-              </div>
-
-              {/* H1 with target keyword */}
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-6">
-                Section 8 Notice Template
-              </h1>
-
-              <p className="text-xl text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-                Download a free <strong>Section 8 notice template</strong> for grounds-based eviction.
-                Rent arrears, antisocial behaviour, property damage and more.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <Link
-                  href="/tools/free-section-8-notice-generator"
-                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all"
-                >
-                  <Download className="w-5 h-5" />
-                  Try Free Template
-                </Link>
-                <Link
-                  href={wizardLinkCompletePack}
-                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
-                >
-                  Get Complete Pack — £199.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-
-              {/* Trust Signals */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-                <span className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  17 Grounds Covered
-                </span>
-                <span className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  Designed for Court Acceptance
-                </span>
-                <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-green-500" />
-                  Ready in 5 Minutes
-                </span>
-              </div>
-            </div>
+        <StandardHero
+          badge="Works after May 2026"
+          badgeIcon={<CheckCircle className="w-4 h-4" />}
+          title="Section 8 Notice Template"
+          subtitle={<>Download a free <strong>Section 8 notice template</strong> for grounds-based eviction. Rent arrears, antisocial behaviour, property damage and more.</>}
+          primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
+          secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
+          variant="pastel"
+        >
+          {/* Jurisdiction Notice - England Only */}
+          <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg max-w-2xl mx-auto text-left">
+            <p className="text-amber-900 text-sm">
+              <strong>England only:</strong> Section 8 notices apply to <strong>England only</strong>.
+              Different eviction grounds and processes apply in{' '}
+              <Link href="/wales-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
+                Wales (Renting Homes Act)
+              </Link>{' '}
+              and{' '}
+              <Link href="/scotland-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
+                Scotland (PRT eviction grounds)
+              </Link>.
+            </p>
           </div>
-        </section>
+
+          {/* Trust Signals */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+            <span className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              17 Grounds Covered
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-500" />
+              Designed for Court Acceptance
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-green-500" />
+              Ready in 5 Minutes
+            </span>
+          </div>
+        </StandardHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
