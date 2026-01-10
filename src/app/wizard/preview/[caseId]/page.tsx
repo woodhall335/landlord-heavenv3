@@ -20,6 +20,11 @@ import {
   getASTDocuments,
   getProductMeta,
 } from '@/lib/documents/document-configs';
+import {
+  requiresRentSchedule,
+  computeIncludedGrounds,
+  validateNoticeOnlyCase,
+} from '@/lib/validation/notice-only-case-validator';
 import { Loader2 } from 'lucide-react';
 
 interface CaseData {
@@ -55,7 +60,12 @@ export default function WizardPreviewPage() {
   const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
 
   // Helper to get all document types that should be generated for a product
-  const getDocumentTypesForProduct = (product: string, jurisdiction: string, noticeRoute: string): string[] => {
+  const getDocumentTypesForProduct = (
+    product: string,
+    jurisdiction: string,
+    noticeRoute: string,
+    options: { includeArrearsSchedule?: boolean } = {}
+  ): string[] => {
     const types: string[] = [];
 
     // Determine the main notice type
@@ -70,6 +80,10 @@ export default function WizardPreviewPage() {
       types.push(getNoticeType());
       types.push('service_instructions');
       types.push('service_checklist');
+      // Include arrears schedule when applicable (Section 8 with arrears grounds + data)
+      if (options.includeArrearsSchedule) {
+        types.push('arrears_schedule');
+      }
     } else if (product === 'complete_pack') {
       // Complete pack: all eviction documents
       types.push(getNoticeType());
@@ -207,10 +221,30 @@ export default function WizardPreviewPage() {
 
         // Generate ALL preview documents for thumbnails based on product
         try {
+          // Determine if arrears schedule should be included (Section 8 + arrears grounds + data)
+          const productForGen = inferredProduct || 'notice_only';
+          const jurisdictionForGen = fetchedCase.jurisdiction || 'england';
+          const routeForGen = fetchedCase.recommended_route || 'section_8';
+          const facts = (fetchedCase.collected_facts as any) || {};
+
+          const shouldIncludeArrearsScheduleForGen = (): boolean => {
+            if (productForGen !== 'notice_only') return false;
+            if (routeForGen !== 'section_8' && routeForGen !== 'section-8') return false;
+
+            // Check if arrears grounds are included
+            const needsSchedule = requiresRentSchedule(facts);
+            if (!needsSchedule) return false;
+
+            // Check if arrears data exists
+            const arrearsItems = facts.arrears_items || [];
+            return arrearsItems.length > 0;
+          };
+
           const documentTypesToGenerate = getDocumentTypesForProduct(
-            inferredProduct || 'notice_only',
-            fetchedCase.jurisdiction || 'england',
-            fetchedCase.recommended_route || 'section_8'
+            productForGen,
+            jurisdictionForGen,
+            routeForGen,
+            { includeArrearsSchedule: shouldIncludeArrearsScheduleForGen() }
           );
 
           console.log('[Preview] Generating preview documents:', documentTypesToGenerate);
@@ -321,9 +355,26 @@ export default function WizardPreviewPage() {
 
     let baseDocuments: DocumentInfo[];
 
+    // Determine if arrears schedule should be included for Notice Only packs
+    // Requires: Section 8 route + arrears grounds (8/10/11) + arrears data exists
+    const shouldIncludeArrearsSchedule = (): boolean => {
+      if (product !== 'notice_only') return false;
+      if (noticeRoute !== 'section_8' && noticeRoute !== 'section-8') return false;
+
+      // Check if arrears grounds are included
+      const needsSchedule = requiresRentSchedule(facts);
+      if (!needsSchedule) return false;
+
+      // Check if arrears data exists
+      const arrearsItems = facts.arrears_items || [];
+      return arrearsItems.length > 0;
+    };
+
+    const includeArrearsSchedule = shouldIncludeArrearsSchedule();
+
     switch (product) {
       case 'notice_only':
-        baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+        baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute, { includeArrearsSchedule });
         break;
       case 'complete_pack':
         baseDocuments = getCompletePackDocuments(jurisdiction, noticeRoute);
@@ -538,6 +589,12 @@ export default function WizardPreviewPage() {
   const product = getProduct();
   const productMeta = getProductMeta(product);
 
+  // Dynamically add rent schedule feature if included in documents
+  const hasRentSchedule = documents.some(doc => doc.id === 'arrears-schedule');
+  const dynamicFeatures = hasRentSchedule
+    ? [...productMeta.features, 'Rent schedule (arrears breakdown)']
+    : productMeta.features;
+
   return (
     <>
       <PreviewPageLayout
@@ -548,7 +605,7 @@ export default function WizardPreviewPage() {
         originalPrice={productMeta.originalPrice}
         savings={productMeta.savings}
         documents={documents}
-        features={productMeta.features}
+        features={dynamicFeatures}
       />
 
       {/* Signup Modal */}
