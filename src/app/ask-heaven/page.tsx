@@ -3,6 +3,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import AskHeavenPageClient from './AskHeavenPageClient';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
@@ -284,22 +285,30 @@ export default function AskHeavenPage(): React.ReactElement {
             {/* Jurisdiction coverage cards */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <span className="text-2xl mb-2 block">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <div className="w-10 h-7 mb-2 overflow-hidden rounded">
+                  <Image src="/gb-eng.svg" alt="England flag" width={40} height={28} className="w-full h-full object-cover" />
+                </div>
                 <h3 className="font-semibold text-gray-900">England</h3>
                 <p className="text-xs text-gray-500 mt-1">Section 21 & 8, ASTs, MCOL</p>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <span className="text-2xl mb-2 block">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                <div className="w-10 h-7 mb-2 overflow-hidden rounded">
+                  <Image src="/gb-wls.svg" alt="Wales flag" width={40} height={28} className="w-full h-full object-cover" />
+                </div>
                 <h3 className="font-semibold text-gray-900">Wales</h3>
                 <p className="text-xs text-gray-500 mt-1">Renting Homes Act, Section 173</p>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <span className="text-2xl mb-2 block">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                <div className="w-10 h-7 mb-2 overflow-hidden rounded">
+                  <Image src="/gb-sct.svg" alt="Scotland flag" width={40} height={28} className="w-full h-full object-cover" />
+                </div>
                 <h3 className="font-semibold text-gray-900">Scotland</h3>
                 <p className="text-xs text-gray-500 mt-1">PRT, Notice to Leave, FTT</p>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <span className="text-2xl mb-2 block">🇬🇧</span>
+                <div className="w-10 h-7 mb-2 overflow-hidden rounded">
+                  <Image src="/gb-nir.svg" alt="Northern Ireland flag" width={40} height={28} className="w-full h-full object-cover" />
+                </div>
                 <h3 className="font-semibold text-gray-900">N. Ireland</h3>
                 <p className="text-xs text-gray-500 mt-1">Notice to Quit, rent recovery</p>
               </div>
