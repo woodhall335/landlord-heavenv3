@@ -337,7 +337,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Pricing */}
+          {/* Pricing & Products */}
           <div>
             <h5 className="text-xs font-bold mb-3" style={{ color: '#bdbdbd' }}>Pricing</h5>
             <ul className="space-y-2">
@@ -347,8 +347,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/refunds" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
-                  Refund Policy
+                <Link href="/products/complete-pack" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Eviction Pack
+                </Link>
+              </li>
+              <li>
+                <Link href="/ask-heaven" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#6b6b6b' }}>
+                  Ask Heaven AI
                 </Link>
               </li>
             </ul>
