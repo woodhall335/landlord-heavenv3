@@ -8,17 +8,30 @@ import { BlogCTA } from '@/components/blog/BlogCTA';
 import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
 import { NextSteps } from '@/components/blog/NextSteps';
 import { Sources } from '@/components/blog/Sources';
+import { CategoryPage } from '@/components/blog/CategoryPage';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
-import { getPostRegion, BLOG_CATEGORIES, BlogRegion } from '@/lib/blog/categories';
+import {
+  getPostRegion,
+  getPostsByRegion,
+  getValidRegions,
+  getCategoryConfig,
+  BLOG_CATEGORIES,
+  BlogRegion,
+} from '@/lib/blog/categories';
 import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
 import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 
-interface BlogPostPageProps {
+interface BlogPageProps {
   params: Promise<{ slug: string }>;
+}
+
+// Check if a slug is a valid category/region
+function isValidCategory(slug: string): slug is BlogRegion {
+  return getValidRegions().includes(slug as BlogRegion);
 }
 
 // Map blog post slugs/tags to Ask Heaven topics for compliance posts
@@ -161,13 +174,53 @@ const getRelatedGuides = (post: BlogPost) => {
 };
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
+  // Include both category pages and blog posts
+  const categoryParams = getValidRegions().map((region) => ({
+    slug: region,
+  }));
+
+  const postParams = blogPosts.map((post) => ({
     slug: post.slug,
   }));
+
+  return [...categoryParams, ...postParams];
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
+
+  // Check if this is a category page
+  if (isValidCategory(slug)) {
+    const config = getCategoryConfig(slug);
+    if (!config) {
+      return { title: 'Category Not Found' };
+    }
+
+    const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
+
+    return {
+      title: config.title,
+      description: config.metaDescription,
+      keywords: config.relatedTopics,
+      robots: 'index,follow',
+      alternates: {
+        canonical: canonicalUrl,
+      },
+      openGraph: {
+        title: `${config.title} | Landlord Heaven`,
+        description: config.metaDescription,
+        type: 'website',
+        url: canonicalUrl,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: config.title,
+        description: config.metaDescription,
+      },
+    };
+  }
+
+  // Otherwise, it's a blog post
   const post = getBlogPost(slug);
 
   if (!post) {
@@ -216,8 +269,33 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogSlugPage({ params }: BlogPageProps) {
   const { slug } = await params;
+
+  // Check if this is a category page
+  if (isValidCategory(slug)) {
+    const config = getCategoryConfig(slug);
+    if (!config) {
+      notFound();
+    }
+
+    // Get posts for this region
+    const posts = getPostsByRegion(blogPosts, slug);
+    const postsForDisplay = posts.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      readTime: post.readTime,
+      category: post.category,
+      heroImage: post.heroImage,
+      heroImageAlt: post.heroImageAlt,
+    }));
+
+    return <CategoryPage region={slug} posts={postsForDisplay} />;
+  }
+
+  // Otherwise, it's a blog post
   const post = getBlogPost(slug);
 
   if (!post) {
