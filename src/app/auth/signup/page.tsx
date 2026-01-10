@@ -192,7 +192,7 @@ function SignupContent() {
 
             <Button
               type="submit"
-              variant="primary"
+              variant="heroPrimary"
               size="large"
               loading={isLoading}
               fullWidth

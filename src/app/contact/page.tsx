@@ -73,7 +73,7 @@ export default function ContactPage() {
             </div>
             <Link
               href="mailto:support@landlordheaven.co.uk"
-              className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-dark transition-colors"
+              className="hero-btn-primary block w-full text-center"
             >
               Email Support
             </Link>
@@ -113,7 +113,7 @@ export default function ContactPage() {
             </div>
             <Link
               href="/refunds"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-secondary block w-full text-center"
             >
               View Refund Policy
             </Link>
@@ -150,7 +150,7 @@ export default function ContactPage() {
             </div>
             <a
               href="mailto:sales@landlordheaven.co.uk"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-secondary block w-full text-center"
             >
               Email Sales
             </a>
@@ -186,7 +186,7 @@ export default function ContactPage() {
             </div>
             <Link
               href="/privacy"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+              className="hero-btn-secondary block w-full text-center"
             >
               View Privacy Policy
             </Link>
@@ -201,7 +201,7 @@ export default function ContactPage() {
           </p>
           <Link
             href="/help"
-            className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+            className="hero-btn-primary"
           >
             Browse Help Center →
           </Link>

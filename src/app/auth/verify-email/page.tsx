@@ -58,7 +58,7 @@ function VerifyEmailContent() {
             </div>
 
             <Link href="/auth/login">
-              <Button variant="primary" fullWidth>
+              <Button variant="heroPrimary" fullWidth>
                 Go to login
               </Button>
             </Link>

@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                 If an account exists for <strong>{email}</strong>, you'll receive a password reset link shortly.
               </p>
               <Link href="/auth/login">
-                <Button variant="primary" fullWidth>
+                <Button variant="heroPrimary" fullWidth>
                   Back to login
                 </Button>
               </Link>
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
 
               <Button
                 type="submit"
-                variant="primary"
+                variant="heroPrimary"
                 size="large"
                 loading={isLoading}
                 fullWidth

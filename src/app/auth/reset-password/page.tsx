@@ -149,7 +149,7 @@ function ResetPasswordContent() {
                 This password reset link is invalid or has expired. Please request a new one.
               </p>
               <Link href="/auth/forgot-password">
-                <Button variant="primary" fullWidth>
+                <Button variant="heroPrimary" fullWidth>
                   Request New Reset Link
                 </Button>
               </Link>
@@ -193,7 +193,7 @@ function ResetPasswordContent() {
                 Your password has been successfully updated. You will be redirected to the login page.
               </p>
               <Link href="/auth/login">
-                <Button variant="primary" fullWidth>
+                <Button variant="heroPrimary" fullWidth>
                   Go to Login
                 </Button>
               </Link>
@@ -229,7 +229,7 @@ function ResetPasswordContent() {
 
               <Button
                 type="submit"
-                variant="primary"
+                variant="heroPrimary"
                 size="large"
                 loading={isLoading}
                 fullWidth

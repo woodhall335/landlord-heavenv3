@@ -390,7 +390,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </ul>
                   <Link
                     href="/tools/free-rent-demand-letter"
-                    className="block w-full text-center bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-secondary block w-full text-center"
                   >
                     Try Free Template
                   </Link>
@@ -435,7 +435,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </ul>
                   <Link
                     href={wizardLinkMoneyClaim}
-                    className="block w-full text-center bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                    className="hero-btn-primary block w-full text-center"
                   >
                     Get Money Claim Pack
                   </Link>
@@ -518,7 +518,7 @@ export default function RentArrearsLetterTemplatePage() {
               </div>
               <Link
                 href="/tools/free-rent-demand-letter"
-                className="inline-flex items-center gap-2 bg-white text-amber-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
+                className="hero-btn-secondary inline-flex items-center gap-2"
               >
                 Send Your Demand Letter Now
                 <ArrowRight className="w-5 h-5" />
@@ -620,14 +620,14 @@ export default function RentArrearsLetterTemplatePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/tools/free-rent-demand-letter"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl border border-white/30 transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
                   Try Free Template
                 </Link>
                 <Link
                   href={wizardLinkMoneyClaim}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-colors"
+                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Get Money Claim Pack — £199.99
                   <ArrowRight className="w-5 h-5" />

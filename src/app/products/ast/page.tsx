@@ -192,7 +192,7 @@ export default function ASTPage() {
                 <div className="mt-6">
                   <Link
                     href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                    className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+                    className="hero-btn-secondary block w-full text-center"
                   >
                     Get Standard - {standardPrice}
                   </Link>
