@@ -65,7 +65,7 @@ export const BLOG_CATEGORIES: Record<BlogRegion, CategoryConfig> = {
     title: 'UK Landlord Guides (2026)',
     description: 'UK-wide landlord guides covering topics that apply across all jurisdictions: insurance, tax, tenant referencing, right to rent checks, and general compliance.',
     metaDescription: 'UK landlord guides 2026: insurance, tax, safety regulations, tenant referencing, right to rent. Expert guidance for landlords across Britain.',
-    flag: '/uk.svg',
+    flag: '/lgb.svg',
     relatedTopics: ['Landlord Insurance', 'Tax', 'Gas Safety', 'Electrical Safety', 'Right to Rent'],
   },
 };
