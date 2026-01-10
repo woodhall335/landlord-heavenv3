@@ -28,6 +28,20 @@ import {
   validateSixMonthRule,
 } from '@/lib/scotland/grounds';
 
+// Section 8 ground utilities
+import {
+  calculateCombinedNoticePeriod,
+  compareNoticePeriods,
+  normalizeGroundCode,
+  getGroundDescription,
+  hasArrearsGround,
+} from '@/lib/grounds/notice-period-utils';
+import {
+  getGroundAwareSuggestions,
+  isArrearsEvidenceComplete,
+} from '@/lib/grounds/evidence-suggestions';
+import { saveCaseFacts } from '@/lib/wizard/facts-client';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -1418,7 +1432,6 @@ function NoticeOnlyReviewContent({
   const blockingIssues = decisionEngine?.blocking_issues?.filter((i: any) => i.severity === 'blocking') || [];
   const warnings = decisionEngine?.warnings || [];
   const recommendedRoute = analysis?.recommended_route;
-  const recommendedRouteLabel = analysis?.recommended_route_label || 'Notice';
 
   const isSection21 = recommendedRoute === 'section_21';
   const isSection8 = recommendedRoute === 'section_8';
@@ -1431,6 +1444,89 @@ function NoticeOnlyReviewContent({
   // Jurisdiction display label
   const jurisdictionLabel = jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1);
 
+  // =========================================================================
+  // Section 8 Grounds Logic - Selected vs Recommended
+  // =========================================================================
+  // Get user-selected grounds from case facts
+  const caseFacts = analysis?.case_facts || analysis?.facts || {};
+  const selectedGroundsRaw: string[] = caseFacts?.section8_grounds || [];
+  const selectedGrounds = selectedGroundsRaw.map(g => normalizeGroundCode(g));
+
+  // Get decision engine recommended grounds (these are additional recommendations)
+  const recommendedGroundsFromEngine: any[] = decisionEngine?.recommended_grounds || [];
+  // Filter out grounds that user already selected
+  const additionalRecommendedGrounds = recommendedGroundsFromEngine.filter(
+    (g) => !selectedGrounds.includes(normalizeGroundCode(g.code))
+  );
+
+  // State for opt-in toggle
+  const [includeRecommendedGrounds, setIncludeRecommendedGrounds] = useState<boolean>(
+    caseFacts?.include_recommended_grounds || false
+  );
+
+  // Calculate included grounds based on toggle
+  const includedGroundCodes = includeRecommendedGrounds
+    ? [...selectedGrounds, ...additionalRecommendedGrounds.map(g => normalizeGroundCode(g.code))]
+    : selectedGrounds;
+
+  // Calculate notice periods
+  const selectedOnlyPeriod = calculateCombinedNoticePeriod(selectedGrounds);
+  const includedPeriod = calculateCombinedNoticePeriod(includedGroundCodes);
+  const periodComparison = compareNoticePeriods(
+    selectedGrounds,
+    additionalRecommendedGrounds.map(g => g.code)
+  );
+
+  // Check if arrears grounds are included and if arrears schedule is complete
+  const includesArrearsGrounds = hasArrearsGround(includedGroundCodes);
+  const arrearsItems = caseFacts?.arrears_items || [];
+  const arrearsEvidenceStatus = isArrearsEvidenceComplete(includedGroundCodes, arrearsItems);
+
+  // Get ground-aware suggestions
+  const evidenceOverview = analysis?.evidence_overview || {};
+  const suggestions = getGroundAwareSuggestions(includedGroundCodes, {
+    tenancy_agreement_uploaded: evidenceOverview.tenancy_agreement_uploaded,
+    rent_schedule_uploaded: evidenceOverview.rent_schedule_uploaded,
+    bank_statements_uploaded: evidenceOverview.bank_statements_uploaded,
+    damage_photos_uploaded: evidenceOverview.damage_photos_uploaded,
+    authority_letters_uploaded: evidenceOverview.authority_letters_uploaded,
+    correspondence_uploaded: evidenceOverview.correspondence_uploaded,
+  });
+
+  // Handler for toggle change - persists to case facts
+  const handleIncludeRecommendedChange = async (checked: boolean) => {
+    setIncludeRecommendedGrounds(checked);
+
+    // Persist to case facts
+    try {
+      await saveCaseFacts(
+        caseId,
+        {
+          ...caseFacts,
+          include_recommended_grounds: checked,
+        },
+        {
+          jurisdiction: jurisdiction as any,
+          caseType: 'eviction',
+          product: 'notice_only',
+        }
+      );
+    } catch (error) {
+      console.error('Failed to save include_recommended_grounds preference:', error);
+    }
+  };
+
+  // Build route label based on actual route
+  const recommendedRouteLabel = isSection8
+    ? 'Section 8 Notice (Form 3)'
+    : isSection21
+    ? 'Section 21 Notice (Form 6A)'
+    : isWales
+    ? 'RHW Notice'
+    : isScotland
+    ? 'Notice to Leave'
+    : 'Notice';
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto p-6">
       {/* Header */}
@@ -1439,19 +1535,24 @@ function NoticeOnlyReviewContent({
         <p className="text-gray-600 mt-2">
           {jurisdictionLabel} • {recommendedRouteLabel}
         </p>
+        {isSection8 && includedGroundCodes.length > 0 && (
+          <p className="text-sm text-gray-500 mt-1">
+            Minimum notice period: <span className="font-semibold">{includedPeriod.noticePeriodDays} days</span>
+          </p>
+        )}
         <div className="mt-4">
           {readinessBadge || (
             hasBlockingIssues || (isSection21 && hasComplianceIssues) ? (
               <span className="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 font-medium">
-                ⚠️ Issues Found - Review Required
+                Issues Found - Review Required
               </span>
             ) : hasWarnings || hasComplianceIssues ? (
               <span className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-800 font-medium">
-                ⚡ Warnings to Review
+                Warnings to Review
               </span>
             ) : (
               <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 font-medium">
-                ✓ Ready to Generate
+                Ready to Generate
               </span>
             )
           )}
@@ -1533,39 +1634,229 @@ function NoticeOnlyReviewContent({
           </div>
           {hasComplianceIssues && (
             <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
-              <strong>⚠️ Warning:</strong> If any requirements are not met, your Section 21 notice
+              <strong>Warning:</strong> If any requirements are not met, your Section 21 notice
               will be invalid and the court will not grant possession.
             </div>
           )}
         </Card>
       )}
 
-      {/* Section 8 Grounds Summary */}
-      {isSection8 && decisionEngine?.recommended_grounds?.length > 0 && (
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Section 8 Grounds</h2>
-          <ul className="space-y-3">
-            {decisionEngine.recommended_grounds.map((ground: any, index: number) => (
-              <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
-                <span className="font-mono text-sm bg-gray-200 px-2 py-1 rounded shrink-0">
-                  {ground.code}
-                </span>
-                <div>
-                  <p className="font-medium">{ground.title}</p>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${
-                      ground.type === 'mandatory'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-amber-100 text-amber-800'
-                    }`}
-                  >
-                    {ground.type}
+      {/* Section 8 Grounds - Selected vs Recommended (NEW IMPLEMENTATION) */}
+      {isSection8 && (
+        <>
+          {/* Selected Grounds (User's choice - always included) */}
+          {selectedGrounds.length > 0 && (
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
+                Selected Grounds (included in your notice)
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                These grounds will be included in your Section 8 notice.
+                {selectedOnlyPeriod.noticePeriodDays === 14 && selectedGrounds.length === 1 && selectedGrounds.includes('8') && (
+                  <span className="block mt-1 text-green-700 font-medium">
+                    Ground 8 only requires 14 days notice.
                   </span>
+                )}
+              </p>
+              <ul className="space-y-3">
+                {selectedGrounds.map((groundCode, index) => {
+                  const groundInfo = getGroundDescription(groundCode);
+                  return (
+                    <li key={index} className="flex items-start gap-3 p-3 bg-green-50 rounded border border-green-200">
+                      <span className="font-mono text-sm bg-green-200 px-2 py-1 rounded shrink-0">
+                        {groundInfo.code}
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">{groundInfo.title}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span
+                            className={`text-xs px-2 py-0.5 rounded ${
+                              groundInfo.type === 'mandatory'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-amber-100 text-amber-800'
+                            }`}
+                          >
+                            {groundInfo.type}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {groundInfo.noticePeriodDays} days notice
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="text-sm text-gray-600 mt-3">
+                <strong>Notice period for selected grounds:</strong> {selectedOnlyPeriod.noticePeriodDays} days
+              </p>
+            </Card>
+          )}
+
+          {/* Recommended Grounds (Optional - from decision engine) */}
+          {additionalRecommendedGrounds.length > 0 && (
+            <Card className="p-6 border-blue-200 bg-blue-50/30">
+              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                <RiInformationLine className="w-5 h-5 text-blue-600" />
+                Recommended Grounds (optional)
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                Based on your case details, these additional grounds may strengthen your position.
+                Including them is <strong>optional</strong>.
+              </p>
+
+              {/* Notice period warning */}
+              {periodComparison.increasesNotice && (
+                <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded text-sm">
+                  <p className="text-amber-800">
+                    <strong>Important:</strong> Adding these grounds will increase your notice period
+                    from {periodComparison.selectedPeriod} days to {periodComparison.combinedPeriod} days.
+                    This will delay when you can start court proceedings.
+                  </p>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
+              )}
+
+              <ul className="space-y-3 mb-4">
+                {additionalRecommendedGrounds.map((ground: any, index: number) => (
+                  <li key={index} className="flex items-start gap-3 p-3 bg-white rounded border border-blue-100">
+                    <span className="font-mono text-sm bg-blue-100 px-2 py-1 rounded shrink-0">
+                      {ground.code}
+                    </span>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900">{ground.title}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded ${
+                            ground.type === 'mandatory'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}
+                        >
+                          {ground.type}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {ground.notice_period_days || getGroundDescription(ground.code).noticePeriodDays} days notice
+                        </span>
+                      </div>
+                      {ground.reasoning && (
+                        <p className="text-xs text-gray-500 mt-1">{ground.reasoning}</p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Opt-in toggle */}
+              <div className="border-t pt-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={includeRecommendedGrounds}
+                    onChange={(e) => handleIncludeRecommendedChange(e.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-900">
+                      Include recommended grounds in my notice
+                    </span>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {includeRecommendedGrounds ? (
+                        <span className="text-blue-700">
+                          Your notice will include {includedGroundCodes.length} ground(s) with a {includedPeriod.noticePeriodDays}-day notice period.
+                        </span>
+                      ) : (
+                        'Your notice will only include your selected grounds.'
+                      )}
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Confirmation when toggled on */}
+              {includeRecommendedGrounds && periodComparison.increasesNotice && (
+                <div className="mt-4 p-3 bg-blue-100 border border-blue-200 rounded text-sm">
+                  <p className="text-blue-900">
+                    <strong>Confirmed:</strong> Your notice period is now {includedPeriod.noticePeriodDays} days
+                    (increased from {selectedOnlyPeriod.noticePeriodDays} days).
+                    The court cannot hear your case until after this period expires.
+                  </p>
+                </div>
+              )}
+            </Card>
+          )}
+
+          {/* Arrears Schedule Blocking Message */}
+          {includesArrearsGrounds && !arrearsEvidenceStatus.complete && (
+            <Card className="p-6 border-red-200 bg-red-50">
+              <h2 className="text-lg font-semibold text-red-800 flex items-center gap-2 mb-2">
+                <RiErrorWarningLine className="w-5 h-5" />
+                Rent Schedule Required
+              </h2>
+              <p className="text-sm text-red-700 mb-4">
+                {arrearsEvidenceStatus.message}
+              </p>
+              <Button
+                onClick={onEdit}
+                variant="outline"
+                className="border-red-300 text-red-700 hover:bg-red-100"
+              >
+                Complete Arrears Schedule
+              </Button>
+            </Card>
+          )}
+
+          {/* Ground-Aware Evidence Suggestions */}
+          {suggestions.length > 0 && (
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
+                Suggestions to strengthen your case
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                Based on the grounds in your notice, consider gathering the following evidence:
+              </p>
+              <ul className="space-y-3">
+                {suggestions.slice(0, 5).map((suggestion, index) => (
+                  <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
+                    <span className={`text-xs px-2 py-0.5 rounded shrink-0 mt-0.5 ${
+                      suggestion.priority === 'high'
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}>
+                      {suggestion.priority === 'high' ? 'Important' : 'Helpful'}
+                    </span>
+                    <div>
+                      <p className="font-medium text-gray-900">{suggestion.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{suggestion.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
+          {/* Notice Period Summary */}
+          <Card className="p-6 bg-gray-50">
+            <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+              <RiCalendarCheckLine className="w-5 h-5 text-gray-600" />
+              Notice Period Summary
+            </h2>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Grounds in notice:</span>
+                <span className="font-medium">{includedGroundCodes.map(c => `Ground ${c}`).join(', ')}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Minimum notice period:</span>
+                <span className="font-semibold text-lg">{includedPeriod.noticePeriodDays} days</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                {includedPeriod.explanation}
+              </p>
+            </div>
+          </Card>
+        </>
       )}
 
       {/* Wales-specific notice info */}
@@ -1593,7 +1884,7 @@ function NoticeOnlyReviewContent({
       {/* Compliance Issues (non-S21) */}
       {hasComplianceIssues && !isSection21 && (
         <Card className="border-amber-200 bg-amber-50 p-6">
-          <h2 className="text-lg font-semibold text-amber-800 mb-3">⚠️ Compliance Warnings</h2>
+          <h2 className="text-lg font-semibold text-amber-800 mb-3">Compliance Warnings</h2>
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-amber-900">
@@ -1608,7 +1899,7 @@ function NoticeOnlyReviewContent({
       {/* Red Flags */}
       {redFlags.length > 0 && (
         <Card className="border-amber-200 bg-amber-50 p-6">
-          <h2 className="text-lg font-semibold text-amber-800 mb-3">⚡ Things to Check</h2>
+          <h2 className="text-lg font-semibold text-amber-800 mb-3">Things to Check</h2>
           <ul className="space-y-2">
             {redFlags.map((flag: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-amber-900">
@@ -1623,7 +1914,7 @@ function NoticeOnlyReviewContent({
       {/* Warnings from decision engine */}
       {warnings.length > 0 && (
         <Card className="border-blue-200 bg-blue-50 p-6">
-          <h2 className="text-lg font-semibold text-blue-800 mb-3">ℹ️ Important Notes</h2>
+          <h2 className="text-lg font-semibold text-blue-800 mb-3">Important Notes</h2>
           <ul className="space-y-2">
             {warnings.map((warning: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
@@ -1660,36 +1951,87 @@ function NoticeOnlyReviewContent({
 
       {/* Documents in Pack */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Documents in Your Pack</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <RiFileList3Line className="w-5 h-5 text-gray-600" />
+          Documents in Your Pack
+        </h2>
         <ul className="space-y-2">
           {isSection21 ? (
             <>
-              <li className="flex items-center gap-2 text-gray-700">📄 Form 6A - Section 21 Notice</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Compliance Checklist</li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Form 6A - Section 21 Notice
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Service Instructions
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Compliance Checklist
+              </li>
             </>
           ) : isSection8 ? (
             <>
-              <li className="flex items-center gap-2 text-gray-700">📄 Form 3 - Section 8 Notice</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Grounds Summary</li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Form 3 - Section 8 Notice
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Service Instructions
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Grounds Summary
+              </li>
+              {includesArrearsGrounds && arrearsEvidenceStatus.complete && (
+                <li className="flex items-center gap-2 text-gray-700">
+                  <RiFileTextLine className="w-4 h-4 text-green-500" />
+                  Rent Schedule / Arrears Statement
+                </li>
+              )}
             </>
           ) : isWales ? (
             <>
-              <li className="flex items-center gap-2 text-gray-700">📄 RHW Notice Form</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Compliance Checklist</li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                RHW Notice Form
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Service Instructions
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Compliance Checklist
+              </li>
             </>
           ) : isScotland ? (
             <>
-              <li className="flex items-center gap-2 text-gray-700">📄 Notice to Leave</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Eviction Grounds Summary</li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Notice to Leave
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Service Instructions
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Eviction Grounds Summary
+              </li>
             </>
           ) : (
             <>
-              <li className="flex items-center gap-2 text-gray-700">📄 Eviction Notice</li>
-              <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Eviction Notice
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Service Instructions
+              </li>
             </>
           )}
         </ul>
@@ -1703,7 +2045,7 @@ function NoticeOnlyReviewContent({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
-          Go back &amp; edit answers
+          Go back and edit answers
         </Button>
         {hasBlockingIssues && (
           <Button
@@ -1718,10 +2060,10 @@ function NoticeOnlyReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
-          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete)}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete)}
         >
-          Proceed to payment &amp; pack
+          Proceed to payment and pack
         </Button>
       </div>
 
