@@ -96,12 +96,19 @@ const quickPrompts: Array<{ label: string; icon: string; prompt: string }> = [
   },
 ];
 
-// Jurisdiction display names
+// Jurisdiction display names and flags
 const jurisdictionLabels: Record<Jurisdiction, string> = {
   england: 'England',
   wales: 'Wales',
   scotland: 'Scotland',
   'northern-ireland': 'N. Ireland',
+};
+
+const jurisdictionFlags: Record<Jurisdiction, string> = {
+  england: '/gb-eng.svg',
+  wales: '/gb-wls.svg',
+  scotland: '/gb-sct.svg',
+  'northern-ireland': '/gb-nir.svg',
 };
 
 // Email gate threshold
@@ -652,7 +659,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-200/30 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
-        {/* Jurisdiction Toggle - Copilot-style pill buttons */}
+        {/* Jurisdiction Toggle - Copilot-style pill buttons with flags */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-sm border border-gray-200/50">
             {(Object.keys(jurisdictionLabels) as Jurisdiction[]).map((jur) => (
@@ -660,12 +667,19 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 key={jur}
                 type="button"
                 onClick={() => setJurisdiction(jur)}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                   jurisdiction === jur
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
                 }`}
               >
+                <Image
+                  src={jurisdictionFlags[jur]}
+                  alt={jurisdictionLabels[jur]}
+                  width={20}
+                  height={15}
+                  className="w-5 h-auto rounded-sm"
+                />
                 {jurisdictionLabels[jur]}
               </button>
             ))}

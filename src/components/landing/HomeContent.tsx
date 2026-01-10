@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials } from "@/components/landing";
 import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
-import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill } from 'react-icons/ri';
+import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill, RiAddLine, RiMicLine } from 'react-icons/ri';
 
 export default function HomeContent() {
   const router = useRouter();
@@ -209,51 +209,129 @@ export default function HomeContent() {
       </section>
 
       {/* ASK HEAVEN */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 to-white">
-        <Container>
+      <section className="py-20 md:py-24 relative overflow-hidden">
+        {/* Gradient background matching Ask Heaven page */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50 opacity-70" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-200/30 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-200/30 via-transparent to-transparent" />
+
+        <Container className="relative z-10">
           <div className="max-w-3xl mx-auto">
+            {/* Ask Heaven Branding */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <Image
+                src="/favicon.png"
+                alt="Ask Heaven"
+                width={48}
+                height={48}
+                className="rounded-xl"
+              />
+              <span className="text-2xl font-bold text-gray-900">Ask Heaven</span>
+            </div>
+
             <div className="text-center mb-10">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Ask Heaven (Free)</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ask Heaven</h2>
-              <p className="text-xl text-gray-600 mb-2">
-                Your instant UK landlord and tenant law assistant
-              </p>
-              <p className="text-gray-500">
-                Get answers to any tenancy question — no sign-up required
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Hi, how can I help you?
+              </h2>
+              <p className="text-gray-500 text-lg">
+                Free UK landlord advice — no sign-up required
               </p>
             </div>
 
-            {/* Centered Chat Input Box */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={askQuestion}
-                  onChange={(e) => setAskQuestion(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
-                  placeholder="Ask me anything about UK landlord-tenant law..."
-                  className="w-full px-5 py-4 pr-14 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent focus:bg-white transition-all"
-                  disabled={isLoading}
-                />
-                <button
-                  onClick={handleAskQuestion}
-                  disabled={isLoading || !askQuestion.trim()}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary hover:bg-primary-dark text-white rounded-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
-                  type="button"
-                  aria-label="Send question"
-                >
-                  {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <RiSendPlaneFill className="w-5 h-5" />
-                  )}
-                </button>
+            {/* Main Chat Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden p-6 md:p-8">
+              {/* Main Input */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!isLoading && askQuestion.trim()) {
+                    handleAskQuestion();
+                  }
+                }}
+                className="mb-8"
+              >
+                <div className="relative">
+                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                    <button
+                      type="button"
+                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      aria-label="Add attachment"
+                      disabled
+                    >
+                      <RiAddLine className="w-5 h-5" />
+                    </button>
+                    <input
+                      type="text"
+                      className="flex-1 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
+                      placeholder="Ask about evictions, rent arrears, deposits..."
+                      value={askQuestion}
+                      onChange={(e) => setAskQuestion(e.target.value)}
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      aria-label="Voice input"
+                      disabled
+                    >
+                      <RiMicLine className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoading || !askQuestion.trim()}
+                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      aria-label="Send message"
+                    >
+                      {isLoading ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <RiSendPlaneFill className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              {/* Quick Prompt Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  { label: 'Eviction notice help', icon: '📄', prompt: 'How do I serve an eviction notice to my tenant?' },
+                  { label: 'Rent arrears recovery', icon: '💷', prompt: 'How do I recover unpaid rent from a tenant?' },
+                  { label: 'Deposit protection rules', icon: '🛡️', prompt: 'What are the deposit protection requirements?' },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => setAskQuestion(item.prompt)}
+                    className="group p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-lg text-left transition-all duration-200"
+                  >
+                    <span className="text-2xl mb-2 block">{item.icon}</span>
+                    <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                      {item.label}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.prompt}</p>
+                  </button>
+                ))}
               </div>
 
-              <p className="mt-4 text-center text-sm text-gray-500">
-                For guidance and document generation only — not legal advice.
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-gray-500">
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  Free to use
+                </span>
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  No sign-up required
+                </span>
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  UK law focused
+                </span>
+              </div>
+
+              <p className="mt-6 text-center text-xs text-gray-400">
+                For guidance only — not legal advice. <Link href="/terms" className="text-primary hover:underline">Terms apply</Link>
               </p>
             </div>
           </div>
