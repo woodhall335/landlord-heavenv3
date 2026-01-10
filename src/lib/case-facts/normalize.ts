@@ -2378,9 +2378,19 @@ const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
 
 /**
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
+ *
+ * For Notice Only flows, this uses `section8_included_grounds` which combines:
+ * - User-selected grounds
+ * - Decision engine recommended grounds (auto-merged)
+ *
+ * This ensures the Form 3 notice includes all grounds that strengthen the case.
  */
 function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any>): any[] {
-  const selectedGrounds = getFirstValue(wizard, [
+  // For Notice Only, prefer included_grounds (selected + recommended) over just selected_grounds
+  // This is populated by the analyze API when grounds_auto_merged is true
+  const includedGrounds = getWizardValue(wizard, 'section8_included_grounds');
+
+  const selectedGrounds = includedGrounds || getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.selected_grounds',
     'section8_grounds',
     'section8_grounds_selection',
@@ -2389,6 +2399,11 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
 
   if (!selectedGrounds || (Array.isArray(selectedGrounds) && selectedGrounds.length === 0)) {
     return [];
+  }
+
+  // Log if we're using auto-merged included grounds
+  if (includedGrounds && getWizardValue(wizard, 'grounds_auto_merged')) {
+    console.log('[buildGroundsArray] Using included_grounds (selected + recommended):', includedGrounds);
   }
 
   const groundParticulars = getWizardValue(wizard, 'ground_particulars');
@@ -3154,11 +3169,14 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   }
 
   // Calculate earliest_possession_date if not provided
-  // IMPORTANT: Notice period depends on selected grounds!
+  // IMPORTANT: Notice period depends on included grounds (selected + recommended)!
   // Grounds 10 and 11 require 2 months (60 days), not 2 weeks (14 days)
   if (!templateData.earliest_possession_date && templateData.service_date) {
+    // Use included_grounds if available (for Notice Only flows with auto-merged grounds)
+    const includedGrounds = getWizardValue(wizard, 'section8_included_grounds');
+
     // Get selected grounds to calculate required notice period
-    const selectedGrounds = getFirstValue(wizard, [
+    const selectedGrounds = includedGrounds || getFirstValue(wizard, [
       'case_facts.issues.section8_grounds.selected_grounds',
       'section8_grounds',
       'section8_grounds_selection',

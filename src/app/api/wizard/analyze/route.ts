@@ -16,6 +16,13 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
+import {
+  computeIncludedGrounds,
+  getAutoAddedGrounds,
+  generateGroundSuggestions,
+  hasArrearsGrounds,
+  type EvidenceFlags,
+} from '@/lib/wizard/ground-suggestions';
 
 export const runtime = 'nodejs';
 
@@ -762,7 +769,75 @@ export async function POST(request: Request) {
       }
     }
 
-    if (caseData.case_type === 'eviction') {
+    // =========================================================================
+    // NOTICE ONLY: COMPUTE INCLUDED GROUNDS (selected + recommended)
+    // =========================================================================
+    // For Notice Only + Section 8 flows, we merge user-selected grounds with
+    // decision engine recommended grounds to maximize case strength.
+    // =========================================================================
+
+    let noticeOnlyGroundsInfo: {
+      selected_grounds: string[];
+      recommended_grounds: string[];
+      included_grounds: string[];
+      auto_added_grounds: string[];
+    } | null = null;
+
+    let groundSuggestions: {
+      suggestions: Array<{ id: string; title: string; description: string; category: string }>;
+      summary: string;
+    } | null = null;
+
+    const isNoticeOnlySection8 = product === 'notice_only' &&
+      (finalRecommendedRoute === 'section_8' || (wizardFacts as any).eviction_route === 'section_8');
+
+    if (caseData.case_type === 'eviction' && isNoticeOnlySection8) {
+      // Get user-selected grounds from wizard facts
+      const selectedGrounds: string[] = (wizardFacts as any).section8_grounds || [];
+
+      // Get recommended grounds from decision engine
+      const recommendedGrounds = decisionEngineOutput?.recommended_grounds || [];
+
+      // Compute included grounds (union of selected + recommended)
+      const includedGrounds = computeIncludedGrounds(selectedGrounds, recommendedGrounds);
+      const autoAddedGrounds = getAutoAddedGrounds(selectedGrounds, includedGrounds);
+
+      noticeOnlyGroundsInfo = {
+        selected_grounds: selectedGrounds,
+        recommended_grounds: recommendedGrounds.map(g => `Ground ${g.code}`),
+        included_grounds: includedGrounds,
+        auto_added_grounds: autoAddedGrounds,
+      };
+
+      // Generate ground-specific suggestions based on included grounds
+      const evidenceFlags: EvidenceFlags = {
+        tenancy_agreement_uploaded: evidence.tenancy_agreement_uploaded,
+        rent_schedule_uploaded: evidence.rent_schedule_uploaded,
+        correspondence_uploaded: evidence.correspondence_uploaded,
+        damage_photos_uploaded: evidence.damage_photos_uploaded,
+        authority_letters_uploaded: evidence.authority_letters_uploaded,
+        bank_statements_uploaded: evidence.bank_statements_uploaded,
+      };
+
+      const suggestions = generateGroundSuggestions(includedGrounds, evidenceFlags);
+      groundSuggestions = {
+        suggestions: suggestions.suggestions.map(s => ({
+          id: s.id,
+          title: s.title,
+          description: s.description,
+          category: s.category,
+        })),
+        summary: suggestions.summary,
+      };
+
+      // Add ground-specific suggestions to compliance array (renamed to "Suggestions to strengthen your case")
+      // These are filtered based on what's actually relevant to the included grounds
+      suggestions.suggestions.slice(0, 5).forEach(s => {
+        compliance.push(s.title);
+      });
+
+    } else if (caseData.case_type === 'eviction') {
+      // For non-Notice Only flows or Section 21, use generic evidence suggestions
       if (!evidence.tenancy_agreement_uploaded) {
         compliance.push('Tenancy agreement not uploaded yet – add it under evidence to strengthen your position.');
       }
@@ -927,15 +1002,31 @@ export async function POST(request: Request) {
       finalRecommendedRoute = route;
     }
 
+    // Prepare case update payload
+    const caseUpdatePayload: Record<string, any> = {
+      recommended_route: finalRecommendedRoute,
+      red_flags: red_flags as any, // Supabase types red_flags as Json
+      compliance_issues: compliance as any, // Supabase types compliance_issues as Json
+      success_probability: score,
+      wizard_progress: caseData.wizard_progress ?? 0,
+    };
+
+    // For Notice Only Section 8, store included_grounds in wizard_facts
+    // This allows the preview route to use included_grounds (selected + recommended)
+    if (noticeOnlyGroundsInfo && noticeOnlyGroundsInfo.included_grounds.length > 0) {
+      const existingWizardFacts = caseData.wizard_facts || {};
+      caseUpdatePayload.wizard_facts = {
+        ...existingWizardFacts,
+        // Store computed included grounds for preview route
+        section8_included_grounds: noticeOnlyGroundsInfo.included_grounds,
+        // Mark that recommended grounds have been merged
+        grounds_auto_merged: true,
+      };
+    }
+
     await adminSupabase
       .from('cases')
-      .update({
-        recommended_route: finalRecommendedRoute,
-        red_flags: red_flags as any, // Supabase types red_flags as Json
-        compliance_issues: compliance as any, // Supabase types compliance_issues as Json
-        success_probability: score,
-        wizard_progress: caseData.wizard_progress ?? 0,
-      } as any)
+      .update(caseUpdatePayload as any)
       .eq('id', case_id);
 
     const previewDocuments: {
@@ -1027,6 +1118,25 @@ export async function POST(request: Request) {
             document_title: 'Service checklist & certificates of service',
           },
         );
+
+        // For Notice Only Section 8 with arrears grounds, include arrears schedule
+        if (isNoticeOnly && isSection8Route && noticeOnlyGroundsInfo) {
+          const includedGroundCodes = (noticeOnlyGroundsInfo.included_grounds || [])
+            .map((g: string) => {
+              const match = g.match(/(\d+)/);
+              return match ? parseInt(match[1], 10) : null;
+            })
+            .filter((n: number | null): n is number => n !== null);
+
+          const hasArrearsGrounds = includedGroundCodes.some(code => [8, 10, 11].includes(code));
+          if (hasArrearsGrounds) {
+            previewDocuments.push({
+              id: 'arrears_schedule',
+              document_type: 'evidence',
+              document_title: 'Rent Schedule (Arrears Breakdown)',
+            });
+          }
+        }
 
         if (!isNoticeOnly) {
           previewDocuments.push(
@@ -1141,6 +1251,10 @@ export async function POST(request: Request) {
       decision_engine: decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
+      // Notice Only Section 8: included grounds info (selected + recommended)
+      notice_only_grounds: noticeOnlyGroundsInfo,
+      // Ground-specific suggestions for strengthening the case
+      ground_suggestions: groundSuggestions,
     });
 
   } catch (error: any) {

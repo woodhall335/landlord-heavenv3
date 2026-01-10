@@ -273,13 +273,20 @@ export interface PackContentsOptions {
   packType: 'notice_only' | 'complete_pack';
   hasArrears?: boolean;
   isAccelerated?: boolean;
+  /** Ground codes included in the notice (for notice_only to determine if arrears schedule is needed) */
+  includedGroundCodes?: number[];
 }
 
 /**
  * Get the list of documents included in an eviction pack
  */
 export function getEvictionPackContents(options: PackContentsOptions): PackCategory[] {
-  const { jurisdiction, route, packType, hasArrears = false, isAccelerated = false } = options;
+  const { jurisdiction, route, packType, hasArrears = false, isAccelerated = false, includedGroundCodes = [] } = options;
+
+  // Check if arrears grounds (8, 10, 11) are included
+  const hasArrearsGroundsIncluded = includedGroundCodes.some(code => [8, 10, 11].includes(code));
+  // Use arrears schedule if: explicitly hasArrears, or arrears grounds are included
+  const shouldIncludeArrearsSchedule = hasArrears || hasArrearsGroundsIncluded;
 
   // Helper to check if a document should be included
   const shouldInclude = (doc: PackDocument): boolean => {
@@ -403,13 +410,15 @@ export function getEvictionPackContents(options: PackContentsOptions): PackCateg
   });
 
   // ==========================================================================
-  // EVIDENCE TOOLS (Complete Pack only)
+  // EVIDENCE TOOLS
+  // - For complete_pack: full evidence toolkit
+  // - For notice_only: include arrears schedule when arrears grounds (8/10/11) included
   // ==========================================================================
   if (packType === 'complete_pack') {
     const evidenceTools: PackDocument[] = [EVIDENCE_CHECKLIST, PROOF_OF_SERVICE];
 
-    // Add arrears schedule if claiming rent arrears
-    if (hasArrears || route === 'section_8') {
+    // Add arrears schedule if claiming rent arrears or arrears grounds included
+    if (shouldIncludeArrearsSchedule || route === 'section_8') {
       evidenceTools.unshift(ARREARS_SCHEDULE);
     }
 
@@ -418,6 +427,14 @@ export function getEvictionPackContents(options: PackContentsOptions): PackCateg
       title: 'Evidence Tools',
       icon: '📂',
       documents: evidenceTools,
+    });
+  } else if (packType === 'notice_only' && shouldIncludeArrearsSchedule) {
+    // For Notice Only with arrears grounds, include the arrears schedule
+    categories.push({
+      id: 'evidence_tools',
+      title: 'Arrears Documentation',
+      icon: '📊',
+      documents: [ARREARS_SCHEDULE],
     });
   }
 

@@ -1418,12 +1418,24 @@ function NoticeOnlyReviewContent({
   const blockingIssues = decisionEngine?.blocking_issues?.filter((i: any) => i.severity === 'blocking') || [];
   const warnings = decisionEngine?.warnings || [];
   const recommendedRoute = analysis?.recommended_route;
-  const recommendedRouteLabel = analysis?.recommended_route_label || 'Notice';
 
   const isSection21 = recommendedRoute === 'section_21';
   const isSection8 = recommendedRoute === 'section_8';
   const isWales = jurisdiction === 'wales';
   const isScotland = jurisdiction === 'scotland';
+
+  // Notice Only Section 8: included grounds info
+  const noticeOnlyGrounds = analysis?.notice_only_grounds;
+  const groundSuggestions = analysis?.ground_suggestions;
+  const selectedGrounds = noticeOnlyGrounds?.selected_grounds || [];
+  const autoAddedGrounds = noticeOnlyGrounds?.auto_added_grounds || [];
+  const includedGrounds = noticeOnlyGrounds?.included_grounds || [];
+
+  // Check if arrears grounds are included (8, 10, 11) for rent schedule
+  const hasArrearsGroundsIncluded = includedGrounds.some((g: string) => {
+    const match = g.match(/(\d+)/);
+    return match && [8, 10, 11].includes(parseInt(match[1], 10));
+  });
 
   const hasComplianceIssues = complianceIssues.length > 0;
   const hasWarnings = warnings.length > 0 || redFlags.length > 0;
@@ -1431,14 +1443,34 @@ function NoticeOnlyReviewContent({
   // Jurisdiction display label
   const jurisdictionLabel = jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1);
 
+  // Generate Notice Only header label (without N5/N119 references)
+  const getNoticeTypeLabel = () => {
+    if (isSection8) {
+      return 'Section 8 Notice (Form 3)';
+    } else if (isSection21) {
+      return 'Section 21 Notice (Form 6A)';
+    } else if (isWales) {
+      return 'RHW Notice';
+    } else if (isScotland) {
+      return 'Notice to Leave';
+    }
+    return 'Eviction Notice';
+  };
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto p-6">
-      {/* Header */}
+      {/* Header - Notice Only specific (no N5/N119 references) */}
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} • {recommendedRouteLabel}
+          {jurisdictionLabel} • {getNoticeTypeLabel()}
         </p>
+        {/* Show included grounds summary for Section 8 */}
+        {isSection8 && includedGrounds.length > 0 && (
+          <p className="text-sm text-gray-500 mt-1">
+            Grounds included: {includedGrounds.map((g: string) => g.replace('Ground ', '')).join(', ')}
+          </p>
+        )}
         <div className="mt-4">
           {readinessBadge || (
             hasBlockingIssues || (isSection21 && hasComplianceIssues) ? (
@@ -1540,31 +1572,82 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Section 8 Grounds Summary */}
-      {isSection8 && decisionEngine?.recommended_grounds?.length > 0 && (
+      {/* Section 8 Grounds - User Selected vs Auto-Added */}
+      {isSection8 && includedGrounds.length > 0 && (
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Section 8 Grounds</h2>
-          <ul className="space-y-3">
-            {decisionEngine.recommended_grounds.map((ground: any, index: number) => (
-              <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
-                <span className="font-mono text-sm bg-gray-200 px-2 py-1 rounded shrink-0">
-                  {ground.code}
-                </span>
-                <div>
-                  <p className="font-medium">{ground.title}</p>
+          <h2 className="text-lg font-semibold mb-4">Grounds Included in Your Notice</h2>
+
+          {/* User Selected Grounds */}
+          {selectedGrounds.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Your selected grounds:</h3>
+              <div className="flex flex-wrap gap-2">
+                {selectedGrounds.map((ground: string, index: number) => (
                   <span
-                    className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${
-                      ground.type === 'mandatory'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-amber-100 text-amber-800'
-                    }`}
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
                   >
-                    {ground.type}
+                    {ground}
                   </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Auto-Added Grounds (from decision engine recommendations) */}
+          {autoAddedGrounds.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">
+                Automatically included (strengthens your case):
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {autoAddedGrounds.map((ground: string, index: number) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+                  >
+                    {ground}
+                    <span className="ml-1 text-xs">(auto)</span>
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Based on your case facts, these grounds have been automatically added to strengthen your position.
+              </p>
+            </div>
+          )}
+
+          {/* Full list with details from decision engine */}
+          {decisionEngine?.recommended_grounds?.length > 0 && (
+            <div className="mt-4 pt-4 border-t">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Ground details:</h3>
+              <ul className="space-y-2">
+                {decisionEngine.recommended_grounds
+                  .filter((ground: any) => includedGrounds.some((g: string) =>
+                    g.includes(ground.code) || g.replace('Ground ', '') === ground.code
+                  ))
+                  .map((ground: any, index: number) => (
+                    <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
+                      <span className="font-mono text-sm bg-gray-200 px-2 py-1 rounded shrink-0">
+                        {ground.code}
+                      </span>
+                      <div>
+                        <p className="font-medium text-sm">{ground.title}</p>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${
+                            ground.type === 'mandatory'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}
+                        >
+                          {ground.type}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
         </Card>
       )}
 
@@ -1590,8 +1673,29 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Compliance Issues (non-S21) */}
-      {hasComplianceIssues && !isSection21 && (
+      {/* Suggestions to Strengthen Your Case (Section 8 with ground-specific suggestions) */}
+      {isSection8 && groundSuggestions?.suggestions?.length > 0 && (
+        <Card className="border-green-200 bg-green-50 p-6">
+          <h2 className="text-lg font-semibold text-green-800 mb-3">
+            ✅ Suggestions to strengthen your case
+          </h2>
+          <p className="text-sm text-green-700 mb-3">{groundSuggestions.summary}</p>
+          <ul className="space-y-3">
+            {groundSuggestions.suggestions.map((suggestion: any, index: number) => (
+              <li key={index} className="flex items-start gap-3 bg-white p-3 rounded border border-green-100">
+                <span className="text-green-600 mt-0.5">✓</span>
+                <div>
+                  <p className="font-medium text-green-900">{suggestion.title}</p>
+                  <p className="text-sm text-green-700 mt-1">{suggestion.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Compliance Issues (non-S21 and non-S8 with ground suggestions) - legacy fallback */}
+      {hasComplianceIssues && !isSection21 && !(isSection8 && groundSuggestions?.suggestions?.length > 0) && (
         <Card className="border-amber-200 bg-amber-50 p-6">
           <h2 className="text-lg font-semibold text-amber-800 mb-3">⚠️ Compliance Warnings</h2>
           <ul className="space-y-2">
@@ -1673,6 +1777,10 @@ function NoticeOnlyReviewContent({
               <li className="flex items-center gap-2 text-gray-700">📄 Form 3 - Section 8 Notice</li>
               <li className="flex items-center gap-2 text-gray-700">📄 Service Instructions</li>
               <li className="flex items-center gap-2 text-gray-700">📄 Grounds Summary</li>
+              {/* Include Rent Schedule when arrears grounds (8/10/11) are included */}
+              {hasArrearsGroundsIncluded && (
+                <li className="flex items-center gap-2 text-gray-700">📄 Rent Schedule (Arrears Breakdown)</li>
+              )}
             </>
           ) : isWales ? (
             <>
