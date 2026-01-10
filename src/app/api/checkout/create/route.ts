@@ -13,9 +13,13 @@ import { createServerSupabaseClient, createAdminClient, requireServerAuth } from
 import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { stripe, PRICE_IDS } from '@/lib/stripe';
+import { stripe, PRICE_IDS, assertValidPriceId, StripePriceIdError } from '@/lib/stripe';
 import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 import { logger } from '@/lib/logger';
+import {
+  validateNoticeOnlyCase,
+  NoticeOnlyCaseValidationError,
+} from '@/lib/validation/notice-only-case-validator';
 
 /**
  * Map product types to Stripe Price IDs
@@ -147,6 +151,25 @@ export async function POST(request: Request) {
       );
     }
 
+    // GUARDRAIL: Validate price ID format (reject prod_ IDs in price slot)
+    try {
+      assertValidPriceId(priceId, `${product_type} product`);
+    } catch (priceError) {
+      if (priceError instanceof StripePriceIdError) {
+        logger.error('Invalid Stripe price ID configuration', {
+          productType: product_type,
+          invalidId: priceError.invalidId,
+          expectedPrefix: priceError.expectedPrefix,
+          context: priceError.context,
+        });
+        return NextResponse.json(
+          { error: 'Payment configuration error. Please contact support.' },
+          { status: 500 }
+        );
+      }
+      throw priceError;
+    }
+
     // Get product details from source of truth (products.ts)
     // Map sc_money_claim to money_claim for product config lookup
     const productSku: ProductSku = product_type === 'sc_money_claim' ? 'sc_money_claim' : product_type as ProductSku;
@@ -157,7 +180,7 @@ export async function POST(request: Request) {
       // Use admin client for case lookup - case might have just been linked
       const { data: caseData, error: caseError } = await adminSupabase
         .from('cases')
-        .select('jurisdiction, case_type, user_id')
+        .select('jurisdiction, case_type, user_id, collected_facts')
         .eq('id', case_id)
         .single();
 
@@ -203,6 +226,41 @@ export async function POST(request: Request) {
             { error: 'Money claim packs are not available for Northern Ireland' },
             { status: 400 }
           );
+        }
+
+        // Notice-only case validation: ensure rent schedule data is complete for arrears grounds
+        if (product_type === 'notice_only') {
+          const collectedFacts = (caseData as any).collected_facts || {};
+          const noticeRoute = collectedFacts.selected_notice_route || collectedFacts.eviction_route || 'section_8';
+
+          // Only validate Section 8 notices (which use grounds)
+          if (noticeRoute === 'section_8') {
+            const validation = validateNoticeOnlyCase(collectedFacts);
+
+            if (!validation.valid) {
+              logger.warn('Notice-only checkout blocked due to validation errors', {
+                caseId: case_id,
+                userId: user.id,
+                errors: validation.errors,
+                includedGrounds: validation.includedGrounds,
+              });
+
+              const primaryError = validation.errors[0];
+              return NextResponse.json(
+                {
+                  error: primaryError.message,
+                  code: primaryError.code,
+                  details: {
+                    includedGrounds: validation.includedGrounds,
+                    includesArrearsGrounds: validation.includesArrearsGrounds,
+                    arrearsScheduleComplete: validation.arrearsScheduleComplete,
+                    errors: validation.errors,
+                  },
+                },
+                { status: 422 }
+              );
+            }
+          }
         }
       }
     }
