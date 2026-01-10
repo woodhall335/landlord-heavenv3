@@ -40,6 +40,10 @@ import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
 import { assertPaidEntitlement } from '@/lib/payments/entitlement';
+import {
+  validateNoticeOnlyCase,
+  NoticeOnlyCaseValidationError,
+} from '@/lib/validation/notice-only-case-validator';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -599,6 +603,46 @@ export async function POST(request: Request) {
         document_type,
       });
       return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
+    // ============================================================================
+    // NOTICE-ONLY SPECIFIC VALIDATION (Arrears Schedule Enforcement)
+    // ============================================================================
+    // For notice-only products with Section 8 route, enforce rent schedule data
+    // when arrears grounds are included (Grounds 8/10/11)
+    if (product === 'notice_only' && route === 'section_8') {
+      const noticeValidation = validateNoticeOnlyCase(wizardFacts);
+
+      if (!noticeValidation.valid) {
+        const primaryError = noticeValidation.errors[0];
+        console.warn('[GENERATE] Notice-only validation blocked generation:', {
+          case_id,
+          document_type,
+          error_code: primaryError?.code,
+          included_grounds: noticeValidation.includedGrounds,
+          arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+        });
+
+        return NextResponse.json(
+          {
+            code: primaryError?.code || 'NOTICE_ONLY_VALIDATION_FAILED',
+            error: primaryError?.message || 'Notice-only case validation failed',
+            user_message: primaryError?.message,
+            blocking_issues: noticeValidation.errors.map(e => ({
+              code: e.code,
+              description: e.message,
+            })),
+            warnings: noticeValidation.warnings.map(w => ({
+              code: w.code,
+              description: w.message,
+            })),
+            included_grounds: noticeValidation.includedGrounds,
+            arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+            notice_period_days: noticeValidation.noticePeriodDays,
+          },
+          { status: 422 }
+        );
+      }
     }
 
     let generatedDoc: any;

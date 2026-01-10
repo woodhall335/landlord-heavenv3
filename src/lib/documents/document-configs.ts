@@ -4,7 +4,19 @@ import { DocumentInfo } from '@/components/preview/DocumentCard';
 // NOTICE ONLY DOCUMENTS (4 per jurisdiction)
 // ============================================
 
-export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string): DocumentInfo[] {
+/**
+ * Options for notice-only document list generation
+ */
+export interface NoticeOnlyDocumentOptions {
+  /** If true, includes rent schedule document for arrears grounds (8/10/11) */
+  includeArrearsSchedule?: boolean;
+}
+
+export function getNoticeOnlyDocuments(
+  jurisdiction: string,
+  noticeRoute: string,
+  options: NoticeOnlyDocumentOptions = {}
+): DocumentInfo[] {
   const documents: DocumentInfo[] = [];
 
   // ENGLAND
@@ -182,6 +194,19 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
         category: 'Checklists',
       }
     );
+  }
+
+  // Optional: Include arrears schedule for arrears grounds (8/10/11)
+  // This is required for Section 8 notices with rent arrears grounds
+  if (options.includeArrearsSchedule && (noticeRoute === 'section_8' || noticeRoute === 'section-8')) {
+    documents.push({
+      id: 'arrears-schedule',
+      title: 'Rent Schedule / Arrears Statement',
+      description: 'Detailed breakdown of rent owed with dates and payment history',
+      icon: 'schedule',
+      pages: '1-3 pages',
+      category: 'Evidence',
+    });
   }
 
   return documents;
