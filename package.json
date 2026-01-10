@@ -12,24 +12,18 @@
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
     "test:notice-compliance": "vitest run notice-compliance",
-
     "law-monitor": "npx tsx scripts/law-monitor-run.ts",
-
     "audit:notice-only": "npx tsx scripts/audit-notice-only-pdfs.ts",
     "audit:notice-only:layout": "npx tsx scripts/audit-notice-only-layout.ts",
     "audit:notice-only:visual": "npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
     "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
-
     "audit:official-forms-clean": "npx tsx scripts/audit-official-forms-clean.ts",
     "audit:seo": "npx tsx scripts/seo-audit.ts",
     "audit:sitemap": "npx tsx scripts/sitemap-audit.ts",
-
     "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
     "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts",
-
     "validate:wizard-mappings": "npx tsx scripts/validate-wizard-mappings.ts",
     "audit:legal-v2": "npx tsx scripts/legal-validity-audit-v2.1.ts",
-
     "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2"
   },
   "dependencies": {
@@ -37,6 +31,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-select": "^2.2.6",
+    "@sparticuz/chromium": "^143.0.4",
     "@stripe/stripe-js": "^8.5.2",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
@@ -53,6 +48,7 @@
     "openai": "^6.9.1",
     "pdf-lib": "^1.17.1",
     "puppeteer": "^24.31.0",
+    "puppeteer-core": "^24.34.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.66.1",
