@@ -4,6 +4,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
@@ -595,11 +596,11 @@ export default function AskHeavenPageClient(): React.ReactElement {
     inputRef.current?.focus();
   };
 
-  const handleFollowupClick = (question: string) => {
+  const handleFollowupClick = useCallback((question: string) => {
     trackAskHeavenFollowupClick(getTrackingParams());
-    setInput(question);
-    inputRef.current?.focus();
-  };
+    // Auto-submit the follow-up question
+    void submitQuestion(question);
+  }, [getTrackingParams, submitQuestion]);
 
   const buildWizardLinkWithAttribution = useCallback((product: string) => {
     const attribution = getAskHeavenAttribution();
@@ -797,6 +798,18 @@ export default function AskHeavenPageClient(): React.ReactElement {
           {isWelcomeState ? (
             /* Welcome State - Copilot-inspired centered layout */
             <div className="px-6 py-12 md:px-12 md:py-16">
+              {/* Ask Heaven Branding */}
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <Image
+                  src="/favicon.png"
+                  alt="Ask Heaven"
+                  width={48}
+                  height={48}
+                  className="rounded-xl"
+                />
+                <span className="text-2xl font-bold text-gray-900">Ask Heaven</span>
+              </div>
+
               <div className="text-center mb-10">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
                   Hi, how can I help you?
@@ -901,15 +914,21 @@ export default function AskHeavenPageClient(): React.ReactElement {
                   >
                     {m.role === 'user' ? (
                       <div className="max-w-[85%] md:max-w-[70%]">
-                        <div className="rounded-2xl rounded-br-md px-5 py-3 bg-primary text-white">
-                          <p className="whitespace-pre-wrap text-sm leading-relaxed">{m.content}</p>
+                        <div className="rounded-2xl rounded-br-md px-5 py-3 bg-primary">
+                          <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">{m.content}</p>
                         </div>
                       </div>
                     ) : (
                       <div className="max-w-[85%] md:max-w-[70%]">
                         <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-sm font-bold">
-                            H
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden">
+                            <Image
+                              src="/favicon.png"
+                              alt="Ask Heaven"
+                              width={32}
+                              height={32}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                           <div className="flex-1">
                             <div className="rounded-2xl rounded-tl-md px-5 py-3 bg-gray-100 text-gray-800">
@@ -990,8 +1009,14 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 {isSending && (
                   <div className="flex justify-start">
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-sm font-bold">
-                        H
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden">
+                        <Image
+                          src="/favicon.png"
+                          alt="Ask Heaven"
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <div className="rounded-2xl rounded-tl-md px-5 py-4 bg-gray-100">
                         <div className="flex gap-1.5">
