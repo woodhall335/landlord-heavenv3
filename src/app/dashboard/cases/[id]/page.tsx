@@ -83,6 +83,12 @@ export default function CaseDetailPage() {
   const pollStartTimeRef = useRef<number | null>(null);
   const autoRetryAttemptedRef = useRef(false);
 
+  // Payment confirmation state (for webhook delay handling)
+  const [awaitingPaymentConfirmation, setAwaitingPaymentConfirmation] = useState(false);
+  const [paymentConfirmationTimedOut, setPaymentConfirmationTimedOut] = useState(false);
+  const paymentPollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const paymentPollStartTimeRef = useRef<number | null>(null);
+
   const handleDocumentDownload = async (docId: string) => {
     setDownloadingDocId(docId);
     try {
@@ -153,6 +159,74 @@ export default function CaseDetailPage() {
     setIsPolling(false);
   }, []);
 
+  // Start polling for document fulfillment
+  const startPolling = useCallback(() => {
+    if (pollIntervalRef.current) return; // Already polling
+
+    setIsPolling(true);
+    setPollingTimedOut(false);
+    pollStartTimeRef.current = Date.now();
+
+    pollIntervalRef.current = setInterval(async () => {
+      // Check timeout
+      const elapsed = Date.now() - (pollStartTimeRef.current || 0);
+      if (elapsed >= POLL_TIMEOUT_MS) {
+        stopPolling();
+        setPollingTimedOut(true);
+        return;
+      }
+
+      // Fetch latest status
+      const status = await fetchOrderStatus();
+      if (status?.has_final_documents) {
+        stopPolling();
+        // Refresh documents list
+        fetchCaseDocuments();
+      }
+    }, POLL_INTERVAL_MS);
+  }, [fetchOrderStatus, stopPolling, fetchCaseDocuments]);
+
+  // Stop payment confirmation polling
+  const stopPaymentPolling = useCallback(() => {
+    if (paymentPollIntervalRef.current) {
+      clearInterval(paymentPollIntervalRef.current);
+      paymentPollIntervalRef.current = null;
+    }
+    setAwaitingPaymentConfirmation(false);
+  }, []);
+
+  // Start polling for payment confirmation (when arriving from checkout but webhook hasn't fired)
+  const startPaymentPolling = useCallback(() => {
+    if (paymentPollIntervalRef.current) return; // Already polling
+
+    console.log('[CaseDetailPage] Starting payment confirmation polling');
+    setAwaitingPaymentConfirmation(true);
+    setPaymentConfirmationTimedOut(false);
+    paymentPollStartTimeRef.current = Date.now();
+
+    paymentPollIntervalRef.current = setInterval(async () => {
+      // Check timeout
+      const elapsed = Date.now() - (paymentPollStartTimeRef.current || 0);
+      if (elapsed >= POLL_TIMEOUT_MS) {
+        console.log('[CaseDetailPage] Payment confirmation polling timed out');
+        stopPaymentPolling();
+        setPaymentConfirmationTimedOut(true);
+        return;
+      }
+
+      // Fetch latest status
+      const status = await fetchOrderStatus();
+      if (status?.paid) {
+        console.log('[CaseDetailPage] Payment confirmed via polling');
+        stopPaymentPolling();
+        // If paid but no final docs, start document polling
+        if (!status.has_final_documents) {
+          startPolling();
+        }
+      }
+    }, POLL_INTERVAL_MS);
+  }, [fetchOrderStatus, stopPaymentPolling, startPolling]);
+
   // Retry fulfillment - derives product from case details
   const retryFulfillment = useCallback(async (): Promise<boolean> => {
     setIsRetrying(true);
@@ -206,38 +280,14 @@ export default function CaseDetailPage() {
     }
   }, [caseId, caseDetails, fetchOrderStatus, fetchCaseDocuments]);
 
-  // Start polling for document fulfillment
-  const startPolling = useCallback(() => {
-    if (pollIntervalRef.current) return; // Already polling
-
-    setIsPolling(true);
-    setPollingTimedOut(false);
-    pollStartTimeRef.current = Date.now();
-
-    pollIntervalRef.current = setInterval(async () => {
-      // Check timeout
-      const elapsed = Date.now() - (pollStartTimeRef.current || 0);
-      if (elapsed >= POLL_TIMEOUT_MS) {
-        stopPolling();
-        setPollingTimedOut(true);
-        return;
-      }
-
-      // Fetch latest status
-      const status = await fetchOrderStatus();
-      if (status?.has_final_documents) {
-        stopPolling();
-        // Refresh documents list
-        fetchCaseDocuments();
-      }
-    }, POLL_INTERVAL_MS);
-  }, [fetchOrderStatus, stopPolling, fetchCaseDocuments]);
-
   // Cleanup polling on unmount or navigation
   useEffect(() => {
     return () => {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
+      }
+      if (paymentPollIntervalRef.current) {
+        clearInterval(paymentPollIntervalRef.current);
       }
     };
   }, []);
@@ -301,8 +351,21 @@ export default function CaseDetailPage() {
     const checkOrderStatus = async () => {
       const status = await fetchOrderStatus();
 
-      if (!status?.paid || status.has_final_documents) return;
+      // Case 1: Arrived from checkout but payment not confirmed yet (webhook delay)
+      // Start payment confirmation polling
+      if (arrivedFromCheckout && !status?.paid) {
+        console.log('[CaseDetailPage] Arrived from checkout, payment not yet confirmed - starting payment polling');
+        startPaymentPolling();
+        return;
+      }
 
+      // Case 2: Not paid and not from checkout - nothing to poll for
+      if (!status?.paid) return;
+
+      // Case 3: Already has documents - nothing to do
+      if (status.has_final_documents) return;
+
+      // Case 4: Paid but no documents - need to poll for document generation
       // If fulfillment is stuck in 'ready_to_generate' or 'failed', attempt ONE auto-retry
       const shouldAutoRetry =
         !autoRetryAttemptedRef.current &&
@@ -325,7 +388,7 @@ export default function CaseDetailPage() {
     };
 
     checkOrderStatus();
-  }, [caseId, fetchOrderStatus, startPolling, retryFulfillment, retryErrorFatal]);
+  }, [caseId, arrivedFromCheckout, fetchOrderStatus, startPolling, startPaymentPolling, retryFulfillment, retryErrorFatal]);
 
   // Track purchase conversion when payment is confirmed via DB
   useEffect(() => {
@@ -821,6 +884,54 @@ export default function CaseDetailPage() {
             }`}
           >
             {message.text}
+          </div>
+        )}
+
+        {/* Confirming Payment - webhook hasn't fired yet */}
+        {awaitingPaymentConfirmation && !paymentConfirmationTimedOut && (
+          <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">
+                  Confirming your payment...
+                </h3>
+                <p className="text-gray-700 mt-1">
+                  We're verifying your payment with our payment provider. This usually takes just a few seconds.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Payment Confirmation Timeout */}
+        {paymentConfirmationTimedOut && !orderStatus?.paid && (
+          <div className="mb-6 p-6 rounded-lg border border-warning/20 bg-warning/5">
+            <div className="flex items-start gap-3">
+              <div className="text-warning text-2xl">⏳</div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Still confirming your payment</h3>
+                <p className="text-gray-700 mt-1">
+                  Payment confirmation is taking longer than expected. This can happen during high traffic.
+                  Your payment may still be processing.
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">
+                  Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={() => window.location.reload()}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    Refresh Page
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
