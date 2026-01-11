@@ -33,6 +33,7 @@ import {
   validateNoticeOnlyCase,
   computeIncludedGrounds,
 } from '@/lib/validation/notice-only-case-validator';
+import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -104,6 +105,15 @@ export async function GET(
 
     // Get wizard facts
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
+
+    // ========================================================================
+    // NORMALIZE SECTION 8 FACTS BEFORE VALIDATION
+    // This backfills missing canonical fields from legacy/alternative locations:
+    // - arrears_total from issues.rent_arrears.total_arrears
+    // - ground_particulars.ground_8.summary from section8_details
+    // ========================================================================
+    normalizeSection8Facts(wizardFacts);
+
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
