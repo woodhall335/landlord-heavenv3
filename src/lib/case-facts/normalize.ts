@@ -2215,8 +2215,8 @@ export function normalizeCaseFacts(
  *
  * Legal basis: Housing Act 1988, Section 8(4) and Schedule 2
  *
- * 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
- * 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+ * 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
+ * 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
  * Immediate (0 days): Ground 14 (serious anti-social behaviour), Ground 14A
  *
  * NOTE: Ground 14 can be served with immediate effect in cases of serious
@@ -2234,8 +2234,8 @@ const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
   '7B': 14, // 2 weeks - abandonment (periodic)
   8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
   9: 60,    // 2 months - suitable alternative accommodation
-  10: 60,   // 2 MONTHS - some rent arrears (NOT 2 weeks!)
-  11: 60,   // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  10: 14,   // 2 weeks - some rent arrears
+  11: 14,   // 2 weeks - persistent delay in paying rent
   12: 14,   // 2 weeks - breach of tenancy obligation
   13: 14,   // 2 weeks - deterioration of dwelling
   14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
@@ -3155,7 +3155,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // Calculate earliest_possession_date if not provided
   // IMPORTANT: Notice period depends on selected grounds!
-  // Grounds 10 and 11 require 2 months (60 days), not 2 weeks (14 days)
+  // Most grounds require 2 weeks (14 days); some require 2 months (60 days)
   if (!templateData.earliest_possession_date && templateData.service_date) {
     // Get selected grounds to calculate required notice period
     const selectedGrounds = getFirstValue(wizard, [

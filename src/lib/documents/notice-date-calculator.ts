@@ -92,11 +92,9 @@ export type NoticePeriodResult = {
  * Ground-specific notice periods (in days) as per Housing Act 1988, Schedule 2
  *
  * Legal requirements:
- * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
- * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+ * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
+ * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
  * - Immediate (0 days): Ground 14 (serious ASB), Ground 14A
- *
- * CRITICAL: Grounds 10 and 11 require 2 MONTHS, not 2 weeks!
  */
 const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
   1: 60,    // 2 months - landlord previously occupied
@@ -110,8 +108,8 @@ const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
   '7B': 14, // 2 weeks - abandonment (periodic)
   8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
   9: 60,    // 2 months - suitable alternative accommodation
-  10: 60,   // 2 MONTHS - some rent arrears (NOT 2 weeks!)
-  11: 60,   // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  10: 14,   // 2 weeks - some rent arrears
+  11: 14,   // 2 weeks - persistent delay in paying rent
   12: 14,   // 2 weeks - breach of tenancy obligation
   13: 14,   // 2 weeks - deterioration of dwelling
   14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
@@ -130,7 +128,6 @@ const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
  * - Ground 14A: Immediate (0 days) for domestic violence
  * - Ground 14 serious ASB: Immediate (0 days)
  * - Ground 14 moderate ASB: 14 days minimum
- * - Grounds 10, 11: 2 MONTHS (60 days) - NOT 2 weeks!
  * - Grounds 1, 2, 5, 6, 7, 9, 16: 2 months (60 days)
  * - All other grounds: 14 days minimum
  * - Wales: Generates warnings (wrong terminology)

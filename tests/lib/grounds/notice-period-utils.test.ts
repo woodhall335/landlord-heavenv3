@@ -51,15 +51,15 @@ describe('getGroundNoticePeriod', () => {
     expect(getGroundNoticePeriod('Ground 8')).toBe(14);
   });
 
-  it('should return 60 days for Ground 10 (some rent arrears)', () => {
-    expect(getGroundNoticePeriod('10')).toBe(60);
-    expect(getGroundNoticePeriod(10)).toBe(60);
-    expect(getGroundNoticePeriod('Ground 10')).toBe(60);
+  it('should return 14 days for Ground 10 (some rent arrears)', () => {
+    expect(getGroundNoticePeriod('10')).toBe(14);
+    expect(getGroundNoticePeriod(10)).toBe(14);
+    expect(getGroundNoticePeriod('Ground 10')).toBe(14);
   });
 
-  it('should return 60 days for Ground 11 (persistent late payment)', () => {
-    expect(getGroundNoticePeriod('11')).toBe(60);
-    expect(getGroundNoticePeriod(11)).toBe(60);
+  it('should return 14 days for Ground 11 (persistent late payment)', () => {
+    expect(getGroundNoticePeriod('11')).toBe(14);
+    expect(getGroundNoticePeriod(11)).toBe(14);
   });
 
   it('should return 14 days for Ground 14 (nuisance/ASB)', () => {
@@ -84,14 +84,14 @@ describe('calculateCombinedNoticePeriod', () => {
       expect(result.noticePeriodDays).toBe(14);
     });
 
-    it('Ground 10 only => 60 days', () => {
+    it('Ground 10 only => 14 days', () => {
       const result = calculateCombinedNoticePeriod(['10']);
-      expect(result.noticePeriodDays).toBe(60);
+      expect(result.noticePeriodDays).toBe(14);
     });
 
-    it('Ground 11 only => 60 days', () => {
+    it('Ground 11 only => 14 days', () => {
       const result = calculateCombinedNoticePeriod(['11']);
-      expect(result.noticePeriodDays).toBe(60);
+      expect(result.noticePeriodDays).toBe(14);
     });
 
     it('Ground 14 only => 14 days', () => {
@@ -101,24 +101,19 @@ describe('calculateCombinedNoticePeriod', () => {
   });
 
   describe('Multiple ground scenarios - uses MAX', () => {
-    it('Ground 8 (14 days) + Ground 10 (60 days) => 60 days', () => {
+    it('Ground 8 (14 days) + Ground 10 (14 days) => 14 days', () => {
       const result = calculateCombinedNoticePeriod(['8', '10']);
-      expect(result.noticePeriodDays).toBe(60);
-      expect(result.drivingGrounds).toContain('Ground 10');
+      expect(result.noticePeriodDays).toBe(14);
     });
 
-    it('Ground 8 (14 days) + Ground 11 (60 days) => 60 days', () => {
+    it('Ground 8 (14 days) + Ground 11 (14 days) => 14 days', () => {
       const result = calculateCombinedNoticePeriod(['8', '11']);
-      expect(result.noticePeriodDays).toBe(60);
-      expect(result.drivingGrounds).toContain('Ground 11');
+      expect(result.noticePeriodDays).toBe(14);
     });
 
-    it('Ground 8 + Ground 10 + Ground 11 => 60 days', () => {
+    it('Ground 8 + Ground 10 + Ground 11 => 14 days (all arrears grounds are 14 days)', () => {
       const result = calculateCombinedNoticePeriod(['8', '10', '11']);
-      expect(result.noticePeriodDays).toBe(60);
-      // Both 10 and 11 should be driving grounds
-      expect(result.drivingGrounds).toContain('Ground 10');
-      expect(result.drivingGrounds).toContain('Ground 11');
+      expect(result.noticePeriodDays).toBe(14);
     });
 
     it('Ground 8 + Ground 14 => 14 days (both are 14-day grounds)', () => {
@@ -152,7 +147,8 @@ describe('calculateCombinedNoticePeriod', () => {
 
   describe('Explanation generation', () => {
     it('includes correct explanation for 60-day periods', () => {
-      const result = calculateCombinedNoticePeriod(['10']);
+      // Use Ground 1 (prior occupation) which requires 60 days notice
+      const result = calculateCombinedNoticePeriod(['1']);
       expect(result.explanation).toContain('60 days');
       expect(result.explanation).toContain('2 months');
     });
@@ -161,13 +157,22 @@ describe('calculateCombinedNoticePeriod', () => {
       const result = calculateCombinedNoticePeriod(['8', '14']);
       expect(result.explanation).toContain('14 days');
     });
+
+    it('includes correct explanation for arrears grounds (10, 11)', () => {
+      // Ground 10 and 11 are now 14 days (not 60)
+      const result10 = calculateCombinedNoticePeriod(['10']);
+      expect(result10.noticePeriodDays).toBe(14);
+
+      const result11 = calculateCombinedNoticePeriod(['11']);
+      expect(result11.noticePeriodDays).toBe(14);
+    });
   });
 });
 
 describe('compareNoticePeriods', () => {
   it('detects when adding recommended grounds increases notice period', () => {
     const selected = ['8']; // 14 days
-    const recommended = ['10', '11']; // 60 days each
+    const recommended = ['1', '9']; // 60 days each (prior occupation, alternative accommodation)
 
     const result = compareNoticePeriods(selected, recommended);
 
@@ -178,14 +183,14 @@ describe('compareNoticePeriods', () => {
     expect(result.explanation).toContain('increase');
   });
 
-  it('detects when adding recommended grounds does NOT increase notice period', () => {
-    const selected = ['10']; // 60 days
-    const recommended = ['8', '14']; // 14 days each
+  it('detects when adding recommended grounds does NOT increase notice period (all arrears grounds = 14 days)', () => {
+    const selected = ['8']; // 14 days
+    const recommended = ['10', '11']; // 14 days each (also arrears grounds)
 
     const result = compareNoticePeriods(selected, recommended);
 
-    expect(result.selectedPeriod).toBe(60);
-    expect(result.combinedPeriod).toBe(60);
+    expect(result.selectedPeriod).toBe(14);
+    expect(result.combinedPeriod).toBe(14);
     expect(result.increasesNotice).toBe(false);
     expect(result.increaseAmount).toBe(0);
     expect(result.explanation).toContain('remains');
@@ -268,7 +273,7 @@ describe('getGroundDescription', () => {
     expect(info.code).toBe('10');
     expect(info.title).toContain('arrears');
     expect(info.type).toBe('discretionary');
-    expect(info.noticePeriodDays).toBe(60);
+    expect(info.noticePeriodDays).toBe(14);
   });
 });
 
@@ -276,9 +281,55 @@ describe('Config consistency', () => {
   it('SECTION8_GROUND_NOTICE_PERIODS should have correct values for key grounds', () => {
     // These are the legally mandated notice periods
     expect(SECTION8_GROUND_NOTICE_PERIODS['8']).toBe(14);
-    expect(SECTION8_GROUND_NOTICE_PERIODS['10']).toBe(60); // CRITICAL: 2 months, NOT 2 weeks
-    expect(SECTION8_GROUND_NOTICE_PERIODS['11']).toBe(60); // CRITICAL: 2 months, NOT 2 weeks
+    expect(SECTION8_GROUND_NOTICE_PERIODS['10']).toBe(14);
+    expect(SECTION8_GROUND_NOTICE_PERIODS['11']).toBe(14);
     expect(SECTION8_GROUND_NOTICE_PERIODS['14']).toBe(14);
     expect(SECTION8_GROUND_NOTICE_PERIODS['14A']).toBe(0);
+  });
+});
+
+/**
+ * REGRESSION TESTS
+ *
+ * These tests document critical business rules that must not regress:
+ * - All arrears grounds (8, 10, 11) use 14 days notice
+ * - Combining arrears grounds does NOT increase the notice period
+ */
+describe('Regression: Arrears grounds [8,10,11] = 14 days', () => {
+  it('Ground 8, 10, and 11 all require exactly 14 days notice', () => {
+    // All three arrears grounds must be 14 days
+    expect(getGroundNoticePeriod('8')).toBe(14);
+    expect(getGroundNoticePeriod('10')).toBe(14);
+    expect(getGroundNoticePeriod('11')).toBe(14);
+  });
+
+  it('Combining grounds [8, 10, 11] results in 14 days (not 60 days)', () => {
+    const result = calculateCombinedNoticePeriod(['8', '10', '11']);
+
+    // Critical: must be 14 days, NOT 60 days
+    expect(result.noticePeriodDays).toBe(14);
+    expect(result.noticePeriodDays).not.toBe(60);
+  });
+
+  it('Adding Ground 10 or 11 to Ground 8 does NOT increase notice period', () => {
+    const ground8Only = calculateCombinedNoticePeriod(['8']);
+    const ground8And10 = calculateCombinedNoticePeriod(['8', '10']);
+    const ground8And11 = calculateCombinedNoticePeriod(['8', '11']);
+    const allThree = calculateCombinedNoticePeriod(['8', '10', '11']);
+
+    // All combinations must be 14 days
+    expect(ground8Only.noticePeriodDays).toBe(14);
+    expect(ground8And10.noticePeriodDays).toBe(14);
+    expect(ground8And11.noticePeriodDays).toBe(14);
+    expect(allThree.noticePeriodDays).toBe(14);
+  });
+
+  it('compareNoticePeriods shows no increase when adding Ground 10/11 to Ground 8', () => {
+    const result = compareNoticePeriods(['8'], ['10', '11']);
+
+    expect(result.selectedPeriod).toBe(14);
+    expect(result.combinedPeriod).toBe(14);
+    expect(result.increasesNotice).toBe(false);
+    expect(result.increaseAmount).toBe(0);
   });
 });
