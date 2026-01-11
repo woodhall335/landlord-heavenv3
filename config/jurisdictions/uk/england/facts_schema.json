@@ -425,6 +425,69 @@
         "required": false
       }
     },
+    "ground_6": {
+      "demolition_or_reconstruction_planned": {
+        "type": "boolean",
+        "required": true,
+        "question": "Do you intend to demolish, reconstruct or carry out substantial works on the property?"
+      },
+      "works_description": {
+        "type": "text",
+        "required_if": "demolition_or_reconstruction_planned == true",
+        "question": "Describe the planned works (e.g. demolition, structural rebuild, substantial alterations)."
+      },
+      "vacant_possession_required": {
+        "type": "boolean",
+        "required": true,
+        "question": "Is vacant possession required for the works to be carried out safely and effectively?"
+      },
+      "works_cannot_be_done_with_tenant": {
+        "type": "boolean",
+        "required_if": "vacant_possession_required == true",
+        "question": "Confirm the works cannot reasonably be done while the tenant remains in occupation."
+      },
+      "planning_permission": {
+        "type": "enum",
+        "values": [
+          "granted",
+          "applied",
+          "not_required",
+          "not_applied"
+        ],
+        "required": true,
+        "question": "Planning permission status for the proposed works"
+      },
+      "planning_permission_reference": {
+        "type": "string",
+        "required_if": "planning_permission == 'granted'",
+        "question": "Planning reference number (if granted)"
+      },
+      "funding_secured": {
+        "type": "boolean",
+        "required": false,
+        "question": "Have you secured funding or finance to carry out the works?"
+      },
+      "funding_details": {
+        "type": "text",
+        "required_if": "funding_secured == true",
+        "question": "Provide brief details of funding or finance arrangements"
+      },
+      "landlord_owned_2_years": {
+        "type": "boolean",
+        "required": true,
+        "question": "Have you owned the property for at least two years?"
+      },
+      "notice_given_before_tenancy": {
+        "type": "boolean",
+        "required": true,
+        "question": "Did you notify the tenant before the tenancy that possession might be sought for redevelopment?"
+      },
+      "supporting_documents": {
+        "type": "file",
+        "required": false,
+        "question": "Upload any plans, permissions or schedules showing the proposed works"
+      }
+    },
     "ground_8": {
       "rent_amount_monthly": {
         "type": "currency",

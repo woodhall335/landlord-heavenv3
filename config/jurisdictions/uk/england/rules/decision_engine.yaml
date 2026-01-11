@@ -26,6 +26,22 @@ evaluation_order:
 # Ground recommendation rules
 rules:
 
+  # WALES ROUTING BLOCK (HA 1988 NOT APPLICABLE)
+  - rule_id: "wales_block_ha1988"
+    name: "Wales - Switch to Renting Homes routes"
+    priority: 0
+    conditions:
+      property.location: "wales"
+    action: "block_ha1988"
+    recommended_route: "rhw_occupation_contract_notice"
+    warnings:
+      - level: "critical"
+        message: |
+          Renting Homes (Wales) Act 2016 applies in Wales. Assured shorthold tenancies and Section 21/Section 8 notices are not valid.
+
+          Use the appropriate occupation contract notice (e.g. RHW section 173) instead of Housing Act 1988 routes.
+
+  
   # RENT ARREARS SCENARIOS
   - rule_id: "ew_rent_001"
     name: "Serious Rent Arrears - Ground 8"
