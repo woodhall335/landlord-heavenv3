@@ -16,6 +16,8 @@ export interface OrderStatusResponse {
   paid: boolean;
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded' | 'partially_refunded';
   fulfillment_status: 'pending' | 'ready_to_generate' | 'processing' | 'fulfilled' | 'failed' | null;
+  /** Human-readable error message if fulfillment failed */
+  fulfillment_error: string | null;
   paid_at: string | null;
   order_id: string | null;
   stripe_session_id: string | null;
@@ -23,6 +25,8 @@ export interface OrderStatusResponse {
   currency: string | null;
   has_final_documents: boolean;
   final_document_count: number;
+  /** ISO string of when the most recent final document was created */
+  last_final_document_created_at: string | null;
   /** Whether the 30-day edit/regenerate window is currently open */
   edit_window_open: boolean;
   /** ISO string of when the edit window ends (null if not paid) */
@@ -46,10 +50,10 @@ export async function GET(request: Request) {
       );
     }
 
-    // Build order query
+    // Build order query (include metadata for fulfillment_error)
     let orderQuery = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency')
+      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, metadata')
       .eq('case_id', caseId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
@@ -69,13 +73,15 @@ export async function GET(request: Request) {
       );
     }
 
-    // Count final documents (is_preview=false) for this case
-    const { count: finalDocCount, error: docError } = await supabase
+    // Get final documents (is_preview=false) for this case - need count and latest created_at
+    const { data: finalDocs, count: finalDocCount, error: docError } = await supabase
       .from('documents')
-      .select('id', { count: 'exact', head: true })
+      .select('id, created_at', { count: 'exact' })
       .eq('case_id', caseId)
       .eq('user_id', user.id)
-      .eq('is_preview', false);
+      .eq('is_preview', false)
+      .order('created_at', { ascending: false })
+      .limit(1);
 
     if (docError) {
       console.error('Failed to count documents:', docError);
@@ -84,6 +90,11 @@ export async function GET(request: Request) {
 
     const order = orders?.[0] || null;
     const documentCount = finalDocCount || 0;
+    const lastFinalDocCreatedAt = finalDocs?.[0]?.created_at || null;
+
+    // Extract fulfillment error from order metadata if present
+    const orderMetadata = (order as any)?.metadata as Record<string, unknown> | null;
+    const fulfillmentError = (orderMetadata?.fulfillment_error as string) || null;
 
     // Calculate edit window status
     const editWindow = getEditWindowStatus(order?.paid_at || null);
@@ -93,6 +104,7 @@ export async function GET(request: Request) {
       paid: order?.payment_status === 'paid',
       payment_status: order?.payment_status || 'pending',
       fulfillment_status: order?.fulfillment_status || null,
+      fulfillment_error: fulfillmentError,
       paid_at: order?.paid_at || null,
       order_id: order?.id || null,
       stripe_session_id: order?.stripe_session_id || null,
@@ -100,6 +112,7 @@ export async function GET(request: Request) {
       currency: order?.currency || null,
       has_final_documents: documentCount > 0,
       final_document_count: documentCount,
+      last_final_document_created_at: lastFinalDocCreatedAt,
       edit_window_open: editWindow.isPaid && editWindow.isOpen,
       edit_window_ends_at: editWindow.endsAt,
     };

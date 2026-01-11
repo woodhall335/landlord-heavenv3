@@ -218,10 +218,30 @@ export async function POST(request: Request) {
               });
               processingResult = fulfillment.status;
             } catch (fulfillmentError: any) {
+              // Persist error message in order metadata for debugging and user display
+              const errorMessage = fulfillmentError?.message || 'Document generation failed';
+              const truncatedError = errorMessage.substring(0, 500);
+
+              // Get current metadata to merge
+              const { data: currentOrderData } = await supabase
+                .from('orders')
+                .select('metadata')
+                .eq('id', (order as any).id)
+                .single();
+
+              const currentMetadata = (currentOrderData?.metadata as Record<string, unknown>) || {};
+
               await supabase
                 .from('orders')
-                .update({ fulfillment_status: 'failed' })
+                .update({
+                  fulfillment_status: 'failed',
+                  metadata: {
+                    ...currentMetadata,
+                    fulfillment_error: truncatedError,
+                  },
+                })
                 .eq('id', (order as any).id);
+
               throw fulfillmentError;
             }
           } else {

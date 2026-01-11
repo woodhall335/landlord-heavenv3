@@ -13,7 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
@@ -76,8 +76,12 @@ export default function CaseDetailPage() {
   const [orderStatus, setOrderStatus] = useState<OrderStatusResponse | null>(null);
   const [isPolling, setIsPolling] = useState(false);
   const [pollingTimedOut, setPollingTimedOut] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryError, setRetryError] = useState<string | null>(null);
+  const [retryErrorFatal, setRetryErrorFatal] = useState(false);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const pollStartTimeRef = useRef<number | null>(null);
+  const autoRetryAttemptedRef = useRef(false);
 
   const handleDocumentDownload = async (docId: string) => {
     setDownloadingDocId(docId);
@@ -148,6 +152,59 @@ export default function CaseDetailPage() {
     }
     setIsPolling(false);
   }, []);
+
+  // Retry fulfillment - derives product from case details
+  const retryFulfillment = useCallback(async (): Promise<boolean> => {
+    setIsRetrying(true);
+    setRetryError(null);
+    setRetryErrorFatal(false);
+
+    try {
+      // Derive product from case details
+      const params = caseDetails ? getProductAndParams() : null;
+      const product = params?.product;
+
+      const response = await fetch('/api/orders/fulfill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId, product }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // 422 = missing user, 403 = permission denied - both are fatal
+        if (response.status === 422 || response.status === 403) {
+          setRetryError(data.user_message || data.error || 'Unable to generate documents. Please contact support.');
+          setRetryErrorFatal(true);
+          setIsRetrying(false);
+          return false;
+        }
+
+        // Other errors - allow retry
+        setRetryError(data.message || data.error || 'Document generation failed. Please try again.');
+        setIsRetrying(false);
+        return false;
+      }
+
+      // Success - refresh order status and documents
+      if (data.status === 'fulfilled' || data.status === 'already_fulfilled') {
+        await fetchOrderStatus();
+        await fetchCaseDocuments();
+        setIsRetrying(false);
+        return true;
+      }
+
+      // Still processing - continue polling
+      setIsRetrying(false);
+      return true;
+    } catch (err) {
+      console.error('Retry fulfillment error:', err);
+      setRetryError('Network error. Please check your connection and try again.');
+      setIsRetrying(false);
+      return false;
+    }
+  }, [caseId, caseDetails, fetchOrderStatus, fetchCaseDocuments]);
 
   // Start polling for document fulfillment
   const startPolling = useCallback(() => {
@@ -237,21 +294,38 @@ export default function CaseDetailPage() {
     runAskHeaven();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
 
-  // Fetch order status and start polling if needed
+  // Fetch order status and handle auto-retry + polling
   useEffect(() => {
     if (!caseId) return;
 
     const checkOrderStatus = async () => {
       const status = await fetchOrderStatus();
 
-      // If paid but no final documents, start polling
-      if (status?.paid && !status.has_final_documents) {
+      if (!status?.paid || status.has_final_documents) return;
+
+      // If fulfillment is stuck in 'ready_to_generate' or 'failed', attempt ONE auto-retry
+      const shouldAutoRetry =
+        !autoRetryAttemptedRef.current &&
+        !retryErrorFatal &&
+        (status.fulfillment_status === 'ready_to_generate' ||
+          status.fulfillment_status === 'failed');
+
+      if (shouldAutoRetry) {
+        autoRetryAttemptedRef.current = true;
+        retryFulfillment().then(() => {
+          // Whether success or not, start polling to check for completion
+          if (!retryErrorFatal) {
+            startPolling();
+          }
+        });
+      } else if (!retryErrorFatal) {
+        // No auto-retry needed, just start polling
         startPolling();
       }
     };
 
     checkOrderStatus();
-  }, [caseId, fetchOrderStatus, startPolling]);
+  }, [caseId, fetchOrderStatus, startPolling, retryFulfillment, retryErrorFatal]);
 
   // Track purchase conversion when payment is confirmed via DB
   useEffect(() => {
@@ -806,13 +880,99 @@ export default function CaseDetailPage() {
           </div>
         )}
 
+        {/* Fatal Error State - Cannot retry */}
+        {orderStatus?.paid && retryErrorFatal && !orderStatus.has_final_documents && (
+          <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
+            <div className="flex items-start gap-3">
+              <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Unable to generate documents</h3>
+                <p className="text-gray-700 mt-1">
+                  {retryError}
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">
+                  Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Link href="/contact">
+                    <Button variant="primary">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Retryable Error State */}
+        {orderStatus?.paid && !retryErrorFatal && retryError && !orderStatus.has_final_documents && !isRetrying && (
+          <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
+            <div className="flex items-start gap-3">
+              <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">
+                  We're having trouble generating your documents
+                </h3>
+                <p className="text-gray-700 mt-1">
+                  {retryError}
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    Retry Generation
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Fulfillment Failed State (from order status) */}
+        {orderStatus?.paid && !retryErrorFatal && !retryError && orderStatus.fulfillment_status === 'failed' && !orderStatus.has_final_documents && !isRetrying && (
+          <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
+            <div className="flex items-start gap-3">
+              <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">
+                  We're having trouble generating your documents
+                </h3>
+                <p className="text-gray-700 mt-1">
+                  {orderStatus.fulfillment_error || 'Document generation failed. Please try again.'}
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    Retry Generation
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Finalizing Documents - shown when paid but documents still generating */}
-        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && (
+        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus.fulfillment_status !== 'failed' && (
           <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-charcoal">Finalizing your documents...</h3>
+                <h3 className="text-xl font-semibold text-charcoal">
+                  {isRetrying ? 'Retrying document generation...' : 'Finalizing your documents...'}
+                </h3>
                 <p className="text-gray-700 mt-1">
                   Your payment has been received. We're generating your final documents now. This usually takes just a few seconds.
                 </p>
@@ -822,7 +982,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Polling Timeout - shown when documents didn't arrive in time */}
-        {orderStatus?.paid && !orderStatus.has_final_documents && pollingTimedOut && (
+        {orderStatus?.paid && !orderStatus.has_final_documents && pollingTimedOut && !retryErrorFatal && (
           <div className="mb-6 p-6 rounded-lg border border-warning/20 bg-warning/5">
             <div className="flex items-start gap-3">
               <div className="text-warning text-2xl">⏳</div>
@@ -830,11 +990,17 @@ export default function CaseDetailPage() {
                 <h3 className="text-xl font-semibold text-charcoal">Still generating your documents</h3>
                 <p className="text-gray-700 mt-1">
                   Your payment was successful, but document generation is taking longer than expected.
-                  Please try refreshing the page. If documents don't appear within a few minutes,
-                  contact support with your Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                  You can try retrying or refresh the page.
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">
+                  Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
                 </p>
                 <div className="mt-4 flex gap-3">
-                  <Button variant="primary" onClick={() => window.location.reload()}>
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    {isRetrying ? 'Retrying...' : 'Retry Generation'}
+                  </Button>
+                  <Button variant="outline" onClick={() => window.location.reload()}>
                     Refresh Page
                   </Button>
                   <Link href="/contact">
