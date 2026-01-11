@@ -17,7 +17,7 @@ import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
 export interface NoticeOnlyDocument {
   title: string;
-  category: 'notice' | 'guidance' | 'checklist';
+  category: 'notice' | 'guidance' | 'checklist' | 'schedule';
   pdf?: Buffer;
   html?: string;
 }
