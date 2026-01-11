@@ -515,7 +515,7 @@ export default function CaseDetailPage() {
     if (!caseDetails) return;
 
     const confirmed = confirm(
-      'This will regenerate the document with the current case data. Any unsaved changes will be lost. Continue?'
+      'This will regenerate all your purchased documents with the current case data. Continue?'
     );
 
     if (!confirmed) return;
@@ -524,25 +524,34 @@ export default function CaseDetailPage() {
     setMessage(null);
 
     try {
-      const response = await fetch('/api/documents/generate', {
+      const response = await fetch('/api/orders/regenerate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
-          document_type: caseDetails.case_type,
-          is_preview: false,
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to regenerate document');
+        // Handle specific error types
+        if (data.error === 'EDIT_WINDOW_EXPIRED') {
+          throw new Error(data.message || 'The 30-day editing period has ended. Downloads remain available.');
+        }
+        throw new Error(data.message || data.error || 'Failed to regenerate documents');
       }
 
-      setMessage({ type: 'success', text: 'Document regenerated successfully!' });
-      fetchCaseDocuments();
+      setMessage({
+        type: 'success',
+        text: `Successfully regenerated ${data.regenerated_count || 'your'} document(s)!`,
+      });
+
+      // Refresh documents and order status
+      await Promise.all([fetchCaseDocuments(), fetchOrderStatus()]);
     } catch (err: any) {
-      console.error('Error regenerating document:', err);
-      setMessage({ type: 'error', text: err.message || 'Failed to regenerate document' });
+      console.error('Error regenerating documents:', err);
+      setMessage({ type: 'error', text: err.message || 'Failed to regenerate documents' });
     } finally {
       setIsRegenerating(false);
     }
@@ -768,7 +777,7 @@ export default function CaseDetailPage() {
                   onClick={handleRegenerateDocument}
                   disabled={isRegenerating || (orderStatus?.paid && !orderStatus?.edit_window_open)}
                 >
-                  {isRegenerating ? 'Regenerating...' : 'Regenerate Document'}
+                  {isRegenerating ? 'Regenerating...' : 'Regenerate Documents'}
                 </Button>
                 {documents.length > 0 && (
                   <Link href={`/wizard/preview/${caseId}`}>
