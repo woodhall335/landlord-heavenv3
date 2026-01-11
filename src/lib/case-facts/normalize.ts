@@ -9,6 +9,10 @@ import type { WizardFacts, CaseFacts, PartyDetails } from './schema';
 import { createEmptyCaseFacts } from './schema';
 import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
 import { normalizeJurisdiction } from '../types/jurisdiction';
+import {
+  SECTION8_GROUND_DEFINITIONS,
+  type Section8GroundDefinition,
+} from '../grounds/section8-ground-definitions';
 
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
@@ -2287,94 +2291,7 @@ function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): nu
   return maxPeriod;
 }
 
-/**
- * Official Section 8 ground definitions
- */
-const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
-  code: number;
-  title: string;
-  mandatory: boolean;
-  legal_basis: string;
-  full_text: string;
-}> = {
-  1: {
-    code: 1,
-    title: 'Landlord previously occupied as only or principal home',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 1',
-    full_text: 'Not later than the beginning of the tenancy, the landlord gave notice that possession might be recovered on this ground; and at some time before the beginning of the tenancy, the landlord (or one of joint landlords) occupied the dwelling-house as his only or principal home.',
-  },
-  2: {
-    code: 2,
-    title: 'Mortgage lender requires possession',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 2',
-    full_text: 'The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and the mortgagee is entitled to exercise a power of sale and requires possession for the purpose of disposing of the dwelling-house.',
-  },
-  8: {
-    code: 8,
-    title: 'Serious rent arrears (at least 8 weeks or 2 months)',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
-    full_text: 'At the date of the service of the notice and at the date of the hearing, at least eight weeks\' rent is unpaid if the rent is payable weekly or fortnightly, at least two months\' rent is unpaid if the rent is payable monthly, at least one quarter\'s rent is more than three months in arrears if the rent is payable quarterly, or at least three months\' rent is more than three months in arrears if the rent is payable yearly.',
-  },
-  10: {
-    code: 10,
-    title: 'Some rent arrears (unpaid at notice and hearing)',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 10',
-    full_text: 'Some rent lawfully due from the tenant is unpaid on the date on which proceedings for possession are begun and was in arrears at the date of service of the notice.',
-  },
-  11: {
-    code: 11,
-    title: 'Persistent delay in paying rent',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 11',
-    full_text: 'Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.',
-  },
-  12: {
-    code: 12,
-    title: 'Breach of tenancy obligation',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 12',
-    full_text: 'Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.',
-  },
-  13: {
-    code: 13,
-    title: 'Deterioration of dwelling',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 13',
-    full_text: 'The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house.',
-  },
-  14: {
-    code: 14,
-    title: 'Nuisance or annoyance to neighbours',
-    mandatory: false,  // Note: Ground 14 is discretionary, NOT mandatory
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14',
-    full_text: 'The tenant or a person residing in or visiting the dwelling-house has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality, or has been convicted of using the dwelling-house or allowing it to be used for immoral or illegal purposes, or an arrestable offence committed in, or in the locality of, the dwelling-house.',
-  },
-  '14A': {
-    code: 14,
-    title: 'Domestic violence',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14A',
-    full_text: 'The dwelling-house was occupied by a married couple or a couple living together as husband and wife and one or both of the partners is a tenant of the dwelling-house, and the partner who is not a tenant has left because of violence or threats of violence by the other partner.',
-  },
-  15: {
-    code: 15,
-    title: 'Deterioration of furniture',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 15',
-    full_text: 'The condition of any furniture provided for use under the tenancy has deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house.',
-  },
-  17: {
-    code: 17,
-    title: 'False statement induced grant of tenancy',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 17',
-    full_text: 'The tenancy was granted on the basis of a false statement knowingly or recklessly made by the tenant or a person acting at the tenant\'s instigation.',
-  },
-};
+// SECTION8_GROUND_DEFINITIONS is now imported from '@/lib/grounds/section8-ground-definitions'
 
 /**
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
@@ -2445,7 +2362,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
   };
 
   const renderParticulars = (
-    groundDef: (typeof SECTION8_GROUND_DEFINITIONS)[keyof typeof SECTION8_GROUND_DEFINITIONS] | undefined,
+    groundDef: Section8GroundDefinition | undefined,
     groundCode: string | number | null,
   ) => {
     const particularsEntry = pickParticularEntry(groundCode || '');
