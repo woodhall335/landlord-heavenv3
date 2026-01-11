@@ -634,7 +634,10 @@ export default function CaseDetailPage() {
   };
 
   const handleContinueWizard = () => {
-    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${caseDetails?.jurisdiction}&case_id=${caseId}`);
+    const params = getProductAndParams();
+    const product = params?.product || '';
+    const productParam = product ? `&product=${product}` : '';
+    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${caseDetails?.jurisdiction}&case_id=${caseId}${productParam}`);
   };
 
   const handleDeleteCase = async () => {
