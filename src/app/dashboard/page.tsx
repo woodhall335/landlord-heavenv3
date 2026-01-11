@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
 import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine } from 'react-icons/ri';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
+import type { OrderBySessionResponse } from '@/app/api/orders/by-session/route';
 
 interface Case {
   id: string;
@@ -36,6 +37,7 @@ interface Document {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isLoading: authLoading, isAuthenticated, user } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -43,11 +45,34 @@ export default function DashboardPage() {
   const [isLoadingData, setIsLoadingData] = useState(false);
   const statsSectionRef = useRef<HTMLDivElement>(null);
 
+  // Session ID fallback redirect handling
+  const sessionId = searchParams.get('session_id');
+  const [sessionOrder, setSessionOrder] = useState<OrderBySessionResponse | null>(null);
+  const [sessionOrderLoading, setSessionOrderLoading] = useState(false);
+
   const handleScrollToStats = () => {
     setTimeout(() => {
       statsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   };
+
+  // Fetch order by session_id if present
+  const fetchSessionOrder = useCallback(async () => {
+    if (!sessionId || !isAuthenticated) return;
+
+    setSessionOrderLoading(true);
+    try {
+      const response = await fetch(`/api/orders/by-session?session_id=${encodeURIComponent(sessionId)}`);
+      if (response.ok) {
+        const data: OrderBySessionResponse = await response.json();
+        setSessionOrder(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch session order:', error);
+    } finally {
+      setSessionOrderLoading(false);
+    }
+  }, [sessionId, isAuthenticated]);
 
   const fetchDashboardData = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -85,8 +110,9 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
       fetchDashboardData();
+      fetchSessionOrder();
     }
-  }, [authLoading, isAuthenticated, fetchDashboardData]);
+  }, [authLoading, isAuthenticated, fetchDashboardData, fetchSessionOrder]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -163,6 +189,56 @@ export default function DashboardPage() {
       />
 
       <Container size="large" className="py-8">
+        {/* Session Order Banner - shown when redirected from Stripe with session_id */}
+        {sessionId && !sessionOrderLoading && sessionOrder && (
+          <>
+            {sessionOrder.found && sessionOrder.paid && sessionOrder.case_id ? (
+              <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
+                <div className="flex items-start gap-3">
+                  <div className="text-success text-2xl">✔</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-charcoal">Payment confirmed</h3>
+                    <p className="text-gray-700 mt-1">
+                      Your payment was successful. View your case to download your documents.
+                    </p>
+                    <div className="mt-4">
+                      <Link href={`/dashboard/cases/${sessionOrder.case_id}`}>
+                        <Button variant="primary">
+                          View Your Case
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : sessionOrder.found && !sessionOrder.paid ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Payment pending</h3>
+                    <p className="text-gray-600 mt-1">
+                      Your payment is being processed. Please check back shortly or contact support if you believe this is an error.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : !sessionOrder.found ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Session not found</h3>
+                    <p className="text-gray-600 mt-1">
+                      We couldn't find a purchase associated with this session. If you recently made a payment, it may still be processing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
+
         {/* Stats Overview */}
         {stats && (
           <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">

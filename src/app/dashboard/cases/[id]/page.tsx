@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
+import type { OrderStatusResponse } from '@/app/api/orders/status/route';
 
 interface CaseDetails {
   id: string;
@@ -38,13 +39,18 @@ interface Document {
   created_at: string;
 }
 
+// Polling configuration
+const POLL_INTERVAL_MS = 2500; // 2.5 seconds
+const POLL_TIMEOUT_MS = 60000; // 60 seconds max polling
+
 export default function CaseDetailPage() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const caseId = params.id as string;
-  const paymentStatus = searchParams.get('payment');
-  const paymentSuccess = paymentStatus === 'success';
+
+  // payment=success only means "arrived from checkout", not proof of payment
+  const arrivedFromCheckout = searchParams.get('payment') === 'success';
 
   const [caseDetails, setCaseDetails] = useState<CaseDetails | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -62,6 +68,13 @@ export default function CaseDetailPage() {
   >([]);
   const [askLoading, setAskLoading] = useState(false);
   const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
+
+  // Order status state (DB-backed, authoritative)
+  const [orderStatus, setOrderStatus] = useState<OrderStatusResponse | null>(null);
+  const [isPolling, setIsPolling] = useState(false);
+  const [pollingTimedOut, setPollingTimedOut] = useState(false);
+  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollStartTimeRef = useRef<number | null>(null);
 
   const handleDocumentDownload = async (docId: string) => {
     setDownloadingDocId(docId);
@@ -109,6 +122,66 @@ export default function CaseDetailPage() {
     }
   }, [caseId]);
 
+  // Fetch order status from DB (authoritative source)
+  const fetchOrderStatus = useCallback(async (): Promise<OrderStatusResponse | null> => {
+    try {
+      const response = await fetch(`/api/orders/status?case_id=${caseId}`);
+      if (response.ok) {
+        const data: OrderStatusResponse = await response.json();
+        setOrderStatus(data);
+        return data;
+      }
+    } catch (err) {
+      console.error('Failed to fetch order status:', err);
+    }
+    return null;
+  }, [caseId]);
+
+  // Stop polling and cleanup
+  const stopPolling = useCallback(() => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+    setIsPolling(false);
+  }, []);
+
+  // Start polling for document fulfillment
+  const startPolling = useCallback(() => {
+    if (pollIntervalRef.current) return; // Already polling
+
+    setIsPolling(true);
+    setPollingTimedOut(false);
+    pollStartTimeRef.current = Date.now();
+
+    pollIntervalRef.current = setInterval(async () => {
+      // Check timeout
+      const elapsed = Date.now() - (pollStartTimeRef.current || 0);
+      if (elapsed >= POLL_TIMEOUT_MS) {
+        stopPolling();
+        setPollingTimedOut(true);
+        return;
+      }
+
+      // Fetch latest status
+      const status = await fetchOrderStatus();
+      if (status?.has_final_documents) {
+        stopPolling();
+        // Refresh documents list
+        fetchCaseDocuments();
+      }
+    }, POLL_INTERVAL_MS);
+  }, [fetchOrderStatus, stopPolling, fetchCaseDocuments]);
+
+  // Cleanup polling on unmount or navigation
+  useEffect(() => {
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+      }
+    };
+  }, []);
+
   const runAskHeaven = useCallback(
     async (question?: string) => {
       if (!caseId) return;
@@ -152,6 +225,7 @@ export default function CaseDetailPage() {
     [caseId],
   );
 
+  // Initial data fetch
   useEffect(() => {
     if (!caseId) return;
 
@@ -160,31 +234,48 @@ export default function CaseDetailPage() {
     runAskHeaven();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
 
-  // Track purchase conversion when payment is successful
+  // Fetch order status and start polling if needed
   useEffect(() => {
-    if (paymentSuccess && caseDetails) {
+    if (!caseId) return;
+
+    const checkOrderStatus = async () => {
+      const status = await fetchOrderStatus();
+
+      // If paid but no final documents, start polling
+      if (status?.paid && !status.has_final_documents) {
+        startPolling();
+      }
+    };
+
+    checkOrderStatus();
+  }, [caseId, fetchOrderStatus, startPolling]);
+
+  // Track purchase conversion when payment is confirmed via DB
+  useEffect(() => {
+    if (orderStatus?.paid && caseDetails) {
       // Prevent duplicate tracking by checking sessionStorage
       const purchaseKey = `purchase_tracked_${caseId}`;
       if (sessionStorage.getItem(purchaseKey)) return;
 
       // Get product info from case type
       const productName = getCaseTypeLabel(caseDetails.case_type);
+      const amount = orderStatus.total_amount || 29.99;
+      const currency = orderStatus.currency || 'GBP';
 
       // Track purchase in analytics (GA4 + FB Pixel)
-      // Note: We use case_id as transaction_id, value is approximate
-      trackPurchase(caseId, 29.99, 'GBP', [
+      trackPurchase(caseId, amount, currency, [
         {
           item_id: caseDetails.case_type,
           item_name: productName,
           item_category: 'legal_document',
-          price: 29.99,
+          price: amount,
           quantity: 1,
         },
       ]);
 
       sessionStorage.setItem(purchaseKey, 'true');
     }
-  }, [paymentSuccess, caseDetails, caseId]);
+  }, [orderStatus?.paid, orderStatus?.total_amount, orderStatus?.currency, caseDetails, caseId]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -552,8 +643,8 @@ export default function CaseDetailPage() {
           </div>
         )}
 
-        {/* Payment Success Summary */}
-        {paymentSuccess && (
+        {/* Payment Success Summary - DB-backed status */}
+        {orderStatus?.paid && orderStatus.has_final_documents && (
           <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
             <div className="flex items-start gap-3">
               <div className="text-success text-2xl">✔</div>
@@ -566,26 +657,22 @@ export default function CaseDetailPage() {
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
                     <h4 className="font-semibold text-charcoal mb-3">Documents in your pack</h4>
-                    {documents.length === 0 ? (
-                      <p className="text-gray-600 text-sm">Generating your documents...</p>
-                    ) : (
-                      <ul className="space-y-2 text-sm text-gray-800">
-                        {documents.map((doc) => (
-                          <li key={doc.id} className="flex items-center justify-between gap-2">
-                            <span className="truncate">{doc.document_title}</span>
-                            {doc.pdf_url && (
-                              <button
-                                onClick={() => handleDocumentDownload(doc.id)}
-                                disabled={downloadingDocId === doc.id}
-                                className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
-                              >
-                                {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
-                              </button>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    <ul className="space-y-2 text-sm text-gray-800">
+                      {documents.map((doc) => (
+                        <li key={doc.id} className="flex items-center justify-between gap-2">
+                          <span className="truncate">{doc.document_title}</span>
+                          {doc.pdf_url && (
+                            <button
+                              onClick={() => handleDocumentDownload(doc.id)}
+                              disabled={downloadingDocId === doc.id}
+                              className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
+                            >
+                              {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
+                            </button>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -596,6 +683,46 @@ export default function CaseDetailPage() {
                       ))}
                     </ol>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Finalizing Documents - shown when paid but documents still generating */}
+        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && (
+          <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Finalizing your documents...</h3>
+                <p className="text-gray-700 mt-1">
+                  Your payment has been received. We're generating your final documents now. This usually takes just a few seconds.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Polling Timeout - shown when documents didn't arrive in time */}
+        {orderStatus?.paid && !orderStatus.has_final_documents && pollingTimedOut && (
+          <div className="mb-6 p-6 rounded-lg border border-warning/20 bg-warning/5">
+            <div className="flex items-start gap-3">
+              <div className="text-warning text-2xl">⏳</div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Still generating your documents</h3>
+                <p className="text-gray-700 mt-1">
+                  Your payment was successful, but document generation is taking longer than expected.
+                  Please try refreshing the page. If documents don't appear within a few minutes,
+                  contact support with your Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={() => window.location.reload()}>
+                    Refresh Page
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">Contact Support</Button>
+                  </Link>
                 </div>
               </div>
             </div>
