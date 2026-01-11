@@ -37,6 +37,7 @@ import {
 } from './arrears-schedule-mapper';
 import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
+import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 
 // ============================================================================
 // TYPES
@@ -1050,6 +1051,12 @@ export async function generateNoticeOnlyPack(
   }
 
   console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
+
+  // Normalize Section 8 facts BEFORE validation
+  // This backfills missing canonical fields from legacy/alternative locations:
+  // - arrears_total from issues.rent_arrears.total_arrears
+  // - ground_particulars.ground_8.summary from section8_details
+  normalizeSection8Facts(wizardFacts || {});
 
   const selectedGroundCodes = extractGroundCodes(
     wizardFacts?.section8_grounds || wizardFacts?.grounds || []
