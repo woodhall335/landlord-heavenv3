@@ -43,8 +43,8 @@ const EXPECTED_NOTICE_PERIODS: Record<number, number> = {
   7: 60,   // 2 months - death of tenant (mandatory)
   8: 14,   // 2 weeks - serious rent arrears (mandatory)
   9: 60,   // 2 months - alternative accommodation (discretionary)
-  10: 60,  // 2 MONTHS - some rent arrears (discretionary, NOT 14 days!)
-  11: 60,  // 2 MONTHS - persistent delay (discretionary, NOT 14 days!)
+  10: 14,  // 2 weeks - some rent arrears (discretionary)
+  11: 14,  // 2 weeks - persistent delay (discretionary)
   12: 14,  // 2 weeks - breach of tenancy (discretionary)
   13: 14,  // 2 weeks - deterioration of dwelling (discretionary)
   14: 14,  // 2 weeks (default) - nuisance/ASB (discretionary)
@@ -66,41 +66,41 @@ describe('Config Consistency - Single Source of Truth', () => {
     jsonConfig = JSON.parse(readFileSync(jsonPath, 'utf-8'));
   });
 
-  describe('Ground 10 (Some Rent Arrears) = 60 days', () => {
-    it('TypeScript calculator returns 60 days', () => {
+  describe('Ground 10 (Some Rent Arrears) = 14 days', () => {
+    it('TypeScript calculator returns 14 days', () => {
       const result = calculateSection8NoticePeriod({
         grounds: [{ code: 10, mandatory: false }],
       });
-      expect(result.minimum_legal_days).toBe(60);
+      expect(result.minimum_legal_days).toBe(14);
     });
 
-    it('YAML decision_rules.yaml has 60 days', () => {
+    it('YAML decision_rules.yaml has 14 days', () => {
       const ground10 = yamlConfig.section_8_grounds.discretionary.ground_10;
-      expect(ground10.notice_period_days).toBe(60);
+      expect(ground10.notice_period_days).toBe(14);
     });
 
-    it('JSON eviction_grounds.json has 60 days', () => {
+    it('JSON eviction_grounds.json has 14 days', () => {
       const ground10 = jsonConfig.grounds.ground_10;
-      expect(ground10.notice_period_days).toBe(60);
+      expect(ground10.notice_period_days).toBe(14);
     });
   });
 
-  describe('Ground 11 (Persistent Delay) = 60 days', () => {
-    it('TypeScript calculator returns 60 days', () => {
+  describe('Ground 11 (Persistent Delay) = 14 days', () => {
+    it('TypeScript calculator returns 14 days', () => {
       const result = calculateSection8NoticePeriod({
         grounds: [{ code: 11, mandatory: false }],
       });
-      expect(result.minimum_legal_days).toBe(60);
+      expect(result.minimum_legal_days).toBe(14);
     });
 
-    it('YAML decision_rules.yaml has 60 days', () => {
+    it('YAML decision_rules.yaml has 14 days', () => {
       const ground11 = yamlConfig.section_8_grounds.discretionary.ground_11;
-      expect(ground11.notice_period_days).toBe(60);
+      expect(ground11.notice_period_days).toBe(14);
     });
 
-    it('JSON eviction_grounds.json has 60 days', () => {
+    it('JSON eviction_grounds.json has 14 days', () => {
       const ground11 = jsonConfig.grounds.ground_11;
-      expect(ground11.notice_period_days).toBe(60);
+      expect(ground11.notice_period_days).toBe(14);
     });
   });
 
@@ -136,24 +136,35 @@ describe('Config Consistency - Single Source of Truth', () => {
   });
 
   describe('Mixed grounds use maximum notice period', () => {
-    it('Ground 8 (14 days) + Ground 10 (60 days) = 60 days', () => {
+    it('Ground 8 (14 days) + Ground 10 (14 days) = 14 days', () => {
       const result = calculateSection8NoticePeriod({
         grounds: [
           { code: 8, mandatory: true },
           { code: 10, mandatory: false },
         ],
       });
-      expect(result.minimum_legal_days).toBe(60);
+      expect(result.minimum_legal_days).toBe(14);
     });
 
-    it('Ground 8 (14 days) + Ground 11 (60 days) = 60 days', () => {
+    it('Ground 8 (14 days) + Ground 11 (14 days) = 14 days', () => {
       const result = calculateSection8NoticePeriod({
         grounds: [
           { code: 8, mandatory: true },
           { code: 11, mandatory: false },
         ],
       });
-      expect(result.minimum_legal_days).toBe(60);
+      expect(result.minimum_legal_days).toBe(14);
+    });
+
+    it('Ground 8 + Ground 10 + Ground 11 = 14 days (all arrears grounds)', () => {
+      const result = calculateSection8NoticePeriod({
+        grounds: [
+          { code: 8, mandatory: true },
+          { code: 10, mandatory: false },
+          { code: 11, mandatory: false },
+        ],
+      });
+      expect(result.minimum_legal_days).toBe(14);
     });
   });
 });

@@ -28,8 +28,8 @@ export const SECTION8_GROUND_NOTICE_PERIODS: Record<string, number> = {
 
   // Discretionary grounds
   '9': 60, // 2 months - suitable alternative accommodation
-  '10': 60, // 2 MONTHS - some rent arrears (NOT 2 weeks!)
-  '11': 60, // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  '10': 14, // 2 weeks - some rent arrears
+  '11': 14, // 2 weeks - persistent delay in paying rent
   '12': 14, // 2 weeks - breach of tenancy obligation
   '13': 14, // 2 weeks - deterioration of dwelling
   '14': 14, // 2 weeks (default) - nuisance/annoyance
