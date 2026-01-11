@@ -4,7 +4,7 @@
  * Smoke tests to ensure PDFs don't contain raw markdown or [object Object] artifacts
  */
 
-import { compileTemplate, safeText, loadTemplate, isFullHtmlDocument } from '../generator';
+import { compileTemplate, safeText, loadTemplate, isFullHtmlDocument, generateDocument } from '../generator';
 import { generateSection8Notice } from '../section8-generator';
 import { generateNoticeToLeave } from '../scotland/notice-to-leave-generator';
 
@@ -492,5 +492,193 @@ describe('Section 8 Form 3 Compliance - Statutory Text', () => {
 
     // Custom statutory text should be preserved
     expect(result.html).toContain(customStatutoryText);
+  });
+});
+
+/**
+ * Section 21 Form 6A Compliance Tests - Prescribed Notes
+ *
+ * These tests verify that Section 21 Form 6A notices include the required
+ * prescribed notes as mandated by the Assured Shorthold Tenancy Notices
+ * and Prescribed Requirements (England) Regulations 2015 (as amended 2021).
+ */
+describe('Section 21 Form 6A Compliance - Prescribed Notes', () => {
+  test('Form 6A includes prescribed "Notes on the Notice" section', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St, London, SW1A 1AA',
+        property_address: '456 Rental Property, London, W1A 2BB',
+        notice_expiry_date: '2025-03-15',
+        service_date: '2025-01-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Must contain "Notes on the Notice" header per prescribed form
+    expect(section21Doc.html).toContain('Notes on the Notice');
+  });
+
+  test('Form 6A includes breathing space guidance', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Breathing space debtor guidance required since June 2021
+    expect(section21Doc.html).toContain('breathing space');
+    expect(section21Doc.html).toContain('debt advice provider');
+  });
+
+  test('Form 6A includes two-month notice period statement', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Prescribed note about two months' notice
+    expect(section21Doc.html).toContain('two months');
+    expect(section21Doc.html).toContain('notice');
+  });
+
+  test('Form 6A includes court order requirement statement', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Prescribed note that landlord must get court order
+    expect(section21Doc.html).toContain('order for possession from the court');
+  });
+
+  test('Form 6A includes bailiff eviction statement', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Prescribed note about bailiff and 14 days notice
+    expect(section21Doc.html).toContain('bailiff');
+    expect(section21Doc.html).toContain('14 days');
+  });
+
+  test('Form 6A includes advice signposting', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Prescribed advice signposting
+    expect(section21Doc.html).toContain('citizens');
+    expect(section21Doc.html).toContain('solicitor');
+    expect(section21Doc.html).toContain('Shelter');
+  });
+
+  test('Form 6A includes homelessness local authority guidance', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Homelessness guidance per 2021 update
+    expect(section21Doc.html).toContain('homelessness');
+    expect(section21Doc.html).toContain('local authority');
+  });
+
+  test('Form 6A has correct 3-section structure', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+        service_date: '2025-01-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // Section 1: Tenant name (To:)
+    expect(section21Doc.html).toMatch(/section-number[^>]*>1</);
+
+    // Section 2: Date and property
+    expect(section21Doc.html).toMatch(/section-number[^>]*>2</);
+
+    // Section 3: Landlord signature
+    expect(section21Doc.html).toMatch(/<span class="num">3<\/span>/);
+
+    // Should NOT have a Section 4
+    expect(section21Doc.html).not.toMatch(/<span class="num">4<\/span>/);
+  });
+
+  test('Form 6A includes 6-month validity period', async () => {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+      data: {
+        tenant_full_name: 'Test Tenant',
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '123 Landlord St',
+        property_address: '456 Rental Ave',
+        notice_expiry_date: '2025-03-15',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+
+    // 6-month validity period for court application
+    expect(section21Doc.html).toContain('6 months');
   });
 });
