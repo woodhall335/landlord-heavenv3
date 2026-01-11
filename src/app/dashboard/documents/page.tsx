@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiFileTextLine, RiDownloadLine, RiDeleteBinLine } from 'react-icons/ri';
+import { downloadDocument } from '@/lib/documents/download';
 
 interface Document {
   id: string;
@@ -39,6 +40,7 @@ export default function DocumentsPage() {
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortBy>('newest');
   const [showPreviewOnly, setShowPreviewOnly] = useState(false);
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDocuments();
@@ -51,7 +53,8 @@ export default function DocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('/api/documents');
+      // Fetch all documents (preview + final) and disable dedup to show full history
+      const response = await fetch('/api/documents?is_preview=all&latest_per_type=false');
 
       if (response.ok) {
         const data = await response.json();
@@ -119,12 +122,17 @@ export default function DocumentsPage() {
       return;
     }
 
+    setDownloadingDocId(doc.id);
     try {
-      // Open in new tab for now - in production this would trigger a download
-      window.open(doc.pdf_url, '_blank');
+      const success = await downloadDocument(doc.id);
+      if (!success) {
+        alert('Failed to download document. Please try again.');
+      }
     } catch (error) {
       console.error('Failed to download document:', error);
       alert('Failed to download document');
+    } finally {
+      setDownloadingDocId(null);
     }
   };
 
@@ -342,9 +350,14 @@ export default function DocumentsPage() {
                         variant="secondary"
                         size="small"
                         onClick={() => handleDownload(doc)}
+                        disabled={downloadingDocId === doc.id}
                       >
-                        <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
-                        Download
+                        {downloadingDocId === doc.id ? (
+                          <div className="w-4 h-4 mr-1 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
+                        )}
+                        {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
                       </Button>
                     )}
                     <button

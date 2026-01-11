@@ -13,8 +13,9 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
+import { downloadDocument } from '@/lib/documents/download';
 
 interface CaseDetails {
   id: string;
@@ -33,7 +34,7 @@ interface Document {
   document_title: string;
   document_type: string;
   is_preview: boolean;
-  file_path: string | null;
+  pdf_url: string | null;
   created_at: string;
 }
 
@@ -60,6 +61,22 @@ export default function CaseDetailPage() {
     { role: 'user' | 'assistant'; content: string; timestamp: number }[]
   >([]);
   const [askLoading, setAskLoading] = useState(false);
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
+
+  const handleDocumentDownload = async (docId: string) => {
+    setDownloadingDocId(docId);
+    try {
+      const success = await downloadDocument(docId);
+      if (!success) {
+        alert('Failed to download document. Please try again.');
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Failed to download document. Please try again.');
+    } finally {
+      setDownloadingDocId(null);
+    }
+  };
 
   const fetchCaseDetails = useCallback(async () => {
     try {
@@ -556,15 +573,14 @@ export default function CaseDetailPage() {
                         {documents.map((doc) => (
                           <li key={doc.id} className="flex items-center justify-between gap-2">
                             <span className="truncate">{doc.document_title}</span>
-                            {doc.file_path && (
-                              <a
-                                href={doc.file_path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:text-primary-dark font-semibold"
+                            {doc.pdf_url && (
+                              <button
+                                onClick={() => handleDocumentDownload(doc.id)}
+                                disabled={downloadingDocId === doc.id}
+                                className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
                               >
-                                Download
-                              </a>
+                                {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
+                              </button>
                             )}
                           </li>
                         ))}
@@ -758,15 +774,19 @@ export default function CaseDetailPage() {
                             Preview
                           </Badge>
                         )}
-                        {doc.file_path && (
-                          <a
-                            href={doc.file_path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:text-primary-dark"
+                        {doc.pdf_url && (
+                          <button
+                            onClick={() => handleDocumentDownload(doc.id)}
+                            disabled={downloadingDocId === doc.id}
+                            className="text-primary hover:text-primary-dark disabled:opacity-50"
+                            title="Download document"
                           >
-                            <RiExternalLinkLine className="w-5 h-5 text-primary" />
-                          </a>
+                            {downloadingDocId === doc.id ? (
+                              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <RiDownloadLine className="w-5 h-5" />
+                            )}
+                          </button>
                         )}
                       </div>
                     </div>
