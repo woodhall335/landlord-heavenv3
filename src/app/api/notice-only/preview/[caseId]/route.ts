@@ -690,6 +690,50 @@ export async function GET(
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] England compliance checklist generation failed:', err);
       }
+
+      // 5. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
+      if (selected_route === 'section_8') {
+        const noticeValidation = validateNoticeOnlyCase(wizardFacts);
+        const arrearsItems = wizardFacts.arrears_items || [];
+
+        if (noticeValidation.includesArrearsGrounds && arrearsItems.length > 0) {
+          console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule (arrears grounds detected)');
+          try {
+            const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+            const arrearsScheduleData = getArrearsScheduleData({
+              arrears_items: arrearsItems,
+              total_arrears: wizardFacts.total_arrears || null,
+              rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+              rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+              include_schedule: true,
+            });
+
+            if (arrearsScheduleData.arrears_schedule.length > 0) {
+              const scheduleDoc = await generateDocument({
+                templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+                data: {
+                  claimant_reference: caseId,
+                  arrears_schedule: arrearsScheduleData.arrears_schedule,
+                  arrears_total: arrearsScheduleData.arrears_total,
+                },
+                outputFormat: 'pdf',
+              });
+
+              if (scheduleDoc.pdf) {
+                documents.push({
+                  title: 'Rent Schedule / Arrears Statement',
+                  category: 'schedule',
+                  pdf: scheduleDoc.pdf,
+                });
+                console.log('[NOTICE-PREVIEW-API] Rent Schedule generated successfully');
+              }
+            }
+          } catch (err) {
+            console.error('[NOTICE-PREVIEW-API] Rent Schedule generation failed:', err);
+          }
+        }
+      }
     }
 
     // ===========================================================================
@@ -922,6 +966,57 @@ export async function GET(
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] Wales compliance checklist generation failed:', err);
       }
+
+      // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
+      if (selected_route === 'wales_fault_based') {
+        const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+        const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+        const isRentArrearsCase =
+          breachType === 'rent_arrears' ||
+          breachType === 'arrears' ||
+          faultBasedSection.includes('Section 157') ||
+          faultBasedSection.includes('Section 159');
+
+        const arrearsItems = wizardFacts.arrears_items || [];
+
+        if (isRentArrearsCase && arrearsItems.length > 0) {
+          console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Wales fault-based rent arrears');
+          try {
+            const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+            const arrearsScheduleData = getArrearsScheduleData({
+              arrears_items: arrearsItems,
+              total_arrears: wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || null,
+              rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+              rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+              include_schedule: true,
+            });
+
+            if (arrearsScheduleData.arrears_schedule.length > 0) {
+              const scheduleDoc = await generateDocument({
+                templatePath: 'uk/wales/templates/money_claims/schedule_of_arrears.hbs',
+                data: {
+                  claimant_reference: caseId,
+                  arrears_schedule: arrearsScheduleData.arrears_schedule,
+                  arrears_total: arrearsScheduleData.arrears_total,
+                },
+                outputFormat: 'pdf',
+              });
+
+              if (scheduleDoc.pdf) {
+                documents.push({
+                  title: 'Rent Schedule / Arrears Statement (Wales)',
+                  category: 'schedule',
+                  pdf: scheduleDoc.pdf,
+                });
+                console.log('[NOTICE-PREVIEW-API] Wales Rent Schedule generated successfully');
+              }
+            }
+          } catch (err) {
+            console.error('[NOTICE-PREVIEW-API] Wales Rent Schedule generation failed:', err);
+          }
+        }
+      }
     }
 
     // ===========================================================================
@@ -1117,6 +1212,48 @@ export async function GET(
         }
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] Scotland compliance checklist generation failed:', err);
+      }
+
+      // 5. Generate Rent Schedule for Scotland Ground 1 (rent arrears)
+      // Note: hasGround1 is already computed above in Scotland date calculation section
+      const scotlandArrearsItems = wizardFacts.arrears_items || [];
+
+      if (hasGround1 && scotlandArrearsItems.length > 0) {
+        console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Scotland Ground 1 (rent arrears)');
+        try {
+          const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+          const scotlandArrearsData = getArrearsScheduleData({
+            arrears_items: scotlandArrearsItems,
+            total_arrears: wizardFacts.total_arrears || wizardFacts.arrears_amount || null,
+            rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+            rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+            include_schedule: true,
+          });
+
+          if (scotlandArrearsData.arrears_schedule.length > 0) {
+            const scheduleDoc = await generateDocument({
+              templatePath: 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs',
+              data: {
+                claimant_reference: caseId,
+                arrears_schedule: scotlandArrearsData.arrears_schedule,
+                arrears_total: scotlandArrearsData.arrears_total,
+              },
+              outputFormat: 'pdf',
+            });
+
+            if (scheduleDoc.pdf) {
+              documents.push({
+                title: 'Rent Schedule / Arrears Statement (Scotland)',
+                category: 'schedule',
+                pdf: scheduleDoc.pdf,
+              });
+              console.log('[NOTICE-PREVIEW-API] Scotland Rent Schedule generated successfully');
+            }
+          }
+        } catch (err) {
+          console.error('[NOTICE-PREVIEW-API] Scotland Rent Schedule generation failed:', err);
+        }
       }
     }
 
