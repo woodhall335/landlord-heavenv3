@@ -9,6 +9,7 @@
 import { createAdminClient, createServerSupabaseClient, getServerUser, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { logMutation } from '@/lib/auth/audit-log';
 
 /**
  * GET - Fetch specific case by ID
@@ -161,6 +162,18 @@ export async function PUT(
         { error: 'Failed to update case' },
         { status: 500 }
       );
+    }
+
+    // Audit log for paid cases (non-blocking)
+    const changedKeys = Object.keys(updates);
+    if (changedKeys.length > 0) {
+      logMutation({
+        caseId: id,
+        userId: user.id,
+        action: changedKeys.includes('status') ? 'case_status_change' : 'case_facts_update',
+        changedKeys,
+        metadata: { source: 'case-update', fieldsUpdated: changedKeys },
+      }).catch(() => {}); // Fire and forget
     }
 
     return NextResponse.json(

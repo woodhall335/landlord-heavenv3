@@ -36,6 +36,7 @@ import {
   type SmartReviewWarning,
   type EvidenceCategory,
 } from '@/lib/evidence';
+import { logMutation } from '@/lib/auth/audit-log';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -1340,6 +1341,22 @@ export async function POST(request: Request) {
     const newFacts = await updateWizardFacts(adminSupabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
+
+    // Audit log for paid cases (non-blocking, fire-and-forget)
+    // Get user from supabase session for audit
+    const { data: userData } = await adminSupabase.auth.getUser();
+    const auditUserId = userData?.user?.id || null;
+    logMutation({
+      caseId: case_id,
+      userId: auditUserId,
+      action: 'wizard_answer_update',
+      changedKeys: [question_id, ...(question.maps_to || [])],
+      metadata: {
+        question_id,
+        input_type: (question as any).inputType,
+        source: 'wizard-answer',
+      },
+    }).catch(() => {}); // Fire and forget
 
     // ---------------------------------------
     // 4. Log conversation (user + assistant)
