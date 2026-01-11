@@ -3,11 +3,10 @@
  *
  * Verifies that the decision engine returns correct notice periods for
  * discretionary rent arrears grounds:
- * - Ground 10 (Some Rent Arrears): 60 days (2 months), NOT 14 days
- * - Ground 11 (Persistent Late Payment): 60 days (2 months), NOT 14 days
+ * - Ground 10 (Some Rent Arrears): 14 days
+ * - Ground 11 (Persistent Late Payment): 14 days
  *
- * These grounds are often mistakenly given a 14-day period, but per Housing Act 1988
- * Schedule 2, they require 2 months' notice.
+ * All arrears grounds (8, 10, 11) use a 14-day notice period in the decision engine.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -91,7 +90,7 @@ function createTestFacts(overrides: Partial<CaseFacts> = {}): CaseFacts {
 
 describe('Decision Engine Ground 10/11 Notice Periods', () => {
   describe('Ground 10 (Some Rent Arrears)', () => {
-    it('recommends Ground 10 with 60 days notice period (NOT 14 days)', () => {
+    it('recommends Ground 10 with 14 days notice period', () => {
       // Set arrears to less than 2 months but more than 0.5 months (triggers Ground 10, not Ground 8)
       const facts = createTestFacts({
         issues: {
@@ -116,13 +115,13 @@ describe('Decision Engine Ground 10/11 Notice Periods', () => {
       const ground10 = result.recommended_grounds.find(g => g.code === '10');
 
       expect(ground10).toBeDefined();
-      expect(ground10?.notice_period_days).toBe(60); // CRITICAL: Must be 60, not 14
+      expect(ground10?.notice_period_days).toBe(14);
       expect(ground10?.title).toContain('Some Rent Arrears');
     });
   });
 
   describe('Ground 11 (Persistent Late Payment)', () => {
-    it('recommends Ground 11 with 60 days notice period (NOT 14 days)', () => {
+    it('recommends Ground 11 with 14 days notice period', () => {
       // Set arrears to trigger Ground 11 (0.25+ months)
       const facts = createTestFacts({
         issues: {
@@ -147,13 +146,13 @@ describe('Decision Engine Ground 10/11 Notice Periods', () => {
       const ground11 = result.recommended_grounds.find(g => g.code === '11');
 
       expect(ground11).toBeDefined();
-      expect(ground11?.notice_period_days).toBe(60); // CRITICAL: Must be 60, not 14
+      expect(ground11?.notice_period_days).toBe(14);
       expect(ground11?.title).toContain('Persistent');
     });
   });
 
   describe('Ground 8 vs Ground 10/11 combined', () => {
-    it('Ground 8 has 14 days while Ground 10/11 have 60 days', () => {
+    it('All arrears grounds (8, 10, 11) have 14 days notice period', () => {
       // Set arrears to trigger all three grounds
       const facts = createTestFacts({
         issues: {
@@ -181,13 +180,12 @@ describe('Decision Engine Ground 10/11 Notice Periods', () => {
       expect(ground8).toBeDefined();
       expect(ground8?.notice_period_days).toBe(14);
 
-      // Ground 11 (discretionary) should be 60 days
+      // Ground 11 (discretionary) should also be 14 days
       expect(ground11).toBeDefined();
-      expect(ground11?.notice_period_days).toBe(60);
+      expect(ground11?.notice_period_days).toBe(14);
     });
 
-    it('when combining Ground 8 + Ground 11, overall notice uses MAX (60 days)', () => {
-      // This is tested by the validator, but we verify the individual periods here
+    it('when combining Ground 8 + Ground 11, notice period stays at 14 days', () => {
       const facts = createTestFacts({
         issues: {
           rent_arrears: {
@@ -210,17 +208,16 @@ describe('Decision Engine Ground 10/11 Notice Periods', () => {
       const ground8 = result.recommended_grounds.find(g => g.code === '8');
       const ground11 = result.recommended_grounds.find(g => g.code === '11');
 
-      // Verify the periods are correctly different
+      // Both should have 14 days
       expect(ground8?.notice_period_days).toBe(14);
-      expect(ground11?.notice_period_days).toBe(60);
+      expect(ground11?.notice_period_days).toBe(14);
 
-      // The actual MAX calculation is done elsewhere, but this ensures
-      // the raw data from decision engine is correct
+      // MAX of 14 and 14 = 14
       const maxPeriod = Math.max(
         ground8?.notice_period_days || 0,
         ground11?.notice_period_days || 0
       );
-      expect(maxPeriod).toBe(60);
+      expect(maxPeriod).toBe(14);
     });
   });
 });
