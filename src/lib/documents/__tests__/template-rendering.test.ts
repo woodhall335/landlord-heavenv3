@@ -360,3 +360,137 @@ Some **content** here.
     expect(result).toContain('<strong>content</strong>');
   });
 });
+
+/**
+ * Form 3 Compliance Tests - Statutory Text Enrichment
+ *
+ * These tests verify that Section 8 notices include the full Schedule 2 statutory
+ * text for each ground, as required by Form 3: "Give the full text (as set out in
+ * Schedule 2 of the Housing Act 1988 (as amended)) of each ground which is being
+ * relied on."
+ */
+describe('Section 8 Form 3 Compliance - Statutory Text', () => {
+  test('generateSection8Notice enriches Ground 8 with statutory_text automatically', async () => {
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '123 Main St, London, SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '456 Rental Ave, London, W1A 2BB',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly' as const,
+      payment_date: 1,
+      grounds: [
+        {
+          code: 8,
+          title: 'Serious rent arrears',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+          particulars: 'Tenant owes 2 months rent',
+          mandatory: true,
+          // Note: statutory_text is NOT provided - should be enriched automatically
+        },
+      ],
+      service_date: '2025-01-15',
+      earliest_possession_date: '2025-01-29',
+      notice_period_days: 14,
+      any_mandatory_ground: true,
+      any_discretionary_ground: false,
+    };
+
+    const result = await generateSection8Notice(testData, false);
+
+    // Should contain distinctive Ground 8 statutory wording from Schedule 2
+    // Note: Check for text without apostrophes to avoid escaping issues
+    expect(result.html).toContain('at least eight weeks');
+    expect(result.html).toContain('at least two months');
+    expect(result.html).toContain('rent is unpaid');
+  });
+
+  test('generateSection8Notice enriches multiple grounds with statutory_text', async () => {
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '123 Main St, London, SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '456 Rental Ave, London, W1A 2BB',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly' as const,
+      payment_date: 1,
+      grounds: [
+        {
+          code: 8,
+          title: 'Serious rent arrears',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+          particulars: 'Tenant owes 2 months rent',
+          mandatory: true,
+        },
+        {
+          code: 10,
+          title: 'Some rent arrears',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 10',
+          particulars: 'Some rent is unpaid',
+          mandatory: false,
+        },
+        {
+          code: 11,
+          title: 'Persistent delay',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 11',
+          particulars: 'Tenant persistently delays rent',
+          mandatory: false,
+        },
+      ],
+      service_date: '2025-01-15',
+      earliest_possession_date: '2025-01-29',
+      notice_period_days: 14,
+      any_mandatory_ground: true,
+      any_discretionary_ground: true,
+    };
+
+    const result = await generateSection8Notice(testData, false);
+
+    // Ground 8 statutory text
+    expect(result.html).toContain('at least eight weeks');
+    expect(result.html).toContain('at least two months');
+
+    // Ground 10 statutory text
+    expect(result.html).toContain('Some rent lawfully due from the tenant is unpaid');
+
+    // Ground 11 statutory text
+    expect(result.html).toContain('persistently delayed paying rent');
+  });
+
+  test('statutory_text is preserved if already provided', async () => {
+    const customStatutoryText = 'CUSTOM STATUTORY TEXT FOR TESTING';
+
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '123 Main St, London, SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '456 Rental Ave, London, W1A 2BB',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly' as const,
+      payment_date: 1,
+      grounds: [
+        {
+          code: 8,
+          title: 'Serious rent arrears',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+          particulars: 'Tenant owes 2 months rent',
+          mandatory: true,
+          statutory_text: customStatutoryText, // Custom text provided
+        },
+      ],
+      service_date: '2025-01-15',
+      earliest_possession_date: '2025-01-29',
+      notice_period_days: 14,
+      any_mandatory_ground: true,
+      any_discretionary_ground: false,
+    };
+
+    const result = await generateSection8Notice(testData, false);
+
+    // Custom statutory text should be preserved
+    expect(result.html).toContain(customStatutoryText);
+  });
+});

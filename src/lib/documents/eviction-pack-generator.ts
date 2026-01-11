@@ -38,6 +38,7 @@ import {
 import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
+import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 
 // ============================================================================
 // TYPES
@@ -561,14 +562,19 @@ async function generateEnglandOrWalesEvictionPack(
       rent_amount: evictionCase.rent_amount,
       rent_frequency: evictionCase.rent_frequency,
       payment_date: evictionCase.payment_day,
-      grounds: evictionCase.grounds.map((g) => ({
-        code: parseInt(g.code.replace('Ground ', '')),
-        title: g.title,
-        legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
-        particulars: g.particulars,
-        supporting_evidence: g.evidence,
-        mandatory: g.mandatory || false,
-      })),
+      grounds: evictionCase.grounds.map((g) => {
+        const groundCode = parseInt(g.code.replace('Ground ', ''));
+        const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
+        return {
+          code: groundCode,
+          title: g.title,
+          legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
+          particulars: g.particulars,
+          supporting_evidence: g.evidence,
+          mandatory: g.mandatory || false,
+          statutory_text: groundDef?.full_text || '',
+        };
+      }),
       // Pass service date if user provided it; section8-generator will calculate
       // earliest_possession_date and notice_period_days based on grounds
       service_date: serviceDate || undefined,
@@ -1207,14 +1213,19 @@ export async function generateNoticeOnlyPack(
           rent_amount: evictionCase.rent_amount,
           rent_frequency: evictionCase.rent_frequency,
           payment_date: evictionCase.payment_day,
-          grounds: evictionCase.grounds.map((g) => ({
-            code: parseInt(g.code.replace('Ground ', '')),
-            title: g.title,
-            legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
-            particulars: g.particulars,
-            supporting_evidence: g.evidence,
-            mandatory: g.mandatory || false,
-          })),
+          grounds: evictionCase.grounds.map((g) => {
+            const groundCode = parseInt(g.code.replace('Ground ', ''));
+            const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
+            return {
+              code: groundCode,
+              title: g.title,
+              legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
+              particulars: g.particulars,
+              supporting_evidence: g.evidence,
+              mandatory: g.mandatory || false,
+              statutory_text: groundDef?.full_text || '',
+            };
+          }),
           notice_period_days: 14,
           earliest_possession_date: '',
           any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
