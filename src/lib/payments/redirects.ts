@@ -4,9 +4,16 @@
  * Centralized helper for generating success/cancel URLs for Stripe checkout.
  *
  * Product Routing:
- * - Single-transaction products (notice_only, ast_standard, ast_premium) => /success/[product]/[caseId]
- * - Complex products (complete_pack, money_claim, sc_money_claim) => /dashboard/cases/[caseId]?payment=success
- * - Fallback (no caseId) => /dashboard?session_id={CHECKOUT_SESSION_ID}
+ * ALL products now redirect to /dashboard/cases/[caseId]?payment=success
+ *
+ * The dashboard has robust polling, retry logic, and error handling that works
+ * better than the dedicated success page for all products. This prevents issues
+ * where:
+ * - Webhook delays cause orderStatus.paid to be false
+ * - API failures cause orderStatus to be null
+ * - Either case would cause the success page to show "Preparing..." forever
+ *
+ * Fallback (no caseId) => /dashboard?session_id={CHECKOUT_SESSION_ID}
  */
 
 export type CheckoutProduct =
@@ -17,26 +24,6 @@ export type CheckoutProduct =
   | 'ast_standard'
   | 'ast_premium';
 
-/**
- * Products that should route to the dedicated success page.
- * These are single-transaction products with a simple download flow.
- */
-const SINGLE_TRANSACTION_PRODUCTS: ReadonlySet<CheckoutProduct> = new Set([
-  'notice_only',
-  'ast_standard',
-  'ast_premium',
-]);
-
-/**
- * Products that should route to the case dashboard.
- * These are complex products requiring document generation/polling.
- */
-const DASHBOARD_PRODUCTS: ReadonlySet<CheckoutProduct> = new Set([
-  'complete_pack',
-  'money_claim',
-  'sc_money_claim',
-]);
-
 export interface CheckoutRedirectInput {
   product: CheckoutProduct;
   caseId?: string;
@@ -46,20 +33,6 @@ export interface CheckoutRedirectInput {
 export interface CheckoutRedirectResult {
   successUrl: string;
   cancelUrl: string;
-}
-
-/**
- * Determines if a product should route to the dedicated success page.
- */
-export function isSingleTransactionProduct(product: CheckoutProduct): boolean {
-  return SINGLE_TRANSACTION_PRODUCTS.has(product);
-}
-
-/**
- * Determines if a product should route to the dashboard.
- */
-export function isDashboardProduct(product: CheckoutProduct): boolean {
-  return DASHBOARD_PRODUCTS.has(product);
 }
 
 /**
@@ -88,27 +61,20 @@ function getBaseUrl(providedBaseUrl?: string): string {
 /**
  * Generate the success URL for a checkout session.
  *
- * @param product - The product being purchased
- * @param caseId - Optional case ID (required for case-based products)
+ * ALL products redirect to /dashboard/cases/[caseId]?payment=success
+ * The dashboard has robust polling, retry logic, and error handling.
+ *
+ * @param product - The product being purchased (unused, kept for API compat)
+ * @param caseId - Optional case ID
  * @param baseUrl - Optional base URL override
  * @returns The success URL to redirect to after payment
- *
- * Routing:
- * - notice_only, ast_standard, ast_premium => /success/{product}/{caseId}
- * - complete_pack, money_claim, sc_money_claim => /dashboard/cases/{caseId}?payment=success
- * - Fallback (no caseId) => /dashboard?session_id={CHECKOUT_SESSION_ID}
  */
 export function getSuccessUrl(input: CheckoutRedirectInput): string {
-  const { product, caseId, baseUrl } = input;
+  const { caseId, baseUrl } = input;
   const base = getBaseUrl(baseUrl);
 
-  // Single-transaction products go to dedicated success page
-  if (caseId && isSingleTransactionProduct(product)) {
-    return `${base}/success/${product}/${caseId}`;
-  }
-
-  // Dashboard products go to case page with payment flag
-  if (caseId && isDashboardProduct(product)) {
+  // All products go to case dashboard with payment flag
+  if (caseId) {
     return `${base}/dashboard/cases/${caseId}?payment=success`;
   }
 
