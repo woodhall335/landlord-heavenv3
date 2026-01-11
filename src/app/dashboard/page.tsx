@@ -295,7 +295,7 @@ export default function DashboardPage() {
                             {caseItem.case_type.replace('_', ' ')}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {caseItem.jurisdiction === 'england-wales' ? 'England & Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : 'Northern Ireland'}
+                            {caseItem.jurisdiction === 'england' ? 'England' : caseItem.jurisdiction === 'wales' ? 'Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : caseItem.jurisdiction === 'northern-ireland' ? 'Northern Ireland' : caseItem.jurisdiction}
                           </div>
                         </div>
                         <Badge

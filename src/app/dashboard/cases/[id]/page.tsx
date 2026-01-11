@@ -1081,7 +1081,7 @@ export default function CaseDetailPage() {
                   </p>
                   <p className="text-sm text-gray-600 mt-2">Route</p>
                   <p className="text-base text-charcoal capitalize">
-                    {analysis?.case_summary?.route?.replace('_', ' ') || analysis?.recommended_route || 'money claim'}
+                    {(analysis?.recommended_route || analysis?.case_summary?.route || 'eviction')?.replace('_', ' ')}
                   </p>
                 </div>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-1">
