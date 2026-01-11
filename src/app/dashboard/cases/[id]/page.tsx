@@ -17,6 +17,8 @@ import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiB
 import { trackPurchase } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
+import { getPackContents, getNextSteps } from '@/lib/products';
+import type { PackItem } from '@/lib/products';
 
 interface CaseDetails {
   id: string;
@@ -316,30 +318,94 @@ export default function CaseDetailPage() {
     }
   };
 
-  const getNextSteps = () => {
-    if (!caseDetails) return [] as string[];
+  // Derive product and case parameters from case details
+  const getProductAndParams = () => {
+    if (!caseDetails) return null;
 
-    if (caseDetails.case_type === 'money_claim') {
-      if (caseDetails.jurisdiction === 'scotland') {
-        return [
-          'Review Simple Procedure Form 3A and particulars for accuracy before printing.',
-          'Serve the Form 3A pack on the respondent using the Sheriff Clerk guidance.',
-          'File your completed bundle with the Sheriff Court and keep proof of service.',
-        ];
+    const facts = caseDetails.collected_facts || {};
+
+    // Determine product type from case_type and facts
+    let product = facts.product || facts.original_product || '';
+
+    // Map case_type to product if not explicitly set
+    if (!product) {
+      if (caseDetails.case_type === 'money_claim') {
+        product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+      } else if (caseDetails.case_type === 'tenancy_agreement') {
+        product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
+      } else if (caseDetails.case_type === 'eviction') {
+        product = facts.pack_type === 'complete_pack' ? 'complete_pack' : 'notice_only';
+      } else {
+        // Fallback - try to infer from pack_type
+        product = facts.pack_type || 'notice_only';
       }
-
-      return [
-        'Print and sign the N1 claim form and particulars of claim.',
-        'Include the pre-action letter and information sheet when serving the defendant.',
-        'File the claim via Money Claim Online or your local court and retain proof of service.',
-      ];
     }
 
-    return [
-      'Download and review your documents.',
-      'Follow the included filing or service instructions.',
-      'Contact support if you need any help completing the process.',
-    ];
+    // Determine route
+    const route = facts.route || facts.notice_route || facts.eviction_route || null;
+
+    // Determine notice period
+    const noticePeriodDays = facts.notice_period_days || facts.notice_period || null;
+
+    // Check for arrears
+    const hasArrears = Boolean(
+      facts.has_arrears ||
+      facts.rent_arrears ||
+      facts.arrears_amount ||
+      (facts.ground_codes && (
+        facts.ground_codes.includes('8') ||
+        facts.ground_codes.includes('10') ||
+        facts.ground_codes.includes('11')
+      ))
+    );
+
+    // Check if arrears schedule is in documents
+    const includeArrearsSchedule = hasArrears || documents.some(
+      doc => doc.document_type === 'arrears_schedule'
+    );
+
+    return {
+      product,
+      jurisdiction: caseDetails.jurisdiction,
+      route,
+      noticePeriodDays,
+      hasArrears,
+      includeArrearsSchedule,
+      grounds: facts.ground_codes || null,
+    };
+  };
+
+  // Get pack contents for "What's included" section
+  const getPackContentsForCase = (): PackItem[] => {
+    const params = getProductAndParams();
+    if (!params) return [];
+
+    return getPackContents({
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      route: params.route,
+      grounds: params.grounds,
+      has_arrears: params.hasArrears,
+      include_arrears_schedule: params.includeArrearsSchedule,
+    });
+  };
+
+  // Get next steps for the case
+  const getNextStepsForCase = () => {
+    const params = getProductAndParams();
+    if (!params) {
+      return {
+        title: 'What to do next',
+        steps: ['Review your documents and follow the included instructions.'],
+      };
+    }
+
+    return getNextSteps({
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      route: params.route,
+      notice_period_days: params.noticePeriodDays,
+    });
   };
 
   const handleSaveChanges = async () => {
@@ -651,12 +717,30 @@ export default function CaseDetailPage() {
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-charcoal">Payment received — your documents are ready</h3>
                 <p className="text-gray-700 mt-1">
-                  Download your bundle and follow the steps below to file your claim.
+                  Your purchase is complete. Download your documents below and follow the next steps.
                 </p>
 
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  {/* What's included - informational */}
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h4 className="font-semibold text-charcoal mb-3">Documents in your pack</h4>
+                    <h4 className="font-semibold text-charcoal mb-3">Included in your purchase</h4>
+                    {getPackContentsForCase().length === 0 ? (
+                      <p className="text-sm text-gray-600">See generated documents below.</p>
+                    ) : (
+                      <ul className="space-y-1.5 text-sm text-gray-700">
+                        {getPackContentsForCase().map((item) => (
+                          <li key={item.key} className="flex items-start gap-2">
+                            <span className="text-success mt-0.5">•</span>
+                            <span>{item.title}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* Generated documents - actual files */}
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <h4 className="font-semibold text-charcoal mb-3">Generated documents</h4>
                     <ul className="space-y-2 text-sm text-gray-800">
                       {documents.map((doc) => (
                         <li key={doc.id} className="flex items-center justify-between gap-2">
@@ -675,10 +759,11 @@ export default function CaseDetailPage() {
                     </ul>
                   </div>
 
+                  {/* Next steps */}
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h4 className="font-semibold text-charcoal mb-3">Next steps</h4>
+                    <h4 className="font-semibold text-charcoal mb-3">{getNextStepsForCase().title}</h4>
                     <ol className="list-decimal list-inside space-y-2 text-sm text-gray-800">
-                      {getNextSteps().map((step, idx) => (
+                      {getNextStepsForCase().steps.map((step, idx) => (
                         <li key={idx}>{step}</li>
                       ))}
                     </ol>
