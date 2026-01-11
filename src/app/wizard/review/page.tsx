@@ -1644,6 +1644,27 @@ function NoticeOnlyReviewContent({
       {/* Section 8 Grounds - Selected vs Recommended (NEW IMPLEMENTATION) */}
       {isSection8 && (
         <>
+          {/* No Grounds Selected - Prompt user to go back */}
+          {selectedGrounds.length === 0 && (
+            <Card className="p-6 border-amber-200 bg-amber-50">
+              <h2 className="text-lg font-semibold text-amber-800 flex items-center gap-2 mb-2">
+                <RiErrorWarningLine className="w-5 h-5" />
+                No grounds selected
+              </h2>
+              <p className="text-sm text-amber-700 mb-4">
+                Please go back and select at least one ground for your Section 8 notice.
+                Common grounds for rent arrears include Ground 8 (serious arrears - 2+ months).
+              </p>
+              <Button
+                onClick={onEdit}
+                variant="outline"
+                className="border-amber-300 text-amber-800 hover:bg-amber-100"
+              >
+                Go back and select grounds
+              </Button>
+            </Card>
+          )}
+
           {/* Selected Grounds (User's choice - always included) */}
           {selectedGrounds.length > 0 && (
             <Card className="p-6">
@@ -1881,13 +1902,16 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Compliance Issues (non-S21) */}
-      {hasComplianceIssues && !isSection21 && (
-        <Card className="border-amber-200 bg-amber-50 p-6">
-          <h2 className="text-lg font-semibold text-amber-800 mb-3">Compliance Warnings</h2>
+      {/* Additional suggestions (non-S21, only if there are items and no ground-aware suggestions shown) */}
+      {hasComplianceIssues && !isSection21 && suggestions.length === 0 && (
+        <Card className="border-blue-200 bg-blue-50/50 p-6">
+          <h2 className="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2">
+            <RiInformationLine className="w-5 h-5" />
+            Additional notes
+          </h2>
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
-              <li key={index} className="flex items-start gap-2 text-amber-900">
+              <li key={index} className="flex items-start gap-2 text-blue-900">
                 <span>•</span>
                 <span>{issue}</span>
               </li>
