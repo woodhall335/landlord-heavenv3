@@ -37,6 +37,7 @@ import {
   type EvidenceCategory,
 } from '@/lib/evidence';
 import { logMutation } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -601,6 +602,12 @@ export async function POST(request: Request) {
       if (errorResponse) {
         return errorResponse;
       }
+    }
+
+    // Check edit window - block if case has paid order with expired window
+    const mutationCheck = await checkMutationAllowed(case_id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
     }
 
     const caseRow = data as {

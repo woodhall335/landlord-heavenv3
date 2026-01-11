@@ -10,6 +10,7 @@ import {
   createAdminClient,
   tryGetServerUser,
 } from '@/lib/supabase/server';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 import { generateDocument } from '@/lib/documents/generator';
 import { generateSection8Notice } from '@/lib/documents/section8-generator';
@@ -528,6 +529,12 @@ export async function POST(request: Request) {
     if (!is_preview) {
       const productType = resolveProductForDocument(document_type, entitlementFacts as any);
       await assertPaidEntitlement({ caseId: case_id, product: productType });
+
+      // Check edit window for regeneration - block if paid and window expired
+      const mutationCheck = await checkMutationAllowed(case_id);
+      if (!mutationCheck.allowed) {
+        return mutationCheck.errorResponse;
+      }
     }
 
     const canonicalJurisdiction =

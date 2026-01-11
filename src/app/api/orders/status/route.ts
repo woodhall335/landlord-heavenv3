@@ -10,6 +10,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
+import { getEditWindowStatus } from '@/lib/payments/edit-window';
 
 export interface OrderStatusResponse {
   paid: boolean;
@@ -22,6 +23,10 @@ export interface OrderStatusResponse {
   currency: string | null;
   has_final_documents: boolean;
   final_document_count: number;
+  /** Whether the 30-day edit/regenerate window is currently open */
+  edit_window_open: boolean;
+  /** ISO string of when the edit window ends (null if not paid) */
+  edit_window_ends_at: string | null;
 }
 
 export async function GET(request: Request) {
@@ -80,6 +85,9 @@ export async function GET(request: Request) {
     const order = orders?.[0] || null;
     const documentCount = finalDocCount || 0;
 
+    // Calculate edit window status
+    const editWindow = getEditWindowStatus(order?.paid_at || null);
+
     // Build response
     const response: OrderStatusResponse = {
       paid: order?.payment_status === 'paid',
@@ -92,6 +100,8 @@ export async function GET(request: Request) {
       currency: order?.currency || null,
       has_final_documents: documentCount > 0,
       final_document_count: documentCount,
+      edit_window_open: editWindow.isPaid && editWindow.isOpen,
+      edit_window_ends_at: editWindow.endsAt,
     };
 
     return NextResponse.json(response, { status: 200 });

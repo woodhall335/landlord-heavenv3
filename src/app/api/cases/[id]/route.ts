@@ -10,6 +10,7 @@ import { createAdminClient, createServerSupabaseClient, getServerUser, requireSe
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logMutation } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 /**
  * GET - Fetch specific case by ID
@@ -104,6 +105,9 @@ const updateCaseSchema = z.object({
 
 /**
  * PUT - Update case
+ *
+ * Edit window enforcement: If case has a paid order with expired
+ * edit window (30 days), mutations are blocked with 403.
  */
 export async function PUT(
   request: Request,
@@ -112,6 +116,13 @@ export async function PUT(
   try {
     const user = await requireServerAuth();
     const { id } = await params;
+
+    // Check edit window - block if paid and window expired
+    const mutationCheck = await checkMutationAllowed(id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
+    }
+
     const body = await request.json();
 
     // Validate input

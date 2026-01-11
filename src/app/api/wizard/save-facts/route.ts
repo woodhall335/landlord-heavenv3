@@ -11,6 +11,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { logMutation, getChangedKeys } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 export const runtime = 'nodejs';
 
@@ -32,6 +33,12 @@ export async function POST(request: NextRequest) {
         { error: 'facts must be an object' },
         { status: 400 }
       );
+    }
+
+    // Check edit window - block if case has paid order with expired window
+    const mutationCheck = await checkMutationAllowed(case_id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
     }
 
     const supabase = await createServerSupabaseClient();

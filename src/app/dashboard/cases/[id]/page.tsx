@@ -19,6 +19,7 @@ import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
 import { getPackContents, getNextSteps } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
+import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 
 interface CaseDetails {
   id: string;
@@ -644,23 +645,54 @@ export default function CaseDetailPage() {
             </div>
           </div>
 
+          {/* Edit Window Status */}
+          {orderStatus?.paid && (
+            <div className={`mb-4 p-3 rounded-lg text-sm ${
+              orderStatus.edit_window_open
+                ? 'bg-primary/5 border border-primary/20 text-charcoal'
+                : 'bg-warning/10 border border-warning/20 text-warning-dark'
+            }`}>
+              {orderStatus.edit_window_open ? (
+                <span>
+                  Unlimited edits &amp; regeneration until{' '}
+                  <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at!)}</strong>{' '}
+                  (30 days from purchase).
+                </span>
+              ) : (
+                <span>
+                  This case is locked — the 30-day edit window ended{' '}
+                  <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at!)}</strong>.
+                  Downloads remain available.
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3">
             {!isEditMode ? (
               <>
-                <Button variant="primary" onClick={() => setIsEditMode(true)}>
+                <Button
+                  variant="primary"
+                  onClick={() => setIsEditMode(true)}
+                  disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
+                >
                   <RiEditLine className="w-4 h-4 mr-2 text-white" />
                   Edit Case Details
                 </Button>
                 {caseDetails.wizard_progress < 100 && (
-                  <Button variant="secondary" onClick={handleContinueWizard}>
+                  <Button
+                    variant="secondary"
+                    onClick={handleContinueWizard}
+                    disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
+                  >
                     Continue Wizard
                   </Button>
                 )}
                 <Button
                   variant="outline"
                   onClick={handleRegenerateDocument}
-                  disabled={isRegenerating}
+                  disabled={isRegenerating || (orderStatus?.paid && !orderStatus?.edit_window_open)}
                 >
                   {isRegenerating ? 'Regenerating...' : 'Regenerate Document'}
                 </Button>
@@ -678,7 +710,7 @@ export default function CaseDetailPage() {
                 <Button
                   variant="primary"
                   onClick={handleSaveChanges}
-                  disabled={isSaving}
+                  disabled={isSaving || (orderStatus?.paid && !orderStatus?.edit_window_open)}
                 >
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>

@@ -24,6 +24,7 @@ import { downloadDocument } from '@/lib/documents/download';
 import { getPackContents, getNextSteps } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
+import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 
 interface CaseDetails {
   id: string;
@@ -324,6 +325,29 @@ export default function SuccessPage() {
             Thank you for purchasing the {productName}
           </p>
         </div>
+
+        {/* Edit Window Status */}
+        {orderStatus?.paid && orderStatus.edit_window_ends_at && (
+          <div className={`mb-6 p-4 rounded-lg text-sm text-center ${
+            orderStatus.edit_window_open
+              ? 'bg-primary/5 border border-primary/20 text-charcoal'
+              : 'bg-warning/10 border border-warning/20 text-warning-dark'
+          }`}>
+            {orderStatus.edit_window_open ? (
+              <span>
+                You can edit and regenerate documents until{' '}
+                <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at)}</strong>{' '}
+                (30 days from purchase). Downloads are available forever.
+              </span>
+            ) : (
+              <span>
+                The 30-day edit window ended{' '}
+                <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at)}</strong>.
+                Downloads remain available.
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Document Status Card */}
         {!hasFinalDocuments && !pollingTimedOut && (
