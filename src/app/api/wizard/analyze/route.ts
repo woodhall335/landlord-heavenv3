@@ -762,21 +762,44 @@ export async function POST(request: Request) {
       }
     }
 
+    // Ground-aware evidence suggestions for eviction cases
+    // Only show suggestions relevant to the user's selected grounds
     if (caseData.case_type === 'eviction') {
+      // Get user's selected grounds from wizard facts
+      const selectedGrounds: string[] = (wizardFacts as any)?.section8_grounds || [];
+      const normalizeGround = (g: string) => g.replace(/^ground\s*/i, '').trim();
+      const normalizedSelectedGrounds = selectedGrounds.map(normalizeGround);
+
+      // Check if arrears grounds (8, 10, 11) are selected
+      const hasArrearsGrounds = normalizedSelectedGrounds.some(g => ['8', '10', '11'].includes(g));
+      // Check if damage/deterioration grounds (13, 15) are selected
+      const hasDamageGrounds = normalizedSelectedGrounds.some(g => ['13', '15'].includes(g));
+      // Check if ASB grounds (14, 14ZA) are selected
+      const hasASBGrounds = normalizedSelectedGrounds.some(g => ['14', '14ZA', '14A'].includes(g));
+
+      // Tenancy agreement is always relevant
       if (!evidence.tenancy_agreement_uploaded) {
-        compliance.push('Tenancy agreement not uploaded yet – add it under evidence to strengthen your position.');
+        compliance.push('If you have it, a copy of your tenancy agreement will strengthen your case.');
       }
-      if (!evidence.rent_schedule_uploaded) {
-        compliance.push('Rent schedule missing – courts expect a clear arrears schedule. Upload it under evidence.');
+
+      // Rent schedule only relevant for arrears grounds
+      if (hasArrearsGrounds && !evidence.rent_schedule_uploaded) {
+        compliance.push('A detailed rent schedule showing arrears will support your arrears claim.');
       }
+
+      // Correspondence is generally useful but phrased conditionally
       if (!evidence.correspondence_uploaded) {
-        compliance.push('No correspondence uploaded – add key emails or letters showing the dispute history.');
+        compliance.push('If available, correspondence with the tenant about the issues can support your case.');
       }
-      if (!evidence.damage_photos_uploaded) {
-        compliance.push('Damage/photos evidence missing – upload photos if you rely on property damage or disrepair.');
+
+      // Damage photos only relevant for damage/deterioration grounds
+      if (hasDamageGrounds && !evidence.damage_photos_uploaded) {
+        compliance.push('Photographs of damage will support your property deterioration claim.');
       }
-      if (!evidence.authority_letters_uploaded) {
-        compliance.push('Council/police letters not uploaded – include them if anti-social behaviour is part of your case.');
+
+      // Council/police letters only relevant for ASB grounds
+      if (hasASBGrounds && !evidence.authority_letters_uploaded) {
+        compliance.push('Council or police correspondence will significantly strengthen your ASB case.');
       }
     }
 
@@ -1118,6 +1141,18 @@ export async function POST(request: Request) {
       }
     }
 
+    // Build case_facts object for review page consumption
+    // Contains persisted wizard facts relevant to grounds selection and review display
+    const caseFacts = {
+      section8_grounds: (wizardFacts as any)?.section8_grounds || [],
+      include_recommended_grounds: (wizardFacts as any)?.include_recommended_grounds || false,
+      arrears_items: (wizardFacts as any)?.arrears_items || [],
+      recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
+      jurisdiction: canonicalJurisdiction,
+      eviction_route: (wizardFacts as any)?.eviction_route || null,
+      selected_notice_route: (wizardFacts as any)?.selected_notice_route || null,
+    };
+
     return NextResponse.json({
       case_id,
       jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
@@ -1141,6 +1176,8 @@ export async function POST(request: Request) {
       decision_engine: decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
+      // Case facts for review page - contains persisted wizard data
+      case_facts: caseFacts,
     });
 
   } catch (error: any) {

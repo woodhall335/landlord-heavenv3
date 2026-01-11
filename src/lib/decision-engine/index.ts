@@ -358,7 +358,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
         title: 'Ground 10 - Some Rent Arrears',
         type: 'discretionary',
         weight: 'medium',
-        notice_period_days: 14,
+        notice_period_days: 60, // 2 months per Housing Act 1988
         reasoning: 'Some rent unpaid - discretionary ground, court considers reasonableness',
         success_probability: 'medium',
       });
@@ -370,7 +370,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
         title: 'Ground 11 - Persistent Late Payment',
         type: 'discretionary',
         weight: 'medium',
-        notice_period_days: 14,
+        notice_period_days: 60, // 2 months per Housing Act 1988
         reasoning: 'Pattern of late payment - can succeed even if arrears small',
         success_probability: 'medium',
       });
