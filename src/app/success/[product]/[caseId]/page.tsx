@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { RiCheckLine, RiDownloadLine, RiArrowRightLine, RiCustomerService2Line } from 'react-icons/ri';
+import { RiCheckLine, RiDownloadLine, RiArrowRightLine, RiCustomerService2Line, RiRefreshLine, RiErrorWarningLine } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
 import { getPackContents, getNextSteps } from '@/lib/products';
@@ -69,10 +69,14 @@ export default function SuccessPage() {
   const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
   const [isPolling, setIsPolling] = useState(false);
   const [pollingTimedOut, setPollingTimedOut] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryError, setRetryError] = useState<string | null>(null);
+  const [retryErrorFatal, setRetryErrorFatal] = useState(false);
 
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const pollStartTimeRef = useRef<number | null>(null);
   const purchaseTrackedRef = useRef(false);
+  const autoRetryAttemptedRef = useRef(false);
 
   // Validate product type
   useEffect(() => {
@@ -134,6 +138,55 @@ export default function SuccessPage() {
     setIsPolling(false);
   }, []);
 
+  // Retry fulfillment
+  const retryFulfillment = useCallback(async (): Promise<boolean> => {
+    setIsRetrying(true);
+    setRetryError(null);
+    setRetryErrorFatal(false);
+
+    try {
+      const response = await fetch('/api/orders/fulfill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId, product }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // 422 = missing user, 403 = permission denied - both are fatal
+        if (response.status === 422 || response.status === 403) {
+          setRetryError(data.user_message || data.error || 'Unable to generate documents. Please contact support.');
+          setRetryErrorFatal(true);
+          setIsRetrying(false);
+          return false;
+        }
+
+        // Other errors - allow retry
+        setRetryError(data.message || data.error || 'Document generation failed. Please try again.');
+        setIsRetrying(false);
+        return false;
+      }
+
+      // Success - refresh order status and documents
+      if (data.status === 'fulfilled' || data.status === 'already_fulfilled') {
+        await fetchOrderStatus();
+        await fetchDocuments();
+        setIsRetrying(false);
+        return true;
+      }
+
+      // Still processing - continue polling
+      setIsRetrying(false);
+      return true;
+    } catch (err) {
+      console.error('Retry fulfillment error:', err);
+      setRetryError('Network error. Please check your connection and try again.');
+      setIsRetrying(false);
+      return false;
+    }
+  }, [caseId, product, fetchOrderStatus, fetchDocuments]);
+
   // Start polling for document fulfillment
   const startPolling = useCallback(() => {
     if (pollIntervalRef.current) return;
@@ -180,12 +233,30 @@ export default function SuccessPage() {
     loadData();
   }, [caseId, product, fetchCaseDetails, fetchDocuments, fetchOrderStatus]);
 
-  // Start polling if paid but no documents
+  // Auto-retry and polling logic
   useEffect(() => {
-    if (orderStatus?.paid && !orderStatus.has_final_documents) {
+    if (!orderStatus?.paid || orderStatus.has_final_documents) return;
+
+    // If fulfillment is stuck in 'ready_to_generate' or 'failed', attempt ONE auto-retry
+    const shouldAutoRetry =
+      !autoRetryAttemptedRef.current &&
+      !retryErrorFatal &&
+      (orderStatus.fulfillment_status === 'ready_to_generate' ||
+        orderStatus.fulfillment_status === 'failed');
+
+    if (shouldAutoRetry) {
+      autoRetryAttemptedRef.current = true;
+      retryFulfillment().then((success) => {
+        // Whether success or not, start polling to check for completion
+        if (!retryErrorFatal) {
+          startPolling();
+        }
+      });
+    } else if (!retryErrorFatal) {
+      // No auto-retry needed, just start polling
       startPolling();
     }
-  }, [orderStatus?.paid, orderStatus?.has_final_documents, startPolling]);
+  }, [orderStatus?.paid, orderStatus?.has_final_documents, orderStatus?.fulfillment_status, startPolling, retryFulfillment, retryErrorFatal]);
 
   // Track purchase conversion
   useEffect(() => {
@@ -349,14 +420,100 @@ export default function SuccessPage() {
           </div>
         )}
 
-        {/* Document Status Card */}
-        {!hasFinalDocuments && !pollingTimedOut && (
+        {/* Fatal Error State - Cannot retry */}
+        {retryErrorFatal && !hasFinalDocuments && (
+          <Card padding="large" className="mb-6 border-error/20 bg-error/5">
+            <div className="flex items-start gap-4">
+              <RiErrorWarningLine className="w-8 h-8 text-error flex-shrink-0" />
+              <div>
+                <h2 className="text-xl font-semibold text-charcoal">
+                  Unable to generate documents
+                </h2>
+                <p className="text-gray-700 mt-1">
+                  {retryError}
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">
+                  Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Link href="/contact">
+                    <Button variant="primary">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Retryable Error State */}
+        {!retryErrorFatal && retryError && !hasFinalDocuments && !isRetrying && (
+          <Card padding="large" className="mb-6 border-error/20 bg-error/5">
+            <div className="flex items-start gap-4">
+              <RiErrorWarningLine className="w-8 h-8 text-error flex-shrink-0" />
+              <div>
+                <h2 className="text-xl font-semibold text-charcoal">
+                  We're having trouble generating your documents
+                </h2>
+                <p className="text-gray-700 mt-1">
+                  {retryError}
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    Retry Generation
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Fulfillment Failed State (from order status) */}
+        {!retryErrorFatal && !retryError && orderStatus?.fulfillment_status === 'failed' && !hasFinalDocuments && !isRetrying && (
+          <Card padding="large" className="mb-6 border-error/20 bg-error/5">
+            <div className="flex items-start gap-4">
+              <RiErrorWarningLine className="w-8 h-8 text-error flex-shrink-0" />
+              <div>
+                <h2 className="text-xl font-semibold text-charcoal">
+                  We're having trouble generating your documents
+                </h2>
+                <p className="text-gray-700 mt-1">
+                  {orderStatus.fulfillment_error || 'Document generation failed. Please try again.'}
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    Retry Generation
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">
+                      <RiCustomerService2Line className="w-4 h-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Document Status Card - Processing */}
+        {!hasFinalDocuments && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus?.fulfillment_status !== 'failed' && (
           <Card padding="large" className="mb-6 border-primary/20 bg-primary/5">
             <div className="flex items-start gap-4">
               <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin flex-shrink-0" />
               <div>
                 <h2 className="text-xl font-semibold text-charcoal">
-                  Preparing your documents...
+                  {isRetrying ? 'Retrying document generation...' : 'Preparing your documents...'}
                 </h2>
                 <p className="text-gray-700 mt-1">
                   We're generating your final documents. This usually takes just a few seconds.
@@ -366,7 +523,8 @@ export default function SuccessPage() {
           </Card>
         )}
 
-        {pollingTimedOut && !hasFinalDocuments && (
+        {/* Polling Timeout */}
+        {pollingTimedOut && !hasFinalDocuments && !retryErrorFatal && (
           <Card padding="large" className="mb-6 border-warning/20 bg-warning/5">
             <div className="flex items-start gap-4">
               <div className="text-2xl">⏳</div>
@@ -375,12 +533,17 @@ export default function SuccessPage() {
                   Still generating your documents
                 </h2>
                 <p className="text-gray-700 mt-1">
-                  Document generation is taking longer than expected. Please try refreshing the page.
-                  If documents don't appear within a few minutes, contact support with your Case ID:{' '}
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                  Document generation is taking longer than expected. You can try retrying or refresh the page.
+                </p>
+                <p className="text-gray-600 mt-2 text-sm">
+                  Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
                 </p>
                 <div className="mt-4 flex gap-3">
-                  <Button variant="primary" onClick={() => window.location.reload()}>
+                  <Button variant="primary" onClick={retryFulfillment} disabled={isRetrying}>
+                    <RiRefreshLine className="w-4 h-4 mr-2" />
+                    {isRetrying ? 'Retrying...' : 'Retry Generation'}
+                  </Button>
+                  <Button variant="outline" onClick={() => window.location.reload()}>
                     Refresh Page
                   </Button>
                   <Link href="/contact">

@@ -14,6 +14,7 @@ describe('OrderStatusResponse type', () => {
       paid: true,
       payment_status: 'paid',
       fulfillment_status: 'fulfilled',
+      fulfillment_error: null,
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc123',
@@ -21,11 +22,17 @@ describe('OrderStatusResponse type', () => {
       currency: 'GBP',
       has_final_documents: true,
       final_document_count: 8,
+      last_final_document_created_at: '2024-01-15T10:31:00Z',
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
     };
 
     expect(response.paid).toBe(true);
     expect(response.has_final_documents).toBe(true);
     expect(response.final_document_count).toBe(8);
+    expect(response.fulfillment_error).toBeNull();
+    expect(response.last_final_document_created_at).toBe('2024-01-15T10:31:00Z');
+    expect(response.edit_window_open).toBe(true);
   });
 
   it('has correct shape for paid order without final documents (webhook race)', () => {
@@ -33,6 +40,7 @@ describe('OrderStatusResponse type', () => {
       paid: true,
       payment_status: 'paid',
       fulfillment_status: 'processing',
+      fulfillment_error: null,
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc123',
@@ -40,11 +48,39 @@ describe('OrderStatusResponse type', () => {
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
     };
 
     expect(response.paid).toBe(true);
     expect(response.has_final_documents).toBe(false);
     expect(response.fulfillment_status).toBe('processing');
+    expect(response.last_final_document_created_at).toBeNull();
+  });
+
+  it('has correct shape for failed fulfillment with error message', () => {
+    const response: OrderStatusResponse = {
+      paid: true,
+      payment_status: 'paid',
+      fulfillment_status: 'failed',
+      fulfillment_error: 'Storage upload failed: bucket not found',
+      paid_at: '2024-01-15T10:30:00Z',
+      order_id: 'order-123',
+      stripe_session_id: 'cs_test_abc123',
+      total_amount: 39.99,
+      currency: 'GBP',
+      has_final_documents: false,
+      final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
+    };
+
+    expect(response.paid).toBe(true);
+    expect(response.fulfillment_status).toBe('failed');
+    expect(response.fulfillment_error).toBe('Storage upload failed: bucket not found');
+    expect(response.has_final_documents).toBe(false);
   });
 
   it('has correct shape for unpaid/pending order', () => {
@@ -52,6 +88,7 @@ describe('OrderStatusResponse type', () => {
       paid: false,
       payment_status: 'pending',
       fulfillment_status: 'pending',
+      fulfillment_error: null,
       paid_at: null,
       order_id: 'order-456',
       stripe_session_id: 'cs_test_def456',
@@ -59,11 +96,15 @@ describe('OrderStatusResponse type', () => {
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: false,
+      edit_window_ends_at: null,
     };
 
     expect(response.paid).toBe(false);
     expect(response.payment_status).toBe('pending');
     expect(response.paid_at).toBeNull();
+    expect(response.edit_window_open).toBe(false);
   });
 
   it('has correct shape for no order found', () => {
@@ -71,6 +112,7 @@ describe('OrderStatusResponse type', () => {
       paid: false,
       payment_status: 'pending',
       fulfillment_status: null,
+      fulfillment_error: null,
       paid_at: null,
       order_id: null,
       stripe_session_id: null,
@@ -78,10 +120,14 @@ describe('OrderStatusResponse type', () => {
       currency: null,
       has_final_documents: false,
       final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: false,
+      edit_window_ends_at: null,
     };
 
     expect(response.order_id).toBeNull();
     expect(response.paid).toBe(false);
+    expect(response.fulfillment_error).toBeNull();
   });
 
   it('supports all payment status values', () => {
@@ -98,6 +144,7 @@ describe('OrderStatusResponse type', () => {
         paid: status === 'paid',
         payment_status: status,
         fulfillment_status: null,
+        fulfillment_error: null,
         paid_at: null,
         order_id: null,
         stripe_session_id: null,
@@ -105,6 +152,9 @@ describe('OrderStatusResponse type', () => {
         currency: null,
         has_final_documents: false,
         final_document_count: 0,
+        last_final_document_created_at: null,
+        edit_window_open: false,
+        edit_window_ends_at: null,
       };
       expect(response.payment_status).toBe(status);
     });
@@ -125,6 +175,7 @@ describe('OrderStatusResponse type', () => {
         paid: false,
         payment_status: 'pending',
         fulfillment_status: status,
+        fulfillment_error: status === 'failed' ? 'Test error' : null,
         paid_at: null,
         order_id: null,
         stripe_session_id: null,
@@ -132,6 +183,9 @@ describe('OrderStatusResponse type', () => {
         currency: null,
         has_final_documents: false,
         final_document_count: 0,
+        last_final_document_created_at: null,
+        edit_window_open: false,
+        edit_window_ends_at: null,
       };
       expect(response.fulfillment_status).toBe(status);
     });
@@ -206,6 +260,7 @@ describe('Order Status Business Logic', () => {
       paid: true,
       payment_status: 'paid',
       fulfillment_status: 'fulfilled',
+      fulfillment_error: null,
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc123',
@@ -213,6 +268,9 @@ describe('Order Status Business Logic', () => {
       currency: 'GBP',
       has_final_documents: true,
       final_document_count: 4,
+      last_final_document_created_at: '2024-01-15T10:31:00Z',
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
     };
 
     // UI should show success state
@@ -225,6 +283,7 @@ describe('Order Status Business Logic', () => {
       paid: true,
       payment_status: 'paid',
       fulfillment_status: 'processing',
+      fulfillment_error: null,
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc123',
@@ -232,6 +291,9 @@ describe('Order Status Business Logic', () => {
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
     };
 
     // UI should show "Finalizing..." and start polling
@@ -239,11 +301,63 @@ describe('Order Status Business Logic', () => {
     expect(shouldPoll).toBe(true);
   });
 
+  it('fulfillment_status=failed should trigger retry option', () => {
+    const response: OrderStatusResponse = {
+      paid: true,
+      payment_status: 'paid',
+      fulfillment_status: 'failed',
+      fulfillment_error: 'Document generation failed',
+      paid_at: '2024-01-15T10:30:00Z',
+      order_id: 'order-123',
+      stripe_session_id: 'cs_test_abc123',
+      total_amount: 39.99,
+      currency: 'GBP',
+      has_final_documents: false,
+      final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
+    };
+
+    // UI should show error state with retry button
+    const shouldShowRetry = response.paid &&
+      !response.has_final_documents &&
+      (response.fulfillment_status === 'failed' || response.fulfillment_status === 'ready_to_generate');
+    expect(shouldShowRetry).toBe(true);
+    expect(response.fulfillment_error).toBe('Document generation failed');
+  });
+
+  it('fulfillment_status=ready_to_generate should auto-retry', () => {
+    const response: OrderStatusResponse = {
+      paid: true,
+      payment_status: 'paid',
+      fulfillment_status: 'ready_to_generate',
+      fulfillment_error: null,
+      paid_at: '2024-01-15T10:30:00Z',
+      order_id: 'order-123',
+      stripe_session_id: 'cs_test_abc123',
+      total_amount: 39.99,
+      currency: 'GBP',
+      has_final_documents: false,
+      final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: true,
+      edit_window_ends_at: '2024-02-14T10:30:00Z',
+    };
+
+    // UI should auto-retry when stuck in ready_to_generate
+    const shouldAutoRetry = response.paid &&
+      !response.has_final_documents &&
+      (response.fulfillment_status === 'failed' || response.fulfillment_status === 'ready_to_generate');
+    expect(shouldAutoRetry).toBe(true);
+  });
+
   it('!paid means payment not confirmed', () => {
     const response: OrderStatusResponse = {
       paid: false,
       payment_status: 'pending',
       fulfillment_status: 'pending',
+      fulfillment_error: null,
       paid_at: null,
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc123',
@@ -251,6 +365,9 @@ describe('Order Status Business Logic', () => {
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
+      last_final_document_created_at: null,
+      edit_window_open: false,
+      edit_window_ends_at: null,
     };
 
     // UI should not show success state
@@ -266,8 +383,8 @@ describe('Product/Jurisdiction Coverage', () => {
     { type: 'complete_pack', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
     { type: 'money_claim', jurisdictions: ['england', 'wales'] },
     { type: 'sc_money_claim', jurisdictions: ['scotland'] },
-    { type: 'ast_standard', jurisdictions: ['england', 'wales'] },
-    { type: 'ast_premium', jurisdictions: ['england', 'wales'] },
+    { type: 'ast_standard', jurisdictions: ['england', 'wales', 'northern-ireland'] },
+    { type: 'ast_premium', jurisdictions: ['england', 'wales', 'northern-ireland'] },
   ];
 
   products.forEach(({ type, jurisdictions }) => {
@@ -276,6 +393,7 @@ describe('Product/Jurisdiction Coverage', () => {
         paid: true,
         payment_status: 'paid',
         fulfillment_status: 'fulfilled',
+        fulfillment_error: null,
         paid_at: '2024-01-15T10:30:00Z',
         order_id: `order-${type}`,
         stripe_session_id: 'cs_test_abc123',
@@ -283,6 +401,9 @@ describe('Product/Jurisdiction Coverage', () => {
         currency: 'GBP',
         has_final_documents: true,
         final_document_count: 4,
+        last_final_document_created_at: '2024-01-15T10:31:00Z',
+        edit_window_open: true,
+        edit_window_ends_at: '2024-02-14T10:30:00Z',
       };
 
       expect(response.order_id).toBe(`order-${type}`);
