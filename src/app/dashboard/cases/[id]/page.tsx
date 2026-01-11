@@ -6,15 +6,20 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
+import { downloadDocument } from '@/lib/documents/download';
+import type { OrderStatusResponse } from '@/app/api/orders/status/route';
+import { getPackContents, getNextSteps } from '@/lib/products';
+import type { PackItem } from '@/lib/products';
+import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 
 interface CaseDetails {
   id: string;
@@ -33,17 +38,22 @@ interface Document {
   document_title: string;
   document_type: string;
   is_preview: boolean;
-  file_path: string | null;
+  pdf_url: string | null;
   created_at: string;
 }
+
+// Polling configuration
+const POLL_INTERVAL_MS = 2500; // 2.5 seconds
+const POLL_TIMEOUT_MS = 60000; // 60 seconds max polling
 
 export default function CaseDetailPage() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const caseId = params.id as string;
-  const paymentStatus = searchParams.get('payment');
-  const paymentSuccess = paymentStatus === 'success';
+
+  // payment=success only means "arrived from checkout", not proof of payment
+  const arrivedFromCheckout = searchParams.get('payment') === 'success';
 
   const [caseDetails, setCaseDetails] = useState<CaseDetails | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -60,6 +70,29 @@ export default function CaseDetailPage() {
     { role: 'user' | 'assistant'; content: string; timestamp: number }[]
   >([]);
   const [askLoading, setAskLoading] = useState(false);
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
+
+  // Order status state (DB-backed, authoritative)
+  const [orderStatus, setOrderStatus] = useState<OrderStatusResponse | null>(null);
+  const [isPolling, setIsPolling] = useState(false);
+  const [pollingTimedOut, setPollingTimedOut] = useState(false);
+  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollStartTimeRef = useRef<number | null>(null);
+
+  const handleDocumentDownload = async (docId: string) => {
+    setDownloadingDocId(docId);
+    try {
+      const success = await downloadDocument(docId);
+      if (!success) {
+        alert('Failed to download document. Please try again.');
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Failed to download document. Please try again.');
+    } finally {
+      setDownloadingDocId(null);
+    }
+  };
 
   const fetchCaseDetails = useCallback(async () => {
     try {
@@ -91,6 +124,66 @@ export default function CaseDetailPage() {
       console.error('Failed to fetch documents:', err);
     }
   }, [caseId]);
+
+  // Fetch order status from DB (authoritative source)
+  const fetchOrderStatus = useCallback(async (): Promise<OrderStatusResponse | null> => {
+    try {
+      const response = await fetch(`/api/orders/status?case_id=${caseId}`);
+      if (response.ok) {
+        const data: OrderStatusResponse = await response.json();
+        setOrderStatus(data);
+        return data;
+      }
+    } catch (err) {
+      console.error('Failed to fetch order status:', err);
+    }
+    return null;
+  }, [caseId]);
+
+  // Stop polling and cleanup
+  const stopPolling = useCallback(() => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+    setIsPolling(false);
+  }, []);
+
+  // Start polling for document fulfillment
+  const startPolling = useCallback(() => {
+    if (pollIntervalRef.current) return; // Already polling
+
+    setIsPolling(true);
+    setPollingTimedOut(false);
+    pollStartTimeRef.current = Date.now();
+
+    pollIntervalRef.current = setInterval(async () => {
+      // Check timeout
+      const elapsed = Date.now() - (pollStartTimeRef.current || 0);
+      if (elapsed >= POLL_TIMEOUT_MS) {
+        stopPolling();
+        setPollingTimedOut(true);
+        return;
+      }
+
+      // Fetch latest status
+      const status = await fetchOrderStatus();
+      if (status?.has_final_documents) {
+        stopPolling();
+        // Refresh documents list
+        fetchCaseDocuments();
+      }
+    }, POLL_INTERVAL_MS);
+  }, [fetchOrderStatus, stopPolling, fetchCaseDocuments]);
+
+  // Cleanup polling on unmount or navigation
+  useEffect(() => {
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+      }
+    };
+  }, []);
 
   const runAskHeaven = useCallback(
     async (question?: string) => {
@@ -135,6 +228,7 @@ export default function CaseDetailPage() {
     [caseId],
   );
 
+  // Initial data fetch
   useEffect(() => {
     if (!caseId) return;
 
@@ -143,31 +237,48 @@ export default function CaseDetailPage() {
     runAskHeaven();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
 
-  // Track purchase conversion when payment is successful
+  // Fetch order status and start polling if needed
   useEffect(() => {
-    if (paymentSuccess && caseDetails) {
+    if (!caseId) return;
+
+    const checkOrderStatus = async () => {
+      const status = await fetchOrderStatus();
+
+      // If paid but no final documents, start polling
+      if (status?.paid && !status.has_final_documents) {
+        startPolling();
+      }
+    };
+
+    checkOrderStatus();
+  }, [caseId, fetchOrderStatus, startPolling]);
+
+  // Track purchase conversion when payment is confirmed via DB
+  useEffect(() => {
+    if (orderStatus?.paid && caseDetails) {
       // Prevent duplicate tracking by checking sessionStorage
       const purchaseKey = `purchase_tracked_${caseId}`;
       if (sessionStorage.getItem(purchaseKey)) return;
 
       // Get product info from case type
       const productName = getCaseTypeLabel(caseDetails.case_type);
+      const amount = orderStatus.total_amount || 29.99;
+      const currency = orderStatus.currency || 'GBP';
 
       // Track purchase in analytics (GA4 + FB Pixel)
-      // Note: We use case_id as transaction_id, value is approximate
-      trackPurchase(caseId, 29.99, 'GBP', [
+      trackPurchase(caseId, amount, currency, [
         {
           item_id: caseDetails.case_type,
           item_name: productName,
           item_category: 'legal_document',
-          price: 29.99,
+          price: amount,
           quantity: 1,
         },
       ]);
 
       sessionStorage.setItem(purchaseKey, 'true');
     }
-  }, [paymentSuccess, caseDetails, caseId]);
+  }, [orderStatus?.paid, orderStatus?.total_amount, orderStatus?.currency, caseDetails, caseId]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -208,30 +319,94 @@ export default function CaseDetailPage() {
     }
   };
 
-  const getNextSteps = () => {
-    if (!caseDetails) return [] as string[];
+  // Derive product and case parameters from case details
+  const getProductAndParams = () => {
+    if (!caseDetails) return null;
 
-    if (caseDetails.case_type === 'money_claim') {
-      if (caseDetails.jurisdiction === 'scotland') {
-        return [
-          'Review Simple Procedure Form 3A and particulars for accuracy before printing.',
-          'Serve the Form 3A pack on the respondent using the Sheriff Clerk guidance.',
-          'File your completed bundle with the Sheriff Court and keep proof of service.',
-        ];
+    const facts = caseDetails.collected_facts || {};
+
+    // Determine product type from case_type and facts
+    let product = facts.product || facts.original_product || '';
+
+    // Map case_type to product if not explicitly set
+    if (!product) {
+      if (caseDetails.case_type === 'money_claim') {
+        product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+      } else if (caseDetails.case_type === 'tenancy_agreement') {
+        product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
+      } else if (caseDetails.case_type === 'eviction') {
+        product = facts.pack_type === 'complete_pack' ? 'complete_pack' : 'notice_only';
+      } else {
+        // Fallback - try to infer from pack_type
+        product = facts.pack_type || 'notice_only';
       }
-
-      return [
-        'Print and sign the N1 claim form and particulars of claim.',
-        'Include the pre-action letter and information sheet when serving the defendant.',
-        'File the claim via Money Claim Online or your local court and retain proof of service.',
-      ];
     }
 
-    return [
-      'Download and review your documents.',
-      'Follow the included filing or service instructions.',
-      'Contact support if you need any help completing the process.',
-    ];
+    // Determine route
+    const route = facts.route || facts.notice_route || facts.eviction_route || null;
+
+    // Determine notice period
+    const noticePeriodDays = facts.notice_period_days || facts.notice_period || null;
+
+    // Check for arrears
+    const hasArrears = Boolean(
+      facts.has_arrears ||
+      facts.rent_arrears ||
+      facts.arrears_amount ||
+      (facts.ground_codes && (
+        facts.ground_codes.includes('8') ||
+        facts.ground_codes.includes('10') ||
+        facts.ground_codes.includes('11')
+      ))
+    );
+
+    // Check if arrears schedule is in documents
+    const includeArrearsSchedule = hasArrears || documents.some(
+      doc => doc.document_type === 'arrears_schedule'
+    );
+
+    return {
+      product,
+      jurisdiction: caseDetails.jurisdiction,
+      route,
+      noticePeriodDays,
+      hasArrears,
+      includeArrearsSchedule,
+      grounds: facts.ground_codes || null,
+    };
+  };
+
+  // Get pack contents for "What's included" section
+  const getPackContentsForCase = (): PackItem[] => {
+    const params = getProductAndParams();
+    if (!params) return [];
+
+    return getPackContents({
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      route: params.route,
+      grounds: params.grounds,
+      has_arrears: params.hasArrears,
+      include_arrears_schedule: params.includeArrearsSchedule,
+    });
+  };
+
+  // Get next steps for the case
+  const getNextStepsForCase = () => {
+    const params = getProductAndParams();
+    if (!params) {
+      return {
+        title: 'What to do next',
+        steps: ['Review your documents and follow the included instructions.'],
+      };
+    }
+
+    return getNextSteps({
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      route: params.route,
+      notice_period_days: params.noticePeriodDays,
+    });
   };
 
   const handleSaveChanges = async () => {
@@ -470,23 +645,54 @@ export default function CaseDetailPage() {
             </div>
           </div>
 
+          {/* Edit Window Status */}
+          {orderStatus?.paid && (
+            <div className={`mb-4 p-3 rounded-lg text-sm ${
+              orderStatus.edit_window_open
+                ? 'bg-primary/5 border border-primary/20 text-charcoal'
+                : 'bg-warning/10 border border-warning/20 text-warning-dark'
+            }`}>
+              {orderStatus.edit_window_open ? (
+                <span>
+                  Unlimited edits &amp; regeneration until{' '}
+                  <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at!)}</strong>{' '}
+                  (30 days from purchase).
+                </span>
+              ) : (
+                <span>
+                  This case is locked — the 30-day edit window ended{' '}
+                  <strong>{formatEditWindowEndDate(orderStatus.edit_window_ends_at!)}</strong>.
+                  Downloads remain available.
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3">
             {!isEditMode ? (
               <>
-                <Button variant="primary" onClick={() => setIsEditMode(true)}>
+                <Button
+                  variant="primary"
+                  onClick={() => setIsEditMode(true)}
+                  disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
+                >
                   <RiEditLine className="w-4 h-4 mr-2 text-white" />
                   Edit Case Details
                 </Button>
                 {caseDetails.wizard_progress < 100 && (
-                  <Button variant="secondary" onClick={handleContinueWizard}>
+                  <Button
+                    variant="secondary"
+                    onClick={handleContinueWizard}
+                    disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
+                  >
                     Continue Wizard
                   </Button>
                 )}
                 <Button
                   variant="outline"
                   onClick={handleRegenerateDocument}
-                  disabled={isRegenerating}
+                  disabled={isRegenerating || (orderStatus?.paid && !orderStatus?.edit_window_open)}
                 >
                   {isRegenerating ? 'Regenerating...' : 'Regenerate Document'}
                 </Button>
@@ -504,7 +710,7 @@ export default function CaseDetailPage() {
                 <Button
                   variant="primary"
                   onClick={handleSaveChanges}
-                  disabled={isSaving}
+                  disabled={isSaving || (orderStatus?.paid && !orderStatus?.edit_window_open)}
                 >
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
@@ -535,51 +741,105 @@ export default function CaseDetailPage() {
           </div>
         )}
 
-        {/* Payment Success Summary */}
-        {paymentSuccess && (
+        {/* Payment Success Summary - DB-backed status */}
+        {orderStatus?.paid && orderStatus.has_final_documents && (
           <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
             <div className="flex items-start gap-3">
               <div className="text-success text-2xl">✔</div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-charcoal">Payment received — your documents are ready</h3>
                 <p className="text-gray-700 mt-1">
-                  Download your bundle and follow the steps below to file your claim.
+                  Your purchase is complete. Download your documents below and follow the next steps.
                 </p>
 
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  {/* What's included - informational */}
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h4 className="font-semibold text-charcoal mb-3">Documents in your pack</h4>
-                    {documents.length === 0 ? (
-                      <p className="text-gray-600 text-sm">Generating your documents...</p>
+                    <h4 className="font-semibold text-charcoal mb-3">Included in your purchase</h4>
+                    {getPackContentsForCase().length === 0 ? (
+                      <p className="text-sm text-gray-600">See generated documents below.</p>
                     ) : (
-                      <ul className="space-y-2 text-sm text-gray-800">
-                        {documents.map((doc) => (
-                          <li key={doc.id} className="flex items-center justify-between gap-2">
-                            <span className="truncate">{doc.document_title}</span>
-                            {doc.file_path && (
-                              <a
-                                href={doc.file_path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:text-primary-dark font-semibold"
-                              >
-                                Download
-                              </a>
-                            )}
+                      <ul className="space-y-1.5 text-sm text-gray-700">
+                        {getPackContentsForCase().map((item) => (
+                          <li key={item.key} className="flex items-start gap-2">
+                            <span className="text-success mt-0.5">•</span>
+                            <span>{item.title}</span>
                           </li>
                         ))}
                       </ul>
                     )}
                   </div>
 
+                  {/* Generated documents - actual files */}
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h4 className="font-semibold text-charcoal mb-3">Next steps</h4>
+                    <h4 className="font-semibold text-charcoal mb-3">Generated documents</h4>
+                    <ul className="space-y-2 text-sm text-gray-800">
+                      {documents.map((doc) => (
+                        <li key={doc.id} className="flex items-center justify-between gap-2">
+                          <span className="truncate">{doc.document_title}</span>
+                          {doc.pdf_url && (
+                            <button
+                              onClick={() => handleDocumentDownload(doc.id)}
+                              disabled={downloadingDocId === doc.id}
+                              className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
+                            >
+                              {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
+                            </button>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Next steps */}
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <h4 className="font-semibold text-charcoal mb-3">{getNextStepsForCase().title}</h4>
                     <ol className="list-decimal list-inside space-y-2 text-sm text-gray-800">
-                      {getNextSteps().map((step, idx) => (
+                      {getNextStepsForCase().steps.map((step, idx) => (
                         <li key={idx}>{step}</li>
                       ))}
                     </ol>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Finalizing Documents - shown when paid but documents still generating */}
+        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && (
+          <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Finalizing your documents...</h3>
+                <p className="text-gray-700 mt-1">
+                  Your payment has been received. We're generating your final documents now. This usually takes just a few seconds.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Polling Timeout - shown when documents didn't arrive in time */}
+        {orderStatus?.paid && !orderStatus.has_final_documents && pollingTimedOut && (
+          <div className="mb-6 p-6 rounded-lg border border-warning/20 bg-warning/5">
+            <div className="flex items-start gap-3">
+              <div className="text-warning text-2xl">⏳</div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Still generating your documents</h3>
+                <p className="text-gray-700 mt-1">
+                  Your payment was successful, but document generation is taking longer than expected.
+                  Please try refreshing the page. If documents don't appear within a few minutes,
+                  contact support with your Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" onClick={() => window.location.reload()}>
+                    Refresh Page
+                  </Button>
+                  <Link href="/contact">
+                    <Button variant="outline">Contact Support</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -758,15 +1018,19 @@ export default function CaseDetailPage() {
                             Preview
                           </Badge>
                         )}
-                        {doc.file_path && (
-                          <a
-                            href={doc.file_path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:text-primary-dark"
+                        {doc.pdf_url && (
+                          <button
+                            onClick={() => handleDocumentDownload(doc.id)}
+                            disabled={downloadingDocId === doc.id}
+                            className="text-primary hover:text-primary-dark disabled:opacity-50"
+                            title="Download document"
                           >
-                            <RiExternalLinkLine className="w-5 h-5 text-primary" />
-                          </a>
+                            {downloadingDocId === doc.id ? (
+                              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <RiDownloadLine className="w-5 h-5" />
+                            )}
+                          </button>
                         )}
                       </div>
                     </div>

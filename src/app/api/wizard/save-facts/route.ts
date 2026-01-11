@@ -10,6 +10,8 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { logMutation, getChangedKeys } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 export const runtime = 'nodejs';
 
@@ -31,6 +33,12 @@ export async function POST(request: NextRequest) {
         { error: 'facts must be an object' },
         { status: 400 }
       );
+    }
+
+    // Check edit window - block if case has paid order with expired window
+    const mutationCheck = await checkMutationAllowed(case_id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
     }
 
     const supabase = await createServerSupabaseClient();
@@ -130,6 +138,18 @@ export async function POST(request: NextRequest) {
           { error: 'Failed to save facts' },
           { status: 500 }
         );
+      }
+
+      // Audit log for paid cases (non-blocking)
+      const changedKeys = getChangedKeys(existingFacts, facts);
+      if (changedKeys.length > 0) {
+        logMutation({
+          caseId: case_id,
+          userId: user?.id || null,
+          action: 'case_facts_update',
+          changedKeys,
+          metadata: { source: 'save-facts', fieldsUpdated: changedKeys.length },
+        }).catch(() => {}); // Fire and forget
       }
 
       return NextResponse.json({

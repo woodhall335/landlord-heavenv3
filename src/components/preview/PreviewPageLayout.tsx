@@ -5,6 +5,7 @@ import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download } from 'lucide-react';
+import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { trackBeginCheckout } from '@/lib/analytics';
 
 interface PreviewPageLayoutProps {
@@ -49,6 +50,12 @@ export function PreviewPageLayout({
       // Link case to user if not already linked
       await fetch(`/api/cases/${caseId}/link`, { method: 'POST' });
 
+      // Get product-aware redirect URLs
+      const { successUrl, cancelUrl } = getCheckoutRedirectUrls({
+        product: product as CheckoutProduct,
+        caseId,
+      });
+
       // Create checkout session
       const response = await fetch('/api/checkout/create', {
         method: 'POST',
@@ -56,8 +63,8 @@ export function PreviewPageLayout({
         body: JSON.stringify({
           product_type: product,
           case_id: caseId,
-          success_url: `${window.location.origin}/dashboard/cases/${caseId}?payment=success`,
-          cancel_url: `${window.location.origin}/wizard/preview/${caseId}?payment=cancelled`,
+          success_url: successUrl,
+          cancel_url: cancelUrl,
         }),
       });
 
