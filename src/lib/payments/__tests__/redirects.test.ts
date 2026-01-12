@@ -81,24 +81,24 @@ describe('redirects', () => {
   describe('getSuccessUrl', () => {
     const caseId = 'case-123';
 
-    describe('single-transaction products', () => {
-      it('routes notice_only to success page', () => {
+    // As of Jan 2026, ALL products redirect to /dashboard/cases/[caseId]?payment=success
+    // This unified approach provides better UX with robust polling and error handling.
+    describe('unified dashboard redirect (all products)', () => {
+      it('routes notice_only to dashboard with payment flag', () => {
         const url = getSuccessUrl({ product: 'notice_only', caseId });
-        expect(url).toBe('https://landlordheaven.co.uk/success/notice_only/case-123');
+        expect(url).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
       });
 
-      it('routes ast_standard to success page', () => {
+      it('routes ast_standard to dashboard with payment flag', () => {
         const url = getSuccessUrl({ product: 'ast_standard', caseId });
-        expect(url).toBe('https://landlordheaven.co.uk/success/ast_standard/case-123');
+        expect(url).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
       });
 
-      it('routes ast_premium to success page', () => {
+      it('routes ast_premium to dashboard with payment flag', () => {
         const url = getSuccessUrl({ product: 'ast_premium', caseId });
-        expect(url).toBe('https://landlordheaven.co.uk/success/ast_premium/case-123');
+        expect(url).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
       });
-    });
 
-    describe('dashboard products', () => {
       it('routes complete_pack to dashboard with payment flag', () => {
         const url = getSuccessUrl({ product: 'complete_pack', caseId });
         expect(url).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
@@ -127,7 +127,7 @@ describe('redirects', () => {
           caseId,
           baseUrl: 'http://localhost:5000',
         });
-        expect(url).toBe('http://localhost:5000/success/notice_only/case-123');
+        expect(url).toBe('http://localhost:5000/dashboard/cases/case-123?payment=success');
       });
     });
   });
@@ -160,7 +160,7 @@ describe('redirects', () => {
 
     it('returns both successUrl and cancelUrl for notice_only', () => {
       const result = getCheckoutRedirectUrls({ product: 'notice_only', caseId });
-      expect(result.successUrl).toBe('https://landlordheaven.co.uk/success/notice_only/case-123');
+      expect(result.successUrl).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
       expect(result.cancelUrl).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled');
     });
 
@@ -197,11 +197,12 @@ describe('redirects', () => {
       }
     });
 
-    it('all products return valid success URLs with caseId', () => {
+    it('all products return valid dashboard success URLs with caseId', () => {
       const caseId = 'test-case';
       for (const product of products) {
         const url = getSuccessUrl({ product, caseId });
-        expect(url).toMatch(/^https:\/\/landlordheaven\.co\.uk\/(success|dashboard)/);
+        // All products now redirect to dashboard for unified UX
+        expect(url).toBe(`https://landlordheaven.co.uk/dashboard/cases/${caseId}?payment=success`);
         expect(url).not.toContain('undefined');
       }
     });
