@@ -379,6 +379,11 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 function getWalesCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   const items = getWalesNoticeOnlyContents(args);
 
+  // If notice contents returned empty (invalid route), don't add court forms
+  if (items.length === 0) {
+    return [];
+  }
+
   items.push({
     key: 'n5_claim',
     title: 'Form N5 - Claim for Possession',
