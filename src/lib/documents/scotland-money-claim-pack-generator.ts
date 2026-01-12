@@ -314,9 +314,10 @@ function buildSimpleProcedurePayload(
     damages_total: totals.damages_total,
     other_total: totals.other_total,
     total_claim_amount: totals.total_claim_amount,
-    interest_rate: totals.interest_rate,
-    interest_to_date: totals.interest_to_date,
-    daily_interest: totals.daily_interest,
+    // Convert null to undefined for ScotlandMoneyClaimData interface compatibility
+    interest_rate: totals.interest_rate ?? undefined,
+    interest_to_date: totals.interest_to_date ?? undefined,
+    daily_interest: totals.daily_interest ?? undefined,
     interest_start_date: claim.interest_start_date,
     court_fee: totals.court_fee,
     solicitor_costs: totals.solicitor_costs,
