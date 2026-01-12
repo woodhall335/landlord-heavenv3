@@ -26,6 +26,7 @@ import {
   validateNoticeOnlyCase,
 } from '@/lib/validation/notice-only-case-validator';
 import { Loader2 } from 'lucide-react';
+import { trackWizardPreviewViewed, trackCheckoutStarted } from '@/lib/analytics';
 
 interface CaseData {
   id: string;
@@ -153,6 +154,18 @@ export default function WizardPreviewPage() {
         }
 
         setCaseData(fetchedCase);
+
+        // Track preview viewed (Vercel Analytics)
+        const productFromFacts =
+          (fetchedCase.collected_facts as any)?.meta?.product ||
+          (fetchedCase.collected_facts as any)?.__meta?.product ||
+          (fetchedCase.collected_facts as any)?.__meta?.original_product ||
+          'unknown';
+        trackWizardPreviewViewed({
+          product: productFromFacts,
+          route: fetchedCase.recommended_route || 'unknown',
+          jurisdiction: fetchedCase.jurisdiction || 'unknown',
+        });
 
         // Try to generate/load preview
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};

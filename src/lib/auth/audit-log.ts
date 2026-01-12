@@ -13,7 +13,8 @@ export type MutationAction =
   | 'case_facts_update'
   | 'evidence_upload'
   | 'document_regenerate'
-  | 'case_status_change';
+  | 'case_status_change'
+  | 'case_archived';
 
 export interface MutationLogEntry {
   id?: string;

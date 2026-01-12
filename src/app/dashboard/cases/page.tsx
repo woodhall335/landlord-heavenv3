@@ -24,6 +24,12 @@ interface Case {
   wizard_progress: number;
   created_at: string;
   updated_at: string;
+  // Derived display status from API
+  display_status?: string;
+  display_label?: string;
+  display_badge_variant?: 'neutral' | 'warning' | 'success';
+  has_paid_order?: boolean;
+  has_fulfilled_order?: boolean;
 }
 
 type FilterStatus = 'all' | 'draft' | 'in_progress' | 'completed';
@@ -119,8 +125,13 @@ export default function CasesListPage() {
     return labels[jurisdiction] || jurisdiction;
   };
 
-  const getStatusColor = (status: string): 'neutral' | 'warning' | 'success' => {
-    switch (status) {
+  const getStatusColor = (caseItem: Case): 'neutral' | 'warning' | 'success' => {
+    // Use derived badge variant if available
+    if (caseItem.display_badge_variant) {
+      return caseItem.display_badge_variant;
+    }
+    // Fallback to status-based color
+    switch (caseItem.status) {
       case 'completed':
         return 'success';
       case 'in_progress':
@@ -128,6 +139,15 @@ export default function CasesListPage() {
       default:
         return 'neutral';
     }
+  };
+
+  const getStatusLabel = (caseItem: Case): string => {
+    // Use derived display label if available
+    if (caseItem.display_label) {
+      return caseItem.display_label;
+    }
+    // Fallback to raw status
+    return caseItem.status.replace('_', ' ');
   };
 
   // Show loading while checking auth
@@ -301,8 +321,8 @@ export default function CasesListPage() {
                       {getJurisdictionLabel(caseItem.jurisdiction)}
                     </p>
                   </div>
-                  <Badge variant={getStatusColor(caseItem.status)}>
-                    {caseItem.status.replace('_', ' ')}
+                  <Badge variant={getStatusColor(caseItem)}>
+                    {getStatusLabel(caseItem)}
                   </Badge>
                 </div>
 

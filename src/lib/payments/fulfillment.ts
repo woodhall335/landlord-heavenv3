@@ -192,6 +192,15 @@ export async function fulfillOrder({
       })
       .eq('id', orderId);
 
+    // Sync case status to 'completed' (idempotent)
+    await supabase
+      .from('cases')
+      .update({
+        status: 'completed',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', caseId);
+
     logFulfillmentValidation(orderId, caseId, productType, preValidation);
 
     return {
@@ -469,6 +478,15 @@ export async function fulfillOrder({
           },
         })
         .eq('id', orderId);
+
+      // Sync case status to 'completed' (idempotent)
+      await supabase
+        .from('cases')
+        .update({
+          status: 'completed',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', caseId);
 
       return {
         status: 'fulfilled',

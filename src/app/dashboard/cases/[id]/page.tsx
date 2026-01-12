@@ -13,8 +13,9 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line } from 'react-icons/ri';
-import { trackPurchase } from '@/lib/analytics';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine } from 'react-icons/ri';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
 import { getPackContents, getNextSteps } from '@/lib/products';
@@ -91,9 +92,20 @@ export default function CaseDetailPage() {
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
   const [packContents, setPackContents] = useState<PackItem[]>([]);
 
-  const handleDocumentDownload = async (docId: string) => {
+  // Delete/Archive modal state
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDocumentDownload = async (docId: string, documentType?: string) => {
     setDownloadingDocId(docId);
     try {
+      // Track document download (Vercel Analytics)
+      const params = caseDetails ? getProductAndParams() : null;
+      trackDocumentDownloadClicked({
+        document_type: documentType || 'unknown',
+        product: params?.product,
+      });
+
       const success = await downloadDocument(docId);
       if (!success) {
         alert('Failed to download document. Please try again.');
@@ -373,11 +385,19 @@ export default function CaseDetailPage() {
     if (arrivedFromCheckout && orderStatus?.paid && !showPaymentSuccess) {
       setShowPaymentSuccess(true);
 
+      // Track payment success landing (Vercel Analytics)
+      const params = caseDetails ? getProductAndParams() : null;
+      trackPaymentSuccessLanded({
+        product: params?.product,
+        caseId_present: !!caseId,
+      });
+
       // Auto-scroll to downloads section after a short delay
       setTimeout(() => {
         downloadsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 500);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arrivedFromCheckout, orderStatus?.paid, showPaymentSuccess]);
 
   // Fetch order status and handle auto-retry + polling
@@ -636,22 +656,28 @@ export default function CaseDetailPage() {
   };
 
   const handleDeleteCase = async () => {
-    if (!confirm('Are you sure you want to delete this case? This action cannot be undone.')) {
-      return;
-    }
-
+    setIsDeleting(true);
     try {
       const response = await fetch(`/api/cases/${caseId}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
-        router.push('/dashboard/cases');
+        // Track case archived (Vercel Analytics)
+        trackCaseArchived({
+          had_paid_order: !!orderStatus?.paid,
+        });
+
+        setShowDeleteModal(false);
+        router.push('/dashboard/cases?archived=true');
       } else {
-        alert('Failed to delete case');
+        const data = await response.json();
+        alert(data.error || 'Failed to archive case');
+        setIsDeleting(false);
       }
     } catch {
-      alert('Failed to delete case');
+      alert('Failed to archive case');
+      setIsDeleting(false);
     }
   };
 
@@ -779,12 +805,15 @@ export default function CaseDetailPage() {
               </Button>
             </Link>
 
-            {/* Delete Case - only if not paid */}
-            {!orderStatus?.paid && (
-              <Button variant="outline" onClick={handleDeleteCase}>
-                Delete Case
-              </Button>
-            )}
+            {/* Delete/Archive Case */}
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteModal(true)}
+              className="text-gray-600 hover:text-red-600 hover:border-red-300"
+            >
+              <RiDeleteBinLine className="w-4 h-4 mr-2" />
+              Delete Case
+            </Button>
           </div>
         </Container>
       </div>
@@ -923,7 +952,7 @@ export default function CaseDetailPage() {
                           <span className="truncate">{doc.document_title}</span>
                           {doc.pdf_url && (
                             <button
-                              onClick={() => handleDocumentDownload(doc.id)}
+                              onClick={() => handleDocumentDownload(doc.id, doc.document_type)}
                               disabled={downloadingDocId === doc.id}
                               className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
                             >
@@ -1288,7 +1317,7 @@ export default function CaseDetailPage() {
                           )}
                           {doc.pdf_url && (
                             <button
-                              onClick={() => handleDocumentDownload(doc.id)}
+                              onClick={() => handleDocumentDownload(doc.id, doc.document_type)}
                               disabled={downloadingDocId === doc.id}
                               className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
                               title="Download document"
@@ -1374,6 +1403,35 @@ export default function CaseDetailPage() {
           </div>
         </div>
       </Container>
+
+      {/* Delete/Archive Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteCase}
+        title="Delete this case?"
+        message={
+          orderStatus?.paid ? (
+            <div className="space-y-2">
+              <p>
+                This will archive the case and remove it from your dashboard.
+              </p>
+              <p className="text-amber-600 font-medium">
+                Your purchased documents may no longer be easily accessible.
+              </p>
+            </div>
+          ) : (
+            <p>
+              This will archive the case and remove it from your dashboard.
+              You can contact support if you need to restore it later.
+            </p>
+          )
+        }
+        confirmLabel="Delete Case"
+        cancelLabel="Keep Case"
+        variant={orderStatus?.paid ? 'warning' : 'danger'}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import {
 import { PopupProvider } from "@/components/providers/PopupProvider";
 import { TrackingPixels } from "@/components/analytics/TrackingPixels";
 import { Section21HeaderBanner } from "@/components/ui/Section21HeaderBanner";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -69,6 +70,7 @@ export default async function RootLayout({
           <Footer />
         </PopupProvider>
         <TrackingPixels />
+        <Analytics />
       </body>
     </html>
   );

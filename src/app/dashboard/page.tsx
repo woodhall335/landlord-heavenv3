@@ -25,6 +25,11 @@ interface Case {
   status: string;
   wizard_progress: number;
   created_at: string;
+  // Derived display status from API
+  display_status?: string;
+  display_label?: string;
+  display_badge_variant?: 'neutral' | 'warning' | 'success';
+  has_paid_order?: boolean;
 }
 
 interface Document {
@@ -299,9 +304,9 @@ export default function DashboardPage() {
                           </div>
                         </div>
                         <Badge
-                          variant={caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral'}
+                          variant={caseItem.display_badge_variant || (caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral')}
                         >
-                          {caseItem.status}
+                          {caseItem.display_label || caseItem.status.replace('_', ' ')}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
