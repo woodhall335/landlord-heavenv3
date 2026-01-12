@@ -115,3 +115,36 @@ export function getCheckoutRedirectUrls(input: CheckoutRedirectInput): CheckoutR
     cancelUrl: getCancelUrl(input),
   };
 }
+
+// =============================================================================
+// PRODUCT CLASSIFICATION (for backwards compatibility)
+// =============================================================================
+// Note: As of Jan 2026, ALL products redirect to /dashboard/cases/[caseId]?payment=success
+// These classification functions are retained for backwards compatibility and for cases
+// where downstream code needs to distinguish product types (e.g., analytics, fulfillment).
+// They no longer affect redirect routing behavior.
+
+/**
+ * Single-transaction products: one-time purchases where the user receives
+ * documents immediately without ongoing case management.
+ *
+ * Includes: notice_only, ast_standard, ast_premium
+ *
+ * Note: Despite the name, these products now also redirect to the dashboard
+ * on success (not a dedicated /success page) for better UX and reliability.
+ */
+export function isSingleTransactionProduct(product: CheckoutProduct): boolean {
+  const singleTransactionProducts: CheckoutProduct[] = ['notice_only', 'ast_standard', 'ast_premium'];
+  return singleTransactionProducts.includes(product);
+}
+
+/**
+ * Dashboard products: products that require ongoing case management
+ * and are best experienced from the dashboard.
+ *
+ * Includes: complete_pack, money_claim, sc_money_claim
+ */
+export function isDashboardProduct(product: CheckoutProduct): boolean {
+  const dashboardProducts: CheckoutProduct[] = ['complete_pack', 'money_claim', 'sc_money_claim'];
+  return dashboardProducts.includes(product);
+}
