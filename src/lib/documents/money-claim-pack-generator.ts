@@ -424,22 +424,24 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: '02-schedule-of-arrears.pdf',
   });
 
-  // INTEREST CALCULATION
-  const interest = await generateDocument({
-    templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // INTEREST CALCULATION (optional - only if user opted in)
+  if (totals.claim_interest === true) {
+    const interest = await generateDocument({
+      templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
+      data: baseTemplateData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
 
-  documents.push({
-    title: 'Interest calculation',
-    description: 'Section 69 County Courts Act interest workings and daily rate.',
-    category: 'guidance',
-    html: interest.html,
-    pdf: interest.pdf,
-    file_name: '03-interest-calculation.pdf',
-  });
+    documents.push({
+      title: 'Interest calculation',
+      description: 'Section 69 County Courts Act interest workings and daily rate.',
+      category: 'guidance',
+      html: interest.html,
+      pdf: interest.pdf,
+      file_name: '03-interest-calculation.pdf',
+    });
+  }
 
   // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
   // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
