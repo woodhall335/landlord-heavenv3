@@ -311,6 +311,7 @@ async function generateEvictionRoadmap(
     title: 'Step-by-Step Eviction Roadmap',
     description: 'Complete timeline and checklist for your eviction case',
     category: 'guidance',
+    document_type: 'eviction_roadmap',
     html: doc.html,
     pdf: doc.pdf,
     file_name: `eviction_roadmap_${jurisdiction}.pdf`,
@@ -420,6 +421,7 @@ async function generateExpertGuidance(
     description:
       'Professional tips, common mistakes to avoid, and success strategies',
     category: 'guidance',
+    document_type: 'expert_guidance',
     html: doc.html,
     pdf: doc.pdf,
     file_name: 'expert_eviction_guidance.pdf',
@@ -452,6 +454,7 @@ async function generateTimelineExpectations(
     title: 'Eviction Timeline & Expectations',
     description: 'Realistic timeline for each stage of your eviction case',
     category: 'guidance',
+    document_type: 'eviction_timeline',
     html: doc.html,
     pdf: doc.pdf,
     file_name: 'eviction_timeline_expectations.pdf',
