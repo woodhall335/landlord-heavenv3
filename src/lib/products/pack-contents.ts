@@ -301,38 +301,33 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   const items: PackItem[] = [];
   const { route, has_arrears, include_arrears_schedule } = args;
 
-  // Section 173 (No-Fault - 6 month notice)
+  // Section 173 (No-Fault - 6 month notice) - Renting Homes (Wales) Act 2016
   if (route === 'section_173') {
     items.push({
       key: 'section173_notice',
       title: "Landlord's Notice (Section 173)",
-      description: '6-month no-fault notice under Renting Homes Act',
+      description: '6-month no-fault notice under Renting Homes (Wales) Act 2016',
       category: 'Notice',
       required: true,
     });
   }
 
-  // Fault-based notice
+  // Fault-based notice - Renting Homes (Wales) Act 2016
+  // NOTE: Wales does NOT use Section 8 (Housing Act 1988). Section 8 is ENGLAND ONLY.
+  // For rent arrears in Wales, use fault_based route with appropriate grounds.
   if (route === 'fault_based') {
     items.push({
       key: 'fault_notice',
       title: 'Fault-Based Notice (RHW23)',
-      description: 'Breach notice under Renting Homes Act',
+      description: 'Breach notice under Renting Homes (Wales) Act 2016',
       category: 'Notice',
       required: true,
     });
   }
 
-  // Section 8 equivalent in Wales
-  if (route === 'section_8') {
-    items.push({
-      key: 'section8_notice',
-      title: 'Possession Notice (Form 3)',
-      description: 'Grounds-based possession notice',
-      category: 'Notice',
-      required: true,
-    });
-  }
+  // REMOVED: Section 8 handling for Wales
+  // Section 8 (Housing Act 1988) does NOT apply to Wales for standard occupation contracts
+  // created on or after 1 December 2022. See Renting Homes (Wales) Act 2016.
 
   items.push({
     key: 'service_instructions',
@@ -350,7 +345,9 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
-  if ((route === 'section_8' || route === 'fault_based') && (has_arrears || include_arrears_schedule)) {
+  // Arrears schedule for fault-based cases with rent arrears
+  // NOTE: Only fault_based route is valid for Wales - Section 8 is England-only
+  if (route === 'fault_based' && (has_arrears || include_arrears_schedule)) {
     items.push({
       key: 'arrears_schedule',
       title: 'Rent Arrears Schedule',

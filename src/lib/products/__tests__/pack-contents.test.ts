@@ -393,6 +393,178 @@ describe('getPackContents', () => {
   });
 });
 
+// =============================================================================
+// JURISDICTION CORRECTNESS - CRITICAL LEGAL TESTS
+// These tests prevent the reintroduction of jurisdiction bugs.
+// Section 8 and Section 21 are ENGLAND ONLY under Housing Act 1988.
+// Wales uses Renting Homes (Wales) Act 2016 (Section 173, fault_based).
+// Scotland uses Private Housing (Tenancies) (Scotland) Act 2016 (Notice to Leave).
+// =============================================================================
+
+describe('Jurisdiction correctness', () => {
+  describe('Wales - Section 8/21 must NOT be supported', () => {
+    it('Wales + section_8 returns NO section8_notice (Section 8 is England-only)', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'wales',
+        route: 'section_8',
+      });
+
+      // Should NOT find any Section 8 related items
+      expect(items.find(i => i.key === 'section8_notice')).toBeUndefined();
+      expect(items.find(i => i.key.includes('section8'))).toBeUndefined();
+      expect(items.find(i => i.title.toLowerCase().includes('section 8'))).toBeUndefined();
+
+      // Should only have generic guidance items (service instructions, checklist)
+      // No notice document because section_8 is invalid for Wales
+      expect(items.find(i => i.category === 'Notice')).toBeUndefined();
+    });
+
+    it('Wales + section_21 returns NO section21_notice (Section 21 is England-only)', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'wales',
+        route: 'section_21',
+      });
+
+      // Should NOT find any Section 21 related items
+      expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
+      expect(items.find(i => i.key.includes('section21'))).toBeUndefined();
+      expect(items.find(i => i.title.toLowerCase().includes('section 21'))).toBeUndefined();
+
+      // No notice document because section_21 is invalid for Wales
+      expect(items.find(i => i.category === 'Notice')).toBeUndefined();
+    });
+
+    it('Wales complete_pack + section_8 returns NO England court forms', () => {
+      const items = getPackContents({
+        product: 'complete_pack',
+        jurisdiction: 'wales',
+        route: 'section_8',
+      });
+
+      // Should NOT have Section 8 specific content
+      expect(items.find(i => i.key === 'section8_notice')).toBeUndefined();
+    });
+
+    it('Wales complete_pack + section_21 returns NO accelerated possession (N5B)', () => {
+      const items = getPackContents({
+        product: 'complete_pack',
+        jurisdiction: 'wales',
+        route: 'section_21',
+      });
+
+      // N5B is for Section 21 accelerated procedure - England only
+      expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
+      expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
+    });
+
+    it('Wales ONLY supports section_173 and fault_based routes', () => {
+      // section_173 should work
+      const s173Items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'wales',
+        route: 'section_173',
+      });
+      expect(s173Items.find(i => i.key === 'section173_notice')).toBeDefined();
+      expect(s173Items.find(i => i.category === 'Notice')).toBeDefined();
+
+      // fault_based should work
+      const faultItems = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'wales',
+        route: 'fault_based',
+      });
+      expect(faultItems.find(i => i.key === 'fault_notice')).toBeDefined();
+      expect(faultItems.find(i => i.category === 'Notice')).toBeDefined();
+    });
+  });
+
+  describe('Scotland - Section 8/21 and County Court must NOT be supported', () => {
+    it('Scotland + section_8 returns NO section8_notice', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'scotland',
+        route: 'section_8',
+      });
+
+      expect(items.find(i => i.key === 'section8_notice')).toBeUndefined();
+      expect(items.find(i => i.title.toLowerCase().includes('section 8'))).toBeUndefined();
+    });
+
+    it('Scotland + section_21 returns NO section21_notice', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'scotland',
+        route: 'section_21',
+      });
+
+      expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
+      expect(items.find(i => i.title.toLowerCase().includes('section 21'))).toBeUndefined();
+    });
+
+    it('Scotland complete_pack returns NO County Court forms', () => {
+      const items = getPackContents({
+        product: 'complete_pack',
+        jurisdiction: 'scotland',
+      });
+
+      // Should NOT have County Court forms (N5, N5B, N119)
+      expect(items.find(i => i.key === 'n5_claim')).toBeUndefined();
+      expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
+      expect(items.find(i => i.key === 'n119_particulars')).toBeUndefined();
+
+      // Should have Tribunal form instead
+      expect(items.find(i => i.key === 'form_e_tribunal')).toBeDefined();
+      expect(items.find(i => i.description?.includes('First-tier Tribunal'))).toBeDefined();
+    });
+
+    it('Scotland uses Notice to Leave (PRT), not Section 8/21', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'scotland',
+      });
+
+      expect(items.find(i => i.key === 'notice_to_leave')).toBeDefined();
+      expect(items.find(i => i.title.includes('Notice to Leave'))).toBeDefined();
+    });
+  });
+
+  describe('England - Section 8/21 ARE supported (Housing Act 1988)', () => {
+    it('England + section_8 returns Section 8 notice', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'england',
+        route: 'section_8',
+      });
+
+      expect(items.find(i => i.key === 'section8_notice')).toBeDefined();
+    });
+
+    it('England + section_21 returns Section 21 notice', () => {
+      const items = getPackContents({
+        product: 'notice_only',
+        jurisdiction: 'england',
+        route: 'section_21',
+      });
+
+      expect(items.find(i => i.key === 'section21_notice')).toBeDefined();
+    });
+
+    it('England complete_pack uses County Court forms', () => {
+      const items = getPackContents({
+        product: 'complete_pack',
+        jurisdiction: 'england',
+        route: 'section_8',
+      });
+
+      expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
+      expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
+      expect(items.find(i => i.description?.includes('County Court'))).toBeDefined();
+    });
+  });
+});
+
 describe('isProductSupported', () => {
   it('supports tenancy agreements everywhere', () => {
     expect(isProductSupported('ast_standard', 'england')).toBe(true);
