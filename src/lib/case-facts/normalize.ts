@@ -2873,6 +2873,78 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
+  // SERVING CAPACITY (COMPLIANCE-CRITICAL)
+  // Maps who is serving the notice to template checkbox flags
+  // =============================================================================
+  // Extract serving capacity from various possible paths
+  // Priority: explicit serving_capacity field > served_by text field
+  const rawServingCapacity = extractString(
+    getFirstValue(wizard, [
+      'notice_service.serving_capacity',  // England MQS maps_to path (primary)
+      'serving_capacity',                  // Direct flat key
+      'notice_capacity',
+      'landlord_capacity',
+      'notice_service.served_by',         // Fall back to served_by if capacity not explicit
+      'notice_served_by',
+      'served_by',
+    ])
+  );
+
+  // Normalize serving capacity to canonical enum
+  // Possible values: 'landlord', 'joint_landlords', 'agent'
+  let servingCapacity: 'landlord' | 'joint_landlords' | 'agent' | null = null;
+
+  if (rawServingCapacity) {
+    const normalized = rawServingCapacity.toLowerCase().trim();
+
+    // Check for agent variants
+    if (
+      normalized.includes('agent') ||
+      normalized.includes('solicitor') ||
+      normalized.includes('representative') ||
+      normalized.includes('letting agent') ||
+      normalized.includes('property manager')
+    ) {
+      servingCapacity = 'agent';
+    }
+    // Check for joint landlords variants
+    else if (
+      normalized.includes('joint landlord') ||
+      normalized.includes('joint licensor') ||
+      normalized.includes('both landlord') ||
+      normalized.includes('co-landlord') ||
+      normalized === 'joint' ||
+      normalized === 'joint_landlords'
+    ) {
+      servingCapacity = 'joint_landlords';
+    }
+    // Default to landlord for various landlord variants
+    else if (
+      normalized.includes('landlord') ||
+      normalized.includes('licensor') ||
+      normalized.includes('owner') ||
+      normalized === 'self' ||
+      normalized === 'myself' ||
+      normalized === 'i will'
+    ) {
+      servingCapacity = 'landlord';
+    }
+    // If none match but value provided, default to landlord
+    else if (normalized.length > 0) {
+      servingCapacity = 'landlord';
+    }
+  }
+
+  // Set canonical serving_capacity
+  templateData.serving_capacity = servingCapacity;
+
+  // Generate boolean flags for template checkbox ticking
+  // These are what the templates use to tick the correct checkbox
+  templateData.is_landlord_serving = servingCapacity === 'landlord';
+  templateData.is_joint_landlords_serving = servingCapacity === 'joint_landlords';
+  templateData.is_agent_serving = servingCapacity === 'agent';
+
+  // =============================================================================
   // DEPOSIT & COMPLIANCE
   // =============================================================================
   const depositTaken = coerceBoolean(
@@ -3155,6 +3227,12 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.notice_service_date = templateData.service_date || templateData.notice_date;
   templateData.notice_expiry_date = templateData.expiry_date || templateData.earliest_possession_date;
 
+  // Additional date aliases for template compatibility (COMPLIANCE-CRITICAL)
+  // Templates may use different variable names for the same date
+  templateData.intended_service_date = templateData.service_date || templateData.notice_date;
+  templateData.date_of_service = templateData.service_date || templateData.notice_date;
+  templateData.served_on = templateData.service_date || templateData.notice_date;
+
   // Templates expect metadata.generated_at for generation timestamp
   const now = new Date();
 
@@ -3194,6 +3272,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   console.log('[mapNoticeOnlyFacts] Grounds:', templateData.grounds.length);
   console.log('[mapNoticeOnlyFacts] Dates - notice:', templateData.notice_date, 'service:', templateData.service_date, 'earliest:', templateData.earliest_possession_date);
   console.log('[mapNoticeOnlyFacts] Deposit - amount:', templateData.deposit_amount, 'protected:', templateData.deposit_protected, 'scheme:', templateData.deposit_scheme);
+  console.log('[mapNoticeOnlyFacts] Serving capacity:', templateData.serving_capacity, '- landlord:', templateData.is_landlord_serving, 'joint:', templateData.is_joint_landlords_serving, 'agent:', templateData.is_agent_serving);
 
   // PACK DOCUMENT DEBUG - Log what pack templates will receive
   console.log('[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===');

@@ -294,8 +294,21 @@
       border: 1.5px solid #1a1a1a;
       display: inline-block;
       background: white;
+      position: relative;
     }
-    
+
+    /* Checked checkbox state - displays a checkmark */
+    .checkbox-box.checked::after {
+      content: '✓';
+      position: absolute;
+      top: -2px;
+      left: 1px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #1a1a1a;
+      line-height: 1;
+    }
+
     .date-field {
       margin-top: 1.25em;
       display: flex;
@@ -548,11 +561,11 @@
   <div class="capacity-section">
     <p>Capacity (please tick):</p>
     <div class="capacity-options">
-      <span class="capacity-option"><span class="checkbox-box"></span> Landlord</span>
-      <span class="capacity-option"><span class="checkbox-box"></span> Joint landlord(s)</span>
-      <span class="capacity-option"><span class="checkbox-box"></span> Landlord's agent</span>
+      <span class="capacity-option"><span class="checkbox-box{{#if is_landlord_serving}} checked{{/if}}"></span> Landlord</span>
+      <span class="capacity-option"><span class="checkbox-box{{#if is_joint_landlords_serving}} checked{{/if}}"></span> Joint landlord(s)</span>
+      <span class="capacity-option"><span class="checkbox-box{{#if is_agent_serving}} checked{{/if}}"></span> Landlord's agent</span>
     </div>
-    
+
     <div class="date-field">
       <label>Date:</label>
       <span class="value">
@@ -560,6 +573,10 @@
           {{format_date service_date 'long'}}
         {{else if notice_service_date}}
           {{format_date notice_service_date 'long'}}
+        {{else if notice_date}}
+          {{format_date notice_date 'long'}}
+        {{else if intended_service_date}}
+          {{format_date intended_service_date 'long'}}
         {{/if}}
       </span>
     </div>
