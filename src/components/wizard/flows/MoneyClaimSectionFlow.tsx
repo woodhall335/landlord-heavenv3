@@ -97,10 +97,28 @@ const SECTIONS: WizardSection[] = [
     id: 'claim_details',
     label: 'Claim Details',
     description: 'What you are claiming',
-    isComplete: (facts) =>
-      facts.claiming_rent_arrears === true ||
-      facts.claiming_damages === true ||
-      facts.claiming_other === true,
+    isComplete: (facts) => {
+      // Must select at least one claim type
+      const hasClaimType =
+        facts.claiming_rent_arrears === true ||
+        facts.claiming_damages === true ||
+        facts.claiming_other === true;
+
+      // For England/Wales, must explicitly opt in/out of interest
+      // Scotland doesn't use the same interest mechanism
+      const jurisdiction = facts.__meta?.jurisdiction;
+      const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+
+      if (isEnglandWales) {
+        // Interest must be explicitly set (true or false, not null/undefined)
+        const interestDecided =
+          facts.money_claim?.charge_interest === true ||
+          facts.money_claim?.charge_interest === false;
+        return hasClaimType && interestDecided;
+      }
+
+      return hasClaimType;
+    },
   },
   {
     id: 'arrears',

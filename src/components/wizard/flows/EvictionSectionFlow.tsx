@@ -92,15 +92,27 @@ interface WizardSection {
 
 // Define all sections with their visibility rules
 // These sections apply to England and Wales
+// Valid routes by jurisdiction
+const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
+const WALES_ROUTES = ['section_173', 'fault_based'] as const;
+const ALL_VALID_ROUTES = [...ENGLAND_ROUTES, ...WALES_ROUTES] as const;
+
 const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
     label: 'Case Basics',
     description: 'Jurisdiction and eviction route',
     jurisdictions: ['england', 'wales'],
-    isComplete: (facts) =>
-      Boolean(facts.eviction_route) &&
-      ['section_8', 'section_21'].includes(facts.eviction_route as string),
+    isComplete: (facts, jurisdiction) => {
+      const route = facts.eviction_route as string;
+      if (!route) return false;
+
+      // Validate route is appropriate for jurisdiction
+      if (jurisdiction === 'wales') {
+        return WALES_ROUTES.includes(route as typeof WALES_ROUTES[number]);
+      }
+      return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+    },
   },
   {
     id: 'parties',
@@ -467,11 +479,28 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
     }
 
     // For England/Wales, filter by eviction route
-    const route = facts.eviction_route as 'section_8' | 'section_21' | undefined;
+    const route = facts.eviction_route as string | undefined;
+
+    // Wales routes don't have route-specific sections (like S21 compliance or S8 arrears)
+    // so we show all non-route-specific sections once a valid route is selected
+    const isWales = jurisdiction === 'wales';
+    const hasValidRoute = isWales
+      ? route && WALES_ROUTES.includes(route as typeof WALES_ROUTES[number])
+      : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+
     return sections.filter((section) => {
-      if (!section.routes) return true;
-      if (!route) return section.id === 'case_basics'; // Only show case basics until route is selected
-      return section.routes.includes(route);
+      // Route-specific sections (S21 compliance, S8 arrears) only apply to England
+      if (section.routes) {
+        // Wales doesn't use these England-specific sections
+        if (isWales) return false;
+        // England: only show if route matches
+        if (!route) return false;
+        return section.routes.includes(route as 'section_8' | 'section_21');
+      }
+
+      // Non-route-specific sections: show case_basics always, others once route is valid
+      if (!hasValidRoute) return section.id === 'case_basics';
+      return true;
     });
   }, [jurisdiction, facts.eviction_route]);
 
