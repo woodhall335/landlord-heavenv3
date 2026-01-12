@@ -26,14 +26,25 @@ async function getBrowser(): Promise<BrowserInstance> {
   if (isVercel) {
     // Use @sparticuz/chromium for Vercel/AWS Lambda
     // webpackIgnore prevents webpack from bundling this optional Vercel-only dependency
-    const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
+    console.log('[getBrowser] Vercel environment detected, loading @sparticuz/chromium');
 
-    return puppeteerCore.launch({
-      args: chromium.default.args,
-      defaultViewport: { width: 1200, height: 1600 },
-      executablePath: await chromium.default.executablePath(),
-      headless: true,
-    });
+    try {
+      const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
+      const execPath = await chromium.default.executablePath();
+
+      console.log('[getBrowser] Chromium executable path:', execPath);
+      console.log('[getBrowser] Chromium args:', chromium.default.args.length, 'args');
+
+      return puppeteerCore.launch({
+        args: chromium.default.args,
+        defaultViewport: { width: 1200, height: 1600 },
+        executablePath: execPath,
+        headless: true,
+      });
+    } catch (err: any) {
+      console.error('[getBrowser] Failed to load @sparticuz/chromium:', err.message);
+      throw new Error(`Vercel Chromium initialization failed: ${err.message}`);
+    }
   } else {
     // Local development - try to find Chrome in common locations
     const possiblePaths = [
@@ -76,6 +87,45 @@ async function getBrowser(): Promise<BrowserInstance> {
       executablePath,
     });
   }
+}
+
+/**
+ * Get diagnostics about browser/chromium setup for debugging
+ * Safe for production - does not expose secrets
+ */
+export async function getBrowserDiagnostics(): Promise<Record<string, unknown>> {
+  const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+  const diagnostics: Record<string, unknown> = {
+    isVercel,
+    nodeVersion: process.version,
+    platform: process.platform,
+    arch: process.arch,
+  };
+
+  if (isVercel) {
+    try {
+      const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
+      const execPath = await chromium.default.executablePath();
+      diagnostics.chromiumLoaded = true;
+      diagnostics.executablePath = execPath;
+      diagnostics.executableExists = existsSync(execPath);
+      diagnostics.argsCount = chromium.default.args.length;
+    } catch (err: any) {
+      diagnostics.chromiumLoaded = false;
+      diagnostics.chromiumError = err.message;
+    }
+  } else {
+    // Local: check for available browsers
+    const possiblePaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+    ];
+    diagnostics.localBrowsers = possiblePaths.filter(p => existsSync(p));
+  }
+
+  return diagnostics;
 }
 
 // ESM compatibility: Get __dirname equivalent

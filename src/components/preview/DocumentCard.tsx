@@ -67,7 +67,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 className="w-16 h-22 object-cover rounded-lg border shadow-sm"
                 onLoad={() => setThumbnailLoading(false)}
                 onError={(e) => {
-                  // Log thumbnail load failure for debugging
+                  // Log thumbnail load failure for debugging (works in both dev and production)
                   const img = e.currentTarget;
                   console.error('[DocumentCard] Thumbnail failed to load:', {
                     url: thumbnailUrl,
@@ -77,27 +77,33 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                     naturalHeight: img.naturalHeight,
                   });
 
-                  // Try to fetch and get actual error details
-                  if (thumbnailUrl && process.env.NODE_ENV === 'development') {
+                  // Fetch actual error details - works in both dev AND production for debugging
+                  // This helps diagnose Vercel-specific failures
+                  if (thumbnailUrl) {
                     fetch(thumbnailUrl)
-                      .then(res => {
+                      .then(async (res) => {
                         if (!res.ok) {
-                          return res.json().then(data => {
-                            console.error('[DocumentCard] Thumbnail API error:', {
-                              status: res.status,
-                              statusText: res.statusText,
-                              error: data,
-                            });
-                          }).catch(() => {
-                            console.error('[DocumentCard] Thumbnail API error (non-JSON):', {
-                              status: res.status,
-                              statusText: res.statusText,
-                            });
+                          // Try to get response body (limited to prevent huge logs)
+                          let bodySnippet = '';
+                          try {
+                            const text = await res.text();
+                            // Only log first 200 chars to avoid dumping large responses
+                            bodySnippet = text.substring(0, 200);
+                          } catch {
+                            bodySnippet = '(could not read body)';
+                          }
+
+                          console.error('[DocumentCard] Thumbnail API error:', {
+                            status: res.status,
+                            statusText: res.statusText,
+                            contentType: res.headers.get('content-type'),
+                            runtime: res.headers.get('x-thumbnail-runtime'),
+                            bodySnippet,
                           });
                         }
                       })
                       .catch(fetchErr => {
-                        console.error('[DocumentCard] Thumbnail fetch error:', fetchErr);
+                        console.error('[DocumentCard] Thumbnail fetch error:', fetchErr.message);
                       });
                   }
 
