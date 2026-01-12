@@ -915,7 +915,7 @@ export default function ScotlandPRTPage() {
                 <p className="text-gray-700 text-sm mb-3">
                   Official notice from landlord to tenant to end a PRT, stating the ground(s) for ending the tenancy and the notice period.
                 </p>
-                <Link href="/products/notice-to-leave" className="text-blue-600 hover:underline text-sm font-semibold">
+                <Link href="/products/notice-only" className="text-blue-600 hover:underline text-sm font-semibold">
                   Learn More →
                 </Link>
               </div>

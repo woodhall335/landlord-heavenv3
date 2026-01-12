@@ -39,12 +39,12 @@ const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Complete Eviction Pack - ${price}`,
+  title: `Complete Eviction Pack 2026 - ${price}`,
   description:
-    `Complete eviction pack with all court forms from notice to possession order. 7-9 documents including N5, N119, AI Witness Statement. England, Wales & Scotland. ${price} one-time.`,
+    `Complete eviction pack 2026 with all court forms from notice to possession order. 7-9 documents including N5, N119, AI Witness Statement. England, Wales & Scotland. ${price} one-time.`,
   openGraph: {
-    title: `Complete Eviction Pack - ${price}`,
-    description: "Complete eviction pack with all court forms. Official HMCTS forms + AI Witness Statement. Preview before you buy.",
+    title: `Complete Eviction Pack 2026 - ${price}`,
+    description: "Complete eviction pack with all court forms. Notice + Court Forms + AI Witness Statement. England, Wales, Scotland. Preview before you buy.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
   alternates: {
