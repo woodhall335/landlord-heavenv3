@@ -211,7 +211,7 @@ export async function POST(request: Request) {
         {
           ok: false,
           error: 'Document regeneration failed',
-          message: truncatedError,
+          message: errorMessage.substring(0, 500),
         },
         { status: 500 }
       );
