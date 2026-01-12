@@ -5,39 +5,129 @@
  * Generates a watermarked JPEG thumbnail of the first page of a document
  * Supports both HTML documents and PDF documents
  * ALLOWS ANONYMOUS ACCESS - Users can preview their anonymous documents
+ *
+ * Vercel Compatibility Notes:
+ * - Uses @sparticuz/chromium for serverless Puppeteer
+ * - Falls back gracefully when admin client unavailable
+ * - Avoids Content-Length header issues with streaming
  */
 
-import { getServerUser, createAdminClient } from '@/lib/supabase/server';
+import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 import { htmlToPreviewThumbnail, pdfToPreviewThumbnail } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
+
+// Environment detection
+const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const isDev = process.env.NODE_ENV === 'development';
+
+/**
+ * Structured error response with code for debugging
+ */
+function errorResponse(code: string, message: string, status: number, details?: Record<string, unknown>) {
+  const logData = { code, message, status, ...details, isVercel, timestamp: new Date().toISOString() };
+  console.error(`[Thumbnail API] ${code}:`, logData);
+  return NextResponse.json({ error: message, code, ...(isDev ? { details } : {}) }, { status });
+}
+
+/**
+ * Try to create admin client, return null if env vars missing
+ * Does NOT throw - allows graceful fallback for anonymous documents
+ */
+function tryCreateAdminClient() {
+  const url = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !serviceRoleKey) {
+    console.warn('[Thumbnail API] Admin client unavailable:', {
+      hasUrl: !!url,
+      hasServiceRoleKey: !!serviceRoleKey,
+      isVercel,
+    });
+    return null;
+  }
+
+  try {
+    // Dynamic import to avoid 'server-only' issues in edge cases
+    const { createClient } = require('@supabase/supabase-js');
+    return createClient(url, serviceRoleKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+  } catch (err: any) {
+    console.error('[Thumbnail API] Failed to create admin client:', err.message);
+    return null;
+  }
+}
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const startTime = Date.now();
+  let documentId: string | null = null;
+
   try {
-    const user = await getServerUser();
     const { id } = await params;
+    documentId = id;
 
-    // Use admin client to bypass RLS - we do our own access control below
-    const adminSupabase = createAdminClient();
+    console.log(`[Thumbnail API] Request for document ${id}`, { isVercel });
 
-    // Fetch document using admin client (bypasses RLS)
-    const { data: document, error } = await adminSupabase
+    // Get current user (may be null for anonymous)
+    const user = await getServerUser();
+    console.log(`[Thumbnail API] User context:`, { userId: user?.id ?? 'anonymous' });
+
+    // Try admin client first (preferred for bypassing RLS)
+    let supabase = tryCreateAdminClient();
+    let usingAdminClient = !!supabase;
+
+    // If admin client unavailable, try regular server client for anonymous docs
+    if (!supabase) {
+      console.log('[Thumbnail API] Falling back to server client (admin unavailable)');
+      supabase = await tryCreateServerSupabaseClient();
+
+      if (!supabase) {
+        return errorResponse(
+          'CONFIG_ERROR',
+          'Database connection unavailable',
+          503,
+          { reason: 'No Supabase client could be created - check SUPABASE_URL and SUPABASE_ANON_KEY env vars' }
+        );
+      }
+    }
+
+    // Fetch document
+    console.log(`[Thumbnail API] Fetching document ${id} (admin=${usingAdminClient})`);
+    const { data: document, error: fetchError } = await supabase
       .from('documents')
       .select('id, user_id, case_id, document_type, html_content, pdf_url, document_title')
       .eq('id', id)
       .single();
 
-    if (error || !document) {
-      console.error('Document not found for thumbnail:', error);
-      return NextResponse.json(
-        { error: 'Document not found' },
-        { status: 404 }
+    if (fetchError) {
+      console.error('[Thumbnail API] DB fetch error:', fetchError);
+
+      // If using regular client and got permission error, might be a non-anonymous doc
+      if (!usingAdminClient && fetchError.code === 'PGRST116') {
+        return errorResponse(
+          'ACCESS_DENIED',
+          'Document not found or access denied',
+          404,
+          { dbError: fetchError.message, hint: 'Document may require authentication' }
+        );
+      }
+
+      return errorResponse(
+        'DB_ERROR',
+        'Failed to fetch document',
+        500,
+        { dbError: fetchError.message, dbCode: fetchError.code }
       );
     }
 
-    // Type assertion for the document record properties we need
+    if (!document) {
+      return errorResponse('NOT_FOUND', 'Document not found', 404);
+    }
+
+    // Type assertion
     const docRecord = document as {
       id: string;
       user_id: string | null;
@@ -48,98 +138,153 @@ export async function GET(
       document_title: string | null;
     };
 
-    // Manual access control: user can access if:
-    // 1. They own the document (user_id matches)
-    // 2. The document is anonymous (user_id is null) - anyone can access
+    console.log(`[Thumbnail API] Document found:`, {
+      docId: docRecord.id,
+      docType: docRecord.document_type,
+      hasHtml: !!docRecord.html_content,
+      hasPdf: !!docRecord.pdf_url,
+      isAnonymous: docRecord.user_id === null,
+      ownerId: docRecord.user_id,
+    });
+
+    // Access control: owner OR anonymous document
     const isOwner = user && docRecord.user_id === user.id;
     const isAnonymousDoc = docRecord.user_id === null;
 
     if (!isOwner && !isAnonymousDoc) {
-      console.error('Access denied to document thumbnail:', { id, userId: user?.id, docUserId: docRecord.user_id });
-      return NextResponse.json(
-        { error: 'Document not found' },
-        { status: 404 }
+      return errorResponse(
+        'ACCESS_DENIED',
+        'Document not found',
+        404,
+        { reason: 'Not owner and not anonymous', userId: user?.id, docUserId: docRecord.user_id }
       );
     }
 
-    try {
-      let thumbnail: Buffer;
+    // Generate thumbnail
+    let thumbnail: Buffer;
+    let generationMethod: string;
 
-      // Try HTML content first, then fall back to PDF
-      if (docRecord.html_content) {
-        // Generate watermarked JPEG thumbnail from HTML
+    if (docRecord.html_content) {
+      // HTML-based thumbnail
+      generationMethod = 'html';
+      console.log(`[Thumbnail API] Generating HTML thumbnail for ${docRecord.document_type}`);
+
+      try {
         thumbnail = await htmlToPreviewThumbnail(docRecord.html_content, {
           quality: 75,
           watermarkText: 'PREVIEW',
         });
-      } else if (docRecord.pdf_url) {
-        // Generate watermarked JPEG thumbnail from PDF
-        console.log(`[Thumbnail] Generating PDF thumbnail for ${docRecord.document_type}`);
+      } catch (htmlErr: any) {
+        return errorResponse(
+          'THUMBNAIL_HTML_ERROR',
+          'Failed to generate thumbnail from HTML',
+          500,
+          {
+            error: htmlErr.message,
+            stack: isDev ? htmlErr.stack : undefined,
+            docType: docRecord.document_type,
+          }
+        );
+      }
+    } else if (docRecord.pdf_url) {
+      // PDF-based thumbnail
+      generationMethod = 'pdf';
+      console.log(`[Thumbnail API] Generating PDF thumbnail for ${docRecord.document_type}`);
 
-        // Extract file path from the public URL to create a signed URL
-        // Public URL format: https://<project>.supabase.co/storage/v1/object/public/documents/<path>
-        let pdfAccessUrl = docRecord.pdf_url;
+      let pdfAccessUrl = docRecord.pdf_url;
 
+      // Try to create signed URL if admin client available
+      if (usingAdminClient && supabase) {
         try {
           const publicMarker = '/storage/v1/object/public/documents/';
           const publicIndex = docRecord.pdf_url.indexOf(publicMarker);
 
           if (publicIndex !== -1) {
             const filePath = docRecord.pdf_url.substring(publicIndex + publicMarker.length);
-            console.log(`[Thumbnail] Extracting file path: ${filePath}`);
+            console.log(`[Thumbnail API] Creating signed URL for: ${filePath}`);
 
-            // Create a signed URL using admin client (bypasses RLS/bucket policies)
-            const { data: signedUrlData, error: signedUrlError } = await adminSupabase
+            const { data: signedUrlData, error: signedUrlError } = await supabase
               .storage
               .from('documents')
-              .createSignedUrl(filePath, 60); // 60 seconds expiry
+              .createSignedUrl(filePath, 120); // 120 seconds expiry for Vercel cold starts
 
             if (signedUrlError) {
-              console.error('[Thumbnail] Failed to create signed URL:', signedUrlError);
+              console.warn('[Thumbnail API] Signed URL failed, using public URL:', signedUrlError.message);
             } else if (signedUrlData?.signedUrl) {
               pdfAccessUrl = signedUrlData.signedUrl;
-              console.log(`[Thumbnail] Using signed URL for PDF access`);
+              console.log('[Thumbnail API] Using signed URL');
             }
           }
-        } catch (urlError) {
-          console.error('[Thumbnail] Error creating signed URL, falling back to public URL:', urlError);
+        } catch (urlErr: any) {
+          console.warn('[Thumbnail API] Signed URL error, falling back to public:', urlErr.message);
         }
+      } else {
+        console.log('[Thumbnail API] Using public PDF URL (admin client unavailable)');
+      }
 
+      try {
         thumbnail = await pdfToPreviewThumbnail(pdfAccessUrl, {
           quality: 75,
           watermarkText: 'PREVIEW',
         });
-      } else {
-        return NextResponse.json(
-          { error: 'No content available for thumbnail generation' },
-          { status: 404 }
+      } catch (pdfErr: any) {
+        return errorResponse(
+          'THUMBNAIL_PDF_ERROR',
+          'Failed to generate thumbnail from PDF',
+          500,
+          {
+            error: pdfErr.message,
+            stack: isDev ? pdfErr.stack : undefined,
+            docType: docRecord.document_type,
+            usedSignedUrl: pdfAccessUrl !== docRecord.pdf_url,
+          }
         );
       }
-
-      // Convert Buffer to Uint8Array for NextResponse
-      const uint8Array = new Uint8Array(thumbnail);
-
-      // Return the JPEG image directly
-      return new NextResponse(uint8Array, {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Content-Length': thumbnail.length.toString(),
-          'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
-        },
-      });
-    } catch (thumbnailError: any) {
-      console.error('Thumbnail generation failed:', thumbnailError);
-      return NextResponse.json(
-        { error: `Thumbnail generation failed: ${thumbnailError.message}` },
-        { status: 500 }
+    } else {
+      return errorResponse(
+        'NO_CONTENT',
+        'No content available for thumbnail generation',
+        404,
+        { docType: docRecord.document_type }
       );
     }
+
+    const elapsed = Date.now() - startTime;
+    console.log(`[Thumbnail API] Success:`, {
+      docId: id,
+      method: generationMethod,
+      size: thumbnail.length,
+      elapsed: `${elapsed}ms`,
+    });
+
+    // Return JPEG image
+    // Note: Avoid Content-Length on Vercel as it can cause issues with streaming/compression
+    const headers: Record<string, string> = {
+      'Content-Type': 'image/jpeg',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour (browser + CDN)
+      'X-Thumbnail-Method': generationMethod,
+    };
+
+    // Only set Content-Length in non-Vercel environments
+    // Vercel's edge network handles this automatically and setting it can cause issues
+    if (!isVercel) {
+      headers['Content-Length'] = thumbnail.length.toString();
+    }
+
+    return new NextResponse(thumbnail, { status: 200, headers });
+
   } catch (error: any) {
-    console.error('Thumbnail document error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    const elapsed = Date.now() - startTime;
+    return errorResponse(
+      'INTERNAL_ERROR',
+      'Internal server error',
+      500,
+      {
+        error: error.message,
+        stack: isDev ? error.stack : undefined,
+        docId: documentId,
+        elapsed: `${elapsed}ms`,
+      }
     );
   }
 }
