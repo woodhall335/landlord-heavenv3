@@ -560,6 +560,8 @@ export interface ASTPackDocument {
   title: string;
   description: string;
   category: 'agreement' | 'schedule' | 'checklist' | 'guidance';
+  /** Canonical document type key matching pack-contents (e.g., 'ast_agreement', 'terms_schedule') */
+  document_type: string;
   html: string;
   pdf?: Buffer;
   file_name: string;
@@ -622,6 +624,7 @@ export async function generateStandardASTDocuments(
       title: 'Assured Shorthold Tenancy Agreement',
       description: 'Comprehensive AST compliant with Housing Act 1988',
       category: 'agreement',
+      document_type: 'ast_agreement',
       html: agreementDoc.html,
       pdf: agreementDoc.pdf,
       file_name: 'tenancy_agreement.pdf',
@@ -643,6 +646,7 @@ export async function generateStandardASTDocuments(
       title: 'Terms & Conditions Schedule',
       description: 'Detailed tenancy terms, obligations, and conditions',
       category: 'schedule',
+      document_type: 'terms_schedule',
       html: termsDoc.html,
       pdf: termsDoc.pdf,
       file_name: 'terms_and_conditions.pdf',
@@ -666,6 +670,7 @@ export async function generateStandardASTDocuments(
       title: 'Government Model Clauses',
       description: 'Recommended clauses from official government guidance',
       category: 'guidance',
+      document_type: 'model_clauses',
       html: modelDoc.html,
       pdf: modelDoc.pdf,
       file_name: 'government_model_clauses.pdf',
@@ -688,6 +693,7 @@ export async function generateStandardASTDocuments(
       title: 'Inventory Template',
       description: 'Comprehensive property contents and condition record',
       category: 'checklist',
+      document_type: 'inventory_template',
       html: inventoryDoc.html,
       pdf: inventoryDoc.pdf,
       file_name: 'inventory_template.pdf',
@@ -748,6 +754,7 @@ export async function generatePremiumASTDocuments(
       title: 'Key Schedule',
       description: 'Detailed record of all keys provided to tenant',
       category: 'checklist',
+      document_type: 'key_schedule',
       html: keyDoc.html,
       pdf: keyDoc.pdf,
       file_name: 'key_schedule.pdf',
@@ -770,6 +777,7 @@ export async function generatePremiumASTDocuments(
       title: 'Property Maintenance Guide',
       description: 'Clear breakdown of tenant and landlord responsibilities',
       category: 'guidance',
+      document_type: 'maintenance_guide',
       html: maintenanceDoc.html,
       pdf: maintenanceDoc.pdf,
       file_name: 'property_maintenance_guide.pdf',
@@ -792,6 +800,7 @@ export async function generatePremiumASTDocuments(
       title: 'Checkout Procedure',
       description: 'End of tenancy process and expectations guide',
       category: 'guidance',
+      document_type: 'checkout_procedure',
       html: checkoutDoc.html,
       pdf: checkoutDoc.pdf,
       file_name: 'checkout_procedure.pdf',

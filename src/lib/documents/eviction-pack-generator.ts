@@ -200,6 +200,8 @@ export interface EvictionPackDocument {
   title: string;
   description: string;
   category: 'notice' | 'court_form' | 'guidance' | 'evidence_tool' | 'bonus';
+  /** Canonical document type key matching pack-contents (e.g., 'section8_notice', 'n5_claim') */
+  document_type: string;
   html?: string;
   pdf?: Buffer;
   file_name: string;
@@ -348,6 +350,7 @@ async function generateEvidenceChecklist(
     title: 'Evidence Collection Checklist',
     description: 'Detailed checklist of all evidence you need to gather',
     category: 'evidence_tool',
+    document_type: 'evidence_checklist',
     html: doc.html,
     pdf: doc.pdf,
     file_name: 'evidence_collection_checklist.pdf',
@@ -380,6 +383,7 @@ async function generateProofOfService(
     title: 'Proof of Service Certificate',
     description: 'Template for proving you served the notice correctly',
     category: 'evidence_tool',
+    document_type: 'proof_of_service',
     html: doc.html,
     pdf: doc.pdf,
     file_name: 'proof_of_service_template.pdf',
@@ -591,6 +595,7 @@ async function generateEnglandOrWalesEvictionPack(
       title: 'Section 8 Notice - Notice Seeking Possession',
       description: 'Official notice to tenant citing grounds for possession',
       category: 'notice',
+      document_type: 'section8_notice',
       html: section8Doc.html,
       pdf: section8Doc.pdf,
       file_name: 'section8_notice.pdf',
@@ -638,6 +643,7 @@ async function generateEnglandOrWalesEvictionPack(
       title: 'Section 21 Notice - Form 6A',
       description: 'Official no-fault eviction notice (2 months) - England only',
       category: 'notice',
+      document_type: 'section21_notice',
       html: section21Doc.html,
       pdf: section21Doc.pdf,
       file_name: 'section21_form6a.pdf',
@@ -672,6 +678,7 @@ async function generateEnglandOrWalesEvictionPack(
       title: 'N5B Accelerated Possession Claim',
       description: 'Accelerated possession claim for Section 21 cases',
       category: 'court_form',
+      document_type: 'n5b_claim',
       pdf: Buffer.from(n5bPdf),
       file_name: 'n5b_accelerated_possession.pdf',
     });
@@ -717,6 +724,7 @@ async function generateEnglandOrWalesEvictionPack(
     title: 'Form N5 - Claim for Possession',
     description: 'Official court claim form for possession proceedings',
     category: 'court_form',
+    document_type: 'n5_claim',
     pdf: Buffer.from(n5Pdf),
     file_name: 'n5_claim_for_possession.pdf',
   });
@@ -727,6 +735,7 @@ async function generateEnglandOrWalesEvictionPack(
     title: 'Form N119 - Particulars of Claim',
     description: 'Detailed particulars supporting your possession claim',
     category: 'court_form',
+    document_type: 'n119_particulars',
     pdf: Buffer.from(n119Pdf),
     file_name: 'n119_particulars_of_claim.pdf',
   });
@@ -760,6 +769,7 @@ async function generateScotlandEvictionPack(
     title: 'Notice to Leave',
     description: 'Official notice under Private Housing (Tenancies) (Scotland) Act 2016',
     category: 'notice',
+    document_type: 'notice_to_leave',
     html: noticeToLeaveDoc.html,
     pdf: noticeToLeaveDoc.pdf,
     file_name: 'notice_to_leave.pdf',
@@ -772,6 +782,7 @@ async function generateScotlandEvictionPack(
     title: 'Form E - Tribunal Application for Eviction Order',
     description: 'Application to First-tier Tribunal for Scotland (Housing and Property Chamber)',
     category: 'court_form',
+    document_type: 'form_e_tribunal',
     pdf: Buffer.from(formEPdf),
     file_name: 'tribunal_form_e_application.pdf',
   });
@@ -916,6 +927,7 @@ export async function generateCompleteEvictionPack(
           title: 'Schedule of Arrears',
           description: 'Detailed period-by-period breakdown of rent arrears',
           category: 'evidence_tool',
+          document_type: 'arrears_schedule',
           html: scheduleDoc.html,
           pdf: scheduleDoc.pdf,
           file_name: 'schedule_of_arrears.pdf',
@@ -964,6 +976,7 @@ export async function generateCompleteEvictionPack(
       title: 'Witness Statement',
       description: 'AI-drafted witness statement for court proceedings',
       category: 'court_form',
+      document_type: 'witness_statement',
       html: witnessStatementDoc.html,
       pdf: witnessStatementDoc.pdf,
       file_name: 'witness_statement.pdf',
@@ -994,6 +1007,7 @@ export async function generateCompleteEvictionPack(
     title: 'Eviction Case Summary',
     description: 'Complete summary of your eviction case and selected grounds',
     category: 'guidance',
+    document_type: 'case_summary',
     html: caseSummaryDoc.html,
     pdf: caseSummaryDoc.pdf,
     file_name: 'eviction_case_summary.pdf',
