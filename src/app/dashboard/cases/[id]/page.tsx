@@ -59,9 +59,6 @@ export default function CaseDetailPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editedFacts, setEditedFacts] = useState<Record<string, any>>({});
-  const [isSaving, setIsSaving] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [analysis, setAnalysis] = useState<any>(null);
@@ -116,7 +113,6 @@ export default function CaseDetailPage() {
       if (response.ok) {
         const data = await response.json();
         setCaseDetails(data.case);
-        setEditedFacts(data.case.collected_facts || {});
       } else {
         setError('Case not found');
       }
@@ -586,34 +582,6 @@ export default function CaseDetailPage() {
     });
   };
 
-  const handleSaveChanges = async () => {
-    setIsSaving(true);
-    setMessage(null);
-
-    try {
-      const response = await fetch(`/api/cases/${caseId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          collected_facts: editedFacts,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save changes');
-      }
-
-      setMessage({ type: 'success', text: 'Changes saved successfully!' });
-      setIsEditMode(false);
-      fetchCaseDetails();
-    } catch (err: any) {
-      console.error('Error saving changes:', err);
-      setMessage({ type: 'error', text: err.message || 'Failed to save changes' });
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   const handleRegenerateDocument = async () => {
     if (!caseDetails) return;
 
@@ -660,19 +628,6 @@ export default function CaseDetailPage() {
     }
   };
 
-  const handleFieldChange = (key: string, value: any) => {
-    setEditedFacts({
-      ...editedFacts,
-      [key]: value,
-    });
-  };
-
-  const handleCancelEdit = () => {
-    setEditedFacts(caseDetails?.collected_facts || {});
-    setIsEditMode(false);
-    setMessage(null);
-  };
-
   const handleContinueWizard = () => {
     const params = getProductAndParams();
     const product = params?.product || '';
@@ -698,70 +653,6 @@ export default function CaseDetailPage() {
     } catch {
       alert('Failed to delete case');
     }
-  };
-
-  const renderFieldValue = (key: string, value: any) => {
-    if (!isEditMode) {
-      // View mode - just display the value
-      return (
-        <div className="text-base text-charcoal font-medium">
-          {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
-        </div>
-      );
-    }
-
-    // Edit mode - render appropriate input
-    if (typeof value === 'boolean') {
-      return (
-        <select
-          value={value ? 'true' : 'false'}
-          onChange={(e) => handleFieldChange(key, e.target.value === 'true')}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-        >
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      );
-    }
-
-    if (typeof value === 'number') {
-      return (
-        <input
-          type="number"
-          value={value}
-          onChange={(e) => handleFieldChange(key, parseFloat(e.target.value) || 0)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
-      );
-    }
-
-    if (typeof value === 'string' && value.length > 100) {
-      return (
-        <textarea
-          value={value}
-          onChange={(e) => handleFieldChange(key, e.target.value)}
-          rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
-      );
-    }
-
-    if (typeof value === 'object' && value !== null) {
-      return (
-        <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto">
-          {JSON.stringify(value, null, 2)}
-        </pre>
-      );
-    }
-
-    return (
-      <input
-        type="text"
-        value={value || ''}
-        onChange={(e) => handleFieldChange(key, e.target.value)}
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-      />
-    );
   };
 
   if (isLoading) {
@@ -859,61 +750,40 @@ export default function CaseDetailPage() {
 
           {/* Action Buttons - Simplified for clarity */}
           <div className="flex flex-wrap gap-3">
-            {!isEditMode ? (
-              <>
-                {/* Primary action: Continue wizard if not complete, or update answers if paid and edit window open */}
-                {caseDetails.wizard_progress < 100 && !orderStatus?.paid && (
-                  <Button
-                    variant="primary"
-                    onClick={handleContinueWizard}
-                  >
-                    Continue Wizard
-                  </Button>
-                )}
+            {/* Primary action: Continue wizard if not complete, or update answers if paid and edit window open */}
+            {caseDetails.wizard_progress < 100 && !orderStatus?.paid && (
+              <Button
+                variant="primary"
+                onClick={handleContinueWizard}
+              >
+                Continue Wizard
+              </Button>
+            )}
 
-                {/* Update Answers - only if paid and edit window open */}
-                {orderStatus?.paid && orderStatus?.edit_window_open && (
-                  <Button
-                    variant="secondary"
-                    onClick={handleContinueWizard}
-                  >
-                    <RiEditLine className="w-4 h-4 mr-2" />
-                    Update Answers
-                  </Button>
-                )}
+            {/* Update Answers - only if paid and edit window open */}
+            {orderStatus?.paid && orderStatus?.edit_window_open && (
+              <Button
+                variant="secondary"
+                onClick={handleContinueWizard}
+              >
+                <RiEditLine className="w-4 h-4 mr-2" />
+                Update Answers
+              </Button>
+            )}
 
-                {/* Help link */}
-                <Link href="/help">
-                  <Button variant="outline">
-                    <RiBookOpenLine className="w-4 h-4 mr-2" />
-                    Get Help
-                  </Button>
-                </Link>
+            {/* Help link */}
+            <Link href="/help">
+              <Button variant="outline">
+                <RiBookOpenLine className="w-4 h-4 mr-2" />
+                Get Help
+              </Button>
+            </Link>
 
-                {/* Delete Case - only if not paid */}
-                {!orderStatus?.paid && (
-                  <Button variant="outline" onClick={handleDeleteCase}>
-                    Delete Case
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="primary"
-                  onClick={handleSaveChanges}
-                  disabled={isSaving || (orderStatus?.paid && !orderStatus?.edit_window_open)}
-                >
-                  {isSaving ? 'Saving...' : 'Save Changes'}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleCancelEdit}
-                  disabled={isSaving}
-                >
-                  Cancel
-                </Button>
-              </>
+            {/* Delete Case - only if not paid */}
+            {!orderStatus?.paid && (
+              <Button variant="outline" onClick={handleDeleteCase}>
+                Delete Case
+              </Button>
             )}
           </div>
         </Container>
@@ -1212,44 +1082,9 @@ export default function CaseDetailPage() {
           </div>
         )}
 
-        {/* Edit Mode Warning */}
-        {isEditMode && (
-          <div className="mb-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
-            <p className="text-warning font-semibold">Edit Mode Active</p>
-            <p className="text-sm text-gray-700">Make your changes and click "Save Changes" when done, or "Cancel" to discard changes.</p>
-          </div>
-        )}
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Main Info */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Collected Facts */}
-            <Card padding="large">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-charcoal">
-                  Collected Information
-                </h2>
-                {isEditMode && (
-                  <span className="text-sm text-warning font-medium">Editing...</span>
-                )}
-              </div>
-
-              {Object.keys(editedFacts).length === 0 ? (
-                <p className="text-gray-600">No information collected yet.</p>
-              ) : (
-                <div className="space-y-4">
-                  {Object.entries(editedFacts).map(([key, value]) => (
-                    <div key={key} className="pb-4 border-b border-gray-200 last:border-0">
-                      <div className="text-sm text-gray-600 mb-2 capitalize font-medium">
-                        {key.replace(/_/g, ' ')}
-                      </div>
-                      {renderFieldValue(key, value)}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
             {/* Ask Heaven Case Q&A */}
             <Card padding="large" id="ask-heaven">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
