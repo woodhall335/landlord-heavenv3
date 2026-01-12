@@ -1205,11 +1205,16 @@ export default function CaseDetailPage() {
                   </p>
                   <p className="text-base text-charcoal">Damages: £{analysis?.case_summary?.damages ?? 0}</p>
                   <p className="text-base text-charcoal">Other charges: £{analysis?.case_summary?.other_charges ?? 0}</p>
-                  <p className="text-sm text-gray-600">
-                    Interest: {analysis?.case_summary?.interest_rate ?? 8}%{analysis?.case_summary?.interest_start_date
-                      ? ` from ${analysis.case_summary.interest_start_date}`
-                      : ''}
-                  </p>
+                  {analysis?.case_summary?.charge_interest === true && (
+                    <p className="text-sm text-gray-600">
+                      Interest: {analysis?.case_summary?.interest_rate ?? 8}%{analysis?.case_summary?.interest_start_date
+                        ? ` from ${analysis.case_summary.interest_start_date}`
+                        : ''}
+                    </p>
+                  )}
+                  {analysis?.case_summary?.charge_interest !== true && (
+                    <p className="text-sm text-gray-400">Interest: Not claimed</p>
+                  )}
                 </div>
               </div>
 

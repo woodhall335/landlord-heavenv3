@@ -65,8 +65,10 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
-    interest_rate: facts.money_claim.interest_rate || undefined,
-    interest_start_date: facts.money_claim.interest_start_date || undefined,
+    // Interest: only passed if user explicitly opted in via charge_interest === true
+    claim_interest: facts.money_claim.charge_interest === true,
+    interest_rate: facts.money_claim.charge_interest === true ? (facts.money_claim.interest_rate || undefined) : undefined,
+    interest_start_date: facts.money_claim.charge_interest === true ? (facts.money_claim.interest_start_date || undefined) : undefined,
 
     // =========================================================================
     // COURT FEE AUTO-CALCULATION
@@ -154,8 +156,10 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
-    interest_rate: facts.money_claim.interest_rate || undefined,
-    interest_start_date: facts.money_claim.interest_start_date || undefined,
+    // Interest: only passed if user explicitly opted in via charge_interest === true
+    claim_interest: facts.money_claim.charge_interest === true,
+    interest_rate: facts.money_claim.charge_interest === true ? (facts.money_claim.interest_rate || undefined) : undefined,
+    interest_start_date: facts.money_claim.charge_interest === true ? (facts.money_claim.interest_start_date || undefined) : undefined,
 
     // =========================================================================
     // COURT FEE AUTO-CALCULATION (Scotland)

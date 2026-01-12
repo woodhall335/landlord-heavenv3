@@ -53,7 +53,10 @@ export function getNoticeOnlyRequirements(
   // === ROUTE-SPECIFIC REQUIREMENTS ===
 
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    // England/Wales have section_21 and section_8 (or Wales equivalents)
+    // JURISDICTION-SPECIFIC ROUTES:
+    // - England: section_21 (no-fault), section_8 (grounds-based) - Housing Act 1988
+    // - Wales: wales_section_173 (no-fault), wales_fault_based (grounds-based) - Renting Homes (Wales) Act 2016
+    // NOTE: section_8 and section_21 are ENGLAND ONLY. Wales uses wales_* routes.
 
     if (route === 'section_21' || route === 'wales_section_173') {
       // Section 21 / Wales Section 173 requirements
@@ -123,7 +126,9 @@ export function getNoticeOnlyRequirements(
       }
 
     } else if (route === 'section_8' || route === 'wales_fault_based') {
-      // Section 8 / Wales fault-based requirements
+      // Grounds-based possession requirements
+      // - England uses section_8 (Housing Act 1988)
+      // - Wales uses wales_fault_based (Renting Homes (Wales) Act 2016)
 
       // Grounds are required
       if (stage === 'generate' || stage === 'preview') {

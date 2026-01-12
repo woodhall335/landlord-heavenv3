@@ -173,7 +173,7 @@ ${moneyClaimCase.arrears_schedule ? `Schedule: ${JSON.stringify(moneyClaimCase.a
 
 DAMAGE CLAIMS: ${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? JSON.stringify(moneyClaimCase.damage_items, null, 2) : 'None'}
 
-INTEREST: ${moneyClaimCase.interest_rate || 8}% from ${moneyClaimCase.interest_start_date || 'date of issue'}
+INTEREST: ${moneyClaimCase.claim_interest === true ? `${moneyClaimCase.interest_rate || 8}% from ${moneyClaimCase.interest_start_date || 'date of issue'}` : 'Not claimed'}
 
 PRE-ACTION: ${caseFacts.money_claim.lba_date ? `Letter before action sent on ${caseFacts.money_claim.lba_date}` : 'No formal pre-action letter sent'}
 
@@ -436,8 +436,13 @@ function generateFallbackDrafts(
     })(),
 
     interest_claim: (() => {
+      // Interest: only include if user explicitly opted in via claim_interest === true
+      if (moneyClaimCase.claim_interest !== true) {
+        return 'The Claimant does not claim interest.';
+      }
       if (isScotland) {
-        return 'The Claimant claims interest on the sum due at the rate of 8% per annum from the date of accrual of the debt.';
+        const rate = moneyClaimCase.interest_rate || 8;
+        return `The Claimant claims interest on the sum due at the rate of ${rate}% per annum from the date of accrual of the debt.`;
       } else {
         const rate = moneyClaimCase.interest_rate || 8;
         const startDate = moneyClaimCase.interest_start_date || 'the date of issue';
@@ -464,12 +469,19 @@ function generateFallbackDrafts(
     })(),
 
     remedy_sought: (() => {
-      let remedy = `The Claimant seeks:\n1. Payment of the sum of \u00A3${arrears} being rent arrears.\n`;
+      let itemNum = 1;
+      let remedy = `The Claimant seeks:\n${itemNum++}. Payment of the sum of \u00A3${arrears} being rent arrears.\n`;
       if (moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0) {
-        remedy += '2. Payment of damages as particularised.\n';
+        remedy += `${itemNum++}. Payment of damages as particularised.\n`;
       }
-      remedy += isScotland ? '3. Interest at 8% per annum.\n' : '3. Interest pursuant to section 69 of the County Courts Act 1984.\n';
-      remedy += isScotland ? '4. Costs.' : '4. Costs and court fees.';
+      // Interest: only include if user explicitly opted in
+      if (moneyClaimCase.claim_interest === true) {
+        const rate = moneyClaimCase.interest_rate || 8;
+        remedy += isScotland
+          ? `${itemNum++}. Interest at ${rate}% per annum.\n`
+          : `${itemNum++}. Interest pursuant to section 69 of the County Courts Act 1984 at ${rate}% per annum.\n`;
+      }
+      remedy += isScotland ? `${itemNum++}. Costs.` : `${itemNum++}. Costs and court fees.`;
       return remedy;
     })(),
   };

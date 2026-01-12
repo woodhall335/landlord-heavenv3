@@ -137,34 +137,17 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
         }
       );
     }
-    // Wales Section 8 fallback
-    if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
-      templates.push(
-        {
-          id: 'notice-section-8',
-          templatePath: 'uk/wales/templates/notice_only/form_3_section8/notice.hbs',
-          title: 'Section 8 Notice (Form 3)',
-          type: 'notice',
-          description: 'Your grounds-based possession notice',
-          category: 'notice',
-        },
-        {
-          id: 'service-instructions-s8',
-          templatePath: 'uk/wales/templates/eviction/service_instructions_section_8.hbs',
-          title: 'Service Instructions',
-          type: 'guidance',
-          description: 'How to properly serve your Section 8 notice',
-          category: 'guidance',
-        },
-        {
-          id: 'validity-checklist-s8',
-          templatePath: 'uk/wales/templates/eviction/checklist_section_8.hbs',
-          title: 'Service & Validity Checklist',
-          type: 'checklist',
-          description: 'Ensure your notice meets all legal requirements',
-          category: 'checklist',
-        }
+    // REMOVED: Wales Section 8 fallback
+    // Section 8 (Housing Act 1988) does NOT apply to Wales.
+    // Wales uses Renting Homes (Wales) Act 2016 with Section 173 (no-fault) or fault_based routes.
+    // If section_8 route is passed for Wales, it's a bug - return empty templates.
+    if (noticeRoute === 'section_8' || noticeRoute === 'section-8' || noticeRoute === 'section_21' || noticeRoute === 'section-21') {
+      console.warn(
+        `[template-configs] JURISDICTION ERROR: Route "${noticeRoute}" is not valid for Wales. ` +
+        `Section 8/21 (Housing Act 1988) apply to England only. ` +
+        `Use section_173 or fault_based routes for Wales.`
       );
+      // Return empty - do not add any templates for invalid routes
     }
   }
 

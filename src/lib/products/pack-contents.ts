@@ -298,40 +298,52 @@ function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
 // =============================================================================
 
 function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
-  const items: PackItem[] = [];
   const { route, has_arrears, include_arrears_schedule } = args;
 
-  // Section 173 (No-Fault - 6 month notice)
+  // =========================================================================
+  // JURISDICTION GUARD: Section 8 and Section 21 are NOT valid for Wales
+  // Housing Act 1988 (Section 8/21) applies to ENGLAND ONLY.
+  // Wales uses Renting Homes (Wales) Act 2016.
+  // =========================================================================
+  const INVALID_WALES_ROUTES = ['section_8', 'section_21', 'accelerated_possession', 'accelerated_section21'];
+  if (route && INVALID_WALES_ROUTES.includes(route)) {
+    console.warn(
+      `[pack-contents] JURISDICTION ERROR: Route "${route}" is not valid for Wales. ` +
+      `Section 8 and Section 21 (Housing Act 1988) apply to England only. ` +
+      `Wales uses Section 173 (no-fault) or fault_based routes under Renting Homes (Wales) Act 2016.`
+    );
+    return []; // Return empty - invalid route for this jurisdiction
+  }
+
+  const items: PackItem[] = [];
+
+  // Section 173 (No-Fault - 6 month notice) - Renting Homes (Wales) Act 2016
   if (route === 'section_173') {
     items.push({
       key: 'section173_notice',
       title: "Landlord's Notice (Section 173)",
-      description: '6-month no-fault notice under Renting Homes Act',
+      description: '6-month no-fault notice under Renting Homes (Wales) Act 2016',
       category: 'Notice',
       required: true,
     });
   }
 
-  // Fault-based notice
+  // Fault-based notice - Renting Homes (Wales) Act 2016
   if (route === 'fault_based') {
     items.push({
       key: 'fault_notice',
       title: 'Fault-Based Notice (RHW23)',
-      description: 'Breach notice under Renting Homes Act',
+      description: 'Breach notice under Renting Homes (Wales) Act 2016',
       category: 'Notice',
       required: true,
     });
   }
 
-  // Section 8 equivalent in Wales
-  if (route === 'section_8') {
-    items.push({
-      key: 'section8_notice',
-      title: 'Possession Notice (Form 3)',
-      description: 'Grounds-based possession notice',
-      category: 'Notice',
-      required: true,
-    });
+  // Only add guidance documents if a valid Wales route was specified
+  // (section_8/section_21 already blocked above with early return)
+  if (!route || !['section_173', 'fault_based'].includes(route)) {
+    // No valid notice route specified - return empty
+    return [];
   }
 
   items.push({
@@ -350,7 +362,8 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
-  if ((route === 'section_8' || route === 'fault_based') && (has_arrears || include_arrears_schedule)) {
+  // Arrears schedule for fault-based cases with rent arrears
+  if (route === 'fault_based' && (has_arrears || include_arrears_schedule)) {
     items.push({
       key: 'arrears_schedule',
       title: 'Rent Arrears Schedule',
