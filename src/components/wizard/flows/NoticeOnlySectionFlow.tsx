@@ -59,15 +59,22 @@ interface WizardSection {
   hasWarnings?: (facts: WizardFacts) => string[];
 }
 
+// Valid routes by jurisdiction
+const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
+const WALES_ROUTES = ['section_173', 'fault_based'] as const;
+
 // Define all sections with their visibility rules
 const SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
     label: 'Case Basics',
     description: 'Jurisdiction and eviction route',
-    isComplete: (facts) =>
-      Boolean(facts.eviction_route) &&
-      ['section_8', 'section_21'].includes(facts.eviction_route as string),
+    isComplete: (facts) => {
+      const route = facts.eviction_route as string;
+      if (!route) return false;
+      // Accept both England and Wales routes as valid
+      return [...ENGLAND_ROUTES, ...WALES_ROUTES].includes(route as any);
+    },
   },
   {
     id: 'parties',
@@ -275,15 +282,31 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     };
   }, []);
 
-  // Get visible sections based on eviction route
+  // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
-    const route = facts.eviction_route as 'section_8' | 'section_21' | undefined;
+    const route = facts.eviction_route as string | undefined;
+    const isWales = jurisdiction === 'wales';
+
+    // Determine if route is valid for this jurisdiction
+    const hasValidRoute = isWales
+      ? route && WALES_ROUTES.includes(route as typeof WALES_ROUTES[number])
+      : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+
     return SECTIONS.filter((section) => {
-      if (!section.routes) return true;
-      if (!route) return section.id === 'case_basics';
-      return section.routes.includes(route);
+      // Route-specific sections (S21 compliance, S8 arrears) only apply to England
+      if (section.routes) {
+        // Wales doesn't use these England-specific sections
+        if (isWales) return false;
+        // England: only show if route matches
+        if (!route) return false;
+        return section.routes.includes(route as 'section_8' | 'section_21');
+      }
+
+      // Non-route-specific sections: show case_basics always, others once route is valid
+      if (!hasValidRoute) return section.id === 'case_basics';
+      return true;
     });
-  }, [facts.eviction_route]);
+  }, [jurisdiction, facts.eviction_route]);
 
   const currentSection = visibleSections[currentSectionIndex];
 

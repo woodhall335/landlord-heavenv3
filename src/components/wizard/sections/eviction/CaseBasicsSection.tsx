@@ -24,6 +24,10 @@ interface CaseBasicsSectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
+// Valid routes by jurisdiction
+const ENGLAND_ROUTES = ['section_8', 'section_21'];
+const WALES_ROUTES = ['section_173', 'fault_based'];
+
 export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
   facts,
   jurisdiction,
@@ -33,6 +37,15 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
 
   // Determine which routes are available based on jurisdiction
   const isWales = jurisdiction === 'wales';
+
+  // Check for invalid saved route (e.g., Wales case with section_8 from old data)
+  const validRoutes = isWales ? WALES_ROUTES : ENGLAND_ROUTES;
+  const hasInvalidRoute = evictionRoute && !validRoutes.includes(evictionRoute);
+
+  // Reset invalid route
+  const handleResetRoute = () => {
+    onUpdate({ eviction_route: '' });
+  };
 
   return (
     <div className="space-y-6">
@@ -53,12 +66,57 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
         </div>
       </div>
 
+      {/* Invalid route guardrail - show when saved route doesn't match jurisdiction */}
+      {hasInvalidRoute && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <h4 className="text-sm font-medium text-red-800">
+                Invalid eviction route for {isWales ? 'Wales' : 'England'}
+              </h4>
+              <p className="text-sm text-red-700 mt-1">
+                The previously selected route &quot;{evictionRoute}&quot; is not valid for {isWales ? 'Welsh' : 'English'} law.
+                {isWales
+                  ? ' Wales uses the Renting Homes (Wales) Act 2016, not Housing Act 1988 notices.'
+                  : ' England uses Housing Act 1988 notices (Section 8/21).'}
+              </p>
+              <button
+                onClick={handleResetRoute}
+                className="mt-3 inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-md transition-colors"
+              >
+                Reset and choose a valid route
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Eviction route selection */}
       <div className="space-y-3">
         <label className="block text-sm font-medium text-gray-700">
           Which eviction route are you using?
           <span className="text-red-500 ml-1">*</span>
         </label>
+
+        {/* Jurisdiction-specific helper text */}
+        <p className="text-sm text-gray-500">
+          {isWales ? (
+            <>
+              <strong>Why these options?</strong> Since December 2022, Wales uses the{' '}
+              <em>Renting Homes (Wales) Act 2016</em> instead of the Housing Act 1988.
+              Section 8 and Section 21 notices do not apply in Wales.
+            </>
+          ) : (
+            <>
+              <strong>Why these options?</strong> England uses the{' '}
+              <em>Housing Act 1988</em> for private tenancy evictions.
+              Choose Section 21 for no-fault possession or Section 8 for grounds-based eviction.
+            </>
+          )}
+        </p>
 
         <div className="space-y-3">
           {/* ================================================================== */}
