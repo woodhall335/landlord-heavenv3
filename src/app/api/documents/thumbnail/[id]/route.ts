@@ -271,7 +271,8 @@ export async function GET(
       headers['Content-Length'] = thumbnail.length.toString();
     }
 
-    return new NextResponse(thumbnail, { status: 200, headers });
+    // Convert Buffer to Uint8Array for NextResponse compatibility
+    return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
 
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
