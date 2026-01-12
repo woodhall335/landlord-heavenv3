@@ -160,6 +160,7 @@ export interface GeneratedDocument {
     generatedAt: string;
     documentId: string;
     isPreview: boolean;
+    jurisdiction?: string;
   };
 }
 
