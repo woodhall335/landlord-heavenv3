@@ -488,14 +488,16 @@ export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): Con
   // ========================================
 
   if (jurisdiction === 'wales' && (route === 'wales_fault_based' || route?.includes('fault'))) {
-    // Wales fault-based requires grounds
+    // Wales fault-based requires grounds under Renting Homes (Wales) Act 2016
+    // NOTE: section8_grounds is checked as legacy fallback for older wizard data
+    // New wizard data should use wales_breach_type field
     const grounds = facts.wales_breach_type || facts.section8_grounds;
     if (!grounds || (Array.isArray(grounds) && grounds.length === 0)) {
       issues.push({
         code: 'WALES_FAULT_NO_GROUNDS',
         severity: 'blocker',
         message: 'Wales fault-based notice requires breach grounds',
-        fields: ['wales_breach_type', 'section8_grounds'],
+        fields: ['wales_breach_type'],
         suggestion: 'Specify the grounds for possession under Schedule 9 of Renting Homes (Wales) Act 2016',
       });
     }

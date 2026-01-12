@@ -298,8 +298,24 @@ function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
 // =============================================================================
 
 function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
-  const items: PackItem[] = [];
   const { route, has_arrears, include_arrears_schedule } = args;
+
+  // =========================================================================
+  // JURISDICTION GUARD: Section 8 and Section 21 are NOT valid for Wales
+  // Housing Act 1988 (Section 8/21) applies to ENGLAND ONLY.
+  // Wales uses Renting Homes (Wales) Act 2016.
+  // =========================================================================
+  const INVALID_WALES_ROUTES = ['section_8', 'section_21', 'accelerated_possession', 'accelerated_section21'];
+  if (route && INVALID_WALES_ROUTES.includes(route)) {
+    console.warn(
+      `[pack-contents] JURISDICTION ERROR: Route "${route}" is not valid for Wales. ` +
+      `Section 8 and Section 21 (Housing Act 1988) apply to England only. ` +
+      `Wales uses Section 173 (no-fault) or fault_based routes under Renting Homes (Wales) Act 2016.`
+    );
+    return []; // Return empty - invalid route for this jurisdiction
+  }
+
+  const items: PackItem[] = [];
 
   // Section 173 (No-Fault - 6 month notice) - Renting Homes (Wales) Act 2016
   if (route === 'section_173') {
@@ -313,8 +329,6 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   }
 
   // Fault-based notice - Renting Homes (Wales) Act 2016
-  // NOTE: Wales does NOT use Section 8 (Housing Act 1988). Section 8 is ENGLAND ONLY.
-  // For rent arrears in Wales, use fault_based route with appropriate grounds.
   if (route === 'fault_based') {
     items.push({
       key: 'fault_notice',
@@ -325,9 +339,12 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     });
   }
 
-  // REMOVED: Section 8 handling for Wales
-  // Section 8 (Housing Act 1988) does NOT apply to Wales for standard occupation contracts
-  // created on or after 1 December 2022. See Renting Homes (Wales) Act 2016.
+  // Only add guidance documents if a valid Wales route was specified
+  // (section_8/section_21 already blocked above with early return)
+  if (!route || !['section_173', 'fault_based'].includes(route)) {
+    // No valid notice route specified - return empty
+    return [];
+  }
 
   items.push({
     key: 'service_instructions',
@@ -346,7 +363,6 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   // Arrears schedule for fault-based cases with rent arrears
-  // NOTE: Only fault_based route is valid for Wales - Section 8 is England-only
   if (route === 'fault_based' && (has_arrears || include_arrears_schedule)) {
     items.push({
       key: 'arrears_schedule',
