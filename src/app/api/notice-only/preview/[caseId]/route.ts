@@ -19,6 +19,10 @@ import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/nor
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
+import {
+  generateSection21Notice,
+  mapWizardToSection21Data,
+} from '@/lib/documents/section21-generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
@@ -595,38 +599,15 @@ export async function GET(
           console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
         }
       } else if (selected_route === 'section_21') {
-        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
+        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice via canonical generator');
         try {
-          // Calculate first anniversary date if tenancy start date is available
-          let firstAnniversaryDate = null;
-          let firstAnniversaryDateFormatted = null;
-          if (templateData.tenancy_start_date) {
-            try {
-              const tenancyStart = new Date(templateData.tenancy_start_date);
-              const anniversary = new Date(tenancyStart);
-              anniversary.setFullYear(anniversary.getFullYear() + 1);
-              firstAnniversaryDate = anniversary.toISOString().split('T')[0];
-              firstAnniversaryDateFormatted = formatUKDate(firstAnniversaryDate);
-            } catch (e) {
-              console.error('[NOTICE-PREVIEW-API] Failed to calculate first anniversary:', e);
-            }
-          }
-
-          // FIX: Use templateData (enriched with formatted addresses/dates) instead of caseFacts
-          const section21Data = {
-            ...templateData,
-            // Section 21 requires possession_date (2 months from service)
-            possession_date: templateData.earliest_possession_date_formatted || templateData.earliest_possession_date,
-            // Add first anniversary date
-            first_anniversary_date: firstAnniversaryDateFormatted || firstAnniversaryDate,
-          };
-
-          const section21Doc = await generateDocument({
-            templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-            data: section21Data,
-            outputFormat: 'pdf',
-            isPreview: true,
+          // Use canonical mapper and generator for Form 6A compliance
+          // This ensures ALL Section 21 generation paths produce identical output
+          const section21NoticeData = mapWizardToSection21Data(wizardFacts, {
+            serviceDate: templateData.service_date || templateData.notice_date,
           });
+
+          const section21Doc = await generateSection21Notice(section21NoticeData, true);
           if (section21Doc.pdf) {
             documents.push({
               title: 'Section 21 Notice (Form 6A)',

@@ -155,6 +155,120 @@ export async function generateSection21Notice(
  * Validate Section 21 eligibility based on compliance requirements
  * This should be called by the decision engine before allowing S21 route
  */
+/**
+ * Map wizard facts to Section21NoticeData
+ *
+ * This provides a single source of truth for mapping wizard/case facts
+ * to the format expected by generateSection21Notice().
+ */
+export function mapWizardToSection21Data(
+  wizardFacts: Record<string, any>,
+  options?: { serviceDate?: string }
+): Section21NoticeData {
+  // Build addresses - prefer pre-concatenated, fallback to building from parts
+  const propertyAddress =
+    wizardFacts.property_address ||
+    [
+      wizardFacts.property_address_line1,
+      wizardFacts.property_address_line2,
+      wizardFacts.property_address_town,
+      wizardFacts.property_address_county,
+      wizardFacts.property_address_postcode,
+    ]
+      .filter(Boolean)
+      .join('\n') ||
+    '';
+
+  const landlordAddress =
+    wizardFacts.landlord_address ||
+    [
+      wizardFacts.landlord_address_line1,
+      wizardFacts.landlord_address_line2,
+      wizardFacts.landlord_address_town,
+      wizardFacts.landlord_address_county,
+      wizardFacts.landlord_address_postcode,
+    ]
+      .filter(Boolean)
+      .join('\n') ||
+    '';
+
+  // Normalize deposit scheme to expected enum
+  const normalizeDepositScheme = (
+    scheme: string | undefined
+  ): 'DPS' | 'MyDeposits' | 'TDS' | undefined => {
+    if (!scheme) return undefined;
+    const upper = scheme.toUpperCase();
+    if (upper === 'DPS' || upper.includes('DEPOSIT PROTECTION')) return 'DPS';
+    if (upper.includes('MYDEPOSIT')) return 'MyDeposits';
+    if (upper === 'TDS' || upper.includes('TENANCY DEPOSIT')) return 'TDS';
+    return undefined;
+  };
+
+  return {
+    // Landlord
+    landlord_full_name: wizardFacts.landlord_full_name || '',
+    landlord_2_name: wizardFacts.landlord_2_name || wizardFacts.joint_landlord_name,
+    landlord_address: landlordAddress,
+    landlord_email: wizardFacts.landlord_email,
+    landlord_phone: wizardFacts.landlord_phone,
+
+    // Tenant
+    tenant_full_name: wizardFacts.tenant_full_name || '',
+    tenant_2_name: wizardFacts.tenant_2_name || wizardFacts.joint_tenant_name,
+    property_address: propertyAddress,
+
+    // Tenancy
+    tenancy_start_date: wizardFacts.tenancy_start_date || '',
+    fixed_term:
+      wizardFacts.fixed_term === true ||
+      wizardFacts.is_fixed_term === true ||
+      wizardFacts.tenancy_type === 'fixed_term',
+    fixed_term_end_date: wizardFacts.fixed_term_end_date,
+    rent_amount: wizardFacts.rent_amount || 0,
+    rent_frequency: wizardFacts.rent_frequency || 'monthly',
+    periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
+
+    // Notice details - service_date and expiry_date will be calculated by generator
+    service_date:
+      options?.serviceDate ||
+      wizardFacts.service_date ||
+      wizardFacts.notice_date ||
+      wizardFacts.notice_served_date,
+    expiry_date: '', // Will be auto-calculated by generateSection21Notice
+
+    // Compliance
+    deposit_protected:
+      wizardFacts.deposit_protected === true ||
+      wizardFacts.deposit_protected === 'yes',
+    deposit_amount: wizardFacts.deposit_amount,
+    deposit_scheme: normalizeDepositScheme(
+      wizardFacts.deposit_scheme || wizardFacts.deposit_scheme_name
+    ),
+    deposit_reference: wizardFacts.deposit_reference,
+    prescribed_info_given:
+      wizardFacts.prescribed_info_given === true ||
+      wizardFacts.prescribed_info_given === 'yes',
+    gas_certificate_provided:
+      wizardFacts.gas_certificate_provided === true ||
+      wizardFacts.gas_safety_certificate === true ||
+      wizardFacts.gas_certificate_provided === 'yes',
+    how_to_rent_provided:
+      wizardFacts.how_to_rent_provided === true ||
+      wizardFacts.how_to_rent_given === true ||
+      wizardFacts.how_to_rent_provided === 'yes',
+    epc_provided:
+      wizardFacts.epc_provided === true || wizardFacts.epc_provided === 'yes',
+    epc_rating: wizardFacts.epc_rating,
+
+    // Help information
+    council_phone: wizardFacts.council_phone,
+  };
+}
+
+/**
+ * Validate Section 21 eligibility based on compliance requirements
+ * This should be called by the decision engine before allowing S21 route
+ */
 export function validateSection21Eligibility(data: Section21NoticeData): {
   eligible: boolean;
   blocking_issues: string[];
