@@ -97,7 +97,10 @@ describe('AST pack - Premium', () => {
     expect(generated.html).toContain('HMO & Shared Facilities');
     expect(generated.html).toContain('Guarantor');
     expect(generated.html).toContain('Joint and Several Liability');
-    expect(generated.html).toContain('Legal Validity Summary');
+    // Certificate of Curation and Legal Validity Summary removed as of Jan 2026 restructure
+    // Instead verify premium-specific content is present
+    expect(generated.html).toContain('Priya Landlord');
+    expect(generated.html).toContain('Tenant One');
     expect(generated.pdf).toBeInstanceOf(Buffer);
   }, 20000);
 });

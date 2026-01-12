@@ -1,10 +1,166 @@
 /**
  * AST (Assured Shorthold Tenancy) Generator
  *
- * Generates standard and premium tenancy agreements for England & Wales.
+ * Generates jurisdiction-specific tenancy agreements:
+ * - England: Assured Shorthold Tenancy (Housing Act 1988)
+ * - Wales: Standard Occupation Contract (Renting Homes Wales Act 2016)
+ * - Scotland: Private Residential Tenancy (Private Housing Act 2016)
+ * - Northern Ireland: Private Tenancy Agreement (Private Tenancies Order 2006)
+ *
+ * IMPORTANT: Each jurisdiction uses different terminology and legal frameworks.
+ * This generator ensures the correct template and document_type is used.
  */
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
+
+// ============================================================================
+// JURISDICTION CONFIGURATION
+// ============================================================================
+
+export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
+
+/**
+ * Jurisdiction-specific configuration for tenancy agreements
+ */
+interface JurisdictionConfig {
+  jurisdiction: TenancyJurisdiction;
+  agreementTitle: string;
+  agreementDescription: string;
+  agreementDocumentType: string; // Must match pack-contents keys
+  modelClausesTitle: string;
+  modelClausesDescription: string;
+  legalFramework: string;
+  jurisdictionLabel: string;
+  templatePaths: {
+    standard: string;
+    premium: string;
+    modelClauses: string;
+    termsSchedule: string;
+    inventory: string;
+    keySchedule: string;
+    maintenanceGuide: string;
+    checkoutProcedure: string;
+  };
+}
+
+/**
+ * Configuration for each UK jurisdiction
+ */
+const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
+  england: {
+    jurisdiction: 'england',
+    agreementTitle: 'Assured Shorthold Tenancy Agreement',
+    agreementDescription: 'Comprehensive AST compliant with Housing Act 1988',
+    agreementDocumentType: 'ast_agreement',
+    modelClausesTitle: 'Government Model Clauses',
+    modelClausesDescription: 'Recommended clauses from official government guidance',
+    legalFramework: 'Housing Act 1988',
+    jurisdictionLabel: 'England',
+    templatePaths: {
+      standard: 'uk/england/templates/standard_ast_formatted.hbs',
+      premium: 'uk/england/templates/premium_ast_formatted.hbs',
+      modelClauses: 'uk/england/templates/government_model_clauses.hbs',
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'shared/templates/inventory_template.hbs',
+      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  wales: {
+    jurisdiction: 'wales',
+    agreementTitle: 'Standard Occupation Contract',
+    agreementDescription: 'Compliant with Renting Homes (Wales) Act 2016',
+    agreementDocumentType: 'soc_agreement',
+    modelClausesTitle: 'Government Model Clauses (Wales)',
+    modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act',
+    legalFramework: 'Renting Homes (Wales) Act 2016',
+    jurisdictionLabel: 'Wales',
+    templatePaths: {
+      standard: 'uk/wales/templates/standard_occupation_contract.hbs',
+      premium: 'uk/wales/templates/standard_occupation_contract.hbs', // Uses same template
+      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback to England
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'shared/templates/inventory_template.hbs',
+      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  scotland: {
+    jurisdiction: 'scotland',
+    agreementTitle: 'Private Residential Tenancy Agreement',
+    agreementDescription: 'Compliant with Private Housing (Tenancies) (Scotland) Act 2016',
+    agreementDocumentType: 'prt_agreement',
+    modelClausesTitle: 'Model Clauses (Scotland)',
+    modelClausesDescription: 'Scottish Government prescribed terms for PRTs',
+    legalFramework: 'Private Housing (Tenancies) (Scotland) Act 2016',
+    jurisdictionLabel: 'Scotland',
+    templatePaths: {
+      standard: 'uk/scotland/templates/prt_agreement.hbs',
+      premium: 'uk/scotland/templates/prt_agreement_premium.hbs',
+      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback until Scotland template exists
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'uk/scotland/templates/inventory_template.hbs',
+      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  'northern-ireland': {
+    jurisdiction: 'northern-ireland',
+    agreementTitle: 'Private Tenancy Agreement',
+    agreementDescription: 'Compliant with Private Tenancies (Northern Ireland) Order 2006',
+    agreementDocumentType: 'private_tenancy_agreement',
+    modelClausesTitle: 'Model Clauses (Northern Ireland)',
+    modelClausesDescription: 'Prescribed statutory terms under NI legislation',
+    legalFramework: 'Private Tenancies (Northern Ireland) Order 2006',
+    jurisdictionLabel: 'Northern Ireland',
+    templatePaths: {
+      standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
+      premium: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
+      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback until NI template exists
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'uk/northern-ireland/templates/inventory_template.hbs',
+      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+    },
+  },
+};
+
+/**
+ * Detect jurisdiction from ASTData
+ * Checks multiple possible sources and normalizes to canonical jurisdiction
+ */
+function detectJurisdiction(data: ASTData): TenancyJurisdiction {
+  // Check explicit jurisdiction field (canonical)
+  const explicitJurisdiction = (data as any).jurisdiction;
+  if (explicitJurisdiction) {
+    const normalized = explicitJurisdiction.toLowerCase().replace(/\s+/g, '-');
+    if (normalized === 'scotland') return 'scotland';
+    if (normalized === 'northern-ireland' || normalized === 'ni') return 'northern-ireland';
+    if (normalized === 'wales') return 'wales';
+    if (normalized === 'england') return 'england';
+  }
+
+  // Check legacy jurisdiction flags
+  if ((data as any).jurisdiction_scotland) return 'scotland';
+  if ((data as any).jurisdiction_northern_ireland || (data as any).jurisdiction_ni) return 'northern-ireland';
+  if (data.jurisdiction_wales) return 'wales';
+  if (data.jurisdiction_england) return 'england';
+
+  // Default to England if not specified
+  console.warn('[AST Generator] No jurisdiction specified, defaulting to England');
+  return 'england';
+}
+
+/**
+ * Get jurisdiction configuration
+ */
+export function getJurisdictionConfig(jurisdiction: TenancyJurisdiction): JurisdictionConfig {
+  return JURISDICTION_CONFIGS[jurisdiction];
+}
 
 // ============================================================================
 // TYPES
@@ -417,7 +573,8 @@ export function validateASTData(data: ASTData): string[] {
 // ============================================================================
 
 /**
- * Generate a standard AST with all bonus documents
+ * Generate a standard tenancy agreement with all bonus documents (merged PDF)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  */
 export async function generateStandardAST(
   data: ASTData,
@@ -428,10 +585,9 @@ export async function generateStandardAST(
     throw new Error(`AST validation failed:\n${errors.join('\n')}`);
   }
 
-  // Set defaults
-  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
-    data.jurisdiction_england = true;
-  }
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
 
   if (!data.rent_period) {
     data.rent_period = 'month';
@@ -442,26 +598,26 @@ export async function generateStandardAST(
   }
 
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-STD-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
 
   // Add metadata flags
   const enrichedData = {
     ...data,
     premium: false,
-    product_tier: data.product_tier || 'Standard AST',
+    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
   };
 
-  // List of all templates to merge (in order)
-  // Note: certificate_of_curation, ast_legal_validity_summary, and deposit_protection_certificate
-  // removed as of Jan 2026 pack restructure
+  // List of all templates to merge (in order) - jurisdiction-specific
   const templatePaths = [
-    'uk/england/templates/standard_ast_formatted.hbs',
-    'shared/templates/terms_and_conditions.hbs',
-    'uk/england/templates/government_model_clauses.hbs',
-    'shared/templates/inventory_template.hbs',
+    config.templatePaths.standard,
+    config.templatePaths.termsSchedule,
+    config.templatePaths.modelClauses,
+    config.templatePaths.inventory,
   ];
 
   // Compile and merge all templates
@@ -474,16 +630,18 @@ export async function generateStandardAST(
     html: mergedHtml,
     pdf,
     metadata: {
-      templateUsed: 'standard_ast_with_bonus_docs',
+      templateUsed: `${jurisdiction}_standard_tenancy_merged`,
       generatedAt: new Date().toISOString(),
       documentId,
       isPreview,
+      jurisdiction,
     },
   };
 }
 
 /**
- * Generate a premium AST with all bonus documents + enhanced clauses
+ * Generate a premium tenancy agreement with all bonus documents + enhanced clauses (merged PDF)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  */
 export async function generatePremiumAST(
   data: ASTData,
@@ -494,10 +652,9 @@ export async function generatePremiumAST(
     throw new Error(`AST validation failed:\n${errors.join('\n')}`);
   }
 
-  // Set defaults
-  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
-    data.jurisdiction_england = true;
-  }
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
 
   if (!data.rent_period) {
     data.rent_period = 'month';
@@ -508,30 +665,30 @@ export async function generatePremiumAST(
   }
 
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-PREM-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-PREM-${Date.now()}`;
 
   // Add metadata flags for premium
   const enrichedData = {
     ...data,
     premium: true,
-    product_tier: data.product_tier || 'Premium AST',
+    product_tier: data.product_tier || `Premium ${config.agreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
   };
 
-  // Premium includes all standard docs PLUS exclusive premium documents
-  // Note: certificate_of_curation, ast_legal_validity_summary, deposit_protection_certificate,
-  // tenant_welcome_pack, and move_in_condition_report removed as of Jan 2026 pack restructure
+  // Premium includes all standard docs PLUS exclusive premium documents - jurisdiction-specific
   const templatePaths = [
-    'uk/england/templates/premium_ast_formatted.hbs',
-    'shared/templates/terms_and_conditions.hbs',
-    'uk/england/templates/government_model_clauses.hbs',
-    'shared/templates/inventory_template.hbs',
+    config.templatePaths.premium,
+    config.templatePaths.termsSchedule,
+    config.templatePaths.modelClauses,
+    config.templatePaths.inventory,
     // Premium-exclusive documents
-    'uk/england/templates/premium/key_schedule.hbs',
-    'uk/england/templates/premium/property_maintenance_guide.hbs',
-    'uk/england/templates/premium/checkout_procedure.hbs',
+    config.templatePaths.keySchedule,
+    config.templatePaths.maintenanceGuide,
+    config.templatePaths.checkoutProcedure,
   ];
 
   // Compile and merge all templates
@@ -544,10 +701,11 @@ export async function generatePremiumAST(
     html: mergedHtml,
     pdf,
     metadata: {
-      templateUsed: 'premium_ast_with_bonus_docs',
+      templateUsed: `${jurisdiction}_premium_tenancy_merged`,
       generatedAt: new Date().toISOString(),
       documentId,
       isPreview,
+      jurisdiction,
     },
   };
 }
@@ -575,8 +733,8 @@ export interface ASTDocumentPack {
 }
 
 /**
- * Generate Standard AST as separate documents (unbundled)
- * Returns array of individual documents instead of merged PDF
+ * Generate Standard tenancy agreement as separate documents (unbundled)
+ * Jurisdiction-aware: uses correct templates and document_type for each UK jurisdiction
  */
 export async function generateStandardASTDocuments(
   data: ASTData,
@@ -587,23 +745,28 @@ export async function generateStandardASTDocuments(
     throw new Error(`AST validation failed:\n${errors.join('\n')}`);
   }
 
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
+
+  console.log(`[AST Generator] Using jurisdiction: ${jurisdiction} (${config.legalFramework})`);
+
   // Set defaults
-  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
-    data.jurisdiction_england = true;
-  }
   if (!data.rent_period) data.rent_period = 'month';
   if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
 
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-STD-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
 
   const enrichedData = {
     ...data,
     premium: false,
-    product_tier: data.product_tier || 'Standard AST',
+    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
     generation_timestamp: generationTimestamp,
     document_id: documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
     current_date: new Date().toISOString().split('T')[0],
   };
 
@@ -612,32 +775,32 @@ export async function generateStandardASTDocuments(
   // Import generateDocument for individual templates
   const { generateDocument } = await import('./generator');
 
-  // 1. Main Agreement
+  // 1. Main Agreement - jurisdiction-specific
   try {
     const agreementDoc = await generateDocument({
-      templatePath: 'uk/england/templates/standard_ast_formatted.hbs',
+      templatePath: config.templatePaths.standard,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
     });
     documents.push({
-      title: 'Assured Shorthold Tenancy Agreement',
-      description: 'Comprehensive AST compliant with Housing Act 1988',
+      title: config.agreementTitle,
+      description: config.agreementDescription,
       category: 'agreement',
-      document_type: 'ast_agreement',
+      document_type: config.agreementDocumentType, // jurisdiction-specific key
       html: agreementDoc.html,
       pdf: agreementDoc.pdf,
       file_name: 'tenancy_agreement.pdf',
     });
   } catch (err) {
-    console.error('Failed to generate AST agreement:', err);
+    console.error(`Failed to generate ${config.agreementTitle}:`, err);
     throw err;
   }
 
-  // 2. Terms and Conditions
+  // 2. Terms and Conditions - shared template
   try {
     const termsDoc = await generateDocument({
-      templatePath: 'shared/templates/terms_and_conditions.hbs',
+      templatePath: config.templatePaths.termsSchedule,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -655,36 +818,31 @@ export async function generateStandardASTDocuments(
     console.warn('Failed to generate terms and conditions:', err);
   }
 
-  // 3. Certificate of Curation - Removed as of Jan 2026 pack restructure
-  // 4. Legal Validity Summary - Removed as of Jan 2026 pack restructure
-
-  // 5. Government Model Clauses
+  // 3. Model Clauses - jurisdiction-specific title
   try {
     const modelDoc = await generateDocument({
-      templatePath: 'uk/england/templates/government_model_clauses.hbs',
+      templatePath: config.templatePaths.modelClauses,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
     });
     documents.push({
-      title: 'Government Model Clauses',
-      description: 'Recommended clauses from official government guidance',
+      title: config.modelClausesTitle,
+      description: config.modelClausesDescription,
       category: 'guidance',
       document_type: 'model_clauses',
       html: modelDoc.html,
       pdf: modelDoc.pdf,
-      file_name: 'government_model_clauses.pdf',
+      file_name: 'model_clauses.pdf',
     });
   } catch (err) {
     console.warn('Failed to generate model clauses:', err);
   }
 
-  // 6. Deposit Protection Certificate - Removed as of Jan 2026 pack restructure
-
-  // 7. Inventory Template
+  // 4. Inventory Template - jurisdiction-specific path
   try {
     const inventoryDoc = await generateDocument({
-      templatePath: 'shared/templates/inventory_template.hbs',
+      templatePath: config.templatePaths.inventory,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -702,7 +860,7 @@ export async function generateStandardASTDocuments(
     console.warn('Failed to generate inventory:', err);
   }
 
-  console.log(`✅ Generated ${documents.length} documents for Standard AST pack`);
+  console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Standard pack`);
 
   return {
     case_id: caseId || documentId,
@@ -713,8 +871,8 @@ export async function generateStandardASTDocuments(
 }
 
 /**
- * Generate Premium AST as separate documents (unbundled)
- * Returns array of individual documents instead of merged PDF
+ * Generate Premium tenancy agreement as separate documents (unbundled)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  */
 export async function generatePremiumASTDocuments(
   data: ASTData,
@@ -724,17 +882,23 @@ export async function generatePremiumASTDocuments(
   const standardPack = await generateStandardASTDocuments(data, caseId);
   const documents = [...standardPack.documents];
 
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
+
   // Update tier
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-PREM-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-PREM-${Date.now()}`;
 
   const enrichedData = {
     ...data,
     premium: true,
-    product_tier: 'Premium AST',
+    product_tier: `Premium ${config.agreementTitle}`,
     generation_timestamp: generationTimestamp,
     document_id: documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
     current_date: new Date().toISOString().split('T')[0],
   };
 
@@ -742,10 +906,10 @@ export async function generatePremiumASTDocuments(
 
   // Add Premium-exclusive documents
 
-  // 8. Key Schedule
+  // Key Schedule - jurisdiction-specific path
   try {
     const keyDoc = await generateDocument({
-      templatePath: 'uk/england/templates/premium/key_schedule.hbs',
+      templatePath: config.templatePaths.keySchedule,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -763,12 +927,10 @@ export async function generatePremiumASTDocuments(
     console.warn('Failed to generate key schedule:', err);
   }
 
-  // 9. Tenant Welcome Pack - Removed as of Jan 2026 pack restructure
-
-  // 10. Property Maintenance Guide
+  // Property Maintenance Guide - jurisdiction-specific path
   try {
     const maintenanceDoc = await generateDocument({
-      templatePath: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      templatePath: config.templatePaths.maintenanceGuide,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -786,12 +948,10 @@ export async function generatePremiumASTDocuments(
     console.warn('Failed to generate maintenance guide:', err);
   }
 
-  // 11. Move-In Condition Report - Removed as of Jan 2026 pack restructure
-
-  // 12. Checkout Procedure
+  // Checkout Procedure - jurisdiction-specific path
   try {
     const checkoutDoc = await generateDocument({
-      templatePath: 'uk/england/templates/premium/checkout_procedure.hbs',
+      templatePath: config.templatePaths.checkoutProcedure,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -809,7 +969,7 @@ export async function generatePremiumASTDocuments(
     console.warn('Failed to generate checkout procedure:', err);
   }
 
-  console.log(`✅ Generated ${documents.length} documents for Premium AST pack`);
+  console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Premium pack`);
 
   return {
     case_id: caseId || documentId,
