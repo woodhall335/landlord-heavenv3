@@ -72,19 +72,19 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     agreementTitle: 'Standard Occupation Contract',
     agreementDescription: 'Compliant with Renting Homes (Wales) Act 2016',
     agreementDocumentType: 'soc_agreement',
-    modelClausesTitle: 'Government Model Clauses (Wales)',
-    modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act',
+    modelClausesTitle: 'Model Clauses (Wales)',
+    modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act 2016',
     legalFramework: 'Renting Homes (Wales) Act 2016',
     jurisdictionLabel: 'Wales',
     templatePaths: {
       standard: 'uk/wales/templates/standard_occupation_contract.hbs',
-      premium: 'uk/wales/templates/standard_occupation_contract.hbs', // Uses same template
-      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback to England
+      premium: 'uk/wales/templates/premium_occupation_contract.hbs',
+      modelClauses: 'uk/wales/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'shared/templates/inventory_template.hbs',
-      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
-      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
-      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+      keySchedule: 'uk/wales/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/wales/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/wales/templates/premium/checkout_procedure.hbs',
     },
   },
   scotland: {
@@ -99,12 +99,12 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     templatePaths: {
       standard: 'uk/scotland/templates/prt_agreement.hbs',
       premium: 'uk/scotland/templates/prt_agreement_premium.hbs',
-      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback until Scotland template exists
+      modelClauses: 'uk/scotland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/scotland/templates/inventory_template.hbs',
-      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
-      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
-      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+      keySchedule: 'uk/scotland/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/scotland/templates/premium/checkout_procedure.hbs',
     },
   },
   'northern-ireland': {
@@ -119,12 +119,12 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     templatePaths: {
       standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
       premium: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
-      modelClauses: 'uk/england/templates/government_model_clauses.hbs', // Fallback until NI template exists
+      modelClauses: 'uk/northern-ireland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/northern-ireland/templates/inventory_template.hbs',
-      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
-      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
-      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+      keySchedule: 'uk/northern-ireland/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/northern-ireland/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/northern-ireland/templates/premium/checkout_procedure.hbs',
     },
   },
 };
