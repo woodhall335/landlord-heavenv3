@@ -13,7 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line } from 'react-icons/ri';
 import { trackPurchase } from '@/lib/analytics';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
@@ -88,6 +88,11 @@ export default function CaseDetailPage() {
   const [paymentConfirmationTimedOut, setPaymentConfirmationTimedOut] = useState(false);
   const paymentPollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const paymentPollStartTimeRef = useRef<number | null>(null);
+
+  // Downloads section ref for auto-scroll on payment success
+  const downloadsSectionRef = useRef<HTMLDivElement>(null);
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+  const [packContents, setPackContents] = useState<PackItem[]>([]);
 
   const handleDocumentDownload = async (docId: string) => {
     setDownloadingDocId(docId);
@@ -343,6 +348,41 @@ export default function CaseDetailPage() {
     fetchCaseDocuments();
     runAskHeaven();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
+
+  // Load pack contents when case details are available
+  useEffect(() => {
+    if (!caseDetails) return;
+
+    try {
+      // Determine product from case_type
+      const product = caseDetails.case_type === 'money_claim'
+        ? (caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim')
+        : caseDetails.case_type === 'eviction'
+          ? (caseDetails.collected_facts?.__meta?.product || 'complete_pack')
+          : caseDetails.case_type;
+
+      const contents = getPackContents({
+        product,
+        jurisdiction: caseDetails.jurisdiction as 'england' | 'wales' | 'scotland',
+        route: caseDetails.collected_facts?.eviction_route,
+      });
+      setPackContents(contents);
+    } catch (err) {
+      console.error('Failed to load pack contents:', err);
+    }
+  }, [caseDetails]);
+
+  // Show payment success banner and auto-scroll to downloads
+  useEffect(() => {
+    if (arrivedFromCheckout && orderStatus?.paid && !showPaymentSuccess) {
+      setShowPaymentSuccess(true);
+
+      // Auto-scroll to downloads section after a short delay
+      setTimeout(() => {
+        downloadsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500);
+    }
+  }, [arrivedFromCheckout, orderStatus?.paid, showPaymentSuccess]);
 
   // Fetch order status and handle auto-retry + polling
   useEffect(() => {
@@ -817,42 +857,45 @@ export default function CaseDetailPage() {
             </div>
           )}
 
-          {/* Action Buttons */}
+          {/* Action Buttons - Simplified for clarity */}
           <div className="flex flex-wrap gap-3">
             {!isEditMode ? (
               <>
-                <Button
-                  variant="primary"
-                  onClick={() => setIsEditMode(true)}
-                  disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
-                >
-                  <RiEditLine className="w-4 h-4 mr-2 text-white" />
-                  Edit Case Details
-                </Button>
-                {caseDetails.wizard_progress < 100 && (
+                {/* Primary action: Continue wizard if not complete, or update answers if paid and edit window open */}
+                {caseDetails.wizard_progress < 100 && !orderStatus?.paid && (
                   <Button
-                    variant="secondary"
+                    variant="primary"
                     onClick={handleContinueWizard}
-                    disabled={orderStatus?.paid && !orderStatus?.edit_window_open}
                   >
                     Continue Wizard
                   </Button>
                 )}
-                <Button
-                  variant="outline"
-                  onClick={handleRegenerateDocument}
-                  disabled={isRegenerating || (orderStatus?.paid && !orderStatus?.edit_window_open)}
-                >
-                  {isRegenerating ? 'Regenerating...' : 'Regenerate Documents'}
-                </Button>
-                {documents.length > 0 && (
-                  <Link href={`/wizard/preview/${caseId}`}>
-                    <Button variant="outline">View Preview</Button>
-                  </Link>
+
+                {/* Update Answers - only if paid and edit window open */}
+                {orderStatus?.paid && orderStatus?.edit_window_open && (
+                  <Button
+                    variant="secondary"
+                    onClick={handleContinueWizard}
+                  >
+                    <RiEditLine className="w-4 h-4 mr-2" />
+                    Update Answers
+                  </Button>
                 )}
-                <Button variant="outline" onClick={handleDeleteCase}>
-                  Delete Case
-                </Button>
+
+                {/* Help link */}
+                <Link href="/help">
+                  <Button variant="outline">
+                    <RiBookOpenLine className="w-4 h-4 mr-2" />
+                    Get Help
+                  </Button>
+                </Link>
+
+                {/* Delete Case - only if not paid */}
+                {!orderStatus?.paid && (
+                  <Button variant="outline" onClick={handleDeleteCase}>
+                    Delete Case
+                  </Button>
+                )}
               </>
             ) : (
               <>
@@ -877,6 +920,40 @@ export default function CaseDetailPage() {
       </div>
 
       <Container size="large" className="py-8">
+        {/* Payment Success Banner */}
+        {showPaymentSuccess && orderStatus?.paid && (
+          <div className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <RiCheckboxCircleLine className="w-7 h-7 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-green-800 mb-1">
+                  Payment received — your documents are ready!
+                </h2>
+                <p className="text-green-700 mb-3">
+                  Thank you for your purchase. Your legal documents have been generated and are ready to download below.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => downloadsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    <RiDownloadLine className="w-4 h-4 mr-2" />
+                    Go to Downloads
+                  </button>
+                  <button
+                    onClick={() => setShowPaymentSuccess(false)}
+                    className="text-green-600 hover:text-green-800 font-medium"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Message Display */}
         {message && (
           <div
@@ -1280,58 +1357,124 @@ export default function CaseDetailPage() {
               </Card>
             )}
 
-            {/* Documents */}
-            <Card padding="large">
-              <h2 className="text-xl font-semibold text-charcoal mb-6">Documents</h2>
-
-              {documents.length === 0 ? (
-                <p className="text-gray-600">No documents generated yet.</p>
-              ) : (
-                <div className="space-y-3">
-                  {documents.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
-                          <RiFileTextLine className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-charcoal truncate">
-                            {doc.document_title}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {formatDate(doc.created_at)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {doc.is_preview && (
-                          <Badge variant="warning" size="small">
-                            Preview
-                          </Badge>
-                        )}
-                        {doc.pdf_url && (
-                          <button
-                            onClick={() => handleDocumentDownload(doc.id)}
-                            disabled={downloadingDocId === doc.id}
-                            className="text-primary hover:text-primary-dark disabled:opacity-50"
-                            title="Download document"
-                          >
-                            {downloadingDocId === doc.id ? (
-                              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <RiDownloadLine className="w-5 h-5" />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+            {/* Downloads Section */}
+            <div ref={downloadsSectionRef}>
+              <Card padding="large">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-charcoal">
+                    {orderStatus?.paid ? 'Your Documents' : 'Documents'}
+                  </h2>
+                  {orderStatus?.paid && documents.length > 0 && (
+                    <span className="text-sm text-green-600 font-medium flex items-center gap-1">
+                      <RiCheckboxCircleLine className="w-4 h-4" />
+                      Ready to download
+                    </span>
+                  )}
                 </div>
-              )}
-            </Card>
+
+                {/* What's Included - Pack Contents */}
+                {orderStatus?.paid && packContents.length > 0 && (
+                  <div className="mb-6 p-4 bg-purple-50 border border-purple-100 rounded-lg">
+                    <h3 className="text-sm font-semibold text-purple-900 mb-2">
+                      What&apos;s included in your pack:
+                    </h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 text-sm text-purple-800">
+                      {packContents.slice(0, 10).map((item) => {
+                        const docExists = documents.some(
+                          (d) => d.document_type === item.key && !d.is_preview
+                        );
+                        return (
+                          <li key={item.key} className="flex items-center gap-2">
+                            {docExists ? (
+                              <RiCheckboxCircleLine className="w-4 h-4 text-green-600 flex-shrink-0" />
+                            ) : (
+                              <RiLoader4Line className="w-4 h-4 text-purple-400 animate-spin flex-shrink-0" />
+                            )}
+                            <span className={docExists ? '' : 'text-purple-500'}>
+                              {item.title}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    {packContents.length > 10 && (
+                      <p className="text-xs text-purple-600 mt-2">
+                        + {packContents.length - 10} more items
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {documents.length === 0 ? (
+                  <div className="text-center py-8">
+                    {isPolling ? (
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                        <p className="text-gray-600">Generating your documents...</p>
+                        <p className="text-sm text-gray-500">This usually takes less than a minute.</p>
+                      </div>
+                    ) : orderStatus?.paid ? (
+                      <div className="space-y-3">
+                        <p className="text-gray-600">Documents are being prepared.</p>
+                        <Button variant="outline" onClick={handleRegenerateDocument}>
+                          <RiRefreshLine className="w-4 h-4 mr-2" />
+                          Retry Generation
+                        </Button>
+                      </div>
+                    ) : (
+                      <p className="text-gray-600">No documents generated yet.</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {documents.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-purple-200 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                            <RiFileTextLine className="w-5 h-5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-charcoal truncate">
+                              {doc.document_title}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {formatDate(doc.created_at)}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {doc.is_preview && (
+                            <Badge variant="warning" size="small">
+                              Preview
+                            </Badge>
+                          )}
+                          {doc.pdf_url && (
+                            <button
+                              onClick={() => handleDocumentDownload(doc.id)}
+                              disabled={downloadingDocId === doc.id}
+                              className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                              title="Download document"
+                            >
+                              {downloadingDocId === doc.id ? (
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <>
+                                  <RiDownloadLine className="w-4 h-4" />
+                                  Download
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            </div>
           </div>
 
           {/* Right Column: Timeline & Metadata */}
