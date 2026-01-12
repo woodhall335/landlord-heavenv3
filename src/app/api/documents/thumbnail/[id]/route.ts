@@ -10,15 +10,23 @@
  * - Uses @sparticuz/chromium for serverless Puppeteer
  * - Falls back gracefully when admin client unavailable
  * - Avoids Content-Length header issues with streaming
+ * - MUST run on Node.js runtime (not Edge) for Puppeteer compatibility
  */
 
 import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, pdfToPreviewThumbnail } from '@/lib/documents/generator';
+import { htmlToPreviewThumbnail, pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
+
+// Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
+export const runtime = 'nodejs';
+
+// Disable static optimization to ensure fresh thumbnail generation
+export const dynamic = 'force-dynamic';
 
 // Environment detection
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isDev = process.env.NODE_ENV === 'development';
+const isDebugMode = process.env.THUMBNAIL_DEBUG === '1';
 
 /**
  * Structured error response with code for debugging
@@ -69,7 +77,26 @@ export async function GET(
     const { id } = await params;
     documentId = id;
 
-    console.log(`[Thumbnail API] Request for document ${id}`, { isVercel });
+    // Debug mode: return diagnostics instead of thumbnail (safe for production, requires env var)
+    if (isDebugMode && id === '_debug') {
+      const diagnostics = await getBrowserDiagnostics();
+      return NextResponse.json({
+        ok: true,
+        runtime: 'nodejs',
+        isVercel,
+        isDev,
+        timestamp: new Date().toISOString(),
+        chromium: diagnostics,
+        env: {
+          hasSupabaseUrl: !!process.env.SUPABASE_URL,
+          hasSupabaseAnonKey: !!process.env.SUPABASE_ANON_KEY,
+          hasSupabaseServiceRole: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+          nodeVersion: process.version,
+        },
+      });
+    }
+
+    console.log(`[Thumbnail API] Request for document ${id}`, { isVercel, runtime: 'nodejs' });
 
     // Get current user (may be null for anonymous)
     const user = await getServerUser();
@@ -257,12 +284,14 @@ export async function GET(
       elapsed: `${elapsed}ms`,
     });
 
-    // Return JPEG image
-    // Note: Avoid Content-Length on Vercel as it can cause issues with streaming/compression
+    // Return JPEG image with headers that ensure browsers render it correctly
     const headers: Record<string, string> = {
       'Content-Type': 'image/jpeg',
+      'Content-Disposition': 'inline; filename="preview.jpg"', // Hint to browser: display inline as image
+      'X-Content-Type-Options': 'nosniff', // Prevent MIME type sniffing
       'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour (browser + CDN)
       'X-Thumbnail-Method': generationMethod,
+      'X-Thumbnail-Runtime': 'nodejs', // Confirm we're on Node.js runtime
     };
 
     // Only set Content-Length in non-Vercel environments
