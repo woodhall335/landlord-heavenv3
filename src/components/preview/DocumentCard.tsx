@@ -66,7 +66,41 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 alt={`Preview of ${document.title}`}
                 className="w-16 h-22 object-cover rounded-lg border shadow-sm"
                 onLoad={() => setThumbnailLoading(false)}
-                onError={() => {
+                onError={(e) => {
+                  // Log thumbnail load failure for debugging
+                  const img = e.currentTarget;
+                  console.error('[DocumentCard] Thumbnail failed to load:', {
+                    url: thumbnailUrl,
+                    documentId: document.documentId,
+                    title: document.title,
+                    naturalWidth: img.naturalWidth,
+                    naturalHeight: img.naturalHeight,
+                  });
+
+                  // Try to fetch and get actual error details
+                  if (thumbnailUrl && process.env.NODE_ENV === 'development') {
+                    fetch(thumbnailUrl)
+                      .then(res => {
+                        if (!res.ok) {
+                          return res.json().then(data => {
+                            console.error('[DocumentCard] Thumbnail API error:', {
+                              status: res.status,
+                              statusText: res.statusText,
+                              error: data,
+                            });
+                          }).catch(() => {
+                            console.error('[DocumentCard] Thumbnail API error (non-JSON):', {
+                              status: res.status,
+                              statusText: res.statusText,
+                            });
+                          });
+                        }
+                      })
+                      .catch(fetchErr => {
+                        console.error('[DocumentCard] Thumbnail fetch error:', fetchErr);
+                      });
+                  }
+
                   setThumbnailError(true);
                   setThumbnailLoading(false);
                 }}
