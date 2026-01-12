@@ -74,12 +74,27 @@ export function PreviewPageLayout({
         throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      if (data.session_url) {
+      // Handle idempotent checkout responses
+      if (data.status === 'already_paid') {
+        // User already purchased this product - redirect to case page
+        window.location.href = data.redirect_url;
+        return;
+      }
+
+      if (data.status === 'pending') {
+        // Reusing existing checkout session
+        window.location.href = data.checkout_url;
+        return;
+      }
+
+      // New checkout session (status === 'new' or legacy response)
+      const checkoutUrl = data.session_url || data.checkout_url;
+      if (checkoutUrl) {
         // Track checkout initiation in analytics (GA4 + FB Pixel)
         const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
         trackBeginCheckout(product, productName, priceValue);
 
-        window.location.href = data.session_url;
+        window.location.href = checkoutUrl;
       }
     } catch (err) {
       console.error('Checkout failed:', err);

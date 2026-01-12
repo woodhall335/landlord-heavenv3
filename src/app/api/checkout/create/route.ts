@@ -7,6 +7,12 @@
  * IMPORTANT: Prices are controlled in Stripe Dashboard.
  * Product metadata comes from src/lib/pricing/products.ts (source of truth).
  * Stripe Price IDs come from environment variables via src/lib/stripe/index.ts.
+ *
+ * IDEMPOTENCY:
+ * - If case_id is provided, checkout is idempotent per (case_id, product_type)
+ * - Returns "already_paid" if a paid order exists
+ * - Reuses existing pending session if still valid
+ * - Uses Stripe idempotency keys to prevent duplicate charges
  */
 
 import { createServerSupabaseClient, createAdminClient, requireServerAuth } from '@/lib/supabase/server';
@@ -20,6 +26,7 @@ import {
   validateNoticeOnlyCase,
   NoticeOnlyCaseValidationError,
 } from '@/lib/validation/notice-only-case-validator';
+import crypto from 'crypto';
 
 /**
  * Map product types to Stripe Price IDs
@@ -71,6 +78,68 @@ const createCheckoutSchema = z.object({
   success_url: z.string().url().optional(),
   cancel_url: z.string().url().optional(),
 });
+
+// =============================================================================
+// IDEMPOTENCY HELPERS
+// =============================================================================
+
+/**
+ * Generate a deterministic idempotency key for Stripe API calls.
+ * This ensures the same checkout request produces the same Stripe session.
+ */
+function generateIdempotencyKey(caseId: string, productType: string, userId: string): string {
+  const input = `checkout:${caseId}:${productType}:${userId}`;
+  return crypto.createHash('sha256').update(input).digest('hex').substring(0, 64);
+}
+
+/**
+ * Check if a Stripe checkout session is still valid (not expired or completed).
+ * Stripe sessions expire after 24 hours by default.
+ */
+async function isStripeSessionValid(sessionId: string): Promise<{ valid: boolean; url: string | null }> {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // Session is valid if it's still open (not completed, expired, or cancelled)
+    if (session.status === 'open' && session.url) {
+      return { valid: true, url: session.url };
+    }
+
+    return { valid: false, url: null };
+  } catch (error: any) {
+    // Session not found or other error - treat as invalid
+    logger.warn('Failed to retrieve Stripe session', { sessionId, error: error.message });
+    return { valid: false, url: null };
+  }
+}
+
+/**
+ * Response types for checkout idempotency
+ */
+interface CheckoutAlreadyPaidResponse {
+  status: 'already_paid';
+  redirect_url: string;
+  order_id: string;
+  message: string;
+}
+
+interface CheckoutPendingResponse {
+  status: 'pending';
+  checkout_url: string;
+  session_id: string;
+  order_id: string;
+  message: string;
+}
+
+interface CheckoutNewResponse {
+  status: 'new';
+  success: true;
+  session_id: string;
+  session_url: string;
+  order_id: string;
+}
+
+type CheckoutResponse = CheckoutAlreadyPaidResponse | CheckoutPendingResponse | CheckoutNewResponse;
 
 export async function POST(request: Request) {
   try {
@@ -265,6 +334,113 @@ export async function POST(request: Request) {
       }
     }
 
+    // =========================================================================
+    // IDEMPOTENCY CHECK: Prevent double payment for same (case_id, product_type)
+    // =========================================================================
+    if (case_id) {
+      // Check for existing orders for this case and product
+      const { data: existingOrders, error: orderQueryError } = await adminSupabase
+        .from('orders')
+        .select('id, payment_status, stripe_session_id, stripe_checkout_url')
+        .eq('case_id', case_id)
+        .eq('product_type', product_type)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (orderQueryError) {
+        logger.error('Failed to check existing orders', {
+          caseId: case_id,
+          productType: product_type,
+          error: orderQueryError.message,
+        });
+        // Continue with checkout - don't block on query error
+      } else if (existingOrders && existingOrders.length > 0) {
+        // Check for PAID order first (highest priority)
+        const paidOrder = existingOrders.find(o => o.payment_status === 'paid');
+        if (paidOrder) {
+          logger.info('Checkout blocked: already paid', {
+            caseId: case_id,
+            productType: product_type,
+            orderId: paidOrder.id,
+            userId: user.id,
+          });
+
+          const response: CheckoutAlreadyPaidResponse = {
+            status: 'already_paid',
+            redirect_url: `/dashboard/cases/${case_id}`,
+            order_id: paidOrder.id,
+            message: 'You have already purchased this product for this case.',
+          };
+
+          return NextResponse.json(response, { status: 200 });
+        }
+
+        // Check for PENDING order with valid Stripe session
+        const pendingOrder = existingOrders.find(o =>
+          o.payment_status === 'pending' && o.stripe_session_id
+        );
+
+        if (pendingOrder && pendingOrder.stripe_session_id) {
+          // Check if the Stripe session is still valid
+          const sessionCheck = await isStripeSessionValid(pendingOrder.stripe_session_id);
+
+          if (sessionCheck.valid && sessionCheck.url) {
+            logger.info('Reusing existing pending checkout session', {
+              caseId: case_id,
+              productType: product_type,
+              orderId: pendingOrder.id,
+              sessionId: pendingOrder.stripe_session_id,
+              userId: user.id,
+            });
+
+            // Update the checkout URL in case it changed
+            if (sessionCheck.url !== pendingOrder.stripe_checkout_url) {
+              await adminSupabase
+                .from('orders')
+                .update({ stripe_checkout_url: sessionCheck.url })
+                .eq('id', pendingOrder.id);
+            }
+
+            const response: CheckoutPendingResponse = {
+              status: 'pending',
+              checkout_url: sessionCheck.url,
+              session_id: pendingOrder.stripe_session_id,
+              order_id: pendingOrder.id,
+              message: 'Resuming your previous checkout session.',
+            };
+
+            return NextResponse.json(response, { status: 200 });
+          }
+
+          // Session expired or invalid - mark order as failed and continue to create new one
+          logger.info('Previous checkout session expired, creating new one', {
+            caseId: case_id,
+            productType: product_type,
+            oldOrderId: pendingOrder.id,
+            oldSessionId: pendingOrder.stripe_session_id,
+            userId: user.id,
+          });
+
+          await adminSupabase
+            .from('orders')
+            .update({
+              payment_status: 'failed',
+              fulfillment_status: 'failed',
+            })
+            .eq('id', pendingOrder.id);
+        }
+      }
+    }
+
+    // =========================================================================
+    // CREATE NEW ORDER AND STRIPE SESSION
+    // =========================================================================
+
+    // Generate idempotency key for Stripe API call (if case_id provided)
+    const idempotencyKey = case_id
+      ? generateIdempotencyKey(case_id, product_type, user.id)
+      : undefined;
+
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
     const { data: order, error: orderError } = await adminSupabase
@@ -312,42 +488,61 @@ export async function POST(request: Request) {
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
         : 'http://localhost:5000');
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      mode: 'payment',
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      metadata: {
-        user_id: user.id,
-        order_id: (order as any).id,
-        product_type,
-        case_id: case_id || '',
-      },
-      success_url: success_url || `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancel_url || `${baseUrl}/dashboard`,
-      allow_promotion_codes: true,
-    });
 
-    // Update order with Stripe session ID (use admin client)
+    // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
+    const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
+
+    const session = await stripe.checkout.sessions.create(
+      {
+        customer: customerId,
+        mode: 'payment',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          user_id: user.id,
+          order_id: (order as any).id,
+          product_type,
+          case_id: case_id || '',
+        },
+        success_url: success_url || `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: cancel_url || `${baseUrl}/dashboard`,
+        allow_promotion_codes: true,
+      },
+      stripeOptions
+    );
+
+    // Update order with Stripe session ID and checkout URL (use admin client)
     await adminSupabase
       .from('orders')
-      .update({ stripe_session_id: session.id })
+      .update({
+        stripe_session_id: session.id,
+        stripe_checkout_url: session.url,
+      })
       .eq('id', (order as any).id);
 
-    return NextResponse.json(
-      {
-        success: true,
-        session_id: session.id,
-        session_url: session.url,
-        order_id: (order as any).id,
-      },
-      { status: 200 }
-    );
+    logger.info('Created new checkout session', {
+      caseId: case_id,
+      productType: product_type,
+      orderId: (order as any).id,
+      sessionId: session.id,
+      userId: user.id,
+      idempotencyKey: idempotencyKey ? 'used' : 'not-applicable',
+    });
+
+    const response: CheckoutNewResponse = {
+      status: 'new',
+      success: true,
+      session_id: session.id,
+      session_url: session.url!,
+      order_id: (order as any).id,
+    };
+
+    return NextResponse.json(response, { status: 200 });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {
       return NextResponse.json(
