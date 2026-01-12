@@ -99,6 +99,79 @@ describe('normalizeSection8Facts', () => {
       // arrears_total should not be set for non-arrears grounds
       expect(facts.arrears_total).toBeUndefined();
     });
+
+    it('should compute arrears_total from arrears_items when no total is available', () => {
+      // This is the critical case that caused the Stripe webhook 500 error
+      // arrears_items exist but arrears_total is not set
+      const facts: Record<string, any> = {
+        selected_notice_route: 'section_8',
+        section8_grounds: ['Ground 8 - Serious rent arrears'],
+        arrears_items: [
+          { period_start: '2024-01-01', arrears_amount: 1200 },
+          { period_start: '2024-02-01', arrears_amount: 1200 },
+          { period_start: '2024-03-01', arrears_amount: 1200 },
+        ],
+        // NOTE: arrears_total is NOT set - this caused NOTICE_ONLY_VALIDATION_FAILED
+      };
+
+      normalizeSection8Facts(facts);
+
+      // Should compute arrears_total from arrears_items
+      expect(facts.arrears_total).toBe(3600);
+      expect(facts.arrears_amount).toBe(3600);
+    });
+
+    it('should compute arrears_total from nested issues.rent_arrears.arrears_items', () => {
+      const facts: Record<string, any> = {
+        selected_notice_route: 'section_8',
+        section8_grounds: ['ground_8'],
+        issues: {
+          rent_arrears: {
+            arrears_items: [
+              { period_start: '2024-01-01', amount_owed: 1500 },
+              { period_start: '2024-02-01', amount_owed: 1500 },
+            ],
+            // total_arrears is NOT set
+          },
+        },
+      };
+
+      normalizeSection8Facts(facts);
+
+      // Should compute from nested arrears_items
+      expect(facts.arrears_total).toBe(3000);
+    });
+
+    it('should handle arrears_items with different field names for amounts', () => {
+      const facts: Record<string, any> = {
+        selected_notice_route: 'section_8',
+        section8_grounds: ['ground_8'],
+        arrears_items: [
+          { period: 'Jan', balance: 1000 },
+          { period: 'Feb', amount_due: 1000 },
+          { period: 'Mar', amount: 1000 },
+        ],
+      };
+
+      normalizeSection8Facts(facts);
+
+      expect(facts.arrears_total).toBe(3000);
+    });
+
+    it('should handle string amounts with currency formatting', () => {
+      const facts: Record<string, any> = {
+        selected_notice_route: 'section_8',
+        section8_grounds: ['ground_8'],
+        arrears_items: [
+          { period: 'Jan', arrears_amount: '£1,200.00' },
+          { period: 'Feb', arrears_amount: '£1,200.00' },
+        ],
+      };
+
+      normalizeSection8Facts(facts);
+
+      expect(facts.arrears_total).toBe(2400);
+    });
   });
 
   describe('ground_particulars backfill', () => {
