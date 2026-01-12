@@ -5,11 +5,12 @@
  * Handles legacy human-readable route labels and normalizes to decision engine format.
  *
  * CANONICAL VALUES:
- * - England & Wales: 'section_8', 'section_21'
+ * - England: 'section_8', 'section_21'
+ * - Wales: 'section_173', 'fault_based' (Renting Homes Wales Act 2016)
  * - Scotland: 'notice_to_leave'
  */
 
-export type CanonicalRoute = 'section_8' | 'section_21' | 'notice_to_leave';
+export type CanonicalRoute = 'section_8' | 'section_21' | 'notice_to_leave' | 'section_173' | 'fault_based';
 
 /**
  * Normalize a single route value to canonical format
@@ -23,6 +24,8 @@ export function normalizeRoute(value: string | null | undefined): CanonicalRoute
   if (normalized === 'section_8') return 'section_8';
   if (normalized === 'section_21') return 'section_21';
   if (normalized === 'notice_to_leave') return 'notice_to_leave';
+  if (normalized === 'section_173') return 'section_173';
+  if (normalized === 'fault_based') return 'fault_based';
 
   // Legacy human-readable labels from old YAML (before canonical values)
   if (normalized.includes('section 8') || normalized.includes('section8')) {
@@ -35,6 +38,15 @@ export function normalizeRoute(value: string | null | undefined): CanonicalRoute
 
   if (normalized.includes('notice to leave') || normalized.includes('ntl')) {
     return 'notice_to_leave';
+  }
+
+  // Wales routes - Renting Homes (Wales) Act 2016
+  if (normalized.includes('section 173') || normalized.includes('section173')) {
+    return 'section_173';
+  }
+
+  if (normalized.includes('fault based') || normalized.includes('fault-based') || normalized.includes('breach')) {
+    return 'fault_based';
   }
 
   // Unknown value - log warning and return null
@@ -81,6 +93,8 @@ export function routeToDocumentType(route: CanonicalRoute | null): string | null
     section_8: 'section8_notice',
     section_21: 'section21_notice',
     notice_to_leave: 'notice_to_leave',
+    section_173: 'section173_notice',
+    fault_based: 'fault_based_notice',
   };
 
   return mapping[route] || null;
@@ -96,6 +110,8 @@ export function getRouteLabel(route: CanonicalRoute | null): string {
     section_8: 'Section 8 - Fault-based eviction',
     section_21: 'Section 21 - No-fault notice',
     notice_to_leave: 'Notice to Leave (Scotland)',
+    section_173: 'Section 173 - No-fault notice (Wales)',
+    fault_based: 'Fault-based eviction (Wales)',
   };
 
   return labels[route] || route;

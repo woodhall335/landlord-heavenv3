@@ -93,18 +93,12 @@ async function validateFulfillmentCompleteness(
   }
 
   const actualTitles = (actualDocs || []).map((d) => d.document_title);
+  const actualKeys = (actualDocs || []).map((d) => d.document_type);
   const actualCount = actualDocs?.length || 0;
 
-  // For now, we compare counts since document_type in DB doesn't match pack-contents keys exactly
-  // In a future refactor, we should store the pack-contents key as a separate field
-  const isComplete = actualCount >= expectedKeys.length;
-
-  // Try to identify missing keys by comparing titles (best effort)
-  const missingKeys = expectedKeys.filter((key) => {
-    // Simple heuristic: check if any actual title contains part of the key
-    const keyNormalized = key.replace(/_/g, ' ').toLowerCase();
-    return !actualTitles.some((title) => title.toLowerCase().includes(keyNormalized));
-  });
+  // Exact key-based completeness check: every expected key must exist in actual document_type values
+  const missingKeys = expectedKeys.filter((key) => !actualKeys.includes(key));
+  const isComplete = missingKeys.length === 0;
 
   return {
     isComplete,
@@ -112,7 +106,7 @@ async function validateFulfillmentCompleteness(
     actualCount,
     expectedKeys,
     actualTitles,
-    missingKeys: isComplete ? [] : missingKeys,
+    missingKeys,
   };
 }
 
@@ -263,12 +257,12 @@ export async function fulfillOrder({
           .from('documents')
           .getPublicUrl(fileName);
 
-        // Upsert document record
+        // Upsert document record using canonical document_type key
         const { error: insertError } = await supabase.from('documents').upsert(
           {
             user_id: resolvedUserId,
             case_id: caseId,
-            document_type: doc.category,
+            document_type: doc.document_type,
             document_title: doc.title,
             jurisdiction,
             html_content: doc.html || null,
@@ -277,7 +271,7 @@ export async function fulfillOrder({
             qa_passed: true,
             metadata: { description: doc.description, pack_type: productType, order_id: orderId },
           },
-          { onConflict: 'case_id,document_title,is_preview' }
+          { onConflict: 'case_id,document_type,is_preview' }
         );
 
         if (insertError) {
@@ -317,7 +311,7 @@ export async function fulfillOrder({
           {
             user_id: resolvedUserId,
             case_id: caseId,
-            document_type: doc.category,
+            document_type: doc.document_type,
             document_title: doc.title,
             jurisdiction,
             html_content: doc.html || null,
@@ -326,7 +320,7 @@ export async function fulfillOrder({
             qa_passed: true,
             metadata: { description: doc.description, pack_type: productType, order_id: orderId },
           },
-          { onConflict: 'case_id,document_title,is_preview' }
+          { onConflict: 'case_id,document_type,is_preview' }
         );
 
         if (insertError) {
@@ -368,7 +362,7 @@ export async function fulfillOrder({
           {
             user_id: resolvedUserId,
             case_id: caseId,
-            document_type: doc.category,
+            document_type: doc.document_type,
             document_title: doc.title,
             jurisdiction,
             html_content: doc.html || null,
@@ -377,7 +371,7 @@ export async function fulfillOrder({
             qa_passed: true,
             metadata: { description: doc.description, pack_type: productType, order_id: orderId },
           },
-          { onConflict: 'case_id,document_title,is_preview' }
+          { onConflict: 'case_id,document_type,is_preview' }
         );
 
         if (insertError) {
@@ -419,7 +413,7 @@ export async function fulfillOrder({
           {
             user_id: resolvedUserId,
             case_id: caseId,
-            document_type: doc.category,
+            document_type: doc.document_type,
             document_title: doc.title,
             jurisdiction,
             html_content: doc.html || null,
@@ -433,7 +427,7 @@ export async function fulfillOrder({
               tier: astPack.tier,
             },
           },
-          { onConflict: 'case_id,document_title,is_preview' }
+          { onConflict: 'case_id,document_type,is_preview' }
         );
 
         if (insertError) {

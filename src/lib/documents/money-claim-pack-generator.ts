@@ -149,6 +149,8 @@ export interface MoneyClaimPackDocument {
   title: string;
   description: string;
   category: 'court_form' | 'particulars' | 'schedule' | 'guidance' | 'evidence';
+  /** Canonical document type key matching pack-contents (e.g., 'n1_claim', 'particulars_of_claim') */
+  document_type: string;
   html?: string;
   pdf?: Buffer;
   file_name: string;
@@ -402,6 +404,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Particulars of claim',
     description: 'Detailed particulars for rent arrears, damages and costs.',
     category: 'particulars',
+    document_type: 'particulars_of_claim',
     html: particulars.html,
     pdf: particulars.pdf,
     file_name: '01-particulars-of-claim.pdf',
@@ -419,27 +422,31 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Schedule of arrears',
     description: 'Line-by-line arrears schedule required by HMCTS.',
     category: 'schedule',
+    document_type: 'arrears_schedule',
     html: arrears.html,
     pdf: arrears.pdf,
     file_name: '02-schedule-of-arrears.pdf',
   });
 
-  // INTEREST CALCULATION
-  const interest = await generateDocument({
-    templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // INTEREST CALCULATION (optional - only if user opted in)
+  if (totals.claim_interest === true) {
+    const interest = await generateDocument({
+      templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
+      data: baseTemplateData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
 
-  documents.push({
-    title: 'Interest calculation',
-    description: 'Section 69 County Courts Act interest workings and daily rate.',
-    category: 'guidance',
-    html: interest.html,
-    pdf: interest.pdf,
-    file_name: '03-interest-calculation.pdf',
-  });
+    documents.push({
+      title: 'Interest calculation',
+      description: 'Section 69 County Courts Act interest workings and daily rate.',
+      category: 'guidance',
+      document_type: 'interest_calculation',
+      html: interest.html,
+      pdf: interest.pdf,
+      file_name: '03-interest-calculation.pdf',
+    });
+  }
 
   // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
   // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
@@ -464,6 +471,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Letter Before Claim (PAP-DEBT)',
     description: 'Pre-Action Protocol letter required before issuing proceedings.',
     category: 'guidance',
+    document_type: 'letter_before_claim',
     html: letterBeforeClaim.html,
     pdf: letterBeforeClaim.pdf,
     file_name: '04-letter-before-claim.pdf',
@@ -480,6 +488,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Information Sheet for Defendants',
     description: 'Explains defendant rights and options (enclose with Letter Before Claim).',
     category: 'guidance',
+    document_type: 'defendant_info_sheet',
     html: infoSheet.html,
     pdf: infoSheet.pdf,
     file_name: '05-information-sheet-for-defendants.pdf',
@@ -496,6 +505,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Reply Form',
     description: 'Form for defendant to respond to Letter Before Claim.',
     category: 'guidance',
+    document_type: 'reply_form',
     html: replyForm.html,
     pdf: replyForm.pdf,
     file_name: '06-reply-form.pdf',
@@ -512,6 +522,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Financial Statement Form',
     description: 'Form for defendant to disclose income/expenditure for payment plan.',
     category: 'guidance',
+    document_type: 'financial_statement_form',
     html: financialStatement.html,
     pdf: financialStatement.pdf,
     file_name: '07-financial-statement-form.pdf',
@@ -529,6 +540,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Money Claims Filing Guide',
     description: 'Step-by-step instructions for filing via MCOL or paper.',
     category: 'guidance',
+    document_type: 'court_filing_guide',
     html: filingGuide.html,
     pdf: filingGuide.pdf,
     file_name: '08-filing-guide.pdf',
@@ -546,6 +558,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Enforcement Guide',
     description: 'Explains enforcement options after obtaining a County Court Judgment.',
     category: 'guidance',
+    document_type: 'enforcement_guide',
     html: enforcementGuide.html,
     pdf: enforcementGuide.pdf,
     file_name: '09-enforcement-guide.pdf',
@@ -559,6 +572,7 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Form N1 (official PDF)',
     description: 'Completed claim form ready for County Court Money Claims Centre.',
     category: 'court_form',
+    document_type: 'n1_claim',
     pdf: Buffer.from(n1Pdf),
     file_name: '10-n1-claim-form.pdf',
   });

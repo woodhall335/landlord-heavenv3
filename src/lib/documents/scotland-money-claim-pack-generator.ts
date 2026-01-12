@@ -133,6 +133,8 @@ export interface ScotlandMoneyClaimPackDocument {
   title: string;
   description: string;
   category: 'court_form' | 'particulars' | 'schedule' | 'guidance' | 'evidence';
+  /** Canonical document type key matching pack-contents (e.g., 'form_3a', 'statement_of_claim') */
+  document_type: string;
   html?: string;
   pdf?: Buffer;
   file_name: string;
@@ -402,6 +404,7 @@ async function generateScotlandMoneyClaimPack(
     title: 'Pre-Action Letter',
     description: 'Formal demand for payment before raising Simple Procedure proceedings.',
     category: 'guidance',
+    document_type: 'pre_action_letter',
     html: preActionLetter.html,
     pdf: preActionLetter.pdf,
     file_name: '01-pre-action-letter.pdf',
@@ -419,6 +422,7 @@ async function generateScotlandMoneyClaimPack(
     title: 'Statement of claim (Particulars)',
     description: 'Detailed particulars for rent arrears, damages and attempts to resolve.',
     category: 'particulars',
+    document_type: 'statement_of_claim',
     html: particulars.html,
     pdf: particulars.pdf,
     file_name: '02-simple-procedure-particulars.pdf',
@@ -437,6 +441,7 @@ async function generateScotlandMoneyClaimPack(
       title: 'Schedule of rent arrears',
       description: 'Period-by-period breakdown of rent arrears.',
       category: 'schedule',
+      document_type: 'arrears_schedule',
       html: arrears.html,
       pdf: arrears.pdf,
       file_name: '03-schedule-of-arrears.pdf',
@@ -456,6 +461,7 @@ async function generateScotlandMoneyClaimPack(
       title: 'Interest calculation',
       description: 'Statutory interest workings and daily rate.',
       category: 'guidance',
+      document_type: 'interest_calculation',
       html: interest.html,
       pdf: interest.pdf,
       file_name: '04-interest-calculation.pdf',
@@ -470,6 +476,7 @@ async function generateScotlandMoneyClaimPack(
     title: 'Simple Procedure Claim Form (Form 3A) - Official PDF',
     description: 'Completed claim form ready for Sheriff Court lodging.',
     category: 'court_form',
+    document_type: 'form_3a',
     pdf: Buffer.from(simpleProcedurePdf),
     file_name: '05-simple-procedure-claim-form.pdf',
   });
@@ -486,6 +493,7 @@ async function generateScotlandMoneyClaimPack(
     title: 'Simple Procedure Filing Guide',
     description: 'Step-by-step instructions for lodging your claim at the Sheriff Court.',
     category: 'guidance',
+    document_type: 'filing_guide',
     html: filingGuide.html,
     pdf: filingGuide.pdf,
     file_name: '06-filing-guide-scotland.pdf',
@@ -503,6 +511,7 @@ async function generateScotlandMoneyClaimPack(
     title: 'Enforcement Guide (Diligence)',
     description: 'Explains enforcement (diligence) options after obtaining a Sheriff Court decree.',
     category: 'guidance',
+    document_type: 'enforcement_guide',
     html: enforcementGuide.html,
     pdf: enforcementGuide.pdf,
     file_name: '07-enforcement-guide-scotland.pdf',
