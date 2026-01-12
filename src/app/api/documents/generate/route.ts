@@ -14,6 +14,10 @@ import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 import { generateDocument } from '@/lib/documents/generator';
 import { generateSection8Notice } from '@/lib/documents/section8-generator';
+import {
+  generateSection21Notice,
+  mapWizardToSection21Data,
+} from '@/lib/documents/section21-generator';
 import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-generator';
 
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
@@ -742,9 +746,10 @@ export async function POST(request: Request) {
             );
           }
 
-          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any);
-          const missing = missingFieldsForSection21(safeCaseData);
+          // Use canonical mapper and generator for Form 6A compliance
+          // This ensures ALL Section 21 generation paths produce identical output
+          const section21NoticeData = mapWizardToSection21Data(wizardFacts);
+          const missing = missingFieldsForSection21(section21NoticeData as any);
 
           if (missing.length > 0) {
             return NextResponse.json(
@@ -759,18 +764,9 @@ export async function POST(request: Request) {
             );
           }
 
-          // Section 21 is England-only (Wales uses Section 173)
-          // Use canonical notice_only template path for England
-          const templatePath = canonicalJurisdiction === 'wales'
-            ? 'uk/wales/templates/eviction/section21_form6a.hbs' // Legacy path for any Wales edge cases
-            : 'uk/england/templates/notice_only/form_6a_section21/notice.hbs'; // Canonical England path
-
-          generatedDoc = await generateDocument({
-            templatePath,
-            data: safeCaseData as any,
-            isPreview: is_preview,
-            outputFormat: 'both',
-          });
+          // Use canonical Section 21 generator (single source of truth)
+          // generateSection21Notice handles date calculation and template selection
+          generatedDoc = await generateSection21Notice(section21NoticeData, is_preview);
 
           documentTitle = 'Section 21 Notice - Form 6A';
           break;
