@@ -25,7 +25,8 @@ async function getBrowser(): Promise<BrowserInstance> {
 
   if (isVercel) {
     // Use @sparticuz/chromium for Vercel/AWS Lambda
-    const chromium = await import('@sparticuz/chromium');
+    // webpackIgnore prevents webpack from bundling this optional Vercel-only dependency
+    const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
 
     return puppeteerCore.launch({
       args: chromium.default.args,
