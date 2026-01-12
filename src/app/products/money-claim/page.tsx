@@ -33,12 +33,12 @@ const product = PRODUCTS.money_claim;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Money Claim Pack - ${price}`,
+  title: `Money Claim Pack 2026 - ${price}`,
   description:
-    `Recover unpaid rent arrears through UK courts. 11 documents including N1 form, Particulars of Claim, PAP-DEBT compliance. England, Wales & Scotland. ${price} one-time.`,
+    `Recover unpaid rent, property damage & costs through UK courts 2026. 11 documents including N1 form, Particulars of Claim, PAP-DEBT compliance. England, Wales & Scotland. ${price} one-time.`,
   openGraph: {
-    title: `Money Claim Pack - Recover Rent Arrears - ${price}`,
-    description: "Recover unpaid rent arrears through UK courts. PAP-DEBT compliance, N1 form, enforcement guidance.",
+    title: `Money Claim Pack 2026 - Recover Rent Arrears - ${price}`,
+    description: "Recover unpaid rent, property damage and cleaning costs through UK courts. MCOL and Scottish Simple Procedure. PAP-DEBT compliance.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {

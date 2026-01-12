@@ -550,13 +550,19 @@ link.href = url;
                 </p>
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
+                    href="/wizard/flow?type=money_claim&jurisdiction=england&product=money_claim&src=product_page&topic=arrears"
                     className="hero-btn-primary flex-1 text-center"
                   >
-                    Start Money Claim (E&W)
+                    Start Money Claim (England)
                   </Link>
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
+                    href="/wizard/flow?type=money_claim&jurisdiction=wales&product=money_claim&src=product_page&topic=arrears"
+                    className="hero-btn-secondary flex-1 text-center"
+                  >
+                    Start Money Claim (Wales)
+                  </Link>
+                  <Link
+                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&src=product_page&topic=arrears"
                     className="hero-btn-secondary flex-1 text-center"
                   >
                     Start Simple Procedure (Scotland)

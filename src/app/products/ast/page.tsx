@@ -31,13 +31,13 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreements - Standard ${standardPrice} / Premium ${premiumPrice}`,
+  title: `Tenancy Agreements 2026 - Standard ${standardPrice} / Premium ${premiumPrice}`,
   description:
-    `Legally compliant tenancy agreements for UK landlords. AST (England), Occupation Contract (Wales), PRT (Scotland), NI Tenancy. Preview before you buy. Standard ${standardPrice}, Premium ${premiumPrice}.`,
+    `Legally compliant tenancy agreements 2026 for UK landlords. AST (England), Occupation Contract (Wales), PRT (Scotland), NI Tenancy. Preview before you buy. Standard ${standardPrice}, Premium ${premiumPrice}.`,
   openGraph: {
-    title: `Tenancy Agreements - From ${standardPrice}`,
+    title: `Tenancy Agreements 2026 - From ${standardPrice}`,
     description:
-      "Legally compliant tenancy agreements for UK landlords. Covers England, Wales, Scotland, and Northern Ireland. Preview before you buy.",
+      "Legally compliant tenancy agreements for UK landlords 2026. AST England, Occupation Contract Wales, PRT Scotland, Northern Ireland. Preview before you buy.",
     type: 'website',
     url: getCanonicalUrl('/products/ast'),
   },
@@ -87,8 +87,8 @@ export default function ASTPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
-        name: "Tenancy Agreements - AST, PRT, NI",
-        description: "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England & Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+        name: "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+        description: "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
         price: PRODUCTS.ast_standard.price.toString(),
         url: "https://landlordheaven.co.uk/products/ast"
       })} />

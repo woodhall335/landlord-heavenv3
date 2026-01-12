@@ -904,7 +904,7 @@ export default function NorthernIrelandTenancyPage() {
                 <p className="text-gray-700 text-sm mb-3">
                   Official notice from landlord to end a tenancy, with length-based notice periods (28/56/84 days).
                 </p>
-                <Link href="/products/notice-to-quit" className="text-red-600 hover:underline text-sm font-semibold">
+                <Link href="/products/notice-only" className="text-red-600 hover:underline text-sm font-semibold">
                   Learn More →
                 </Link>
               </div>

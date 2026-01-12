@@ -33,12 +33,12 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Notice Pack - ${price}`,
+  title: `Eviction Notice Pack 2026 - ${price}`,
   description:
-    `Court-ready eviction notices for England, Wales and Scotland. Section 21, Section 8, Section 173, Notice to Leave. Preview before you buy. ${price} one-time.`,
+    `Court-ready eviction notices for England, Wales and Scotland 2026. Section 21 (ends May 2026), Section 8, Section 173, Notice to Leave. Preview before you buy. ${price} one-time.`,
   openGraph: {
-    title: `Eviction Notice Pack - Court-Ready from ${price}`,
-    description: "Court-ready eviction notices for England, Wales and Scotland. Preview before you buy.",
+    title: `Eviction Notice Pack 2026 - Court-Ready from ${price}`,
+    description: "Court-ready eviction notices for England, Wales and Scotland. Section 21, Section 8, Wales RHW, Scotland Notice to Leave. Preview before you buy.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {

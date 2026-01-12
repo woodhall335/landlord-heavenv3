@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
@@ -163,6 +163,11 @@ export default function TenancyAgreementTemplatePage() {
     <>
       <StructuredData data={pageSchema} />
       <StructuredData data={faqSchema} />
+      <StructuredData data={breadcrumbSchema([
+        { name: "Home", url: "https://landlordheaven.co.uk" },
+        { name: "Templates", url: "https://landlordheaven.co.uk/tenancy-agreements" },
+        { name: "Tenancy Agreement Template UK", url: "https://landlordheaven.co.uk/tenancy-agreement-template" }
+      ])} />
 
       <main>
         {/* Hero Section */}
@@ -433,7 +438,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/standard"
+                    href="/tenancy-agreements"
                     className="hero-btn-secondary block w-full text-center"
                   >
                     Get Free Template
