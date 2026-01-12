@@ -195,32 +195,17 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } catch (fulfillmentError: any) {
-      // Store error in order metadata
+      // Mark order as failed
       const errorMessage = fulfillmentError?.message || 'Document regeneration failed';
-      const truncatedError = errorMessage.substring(0, 500);
-
-      // Get current metadata to merge
-      const { data: orderForError } = await adminClient
-        .from('orders')
-        .select('metadata')
-        .eq('id', order.id)
-        .single();
-
-      const metadataForError = (orderForError?.metadata as Record<string, unknown>) || {};
 
       await adminClient
         .from('orders')
         .update({
           fulfillment_status: 'failed',
-          metadata: {
-            ...metadataForError,
-            fulfillment_error: truncatedError,
-            last_regeneration_attempt: new Date().toISOString(),
-          },
         })
         .eq('id', order.id);
 
-      console.error('Regeneration failed:', fulfillmentError);
+      console.error('Regeneration failed:', errorMessage, fulfillmentError);
 
       return NextResponse.json(
         {

@@ -50,10 +50,10 @@ export async function GET(request: Request) {
       );
     }
 
-    // Build order query (include metadata for fulfillment_error)
+    // Build order query
     let orderQuery = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, metadata')
+      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency')
       .eq('case_id', caseId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
@@ -92,9 +92,9 @@ export async function GET(request: Request) {
     const documentCount = finalDocCount || 0;
     const lastFinalDocCreatedAt = finalDocs?.[0]?.created_at || null;
 
-    // Extract fulfillment error from order metadata if present
-    const orderMetadata = (order as any)?.metadata as Record<string, unknown> | null;
-    const fulfillmentError = (orderMetadata?.fulfillment_error as string) || null;
+    // Note: fulfillment_error would need a dedicated column if we want to track it
+    // For now, return null since the orders table doesn't have a metadata column
+    const fulfillmentError: string | null = null;
 
     // Calculate edit window status
     const editWindow = getEditWindowStatus(order?.paid_at || null);
