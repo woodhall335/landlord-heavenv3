@@ -767,13 +767,28 @@ questions:
         options: ["Post", "By hand", "Email (agreed)", "Other"]
         validation:
           required: true
+      - id: serving_capacity
+        label: "In what capacity will you serve the notice?"
+        inputType: select
+        options:
+          - label: "Landlord"
+            value: "landlord"
+          - label: "Joint landlord(s)"
+            value: "joint_landlords"
+          - label: "Landlord's agent / representative"
+            value: "agent"
+        validation:
+          required: true
+        helperText: "Select who will be signing and serving the notice"
       - id: served_by
-        label: "Who will serve the notice?"
+        label: "Name of person serving"
         inputType: text
+        helperText: "Enter the name of the person who will serve the notice"
     maps_to:
       - notice_service.notice_date
       - notice_service.notice_expiry_date
       - notice_service.service_method
+      - notice_service.serving_capacity
       - notice_service.served_by
 
   # ============================================================
