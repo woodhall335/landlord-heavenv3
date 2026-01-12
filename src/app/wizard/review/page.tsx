@@ -331,11 +331,15 @@ function MoneyClaimReviewContent({
   const totalArrears = caseSummary?.total_arrears ?? 0;
   const damages = caseSummary?.damages ?? 0;
   const otherCharges = caseSummary?.other_charges ?? 0;
-  const interestRate = caseSummary?.interest_rate ?? 8;
+  // Interest: only calculate if user explicitly opted in via charge_interest
+  const claimInterest = caseSummary?.charge_interest === true;
+  const interestRate = claimInterest ? (caseSummary?.interest_rate ?? 8) : 0;
   const totalPrincipal = totalArrears + damages + otherCharges;
 
-  // Estimate interest (roughly 3 months worth for display)
-  const estimatedInterest = Number((totalPrincipal * (interestRate / 100) * 0.25).toFixed(2));
+  // Estimate interest (roughly 3 months worth for display) - only if opted in
+  const estimatedInterest = claimInterest
+    ? Number((totalPrincipal * (interestRate / 100) * 0.25).toFixed(2))
+    : 0;
   const totalClaim = totalPrincipal + estimatedInterest;
 
   // Pre-action status
@@ -436,13 +440,20 @@ function MoneyClaimReviewContent({
               £{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
-            <p className="text-2xl font-bold text-gray-900">
-              £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
-            </p>
-            <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
-          </div>
+          {claimInterest ? (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
+              <p className="text-2xl font-bold text-gray-900">
+                £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
+            </div>
+          ) : (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Interest</p>
+              <p className="text-lg text-gray-400">Not claimed</p>
+            </div>
+          )}
           <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
             <p className="text-sm text-gray-500 mb-1">Total Claim</p>
             <p className="text-2xl font-bold text-primary">

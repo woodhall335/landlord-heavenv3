@@ -81,7 +81,9 @@ export interface MoneyClaimCase {
   other_costs_notes?: string;
   other_amounts_summary?: string;
 
-  // Interest
+  // Interest - REQUIRES EXPLICIT OPT-IN
+  // claim_interest must be true for interest to be calculated and included in documents
+  claim_interest?: boolean;
   interest_rate?: number;
   interest_start_date?: string;
   interest_to_date?: number;
@@ -170,9 +172,10 @@ interface CalculatedTotals {
   arrears_total: number;
   damages_total: number;
   other_total: number;
-  interest_rate: number;
-  interest_to_date: number;
-  daily_interest: number;
+  claim_interest: boolean;
+  interest_rate: number | null;
+  interest_to_date: number | null;
+  daily_interest: number | null;
   total_claim_amount: number;
   court_fee: number;
   solicitor_costs: number;
@@ -193,23 +196,42 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
 
   const basePrincipal = arrears_total + damages_total + other_total;
 
-  const interest_rate = claim.interest_rate ?? 8;
-  const interest_to_date =
-    claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
+  // INTEREST: Only calculate if user EXPLICITLY opted in via claim_interest === true
+  // No default 8% rate - user must confirm they want to claim interest
+  const claimInterest = claim.claim_interest === true;
 
-  const daily_interest =
-    claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+  let interest_rate: number | null = null;
+  let interest_to_date: number | null = null;
+  let daily_interest: number | null = null;
+
+  if (claimInterest) {
+    // User opted in - use their rate or suggest 8% statutory rate
+    // Note: The rate should have been explicitly confirmed in the wizard
+    interest_rate = claim.interest_rate ?? 8;
+    interest_to_date =
+      claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
+    daily_interest =
+      claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+
+    console.log(
+      `[money-claim] Interest claimed at ${interest_rate}% (user opted in). ` +
+        `Interest to date: £${interest_to_date}, Daily rate: £${daily_interest}`
+    );
+  } else {
+    console.log('[money-claim] No interest claimed (user did not opt in or claim_interest !== true)');
+  }
 
   const court_fee = claim.court_fee ?? 355;
   const solicitor_costs = claim.solicitor_costs ?? 0;
 
-  const total_claim_amount = basePrincipal + interest_to_date;
+  const total_claim_amount = basePrincipal + (interest_to_date ?? 0);
   const total_with_fees = total_claim_amount + court_fee + solicitor_costs;
 
   return {
     arrears_total,
     damages_total,
     other_total,
+    claim_interest: claimInterest,
     interest_rate,
     interest_to_date,
     daily_interest,

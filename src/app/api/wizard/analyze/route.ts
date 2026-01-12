@@ -313,8 +313,10 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     has_arrears: hasArrears,
     damages,
     other_charges,
-    interest_rate: facts.money_claim.interest_rate,
-    interest_start_date: facts.money_claim.interest_start_date,
+    // Interest: only include if user explicitly opted in
+    charge_interest: facts.money_claim.charge_interest === true,
+    interest_rate: facts.money_claim.charge_interest === true ? facts.money_claim.interest_rate : null,
+    interest_start_date: facts.money_claim.charge_interest === true ? facts.money_claim.interest_start_date : null,
     sheriffdom: facts.money_claim.sheriffdom,
     route: jurisdiction === 'scotland' ? 'simple_procedure' : 'money_claim',
 
@@ -506,8 +508,9 @@ function craftAskHeavenAnswer(
   const { score, red_flags, compliance } = computeStrength(facts);
   const summary = buildCaseSummary(facts, jurisdiction);
   const arrears = facts.issues.rent_arrears.total_arrears;
-  const interestRate =
-    facts.money_claim.interest_rate ?? (jurisdiction === 'scotland' ? 8 : 8);
+  // Interest: only show if user explicitly opted in via charge_interest === true
+  const claimInterest = facts.money_claim.charge_interest === true;
+  const interestRate = claimInterest ? (facts.money_claim.interest_rate ?? 8) : null;
   const hasDamages = (facts.money_claim.damage_items || []).length > 0;
   const hasOther = (facts.money_claim.other_charges || []).length > 0;
   const isMoneyClaim = isMoneyClaimCase(facts);
@@ -565,9 +568,11 @@ function craftAskHeavenAnswer(
     }
   }
 
-  const interestLine =
-    ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
-    ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.';
+  // Interest line: only include if user explicitly opted in
+  const interestLine = claimInterest && interestRate
+    ? ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
+      ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.'
+    : '';
 
   const disclaimer =
     ' This explanation is for information only and is not legal advice. Courts make their own decisions, and a strong claim on paper can still be defended or refused if the facts or evidence do not support it.';
