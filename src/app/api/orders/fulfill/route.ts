@@ -161,22 +161,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get current order metadata to preserve existing fields
-    const { data: currentOrder } = await adminClient
-      .from('orders')
-      .select('metadata')
-      .eq('id', order.id)
-      .single();
-
-    const currentMetadata = (currentOrder?.metadata as Record<string, unknown>) || {};
-
-    // Set status to processing before starting (clear any previous error)
-    const { fulfillment_error: _, ...metadataWithoutError } = currentMetadata;
+    // Set status to processing before starting
     await adminClient
       .from('orders')
       .update({
         fulfillment_status: 'processing',
-        metadata: metadataWithoutError,
       })
       .eq('id', order.id);
 
@@ -198,37 +187,23 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } catch (fulfillmentError: any) {
-      // Store error in order metadata for debugging
+      // Mark order as failed
       const errorMessage = fulfillmentError?.message || 'Document generation failed';
-      const truncatedError = errorMessage.substring(0, 500);
-
-      // Get current metadata again to merge with error
-      const { data: orderForError } = await adminClient
-        .from('orders')
-        .select('metadata')
-        .eq('id', order.id)
-        .single();
-
-      const metadataForError = (orderForError?.metadata as Record<string, unknown>) || {};
 
       await adminClient
         .from('orders')
         .update({
           fulfillment_status: 'failed',
-          metadata: {
-            ...metadataForError,
-            fulfillment_error: truncatedError,
-          },
         })
         .eq('id', order.id);
 
-      console.error('Fulfillment retry failed:', fulfillmentError);
+      console.error('Fulfillment retry failed:', errorMessage, fulfillmentError);
 
       return NextResponse.json(
         {
           success: false,
           error: 'Document generation failed',
-          message: truncatedError,
+          message: errorMessage.substring(0, 500),
         },
         { status: 500 }
       );

@@ -260,25 +260,11 @@ export async function POST(request: Request) {
                 error: truncatedError,
               });
 
-              // Get current metadata to merge
-              const { data: currentOrderData } = await supabase
-                .from('orders')
-                .select('metadata')
-                .eq('id', (order as any).id)
-                .single();
-
-              const currentMetadata = (currentOrderData?.metadata as Record<string, unknown>) || {};
-
+              // Mark order as failed
               await supabase
                 .from('orders')
                 .update({
                   fulfillment_status: 'failed',
-                  metadata: {
-                    ...currentMetadata,
-                    fulfillment_error: truncatedError,
-                    fulfillment_error_type: errorType,
-                    fulfillment_failed_at: new Date().toISOString(),
-                  },
                 })
                 .eq('id', (order as any).id);
 
