@@ -25,11 +25,11 @@ async function getBrowser(): Promise<BrowserInstance> {
 
   if (isVercel) {
     // Use @sparticuz/chromium for Vercel/AWS Lambda
-    // webpackIgnore prevents webpack from bundling this optional Vercel-only dependency
+    // This package bundles a serverless-compatible Chromium binary
     console.log('[getBrowser] Vercel environment detected, loading @sparticuz/chromium');
 
     try {
-      const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
+      const chromium = await import('@sparticuz/chromium');
       const execPath = await chromium.default.executablePath();
 
       console.log('[getBrowser] Chromium executable path:', execPath);
@@ -105,7 +105,7 @@ export async function getBrowserDiagnostics(): Promise<Record<string, unknown>> 
 
   if (isVercel) {
     try {
-      const chromium = await import(/* webpackIgnore: true */ '@sparticuz/chromium');
+      const chromium = await import('@sparticuz/chromium');
       const execPath = await chromium.default.executablePath();
       diagnostics.chromiumLoaded = true;
       diagnostics.executablePath = execPath;

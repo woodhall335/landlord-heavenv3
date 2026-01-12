@@ -57,13 +57,12 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
-  // Exclude PDF libraries and Chromium from webpack bundling
-  // puppeteer-core and @sparticuz/chromium must be external for Vercel serverless
+  // Exclude PDF libraries from webpack bundling (they have native dependencies)
+  // NOTE: @sparticuz/chromium must NOT be in this list - it needs to be bundled for Vercel
   serverExternalPackages: [
     'pdfjs-dist',
     'pdf-parse',
     'canvas',
-    '@sparticuz/chromium',
     'puppeteer-core',
     'puppeteer',
   ],
