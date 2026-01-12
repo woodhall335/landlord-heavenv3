@@ -13,9 +13,14 @@ interface SectionProps {
 }
 
 export const ReviewSection: React.FC<SectionProps> = ({
+  facts,
   caseId,
   jurisdiction,
 }) => {
+  // Get interest status from facts
+  const moneyClaim = facts?.money_claim || {};
+  const chargeInterest = moneyClaim.charge_interest === true;
+  const interestRate = moneyClaim.interest_rate || 8;
   const router = useRouter();
   const [previewing, setPreviewing] = useState(false);
 
@@ -57,6 +62,16 @@ export const ReviewSection: React.FC<SectionProps> = ({
             ? 'Wales'
             : 'England'}
         </p>
+        <p>
+          <span className="font-semibold">Interest:</span>{' '}
+          {chargeInterest ? (
+            <span className="text-green-700">
+              Claimed at {interestRate}% statutory rate
+            </span>
+          ) : (
+            <span className="text-gray-500">Not claimed</span>
+          )}
+        </p>
       </div>
 
       {/* Ask Heaven Features Banner */}
@@ -84,7 +99,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
               <li>• Form 3A - Simple Procedure Claim Form</li>
               <li>• Particulars of Claim (AI-drafted)</li>
               <li>• Schedule of Arrears</li>
-              <li>• Interest Calculation</li>
+              {chargeInterest && <li>• Interest Calculation</li>}
               <li>• Pre-Action Letter</li>
               <li>• Filing Guide</li>
             </>
@@ -93,16 +108,20 @@ export const ReviewSection: React.FC<SectionProps> = ({
               <li>• Form N1 - Money Claim Form (official PDF)</li>
               <li>• Particulars of Claim (AI-drafted)</li>
               <li>• Schedule of Arrears</li>
-              <li>• Interest Calculation</li>
+              {chargeInterest && <li>• Interest Calculation</li>}
               <li>• Letter Before Claim (PAP-DEBT compliant)</li>
               <li>• Information Sheet for Defendants</li>
               <li>• Reply Form & Financial Statement Form</li>
-              <li>• Evidence Index</li>
               <li>• Court Filing Guide</li>
               <li>• Enforcement Guide</li>
             </>
           )}
         </ul>
+        {!chargeInterest && (
+          <p className="text-xs text-gray-500 mt-2 italic">
+            Interest calculation not included (you chose not to claim interest)
+          </p>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-3">

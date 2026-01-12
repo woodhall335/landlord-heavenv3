@@ -75,90 +75,145 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         </p>
       </div>
 
-      {/* Interest (statutory) */}
+      {/* Interest Opt-In - Explicit Confirmation Required */}
       {isEnglandWales && (
-        <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
-          <h3 className="text-sm font-medium text-charcoal">
-            Statutory interest (section 69 County Courts Act 1984)
-          </h3>
-          <p className="text-xs text-gray-600">
-            Most money claims include simple interest at 8% per year on the
-            outstanding balance. If you&apos;re unsure, you can select yes and Ask
-            Heaven will draft the interest wording for you.
-          </p>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-charcoal">
-                Add statutory interest?
-              </label>
-              <select
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                value={
-                  chargeInterest === true
-                    ? 'yes'
-                    : chargeInterest === false
-                    ? 'no'
-                    : ''
-                }
-                onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === 'yes') {
-                    updateMoneyClaim('charge_interest', true);
-                  } else if (v === 'no') {
-                    updateMoneyClaim('charge_interest', false);
-                  } else {
-                    updateMoneyClaim('charge_interest', null);
-                  }
-                }}
-              >
-                <option value="">Select</option>
-                <option value="yes">Yes, add statutory interest</option>
-                <option value="no">No, I don&apos;t want to claim interest</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-charcoal">
-                Interest start date
-              </label>
-              <input
-                type="date"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                value={interestStartDate}
-                onChange={(e) =>
-                  updateMoneyClaim('interest_start_date', e.target.value)
-                }
-                disabled={chargeInterest !== true}
-              />
-              <p className="text-[11px] text-gray-500">
-                Usually the date of the first missed rent instalment.
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-charcoal">
-                Interest rate (% per year)
-              </label>
-              <input
-                type="number"
-                min={0}
-                step="0.1"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                value={interestRate}
-                onChange={(e) =>
-                  updateMoneyClaim(
-                    'interest_rate',
-                    e.target.value ? Number(e.target.value) : null
-                  )
-                }
-                disabled={chargeInterest !== true}
-              />
-              <p className="text-[11px] text-gray-500">
-                Default statutory rate is 8% simple interest.
+        <div className="space-y-4 rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">💷</div>
+            <div>
+              <h3 className="text-sm font-semibold text-charcoal">
+                Do you want to claim statutory interest?
+                <span className="text-red-500 ml-1">*</span>
+              </h3>
+              <p className="text-xs text-gray-600 mt-1">
+                Under Section 69 of the County Courts Act 1984, you can claim simple
+                interest on debts at 8% per year from the date the money became due.
               </p>
             </div>
           </div>
+
+          {/* Explicit Yes/No Radio Buttons */}
+          <div className="space-y-2 ml-9">
+            <label
+              className={`
+                flex items-center p-3 border rounded-lg cursor-pointer transition-all
+                ${chargeInterest === true
+                  ? 'border-purple-500 bg-white ring-2 ring-purple-200'
+                  : 'border-gray-200 bg-white hover:border-gray-300'}
+              `}
+            >
+              <input
+                type="radio"
+                name="charge_interest"
+                checked={chargeInterest === true}
+                onChange={() => {
+                  updateMoneyClaim('charge_interest', true);
+                  // Set default 8% rate if not already set
+                  if (!moneyClaim.interest_rate) {
+                    updateMoneyClaim('interest_rate', 8);
+                  }
+                }}
+                className="mr-3"
+              />
+              <div>
+                <span className="font-medium text-gray-900">
+                  Yes, claim statutory interest at 8%
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Interest calculation will be included in your claim documents
+                </p>
+              </div>
+            </label>
+
+            <label
+              className={`
+                flex items-center p-3 border rounded-lg cursor-pointer transition-all
+                ${chargeInterest === false
+                  ? 'border-purple-500 bg-white ring-2 ring-purple-200'
+                  : 'border-gray-200 bg-white hover:border-gray-300'}
+              `}
+            >
+              <input
+                type="radio"
+                name="charge_interest"
+                checked={chargeInterest === false}
+                onChange={() => updateMoneyClaim('charge_interest', false)}
+                className="mr-3"
+              />
+              <div>
+                <span className="font-medium text-gray-900">
+                  No, I don&apos;t want to claim interest
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Your claim will be for the principal debt amount only
+                </p>
+              </div>
+            </label>
+
+            {chargeInterest === null && (
+              <p className="text-xs text-amber-600 italic">
+                Please select an option to continue
+              </p>
+            )}
+          </div>
+
+          {/* Interest Details - Only shown when opted in */}
+          {chargeInterest === true && (
+            <div className="ml-9 mt-3 p-3 bg-white border border-purple-100 rounded-lg space-y-3">
+              <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                Interest Details
+              </h4>
+
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-charcoal">
+                    Interest start date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                    value={interestStartDate}
+                    onChange={(e) =>
+                      updateMoneyClaim('interest_start_date', e.target.value)
+                    }
+                  />
+                  <p className="text-[11px] text-gray-500">
+                    Usually the date of the first missed rent payment
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-charcoal">
+                    Interest rate (% per year)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={20}
+                    step="0.1"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                    value={interestRate}
+                    onChange={(e) =>
+                      updateMoneyClaim(
+                        'interest_rate',
+                        e.target.value ? Number(e.target.value) : 8
+                      )
+                    }
+                    placeholder="8"
+                  />
+                  <p className="text-[11px] text-gray-500">
+                    Statutory rate is 8% (recommended)
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-2 bg-purple-50 rounded text-xs text-purple-800">
+                <strong>How it works:</strong> Interest is calculated as simple interest
+                from the start date to the date of claim. The daily rate will be shown
+                on your claim form so you can continue to accrue interest until judgment.
+              </div>
+            </div>
+          )}
         </div>
       )}
 
