@@ -6,7 +6,7 @@ import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
-import { trackBeginCheckout } from '@/lib/analytics';
+import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
 
 interface PreviewPageLayoutProps {
   caseId: string;
@@ -93,6 +93,9 @@ export function PreviewPageLayout({
         // Track checkout initiation in analytics (GA4 + FB Pixel)
         const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
         trackBeginCheckout(product, productName, priceValue);
+
+        // Track checkout started (Vercel Analytics)
+        trackCheckoutStarted({ product });
 
         window.location.href = checkoutUrl;
       }

@@ -212,7 +212,10 @@ export async function PUT(
 }
 
 /**
- * DELETE - Delete case and associated documents
+ * DELETE - Archive case (soft-delete)
+ *
+ * Sets case status to 'archived' instead of hard deleting.
+ * Archived cases are hidden from list views by default but can be restored.
  */
 export async function DELETE(
   request: Request,
@@ -223,10 +226,10 @@ export async function DELETE(
     const { id } = await params;
     const supabase = await createServerSupabaseClient();
 
-    // Verify case ownership
+    // Verify case ownership and get current data
     const { data: existingCase, error: fetchError } = await supabase
       .from('cases')
-      .select('id')
+      .select('id, status')
       .eq('id', id)
       .eq('user_id', user.id)
       .single();
@@ -239,24 +242,48 @@ export async function DELETE(
       );
     }
 
-    // Delete case (cascade will delete associated documents and orders)
-    const { error: deleteError } = await supabase
+    // Check if already archived
+    if ((existingCase as any).status === 'archived') {
+      return NextResponse.json(
+        {
+          success: true,
+          message: 'Case is already archived',
+          already_archived: true,
+        },
+        { status: 200 }
+      );
+    }
+
+    // Soft-delete: Set status to 'archived'
+    const { error: updateError } = await supabase
       .from('cases')
-      .delete()
+      .update({
+        status: 'archived',
+        updated_at: new Date().toISOString(),
+      })
       .eq('id', id);
 
-    if (deleteError) {
-      console.error('Failed to delete case:', deleteError);
+    if (updateError) {
+      console.error('Failed to archive case:', updateError);
       return NextResponse.json(
-        { error: 'Failed to delete case' },
+        { error: 'Failed to archive case' },
         { status: 500 }
       );
     }
 
+    // Audit log for case archival (non-blocking)
+    logMutation({
+      caseId: id,
+      userId: user.id,
+      action: 'case_archived',
+      changedKeys: ['status'],
+      metadata: { source: 'case-delete', previous_status: (existingCase as any).status },
+    }).catch(() => {}); // Fire and forget
+
     return NextResponse.json(
       {
         success: true,
-        message: 'Case and associated data deleted successfully',
+        message: 'Case archived successfully',
       },
       { status: 200 }
     );
@@ -268,7 +295,7 @@ export async function DELETE(
       );
     }
 
-    console.error('Delete case error:', error);
+    console.error('Archive case error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

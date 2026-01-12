@@ -5,9 +5,20 @@
  * - Google Analytics 4 (GA4)
  * - Google Ads conversion tracking
  * - Facebook Pixel
+ * - Vercel Analytics (via @vercel/analytics)
  *
  * Type definitions are in src/types/gtag.d.ts
  */
+
+// Re-export Vercel Analytics tracking functions
+export {
+  trackWizardPreviewViewed,
+  trackCheckoutStarted,
+  trackPaymentSuccessLanded,
+  trackDocumentDownloadClicked,
+  trackCaseArchived,
+  trackEvent as trackVercelEvent,
+} from './analytics/track';
 
 /**
  * Track a custom event in both Google Analytics and Facebook Pixel
