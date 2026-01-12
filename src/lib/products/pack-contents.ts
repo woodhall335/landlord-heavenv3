@@ -218,6 +218,20 @@ function getEnglandMoneyClaimContents(): PackItem[] {
       required: true,
     },
     {
+      key: 'reply_form',
+      title: 'Reply Form',
+      description: 'PAP-DEBT reply form for defendant response',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'financial_statement_form',
+      title: 'Financial Statement Form',
+      description: 'PAP-DEBT financial statement for defendant',
+      category: 'Guidance',
+      required: true,
+    },
+    {
       key: 'court_filing_guide',
       title: 'Court Filing Guide',
       description: 'MCOL online or paper submission instructions',
