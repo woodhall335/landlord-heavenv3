@@ -222,6 +222,42 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
           }
           console.log(`[normalizeSection8Facts] Backfilled arrears_total=${numericArrears} from alternative location`);
         }
+      } else {
+        // FALLBACK: Compute arrears_total from arrears_items if available
+        // This handles cases where the UI stores individual arrears periods but not the total
+        const arrearsItems =
+          resolveFactValue(facts, 'issues.rent_arrears.arrears_items') ||
+          resolveFactValue(facts, 'arrears_items') || [];
+
+        if (Array.isArray(arrearsItems) && arrearsItems.length > 0) {
+          let computedTotal = 0;
+          for (const item of arrearsItems) {
+            // Support various field names for the arrears amount
+            const itemAmount =
+              item.arrears_amount ??
+              item.amount_owed ??
+              item.amount_due ??
+              item.balance ??
+              item.amount ??
+              0;
+
+            const numericAmount = typeof itemAmount === 'number'
+              ? itemAmount
+              : parseFloat(String(itemAmount).replace(/[£,]/g, ''));
+
+            if (!isNaN(numericAmount)) {
+              computedTotal += numericAmount;
+            }
+          }
+
+          if (computedTotal > 0) {
+            facts.arrears_total = computedTotal;
+            if (facts.arrears_amount === undefined) {
+              facts.arrears_amount = computedTotal;
+            }
+            console.log(`[normalizeSection8Facts] Computed arrears_total=${computedTotal} from ${arrearsItems.length} arrears_items`);
+          }
+        }
       }
     }
   }

@@ -12,6 +12,32 @@ import { sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 
+/**
+ * Error codes that indicate a validation/business rule failure.
+ * These should NOT trigger Stripe retries (return 200).
+ */
+const VALIDATION_ERROR_PATTERNS = [
+  'NOTICE_ONLY_VALIDATION_FAILED',
+  'EVICTION_PACK_VALIDATION_FAILED',
+  'GROUND_REQUIRED_FACT_MISSING',
+  'MISSING_REQUIRED_FIELDS',
+  'VALIDATION_FAILED',
+  'ELIGIBILITY_FAILED',
+  'Case not found',
+  'Unable to resolve user',
+  'Unsupported product type',
+];
+
+/**
+ * Check if an error is a validation/business error vs a transient/server error.
+ * Validation errors should return 200 (don't retry).
+ * Server errors should return 500 (Stripe will retry).
+ */
+function isValidationError(error: Error | unknown): boolean {
+  const message = (error as Error)?.message || String(error);
+  return VALIDATION_ERROR_PATTERNS.some((pattern) => message.includes(pattern));
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
 });
@@ -222,6 +248,18 @@ export async function POST(request: Request) {
               const errorMessage = fulfillmentError?.message || 'Document generation failed';
               const truncatedError = errorMessage.substring(0, 500);
 
+              // Classify the error
+              const isValidation = isValidationError(fulfillmentError);
+              const errorType = isValidation ? 'validation' : 'server';
+
+              logger.error('Fulfillment error', {
+                orderId: (order as any).id,
+                caseId: resolvedCaseId,
+                productType: resolvedProductType,
+                errorType,
+                error: truncatedError,
+              });
+
               // Get current metadata to merge
               const { data: currentOrderData } = await supabase
                 .from('orders')
@@ -238,11 +276,21 @@ export async function POST(request: Request) {
                   metadata: {
                     ...currentMetadata,
                     fulfillment_error: truncatedError,
+                    fulfillment_error_type: errorType,
+                    fulfillment_failed_at: new Date().toISOString(),
                   },
                 })
                 .eq('id', (order as any).id);
 
-              throw fulfillmentError;
+              // For validation errors, DON'T throw - return 200 so Stripe doesn't retry
+              // The order is marked as failed, user can see it in dashboard
+              if (isValidation) {
+                processingResult = 'fulfillment_validation_failed';
+                // Don't throw - continue to return 200
+              } else {
+                // For server/transient errors, throw to return 500 (Stripe will retry)
+                throw fulfillmentError;
+              }
             }
           } else {
             processingResult = 'order_paid_without_fulfillment';
@@ -489,7 +537,16 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error: any) {
-    logger.error('Stripe webhook error', { error: error?.message });
+    const errorMessage = error?.message || 'Webhook processing error';
+    const isValidation = isValidationError(error);
+    const errorType = isValidation ? 'validation' : 'server';
+
+    logger.error('Stripe webhook error', {
+      eventId,
+      errorType,
+      error: errorMessage,
+    });
+
     try {
       const supabase = createAdminClient();
       if (eventId) {
@@ -498,16 +555,32 @@ export async function POST(request: Request) {
           .update({
             status: 'failed',
             processed_at: new Date().toISOString(),
-            processing_result: 'error',
-            error_message: error?.message || 'Webhook processing error',
+            processing_result: isValidation ? 'validation_error' : 'error',
+            error_message: errorMessage.substring(0, 500),
           })
           .eq('stripe_event_id', eventId);
       }
     } catch (logError) {
       logger.error('Failed to update webhook log', { error: (logError as Error)?.message });
     }
+
+    // For validation errors, return 200 so Stripe doesn't retry
+    // The error is logged and persisted for debugging
+    if (isValidation) {
+      return NextResponse.json(
+        {
+          received: true,
+          status: 'failed',
+          reason: 'validation',
+          message: errorMessage.substring(0, 200),
+        },
+        { status: 200 }
+      );
+    }
+
+    // For server/transient errors, return 500 so Stripe will retry
     return NextResponse.json(
-      { error: 'Webhook handler failed', message: error.message },
+      { error: 'Webhook handler failed', message: errorMessage },
       { status: 500 }
     );
   }
