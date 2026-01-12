@@ -57,8 +57,16 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
-  // Exclude PDF libraries from webpack bundling to avoid ESM/CJS conflicts
-  serverExternalPackages: ['pdfjs-dist', 'pdf-parse', 'canvas'],
+  // Exclude PDF libraries and Chromium from webpack bundling
+  // puppeteer-core and @sparticuz/chromium must be external for Vercel serverless
+  serverExternalPackages: [
+    'pdfjs-dist',
+    'pdf-parse',
+    'canvas',
+    '@sparticuz/chromium',
+    'puppeteer-core',
+    'puppeteer',
+  ],
   experimental: {
     serverActions: {
       // Restrict to production domain and localhost for development
