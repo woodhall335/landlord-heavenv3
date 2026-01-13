@@ -1,6 +1,19 @@
 import Link from 'next/link';
-import { ArrowRight, FileText, Calculator, Shield, Scale, MessageCircle, Home, Flame, Zap, ThermometerSun, Users, ClipboardList } from 'lucide-react';
-import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
+import {
+  ArrowRight,
+  FileText,
+  Calculator,
+  Shield,
+  Scale,
+  MessageCircle,
+  Home,
+  Flame,
+  Zap,
+  ThermometerSun,
+  Users,
+  ClipboardList,
+} from 'lucide-react';
+import { getNextStepsCTAs, type NextStepsCTA } from '@/lib/blog/next-steps-cta';
 
 interface NextStepsProps {
   slug: string;
@@ -8,546 +21,125 @@ interface NextStepsProps {
   tags: string[];
 }
 
-interface StepLink {
-  href: string;
-  label: string;
+interface StepLink extends NextStepsCTA {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
-  priority: number;
 }
 
-// Map compliance topics to Ask Heaven topics and prompts
-const COMPLIANCE_ASK_HEAVEN_MAP: Record<string, { topic: AskHeavenTopic; prompt: string }> = {
-  deposit: {
-    topic: 'deposit',
-    prompt: 'What are the deposit protection requirements for landlords?',
-  },
-  gas_safety: {
-    topic: 'gas_safety',
-    prompt: 'When must a landlord provide a gas safety certificate?',
-  },
-  epc: {
-    topic: 'epc',
-    prompt: 'What EPC rating is required to let a property?',
-  },
-  eicr: {
-    topic: 'eicr',
-    prompt: 'Do landlords need an EICR and how often?',
-  },
-  smoke_alarm: {
-    topic: 'smoke_alarms',
-    prompt: 'What are the smoke and CO alarm rules for landlords?',
-  },
-  right_to_rent: {
-    topic: 'right_to_rent',
-    prompt: 'Do I need to do right to rent checks and how?',
-  },
-  fire_safety: {
-    topic: 'smoke_alarms',
-    prompt: 'What are the fire safety requirements for landlords?',
-  },
-  inventory: {
-    topic: 'general',
-    prompt: 'What should be included in a property inventory?',
-  },
-};
+// Map CTA hrefs to icons and descriptions
+function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    '/section-21-notice-template': FileText,
+    '/section-8-notice-template': FileText,
+    '/tools/validators/section-21': Shield,
+    '/tools/validators/section-8': Shield,
+    '/products/notice-only': FileText,
+    '/products/complete-pack': FileText,
+    '/products/money-claim': Scale,
+    '/products/ast': FileText,
+    '/tools/rent-arrears-calculator': Calculator,
+    '/tenancy-agreement-template': FileText,
+    '/wales-eviction-notices': FileText,
+    '/scotland-eviction-notices': FileText,
+    '/how-to-evict-tenant': FileText,
+    '/pricing': Scale,
+  };
 
-/**
- * Determines relevant next steps based on blog post content
- * Returns 3-4 contextual CTAs for products, tools, and pricing
- */
-function getNextStepsForPost(slug: string, category: string, tags: string[]): StepLink[] {
-  const steps: StepLink[] = [];
-  const lowerTags = tags.map((t) => t.toLowerCase());
-  const lowerSlug = slug.toLowerCase();
-  const lowerCategory = category.toLowerCase();
+  const descriptionMap: Record<string, string> = {
+    '/section-21-notice-template': 'Free Form 6A template for England landlords',
+    '/section-8-notice-template': 'Free Form 3 template for England landlords',
+    '/tools/validators/section-21': 'Check if your Section 21 will be valid before serving',
+    '/tools/validators/section-8': 'Verify your grounds for possession are valid',
+    '/products/notice-only': 'Generate a court-ready notice in minutes',
+    '/products/complete-pack': 'Everything you need for a successful eviction',
+    '/products/money-claim': 'Recover unpaid rent through the county court',
+    '/products/ast': 'Create a legally compliant tenancy agreement',
+    '/tools/rent-arrears-calculator': 'Calculate total arrears including interest',
+    '/tenancy-agreement-template': 'Free AST template and guidance for UK landlords',
+    '/wales-eviction-notices': 'Complete guide to Renting Homes (Wales) Act notices',
+    '/scotland-eviction-notices': 'Complete guide to Notice to Leave and Scottish evictions',
+    '/how-to-evict-tenant': 'Complete guide to the eviction process',
+    '/pricing': 'Compare all our document packs and pricing',
+  };
 
-  // Check for Section 21 related content
-  if (
-    lowerSlug.includes('section-21') ||
-    lowerTags.some((t) => t.includes('section 21')) ||
-    lowerSlug.includes('no-fault') ||
-    lowerSlug.includes('assured-shorthold')
-  ) {
-    steps.push({
-      href: '/section-21-notice-template',
-      label: 'Section 21 Notice Template',
-      description: 'Free Form 6A template for England landlords',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: '/products/notice-only',
-      label: 'Section 21 Notice Pack',
-      description: 'Generate a court-ready Section 21 notice in minutes',
-      icon: FileText,
-      priority: 3,
-    });
-    steps.push({
-      href: '/tools/validators/section-21',
-      label: 'Section 21 Validity Checker',
-      description: 'Check if your Section 21 will be valid before serving',
-      icon: Shield,
-      priority: 2,
-    });
-  }
+  // Default icon for ask-heaven links and other dynamic paths
+  let icon = iconMap[cta.href] || MessageCircle;
+  let description = descriptionMap[cta.href] || '';
 
-  // Check for Section 8 related content (England only)
-  // Exclude Scotland/Wales/NI posts from matching on 'ground-' since they have different legal frameworks
-  const isEnglandContent = !lowerSlug.startsWith('scotland-') &&
-                           !lowerSlug.startsWith('wales-') &&
-                           !lowerSlug.startsWith('northern-ireland-');
-  const isSection8Related = lowerSlug.includes('section-8') ||
-    lowerTags.some((t) => t.includes('section 8')) ||
-    (lowerSlug.includes('ground-') && isEnglandContent);
-
-  if (isSection8Related) {
-    steps.push({
-      href: '/section-8-notice-template',
-      label: 'Section 8 Notice Template',
-      description: 'Free Form 3 template for England landlords',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: '/products/complete-pack',
-      label: 'Complete Eviction Pack',
-      description: 'Section 8 notice with all court documents included',
-      icon: FileText,
-      priority: 3,
-    });
-    steps.push({
-      href: '/tools/validators/section-8',
-      label: 'Section 8 Grounds Checker',
-      description: 'Verify your grounds for possession are valid',
-      icon: Shield,
-      priority: 2,
-    });
-  }
-
-  // Check for rent arrears content
-  if (
-    lowerSlug.includes('rent-arrears') ||
-    lowerSlug.includes('unpaid-rent') ||
-    lowerSlug.includes('money-claim') ||
-    lowerTags.some((t) => t.includes('arrears'))
-  ) {
-    steps.push({
-      href: '/products/money-claim',
-      label: 'Money Claim Pack',
-      description: 'Recover unpaid rent through the county court',
-      icon: Scale,
-      priority: 1,
-    });
-    steps.push({
-      href: '/tools/rent-arrears-calculator',
-      label: 'Rent Arrears Calculator',
-      description: 'Calculate total arrears including interest',
-      icon: Calculator,
-      priority: 2,
-    });
-  }
-
-  // Check for tenancy agreement content
-  if (
-    lowerSlug.includes('tenancy-agreement') ||
-    lowerSlug.includes('ast') ||
-    lowerSlug.includes('occupation-contract') ||
-    lowerSlug.includes('prt') ||
-    lowerCategory.includes('tenancy')
-  ) {
-    steps.push({
-      href: '/products/ast',
-      label: 'Tenancy Agreement Generator',
-      description: 'Create a legally compliant tenancy agreement',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: '/tenancy-agreement-template',
-      label: 'Tenancy Agreement Template',
-      description: 'Free AST template and guidance for UK landlords',
-      icon: FileText,
-      priority: 2,
-    });
-    // Add Ask Heaven for tenancy questions
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        prompt: 'What should a compliant tenancy agreement include?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Tenancy Agreements',
-      description: 'Get instant answers about tenancy agreement requirements',
-      icon: MessageCircle,
-      priority: 3,
-    });
-  }
-
-  // Check for Wales-specific content
-  if (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) {
-    steps.push({
-      href: '/wales-eviction-notices',
-      label: 'Wales Eviction Guide',
-      description: 'Complete guide to Renting Homes (Wales) Act notices',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        jurisdiction: 'wales',
-        prompt: 'How do I serve a notice under the Renting Homes (Wales) Act?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask Heaven for Wales',
-      description: 'Get answers specific to Wales landlord law',
-      icon: MessageCircle,
-      priority: 2,
-    });
-    // Add product CTA for Wales
-    if (!steps.some((s) => s.href.includes('notice-only'))) {
-      steps.push({
-        href: '/products/notice-only',
-        label: 'Wales Notice Pack',
-        description: 'Generate Renting Homes Act compliant notices',
-        icon: FileText,
-        priority: 3,
-      });
+  // Handle ask-heaven links
+  if (cta.href.includes('/ask-heaven')) {
+    icon = MessageCircle;
+    // Generate description based on label
+    if (cta.label.includes('Wales')) {
+      description = 'Get answers specific to Wales landlord law';
+    } else if (cta.label.includes('Scotland')) {
+      description = 'Get answers specific to Scottish landlord law';
+    } else if (cta.label.includes('NI')) {
+      description = 'Get answers specific to Northern Ireland landlord law';
+    } else if (cta.label.includes('Deposit')) {
+      description = 'Get instant answers about deposit protection requirements';
+    } else if (cta.label.includes('Gas')) {
+      description = 'Get instant answers about gas safety certificates';
+    } else if (cta.label.includes('EPC')) {
+      description = 'Get instant answers about EPC requirements';
+    } else if (cta.label.includes('EICR')) {
+      description = 'Get instant answers about electrical safety requirements';
+    } else if (cta.label.includes('Fire')) {
+      description = 'Get instant answers about smoke and CO alarm requirements';
+    } else if (cta.label.includes('Right to Rent')) {
+      description = 'Get instant answers about right to rent checks';
+    } else if (cta.label.includes('Inventories')) {
+      description = 'Get guidance on creating property inventories';
+    } else if (cta.label.includes('HMO')) {
+      description = 'Get instant answers about HMO licensing and compliance';
+    } else if (cta.label.includes('Tenancy')) {
+      description = 'Get instant answers about tenancy agreement requirements';
+    } else {
+      description = 'Get instant answers to your landlord questions';
     }
   }
 
-  // Check for Scotland-specific content
-  if (lowerSlug.startsWith('scotland-')) {
-    steps.push({
-      href: '/scotland-eviction-notices',
-      label: 'Scotland Eviction Guide',
-      description: 'Complete guide to Notice to Leave and Scottish evictions',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        jurisdiction: 'scotland',
-        prompt: 'How do I serve a Notice to Leave in Scotland?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask Heaven for Scotland',
-      description: 'Get answers specific to Scottish landlord law',
-      icon: MessageCircle,
-      priority: 2,
-    });
-    // Add product CTA for Scotland
-    if (!steps.some((s) => s.href.includes('notice-only'))) {
-      steps.push({
-        href: '/products/notice-only',
-        label: 'Scotland Notice Pack',
-        description: 'Generate Notice to Leave documents for Scotland',
-        icon: FileText,
-        priority: 3,
-      });
-    }
+  // Handle special label-based descriptions
+  if (cta.label === 'Section 21 Notice Pack') {
+    description = 'Generate a court-ready Section 21 notice in minutes';
+  } else if (cta.label === 'Wales Notice Pack') {
+    description = 'Generate Renting Homes Act compliant notices';
+  } else if (cta.label === 'Scotland Notice Pack') {
+    description = 'Generate Notice to Leave documents for Scotland';
+  } else if (cta.label === 'Complete Eviction Pack') {
+    description = 'Section 8 notice with all court documents included';
+  } else if (cta.label === 'NI Tenancy Agreement') {
+    description = 'Create a legally compliant tenancy agreement';
   }
 
-  // Check for eviction/possession content
-  if (
-    lowerSlug.includes('eviction') ||
-    lowerSlug.includes('possession') ||
-    lowerSlug.includes('bailiff') ||
-    lowerCategory.includes('eviction')
-  ) {
-    if (!steps.some((s) => s.href.includes('complete-pack'))) {
-      steps.push({
-        href: '/products/complete-pack',
-        label: 'Complete Eviction Pack',
-        description: 'Everything you need for a successful eviction',
-        icon: FileText,
-        priority: 1,
-      });
-    }
+  // Handle special icons
+  if (cta.label.includes('Gas')) {
+    icon = Flame;
+  } else if (cta.label.includes('EPC')) {
+    icon = ThermometerSun;
+  } else if (cta.label.includes('EICR') || cta.label.includes('Electrical')) {
+    icon = Zap;
+  } else if (cta.label.includes('Fire')) {
+    icon = Flame;
+  } else if (cta.label.includes('Right to Rent')) {
+    icon = Users;
+  } else if (cta.label.includes('Inventories')) {
+    icon = ClipboardList;
+  } else if (cta.label.includes('HMO')) {
+    icon = Home;
   }
 
-  // Check for deposit protection content
-  if (
-    lowerSlug.includes('deposit') ||
-    lowerTags.some((t) => t.includes('deposit'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.deposit;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Deposit Rules',
-      description: 'Get instant answers about deposit protection requirements',
-      icon: MessageCircle,
-      priority: 2,
-    });
-  }
-
-  // Check for gas safety content
-  if (
-    lowerSlug.includes('gas-safety') ||
-    lowerSlug.includes('gas-safe') ||
-    lowerTags.some((t) => t.includes('gas safety'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.gas_safety;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Gas Safety',
-      description: 'Get instant answers about gas safety certificates',
-      icon: Flame,
-      priority: 2,
-    });
-  }
-
-  // Check for EPC content
-  if (
-    lowerSlug.includes('epc') ||
-    lowerSlug.includes('energy-performance') ||
-    lowerTags.some((t) => t.includes('epc'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.epc;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About EPC Rules',
-      description: 'Get instant answers about EPC requirements',
-      icon: ThermometerSun,
-      priority: 2,
-    });
-  }
-
-  // Check for electrical safety / EICR content
-  if (
-    lowerSlug.includes('eicr') ||
-    lowerSlug.includes('electrical-safety') ||
-    lowerTags.some((t) => t.includes('eicr') || t.includes('electrical'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.eicr;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About EICR Rules',
-      description: 'Get instant answers about electrical safety requirements',
-      icon: Zap,
-      priority: 2,
-    });
-  }
-
-  // Check for smoke/CO alarm / fire safety content
-  if (
-    lowerSlug.includes('smoke') ||
-    lowerSlug.includes('fire-safety') ||
-    lowerSlug.includes('carbon-monoxide') ||
-    lowerSlug.includes('co-alarm') ||
-    lowerTags.some((t) => t.includes('smoke') || t.includes('fire safety'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.smoke_alarm;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Fire Safety',
-      description: 'Get instant answers about smoke and CO alarm requirements',
-      icon: Flame,
-      priority: 2,
-    });
-  }
-
-  // Check for right to rent content
-  if (
-    lowerSlug.includes('right-to-rent') ||
-    lowerTags.some((t) => t.includes('right to rent'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.right_to_rent;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Right to Rent',
-      description: 'Get instant answers about right to rent checks',
-      icon: Users,
-      priority: 2,
-    });
-  }
-
-  // Check for inventory content
-  if (
-    lowerSlug.includes('inventory') ||
-    lowerTags.some((t) => t.includes('inventory'))
-  ) {
-    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.inventory;
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: askHeavenConfig.topic,
-        prompt: askHeavenConfig.prompt,
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Inventories',
-      description: 'Get guidance on creating property inventories',
-      icon: ClipboardList,
-      priority: 3,
-    });
-  }
-
-  // Check for Northern Ireland content
-  if (lowerSlug.startsWith('northern-ireland-')) {
-    // NI has limited product support - focus on Ask Heaven and tenancy agreements
-    if (!steps.some((s) => s.href.includes('ask-heaven'))) {
-      steps.push({
-        href: buildAskHeavenLink({
-          source: 'blog',
-          topic: 'general',
-          jurisdiction: 'northern-ireland',
-          utm_campaign: slug,
-        }),
-        label: 'Ask Heaven for NI',
-        description: 'Get answers specific to Northern Ireland landlord law',
-        icon: MessageCircle,
-        priority: 2,
-      });
-    }
-    // Add tenancy agreement as this is available for NI
-    if (!steps.some((s) => s.href.includes('ast'))) {
-      steps.push({
-        href: '/products/ast',
-        label: 'NI Tenancy Agreement',
-        description: 'Create a legally compliant tenancy agreement',
-        icon: FileText,
-        priority: 3,
-      });
-    }
-  }
-
-  // Check for HMO content
-  if (
-    lowerSlug.includes('hmo') ||
-    lowerTags.some((t) => t.includes('hmo'))
-  ) {
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        prompt: 'What are the HMO licensing requirements?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask About HMO Rules',
-      description: 'Get instant answers about HMO licensing and compliance',
-      icon: Home,
-      priority: 3,
-    });
-  }
-
-  // Check for Rent Smart Wales (specific case - doesn't start with wales-)
-  if (lowerSlug === 'rent-smart-wales') {
-    steps.push({
-      href: '/wales-eviction-notices',
-      label: 'Wales Eviction Guide',
-      description: 'Complete guide to Renting Homes (Wales) Act notices',
-      icon: FileText,
-      priority: 1,
-    });
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        jurisdiction: 'wales',
-        prompt: 'What are the Rent Smart Wales registration requirements?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask Heaven for Wales',
-      description: 'Get answers specific to Wales landlord law',
-      icon: MessageCircle,
-      priority: 2,
-    });
-  }
-
-  // Enhanced fallback: UK-wide landlord guides that don't match specific topics
-  // These get Ask Heaven + Tenancy Agreement as revenue-relevant CTAs
-  if (steps.length === 0 || (steps.length === 1 && steps[0].priority >= 10)) {
-    // This is a general post with no specific CTAs yet
-    // Add Ask Heaven as primary CTA
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        prompt: 'I have a question about being a UK landlord',
-        utm_campaign: slug,
-      }),
-      label: 'Ask Heaven',
-      description: 'Get instant answers to your landlord questions',
-      icon: MessageCircle,
-      priority: 1,
-    });
-
-    // Add tenancy agreement as common need
-    if (!steps.some((s) => s.href.includes('ast'))) {
-      steps.push({
-        href: '/products/ast',
-        label: 'Tenancy Agreement Generator',
-        description: 'Create a legally compliant tenancy agreement',
-        icon: FileText,
-        priority: 2,
-      });
-    }
-
-    // Add how to evict guide as funnel entry
-    steps.push({
-      href: '/how-to-evict-tenant',
-      label: 'UK Eviction Guide',
-      description: 'Complete guide to the eviction process',
-      icon: FileText,
-      priority: 3,
-    });
-  }
-
-  // Always add pricing as a fallback
-  if (!steps.some((s) => s.href === '/pricing')) {
-    steps.push({
-      href: '/pricing',
-      label: 'View All Products',
-      description: 'Compare all our document packs and pricing',
-      icon: Scale,
-      priority: 10,
-    });
-  }
-
-  // Sort by priority and take top 4
-  return steps
-    .sort((a, b) => a.priority - b.priority)
-    .filter((step, index, arr) => arr.findIndex((s) => s.href === step.href) === index) // Remove duplicates
-    .slice(0, 4);
+  return {
+    ...cta,
+    description,
+    icon,
+  };
 }
 
 export function NextSteps({ slug, category, tags }: NextStepsProps) {
-  const steps = getNextStepsForPost(slug, category, tags);
+  // Use the pure helper function for CTA generation
+  const rawCTAs = getNextStepsCTAs({ slug, tags, category });
+  const steps = rawCTAs.map((cta) => enrichCTA(cta, slug));
 
   if (steps.length === 0) {
     return null;
