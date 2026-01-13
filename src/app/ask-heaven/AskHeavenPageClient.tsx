@@ -38,6 +38,7 @@ import {
   type AskHeavenTrackingParams,
 } from '@/lib/analytics';
 import { detectTopics, getPrimaryTopic, type Topic } from '@/lib/ask-heaven/topic-detection';
+import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -1019,6 +1020,26 @@ export default function AskHeavenPageClient(): React.ReactElement {
                                   );
                                 })()}
                               </div>
+                            )}
+
+                            {/* Next Best Action CTA - shown when topic matches eviction/money claim/tenancy intent */}
+                            {(!m.suggestedProduct || !isValidAskHeavenRecommendation(m.suggestedProduct)) &&
+                              m.suggestedNextStep === 'wizard' &&
+                              m.suggestedTopic &&
+                              ['eviction', 'arrears', 'tenancy'].includes(m.suggestedTopic) && (
+                                <NextBestActionCard
+                                  topic={m.suggestedTopic as Topic}
+                                  jurisdiction={jurisdiction}
+                                  suggestedNextStep={m.suggestedNextStep}
+                                  lastQuestion={lastQuestion}
+                                  questionCount={getQuestionCount()}
+                                  attribution={getAskHeavenAttribution()}
+                                  onCtaClick={(ctaType, targetUrl, ctaLabel) => handleCtaClick(ctaType as any, targetUrl, ctaLabel, m.suggestedProduct ?? undefined)}
+                                  onRequestEmailCapture={(reason) => {
+                                    setEmailGateReason(reason);
+                                    setEmailGateOpen(true);
+                                  }}
+                                />
                             )}
                           </div>
                         </div>
