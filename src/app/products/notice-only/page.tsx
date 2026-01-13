@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   description:
     `Court-ready eviction notices for England, Wales and Scotland 2026. Section 21 (ends May 2026), Section 8, Section 173, Notice to Leave. Preview before you buy. ${price} one-time.`,
   openGraph: {
-    title: `Eviction Notice Pack 2026 - Court-Ready from ${price}`,
+    title: `Eviction Notice 2026 - Court-Ready from ${price}`,
     description: "Court-ready eviction notices for England, Wales and Scotland. Section 21, Section 8, Wales RHW, Scotland Notice to Leave. Preview before you buy.",
     url: getCanonicalUrl('/products/notice-only'),
   },
@@ -104,10 +104,10 @@ export default function NoticeOnlyPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Eviction Notice Pack
+              Eviction Notice Only
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              3 court-ready documents for England, Wales or Scotland
+              Legally Valid Possession Notices for England, Wales & Scotland
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
