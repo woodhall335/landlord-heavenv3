@@ -9,6 +9,8 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -34,6 +36,26 @@ export default function RentArrearsCalculator() {
   const [rentAmount, setRentAmount] = useState(750);
   const [frequency, setFrequency] = useState<'month' | 'week'>('month');
   const [schedule, setSchedule] = useState<ScheduleItem[]>(defaultSchedule);
+  const upsellConfig = {
+    toolName: 'Rent Arrears Calculator',
+    toolType: 'calculator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £199.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Arrears and interest totals',
+      'Basic schedule PDF export',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'Move from calculations to a court-ready money claim bundle with the required forms and evidence templates.',
+  };
 
   const totals = useMemo(() => {
     const today = new Date();
@@ -343,6 +365,11 @@ link.href = url;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
@@ -569,6 +596,10 @@ link.href = url;
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-8">
+              <ToolUpsellCard {...upsellConfig} />
             </div>
           </div>
         </Card>

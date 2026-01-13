@@ -11,7 +11,8 @@ import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import { ValidationProgress } from '@/components/validators/ValidationProgress';
 import { ValidationResultBanner } from '@/components/validators/ValidationResultBanner';
 import { CollapsibleExtractedFields } from '@/components/validators/CollapsibleExtractedFields';
-import { trackValidatorUpload, trackValidatorResult } from '@/lib/analytics';
+import { trackValidatorUpload, trackValidatorResult, trackValidatorCompleted } from '@/lib/analytics';
+import { ToolUpsellCard, type ToolUpsellCardProps } from '@/components/tools/ToolUpsellCard';
 
 export interface EvidenceFileSummary {
   id: string;
@@ -37,6 +38,7 @@ interface UploadFieldProps {
   onUploadingChange?: (uploading: boolean) => void;
   /** Hide email/report CTA in UploadField - default true to avoid duplication with parent */
   hideEmailActions?: boolean;
+  toolUpsell?: Omit<ToolUpsellCardProps, 'ctaLabel' | 'ctaHref'>;
 }
 
 interface UploadValidationSummary {
@@ -124,6 +126,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   onChange,
   onUploadingChange,
   hideEmailActions = true,
+  toolUpsell,
 }) => {
   const [uploadedFiles, setUploadedFiles] = useState<EvidenceFileSummary[]>(value ?? []);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -450,6 +453,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
               summary.warnings?.length || 0,
               data?.rulesetVersion
             );
+            trackValidatorCompleted({
+              validator_key: summary.validator_key,
+              status: summary.status,
+              blockers: summary.blockers?.length || 0,
+              warnings: summary.warnings?.length || 0,
+              jurisdiction,
+            });
           }
         }
         if (Array.isArray(data?.recommendations)) {
@@ -845,6 +855,15 @@ export const UploadField: React.FC<UploadFieldProps> = ({
               <div className="mt-4 space-y-2 rounded-md border border-purple-100 bg-purple-50 p-3 text-xs">
                 <p className="font-semibold text-purple-800">Recommended next step</p>
                 {(() => {
+                  const status = validationSummary.status ?? 'warning';
+                  const isInvalid = status === 'invalid' || status === 'warning';
+                  const derivedValidatorKey =
+                    validationSummary.validator_key ?? questionId.replace('validator_', '');
+                  const generatorLinks: Record<string, string> = {
+                    section_21: '/tools/free-section-21-notice-generator',
+                    section_8: '/tools/free-section-8-notice-generator',
+                  };
+                  const generatorLink = generatorLinks[derivedValidatorKey];
                   const ctas = getWizardCta({
                     jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
                     validator_key: validationSummary.validator_key,
@@ -852,26 +871,58 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                     caseId,
                     source: 'validator',
                   });
+                  const primaryLabel = isInvalid
+                    ? 'Generate a court-ready notice'
+                    : 'Download notice + serving steps';
+                  const secondaryLabel = isInvalid ? ctas.secondary?.label : 'Need the full court pack?';
                   return (
                     <div className="flex flex-wrap gap-2">
                       <a
                         href={ctas.primary.href}
                         className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white"
                       >
-                        {ctas.primary.label} (£{ctas.primary.price.toFixed(2)})
+                        {primaryLabel} (£{ctas.primary.price.toFixed(2)})
                       </a>
                       {ctas.secondary && (
                         <a
                           href={ctas.secondary.href}
                           className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700"
                         >
-                          {ctas.secondary.label} (£{ctas.secondary.price.toFixed(2)})
+                          {secondaryLabel} (£{ctas.secondary.price.toFixed(2)})
+                        </a>
+                      )}
+                      {isInvalid && generatorLink && (
+                        <a
+                          href={generatorLink}
+                          className="rounded border border-purple-200 bg-white px-3 py-2 text-xs font-medium text-purple-700"
+                        >
+                          Try free generator
                         </a>
                       )}
                     </div>
                   );
                 })()}
               </div>
+              {toolUpsell && (
+                <div className="mt-6">
+                  {(() => {
+                    const ctas = getWizardCta({
+                      jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
+                      validator_key: validationSummary.validator_key,
+                      validation_summary: validationSummary,
+                      caseId,
+                      source: 'validator',
+                    });
+                    return (
+                      <ToolUpsellCard
+                        {...toolUpsell}
+                        ctaHref={ctas.primary.href}
+                        ctaLabel={`Upgrade to court-ready pack — £${ctas.primary.price.toFixed(2)}`}
+                      />
+                    );
+                  })()}
+                </div>
+              )}
             </>
           )}
           </div>

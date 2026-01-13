@@ -4,12 +4,12 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
-  title: 'PRT Agreement Scotland',
-  description: 'Create a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Complies with Private Housing (Tenancies) (Scotland) Act 2016 and Repairing Standard. Standard and Premium options available.',
+  title: 'PRT Agreement Scotland 2026 | From £9.99',
+  description: 'Create a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Updated for 2026 under the Private Housing (Tenancies) (Scotland) Act 2016. From £9.99.',
   keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
   openGraph: {
-    title: 'Private Residential Tenancy Agreement (PRT) | Scotland',
-    description: 'Create a legally compliant PRT for Scotland. Open-ended tenancy with full legal compliance.',
+    title: 'Private Residential Tenancy Agreement (PRT) Scotland 2026 | From £9.99',
+    description: 'Create a legally compliant PRT for Scotland. Updated for 2026. Open-ended tenancy with full legal compliance.',
     type: 'website',
     url: getCanonicalUrl('/tenancy-agreements/scotland'),
   },
@@ -129,6 +129,31 @@ export default function ScotlandPRTPage() {
     ],
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: getCanonicalUrl('/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tenancy Agreements',
+        item: getCanonicalUrl('/tenancy-agreements'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Scotland',
+        item: getCanonicalUrl('/tenancy-agreements/scotland'),
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -138,6 +163,10 @@ export default function ScotlandPRTPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
@@ -164,13 +193,13 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-secondary"
               >
                 Create Standard PRT - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-primary"
               >
                 Create Premium PRT - £14.99
@@ -693,7 +722,7 @@ export default function ScotlandPRTPage() {
                     <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                   >
                     Create Standard PRT
@@ -718,7 +747,7 @@ export default function ScotlandPRTPage() {
                     <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium PRT
@@ -1016,6 +1045,27 @@ export default function ScotlandPRTPage() {
           variant="gray"
         />
 
+        {/* Related Links */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/scotland-eviction-notices" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scotland eviction guide
+              </Link>
+              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Landlord tools hub
+              </Link>
+              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Ask Heaven (free landlord Q&amp;A)
+              </Link>
+              <Link href="/blog/scotland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scotland landlord guides (blog)
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
@@ -1025,13 +1075,13 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
                 Standard PRT - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium PRT - £14.99 ⭐
@@ -1049,7 +1099,7 @@ export default function ScotlandPRTPage() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
               <Link href="/tenancy-agreements/england" className="text-blue-600 hover:underline font-semibold">
-                England Assured Shorthold Tenancy (AST) →
+                England AST Agreements →
               </Link>
               <Link href="/tenancy-agreements/wales" className="text-blue-600 hover:underline font-semibold">
                 Wales Occupation Contract →

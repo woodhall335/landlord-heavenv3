@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Generator',
+  title: 'Free Section 8 Notice Generator (England)',
   description:
-    'Generate a free Section 8 notice with grounds for possession. Court-ready version with ground-specific validation for £14.99. Free landlord tool.',
+    'Generate a free Section 8 notice with grounds for possession in England. Upgrade to a court-ready version with ground-specific validation. Free landlord tool.',
   keywords: [
     'free section 8 notice generator',
     'section 8 template',
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     'free section 8 form',
   ],
   openGraph: {
-    title: 'Free Section 8 Notice Generator | Landlord Heaven',
+    title: 'Free Section 8 Notice Generator (England) | Landlord Heaven',
     description:
-      'Generate a free Section 8 notice with grounds for possession. Court-ready version with ground-specific validation.',
+      'Generate a free Section 8 notice with grounds for possession in England. Upgrade for a court-ready version.',
     type: 'website',
     url: getCanonicalUrl('/tools/free-section-8-notice-generator'),
   },
@@ -37,7 +37,7 @@ export default function FreeSection8Layout({ children }: { children: React.React
             '@type': 'HowTo',
             name: 'How to Generate a Section 8 Notice',
             description:
-              'Generate a Section 8 notice with grounds for possession to evict a tenant in England & Wales',
+              'Generate a Section 8 notice with grounds for possession to evict a tenant in England',
             estimatedCost: {
               '@type': 'MonetaryAmount',
               currency: 'GBP',

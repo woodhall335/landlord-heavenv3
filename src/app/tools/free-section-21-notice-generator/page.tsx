@@ -8,9 +8,46 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 // SEO Metadata (exported from separate metadata.ts file for client components)
 // See: src/app/tools/free-section-21-notice-generator/metadata.ts
+
+const faqItems = [
+  {
+    question: 'Is this Section 21 generator free to use?',
+    answer:
+      'Yes. This tool generates a free Section 21 template for England so you can preview the format before upgrading.',
+  },
+  {
+    question: 'Is this template court-ready?',
+    answer:
+      'The free template is a basic preview only. The paid pack includes court-ready formatting and compliance checks.',
+  },
+  {
+    question: 'Which form does this create?',
+    answer:
+      'It creates a Section 21 notice in the prescribed Form 6A format used in England.',
+  },
+  {
+    question: 'Can I use this for Wales or Scotland?',
+    answer:
+      'No. Section 21 notices apply to England only. Wales and Scotland use different notice types.',
+  },
+  {
+    question: 'What do I need to serve a valid Section 21 notice?',
+    answer:
+      'You must follow Form 6A requirements, provide required compliance documents, and give the correct notice period. The paid pack guides you through these steps.',
+  },
+  {
+    question: 'Can I regenerate if I make a mistake?',
+    answer:
+      'Yes. You can edit your details and regenerate the template at any time.',
+  },
+];
 
 export default function FreeSection21Tool() {
   const [formData, setFormData] = useState({
@@ -21,6 +58,27 @@ export default function FreeSection21Tool() {
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+  const upsellConfig = {
+    toolName: 'Free Section 21 Notice Generator',
+    toolType: 'generator' as const,
+    productName: 'Notice Only Pack',
+    ctaLabel: `Upgrade to court-ready pack — ${noticeOnlyPrice}`,
+    ctaHref: '/products/notice-only?product=section21',
+    jurisdiction: 'england',
+    jurisdictionLabel: 'England only',
+    freeIncludes: [
+      'Basic Section 21 template preview',
+      'Manual completion only',
+      'No court validation checks',
+    ],
+    paidIncludes: [
+      'Court-ready Form 6A notice',
+      'Compliance checklist and serving steps',
+      'Evidence-ready pack for court',
+    ],
+  };
 
   // PDF generation function (called after email captured)
   const generatePDF = useCallback(async () => {
@@ -216,6 +274,7 @@ export default function FreeSection21Tool() {
       link.click();
       URL.revokeObjectURL(url);
 
+      setShowUpgradePrompt(true);
       setIsGenerating(false);
     } catch (error) {
       console.error('PDF generation failed:', error);
@@ -243,6 +302,22 @@ export default function FreeSection21Tool() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Tools', url: 'https://landlordheaven.co.uk/tools' },
+          {
+            name: 'Section 21 Generator',
+            url: 'https://landlordheaven.co.uk/tools/free-section-21-notice-generator',
+          },
+        ])}
+      />
+      <StructuredData data={faqPageSchema(faqItems)} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
@@ -250,9 +325,12 @@ export default function FreeSection21Tool() {
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Free Tool</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Section 21 Notice Generator</h1>
+            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 mb-4">
+              England only
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Create a Section 21 Notice Template (England)</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Generate a Basic Section 21 Notice Template for England & Wales
+              Create a free Section 21 notice template in the official Form 6A format.
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
@@ -268,7 +346,7 @@ export default function FreeSection21Tool() {
                 href="/products/notice-only?product=section21"
                 className="hero-btn-secondary"
               >
-                Get Court-Ready Version →
+                Get Court-Ready Pack — {noticeOnlyPrice}
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
@@ -410,6 +488,11 @@ export default function FreeSection21Tool() {
             ? 'Generating...'
             : 'Generate Free Notice'}
         </button>
+        {showUpgradePrompt && (
+          <div className="mt-6">
+            <ToolUpsellCard {...upsellConfig} />
+          </div>
+        )}
       </form>
 
       {/* Comparison Table */}
@@ -428,7 +511,7 @@ export default function FreeSection21Tool() {
                   Free
                 </th>
                 <th className="pb-3 text-center text-sm font-medium text-gray-600">
-                  £14.99
+                  {noticeOnlyPrice}
                 </th>
               </tr>
             </thead>
@@ -485,6 +568,10 @@ export default function FreeSection21Tool() {
         </div>
       </div>
 
+      <div className="mt-10">
+        <ToolUpsellCard {...upsellConfig} />
+      </div>
+
               {/* Educational Content */}
               <div className="mt-8 rounded-xl bg-primary-50 p-6">
                 <h3 className="mb-3 text-lg font-semibold text-gray-900">
@@ -492,9 +579,9 @@ export default function FreeSection21Tool() {
                 </h3>
                 <p className="text-sm text-gray-700 leading-relaxed">
                   A Section 21 notice is a formal notice used by landlords in England
-                  and Wales to end an assured shorthold tenancy (AST) without providing
-                  a specific reason. It requires at least 2 months' notice and must
-                  comply with strict legal requirements to be valid.
+                  to end an assured shorthold tenancy (AST) without providing a specific
+                  reason. It requires at least 2 months' notice and must comply with
+                  strict legal requirements to be valid.
                 </p>
                 <p className="mt-3 text-sm font-semibold text-primary-600">
                   ⚠️ Important: A Section 21 notice can be invalidated if you haven't

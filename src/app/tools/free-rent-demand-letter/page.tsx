@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
-import { RiAlertLine, RiInformationLine, RiExternalLinkLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -23,6 +25,26 @@ export default function RentDemandLetterGenerator() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const upsellConfig = {
+    toolName: 'Free Rent Demand Letter Generator',
+    toolType: 'generator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £199.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Basic demand letter PDF',
+      'Manual arrears follow-up',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'If the tenant does not pay, upgrade for a court-ready money claim bundle with forms and evidence templates.',
+  };
 
   // Set default payment deadline to 14 days from today
   useEffect(() => {
@@ -380,6 +402,11 @@ URL.revokeObjectURL(url);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
@@ -675,50 +702,15 @@ URL.revokeObjectURL(url);
             <p className="text-sm text-success-800 font-medium">
               ✓ Demand letter generated successfully! Your PDF has been downloaded.
             </p>
+            <div className="mt-4">
+              <ToolUpsellCard {...upsellConfig} />
+            </div>
           </div>
         )}
       </form>
 
-      {/* Secondary Upgrade Box */}
-      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-gradient-to-br from-purple-50 to-white p-6">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900">
-          Need to pursue a money claim?
-        </h3>
-        <p className="mb-4 text-sm text-gray-700">
-          If the tenant doesn't pay after receiving your demand letter, you may need to take
-          court action. Our Complete Money Claims Pack includes everything you need.
-        </p>
-        <div className="mb-4">
-          <p className="text-2xl font-bold text-blue-600">£199.99</p>
-          <ul className="mt-3 space-y-2 text-sm text-gray-700">
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Complete Money Claims Pack
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              N1 claim form (England & Wales)
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Form 3A (Scotland)
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Particulars of claim templates
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Evidence bundle templates
-            </li>
-          </ul>
-        </div>
-        <a
-          href="/products/money-claim"
-          className="hero-btn-primary block w-full text-center"
-        >
-          Get Money Claims Pack
-        </a>
+      <div className="mt-8">
+        <ToolUpsellCard {...upsellConfig} />
       </div>
 
       {/* Educational Content */}

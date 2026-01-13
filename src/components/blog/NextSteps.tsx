@@ -33,11 +33,18 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
     lowerSlug.includes('assured-shorthold')
   ) {
     steps.push({
+      href: '/section-21-notice-template',
+      label: 'Section 21 Notice Template',
+      description: 'Free Form 6A template for England landlords',
+      icon: FileText,
+      priority: 1,
+    });
+    steps.push({
       href: '/products/notice-only',
       label: 'Section 21 Notice Pack',
       description: 'Generate a court-ready Section 21 notice in minutes',
       icon: FileText,
-      priority: 1,
+      priority: 3,
     });
     steps.push({
       href: '/tools/validators/section-21',
@@ -55,11 +62,18 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
     lowerSlug.includes('ground-')
   ) {
     steps.push({
+      href: '/section-8-notice-template',
+      label: 'Section 8 Notice Template',
+      description: 'Free Form 3 template for England landlords',
+      icon: FileText,
+      priority: 1,
+    });
+    steps.push({
       href: '/products/complete-pack',
       label: 'Complete Eviction Pack',
       description: 'Section 8 notice with all court documents included',
       icon: FileText,
-      priority: 1,
+      priority: 3,
     });
     steps.push({
       href: '/tools/validators/section-8',

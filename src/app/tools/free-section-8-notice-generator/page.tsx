@@ -8,6 +8,10 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 const COMMON_GROUNDS = [
   { id: 'ground8', name: 'Ground 8', description: 'Rent arrears (8+ weeks/2+ months)' },
@@ -16,6 +20,39 @@ const COMMON_GROUNDS = [
   { id: 'ground12', name: 'Ground 12', description: 'Breach of tenancy agreement' },
   { id: 'ground14', name: 'Ground 14', description: 'Nuisance or annoyance to neighbors' },
   { id: 'ground17', name: 'Ground 17', description: 'False statement inducing grant of tenancy' },
+];
+
+const faqItems = [
+  {
+    question: 'Is this Section 8 generator free to use?',
+    answer:
+      'Yes. This tool generates a free Section 8 template for England so you can preview the format.',
+  },
+  {
+    question: 'Is the free template court-ready?',
+    answer:
+      'The free template is a basic preview. The paid pack includes court-ready formatting and evidence guidance.',
+  },
+  {
+    question: 'Which grounds can I include?',
+    answer:
+      'You can select common grounds such as rent arrears, breach of tenancy, and antisocial behaviour.',
+  },
+  {
+    question: 'Can I use Section 8 in Wales or Scotland?',
+    answer:
+      'No. Section 8 applies to England only. Wales and Scotland use different notice types.',
+  },
+  {
+    question: 'Do I need evidence for Section 8?',
+    answer:
+      'Yes. Grounds-based evictions require evidence. The paid pack includes a checklist and guidance for what to prepare.',
+  },
+  {
+    question: 'Can I regenerate if I need to edit?',
+    answer:
+      'Yes. You can update your answers and regenerate the template at any time.',
+  },
 ];
 
 export default function FreeSection8Tool() {
@@ -28,6 +65,27 @@ export default function FreeSection8Tool() {
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+  const upsellConfig = {
+    toolName: 'Free Section 8 Notice Generator',
+    toolType: 'generator' as const,
+    productName: 'Notice Only Pack',
+    ctaLabel: `Upgrade to court-ready pack — ${noticeOnlyPrice}`,
+    ctaHref: '/products/notice-only?product=section8',
+    jurisdiction: 'england',
+    jurisdictionLabel: 'England only',
+    freeIncludes: [
+      'Basic Section 8 template preview',
+      'Manual completion only',
+      'No grounds validation checks',
+    ],
+    paidIncludes: [
+      'Court-ready Form 3 notice',
+      'Grounds selection and evidence checklist',
+      'Serving steps and court prep guidance',
+    ],
+  };
 
   const toggleGround = (groundId: string) => {
     setFormData((prev) => ({
@@ -259,6 +317,7 @@ export default function FreeSection8Tool() {
       link.click();
       URL.revokeObjectURL(url);
 
+      setShowUpgradePrompt(true);
       setIsGenerating(false);
     } catch (error) {
       console.error('PDF generation failed:', error);
@@ -287,6 +346,22 @@ export default function FreeSection8Tool() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Tools', url: 'https://landlordheaven.co.uk/tools' },
+          {
+            name: 'Section 8 Generator',
+            url: 'https://landlordheaven.co.uk/tools/free-section-8-notice-generator',
+          },
+        ])}
+      />
+      <StructuredData data={faqPageSchema(faqItems)} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
@@ -294,9 +369,12 @@ export default function FreeSection8Tool() {
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Free Tool</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Section 8 Notice Generator</h1>
+            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 mb-4">
+              England only
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Create a Section 8 Notice Template (England)</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Generate a Basic Section 8 Notice with Grounds for Possession
+              Create a free Section 8 notice template with the grounds for possession you need.
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
@@ -312,7 +390,7 @@ export default function FreeSection8Tool() {
                 href="/products/notice-only?product=section8"
                 className="hero-btn-secondary"
               >
-                Get Court-Ready Version →
+                Get Court-Ready Pack — {noticeOnlyPrice}
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
@@ -461,7 +539,16 @@ export default function FreeSection8Tool() {
         >
           {isGenerating ? 'Generating...' : 'Generate Free Notice'}
         </button>
+        {showUpgradePrompt && (
+          <div className="mt-6">
+            <ToolUpsellCard {...upsellConfig} />
+          </div>
+        )}
       </form>
+
+      <div className="mt-10">
+        <ToolUpsellCard {...upsellConfig} />
+      </div>
 
               {/* Educational Content */}
               <div className="mt-8 rounded-xl bg-primary-50 p-6">
