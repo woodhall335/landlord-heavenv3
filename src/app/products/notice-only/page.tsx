@@ -107,7 +107,7 @@ export default function NoticeOnlyPage() {
               Eviction Notice Only
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Legally Valid Possession Notices for England, Wales & Scotland
+              Generate Legally Valid Eviction Notices for England, Wales & Scotland
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
