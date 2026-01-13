@@ -15,7 +15,12 @@ export type FunnelEvent =
   | 'checkout_started'
   | 'payment_success_landed'
   | 'document_download_clicked'
-  | 'case_archived';
+  | 'case_archived'
+  | 'free_tool_viewed'
+  | 'validator_completed'
+  | 'upsell_clicked';
+
+export type ToolType = 'validator' | 'generator' | 'calculator' | 'checker';
 
 /**
  * Event properties for each funnel event (no PII)
@@ -42,6 +47,28 @@ export interface DocumentDownloadClickedProps {
 
 export interface CaseArchivedProps {
   had_paid_order: boolean;
+}
+
+export interface FreeToolViewedProps {
+  tool_name: string;
+  tool_type: ToolType;
+  jurisdiction?: string;
+}
+
+export interface ValidatorCompletedProps {
+  validator_key: string;
+  status: string;
+  blockers: number;
+  warnings: number;
+  jurisdiction?: string;
+}
+
+export interface UpsellClickedProps {
+  tool_name: string;
+  tool_type: ToolType;
+  product: string;
+  destination: string;
+  jurisdiction?: string;
 }
 
 /**
@@ -132,6 +159,61 @@ export function trackCaseArchived(props: CaseArchivedProps): void {
     });
   } catch (error) {
     console.warn('[analytics] Failed to track case_archived:', error);
+  }
+}
+
+/**
+ * Track when a free tool is viewed
+ */
+export function trackFreeToolViewed(props: FreeToolViewedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('free_tool_viewed', {
+      tool_name: props.tool_name,
+      tool_type: props.tool_type,
+      jurisdiction: props.jurisdiction || 'unknown',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track free_tool_viewed:', error);
+  }
+}
+
+/**
+ * Track when a validator completes and returns a result
+ */
+export function trackValidatorCompleted(props: ValidatorCompletedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('validator_completed', {
+      validator_key: props.validator_key,
+      status: props.status,
+      blockers: props.blockers,
+      warnings: props.warnings,
+      jurisdiction: props.jurisdiction || 'unknown',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track validator_completed:', error);
+  }
+}
+
+/**
+ * Track when a user clicks an upsell CTA
+ */
+export function trackUpsellClicked(props: UpsellClickedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('upsell_clicked', {
+      tool_name: props.tool_name,
+      tool_type: props.tool_type,
+      product: props.product,
+      destination: props.destination,
+      jurisdiction: props.jurisdiction || 'unknown',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track upsell_clicked:', error);
   }
 }
 

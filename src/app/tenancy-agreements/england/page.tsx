@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'AST Agreement England',
-  description: 'Create a legally compliant Assured Shorthold Tenancy Agreement for England. Covers Housing Act 1988, Tenant Fees Act 2019, and all legal requirements. Standard (£9.99) and Premium (£14.99) options available.',
+  title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
+  description: 'Create a legally compliant Assured Shorthold Tenancy Agreement (AST) for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £9.99.',
   keywords: 'AST, Assured Shorthold Tenancy, tenancy agreement England, AST agreement, residential tenancy UK, landlord forms, rental agreement, housing act 1988, tenant fees act 2019',
   openGraph: {
-    title: 'Assured Shorthold Tenancy Agreement (AST) | England',
-    description: 'Create a legally compliant AST for England. Standard (£9.99) and Premium (£14.99) options.',
+    title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
+    description: 'Create a legally compliant AST for England. Updated for 2026. Standard (£9.99) and Premium (£14.99) options.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/tenancy-agreements/england',
   },
@@ -140,6 +140,31 @@ export default function EnglandASTPage() {
     ],
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://landlordheaven.co.uk/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tenancy Agreements',
+        item: 'https://landlordheaven.co.uk/tenancy-agreements',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'England',
+        item: 'https://landlordheaven.co.uk/tenancy-agreements/england',
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -149,6 +174,10 @@ export default function EnglandASTPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
@@ -178,13 +207,13 @@ export default function EnglandASTPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-secondary"
               >
                 Create Standard AST - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-primary"
               >
                 Create Premium AST - £14.99
@@ -288,7 +317,7 @@ export default function EnglandASTPage() {
                   <li>✓ Standard terms & conditions</li>
                 </ul>
                 <Link
-                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
                   className="hero-btn-secondary block text-center"
                 >
                   Create Standard AST
@@ -311,12 +340,33 @@ export default function EnglandASTPage() {
                   <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
-                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
                   className="hero-btn-primary block text-center"
                 >
                   Create Premium AST
                 </Link>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Links */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/how-to-evict-tenant#england" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                England eviction guide
+              </Link>
+              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Landlord tools hub
+              </Link>
+              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Ask Heaven (free landlord Q&amp;A)
+              </Link>
+              <Link href="/blog/england" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                England landlord guides (blog)
+              </Link>
             </div>
           </div>
         </section>
@@ -357,13 +407,13 @@ export default function EnglandASTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-secondary"
               >
                 Standard AST - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-primary"
               >
                 Premium AST - £14.99

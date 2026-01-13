@@ -58,8 +58,8 @@ const complianceLinks = {
 };
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template - Form 6A Free',
-  description: 'Download a free Section 21 notice template or generate a court-ready Form 6A in minutes. Valid until May 2026. Trusted by 10,000+ UK landlords.',
+  title: 'Section 21 Notice Template (England) – Free Form 6A',
+  description: 'Download a free Section 21 notice template for England or generate a court-ready Form 6A in minutes. Valid until May 2026. Trusted by 10,000+ UK landlords.',
   keywords: [
     'section 21 notice template',
     'section 21 template',
@@ -69,8 +69,8 @@ export const metadata: Metadata = {
     'eviction notice template',
   ],
   openGraph: {
-    title: 'Section 21 Notice Template - Free Download | Landlord Heaven',
-    description: 'Get a free Section 21 notice template or generate a court-ready Form 6A. Valid until May 2026.',
+    title: 'Section 21 Notice Template (England) - Free Form 6A | Landlord Heaven',
+    description: 'Get a free Section 21 notice template for England or generate a court-ready Form 6A. Valid until May 2026.',
     type: 'website',
   },
 };
@@ -80,12 +80,12 @@ export default function Section21NoticeTemplatePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Section 21 Notice Template',
-    description: 'Free Section 21 notice template and court-ready Form 6A generator for UK landlords.',
+    description: 'Free Section 21 notice template and court-ready Form 6A generator for England.',
     url: 'https://landlordheaven.co.uk/section-21-notice-template',
     mainEntity: {
       '@type': 'Product',
       name: 'Section 21 Notice (Form 6A)',
-      description: 'Court-ready Section 21 eviction notice for UK landlords',
+      description: 'Court-ready Section 21 eviction notice for England landlords',
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
@@ -158,7 +158,7 @@ export default function Section21NoticeTemplatePage() {
         <StandardHero
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
-          title="Section 21 Notice Template"
+          title="Section 21 Notice Template (England) / Court-Ready Form 6A"
           subtitle={<>Download a free <strong>Section 21 notice template</strong> or generate a court-ready <strong>Form 6A</strong> in minutes. Trusted by over 10,000 UK landlords.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £39.99", href: wizardLink }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}

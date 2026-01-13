@@ -4,12 +4,12 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
-  title: 'Private Tenancy | Northern Ireland',
-  description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Fully compliant with Private Tenancies Act (NI) 2022 and 2025 legal updates including mandatory EICR. Standard and Premium options.',
+  title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
+  description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022 and 2025 EICR rules. From £9.99.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {
-    title: 'Private Tenancy Agreement | Northern Ireland',
-    description: 'Create a legally compliant Private Tenancy Agreement for NI. Includes 2025 EICR requirements and rent increase restrictions.',
+    title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
+    description: 'Create a legally compliant Private Tenancy Agreement for NI. Updated for 2026 with 2025 EICR requirements and rent increase restrictions.',
     type: 'website',
     url: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
   },
@@ -53,6 +53,14 @@ export default function NorthernIrelandTenancyPage() {
         acceptedAnswer: {
           '@type': 'Answer',
           text: 'From 2025, landlords can increase rent once per year with a minimum 12-month gap between increases. You must give 3 months written notice of any rent increase. Tenants have the right to challenge excessive increases.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do I need a written tenancy agreement in Northern Ireland?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'A written agreement is strongly recommended and makes compliance, deposit protection, and dispute resolution far easier. Our wizard generates a complete written Private Tenancy Agreement with the required terms for Northern Ireland.',
         },
       },
     ],
@@ -113,6 +121,31 @@ export default function NorthernIrelandTenancyPage() {
     ],
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: getCanonicalUrl('/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tenancy Agreements',
+        item: getCanonicalUrl('/tenancy-agreements'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Northern Ireland',
+        item: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -122,6 +155,10 @@ export default function NorthernIrelandTenancyPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
@@ -153,13 +190,13 @@ export default function NorthernIrelandTenancyPage() {
             </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-secondary"
               >
                 Create Standard - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-primary"
               >
                 Create Premium - £14.99
@@ -713,7 +750,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
@@ -737,7 +774,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium
@@ -957,6 +994,10 @@ export default function NorthernIrelandTenancyPage() {
               answer: "In Northern Ireland, the maximum deposit is 2 months' rent. Our wizard automatically validates your deposit amount to ensure compliance. You must also protect the deposit in an approved scheme (TDS Northern Ireland or MyDeposits Northern Ireland) within 28 days of receipt."
             },
             {
+              question: "Do I need a written tenancy agreement in Northern Ireland?",
+              answer: "A written agreement is strongly recommended and makes compliance, deposit protection, and dispute resolution far easier. Our wizard generates a complete written Private Tenancy Agreement with the required terms for Northern Ireland."
+            },
+            {
               question: "How often can I increase rent in Northern Ireland?",
               answer: "From 2025, landlords can increase rent once per year with a minimum 12-month gap between increases. You must give 3 months' written notice of any rent increase. Tenants have the right to challenge excessive increases."
             },
@@ -985,6 +1026,27 @@ export default function NorthernIrelandTenancyPage() {
           variant="gray"
         />
 
+        {/* Related Links */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/how-to-evict-tenant#northern-ireland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Northern Ireland eviction guide
+              </Link>
+              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Landlord tools hub
+              </Link>
+              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Ask Heaven (free landlord Q&amp;A)
+              </Link>
+              <Link href="/blog/northern-ireland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Northern Ireland landlord guides (blog)
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
@@ -994,13 +1056,13 @@ export default function NorthernIrelandTenancyPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 Standard - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium - £14.99 ⭐

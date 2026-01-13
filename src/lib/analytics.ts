@@ -17,6 +17,9 @@ export {
   trackPaymentSuccessLanded,
   trackDocumentDownloadClicked,
   trackCaseArchived,
+  trackFreeToolViewed,
+  trackValidatorCompleted,
+  trackUpsellClicked,
   trackEvent as trackVercelEvent,
 } from './analytics/track';
 

@@ -9,6 +9,9 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -34,6 +37,27 @@ export default function HMOLicenseChecker() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const upsellConfig = {
+    toolName: 'HMO License Checker',
+    toolType: 'checker' as const,
+    productName: 'Complete Eviction Pack',
+    ctaLabel: `Upgrade to court-ready pack — ${PRODUCTS.complete_pack.displayPrice}`,
+    ctaHref: '/products/complete-pack',
+    jurisdiction: 'england',
+    jurisdictionLabel: 'England only',
+    freeIncludes: [
+      'HMO licensing likelihood check',
+      'Council lookup by postcode',
+      'PDF summary download',
+    ],
+    paidIncludes: [
+      'Court-ready eviction notice pack',
+      'HMO compliance reminders in the workflow',
+      'Serving steps and court forms bundle',
+    ],
+    description:
+      'If HMO compliance affects your eviction timeline, upgrade for the court-ready notice and forms pack.',
+  };
 
   // PDF generation function (called after email captured)
   const generatePDF = useCallback(async () => {
@@ -353,6 +377,11 @@ export default function HMOLicenseChecker() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
@@ -575,9 +604,16 @@ export default function HMOLicenseChecker() {
             <p className="text-sm text-success-800 font-medium">
               ✓ Assessment generated successfully! Your PDF has been downloaded.
             </p>
+            <div className="mt-4">
+              <ToolUpsellCard {...upsellConfig} />
+            </div>
           </div>
         )}
       </form>
+
+      <div className="mt-8">
+        <ToolUpsellCard {...upsellConfig} />
+      </div>
 
       {/* Educational Content */}
       <div className="mt-12 space-y-8">

@@ -38,8 +38,8 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice Template - Free Download',
-  description: 'Download a free Section 8 notice template for grounds-based eviction. Rent arrears, antisocial behaviour, property damage. Court-ready documents for UK landlords.',
+  title: 'Section 8 Notice Template (England) - Free Download',
+  description: 'Download a free Section 8 notice template for England. Grounds-based eviction for rent arrears, antisocial behaviour, and property damage. Court-ready documents for UK landlords.',
   keywords: [
     'section 8 notice template',
     'section 8 eviction notice',
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
     'landlord eviction grounds',
   ],
   openGraph: {
-    title: 'Section 8 Notice Template - Free Download | Landlord Heaven',
-    description: 'Download a free Section 8 notice template for grounds-based eviction. Court-ready documents for UK landlords.',
+    title: 'Section 8 Notice Template (England) - Free Download | Landlord Heaven',
+    description: 'Download a free Section 8 notice template for England. Grounds-based eviction with court-ready documents for UK landlords.',
     type: 'website',
   },
 };
@@ -61,12 +61,12 @@ export default function Section8NoticeTemplatePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Section 8 Notice Template',
-    description: 'Free Section 8 notice template for grounds-based eviction. Covers rent arrears, antisocial behaviour, and more.',
+    description: 'Free Section 8 notice template for England grounds-based eviction. Covers rent arrears, antisocial behaviour, and more.',
     url: 'https://landlordheaven.co.uk/section-8-notice-template',
     mainEntity: {
       '@type': 'Product',
       name: 'Section 8 Notice Template',
-      description: 'Court-ready Section 8 eviction notice for UK landlords',
+      description: 'Court-ready Section 8 eviction notice for England landlords',
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
@@ -147,8 +147,8 @@ export default function Section8NoticeTemplatePage() {
         <StandardHero
           badge="Works after May 2026"
           badgeIcon={<CheckCircle className="w-4 h-4" />}
-          title="Section 8 Notice Template"
-          subtitle={<>Download a free <strong>Section 8 notice template</strong> for grounds-based eviction. Rent arrears, antisocial behaviour, property damage and more.</>}
+          title="Section 8 Notice Template (England) / Court-Ready Form 3"
+          subtitle={<>Download a free <strong>Section 8 notice template</strong> for England. Grounds-based eviction for rent arrears, antisocial behaviour, property damage and more.</>}
           primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
           variant="pastel"

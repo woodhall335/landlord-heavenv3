@@ -20,6 +20,7 @@ import {
   trackValidatorView,
   trackValidatorReportRequested,
 } from '@/lib/analytics';
+import { ToolUpsellCard, type ToolUpsellCardProps } from '@/components/tools/ToolUpsellCard';
 
 export interface ValidatorCTA {
   label: string;
@@ -58,6 +59,8 @@ export interface ValidatorPageProps {
   additionalInfo?: string;
   /** Hide the hero section (use when SSR content provides the H1/intro above) */
   hideHeroSection?: boolean;
+  /** Upsell configuration for tool funnel */
+  toolUpsell?: ToolUpsellCardProps;
 }
 
 const JURISDICTION_OPTIONS: { value: Jurisdiction; label: string }[] = [
@@ -96,6 +99,7 @@ export function ValidatorPage({
   features = [],
   additionalInfo,
   hideHeroSection = false,
+  toolUpsell,
 }: ValidatorPageProps): React.ReactElement {
   const needsJurisdictionSelector = jurisdictionProp === 'all';
 
@@ -294,6 +298,7 @@ export function ValidatorPage({
                     label="Document Upload"
                     description="Drag and drop or click to upload your document"
                     evidenceCategory={VALIDATOR_TO_EVIDENCE_CATEGORY[validatorKey] || validatorKey}
+                    toolUpsell={toolUpsell}
                   />
 
                   {/* Email Report Section - Single unified CTA */}
@@ -347,6 +352,12 @@ export function ValidatorPage({
                   <p className="text-sm text-gray-700 leading-relaxed">
                     {additionalInfo}
                   </p>
+                </div>
+              )}
+
+              {toolUpsell && (
+                <div className="mt-8">
+                  <ToolUpsellCard {...toolUpsell} />
                 </div>
               )}
             </div>

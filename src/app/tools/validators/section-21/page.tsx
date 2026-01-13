@@ -12,6 +12,8 @@ import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 
 // Pre-built wizard links for Section 21 validator page
 const wizardLinkNoticeOnly = buildWizardLink({
@@ -28,10 +30,30 @@ const wizardLinkCompletePack = buildWizardLink({
   topic: 'eviction',
 });
 
+const upsellConfig = {
+  toolName: 'Section 21 Notice Validator',
+  toolType: 'validator' as const,
+  productName: 'Notice Only Pack',
+  ctaLabel: `Upgrade to court-ready pack — ${PRODUCTS.notice_only.displayPrice}`,
+  ctaHref: wizardLinkNoticeOnly,
+  jurisdiction: 'england',
+  jurisdictionLabel: 'England only',
+  freeIncludes: [
+    'Instant validity preview',
+    'Compliance issue checklist',
+    'Emailable report summary',
+  ],
+  paidIncludes: [
+    'Court-ready Section 21 notice',
+    'Serving steps and evidence checklist',
+    'Bundled compliance guidance for court',
+  ],
+};
+
 export const metadata: Metadata = {
-  title: 'Section 21 Validity Checker – Is My Notice Valid? | Free Tool',
+  title: 'Free Section 21 Validity Checker (England) – Check My Notice',
   description:
-    'Free Section 21 notice checker for England. Upload your Form 6A for an instant validity report. Checks deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and notice periods. England only.',
+    'Free Section 21 notice checker for England. Upload your Form 6A for an instant validity report. Checks deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and notice periods.',
   keywords: [
     'section 21 validity checker',
     'section 21 notice checker',
@@ -44,7 +66,7 @@ export const metadata: Metadata = {
     'assured shorthold tenancy eviction',
   ],
   openGraph: {
-    title: 'Section 21 Validity Checker – Is My Notice Valid? | Free Tool',
+    title: 'Free Section 21 Validity Checker (England) | Landlord Heaven',
     description:
       'Free online Section 21 notice checker for England landlords. Upload your Form 6A for instant validity verification.',
     type: 'website',
@@ -165,6 +187,11 @@ const howToSchema = {
 export default function Section21ValidatorPage() {
   return (
     <>
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Structured Data */}
       <StructuredData data={faqSchema} />
       <StructuredData data={howToSchema} />
@@ -184,9 +211,12 @@ export default function Section21ValidatorPage() {
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-8 md:pt-32">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 mb-4">
+              England only
+            </div>
             {/* H1 - SSR Rendered */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
-              Section 21 Validity Checker – Is My Notice Valid?
+              Check Your Section 21 Notice (England)
             </h1>
 
             {/* Intro paragraph with target keywords */}
@@ -355,6 +385,7 @@ export default function Section21ValidatorPage() {
         allowedJurisdictions={['england']}
         caseType="eviction"
         productVariant="section21_england"
+        toolUpsell={upsellConfig}
         features={[
           'Form 6A compliance verification',
           'Deposit protection status check',
