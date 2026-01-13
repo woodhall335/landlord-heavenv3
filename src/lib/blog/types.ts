@@ -41,4 +41,5 @@ export interface BlogPost {
   content: React.ReactNode;
   faqs?: FAQItem[]; // Optional FAQ section for rich snippets
   sources?: SourceLink[]; // Official sources for EEAT
+  canonicalSlug?: string; // For near-duplicate posts, point to the canonical version
 }

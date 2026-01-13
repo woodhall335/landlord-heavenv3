@@ -207,9 +207,9 @@ const faqItems = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Ask Heaven – Free UK Landlord Q&A Tool',
+  title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
   description:
-    'Free landlord advice for England, Wales, Scotland and NI. Get answers on evictions, deposit protection, EPC rules, gas safety, EICR, smoke alarms and right to rent.',
+    'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
   keywords: [
     'landlord advice',
     'landlord Q&A',
@@ -232,9 +232,9 @@ export const metadata: Metadata = {
     'right to rent checks landlord',
   ],
   openGraph: {
-    title: 'Ask Heaven – Free UK Landlord Q&A Tool',
+    title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
     description:
-      'Get instant answers to landlord-tenant questions for England, Wales, Scotland, and Northern Ireland. Free advice on evictions, rent arrears, and tenancy agreements.',
+      'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
     type: 'website',
     url: getCanonicalUrl('/ask-heaven'),
   },

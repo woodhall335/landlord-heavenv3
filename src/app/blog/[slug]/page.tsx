@@ -234,7 +234,8 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const truncatedTitle = post.title.length > maxTitleLength
     ? post.title.substring(0, maxTitleLength - 3) + '...'
     : post.title;
-  const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
+  // Use canonicalSlug if this post points to another as the canonical version
+  const canonicalUrl = getCanonicalUrl(`/blog/${post.canonicalSlug || slug}`);
 
   return {
     title: truncatedTitle, // Layout template adds "| Landlord Heaven"
