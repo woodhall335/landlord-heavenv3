@@ -9,6 +9,12 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  getNextStepsCTAs,
+  detectJurisdiction,
+  ENGLAND_ONLY_URLS,
+  type NextStepsCTA,
+} from '../src/lib/blog/next-steps-cta';
 
 // Types matching src/lib/blog/types.ts
 interface BlogPost {
@@ -18,12 +24,8 @@ interface BlogPost {
   tags: string[];
 }
 
-// Minimal StepLink for audit
-interface StepLink {
-  href: string;
-  label: string;
-  priority: number;
-}
+// Alias for compatibility
+type StepLink = NextStepsCTA;
 
 // Routes that exist - validated against src/app directory structure
 const EXISTING_ROUTES = new Set([
@@ -103,348 +105,25 @@ function detectCluster(slug: string, tags: string[]): string {
   return 'General';
 }
 
-function detectJurisdiction(slug: string): string {
-  const lowerSlug = slug.toLowerCase();
-  if (lowerSlug.startsWith('england-')) return 'England';
-  if (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) return 'Wales';
-  if (lowerSlug.startsWith('scotland-')) return 'Scotland';
-  if (lowerSlug.startsWith('northern-ireland-')) return 'NI';
-  if (lowerSlug.startsWith('uk-')) return 'UK-Wide';
-  return 'England'; // Default assumption
+// Use detectJurisdiction from next-steps-cta.ts but format for display
+function getJurisdictionDisplay(slug: string): string {
+  const jurisdiction = detectJurisdiction(slug);
+  const displayMap: Record<string, string> = {
+    'england': 'England',
+    'wales': 'Wales',
+    'scotland': 'Scotland',
+    'northern-ireland': 'NI',
+    'uk-wide': 'UK-Wide',
+  };
+  return displayMap[jurisdiction] || 'England';
 }
 
 /**
- * Replicate the NextSteps logic for CTA computation
- * This mirrors src/components/blog/NextSteps.tsx getNextStepsForPost()
+ * Wrapper for getNextStepsCTAs from the shared helper
+ * Uses the same logic as production NextSteps component
  */
 function getNextStepsForPost(slug: string, category: string, tags: string[]): StepLink[] {
-  const steps: StepLink[] = [];
-  const lowerTags = tags.map((t) => t.toLowerCase());
-  const lowerSlug = slug.toLowerCase();
-  const lowerCategory = category.toLowerCase();
-
-  // Check for Section 21 related content
-  if (
-    lowerSlug.includes('section-21') ||
-    lowerTags.some((t) => t.includes('section 21')) ||
-    lowerSlug.includes('no-fault') ||
-    lowerSlug.includes('assured-shorthold')
-  ) {
-    steps.push({
-      href: '/section-21-notice-template',
-      label: 'Section 21 Notice Template',
-      priority: 1,
-    });
-    steps.push({
-      href: '/products/notice-only',
-      label: 'Section 21 Notice Pack',
-      priority: 3,
-    });
-    steps.push({
-      href: '/tools/validators/section-21',
-      label: 'Section 21 Validity Checker',
-      priority: 2,
-    });
-  }
-
-  // Check for Section 8 related content (England only)
-  // Exclude Scotland/Wales/NI posts from matching on 'ground-' since they have different legal frameworks
-  const isEnglandContent = !lowerSlug.startsWith('scotland-') &&
-                           !lowerSlug.startsWith('wales-') &&
-                           !lowerSlug.startsWith('northern-ireland-');
-  const isSection8Related = lowerSlug.includes('section-8') ||
-    lowerTags.some((t) => t.includes('section 8')) ||
-    (lowerSlug.includes('ground-') && isEnglandContent);
-
-  if (isSection8Related) {
-    steps.push({
-      href: '/section-8-notice-template',
-      label: 'Section 8 Notice Template',
-      priority: 1,
-    });
-    steps.push({
-      href: '/products/complete-pack',
-      label: 'Complete Eviction Pack',
-      priority: 3,
-    });
-    steps.push({
-      href: '/tools/validators/section-8',
-      label: 'Section 8 Grounds Checker',
-      priority: 2,
-    });
-  }
-
-  // Check for rent arrears content
-  if (
-    lowerSlug.includes('rent-arrears') ||
-    lowerSlug.includes('unpaid-rent') ||
-    lowerSlug.includes('money-claim') ||
-    lowerTags.some((t) => t.includes('arrears'))
-  ) {
-    steps.push({
-      href: '/products/money-claim',
-      label: 'Money Claim Pack',
-      priority: 1,
-    });
-    steps.push({
-      href: '/tools/rent-arrears-calculator',
-      label: 'Rent Arrears Calculator',
-      priority: 2,
-    });
-  }
-
-  // Check for tenancy agreement content
-  if (
-    lowerSlug.includes('tenancy-agreement') ||
-    lowerSlug.includes('ast') ||
-    lowerSlug.includes('occupation-contract') ||
-    lowerSlug.includes('prt') ||
-    lowerCategory.includes('tenancy')
-  ) {
-    steps.push({
-      href: '/products/ast',
-      label: 'Tenancy Agreement Generator',
-      priority: 1,
-    });
-    steps.push({
-      href: '/tenancy-agreement-template',
-      label: 'Tenancy Agreement Template',
-      priority: 2,
-    });
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Tenancy Agreements',
-      priority: 3,
-    });
-  }
-
-  // Check for Wales-specific content
-  if (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) {
-    steps.push({
-      href: '/wales-eviction-notices',
-      label: 'Wales Eviction Guide',
-      priority: 1,
-    });
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask Heaven for Wales',
-      priority: 2,
-    });
-    if (!steps.some((s) => s.href.includes('notice-only'))) {
-      steps.push({
-        href: '/products/notice-only',
-        label: 'Wales Notice Pack',
-        priority: 3,
-      });
-    }
-  }
-
-  // Check for Scotland-specific content
-  if (lowerSlug.startsWith('scotland-')) {
-    steps.push({
-      href: '/scotland-eviction-notices',
-      label: 'Scotland Eviction Guide',
-      priority: 1,
-    });
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask Heaven for Scotland',
-      priority: 2,
-    });
-    if (!steps.some((s) => s.href.includes('notice-only'))) {
-      steps.push({
-        href: '/products/notice-only',
-        label: 'Scotland Notice Pack',
-        priority: 3,
-      });
-    }
-  }
-
-  // Check for eviction/possession content
-  if (
-    lowerSlug.includes('eviction') ||
-    lowerSlug.includes('possession') ||
-    lowerSlug.includes('bailiff') ||
-    lowerCategory.includes('eviction')
-  ) {
-    if (!steps.some((s) => s.href.includes('complete-pack'))) {
-      steps.push({
-        href: '/products/complete-pack',
-        label: 'Complete Eviction Pack',
-        priority: 1,
-      });
-    }
-  }
-
-  // Check for deposit protection content
-  if (
-    lowerSlug.includes('deposit') ||
-    lowerTags.some((t) => t.includes('deposit'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Deposit Rules',
-      priority: 2,
-    });
-  }
-
-  // Check for gas safety content
-  if (
-    lowerSlug.includes('gas-safety') ||
-    lowerSlug.includes('gas-safe') ||
-    lowerTags.some((t) => t.includes('gas safety'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Gas Safety',
-      priority: 2,
-    });
-  }
-
-  // Check for EPC content
-  if (
-    lowerSlug.includes('epc') ||
-    lowerSlug.includes('energy-performance') ||
-    lowerTags.some((t) => t.includes('epc'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About EPC Rules',
-      priority: 2,
-    });
-  }
-
-  // Check for electrical safety / EICR content
-  if (
-    lowerSlug.includes('eicr') ||
-    lowerSlug.includes('electrical-safety') ||
-    lowerTags.some((t) => t.includes('eicr') || t.includes('electrical'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About EICR Rules',
-      priority: 2,
-    });
-  }
-
-  // Check for smoke/CO alarm / fire safety content
-  if (
-    lowerSlug.includes('smoke') ||
-    lowerSlug.includes('fire-safety') ||
-    lowerSlug.includes('carbon-monoxide') ||
-    lowerSlug.includes('co-alarm') ||
-    lowerTags.some((t) => t.includes('smoke') || t.includes('fire safety'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Fire Safety',
-      priority: 2,
-    });
-  }
-
-  // Check for right to rent content
-  if (
-    lowerSlug.includes('right-to-rent') ||
-    lowerTags.some((t) => t.includes('right to rent'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Right to Rent',
-      priority: 2,
-    });
-  }
-
-  // Check for inventory content
-  if (
-    lowerSlug.includes('inventory') ||
-    lowerTags.some((t) => t.includes('inventory'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About Inventories',
-      priority: 3,
-    });
-  }
-
-  // Check for Northern Ireland content
-  if (lowerSlug.startsWith('northern-ireland-')) {
-    if (!steps.some((s) => s.href.includes('ask-heaven'))) {
-      steps.push({
-        href: '/ask-heaven',
-        label: 'Ask Heaven for NI',
-        priority: 2,
-      });
-    }
-    if (!steps.some((s) => s.href.includes('ast'))) {
-      steps.push({
-        href: '/products/ast',
-        label: 'NI Tenancy Agreement',
-        priority: 3,
-      });
-    }
-  }
-
-  // Check for HMO content
-  if (
-    lowerSlug.includes('hmo') ||
-    lowerTags.some((t) => t.includes('hmo'))
-  ) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask About HMO Rules',
-      priority: 3,
-    });
-  }
-
-  // Check for Rent Smart Wales (specific case)
-  if (lowerSlug === 'rent-smart-wales') {
-    steps.push({
-      href: '/wales-eviction-notices',
-      label: 'Wales Eviction Guide',
-      priority: 1,
-    });
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask Heaven for Wales',
-      priority: 2,
-    });
-  }
-
-  // Enhanced fallback for general UK-wide landlord guides
-  if (steps.length === 0 || (steps.length === 1 && steps[0].priority >= 10)) {
-    steps.push({
-      href: '/ask-heaven',
-      label: 'Ask Heaven',
-      priority: 1,
-    });
-    if (!steps.some((s) => s.href.includes('ast'))) {
-      steps.push({
-        href: '/products/ast',
-        label: 'Tenancy Agreement Generator',
-        priority: 2,
-      });
-    }
-    steps.push({
-      href: '/how-to-evict-tenant',
-      label: 'UK Eviction Guide',
-      priority: 3,
-    });
-  }
-
-  // Always add pricing as a fallback
-  if (!steps.some((s) => s.href === '/pricing')) {
-    steps.push({
-      href: '/pricing',
-      label: 'View All Products',
-      priority: 10,
-    });
-  }
-
-  // Sort by priority, remove duplicates, take top 4
-  return steps
-    .sort((a, b) => a.priority - b.priority)
-    .filter((step, index, arr) => arr.findIndex((s) => s.href === step.href) === index)
-    .slice(0, 4);
+  return getNextStepsCTAs({ slug, tags, category });
 }
 
 function isMeaningfulCTA(href: string): boolean {
@@ -538,7 +217,7 @@ async function main() {
     const steps = getNextStepsForPost(post.slug, post.category, post.tags);
     const meaningfulSteps = steps.filter(s => isMeaningfulCTA(s.href));
     const cluster = detectCluster(post.slug, post.tags);
-    const jurisdiction = detectJurisdiction(post.slug);
+    const jurisdiction = getJurisdictionDisplay(post.slug);
 
     // Update cluster stats
     if (!clusterStats[cluster]) {

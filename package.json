@@ -25,6 +25,7 @@
     "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts",
     "validate:wizard-mappings": "npx tsx scripts/validate-wizard-mappings.ts",
     "audit:legal-v2": "npx tsx scripts/legal-validity-audit-v2.1.ts",
+    "audit:cta-jurisdiction": "npx tsx scripts/jurisdiction-cta-audit.ts",
     "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2"
   },
   "dependencies": {
