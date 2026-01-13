@@ -100,16 +100,16 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'eviction', type: 'wizard' },
-      { label: 'Complete Pack', href: '/products/complete-pack', price: 149.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Complete Pack', href: '/products/complete-pack', price: 199.99, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Money Claim Pack', href: '/products/money-claim', price: 179.99, topic: 'arrears', type: 'wizard' },
-      { label: 'Notice Only', href: '/products/notice-only', price: 29.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Money Claim Pack', href: '/products/money-claim', price: 199.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },

@@ -29,9 +29,9 @@ export interface CtaInput {
 }
 
 const PRICE_MAP: Record<ProductKey, number> = {
-  notice_only: 29.99,
-  complete_pack: 149.99,
-  money_claim: 179.99,
+  notice_only: 39.99,
+  complete_pack: 199.99,
+  money_claim: 199.99,
   ast_standard: 9.99,
   ast_premium: 14.99,
 };

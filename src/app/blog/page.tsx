@@ -10,6 +10,7 @@ import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/c
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FileText, Scale, Clock, Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 export const metadata: Metadata = {
   title: 'Landlord Guides & Legal Resources',
@@ -214,13 +215,13 @@ export default function BlogPage() {
                   href="/products/notice-only"
                   className="hero-btn-primary"
                 >
-                  Section 21 Notice — £39.99 →
+                  Section 21 Notice — {PRODUCTS.notice_only.displayPrice} →
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="hero-btn-secondary"
                 >
-                  Complete Pack — £199.99 →
+                  Complete Pack — {PRODUCTS.complete_pack.displayPrice} →
                 </Link>
               </div>
 
