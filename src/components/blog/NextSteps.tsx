@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowRight, FileText, Calculator, Shield, Scale } from 'lucide-react';
+import { ArrowRight, FileText, Calculator, Shield, Scale, MessageCircle, Home, Flame, Zap, ThermometerSun, Users, ClipboardList } from 'lucide-react';
+import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 
 interface NextStepsProps {
   slug: string;
@@ -14,6 +15,42 @@ interface StepLink {
   icon: React.ComponentType<{ className?: string }>;
   priority: number;
 }
+
+// Map compliance topics to Ask Heaven topics and prompts
+const COMPLIANCE_ASK_HEAVEN_MAP: Record<string, { topic: AskHeavenTopic; prompt: string }> = {
+  deposit: {
+    topic: 'deposit',
+    prompt: 'What are the deposit protection requirements for landlords?',
+  },
+  gas_safety: {
+    topic: 'gas_safety',
+    prompt: 'When must a landlord provide a gas safety certificate?',
+  },
+  epc: {
+    topic: 'epc',
+    prompt: 'What EPC rating is required to let a property?',
+  },
+  eicr: {
+    topic: 'eicr',
+    prompt: 'Do landlords need an EICR and how often?',
+  },
+  smoke_alarm: {
+    topic: 'smoke_alarms',
+    prompt: 'What are the smoke and CO alarm rules for landlords?',
+  },
+  right_to_rent: {
+    topic: 'right_to_rent',
+    prompt: 'Do I need to do right to rent checks and how?',
+  },
+  fire_safety: {
+    topic: 'smoke_alarms',
+    prompt: 'What are the fire safety requirements for landlords?',
+  },
+  inventory: {
+    topic: 'general',
+    prompt: 'What should be included in a property inventory?',
+  },
+};
 
 /**
  * Determines relevant next steps based on blog post content
@@ -169,6 +206,200 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
         priority: 1,
       });
     }
+  }
+
+  // Check for deposit protection content
+  if (
+    lowerSlug.includes('deposit') ||
+    lowerTags.some((t) => t.includes('deposit'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.deposit;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Deposit Rules',
+      description: 'Get instant answers about deposit protection requirements',
+      icon: MessageCircle,
+      priority: 2,
+    });
+  }
+
+  // Check for gas safety content
+  if (
+    lowerSlug.includes('gas-safety') ||
+    lowerSlug.includes('gas-safe') ||
+    lowerTags.some((t) => t.includes('gas safety'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.gas_safety;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Gas Safety',
+      description: 'Get instant answers about gas safety certificates',
+      icon: Flame,
+      priority: 2,
+    });
+  }
+
+  // Check for EPC content
+  if (
+    lowerSlug.includes('epc') ||
+    lowerSlug.includes('energy-performance') ||
+    lowerTags.some((t) => t.includes('epc'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.epc;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About EPC Rules',
+      description: 'Get instant answers about EPC requirements',
+      icon: ThermometerSun,
+      priority: 2,
+    });
+  }
+
+  // Check for electrical safety / EICR content
+  if (
+    lowerSlug.includes('eicr') ||
+    lowerSlug.includes('electrical-safety') ||
+    lowerTags.some((t) => t.includes('eicr') || t.includes('electrical'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.eicr;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About EICR Rules',
+      description: 'Get instant answers about electrical safety requirements',
+      icon: Zap,
+      priority: 2,
+    });
+  }
+
+  // Check for smoke/CO alarm / fire safety content
+  if (
+    lowerSlug.includes('smoke') ||
+    lowerSlug.includes('fire-safety') ||
+    lowerSlug.includes('carbon-monoxide') ||
+    lowerSlug.includes('co-alarm') ||
+    lowerTags.some((t) => t.includes('smoke') || t.includes('fire safety'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.smoke_alarm;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Fire Safety',
+      description: 'Get instant answers about smoke and CO alarm requirements',
+      icon: Flame,
+      priority: 2,
+    });
+  }
+
+  // Check for right to rent content
+  if (
+    lowerSlug.includes('right-to-rent') ||
+    lowerTags.some((t) => t.includes('right to rent'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.right_to_rent;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Right to Rent',
+      description: 'Get instant answers about right to rent checks',
+      icon: Users,
+      priority: 2,
+    });
+  }
+
+  // Check for inventory content
+  if (
+    lowerSlug.includes('inventory') ||
+    lowerTags.some((t) => t.includes('inventory'))
+  ) {
+    const askHeavenConfig = COMPLIANCE_ASK_HEAVEN_MAP.inventory;
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: askHeavenConfig.topic,
+        prompt: askHeavenConfig.prompt,
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Inventories',
+      description: 'Get guidance on creating property inventories',
+      icon: ClipboardList,
+      priority: 3,
+    });
+  }
+
+  // Check for Northern Ireland content
+  if (lowerSlug.startsWith('northern-ireland-')) {
+    // NI has limited product support - focus on Ask Heaven and tenancy agreements
+    if (!steps.some((s) => s.href.includes('ask-heaven'))) {
+      steps.push({
+        href: buildAskHeavenLink({
+          source: 'blog',
+          topic: 'general',
+          jurisdiction: 'northern-ireland',
+          utm_campaign: slug,
+        }),
+        label: 'Ask Heaven for NI',
+        description: 'Get answers specific to Northern Ireland landlord law',
+        icon: MessageCircle,
+        priority: 2,
+      });
+    }
+    // Add tenancy agreement as this is available for NI
+    if (!steps.some((s) => s.href.includes('ast'))) {
+      steps.push({
+        href: '/products/ast',
+        label: 'NI Tenancy Agreement',
+        description: 'Create a legally compliant tenancy agreement',
+        icon: FileText,
+        priority: 3,
+      });
+    }
+  }
+
+  // Check for HMO content
+  if (
+    lowerSlug.includes('hmo') ||
+    lowerTags.some((t) => t.includes('hmo'))
+  ) {
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        prompt: 'What are the HMO licensing requirements?',
+        utm_campaign: slug,
+      }),
+      label: 'Ask About HMO Rules',
+      description: 'Get instant answers about HMO licensing and compliance',
+      icon: Home,
+      priority: 3,
+    });
   }
 
   // Always add pricing as a fallback
