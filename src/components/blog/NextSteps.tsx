@@ -160,34 +160,93 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
       priority: 1,
     });
     steps.push({
-      href: '/tools/validators/tenancy-agreement',
-      label: 'Agreement Validator',
-      description: 'Check your tenancy agreement for compliance issues',
-      icon: Shield,
+      href: '/tenancy-agreement-template',
+      label: 'Tenancy Agreement Template',
+      description: 'Free AST template and guidance for UK landlords',
+      icon: FileText,
       priority: 2,
+    });
+    // Add Ask Heaven for tenancy questions
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        prompt: 'What should a compliant tenancy agreement include?',
+        utm_campaign: slug,
+      }),
+      label: 'Ask About Tenancy Agreements',
+      description: 'Get instant answers about tenancy agreement requirements',
+      icon: MessageCircle,
+      priority: 3,
     });
   }
 
   // Check for Wales-specific content
   if (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) {
     steps.push({
-      href: '/tools/validators/wales-notice',
-      label: 'Wales Notice Validator',
-      description: 'Check compliance with Renting Homes (Wales) Act',
-      icon: Shield,
+      href: '/wales-eviction-notices',
+      label: 'Wales Eviction Guide',
+      description: 'Complete guide to Renting Homes (Wales) Act notices',
+      icon: FileText,
+      priority: 1,
+    });
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        jurisdiction: 'wales',
+        prompt: 'How do I serve a notice under the Renting Homes (Wales) Act?',
+        utm_campaign: slug,
+      }),
+      label: 'Ask Heaven for Wales',
+      description: 'Get answers specific to Wales landlord law',
+      icon: MessageCircle,
       priority: 2,
     });
+    // Add product CTA for Wales
+    if (!steps.some((s) => s.href.includes('notice-only'))) {
+      steps.push({
+        href: '/products/notice-only',
+        label: 'Wales Notice Pack',
+        description: 'Generate Renting Homes Act compliant notices',
+        icon: FileText,
+        priority: 3,
+      });
+    }
   }
 
   // Check for Scotland-specific content
   if (lowerSlug.startsWith('scotland-')) {
     steps.push({
-      href: '/tools/validators/scotland-notice-to-leave',
-      label: 'Scotland Notice Validator',
-      description: 'Validate your Notice to Leave',
-      icon: Shield,
+      href: '/scotland-eviction-notices',
+      label: 'Scotland Eviction Guide',
+      description: 'Complete guide to Notice to Leave and Scottish evictions',
+      icon: FileText,
+      priority: 1,
+    });
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        jurisdiction: 'scotland',
+        prompt: 'How do I serve a Notice to Leave in Scotland?',
+        utm_campaign: slug,
+      }),
+      label: 'Ask Heaven for Scotland',
+      description: 'Get answers specific to Scottish landlord law',
+      icon: MessageCircle,
       priority: 2,
     });
+    // Add product CTA for Scotland
+    if (!steps.some((s) => s.href.includes('notice-only'))) {
+      steps.push({
+        href: '/products/notice-only',
+        label: 'Scotland Notice Pack',
+        description: 'Generate Notice to Leave documents for Scotland',
+        icon: FileText,
+        priority: 3,
+      });
+    }
   }
 
   // Check for eviction/possession content
@@ -398,6 +457,69 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
       label: 'Ask About HMO Rules',
       description: 'Get instant answers about HMO licensing and compliance',
       icon: Home,
+      priority: 3,
+    });
+  }
+
+  // Check for Rent Smart Wales (specific case - doesn't start with wales-)
+  if (lowerSlug === 'rent-smart-wales') {
+    steps.push({
+      href: '/wales-eviction-notices',
+      label: 'Wales Eviction Guide',
+      description: 'Complete guide to Renting Homes (Wales) Act notices',
+      icon: FileText,
+      priority: 1,
+    });
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        jurisdiction: 'wales',
+        prompt: 'What are the Rent Smart Wales registration requirements?',
+        utm_campaign: slug,
+      }),
+      label: 'Ask Heaven for Wales',
+      description: 'Get answers specific to Wales landlord law',
+      icon: MessageCircle,
+      priority: 2,
+    });
+  }
+
+  // Enhanced fallback: UK-wide landlord guides that don't match specific topics
+  // These get Ask Heaven + Tenancy Agreement as revenue-relevant CTAs
+  if (steps.length === 0 || (steps.length === 1 && steps[0].priority >= 10)) {
+    // This is a general post with no specific CTAs yet
+    // Add Ask Heaven as primary CTA
+    steps.push({
+      href: buildAskHeavenLink({
+        source: 'blog',
+        topic: 'general',
+        prompt: 'I have a question about being a UK landlord',
+        utm_campaign: slug,
+      }),
+      label: 'Ask Heaven',
+      description: 'Get instant answers to your landlord questions',
+      icon: MessageCircle,
+      priority: 1,
+    });
+
+    // Add tenancy agreement as common need
+    if (!steps.some((s) => s.href.includes('ast'))) {
+      steps.push({
+        href: '/products/ast',
+        label: 'Tenancy Agreement Generator',
+        description: 'Create a legally compliant tenancy agreement',
+        icon: FileText,
+        priority: 2,
+      });
+    }
+
+    // Add how to evict guide as funnel entry
+    steps.push({
+      href: '/how-to-evict-tenant',
+      label: 'UK Eviction Guide',
+      description: 'Complete guide to the eviction process',
+      icon: FileText,
       priority: 3,
     });
   }

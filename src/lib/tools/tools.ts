@@ -53,11 +53,9 @@ export const freeTools: ToolLink[] = [
   },
 ];
 
+// Only include validators that have actual pages built
+// Wales, Scotland, Tenancy Agreement, and Money Claim validators are not being built
 export const validatorToolRoutes = [
   '/tools/validators/section-21',
   '/tools/validators/section-8',
-  '/tools/validators/wales-notice',
-  '/tools/validators/scotland-notice-to-leave',
-  '/tools/validators/tenancy-agreement',
-  '/tools/validators/money-claim',
 ];

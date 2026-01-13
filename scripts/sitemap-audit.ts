@@ -137,14 +137,12 @@ async function run() {
   }
 
   // 6. Check tool pages
+  // Only check validators that have actual pages built
+  // Wales, Scotland, Tenancy Agreement, and Money Claim validators are not being built
   console.log('\n🔍 Checking tool pages...');
   const validatorPages = [
     '/tools/validators/section-21',
     '/tools/validators/section-8',
-    '/tools/validators/wales-notice',
-    '/tools/validators/scotland-notice-to-leave',
-    '/tools/validators/tenancy-agreement',
-    '/tools/validators/money-claim',
   ];
 
   const missingValidators = validatorPages
