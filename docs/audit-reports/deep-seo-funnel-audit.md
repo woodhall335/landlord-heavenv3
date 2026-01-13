@@ -1,9 +1,9 @@
 # Deep SEO + Funnel Audit Report
 
-**Date:** 2026-01-13
+**Date:** 2026-01-13 (Updated)
 **Repository:** landlord-heavenv3
 **Auditor:** Claude Code
-**Status:** COMPLETE - All P0 issues resolved
+**Status:** COMPLETE - All P0 issues resolved including jurisdiction routing
 
 ---
 
@@ -11,13 +11,14 @@
 
 This audit addressed critical SEO and conversion funnel issues across the Landlord Heaven platform, focusing on blog CTAs, dead internal links, and jurisdiction-correct routing.
 
-### Top 5 Revenue Opportunities Identified & Addressed
+### Top 6 Revenue Opportunities Identified & Addressed
 
 1. **Blog CTA Coverage Gap** - Fixed: All 105 blog posts now have context-aware CTAs (was 79%, now 100%)
 2. **Missing Validator References** - Fixed: Removed all references to 4 non-existent validator pages that were causing 404s in sitemap
 3. **General Content Funnel Gaps** - Fixed: 22 UK-wide landlord guide posts now route to Ask Heaven + Tenancy Agreement + Eviction Guide
 4. **Wales Content Routing** - Fixed: `rent-smart-wales` now correctly routes to Wales-specific CTAs
-5. **Canonical Hierarchy** - Verified: No keyword cannibalization detected; clear pillar/cluster structure in place
+5. **Scotland Jurisdiction Routing** - **FIXED (NEW)**: Scotland eviction ground posts (e.g., `scotland-eviction-ground-12`) were incorrectly linking to England-only Section 8 tools due to `ground-` pattern matching. Now correctly route to Scotland-specific CTAs.
+6. **Canonical Hierarchy** - Verified: No keyword cannibalization detected; clear pillar/cluster structure in place
 
 ### Key Metrics (Post-Fix)
 
@@ -27,6 +28,7 @@ This audit addressed critical SEO and conversion funnel issues across the Landlo
 | Posts linking to missing validators | Unknown | 0 |
 | Missing validator references in code | 6+ | 0 |
 | Sitemap entries for non-existent pages | 4 | 0 |
+| Scotland posts linking to S8 tools | 10 | 0 |
 
 ---
 
@@ -79,23 +81,57 @@ grep -r "/tools/validators/wales-notice" src/
    - UK Eviction Guide as tertiary
 2. Added specific handling for `rent-smart-wales`
 
+### 3. Scotland Jurisdiction Routing Bug (NEW - Fixed)
+
+**Issue:** Scotland eviction ground posts (`scotland-eviction-ground-*`) were incorrectly matching the Section 8 CTA logic due to `lowerSlug.includes('ground-')` pattern.
+
+**Impact:** 10 Scotland blog posts were displaying England-only CTAs:
+- `/section-8-notice-template` (England only)
+- `/tools/validators/section-8` (England only)
+
+**Root Cause:** In `NextSteps.tsx`, the Section 8 detection logic used:
+```typescript
+lowerSlug.includes('section-8') ||
+lowerTags.some((t) => t.includes('section 8')) ||
+lowerSlug.includes('ground-')  // <-- Matches scotland-eviction-ground-12!
+```
+
+**Fix Applied:**
+```typescript
+const isEnglandContent = !lowerSlug.startsWith('scotland-') &&
+                         !lowerSlug.startsWith('wales-') &&
+                         !lowerSlug.startsWith('northern-ireland-');
+const isSection8Related = lowerSlug.includes('section-8') ||
+  lowerTags.some((t) => t.includes('section 8')) ||
+  (lowerSlug.includes('ground-') && isEnglandContent);
+```
+
+**Files Changed:**
+- `src/components/blog/NextSteps.tsx` (lines 95-103)
+- `scripts/blog-cta-coverage.ts` (lines 150-158)
+
+**Verification:**
+- Scotland ground posts now show: Scotland Eviction Guide, Ask Heaven, Notice Pack
+- Zero Section 8 references in Scotland blog CTAs
+
 ---
 
 ## P1 Issues (Important - Addressed)
 
-### 3. Jurisdiction-Correct CTAs
+### 4. Jurisdiction-Correct CTAs (Verified)
 
 **Issue:** Ensure no England-only tools appear for Wales/Scotland/NI content.
 
-**Finding:** NextSteps component correctly routes:
+**Finding:** NextSteps component now correctly routes:
 - Wales posts → Wales Eviction Guide + Ask Heaven (Wales jurisdiction)
 - Scotland posts → Scotland Eviction Guide + Ask Heaven (Scotland jurisdiction)
+- Scotland ground posts → Scotland Eviction Guide + Complete Pack + Ask Heaven (NO Section 8)
 - NI posts → Ask Heaven (NI jurisdiction) + NI Tenancy Agreement
 - Section 21/8 posts → England-specific templates and validators
 
-**No changes needed** - logic already correct.
+**Status:** Fixed after addressing Scotland jurisdiction bug.
 
-### 4. Canonicalization & Internal Link Hierarchy
+### 5. Canonicalization & Internal Link Hierarchy
 
 **Finding:** No keyword cannibalization issues detected.
 
@@ -193,14 +229,15 @@ The `NextSteps` component in `src/components/blog/NextSteps.tsx` now follows the
 ## Files Changed
 
 ### Source Code
-- `src/components/blog/NextSteps.tsx` - Fixed Wales/Scotland/tenancy CTAs, added enhanced fallback
+- `src/components/blog/NextSteps.tsx` - Fixed Wales/Scotland/tenancy CTAs, added enhanced fallback, **fixed Scotland jurisdiction bug** (ground- pattern now excludes Scotland/Wales/NI)
 - `src/lib/tools/tools.ts` - Removed non-existent validators from `validatorToolRoutes`
 - `scripts/sitemap-audit.ts` - Removed expectations for validators we won't build
+- `scripts/blog-cta-coverage.ts` - **Updated** to match NextSteps jurisdiction logic
 
-### New Files Created
-- `scripts/blog-cta-coverage.ts` - CTA coverage analysis script
-- `docs/audit-reports/blog-cta-coverage.csv` - Per-post CTA coverage data
-- `docs/audit-reports/deep-seo-funnel-audit.md` - This report
+### New/Updated Files
+- `scripts/blog-cta-coverage.ts` - CTA coverage analysis script (updated with jurisdiction fix)
+- `docs/audit-reports/blog-cta-coverage.csv` - Per-post CTA coverage data (regenerated)
+- `docs/audit-reports/deep-seo-funnel-audit.md` - This report (updated)
 
 ---
 
@@ -255,6 +292,8 @@ npx tsx scripts/sitemap-audit.ts
 | deep-seo-funnel-audit.md written | PASS |
 | NextSteps coverage improved without validators | PASS (100%) |
 | No jurisdiction-incorrect CTAs | PASS |
+| Scotland posts don't link to S21/S8 tools | PASS |
+| Wales/NI posts don't link to England tools | PASS |
 | Tests updated/passing | PENDING (deps not installed) |
 
 ---

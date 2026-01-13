@@ -92,12 +92,16 @@ function getNextStepsForPost(slug: string, category: string, tags: string[]): St
     });
   }
 
-  // Check for Section 8 related content
-  if (
-    lowerSlug.includes('section-8') ||
+  // Check for Section 8 related content (England only)
+  // Exclude Scotland/Wales/NI posts from matching on 'ground-' since they have different legal frameworks
+  const isEnglandContent = !lowerSlug.startsWith('scotland-') &&
+                           !lowerSlug.startsWith('wales-') &&
+                           !lowerSlug.startsWith('northern-ireland-');
+  const isSection8Related = lowerSlug.includes('section-8') ||
     lowerTags.some((t) => t.includes('section 8')) ||
-    lowerSlug.includes('ground-')
-  ) {
+    (lowerSlug.includes('ground-') && isEnglandContent);
+
+  if (isSection8Related) {
     steps.push({
       href: '/section-8-notice-template',
       label: 'Section 8 Notice Template',
