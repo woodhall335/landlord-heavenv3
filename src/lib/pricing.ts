@@ -9,9 +9,10 @@
 
 export const PRICING = {
   // Eviction Products (One-Time)
-  NOTICE_ONLY: 29.99,
-  COMPLETE_EVICTION_PACK: 149.99,
-  MONEY_CLAIM_PACK: 179.99,
+  // NOTE: These prices must match src/lib/pricing/products.ts (source of truth for UI)
+  NOTICE_ONLY: 39.99,
+  COMPLETE_EVICTION_PACK: 199.99,
+  MONEY_CLAIM_PACK: 199.99,
 
   // Tenancy Products (One-Time)
   STANDARD_AST: 9.99,
