@@ -2,11 +2,24 @@
  * JSON-LD Structured Data Helpers
  *
  * Generate schema.org structured data for SEO
+ *
+ * IMPORTANT: Hardcoded aggregateRating values are risky for Google rich results.
+ * Google may penalize sites with fake/unverified ratings. Only enable structured
+ * ratings if you have real, verifiable review data from a third-party source.
+ *
+ * Set ENABLE_STRUCTURED_RATINGS=true in env to include ratings in schema.
  */
 
 import React from 'react';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
+
+/**
+ * Feature flag for structured ratings.
+ * Default: false (disabled) - only enable when you have real review data.
+ */
+const ENABLE_STRUCTURED_RATINGS = process.env.ENABLE_STRUCTURED_RATINGS === 'true';
 
 /**
  * Get a date 1 year from now in ISO format (YYYY-MM-DD)
@@ -76,9 +89,12 @@ export function organizationSchema() {
 /**
  * Product structured data
  * Use this on product pages
+ *
+ * Note: aggregateRating is only included if ENABLE_STRUCTURED_RATINGS=true
+ * to avoid Google penalties for unverified ratings.
  */
 export function productSchema(product: Product) {
-  return {
+  const baseSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
@@ -133,12 +149,22 @@ export function productSchema(product: Product) {
         "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
       }
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "247"
-    }
   };
+
+  // Only include aggregateRating if explicitly enabled via env var
+  // Hardcoded ratings without real review data can trigger Google penalties
+  if (ENABLE_STRUCTURED_RATINGS) {
+    return {
+      ...baseSchema,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "247"
+      }
+    };
+  }
+
+  return baseSchema;
 }
 
 /**
@@ -288,9 +314,23 @@ export function localBusinessSchema() {
 /**
  * SoftwareApplication structured data
  * For the overall platform
+ *
+ * Price range is derived from PRODUCTS to stay in sync with actual pricing.
+ * aggregateRating is only included if ENABLE_STRUCTURED_RATINGS=true.
  */
 export function softwareApplicationSchema() {
-  return {
+  // Calculate actual price range from products
+  const prices = [
+    PRODUCTS.ast_standard.price,  // £9.99 (lowest)
+    PRODUCTS.ast_premium.price,   // £14.99
+    PRODUCTS.notice_only.price,   // £39.99
+    PRODUCTS.complete_pack.price, // £199.99
+    PRODUCTS.money_claim.price,   // £199.99 (highest)
+  ];
+  const lowPrice = Math.min(...prices).toFixed(2);
+  const highPrice = Math.max(...prices).toFixed(2);
+
+  const baseSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Landlord Heaven",
@@ -298,16 +338,25 @@ export function softwareApplicationSchema() {
     "operatingSystem": "Web",
     "offers": {
       "@type": "AggregateOffer",
-      "lowPrice": "19.99",
-      "highPrice": "149.99",
+      "lowPrice": lowPrice,
+      "highPrice": highPrice,
       "priceCurrency": "GBP"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "247"
-    }
   };
+
+  // Only include aggregateRating if explicitly enabled via env var
+  if (ENABLE_STRUCTURED_RATINGS) {
+    return {
+      ...baseSchema,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "247"
+      }
+    };
+  }
+
+  return baseSchema;
 }
 
 /**

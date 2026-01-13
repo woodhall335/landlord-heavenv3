@@ -23,11 +23,12 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   // Production: Allow crawlers with sensible restrictions
+  // Note: /_next/ must NOT be blocked - Google needs it for rendering JS apps
   return {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/blog/'],
+        allow: ['/', '/blog/', '/_next/'],
         disallow: [
           '/api/',
           '/dashboard/',
@@ -35,7 +36,6 @@ export default function robots(): MetadataRoute.Robots {
           '/wizard/',
           '/admin/',
           '/checkout/',
-          '/_next/',
         ],
       },
     ],
