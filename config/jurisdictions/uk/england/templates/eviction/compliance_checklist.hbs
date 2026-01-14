@@ -300,10 +300,16 @@
   <span class="doc-badge">{{#if (eq selected_notice_route "section_21")}}Section 21{{else}}Section 8{{/if}} Notice</span>
 </div>
 
+<!-- Legal Disclaimer -->
+<div class="alert-box info">
+  <h4>ℹ️ Important</h4>
+  <p>Landlord Heaven provides document generation and general information only. We are not a law firm and do not provide legal advice. Court outcomes depend on your evidence, service, and the facts of the case.</p>
+</div>
+
 <!-- Intro Alert -->
 <div class="alert-box success">
   <h4>✓ Pre-Service Compliance Check</h4>
-  <p>Complete this checklist BEFORE serving your notice. Missing any of these requirements could invalidate your notice and waste months of time and court fees.</p>
+  <p>Complete this checklist BEFORE serving your notice. {{#if (eq selected_notice_route "section_21")}}Missing any of these requirements could invalidate your notice and waste months of time and court fees.{{else}}Reviewing compliance helps you meet your landlord obligations and strengthens your case.{{/if}}</p>
 </div>
 
 <!-- Notice Details -->
@@ -551,10 +557,17 @@
   </div>
 </div>
 
+{{#if (eq selected_notice_route "section_21")}}
 <div class="alert-box critical">
   <h4>⚠️ FINAL CHECK</h4>
   <p>If ANY of the above requirements are not met for Section 21, DO NOT serve the notice. It will be invalid and you'll waste time and court fees. Either fix the compliance issues first, or use Section 8 instead (which has fewer compliance requirements).</p>
 </div>
+{{else}}
+<div class="alert-box warning">
+  <h4>⚠️ FINAL CHECK</h4>
+  <p>Section 8 notices have fewer compliance requirements than Section 21. While non-compliance with the above will not automatically invalidate your Section 8 notice, you should still ensure you meet your landlord obligations to avoid separate penalties or enforcement action. If you are unsure about any requirement, seek legal advice before serving the notice.</p>
+</div>
+{{/if}}
 
 <!-- Footer -->
 <div class="doc-footer">

@@ -122,7 +122,7 @@ describe('getWizardCta', () => {
 
       // When status is 'pass', notice_only is primary
       expect(result.primary.productKey).toBe('notice_only');
-      expect(result.primary.price).toBe(29.99);
+      expect(result.primary.price).toBe(39.99);
     });
 
     it('includes correct price for complete_pack product', () => {
@@ -136,7 +136,7 @@ describe('getWizardCta', () => {
 
       // When status is 'invalid', complete_pack is primary
       expect(result.primary.productKey).toBe('complete_pack');
-      expect(result.primary.price).toBe(149.99);
+      expect(result.primary.price).toBe(199.99);
     });
 
     it('includes correct label for CTA buttons', () => {
