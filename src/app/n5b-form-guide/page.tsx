@@ -26,7 +26,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'seo',
+  src: 'guide',
   topic: 'eviction',
 });
 
