@@ -97,7 +97,7 @@ function getWizardLink(
   return buildWizardLink({
     product,
     jurisdiction,
-    src: 'seo',
+    src: 'guide',
     topic: product === 'money_claim' ? 'money' : 'eviction',
   });
 }

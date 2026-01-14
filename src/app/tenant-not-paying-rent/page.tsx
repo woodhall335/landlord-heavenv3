@@ -29,14 +29,14 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo',
+  src: 'guide',
   topic: 'eviction',
 });
 
 const wizardLinkMoneyClaim = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo',
+  src: 'guide',
   topic: 'money',
 });
 
