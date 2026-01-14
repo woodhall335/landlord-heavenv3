@@ -102,15 +102,15 @@ function SignupContent() {
       <div className="w-full max-w-4xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="grid md:grid-cols-2">
-            {/* Left Side - Branding (sticky) */}
-            <div className="bg-gradient-to-br from-primary to-primary-dark p-8 md:p-12 flex flex-col justify-center text-white md:sticky md:top-0 md:self-start md:min-h-[400px]">
+            {/* Left Side - Branding */}
+            <div className="bg-gradient-to-br from-primary to-primary-dark p-8 md:p-12 pt-12 flex flex-col justify-start">
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 w-fit">
-                <span className="text-sm font-semibold text-white">Get Started</span>
+                <span className="text-sm font-semibold" style={{ color: 'white' }}>Get Started</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'white' }}>
                 Create Your Account
               </h1>
-              <p className="text-white text-lg">
+              <p className="text-lg" style={{ color: 'white' }}>
                 Start creating court-ready legal documents
               </p>
             </div>
