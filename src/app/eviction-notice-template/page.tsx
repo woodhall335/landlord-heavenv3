@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -30,16 +30,19 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Eviction Notice Template UK - Free Download',
-  description: 'Download free UK eviction notice templates. Section 21 (no-fault) and Section 8 (grounds-based) notices. Court-ready documents trusted by 10,000+ landlords.',
+  title: 'Eviction Notice Template UK - Possession Notice Download',
+  description: 'Download free UK eviction notice templates (also called possession notices). Section 21 and Section 8 notices. Court-ready documents trusted by 10,000+ landlords.',
   keywords: [
     'eviction notice template uk',
     'eviction notice template',
+    'possession notice',
+    'possession notice template',
     'landlord eviction notice',
     'section 21 eviction',
     'section 8 eviction',
     'tenant eviction notice',
     'eviction letter template',
+    'notice seeking possession',
   ],
   alternates: {
     canonical: 'https://landlordheaven.co.uk/eviction-notice-template',
@@ -131,6 +134,10 @@ export default function EvictionNoticeTemplatePage() {
     <>
       <StructuredData data={pageSchema} />
       <StructuredData data={faqSchema} />
+      <StructuredData data={breadcrumbSchema([
+        { name: 'Home', url: 'https://landlordheaven.co.uk' },
+        { name: 'Eviction Notice Template', url: 'https://landlordheaven.co.uk/eviction-notice-template' },
+      ])} />
 
       <main>
         {/* Hero Section */}
@@ -274,6 +281,99 @@ export default function EvictionNoticeTemplatePage() {
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Possession Notice Section */}
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Eviction Notice vs Possession Notice — What Landlords Mean
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                These terms are often used interchangeably. Here&apos;s what they actually mean in law.
+              </p>
+
+              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-2">
+                      &ldquo;Eviction notice&rdquo; — the common term
+                    </h3>
+                    <p className="text-gray-600">
+                      When landlords talk about an &ldquo;eviction notice,&rdquo; they usually mean the formal
+                      document that starts the legal process to end a tenancy. In England, this means either a
+                      Section 21 (Form 6A) or Section 8 (Form 3) notice. These are the first step toward
+                      regaining possession of your property.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-2">
+                      &ldquo;Possession notice&rdquo; — the legal term
+                    </h3>
+                    <p className="text-gray-600">
+                      Legally, the term is &ldquo;notice seeking possession&rdquo; — which is why Section 8 is
+                      formally titled &ldquo;Notice seeking possession of a property let on an assured tenancy.&rdquo;
+                      The notice informs the tenant you intend to seek a possession order from the court.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-gray-200">
+                    <h3 className="font-bold text-gray-900 mb-2">
+                      What happens after serving a possession notice?
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      If the tenant doesn&apos;t leave after the notice period expires, you apply to court for a
+                      possession order. If they still won&apos;t leave after the court order, you apply for a
+                      warrant of possession to have bailiffs enforce it.
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <Link
+                        href="/possession-claim-guide"
+                        className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                      >
+                        Read our possession claim guide
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        href="/tenant-wont-leave"
+                        className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                      >
+                        What to do if tenant won&apos;t leave
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid md:grid-cols-2 gap-6">
+                <Link
+                  href="/section-21-notice-template"
+                  className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:border-primary/50 transition-colors group"
+                >
+                  <h4 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    Section 21 Possession Notice
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    No-fault eviction — 2 months notice. Ends May 2026.
+                  </p>
+                </Link>
+                <Link
+                  href="/section-8-notice-template"
+                  className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:border-primary/50 transition-colors group"
+                >
+                  <h4 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    Section 8 Possession Notice
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    Grounds-based eviction — 2 weeks to 2 months notice. Works after 2026.
+                  </p>
+                </Link>
               </div>
             </div>
           </div>
