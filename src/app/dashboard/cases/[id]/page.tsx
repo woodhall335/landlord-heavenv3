@@ -914,7 +914,7 @@ export default function CaseDetailPage() {
           </div>
         )}
 
-        {/* Payment Success Summary - DB-backed status */}
+        {/* Payment Success Summary - DB-backed status (simplified - documents shown in main section below) */}
         {orderStatus?.paid && orderStatus.has_final_documents && (
           <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
             <div className="flex items-start gap-3">
@@ -922,10 +922,10 @@ export default function CaseDetailPage() {
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-charcoal">Payment received — your documents are ready</h3>
                 <p className="text-gray-700 mt-1">
-                  Your purchase is complete. Download your documents below and follow the next steps.
+                  Your purchase is complete. Download your documents from the &quot;Your Documents&quot; section below and follow the next steps.
                 </p>
 
-                <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {/* What's included - informational */}
                   <div className="bg-white rounded-lg border border-gray-200 p-4">
                     <h4 className="font-semibold text-charcoal mb-3">Included in your purchase</h4>
@@ -941,27 +941,6 @@ export default function CaseDetailPage() {
                         ))}
                       </ul>
                     )}
-                  </div>
-
-                  {/* Generated documents - actual files */}
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h4 className="font-semibold text-charcoal mb-3">Generated documents</h4>
-                    <ul className="space-y-2 text-sm text-gray-800">
-                      {documents.map((doc) => (
-                        <li key={doc.id} className="flex items-center justify-between gap-2">
-                          <span className="truncate">{doc.document_title}</span>
-                          {doc.pdf_url && (
-                            <button
-                              onClick={() => handleDocumentDownload(doc.id, doc.document_type)}
-                              disabled={downloadingDocId === doc.id}
-                              className="text-primary hover:text-primary-dark font-semibold disabled:opacity-50"
-                            >
-                              {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
-                            </button>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
 
                   {/* Next steps */}

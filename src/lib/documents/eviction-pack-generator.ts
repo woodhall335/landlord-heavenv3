@@ -104,6 +104,8 @@ function buildSection8TemplateData(
     .map((g) => `Ground ${g.code.replace('Ground ', '')} – ${g.title}`)
     .join(', ');
 
+  const now = new Date().toISOString().split('T')[0];
+
   return {
     ...evictionCase,
     ...wizardFacts,
@@ -119,14 +121,21 @@ function buildSection8TemplateData(
     notice_date_formatted: formatUKLegalDate(serviceDate),
     earliest_possession_date_formatted: formatUKLegalDate(earliestPossessionDate),
     tenancy_start_date_formatted: formatUKLegalDate(tenancyStartDate),
-    generated_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
-    current_date: new Date().toISOString().split('T')[0],
+    generated_date: formatUKLegalDate(now),
+    current_date: now,
     // Ground descriptions for checklist
     ground_descriptions: groundDescriptions,
     grounds: evictionCase.grounds,
     // Convenience flags
     has_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
     is_fixed_term: evictionCase.fixed_term === true,
+    // Nested objects for template compatibility (compliance_checklist.hbs expects these)
+    tenancy: {
+      start_date: tenancyStartDate,
+    },
+    metadata: {
+      generated_at: now,
+    },
   };
 }
 
@@ -1314,6 +1323,11 @@ export async function generateNoticeOnlyPack(
       }
     } else {
       // Section 8
+      // Build Section 8 template data FIRST to resolve service_date from wizardFacts
+      // This ensures service_date_formatted, earliest_possession_date_formatted,
+      // tenancy_start_date_formatted, and ground_descriptions are available for templates
+      const section8TemplateData = buildSection8TemplateData(evictionCase, wizardFacts);
+
       const section8Doc = await generateSection8Notice(
         {
           landlord_full_name: evictionCase.landlord_full_name,
@@ -1337,6 +1351,8 @@ export async function generateNoticeOnlyPack(
               statutory_text: groundDef?.full_text || '',
             };
           }),
+          // Pass service_date from resolved template data to ensure consistent date across all documents
+          service_date: section8TemplateData.service_date,
           notice_period_days: 14,
           earliest_possession_date: '',
           any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
@@ -1353,11 +1369,6 @@ export async function generateNoticeOnlyPack(
         pdf: section8Doc.pdf,
         file_name: 'section8_notice.pdf',
       });
-
-      // Build Section 8 template data with formatted dates and ground descriptions
-      // This ensures service_date_formatted, earliest_possession_date_formatted,
-      // tenancy_start_date_formatted, and ground_descriptions are available for templates
-      const section8TemplateData = buildSection8TemplateData(evictionCase, wizardFacts);
 
       // 2. Generate Service Instructions (Section 8)
       try {
@@ -1420,6 +1431,52 @@ export async function generateNoticeOnlyPack(
         });
       } catch (err) {
         console.warn('Failed to generate compliance declaration:', err);
+      }
+
+      // 5. Generate Rent Schedule / Arrears Statement if arrears grounds selected
+      const hasArrearsGrounds = evictionCase.grounds.some((g) =>
+        ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.code.includes(ag) || g.code === ag)
+      );
+
+      if (hasArrearsGrounds) {
+        try {
+          const arrearsItems = wizardFacts.arrears_items ||
+            wizardFacts.issues?.rent_arrears?.arrears_items ||
+            [];
+
+          const arrearsData = getArrearsScheduleData({
+            arrears_items: arrearsItems,
+            total_arrears: wizardFacts.arrears_total || wizardFacts.issues?.rent_arrears?.total_arrears,
+            rent_amount: evictionCase.rent_amount || 0,
+            rent_frequency: evictionCase.rent_frequency || 'monthly',
+            include_schedule: true,
+          });
+
+          if (arrearsData.arrears_schedule.length > 0 || arrearsData.arrears_total > 0) {
+            const arrearsScheduleDoc = await generateDocument({
+              templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+              data: {
+                ...section8TemplateData,
+                arrears_schedule: arrearsData.arrears_schedule,
+                arrears_total: arrearsData.arrears_total,
+                claimant_reference: caseId,
+              },
+              isPreview: false,
+              outputFormat: 'both',
+            });
+            documents.push({
+              title: 'Rent Schedule / Arrears Statement',
+              description: 'Period-by-period breakdown of rent arrears',
+              category: 'evidence_tool',
+              document_type: 'arrears_schedule',
+              html: arrearsScheduleDoc.html,
+              pdf: arrearsScheduleDoc.pdf,
+              file_name: 'rent_schedule_arrears_statement.pdf',
+            });
+          }
+        } catch (err) {
+          console.warn('Failed to generate arrears schedule:', err);
+        }
       }
     }
   } else if (jurisdiction === 'scotland') {

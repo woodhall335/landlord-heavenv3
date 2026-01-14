@@ -18,6 +18,7 @@ import { fulfillOrder } from '@/lib/payments/fulfillment';
 
 export interface RegenerateOrderRequest {
   case_id: string;
+  product?: string; // Optional product type for validation
 }
 
 export interface RegenerateOrderResponse {
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     const user = await requireServerAuth();
     const body: RegenerateOrderRequest = await request.json();
 
-    const { case_id } = body;
+    const { case_id, product } = body;
 
     if (!case_id) {
       return NextResponse.json(
@@ -72,12 +73,19 @@ export async function POST(request: Request) {
       return mutationCheck.errorResponse;
     }
 
-    // Find the paid order for this case
-    const { data: order, error: orderError } = await adminClient
+    // Build order query - find the paid order for this case
+    let orderQuery = adminClient
       .from('orders')
-      .select('id, payment_status, product_type, user_id')
+      .select('id, payment_status, product_type, user_id, paid_at')
       .eq('case_id', case_id)
-      .eq('payment_status', 'paid')
+      .eq('payment_status', 'paid');
+
+    // If product is specified, validate it matches the order
+    if (product) {
+      orderQuery = orderQuery.eq('product_type', product);
+    }
+
+    const { data: order, error: orderError } = await orderQuery
       .order('paid_at', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -91,9 +99,19 @@ export async function POST(request: Request) {
     }
 
     if (!order) {
+      const productMsg = product ? ` for product "${product}"` : '';
       return NextResponse.json(
-        { ok: false, error: 'No paid order found for this case. Please complete your purchase first.' },
+        { ok: false, error: `No paid order found${productMsg}. Please complete your purchase first.` },
         { status: 402 }
+      );
+    }
+
+    // Defense in depth: verify order belongs to this user
+    if (order.user_id && order.user_id !== user.id) {
+      console.error(`Order user_id mismatch: order=${order.user_id}, user=${user.id}`);
+      return NextResponse.json(
+        { ok: false, error: 'You do not have permission to regenerate this order' },
+        { status: 403 }
       );
     }
 
