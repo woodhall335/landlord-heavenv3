@@ -13,9 +13,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { Container } from '@/components/ui/Container';
-import { Card } from '@/components/ui/Card';
-import { StandardHero } from '@/components/marketing/StandardHero';
 
 function SignupContent() {
   const router = useRouter();
@@ -101,128 +98,135 @@ function SignupContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <StandardHero
-        badge="Get Started"
-        title="Create Your Account"
-        subtitle="Start creating court-ready legal documents"
-        variant="pastel"
-      />
-
-      <div className="flex items-center justify-center py-12 px-4">
-      <Container size="small">
-
-        <Card padding="large">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-900">{error}</p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-4xl">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="grid md:grid-cols-2">
+            {/* Left Side - Branding */}
+            <div className="bg-gradient-to-br from-primary to-primary-dark p-8 md:p-12 flex flex-col justify-center text-white">
+              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 w-fit">
+                <span className="text-sm font-semibold">Get Started</span>
               </div>
-            )}
-
-            <Input
-              label="Full name"
-              type="text"
-              value={formData.fullName}
-              onChange={(e) => handleChange('fullName', e.target.value)}
-              placeholder="John Smith"
-              autoComplete="name"
-            />
-
-            <Input
-              label="Email address"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              placeholder="you@example.com"
-              required
-              autoComplete="email"
-            />
-
-            <Input
-              label="Phone number (optional)"
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => handleChange('phone', e.target.value)}
-              placeholder="+44 7700 900000"
-              autoComplete="tel"
-              helperText="We'll only use this for important account notifications"
-            />
-
-            <Input
-              label="Password"
-              type="password"
-              value={formData.password}
-              onChange={(e) => handleChange('password', e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="new-password"
-              helperText="Minimum 8 characters"
-            />
-
-            <Input
-              label="Confirm password"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="new-password"
-            />
-
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary"
-              />
-              <label className="text-sm text-gray-700">
-                I agree to the{' '}
-                <Link href="/terms" className="text-primary hover:underline">
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy" className="text-primary hover:underline">
-                  Privacy Policy
-                </Link>
-              </label>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">
+                Create Your Account
+              </h1>
+              <p className="text-white/80 text-lg">
+                Start creating court-ready legal documents
+              </p>
             </div>
 
-            <Button
-              type="submit"
-              variant="heroPrimary"
-              size="large"
-              loading={isLoading}
-              fullWidth
-            >
-              Create account
-            </Button>
-          </form>
+            {/* Right Side - Form */}
+            <div className="p-8 md:p-12">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-900">{error}</p>
+                  </div>
+                )}
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link
-                href={`/auth/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
-                className="text-primary hover:text-primary-dark font-medium"
-              >
-                Log in
-              </Link>
-            </p>
+                <Input
+                  label="Full name"
+                  type="text"
+                  value={formData.fullName}
+                  onChange={(e) => handleChange('fullName', e.target.value)}
+                  placeholder="John Smith"
+                  autoComplete="name"
+                />
+
+                <Input
+                  label="Email address"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  autoComplete="email"
+                />
+
+                <Input
+                  label="Phone number (optional)"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  placeholder="+44 7700 900000"
+                  autoComplete="tel"
+                  helperText="We'll only use this for important account notifications"
+                />
+
+                <Input
+                  label="Password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => handleChange('password', e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="new-password"
+                  helperText="Minimum 8 characters"
+                />
+
+                <Input
+                  label="Confirm password"
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="new-password"
+                />
+
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                  <label className="text-sm text-gray-700">
+                    I agree to the{' '}
+                    <Link href="/terms" className="text-primary hover:underline">
+                      Terms of Service
+                    </Link>{' '}
+                    and{' '}
+                    <Link href="/privacy" className="text-primary hover:underline">
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="heroPrimary"
+                  size="large"
+                  loading={isLoading}
+                  fullWidth
+                >
+                  Create account
+                </Button>
+              </form>
+
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <p className="text-center text-sm text-gray-600">
+                  Already have an account?{' '}
+                  <Link
+                    href={`/auth/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
+                    className="text-primary hover:text-primary-dark font-medium"
+                  >
+                    Log in
+                  </Link>
+                </p>
+              </div>
+
+              <div className="mt-6 text-center">
+                <Link
+                  href="/"
+                  className="text-sm text-gray-600 hover:text-primary"
+                >
+                  ← Back to home
+                </Link>
+              </div>
+            </div>
           </div>
-        </Card>
-
-        <div className="mt-6 text-center">
-          <Link
-            href="/"
-            className="text-sm text-gray-600 hover:text-primary"
-          >
-            ← Back to home
-          </Link>
         </div>
-      </Container>
       </div>
     </div>
   );
