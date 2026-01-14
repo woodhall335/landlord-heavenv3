@@ -338,51 +338,6 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      {/* HOW IT WORKS - SECOND INSTANCE */}
-      <section className="py-20 md:py-24 bg-gray-50">
-        <Container>
-          <div className="text-center mb-16">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-              <span className="text-sm font-semibold text-primary">How It Works</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Get Court-Ready Documents in 3 Steps
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our guided wizard makes creating professional legal documents simple
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Step
-              n="1"
-              title="Answer Questions"
-              desc="Tell us about your situation — property details, tenant information, and what you need to achieve."
-            />
-            <Step
-              n="2"
-              title="Review Documents"
-              desc="We generate jurisdiction-specific documents. Review, customise if needed, and approve."
-            />
-            <Step
-              n="3"
-              title="Download & Serve"
-              desc="Instantly download your documents with service instructions and evidence checklists."
-            />
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/pricing"
-              className="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-2 cursor-pointer transition-colors"
-            >
-              Compare all products and features
-              
-            </Link>
-          </div>
-        </Container>
-      </section>
-
       {/* TESTIMONIALS */}
       <Testimonials />
 
