@@ -141,14 +141,14 @@ export function CostComparison() {
           {/* Product Price Anchors - Updated with correct solicitor prices and hover effects */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
-              product="Eviction Notices"
+              product="Generate Jurisdiction Specific Eviction Notices"
               ourPrice="£39.99"
               solicitorPrice="£200-300"
               savings="£160+"
               href="/products/notice-only"
             />
             <PriceAnchor
-              product="Complete Pack"
+              product="Complete Eviction Packs Including Court Docs"
               ourPrice="£199.99"
               solicitorPrice="£1,500-2,500"
               savings="£1,300+"
@@ -156,14 +156,14 @@ export function CostComparison() {
               highlighted
             />
             <PriceAnchor
-              product="Money Claims"
+              product="Claim Unpaid Rent and Damages"
               ourPrice="£199.99"
               solicitorPrice="£800-1200"
               savings="£600+"
               href="/products/money-claim"
             />
             <PriceAnchor
-              product="Tenancy Agreements"
+              product="Legally Compliant Tenancy Agreements"
               ourPrice="£9.99"
               solicitorPrice="£150-400"
               savings="£140+"
