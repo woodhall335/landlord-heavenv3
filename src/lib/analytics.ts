@@ -73,7 +73,28 @@ export function trackPageView(url: string): void {
 }
 
 /**
+ * Attribution data for purchase tracking
+ */
+export interface PurchaseAttribution {
+  landing_path?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+  referrer?: string;
+  jurisdiction?: string;
+  product_type?: string;
+}
+
+/**
  * Track a purchase/transaction in Google Analytics and Facebook Pixel
+ *
+ * @param transactionId - Unique transaction/order ID
+ * @param value - Transaction value
+ * @param currency - Currency code (default: GBP)
+ * @param items - Array of purchased items
+ * @param attribution - Optional attribution data for campaign tracking
  */
 export function trackPurchase(
   transactionId: string,
@@ -85,19 +106,30 @@ export function trackPurchase(
     item_category?: string;
     price: number;
     quantity?: number;
-  }>
+  }>,
+  attribution?: PurchaseAttribution
 ): void {
-  // Google Analytics / Google Ads
+  // Google Analytics / Google Ads - include attribution in event
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'purchase', {
       transaction_id: transactionId,
       value,
       currency,
       items,
+      // Attribution data for GA4 custom dimensions
+      landing_path: attribution?.landing_path,
+      utm_source: attribution?.utm_source,
+      utm_medium: attribution?.utm_medium,
+      utm_campaign: attribution?.utm_campaign,
+      utm_term: attribution?.utm_term,
+      utm_content: attribution?.utm_content,
+      referrer: attribution?.referrer,
+      jurisdiction: attribution?.jurisdiction,
+      product_type: attribution?.product_type,
     });
   }
 
-  // Facebook Pixel
+  // Facebook Pixel - include attribution in custom data
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('track', 'Purchase', {
       value,
@@ -105,6 +137,12 @@ export function trackPurchase(
       content_ids: items?.map(i => i.item_id) || [],
       content_name: items?.map(i => i.item_name).join(', ') || '',
       content_type: 'product',
+      // Attribution for Facebook custom data
+      ...(attribution && {
+        landing_path: attribution.landing_path,
+        utm_source: attribution.utm_source,
+        utm_campaign: attribution.utm_campaign,
+      }),
     });
   }
 }

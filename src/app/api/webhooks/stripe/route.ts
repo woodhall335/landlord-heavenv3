@@ -11,6 +11,11 @@ import Stripe from 'stripe';
 import { sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import {
+  sendServerPurchaseEventWithRetry,
+  generateClientId,
+  isMeasurementProtocolConfigured,
+} from '@/lib/analytics/measurement-protocol';
 
 /**
  * Error codes that indicate a validation/business rule failure.
@@ -207,6 +212,19 @@ export async function POST(request: Request) {
           const productType = session.metadata?.product_type || session.metadata?.product || null;
           const userId = session.metadata?.user_id || null;
 
+          // Extract attribution from Stripe metadata (Migration 012)
+          const stripeAttribution = {
+            landing_path: session.metadata?.landing_path || null,
+            utm_source: session.metadata?.utm_source || null,
+            utm_medium: session.metadata?.utm_medium || null,
+            utm_campaign: session.metadata?.utm_campaign || null,
+            utm_term: session.metadata?.utm_term || null,
+            utm_content: session.metadata?.utm_content || null,
+            referrer: session.metadata?.referrer || null,
+            first_touch_at: session.metadata?.first_touch_at || null,
+            ga_client_id: session.metadata?.ga_client_id || null,
+          };
+
           const order = await findOrderForCheckoutSession(supabase, session);
 
           if (!order) {
@@ -214,15 +232,48 @@ export async function POST(request: Request) {
           }
 
           if ((order as any).payment_status !== 'paid') {
+            // Build update object - FIRST-TOUCH: only set attribution if not already present
+            const orderUpdate: Record<string, any> = {
+              payment_status: 'paid',
+              stripe_payment_intent_id: session.payment_intent as string,
+              stripe_session_id: session.id,
+              paid_at: new Date().toISOString(),
+              fulfillment_status: 'ready_to_generate',
+            };
+
+            // Only backfill attribution if not already set (FIRST-TOUCH preservation)
+            // This handles edge case where order was created before attribution was available
+            if (!(order as any).landing_path && stripeAttribution.landing_path) {
+              orderUpdate.landing_path = stripeAttribution.landing_path;
+            }
+            if (!(order as any).utm_source && stripeAttribution.utm_source) {
+              orderUpdate.utm_source = stripeAttribution.utm_source;
+            }
+            if (!(order as any).utm_medium && stripeAttribution.utm_medium) {
+              orderUpdate.utm_medium = stripeAttribution.utm_medium;
+            }
+            if (!(order as any).utm_campaign && stripeAttribution.utm_campaign) {
+              orderUpdate.utm_campaign = stripeAttribution.utm_campaign;
+            }
+            if (!(order as any).utm_term && stripeAttribution.utm_term) {
+              orderUpdate.utm_term = stripeAttribution.utm_term;
+            }
+            if (!(order as any).utm_content && stripeAttribution.utm_content) {
+              orderUpdate.utm_content = stripeAttribution.utm_content;
+            }
+            if (!(order as any).referrer && stripeAttribution.referrer) {
+              orderUpdate.referrer = stripeAttribution.referrer;
+            }
+            if (!(order as any).first_touch_at && stripeAttribution.first_touch_at) {
+              orderUpdate.first_touch_at = stripeAttribution.first_touch_at;
+            }
+            if (!(order as any).ga_client_id && stripeAttribution.ga_client_id) {
+              orderUpdate.ga_client_id = stripeAttribution.ga_client_id;
+            }
+
             await supabase
               .from('orders')
-              .update({
-                payment_status: 'paid',
-                stripe_payment_intent_id: session.payment_intent as string,
-                stripe_session_id: session.id,
-                paid_at: new Date().toISOString(),
-                fulfillment_status: 'ready_to_generate',
-              })
+              .update(orderUpdate)
               .eq('id', (order as any).id);
           }
 
@@ -314,6 +365,58 @@ export async function POST(request: Request) {
             }
           } catch (emailError: any) {
             console.error('[Email] Failed to send purchase confirmation:', emailError);
+          }
+
+          // Send server-side GA4 purchase event (bypasses ad blockers)
+          // This is a fallback - client-side event may also fire
+          // GA4 deduplicates by transaction_id
+          if (isMeasurementProtocolConfigured()) {
+            try {
+              const { data: orderForGA } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('id', (order as any).id)
+                .single();
+
+              if (orderForGA) {
+                await sendServerPurchaseEventWithRetry({
+                  // Use stored GA client ID or generate a server-side one
+                  clientId: (orderForGA as any).ga_client_id || generateClientId(),
+                  transactionId: (orderForGA as any).id,
+                  value: (orderForGA as any).total_amount || 0,
+                  currency: (orderForGA as any).currency || 'GBP',
+                  items: [
+                    {
+                      item_id: (orderForGA as any).product_type,
+                      item_name: (orderForGA as any).product_name,
+                      price: (orderForGA as any).total_amount,
+                      quantity: 1,
+                      item_category: 'legal_document',
+                    },
+                  ],
+                  // Attribution from stored order data
+                  utm_source: (orderForGA as any).utm_source || undefined,
+                  utm_medium: (orderForGA as any).utm_medium || undefined,
+                  utm_campaign: (orderForGA as any).utm_campaign || undefined,
+                  utm_term: (orderForGA as any).utm_term || undefined,
+                  utm_content: (orderForGA as any).utm_content || undefined,
+                  landing_path: (orderForGA as any).landing_path || undefined,
+                  product_type: (orderForGA as any).product_type || undefined,
+                  userId: userId || undefined,
+                });
+
+                logger.info('Server-side GA4 purchase event sent', {
+                  orderId: (order as any).id,
+                  value: (orderForGA as any).total_amount,
+                });
+              }
+            } catch (gaError: any) {
+              // Non-critical - log but don't fail the webhook
+              logger.warn('Failed to send server-side GA4 event', {
+                orderId: (order as any).id,
+                error: gaError.message,
+              });
+            }
           }
         } else if (session.mode === 'subscription') {
           const userId = session.metadata?.user_id;

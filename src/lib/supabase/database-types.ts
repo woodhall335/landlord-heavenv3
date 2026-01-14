@@ -825,7 +825,7 @@ export interface AiUsageLogInsert {
 
 /**
  * Database row for `orders` table (as returned by SELECT)
- * Source: 002_orders_payments.sql
+ * Source: 002_orders_payments.sql, 012_order_attribution.sql
  */
 export interface OrderRow {
   /** Primary key UUID */
@@ -873,6 +873,35 @@ export interface OrderRow {
   /** When order was fulfilled */
   fulfilled_at: string | null;
 
+  // === Attribution fields (Migration 012) ===
+
+  /** First page path user visited (e.g., /how-to-evict-tenant) */
+  landing_path: string | null;
+
+  /** UTM source parameter (e.g., google, facebook) - first-touch */
+  utm_source: string | null;
+
+  /** UTM medium parameter (e.g., cpc, organic, email) - first-touch */
+  utm_medium: string | null;
+
+  /** UTM campaign parameter (e.g., section21-guide-jan2026) - first-touch */
+  utm_campaign: string | null;
+
+  /** UTM term parameter (e.g., eviction notice) - first-touch */
+  utm_term: string | null;
+
+  /** UTM content parameter (e.g., hero-cta, sidebar) - first-touch */
+  utm_content: string | null;
+
+  /** HTTP referer from first visit */
+  referrer: string | null;
+
+  /** Timestamp of user first visit */
+  first_touch_at: string | null;
+
+  /** Google Analytics client ID for server-side event matching */
+  ga_client_id: string | null;
+
   /** Row creation timestamp */
   created_at: string | null;
 
@@ -899,6 +928,16 @@ export interface OrderInsert {
   paid_at?: string | null;
   fulfillment_status?: string | null;
   fulfilled_at?: string | null;
+  // Attribution fields (Migration 012)
+  landing_path?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  referrer?: string | null;
+  first_touch_at?: string | null;
+  ga_client_id?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 }
@@ -921,6 +960,16 @@ export interface OrderUpdate {
   paid_at?: string | null;
   fulfillment_status?: string | null;
   fulfilled_at?: string | null;
+  // Attribution fields (Migration 012)
+  landing_path?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  referrer?: string | null;
+  first_touch_at?: string | null;
+  ga_client_id?: string | null;
   updated_at?: string | null;
 }
 
