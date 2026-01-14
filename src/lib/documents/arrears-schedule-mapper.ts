@@ -211,7 +211,7 @@ export function generateArrearsParticulars(params: {
 }
 
 /**
- * Format arrears as a summary paragraph.
+ * Format arrears as a month-by-month bullet list.
  * Uses UK legal date format for clarity.
  */
 function formatArrearsSummary(data: ArrearsScheduleData): string {
@@ -221,17 +221,25 @@ function formatArrearsSummary(data: ArrearsScheduleData): string {
     return `No arrears schedule provided.`;
   }
 
-  const periodsWithArrears = arrears_schedule.filter((p) => p.arrears > 0).length;
+  const periodsWithArrears = arrears_schedule.filter((p) => p.arrears > 0);
 
-  // Extract first and last period dates for a cleaner summary
-  // The period field is now formatted as "15 January 2026 to 14 February 2026"
-  const firstPeriodStart = arrears_schedule[0].period.split(' to ')[0];
-  const lastPeriodEnd = arrears_schedule[arrears_schedule.length - 1].period.split(' to ')[1];
-
+  // Header with total
   let summary = `Rent arrears of £${arrears_total.toFixed(2)} are outstanding `;
-  summary += `(approximately ${arrears_in_months.toFixed(1)} months' rent). `;
-  summary += `The arrears have accrued over ${periodsWithArrears} payment period(s), `;
-  summary += `covering the period from ${firstPeriodStart} to ${lastPeriodEnd}. `;
+  summary += `(approximately ${arrears_in_months.toFixed(1)} months' rent):\n\n`;
+
+  // Month-by-month bullet list
+  for (const entry of periodsWithArrears) {
+    // Extract period label (e.g., "1 January 2025 to 31 January 2025")
+    const periodParts = entry.period.split(' to ');
+    const periodLabel = periodParts.length === 2
+      ? `${periodParts[0]} – ${periodParts[1]}`
+      : entry.period;
+
+    summary += `• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding`;
+    summary += ` (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})\n`;
+  }
+
+  summary += `\nTotal arrears: £${arrears_total.toFixed(2)}. `;
   summary += `A detailed schedule of arrears is attached.`;
 
   return summary;

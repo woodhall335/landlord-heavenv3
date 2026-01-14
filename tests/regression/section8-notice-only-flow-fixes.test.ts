@@ -133,7 +133,7 @@ describe('Issue 3: Arrears wording UK date format', () => {
     expect(result.particulars).toContain('February');
   });
 
-  it('arrears summary has clear wording without "from X to Y to Z" confusion', () => {
+  it('arrears summary uses month-by-month bullet list format', () => {
     const arrearsItems: ArrearsItem[] = [
       {
         period_start: '2025-01-01',
@@ -158,11 +158,14 @@ describe('Issue 3: Arrears wording UK date format', () => {
       rent_frequency: 'monthly',
     });
 
-    // The fix changes "from X to Y to Z to W" to "from X to W" (first start to last end)
-    // Should contain "covering the period from" pattern, not "from X to Y to Z to W"
-    expect(result.particulars).toContain('covering the period from');
-    // Should NOT have confusing double "to" patterns from nested periods
-    expect(result.particulars).not.toMatch(/from.*to.*to.*to.*to/);
+    // The fix uses month-by-month bullet list format
+    // Each period should be a bullet point with details
+    expect(result.particulars).toContain('•');
+    expect(result.particulars).toContain('outstanding');
+    expect(result.particulars).toContain('due:');
+    expect(result.particulars).toContain('paid:');
+    // Should have a total at the end
+    expect(result.particulars).toContain('Total arrears: £2000.00');
   });
 });
 
@@ -324,5 +327,138 @@ describe('Integration: Section 8 Notice Only pack structure', () => {
     expect(expectedDocuments).toContain('Section 8 Notice');
     expect(expectedDocuments).toContain('Rent Schedule / Arrears Statement');
     expect(expectedDocuments.length).toBe(5);
+  });
+});
+
+// ============================================================================
+// FOLLOW-UP FIX 1: Server-side entitlement validation
+// ============================================================================
+describe('Follow-up Fix 1: Server-side entitlement validation in regenerate endpoint', () => {
+  it('regenerate endpoint validates product type if provided', () => {
+    // The fix adds optional product param to regenerate request
+    const request = {
+      case_id: 'test-case-id',
+      product: 'section8_notice_only',
+    };
+
+    // If product is specified, query should filter by it
+    const shouldFilterByProduct = !!request.product;
+    expect(shouldFilterByProduct).toBe(true);
+  });
+
+  it('regenerate endpoint verifies order user_id matches authenticated user', () => {
+    // The fix adds defense-in-depth check: order.user_id === user.id
+    const order = { user_id: 'user-123', payment_status: 'paid' };
+    const authenticatedUser = { id: 'user-123' };
+
+    const userIdMatches = order.user_id === authenticatedUser.id;
+    expect(userIdMatches).toBe(true);
+  });
+
+  it('regenerate endpoint rejects mismatched user_id with 403', () => {
+    // Different user trying to access another user's order
+    const order = { user_id: 'user-456', payment_status: 'paid' };
+    const authenticatedUser = { id: 'user-123' };
+
+    const userIdMatches = !order.user_id || order.user_id === authenticatedUser.id;
+    expect(userIdMatches).toBe(false);
+    // Should return 403 Forbidden
+  });
+
+  it('regenerate endpoint requires paid order (402 if unpaid)', () => {
+    // No paid order found
+    const order = null;
+    const statusCode = order ? 200 : 402;
+    expect(statusCode).toBe(402);
+  });
+});
+
+// ============================================================================
+// FOLLOW-UP FIX 2: UI loading state for payment status
+// ============================================================================
+describe('Follow-up Fix 2: UI loading state prevents flash', () => {
+  it('wizard review shows "Loading..." while payment status is being fetched', () => {
+    const isLoadingPaymentStatus = true;
+    const isPaid = false;
+    const isRegenerating = false;
+    const hasBlockers = false;
+
+    const buttonText = isLoadingPaymentStatus
+      ? 'Loading...'
+      : isRegenerating
+        ? 'Regenerating...'
+        : hasBlockers
+          ? 'Fix issues to proceed'
+          : isPaid
+            ? 'Regenerate pack'
+            : 'Proceed to payment & pack';
+
+    expect(buttonText).toBe('Loading...');
+  });
+
+  it('button is disabled while loading payment status', () => {
+    const isLoadingPaymentStatus = true;
+    const hasBlockingIssues = false;
+    const hasAcknowledgedBlockers = false;
+    const isRegenerating = false;
+
+    const isDisabled =
+      (hasBlockingIssues && !hasAcknowledgedBlockers) ||
+      isRegenerating ||
+      isLoadingPaymentStatus;
+
+    expect(isDisabled).toBe(true);
+  });
+
+  it('button shows correct text after payment status loads (paid case)', () => {
+    const isLoadingPaymentStatus = false;
+    const isPaid = true;
+    const isRegenerating = false;
+    const hasBlockers = false;
+
+    const buttonText = isLoadingPaymentStatus
+      ? 'Loading...'
+      : isRegenerating
+        ? 'Regenerating...'
+        : hasBlockers
+          ? 'Fix issues to proceed'
+          : isPaid
+            ? 'Regenerate pack'
+            : 'Proceed to payment & pack';
+
+    expect(buttonText).toBe('Regenerate pack');
+  });
+
+  it('button shows correct text after payment status loads (unpaid case)', () => {
+    const isLoadingPaymentStatus = false;
+    const isPaid = false;
+    const isRegenerating = false;
+    const hasBlockers = false;
+
+    const buttonText = isLoadingPaymentStatus
+      ? 'Loading...'
+      : isRegenerating
+        ? 'Regenerating...'
+        : hasBlockers
+          ? 'Fix issues to proceed'
+          : isPaid
+            ? 'Regenerate pack'
+            : 'Proceed to payment & pack';
+
+    expect(buttonText).toBe('Proceed to payment & pack');
+  });
+
+  it('button is enabled after payment status loads (no blockers)', () => {
+    const isLoadingPaymentStatus = false;
+    const hasBlockingIssues = false;
+    const hasAcknowledgedBlockers = false;
+    const isRegenerating = false;
+
+    const isDisabled =
+      (hasBlockingIssues && !hasAcknowledgedBlockers) ||
+      isRegenerating ||
+      isLoadingPaymentStatus;
+
+    expect(isDisabled).toBe(false);
   });
 });

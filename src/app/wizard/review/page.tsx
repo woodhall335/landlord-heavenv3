@@ -56,6 +56,7 @@ function ReviewPageInner() {
   const [isPaid, setIsPaid] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [editWindowOpen, setEditWindowOpen] = useState(false);
+  const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(true); // Start true to prevent UI flash
 
   // Compute derived values BEFORE any conditional returns (null-safe)
   // This ensures hooks are called in the same order on every render
@@ -136,7 +137,10 @@ function ReviewPageInner() {
   // Fetch payment status to determine if this is a regeneration flow
   useEffect(() => {
     const fetchPaymentStatus = async () => {
-      if (!caseId || !product) return;
+      if (!caseId || !product) {
+        setIsLoadingPaymentStatus(false);
+        return;
+      }
 
       try {
         const response = await fetch(`/api/orders/status?case_id=${caseId}&product=${product}`);
@@ -147,6 +151,8 @@ function ReviewPageInner() {
         }
       } catch (error) {
         console.error('Failed to fetch payment status:', error);
+      } finally {
+        setIsLoadingPaymentStatus(false);
       }
     };
 
@@ -290,6 +296,7 @@ function ReviewPageInner() {
       onProceed={handleProceed}
       isPaid={isPaid}
       isRegenerating={isRegenerating}
+      isLoadingPaymentStatus={isLoadingPaymentStatus}
     />;
   }
 
@@ -310,6 +317,7 @@ function ReviewPageInner() {
       onProceed={handleProceed}
       isPaid={isPaid}
       isRegenerating={isRegenerating}
+      isLoadingPaymentStatus={isLoadingPaymentStatus}
     />;
   }
 
@@ -324,6 +332,7 @@ function ReviewPageInner() {
       onProceed={handleProceed}
       isPaid={isPaid}
       isRegenerating={isRegenerating}
+      isLoadingPaymentStatus={isLoadingPaymentStatus}
     />;
   }
 
@@ -347,6 +356,7 @@ function ReviewPageInner() {
     onProceed={handleProceed}
     isPaid={isPaid}
     isRegenerating={isRegenerating}
+    isLoadingPaymentStatus={isLoadingPaymentStatus}
   />;
 }
 
@@ -371,6 +381,7 @@ interface MoneyClaimReviewContentProps {
   onProceed: () => void;
   isPaid?: boolean;
   isRegenerating?: boolean;
+  isLoadingPaymentStatus?: boolean;
 }
 
 function MoneyClaimReviewContent({
@@ -391,6 +402,7 @@ function MoneyClaimReviewContent({
   onProceed,
   isPaid,
   isRegenerating,
+  isLoadingPaymentStatus,
 }: MoneyClaimReviewContentProps) {
   const caseHealth = analysis.case_health;
   const caseSummary = analysis.case_summary;
@@ -839,10 +851,10 @@ function MoneyClaimReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
         >
-          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
+          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
       </div>
 
@@ -877,6 +889,7 @@ interface EvictionReviewContentProps {
   onProceed: () => void;
   isPaid?: boolean;
   isRegenerating?: boolean;
+  isLoadingPaymentStatus?: boolean;
 }
 
 function EvictionReviewContent({
@@ -898,6 +911,7 @@ function EvictionReviewContent({
   onProceed,
   isPaid,
   isRegenerating,
+  isLoadingPaymentStatus,
 }: EvictionReviewContentProps) {
   const recommendedRouteLabel: string =
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
@@ -1464,10 +1478,10 @@ function EvictionReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
         >
-          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
+          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
       </div>
 
@@ -1498,6 +1512,7 @@ interface NoticeOnlyReviewContentProps {
   onProceed: () => void;
   isPaid?: boolean;
   isRegenerating?: boolean;
+  isLoadingPaymentStatus?: boolean;
 }
 
 function NoticeOnlyReviewContent({
@@ -1515,6 +1530,7 @@ function NoticeOnlyReviewContent({
   onProceed,
   isPaid,
   isRegenerating,
+  isLoadingPaymentStatus,
 }: NoticeOnlyReviewContentProps) {
   // Extract decision engine data
   const decisionEngine = analysis?.decision_engine;
@@ -2173,10 +2189,10 @@ function NoticeOnlyReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
         >
-          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment and pack'}
+          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment and pack'}
         </Button>
       </div>
 
@@ -2208,6 +2224,7 @@ interface TenancyReviewContentProps {
   onProceed: () => void;
   isPaid?: boolean;
   isRegenerating?: boolean;
+  isLoadingPaymentStatus?: boolean;
 }
 
 /**
@@ -2443,6 +2460,7 @@ function TenancyReviewContent({
   onProceed,
   isPaid,
   isRegenerating,
+  isLoadingPaymentStatus,
 }: TenancyReviewContentProps) {
   const facts = analysis.case_facts || {};
   const validation = buildTenancyValidation(facts, jurisdiction);
@@ -2716,14 +2734,16 @@ function TenancyReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers || isRegenerating}>
-          {isRegenerating
-            ? 'Regenerating...'
-            : hasBlockers
-              ? 'Fix issues to proceed'
-              : isPaid
-                ? 'Regenerate pack'
-                : 'Proceed to payment & pack'}
+        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers || isRegenerating || isLoadingPaymentStatus}>
+          {isLoadingPaymentStatus
+            ? 'Loading...'
+            : isRegenerating
+              ? 'Regenerating...'
+              : hasBlockers
+                ? 'Fix issues to proceed'
+                : isPaid
+                  ? 'Regenerate pack'
+                  : 'Proceed to payment & pack'}
         </Button>
       </div>
 
