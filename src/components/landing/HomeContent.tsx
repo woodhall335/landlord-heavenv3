@@ -90,6 +90,24 @@ export default function HomeContent() {
                 No legal experience needed
               </span>
             </div>
+
+            {/* Section 8 Quick Links - SEO Internal Linking */}
+            <div className="mt-6 pt-6 border-t border-gray-200/50">
+              <p className="text-sm text-gray-500 mb-3">Free Section 8 eviction tools:</p>
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+                <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">
+                  Section 8 notice template (Form 3)
+                </Link>
+                <span className="text-gray-300">•</span>
+                <Link href="/tools/free-section-8-notice-generator" className="text-primary hover:underline font-medium">
+                  Free Section 8 generator
+                </Link>
+                <span className="text-gray-300">•</span>
+                <Link href="/tools/validators/section-8" className="text-primary hover:underline font-medium">
+                  Check a Section 8 notice
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
@@ -430,12 +448,24 @@ export default function HomeContent() {
               </span>
               <span className="flex items-center gap-2">
                 <RiShieldCheckLine className="w-5 h-5 text-primary" />
-                Court-ready guarantee
+                Court-ready format
               </span>
               <span className="flex items-center gap-2">
                 <RiGlobalLine className="w-5 h-5 text-primary" />
                 All UK jurisdictions
               </span>
+            </div>
+
+            {/* Section 8 CTA - SEO Internal Linking */}
+            <div className="mt-8 pt-6 border-t border-gray-300/30">
+              <p className="text-gray-600">
+                Need a free Section 8 notice?{' '}
+                <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">Template</Link>
+                {' • '}
+                <Link href="/tools/free-section-8-notice-generator" className="text-primary hover:underline font-medium">Generator</Link>
+                {' • '}
+                <Link href="/tools/validators/section-8" className="text-primary hover:underline font-medium">Checker</Link>
+              </p>
             </div>
           </div>
         </Container>
