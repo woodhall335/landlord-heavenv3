@@ -1004,11 +1004,15 @@ export async function generateCompleteEvictionPack(
       const rentFrequency = (wizardFacts?.rent_frequency ||
                               wizardFacts?.tenancy?.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
 
+      const rentDueDay = wizardFacts?.rent_due_day ||
+                          wizardFacts?.tenancy?.rent_due_day || null;
+
       const arrearsData = getArrearsScheduleData({
         arrears_items: arrearsItems,
         total_arrears: totalArrears,
         rent_amount: rentAmount,
         rent_frequency: rentFrequency,
+        rent_due_day: rentDueDay,
         include_schedule: true,
       });
 
@@ -1444,11 +1448,14 @@ export async function generateNoticeOnlyPack(
             wizardFacts.issues?.rent_arrears?.arrears_items ||
             [];
 
+          const rentDueDay = wizardFacts.rent_due_day || evictionCase.payment_day || null;
+
           const arrearsData = getArrearsScheduleData({
             arrears_items: arrearsItems,
             total_arrears: wizardFacts.arrears_total || wizardFacts.issues?.rent_arrears?.total_arrears,
             rent_amount: evictionCase.rent_amount || 0,
             rent_frequency: evictionCase.rent_frequency || 'monthly',
+            rent_due_day: rentDueDay,
             include_schedule: true,
           });
 
