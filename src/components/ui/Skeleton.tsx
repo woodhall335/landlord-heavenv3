@@ -55,7 +55,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
  * Card Skeleton - Loading placeholder for cards
  */
 export const CardSkeleton: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={clsx('bg-white rounded-xl border border-gray-200 p-6', className)}>
+  <div className={clsx('bg-white rounded-2xl shadow-sm border border-gray-200 p-6', className)}>
     <div className="flex items-start justify-between mb-4">
       <div className="space-y-2">
         <Skeleton variant="text" className="h-5 w-32" />
@@ -93,7 +93,7 @@ export const TableRowSkeleton: React.FC<{ columns?: number; className?: string }
  * Stats Card Skeleton - Loading placeholder for dashboard stats
  */
 export const StatsCardSkeleton: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={clsx('bg-white rounded-xl border border-gray-200 p-6', className)}>
+  <div className={clsx('bg-white rounded-2xl shadow-sm border border-gray-200 p-6', className)}>
     <div className="flex items-center justify-between mb-3">
       <Skeleton variant="circular" className="w-10 h-10" />
       <Skeleton variant="rounded" className="h-5 w-16" />

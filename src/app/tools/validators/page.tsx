@@ -84,7 +84,7 @@ export default function ValidatorsHubPage() {
       </div>
 
       {/* Validators Grid */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {validators.map((validator) => (

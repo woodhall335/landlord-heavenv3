@@ -2875,7 +2875,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-linear-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">☁️</span>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -2934,7 +2934,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
 
             {/* Did You Know Tip */}
-            <div className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-blue-900 mb-1">💡 Did you know?</p>
               <p className="text-sm text-blue-800">
                 Ask Heaven-drafted witness statements typically save landlords{' '}
@@ -3763,7 +3763,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="hidden lg:block sticky top-32 space-y-4">
               {/* Placeholder panel when no Smart Guidance data exists yet */}
               {!routeRecommendation && !groundRecommendations && !calculatedDate && (
-                <Card className="p-6 bg-linear-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
+                <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
                   <div className="text-center mb-4">
                     <div className="text-5xl mb-3">☁️</div>
                     <h3 className="text-lg font-bold text-purple-900 mb-2">
@@ -3816,7 +3816,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* ROUTE RECOMMENDATION PANEL */}
               {routeRecommendation && (
-                <div className="p-5 bg-linear-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">💡</div>
                     <div className="flex-1">
@@ -3877,7 +3877,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* GROUND RECOMMENDATIONS PANEL */}
               {groundRecommendations && groundRecommendations.length > 0 && (
-                <div className="p-5 bg-linear-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">⚖️</div>
                     <div className="flex-1">
@@ -3930,7 +3930,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* CALCULATED DATE PANEL */}
               {calculatedDate && (
-                <div className="p-5 bg-linear-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">📅</div>
                     <div className="flex-1">

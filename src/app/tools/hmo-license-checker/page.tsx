@@ -447,7 +447,7 @@ export default function HMOLicenseChecker() {
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="checker" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">

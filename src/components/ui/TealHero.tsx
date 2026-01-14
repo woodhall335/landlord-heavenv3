@@ -28,7 +28,7 @@ export function TealHero({
         <div className="absolute left-1/3 top-1/3 h-64 w-64 rounded-full bg-purple-200/40 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:py-40">
+      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-32 md:pb-20">
         <div className={clsx("flex flex-col gap-7", alignment)}>
           {breadcrumb && <div className="text-sm text-gray-600">{breadcrumb}</div>}
           {eyebrow && (

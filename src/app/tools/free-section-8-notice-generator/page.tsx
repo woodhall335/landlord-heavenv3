@@ -430,7 +430,7 @@ export default function FreeSection8Tool() {
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">

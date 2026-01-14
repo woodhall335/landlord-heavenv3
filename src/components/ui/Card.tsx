@@ -32,14 +32,14 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const baseStyles = clsx(
-      "bg-white rounded-xl",
+      "bg-white rounded-2xl",
       "transition-all duration-200 ease-out"
     );
 
     const variantStyles = {
-      default: "border border-gray-200",
-      bordered: "border-2 border-gray-300",
-      elevated: "shadow-md border border-gray-100",
+      default: "shadow-sm border border-gray-200",
+      bordered: "shadow-sm border-2 border-gray-300",
+      elevated: "shadow-lg border border-gray-100",
     };
 
     const paddingStyles = {
