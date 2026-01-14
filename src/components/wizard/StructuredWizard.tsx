@@ -2875,7 +2875,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-linear-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">☁️</span>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -2934,7 +2934,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
 
             {/* Did You Know Tip */}
-            <div className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-blue-900 mb-1">💡 Did you know?</p>
               <p className="text-sm text-blue-800">
                 Ask Heaven-drafted witness statements typically save landlords{' '}
@@ -3100,27 +3100,40 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">
-              {productLabel} Pack
-            </h1>
-            <span className="text-sm text-gray-500">
-              {Math.round(progress)}% Complete
-            </span>
+            <div className="flex items-center gap-3">
+              <h1 className="text-lg font-semibold text-gray-900">
+                {productLabel} Pack
+              </h1>
+              {/* Step counter */}
+              <span className="text-sm text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                Question {questionHistory.length + 1}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-sm font-bold text-primary">{Math.round(progress)}%</span>
+              </div>
+            </div>
           </div>
 
           {/* Progress bar */}
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#7C3AED] transition-all duration-300"
+              className="h-full bg-[#7C3AED] transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
 
           {/* Current section indicator */}
-          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
-            <div className="px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap bg-[#7C3AED] text-white">
+          <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-2">
+            <div className="px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap bg-[#7C3AED] text-white">
               {currentQuestion.section || 'Question'}
             </div>
+            {progress > 0 && progress < 100 && (
+              <span className="text-xs text-gray-500">
+                {progress < 25 ? 'Getting started...' : progress < 50 ? 'Making progress!' : progress < 75 ? 'Almost there!' : 'Final details...'}
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -3750,7 +3763,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="hidden lg:block sticky top-32 space-y-4">
               {/* Placeholder panel when no Smart Guidance data exists yet */}
               {!routeRecommendation && !groundRecommendations && !calculatedDate && (
-                <Card className="p-6 bg-linear-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
+                <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
                   <div className="text-center mb-4">
                     <div className="text-5xl mb-3">☁️</div>
                     <h3 className="text-lg font-bold text-purple-900 mb-2">
@@ -3803,7 +3816,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* ROUTE RECOMMENDATION PANEL */}
               {routeRecommendation && (
-                <div className="p-5 bg-linear-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">💡</div>
                     <div className="flex-1">
@@ -3864,7 +3877,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* GROUND RECOMMENDATIONS PANEL */}
               {groundRecommendations && groundRecommendations.length > 0 && (
-                <div className="p-5 bg-linear-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">⚖️</div>
                     <div className="flex-1">
@@ -3917,7 +3930,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* CALCULATED DATE PANEL */}
               {calculatedDate && (
-                <div className="p-5 bg-linear-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-gradient-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">📅</div>
                     <div className="flex-1">

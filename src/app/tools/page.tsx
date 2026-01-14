@@ -70,7 +70,7 @@ export default function ToolsHubPage() {
         </section>
       )}
 
-      <section id="tools" className="py-16 md:py-20">
+      <section id="tools" className="py-20 md:py-24">
         <Container>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">All Free Tools</h2>

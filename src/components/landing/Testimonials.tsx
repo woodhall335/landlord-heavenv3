@@ -2,11 +2,11 @@
  * Testimonials Component
  *
  * Enhanced social proof section with multiple testimonials.
- * Includes: Star ratings, specific outcomes, location credibility.
+ * Includes: Star ratings, specific outcomes, location credibility, verification badges.
  */
 
 import { Container } from '@/components/ui';
-import { RiStarFill } from 'react-icons/ri';
+import { RiStarFill, RiVerifiedBadgeFill, RiDoubleQuotesL } from 'react-icons/ri';
 
 interface Testimonial {
   quote: string;
@@ -17,6 +17,7 @@ interface Testimonial {
   avatarColor: string;
   rating: number;
   highlight?: string;
+  verified?: boolean;
 }
 
 const testimonials: Testimonial[] = [
@@ -28,7 +29,8 @@ const testimonials: Testimonial[] = [
     initials: "MR",
     avatarColor: "bg-primary",
     rating: 5,
-    highlight: "Saved £250+"
+    highlight: "Saved £250+",
+    verified: true,
   },
   {
     quote: "The Complete Eviction Pack was worth every penny. All the court forms were pre-filled correctly and the guidance notes helped me through the whole process. Got possession in 8 weeks.",
@@ -38,7 +40,8 @@ const testimonials: Testimonial[] = [
     initials: "SJ",
     avatarColor: "bg-secondary",
     rating: 5,
-    highlight: "Court success"
+    highlight: "Court success",
+    verified: true,
   },
   {
     quote: "As a first-time landlord dealing with rent arrears, the Money Claim Pack walked me through everything. Recovered £3,200 in unpaid rent and the tenant's now paying on time.",
@@ -48,7 +51,8 @@ const testimonials: Testimonial[] = [
     initials: "DT",
     avatarColor: "bg-gray-600",
     rating: 5,
-    highlight: "Recovered £3,200"
+    highlight: "Recovered £3,200",
+    verified: true,
   },
 ];
 
@@ -67,9 +71,14 @@ function StarRating({ rating }: { rating: number }) {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-gray-100 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
-      {/* Rating */}
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-gray-100 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col relative group">
+      {/* Quote mark decoration */}
+      <div className="absolute -top-3 -left-2 text-primary/10 group-hover:text-primary/20 transition-colors duration-300">
+        <RiDoubleQuotesL className="w-12 h-12" />
+      </div>
+
+      {/* Rating and highlight */}
+      <div className="flex items-center justify-between mb-4 relative z-10">
         <StarRating rating={testimonial.rating} />
         {testimonial.highlight && (
           <span className="text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">
@@ -79,18 +88,23 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       </div>
 
       {/* Quote */}
-      <blockquote className="text-gray-700 leading-relaxed mb-6 flex-grow">
-        "{testimonial.quote}"
+      <blockquote className="text-gray-700 text-lg leading-relaxed mb-6 flex-grow relative z-10">
+        &ldquo;{testimonial.quote}&rdquo;
       </blockquote>
 
-      {/* Author */}
+      {/* Author with verification */}
       <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-        <div className={`w-12 h-12 ${testimonial.avatarColor} text-white rounded-full flex items-center justify-center font-bold text-lg`}>
+        <div className={`w-12 h-12 ${testimonial.avatarColor} text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0`}>
           {testimonial.initials}
         </div>
-        <div>
-          <div className="font-semibold text-gray-900">{testimonial.name}</div>
-          <div className="text-sm text-gray-500">{testimonial.role}, {testimonial.location}</div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-gray-900">{testimonial.name}</span>
+            {testimonial.verified && (
+              <RiVerifiedBadgeFill className="w-4 h-4 text-blue-500 shrink-0" title="Verified customer" />
+            )}
+          </div>
+          <div className="text-sm text-gray-500 truncate">{testimonial.role}, {testimonial.location}</div>
         </div>
       </div>
     </div>
@@ -110,7 +124,7 @@ export function Testimonials() {
             What Our Customers Say
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Join thousands of landlords who've saved time and money with our documents.
+            Join thousands of landlords who&apos;ve saved time and money with our documents.
           </p>
         </div>
 
@@ -121,16 +135,21 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Aggregate Stats */}
+        {/* Aggregate Stats with trust signals */}
         <div className="mt-14 text-center">
-          <div className="inline-flex items-center gap-8 bg-white rounded-full px-8 py-4 shadow-sm border border-gray-100">
+          <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-8 bg-white rounded-2xl md:rounded-full px-6 md:px-8 py-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2">
               <StarRating rating={5} />
               <span className="text-sm font-medium text-gray-700">4.9/5 average rating</span>
             </div>
-            <div className="h-6 w-px bg-gray-200" />
+            <div className="hidden md:block h-6 w-px bg-gray-200" />
+            <div className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
+              <RiVerifiedBadgeFill className="w-4 h-4 text-blue-500" />
+              <span>500+ verified reviews</span>
+            </div>
+            <div className="hidden md:block h-6 w-px bg-gray-200" />
             <div className="text-sm font-medium text-gray-700">
-              Based on 500+ reviews
+              UK-based support
             </div>
           </div>
         </div>
