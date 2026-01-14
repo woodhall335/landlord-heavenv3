@@ -3068,31 +3068,61 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     }
   }
 
+  // =============================================================================
+  // SECTION 21 COMPLIANCE FIELDS (CRITICAL FOR S21 VALIDITY)
+  // IMPORTANT: Wizard stores these as *_served but templates expect *_given/*_provided
+  // We check ALL variants to ensure YES values are correctly mapped
+  // =============================================================================
   templateData.prescribed_info_given = coerceBoolean(
-    getWizardValue(wizard, 'prescribed_info_given')
+    getFirstValue(wizard, [
+      'prescribed_info_given',
+      'prescribed_info_served',  // Section21ComplianceSection uses this
+      'prescribed_info_provided',
+    ])
   );
 
   templateData.gas_certificate_provided = coerceBoolean(
-    getFirstValue(wizard, ['gas_certificate_provided', 'gas_safety_cert_provided'])
+    getFirstValue(wizard, [
+      'gas_certificate_provided',
+      'gas_safety_cert_provided',
+      'gas_safety_cert_served',  // Section21ComplianceSection uses this
+      'gas_cert_provided',
+      'gas_cert_served',
+    ])
   );
 
   templateData.gas_safety_cert_provided = coerceBoolean(
-    getFirstValue(wizard, ['gas_safety_cert_provided', 'gas_certificate_provided'])
+    getFirstValue(wizard, [
+      'gas_safety_cert_provided',
+      'gas_safety_cert_served',  // Section21ComplianceSection uses this
+      'gas_certificate_provided',
+    ])
   );
 
   // Alias for templates that use gas_cert_provided
   templateData.gas_cert_provided = templateData.gas_certificate_provided || templateData.gas_safety_cert_provided;
 
   templateData.how_to_rent_provided = coerceBoolean(
-    getFirstValue(wizard, ['how_to_rent_provided', 'how_to_rent_given'])
+    getFirstValue(wizard, [
+      'how_to_rent_provided',
+      'how_to_rent_given',
+      'how_to_rent_served',  // Section21ComplianceSection uses this
+    ])
   );
 
   templateData.how_to_rent_given = coerceBoolean(
-    getFirstValue(wizard, ['how_to_rent_given', 'how_to_rent_provided'])
+    getFirstValue(wizard, [
+      'how_to_rent_given',
+      'how_to_rent_provided',
+      'how_to_rent_served',  // Section21ComplianceSection uses this
+    ])
   );
 
   templateData.epc_provided = coerceBoolean(
-    getWizardValue(wizard, 'epc_provided')
+    getFirstValue(wizard, [
+      'epc_provided',
+      'epc_served',  // Section21ComplianceSection uses this
+    ])
   );
 
   templateData.epc_rating = extractString(

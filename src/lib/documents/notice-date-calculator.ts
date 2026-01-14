@@ -56,6 +56,9 @@ export interface Section21DateParams {
   tenancy_start_date: string;
   fixed_term?: boolean;
   fixed_term_end_date?: string;
+  // Break clause fields (for fixed term tenancies)
+  has_break_clause?: boolean;
+  break_clause_date?: string; // ISO date
   rent_period: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   periodic_tenancy_start?: string; // When it became periodic (if converted)
 }
@@ -352,8 +355,16 @@ export function validateSection8ExpiryDate(
  * 4. For fixed term: can be served during fixed term but expiry must be on or after last day of fixed term
  */
 export function calculateSection21ExpiryDate(params: Section21DateParams): DateCalculationResult {
-  const { service_date, tenancy_start_date, fixed_term, fixed_term_end_date, rent_period, periodic_tenancy_start } =
-    params;
+  const {
+    service_date,
+    tenancy_start_date,
+    fixed_term,
+    fixed_term_end_date,
+    has_break_clause,
+    break_clause_date,
+    rent_period,
+    periodic_tenancy_start,
+  } = params;
 
   const serviceDateObj = parseUTCDate(service_date);
   const tenancyStartObj = parseUTCDate(tenancy_start_date);
@@ -378,12 +389,38 @@ export function calculateSection21ExpiryDate(params: Section21DateParams): DateC
     );
   }
 
-  // If fixed term, expiry must be on or after last day of fixed term
+  // If fixed term, expiry must be on or after:
+  // - Break clause date (if there is one), OR
+  // - Fixed term end date (if no break clause)
   if (fixed_term && fixed_term_end_date) {
     const fixedTermEndObj = parseUTCDate(fixed_term_end_date);
-    if (expiryDateObj < fixedTermEndObj) {
-      expiryDateObj = new Date(fixedTermEndObj);
-      explanation += `The expiry date has been set to the last day of the fixed term. `;
+
+    // Check if break clause allows earlier exit
+    if (has_break_clause && break_clause_date) {
+      const breakClauseDateObj = parseUTCDate(break_clause_date);
+
+      // Use break clause date if it's before fixed term end
+      if (breakClauseDateObj < fixedTermEndObj) {
+        if (expiryDateObj < breakClauseDateObj) {
+          expiryDateObj = new Date(breakClauseDateObj);
+          explanation += `The expiry date has been set to the break clause date (${formatDate(breakClauseDateObj)}), which allows earlier exit from the fixed term. `;
+        }
+      } else {
+        // Break clause is on/after fixed term end - use fixed term end
+        if (expiryDateObj < fixedTermEndObj) {
+          expiryDateObj = new Date(fixedTermEndObj);
+          explanation += `The expiry date has been set to the last day of the fixed term. `;
+        }
+        warnings.push(
+          'The break clause date is on or after the fixed term end date. The notice will expire at the fixed term end.'
+        );
+      }
+    } else {
+      // No break clause - must wait until fixed term ends
+      if (expiryDateObj < fixedTermEndObj) {
+        expiryDateObj = new Date(fixedTermEndObj);
+        explanation += `The expiry date has been set to the last day of the fixed term (no break clause allows earlier exit). `;
+      }
     }
   }
 

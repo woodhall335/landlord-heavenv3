@@ -37,6 +37,9 @@ export interface Section21NoticeData {
   tenancy_start_date: string;
   fixed_term?: boolean;
   fixed_term_end_date?: string;
+  // Break clause fields (for fixed term tenancies)
+  has_break_clause?: boolean;
+  break_clause_date?: string;
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   periodic_tenancy_start?: string; // When it became periodic (if converted from fixed)
@@ -97,6 +100,8 @@ export async function generateSection21Notice(
     tenancy_start_date: data.tenancy_start_date,
     fixed_term: data.fixed_term,
     fixed_term_end_date: data.fixed_term_end_date,
+    has_break_clause: data.has_break_clause,
+    break_clause_date: data.break_clause_date,
     rent_period: data.rent_frequency,
     periodic_tenancy_start: data.periodic_tenancy_start,
   };
@@ -222,8 +227,14 @@ export function mapWizardToSection21Data(
     fixed_term:
       wizardFacts.fixed_term === true ||
       wizardFacts.is_fixed_term === true ||
-      wizardFacts.tenancy_type === 'fixed_term',
+      wizardFacts.tenancy_type === 'fixed_term' ||
+      wizardFacts.tenancy_type === 'ast_fixed',
     fixed_term_end_date: wizardFacts.fixed_term_end_date,
+    // Break clause fields (for fixed term tenancies)
+    has_break_clause:
+      wizardFacts.has_break_clause === true ||
+      wizardFacts.has_break_clause === 'yes',
+    break_clause_date: wizardFacts.break_clause_date,
     rent_amount: wizardFacts.rent_amount || 0,
     rent_frequency: wizardFacts.rent_frequency || 'monthly',
     periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
@@ -237,6 +248,8 @@ export function mapWizardToSection21Data(
     expiry_date: '', // Will be auto-calculated by generateSection21Notice
 
     // Compliance
+    // IMPORTANT: Section21ComplianceSection stores these as *_served but
+    // templates and interfaces use *_given/*_provided. Check all variants.
     deposit_protected:
       wizardFacts.deposit_protected === true ||
       wizardFacts.deposit_protected === 'yes',
@@ -247,17 +260,27 @@ export function mapWizardToSection21Data(
     deposit_reference: wizardFacts.deposit_reference,
     prescribed_info_given:
       wizardFacts.prescribed_info_given === true ||
-      wizardFacts.prescribed_info_given === 'yes',
+      wizardFacts.prescribed_info_given === 'yes' ||
+      wizardFacts.prescribed_info_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.prescribed_info_served === 'yes',
     gas_certificate_provided:
       wizardFacts.gas_certificate_provided === true ||
+      wizardFacts.gas_certificate_provided === 'yes' ||
       wizardFacts.gas_safety_certificate === true ||
-      wizardFacts.gas_certificate_provided === 'yes',
+      wizardFacts.gas_safety_cert_provided === true ||
+      wizardFacts.gas_safety_cert_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.gas_safety_cert_served === 'yes',
     how_to_rent_provided:
       wizardFacts.how_to_rent_provided === true ||
+      wizardFacts.how_to_rent_provided === 'yes' ||
       wizardFacts.how_to_rent_given === true ||
-      wizardFacts.how_to_rent_provided === 'yes',
+      wizardFacts.how_to_rent_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.how_to_rent_served === 'yes',
     epc_provided:
-      wizardFacts.epc_provided === true || wizardFacts.epc_provided === 'yes',
+      wizardFacts.epc_provided === true ||
+      wizardFacts.epc_provided === 'yes' ||
+      wizardFacts.epc_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.epc_served === 'yes',
     epc_rating: wizardFacts.epc_rating,
 
     // Help information

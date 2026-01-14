@@ -264,6 +264,71 @@ describe('Section 21 Regression Tests - mapNoticeOnlyFacts', () => {
       expect(result.epc_provided).toBe(true);
       expect(result.how_to_rent_given).toBe(true);
     });
+
+    // CRITICAL FIX TEST: Section21ComplianceSection uses *_served field names
+    // but templates and generators expect *_given/*_provided field names.
+    // The mapper MUST recognize both variants.
+    it('MUST correctly map *_served field variants from Section21ComplianceSection', () => {
+      // Section21ComplianceSection stores values using *_served field names
+      const wizardFacts = {
+        ...createSection21WizardFacts(),
+        // Remove the *_given/*_provided fields
+        prescribed_info_given: undefined,
+        gas_certificate_provided: undefined,
+        gas_safety_cert_provided: undefined,
+        epc_provided: undefined,
+        how_to_rent_provided: undefined,
+        how_to_rent_given: undefined,
+        // Use Section21ComplianceSection field names (*_served)
+        prescribed_info_served: true,
+        gas_safety_cert_served: true,
+        epc_served: true,
+        how_to_rent_served: true,
+      };
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // All compliance fields should be mapped correctly from *_served variants
+      expect(result.prescribed_info_given).toBe(true);
+      expect(result.gas_certificate_provided).toBe(true);
+      expect(result.gas_cert_provided).toBe(true); // Alias
+      expect(result.epc_provided).toBe(true);
+      expect(result.how_to_rent_given).toBe(true);
+      expect(result.how_to_rent_provided).toBe(true); // Alias
+    });
+
+    it('MUST correctly map *_served fields with string "yes" value', () => {
+      const wizardFacts = {
+        jurisdiction: 'england',
+        // Only use *_served variants with string values
+        prescribed_info_served: 'yes',
+        gas_safety_cert_served: 'yes',
+        epc_served: 'yes',
+        how_to_rent_served: 'yes',
+      };
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      expect(result.prescribed_info_given).toBe(true);
+      expect(result.gas_certificate_provided).toBe(true);
+      expect(result.epc_provided).toBe(true);
+      expect(result.how_to_rent_given).toBe(true);
+    });
+
+    it('MUST correctly map *_served fields with boolean false value', () => {
+      const wizardFacts = {
+        jurisdiction: 'england',
+        // Only use *_served variants with false values
+        prescribed_info_served: false,
+        gas_safety_cert_served: false,
+        epc_served: false,
+        how_to_rent_served: false,
+      };
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      expect(result.prescribed_info_given).toBe(false);
+      expect(result.gas_certificate_provided).toBe(false);
+      expect(result.epc_provided).toBe(false);
+      expect(result.how_to_rent_given).toBe(false);
+    });
   });
 
   describe('S21 Date Resolution', () => {
