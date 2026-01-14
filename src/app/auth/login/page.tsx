@@ -188,7 +188,7 @@ function LoginContent() {
               <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
                 Welcome Back
               </h1>
-              <p className="text-white/90 text-lg">
+              <p className="text-white text-lg">
                 Log in to access your documents and cases
               </p>
             </div>
