@@ -179,6 +179,7 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
  */
 export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
   // Check all possible paths in precedence order
+  // IMPORTANT: Section 8 notice templates use service_date, notice_service_date, intended_service_date
   const candidates = [
     // Complete pack MQS maps_to path (England)
     'notice_served_date',
@@ -189,6 +190,11 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
     // Direct field IDs (wizard stores by field id)
     'notice_service_date',
     'service_date',
+    // Section 8 specific date fields (used by complete pack and N5 forms)
+    'section_8_notice_date',
+    'section8_notice_date',
+    // Intended service date (used in Form 3 Section 8 template)
+    'intended_service_date',
     // Scotland field ID
     'notice_date',
   ];
@@ -217,12 +223,18 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
  * @returns The canonical expiry date string (YYYY-MM-DD) or null if not found
  */
 export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
+  // Check all possible paths for expiry/possession dates
+  // IMPORTANT: Templates use earliest_possession_date_formatted, notice_expiry_date, etc.
   const candidates = [
     // England/Wales maps_to path
     'notice_service.notice_expiry_date',
     // Direct field IDs
     'notice_expiry_date',
     'expiry_date',
+    // Section 8 specific (earliest date court can hear possession claim)
+    'earliest_possession_date',
+    'section8_expiry_date',
+    'section_8_expiry_date',
     // Scotland
     'earliest_leaving_date',
     'earliest_tribunal_date',

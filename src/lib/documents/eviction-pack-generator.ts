@@ -41,6 +41,96 @@ import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 
 // ============================================================================
+// DATE FORMATTING HELPER - UK Legal Format
+// ============================================================================
+
+/**
+ * Format a date string to UK legal format (e.g., "15 January 2026")
+ * Used for service instructions and checklist PDFs
+ */
+function formatUKLegalDate(dateString: string | null | undefined): string {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    const day = date.getDate();
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Build formatted date fields for Section 8 templates.
+ * Ensures service_date_formatted, earliest_possession_date_formatted,
+ * tenancy_start_date_formatted, and ground_descriptions are set.
+ */
+function buildSection8TemplateData(
+  evictionCase: EvictionCase,
+  wizardFacts: any
+): Record<string, any> {
+  // Resolve service date from multiple possible sources (first non-empty wins)
+  const serviceDate =
+    wizardFacts.notice_service_date ||
+    wizardFacts.notice_served_date ||
+    wizardFacts.section_8_notice_date ||
+    wizardFacts.service_date ||
+    wizardFacts.notice_date ||
+    wizardFacts['notice_service.notice_date'] ||
+    new Date().toISOString().split('T')[0];
+
+  // Resolve earliest possession / expiry date
+  const earliestPossessionDate =
+    wizardFacts.notice_expiry_date ||
+    wizardFacts.earliest_possession_date ||
+    wizardFacts.section8_expiry_date ||
+    wizardFacts['notice_service.notice_expiry_date'] ||
+    '';
+
+  // Resolve tenancy start date
+  const tenancyStartDate =
+    wizardFacts.tenancy_start_date ||
+    evictionCase.tenancy_start_date ||
+    '';
+
+  // Build ground descriptions string (e.g., "Ground 8 – Serious rent arrears, Ground 10 – ...")
+  const groundDescriptions = evictionCase.grounds
+    .map((g) => `Ground ${g.code.replace('Ground ', '')} – ${g.title}`)
+    .join(', ');
+
+  return {
+    ...evictionCase,
+    ...wizardFacts,
+    // Raw dates
+    service_date: serviceDate,
+    notice_service_date: serviceDate,
+    notice_date: serviceDate,
+    intended_service_date: serviceDate,
+    earliest_possession_date: earliestPossessionDate,
+    tenancy_start_date: tenancyStartDate,
+    // Formatted dates for templates
+    service_date_formatted: formatUKLegalDate(serviceDate),
+    notice_date_formatted: formatUKLegalDate(serviceDate),
+    earliest_possession_date_formatted: formatUKLegalDate(earliestPossessionDate),
+    tenancy_start_date_formatted: formatUKLegalDate(tenancyStartDate),
+    generated_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
+    current_date: new Date().toISOString().split('T')[0],
+    // Ground descriptions for checklist
+    ground_descriptions: groundDescriptions,
+    grounds: evictionCase.grounds,
+    // Convenience flags
+    has_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
+    is_fixed_term: evictionCase.fixed_term === true,
+  };
+}
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -1264,11 +1354,16 @@ export async function generateNoticeOnlyPack(
         file_name: 'section8_notice.pdf',
       });
 
+      // Build Section 8 template data with formatted dates and ground descriptions
+      // This ensures service_date_formatted, earliest_possession_date_formatted,
+      // tenancy_start_date_formatted, and ground_descriptions are available for templates
+      const section8TemplateData = buildSection8TemplateData(evictionCase, wizardFacts);
+
       // 2. Generate Service Instructions (Section 8)
       try {
         const serviceInstructionsDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section8TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -1289,7 +1384,7 @@ export async function generateNoticeOnlyPack(
       try {
         const checklistDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/checklist_section_8.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section8TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -1310,7 +1405,7 @@ export async function generateNoticeOnlyPack(
       try {
         const complianceDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section8TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
