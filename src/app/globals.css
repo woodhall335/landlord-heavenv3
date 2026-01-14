@@ -239,8 +239,9 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 }
 
 .header-login-btn:hover {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-dark);
+  background-color: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
   box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
 }
 
