@@ -14,6 +14,54 @@ import {
   type Section8GroundDefinition,
 } from '../grounds/section8-ground-definitions';
 
+// =============================================================================
+// DATE FORMATTING UTILITIES
+// =============================================================================
+
+/**
+ * Formats a date string (YYYY-MM-DD or parseable) to UK legal format.
+ * Example: "2026-01-15" -> "15 January 2026"
+ *
+ * @param dateStr - The date string in YYYY-MM-DD format or any parseable date
+ * @returns Formatted date string (e.g., "15 January 2026") or null if invalid
+ */
+export function formatUkLegalDate(dateStr: string | null | undefined): string | null {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+
+  try {
+    const parsed = new Date(dateStr);
+    if (Number.isNaN(parsed.getTime())) return null;
+
+    return new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(parsed);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Builds a human-readable string of grounds for display in checklists.
+ * Example: "Ground 8 (mandatory) – Serious rent arrears; Ground 10 – Rent arrears"
+ *
+ * @param grounds - Array of ground objects with code, title, and mandatory fields
+ * @returns Formatted grounds string or null if no grounds
+ */
+export function buildGroundDescriptions(grounds: any[] | null | undefined): string | null {
+  if (!grounds || !Array.isArray(grounds) || grounds.length === 0) return null;
+
+  return grounds
+    .map((g) => {
+      const groundLabel = `Ground ${g.code || g.number || '?'}`;
+      const mandatoryLabel = g.mandatory ? ' (mandatory)' : '';
+      const title = g.title ? ` – ${g.title}` : '';
+      return `${groundLabel}${mandatoryLabel}${title}`;
+    })
+    .join('; ');
+}
+
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
  * Supports legacy keys (e.g., landlord_name) and case_facts-prefixed MQS paths.
@@ -180,14 +228,15 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
 export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
   // Check all possible paths in precedence order
   // IMPORTANT: Section 8 notice templates use service_date, notice_service_date, intended_service_date
+  // This list covers all legacy field IDs plus current wizard field IDs across all products
   const candidates = [
     // Complete pack MQS maps_to path (England)
     'notice_served_date',
-    // England/Wales maps_to path
+    // England/Wales maps_to path (nested from MQS maps_to)
     'notice_service.notice_date',
     // Scotland maps_to path
     'notice.notice_date',
-    // Direct field IDs (wizard stores by field id)
+    // Direct field IDs (wizard stores by field id) - most common for notice-only
     'notice_service_date',
     'service_date',
     // Section 8 specific date fields (used by complete pack and N5 forms)
@@ -197,6 +246,11 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
     'intended_service_date',
     // Scotland field ID
     'notice_date',
+    // Additional legacy aliases that may exist in older wizard data
+    'date_notice_served',
+    'date_of_service',
+    'served_on',
+    'served_date',
   ];
 
   for (const path of candidates) {
@@ -225,19 +279,27 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
 export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
   // Check all possible paths for expiry/possession dates
   // IMPORTANT: Templates use earliest_possession_date_formatted, notice_expiry_date, etc.
+  // This list covers all legacy field IDs plus current wizard field IDs across all products
   const candidates = [
-    // England/Wales maps_to path
+    // England/Wales maps_to path (nested from MQS maps_to)
     'notice_service.notice_expiry_date',
-    // Direct field IDs
+    // Direct field IDs - most common for notice-only
     'notice_expiry_date',
     'expiry_date',
     // Section 8 specific (earliest date court can hear possession claim)
     'earliest_possession_date',
     'section8_expiry_date',
     'section_8_expiry_date',
+    // Additional Section 8 legacy aliases
+    'earliest_court_date',
+    'earliest_hearing_date',
+    'possession_date',
     // Scotland
     'earliest_leaving_date',
     'earliest_tribunal_date',
+    // Legacy aliases
+    'notice_end_date',
+    'end_date',
   ];
 
   for (const path of candidates) {
@@ -3245,6 +3307,25 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.date_of_service = templateData.service_date || templateData.notice_date;
   templateData.served_on = templateData.service_date || templateData.notice_date;
 
+  // =============================================================================
+  // FORMATTED DATES FOR PDF TEMPLATES (UK Legal Format: "15 January 2026")
+  // =============================================================================
+  // Service Instructions and Checklist templates expect *_formatted fields
+  templateData.service_date_formatted = formatUkLegalDate(templateData.service_date);
+  templateData.notice_date_formatted = formatUkLegalDate(templateData.notice_date);
+  templateData.earliest_possession_date_formatted = formatUkLegalDate(templateData.earliest_possession_date);
+  templateData.tenancy_start_date_formatted = formatUkLegalDate(templateData.tenancy_start_date);
+  templateData.notice_expiry_date_formatted = formatUkLegalDate(templateData.notice_expiry_date || templateData.earliest_possession_date);
+  templateData.fixed_term_end_date_formatted = formatUkLegalDate(templateData.fixed_term_end_date);
+
+  // =============================================================================
+  // GROUND DESCRIPTIONS FOR CHECKLISTS
+  // =============================================================================
+  // Checklist template expects ground_descriptions as a readable string
+  templateData.ground_descriptions = buildGroundDescriptions(templateData.grounds);
+  // Also provide has_mandatory_ground flag for conditional rendering
+  templateData.has_mandatory_ground = Array.isArray(templateData.grounds) && templateData.grounds.some((g: any) => g.mandatory);
+
   // Templates expect metadata.generated_at for generation timestamp
   const now = new Date();
 
@@ -3296,6 +3377,12 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   console.log('[mapNoticeOnlyFacts] notice_service_date:', templateData.notice_service_date);
   console.log('[mapNoticeOnlyFacts] notice_expiry_date:', templateData.notice_expiry_date);
   console.log('[mapNoticeOnlyFacts] jurisdiction_display:', templateData.jurisdiction_display);
+  // Formatted date fields (for Service Instructions and Checklist PDFs)
+  console.log('[mapNoticeOnlyFacts] service_date_formatted:', templateData.service_date_formatted);
+  console.log('[mapNoticeOnlyFacts] earliest_possession_date_formatted:', templateData.earliest_possession_date_formatted);
+  console.log('[mapNoticeOnlyFacts] tenancy_start_date_formatted:', templateData.tenancy_start_date_formatted);
+  console.log('[mapNoticeOnlyFacts] ground_descriptions:', templateData.ground_descriptions);
+  console.log('[mapNoticeOnlyFacts] has_mandatory_ground:', templateData.has_mandatory_ground);
   console.log('[mapNoticeOnlyFacts] ===========================');
 
   return templateData;

@@ -12,7 +12,13 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { generateDocument } from '@/lib/documents/generator';
-import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
+import {
+  mapNoticeOnlyFacts,
+  resolveNoticeServiceDate,
+  resolveNoticeExpiryDate,
+  formatUkLegalDate,
+  buildGroundDescriptions,
+} from '@/lib/case-facts/normalize';
 
 const runPdf = process.env.RUN_PDF_TESTS === 'true' || process.env.RUN_PDF_TESTS === '1';
 
@@ -125,23 +131,9 @@ function createSection8WizardFacts() {
     const wizardFacts = createSection8WizardFacts();
     const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-    // Add formatted dates (as done in route.ts)
-    const formatUKDate = (dateString: string): string => {
-      if (!dateString) return '';
-      const date = new Date(dateString);
-      const day = date.getDate();
-      const months = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-      const month = months[date.getMonth()];
-      const year = date.getFullYear();
-      return `${day} ${month} ${year}`;
-    };
-
-    templateData.service_date_formatted = formatUKDate(templateData.service_date || '');
-    templateData.earliest_possession_date_formatted = formatUKDate(templateData.earliest_possession_date || '');
-    templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
+    // Formatted dates should now be automatically included by mapNoticeOnlyFacts
+    expect(templateData.service_date_formatted).toBe('15 January 2026');
+    expect(templateData.earliest_possession_date_formatted).toBeTruthy(); // Will be 29 January 2026
 
     let doc;
     try {
@@ -185,29 +177,12 @@ function createSection8WizardFacts() {
     const wizardFacts = createSection8WizardFacts();
     const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-    // Add formatted dates (as done in route.ts)
-    const formatUKDate = (dateString: string): string => {
-      if (!dateString) return '';
-      const date = new Date(dateString);
-      const day = date.getDate();
-      const months = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-      const month = months[date.getMonth()];
-      const year = date.getFullYear();
-      return `${day} ${month} ${year}`;
-    };
-
-    templateData.service_date_formatted = formatUKDate(templateData.service_date || '');
-    templateData.earliest_possession_date_formatted = formatUKDate(templateData.earliest_possession_date || '');
-    templateData.tenancy_start_date_formatted = formatUKDate(templateData.tenancy_start_date || '');
-    templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
-
-    // Ground descriptions (as done in route.ts)
-    templateData.ground_descriptions = templateData.grounds
-      .map((g: any) => `Ground ${g.code} – ${g.title}`)
-      .join(', ');
+    // Formatted dates and ground_descriptions should now be automatically included by mapNoticeOnlyFacts
+    expect(templateData.service_date_formatted).toBe('15 January 2026');
+    expect(templateData.tenancy_start_date_formatted).toBe('15 June 2023');
+    expect(templateData.earliest_possession_date_formatted).toBeTruthy();
+    expect(templateData.ground_descriptions).toBeTruthy();
+    expect(templateData.has_mandatory_ground).toBe(true); // Ground 8 is mandatory
 
     let doc;
     try {
@@ -325,5 +300,350 @@ describe('mapNoticeOnlyFacts - service date resolution', () => {
     // Note: earliest_possession_date may be calculated if not in expiry_date fields
     // The key is that some possession date is set
     expect(result.earliest_possession_date || result.notice_expiry_date).toBeTruthy();
+  });
+
+  it('resolves service_date from date_of_service (legacy)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      date_of_service: '2026-02-10',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.service_date).toBe('2026-02-10');
+  });
+
+  it('resolves service_date from served_on (legacy)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      served_on: '2026-02-15',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.service_date).toBe('2026-02-15');
+  });
+
+  it('resolves expiry_date from section8_expiry_date', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      notice_service_date: '2026-01-15',
+      section8_expiry_date: '2026-01-29',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.expiry_date).toBe('2026-01-29');
+  });
+
+  it('resolves expiry_date from section_8_expiry_date (underscore variant)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      notice_service_date: '2026-01-15',
+      section_8_expiry_date: '2026-01-30',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.expiry_date).toBe('2026-01-30');
+  });
+});
+
+// =============================================================================
+// UNIT TESTS FOR resolveNoticeServiceDate
+// =============================================================================
+describe('resolveNoticeServiceDate - comprehensive key coverage', () => {
+  it('resolves from notice_served_date (highest priority for Complete Pack)', () => {
+    const result = resolveNoticeServiceDate({ notice_served_date: '2026-03-01' } as any);
+    expect(result).toBe('2026-03-01');
+  });
+
+  it('resolves from nested notice_service.notice_date (MQS maps_to)', () => {
+    const result = resolveNoticeServiceDate({
+      notice_service: { notice_date: '2026-03-02' },
+    } as any);
+    expect(result).toBe('2026-03-02');
+  });
+
+  it('resolves from notice_service_date', () => {
+    const result = resolveNoticeServiceDate({ notice_service_date: '2026-03-03' } as any);
+    expect(result).toBe('2026-03-03');
+  });
+
+  it('resolves from service_date', () => {
+    const result = resolveNoticeServiceDate({ service_date: '2026-03-04' } as any);
+    expect(result).toBe('2026-03-04');
+  });
+
+  it('resolves from section_8_notice_date', () => {
+    const result = resolveNoticeServiceDate({ section_8_notice_date: '2026-03-05' } as any);
+    expect(result).toBe('2026-03-05');
+  });
+
+  it('resolves from section8_notice_date (no underscore)', () => {
+    const result = resolveNoticeServiceDate({ section8_notice_date: '2026-03-06' } as any);
+    expect(result).toBe('2026-03-06');
+  });
+
+  it('resolves from intended_service_date', () => {
+    const result = resolveNoticeServiceDate({ intended_service_date: '2026-03-07' } as any);
+    expect(result).toBe('2026-03-07');
+  });
+
+  it('resolves from notice_date (Scotland)', () => {
+    const result = resolveNoticeServiceDate({ notice_date: '2026-03-08' } as any);
+    expect(result).toBe('2026-03-08');
+  });
+
+  it('resolves from date_notice_served (legacy)', () => {
+    const result = resolveNoticeServiceDate({ date_notice_served: '2026-03-09' } as any);
+    expect(result).toBe('2026-03-09');
+  });
+
+  it('resolves from date_of_service (legacy)', () => {
+    const result = resolveNoticeServiceDate({ date_of_service: '2026-03-10' } as any);
+    expect(result).toBe('2026-03-10');
+  });
+
+  it('resolves from served_on (legacy)', () => {
+    const result = resolveNoticeServiceDate({ served_on: '2026-03-11' } as any);
+    expect(result).toBe('2026-03-11');
+  });
+
+  it('resolves from served_date (legacy)', () => {
+    const result = resolveNoticeServiceDate({ served_date: '2026-03-12' } as any);
+    expect(result).toBe('2026-03-12');
+  });
+
+  it('returns null when no date is found', () => {
+    const result = resolveNoticeServiceDate({} as any);
+    expect(result).toBeNull();
+  });
+
+  it('returns null for invalid date strings', () => {
+    const result = resolveNoticeServiceDate({ notice_service_date: 'not-a-date' } as any);
+    expect(result).toBeNull();
+  });
+
+  it('normalizes dates to YYYY-MM-DD format', () => {
+    // JavaScript Date parsing handles various formats
+    const result = resolveNoticeServiceDate({ notice_service_date: '2026/03/15' } as any);
+    expect(result).toBe('2026-03-15');
+  });
+});
+
+// =============================================================================
+// UNIT TESTS FOR resolveNoticeExpiryDate
+// =============================================================================
+describe('resolveNoticeExpiryDate - comprehensive key coverage', () => {
+  it('resolves from nested notice_service.notice_expiry_date (MQS maps_to)', () => {
+    const result = resolveNoticeExpiryDate({
+      notice_service: { notice_expiry_date: '2026-04-01' },
+    } as any);
+    expect(result).toBe('2026-04-01');
+  });
+
+  it('resolves from notice_expiry_date', () => {
+    const result = resolveNoticeExpiryDate({ notice_expiry_date: '2026-04-02' } as any);
+    expect(result).toBe('2026-04-02');
+  });
+
+  it('resolves from expiry_date', () => {
+    const result = resolveNoticeExpiryDate({ expiry_date: '2026-04-03' } as any);
+    expect(result).toBe('2026-04-03');
+  });
+
+  it('resolves from earliest_possession_date', () => {
+    const result = resolveNoticeExpiryDate({ earliest_possession_date: '2026-04-04' } as any);
+    expect(result).toBe('2026-04-04');
+  });
+
+  it('resolves from section8_expiry_date', () => {
+    const result = resolveNoticeExpiryDate({ section8_expiry_date: '2026-04-05' } as any);
+    expect(result).toBe('2026-04-05');
+  });
+
+  it('resolves from section_8_expiry_date (underscore variant)', () => {
+    const result = resolveNoticeExpiryDate({ section_8_expiry_date: '2026-04-06' } as any);
+    expect(result).toBe('2026-04-06');
+  });
+
+  it('resolves from earliest_court_date (legacy)', () => {
+    const result = resolveNoticeExpiryDate({ earliest_court_date: '2026-04-07' } as any);
+    expect(result).toBe('2026-04-07');
+  });
+
+  it('resolves from earliest_hearing_date (legacy)', () => {
+    const result = resolveNoticeExpiryDate({ earliest_hearing_date: '2026-04-08' } as any);
+    expect(result).toBe('2026-04-08');
+  });
+
+  it('resolves from possession_date (legacy)', () => {
+    const result = resolveNoticeExpiryDate({ possession_date: '2026-04-09' } as any);
+    expect(result).toBe('2026-04-09');
+  });
+
+  it('resolves from earliest_leaving_date (Scotland)', () => {
+    const result = resolveNoticeExpiryDate({ earliest_leaving_date: '2026-04-10' } as any);
+    expect(result).toBe('2026-04-10');
+  });
+
+  it('resolves from earliest_tribunal_date (Scotland)', () => {
+    const result = resolveNoticeExpiryDate({ earliest_tribunal_date: '2026-04-11' } as any);
+    expect(result).toBe('2026-04-11');
+  });
+
+  it('resolves from notice_end_date (legacy)', () => {
+    const result = resolveNoticeExpiryDate({ notice_end_date: '2026-04-12' } as any);
+    expect(result).toBe('2026-04-12');
+  });
+
+  it('resolves from end_date (legacy)', () => {
+    const result = resolveNoticeExpiryDate({ end_date: '2026-04-13' } as any);
+    expect(result).toBe('2026-04-13');
+  });
+
+  it('returns null when no date is found', () => {
+    const result = resolveNoticeExpiryDate({} as any);
+    expect(result).toBeNull();
+  });
+});
+
+// =============================================================================
+// UNIT TESTS FOR formatUkLegalDate
+// =============================================================================
+describe('formatUkLegalDate - date formatting', () => {
+  it('formats YYYY-MM-DD to UK legal format', () => {
+    expect(formatUkLegalDate('2026-01-15')).toBe('15 January 2026');
+  });
+
+  it('formats with single-digit day correctly', () => {
+    expect(formatUkLegalDate('2026-03-05')).toBe('5 March 2026');
+  });
+
+  it('handles December correctly', () => {
+    expect(formatUkLegalDate('2026-12-25')).toBe('25 December 2026');
+  });
+
+  it('returns null for null input', () => {
+    expect(formatUkLegalDate(null)).toBeNull();
+  });
+
+  it('returns null for undefined input', () => {
+    expect(formatUkLegalDate(undefined)).toBeNull();
+  });
+
+  it('returns null for empty string', () => {
+    expect(formatUkLegalDate('')).toBeNull();
+  });
+
+  it('returns null for invalid date string', () => {
+    expect(formatUkLegalDate('not-a-date')).toBeNull();
+  });
+
+  it('handles ISO date-time strings', () => {
+    // Date parsing may convert to local time, but should still produce a valid date
+    const result = formatUkLegalDate('2026-06-15T12:00:00Z');
+    expect(result).toMatch(/^\d{1,2} June 2026$/);
+  });
+});
+
+// =============================================================================
+// UNIT TESTS FOR buildGroundDescriptions
+// =============================================================================
+describe('buildGroundDescriptions - ground string builder', () => {
+  it('builds description for single mandatory ground', () => {
+    const grounds = [{ code: 8, title: 'Serious rent arrears', mandatory: true }];
+    expect(buildGroundDescriptions(grounds)).toBe('Ground 8 (mandatory) – Serious rent arrears');
+  });
+
+  it('builds description for single discretionary ground', () => {
+    const grounds = [{ code: 10, title: 'Some rent unpaid', mandatory: false }];
+    expect(buildGroundDescriptions(grounds)).toBe('Ground 10 – Some rent unpaid');
+  });
+
+  it('builds description for multiple grounds', () => {
+    const grounds = [
+      { code: 8, title: 'Serious rent arrears', mandatory: true },
+      { code: 10, title: 'Some rent unpaid', mandatory: false },
+    ];
+    const result = buildGroundDescriptions(grounds);
+    expect(result).toBe('Ground 8 (mandatory) – Serious rent arrears; Ground 10 – Some rent unpaid');
+  });
+
+  it('handles grounds with number instead of code', () => {
+    const grounds = [{ number: '14', title: 'Nuisance', mandatory: false }];
+    expect(buildGroundDescriptions(grounds)).toBe('Ground 14 – Nuisance');
+  });
+
+  it('returns null for null input', () => {
+    expect(buildGroundDescriptions(null)).toBeNull();
+  });
+
+  it('returns null for undefined input', () => {
+    expect(buildGroundDescriptions(undefined)).toBeNull();
+  });
+
+  it('returns null for empty array', () => {
+    expect(buildGroundDescriptions([])).toBeNull();
+  });
+
+  it('handles ground without title', () => {
+    const grounds = [{ code: 11, mandatory: false }];
+    expect(buildGroundDescriptions(grounds)).toBe('Ground 11');
+  });
+});
+
+// =============================================================================
+// INTEGRATION TEST: mapNoticeOnlyFacts produces all required fields
+// =============================================================================
+describe('mapNoticeOnlyFacts - formatted fields integration', () => {
+  it('includes all formatted dates and ground_descriptions', () => {
+    const wizardFacts = createSection8WizardFacts();
+    const result = mapNoticeOnlyFacts(wizardFacts);
+
+    // Raw dates
+    expect(result.service_date).toBe('2026-01-15');
+    expect(result.tenancy_start_date).toBe('2023-06-15');
+
+    // Formatted dates (UK legal format)
+    expect(result.service_date_formatted).toBe('15 January 2026');
+    expect(result.tenancy_start_date_formatted).toBe('15 June 2023');
+    expect(result.earliest_possession_date_formatted).toBeTruthy();
+
+    // Ground descriptions
+    expect(result.ground_descriptions).toBeTruthy();
+    expect(result.ground_descriptions).toContain('Ground 8');
+    expect(result.has_mandatory_ground).toBe(true);
+  });
+
+  it('handles missing tenancy_start_date gracefully', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      notice_service_date: '2026-01-15',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.tenancy_start_date_formatted).toBeNull();
+    expect(result.service_date_formatted).toBe('15 January 2026');
+  });
+
+  it('handles missing grounds gracefully', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      notice_service_date: '2026-01-15',
+      landlord_full_name: 'Test Landlord',
+      tenant_full_name: 'Test Tenant',
+    };
+
+    const result = mapNoticeOnlyFacts(wizardFacts);
+    expect(result.ground_descriptions).toBeNull();
+    expect(result.has_mandatory_ground).toBe(false);
   });
 });
