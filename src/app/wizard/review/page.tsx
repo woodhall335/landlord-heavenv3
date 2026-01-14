@@ -52,6 +52,11 @@ function ReviewPageInner() {
   const [loading, setLoading] = useState(true);
   const [hasAcknowledgedBlockers, setHasAcknowledgedBlockers] = useState(false);
 
+  // Payment status state for paid-case regeneration flow
+  const [isPaid, setIsPaid] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [editWindowOpen, setEditWindowOpen] = useState(false);
+
   // Compute derived values BEFORE any conditional returns (null-safe)
   // This ensures hooks are called in the same order on every render
   const jurisdiction = analysis?.jurisdiction;
@@ -128,6 +133,26 @@ function ReviewPageInner() {
     }
   }, [analysis, product, jurisdiction, hasBlockingIssues]);
 
+  // Fetch payment status to determine if this is a regeneration flow
+  useEffect(() => {
+    const fetchPaymentStatus = async () => {
+      if (!caseId || !product) return;
+
+      try {
+        const response = await fetch(`/api/orders/status?case_id=${caseId}&product=${product}`);
+        if (response.ok) {
+          const data = await response.json();
+          setIsPaid(data.paid === true);
+          setEditWindowOpen(data.edit_window_open === true);
+        }
+      } catch (error) {
+        console.error('Failed to fetch payment status:', error);
+      }
+    };
+
+    fetchPaymentStatus();
+  }, [caseId, product]);
+
   // Conditional returns AFTER all hooks
   if (loading) {
     return (
@@ -174,7 +199,7 @@ function ReviewPageInner() {
     document.getElementById('critical-issues')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleProceed = () => {
+  const handleProceed = async () => {
     if (hasBlockingIssues && !hasAcknowledgedBlockers) {
       return;
     }
@@ -191,6 +216,37 @@ function ReviewPageInner() {
       }
     }
 
+    // PAID CASE: Trigger document regeneration instead of going to checkout
+    if (isPaid && editWindowOpen) {
+      setIsRegenerating(true);
+      try {
+        const response = await fetch('/api/orders/regenerate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            product: product,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Failed to regenerate documents');
+        }
+
+        // Success - redirect to dashboard with regeneration success flag
+        router.push(`/dashboard/cases/${caseId}?regenerated=true`);
+      } catch (error) {
+        console.error('Regeneration failed:', error);
+        alert(
+          'Failed to regenerate documents. Please try again or contact support if the issue persists.'
+        );
+        setIsRegenerating(false);
+      }
+      return;
+    }
+
+    // UNPAID CASE: Go to preview/checkout
     router.push(`/wizard/preview/${caseId}`);
   };
 
@@ -232,6 +288,8 @@ function ReviewPageInner() {
       onFixIssues={handleFixIssues}
       onEdit={handleEdit}
       onProceed={handleProceed}
+      isPaid={isPaid}
+      isRegenerating={isRegenerating}
     />;
   }
 
@@ -250,6 +308,8 @@ function ReviewPageInner() {
       onFixIssues={handleFixIssues}
       onEdit={handleEdit}
       onProceed={handleProceed}
+      isPaid={isPaid}
+      isRegenerating={isRegenerating}
     />;
   }
 
@@ -262,6 +322,8 @@ function ReviewPageInner() {
       product={product}
       onEdit={handleEdit}
       onProceed={handleProceed}
+      isPaid={isPaid}
+      isRegenerating={isRegenerating}
     />;
   }
 
@@ -283,6 +345,8 @@ function ReviewPageInner() {
     onFixIssues={handleFixIssues}
     onEdit={handleEdit}
     onProceed={handleProceed}
+    isPaid={isPaid}
+    isRegenerating={isRegenerating}
   />;
 }
 
@@ -305,6 +369,8 @@ interface MoneyClaimReviewContentProps {
   onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
+  isPaid?: boolean;
+  isRegenerating?: boolean;
 }
 
 function MoneyClaimReviewContent({
@@ -323,6 +389,8 @@ function MoneyClaimReviewContent({
   onFixIssues,
   onEdit,
   onProceed,
+  isPaid,
+  isRegenerating,
 }: MoneyClaimReviewContentProps) {
   const caseHealth = analysis.case_health;
   const caseSummary = analysis.case_summary;
@@ -771,16 +839,17 @@ function MoneyClaimReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
-          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
         >
-          Proceed to payment &amp; pack
+          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
       </div>
 
       <p className="text-xs text-center text-gray-500 mt-2">
-        We will generate your complete money claim pack regardless of readiness status.
-        Your pack includes all PAP-DEBT documents and filing guides.
+        {isPaid
+          ? 'Your updated answers will be used to regenerate your documents.'
+          : 'We will generate your complete money claim pack regardless of readiness status. Your pack includes all PAP-DEBT documents and filing guides.'}
       </p>
     </div>
   );
@@ -806,6 +875,8 @@ interface EvictionReviewContentProps {
   onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
+  isPaid?: boolean;
+  isRegenerating?: boolean;
 }
 
 function EvictionReviewContent({
@@ -825,6 +896,8 @@ function EvictionReviewContent({
   onFixIssues,
   onEdit,
   onProceed,
+  isPaid,
+  isRegenerating,
 }: EvictionReviewContentProps) {
   const recommendedRouteLabel: string =
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
@@ -1391,16 +1464,17 @@ function EvictionReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
-          aria-disabled={hasBlockingIssues && !hasAcknowledgedBlockers}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating}
         >
-          Proceed to payment &amp; pack
+          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
       </div>
 
       <p className="text-xs text-center text-gray-500 mt-2">
-        We will generate your full pack regardless of readiness. Use the guidance to reach a
-        safe, court-ready position before issuing.
+        {isPaid
+          ? 'Your updated answers will be used to regenerate your documents.'
+          : 'We will generate your full pack regardless of readiness. Use the guidance to reach a safe, court-ready position before issuing.'}
       </p>
     </div>
   );
@@ -1422,6 +1496,8 @@ interface NoticeOnlyReviewContentProps {
   onFixIssues: () => void;
   onEdit: () => void;
   onProceed: () => void;
+  isPaid?: boolean;
+  isRegenerating?: boolean;
 }
 
 function NoticeOnlyReviewContent({
@@ -1437,6 +1513,8 @@ function NoticeOnlyReviewContent({
   onFixIssues,
   onEdit,
   onProceed,
+  isPaid,
+  isRegenerating,
 }: NoticeOnlyReviewContentProps) {
   // Extract decision engine data
   const decisionEngine = analysis?.decision_engine;
@@ -2095,18 +2173,23 @@ function NoticeOnlyReviewContent({
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete)}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete)}
+          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating}
+          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating}
         >
-          Proceed to payment and pack
+          {isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment and pack'}
         </Button>
       </div>
 
       {/* Disclaimer for issues */}
-      {(hasBlockingIssues || (isSection21 && hasComplianceIssues)) && (
+      {(hasBlockingIssues || (isSection21 && hasComplianceIssues)) && !isPaid && (
         <p className="text-center text-sm text-gray-500 pb-4">
           By proceeding, you acknowledge the issues above. We recommend resolving compliance issues
           before serving your notice.
+        </p>
+      )}
+      {isPaid && (
+        <p className="text-center text-sm text-gray-500 pb-4">
+          Your updated answers will be used to regenerate your documents.
         </p>
       )}
     </div>
@@ -2123,6 +2206,8 @@ interface TenancyReviewContentProps {
   product: string;
   onEdit: () => void;
   onProceed: () => void;
+  isPaid?: boolean;
+  isRegenerating?: boolean;
 }
 
 /**
@@ -2356,6 +2441,8 @@ function TenancyReviewContent({
   product,
   onEdit,
   onProceed,
+  isPaid,
+  isRegenerating,
 }: TenancyReviewContentProps) {
   const facts = analysis.case_facts || {};
   const validation = buildTenancyValidation(facts, jurisdiction);
@@ -2629,14 +2716,25 @@ function TenancyReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers}>
-          {hasBlockers ? 'Fix issues to proceed' : 'Proceed to payment & pack'}
+        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers || isRegenerating}>
+          {isRegenerating
+            ? 'Regenerating...'
+            : hasBlockers
+              ? 'Fix issues to proceed'
+              : isPaid
+                ? 'Regenerate pack'
+                : 'Proceed to payment & pack'}
         </Button>
       </div>
 
-      {hasBlockers && (
+      {hasBlockers && !isPaid && (
         <p className="text-center text-sm text-gray-500 pb-4">
           Please complete all required fields before generating your tenancy agreement.
+        </p>
+      )}
+      {isPaid && (
+        <p className="text-center text-sm text-gray-500 pb-4">
+          Your updated answers will be used to regenerate your documents.
         </p>
       )}
     </div>
