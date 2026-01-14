@@ -3319,6 +3319,23 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.fixed_term_end_date_formatted = formatUkLegalDate(templateData.fixed_term_end_date);
 
   // =============================================================================
+  // SECTION 21 SPECIFIC DATE ALIASES
+  // =============================================================================
+  // S21 Service Instructions and Validity Checklist templates use display_possession_date_formatted
+  // This is the "possession date" that appears in the notice and tells tenant when to leave
+  // For S21 this is typically notice_expiry_date or earliest_possession_date
+  templateData.display_possession_date_formatted =
+    templateData.notice_expiry_date_formatted ||
+    templateData.earliest_possession_date_formatted ||
+    null;
+
+  // Also provide raw display_possession_date for templates that use format_date helper
+  templateData.display_possession_date =
+    templateData.notice_expiry_date ||
+    templateData.earliest_possession_date ||
+    null;
+
+  // =============================================================================
   // GROUND DESCRIPTIONS FOR CHECKLISTS
   // =============================================================================
   // Checklist template expects ground_descriptions as a readable string
@@ -3354,6 +3371,8 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // Also provide flat generation fields for backward compatibility
   templateData.generation_timestamp = now.toISOString();
   templateData.generation_date = now.toISOString().split('T')[0];
+  // Templates also use generated_date (without underscore prefix) - add as alias
+  templateData.generated_date = formatUkLegalDate(templateData.generation_date);
 
   console.log('[mapNoticeOnlyFacts] Mapped Notice Only template data');
   console.log('[mapNoticeOnlyFacts] Landlord:', templateData.landlord_full_name);
