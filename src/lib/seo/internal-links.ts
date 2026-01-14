@@ -193,6 +193,48 @@ export const guideLinks = {
     icon: 'legal' as const,
     type: 'guide' as const,
   },
+  tenantWontLeave: {
+    href: '/tenant-wont-leave',
+    title: 'Tenant Won\'t Leave Guide',
+    description: 'What to do when tenant refuses',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  tenantNotPayingRent: {
+    href: '/tenant-not-paying-rent',
+    title: 'Tenant Not Paying Rent',
+    description: 'Rent arrears solutions',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  possessionClaimGuide: {
+    href: '/possession-claim-guide',
+    title: 'Possession Claim Guide',
+    description: 'Court possession process',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  evictionCostUk: {
+    href: '/eviction-cost-uk',
+    title: 'Eviction Costs UK',
+    description: 'Full cost breakdown',
+    icon: 'calculator' as const,
+    type: 'guide' as const,
+  },
+  n5bFormGuide: {
+    href: '/n5b-form-guide',
+    title: 'N5B Form Guide',
+    description: 'Accelerated possession',
+    icon: 'document' as const,
+    type: 'guide' as const,
+  },
+  warrantOfPossession: {
+    href: '/warrant-of-possession',
+    title: 'Warrant of Possession',
+    description: 'Bailiff enforcement guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
 };
 
 // Pre-built link groups for common use cases
@@ -303,4 +345,58 @@ export const rentArrearsWithAdviceLinks = [
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
   landingPageLinks.rentArrearsTemplate,
+];
+
+// SEO page related link groups (Q1/Q2 2026)
+export const tenantWontLeaveRelatedLinks = [
+  productLinks.noticeOnly,
+  productLinks.completePack,
+  landingPageLinks.section21Template,
+  landingPageLinks.section8Template,
+  toolLinks.section21Generator,
+  toolLinks.section8Generator,
+  guideLinks.possessionClaimGuide,
+];
+
+export const tenantNotPayingRentRelatedLinks = [
+  productLinks.noticeOnly,
+  productLinks.completePack,
+  productLinks.moneyClaim,
+  landingPageLinks.section8Template,
+  toolLinks.section8Generator,
+  toolLinks.rentDemandLetter,
+  toolLinks.rentArrearsCalculator,
+];
+
+export const possessionClaimRelatedLinks = [
+  productLinks.completePack,
+  productLinks.noticeOnly,
+  guideLinks.n5bFormGuide,
+  guideLinks.warrantOfPossession,
+  landingPageLinks.section21Template,
+  landingPageLinks.section8Template,
+];
+
+export const evictionCostRelatedLinks = [
+  productLinks.noticeOnly,
+  productLinks.completePack,
+  guideLinks.howToEvictTenant,
+  guideLinks.possessionClaimGuide,
+  toolLinks.rentArrearsCalculator,
+];
+
+export const n5bFormRelatedLinks = [
+  productLinks.completePack,
+  guideLinks.possessionClaimGuide,
+  guideLinks.warrantOfPossession,
+  landingPageLinks.section21Template,
+  toolLinks.section21Validator,
+];
+
+export const warrantOfPossessionRelatedLinks = [
+  productLinks.completePack,
+  guideLinks.possessionClaimGuide,
+  guideLinks.n5bFormGuide,
+  guideLinks.evictionCostUk,
+  guideLinks.howToEvictTenant,
 ];

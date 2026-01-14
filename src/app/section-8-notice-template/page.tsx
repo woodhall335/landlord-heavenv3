@@ -734,6 +734,7 @@ export default function Section8NoticeTemplatePage() {
                 links={[
                   productLinks.noticeOnly,
                   productLinks.completePack,
+                  landingPageLinks.section21Template,
                   toolLinks.section8Validator,
                   toolLinks.section8Generator,
                   blogLinks.section21VsSection8,
