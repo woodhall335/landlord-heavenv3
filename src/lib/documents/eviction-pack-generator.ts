@@ -1149,7 +1149,7 @@ export async function generateCompleteEvictionPack(
 }
 
 /**
- * Generate Notice Only Pack (£29.99)
+ * Generate Notice Only Pack (£39.99)
  *
  * Includes:
  * - Eviction notice (Section 8/21, Notice to Leave)
