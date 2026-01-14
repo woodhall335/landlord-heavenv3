@@ -158,8 +158,8 @@ export function CostComparison() {
             <PriceAnchor
               product="Money Claims"
               ourPrice="£199.99"
-              solicitorPrice="£400-600"
-              savings="£200+"
+              solicitorPrice="£800-1200"
+              savings="£600+"
               href="/products/money-claim"
             />
             <PriceAnchor
