@@ -68,6 +68,9 @@ export const metadata: Metadata = {
     'no fault eviction template',
     'eviction notice template',
   ],
+  alternates: {
+    canonical: 'https://landlordheaven.co.uk/section-21-notice-template',
+  },
   openGraph: {
     title: 'Section 21 Notice Template (England) - Free Form 6A | Landlord Heaven',
     description: 'Get a free Section 21 notice template for England or generate a court-ready Form 6A. Valid until May 2026.',

@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     'tenant eviction notice',
     'eviction letter template',
   ],
+  alternates: {
+    canonical: 'https://landlordheaven.co.uk/eviction-notice-template',
+  },
   openGraph: {
     title: 'Eviction Notice Template UK - Free Download | Landlord Heaven',
     description: 'Download free UK eviction notice templates. Section 21 and Section 8 notices. Court-ready documents.',
