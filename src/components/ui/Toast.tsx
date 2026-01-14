@@ -43,11 +43,18 @@ export const Toast: React.FC<ToastProps> = ({
     info: 'bg-blue-50 border-blue-200 text-blue-900',
   };
 
+  const iconColors = {
+    success: 'text-green-600',
+    error: 'text-red-600',
+    warning: 'text-amber-600',
+    info: 'text-blue-600',
+  };
+
   const icons = {
-    success: <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />,
-    error: <RiCloseCircleLine className="w-5 h-5 text-[#7C3AED]" />,
-    warning: <RiAlertLine className="w-5 h-5 text-[#7C3AED]" />,
-    info: <RiInformationLine className="w-5 h-5 text-[#7C3AED]" />,
+    success: <RiCheckboxCircleLine className={`w-5 h-5 ${iconColors[type]}`} />,
+    error: <RiCloseCircleLine className={`w-5 h-5 ${iconColors[type]}`} />,
+    warning: <RiAlertLine className={`w-5 h-5 ${iconColors[type]}`} />,
+    info: <RiInformationLine className={`w-5 h-5 ${iconColors[type]}`} />,
   };
 
   const toastContent = (
@@ -68,7 +75,7 @@ export const Toast: React.FC<ToastProps> = ({
           className="text-gray-400 hover:text-gray-600 transition-colors"
           aria-label="Close notification"
         >
-          <RiCloseLine className="w-4 h-4 text-[#7C3AED]" />
+          <RiCloseLine className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -362,3 +362,20 @@ body {
 body.s21-banner-visible header.site-header {
   transition: top 0.3s ease;
 }
+
+/* =============================================
+   Skeleton Shimmer Animation
+   ============================================= */
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+}

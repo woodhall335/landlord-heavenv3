@@ -32,8 +32,8 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const baseStyles = clsx(
-      "bg-white rounded-lg",
-      "transition-all"
+      "bg-white rounded-xl",
+      "transition-all duration-200 ease-out"
     );
 
     const variantStyles = {
@@ -50,7 +50,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     };
 
     const hoverStyles = hoverable
-      ? "hover:shadow-xl hover:border-primary/30 hover:-translate-y-1 cursor-pointer"
+      ? "hover:shadow-xl hover:border-primary/30 hover:-translate-y-1 active:scale-[0.99] cursor-pointer"
       : "";
 
     return (

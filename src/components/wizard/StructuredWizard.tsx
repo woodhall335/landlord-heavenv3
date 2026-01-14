@@ -3100,27 +3100,40 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">
-              {productLabel} Pack
-            </h1>
-            <span className="text-sm text-gray-500">
-              {Math.round(progress)}% Complete
-            </span>
+            <div className="flex items-center gap-3">
+              <h1 className="text-lg font-semibold text-gray-900">
+                {productLabel} Pack
+              </h1>
+              {/* Step counter */}
+              <span className="text-sm text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                Question {questionHistory.length + 1}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-sm font-bold text-primary">{Math.round(progress)}%</span>
+              </div>
+            </div>
           </div>
 
           {/* Progress bar */}
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#7C3AED] transition-all duration-300"
+              className="h-full bg-[#7C3AED] transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
 
           {/* Current section indicator */}
-          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
-            <div className="px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap bg-[#7C3AED] text-white">
+          <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-2">
+            <div className="px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap bg-[#7C3AED] text-white">
               {currentQuestion.section || 'Question'}
             </div>
+            {progress > 0 && progress < 100 && (
+              <span className="text-xs text-gray-500">
+                {progress < 25 ? 'Getting started...' : progress < 50 ? 'Making progress!' : progress < 75 ? 'Almost there!' : 'Final details...'}
+              </span>
+            )}
           </div>
         </div>
       </header>
