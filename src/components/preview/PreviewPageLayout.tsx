@@ -7,6 +7,7 @@ import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
+import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 
 interface PreviewPageLayoutProps {
   caseId: string;
@@ -56,7 +57,10 @@ export function PreviewPageLayout({
         caseId,
       });
 
-      // Create checkout session
+      // Get attribution data for checkout
+      const attribution = getCheckoutAttribution();
+
+      // Create checkout session with attribution
       const response = await fetch('/api/checkout/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,6 +69,8 @@ export function PreviewPageLayout({
           case_id: caseId,
           success_url: successUrl,
           cancel_url: cancelUrl,
+          // Attribution fields for revenue tracking
+          ...attribution,
         }),
       });
 

@@ -7,6 +7,7 @@ import { tenantWontLeaveRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   CheckCircle,
   Clock,
@@ -17,6 +18,11 @@ import {
   Shield,
   Ban,
 } from 'lucide-react';
+
+// Page constants for analytics
+const PAGE_PATH = '/tenant-wont-leave';
+const PAGE_TITLE = "Tenant Won't Leave After Notice";
+const PAGE_TYPE = 'problem' as const;
 
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
@@ -102,6 +108,14 @@ export default function TenantWontLeavePage() {
         { name: 'Guides', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
         { name: 'Tenant Won\'t Leave', url: 'https://landlordheaven.co.uk/tenant-wont-leave' },
       ])} />
+
+      {/* Analytics: Attribution + landing_view event */}
+      <SeoLandingWrapper
+        pagePath={PAGE_PATH}
+        pageTitle={PAGE_TITLE}
+        pageType={PAGE_TYPE}
+        jurisdiction="england"
+      />
 
       <main>
         {/* Hero Section */}
@@ -329,6 +343,7 @@ export default function TenantWontLeavePage() {
               <SeoCtaBlock
                 pageType="problem"
                 variant="section"
+                pagePath={PAGE_PATH}
                 jurisdiction="england"
                 title="Need All the Court Forms?"
                 description="Our Complete Eviction Pack includes notices, possession claim forms (N5, N5B), witness statements, and step-by-step instructions."
@@ -445,6 +460,7 @@ export default function TenantWontLeavePage() {
               <SeoCtaBlock
                 pageType="problem"
                 variant="faq"
+                pagePath={PAGE_PATH}
                 jurisdiction="england"
               />
             </div>
@@ -458,6 +474,7 @@ export default function TenantWontLeavePage() {
               <SeoCtaBlock
                 pageType="problem"
                 variant="final"
+                pagePath={PAGE_PATH}
                 jurisdiction="england"
                 title="Get Your Eviction Documents Now"
                 description="Court-ready notices and forms. AI compliance checking. Step-by-step serving instructions."

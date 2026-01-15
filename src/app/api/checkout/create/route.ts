@@ -77,6 +77,16 @@ const createCheckoutSchema = z.object({
   case_id: z.string().uuid().optional(),
   success_url: z.string().url().optional(),
   cancel_url: z.string().url().optional(),
+  // Attribution fields (Migration 012)
+  landing_path: z.string().max(500).nullable().optional(),
+  utm_source: z.string().max(200).nullable().optional(),
+  utm_medium: z.string().max(200).nullable().optional(),
+  utm_campaign: z.string().max(200).nullable().optional(),
+  utm_term: z.string().max(200).nullable().optional(),
+  utm_content: z.string().max(200).nullable().optional(),
+  referrer: z.string().max(500).nullable().optional(),
+  first_touch_at: z.string().nullable().optional(),
+  ga_client_id: z.string().max(50).nullable().optional(),
 });
 
 // =============================================================================
@@ -158,7 +168,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product_type, case_id, success_url, cancel_url } = validationResult.data;
+    const {
+      product_type,
+      case_id,
+      success_url,
+      cancel_url,
+      // Attribution fields
+      landing_path,
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_term,
+      utm_content,
+      referrer,
+      first_touch_at,
+      ga_client_id,
+    } = validationResult.data;
 
     // CRITICAL: Ensure user profile exists before creating order
     // This prevents foreign key constraint violations on orders table
@@ -443,6 +468,7 @@ export async function POST(request: Request) {
 
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
+    // Attribution fields are stored for revenue reporting (Migration 012)
     const { data: order, error: orderError } = await adminSupabase
       .from('orders')
       .insert({
@@ -455,6 +481,16 @@ export async function POST(request: Request) {
         total_amount: product.price,
         payment_status: 'pending',
         fulfillment_status: 'pending',
+        // Attribution fields for revenue tracking (FIRST-TOUCH)
+        landing_path: landing_path || null,
+        utm_source: utm_source || null,
+        utm_medium: utm_medium || null,
+        utm_campaign: utm_campaign || null,
+        utm_term: utm_term || null,
+        utm_content: utm_content || null,
+        referrer: referrer || null,
+        first_touch_at: first_touch_at || null,
+        ga_client_id: ga_client_id || null,
       })
       .select()
       .single();
@@ -508,6 +544,16 @@ export async function POST(request: Request) {
           order_id: (order as any).id,
           product_type,
           case_id: case_id || '',
+          // Attribution for webhook processing (Stripe metadata max 500 chars per value)
+          landing_path: (landing_path || '').substring(0, 500),
+          utm_source: (utm_source || '').substring(0, 200),
+          utm_medium: (utm_medium || '').substring(0, 200),
+          utm_campaign: (utm_campaign || '').substring(0, 200),
+          utm_term: (utm_term || '').substring(0, 200),
+          utm_content: (utm_content || '').substring(0, 200),
+          referrer: (referrer || '').substring(0, 500),
+          first_touch_at: first_touch_at || '',
+          ga_client_id: ga_client_id || '',
         },
         success_url: success_url || `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: cancel_url || `${baseUrl}/dashboard`,

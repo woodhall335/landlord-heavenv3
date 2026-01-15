@@ -15,7 +15,8 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine } from 'react-icons/ri';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
-import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived } from '@/lib/analytics';
+import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, type PurchaseAttribution } from '@/lib/analytics';
+import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
 import { getPackContents, getNextSteps } from '@/lib/products';
@@ -458,7 +459,21 @@ export default function CaseDetailPage() {
       const amount = orderStatus.total_amount || 39.99;
       const currency = orderStatus.currency || 'GBP';
 
-      // Track purchase in analytics (GA4 + FB Pixel)
+      // Get attribution data from session/local storage
+      const attributionData = getAttributionForAnalytics();
+      const attribution: PurchaseAttribution = {
+        landing_path: attributionData.landing_path,
+        utm_source: attributionData.utm_source,
+        utm_medium: attributionData.utm_medium,
+        utm_campaign: attributionData.utm_campaign,
+        utm_term: attributionData.utm_term,
+        utm_content: attributionData.utm_content,
+        referrer: attributionData.referrer,
+        jurisdiction: caseDetails.jurisdiction,
+        product_type: caseDetails.case_type,
+      };
+
+      // Track purchase in analytics (GA4 + FB Pixel) with attribution
       trackPurchase(caseId, amount, currency, [
         {
           item_id: caseDetails.case_type,
@@ -467,7 +482,7 @@ export default function CaseDetailPage() {
           price: amount,
           quantity: 1,
         },
-      ]);
+      ], attribution);
 
       sessionStorage.setItem(purchaseKey, 'true');
     }

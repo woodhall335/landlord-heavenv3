@@ -11,10 +11,13 @@
  * - general: General eviction content (balanced CTAs)
  */
 
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, Shield, Clock, FileText, Gavel, PoundSterling } from 'lucide-react';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 
 export type SeoPageType = 'problem' | 'court' | 'money' | 'general';
 
@@ -25,6 +28,8 @@ interface SeoCtaBlockProps {
   pageType: SeoPageType;
   /** Visual variant of the CTA */
   variant: SeoCtaVariant;
+  /** Page path for analytics tracking (e.g., /how-to-evict-tenant) */
+  pagePath?: string;
   /** Override primary CTA text */
   primaryText?: string;
   /** Override secondary CTA text */
@@ -136,6 +141,7 @@ export function getHeroCtaProps(
 export function SeoCtaBlock({
   pageType,
   variant,
+  pagePath,
   primaryText,
   secondaryText,
   title,
@@ -148,15 +154,24 @@ export function SeoCtaBlock({
   const wizardHref = getWizardLink(config.primary.product, jurisdiction);
   const Icon = config.icon;
 
+  // Helper to track CTA clicks
+  const handleCtaClick = (ctaText?: string) => {
+    if (pagePath) {
+      trackLandingCtaClick(pagePath, pageType, variant, ctaText);
+    }
+  };
+
   // Inline variant - simple text link
   if (variant === 'inline') {
+    const ctaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
     return (
       <div className={`inline-flex items-center gap-2 ${className}`}>
         <Link
           href={wizardHref}
           className="text-primary font-medium hover:underline inline-flex items-center gap-1"
+          onClick={() => handleCtaClick(ctaText)}
         >
-          {primaryText || config.primary.label} — {product.displayPrice}
+          {ctaText}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -165,6 +180,7 @@ export function SeoCtaBlock({
 
   // Section variant - mid-page CTA block
   if (variant === 'section') {
+    const ctaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
     return (
       <div className={`bg-primary/5 rounded-xl p-6 lg:p-8 border border-primary/20 ${className}`}>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -183,8 +199,9 @@ export function SeoCtaBlock({
             <Link
               href={wizardHref}
               className="hero-btn-primary text-center whitespace-nowrap"
+              onClick={() => handleCtaClick(ctaText)}
             >
-              {primaryText || config.primary.label} — {product.displayPrice}
+              {ctaText}
             </Link>
           </div>
         </div>
@@ -194,6 +211,8 @@ export function SeoCtaBlock({
 
   // FAQ variant - CTA after FAQ section
   if (variant === 'faq') {
+    const primaryCtaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
+    const secondaryCtaText = secondaryText || config.secondary.label;
     return (
       <div className={`bg-gray-50 rounded-xl p-6 lg:p-8 mt-8 ${className}`}>
         <div className="flex items-start gap-4">
@@ -211,16 +230,18 @@ export function SeoCtaBlock({
               <Link
                 href={wizardHref}
                 className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                onClick={() => handleCtaClick(primaryCtaText)}
               >
-                {primaryText || config.primary.label} — {product.displayPrice}
+                {primaryCtaText}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               {secondaryText !== '' && (
                 <Link
                   href={config.secondary.href}
                   className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  onClick={() => handleCtaClick(secondaryCtaText)}
                 >
-                  {secondaryText || config.secondary.label}
+                  {secondaryCtaText}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               )}
@@ -233,6 +254,7 @@ export function SeoCtaBlock({
 
   // Final variant - large gradient CTA block
   if (variant === 'final') {
+    const primaryCtaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
     const secondaryProduct = pageType === 'money'
       ? PRODUCTS.complete_pack
       : pageType === 'court'
@@ -242,6 +264,7 @@ export function SeoCtaBlock({
       pageType === 'money' ? 'complete_pack' : pageType === 'court' ? 'notice_only' : 'complete_pack',
       jurisdiction
     );
+    const secondaryCtaText = `${secondaryText || secondaryProduct.shortLabel} — ${secondaryProduct.displayPrice}`;
 
     return (
       <div className={`bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center ${className}`}>
@@ -255,16 +278,18 @@ export function SeoCtaBlock({
           <Link
             href={wizardHref}
             className="hero-btn-secondary inline-flex items-center justify-center gap-2"
+            onClick={() => handleCtaClick(primaryCtaText)}
           >
-            {primaryText || config.primary.label} — {product.displayPrice}
+            {primaryCtaText}
             <ArrowRight className="w-5 h-5" />
           </Link>
           {pageType !== 'general' && (
             <Link
               href={secondaryWizardHref}
               className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors inline-flex items-center justify-center gap-2"
+              onClick={() => handleCtaClick(secondaryCtaText)}
             >
-              {secondaryText || secondaryProduct.shortLabel} — {secondaryProduct.displayPrice}
+              {secondaryCtaText}
             </Link>
           )}
         </div>
@@ -282,13 +307,23 @@ export function SeoCtaBlock({
   }
 
   // Default/hero variant - simple buttons (use with StandardHero)
+  const heroPrimaryText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
+  const heroSecondaryText = secondaryText || config.secondary.label;
   return (
     <div className={`flex flex-col sm:flex-row gap-3 ${className}`}>
-      <Link href={wizardHref} className="hero-btn-primary">
-        {primaryText || config.primary.label} — {product.displayPrice}
+      <Link
+        href={wizardHref}
+        className="hero-btn-primary"
+        onClick={() => handleCtaClick(heroPrimaryText)}
+      >
+        {heroPrimaryText}
       </Link>
-      <Link href={config.secondary.href} className="hero-btn-secondary">
-        {secondaryText || config.secondary.label}
+      <Link
+        href={config.secondary.href}
+        className="hero-btn-secondary"
+        onClick={() => handleCtaClick(heroSecondaryText)}
+      >
+        {heroSecondaryText}
       </Link>
     </div>
   );

@@ -11,13 +11,35 @@ export interface WizardAttributionPayload {
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
   product?: string;
   jurisdiction?: string;
   landing_url: string;
+  landing_path: string; // Just the pathname (e.g., /how-to-evict-tenant)
+  referrer?: string;
   first_seen_at: string;
+  ga_client_id?: string;
+}
+
+/**
+ * Attribution data formatted for checkout API
+ * This is the shape expected by /api/checkout/create
+ */
+export interface CheckoutAttributionPayload {
+  landing_path: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
+  referrer: string | null;
+  first_touch_at: string | null;
+  ga_client_id: string | null;
 }
 
 const ATTRIBUTION_KEY = 'wizard_attribution';
+const ATTRIBUTION_KEY_LOCAL = 'lh_attribution'; // localStorage for cross-session persistence
 const COMPLETED_STEPS_KEY = 'wizard_completed_steps';
 const WIZARD_STARTED_KEY = 'wizard_started';
 const ABANDON_SENT_KEY = 'wizard_abandon_sent';
@@ -30,6 +52,58 @@ const DEFAULT_ATTRIBUTION: Pick<WizardAttributionPayload, 'src' | 'topic'> = {
   src: 'direct',
   topic: 'general',
 };
+
+/**
+ * Get the current path from URL
+ */
+function getCurrentPath(): string {
+  if (typeof window === 'undefined') return '';
+  return window.location.pathname;
+}
+
+/**
+ * Get the referrer, truncated to domain for privacy
+ */
+function getReferrer(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
+  const referrer = document.referrer;
+  if (!referrer) return undefined;
+
+  try {
+    const url = new URL(referrer);
+    // Only capture external referrers
+    if (url.hostname === window.location.hostname) return undefined;
+    // Return just the hostname for privacy
+    return url.hostname;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Get Google Analytics client ID from _ga cookie
+ * Format: GA1.1.XXXXXXXXX.YYYYYYYYYY
+ */
+function getGAClientId(): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+
+  try {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === '_ga' && value) {
+        // Extract client ID from GA cookie (skip GA1.1. prefix)
+        const parts = value.split('.');
+        if (parts.length >= 4) {
+          return `${parts[2]}.${parts[3]}`;
+        }
+      }
+    }
+  } catch {
+    // Ignore cookie errors
+  }
+  return undefined;
+}
 
 /**
  * Check if sessionStorage is available
@@ -47,69 +121,145 @@ function isSessionStorageAvailable(): boolean {
 }
 
 /**
- * Get current wizard attribution from sessionStorage
+ * Check if localStorage is available
+ */
+function isLocalStorageAvailable(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const test = '__test__';
+    window.localStorage.setItem(test, test);
+    window.localStorage.removeItem(test);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get current wizard attribution from sessionStorage (with localStorage fallback)
  * Falls back to defaults if not set
+ *
+ * Priority: sessionStorage > localStorage > defaults
+ * This allows attribution to persist across sessions if user returns
  */
 export function getWizardAttribution(): WizardAttributionPayload {
-  if (!isSessionStorageAvailable()) {
-    return {
-      ...DEFAULT_ATTRIBUTION,
-      landing_url: typeof window !== 'undefined' ? window.location.href : '',
-      first_seen_at: new Date().toISOString(),
-    };
-  }
-
-  try {
-    const stored = window.sessionStorage.getItem(ATTRIBUTION_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored) as WizardAttributionPayload;
-      return {
-        ...DEFAULT_ATTRIBUTION,
-        ...parsed,
-      };
-    }
-  } catch {
-    // Ignore parse errors
-  }
-
-  return {
+  const defaults: WizardAttributionPayload = {
     ...DEFAULT_ATTRIBUTION,
-    landing_url: window.location.href,
+    landing_url: typeof window !== 'undefined' ? window.location.href : '',
+    landing_path: getCurrentPath(),
     first_seen_at: new Date().toISOString(),
   };
+
+  // Try sessionStorage first
+  if (isSessionStorageAvailable()) {
+    try {
+      const stored = window.sessionStorage.getItem(ATTRIBUTION_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as WizardAttributionPayload;
+        // Ensure landing_path exists (migration from old data)
+        if (!parsed.landing_path && parsed.landing_url) {
+          try {
+            parsed.landing_path = new URL(parsed.landing_url).pathname;
+          } catch {
+            parsed.landing_path = getCurrentPath();
+          }
+        }
+        return {
+          ...defaults,
+          ...parsed,
+        };
+      }
+    } catch {
+      // Ignore parse errors
+    }
+  }
+
+  // Try localStorage as fallback (cross-session persistence)
+  if (isLocalStorageAvailable()) {
+    try {
+      const stored = window.localStorage.getItem(ATTRIBUTION_KEY_LOCAL);
+      if (stored) {
+        const parsed = JSON.parse(stored) as WizardAttributionPayload;
+        // Ensure landing_path exists (migration from old data)
+        if (!parsed.landing_path && parsed.landing_url) {
+          try {
+            parsed.landing_path = new URL(parsed.landing_url).pathname;
+          } catch {
+            parsed.landing_path = getCurrentPath();
+          }
+        }
+        return {
+          ...defaults,
+          ...parsed,
+        };
+      }
+    } catch {
+      // Ignore parse errors
+    }
+  }
+
+  return defaults;
 }
 
 /**
  * Set/update wizard attribution
- * Merges with existing data, keeping first_seen_at and landing_url stable
+ * Merges with existing data, keeping first_seen_at, landing_url, landing_path stable
+ *
+ * Strategy: FIRST-TOUCH attribution
+ * - landing_url, landing_path, first_seen_at never overwritten
+ * - UTMs can be updated (allows for multi-touch analysis if needed)
+ * - GA client ID captured/refreshed on each call
  */
 export function setWizardAttribution(
   payload: Partial<WizardAttributionPayload>
 ): WizardAttributionPayload {
+  const defaults: WizardAttributionPayload = {
+    ...DEFAULT_ATTRIBUTION,
+    landing_url: typeof window !== 'undefined' ? window.location.href : '',
+    landing_path: getCurrentPath(),
+    first_seen_at: new Date().toISOString(),
+  };
+
   if (!isSessionStorageAvailable()) {
     return {
-      ...DEFAULT_ATTRIBUTION,
-      landing_url: typeof window !== 'undefined' ? window.location.href : '',
-      first_seen_at: new Date().toISOString(),
+      ...defaults,
       ...payload,
     };
   }
 
   const existing = getWizardAttribution();
 
-  // Keep original first_seen_at and landing_url
+  // Capture GA client ID if available
+  const gaClientId = getGAClientId();
+
+  // Keep original first_seen_at, landing_url, landing_path (FIRST-TOUCH)
   const updated: WizardAttributionPayload = {
     ...existing,
     ...payload,
-    // Never overwrite these once set
-    first_seen_at: existing.first_seen_at,
-    landing_url: existing.landing_url,
+    // Never overwrite these once set - FIRST-TOUCH attribution
+    first_seen_at: existing.first_seen_at || defaults.first_seen_at,
+    landing_url: existing.landing_url || defaults.landing_url,
+    landing_path: existing.landing_path || defaults.landing_path,
+    // Keep first referrer only
+    referrer: existing.referrer || payload.referrer,
+    // Update GA client ID if available (may change with consent)
+    ga_client_id: gaClientId || existing.ga_client_id,
   };
 
+  // Store in both sessionStorage and localStorage
   try {
     window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(updated));
   } catch {
     // Ignore storage errors
+  }
+
+  // Also persist to localStorage for cross-session attribution
+  if (isLocalStorageAvailable()) {
+    try {
+      window.localStorage.setItem(ATTRIBUTION_KEY_LOCAL, JSON.stringify(updated));
+    } catch {
+      // Ignore storage errors
+    }
   }
 
   return updated;
@@ -117,17 +267,37 @@ export function setWizardAttribution(
 
 /**
  * Clear wizard attribution (e.g., after purchase)
+ * Note: Does NOT clear localStorage to allow future attribution analysis
  */
 export function clearWizardAttribution(): void {
-  if (!isSessionStorageAvailable()) return;
+  if (isSessionStorageAvailable()) {
+    try {
+      window.sessionStorage.removeItem(ATTRIBUTION_KEY);
+      window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
+      window.sessionStorage.removeItem(WIZARD_STARTED_KEY);
+      window.sessionStorage.removeItem(ABANDON_SENT_KEY);
+    } catch {
+      // Ignore storage errors
+    }
+  }
 
-  try {
-    window.sessionStorage.removeItem(ATTRIBUTION_KEY);
-    window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
-    window.sessionStorage.removeItem(WIZARD_STARTED_KEY);
-    window.sessionStorage.removeItem(ABANDON_SENT_KEY);
-  } catch {
-    // Ignore storage errors
+  // Note: We intentionally keep localStorage attribution for cross-session analysis
+  // To fully clear, use clearAllAttribution()
+}
+
+/**
+ * Clear all attribution including localStorage
+ * Use sparingly - typically only for user-requested data deletion
+ */
+export function clearAllAttribution(): void {
+  clearWizardAttribution();
+
+  if (isLocalStorageAvailable()) {
+    try {
+      window.localStorage.removeItem(ATTRIBUTION_KEY_LOCAL);
+    } catch {
+      // Ignore storage errors
+    }
   }
 }
 
@@ -311,6 +481,8 @@ export function extractAttributionFromUrl(searchParams: URLSearchParams): Partia
   const utm_source = searchParams.get('utm_source');
   const utm_medium = searchParams.get('utm_medium');
   const utm_campaign = searchParams.get('utm_campaign');
+  const utm_term = searchParams.get('utm_term');
+  const utm_content = searchParams.get('utm_content');
   const product = searchParams.get('product');
   const jurisdiction = searchParams.get('jurisdiction');
 
@@ -319,6 +491,8 @@ export function extractAttributionFromUrl(searchParams: URLSearchParams): Partia
   if (utm_source) attribution.utm_source = utm_source;
   if (utm_medium) attribution.utm_medium = utm_medium;
   if (utm_campaign) attribution.utm_campaign = utm_campaign;
+  if (utm_term) attribution.utm_term = utm_term;
+  if (utm_content) attribution.utm_content = utm_content;
   if (product) attribution.product = product;
   if (jurisdiction) attribution.jurisdiction = jurisdiction;
 
@@ -327,13 +501,15 @@ export function extractAttributionFromUrl(searchParams: URLSearchParams): Partia
 
 /**
  * Initialize attribution from current URL
- * Should be called on wizard entry page load
+ * Should be called on ANY page load where attribution tracking is needed
+ * (wizard entry, SEO landing pages, etc.)
  */
 export function initializeAttribution(): WizardAttributionPayload {
   if (typeof window === 'undefined') {
     return {
       ...DEFAULT_ATTRIBUTION,
       landing_url: '',
+      landing_path: '',
       first_seen_at: new Date().toISOString(),
     };
   }
@@ -341,18 +517,18 @@ export function initializeAttribution(): WizardAttributionPayload {
   const searchParams = new URLSearchParams(window.location.search);
   const urlAttribution = extractAttributionFromUrl(searchParams);
 
-  // Set landing URL and first_seen_at if this is first visit
-  const existing = getWizardAttribution();
-  const isFirstVisit = existing.landing_url === window.location.href;
+  // Capture referrer on first visit
+  const referrer = getReferrer();
 
   const payload: Partial<WizardAttributionPayload> = {
     ...urlAttribution,
+    // Set referrer (will only be stored if not already set - first-touch)
+    referrer,
+    // Set landing_path
+    landing_path: window.location.pathname,
+    // Set landing_url
+    landing_url: window.location.href,
   };
-
-  // Only set landing_url if not already set
-  if (!existing.landing_url || existing.landing_url === '') {
-    payload.landing_url = window.location.href;
-  }
 
   return setWizardAttribution(payload);
 }
@@ -370,9 +546,36 @@ export function getAttributionForAnalytics(): Record<string, string | undefined>
     utm_source: attribution.utm_source,
     utm_medium: attribution.utm_medium,
     utm_campaign: attribution.utm_campaign,
+    utm_term: attribution.utm_term,
+    utm_content: attribution.utm_content,
     product: attribution.product,
     jurisdiction: attribution.jurisdiction,
     landing_url: attribution.landing_url,
+    landing_path: attribution.landing_path,
+    referrer: attribution.referrer,
     first_seen_at: attribution.first_seen_at,
+    ga_client_id: attribution.ga_client_id,
+  };
+}
+
+/**
+ * Get attribution payload formatted for checkout API
+ * This returns the exact shape expected by /api/checkout/create
+ *
+ * @returns CheckoutAttributionPayload with null for missing values
+ */
+export function getCheckoutAttribution(): CheckoutAttributionPayload {
+  const attribution = getWizardAttribution();
+
+  return {
+    landing_path: attribution.landing_path || null,
+    utm_source: attribution.utm_source || null,
+    utm_medium: attribution.utm_medium || null,
+    utm_campaign: attribution.utm_campaign || null,
+    utm_term: attribution.utm_term || null,
+    utm_content: attribution.utm_content || null,
+    referrer: attribution.referrer || null,
+    first_touch_at: attribution.first_seen_at || null,
+    ga_client_id: attribution.ga_client_id || null,
   };
 }
