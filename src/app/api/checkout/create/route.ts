@@ -497,37 +497,14 @@ export async function POST(request: Request) {
       .select()
       .single();
 
-    if (orderError?.code === 'PGRST204') {
-      const missingColumnMatch = orderError.message?.match(/'([^']+)' column/);
-      const missingColumn = missingColumnMatch?.[1];
-      const attributionFallbackColumns = [
-        'landing_path',
-        'utm_source',
-        'utm_medium',
-        'utm_campaign',
-        'utm_term',
-        'utm_content',
-        'referrer',
-        'first_touch_at',
-        'ga_client_id',
-      ];
-      const fallbackPayload = { ...orderPayload };
-
-      if (missingColumn) {
-        delete (fallbackPayload as Record<string, unknown>)[missingColumn];
-      } else {
-        attributionFallbackColumns.forEach((column) => {
-          delete (fallbackPayload as Record<string, unknown>)[column];
-        });
-      }
-
-      logger.warn('Orders schema cache missing column, retrying insert without fallback fields', {
+    if (orderError?.code === 'PGRST204' && orderError.message?.includes('first_touch_at')) {
+      logger.warn('Orders schema cache missing first_touch_at, retrying insert without attribution timestamp', {
         userId: user.id,
         caseId: case_id,
         productType: product_type,
-        missingColumn: missingColumn || 'unknown',
       });
 
+      const { first_touch_at: _ignoredFirstTouch, ...fallbackPayload } = orderPayload;
       const retryResult = await adminSupabase
         .from('orders')
         .insert(fallbackPayload)
