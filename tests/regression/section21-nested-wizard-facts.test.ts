@@ -507,4 +507,231 @@ describe('Section 21 Notice Only - Nested Wizard Facts Regression Tests', () => 
       expect(templateData.gas_certificate_provided).toBeFalsy();
     });
   });
+
+  describe('PROPERTY LICENSING: "No licensing required" → N/A status', () => {
+    /**
+     * When the wizard answer is "No licensing required" (false/"no"),
+     * the template should show "N/A - No licensing required" (COMPLIANT).
+     *
+     * ISSUE: Template was showing "NOT LICENSED" because licensing_required
+     * wasn't being resolved from nested wizard paths.
+     */
+
+    it('should set licensing_required=false from property_licensing_required=false', () => {
+      const wizard: WizardFacts = {
+        property_licensing_required: false,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.hmo_license_required).toBe(false);
+      expect(templateData.licensing_required).toBe(false);
+    });
+
+    it('should set licensing_required=false from property_licensing_required="no"', () => {
+      const wizard: WizardFacts = {
+        property_licensing_required: 'no',
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.hmo_license_required).toBe(false);
+      expect(templateData.licensing_required).toBe(false);
+    });
+
+    it('should set licensing_required=false from section21.property_licensing_required=false', () => {
+      const wizard: WizardFacts = {
+        section21: {
+          property_licensing_required: false,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.hmo_license_required).toBe(false);
+      expect(templateData.licensing_required).toBe(false);
+    });
+
+    it('should set licensing_required=false from property.licensing_required=false', () => {
+      const wizard: WizardFacts = {
+        property: {
+          licensing_required: false,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.hmo_license_required).toBe(false);
+      expect(templateData.licensing_required).toBe(false);
+    });
+
+    it('should set licensing_required=true when license is required', () => {
+      const wizard: WizardFacts = {
+        property_licensing_required: true,
+        property_licensed: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.hmo_license_required).toBe(true);
+      expect(templateData.licensing_required).toBe(true);
+      expect(templateData.hmo_license_valid).toBe(true);
+      expect(templateData.property_licensed).toBe(true);
+    });
+  });
+
+  describe('RETALIATORY EVICTION: Wizard confirms no concerns → COMPLIANT', () => {
+    /**
+     * When the wizard confirms there are no retaliatory eviction concerns
+     * (no repair complaints within 6 months, or explicit "clear" confirmation),
+     * the template should show "COMPLIANT", not "REQUIRES REVIEW".
+     *
+     * ISSUE: Template was showing "REQUIRES REVIEW" because retaliatory_eviction_clear
+     * and no_repair_complaint weren't being resolved from wizard answers.
+     */
+
+    it('should set no_repair_complaint=true from retaliatory_eviction_clear=true', () => {
+      const wizard: WizardFacts = {
+        retaliatory_eviction_clear: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set no_repair_complaint=true from retaliatory_eviction_clear="yes"', () => {
+      const wizard: WizardFacts = {
+        retaliatory_eviction_clear: 'yes',
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set no_repair_complaint=true from section21.retaliatory_eviction_clear=true', () => {
+      const wizard: WizardFacts = {
+        section21: {
+          retaliatory_eviction_clear: true,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set no_repair_complaint=true when repair_complaint_within_6_months=false', () => {
+      // If there's explicitly NO complaint within 6 months, that means clear
+      const wizard: WizardFacts = {
+        repair_complaint_within_6_months: false,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set no_repair_complaint=true from section21.repair_complaint_within_6_months=false', () => {
+      const wizard: WizardFacts = {
+        section21: {
+          repair_complaint_within_6_months: false,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set no_repair_complaint=true from no_repair_complaint=true', () => {
+      const wizard: WizardFacts = {
+        no_repair_complaint: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('should set repair_complaint_addressed=true from repair_complaint_addressed=true', () => {
+      const wizard: WizardFacts = {
+        repair_complaint_addressed: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.repair_complaint_addressed).toBe(true);
+    });
+
+    it('should NOT set no_repair_complaint when fields are missing (REQUIRES REVIEW)', () => {
+      // When no retaliatory eviction fields are provided, should default to false
+      // which causes template to show "REQUIRES REVIEW"
+      const wizard: WizardFacts = {
+        tenant_full_name: 'Test Tenant',
+        // No retaliatory eviction fields
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.retaliatory_eviction_clear).toBe(false);
+      expect(templateData.no_repair_complaint).toBe(false);
+      expect(templateData.repair_complaint_addressed).toBe(false);
+    });
+  });
+
+  describe('FULL REALISTIC PAYLOAD: Licensing + Retaliatory Eviction', () => {
+    it('should correctly map all fields including licensing and retaliatory eviction', () => {
+      const wizard: WizardFacts = {
+        // Parties
+        tenant_full_name: 'Sonia Shezadi',
+        landlord_full_name: 'Tariq Mohammed',
+        property_address_line1: '16 Waterloo Road',
+        property_address_town: 'Pudsey',
+
+        // Tenancy
+        tenancy: {
+          start_date: '2025-07-14',
+        },
+
+        // Notice service
+        notice_service: {
+          date: '2026-01-15',
+        },
+
+        // Compliance - all compliant
+        section21: {
+          prescribed_info_given: true,
+          gas_certificate_provided: true,
+          epc_provided: true,
+          how_to_rent_provided: true,
+        },
+
+        // Licensing - "No licensing required"
+        property_licensing_required: false,
+
+        // Retaliatory eviction - "No concerns" (confirmed clear)
+        retaliatory_eviction_clear: true,
+
+        // Deposit
+        deposit_taken: true,
+        deposit_protected: true,
+
+        jurisdiction: 'england',
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+
+      // Compliance fields should all be true
+      expect(templateData.prescribed_info_given).toBe(true);
+      expect(templateData.gas_certificate_provided).toBe(true);
+      expect(templateData.epc_provided).toBe(true);
+      expect(templateData.how_to_rent_provided).toBe(true);
+
+      // Licensing should show N/A
+      expect(templateData.licensing_required).toBe(false);
+      expect(templateData.hmo_license_required).toBe(false);
+
+      // Retaliatory eviction should show COMPLIANT
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+
+      // Deposit
+      expect(templateData.deposit_protected).toBe(true);
+    });
+  });
 });
