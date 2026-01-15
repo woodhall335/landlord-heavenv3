@@ -401,10 +401,42 @@ export async function GET(
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-      // Debug: Log the resolved service date to verify it matches user input
-      if (process.env.NOTICE_ONLY_DEBUG === '1') {
-        console.log('[NOTICE-PREVIEW-API] Resolved service_date:', templateData.service_date);
-        console.log('[NOTICE-PREVIEW-API] Resolved notice_date:', templateData.notice_date);
+      // Debug: Log all critical fields to verify correct data flow
+      // This helps diagnose blank dates and false compliance in Notice Only pack PDFs
+      if (process.env.NOTICE_ONLY_DEBUG === '1' || process.env.NODE_ENV === 'development') {
+        console.log('[NOTICE-PREVIEW-API] === SECTION 21 TEMPLATE DATA DEBUG ===');
+        console.log('[NOTICE-PREVIEW-API] Key Dates:');
+        console.log('  - tenancy_start_date:', templateData.tenancy_start_date);
+        console.log('  - service_date:', templateData.service_date);
+        console.log('  - notice_date:', templateData.notice_date);
+        console.log('  - notice_expiry_date:', templateData.notice_expiry_date);
+        console.log('  - earliest_possession_date:', templateData.earliest_possession_date);
+        console.log('  - display_possession_date:', templateData.display_possession_date);
+        console.log('[NOTICE-PREVIEW-API] Compliance Fields:');
+        console.log('  - prescribed_info_given:', templateData.prescribed_info_given);
+        console.log('  - gas_certificate_provided:', templateData.gas_certificate_provided);
+        console.log('  - epc_provided:', templateData.epc_provided);
+        console.log('  - how_to_rent_provided:', templateData.how_to_rent_provided);
+        console.log('  - hmo_license_required:', templateData.hmo_license_required);
+        console.log('  - hmo_license_valid:', templateData.hmo_license_valid);
+        console.log('[NOTICE-PREVIEW-API] Licensing/Retaliatory Fields (BUG AUDIT):');
+        console.log('  - licensing_required:', templateData.licensing_required, '(template)');
+        console.log('  - wizardFacts.licensing_required:', wizardFacts.licensing_required, '(raw)');
+        console.log('  - retaliatory_eviction_clear:', templateData.retaliatory_eviction_clear, '(template)');
+        console.log('  - no_repair_complaint:', templateData.no_repair_complaint, '(template)');
+        console.log('  - wizardFacts.no_retaliatory_notice:', wizardFacts.no_retaliatory_notice, '(raw)');
+        console.log('  - wizardFacts.retaliatory_eviction_clear:', wizardFacts.retaliatory_eviction_clear, '(raw)');
+        console.log('  - wizardFacts.repair_complaint_within_6_months:', wizardFacts.repair_complaint_within_6_months, '(raw)');
+        console.log('[NOTICE-PREVIEW-API] Deposit Fields:');
+        console.log('  - deposit_taken:', templateData.deposit_taken);
+        console.log('  - deposit_protected:', templateData.deposit_protected);
+        console.log('  - deposit_scheme:', templateData.deposit_scheme);
+        console.log('[NOTICE-PREVIEW-API] Raw wizardFacts sample (nested check):');
+        console.log('  - wizardFacts.section21:', JSON.stringify(wizardFacts.section21 || null));
+        console.log('  - wizardFacts.notice_service:', JSON.stringify(wizardFacts.notice_service || null));
+        console.log('  - wizardFacts.tenancy:', JSON.stringify(wizardFacts.tenancy || null));
+        console.log('  - wizardFacts.compliance:', JSON.stringify(wizardFacts.compliance || null));
+        console.log('[NOTICE-PREVIEW-API] === END DEBUG ===');
       }
 
       // JURISDICTION VALIDATION: Block Section 8/21 for Wales
@@ -663,23 +695,31 @@ export async function GET(
       }
 
       // 4. Generate compliance checklist (pre-service verification)
-      console.log('[NOTICE-PREVIEW-API] Generating England compliance checklist');
+      // Use dedicated Section 21 compliance checklist for Section 21 notices
+      // to ensure correct mapping of wizard answers and proper labeling
+      const complianceTemplatePath = selected_route === 'section_21'
+        ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
+        : 'uk/england/templates/eviction/compliance_checklist.hbs';
+
+      console.log(`[NOTICE-PREVIEW-API] Generating ${selected_route === 'section_21' ? 'Section 21' : 'Section 8'} compliance checklist`);
       try {
         const complianceDoc = await generateDocument({
-          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          templatePath: complianceTemplatePath,
           data: templateData,
           outputFormat: 'pdf',
         });
 
         if (complianceDoc.pdf) {
           documents.push({
-            title: 'Pre-Service Compliance Checklist',
+            title: selected_route === 'section_21'
+              ? 'Section 21 Pre-Service Compliance Checklist'
+              : 'Pre-Service Compliance Checklist',
             category: 'checklist',
             pdf: complianceDoc.pdf,
           });
         }
       } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] England compliance checklist generation failed:', err);
+        console.error(`[NOTICE-PREVIEW-API] ${selected_route === 'section_21' ? 'Section 21' : 'England'} compliance checklist generation failed:`, err);
       }
 
       // 5. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
