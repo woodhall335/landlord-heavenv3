@@ -469,9 +469,7 @@ export async function POST(request: Request) {
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
-    const { data: order, error: orderError } = await adminSupabase
-      .from('orders')
-      .insert({
+    const orderPayload = {
         user_id: user.id,
         case_id: case_id || null,
         product_type,
@@ -491,9 +489,54 @@ export async function POST(request: Request) {
         referrer: referrer || null,
         first_touch_at: first_touch_at || null,
         ga_client_id: ga_client_id || null,
-      })
+      };
+
+    let { data: order, error: orderError } = await adminSupabase
+      .from('orders')
+      .insert(orderPayload)
       .select()
       .single();
+
+    if (orderError?.code === 'PGRST204') {
+      const missingColumnMatch = orderError.message?.match(/'([^']+)' column/);
+      const missingColumn = missingColumnMatch?.[1];
+      const attributionFallbackColumns = [
+        'landing_path',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content',
+        'referrer',
+        'first_touch_at',
+        'ga_client_id',
+      ];
+      const fallbackPayload = { ...orderPayload };
+
+      if (missingColumn) {
+        delete (fallbackPayload as Record<string, unknown>)[missingColumn];
+      } else {
+        attributionFallbackColumns.forEach((column) => {
+          delete (fallbackPayload as Record<string, unknown>)[column];
+        });
+      }
+
+      logger.warn('Orders schema cache missing column, retrying insert without fallback fields', {
+        userId: user.id,
+        caseId: case_id,
+        productType: product_type,
+        missingColumn: missingColumn || 'unknown',
+      });
+
+      const retryResult = await adminSupabase
+        .from('orders')
+        .insert(fallbackPayload)
+        .select()
+        .single();
+
+      order = retryResult.data;
+      orderError = retryResult.error ?? null;
+    }
 
     if (orderError) {
       logger.error('Failed to create order', {
