@@ -60,6 +60,16 @@ export default function WizardPreviewPage() {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
 
+  const normalizeValidationIssues = (issues: any[] = []): ValidationIssue[] =>
+    issues.map((issue) => ({
+      code: issue.code || 'VALIDATION_ISSUE',
+      fields: Array.isArray(issue.fields) ? issue.fields : [],
+      affected_question_id: issue.affected_question_id,
+      alternate_question_ids: issue.alternate_question_ids,
+      user_fix_hint: issue.user_fix_hint || issue.description || issue.message,
+      legal_reason: issue.legal_reason,
+    }));
+
   // Helper to get all document types that should be generated for a product
   const getDocumentTypesForProduct = (
     product: string,
@@ -263,8 +273,13 @@ export default function WizardPreviewPage() {
           console.log('[Preview] Generating preview documents:', documentTypesToGenerate);
 
           // Generate documents in parallel (but limit concurrency to avoid overwhelming server)
+          let previewBlocked = false;
+
           const generateDoc = async (docType: string) => {
             try {
+              if (previewBlocked) {
+                return null;
+              }
               const response = await fetch('/api/documents/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -285,6 +300,21 @@ export default function WizardPreviewPage() {
                   };
                 }
               }
+              if (response.status === 422) {
+                const errorPayload = await response.json().catch(() => ({}));
+                console.warn('[Preview] Preview generation blocked:', {
+                  caseId,
+                  docType,
+                  errorPayload,
+                });
+                previewBlocked = true;
+                setValidationErrors({
+                  blocking_issues: normalizeValidationIssues(errorPayload.blocking_issues),
+                  warnings: normalizeValidationIssues(errorPayload.warnings),
+                });
+                setError('VALIDATION_ERROR');
+                return null;
+              }
               return null;
             } catch (err) {
               console.log(`[Preview] Failed to generate ${docType}:`, err);
@@ -297,11 +327,13 @@ export default function WizardPreviewPage() {
           const newDocs: GeneratedDocument[] = [];
 
           for (let i = 0; i < documentTypesToGenerate.length; i += batchSize) {
+            if (previewBlocked) break;
             const batch = documentTypesToGenerate.slice(i, i + batchSize);
             const results = await Promise.all(batch.map(generateDoc));
             results.forEach(doc => {
               if (doc) newDocs.push(doc);
             });
+            if (previewBlocked) break;
           }
 
           if (newDocs.length > 0) {

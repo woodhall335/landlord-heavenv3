@@ -469,9 +469,7 @@ export async function POST(request: Request) {
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
-    const { data: order, error: orderError } = await adminSupabase
-      .from('orders')
-      .insert({
+    const orderPayload = {
         user_id: user.id,
         case_id: case_id || null,
         product_type,
@@ -491,9 +489,31 @@ export async function POST(request: Request) {
         referrer: referrer || null,
         first_touch_at: first_touch_at || null,
         ga_client_id: ga_client_id || null,
-      })
+      };
+
+    let { data: order, error: orderError } = await adminSupabase
+      .from('orders')
+      .insert(orderPayload)
       .select()
       .single();
+
+    if (orderError?.code === 'PGRST204' && orderError.message?.includes('first_touch_at')) {
+      logger.warn('Orders schema cache missing first_touch_at, retrying insert without attribution timestamp', {
+        userId: user.id,
+        caseId: case_id,
+        productType: product_type,
+      });
+
+      const { first_touch_at: _ignoredFirstTouch, ...fallbackPayload } = orderPayload;
+      const retryResult = await adminSupabase
+        .from('orders')
+        .insert(fallbackPayload)
+        .select()
+        .single();
+
+      order = retryResult.data;
+      orderError = retryResult.error ?? null;
+    }
 
     if (orderError) {
       logger.error('Failed to create order', {

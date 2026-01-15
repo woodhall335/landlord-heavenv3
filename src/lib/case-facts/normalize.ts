@@ -2047,6 +2047,18 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     (base.compliance as any).recent_repair_complaints = coerceBoolean(recentRepairComplaints);
   }
 
+  const noRetaliatoryNotice = getFirstValue(wizard, ['no_retaliatory_notice']);
+  if (
+    noRetaliatoryNotice !== null &&
+    noRetaliatoryNotice !== undefined &&
+    (base.compliance as any).recent_repair_complaints === undefined
+  ) {
+    const normalizedValue = coerceBoolean(noRetaliatoryNotice);
+    if (normalizedValue !== null && normalizedValue !== undefined) {
+      (base.compliance as any).recent_repair_complaints = !normalizedValue;
+    }
+  }
+
   // Keep "breaches" in sync with "other_breaches" for modules that expect either
   if (!base.issues.breaches) {
     base.issues.breaches = {
