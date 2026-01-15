@@ -396,6 +396,146 @@ describe('Section 21 Regression Tests - mapNoticeOnlyFacts', () => {
       expect(result.is_agent_serving).toBe(true);
     });
   });
+
+  // =============================================================================
+  // S21 AUTO-CALCULATION TESTS (FIX FOR FORM 6A DATE MAPPING)
+  // =============================================================================
+  // These tests verify that when notice_expiry_date is NOT provided by the user,
+  // the system correctly auto-calculates it using the Section 21 rules:
+  // - 2 calendar months minimum notice
+  // - 4-month bar from tenancy start
+  // - Fixed term end date constraints
+  // - Break clause handling
+  // =============================================================================
+  describe('S21 Expiry Date Auto-Calculation (FIX: Form 6A dates)', () => {
+    it('MUST auto-calculate notice_expiry_date when not provided (2 months from service)', () => {
+      // Create facts WITHOUT notice_expiry_date - mimics real wizard flow
+      const wizardFacts = {
+        jurisdiction: 'england',
+        selected_notice_route: 'section_21',
+        landlord_full_name: 'Test Landlord',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '1 Test Street',
+        property_city: 'London',
+        property_postcode: 'E1 1AA',
+        tenancy_start_date: '2024-01-15', // Started over 4 months ago
+        rent_frequency: 'monthly',
+        is_fixed_term: false,
+        fixed_term: false,
+        notice_service_date: '2026-01-15',
+        // notice_expiry_date NOT provided - should be auto-calculated
+        deposit_taken: true,
+        deposit_protected: true,
+      };
+
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should auto-calculate 2 months from service date
+      expect(result.notice_expiry_date).toBe('2026-03-15');
+      expect(result.earliest_possession_date).toBe('2026-03-15');
+      expect(result.notice_expiry_date_formatted).toBe('15 March 2026');
+      expect(result.display_possession_date).toBe('2026-03-15');
+      expect(result.display_possession_date_formatted).toBe('15 March 2026');
+      expect(result.s21_expiry_explanation).toContain('2 calendar months');
+    });
+
+    it('MUST respect 4-month bar when tenancy started recently', () => {
+      // Tenancy started only 2 months ago - 4-month bar applies
+      const wizardFacts = {
+        jurisdiction: 'england',
+        selected_notice_route: 'section_21',
+        landlord_full_name: 'Test Landlord',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '1 Test Street',
+        property_city: 'London',
+        property_postcode: 'E1 1AA',
+        tenancy_start_date: '2025-11-15', // Only ~2 months ago
+        rent_frequency: 'monthly',
+        is_fixed_term: false,
+        fixed_term: false,
+        notice_service_date: '2026-01-15',
+        // notice_expiry_date NOT provided
+        deposit_taken: true,
+        deposit_protected: true,
+      };
+
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // 2 months from service = 2026-03-15
+      // 4 months from tenancy start = 2026-03-15
+      // Should be 2026-03-15 (max of both constraints)
+      expect(result.notice_expiry_date).toBe('2026-03-15');
+      expect(result.earliest_possession_date).toBe('2026-03-15');
+    });
+
+    it('MUST respect fixed term end date constraint', () => {
+      // Fixed term ends after 2-month notice period
+      const wizardFacts = {
+        jurisdiction: 'england',
+        selected_notice_route: 'section_21',
+        landlord_full_name: 'Test Landlord',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '1 Test Street',
+        property_city: 'London',
+        property_postcode: 'E1 1AA',
+        tenancy_start_date: '2024-06-01',
+        rent_frequency: 'monthly',
+        is_fixed_term: true,
+        fixed_term: true,
+        fixed_term_end_date: '2026-06-01', // Fixed term ends June 2026
+        notice_service_date: '2026-01-15',
+        // notice_expiry_date NOT provided
+        deposit_taken: true,
+        deposit_protected: true,
+      };
+
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // 2 months from service = 2026-03-15
+      // But fixed term ends 2026-06-01, so expiry must be on/after that
+      expect(result.notice_expiry_date).toBe('2026-06-01');
+      expect(result.earliest_possession_date).toBe('2026-06-01');
+      expect(result.notice_expiry_date_formatted).toBe('1 June 2026');
+    });
+
+    it('MUST NOT override user-provided notice_expiry_date', () => {
+      // User explicitly provides an expiry date
+      const wizardFacts = {
+        ...createSection21WizardFacts(),
+        notice_expiry_date: '2026-04-20', // User provides custom date
+      };
+
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should use user-provided date, not auto-calculate
+      expect(result.notice_expiry_date).toBe('2026-04-20');
+    });
+
+    it('MUST NOT run for Section 8 routes', () => {
+      // Section 8 should use ground-based calculation, not S21 calculation
+      const wizardFacts = {
+        jurisdiction: 'england',
+        selected_notice_route: 'section_8',
+        landlord_full_name: 'Test Landlord',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '1 Test Street',
+        property_city: 'London',
+        property_postcode: 'E1 1AA',
+        tenancy_start_date: '2024-01-15',
+        rent_frequency: 'monthly',
+        notice_service_date: '2026-01-15',
+        section8_grounds: ['Ground 8'],
+      };
+
+      const result = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should use ground-based calculation (14 days for Ground 8)
+      expect(result.notice_period_days).toBe(14);
+      expect(result.notice_period_description).toBe('2 weeks');
+      // Should NOT have S21-specific explanation
+      expect(result.s21_expiry_explanation).toBeUndefined();
+    });
+  });
 });
 
 // =============================================================================
