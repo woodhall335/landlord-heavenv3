@@ -14,6 +14,7 @@ import {
   calculateSection21ExpiryDate,
   validateSection21ExpiryDate,
   type Section21DateParams,
+  type ServiceMethod,
 } from './notice-date-calculator';
 
 // ============================================================================
@@ -46,6 +47,7 @@ export interface Section21NoticeData {
 
   // Notice details
   service_date?: string; // Date notice is served (defaults to today)
+  service_method?: ServiceMethod; // How notice is being served (affects deemed service date)
   expiry_date?: string; // Date tenant must leave by (auto-calculated if not provided)
   expiry_date_explanation?: string; // How we calculated this
   serving_capacity?: 'landlord' | 'joint_landlords' | 'agent'; // Who is serving the notice
@@ -121,6 +123,7 @@ export async function generateSection21Notice(
     break_clause_date: data.break_clause_date,
     rent_period: data.rent_frequency,
     periodic_tenancy_start: data.periodic_tenancy_start,
+    service_method: data.service_method, // For deemed service date calculation
   };
 
   // =============================================================================
@@ -354,6 +357,45 @@ export function mapWizardToSection21Data(
     return undefined;
   };
 
+  // =============================================================================
+  // RESOLVE SERVICE METHOD FROM WIZARD PATHS
+  // Determines deemed service date calculation (postal = +2 working days)
+  // =============================================================================
+  const resolveServiceMethod = (): ServiceMethod | undefined => {
+    const validMethods: ServiceMethod[] = [
+      'first_class_post',
+      'second_class_post',
+      'hand_delivery',
+      'leaving_at_property',
+      'recorded_delivery',
+    ];
+
+    // Check nested path from MQS maps_to (notice_service.service_method)
+    const noticeService = wizardFacts.notice_service;
+    if (typeof noticeService === 'object' && noticeService?.service_method) {
+      const method = noticeService.service_method;
+      if (validMethods.includes(method as ServiceMethod)) {
+        return method as ServiceMethod;
+      }
+    }
+
+    // Check flat keys with various possible names
+    const possibleKeys = [
+      'service_method',
+      'notice_service_method',
+      'delivery_method',
+      'how_serving',
+    ];
+    for (const key of possibleKeys) {
+      const value = wizardFacts[key];
+      if (value && validMethods.includes(value as ServiceMethod)) {
+        return value as ServiceMethod;
+      }
+    }
+
+    return undefined;
+  };
+
   return {
     // Landlord
     landlord_full_name: wizardFacts.landlord_full_name || '',
@@ -388,6 +430,8 @@ export function mapWizardToSection21Data(
     // CRITICAL (Jan 2026): expiry_date is ALWAYS computed server-side for S21
     // We do NOT pass any user-provided expiry_date - generateSection21Notice computes it.
     service_date: resolveServiceDate(),
+    // Service method determines deemed service date (postal = +2 working days)
+    service_method: resolveServiceMethod(),
     // expiry_date is intentionally omitted - generateSection21Notice will compute it
     // Include serving_capacity for Form 6A checkbox rendering
     serving_capacity: resolveServingCapacity(),
