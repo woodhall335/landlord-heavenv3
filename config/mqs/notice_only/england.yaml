@@ -766,6 +766,11 @@ questions:
   # ========================================
   # NOTICE SERVICE + EXPIRY (comes AFTER grounds for Section 8)
   # ========================================
+  # CRITICAL FIX (Jan 2026): Field IDs MUST match the last segment of maps_to paths
+  # for the mapping.ts applyMappedAnswers() function to correctly extract values.
+  # Old field IDs like "notice_service_date" didn't match maps_to "notice_service.notice_date"
+  # which caused values to be silently dropped.
+  # ========================================
 
   - id: notice_service
     section: Notice Details
@@ -779,17 +784,22 @@ questions:
           value: section_21
     helperText: "We need these dates to calculate the minimum notice period and check statutory bars."
     fields:
-      - id: notice_service_date
-        label: "Date the notice will be served"
+      # FIXED: Field ID "notice_date" now matches maps_to "notice_service.notice_date"
+      - id: notice_date
+        label: "Date you will serve the notice*"
         inputType: date
         validation:
           required: true
+        helperText: "This is the date you will actually serve (hand deliver or post) the notice to the tenant."
+      # Section 8 ONLY: User can input expiry date (grounds-driven, strategy-driven)
       - id: notice_expiry_date
         label: "Date the notice should expire"
         inputType: date
+        routes:
+          - section_8
         validation:
           required: false
-        helperText: "Will be auto-calculated based on your grounds and service date"
+        helperText: "Will be auto-calculated based on your grounds and service date. You can override if needed."
       - id: service_method
         label: "How will you serve the notice?"
         inputType: select
@@ -819,6 +829,31 @@ questions:
       - notice_service.service_method
       - notice_service.serving_capacity
       - notice_service.served_by
+
+  # Section 21 ONLY: Computed expiry date (read-only display)
+  # This shows the auto-calculated expiry date based on tenancy terms and service date
+  - id: s21_calculated_expiry_info
+    section: Notice Details
+    question: "Calculated notice expiry date"
+    inputType: info
+    routes:
+      - section_21
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    content: |
+      **Your Section 21 notice expiry date will be calculated automatically** based on:
+
+      • Your service date (entered above)
+      • Whether tenancy is fixed term or periodic
+      • Fixed term end date (if applicable)
+      • Break clause date (if applicable)
+      • The 4-month restriction from tenancy start
+
+      The system ensures compliance with Housing Act 1988, Section 21(4) requirements
+      (minimum 2 calendar months notice, cannot expire before fixed term ends, etc.)
+
+      **You will see the calculated expiry date on the generated Form 6A.**
 
   # ============================================================
   # EVIDENCE WITH DESCRIBE OPTION

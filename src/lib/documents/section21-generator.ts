@@ -93,7 +93,23 @@ export async function generateSection21Notice(
     throw new Error('rent_frequency is required');
   }
 
-  // Auto-calculate expiry date if not provided or validate if provided
+  // =============================================================================
+  // SECTION 21 EXPIRY DATE: ALWAYS AUTO-CALCULATED (Jan 2026 Fix)
+  // =============================================================================
+  // For Section 21 notices, the expiry date MUST be computed server-side using
+  // the S21 validity engine. This ensures legal compliance with Housing Act 1988.
+  //
+  // IMPORTANT: Even if a user provides an expiry_date (from stale client or old data),
+  // we IGNORE it and compute the correct date. This is the single source of truth.
+  //
+  // The computed date considers:
+  // - Service date
+  // - Fixed term end date (if applicable)
+  // - Break clause date (if applicable)
+  // - 4-month restriction from tenancy start
+  // - 2 calendar months minimum notice
+  // - Periodic tenancy alignment
+  // =============================================================================
   const serviceDate = data.service_date || new Date().toISOString().split('T')[0];
 
   const dateParams: Section21DateParams = {
@@ -107,23 +123,55 @@ export async function generateSection21Notice(
     periodic_tenancy_start: data.periodic_tenancy_start,
   };
 
-  // If expiry_date is provided, validate it
-  if (data.expiry_date) {
-    const validation = validateSection21ExpiryDate(data.expiry_date, dateParams);
-    if (!validation.valid) {
-      // Return 422 error with precise explanation
-      const error = new Error(validation.errors.join(' '));
-      (error as any).statusCode = 422;
-      (error as any).validationErrors = validation.errors;
-      (error as any).suggestedDate = validation.suggested_date;
-      throw error;
-    }
-  } else {
-    // Auto-calculate the expiry date
-    const calculatedDate = calculateSection21ExpiryDate(dateParams);
-    data.expiry_date = calculatedDate.earliest_valid_date;
-    data.expiry_date_explanation = calculatedDate.explanation;
+  // =============================================================================
+  // SAFETY RAILS: Validate S21 can be served (4-month rule)
+  // =============================================================================
+  const tenancyStartObj = new Date(data.tenancy_start_date + 'T00:00:00.000Z');
+  const serviceDateObj = new Date(serviceDate + 'T00:00:00.000Z');
+  const fourMonthsAfterStart = new Date(tenancyStartObj);
+  fourMonthsAfterStart.setUTCMonth(fourMonthsAfterStart.getUTCMonth() + 4);
+
+  if (serviceDateObj < fourMonthsAfterStart) {
+    const error = new Error(
+      `Section 21 notice cannot be served within the first 4 months of the tenancy. ` +
+      `Tenancy started: ${data.tenancy_start_date}. ` +
+      `Earliest service date: ${fourMonthsAfterStart.toISOString().split('T')[0]}. ` +
+      `Legal basis: Housing Act 1988, Section 21(4B).`
+    );
+    (error as any).statusCode = 422;
+    (error as any).validationErrors = [(error as Error).message];
+    throw error;
   }
+
+  // =============================================================================
+  // SAFETY RAILS: Fixed term without break clause - ensure expiry >= fixed term end
+  // =============================================================================
+  if (data.fixed_term && data.fixed_term_end_date && !data.has_break_clause) {
+    const fixedTermEndObj = new Date(data.fixed_term_end_date + 'T00:00:00.000Z');
+    const twoMonthsFromService = new Date(serviceDateObj);
+    twoMonthsFromService.setUTCMonth(twoMonthsFromService.getUTCMonth() + 2);
+
+    // The calculated expiry will be the later of: (service + 2 months) OR fixed_term_end
+    // This is correct behavior, but if someone somehow bypasses and sets expiry < fixed_term_end,
+    // that's a bug. We validate this in the calculation.
+  }
+
+  // =============================================================================
+  // ALWAYS COMPUTE EXPIRY DATE (ignore user-provided values for S21)
+  // This is the SINGLE SOURCE OF TRUTH for Section 21 expiry dates.
+  // =============================================================================
+  const calculatedDate = calculateSection21ExpiryDate(dateParams);
+
+  // Log if user provided a different expiry date (for debugging)
+  if (data.expiry_date && data.expiry_date !== calculatedDate.earliest_valid_date) {
+    console.warn(
+      `[S21 Generator] User-provided expiry date (${data.expiry_date}) differs from calculated (${calculatedDate.earliest_valid_date}). ` +
+      `Using calculated date as single source of truth.`
+    );
+  }
+
+  data.expiry_date = calculatedDate.earliest_valid_date;
+  data.expiry_date_explanation = calculatedDate.explanation;
 
   // Compliance warnings (should be checked by decision engine before allowing S21)
   const complianceWarnings: string[] = [];
@@ -253,6 +301,10 @@ export function mapWizardToSection21Data(
   // The wizard stores service date in various locations depending on product/config.
   // MQS maps_to: notice_service.notice_date creates nested structure.
   // We need to check all possible paths to find the user-entered service date.
+  //
+  // CRITICAL FIX (Jan 2026): Added support for new field ID "notice_date" from MSQ fix.
+  // Old field was "notice_service_date" which didn't match maps_to path last segment.
+  // Now MSQ uses "notice_date" which correctly maps to "notice_service.notice_date".
   // =============================================================================
   const resolveServiceDate = (): string | undefined => {
     // Priority 1: Explicit option passed from caller
@@ -265,9 +317,13 @@ export function mapWizardToSection21Data(
     }
 
     // Priority 3: Direct field IDs (flat keys in wizard facts)
-    if (wizardFacts.notice_service_date) return wizardFacts.notice_service_date;
-    if (wizardFacts.service_date) return wizardFacts.service_date;
+    // Check BOTH old and new field names for backwards compatibility
+    // New field ID (Jan 2026 fix): notice_date
     if (wizardFacts.notice_date) return wizardFacts.notice_date;
+    // Old field ID (pre-fix): notice_service_date
+    if (wizardFacts.notice_service_date) return wizardFacts.notice_service_date;
+    // Other possible paths
+    if (wizardFacts.service_date) return wizardFacts.service_date;
     if (wizardFacts.notice_served_date) return wizardFacts.notice_served_date;
     if (wizardFacts.intended_service_date) return wizardFacts.intended_service_date;
 
@@ -329,9 +385,10 @@ export function mapWizardToSection21Data(
     periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
 
     // Notice details - service_date resolved from all possible wizard paths
-    // expiry_date will be auto-calculated by generateSection21Notice
+    // CRITICAL (Jan 2026): expiry_date is ALWAYS computed server-side for S21
+    // We do NOT pass any user-provided expiry_date - generateSection21Notice computes it.
     service_date: resolveServiceDate(),
-    expiry_date: '', // Will be auto-calculated by generateSection21Notice
+    // expiry_date is intentionally omitted - generateSection21Notice will compute it
     // Include serving_capacity for Form 6A checkbox rendering
     serving_capacity: resolveServingCapacity(),
 
