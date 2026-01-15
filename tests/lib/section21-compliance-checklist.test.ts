@@ -743,6 +743,137 @@ describe('Template Rendering - Licensing & Retaliatory Eviction', () => {
     });
   });
 
+  /**
+   * REGRESSION TESTS FOR BUG FIX: licensing_required='not_required' and no_retaliatory_notice=true
+   *
+   * These tests verify the ACTUAL wizard payload shapes from Section21ComplianceSection.tsx:
+   * 1. licensing_required stores a SELECT value: 'not_required', 'hmo_mandatory', 'hmo_additional', 'selective'
+   * 2. no_retaliatory_notice is the wizard field for "Is notice served > 6 months after repair complaint?"
+   */
+  describe('Bug Fix Regression - Wizard Payload Shapes', () => {
+    it('licensing_required="not_required" (wizard select value) should map to false', () => {
+      // This is the ACTUAL wizard payload shape from Section21ComplianceSection.tsx (LICENSING_OPTIONS)
+      const wizardFacts = {
+        licensing_required: 'not_required', // SELECT value, NOT boolean!
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should map to false (no licensing required)
+      expect(templateData.licensing_required).toBe(false);
+      expect(templateData.hmo_license_required).toBe(false);
+    });
+
+    it('licensing_required="hmo_mandatory" should map to true', () => {
+      const wizardFacts = {
+        licensing_required: 'hmo_mandatory',
+        has_valid_licence: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      expect(templateData.licensing_required).toBe(true);
+      expect(templateData.hmo_license_required).toBe(true);
+    });
+
+    it('licensing_required="selective" should map to true', () => {
+      const wizardFacts = {
+        licensing_required: 'selective',
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      expect(templateData.licensing_required).toBe(true);
+      expect(templateData.hmo_license_required).toBe(true);
+    });
+
+    it('no_retaliatory_notice=true (wizard field) should set retaliatory_eviction_clear=true', () => {
+      // This is the ACTUAL wizard field from Section21ComplianceSection.tsx
+      // Question: "Is this notice being served more than 6 months after any repair complaint?"
+      const wizardFacts = {
+        no_retaliatory_notice: true, // Yes = > 6 months after complaint = NO concerns
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should set retaliatory_eviction_clear to true (compliant)
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+      expect(templateData.no_repair_complaint).toBe(true);
+    });
+
+    it('no_retaliatory_notice=false should NOT set retaliatory_eviction_clear', () => {
+      // User selected "No" = within 6 months of complaint = potential concern
+      const wizardFacts = {
+        no_retaliatory_notice: false,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Should NOT be marked as compliant
+      expect(templateData.retaliatory_eviction_clear).toBe(false);
+    });
+
+    it('complete wizard scenario with actual field names should map correctly', () => {
+      // This is the EXACT wizard payload from Section21ComplianceSection.tsx
+      const wizardFacts = {
+        // Property
+        property_address_line1: '16 Waterloo Road',
+        property_address_town: 'Pudsey',
+        property_address_postcode: 'LS28 7PW',
+
+        // Landlord
+        landlord_full_name: 'Tariq Mohammed',
+
+        // Tenant
+        tenant_full_name: 'Sonia Shezadi',
+
+        // Tenancy
+        tenancy_start_date: '2025-07-14',
+        fixed_term: true,
+        fixed_term_end_date: '2026-07-14',
+
+        // Notice
+        notice_service_date: '2026-01-15',
+        selected_notice_route: 'section_21',
+
+        // Deposit - using wizard field names
+        deposit_taken: true,
+        deposit_protected: true,
+        deposit_amount: 1000,
+        deposit_scheme_name: 'DPS',
+        prescribed_info_served: true, // wizard uses _served suffix
+
+        // Gas - wizard field name
+        gas_safety_cert_served: true,
+
+        // EPC - wizard field name
+        epc_served: true,
+
+        // How to Rent - wizard field name
+        how_to_rent_served: true,
+
+        // Licensing - CRITICAL: wizard uses SELECT value not boolean!
+        licensing_required: 'not_required',
+
+        // Retaliatory eviction - CRITICAL: wizard field name!
+        no_retaliatory_notice: true,
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Verify ALL fields are correctly mapped
+      expect(templateData.deposit_protected).toBe(true);
+      expect(templateData.prescribed_info_given).toBe(true);
+      expect(templateData.gas_certificate_provided).toBe(true);
+      expect(templateData.epc_provided).toBe(true);
+      expect(templateData.how_to_rent_provided).toBe(true);
+
+      // CRITICAL: These were the bugs!
+      expect(templateData.licensing_required).toBe(false); // NOT true!
+      expect(templateData.retaliatory_eviction_clear).toBe(true);
+    });
+  });
+
   describe('Full Compliant Scenario - No False Warnings', () => {
     it('reference scenario should NOT contain false warnings', () => {
       // This is the exact reference scenario from the task
