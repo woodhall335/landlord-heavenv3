@@ -22,6 +22,7 @@ import {
   Users,
   PoundSterling,
   Home,
+  Download,
 } from 'lucide-react';
 
 const wizardLinkCompletePack = buildWizardLink({
@@ -296,6 +297,47 @@ export default function WarrantOfPossessionPage() {
                       </p>
                     </div>
                   </div>
+                </div>
+
+                {/* Free Download Section */}
+                <div className="bg-green-50 rounded-2xl p-6 border-2 border-green-200">
+                  <h2 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <Download className="w-5 h-5 text-green-600" />
+                    Download N325 &amp; N325A Forms (Free PDF)
+                  </h2>
+                  <p className="text-gray-600 mb-4">
+                    You can download the official court forms used to request a warrant of possession below.
+                    These are free, government-issued forms required to instruct county court bailiffs or apply for enforcement.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <a
+                      href="/official-forms/n325-eng.pdf"
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download free — Form N325 (Request for Warrant of Possession of Land)
+                    </a>
+                    <a
+                      href="/official-forms/N325A.pdf"
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download free — Form N325A
+                    </a>
+                  </div>
+                  <p className="text-sm text-gray-500 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                    <span>
+                      These are official court forms. You must already have a possession order before applying for a warrant.
+                      Completing the form incorrectly may delay enforcement.
+                    </span>
+                  </p>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
