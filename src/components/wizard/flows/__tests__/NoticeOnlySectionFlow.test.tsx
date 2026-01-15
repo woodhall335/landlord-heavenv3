@@ -344,3 +344,243 @@ describe('NoticeOnlySectionFlow - Header and Title', () => {
     expect(screen.getByText(/Wales Eviction Notice/)).toBeDefined();
   });
 });
+
+/**
+ * Notice Details Section Completion Tests
+ *
+ * These tests verify the isComplete logic for the Notice Details section
+ * works correctly for both England and Wales routes.
+ */
+describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
+  /**
+   * Helper to extract the notice section isComplete logic for direct testing.
+   * This mirrors the logic in SECTIONS array for the 'notice' section.
+   */
+  const isNoticeComplete = (facts: Record<string, any>): boolean => {
+    const route = facts.eviction_route as string;
+
+    // Wales: Section 173 (no-fault) - requires service method and date
+    if (route === 'section_173') {
+      const hasServiceMethod = Boolean(facts.notice_service_method);
+      const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+      return hasServiceMethod && hasServiceDate;
+    }
+
+    // Wales: Fault-based - requires grounds, service method, and date
+    if (route === 'fault_based') {
+      const walesGrounds = (facts.wales_fault_grounds as string[]) || [];
+      const hasGrounds = walesGrounds.length > 0;
+      const hasServiceMethod = Boolean(facts.notice_service_method);
+      const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+      return hasGrounds && hasServiceMethod && hasServiceDate;
+    }
+
+    // England: Section 21 - just need to confirm service method
+    if (route === 'section_21') {
+      return Boolean(facts.notice_service_method);
+    }
+
+    // England: Section 8 - need grounds selected + service method
+    const selectedGrounds = (facts.section8_grounds as string[]) || [];
+    return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+  };
+
+  describe('Wales Section 173 (No-fault)', () => {
+    it('should return true when notice_service_method and notice_date are set', () => {
+      const facts = {
+        eviction_route: 'section_173',
+        notice_service_method: 'first_class_post',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return true when notice_service_method and notice_service_date are set', () => {
+      const facts = {
+        eviction_route: 'section_173',
+        notice_service_method: 'hand_delivered',
+        notice_service_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return false when notice_service_method is missing', () => {
+      const facts = {
+        eviction_route: 'section_173',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when both notice dates are missing', () => {
+      const facts = {
+        eviction_route: 'section_173',
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+  });
+
+  describe('Wales Fault-based', () => {
+    it('should return true when grounds, service method, and date are all set', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        wales_fault_grounds: ['rent_arrears_serious'],
+        notice_service_method: 'recorded_delivery',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return true with multiple grounds selected', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        wales_fault_grounds: ['rent_arrears_serious', 'breach_of_contract', 'antisocial_behaviour'],
+        notice_service_method: 'hand_delivered',
+        notice_service_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return false when wales_fault_grounds is empty', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        wales_fault_grounds: [],
+        notice_service_method: 'first_class_post',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when wales_fault_grounds is not set', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        notice_service_method: 'first_class_post',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when notice_service_method is missing', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        wales_fault_grounds: ['rent_arrears_serious'],
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when notice date is missing', () => {
+      const facts = {
+        eviction_route: 'fault_based',
+        wales_fault_grounds: ['breach_of_contract'],
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+  });
+
+  describe('England Section 21 (unchanged behavior)', () => {
+    it('should return true when only notice_service_method is set', () => {
+      const facts = {
+        eviction_route: 'section_21',
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return false when notice_service_method is missing', () => {
+      const facts = {
+        eviction_route: 'section_21',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should NOT require notice_date (preserves existing England behavior)', () => {
+      const facts = {
+        eviction_route: 'section_21',
+        notice_service_method: 'recorded_delivery',
+        // no notice_date - should still complete for England
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+  });
+
+  describe('England Section 8 (unchanged behavior)', () => {
+    it('should return true when section8_grounds and notice_service_method are set', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        section8_grounds: ['Ground 8'],
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return true with multiple grounds', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        section8_grounds: ['Ground 8', 'Ground 10', 'Ground 11'],
+        notice_service_method: 'hand_delivered',
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+
+    it('should return false when section8_grounds is empty', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        section8_grounds: [],
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when section8_grounds is not set', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should return false when notice_service_method is missing', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        section8_grounds: ['Ground 8'],
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should NOT require notice_date (preserves existing England behavior)', () => {
+      const facts = {
+        eviction_route: 'section_8',
+        section8_grounds: ['Ground 8'],
+        notice_service_method: 'recorded_delivery',
+        // no notice_date - should still complete for England
+      };
+      expect(isNoticeComplete(facts)).toBe(true);
+    });
+  });
+
+  describe('Jurisdiction isolation', () => {
+    it('should NOT use section8_grounds for Wales fault_based route', () => {
+      // Even if section8_grounds is set, Wales fault_based should use wales_fault_grounds
+      const facts = {
+        eviction_route: 'fault_based',
+        section8_grounds: ['Ground 8'], // wrong key for Wales
+        notice_service_method: 'first_class_post',
+        notice_date: '2024-06-01',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+
+    it('should NOT use wales_fault_grounds for England section_8 route', () => {
+      // Even if wales_fault_grounds is set, England section_8 should use section8_grounds
+      const facts = {
+        eviction_route: 'section_8',
+        wales_fault_grounds: ['rent_arrears_serious'], // wrong key for England
+        notice_service_method: 'first_class_post',
+      };
+      expect(isNoticeComplete(facts)).toBe(false);
+    });
+  });
+});
