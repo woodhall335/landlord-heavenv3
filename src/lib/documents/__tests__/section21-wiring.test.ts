@@ -104,7 +104,8 @@ describe('Section 21 Canonical Generator', () => {
 
     it('auto-calculates expiry date if not provided', async () => {
       const section21Data = mapWizardToSection21Data(validWizardFacts);
-      expect(section21Data.expiry_date).toBe('');
+      // expiry_date is intentionally not set by mapper - it's always computed server-side
+      expect(section21Data.expiry_date).toBeUndefined();
 
       const result = await generateSection21Notice(section21Data, true);
 
