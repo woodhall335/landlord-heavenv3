@@ -35,6 +35,10 @@ import { Section21ComplianceSection } from '../sections/eviction/Section21Compli
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
 
+// Wales-specific section components
+import { OccupationContractSection } from '../sections/wales/OccupationContractSection';
+import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
+
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
@@ -292,7 +296,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       ? route && WALES_ROUTES.includes(route as typeof WALES_ROUTES[number])
       : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
 
-    return SECTIONS.filter((section) => {
+    const filteredSections = SECTIONS.filter((section) => {
       // Route-specific sections (S21 compliance, S8 arrears) only apply to England
       if (section.routes) {
         // Wales doesn't use these England-specific sections
@@ -306,6 +310,31 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       if (!hasValidRoute) return section.id === 'case_basics';
       return true;
     });
+
+    // Override labels for Wales jurisdiction
+    if (isWales) {
+      return filteredSections.map((section) => {
+        if (section.id === 'tenancy') {
+          return {
+            ...section,
+            label: 'Occupation Contract',
+            description: 'Contract details and rent',
+          };
+        }
+        if (section.id === 'notice') {
+          return {
+            ...section,
+            label: 'Notice Details',
+            description: route === 'section_173'
+              ? 'Section 173 notice service'
+              : 'Fault-based notice and grounds',
+          };
+        }
+        return section;
+      });
+    }
+
+    return filteredSections;
   }, [jurisdiction, facts.eviction_route]);
 
   const currentSection = visibleSections[currentSectionIndex];
@@ -455,6 +484,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       onUpdate: handleUpdate,
     };
 
+    const isWales = jurisdiction === 'wales';
+
     switch (currentSection.id) {
       case 'case_basics':
         return <CaseBasicsSection {...sectionProps} />;
@@ -463,13 +494,19 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'property':
         return <PropertySection {...sectionProps} />;
       case 'tenancy':
-        return <TenancySection {...sectionProps} />;
+        // Wales uses OccupationContractSection, England uses TenancySection
+        return isWales
+          ? <OccupationContractSection {...sectionProps} />
+          : <TenancySection {...sectionProps} />;
       case 'section21_compliance':
         return <Section21ComplianceSection {...sectionProps} />;
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
       case 'notice':
-        return <NoticeSection {...sectionProps} mode="notice_only" />;
+        // Wales uses WalesNoticeSection, England uses NoticeSection
+        return isWales
+          ? <WalesNoticeSection {...sectionProps} mode="notice_only" />
+          : <NoticeSection {...sectionProps} mode="notice_only" />;
       case 'review':
         return renderReviewSection();
       default:
@@ -558,15 +595,37 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           <div className="text-sm text-gray-600 space-y-1">
             <p>
               <strong>Type:</strong>{' '}
-              {facts.eviction_route === 'section_21' ? 'Section 21 (No-Fault)' : 'Section 8 (Fault-Based)'}
+              {(() => {
+                // Wales routes
+                if (jurisdiction === 'wales') {
+                  if (facts.eviction_route === 'section_173') {
+                    return 'Section 173 (No-fault)';
+                  } else if (facts.eviction_route === 'fault_based') {
+                    return 'Fault-based (breach grounds)';
+                  }
+                  return 'Wales notice';
+                }
+                // England routes
+                return facts.eviction_route === 'section_21'
+                  ? 'Section 21 (No-Fault)'
+                  : 'Section 8 (Fault-Based)';
+              })()}
             </p>
             <p>
               <strong>Jurisdiction:</strong> {jurisdiction === 'england' ? 'England' : 'Wales'}
             </p>
-            {facts.eviction_route === 'section_8' && (
+            {/* England Section 8 grounds */}
+            {jurisdiction === 'england' && facts.eviction_route === 'section_8' && (
               <p>
                 <strong>Grounds:</strong>{' '}
                 {((facts.section8_grounds as string[]) || []).join(', ') || 'Not selected'}
+              </p>
+            )}
+            {/* Wales fault-based grounds */}
+            {jurisdiction === 'wales' && facts.eviction_route === 'fault_based' && (
+              <p>
+                <strong>Grounds:</strong>{' '}
+                {((facts.wales_fault_grounds as string[]) || []).join(', ') || 'Not selected'}
               </p>
             )}
           </div>
