@@ -110,9 +110,25 @@ export function getNoticeOnlyRequirements(
         derived.add('gas_safety_cert_date');
       }
 
-      // Notice expiry date
+      // Notice service date is required (user must specify when they will serve)
+      // FIX (Jan 2026): Check both notice_date (new) and notice_service_date (old) field IDs
       if (stage === 'generate' || stage === 'preview') {
-        requiredNow.add('notice_expiry_date');
+        if (!facts.notice_date && !facts.notice_service_date) {
+          requiredNow.add('notice_date');
+        }
+      }
+
+      // Notice expiry date:
+      // - Section 21: AUTO-CALCULATED server-side, NOT required from wizard facts
+      //   The generateSection21Notice function computes this from service date + tenancy terms
+      // - Wales Section 173: May still require user input depending on implementation
+      if (route === 'wales_section_173') {
+        if (stage === 'generate' || stage === 'preview') {
+          requiredNow.add('notice_expiry_date');
+        }
+      } else {
+        // Section 21: expiry is derived/computed, mark as such
+        derived.add('notice_expiry_date');
       }
 
       // Fixed term handling

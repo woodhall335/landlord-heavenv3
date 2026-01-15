@@ -469,31 +469,59 @@ export async function POST(request: Request) {
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
-    const { data: order, error: orderError } = await adminSupabase
+    //
+    // NOTE: Attribution columns may not exist if migration 012 hasn't been applied.
+    // We attempt to insert with attribution first, then retry without if the columns don't exist.
+    const baseOrderData = {
+      user_id: user.id,
+      case_id: case_id || null,
+      product_type,
+      product_name: product.label,
+      amount: product.price,
+      currency: 'GBP',
+      total_amount: product.price,
+      payment_status: 'pending',
+      fulfillment_status: 'pending',
+    };
+
+    // Attribution fields for revenue tracking (FIRST-TOUCH) - Migration 012
+    const attributionData = {
+      landing_path: landing_path || null,
+      utm_source: utm_source || null,
+      utm_medium: utm_medium || null,
+      utm_campaign: utm_campaign || null,
+      utm_term: utm_term || null,
+      utm_content: utm_content || null,
+      referrer: referrer || null,
+      first_touch_at: first_touch_at || null,
+      ga_client_id: ga_client_id || null,
+    };
+
+    // Try to insert with attribution data first
+    let { data: order, error: orderError } = await adminSupabase
       .from('orders')
-      .insert({
-        user_id: user.id,
-        case_id: case_id || null,
-        product_type,
-        product_name: product.label,
-        amount: product.price,
-        currency: 'GBP',
-        total_amount: product.price,
-        payment_status: 'pending',
-        fulfillment_status: 'pending',
-        // Attribution fields for revenue tracking (FIRST-TOUCH)
-        landing_path: landing_path || null,
-        utm_source: utm_source || null,
-        utm_medium: utm_medium || null,
-        utm_campaign: utm_campaign || null,
-        utm_term: utm_term || null,
-        utm_content: utm_content || null,
-        referrer: referrer || null,
-        first_touch_at: first_touch_at || null,
-        ga_client_id: ga_client_id || null,
-      })
+      .insert({ ...baseOrderData, ...attributionData })
       .select()
       .single();
+
+    // If insert fails due to missing columns (PGRST204), retry without attribution
+    if (orderError && orderError.code === 'PGRST204') {
+      logger.warn('Attribution columns not found in orders table (migration 012 not applied). Retrying without attribution.', {
+        userId: user.id,
+        caseId: case_id,
+        originalError: orderError.message,
+      });
+
+      // Retry without attribution columns
+      const retryResult = await adminSupabase
+        .from('orders')
+        .insert(baseOrderData)
+        .select()
+        .single();
+
+      order = retryResult.data;
+      orderError = retryResult.error;
+    }
 
     if (orderError) {
       logger.error('Failed to create order', {

@@ -192,8 +192,12 @@ function missingFieldsForSection21(caseData: Record<string, any>): string[] {
   if (!caseData.property_address) missing.push('property_address');
   if (!caseData.tenant_full_name) missing.push('tenant_full_name');
   if (!caseData.landlord_full_name) missing.push('landlord_full_name');
-  if (!caseData.notice_expiry_date && !caseData.notice?.expiry_date) {
-    missing.push('notice_expiry_date');
+  // NOTE (Jan 2026): notice_expiry_date is NO LONGER required from wizard facts for Section 21
+  // It is auto-calculated server-side by generateSection21Notice() using the S21 validity engine.
+  // This ensures compliance with Housing Act 1988 Section 21(4) requirements.
+  // The service_date IS required (user must specify when they will serve the notice).
+  if (!caseData.service_date && !caseData.notice_date && !caseData.notice_service_date) {
+    missing.push('service_date');
   }
   return missing;
 }
