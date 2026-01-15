@@ -165,6 +165,106 @@ describe('wizardFactsToCaseFacts', () => {
       expect(result.tenancy.deposit_scheme_name).toBeNull();
       expect(result.tenancy.deposit_protection_date).toBeNull();
     });
+
+    // =========================================================================
+    // Fixed Term End Date Mapping Tests (Section 21 PDF fix)
+    // =========================================================================
+
+    test('should map end_date from fixed_term_end_date (flat payload)', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+        fixed_term_end_date: '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should map end_date from nested tenancy.fixed_term_end_date', () => {
+      const wizard: WizardFacts = {
+        'tenancy.fixed_term_end_date': '2026-07-14',
+        tenancy_type: 'AST Fixed Term',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should map end_date from case_facts.tenancy.fixed_term_end_date', () => {
+      const wizard: WizardFacts = {
+        'case_facts.tenancy.fixed_term_end_date': '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+    });
+
+    test('should prefer tenancy_end_date over fixed_term_end_date when both present', () => {
+      const wizard: WizardFacts = {
+        tenancy_end_date: '2026-08-01',
+        fixed_term_end_date: '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-08-01');
+    });
+
+    test('should infer fixed_term=true from tenancy_type containing "fixed term" (case insensitive)', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should infer fixed_term=true from tenancy_type "ast_fixed"', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'ast_fixed',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should infer fixed_term=true from tenancy_type "fixed_term"', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'fixed_term',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should NOT infer fixed_term from tenancy_type that does not indicate fixed term', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Periodic)',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBeNull();
+    });
+
+    test('should prefer explicit is_fixed_term over tenancy_type inference', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+        is_fixed_term: false,
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(false);
+    });
   });
 
   // =============================================================================
@@ -730,6 +830,84 @@ describe('wizardFactsToCaseFacts', () => {
       const result = wizardFactsToCaseFacts(wizard);
 
       expect(result.notice.expiry_date).toBe('2024-06-01');
+    });
+
+    // =========================================================================
+    // Notice Service Method from Nested Paths (Section 21 PDF fix)
+    // =========================================================================
+
+    test('should resolve service_method from notice_service.service_method', () => {
+      const wizard: WizardFacts = {
+        notice_service: {
+          service_method: 'first_class_post',
+        },
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('first_class_post');
+    });
+
+    test('should resolve service_method from notice_service.method', () => {
+      const wizard: WizardFacts = {
+        notice_service: {
+          method: 'recorded_delivery',
+        },
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('recorded_delivery');
+    });
+
+    test('should normalize "Hand delivery" to "hand_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'Hand delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
+    });
+
+    test('should normalize "First class post" to "first_class_post"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'First class post',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('first_class_post');
+    });
+
+    test('should normalize "Recorded delivery" to "recorded_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'Recorded delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('recorded_delivery');
+    });
+
+    test('should normalize "In person" to "hand_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'In person',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
+    });
+
+    test('should preserve already-canonical service_method values', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'hand_delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
     });
   });
 

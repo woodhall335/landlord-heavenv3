@@ -733,10 +733,35 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.tenancy.end_date ??= getFirstValue(wizard, [
     'case_facts.tenancy.end_date',
     'tenancy_end_date',
+    'fixed_term_end_date',
+    'tenancy.fixed_term_end_date',
+    'case_facts.tenancy.fixed_term_end_date',
   ]);
+
+  // Resolve fixed_term from explicit fields or infer from tenancy_type
   const fixedTerm = getFirstValue(wizard, ['tenancy_fixed_term', 'is_fixed_term']);
   if (fixedTerm !== null && fixedTerm !== undefined) {
     base.tenancy.fixed_term = coerceBoolean(fixedTerm);
+  } else {
+    // Infer fixed_term from tenancy_type if not explicitly set
+    const tenancyType = getFirstValue(wizard, [
+      'tenancy_type',
+      'tenancy.tenancy_type',
+      'case_facts.tenancy.tenancy_type',
+    ]);
+    if (tenancyType && typeof tenancyType === 'string') {
+      const lowerType = tenancyType.toLowerCase();
+      // Check for common fixed term indicators
+      if (
+        lowerType.includes('fixed term') ||
+        lowerType.includes('fixed-term') ||
+        lowerType === 'ast_fixed' ||
+        lowerType === 'fixed_term' ||
+        lowerType === 'fixed'
+      ) {
+        base.tenancy.fixed_term = true;
+      }
+    }
   }
   base.tenancy.fixed_term_months ??= getWizardValue(wizard, 'tenancy_fixed_term_months');
   base.tenancy.rent_amount ??= getFirstValue(wizard, [
@@ -1352,7 +1377,40 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.notice.service_method',
     'notice_service_method',
     'service_method',
+    'notice_service.service_method',
+    'notice_service.method',
+    'notice.service_method',
   ]);
+
+  // Normalize service method to canonical enum values if needed
+  if (base.notice.service_method && typeof base.notice.service_method === 'string') {
+    const methodLower = base.notice.service_method.toLowerCase().trim();
+    // Map common labels to canonical enum values
+    const serviceMethodMap: Record<string, string> = {
+      'hand delivery': 'hand_delivery',
+      'hand-delivery': 'hand_delivery',
+      'in person': 'hand_delivery',
+      'in_person': 'hand_delivery',
+      'personal delivery': 'hand_delivery',
+      'first class post': 'first_class_post',
+      'first-class post': 'first_class_post',
+      'first class': 'first_class_post',
+      '1st class post': 'first_class_post',
+      'recorded delivery': 'recorded_delivery',
+      'recorded post': 'recorded_delivery',
+      'signed for': 'recorded_delivery',
+      'signed_for': 'recorded_delivery',
+      'special delivery': 'special_delivery',
+      'special post': 'special_delivery',
+      'email': 'email',
+      'electronic': 'email',
+      'post': 'first_class_post',
+      'postal': 'first_class_post',
+    };
+    if (serviceMethodMap[methodLower]) {
+      base.notice.service_method = serviceMethodMap[methodLower] as any;
+    }
+  }
   base.notice.served_by ??= getFirstValue(wizard, [
     'case_facts.notice.served_by',
     'notice_served_by',
@@ -2871,12 +2929,47 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     ])
   );
 
-  templateData.fixed_term = coerceBoolean(
-    getFirstValue(wizard, ['is_fixed_term', 'fixed_term', 'tenancy_fixed_term'])
-  );
+  // Resolve fixed_term from explicit fields or infer from tenancy_type
+  const explicitFixedTerm = getFirstValue(wizard, ['is_fixed_term', 'fixed_term', 'tenancy_fixed_term']);
+  if (explicitFixedTerm !== null && explicitFixedTerm !== undefined) {
+    templateData.fixed_term = coerceBoolean(explicitFixedTerm);
+  } else {
+    // Infer fixed_term from tenancy_type if not explicitly set
+    const tenancyType = extractString(getFirstValue(wizard, [
+      'tenancy_type',
+      'tenancy.tenancy_type',
+      'case_facts.tenancy.tenancy_type',
+    ]));
+    if (tenancyType) {
+      const lowerType = tenancyType.toLowerCase();
+      // Check for common fixed term indicators
+      if (
+        lowerType.includes('fixed term') ||
+        lowerType.includes('fixed-term') ||
+        lowerType === 'ast_fixed' ||
+        lowerType === 'fixed_term' ||
+        lowerType === 'fixed'
+      ) {
+        templateData.fixed_term = true;
+      } else {
+        templateData.fixed_term = null;
+      }
+    } else {
+      templateData.fixed_term = null;
+    }
+  }
+
+  // Also store is_fixed_term alias for templates that use it
+  templateData.is_fixed_term = templateData.fixed_term;
 
   templateData.fixed_term_end_date = extractString(
-    getFirstValue(wizard, ['fixed_term_end_date', 'tenancy_end_date'])
+    getFirstValue(wizard, [
+      'case_facts.tenancy.end_date',
+      'tenancy_end_date',
+      'fixed_term_end_date',
+      'tenancy.fixed_term_end_date',
+      'case_facts.tenancy.fixed_term_end_date',
+    ])
   );
 
   templateData.periodic_tenancy_start = extractString(
