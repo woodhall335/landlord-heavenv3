@@ -52,6 +52,25 @@ export function getNoticeOnlyRequirements(
 
   // === ROUTE-SPECIFIC REQUIREMENTS ===
 
+  // Helper to check boolean-like values (handles 'yes', 'true', true, etc.)
+  const isTruthy = (value: unknown): boolean => {
+    if (value === true) return true;
+    if (typeof value === 'string') {
+      const lower = value.toLowerCase().trim();
+      return ['true', 'yes', 'y', '1'].includes(lower);
+    }
+    return false;
+  };
+
+  const isFalsy = (value: unknown): boolean => {
+    if (value === false) return true;
+    if (typeof value === 'string') {
+      const lower = value.toLowerCase().trim();
+      return ['false', 'no', 'n', '0'].includes(lower);
+    }
+    return false;
+  };
+
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     // JURISDICTION-SPECIFIC ROUTES:
     // - England: section_21 (no-fault), section_8 (grounds-based) - Housing Act 1988
@@ -62,9 +81,11 @@ export function getNoticeOnlyRequirements(
       // Section 21 / Wales Section 173 requirements
 
       // Deposit requirements (CONDITIONAL on deposit_taken)
-      const depositTaken = facts.deposit_taken;
+      // Use isTruthy to handle both boolean true and string 'yes'/'true'
+      const depositTaken = isTruthy(facts.deposit_taken);
+      const depositNotTaken = isFalsy(facts.deposit_taken);
 
-      if (depositTaken === true) {
+      if (depositTaken) {
         // If deposit was taken, require deposit compliance facts at generate/preview
         const depositFacts = [
           'deposit_amount',
@@ -86,42 +107,51 @@ export function getNoticeOnlyRequirements(
           // Checkpoint: require deposit compliance decision
           depositFacts.forEach(key => warnNow.add(key));
         }
-      } else if (depositTaken === false) {
-        // No deposit taken, don't require deposit facts
+      } else if (depositNotTaken) {
+        // No deposit taken, mark deposit facts as derived (not required)
         derived.add('deposit_amount');
         derived.add('deposit_protected');
         derived.add('prescribed_info_given');
       } else {
-        // deposit_taken not yet answered - warn to collect it
+        // deposit_taken not yet answered - warn to collect it (but don't block on deposit compliance)
         if (stage !== 'wizard') {
           warnNow.add('deposit_taken');
         }
+        // Mark deposit compliance facts as derived until we know deposit was taken
+        // This prevents false "missing required" errors when user hasn't answered deposit question yet
+        derived.add('deposit_amount');
+        derived.add('deposit_protected');
+        derived.add('prescribed_info_given');
       }
 
       // Gas safety (CONDITIONAL on has_gas_appliances)
-      const hasGas = facts.has_gas_appliances;
-      if (hasGas === true) {
+      // Note: gas_safety_cert_date is informational - the blocking check is on gas_certificate_provided
+      // The date is only needed for record-keeping, not for Section 21 validity
+      const hasGas = isTruthy(facts.has_gas_appliances);
+      if (hasGas) {
+        // Only warn about gas cert date at generate stage - it's nice-to-have, not blocking
         if (stage === 'generate') {
-          requiredNow.add('gas_safety_cert_date');
-        } else if (stage === 'preview' || stage === 'checkpoint') {
           warnNow.add('gas_safety_cert_date');
         }
-      } else if (hasGas === false) {
+        // gas_certificate_provided is the blocking field, handled by decision engine
+      } else {
+        // No gas appliances OR not yet answered - mark gas cert date as derived (not required)
         derived.add('gas_safety_cert_date');
       }
 
-      // Notice expiry date
-      if (stage === 'generate' || stage === 'preview') {
-        requiredNow.add('notice_expiry_date');
-      }
+      // Notice expiry date - For Section 21, this is AUTO-CALCULATED, not user-provided
+      // The MQS only collects notice_expiry_date for Section 8 route
+      // Section 21 expiry dates are computed server-side based on service date, fixed term, etc.
+      derived.add('notice_expiry_date');
 
       // Fixed term handling
-      const isFixedTerm = facts.is_fixed_term;
-      if (isFixedTerm === true) {
+      const isFixedTerm = isTruthy(facts.is_fixed_term);
+      if (isFixedTerm) {
         if (stage === 'generate' || stage === 'preview') {
           requiredNow.add('fixed_term_end_date');
         }
-      } else if (isFixedTerm === false) {
+      } else {
+        // Not fixed term OR not yet answered - mark as derived
         derived.add('fixed_term_end_date');
       }
 
@@ -133,25 +163,28 @@ export function getNoticeOnlyRequirements(
       // Grounds are required
       if (stage === 'generate' || stage === 'preview') {
         requiredNow.add('ground_codes');
-        requiredNow.add('notice_expiry_date');
+        // Section 8 DOES collect notice_expiry_date from user (can be auto-calculated or overridden)
+        // Mark as warned since it can be auto-computed but user can provide override
+        warnNow.add('notice_expiry_date');
       } else if (stage === 'checkpoint') {
         warnNow.add('ground_codes');
       }
 
       // Fixed term handling (same as S21)
-      const isFixedTerm = facts.is_fixed_term;
-      if (isFixedTerm === true) {
+      const isFixedTerm = isTruthy(facts.is_fixed_term);
+      if (isFixedTerm) {
         if (stage === 'generate' || stage === 'preview') {
           requiredNow.add('fixed_term_end_date');
         }
-      } else if (isFixedTerm === false) {
+      } else {
+        // Not fixed term OR not yet answered - mark as derived
         derived.add('fixed_term_end_date');
       }
 
       // Deposit is good practice but not legally required for S8
       // Don't block on deposit for S8
-      const depositTaken = facts.deposit_taken;
-      if (depositTaken === true) {
+      const depositTaken = isTruthy(facts.deposit_taken);
+      if (depositTaken) {
         // Warn if deposit not protected, but don't block
         warnNow.add('deposit_protected');
       }
@@ -163,18 +196,21 @@ export function getNoticeOnlyRequirements(
     if (route === 'notice_to_leave') {
       // Scotland-specific required facts
       if (stage === 'generate' || stage === 'preview') {
-        requiredNow.add('notice_expiry_date');
+        // Scotland notice_expiry_date is computed server-side like Section 21
+        derived.add('notice_expiry_date');
         requiredNow.add('ground_codes'); // Scotland eviction grounds
       } else if (stage === 'checkpoint') {
         warnNow.add('ground_codes');
       }
 
       // Fixed term handling
-      const isFixedTerm = facts.is_fixed_term;
-      if (isFixedTerm === true) {
+      const isFixedTerm = isTruthy(facts.is_fixed_term);
+      if (isFixedTerm) {
         if (stage === 'generate' || stage === 'preview') {
           requiredNow.add('fixed_term_end_date');
         }
+      } else {
+        derived.add('fixed_term_end_date');
       }
     }
   }
