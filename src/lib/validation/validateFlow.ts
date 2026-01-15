@@ -138,6 +138,40 @@ function normalizeGroundsCodes(facts: Record<string, unknown>): Record<string, u
 }
 
 /**
+ * Normalize retaliatory eviction toggle to canonical recent_repair_complaints
+ * Wizard question: "Is this notice being served more than 6 months after any repair complaint?"
+ * - yes -> recent_repair_complaints = false
+ * - no -> recent_repair_complaints = true
+ */
+function normalizeRetaliatoryNotice(facts: Record<string, unknown>): Record<string, unknown> {
+  if (facts.recent_repair_complaints !== undefined) {
+    return facts;
+  }
+
+  const raw = (facts as any).no_retaliatory_notice;
+  if (raw === undefined || raw === null) {
+    return facts;
+  }
+
+  const normalized = { ...facts } as Record<string, unknown>;
+
+  if (raw === true) {
+    normalized.recent_repair_complaints = false;
+  } else if (raw === false) {
+    normalized.recent_repair_complaints = true;
+  } else if (typeof raw === 'string') {
+    const value = raw.toLowerCase().trim();
+    if (['true', 'yes', 'y', '1'].includes(value)) {
+      normalized.recent_repair_complaints = false;
+    } else if (['false', 'no', 'n', '0'].includes(value)) {
+      normalized.recent_repair_complaints = true;
+    }
+  }
+
+  return normalized;
+}
+
+/**
  * Unified flow validation orchestrator
  *
  * Steps:
@@ -155,7 +189,7 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   const { jurisdiction, product, route, stage } = input;
 
   // Step 0: Normalize facts (canonicalize grounds)
-  const facts = normalizeGroundsCodes(input.facts);
+  const facts = normalizeRetaliatoryNotice(normalizeGroundsCodes(input.facts));
 
   // Step 1: Assert flow is supported
   let flow: FlowCapability;

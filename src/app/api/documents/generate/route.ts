@@ -49,6 +49,8 @@ import {
   validateNoticeOnlyCase,
   NoticeOnlyCaseValidationError,
 } from '@/lib/validation/notice-only-case-validator';
+import { getSelectedGrounds } from '@/lib/grounds';
+import { normalizeRoute } from '@/lib/wizard/route-normalizer';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -368,9 +370,8 @@ function prepareGuidanceDocumentData(
   const contractStartDate = wizardFacts.contract_start_date || wizardFacts.tenancy_start_date;
   const noticeDate = wizardFacts.notice_date || wizardFacts.notice_served_date;
 
-  // Extract grounds data for Section 8
-  const selectedGrounds = wizardFacts.selected_grounds ||
-                          caseFacts.issues?.section8_grounds?.selected_grounds || [];
+  // Extract grounds data for Section 8 only
+  const selectedGrounds = route === 'section_8' ? getSelectedGrounds(wizardFacts, caseFacts) : [];
   const groundDescriptions = Array.isArray(selectedGrounds)
     ? selectedGrounds.map((g: string) => {
         const match = g.match(/ground\s*([0-9a-z]+)/i);
@@ -423,7 +424,8 @@ function prepareGuidanceDocumentData(
   const generated_date = new Date().toLocaleDateString('en-GB');
 
   // Build ground-specific required evidence items
-  const requiredEvidence = buildGroundSpecificEvidence(selectedGrounds);
+  const requiredEvidence =
+    route === 'section_8' ? buildGroundSpecificEvidence(selectedGrounds) : [];
 
   return {
     // Spread original wizard facts
@@ -497,7 +499,7 @@ export async function POST(request: Request) {
     // Fetch case metadata (RLS handles auth / anon)
     let caseQuery = supabase
       .from('cases')
-      .select('id, jurisdiction, user_id, collected_facts')
+      .select('id, jurisdiction, user_id, collected_facts, recommended_route')
       .eq('id', case_id);
 
     if (user) {
@@ -521,6 +523,7 @@ export async function POST(request: Request) {
       jurisdiction: string;
       user_id: string | null;
       collected_facts?: any;
+      recommended_route?: string | null;
     };
 
     // Load WizardFacts (source of truth) + fallback to collected_facts if present
@@ -554,6 +557,14 @@ export async function POST(request: Request) {
         warnings: [],
       }, { status: 422 });
     }
+
+    const normalizedRecommendedRoute = normalizeRoute(caseRow.recommended_route ?? undefined);
+    const normalizedSelectedRoute = normalizeRoute(
+      (wizardFacts as any).selected_notice_route ||
+      (wizardFacts as any).eviction_route ||
+      (wizardFacts as any).route_recommendation?.recommended_route
+    );
+    const effectiveRoute = normalizedRecommendedRoute || normalizedSelectedRoute;
 
     // Guard: NI only supports tenancy documents
     if (
@@ -599,6 +610,46 @@ export async function POST(request: Request) {
       route = 'tenancy_agreement';
     }
 
+    if (document_type === 'section21_notice' && effectiveRoute && effectiveRoute !== 'section_21') {
+      const routeOverride = (wizardFacts as any).route_override;
+      const routeReason =
+        routeOverride?.reason ||
+        'Section 21 is not available for this case. Your notice route has been set to Section 8.';
+      const overrideIssues = Array.isArray(routeOverride?.blocking_issues)
+        ? routeOverride.blocking_issues
+        : [];
+      const blockingIssues = overrideIssues.length > 0
+        ? overrideIssues.map((issue: string) => ({
+            code: 'SECTION_21_BLOCKED',
+            fields: [],
+            user_fix_hint: issue,
+          }))
+        : [{
+            code: 'SECTION_21_BLOCKED',
+            fields: [],
+            user_fix_hint: routeReason,
+          }];
+
+      console.warn('[GENERATE] Section 21 blocked by route selection:', {
+        case_id,
+        document_type,
+        effectiveRoute,
+      });
+
+      return NextResponse.json(
+        {
+          code: 'SECTION_21_BLOCKED',
+          error: 'SECTION_21_BLOCKED',
+          user_message: routeReason,
+          blocking_issues: blockingIssues,
+          warnings: [],
+          alternative_routes: ['section_8'],
+          suggested_action: 'Use Section 8 notice instead or resolve the compliance issues listed.',
+        },
+        { status: 422 }
+      );
+    }
+
     console.log('[GENERATE] Running unified validation via validateForGenerate');
     const validationError = validateForGenerate({
       jurisdiction: canonicalJurisdiction,
@@ -641,11 +692,13 @@ export async function POST(request: Request) {
             user_message: primaryError?.message,
             blocking_issues: noticeValidation.errors.map(e => ({
               code: e.code,
-              description: e.message,
+              fields: [],
+              user_fix_hint: e.message,
             })),
             warnings: noticeValidation.warnings.map(w => ({
               code: w.code,
-              description: w.message,
+              fields: [],
+              user_fix_hint: w.message,
             })),
             included_grounds: noticeValidation.includedGrounds,
             arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
@@ -699,21 +752,40 @@ export async function POST(request: Request) {
         case 'section21_notice': {
           // ✅ ELIGIBILITY CHECK: Verify Section 21 is allowed before generating
           // First check if wizard has auto-selected a different route
-          const selectedNoticeRoute = (wizardFacts as any).selected_notice_route;
+          const selectedNoticeRoute = normalizeRoute((wizardFacts as any).selected_notice_route);
           const routeOverride = (wizardFacts as any).route_override;
 
           if (selectedNoticeRoute === 'section_8') {
             // Wizard has auto-selected Section 8 due to S21 being blocked
+            const routeReason =
+              routeOverride?.reason ||
+              'Section 21 eligibility requirements not met. Your case has been automatically routed to Section 8.';
+            const overrideIssues = Array.isArray(routeOverride?.blocking_issues)
+              ? routeOverride.blocking_issues
+              : [];
+            const blockingIssues = overrideIssues.length > 0
+              ? overrideIssues.map((issue: string) => ({
+                  code: 'SECTION_21_BLOCKED',
+                  fields: [],
+                  user_fix_hint: issue,
+                }))
+              : [{
+                  code: 'SECTION_21_BLOCKED',
+                  fields: [],
+                  user_fix_hint: routeReason,
+                }];
+
             return NextResponse.json(
               {
-                error: 'Section 21 is not available for this case',
                 code: 'SECTION_21_BLOCKED',
-                explanation: routeOverride?.reason || 'Section 21 eligibility requirements not met. Your case has been automatically routed to Section 8.',
-                blocking_issues: routeOverride?.blocking_issues || [],
+                error: 'SECTION_21_BLOCKED',
+                user_message: routeReason,
+                blocking_issues: blockingIssues,
+                warnings: [],
                 alternative_routes: ['section_8'],
-                suggested_action: 'Use Section 8 notice instead or fix the compliance issues listed in blocking_issues',
+                suggested_action: 'Use Section 8 notice instead or resolve the compliance issues listed.',
               },
-              { status: 403 } // 403 Forbidden (not just unprocessable - legally forbidden)
+              { status: 422 }
             );
           }
 
@@ -735,14 +807,19 @@ export async function POST(request: Request) {
 
             return NextResponse.json(
               {
-                error: 'Section 21 is not available for this case',
                 code: 'SECTION_21_BLOCKED',
-                explanation: decisionOutput.route_explanations.section_21 || 'Section 21 eligibility requirements not met',
-                blocking_issues: blockingReasons,
+                error: 'SECTION_21_BLOCKED',
+                user_message: decisionOutput.route_explanations.section_21 || 'Section 21 eligibility requirements not met',
+                blocking_issues: blockingReasons.map(reason => ({
+                  code: 'SECTION_21_BLOCKED',
+                  fields: [],
+                  user_fix_hint: reason,
+                })),
+                warnings: [],
                 alternative_routes: decisionOutput.allowed_routes,
-                suggested_action: 'Use Section 8 instead or fix the compliance issues listed in blocking_issues',
+                suggested_action: 'Use Section 8 instead or resolve the compliance issues listed.',
               },
-              { status: 403 } // 403 Forbidden (not just unprocessable - legally forbidden)
+              { status: 422 }
             );
           }
 

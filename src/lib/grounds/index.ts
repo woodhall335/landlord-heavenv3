@@ -21,3 +21,5 @@ export {
   isArrearsEvidenceComplete,
   type EvidenceSuggestion,
 } from './evidence-suggestions';
+
+export { getSelectedGrounds, getNormalizedSelectedGrounds } from './selected-grounds';
