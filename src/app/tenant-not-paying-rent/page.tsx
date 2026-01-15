@@ -37,7 +37,7 @@ const wizardLinkMoneyClaim = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
   src: 'guide',
-  topic: 'money',
+  topic: 'money_claim',
 });
 
 export const metadata: Metadata = {
