@@ -401,10 +401,34 @@ export async function GET(
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-      // Debug: Log the resolved service date to verify it matches user input
-      if (process.env.NOTICE_ONLY_DEBUG === '1') {
-        console.log('[NOTICE-PREVIEW-API] Resolved service_date:', templateData.service_date);
-        console.log('[NOTICE-PREVIEW-API] Resolved notice_date:', templateData.notice_date);
+      // Debug: Log all critical fields to verify correct data flow
+      // This helps diagnose blank dates and false compliance in Notice Only pack PDFs
+      if (process.env.NOTICE_ONLY_DEBUG === '1' || process.env.NODE_ENV === 'development') {
+        console.log('[NOTICE-PREVIEW-API] === SECTION 21 TEMPLATE DATA DEBUG ===');
+        console.log('[NOTICE-PREVIEW-API] Key Dates:');
+        console.log('  - tenancy_start_date:', templateData.tenancy_start_date);
+        console.log('  - service_date:', templateData.service_date);
+        console.log('  - notice_date:', templateData.notice_date);
+        console.log('  - notice_expiry_date:', templateData.notice_expiry_date);
+        console.log('  - earliest_possession_date:', templateData.earliest_possession_date);
+        console.log('  - display_possession_date:', templateData.display_possession_date);
+        console.log('[NOTICE-PREVIEW-API] Compliance Fields:');
+        console.log('  - prescribed_info_given:', templateData.prescribed_info_given);
+        console.log('  - gas_certificate_provided:', templateData.gas_certificate_provided);
+        console.log('  - epc_provided:', templateData.epc_provided);
+        console.log('  - how_to_rent_provided:', templateData.how_to_rent_provided);
+        console.log('  - hmo_license_required:', templateData.hmo_license_required);
+        console.log('  - hmo_license_valid:', templateData.hmo_license_valid);
+        console.log('[NOTICE-PREVIEW-API] Deposit Fields:');
+        console.log('  - deposit_taken:', templateData.deposit_taken);
+        console.log('  - deposit_protected:', templateData.deposit_protected);
+        console.log('  - deposit_scheme:', templateData.deposit_scheme);
+        console.log('[NOTICE-PREVIEW-API] Raw wizardFacts sample (nested check):');
+        console.log('  - wizardFacts.section21:', JSON.stringify(wizardFacts.section21 || null));
+        console.log('  - wizardFacts.notice_service:', JSON.stringify(wizardFacts.notice_service || null));
+        console.log('  - wizardFacts.tenancy:', JSON.stringify(wizardFacts.tenancy || null));
+        console.log('  - wizardFacts.compliance:', JSON.stringify(wizardFacts.compliance || null));
+        console.log('[NOTICE-PREVIEW-API] === END DEBUG ===');
       }
 
       // JURISDICTION VALIDATION: Block Section 8/21 for Wales
