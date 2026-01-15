@@ -27,6 +27,7 @@ export { Section8ArrearsSection } from './Section8ArrearsSection';
 export { EvidenceSection } from './EvidenceSection';
 export { CourtSigningSection } from './CourtSigningSection';
 export { ReviewSection } from './ReviewSection';
+export { WalesNoticeSection } from './WalesNoticeSection';
 
 // Re-export the existing CourtDetailsSection for backward compatibility
 export { CourtDetailsSection } from './CourtDetailsSection';
