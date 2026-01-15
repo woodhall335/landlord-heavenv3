@@ -35,10 +35,18 @@ import { Section21ComplianceSection } from '../sections/eviction/Section21Compli
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
 
+// Wales-specific sections
+import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
+import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
+import { WalesSection173NoticeSection } from '../sections/wales/WalesSection173NoticeSection';
+
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
+
+// All supported eviction routes
+type EvictionRoute = 'section_8' | 'section_21' | 'wales_section_173' | 'wales_fault_based';
 
 // Section definition type
 interface WizardSection {
@@ -46,7 +54,7 @@ interface WizardSection {
   label: string;
   description: string;
   // Route-specific visibility
-  routes?: ('section_8' | 'section_21')[];
+  routes?: EvictionRoute[];
   // Validation function to check if section is complete
   isComplete: (facts: WizardFacts) => boolean;
   // Check if section has blockers
@@ -63,7 +71,7 @@ const SECTIONS: WizardSection[] = [
     description: 'Jurisdiction and eviction route',
     isComplete: (facts) =>
       Boolean(facts.eviction_route) &&
-      ['section_8', 'section_21'].includes(facts.eviction_route as string),
+      ['section_8', 'section_21', 'wales_section_173', 'wales_fault_based'].includes(facts.eviction_route as string),
   },
   {
     id: 'parties',
@@ -140,14 +148,38 @@ const SECTIONS: WizardSection[] = [
     id: 'notice',
     label: 'Notice Details',
     description: 'Grounds and service details',
+    // Show for England routes and Wales fault-based (Wales S173 uses different flow)
+    routes: ['section_8', 'section_21', 'wales_fault_based'],
     isComplete: (facts) => {
       // For Section 21: just need to confirm service method
       if (facts.eviction_route === 'section_21') {
         return Boolean(facts.notice_service_method);
       }
       // For Section 8: need grounds selected
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+      if (facts.eviction_route === 'section_8') {
+        const selectedGrounds = (facts.section8_grounds as string[]) || [];
+        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+      }
+      // For Wales fault-based: need grounds selected and breach description
+      if (facts.eviction_route === 'wales_fault_based') {
+        const selectedGrounds = (facts.wales_grounds as string[]) || [];
+        return (
+          selectedGrounds.length > 0 &&
+          Boolean(facts.breach_description) &&
+          Boolean(facts.notice_service_method)
+        );
+      }
+      return false;
+    },
+  },
+  {
+    id: 'wales_section_173',
+    label: 'Notice Details',
+    description: 'Section 173 no-fault notice',
+    routes: ['wales_section_173'],
+    isComplete: (facts) => {
+      // For Section 173: need service details (no grounds required)
+      return Boolean(facts.notice_service_method) && Boolean(facts.notice_service_date);
     },
   },
   {
@@ -260,7 +292,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
   // Get visible sections based on eviction route
   const visibleSections = useMemo(() => {
-    const route = facts.eviction_route as 'section_8' | 'section_21' | undefined;
+    const route = facts.eviction_route as EvictionRoute | undefined;
     return SECTIONS.filter((section) => {
       if (!section.routes) return true;
       if (!route) return section.id === 'case_basics';
@@ -378,7 +410,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
     switch (currentSection.id) {
       case 'case_basics':
-        return <CaseBasicsSection {...sectionProps} />;
+        // Use Wales-specific case basics when jurisdiction is Wales
+        return jurisdiction === 'wales' ? (
+          <WalesCaseBasicsSection facts={facts} onUpdate={handleUpdate} />
+        ) : (
+          <CaseBasicsSection {...sectionProps} />
+        );
       case 'parties':
         return <PartiesSection {...sectionProps} />;
       case 'property':
@@ -390,7 +427,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
       case 'notice':
+        // Use Wales notice section for Wales fault-based
+        if (facts.eviction_route === 'wales_fault_based') {
+          return <WalesNoticeSection facts={facts} onUpdate={handleUpdate} />;
+        }
         return <NoticeSection {...sectionProps} mode="notice_only" />;
+      case 'wales_section_173':
+        // Wales Section 173 - simple service details (no grounds needed)
+        return <WalesSection173NoticeSection facts={facts} onUpdate={handleUpdate} />;
       case 'review':
         return renderReviewSection();
       default:
@@ -479,7 +523,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           <div className="text-sm text-gray-600 space-y-1">
             <p>
               <strong>Type:</strong>{' '}
-              {facts.eviction_route === 'section_21' ? 'Section 21 (No-Fault)' : 'Section 8 (Fault-Based)'}
+              {facts.eviction_route === 'section_21' && 'Section 21 (No-Fault)'}
+              {facts.eviction_route === 'section_8' && 'Section 8 (Fault-Based)'}
+              {facts.eviction_route === 'wales_section_173' && 'Section 173 (No-Fault)'}
+              {facts.eviction_route === 'wales_fault_based' && 'Fault-Based (Renting Homes Act)'}
             </p>
             <p>
               <strong>Jurisdiction:</strong> {jurisdiction === 'england' ? 'England' : 'Wales'}
@@ -488,6 +535,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
               <p>
                 <strong>Grounds:</strong>{' '}
                 {((facts.section8_grounds as string[]) || []).join(', ') || 'Not selected'}
+              </p>
+            )}
+            {facts.eviction_route === 'wales_fault_based' && (
+              <p>
+                <strong>Grounds:</strong>{' '}
+                {((facts.wales_grounds as string[]) || []).join(', ') || 'Not selected'}
               </p>
             )}
           </div>
