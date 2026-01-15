@@ -468,3 +468,353 @@ describe('Regression: Concrete Scenario Validation', () => {
     expect(templateData.compliance.how_to_rent_given).toBe(true);
   });
 });
+
+/**
+ * TEMPLATE RENDERING TESTS
+ *
+ * These tests actually compile the Handlebars template and verify the output HTML
+ * to ensure the template logic correctly handles licensing_required and retaliatory_eviction_clear.
+ */
+describe('Template Rendering - Licensing & Retaliatory Eviction', () => {
+  const Handlebars = require('handlebars');
+  const fs = require('fs');
+  const path = require('path');
+
+  // Register the 'eq' helper (must match generator.ts implementation)
+  Handlebars.registerHelper('eq', function (this: any, a: any, b: any, options?: any) {
+    if (arguments.length === 3 && options && typeof options.fn === 'function') {
+      return a === b ? options.fn(this) : (options.inverse ? options.inverse(this) : '');
+    }
+    return a === b;
+  });
+
+  // Register format_date helper (simplified version)
+  Handlebars.registerHelper('format_date', function (date: any, format?: string) {
+    if (!date) return '';
+    const d = new Date(date + (typeof date === 'string' && !date.includes('T') ? 'T00:00:00.000Z' : ''));
+    if (isNaN(d.getTime())) return '';
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const year = d.getUTCFullYear();
+    if (format === 'long') {
+      return `${parseInt(day)} ${monthNames[d.getUTCMonth()]} ${year}`;
+    }
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    return `${day}/${month}/${year}`;
+  });
+
+  let templateContent: string;
+  let compiledTemplate: ReturnType<typeof Handlebars.compile>;
+
+  beforeEach(() => {
+    const templatePath = path.join(
+      process.cwd(),
+      'config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
+    );
+    templateContent = fs.readFileSync(templatePath, 'utf-8');
+    compiledTemplate = Handlebars.compile(templateContent);
+  });
+
+  describe('Property Licensing - Template Output', () => {
+    it('licensing_required=false should render "NOT APPLICABLE" not "NOT LICENSED"', () => {
+      const templateData = {
+        // Required fields for template
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        // Compliance fields
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        // CRITICAL: licensing_required = false (not required)
+        licensing_required: false,
+        hmo_license_required: false,
+        // Retaliatory eviction
+        retaliatory_eviction_clear: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Should show "NOT APPLICABLE" for licensing
+      expect(html).toContain('NOT APPLICABLE');
+      expect(html).toContain('Not required for this property');
+
+      // Should NOT show "NOT LICENSED" or "MAY BLOCK" when licensing_required=false
+      expect(html).not.toContain('NOT LICENSED');
+      expect(html).not.toContain('LICENSE REQUIRED – MAY BLOCK SECTION 21');
+    });
+
+    it('licensing_required=true without license should render "LICENSE REQUIRED – MAY BLOCK SECTION 21"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        // CRITICAL: licensing_required = true but NOT licensed
+        licensing_required: true,
+        hmo_license_required: true,
+        hmo_license_valid: false,
+        property_licensed: false,
+        retaliatory_eviction_clear: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Should show licensing is required but missing
+      expect(html).toContain('LICENSE REQUIRED – MAY BLOCK SECTION 21');
+      expect(html).toContain('CRITICAL ISSUE');
+    });
+
+    it('licensing_required=true with valid license should render "COMPLIANT"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        // CRITICAL: licensing_required = true AND licensed
+        licensing_required: true,
+        hmo_license_required: true,
+        hmo_license_valid: true,
+        retaliatory_eviction_clear: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Should show licensing is compliant
+      expect(html).toContain('HMO/Selective License');
+      expect(html).toContain('Licensing requirements met');
+    });
+
+    it('licensing_required=undefined should render "REQUIRES REVIEW"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        // CRITICAL: licensing_required is undefined/missing
+        // (intentionally omitted)
+        retaliatory_eviction_clear: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Property licensing section should show REQUIRES REVIEW
+      // Use regex to match the section 5 specifically
+      const licensingSection = html.match(/<h3>5\. Property Licensing<\/h3>[\s\S]*?<\/div>\s*<\/div>/)?.[0] || '';
+      expect(licensingSection).toContain('REQUIRES REVIEW');
+      expect(licensingSection).toContain('Please confirm whether this property requires licensing');
+    });
+  });
+
+  describe('Retaliatory Eviction - Template Output', () => {
+    it('retaliatory_eviction_clear=true should render "COMPLIANT"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        licensing_required: false,
+        // CRITICAL: retaliatory_eviction_clear = true
+        retaliatory_eviction_clear: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Retaliatory eviction section should show COMPLIANT
+      const retaliatorySection = html.match(/<h3>6\. Retaliatory Eviction Check<\/h3>[\s\S]*?<\/div>\s*<\/div>/)?.[0] || '';
+      expect(retaliatorySection).toContain('COMPLIANT');
+      expect(retaliatorySection).toContain('No retaliatory eviction concerns');
+
+      // Should NOT show "REQUIRES REVIEW" in the retaliatory section
+      expect(retaliatorySection).not.toContain('REQUIRES REVIEW');
+    });
+
+    it('no_repair_complaint=true should render "COMPLIANT"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        licensing_required: false,
+        // Alternative path
+        no_repair_complaint: true,
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Retaliatory eviction section should show COMPLIANT
+      const retaliatorySection = html.match(/<h3>6\. Retaliatory Eviction Check<\/h3>[\s\S]*?<\/div>\s*<\/div>/)?.[0] || '';
+      expect(retaliatorySection).toContain('COMPLIANT');
+      expect(retaliatorySection).toContain('No repair complaints');
+    });
+
+    it('retaliatory fields missing should render "REQUIRES REVIEW"', () => {
+      const templateData = {
+        property_address: '16 Waterloo Road, Pudsey, LS28 7PW',
+        tenancy_start_date: '2025-07-14',
+        service_date: '2026-01-15',
+        notice_expiry_date: '2026-07-14',
+        service_date_formatted: '15 January 2026',
+        notice_expiry_date_formatted: '14 July 2026',
+        tenancy_start_date_formatted: '14 July 2025',
+        generated_date: '15 January 2026',
+        current_date: '2026-01-15',
+        print_css: '',
+        deposit_protected: true,
+        prescribed_info_given: true,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        licensing_required: false,
+        // CRITICAL: No retaliatory eviction fields provided
+        // (intentionally omitted)
+      };
+
+      const html = compiledTemplate(templateData);
+
+      // Retaliatory eviction section should show REQUIRES REVIEW
+      const retaliatorySection = html.match(/<h3>6\. Retaliatory Eviction Check<\/h3>[\s\S]*?<\/div>\s*<\/div>/)?.[0] || '';
+      expect(retaliatorySection).toContain('REQUIRES REVIEW');
+      expect(retaliatorySection).toContain('Important Check');
+    });
+  });
+
+  describe('Full Compliant Scenario - No False Warnings', () => {
+    it('reference scenario should NOT contain false warnings', () => {
+      // This is the exact reference scenario from the task
+      const templateData = mapNoticeOnlyFacts({
+        // Parties
+        tenant_full_name: 'Sonia Shezadi',
+        landlord_full_name: 'Tariq Mohammed',
+        landlord_address_line1: '35 Woodhall Park Avenue',
+        landlord_address_town: 'Pudsey',
+        landlord_address_postcode: 'LS28 7HF',
+        property_address_line1: '16 Waterloo Road',
+        property_address_town: 'Pudsey',
+        property_address_postcode: 'LS28 7PW',
+
+        // Tenancy
+        tenancy: {
+          start_date: '2025-07-14',
+        },
+
+        // Notice service
+        notice_service: {
+          date: '2026-01-15',
+        },
+
+        // Compliance - all compliant
+        section21: {
+          prescribed_info_given: true,
+          gas_certificate_provided: true,
+          epc_provided: true,
+          how_to_rent_provided: true,
+        },
+
+        // Deposit
+        deposit_taken: true,
+        deposit_protected: true,
+        deposit_amount: 1000,
+        deposit_scheme: 'DPS',
+
+        // Licensing - "No licensing required"
+        property_licensing_required: false,
+
+        // Retaliatory eviction - "No concerns"
+        retaliatory_eviction_clear: true,
+
+        jurisdiction: 'england',
+        selected_notice_route: 'section_21',
+      });
+
+      // Add print_css for template
+      templateData.print_css = '';
+
+      const html = compiledTemplate(templateData);
+
+      // === CRITICAL ASSERTIONS ===
+
+      // 1. Property Licensing: Should NOT show false "NOT LICENSED" warning
+      expect(html).not.toContain('NOT LICENSED');
+      expect(html).not.toContain('LICENSE REQUIRED – MAY BLOCK SECTION 21');
+      // Should show "NOT APPLICABLE" for licensing
+      expect(html).toContain('NOT APPLICABLE');
+      expect(html).toContain('Not required for this property');
+
+      // 2. Retaliatory Eviction: Should show COMPLIANT, NOT "REQUIRES REVIEW"
+      const retaliatorySection = html.match(/<h3>6\. Retaliatory Eviction Check<\/h3>[\s\S]*?Evidence to Prepare/)?.[0] || '';
+      expect(retaliatorySection).toContain('COMPLIANT');
+      expect(retaliatorySection).not.toContain('REQUIRES REVIEW');
+
+      // 3. All other compliance fields should show COMPLIANT
+      expect(html).toContain('Deposit Protection');
+      expect(html).toContain('Gas Safety Certificate');
+      expect(html).toContain('Energy Performance Certificate');
+      expect(html).toContain('How to Rent');
+    });
+  });
+});

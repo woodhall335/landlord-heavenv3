@@ -524,9 +524,19 @@
 </div>
 
 {{!-- Licensing (HMO/Selective) --}}
+{{!-- FIX: Use explicit eq checks to distinguish false (not required) from undefined (unknown) --}}
 <div class="checklist-item">
   <h3>5. Property Licensing</h3>
-  {{#if hmo_license_required}}
+  {{#if (eq licensing_required false)}}
+    {{!-- Explicitly false = confirmed no licensing required --}}
+    <p class="status-pass">NOT APPLICABLE</p>
+    <p><strong>Property Licensing:</strong> Not required for this property</p>
+
+    <div class="alert-box success" style="margin-top: 0.75em;">
+      <p>No HMO or selective licensing applies to this property. You have confirmed this property does not require a license.</p>
+    </div>
+  {{else if licensing_required}}
+    {{!-- True = licensing is required, check if valid --}}
     {{#if hmo_license_valid}}
       <p class="status-pass">COMPLIANT</p>
       <p><strong>HMO/Selective License:</strong> Valid</p>
@@ -534,8 +544,15 @@
       <div class="alert-box success" style="margin-top: 0.75em;">
         <p>Licensing requirements met - property is properly licensed.</p>
       </div>
+    {{else if property_licensed}}
+      <p class="status-pass">COMPLIANT</p>
+      <p><strong>Property License:</strong> Valid</p>
+
+      <div class="alert-box success" style="margin-top: 0.75em;">
+        <p>Licensing requirements met - property is properly licensed.</p>
+      </div>
     {{else}}
-      <p class="status-fail">NOT LICENSED - MAY BLOCK PROCEEDINGS</p>
+      <p class="status-fail">LICENSE REQUIRED – MAY BLOCK SECTION 21</p>
       <div class="alert-box critical">
         <h4>CRITICAL ISSUE</h4>
         <p>This property requires a license (HMO or selective licensing). Operating without one is a criminal offense and may prevent you from serving valid Section 21 notices. You MUST:</p>
@@ -546,25 +563,12 @@
         </ul>
       </div>
     {{/if}}
-  {{else if licensing_required}}
-    {{#if property_licensed}}
-      <p class="status-pass">COMPLIANT</p>
-      <p><strong>Property License:</strong> Valid</p>
-
-      <div class="alert-box success" style="margin-top: 0.75em;">
-        <p>Licensing requirements met - property is properly licensed.</p>
-      </div>
-    {{else}}
-      <p class="status-fail">NOT LICENSED - MAY BLOCK PROCEEDINGS</p>
-      <div class="alert-box critical">
-        <h4>CRITICAL ISSUE</h4>
-        <p>This property requires a license. Please ensure it is properly licensed before proceeding.</p>
-      </div>
-    {{/if}}
   {{else}}
-    <p class="status-pass">N/A - No licensing required</p>
-    <div class="alert-box success" style="margin-top: 0.75em;">
-      <p>No HMO or selective licensing applies to this property.</p>
+    {{!-- Undefined = unknown, needs review --}}
+    <p class="status-unknown">REQUIRES REVIEW</p>
+    <div class="alert-box warning">
+      <h4>Action Required</h4>
+      <p>Please confirm whether this property requires licensing (HMO or selective licensing). Check with your local council if unsure. Operating without required licensing can invalidate Section 21 notices.</p>
     </div>
   {{/if}}
 
@@ -578,22 +582,22 @@
 </div>
 
 {{!-- Retaliatory Eviction Check --}}
+{{!-- FIX: Check retaliatory_eviction_clear first, then fall through to REQUIRES REVIEW --}}
 <div class="checklist-item">
   <h3>6. Retaliatory Eviction Check</h3>
-  {{!-- FIX: Check all field variations for retaliatory eviction status --}}
-  {{#if no_repair_complaint}}
-    <p class="status-pass">COMPLIANT</p>
-    <p><strong>Recent Repair Complaints:</strong> None</p>
-
-    <div class="alert-box success" style="margin-top: 0.75em;">
-      <p>No repair complaints within the relevant period - retaliatory eviction defense unlikely to apply.</p>
-    </div>
-  {{else if retaliatory_eviction_clear}}
+  {{#if retaliatory_eviction_clear}}
     <p class="status-pass">COMPLIANT</p>
     <p><strong>Retaliatory Eviction Check:</strong> Clear</p>
 
     <div class="alert-box success" style="margin-top: 0.75em;">
       <p>No retaliatory eviction concerns - Section 21 notice can proceed.</p>
+    </div>
+  {{else if no_repair_complaint}}
+    <p class="status-pass">COMPLIANT</p>
+    <p><strong>Recent Repair Complaints:</strong> None</p>
+
+    <div class="alert-box success" style="margin-top: 0.75em;">
+      <p>No repair complaints within the relevant period - retaliatory eviction defense unlikely to apply.</p>
     </div>
   {{else if repair_complaint_addressed}}
     <p class="status-pass">COMPLIANT</p>
