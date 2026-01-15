@@ -163,19 +163,24 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   // Calculate suggested service and expiry dates
   const today = new Date().toISOString().split('T')[0];
   const suggestedExpiryDate = useMemo(() => {
-    const serviceDate = facts.notice_service_date || today;
+    // FIXED (Jan 2026): Check both notice_date (new) and notice_service_date (old)
+    const serviceDate = facts.notice_date || facts.notice_service_date || today;
     const date = new Date(serviceDate);
     date.setDate(date.getDate() + minNoticePeriod);
     return date.toISOString().split('T')[0];
-  }, [facts.notice_service_date, minNoticePeriod, today]);
+  }, [facts.notice_date, facts.notice_service_date, minNoticePeriod, today]);
 
-  // Initialize notice_service_date with today when entering service step
+  // Initialize notice_date (and notice_service_date for backwards compat) when entering service step
   // This ensures the displayed default value is also saved to facts
+  // FIXED (Jan 2026): Use notice_date to match MSQ field ID
   useEffect(() => {
-    if (currentStep === 'service' && !facts.notice_service_date) {
-      onUpdate({ notice_service_date: today });
+    if (currentStep === 'service' && !facts.notice_date && !facts.notice_service_date) {
+      onUpdate({
+        notice_date: today,
+        notice_service_date: today  // Backwards compat
+      });
     }
-  }, [currentStep, facts.notice_service_date, today, onUpdate]);
+  }, [currentStep, facts.notice_date, facts.notice_service_date, today, onUpdate]);
 
   // Handle ground toggle
   const handleGroundToggle = (ground: string) => {
@@ -215,7 +220,8 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
         return selectedGrounds.length > 0;
       case 'service':
         // Service details must be complete
-        return Boolean(facts.notice_service_date) && Boolean(facts.notice_service_method);
+        // FIXED (Jan 2026): Check both notice_date (new) and notice_service_date (old) for compatibility
+        return Boolean(facts.notice_date || facts.notice_service_date) && Boolean(facts.notice_service_method);
       default:
         return true;
     }
@@ -229,9 +235,14 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       setCurrentStep('service');
     } else if (currentStep === 'service') {
       // Auto-populate eviction wizard notice fields from subflow data
+      // FIXED (Jan 2026): Use notice_date as primary, with fallback to notice_service_date
+      const serviceDate = facts.notice_date || facts.notice_service_date || today;
       const updates: Record<string, any> = {
-        notice_served_date: facts.notice_service_date || today,
-        notice_expiry_date: facts.notice_expiry_date || suggestedExpiryDate,
+        notice_served_date: serviceDate,
+        notice_date: serviceDate,  // Ensure new field is set
+        notice_service_date: serviceDate,  // Backwards compat
+        // For S8, use user-provided or suggested expiry; for S21, leave it for server to compute
+        notice_expiry_date: isSection8 ? (facts.notice_expiry_date || suggestedExpiryDate) : undefined,
         // Map service_method to notice_service_method (canonical key)
         notice_service_method: facts.notice_service_method || facts.service_method,
       };
@@ -566,19 +577,25 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             When and how will you serve this notice?
           </p>
 
-          {/* Service date */}
+          {/* Service date - FIXED: Use notice_date to match MSQ field ID (Jan 2026 fix) */}
           <div className="space-y-2">
-            <label htmlFor="notice_service_date" className="block text-sm font-medium text-gray-700">
-              Date you will serve the notice
+            <label htmlFor="notice_date" className="block text-sm font-medium text-gray-700">
+              Date you will serve the notice*
               <span className="text-red-500 ml-1">*</span>
             </label>
             <input
-              id="notice_service_date"
+              id="notice_date"
               type="date"
               className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.notice_service_date || today}
-              onChange={(e) => onUpdate({ notice_service_date: e.target.value })}
+              value={facts.notice_date || facts.notice_service_date || today}
+              onChange={(e) => onUpdate({
+                notice_date: e.target.value,
+                notice_service_date: e.target.value  // Backwards compat
+              })}
             />
+            <p className="text-xs text-gray-500">
+              This is the date you will actually serve (hand deliver or post) the notice.
+            </p>
           </div>
 
           {/* Service method */}
@@ -602,33 +619,57 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             </select>
           </div>
 
-          {/* Expiry date */}
-          <div className="space-y-2">
-            <label htmlFor="notice_expiry_date_inline" className="block text-sm font-medium text-gray-700">
-              Notice expiry date
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                id="notice_expiry_date_inline"
-                type="date"
-                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.notice_expiry_date || ''}
-                onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
-              />
-              {!facts.notice_expiry_date && (
-                <button
-                  type="button"
-                  onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
-                  className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
-                >
-                  Use suggested: {suggestedExpiryDate}
-                </button>
-              )}
+          {/* Expiry date - SECTION 8 ONLY: User-editable */}
+          {isSection8 && (
+            <div className="space-y-2">
+              <label htmlFor="notice_expiry_date_inline" className="block text-sm font-medium text-gray-700">
+                Notice expiry date
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  id="notice_expiry_date_inline"
+                  type="date"
+                  className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                  value={facts.notice_expiry_date || ''}
+                  onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
+                />
+                {!facts.notice_expiry_date && (
+                  <button
+                    type="button"
+                    onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
+                    className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
+                  >
+                    Use suggested: {suggestedExpiryDate}
+                  </button>
+                )}
+              </div>
+              <p className="text-xs text-gray-500">
+                Minimum {minNoticePeriod} days from service date. You can override if needed.
+              </p>
             </div>
-            <p className="text-xs text-gray-500">
-              Minimum {minNoticePeriod} days from service date.
-            </p>
-          </div>
+          )}
+
+          {/* Expiry date - SECTION 21 ONLY: Auto-calculated (read-only) */}
+          {!isSection8 && (
+            <div className="space-y-2 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <label className="block text-sm font-medium text-purple-800">
+                Notice expiry date (auto-calculated)
+              </label>
+              <p className="text-sm text-purple-700">
+                Your Section 21 expiry date will be <strong>automatically calculated</strong> when the notice is generated.
+                The system will determine the earliest legal date based on:
+              </p>
+              <ul className="text-xs text-purple-600 list-disc list-inside mt-1 space-y-0.5">
+                <li>Minimum 2 calendar months from service date</li>
+                <li>Fixed term end date (if applicable)</li>
+                <li>Break clause date (if applicable)</li>
+                <li>4-month restriction from tenancy start</li>
+              </ul>
+              <p className="text-xs text-purple-700 mt-2 font-medium">
+                This ensures your notice is legally valid under Housing Act 1988, Section 21(4).
+              </p>
+            </div>
+          )}
 
           {/* Notice generation info */}
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
