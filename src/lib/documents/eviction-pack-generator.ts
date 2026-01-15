@@ -39,6 +39,7 @@ import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
+import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -1263,11 +1264,32 @@ export async function generateNoticeOnlyPack(
         file_name: 'section21_form6a.pdf',
       });
 
+      // =============================================================================
+      // SECTION 21 TEMPLATE DATA - USE mapNoticeOnlyFacts FOR PARITY WITH PREVIEW
+      // CRITICAL FIX (Jan 2026): The preview route uses mapNoticeOnlyFacts() which
+      // resolves dates/compliance from nested wizardFacts paths (section21.*, notice_service.*).
+      // The fulfillment path MUST use the same normalization to avoid blank dates/false compliance.
+      // =============================================================================
+      const section21TemplateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Debug logging (dev only) to verify correct data flow
+      if (process.env.NODE_ENV === 'development' || process.env.NOTICE_ONLY_DEBUG === '1') {
+        console.log('[generateNoticeOnlyPack] === SECTION 21 TEMPLATE DATA DEBUG ===');
+        console.log('  - tenancy_start_date:', section21TemplateData.tenancy_start_date);
+        console.log('  - service_date:', section21TemplateData.service_date);
+        console.log('  - display_possession_date_formatted:', section21TemplateData.display_possession_date_formatted);
+        console.log('  - prescribed_info_given:', section21TemplateData.prescribed_info_given);
+        console.log('  - gas_certificate_provided:', section21TemplateData.gas_certificate_provided);
+        console.log('  - epc_provided:', section21TemplateData.epc_provided);
+        console.log('  - how_to_rent_provided:', section21TemplateData.how_to_rent_provided);
+        console.log('[generateNoticeOnlyPack] === END DEBUG ===');
+      }
+
       // 2. Generate Service Instructions (Section 21)
       try {
         const serviceInstructionsDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/service_instructions_section_21.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section21TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -1288,7 +1310,7 @@ export async function generateNoticeOnlyPack(
       try {
         const checklistDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/checklist_section_21.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section21TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -1309,7 +1331,7 @@ export async function generateNoticeOnlyPack(
       try {
         const complianceDoc = await generateDocument({
           templatePath: 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs',
-          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          data: section21TemplateData,
           isPreview: false,
           outputFormat: 'both',
         });
