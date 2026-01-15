@@ -22,6 +22,11 @@ const FIELD_ALIASES: Record<string, string[]> = {
   property_address_line1: ['property_address'],
   property_address_town: ['property_city', 'property_town'],
   property_address_postcode: ['property_postcode'],
+  // Section 21 compliance field aliases
+  prescribed_info_given: ['prescribed_info_served', 'prescribed_info_provided', 'prescribed_information_given'],
+  deposit_protected: ['deposit_protected_scheme', 'deposit_is_protected'],
+  gas_safety_cert_date: ['gas_cert_date', 'gas_certificate_date'],
+  notice_expiry_date: ['expiry_date', 'notice_expiry'],
 };
 
 /**
