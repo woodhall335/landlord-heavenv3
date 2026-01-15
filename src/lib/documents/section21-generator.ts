@@ -46,8 +46,9 @@ export interface Section21NoticeData {
 
   // Notice details
   service_date?: string; // Date notice is served (defaults to today)
-  expiry_date: string; // Date tenant must leave by
+  expiry_date?: string; // Date tenant must leave by (auto-calculated if not provided)
   expiry_date_explanation?: string; // How we calculated this
+  serving_capacity?: 'landlord' | 'joint_landlords' | 'agent'; // Who is serving the notice
 
   // Compliance (checked by decision engine before allowing S21)
   deposit_protected?: boolean;
@@ -148,9 +149,47 @@ export async function generateSection21Notice(
     console.warn('Section 21 compliance warnings:', complianceWarnings);
   }
 
+  // =============================================================================
+  // TEMPLATE DATA PREPARATION (FIX: Ensure Form 6A template variables are set)
+  // Form 6A template expects these specific variable names:
+  // - notice_expiry_date (Section 2: "You are required to leave... after:")
+  // - service_date / notice_service_date / notice_date (Page 2 Date: field)
+  // - is_landlord_serving / is_joint_landlords_serving / is_agent_serving (capacity)
+  // =============================================================================
+  const templateData: Record<string, any> = {
+    ...data,
+    // CRITICAL: Form 6A Section 2 renders from notice_expiry_date (not expiry_date)
+    notice_expiry_date: data.expiry_date,
+    earliest_possession_date: data.expiry_date, // Fallback alias
+
+    // CRITICAL: Form 6A Page 2 "Date:" renders from service_date (and fallbacks)
+    service_date: serviceDate,
+    notice_service_date: serviceDate,
+    notice_date: serviceDate,
+    intended_service_date: serviceDate,
+
+    // Serving capacity flags for Form 6A checkbox rendering
+    is_landlord_serving: false,
+    is_joint_landlords_serving: false,
+    is_agent_serving: false,
+  };
+
+  // Set serving capacity based on wizard input
+  const servingCapacity = (data as any).serving_capacity;
+  if (servingCapacity === 'landlord') {
+    templateData.is_landlord_serving = true;
+  } else if (servingCapacity === 'joint_landlords') {
+    templateData.is_joint_landlords_serving = true;
+  } else if (servingCapacity === 'agent') {
+    templateData.is_agent_serving = true;
+  } else {
+    // Default to landlord if not specified
+    templateData.is_landlord_serving = true;
+  }
+
   return generateDocument({
     templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-    data,
+    data: templateData,
     isPreview,
     outputFormat: 'both',
   });
@@ -209,6 +248,56 @@ export function mapWizardToSection21Data(
     return undefined;
   };
 
+  // =============================================================================
+  // RESOLVE SERVICE DATE FROM ALL POSSIBLE WIZARD PATHS
+  // The wizard stores service date in various locations depending on product/config.
+  // MQS maps_to: notice_service.notice_date creates nested structure.
+  // We need to check all possible paths to find the user-entered service date.
+  // =============================================================================
+  const resolveServiceDate = (): string | undefined => {
+    // Priority 1: Explicit option passed from caller
+    if (options?.serviceDate) return options.serviceDate;
+
+    // Priority 2: Nested path from MQS maps_to (notice_service.notice_date)
+    const noticeService = wizardFacts.notice_service;
+    if (typeof noticeService === 'object' && noticeService?.notice_date) {
+      return noticeService.notice_date;
+    }
+
+    // Priority 3: Direct field IDs (flat keys in wizard facts)
+    if (wizardFacts.notice_service_date) return wizardFacts.notice_service_date;
+    if (wizardFacts.service_date) return wizardFacts.service_date;
+    if (wizardFacts.notice_date) return wizardFacts.notice_date;
+    if (wizardFacts.notice_served_date) return wizardFacts.notice_served_date;
+    if (wizardFacts.intended_service_date) return wizardFacts.intended_service_date;
+
+    return undefined;
+  };
+
+  // =============================================================================
+  // RESOLVE SERVING CAPACITY FROM NESTED WIZARD PATHS
+  // =============================================================================
+  type ServingCapacity = 'landlord' | 'joint_landlords' | 'agent';
+
+  const resolveServingCapacity = (): ServingCapacity | undefined => {
+    // Check nested path from MQS maps_to (notice_service.serving_capacity)
+    const noticeService = wizardFacts.notice_service;
+    if (typeof noticeService === 'object' && noticeService?.serving_capacity) {
+      const cap = noticeService.serving_capacity;
+      if (cap === 'landlord' || cap === 'joint_landlords' || cap === 'agent') {
+        return cap;
+      }
+    }
+
+    // Check flat keys
+    const flatCap = wizardFacts.serving_capacity;
+    if (flatCap === 'landlord' || flatCap === 'joint_landlords' || flatCap === 'agent') {
+      return flatCap;
+    }
+
+    return undefined;
+  };
+
   return {
     // Landlord
     landlord_full_name: wizardFacts.landlord_full_name || '',
@@ -239,13 +328,12 @@ export function mapWizardToSection21Data(
     rent_frequency: wizardFacts.rent_frequency || 'monthly',
     periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
 
-    // Notice details - service_date and expiry_date will be calculated by generator
-    service_date:
-      options?.serviceDate ||
-      wizardFacts.service_date ||
-      wizardFacts.notice_date ||
-      wizardFacts.notice_served_date,
+    // Notice details - service_date resolved from all possible wizard paths
+    // expiry_date will be auto-calculated by generateSection21Notice
+    service_date: resolveServiceDate(),
     expiry_date: '', // Will be auto-calculated by generateSection21Notice
+    // Include serving_capacity for Form 6A checkbox rendering
+    serving_capacity: resolveServingCapacity(),
 
     // Compliance
     // IMPORTANT: Section21ComplianceSection stores these as *_served but

@@ -96,8 +96,51 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   onUpdate,
   onComplete,
 }) => {
+  // =============================================================================
+  // INITIAL STEP DETERMINATION
+  // CRITICAL: For Section 21, check if compliance questions are already answered
+  // (e.g., from the separate Compliance tab) to avoid asking twice.
+  // =============================================================================
+  const getInitialStep = (): 'compliance' | 'grounds' | 'service' => {
+    if (isSection8) return 'grounds';
+
+    // For Section 21: Check if compliance questions are already answered
+    // These may have been answered in Section21ComplianceSection (Compliance tab)
+    const complianceAlreadyComplete = (() => {
+      // Check deposit compliance
+      if (facts.deposit_taken === undefined) return false;
+      if (facts.deposit_taken === true) {
+        // deposit_protected can be stored with different keys
+        const depositProtected = facts.deposit_protected ?? facts.deposit_protected_scheme;
+        if (depositProtected === undefined) return false;
+        // prescribed_info can be stored with different keys
+        const prescribedInfo = facts.prescribed_info_served ?? facts.prescribed_info_given;
+        if (prescribedInfo === undefined) return false;
+      }
+
+      // Check gas compliance
+      if (facts.has_gas_appliances === undefined) return false;
+      if (facts.has_gas_appliances === true) {
+        const gasCert = facts.gas_safety_cert_served ?? facts.gas_certificate_provided;
+        if (gasCert === undefined) return false;
+      }
+
+      // Check EPC and How to Rent
+      const epcProvided = facts.epc_served ?? facts.epc_provided;
+      if (epcProvided === undefined) return false;
+
+      const howToRent = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+      if (howToRent === undefined) return false;
+
+      return true;
+    })();
+
+    // Skip compliance step if already completed
+    return complianceAlreadyComplete ? 'service' : 'compliance';
+  };
+
   const [currentStep, setCurrentStep] = useState<'compliance' | 'grounds' | 'service' | 'complete'>(
-    isSection8 ? 'grounds' : 'compliance'
+    getInitialStep()
   );
 
   // Section 8 grounds selection (reuses same keys as notice-only schema)
@@ -143,19 +186,28 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   };
 
   // Check if current step is complete
+  // NOTE: Check all possible key variants since different sections use different keys
   const isStepComplete = useCallback(() => {
     switch (currentStep) {
       case 'compliance':
         // For S21: deposit checks must be answered
+        // Check both key variants: *_served (from this flow) and *_provided/*_given (from Compliance tab)
         if (facts.deposit_taken === undefined) return false;
         if (facts.deposit_taken === true) {
-          if (facts.deposit_protected === undefined) return false;
-          if (facts.prescribed_info_served === undefined) return false;
+          const depositProtected = facts.deposit_protected ?? facts.deposit_protected_scheme;
+          if (depositProtected === undefined) return false;
+          const prescribedInfo = facts.prescribed_info_served ?? facts.prescribed_info_given;
+          if (prescribedInfo === undefined) return false;
         }
         if (facts.has_gas_appliances === undefined) return false;
-        if (facts.has_gas_appliances === true && facts.gas_safety_cert_served === undefined) return false;
-        if (facts.epc_served === undefined) return false;
-        if (facts.how_to_rent_served === undefined) return false;
+        if (facts.has_gas_appliances === true) {
+          const gasCert = facts.gas_safety_cert_served ?? facts.gas_certificate_provided;
+          if (gasCert === undefined) return false;
+        }
+        const epcProvided = facts.epc_served ?? facts.epc_provided;
+        if (epcProvided === undefined) return false;
+        const howToRent = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+        if (howToRent === undefined) return false;
         return true;
       case 'grounds':
         // For S8: at least one ground must be selected
