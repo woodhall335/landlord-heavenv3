@@ -16,7 +16,7 @@
 import Link from 'next/link';
 import { ArrowRight, Shield, Clock, FileText, Gavel, PoundSterling } from 'lucide-react';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 
 export type SeoPageType = 'problem' | 'court' | 'money' | 'general';
@@ -39,7 +39,7 @@ interface SeoCtaBlockProps {
   /** Custom description for section/final variants */
   description?: string;
   /** Jurisdiction for wizard links */
-  jurisdiction?: 'england' | 'wales' | 'scotland' | 'ni';
+  jurisdiction?: WizardJurisdiction;
   /** Additional CSS classes */
   className?: string;
 }
@@ -97,13 +97,13 @@ const ctaConfig: Record<SeoPageType, {
  */
 function getWizardLink(
   product: 'notice_only' | 'complete_pack' | 'money_claim',
-  jurisdiction?: 'england' | 'wales' | 'scotland' | 'ni'
+  jurisdiction?: WizardJurisdiction
 ): string {
   return buildWizardLink({
     product,
     jurisdiction,
     src: 'guide',
-    topic: product === 'money_claim' ? 'money' : 'eviction',
+    topic: product === 'money_claim' ? 'money_claim' : 'eviction',
   });
 }
 
@@ -113,7 +113,7 @@ function getWizardLink(
  */
 export function getHeroCtaProps(
   pageType: SeoPageType,
-  jurisdiction?: 'england' | 'wales' | 'scotland' | 'ni'
+  jurisdiction?: WizardJurisdiction
 ): {
   primaryCTA: { label: string; href: string };
   secondaryCTA: { label: string; href: string };
