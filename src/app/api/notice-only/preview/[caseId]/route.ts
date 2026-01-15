@@ -419,6 +419,14 @@ export async function GET(
         console.log('  - how_to_rent_provided:', templateData.how_to_rent_provided);
         console.log('  - hmo_license_required:', templateData.hmo_license_required);
         console.log('  - hmo_license_valid:', templateData.hmo_license_valid);
+        console.log('[NOTICE-PREVIEW-API] Licensing/Retaliatory Fields (BUG AUDIT):');
+        console.log('  - licensing_required:', templateData.licensing_required, '(template)');
+        console.log('  - wizardFacts.licensing_required:', wizardFacts.licensing_required, '(raw)');
+        console.log('  - retaliatory_eviction_clear:', templateData.retaliatory_eviction_clear, '(template)');
+        console.log('  - no_repair_complaint:', templateData.no_repair_complaint, '(template)');
+        console.log('  - wizardFacts.no_retaliatory_notice:', wizardFacts.no_retaliatory_notice, '(raw)');
+        console.log('  - wizardFacts.retaliatory_eviction_clear:', wizardFacts.retaliatory_eviction_clear, '(raw)');
+        console.log('  - wizardFacts.repair_complaint_within_6_months:', wizardFacts.repair_complaint_within_6_months, '(raw)');
         console.log('[NOTICE-PREVIEW-API] Deposit Fields:');
         console.log('  - deposit_taken:', templateData.deposit_taken);
         console.log('  - deposit_protected:', templateData.deposit_protected);

@@ -3328,26 +3328,62 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // =============================================================================
   // PROPERTY LICENSING (HMO/SELECTIVE)
   // FIX: Check ALL wizard path variations including property_licensing_required
-  // When wizard says "No licensing required", value is false/no → licensing_required = false
+  // CRITICAL: Wizard stores licensing_required as a SELECT value, NOT a boolean:
+  //   - 'not_required' → licensing NOT required (false)
+  //   - 'hmo_mandatory', 'hmo_additional', 'selective' → licensing IS required (true)
+  // Also normalize string labels like "No licensing required" → false
   // =============================================================================
-  templateData.hmo_license_required = coerceBoolean(
-    getFirstValue(wizard, [
-      'hmo_license_required',
-      'licensing_required',
-      'property_licensing_required',  // Common wizard field name
-      // Nested section21.* paths
-      'section21.hmo_license_required',
-      'section21.licensing_required',
-      'section21.property_licensing_required',
-      // Nested property.* paths
-      'property.licensing_required',
-      'property.hmo_license_required',
-      // Nested compliance.* paths
-      'compliance.hmo_license_required',
-      'compliance.licensing_required',
-      'compliance.property_licensing_required',
-    ])
-  );
+  const rawLicensingRequired = getFirstValue(wizard, [
+    'hmo_license_required',
+    'licensing_required',
+    'property_licensing_required',  // Common wizard field name
+    // Nested section21.* paths
+    'section21.hmo_license_required',
+    'section21.licensing_required',
+    'section21.property_licensing_required',
+    // Nested property.* paths
+    'property.licensing_required',
+    'property.hmo_license_required',
+    // Nested compliance.* paths
+    'compliance.hmo_license_required',
+    'compliance.licensing_required',
+    'compliance.property_licensing_required',
+  ]);
+
+  // Handle wizard SELECT values and string labels
+  if (rawLicensingRequired !== null && rawLicensingRequired !== undefined) {
+    if (typeof rawLicensingRequired === 'string') {
+      const normalized = rawLicensingRequired.toLowerCase().trim();
+      // 'not_required' or label variations = false (no licensing needed)
+      if (normalized === 'not_required' ||
+          normalized === 'no licensing required' ||
+          normalized === 'not applicable' ||
+          normalized === 'n/a' ||
+          normalized === 'none' ||
+          normalized === 'no' ||
+          normalized === 'false') {
+        templateData.hmo_license_required = false;
+      }
+      // Any other non-empty string value = true (licensing required)
+      else if (normalized === 'hmo_mandatory' ||
+               normalized === 'hmo_additional' ||
+               normalized === 'selective' ||
+               normalized === 'required' ||
+               normalized === 'yes' ||
+               normalized === 'true') {
+        templateData.hmo_license_required = true;
+      }
+      // Unknown string - coerce normally
+      else {
+        templateData.hmo_license_required = coerceBoolean(rawLicensingRequired);
+      }
+    } else {
+      // Boolean or other type - coerce normally
+      templateData.hmo_license_required = coerceBoolean(rawLicensingRequired);
+    }
+  } else {
+    templateData.hmo_license_required = null;
+  }
 
   templateData.hmo_license_valid = coerceBoolean(
     getFirstValue(wizard, [
@@ -3369,8 +3405,9 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // =============================================================================
   // RETALIATORY EVICTION CHECK
   // FIX: Map wizard answers to template fields for retaliatory eviction status
-  // When wizard confirms "no repair complaint in 6 months" or "retaliatory eviction clear"
-  // → set no_repair_complaint = true so template shows COMPLIANT
+  // CRITICAL: The wizard field is `no_retaliatory_notice` (from Section21ComplianceSection)
+  // Question: "Is this notice being served more than 6 months after any repair complaint?"
+  // If answer is TRUE → no retaliatory eviction concerns → COMPLIANT
   // =============================================================================
 
   // Check if there was a repair complaint within 6 months
@@ -3384,16 +3421,22 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // Check for explicit "retaliatory eviction clear" confirmation
+  // CRITICAL: `no_retaliatory_notice` is the PRIMARY wizard field from Section21ComplianceSection
+  // The question is: "Is this notice being served more than 6 months after any repair complaint?"
+  // If TRUE → means > 6 months since complaint → retaliatory eviction defense won't apply → COMPLIANT
   const retaliatoryEvictionClear = coerceBoolean(
     getFirstValue(wizard, [
+      'no_retaliatory_notice',           // PRIMARY: Section21ComplianceSection wizard field
       'retaliatory_eviction_clear',
       'no_retaliatory_eviction',
       'no_repair_complaint',
       // Nested section21.* paths
+      'section21.no_retaliatory_notice', // Nested variant of primary field
       'section21.retaliatory_eviction_clear',
       'section21.no_retaliatory_eviction',
       'section21.no_repair_complaint',
       // Nested compliance.* paths
+      'compliance.no_retaliatory_notice',
       'compliance.retaliatory_eviction_clear',
       'compliance.no_repair_complaint',
     ])
