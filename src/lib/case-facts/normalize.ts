@@ -13,6 +13,7 @@ import {
   SECTION8_GROUND_DEFINITIONS,
   type Section8GroundDefinition,
 } from '../grounds/section8-ground-definitions';
+import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -3246,9 +3247,52 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     templateData.service_date = todayISO;
   }
 
-  // Calculate earliest_possession_date if not provided
+  // =============================================================================
+  // SECTION 21 EXPIRY DATE CALCULATION
+  // =============================================================================
+  // For Section 21 (no-fault eviction), we use the dedicated calculator which
+  // implements: 2-month minimum notice, 4-month bar, fixed term constraints,
+  // break clause handling, and rent period alignment for periodic tenancies.
+  // This is different from Section 8 which uses ground-based notice periods.
+  // =============================================================================
+  const isSection21Route = templateData.selected_notice_route === 'section_21';
+
+  if (isSection21Route && !templateData.expiry_date && templateData.service_date && templateData.tenancy_start_date) {
+    try {
+      const s21Params = {
+        service_date: templateData.service_date,
+        tenancy_start_date: templateData.tenancy_start_date,
+        fixed_term: templateData.fixed_term === true,
+        fixed_term_end_date: templateData.fixed_term_end_date || undefined,
+        has_break_clause: templateData.has_break_clause === true,
+        break_clause_date: templateData.break_clause_date || undefined,
+        rent_period: (templateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly',
+        periodic_tenancy_start: templateData.periodic_tenancy_start || undefined,
+      };
+
+      const s21ExpiryResult = calculateSection21ExpiryDate(s21Params);
+
+      // Set the calculated expiry date
+      templateData.expiry_date = s21ExpiryResult.earliest_valid_date;
+      templateData.earliest_possession_date = s21ExpiryResult.earliest_valid_date;
+      templateData.notice_period_days = s21ExpiryResult.notice_period_days;
+      templateData.notice_period_months = 2; // S21 always 2 months minimum
+      templateData.notice_period_description = '2 months';
+      templateData.s21_expiry_explanation = s21ExpiryResult.explanation;
+      templateData.s21_expiry_warnings = s21ExpiryResult.warnings;
+
+      console.log(`[mapNoticeOnlyFacts] Section 21 expiry calculated: ${s21ExpiryResult.earliest_valid_date} (${s21ExpiryResult.notice_period_days} days)`);
+      console.log(`[mapNoticeOnlyFacts] Section 21 explanation: ${s21ExpiryResult.explanation}`);
+    } catch (error) {
+      // Log but don't fail - allow fallback to manual entry or default
+      console.warn('[mapNoticeOnlyFacts] Section 21 expiry calculation failed:', error);
+    }
+  }
+
+  // Calculate earliest_possession_date if not provided (SECTION 8 FALLBACK)
   // IMPORTANT: Notice period depends on selected grounds!
   // Most grounds require 2 weeks (14 days); some require 2 months (60 days)
+  // NOTE: This block only runs if Section 21 calculation above didn't set earliest_possession_date
   if (!templateData.earliest_possession_date && templateData.service_date) {
     // Get selected grounds to calculate required notice period
     const selectedGrounds = getFirstValue(wizard, [

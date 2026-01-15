@@ -154,6 +154,35 @@ questions:
     maps_to:
       - fixed_term_end_date
 
+  # Break clause questions - allows earlier exit from fixed term
+  - id: has_break_clause
+    section: Tenancy Details
+    question: "Does the tenancy have a break clause?"
+    inputType: yes_no
+    dependsOn:
+      questionId: is_fixed_term
+      value: true
+    validation:
+      required: true
+    helperText: |
+      A break clause allows landlord or tenant to end the fixed term early.
+      If you have one, you may be able to serve notice before the fixed term ends.
+    maps_to:
+      - has_break_clause
+
+  - id: break_clause_date
+    section: Tenancy Details
+    question: "Earliest break clause date"
+    inputType: date
+    dependsOn:
+      questionId: has_break_clause
+      value: true
+    validation:
+      required: true
+    helperText: "The earliest date you can exercise the break clause (notice can expire on/after this date)"
+    maps_to:
+      - break_clause_date
+
   - id: rent_terms
     section: Rent Details
     question: "Rent details"
