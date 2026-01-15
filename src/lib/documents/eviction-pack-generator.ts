@@ -1305,25 +1305,25 @@ export async function generateNoticeOnlyPack(
         console.warn('Failed to generate validity checklist:', err);
       }
 
-      // 4. Generate Compliance Declaration
+      // 4. Generate Compliance Declaration (Section 21-specific template)
       try {
         const complianceDoc = await generateDocument({
-          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          templatePath: 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs',
           data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
           isPreview: false,
           outputFormat: 'both',
         });
         documents.push({
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Evidence of deposit, EPC, gas safety & How to Rent compliance',
+          title: 'Section 21 Pre-Service Compliance Checklist',
+          description: 'Evidence of deposit, EPC, gas safety & How to Rent compliance for Section 21',
           category: 'guidance',
           document_type: 'compliance_declaration',
           html: complianceDoc.html,
           pdf: complianceDoc.pdf,
-          file_name: 'compliance_declaration.pdf',
+          file_name: 'section21_compliance_declaration.pdf',
         });
       } catch (err) {
-        console.warn('Failed to generate compliance declaration:', err);
+        console.warn('Failed to generate Section 21 compliance declaration:', err);
       }
     } else {
       // Section 8

@@ -663,23 +663,31 @@ export async function GET(
       }
 
       // 4. Generate compliance checklist (pre-service verification)
-      console.log('[NOTICE-PREVIEW-API] Generating England compliance checklist');
+      // Use dedicated Section 21 compliance checklist for Section 21 notices
+      // to ensure correct mapping of wizard answers and proper labeling
+      const complianceTemplatePath = selected_route === 'section_21'
+        ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
+        : 'uk/england/templates/eviction/compliance_checklist.hbs';
+
+      console.log(`[NOTICE-PREVIEW-API] Generating ${selected_route === 'section_21' ? 'Section 21' : 'Section 8'} compliance checklist`);
       try {
         const complianceDoc = await generateDocument({
-          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          templatePath: complianceTemplatePath,
           data: templateData,
           outputFormat: 'pdf',
         });
 
         if (complianceDoc.pdf) {
           documents.push({
-            title: 'Pre-Service Compliance Checklist',
+            title: selected_route === 'section_21'
+              ? 'Section 21 Pre-Service Compliance Checklist'
+              : 'Pre-Service Compliance Checklist',
             category: 'checklist',
             pdf: complianceDoc.pdf,
           });
         }
       } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] England compliance checklist generation failed:', err);
+        console.error(`[NOTICE-PREVIEW-API] ${selected_route === 'section_21' ? 'Section 21' : 'England'} compliance checklist generation failed:`, err);
       }
 
       // 5. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
