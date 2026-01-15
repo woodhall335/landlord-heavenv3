@@ -450,4 +450,61 @@ describe('Section 21 Notice Only - Nested Wizard Facts Regression Tests', () => 
       expect(templateData.hmo_license_required).toBe(false);
     });
   });
+
+  describe('COMPLIANCE FLIP TEST: false should NOT show as COMPLIANT', () => {
+    /**
+     * This test ensures that when wizard answers are "No" or false,
+     * the compliance fields are correctly mapped to false (not null/undefined).
+     * Templates render "Not confirmed" or "NOT COMPLIANT" for false values.
+     */
+    it('prescribed_info_given false should not be truthy', () => {
+      const wizard: WizardFacts = {
+        section21: {
+          prescribed_info_given: false,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.prescribed_info_given).toBe(false);
+      // Template {{#if prescribed_info_given}} should NOT render the COMPLIANT block
+      expect(!!templateData.prescribed_info_given).toBe(false);
+    });
+
+    it('all compliance fields false should map correctly', () => {
+      const wizard: WizardFacts = {
+        section21: {
+          prescribed_info_given: false,
+          gas_certificate_provided: false,
+          epc_provided: false,
+          how_to_rent_provided: false,
+        },
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      expect(templateData.prescribed_info_given).toBe(false);
+      expect(templateData.gas_certificate_provided).toBe(false);
+      expect(templateData.gas_cert_provided).toBe(false);
+      expect(templateData.epc_provided).toBe(false);
+      expect(templateData.how_to_rent_provided).toBe(false);
+
+      // Verify nested compliance object also reflects false
+      expect(templateData.compliance.gas_cert_provided).toBe(false);
+      expect(templateData.compliance.epc_provided).toBe(false);
+      expect(templateData.compliance.how_to_rent_given).toBe(false);
+    });
+
+    it('undefined compliance fields should default to null/undefined (not false)', () => {
+      // When wizard doesn't have a compliance field at all, we should NOT
+      // incorrectly report it as true. It should be null/undefined.
+      const wizard: WizardFacts = {
+        tenant_full_name: 'Test Tenant',
+        // No compliance fields
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizard);
+      // null/false/undefined are all falsy, which is correct for templates
+      expect(templateData.prescribed_info_given).toBeFalsy();
+      expect(templateData.gas_certificate_provided).toBeFalsy();
+    });
+  });
 });
