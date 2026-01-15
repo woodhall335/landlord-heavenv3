@@ -16,6 +16,14 @@ import {
   type Section21DateParams,
   type ServiceMethod,
 } from './notice-date-calculator';
+import {
+  isFixedTermTenancy,
+  resolveFixedTermEndDate,
+  hasBreakClause,
+  resolveBreakClauseDate,
+  resolveServiceMethod,
+  logResolvedDateParams,
+} from './section21-payload-normalizer';
 
 // ============================================================================
 // TYPES
@@ -125,6 +133,22 @@ export async function generateSection21Notice(
     periodic_tenancy_start: data.periodic_tenancy_start,
     service_method: data.service_method, // For deemed service date calculation
   };
+
+  // =============================================================================
+  // DEBUG LOGGING: Log resolved date parameters for verification
+  // This helps diagnose issues where fixed_term or fixed_term_end_date are mis-mapped
+  // =============================================================================
+  logResolvedDateParams(
+    {
+      fixed_term: !!data.fixed_term,
+      fixed_term_end_date: data.fixed_term_end_date,
+      has_break_clause: !!data.has_break_clause,
+      break_clause_date: data.break_clause_date,
+      service_method: data.service_method,
+      serve_date: serviceDate,
+    },
+    'S21Generator'
+  );
 
   // =============================================================================
   // SAFETY RAILS: Validate S21 can be served (4-month rule)
@@ -360,41 +384,9 @@ export function mapWizardToSection21Data(
   // =============================================================================
   // RESOLVE SERVICE METHOD FROM WIZARD PATHS
   // Determines deemed service date calculation (postal = +2 working days)
+  // Uses centralized normalizer that handles label strings ("First class post" → "first_class_post")
   // =============================================================================
-  const resolveServiceMethod = (): ServiceMethod | undefined => {
-    const validMethods: ServiceMethod[] = [
-      'first_class_post',
-      'second_class_post',
-      'hand_delivery',
-      'leaving_at_property',
-      'recorded_delivery',
-    ];
-
-    // Check nested path from MQS maps_to (notice_service.service_method)
-    const noticeService = wizardFacts.notice_service;
-    if (typeof noticeService === 'object' && noticeService?.service_method) {
-      const method = noticeService.service_method;
-      if (validMethods.includes(method as ServiceMethod)) {
-        return method as ServiceMethod;
-      }
-    }
-
-    // Check flat keys with various possible names
-    const possibleKeys = [
-      'service_method',
-      'notice_service_method',
-      'delivery_method',
-      'how_serving',
-    ];
-    for (const key of possibleKeys) {
-      const value = wizardFacts[key];
-      if (value && validMethods.includes(value as ServiceMethod)) {
-        return value as ServiceMethod;
-      }
-    }
-
-    return undefined;
-  };
+  // Imported from section21-payload-normalizer.ts - handles label → enum conversion
 
   return {
     // Landlord
@@ -410,18 +402,16 @@ export function mapWizardToSection21Data(
     property_address: propertyAddress,
 
     // Tenancy
-    tenancy_start_date: wizardFacts.tenancy_start_date || '',
-    fixed_term:
-      wizardFacts.fixed_term === true ||
-      wizardFacts.is_fixed_term === true ||
-      wizardFacts.tenancy_type === 'fixed_term' ||
-      wizardFacts.tenancy_type === 'ast_fixed',
-    fixed_term_end_date: wizardFacts.fixed_term_end_date,
+    // Uses centralized normalizers to handle flat/nested payload shapes and label strings
+    tenancy_start_date: wizardFacts.tenancy_start_date || wizardFacts.tenancy?.start_date || '',
+    // isFixedTermTenancy handles: boolean flags, enum values ("ast_fixed"), and labels ("Fixed term")
+    fixed_term: isFixedTermTenancy(wizardFacts),
+    // resolveFixedTermEndDate checks: flat key, nested tenancy.fixed_term_end_date
+    fixed_term_end_date: resolveFixedTermEndDate(wizardFacts),
     // Break clause fields (for fixed term tenancies)
-    has_break_clause:
-      wizardFacts.has_break_clause === true ||
-      wizardFacts.has_break_clause === 'yes',
-    break_clause_date: wizardFacts.break_clause_date,
+    // hasBreakClause handles: boolean flags, 'yes' strings, nested tenancy.has_break_clause
+    has_break_clause: hasBreakClause(wizardFacts),
+    break_clause_date: resolveBreakClauseDate(wizardFacts),
     rent_amount: wizardFacts.rent_amount || 0,
     rent_frequency: wizardFacts.rent_frequency || 'monthly',
     periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
@@ -431,7 +421,8 @@ export function mapWizardToSection21Data(
     // We do NOT pass any user-provided expiry_date - generateSection21Notice computes it.
     service_date: resolveServiceDate(),
     // Service method determines deemed service date (postal = +2 working days)
-    service_method: resolveServiceMethod(),
+    // resolveServiceMethod normalizes labels ("First class post" → "first_class_post")
+    service_method: resolveServiceMethod(wizardFacts),
     // expiry_date is intentionally omitted - generateSection21Notice will compute it
     // Include serving_capacity for Form 6A checkbox rendering
     serving_capacity: resolveServingCapacity(),
