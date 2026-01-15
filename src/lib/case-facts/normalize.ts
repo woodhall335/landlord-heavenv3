@@ -230,13 +230,21 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
   // Check all possible paths in precedence order
   // IMPORTANT: Section 8 notice templates use service_date, notice_service_date, intended_service_date
   // This list covers all legacy field IDs plus current wizard field IDs across all products
+  // FIX: Added nested paths for section21.* and notice_service.date variants
   const candidates = [
     // Complete pack MQS maps_to path (England)
     'notice_served_date',
     // England/Wales maps_to path (nested from MQS maps_to)
     'notice_service.notice_date',
+    // Alternative nested path - notice_service.date (some wizards use this)
+    'notice_service.date',
+    // Section 21 specific nested paths
+    'section21.notice_service_date',
+    'section21.service_date',
+    'section21.notice_date',
     // Scotland maps_to path
     'notice.notice_date',
+    'notice.date',
     // Direct field IDs (wizard stores by field id) - most common for notice-only
     'notice_service_date',
     'service_date',
@@ -247,6 +255,9 @@ export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
     'intended_service_date',
     // Scotland field ID
     'notice_date',
+    // Tenancy nested paths
+    'tenancy.notice_service_date',
+    'tenancy.service_date',
     // Additional legacy aliases that may exist in older wizard data
     'date_notice_served',
     'date_of_service',
@@ -281,9 +292,16 @@ export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
   // Check all possible paths for expiry/possession dates
   // IMPORTANT: Templates use earliest_possession_date_formatted, notice_expiry_date, etc.
   // This list covers all legacy field IDs plus current wizard field IDs across all products
+  // FIX: Added nested paths for section21.* and notice_service.expiry_date variants
   const candidates = [
     // England/Wales maps_to path (nested from MQS maps_to)
     'notice_service.notice_expiry_date',
+    'notice_service.expiry_date',
+    // Section 21 specific nested paths
+    'section21.notice_expiry_date',
+    'section21.expiry_date',
+    'section21.earliest_possession_date',
+    'section21.possession_date',
     // Direct field IDs - most common for notice-only
     'notice_expiry_date',
     'expiry_date',
@@ -298,6 +316,9 @@ export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
     // Scotland
     'earliest_leaving_date',
     'earliest_tribunal_date',
+    // Tenancy nested paths
+    'tenancy.expiry_date',
+    'tenancy.notice_expiry_date',
     // Legacy aliases
     'notice_end_date',
     'end_date',
@@ -2912,12 +2933,19 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // =============================================================================
   // TENANCY/CONTRACT DATES
+  // FIX: Added nested paths for tenancy.*, section21.* variants
   // =============================================================================
   templateData.tenancy_start_date = extractString(
     getFirstValue(wizard, [
       'tenancy_start_date',
       'contract_start_date', // Wales
       'start_date',
+      // Nested tenancy.* paths
+      'tenancy.start_date',
+      'tenancy.tenancy_start_date',
+      // Nested section21.* paths
+      'section21.tenancy_start_date',
+      'section21.start_date',
     ])
   );
 
@@ -2926,11 +2954,22 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     getFirstValue(wizard, [
       'contract_start_date',
       'tenancy_start_date', // Fallback
+      'tenancy.start_date',
+      'tenancy.contract_start_date',
     ])
   );
 
   // Resolve fixed_term from explicit fields or infer from tenancy_type
-  const explicitFixedTerm = getFirstValue(wizard, ['is_fixed_term', 'fixed_term', 'tenancy_fixed_term']);
+  // FIX: Added nested paths for tenancy.*, section21.* variants
+  const explicitFixedTerm = getFirstValue(wizard, [
+    'is_fixed_term',
+    'fixed_term',
+    'tenancy_fixed_term',
+    'tenancy.fixed_term',
+    'tenancy.is_fixed_term',
+    'section21.fixed_term',
+    'section21.is_fixed_term',
+  ]);
   if (explicitFixedTerm !== null && explicitFixedTerm !== undefined) {
     templateData.fixed_term = coerceBoolean(explicitFixedTerm);
   } else {
@@ -2968,7 +3007,12 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'tenancy_end_date',
       'fixed_term_end_date',
       'tenancy.fixed_term_end_date',
+      'tenancy.end_date',
       'case_facts.tenancy.fixed_term_end_date',
+      // Section 21 specific nested paths
+      'section21.fixed_term_end_date',
+      'section21.tenancy_end_date',
+      'section21.end_date',
     ])
   );
 
@@ -3178,12 +3222,22 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // SECTION 21 COMPLIANCE FIELDS (CRITICAL FOR S21 VALIDITY)
   // IMPORTANT: Wizard stores these as *_served but templates expect *_given/*_provided
   // We check ALL variants to ensure YES values are correctly mapped
+  // FIX: Added nested paths for section21.*, notice_service.*, compliance.* variants
   // =============================================================================
   templateData.prescribed_info_given = coerceBoolean(
     getFirstValue(wizard, [
       'prescribed_info_given',
       'prescribed_info_served',  // Section21ComplianceSection uses this
       'prescribed_info_provided',
+      // Nested section21.* paths
+      'section21.prescribed_info_given',
+      'section21.prescribed_info_served',
+      'section21.prescribed_info_provided',
+      // Nested compliance.* paths
+      'compliance.prescribed_info_given',
+      'compliance.prescribed_info_served',
+      // Nested notice_service.* paths
+      'notice_service.prescribed_info_given',
     ])
   );
 
@@ -3194,6 +3248,14 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'gas_safety_cert_served',  // Section21ComplianceSection uses this
       'gas_cert_provided',
       'gas_cert_served',
+      // Nested section21.* paths
+      'section21.gas_certificate_provided',
+      'section21.gas_safety_cert_provided',
+      'section21.gas_safety_cert_served',
+      'section21.gas_cert_provided',
+      // Nested compliance.* paths
+      'compliance.gas_certificate_provided',
+      'compliance.gas_cert_provided',
     ])
   );
 
@@ -3202,6 +3264,10 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'gas_safety_cert_provided',
       'gas_safety_cert_served',  // Section21ComplianceSection uses this
       'gas_certificate_provided',
+      // Nested section21.* paths
+      'section21.gas_safety_cert_provided',
+      'section21.gas_safety_cert_served',
+      'section21.gas_certificate_provided',
     ])
   );
 
@@ -3213,6 +3279,13 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'how_to_rent_provided',
       'how_to_rent_given',
       'how_to_rent_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.how_to_rent_provided',
+      'section21.how_to_rent_given',
+      'section21.how_to_rent_served',
+      // Nested compliance.* paths
+      'compliance.how_to_rent_provided',
+      'compliance.how_to_rent_given',
     ])
   );
 
@@ -3221,6 +3294,13 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'how_to_rent_given',
       'how_to_rent_provided',
       'how_to_rent_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.how_to_rent_given',
+      'section21.how_to_rent_provided',
+      'section21.how_to_rent_served',
+      // Nested compliance.* paths
+      'compliance.how_to_rent_given',
+      'compliance.how_to_rent_provided',
     ])
   );
 
@@ -3228,20 +3308,48 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     getFirstValue(wizard, [
       'epc_provided',
       'epc_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.epc_provided',
+      'section21.epc_served',
+      // Nested compliance.* paths
+      'compliance.epc_provided',
+      'compliance.epc_served',
     ])
   );
 
   templateData.epc_rating = extractString(
-    getWizardValue(wizard, 'epc_rating')
+    getFirstValue(wizard, [
+      'epc_rating',
+      'section21.epc_rating',
+      'compliance.epc_rating',
+    ])
   );
 
   templateData.hmo_license_required = coerceBoolean(
-    getWizardValue(wizard, 'hmo_license_required')
+    getFirstValue(wizard, [
+      'hmo_license_required',
+      'licensing_required',
+      'section21.hmo_license_required',
+      'section21.licensing_required',
+      'compliance.hmo_license_required',
+      'compliance.licensing_required',
+    ])
   );
 
   templateData.hmo_license_valid = coerceBoolean(
-    getWizardValue(wizard, 'hmo_license_valid')
+    getFirstValue(wizard, [
+      'hmo_license_valid',
+      'property_licensed',
+      'section21.hmo_license_valid',
+      'section21.property_licensed',
+      'compliance.hmo_license_valid',
+      'compliance.property_licensed',
+    ])
   );
+
+  // Additional licensing aliases for templates
+  templateData.licensing_required = templateData.hmo_license_required;
+  templateData.property_licensed = templateData.hmo_license_valid;
 
   // =============================================================================
   // WALES-SPECIFIC COMPLIANCE
