@@ -194,9 +194,8 @@ function missingFieldsForSection21(caseData: Record<string, any>): string[] {
   if (!caseData.property_address) missing.push('property_address');
   if (!caseData.tenant_full_name) missing.push('tenant_full_name');
   if (!caseData.landlord_full_name) missing.push('landlord_full_name');
-  if (!caseData.notice_expiry_date && !caseData.notice?.expiry_date) {
-    missing.push('notice_expiry_date');
-  }
+  // NOTE: notice_expiry_date is AUTO-CALCULATED by generateSection21Notice()
+  // based on service_date, fixed_term, etc. - it should NOT be required here
   return missing;
 }
 
