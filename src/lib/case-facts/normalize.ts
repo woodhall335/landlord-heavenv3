@@ -3325,14 +3325,27 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     ])
   );
 
+  // =============================================================================
+  // PROPERTY LICENSING (HMO/SELECTIVE)
+  // FIX: Check ALL wizard path variations including property_licensing_required
+  // When wizard says "No licensing required", value is false/no → licensing_required = false
+  // =============================================================================
   templateData.hmo_license_required = coerceBoolean(
     getFirstValue(wizard, [
       'hmo_license_required',
       'licensing_required',
+      'property_licensing_required',  // Common wizard field name
+      // Nested section21.* paths
       'section21.hmo_license_required',
       'section21.licensing_required',
+      'section21.property_licensing_required',
+      // Nested property.* paths
+      'property.licensing_required',
+      'property.hmo_license_required',
+      // Nested compliance.* paths
       'compliance.hmo_license_required',
       'compliance.licensing_required',
+      'compliance.property_licensing_required',
     ])
   );
 
@@ -3340,8 +3353,10 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     getFirstValue(wizard, [
       'hmo_license_valid',
       'property_licensed',
+      // Nested section21.* paths
       'section21.hmo_license_valid',
       'section21.property_licensed',
+      // Nested compliance.* paths
       'compliance.hmo_license_valid',
       'compliance.property_licensed',
     ])
@@ -3350,6 +3365,62 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // Additional licensing aliases for templates
   templateData.licensing_required = templateData.hmo_license_required;
   templateData.property_licensed = templateData.hmo_license_valid;
+
+  // =============================================================================
+  // RETALIATORY EVICTION CHECK
+  // FIX: Map wizard answers to template fields for retaliatory eviction status
+  // When wizard confirms "no repair complaint in 6 months" or "retaliatory eviction clear"
+  // → set no_repair_complaint = true so template shows COMPLIANT
+  // =============================================================================
+
+  // Check if there was a repair complaint within 6 months
+  // If explicitly false → means NO complaint → set no_repair_complaint = true
+  const repairComplaintWithin6Months = coerceBoolean(
+    getFirstValue(wizard, [
+      'repair_complaint_within_6_months',
+      'section21.repair_complaint_within_6_months',
+      'compliance.repair_complaint_within_6_months',
+    ])
+  );
+
+  // Check for explicit "retaliatory eviction clear" confirmation
+  const retaliatoryEvictionClear = coerceBoolean(
+    getFirstValue(wizard, [
+      'retaliatory_eviction_clear',
+      'no_retaliatory_eviction',
+      'no_repair_complaint',
+      // Nested section21.* paths
+      'section21.retaliatory_eviction_clear',
+      'section21.no_retaliatory_eviction',
+      'section21.no_repair_complaint',
+      // Nested compliance.* paths
+      'compliance.retaliatory_eviction_clear',
+      'compliance.no_repair_complaint',
+    ])
+  );
+
+  // Check if repair complaints have been addressed
+  const repairComplaintAddressed = coerceBoolean(
+    getFirstValue(wizard, [
+      'repair_complaint_addressed',
+      'repairs_addressed',
+      'section21.repair_complaint_addressed',
+      'section21.repairs_addressed',
+      'compliance.repair_complaint_addressed',
+    ])
+  );
+
+  // Logic: if repair_complaint_within_6_months is explicitly FALSE, it means no complaint
+  // If retaliatoryEvictionClear is TRUE, it means user confirmed no concerns
+  if (repairComplaintWithin6Months === false || retaliatoryEvictionClear === true) {
+    templateData.no_repair_complaint = true;
+    templateData.retaliatory_eviction_clear = true;
+  } else {
+    templateData.no_repair_complaint = retaliatoryEvictionClear ?? false;
+    templateData.retaliatory_eviction_clear = retaliatoryEvictionClear ?? false;
+  }
+
+  templateData.repair_complaint_addressed = repairComplaintAddressed ?? false;
 
   // =============================================================================
   // WALES-SPECIFIC COMPLIANCE

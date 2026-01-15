@@ -580,12 +580,20 @@
 {{!-- Retaliatory Eviction Check --}}
 <div class="checklist-item">
   <h3>6. Retaliatory Eviction Check</h3>
+  {{!-- FIX: Check all field variations for retaliatory eviction status --}}
   {{#if no_repair_complaint}}
     <p class="status-pass">COMPLIANT</p>
     <p><strong>Recent Repair Complaints:</strong> None</p>
 
     <div class="alert-box success" style="margin-top: 0.75em;">
       <p>No repair complaints within the relevant period - retaliatory eviction defense unlikely to apply.</p>
+    </div>
+  {{else if retaliatory_eviction_clear}}
+    <p class="status-pass">COMPLIANT</p>
+    <p><strong>Retaliatory Eviction Check:</strong> Clear</p>
+
+    <div class="alert-box success" style="margin-top: 0.75em;">
+      <p>No retaliatory eviction concerns - Section 21 notice can proceed.</p>
     </div>
   {{else if repair_complaint_addressed}}
     <p class="status-pass">COMPLIANT</p>
