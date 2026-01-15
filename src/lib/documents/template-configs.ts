@@ -113,7 +113,7 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
       templates.push(
         {
           id: 'notice-fault-based',
-          templatePath: 'uk/wales/templates/notice_only/rhw23_notice_breach/notice.hbs',
+          templatePath: 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs',
           title: 'Fault-Based Notice (RHW23)',
           type: 'notice',
           description: 'Notice for breach of contract under Welsh law',

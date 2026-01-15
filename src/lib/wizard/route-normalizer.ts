@@ -27,6 +27,10 @@ export function normalizeRoute(value: string | null | undefined): CanonicalRoute
   if (normalized === 'section_173') return 'section_173';
   if (normalized === 'fault_based') return 'fault_based';
 
+  // Wales prefixed routes (MQS uses these)
+  if (normalized === 'wales_section_173') return 'section_173';
+  if (normalized === 'wales_fault_based') return 'fault_based';
+
   // Legacy human-readable labels from old YAML (before canonical values)
   if (normalized.includes('section 8') || normalized.includes('section8')) {
     return 'section_8';
