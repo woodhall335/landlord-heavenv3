@@ -497,14 +497,29 @@ export async function POST(request: Request) {
       .select()
       .single();
 
-    if (orderError?.code === 'PGRST204' && orderError.message?.includes('first_touch_at')) {
-      logger.warn('Orders schema cache missing first_touch_at, retrying insert without attribution timestamp', {
+    if (orderError?.code === 'PGRST204') {
+      // Schema cache issue with attribution columns - retry without them
+      logger.warn('Orders schema cache issue, retrying insert without attribution fields', {
         userId: user.id,
         caseId: case_id,
         productType: product_type,
+        errorMessage: orderError.message,
       });
 
-      const { first_touch_at: _ignoredFirstTouch, ...fallbackPayload } = orderPayload;
+      // Remove all attribution fields that might be missing from schema cache
+      const {
+        first_touch_at: _ignoredFirstTouch,
+        ga_client_id: _ignoredGaClientId,
+        landing_path: _ignoredLandingPath,
+        utm_source: _ignoredUtmSource,
+        utm_medium: _ignoredUtmMedium,
+        utm_campaign: _ignoredUtmCampaign,
+        utm_term: _ignoredUtmTerm,
+        utm_content: _ignoredUtmContent,
+        referrer: _ignoredReferrer,
+        ...fallbackPayload
+      } = orderPayload;
+
       const retryResult = await adminSupabase
         .from('orders')
         .insert(fallbackPayload)
