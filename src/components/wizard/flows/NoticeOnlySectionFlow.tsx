@@ -156,11 +156,30 @@ const SECTIONS: WizardSection[] = [
     label: 'Notice Details',
     description: 'Grounds and service details',
     isComplete: (facts) => {
-      // For Section 21: just need to confirm service method
-      if (facts.eviction_route === 'section_21') {
+      const route = facts.eviction_route as string;
+
+      // Wales: Section 173 (no-fault) - requires service method and date
+      if (route === 'section_173') {
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasServiceMethod && hasServiceDate;
+      }
+
+      // Wales: Fault-based - requires grounds, service method, and date
+      if (route === 'fault_based') {
+        const walesGrounds = (facts.wales_fault_grounds as string[]) || [];
+        const hasGrounds = walesGrounds.length > 0;
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasGrounds && hasServiceMethod && hasServiceDate;
+      }
+
+      // England: Section 21 - just need to confirm service method
+      if (route === 'section_21') {
         return Boolean(facts.notice_service_method);
       }
-      // For Section 8: need grounds selected
+
+      // England: Section 8 - need grounds selected + service method
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
     },
