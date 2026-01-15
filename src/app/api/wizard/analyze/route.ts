@@ -16,11 +16,12 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
+import { getSelectedGrounds } from '@/lib/grounds';
 
 export const runtime = 'nodejs';
 
 const analyzeSchema = z.object({
-  case_id: z.string().min(1),
+  case_id: z.string().uuid(),
   // Optional Ask Heaven question for Q&A-style analysis
   question: z.string().optional(),
 });
@@ -771,7 +772,7 @@ export async function POST(request: Request) {
     // Only show suggestions relevant to the user's selected grounds
     if (caseData.case_type === 'eviction') {
       // Get user's selected grounds from wizard facts
-      const selectedGrounds: string[] = (wizardFacts as any)?.section8_grounds || [];
+      const selectedGrounds: string[] = getSelectedGrounds(wizardFacts as any);
       const normalizeGround = (g: string) => g.replace(/^ground\s*/i, '').trim();
       const normalizedSelectedGrounds = selectedGrounds.map(normalizeGround);
 
@@ -1149,7 +1150,7 @@ export async function POST(request: Request) {
     // Build case_facts object for review page consumption
     // Contains persisted wizard facts relevant to grounds selection and review display
     const caseFacts = {
-      section8_grounds: (wizardFacts as any)?.section8_grounds || [],
+      section8_grounds: getSelectedGrounds(wizardFacts as any),
       include_recommended_grounds: (wizardFacts as any)?.include_recommended_grounds || false,
       arrears_items: (wizardFacts as any)?.arrears_items || [],
       recommended_grounds: decisionEngineOutput?.recommended_grounds || [],

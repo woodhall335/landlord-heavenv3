@@ -15,7 +15,8 @@ import {
   hasArrearsGround,
   normalizeGroundCode,
   calculateCombinedNoticePeriod,
-} from '@/lib/grounds/notice-period-utils';
+  getSelectedGrounds,
+} from '@/lib/grounds';
 import { isArrearsEvidenceComplete } from '@/lib/grounds/evidence-suggestions';
 
 /**
@@ -58,8 +59,7 @@ function extractCaseFacts(facts: Record<string, any>): {
   noticeRoute: string;
 } {
   // Selected grounds from wizard
-  const selectedGroundsRaw: string[] = facts?.section8_grounds || [];
-  const selectedGrounds = selectedGroundsRaw.map((g) => normalizeGroundCode(g));
+  const selectedGrounds = getSelectedGrounds(facts).map((g) => normalizeGroundCode(g));
 
   // Recommended grounds from decision engine (stored in facts after analysis)
   const recommendedGroundsRaw: any[] = facts?.recommended_grounds || [];
