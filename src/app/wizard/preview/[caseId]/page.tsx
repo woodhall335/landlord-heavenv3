@@ -581,9 +581,21 @@ export default function WizardPreviewPage() {
               doc.id.replace(/-/g, '_') === gd.document_type
       );
 
+      // For notice_only products, use the notice-only thumbnail endpoint
+      // This allows thumbnails without requiring database document records
+      let thumbnailUrl: string | undefined;
+      if (product === 'notice_only') {
+        // Map config IDs to document_type for the thumbnail API
+        const docTypeForThumbnail = possibleTypes[0] || doc.id;
+        thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+      }
+
       return {
         ...doc,
         documentId: matchingGenDoc?.id,
+        // For notice_only, use the new thumbnail endpoint
+        // For other products, DocumentCard will use documentId to fetch from /api/documents/thumbnail
+        thumbnailUrl: thumbnailUrl,
       };
     });
   };
