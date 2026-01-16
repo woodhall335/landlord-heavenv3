@@ -159,10 +159,11 @@ export async function GET(
     validationJurisdiction = jurisdiction as JurisdictionKey;
 
     // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
-    // Check both selected_notice_route and eviction_route as wizard may store in either
+    // Check multiple fields as wizard may store route in different locations depending on flow
     selected_route =
       wizardFacts.selected_notice_route ||
       wizardFacts.eviction_route ||
+      wizardFacts.eviction_route_intent ||
       wizardFacts.route_recommendation?.recommended_route;
 
     console.log('[NOTICE-PREVIEW-API] Jurisdiction:', jurisdiction);
@@ -176,6 +177,38 @@ export async function GET(
         const normalizedRoute = `wales_${selected_route}`;
         console.log(`[NOTICE-PREVIEW-API] Normalizing Wales route: ${selected_route} -> ${normalizedRoute}`);
         selected_route = normalizedRoute;
+      }
+    }
+
+    // ========================================================================
+    // WALES ROUTE SALVAGE: Prevent England routes from leaking into Wales cases
+    // If route_recommendation leaks 'section_21' or 'section_8' for a Wales case,
+    // derive the correct Wales route from facts instead of blocking.
+    // ========================================================================
+    if (jurisdiction === 'wales') {
+      const rawRoute = selected_route;
+      const isEnglandRoute = selected_route === 'section_21' || selected_route === 'section_8';
+      const isUnknownRoute = !selected_route || (
+        selected_route !== 'wales_section_173' &&
+        selected_route !== 'wales_fault_based'
+      );
+
+      if (isEnglandRoute || isUnknownRoute) {
+        // Determine Wales route by inspecting facts
+        // If wales_fault_grounds exists with entries, use fault-based route
+        const hasFaultGrounds = Array.isArray(wizardFacts.wales_fault_grounds) &&
+          wizardFacts.wales_fault_grounds.length > 0;
+
+        const resolvedRoute = hasFaultGrounds ? 'wales_fault_based' : 'wales_section_173';
+
+        console.log('[NOTICE-PREVIEW-API] Wales route salvage:', {
+          raw: rawRoute,
+          resolved: resolvedRoute,
+          reason: isEnglandRoute ? 'England route leaked into Wales case' : 'Unknown or missing route',
+          hasFaultGrounds,
+        });
+
+        selected_route = resolvedRoute;
       }
     }
 
