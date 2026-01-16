@@ -450,6 +450,15 @@ const ArrearsScheduleGuidancePanel: React.FC<{
 };
 
 /**
+ * Fields that are rendered in dedicated UI blocks (not via schema-driven rendering).
+ * These are excluded from the generic category rendering to prevent duplication.
+ *
+ * FIX FOR ISSUE A: user_declaration is rendered in a dedicated "Declaration" block
+ * at the bottom of the section, so we exclude it from schema-driven rendering.
+ */
+const FIELDS_WITH_DEDICATED_UI: string[] = ['user_declaration'];
+
+/**
  * Render a category of compliance fields
  */
 const ComplianceCategorySection: React.FC<{
@@ -460,7 +469,10 @@ const ComplianceCategorySection: React.FC<{
   onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
 }> = ({ category, fields, facts, onUpdate, onSetCurrentQuestionId }) => {
   // Filter fields to those that apply based on current facts
-  const applicableFields = fields.filter((field) => shouldFieldApply(field.field_id, facts));
+  // Also exclude fields that have dedicated UI blocks to prevent duplication (Issue A fix)
+  const applicableFields = fields.filter((field) =>
+    shouldFieldApply(field.field_id, facts) && !FIELDS_WITH_DEDICATED_UI.includes(field.field_id)
+  );
 
   // Check if arrears guidance should show (for breach_evidence category with arrears grounds)
   const showArrearsGuidance = category === 'breach_evidence' && hasArrearsGroundSelected(facts.wales_fault_grounds);

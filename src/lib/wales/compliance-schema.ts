@@ -850,10 +850,68 @@ export function shouldFieldApply(fieldId: string, facts: Record<string, unknown>
 }
 
 /**
+ * Helper function to check if a numeric value is "missing" for validation purposes.
+ *
+ * FIX FOR ISSUE B: Numeric fields should be considered missing ONLY if:
+ * - undefined, null, or NaN
+ *
+ * 0 is a VALID numeric value and should NOT be treated as missing.
+ * This function returns true if the value is genuinely missing.
+ */
+export function isNumericValueMissing(value: unknown): boolean {
+  if (value === undefined || value === null) return true;
+  if (typeof value !== 'number') return true;
+  if (Number.isNaN(value)) return true;
+  // 0 is a valid numeric value, NOT missing
+  return false;
+}
+
+/**
+ * Helper function to check if an arrears-related numeric value requires > 0.
+ *
+ * FIX FOR ISSUE B: When arrears grounds are selected, arrears_amount and
+ * arrears_weeks_unpaid must be greater than 0. This provides a clear message
+ * rather than treating 0 as "missing".
+ */
+export function isArrearsValueInvalid(
+  fieldId: string,
+  value: unknown,
+  facts: Record<string, unknown>
+): { invalid: boolean; message?: string } {
+  const grounds = normalizeWalesFaultGrounds(facts['wales_fault_grounds']);
+  const hasArrearsGround = grounds.includes('rent_arrears_serious') || grounds.includes('rent_arrears_other');
+
+  // Only apply this validation to arrears-related fields when arrears ground selected
+  if (!hasArrearsGround) return { invalid: false };
+
+  const arrearsFields = ['arrears_amount', 'arrears_weeks_unpaid'];
+  if (!arrearsFields.includes(fieldId)) return { invalid: false };
+
+  // If value is a number and is 0, that's invalid for arrears (must be > 0)
+  if (typeof value === 'number' && value === 0) {
+    if (fieldId === 'arrears_amount') {
+      return {
+        invalid: true,
+        message: 'Arrears amount must be greater than zero when claiming rent arrears grounds.',
+      };
+    }
+    if (fieldId === 'arrears_weeks_unpaid') {
+      return {
+        invalid: true,
+        message: 'Weeks unpaid must be greater than zero when claiming rent arrears grounds.',
+      };
+    }
+  }
+
+  return { invalid: false };
+}
+
+/**
  * Ground-specific validation (Notice Only / pre-service).
  * Enforces:
  * - serious arrears requires >= 8 weeks unpaid
  * - "other arrears" must be < 8 weeks (otherwise select serious)
+ * - arrears_amount must be > 0 when arrears grounds selected (Issue B fix)
  *
  * Note: wales_fault_grounds is now an array (string[]), so we use
  * normalizeWalesFaultGrounds() and .includes() for checking.
@@ -864,14 +922,31 @@ export function getGroundLogicViolations(
   const violations: Array<{ message: string }> = [];
 
   const grounds = normalizeWalesFaultGrounds(facts['wales_fault_grounds']);
-  const weeks = typeof facts['arrears_weeks_unpaid'] === 'number' ? (facts['arrears_weeks_unpaid'] as number) : null;
+  const weeksRaw = facts['arrears_weeks_unpaid'];
+  const weeks = typeof weeksRaw === 'number' && !Number.isNaN(weeksRaw) ? weeksRaw : null;
+
+  const amountRaw = facts['arrears_amount'];
+  const amount = typeof amountRaw === 'number' && !Number.isNaN(amountRaw) ? amountRaw : null;
 
   const hasSerious = grounds.includes('rent_arrears_serious');
   const hasOther = grounds.includes('rent_arrears_other');
+  const hasAnyArrears = hasSerious || hasOther;
+
+  // FIX FOR ISSUE B: Arrears amount must be > 0 when arrears grounds selected
+  if (hasAnyArrears) {
+    // Check arrears amount (0 is invalid, not "missing")
+    if (amount === null) {
+      violations.push({ message: 'Please provide the arrears amount for rent arrears grounds.' });
+    } else if (amount === 0) {
+      violations.push({ message: 'Arrears amount must be greater than zero when claiming rent arrears grounds.' });
+    }
+  }
 
   if (hasSerious) {
     if (weeks === null) {
       violations.push({ message: 'Please provide the number of weeks of rent unpaid for serious rent arrears.' });
+    } else if (weeks === 0) {
+      violations.push({ message: 'Weeks unpaid must be greater than zero for serious rent arrears.' });
     } else if (weeks < 8) {
       violations.push({ message: 'Serious rent arrears requires at least 8 weeks unpaid. Select "Other rent arrears" or adjust the ground.' });
     }
@@ -880,6 +955,8 @@ export function getGroundLogicViolations(
   if (hasOther) {
     if (weeks === null) {
       violations.push({ message: 'Please provide the number of weeks of rent unpaid for rent arrears.' });
+    } else if (weeks === 0) {
+      violations.push({ message: 'Weeks unpaid must be greater than zero for rent arrears.' });
     } else if (weeks >= 8) {
       violations.push({ message: 'You have 8+ weeks unpaid. Select "Serious rent arrears" instead of "Other rent arrears".' });
     }
@@ -924,8 +1001,15 @@ export function getBlockingViolations(
     }
 
     if (field.input_type === 'number') {
-      if (value === undefined || value === null || typeof value !== 'number' || Number.isNaN(value)) {
+      // FIX FOR ISSUE B: Use helper that treats 0 as valid, not missing
+      if (isNumericValueMissing(value)) {
         violations.push({ field, message: field.block_message || `${field.label} is required` });
+      } else {
+        // FIX FOR ISSUE B: Check if arrears fields require > 0
+        const arrearsCheck = isArrearsValueInvalid(field.field_id, value, facts);
+        if (arrearsCheck.invalid && arrearsCheck.message) {
+          violations.push({ field, message: arrearsCheck.message });
+        }
       }
       continue;
     }
@@ -1016,4 +1100,243 @@ export function getSoftBlockWarnings(
   }
 
   return warnings;
+}
+
+// ============================================
+// LEGACY CASE MIGRATION (Issue C)
+// ============================================
+
+/**
+ * Legacy key mappings for Wales notice-only cases.
+ *
+ * FIX FOR ISSUE C: Older Wales cases may have used different fact keys.
+ * This mapping defines the canonical (new) key and its possible legacy sources.
+ *
+ * Migration rule: If the new key is empty but a legacy key has data, copy the value.
+ * NEVER overwrite if the new key already has data.
+ */
+const LEGACY_KEY_MAPPINGS: Array<{
+  newKey: string;
+  legacyKeys: string[];
+  type: 'string' | 'string[]' | 'number' | 'boolean' | 'object' | 'array';
+}> = [
+  // Wales fault grounds - legacy might be a string, normalize to string[]
+  {
+    newKey: 'wales_fault_grounds',
+    legacyKeys: ['wales_ground', 'fault_ground', 'selected_ground'],
+    type: 'string[]',
+  },
+
+  // ASB description - might be in different locations
+  {
+    newKey: 'wales_asb_description',
+    legacyKeys: ['asb_description', 'asb_details', 'antisocial_behaviour_description'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_asb_incident_date',
+    legacyKeys: ['asb_incident_date', 'asb_date'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_asb_incident_time',
+    legacyKeys: ['asb_incident_time', 'asb_time'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_asb_location',
+    legacyKeys: ['asb_location'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_asb_police_involved',
+    legacyKeys: ['asb_police_involved', 'police_involved'],
+    type: 'boolean',
+  },
+  {
+    newKey: 'wales_asb_police_ref',
+    legacyKeys: ['asb_police_ref', 'police_reference'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_asb_witness_details',
+    legacyKeys: ['asb_witness_details', 'witness_details'],
+    type: 'string',
+  },
+
+  // Breach of contract
+  {
+    newKey: 'wales_breach_clause',
+    legacyKeys: ['breach_clause', 'breached_clause', 'contract_clause'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_breach_dates',
+    legacyKeys: ['breach_dates', 'breach_date', 'breach_period'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_breach_evidence',
+    legacyKeys: ['breach_evidence', 'breach_evidence_summary'],
+    type: 'string',
+  },
+
+  // False statement
+  {
+    newKey: 'wales_false_statement_summary',
+    legacyKeys: ['false_statement_summary', 'false_statement_description', 'false_statement_details'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_false_statement_discovered_date',
+    legacyKeys: ['false_statement_discovered_date', 'false_statement_discovery_date'],
+    type: 'string',
+  },
+  {
+    newKey: 'wales_false_statement_evidence',
+    legacyKeys: ['false_statement_evidence'],
+    type: 'string',
+  },
+
+  // Arrears data
+  {
+    newKey: 'arrears_amount',
+    legacyKeys: ['total_arrears', 'rent_arrears_amount', 'arrears_total'],
+    type: 'number',
+  },
+  {
+    newKey: 'arrears_weeks_unpaid',
+    legacyKeys: ['weeks_unpaid', 'arrears_weeks', 'unpaid_weeks'],
+    type: 'number',
+  },
+
+  // Arrears schedule items - check multiple possible locations
+  {
+    newKey: 'arrears_items',
+    legacyKeys: ['rent_arrears_items', 'arrears_schedule'],
+    type: 'array',
+  },
+
+  // Part D particulars
+  {
+    newKey: 'wales_part_d_particulars',
+    legacyKeys: ['part_d_particulars', 'particulars_of_claim', 'breach_particulars'],
+    type: 'string',
+  },
+];
+
+/**
+ * Checks if a value is considered "empty" for migration purposes.
+ */
+function isValueEmpty(value: unknown, type: string): boolean {
+  if (value === undefined || value === null) return true;
+  if (type === 'string' && (value === '' || (typeof value === 'string' && value.trim() === ''))) return true;
+  if (type === 'string[]' && (!Array.isArray(value) || value.length === 0)) return true;
+  if (type === 'array' && (!Array.isArray(value) || value.length === 0)) return true;
+  if (type === 'number' && (typeof value !== 'number' || Number.isNaN(value))) return true;
+  if (type === 'boolean' && typeof value !== 'boolean') return true;
+  return false;
+}
+
+/**
+ * Attempts to get a value from nested object paths.
+ * E.g., "issues.rent_arrears.arrears_items" -> facts.issues?.rent_arrears?.arrears_items
+ */
+function getNestedValue(facts: Record<string, unknown>, path: string): unknown {
+  const parts = path.split('.');
+  let current: unknown = facts;
+  for (const part of parts) {
+    if (current === null || current === undefined) return undefined;
+    if (typeof current !== 'object') return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current;
+}
+
+/**
+ * Migrate legacy Wales case facts to canonical keys.
+ *
+ * FIX FOR ISSUE C: On load (Wales + notice_only only), this function:
+ * - Normalizes wales_fault_grounds into string[]
+ * - Copies values from legacy keys to new keys if new keys are empty
+ * - NEVER overwrites if the new key already has data
+ *
+ * IMPORTANT: This function is idempotent and safe to call multiple times.
+ * It only modifies facts if legacy data needs to be migrated.
+ *
+ * @param facts - The loaded wizard facts
+ * @param jurisdiction - The jurisdiction (only runs for 'wales')
+ * @param product - The product (only runs for 'notice_only')
+ * @returns The migrated facts (new object, does not mutate input)
+ */
+export function migrateWalesLegacyFacts(
+  facts: Record<string, unknown>,
+  jurisdiction: string,
+  product: string
+): Record<string, unknown> {
+  // Only run migration for Wales notice_only
+  if (jurisdiction !== 'wales' || product !== 'notice_only') {
+    return facts;
+  }
+
+  // Create a shallow copy to avoid mutating the original
+  const migrated: Record<string, unknown> = { ...facts };
+  const migrationLog: string[] = [];
+
+  // 1. Normalize wales_fault_grounds to string[]
+  const currentGrounds = migrated['wales_fault_grounds'];
+  const normalizedGrounds = normalizeWalesFaultGrounds(currentGrounds);
+  if (currentGrounds !== undefined && !Array.isArray(currentGrounds)) {
+    migrated['wales_fault_grounds'] = normalizedGrounds;
+    migrationLog.push(`Normalized wales_fault_grounds from ${typeof currentGrounds} to string[]`);
+  }
+
+  // 2. Migrate legacy keys to new keys
+  for (const mapping of LEGACY_KEY_MAPPINGS) {
+    const currentValue = migrated[mapping.newKey];
+
+    // Skip if new key already has data
+    if (!isValueEmpty(currentValue, mapping.type)) {
+      continue;
+    }
+
+    // Try each legacy key
+    for (const legacyKey of mapping.legacyKeys) {
+      // Try direct key first
+      let legacyValue = migrated[legacyKey];
+
+      // Also try nested paths (e.g., issues.rent_arrears.arrears_items)
+      if (legacyValue === undefined) {
+        legacyValue = getNestedValue(migrated, legacyKey);
+      }
+
+      // If legacy value exists and is not empty, migrate it
+      if (!isValueEmpty(legacyValue, mapping.type)) {
+        // Special handling for string[] type (normalize to array)
+        if (mapping.type === 'string[]') {
+          migrated[mapping.newKey] = normalizeWalesFaultGrounds(legacyValue);
+        } else {
+          migrated[mapping.newKey] = legacyValue;
+        }
+        migrationLog.push(`Migrated ${legacyKey} -> ${mapping.newKey}`);
+        break; // Use first found value
+      }
+    }
+  }
+
+  // 3. Special case: Check nested issues.rent_arrears.arrears_items
+  if (isValueEmpty(migrated['arrears_items'], 'array')) {
+    const nestedArrearsItems = getNestedValue(migrated, 'issues.rent_arrears.arrears_items');
+    if (!isValueEmpty(nestedArrearsItems, 'array')) {
+      migrated['arrears_items'] = nestedArrearsItems;
+      migrationLog.push('Migrated issues.rent_arrears.arrears_items -> arrears_items');
+    }
+  }
+
+  // Log migration if any changes were made (for debugging)
+  if (migrationLog.length > 0) {
+    console.debug('[Wales Legacy Migration]', migrationLog);
+  }
+
+  return migrated;
 }
