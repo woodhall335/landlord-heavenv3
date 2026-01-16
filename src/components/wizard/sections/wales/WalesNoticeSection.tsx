@@ -32,7 +32,9 @@ import { computeArrears } from '@/lib/arrears-engine';
 import {
   generateWalesArrearsSummary,
   isWalesSection157ThresholdMet,
-  WALES_FAULT_GROUNDS,
+  getWalesFaultGroundDefinitions,
+  getWalesFaultGroundByValue,
+  type WalesFaultGroundDef,
 } from '@/lib/wales';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
@@ -721,6 +723,13 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   // Track subflow completion for notice_only mode
   const [subflowComplete, setSubflowComplete] = useState(false);
 
+  // Get filtered grounds list (excludes community-landlord-only grounds for private landlords)
+  // By default, private landlord is assumed (isCommunityLandlord: false)
+  const isCommunityLandlord = facts.is_community_landlord === true || facts.landlord_type === 'community';
+  const availableGrounds = useMemo(() => {
+    return getWalesFaultGroundDefinitions({ isCommunityLandlord });
+  }, [isCommunityLandlord]);
+
   // Calculate minimum notice period based on route and grounds
   const minNoticePeriod = useMemo(() => {
     if (isSection173) return 180; // 6 months for Section 173
@@ -729,7 +738,7 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
       // Find shortest notice period among selected grounds
       let minPeriod = 60;
       selectedGrounds.forEach((ground) => {
-        const groundInfo = WALES_FAULT_GROUNDS.find((g) => g.value === ground);
+        const groundInfo = getWalesFaultGroundByValue(ground);
         if (groundInfo && groundInfo.period < minPeriod) {
           minPeriod = groundInfo.period;
         }
@@ -1084,7 +1093,7 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
             </p>
 
             <div className="grid grid-cols-1 gap-2">
-              {WALES_FAULT_GROUNDS.map((ground) => (
+              {availableGrounds.map((ground) => (
                 <label
                   key={ground.value}
                   className={`
@@ -1131,7 +1140,7 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
               <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
                 <p className="text-sm text-purple-800">
                   <strong>Selected:</strong> {selectedGrounds.map((g) =>
-                    WALES_FAULT_GROUNDS.find((wg) => wg.value === g)?.label
+                    getWalesFaultGroundByValue(g)?.label
                   ).join(', ')}
                 </p>
                 <p className="text-xs text-purple-700 mt-1">
@@ -1385,7 +1394,7 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
                   <dt className="text-gray-500">Grounds:</dt>
                   <dd className="text-gray-900">
                     {selectedGrounds.map(g =>
-                      WALES_FAULT_GROUNDS.find(wg => wg.value === g)?.label || g
+                      getWalesFaultGroundByValue(g)?.label || g
                     ).join(', ')}
                   </dd>
                 </div>

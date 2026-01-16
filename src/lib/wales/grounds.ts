@@ -30,6 +30,12 @@ export interface WalesFaultGroundDef {
   mandatory: boolean;
   /** Whether this ground requires arrears schedule data */
   requiresArrearsSchedule: boolean;
+  /**
+   * Whether this ground is only available to community landlords (social landlords).
+   * Estate management grounds (section 160, Schedule 8) are community landlord-only.
+   * Private landlords should NOT see this ground.
+   */
+  communityLandlordOnly?: boolean;
 }
 
 /**
@@ -102,22 +108,58 @@ export const WALES_FAULT_GROUNDS: WalesFaultGroundDef[] = [
   {
     value: 'estate_management',
     label: 'Estate management grounds',
-    description: 'Estate management grounds for social landlords',
-    section: 159,
+    description: 'Estate management grounds (section 160 and Schedule 8) - community landlords only',
+    section: 160,
     period: 60,
     mandatory: false,
     requiresArrearsSchedule: false,
+    communityLandlordOnly: true,
   },
 ];
 
 /**
+ * Options for filtering Wales fault-based grounds.
+ */
+export interface WalesGroundsFilterOptions {
+  /**
+   * Whether the landlord is a community landlord (social landlord).
+   * If false (default), community-landlord-only grounds like estate_management are excluded.
+   */
+  isCommunityLandlord?: boolean;
+}
+
+/**
  * Get all Wales fault-based ground definitions.
  *
- * Returns the exact ground list used by the UI. Use this function
+ * Returns the ground list used by the UI. Use this function
  * instead of accessing WALES_FAULT_GROUNDS directly to ensure
- * any future filtering or transformation is applied consistently.
+ * filtering and transformation is applied consistently.
+ *
+ * By default, excludes community-landlord-only grounds (estate_management).
+ * Pass { isCommunityLandlord: true } to include them.
+ *
+ * @param options - Filter options for ground selection
+ * @returns Filtered array of ground definitions
  */
-export function getWalesFaultGroundDefinitions(): WalesFaultGroundDef[] {
+export function getWalesFaultGroundDefinitions(
+  options?: WalesGroundsFilterOptions
+): WalesFaultGroundDef[] {
+  const isCommunityLandlord = options?.isCommunityLandlord ?? false;
+
+  return WALES_FAULT_GROUNDS.filter((ground) => {
+    // Exclude community-landlord-only grounds for private landlords
+    if (ground.communityLandlordOnly && !isCommunityLandlord) {
+      return false;
+    }
+    return true;
+  });
+}
+
+/**
+ * Get ALL Wales fault-based ground definitions without any filtering.
+ * Use this only when you need the complete list (e.g., for validation of existing data).
+ */
+export function getAllWalesFaultGroundDefinitions(): WalesFaultGroundDef[] {
   return WALES_FAULT_GROUNDS;
 }
 
@@ -224,4 +266,50 @@ export function calculateWalesMinNoticePeriod(
     }
   }
   return minPeriod;
+}
+
+/**
+ * Wales arrears ground values that require an arrears schedule.
+ * Used for determining whether to include arrears schedule PDF in notice pack.
+ */
+export const WALES_ARREARS_GROUND_VALUES = WALES_FAULT_GROUNDS
+  .filter((g) => g.requiresArrearsSchedule)
+  .map((g) => g.value);
+
+/**
+ * Check if any selected Wales fault grounds require an arrears schedule.
+ *
+ * This function uses the SINGLE SOURCE OF TRUTH (WALES_FAULT_GROUNDS definitions)
+ * to determine whether arrears schedule data should be included in the notice pack.
+ *
+ * @param walesFaultGrounds - Array of ground values from facts.wales_fault_grounds
+ * @returns true if any selected ground requires arrears schedule
+ */
+export function hasWalesArrearsGroundSelected(
+  walesFaultGrounds: string[] | undefined | null
+): boolean {
+  if (!walesFaultGrounds || !Array.isArray(walesFaultGrounds) || walesFaultGrounds.length === 0) {
+    return false;
+  }
+
+  return walesFaultGrounds.some((groundValue) => {
+    const ground = getWalesFaultGroundByValue(groundValue);
+    return ground?.requiresArrearsSchedule === true;
+  });
+}
+
+/**
+ * Check if serious rent arrears (Section 157) is selected.
+ * Used for determining threshold checking requirements.
+ *
+ * @param walesFaultGrounds - Array of ground values from facts.wales_fault_grounds
+ * @returns true if serious rent arrears ground is selected
+ */
+export function hasWalesSection157Selected(
+  walesFaultGrounds: string[] | undefined | null
+): boolean {
+  if (!walesFaultGrounds || !Array.isArray(walesFaultGrounds)) {
+    return false;
+  }
+  return walesFaultGrounds.includes('rent_arrears_serious');
 }

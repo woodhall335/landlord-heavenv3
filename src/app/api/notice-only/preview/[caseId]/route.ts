@@ -38,7 +38,7 @@ import {
   computeIncludedGrounds,
 } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
-import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
+import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from '@/lib/wales';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -1070,10 +1070,15 @@ export async function GET(
       }
 
       // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
+      // Uses SINGLE SOURCE OF TRUTH from grounds definitions to detect arrears grounds
       if (selected_route === 'wales_fault_based') {
+        const walesFaultGrounds = wizardFacts.wales_fault_grounds;
+        const isRentArrearsCase = hasWalesArrearsGroundSelected(walesFaultGrounds);
+
+        // Fallback: Also check legacy fields for backwards compatibility
         const faultBasedSection = wizardFacts.wales_fault_based_section || '';
         const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
-        const isRentArrearsCase =
+        const legacyArrearsDetected =
           breachType === 'rent_arrears' ||
           breachType === 'arrears' ||
           faultBasedSection.includes('Section 157') ||
@@ -1081,7 +1086,7 @@ export async function GET(
 
         const arrearsItems = wizardFacts.arrears_items || [];
 
-        if (isRentArrearsCase && arrearsItems.length > 0) {
+        if ((isRentArrearsCase || legacyArrearsDetected) && arrearsItems.length > 0) {
           console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Wales fault-based rent arrears');
           try {
             const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');

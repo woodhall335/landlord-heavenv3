@@ -40,7 +40,7 @@ import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
-import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales/grounds';
+import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from '@/lib/wales/grounds';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
 
@@ -1628,10 +1628,15 @@ export async function generateNoticeOnlyPack(
       }
 
       // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
+      // Uses SINGLE SOURCE OF TRUTH from grounds definitions to detect arrears grounds
       if (normalizedRoute === 'fault_based') {
+        const walesFaultGrounds = wizardFacts.wales_fault_grounds;
+        const isRentArrearsCase = hasWalesArrearsGroundSelected(walesFaultGrounds);
+
+        // Fallback: Also check legacy fields for backwards compatibility
         const faultBasedSection = wizardFacts.wales_fault_based_section || '';
         const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
-        const isRentArrearsCase =
+        const legacyArrearsDetected =
           breachType === 'rent_arrears' ||
           breachType === 'arrears' ||
           faultBasedSection.includes('Section 157') ||
@@ -1639,7 +1644,7 @@ export async function generateNoticeOnlyPack(
 
         const arrearsItems = wizardFacts.arrears_items || [];
 
-        if (isRentArrearsCase && arrearsItems.length > 0) {
+        if ((isRentArrearsCase || legacyArrearsDetected) && arrearsItems.length > 0) {
           try {
             const arrearsData = getArrearsScheduleData({
               arrears_items: arrearsItems,

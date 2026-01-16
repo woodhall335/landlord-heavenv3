@@ -13,10 +13,14 @@
 import {
   WALES_FAULT_GROUNDS,
   getWalesFaultGroundDefinitions,
+  getAllWalesFaultGroundDefinitions,
   mapWalesFaultGroundsToGroundCodes,
   getWalesFaultGroundByValue,
   getWalesFaultGroundsBySection,
   calculateWalesMinNoticePeriod,
+  hasWalesArrearsGroundSelected,
+  hasWalesSection157Selected,
+  WALES_ARREARS_GROUND_VALUES,
   type WalesFaultGroundDef,
 } from '@/lib/wales';
 
@@ -35,7 +39,7 @@ describe('Wales Fault-Based Ground Definitions', () => {
         expect(typeof ground.label).toBe('string');
         expect(typeof ground.description).toBe('string');
         expect(typeof ground.section).toBe('number');
-        expect([157, 159, 161]).toContain(ground.section);
+        expect([157, 159, 160, 161]).toContain(ground.section); // 160 for estate management
         expect(typeof ground.period).toBe('number');
         expect(ground.period).toBeGreaterThan(0);
         expect(typeof ground.mandatory).toBe('boolean');
@@ -60,12 +64,46 @@ describe('Wales Fault-Based Ground Definitions', () => {
 
       const asb = WALES_FAULT_GROUNDS.find((g) => g.value === 'antisocial_behaviour');
       expect(asb?.section).toBe(161);
+
+      // Estate management is section 160 (community landlord only)
+      const estateManagement = WALES_FAULT_GROUNDS.find((g) => g.value === 'estate_management');
+      expect(estateManagement?.section).toBe(160);
+    });
+
+    it('estate_management should be marked as communityLandlordOnly', () => {
+      const estateManagement = WALES_FAULT_GROUNDS.find((g) => g.value === 'estate_management');
+      expect(estateManagement).toBeDefined();
+      expect(estateManagement?.communityLandlordOnly).toBe(true);
     });
   });
 
   describe('getWalesFaultGroundDefinitions()', () => {
-    it('should return the same array as WALES_FAULT_GROUNDS', () => {
+    it('should exclude community-landlord-only grounds by default (private landlord)', () => {
       const result = getWalesFaultGroundDefinitions();
+      // Should not include estate_management for private landlords
+      const estateManagement = result.find((g) => g.value === 'estate_management');
+      expect(estateManagement).toBeUndefined();
+      // Result should be smaller than full list
+      expect(result.length).toBeLessThan(WALES_FAULT_GROUNDS.length);
+    });
+
+    it('should include community-landlord-only grounds when isCommunityLandlord=true', () => {
+      const result = getWalesFaultGroundDefinitions({ isCommunityLandlord: true });
+      const estateManagement = result.find((g) => g.value === 'estate_management');
+      expect(estateManagement).toBeDefined();
+      // Should return full list
+      expect(result.length).toBe(WALES_FAULT_GROUNDS.length);
+    });
+
+    it('should return same as WALES_FAULT_GROUNDS when community landlord', () => {
+      const result = getWalesFaultGroundDefinitions({ isCommunityLandlord: true });
+      expect(result).toEqual(WALES_FAULT_GROUNDS);
+    });
+  });
+
+  describe('getAllWalesFaultGroundDefinitions()', () => {
+    it('should return the complete WALES_FAULT_GROUNDS array without filtering', () => {
+      const result = getAllWalesFaultGroundDefinitions();
       expect(result).toBe(WALES_FAULT_GROUNDS);
       expect(result.length).toBe(WALES_FAULT_GROUNDS.length);
     });
@@ -118,16 +156,32 @@ describe('Wales Fault-Based Ground Definitions', () => {
     });
 
     it('should handle multiple grounds with same section', () => {
-      // All these are Section 159 grounds
+      // All these are Section 159 grounds (not estate_management which is 160)
       const result = mapWalesFaultGroundsToGroundCodes([
         'rent_arrears_other',
         'breach_of_contract',
         'false_statement',
         'domestic_abuse',
-        'estate_management',
       ]);
 
       expect(result).toEqual(['section_159']);
+    });
+
+    it('should handle estate_management as Section 160', () => {
+      // estate_management is Section 160 (community landlord only)
+      const result = mapWalesFaultGroundsToGroundCodes(['estate_management']);
+      expect(result).toEqual(['section_160']);
+    });
+
+    it('should deduplicate Section 159 grounds with estate_management (160)', () => {
+      const result = mapWalesFaultGroundsToGroundCodes([
+        'rent_arrears_other', // Section 159
+        'estate_management',  // Section 160
+      ]);
+
+      expect(result).toContain('section_159');
+      expect(result).toContain('section_160');
+      expect(result.length).toBe(2);
     });
 
     it('should return empty array for undefined input', () => {
@@ -265,7 +319,7 @@ describe('Single Source of Truth Verification', () => {
       expect(ground.section).toBeDefined();
 
       // Validator needs section for mapping
-      expect([157, 159, 161]).toContain(ground.section);
+      expect([157, 159, 160, 161]).toContain(ground.section); // 160 for estate management
     }
 
     // Verify the mapping function uses the definitions
@@ -297,5 +351,99 @@ describe('Single Source of Truth Verification', () => {
     for (const required of requiredGrounds) {
       expect(definedValues).toContain(required);
     }
+  });
+});
+
+describe('Wales Arrears Ground Detection Helpers', () => {
+  describe('WALES_ARREARS_GROUND_VALUES', () => {
+    it('should contain rent_arrears_serious', () => {
+      expect(WALES_ARREARS_GROUND_VALUES).toContain('rent_arrears_serious');
+    });
+
+    it('should contain rent_arrears_other', () => {
+      expect(WALES_ARREARS_GROUND_VALUES).toContain('rent_arrears_other');
+    });
+
+    it('should NOT contain non-arrears grounds', () => {
+      expect(WALES_ARREARS_GROUND_VALUES).not.toContain('antisocial_behaviour');
+      expect(WALES_ARREARS_GROUND_VALUES).not.toContain('breach_of_contract');
+      expect(WALES_ARREARS_GROUND_VALUES).not.toContain('estate_management');
+    });
+
+    it('should match grounds with requiresArrearsSchedule=true', () => {
+      const expectedValues = WALES_FAULT_GROUNDS
+        .filter((g) => g.requiresArrearsSchedule)
+        .map((g) => g.value);
+      expect(WALES_ARREARS_GROUND_VALUES).toEqual(expectedValues);
+    });
+  });
+
+  describe('hasWalesArrearsGroundSelected()', () => {
+    it('should return true for rent_arrears_serious', () => {
+      expect(hasWalesArrearsGroundSelected(['rent_arrears_serious'])).toBe(true);
+    });
+
+    it('should return true for rent_arrears_other', () => {
+      expect(hasWalesArrearsGroundSelected(['rent_arrears_other'])).toBe(true);
+    });
+
+    it('should return true when arrears ground is mixed with non-arrears', () => {
+      expect(hasWalesArrearsGroundSelected([
+        'rent_arrears_serious',
+        'antisocial_behaviour',
+      ])).toBe(true);
+    });
+
+    it('should return false for non-arrears grounds only', () => {
+      expect(hasWalesArrearsGroundSelected(['antisocial_behaviour'])).toBe(false);
+      expect(hasWalesArrearsGroundSelected(['breach_of_contract'])).toBe(false);
+      expect(hasWalesArrearsGroundSelected(['estate_management'])).toBe(false);
+    });
+
+    it('should return false for empty input', () => {
+      expect(hasWalesArrearsGroundSelected([])).toBe(false);
+    });
+
+    it('should return false for undefined', () => {
+      expect(hasWalesArrearsGroundSelected(undefined)).toBe(false);
+    });
+
+    it('should return false for null', () => {
+      expect(hasWalesArrearsGroundSelected(null)).toBe(false);
+    });
+  });
+
+  describe('hasWalesSection157Selected()', () => {
+    it('should return true for rent_arrears_serious (Section 157)', () => {
+      expect(hasWalesSection157Selected(['rent_arrears_serious'])).toBe(true);
+    });
+
+    it('should return true when Section 157 is mixed with others', () => {
+      expect(hasWalesSection157Selected([
+        'rent_arrears_serious',
+        'breach_of_contract',
+      ])).toBe(true);
+    });
+
+    it('should return false for rent_arrears_other (Section 159)', () => {
+      expect(hasWalesSection157Selected(['rent_arrears_other'])).toBe(false);
+    });
+
+    it('should return false for non-Section-157 grounds', () => {
+      expect(hasWalesSection157Selected(['breach_of_contract'])).toBe(false);
+      expect(hasWalesSection157Selected(['antisocial_behaviour'])).toBe(false);
+    });
+
+    it('should return false for empty input', () => {
+      expect(hasWalesSection157Selected([])).toBe(false);
+    });
+
+    it('should return false for undefined', () => {
+      expect(hasWalesSection157Selected(undefined)).toBe(false);
+    });
+
+    it('should return false for null', () => {
+      expect(hasWalesSection157Selected(null)).toBe(false);
+    });
   });
 });
