@@ -1,0 +1,96 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+    <linearGradient id="buildingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED"/>
+      <stop offset="100%" style="stop-color:#6D28D9"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Parliament Building silhouette -->
+  <g transform="translate(150, 120)">
+    <!-- Main building base -->
+    <rect x="50" y="200" width="400" height="150" fill="#7C3AED" rx="4"/>
+
+    <!-- Central tower (Big Ben style) -->
+    <rect x="220" y="50" width="60" height="200" fill="url(#buildingGrad)"/>
+    <polygon points="250,20 290,50 210,50" fill="#6D28D9"/>
+    <rect x="235" y="70" width="30" height="40" fill="#F3F1FF" rx="2"/>
+    <circle cx="250" cy="90" r="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <line x1="250" y1="90" x2="250" y2="82" stroke="#6D28D9" stroke-width="2"/>
+    <line x1="250" y1="90" x2="256" y2="90" stroke="#6D28D9" stroke-width="2"/>
+
+    <!-- Left towers -->
+    <rect x="80" y="150" width="40" height="100" fill="#6D28D9"/>
+    <polygon points="100,130 125,150 75,150" fill="#7C3AED"/>
+    <rect x="140" y="170" width="35" height="80" fill="#6D28D9"/>
+    <polygon points="157,155 177,170 137,170" fill="#7C3AED"/>
+
+    <!-- Right towers -->
+    <rect x="380" y="150" width="40" height="100" fill="#6D28D9"/>
+    <polygon points="400,130 425,150 375,150" fill="#7C3AED"/>
+    <rect x="325" y="170" width="35" height="80" fill="#6D28D9"/>
+    <polygon points="342,155 362,170 322,170" fill="#7C3AED"/>
+
+    <!-- Windows row 1 -->
+    <rect x="80" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="120" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="160" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="200" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="280" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="320" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="360" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="400" y="220" width="20" height="30" fill="#F3F1FF" rx="2"/>
+
+    <!-- Windows row 2 -->
+    <rect x="80" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="120" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="160" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="200" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="280" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="320" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="360" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+    <rect x="400" y="270" width="20" height="30" fill="#F3F1FF" rx="2"/>
+
+    <!-- Main entrance -->
+    <rect x="225" y="280" width="50" height="70" fill="#6D28D9" rx="25 25 0 0"/>
+    <rect x="240" y="310" width="20" height="40" fill="#F3F1FF"/>
+  </g>
+
+  <!-- Reform scroll/document -->
+  <g transform="translate(580, 280)">
+    <rect x="0" y="0" width="120" height="150" rx="8" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <rect x="15" y="20" width="90" height="8" rx="4" fill="#7C3AED"/>
+    <rect x="15" y="40" width="70" height="5" rx="2" fill="#A78BFA"/>
+    <rect x="15" y="52" width="80" height="5" rx="2" fill="#A78BFA"/>
+    <rect x="15" y="64" width="60" height="5" rx="2" fill="#A78BFA"/>
+    <!-- Checkmarks -->
+    <circle cx="30" cy="90" r="8" fill="#7C3AED"/>
+    <path d="M26 90 L29 93 L35 87" stroke="white" stroke-width="2" fill="none"/>
+    <rect x="45" y="86" width="60" height="5" rx="2" fill="#A78BFA"/>
+    <circle cx="30" cy="110" r="8" fill="#7C3AED"/>
+    <path d="M26 110 L29 113 L35 107" stroke="white" stroke-width="2" fill="none"/>
+    <rect x="45" y="106" width="50" height="5" rx="2" fill="#A78BFA"/>
+    <circle cx="30" cy="130" r="8" fill="#A78BFA"/>
+    <rect x="45" y="126" width="55" height="5" rx="2" fill="#A78BFA"/>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="80" cy="80" r="40" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="720" cy="120" r="50" fill="#A78BFA" opacity="0.15"/>
+  <circle cx="100" cy="420" r="60" fill="#7C3AED" opacity="0.08"/>
+
+  <!-- Small houses representing tenants -->
+  <g transform="translate(50, 350)">
+    <path d="M0 50 L20 30 L40 50 L40 80 L0 80 Z" fill="white" stroke="#A78BFA" stroke-width="2"/>
+    <rect x="15" y="60" width="10" height="20" fill="#7C3AED"/>
+  </g>
+  <g transform="translate(680, 70)">
+    <path d="M0 40 L15 25 L30 40 L30 60 L0 60 Z" fill="white" stroke="#A78BFA" stroke-width="2"/>
+    <rect x="12" y="48" width="6" height="12" fill="#7C3AED"/>
+  </g>
+</svg>

@@ -1,0 +1,123 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#92400E" font-size="22" font-weight="bold" font-family="Arial">SMOKE &amp; CO ALARM REQUIREMENTS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#D97706" font-size="11" font-family="Arial">Legal requirements for smoke and carbon monoxide alarms</text>
+
+  <!-- Smoke alarm icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#D97706" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Smoke detector -->
+      <ellipse cx="60" cy="45" rx="45" ry="12" fill="#FDE68A" stroke="#92400E" stroke-width="2"/>
+      <ellipse cx="60" cy="35" rx="40" ry="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/>
+      <circle cx="60" cy="35" r="5" fill="#EF4444"/>
+      <!-- Sound waves -->
+      <path d="M110 30 Q118 35 110 40" fill="none" stroke="#D97706" stroke-width="2"/>
+      <path d="M118 25 Q130 35 118 45" fill="none" stroke="#D97706" stroke-width="2"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#92400E" font-size="11" font-weight="bold">SMOKE ALARM</text>
+    <text x="100" y="143" text-anchor="middle" fill="#D97706" font-size="9">Legal</text>
+    <text x="100" y="158" text-anchor="middle" fill="#D97706" font-size="9">requirements</text>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#92400E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">LEGAL REQUIREMENTS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Smoke alarm each floor</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">CO alarm where fuel burning</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Working at tenancy start</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Test before check-in</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#D97706" font-size="9" font-weight="bold">£5,000 max penalty</text>
+    </g>
+  </g>
+
+  <!-- CO alarm info -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="200" height="12" fill="#EF4444"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">CO ALARM RULES</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Near gas boilers</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Near log/coal fires</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#991B1B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Oil burning appliances</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#991B1B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Any combustion risk</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#EF4444" font-size="9" font-weight="bold">Silent killer protection</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="680" height="12" fill="#92400E"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ALARM COMPLIANCE GUIDE</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#D97706" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#D97706" font-size="10" font-weight="bold">PLACEMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Ceiling or high on wall</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Away from kitchens</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">In circulation spaces</text>
+      <text x="100" y="94" text-anchor="middle" fill="#D97706" font-size="8" font-weight="bold">Near bedrooms</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">TESTING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Test before each tenancy</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Document testing date</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Replace batteries yearly</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Replace units at 10 years</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">BEST PRACTICE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Use interlinked alarms</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Sealed battery models</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Give tenant instructions</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Keep compliance records</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#D97706" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#92400E" opacity="0.12"/>
+</svg>

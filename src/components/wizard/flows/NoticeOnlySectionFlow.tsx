@@ -20,7 +20,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
@@ -34,16 +34,24 @@ import { TenancySection } from '../sections/eviction/TenancySection';
 import { Section21ComplianceSection } from '../sections/eviction/Section21ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
-import { WalesNoticeSection, WalesCaseBasicsSection } from '../sections/wales';
+
+// Wales-specific section components
+import { OccupationContractSection } from '../sections/wales/OccupationContractSection';
+import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
+import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 
+// Analytics and attribution
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
 // Route types for England and Wales
 type EnglandRoute = 'section_8' | 'section_21';
-type WalesRoute = 'wales_fault_based' | 'wales_section_173';
+type WalesRoute = 'section_173' | 'fault_based';
 type EvictionRoute = EnglandRoute | WalesRoute;
 
 // Section definition type
@@ -61,6 +69,10 @@ interface WizardSection {
   hasWarnings?: (facts: WizardFacts) => string[];
 }
 
+// Valid routes by jurisdiction
+const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
+const WALES_ROUTES = ['section_173', 'fault_based'] as const;
+
 // Define all sections with their visibility rules
 const SECTIONS: WizardSection[] = [
   {
@@ -72,14 +84,14 @@ const SECTIONS: WizardSection[] = [
       if (!route) return false;
       // England routes
       if (jurisdiction === 'england') {
-        return ['section_8', 'section_21'].includes(route);
+        return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
       }
       // Wales routes
       if (jurisdiction === 'wales') {
-        return ['wales_fault_based', 'wales_section_173'].includes(route);
+        return WALES_ROUTES.includes(route as typeof WALES_ROUTES[number]);
       }
       // Fallback: accept any valid route
-      return ['section_8', 'section_21', 'wales_fault_based', 'wales_section_173'].includes(route);
+      return [...ENGLAND_ROUTES, ...WALES_ROUTES].includes(route as any);
     },
   },
   {
@@ -161,30 +173,32 @@ const SECTIONS: WizardSection[] = [
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
 
-      // For Section 21 (England): just need to confirm service method
+      // Wales: Section 173 (no-fault) - requires service method and date
+      if (route === 'section_173') {
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasServiceMethod && hasServiceDate;
+      }
+
+      // Wales: Fault-based - requires grounds, breach description, service method, and date
+      if (route === 'fault_based') {
+        const walesGrounds = (facts.wales_fault_grounds as string[]) || [];
+        const hasGrounds = walesGrounds.length > 0;
+        const hasBreachDescription = Boolean(facts.breach_description);
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasGrounds && hasBreachDescription && hasServiceMethod && hasServiceDate;
+      }
+
+      // England: Section 21 - just need to confirm service method
       if (route === 'section_21') {
         return Boolean(facts.notice_service_method);
       }
 
-      // For Section 8 (England): need grounds selected
+      // England: Section 8 - need grounds selected + service method
       if (route === 'section_8') {
         const selectedGrounds = (facts.section8_grounds as string[]) || [];
         return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
-      }
-
-      // For Wales fault-based: need grounds, breach description, and service method
-      if (route === 'wales_fault_based') {
-        const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
-        return (
-          selectedGrounds.length > 0 &&
-          Boolean(facts.breach_description) &&
-          Boolean(facts.notice_service_method)
-        );
-      }
-
-      // For Wales Section 173 (no-fault): just need service method
-      if (route === 'wales_section_173') {
-        return Boolean(facts.notice_service_method);
       }
 
       return false;
@@ -271,6 +285,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
 
+  // Debounce ref for save operations to prevent excessive API calls
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<WizardFacts | null>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -299,15 +317,65 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     void loadFacts();
   }, [caseId, jurisdiction]);
 
-  // Get visible sections based on eviction route and jurisdiction
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
-    const route = facts.eviction_route as EvictionRoute | undefined;
-    return SECTIONS.filter((section) => {
-      if (!section.routes) return true;
-      if (!route) return section.id === 'case_basics';
-      return section.routes.includes(route);
+    const route = facts.eviction_route as string | undefined;
+    const isWales = jurisdiction === 'wales';
+
+    // Determine if route is valid for this jurisdiction
+    const hasValidRoute = isWales
+      ? route && WALES_ROUTES.includes(route as typeof WALES_ROUTES[number])
+      : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+
+    const filteredSections = SECTIONS.filter((section) => {
+      // Route-specific sections (S21 compliance, S8 arrears) only apply to England
+      if (section.routes) {
+        // Wales doesn't use these England-specific sections
+        if (isWales) return false;
+        // England: only show if route matches
+        if (!route) return false;
+        return section.routes.includes(route as EvictionRoute);
+      }
+
+      // Non-route-specific sections: show case_basics always, others once route is valid
+      if (!hasValidRoute) return section.id === 'case_basics';
+      return true;
     });
-  }, [facts.eviction_route]);
+
+    // Override labels for Wales jurisdiction
+    if (isWales) {
+      return filteredSections.map((section) => {
+        if (section.id === 'tenancy') {
+          return {
+            ...section,
+            label: 'Occupation Contract',
+            description: 'Contract details and rent',
+          };
+        }
+        if (section.id === 'notice') {
+          return {
+            ...section,
+            label: 'Notice Details',
+            description: route === 'section_173'
+              ? 'Section 173 notice service'
+              : 'Fault-based notice and grounds',
+          };
+        }
+        return section;
+      });
+    }
+
+    return filteredSections;
+  }, [jurisdiction, facts.eviction_route]);
 
   const currentSection = visibleSections[currentSectionIndex];
 
@@ -333,22 +401,61 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [caseId, jurisdiction]
   );
 
-  // Update facts and save
+  // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
-    async (updates: Record<string, any>) => {
+    (updates: Record<string, any>) => {
       const updatedFacts = { ...facts, ...updates };
       setFacts(updatedFacts);
-      await saveFactsToServer(updatedFacts);
+
+      // Store the latest facts to save
+      pendingFactsRef.current = updatedFacts;
+
+      // Clear any existing debounce timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Debounce the save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
     },
     [facts, saveFactsToServer]
   );
 
-  // Navigate to next section
+  // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < visibleSections.length - 1) {
+      // Track step completion if the current section is complete
+      const current = visibleSections[currentSectionIndex];
+      if (current && current.isComplete(facts, jurisdiction)) {
+        // Only fire if not already tracked for this step
+        const shouldTrack = markStepCompleted(current.id);
+        if (shouldTrack) {
+          const attribution = getWizardAttribution();
+          trackWizardStepCompleteWithAttribution({
+            product: 'notice_only',
+            jurisdiction: jurisdiction,
+            step: current.id,
+            stepIndex: currentSectionIndex,
+            totalSteps: visibleSections.length,
+            src: attribution.src,
+            topic: attribution.topic,
+            utm_source: attribution.utm_source,
+            utm_medium: attribution.utm_medium,
+            utm_campaign: attribution.utm_campaign,
+            landing_url: attribution.landing_url,
+            first_seen_at: attribution.first_seen_at,
+          });
+        }
+      }
+
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections.length]);
+  }, [currentSectionIndex, visibleSections, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -368,14 +475,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [visibleSections]
   );
 
-  // Generate notice
+  // Generate notice - navigate to review page for analysis before payment
   const handleGenerateNotice = useCallback(async () => {
     try {
       setGenerating(true);
       setError(null);
 
-      // Navigate to preview page
-      router.push(`/wizard/preview/${caseId}`);
+      // Navigate to review page for compliance analysis
+      router.push(`/wizard/review?case_id=${caseId}&product=notice_only`);
     } catch (err) {
       console.error('Failed to generate notice:', err);
       setError('Failed to generate notice. Please try again.');
@@ -405,7 +512,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       allBlockers.push(...sectionBlockers);
     }
     return allBlockers;
-  }, [visibleSections, facts]);
+  }, [visibleSections, facts, jurisdiction]);
 
   // Render section content
   const renderSection = () => {
@@ -417,10 +524,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       onUpdate: handleUpdate,
     };
 
+    const isWales = jurisdiction === 'wales';
+
     switch (currentSection.id) {
       case 'case_basics':
         // Use Wales-specific or England-specific case basics
-        if (jurisdiction === 'wales') {
+        if (isWales) {
           return <WalesCaseBasicsSection {...sectionProps} />;
         }
         return <CaseBasicsSection {...sectionProps} />;
@@ -429,17 +538,19 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'property':
         return <PropertySection {...sectionProps} />;
       case 'tenancy':
-        return <TenancySection {...sectionProps} />;
+        // Wales uses OccupationContractSection, England uses TenancySection
+        return isWales
+          ? <OccupationContractSection {...sectionProps} />
+          : <TenancySection {...sectionProps} />;
       case 'section21_compliance':
         return <Section21ComplianceSection {...sectionProps} />;
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
       case 'notice':
-        // Use Wales-specific notice section for Wales jurisdiction
-        if (jurisdiction === 'wales') {
-          return <WalesNoticeSection {...sectionProps} mode="notice_only" />;
-        }
-        return <NoticeSection {...sectionProps} mode="notice_only" />;
+        // Wales uses WalesNoticeSection, England uses NoticeSection
+        return isWales
+          ? <WalesNoticeSection {...sectionProps} mode="notice_only" />
+          : <NoticeSection {...sectionProps} mode="notice_only" />;
       case 'review':
         return renderReviewSection();
       default:
@@ -528,15 +639,37 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           <div className="text-sm text-gray-600 space-y-1">
             <p>
               <strong>Type:</strong>{' '}
-              {facts.eviction_route === 'section_21' ? 'Section 21 (No-Fault)' : 'Section 8 (Fault-Based)'}
+              {(() => {
+                // Wales routes
+                if (jurisdiction === 'wales') {
+                  if (facts.eviction_route === 'section_173') {
+                    return 'Section 173 (No-fault)';
+                  } else if (facts.eviction_route === 'fault_based') {
+                    return 'Fault-based (breach grounds)';
+                  }
+                  return 'Wales notice';
+                }
+                // England routes
+                return facts.eviction_route === 'section_21'
+                  ? 'Section 21 (No-Fault)'
+                  : 'Section 8 (Fault-Based)';
+              })()}
             </p>
             <p>
               <strong>Jurisdiction:</strong> {jurisdiction === 'england' ? 'England' : 'Wales'}
             </p>
-            {facts.eviction_route === 'section_8' && (
+            {/* England Section 8 grounds */}
+            {jurisdiction === 'england' && facts.eviction_route === 'section_8' && (
               <p>
                 <strong>Grounds:</strong>{' '}
                 {((facts.section8_grounds as string[]) || []).join(', ') || 'Not selected'}
+              </p>
+            )}
+            {/* Wales fault-based grounds */}
+            {jurisdiction === 'wales' && facts.eviction_route === 'fault_based' && (
+              <p>
+                <strong>Grounds:</strong>{' '}
+                {((facts.wales_fault_grounds as string[]) || []).join(', ') || 'Not selected'}
               </p>
             )}
           </div>

@@ -2,10 +2,10 @@
 #
 # WALES-ONLY Occupation Contract (Renting Homes Wales Act 2016)
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
-# Version 2.1.0 - Wales jurisdiction (terminology fix)
+# Version 2.2.0 - Wales jurisdiction (legal audit fixes)
 
 __meta:
-  version: "2.1.0"
+  version: "2.2.0"
   effective_from: "2025-12-16"
   last_updated: "2025-12-28"
   legal_review_date: "2025-12-28"
@@ -19,6 +19,9 @@ __meta:
 # - Wales uses "Standard/Premium Occupation Contract" not AST
 # - Contract holders (tenants) have different statutory rights under RH(W)A 2016
 # - Section 21 does NOT apply in Wales (uses Section 173 instead)
+# - FIXED: Removed Section 13 from rent increase options (England-only procedure)
+# - FIXED: Updated prescribed information helper text to reference Section 173 instead of Section 21
+# - FIXED: Updated rent increase notice requirement to 2 months per Renting Homes (Wales) Act 2016
 
 id: tenancy_agreement_wales_v2
 product: tenancy_agreement
@@ -260,6 +263,44 @@ questions:
       - landlord_address_line1
       - landlord_address_town
       - landlord_address_postcode
+
+  # WALES MANDATORY: Rent Smart Wales Registration
+  - id: rent_smart_wales_registration
+    section: Landlord Details
+    question: "Rent Smart Wales registration"
+    inputType: group
+    helperText: "MANDATORY: All landlords letting property in Wales MUST be registered with Rent Smart Wales. Without valid registration, you cannot legally let a property, serve notices, or make deposit claims."
+    fields:
+      - id: rent_smart_wales_registered
+        label: "Are you registered with Rent Smart Wales?"
+        inputType: yes_no
+        helperText: "Registration is a legal requirement - it is a criminal offence to let without registration"
+        validation:
+          required: true
+        width: half
+      - id: rent_smart_wales_number
+        label: "Rent Smart Wales registration number"
+        inputType: text
+        placeholder: "e.g., RSW123456"
+        dependsOn:
+          questionId: rent_smart_wales_registered
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: rent_smart_wales_expiry
+        label: "Registration expiry date"
+        inputType: date
+        dependsOn:
+          questionId: rent_smart_wales_registered
+          value: true
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - wales_compliance.rent_smart_wales_registered
+      - wales_compliance.rent_smart_wales_number
+      - wales_compliance.rent_smart_wales_expiry
 
   - id: agent_usage
     section: Landlord Details
@@ -568,6 +609,34 @@ questions:
       - term_length
       - tenancy_end_date
 
+  # WALES MANDATORY: Written Statement of Occupation Contract
+  - id: written_statement_compliance
+    section: Contract
+    question: "Written statement of occupation contract"
+    inputType: group
+    helperText: "MANDATORY under Renting Homes (Wales) Act 2016, Section 31: You MUST provide a written statement of the occupation contract within 14 days of the occupation date. Failure to do so is a criminal offence and can result in a fine."
+    fields:
+      - id: written_statement_provided
+        label: "Will you provide a written statement of the occupation contract?"
+        inputType: yes_no
+        helperText: "This is a legal requirement - you cannot proceed without providing this"
+        validation:
+          required: true
+        width: half
+      - id: written_statement_date
+        label: "Date written statement will be/was provided"
+        inputType: date
+        helperText: "Must be within 14 days of occupation date"
+        dependsOn:
+          questionId: written_statement_provided
+          value: true
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - wales_compliance.written_statement_provided
+      - wales_compliance.written_statement_date
+
   # 5. Rent & payment details
   - id: rent_details
     section: Rent & Payments
@@ -728,11 +797,24 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant and any relevant person within 30 days of receiving the deposit. This is a legal obligation under the Housing Act 2004. Failure to comply can result in: (1) Being ordered to pay the tenant 1-3x the deposit amount in compensation, (2) Inability to serve a valid Section 21 notice until compliance is achieved and the tenant has held the deposit for the required period. Non-compliance exposes you to significant financial and legal risk."
+    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the contract holder within 30 days of receiving the deposit. Failure to comply invalidates Section 173 notices."
     validation:
       required: true
     maps_to:
       - deposit.prescribed_information_served
+
+  - id: prescribed_information_date
+    section: Deposit
+    question: "When was/will prescribed information be served?"
+    inputType: date
+    helperText: "CRITICAL: Must be within 30 days of receiving the deposit. This date is required to validate Section 173 eligibility."
+    dependsOn:
+      questionId: prescribed_information_served
+      value: true
+    validation:
+      required: true
+    maps_to:
+      - deposit.prescribed_information_date
 
   # 7. Bills & utilities
   - id: bills_utilities
@@ -814,11 +896,35 @@ questions:
       - utility_transfer_responsibility
 
   # 8. Safety & legal compliance
+  - id: fitness_for_habitation
+    section: Safety & Compliance
+    question: "Fitness for human habitation declaration"
+    inputType: group
+    helperText: "MANDATORY under Renting Homes (Wales) Act 2016: The property MUST be fit for human habitation at the start of and throughout the occupation contract. This is an implied fundamental term that cannot be contracted out of."
+    fields:
+      - id: property_fit_for_habitation
+        label: "Do you confirm the property is fit for human habitation?"
+        inputType: yes_no
+        helperText: "This is a legal requirement - the property must meet fitness standards including structure, water supply, drainage, heating, ventilation, and freedom from damp"
+        validation:
+          required: true
+        width: half
+      - id: ffhh_inspection_date
+        label: "Date of last fitness inspection"
+        inputType: date
+        helperText: "When did you last inspect/confirm the property meets fitness standards?"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - wales_compliance.property_fit_for_habitation
+      - wales_compliance.ffhh_inspection_date
+
   - id: safety_compliance
     section: Safety & Compliance
     question: "Certificates and legal pack items"
     inputType: group
-    helperText: "These drive the legal validity summary."
+    helperText: "These drive the legal validity summary. Certificate dates are critical for compliance verification."
     fields:
       - id: epc_rating
         label: "EPC rating"
@@ -834,6 +940,13 @@ questions:
         validation:
           required: true
         width: half
+      - id: epc_certificate_date
+        label: "EPC certificate date"
+        inputType: date
+        helperText: "EPCs are valid for 10 years from issue date"
+        validation:
+          required: true
+        width: half
       # Note: Right to Rent checks do not apply in Wales
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
@@ -841,11 +954,48 @@ questions:
         validation:
           required: true
         width: half
+      - id: gas_safety_certificate_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Gas certificates are valid for 12 months from issue date"
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: gas_safety_certificate_expiry
+        label: "Gas safety certificate expiry"
+        inputType: date
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
       - id: electrical_safety_certificate
         label: "Electrical safety (EICR) provided?"
         inputType: yes_no
+        helperText: "EICR is required for all rental properties in Wales"
         validation:
           required: true
+        width: half
+      - id: eicr_certificate_date
+        label: "EICR certificate date"
+        inputType: date
+        helperText: "EICRs are typically valid for 5 years"
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: eicr_next_inspection_date
+        label: "EICR next inspection due"
+        inputType: date
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
         width: half
       - id: smoke_alarms_fitted
         label: "Smoke alarms fitted and tested?"
@@ -862,8 +1012,13 @@ questions:
       # Note: 'How to Rent' guide is England-only. Wales has separate requirements under the Renting Homes (Wales) Act 2016
     maps_to:
       - gas_safety_certificate
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
       - electrical_safety_certificate
+      - compliance.eicr_date
+      - compliance.eicr_next_inspection_date
       - epc_rating
+      - compliance.epc_certificate_date
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
 
@@ -1029,7 +1184,7 @@ questions:
     section: Rent Reviews
     question: "Rent increase provisions"
     inputType: group
-    helperText: "Premium occupation contract can include index-linked reviews. Note: Section 13 reviews (England) do not apply in Wales."
+    helperText: "Premium occupation contract can include index-linked reviews. Under the Renting Homes (Wales) Act 2016, landlords must give at least 2 months' written notice of any rent increase."
     fields:
       - id: rent_increase_clause
         label: "Include a rent increase clause?"
@@ -1043,7 +1198,7 @@ questions:
         options:
           - "RPI"
           - "CPI"
-          - "Section 13"
+          - "Market review"
           - "Fixed review"
         dependsOn:
           questionId: rent_increase_clause
@@ -1055,7 +1210,7 @@ questions:
         options:
           - "Annually"
           - "Every 2 years"
-          - "On anniversary with 1 month notice"
+          - "On anniversary with 2 months notice"
         dependsOn:
           questionId: rent_increase_clause
           value: true

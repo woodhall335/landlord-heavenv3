@@ -26,6 +26,12 @@ import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
+import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
+
+// Analytics and attribution
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
@@ -91,10 +97,28 @@ const SECTIONS: WizardSection[] = [
     id: 'claim_details',
     label: 'Claim Details',
     description: 'What you are claiming',
-    isComplete: (facts) =>
-      facts.claiming_rent_arrears === true ||
-      facts.claiming_damages === true ||
-      facts.claiming_other === true,
+    isComplete: (facts) => {
+      // Must select at least one claim type
+      const hasClaimType =
+        facts.claiming_rent_arrears === true ||
+        facts.claiming_damages === true ||
+        facts.claiming_other === true;
+
+      // For England/Wales, must explicitly opt in/out of interest
+      // Scotland doesn't use the same interest mechanism
+      const jurisdiction = facts.__meta?.jurisdiction;
+      const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+
+      if (isEnglandWales) {
+        // Interest must be explicitly set (true or false, not null/undefined)
+        const interestDecided =
+          facts.money_claim?.charge_interest === true ||
+          facts.money_claim?.charge_interest === false;
+        return hasClaimType && interestDecided;
+      }
+
+      return hasClaimType;
+    },
   },
   {
     id: 'arrears',
@@ -181,6 +205,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Smart Review state (hydrated from persisted facts.__smart_review)
+  const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
+  const [smartReviewSummary, setSmartReviewSummary] = useState<SmartReviewSummary | null>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -198,6 +226,13 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               jurisdiction,
             },
           }));
+
+          // Hydrate Smart Review state from persisted data
+          const sr = (loadedFacts as any).__smart_review;
+          if (sr?.warnings) {
+            setSmartReviewWarnings(sr.warnings);
+            setSmartReviewSummary(sr.summary || null);
+          }
         }
       } catch (err) {
         console.error('Failed to load facts:', err);
@@ -256,12 +291,36 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     [facts, saveFactsToServer]
   );
 
-  // Navigate to next section
+  // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < SECTIONS.length - 1) {
+      // Track step completion if the current section is complete
+      const current = SECTIONS[currentSectionIndex];
+      if (current && current.isComplete(facts)) {
+        // Only fire if not already tracked for this step
+        const shouldTrack = markStepCompleted(current.id);
+        if (shouldTrack) {
+          const attribution = getWizardAttribution();
+          trackWizardStepCompleteWithAttribution({
+            product: 'money_claim',
+            jurisdiction: jurisdiction,
+            step: current.id,
+            stepIndex: currentSectionIndex,
+            totalSteps: SECTIONS.length,
+            src: attribution.src,
+            topic: attribution.topic,
+            utm_source: attribution.utm_source,
+            utm_medium: attribution.utm_medium,
+            utm_campaign: attribution.utm_campaign,
+            landing_url: attribution.landing_url,
+            first_seen_at: attribution.first_seen_at,
+          });
+        }
+      }
+
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex]);
+  }, [currentSectionIndex, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -278,9 +337,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     }
   }, []);
 
-  // Handle wizard completion
+  // Handle wizard completion - redirect to review page (same as eviction flow)
   const handleComplete = useCallback(async () => {
-    router.push(`/wizard/preview/${caseId}`);
+    router.push(`/wizard/review?case_id=${caseId}&product=money_claim`);
   }, [caseId, router]);
 
   // Calculate progress
@@ -495,6 +554,18 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
             {/* Section content */}
             {renderSection()}
+
+            {/* Smart Review Panel - Show in evidence and review sections */}
+            {(currentSection?.id === 'evidence' || currentSection?.id === 'review') &&
+              smartReviewWarnings.length > 0 && (
+                <div className="mt-6">
+                  <SmartReviewPanel
+                    warnings={smartReviewWarnings}
+                    summary={smartReviewSummary}
+                    defaultCollapsed={currentSection?.id !== 'evidence'}
+                  />
+                </div>
+              )}
           </div>
 
           {/* Navigation */}

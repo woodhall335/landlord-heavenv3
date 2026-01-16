@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import {
   getNextMQSQuestion,
   loadMQS,
@@ -28,6 +28,7 @@ import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 // ==============================================================================
 // PHASE 1: DEBUG INSTRUMENTATION (behind NOTICE_ONLY_DEBUG=1 env flag)
@@ -180,7 +181,7 @@ function getMoneyClaimMissingEssentials(
 
 export async function POST(request: Request) {
   try {
-    const user = await getServerUser().catch(() => null);
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/next-question', writesUsingAdmin: true });
     const { case_id, mode, include_answered, review_mode, current_question_id, target_question_id } = await request.json();
     const isReviewMode = mode === 'edit' || include_answered === true || review_mode === true;
 
@@ -188,11 +189,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    // Create properly typed Supabase client
-    const supabase = await createServerSupabaseClient();
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createSupabaseAdminClient();
 
-    // RLS policies handle access control - no need for manual user_id filtering
-    const { data, error: caseError } = await supabase
+    // Use admin client to support anonymous users
+    const { data, error: caseError } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
@@ -251,7 +252,8 @@ export async function POST(request: Request) {
     );
     const mqs = product ? loadMQS(product, canonicalJurisdiction) : null;
 
-    const facts = await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const facts = await getOrCreateWizardFacts(adminSupabase, case_id);
 
     if (!mqs) {
       const aiResponse = await getNextAIQuestion({
@@ -280,7 +282,7 @@ export async function POST(request: Request) {
       const targetQuestion = mqs.questions.find(q => q.id === target_question_id);
 
       if (targetQuestion) {
-        await supabase
+        await adminSupabase
           .from('cases')
           .update({ wizard_progress: progress } as any)
           .eq('id', case_id);
@@ -303,7 +305,7 @@ export async function POST(request: Request) {
         current_question_id,
       );
 
-      await supabase
+      await adminSupabase
         .from('cases')
         .update({ wizard_progress: progress } as any)
         .eq('id', case_id);
@@ -363,7 +365,7 @@ export async function POST(request: Request) {
 
       // Mark this info question as viewed by setting a marker in facts
       await updateWizardFacts(
-        supabase,
+        adminSupabase,
         case_id,
         (currentFacts) => ({
           ...currentFacts,
@@ -394,7 +396,7 @@ export async function POST(request: Request) {
         );
 
         if (missingEssentials.length) {
-          await supabase
+          await adminSupabase
             .from('cases')
             .update({ wizard_progress: progress } as any)
             .eq('id', case_id);
@@ -414,7 +416,7 @@ export async function POST(request: Request) {
         }
       }
 
-      await supabase
+      await adminSupabase
         .from('cases')
         .update({
           wizard_progress: 100,
@@ -429,7 +431,7 @@ export async function POST(request: Request) {
       });
     }
 
-    await supabase
+    await adminSupabase
       .from('cases')
       .update({ wizard_progress: progress } as any)
       .eq('id', case_id);

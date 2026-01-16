@@ -1,0 +1,895 @@
+{
+  "summary": {
+    "flowsDiscovered": 13,
+    "templatesResolved": 17,
+    "pdfsFound": 12,
+    "officialFormsReferenced": 11,
+    "candidateFormsOutsidePublic": 2,
+    "findings": [
+      {
+        "severity": "MEDIUM",
+        "scope": "england/section_8",
+        "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "england/section_21",
+        "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "england/money_claim",
+        "message": "Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "england/section_21",
+        "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "england/section_8",
+        "message": "Registry-only templates: uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "england/tenancy_agreement",
+        "message": "Registry-only templates: uk/england/templates/standard_ast_formatted.hbs, uk/england/templates/premium_ast_formatted.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "northern-ireland/tenancy_agreement",
+        "message": "Registry-only templates: uk/northern-ireland/templates/private_tenancy_agreement.hbs, uk/northern-ireland/templates/private_tenancy_premium.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "scotland/notice_to_leave",
+        "message": "Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "scotland/money_claim",
+        "message": "Registry-only templates: uk/scotland/templates/money_claims/pack_cover.hbs, uk/scotland/templates/money_claims/simple_procedure_particulars.hbs, uk/scotland/templates/money_claims/schedule_of_arrears.hbs, uk/scotland/templates/money_claims/interest_calculation.hbs, uk/scotland/templates/money_claims/evidence_index.hbs, uk/scotland/templates/money_claims/hearing_prep_sheet.hbs, uk/scotland/templates/money_claims/pre_action_letter.hbs, uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs, uk/scotland/templates/money_claims/filing_guide_scotland.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "scotland/notice_to_leave",
+        "message": "Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "scotland/tenancy_agreement",
+        "message": "Registry-only templates: uk/scotland/templates/prt_agreement.hbs, uk/scotland/templates/prt_agreement_premium.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/wales_section_173",
+        "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/wales_fault_based",
+        "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/money_claim",
+        "message": "Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/wales_section_173",
+        "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs, uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/wales_fault_based",
+        "message": "Registry-only templates: uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"
+      },
+      {
+        "severity": "MEDIUM",
+        "scope": "wales/tenancy_agreement",
+        "message": "Registry-only templates: uk/wales/templates/standard_occupation_contract.hbs, uk/wales/templates/premium_occupation_contract.hbs"
+      }
+    ],
+    "coverage": [
+      {
+        "jurisdiction": "england",
+        "product": "eviction_pack",
+        "route": "section_8",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "jurisdiction": "england",
+        "product": "eviction_pack",
+        "route": "section_21",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "jurisdiction": "england",
+        "product": "money_claim",
+        "route": "money_claim",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/N1_1224.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+      },
+      {
+        "jurisdiction": "england",
+        "product": "notice_only",
+        "route": "section_21",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs"
+      },
+      {
+        "jurisdiction": "england",
+        "product": "notice_only",
+        "route": "section_8",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      },
+      {
+        "jurisdiction": "england",
+        "product": "tenancy_agreement",
+        "route": "tenancy_agreement",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/standard_ast_formatted.hbs, uk/england/templates/premium_ast_formatted.hbs"
+      },
+      {
+        "jurisdiction": "northern-ireland",
+        "product": "tenancy_agreement",
+        "route": "tenancy_agreement",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/northern-ireland/templates/private_tenancy_agreement.hbs, uk/northern-ireland/templates/private_tenancy_premium.hbs"
+      },
+      {
+        "jurisdiction": "scotland",
+        "product": "eviction_pack",
+        "route": "notice_to_leave",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/scotland/notice_to_leave.pdf; public/official-forms/scotland/form_e_eviction.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      },
+      {
+        "jurisdiction": "scotland",
+        "product": "money_claim",
+        "route": "money_claim",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/scotland/form-3a.pdf; public/official-forms/scotland/simple_procedure_response_form.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/scotland/templates/money_claims/pack_cover.hbs, uk/scotland/templates/money_claims/simple_procedure_particulars.hbs, uk/scotland/templates/money_claims/schedule_of_arrears.hbs, uk/scotland/templates/money_claims/interest_calculation.hbs, uk/scotland/templates/money_claims/evidence_index.hbs, uk/scotland/templates/money_claims/hearing_prep_sheet.hbs, uk/scotland/templates/money_claims/pre_action_letter.hbs, uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs, uk/scotland/templates/money_claims/filing_guide_scotland.hbs"
+      },
+      {
+        "jurisdiction": "scotland",
+        "product": "notice_only",
+        "route": "notice_to_leave",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/scotland/notice_to_leave.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      },
+      {
+        "jurisdiction": "scotland",
+        "product": "tenancy_agreement",
+        "route": "tenancy_agreement",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/scotland/templates/prt_agreement.hbs, uk/scotland/templates/prt_agreement_premium.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "eviction_pack",
+        "route": "wales_section_173",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/N5_WALES_1222.pdf; public/official-forms/N119_WALES_1222.pdf; public/official-forms/N5B_WALES_0323.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "eviction_pack",
+        "route": "wales_fault_based",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/N5_WALES_1222.pdf; public/official-forms/N119_WALES_1222.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "money_claim",
+        "route": "money_claim",
+        "status": "PARTIAL",
+        "officialForms": "public/official-forms/N1_1224.pdf",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "notice_only",
+        "route": "wales_section_173",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs, uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "notice_only",
+        "route": "wales_fault_based",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"
+      },
+      {
+        "jurisdiction": "wales",
+        "product": "tenancy_agreement",
+        "route": "tenancy_agreement",
+        "status": "PARTIAL",
+        "officialForms": "-",
+        "templateChecks": "issues",
+        "preconditions": "ok",
+        "noticeRules": "ok",
+        "mapperConsistency": "ok",
+        "notes": "MEDIUM: Registry-only templates: uk/wales/templates/standard_occupation_contract.hbs, uk/wales/templates/premium_occupation_contract.hbs"
+      }
+    ]
+  },
+  "resolvedAssets": [
+    {
+      "jurisdiction": "england",
+      "product": "eviction_pack",
+      "route": "section_8",
+      "registryTemplates": [
+        "uk/england/templates/notice_only/form_6a_section21/notice.hbs",
+        "uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs",
+        "config/jurisdictions/uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/section_8",
+          "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "england",
+      "product": "eviction_pack",
+      "route": "section_21",
+      "registryTemplates": [
+        "uk/england/templates/notice_only/form_6a_section21/notice.hbs",
+        "uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs",
+        "config/jurisdictions/uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf",
+        "public/official-forms/n5b-eng.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf",
+        "public/official-forms/n5b-eng.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/section_21",
+          "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "england",
+      "product": "money_claim",
+      "route": "money_claim",
+      "registryTemplates": [
+        "uk/england/templates/money_claims/pack_cover.hbs",
+        "uk/england/templates/money_claims/particulars_of_claim.hbs",
+        "uk/england/templates/money_claims/schedule_of_arrears.hbs",
+        "uk/england/templates/money_claims/interest_workings.hbs",
+        "uk/england/templates/money_claims/evidence_index.hbs",
+        "uk/england/templates/money_claims/hearing_prep_sheet.hbs",
+        "uk/england/templates/money_claims/letter_before_claim.hbs",
+        "uk/england/templates/money_claims/information_sheet_for_defendants.hbs",
+        "uk/england/templates/money_claims/reply_form.hbs",
+        "uk/england/templates/money_claims/financial_statement_form.hbs",
+        "uk/england/templates/money_claims/enforcement_guide.hbs",
+        "uk/england/templates/money_claims/filing_guide.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/money_claims/pack_cover.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/particulars_of_claim.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/schedule_of_arrears.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/interest_workings.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/evidence_index.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/hearing_prep_sheet.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/letter_before_claim.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/information_sheet_for_defendants.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/reply_form.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/financial_statement_form.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/enforcement_guide.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/filing_guide.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N1_1224.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/N1_1224.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/money_claim",
+          "message": "Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "england",
+      "product": "notice_only",
+      "route": "section_21",
+      "registryTemplates": [
+        "uk/england/templates/notice_only/form_6a_section21/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf",
+        "public/official-forms/n5b-eng.pdf"
+      ],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/section_21",
+          "message": "Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "england",
+      "product": "notice_only",
+      "route": "section_8",
+      "registryTemplates": [
+        "uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/notice_only/form_3_section8/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/n5-eng.pdf",
+        "public/official-forms/n119-eng.pdf"
+      ],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/section_8",
+          "message": "Registry-only templates: uk/england/templates/notice_only/form_3_section8/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "england",
+      "product": "tenancy_agreement",
+      "route": "tenancy_agreement",
+      "registryTemplates": [
+        "uk/england/templates/standard_ast_formatted.hbs",
+        "uk/england/templates/premium_ast_formatted.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/standard_ast_formatted.hbs",
+        "config/jurisdictions/uk/england/templates/premium_ast_formatted.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "england/tenancy_agreement",
+          "message": "Registry-only templates: uk/england/templates/standard_ast_formatted.hbs, uk/england/templates/premium_ast_formatted.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "product": "tenancy_agreement",
+      "route": "tenancy_agreement",
+      "registryTemplates": [
+        "uk/northern-ireland/templates/private_tenancy_agreement.hbs",
+        "uk/northern-ireland/templates/private_tenancy_premium.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/northern-ireland/templates/private_tenancy_agreement.hbs",
+        "config/jurisdictions/uk/northern-ireland/templates/private_tenancy_premium.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "northern-ireland/tenancy_agreement",
+          "message": "Registry-only templates: uk/northern-ireland/templates/private_tenancy_agreement.hbs, uk/northern-ireland/templates/private_tenancy_premium.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "product": "eviction_pack",
+      "route": "notice_to_leave",
+      "registryTemplates": [
+        "uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [
+        "public/official-forms/public/official-forms/scotland/notice_to_leave.pdf",
+        "public/official-forms/notice_to_leave.pdf",
+        "public/official-forms/public/official-forms/scotland/form_e_eviction.pdf",
+        "public/official-forms/form_e_eviction.pdf",
+        "public/official-forms/public/official-forms/scotland/form-3a.pdf",
+        "public/official-forms/form-3a.pdf",
+        "public/official-forms/public/official-forms/scotland/simple_procedure_response_form.pdf",
+        "public/official-forms/simple_procedure_response_form.pdf"
+      ],
+      "officialFormsExpected": [
+        "public/official-forms/scotland/notice_to_leave.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/scotland/notice_to_leave.pdf",
+        "public/official-forms/scotland/form_e_eviction.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "scotland/notice_to_leave",
+          "message": "Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "product": "money_claim",
+      "route": "money_claim",
+      "registryTemplates": [
+        "uk/scotland/templates/money_claims/pack_cover.hbs",
+        "uk/scotland/templates/money_claims/simple_procedure_particulars.hbs",
+        "uk/scotland/templates/money_claims/schedule_of_arrears.hbs",
+        "uk/scotland/templates/money_claims/interest_calculation.hbs",
+        "uk/scotland/templates/money_claims/evidence_index.hbs",
+        "uk/scotland/templates/money_claims/hearing_prep_sheet.hbs",
+        "uk/scotland/templates/money_claims/pre_action_letter.hbs",
+        "uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs",
+        "uk/scotland/templates/money_claims/filing_guide_scotland.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/scotland/templates/money_claims/pack_cover.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/simple_procedure_particulars.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/schedule_of_arrears.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/interest_calculation.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/evidence_index.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/hearing_prep_sheet.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/pre_action_letter.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs",
+        "config/jurisdictions/uk/scotland/templates/money_claims/filing_guide_scotland.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/scotland/form-3a.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/scotland/form-3a.pdf",
+        "public/official-forms/scotland/simple_procedure_response_form.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "scotland/money_claim",
+          "message": "Registry-only templates: uk/scotland/templates/money_claims/pack_cover.hbs, uk/scotland/templates/money_claims/simple_procedure_particulars.hbs, uk/scotland/templates/money_claims/schedule_of_arrears.hbs, uk/scotland/templates/money_claims/interest_calculation.hbs, uk/scotland/templates/money_claims/evidence_index.hbs, uk/scotland/templates/money_claims/hearing_prep_sheet.hbs, uk/scotland/templates/money_claims/pre_action_letter.hbs, uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs, uk/scotland/templates/money_claims/filing_guide_scotland.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "product": "notice_only",
+      "route": "notice_to_leave",
+      "registryTemplates": [
+        "uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [
+        "public/official-forms/public/official-forms/scotland/notice_to_leave.pdf",
+        "public/official-forms/notice_to_leave.pdf",
+        "public/official-forms/public/official-forms/scotland/form_e_eviction.pdf",
+        "public/official-forms/form_e_eviction.pdf",
+        "public/official-forms/public/official-forms/scotland/form-3a.pdf",
+        "public/official-forms/form-3a.pdf",
+        "public/official-forms/public/official-forms/scotland/simple_procedure_response_form.pdf",
+        "public/official-forms/simple_procedure_response_form.pdf"
+      ],
+      "officialFormsExpected": [
+        "public/official-forms/scotland/notice_to_leave.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/scotland/notice_to_leave.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "scotland/notice_to_leave",
+          "message": "Registry-only templates: uk/scotland/templates/eviction/notice_to_leave_official.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "product": "tenancy_agreement",
+      "route": "tenancy_agreement",
+      "registryTemplates": [
+        "uk/scotland/templates/prt_agreement.hbs",
+        "uk/scotland/templates/prt_agreement_premium.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/scotland/templates/prt_agreement.hbs",
+        "config/jurisdictions/uk/scotland/templates/prt_agreement_premium.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "scotland/tenancy_agreement",
+          "message": "Registry-only templates: uk/scotland/templates/prt_agreement.hbs, uk/scotland/templates/prt_agreement_premium.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "eviction_pack",
+      "route": "wales_section_173",
+      "registryTemplates": [
+        "uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf",
+        "public/official-forms/N5B_WALES_0323.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf",
+        "public/official-forms/N5B_WALES_0323.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/wales_section_173",
+          "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "eviction_pack",
+      "route": "wales_fault_based",
+      "registryTemplates": [
+        "uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/wales_fault_based",
+          "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "money_claim",
+      "route": "money_claim",
+      "registryTemplates": [
+        "uk/england/templates/money_claims/pack_cover.hbs",
+        "uk/england/templates/money_claims/particulars_of_claim.hbs",
+        "uk/england/templates/money_claims/schedule_of_arrears.hbs",
+        "uk/england/templates/money_claims/interest_workings.hbs",
+        "uk/england/templates/money_claims/evidence_index.hbs",
+        "uk/england/templates/money_claims/hearing_prep_sheet.hbs",
+        "uk/england/templates/money_claims/letter_before_claim.hbs",
+        "uk/england/templates/money_claims/information_sheet_for_defendants.hbs",
+        "uk/england/templates/money_claims/reply_form.hbs",
+        "uk/england/templates/money_claims/financial_statement_form.hbs",
+        "uk/england/templates/money_claims/enforcement_guide.hbs",
+        "uk/england/templates/money_claims/filing_guide.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/england/templates/money_claims/pack_cover.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/particulars_of_claim.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/schedule_of_arrears.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/interest_workings.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/evidence_index.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/hearing_prep_sheet.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/letter_before_claim.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/information_sheet_for_defendants.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/reply_form.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/financial_statement_form.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/enforcement_guide.hbs",
+        "config/jurisdictions/uk/england/templates/money_claims/filing_guide.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N1_1224.pdf"
+      ],
+      "officialFormsResolved": [
+        "public/official-forms/N1_1224.pdf"
+      ],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/money_claim",
+          "message": "Registry-only templates: uk/england/templates/money_claims/pack_cover.hbs, uk/england/templates/money_claims/particulars_of_claim.hbs, uk/england/templates/money_claims/schedule_of_arrears.hbs, uk/england/templates/money_claims/interest_workings.hbs, uk/england/templates/money_claims/evidence_index.hbs, uk/england/templates/money_claims/hearing_prep_sheet.hbs, uk/england/templates/money_claims/letter_before_claim.hbs, uk/england/templates/money_claims/information_sheet_for_defendants.hbs, uk/england/templates/money_claims/reply_form.hbs, uk/england/templates/money_claims/financial_statement_form.hbs, uk/england/templates/money_claims/enforcement_guide.hbs, uk/england/templates/money_claims/filing_guide.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "notice_only",
+      "route": "wales_section_173",
+      "registryTemplates": [
+        "uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs",
+        "uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs",
+        "config/jurisdictions/uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf",
+        "public/official-forms/N5B_WALES_0323.pdf"
+      ],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/wales_section_173",
+          "message": "Registry-only templates: uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs, uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "notice_only",
+      "route": "wales_fault_based",
+      "registryTemplates": [
+        "uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [
+        "public/official-forms/N5_WALES_1222.pdf",
+        "public/official-forms/N119_WALES_1222.pdf"
+      ],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/wales_fault_based",
+          "message": "Registry-only templates: uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "product": "tenancy_agreement",
+      "route": "tenancy_agreement",
+      "registryTemplates": [
+        "uk/wales/templates/standard_occupation_contract.hbs",
+        "uk/wales/templates/premium_occupation_contract.hbs"
+      ],
+      "mapperTemplates": [],
+      "templateFilePaths": [
+        "config/jurisdictions/uk/wales/templates/standard_occupation_contract.hbs",
+        "config/jurisdictions/uk/wales/templates/premium_occupation_contract.hbs"
+      ],
+      "referencedPdfsFromTemplates": [],
+      "referencedPdfsFromMappers": [],
+      "officialFormsExpected": [],
+      "officialFormsResolved": [],
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "scope": "wales/tenancy_agreement",
+          "message": "Registry-only templates: uk/wales/templates/standard_occupation_contract.hbs, uk/wales/templates/premium_occupation_contract.hbs"
+        }
+      ]
+    }
+  ],
+  "candidateRows": [
+    {
+      "pdfPath": "public/official-forms/n119-eng.pdf",
+      "matchedRule": "n-form",
+      "referencedBy": "orphan",
+      "suggestion": "ensure mapped"
+    },
+    {
+      "pdfPath": "public/official-forms/n5-eng.pdf",
+      "matchedRule": "n-form",
+      "referencedBy": "orphan",
+      "suggestion": "ensure mapped"
+    },
+    {
+      "pdfPath": "public/official-forms/n5b-eng.pdf",
+      "matchedRule": "n-form",
+      "referencedBy": "orphan",
+      "suggestion": "ensure mapped"
+    },
+    {
+      "pdfPath": "public/official-forms/scotland/form-3a.pdf",
+      "matchedRule": "form-number",
+      "referencedBy": "orphan",
+      "suggestion": "ensure mapped"
+    },
+    {
+      "pdfPath": "public/official-forms/scotland/notice_to_leave.pdf",
+      "matchedRule": "notice-to-leave",
+      "referencedBy": "orphan",
+      "suggestion": "ensure mapped"
+    },
+    {
+      "pdfPath": "config/jurisdictions/uk/_official_form_sources/scotland/notice_to_leave_parts_1_3.pdf",
+      "matchedRule": "notice-to-leave",
+      "referencedBy": "orphan",
+      "suggestion": "move to /public/official-forms or whitelist"
+    },
+    {
+      "pdfPath": "config/jurisdictions/uk/_official_form_sources/scotland/notice_to_leave_parts_1_3.pdf",
+      "matchedRule": "notice-to-leave",
+      "referencedBy": "orphan",
+      "suggestion": "move to /public/official-forms or whitelist"
+    }
+  ]
+}

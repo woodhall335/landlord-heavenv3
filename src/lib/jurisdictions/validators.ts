@@ -1,6 +1,6 @@
 import { type DecisionRules, type FactsSchema, type JurisdictionKey, loadJurisdictionRuleBundle } from './rulesLoader';
 
-export type ValidationStage = 'wizard' | 'preview' | 'generate';
+export type ValidationStage = 'wizard' | 'preview' | 'generate' | 'generation';
 
 export type ProductKey = 'notice_only' | 'eviction_pack' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'unknown';
 
@@ -157,6 +157,14 @@ export function validateGroundsFromConfig(params: {
     const eligibilityRules: string[] = cfg.eligibility_rules || [];
     for (const rule of eligibilityRules) {
       const evaluation = evaluateExpression(rule, facts);
+      // IMPORTANT: Skip rules that couldn't be evaluated (human-readable documentation)
+      // The actual ground eligibility checks (e.g., Ground 8 arrears threshold) are
+      // performed by dedicated validators in gating.ts (validateGround8Eligibility, etc.)
+      // The eligibility_rules in decision_rules.yaml are primarily documentation.
+      if (!evaluation.evaluated) {
+        // Rule is not a valid JS expression - skip it (it's documentation)
+        continue;
+      }
       if (!evaluation.ok) {
         blocking.push({
           code: 'GROUND_ELIGIBILITY_RULE_FAILED',

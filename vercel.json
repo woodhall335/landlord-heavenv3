@@ -1,76 +1,30 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "framework": "nextjs",
-  "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/:path*",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Credentials",
-          "value": "true"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        }
-      ]
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key"
-  },
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "corepack enable && pnpm install",
   "functions": {
-    "api/**": {
+    "src/app/api/notice-only/preview/*/route.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "src/app/api/documents/generate/route.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "src/app/api/documents/thumbnail/*/route.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "src/app/api/webhooks/stripe/route.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "src/app/api/orders/fulfill/route.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "src/app/api/wizard/preview/*/route.ts": {
+      "memory": 1024,
       "maxDuration": 60
     }
-  },
-  "crons": [
-    {
-      "path": "/api/seo/cron/daily",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/compliance-check",
-      "schedule": "0 8 * * *"
-    }
-  ]
+  }
 }

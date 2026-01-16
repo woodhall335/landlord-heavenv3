@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiCheckLine } from 'react-icons/ri';
 
 export default function ForgotPasswordPage() {
@@ -47,17 +48,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <Container size="small">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-charcoal mb-2">
-            Reset Your Password
-          </h1>
-          <p className="text-gray-600">
-            We'll send you a link to reset your password
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Recovery"
+        title="Reset Your Password"
+        subtitle="We'll send you a link to reset your password"
+        variant="pastel"
+      />
 
+      <div className="flex items-center justify-center py-12 px-4">
+      <Container size="small">
         <Card padding="large">
           {success ? (
             <div className="text-center py-8">
@@ -71,7 +72,7 @@ export default function ForgotPasswordPage() {
                 If an account exists for <strong>{email}</strong>, you'll receive a password reset link shortly.
               </p>
               <Link href="/auth/login">
-                <Button variant="primary" fullWidth>
+                <Button variant="heroPrimary" fullWidth>
                   Back to login
                 </Button>
               </Link>
@@ -96,7 +97,7 @@ export default function ForgotPasswordPage() {
 
               <Button
                 type="submit"
-                variant="primary"
+                variant="heroPrimary"
                 size="large"
                 loading={isLoading}
                 fullWidth
@@ -116,6 +117,7 @@ export default function ForgotPasswordPage() {
           )}
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

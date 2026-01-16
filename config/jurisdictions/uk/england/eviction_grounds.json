@@ -87,7 +87,7 @@
       "fullLegalText": "Some rent lawfully due from the tenant—\n(a) is unpaid on the date on which the proceedings for possession are begun; and\n(b) except where subsection (1)(b) of section 8 of this Act applies, was in arrears at the date of the service of the notice under that section relating to those proceedings.",
       "statute": "Housing Act 1988, Schedule 2, Part II, Ground 10",
       "notice_required": "Yes - Section 8 notice",
-      "notice_period_days": 60,
+      "notice_period_days": 14,
       "court_decision": "Discretionary - court may grant possession if reasonable",
       "required_evidence": [
         "Rent account showing any amount unpaid",
@@ -112,7 +112,7 @@
       "shortDescription": "Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.",
       "statute": "Housing Act 1988, Schedule 2, Part II, Ground 11",
       "notice_required": "Yes - Section 8 notice",
-      "notice_period_days": 60,
+      "notice_period_days": 14,
       "court_decision": "Discretionary",
       "required_evidence": [
         "Detailed rent account showing pattern of late payments",

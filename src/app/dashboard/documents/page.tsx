@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiFileTextLine, RiDownloadLine, RiDeleteBinLine } from 'react-icons/ri';
+import { downloadDocument } from '@/lib/documents/download';
 
 interface Document {
   id: string;
@@ -20,9 +21,13 @@ interface Document {
   document_title: string;
   document_type: string;
   is_preview: boolean;
-  file_path: string | null;
-  metadata: any;
+  pdf_url: string | null;  // Correct field name from schema
   created_at: string;
+  metadata?: {
+    description?: string;
+    pack_type?: string;
+    tier?: string;
+  };
 }
 
 type FilterType = 'all' | 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -35,6 +40,7 @@ export default function DocumentsPage() {
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortBy>('newest');
   const [showPreviewOnly, setShowPreviewOnly] = useState(false);
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDocuments();
@@ -47,7 +53,8 @@ export default function DocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('/api/documents');
+      // Fetch all documents (preview + final) and disable dedup to show full history
+      const response = await fetch('/api/documents?is_preview=all&latest_per_type=false');
 
       if (response.ok) {
         const data = await response.json();
@@ -110,17 +117,22 @@ export default function DocumentsPage() {
   };
 
   const handleDownload = async (doc: Document) => {
-    if (!doc.file_path) {
+    if (!doc.pdf_url) {
       alert('Document file not available');
       return;
     }
 
+    setDownloadingDocId(doc.id);
     try {
-      // Open in new tab for now - in production this would trigger a download
-      window.open(doc.file_path, '_blank');
+      const success = await downloadDocument(doc.id);
+      if (!success) {
+        alert('Failed to download document. Please try again.');
+      }
     } catch (error) {
       console.error('Failed to download document:', error);
       alert('Failed to download document');
+    } finally {
+      setDownloadingDocId(null);
     }
   };
 
@@ -298,10 +310,26 @@ export default function DocumentsPage() {
                             Preview
                           </Badge>
                         )}
+                        {doc.metadata?.pack_type && (
+                          <Badge variant="neutral" size="small">
+                            {doc.metadata.pack_type === 'notice_only' ? 'Notice Pack' :
+                             doc.metadata.pack_type === 'complete_pack' ? 'Complete Pack' :
+                             doc.metadata.pack_type === 'money_claim' ? 'Money Claim' :
+                             doc.metadata.pack_type === 'ast_standard' ? 'Standard AST' :
+                             doc.metadata.pack_type === 'ast_premium' ? 'Premium AST' :
+                             doc.metadata.pack_type}
+                          </Badge>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {getDocumentTypeLabel(doc.document_type)}
-                      </p>
+                      {doc.metadata?.description ? (
+                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                          {doc.metadata.description}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-600 mb-2">
+                          {getDocumentTypeLabel(doc.document_type)}
+                        </p>
+                      )}
                       <div className="text-xs text-gray-500">
                         Created {formatDate(doc.created_at)}
                       </div>
@@ -317,14 +345,19 @@ export default function DocumentsPage() {
                         </Button>
                       </Link>
                     )}
-                    {doc.file_path && (
+                    {doc.pdf_url && (
                       <Button
                         variant="secondary"
                         size="small"
                         onClick={() => handleDownload(doc)}
+                        disabled={downloadingDocId === doc.id}
                       >
-                        <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
-                        Download
+                        {downloadingDocId === doc.id ? (
+                          <div className="w-4 h-4 mr-1 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
+                        )}
+                        {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
                       </Button>
                     )}
                     <button
@@ -337,30 +370,6 @@ export default function DocumentsPage() {
                   </div>
                 </div>
 
-                {/* Additional Metadata (if available) */}
-                {doc.metadata && Object.keys(doc.metadata).length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <details className="text-sm">
-                      <summary className="cursor-pointer text-gray-600 hover:text-charcoal font-medium">
-                        View Details
-                      </summary>
-                      <div className="mt-3 space-y-2">
-                        {Object.entries(doc.metadata).map(([key, value]) => (
-                          <div key={key} className="flex gap-2">
-                            <span className="text-gray-600 capitalize min-w-[120px]">
-                              {key.replace(/_/g, ' ')}:
-                            </span>
-                            <span className="text-charcoal">
-                              {typeof value === 'object'
-                                ? JSON.stringify(value)
-                                : String(value)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-                  </div>
-                )}
               </Card>
             ))}
           </div>

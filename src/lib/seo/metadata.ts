@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_ORIGIN, getCanonicalUrl } from "./urls";
 
 /**
  * SEO Metadata Helper
@@ -23,8 +24,7 @@ export interface SEOMetadataConfig {
 }
 
 const SITE_NAME = "Landlord Heaven";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 /**
  * Generate comprehensive SEO metadata for a page
@@ -40,22 +40,26 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     keywords = []
   } = config;
 
-  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-  const url = `${SITE_URL}${path}`;
+  // Don't add site name suffix to title - layout template already adds "| Landlord Heaven"
+  // But still use full title for OG/Twitter which don't inherit template
+  const fullTitleForSocial = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const url = getCanonicalUrl(path);
 
   return {
-    title: fullTitle,
+    title: title, // Layout template will add "| Landlord Heaven"
     description,
     keywords: keywords.length > 0 ? keywords : undefined,
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
     publisher: SITE_NAME,
-    robots: noindex ? 'noindex,nofollow' : 'index,follow',
+    robots: noindex
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
 
     // Open Graph
     openGraph: {
       type,
-      title: fullTitle,
+      title: fullTitleForSocial,
       description,
       url,
       siteName: SITE_NAME,
@@ -73,7 +77,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     // Twitter Card
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
+      title: fullTitleForSocial,
       description,
       images: [image],
       creator: '@LandlordHeaven',
@@ -84,9 +88,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     alternates: {
       canonical: url,
     },
-
-    // Additional metadata
-    metadataBase: new URL(SITE_URL),
+    // Note: metadataBase is set globally in RootLayout
   };
 }
 
@@ -95,48 +97,68 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
  */
 export const defaultMetadata: Metadata = {
   title: {
-    default: "Landlord Heaven - Legal Documents for UK Landlords",
+    default: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
     template: "%s | Landlord Heaven"
   },
-  description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage - England & Wales, Scotland, Northern Ireland.",
+  description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. UK-wide coverage.",
   keywords: [
-    "section 8 notice",
     "section 21 notice",
+    "section 8 notice",
     "eviction notice",
+    "section 21 ban 2026",
     "tenancy agreement",
     "landlord legal documents",
     "UK landlord",
     "rent arrears",
+    "money claim",
+    "possession order",
     "HMO licence",
     "AST",
     "PRT Scotland",
-    "Northern Ireland tenancy"
+    "court-ready documents"
   ],
   authors: [{ name: "Landlord Heaven" }],
   creator: "Landlord Heaven",
   publisher: "Landlord Heaven",
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(SITE_ORIGIN),
+  icons: {
+    // Order matters for Google: larger icons first (Google requires minimum 48x48)
+    icon: [
+      { url: '/favicon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.webmanifest',
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: SITE_URL,
+    url: SITE_ORIGIN,
     siteName: SITE_NAME,
-    title: "Landlord Heaven - Legal Documents for UK Landlords",
-    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage.",
+    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+    description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: [
       {
-        url: DEFAULT_OG_IMAGE,
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Landlord Heaven"
+        alt: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+        type: 'image/png',
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Landlord Heaven - Legal Documents for UK Landlords",
-    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords.",
-    images: [DEFAULT_OG_IMAGE],
+    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+    description: "Generate court-ready eviction notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
+    images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',
   },

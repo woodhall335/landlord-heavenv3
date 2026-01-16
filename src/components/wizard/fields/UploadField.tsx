@@ -2,9 +2,17 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
-import { RiFileTextLine, RiCloseCircleLine } from 'react-icons/ri';
+import { RiFileTextLine, RiCloseCircleLine, RiLightbulbLine } from 'react-icons/ri';
+import type { QuestionDefinition } from '@/lib/validators/question-schema';
+import { getWizardCta } from '@/lib/checkout/cta-mapper';
+import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
+import { ValidationProgress } from '@/components/validators/ValidationProgress';
+import { ValidationResultBanner } from '@/components/validators/ValidationResultBanner';
+import { CollapsibleExtractedFields } from '@/components/validators/CollapsibleExtractedFields';
+import { trackValidatorUpload, trackValidatorResult, trackValidatorCompleted } from '@/lib/analytics';
+import { ToolUpsellCard, type ToolUpsellCardProps } from '@/components/tools/ToolUpsellCard';
 
 export interface EvidenceFileSummary {
   id: string;
@@ -19,6 +27,7 @@ export interface EvidenceFileSummary {
 interface UploadFieldProps {
   caseId: string;
   questionId: string;
+  jurisdiction?: string;
   label?: string;
   description?: string;
   evidenceCategory?: string;
@@ -27,11 +36,87 @@ interface UploadFieldProps {
   value?: EvidenceFileSummary[];
   onChange?: (files: EvidenceFileSummary[]) => void;
   onUploadingChange?: (uploading: boolean) => void;
+  /** Hide email/report CTA in UploadField - default true to avoid duplication with parent */
+  hideEmailActions?: boolean;
+  toolUpsell?: Omit<ToolUpsellCardProps, 'ctaLabel' | 'ctaHref'>;
+}
+
+interface UploadValidationSummary {
+  validator_key?: string | null;
+  status: string;
+  blockers?: Array<{ code: string; message: string }>;
+  warnings?: Array<{ code: string; message: string }>;
+  upsell?: { product: string; reason: string } | null;
+  /** When true, validation short-circuited due to wrong document type */
+  terminal_blocker?: boolean;
+}
+
+interface ExtractedFieldsSummary {
+  notice_type?: string;
+  date_served?: string;
+  service_date?: string;
+  expiry_date?: string;
+  property_address?: string;
+  tenant_names?: string | string[];
+  landlord_name?: string;
+  signature_present?: boolean;
+  form_6a_used?: boolean;
+  section_21_detected?: boolean;
+  [key: string]: any;
+}
+
+interface ExtractionQualitySummary {
+  text_extraction_method?: string;
+  is_low_text?: boolean;
+  is_metadata_only?: boolean;
+  document_markers?: string[];
+}
+
+/**
+ * Dedupe recommendations by message string to prevent duplicates.
+ */
+function dedupeRecommendations(
+  recommendations: Array<{ code: string; message: string }>,
+  upsellReason?: string | null
+): Array<{ code: string; message: string }> {
+  const seen = new Set<string>();
+  const result: Array<{ code: string; message: string }> = [];
+
+  // Add upsell reason first if it exists (as a recommendation)
+  if (upsellReason) {
+    seen.add(upsellReason.toLowerCase().trim());
+    result.push({ code: 'upsell', message: upsellReason });
+  }
+
+  // Add recommendations, skipping duplicates
+  for (const rec of recommendations) {
+    const normalized = rec.message.toLowerCase().trim();
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      result.push(rec);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Check if validation has a wrong document type blocker.
+ * This is a hard guard - if true, Q&A blocks must NEVER render.
+ */
+function hasWrongDocTypeBlocker(summary: UploadValidationSummary | null): boolean {
+  if (!summary) return false;
+  if (summary.terminal_blocker) return true;
+  if (!summary.blockers || summary.blockers.length === 0) return false;
+  return summary.blockers.some(
+    (b) => b.code === 'S21-WRONG-DOC-TYPE' || b.code === 'S8-WRONG-DOC-TYPE' || b.code === 'wrong_doc_type'
+  );
 }
 
 export const UploadField: React.FC<UploadFieldProps> = ({
   caseId,
   questionId,
+  jurisdiction,
   label,
   description,
   evidenceCategory,
@@ -40,11 +125,192 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   value,
   onChange,
   onUploadingChange,
+  hideEmailActions = true,
+  toolUpsell,
 }) => {
   const [uploadedFiles, setUploadedFiles] = useState<EvidenceFileSummary[]>(value ?? []);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationSummary, setValidationSummary] = useState<UploadValidationSummary | null>(null);
+  const [validationRecommendations, setValidationRecommendations] = useState<
+    Array<{ code: string; message: string }>
+  >([]);
+  const [nextQuestions, setNextQuestions] = useState<QuestionDefinition[]>([]);
+  const [analysisSummary, setAnalysisSummary] = useState<{ detected_type?: string; confidence?: number } | null>(null);
+  const [extractedFields, setExtractedFields] = useState<ExtractedFieldsSummary | null>(null);
+  const [extractionQuality, setExtractionQuality] = useState<ExtractionQualitySummary | null>(null);
+  const [questionAnswers, setQuestionAnswers] = useState<Record<string, any>>({});
+  const [questionErrors, setQuestionErrors] = useState<Record<string, string>>({});
+  const [answerSubmitting, setAnswerSubmitting] = useState(false);
+
+  // Ref for questions section - used for "Jump to Questions" scroll
+  const questionsSectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll handler for "Jump to Questions" button
+  const handleJumpToQuestions = useCallback(() => {
+    questionsSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, []);
+
+  const updateAnswer = (factKey: string, value: any) => {
+    setQuestionAnswers((prev) => ({ ...prev, [factKey]: value }));
+    setQuestionErrors((prev) => ({ ...prev, [factKey]: '' }));
+  };
+
+  const renderQuestionInput = (question: QuestionDefinition) => {
+    const value = questionAnswers[question.factKey];
+
+    const baseClassName =
+      'mt-1 w-full rounded border border-gray-200 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500';
+
+    // Button styles for yes/no/unsure groups
+    const buttonBaseClass = 'flex-1 py-2 px-2 rounded border text-xs font-medium transition-colors';
+    const buttonUnselected = 'border-gray-300 text-gray-700 hover:bg-gray-50';
+    const buttonYes = 'bg-green-100 border-green-500 text-green-800';
+    const buttonNo = 'bg-red-100 border-red-500 text-red-800';
+    const buttonUnsure = 'bg-amber-100 border-amber-500 text-amber-800';
+
+    switch (question.type) {
+      case 'yes_no':
+        return (
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'yes')}
+              className={`${buttonBaseClass} ${value === 'yes' ? buttonYes : buttonUnselected}`}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'no')}
+              className={`${buttonBaseClass} ${value === 'no' ? buttonNo : buttonUnselected}`}
+            >
+              No
+            </button>
+          </div>
+        );
+
+      case 'yes_no_unsure':
+        return (
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'yes')}
+              className={`${buttonBaseClass} ${value === 'yes' ? buttonYes : buttonUnselected}`}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'no')}
+              className={`${buttonBaseClass} ${value === 'no' ? buttonNo : buttonUnselected}`}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAnswer(question.factKey, 'not_sure')}
+              className={`${buttonBaseClass} ${value === 'not_sure' ? buttonUnsure : buttonUnselected}`}
+            >
+              Not Sure
+            </button>
+          </div>
+        );
+
+      case 'date':
+        return (
+          <input
+            type="date"
+            className={baseClassName}
+            value={value ?? ''}
+            onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+          />
+        );
+
+      case 'currency':
+        return (
+          <div className="relative mt-1">
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500">£</span>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              className={`${baseClassName} pl-5`}
+              value={value ?? ''}
+              onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+              placeholder="0.00"
+            />
+          </div>
+        );
+
+      case 'number':
+        return (
+          <input
+            type="number"
+            className={baseClassName}
+            value={value ?? ''}
+            onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+          />
+        );
+
+      case 'select':
+        return (
+          <select
+            className={baseClassName}
+            value={value ?? ''}
+            onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+          >
+            <option value="">Select…</option>
+            {question.options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
+
+      case 'multi_select':
+        return (
+          <div className="mt-2 space-y-1">
+            {question.options?.map((option) => {
+              const selected = Array.isArray(value) ? value.includes(option.value) : false;
+              return (
+                <label key={option.value} className="flex items-center gap-2 text-xs text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={(event) => {
+                      const next = new Set(Array.isArray(value) ? value : []);
+                      if (event.target.checked) {
+                        next.add(option.value);
+                      } else {
+                        next.delete(option.value);
+                      }
+                      updateAnswer(question.factKey, Array.from(next));
+                    }}
+                  />
+                  {option.label}
+                </label>
+              );
+            })}
+          </div>
+        );
+
+      default:
+        return (
+          <input
+            type="text"
+            className={baseClassName}
+            value={value ?? ''}
+            onChange={(event) => updateAnswer(question.factKey, event.target.value)}
+          />
+        );
+    }
+  };
 
   //
   // Sync external value
@@ -99,6 +365,9 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     setUploading(true);
     setError(null);
 
+    // Generate client-side correlation ID for tracing
+    const clientDebugId = `client-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+
     try {
       let latestSummaries: EvidenceFileSummary[] = uploadedFiles;
 
@@ -117,28 +386,116 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         // Actual file
         formData.append('file', file);
 
-        const response = await fetch('/api/wizard/upload-evidence', {
-          method: 'POST',
-          body: formData,
-        });
+        let response: Response;
+        try {
+          response = await fetch('/api/wizard/upload-evidence', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'x-debug-id': clientDebugId,
+            },
+          });
+        } catch (networkError) {
+          // Network error (Failed to fetch, CORS, connection refused, etc.)
+          console.error('Network error during upload:', networkError);
+          throw new Error(
+            'Network error: Unable to connect to the server. Please check your internet connection and try again. ' +
+            `(debug_id: ${clientDebugId})`
+          );
+        }
 
         let data: any = null;
         try {
           data = await response.json();
         } catch {
           // Non-JSON or empty body – we'll fall back to generic messages below
+          console.warn('Failed to parse response JSON, status:', response.status);
         }
 
+        // Extract debug_id from response for error messages
+        const serverDebugId = data?.debug_id || response.headers.get('x-debug-id') || clientDebugId;
+
         if (response.status === 401) {
-          throw new Error('Please sign in to upload evidence for this case.');
+          throw new Error(
+            data?.error || 'Please sign in to upload evidence for this case.'
+          );
         }
 
         if (response.status === 403) {
-          throw new Error("You don't have permission to upload evidence to this case.");
+          throw new Error(
+            data?.error || "You don't have permission to upload evidence to this case."
+          );
         }
 
         if (!response.ok || !data?.success) {
-          throw new Error(data?.error || 'Failed to upload file');
+          // Build detailed error message
+          const errorMessage = data?.error || 'Failed to upload file';
+          const errorCode = data?.error_code || 'UNKNOWN';
+          const stage = data?.stage || 'unknown';
+          throw new Error(
+            `${errorMessage} (code: ${errorCode}, stage: ${stage}, debug_id: ${serverDebugId})`
+          );
+        }
+
+        if (data?.validation_summary || data?.validation) {
+          const summary = (data.validation_summary ?? data.validation) as UploadValidationSummary;
+          setValidationSummary(summary);
+
+          // Track upload and validation result
+          if (summary.validator_key) {
+            const documentType = data?.evidence?.analysis?.detected_type ||
+              data?.evidence?.classification?.docType || 'unknown';
+            trackValidatorUpload(summary.validator_key, documentType, jurisdiction);
+            trackValidatorResult(
+              summary.validator_key,
+              summary.status,
+              summary.blockers?.length || 0,
+              summary.warnings?.length || 0,
+              data?.rulesetVersion
+            );
+            trackValidatorCompleted({
+              validator_key: summary.validator_key,
+              status: summary.status,
+              blockers: summary.blockers?.length || 0,
+              warnings: summary.warnings?.length || 0,
+              jurisdiction,
+            });
+          }
+        }
+        if (Array.isArray(data?.recommendations)) {
+          setValidationRecommendations(data.recommendations);
+        } else if (Array.isArray(data?.validation?.recommendations)) {
+          setValidationRecommendations(data.validation.recommendations);
+        }
+        if (Array.isArray(data?.next_questions)) {
+          setNextQuestions(data.next_questions);
+        } else if (Array.isArray(data?.validation?.next_questions)) {
+          setNextQuestions(data.validation.next_questions);
+        }
+        if (data?.evidence?.classification) {
+          setAnalysisSummary({
+            detected_type: data.evidence.classification.docType,
+            confidence: data.evidence.classification.confidence,
+          });
+        } else if (data?.evidence?.analysis) {
+          setAnalysisSummary({
+            detected_type: data.evidence.analysis.detected_type,
+            confidence: data.evidence.analysis.confidence,
+          });
+        }
+
+        // Capture extracted fields for display
+        if (data?.evidence?.analysis?.extracted_fields) {
+          setExtractedFields(data.evidence.analysis.extracted_fields);
+        } else if (data?.evidence?.extracted_fields) {
+          setExtractedFields(data.evidence.extracted_fields);
+        }
+
+        // Capture extraction quality info
+        if (data?.evidence?.analysis?.extraction_quality) {
+          setExtractionQuality(data.evidence.analysis.extraction_quality);
+        } else if (data?.evidence?.extraction_quality) {
+          setExtractionQuality(data.evidence.extraction_quality);
         }
 
         const evidenceFiles: any[] = Array.isArray(data?.evidence?.files)
@@ -214,6 +571,36 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                     Uploaded {file.uploadedAt}
                   </p>
                 )}
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      setError(null);
+                      const url = new URL('/api/evidence/download', window.location.origin);
+                      url.searchParams.set('caseId', caseId);
+                      url.searchParams.set('evidenceId', file.id);
+                      const response = await fetch(url.toString());
+                      const data = await response.json();
+                      if (!response.ok) {
+                        throw new Error(data?.error || 'Failed to download file');
+                      }
+                      if (data?.signedUrl) {
+                        window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+                      }
+                    } catch (downloadError) {
+                      console.error('Failed to download evidence', downloadError);
+                      setError(
+                        downloadError instanceof Error
+                          ? downloadError.message
+                          : 'Download failed'
+                      );
+                    }
+                  }}
+                  className="rounded border border-purple-200 px-2 py-1 text-xs text-purple-700 hover:bg-purple-50"
+                >
+                  Download
+                </button>
               </li>
             ))}
           </ul>
@@ -227,8 +614,319 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         </div>
       )}
 
-      {uploading && (
-        <p className="text-sm text-gray-600">Uploading files, please wait…</p>
+      {/* Animated progress indicator during upload/analysis */}
+      <ValidationProgress isActive={uploading} />
+
+      {/* Document classification - only show when no validation summary yet */}
+      {analysisSummary && !validationSummary && (
+        <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
+          <div className="flex items-center justify-between">
+            <p className="font-medium text-charcoal">Document classification</p>
+            {extractionQuality?.is_low_text && (
+              <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-800">
+                Vision extraction
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-gray-600">
+            {analysisSummary.detected_type || 'unknown'}{' '}
+            {analysisSummary.confidence !== undefined && (
+              <span className="text-gray-500">({Math.round(analysisSummary.confidence * 100)}% confidence)</span>
+            )}
+          </p>
+        </div>
+      )}
+
+      {validationSummary && (
+        <div className="space-y-4">
+          {/* Prominent Result Banner */}
+          <ValidationResultBanner
+            status={validationSummary.status}
+            blockersCount={validationSummary.blockers?.length || 0}
+            warningsCount={validationSummary.warnings?.length || 0}
+            isTerminalBlocker={hasWrongDocTypeBlocker(validationSummary)}
+            sticky={false}
+            questionsCount={hasWrongDocTypeBlocker(validationSummary) ? 0 : nextQuestions.length}
+            onJumpToQuestions={nextQuestions.length > 0 && !hasWrongDocTypeBlocker(validationSummary) ? handleJumpToQuestions : undefined}
+          />
+
+          {/* Collapsible Extracted Fields */}
+          {extractedFields && Object.keys(extractedFields).length > 0 && (
+            <CollapsibleExtractedFields
+              fields={extractedFields}
+              quality={extractionQuality}
+              defaultCollapsed={true}
+            />
+          )}
+
+          {/* Issues Details Card */}
+          <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
+            {validationSummary.blockers && validationSummary.blockers.length > 0 && (
+              <div className="space-y-1 text-red-700">
+                <p className="font-semibold text-red-800 mb-2">Critical Issues</p>
+                {validationSummary.blockers.map((issue, index) => (
+                  <p key={`${issue.code}-${index}`}>• {issue.message}</p>
+                ))}
+              </div>
+            )}
+
+          {/* Terminal blocker OR wrong doc type: Show CTA to switch to correct validator */}
+          {hasWrongDocTypeBlocker(validationSummary) && (
+            <div className="mt-4 space-y-3 rounded-md border border-amber-200 bg-amber-50 p-4">
+              <p className="font-semibold text-amber-900">Upload the correct document</p>
+              <p className="text-xs text-amber-800">
+                {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE')
+                  ? 'You uploaded a Section 8 notice (Form 3) but this validator requires a Section 21 notice (Form 6A).'
+                  : 'You uploaded a Section 21 notice (Form 6A) but this validator requires a Section 8 notice (Form 3).'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE') ? (
+                  <>
+                    <a
+                      href={`/tools/validators/section-8${caseId ? `?caseId=${caseId}` : ''}`}
+                      className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+                    >
+                      Switch to Section 8 Validator
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValidationSummary(null);
+                        setUploadedFiles([]);
+                      }}
+                      className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700 hover:bg-purple-50"
+                    >
+                      Upload a different file
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href={`/tools/validators/section-21${caseId ? `?caseId=${caseId}` : ''}`}
+                      className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+                    >
+                      Switch to Section 21 Validator
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValidationSummary(null);
+                        setUploadedFiles([]);
+                      }}
+                      className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700 hover:bg-purple-50"
+                    >
+                      Upload a different file
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* HARD GUARD: Only show warnings, recommendations, and questions if NOT wrong doc type */}
+          {!hasWrongDocTypeBlocker(validationSummary) && (
+            <>
+              {validationSummary.warnings && validationSummary.warnings.length > 0 && (
+                <div className={`space-y-1 text-amber-700 ${validationSummary.blockers?.length ? 'mt-4 pt-4 border-t border-gray-100' : ''}`}>
+                  <p className="font-semibold text-amber-800 mb-2">Warnings</p>
+                  {validationSummary.warnings.map((issue, index) => (
+                    <p key={`warning-${issue.code}-${index}`}>• {issue.message}</p>
+                  ))}
+                </div>
+              )}
+
+              {/* Recommendations section - separate from warnings, with deduplication */}
+              {(() => {
+                const dedupedRecs = dedupeRecommendations(
+                  validationRecommendations,
+                  validationSummary.upsell?.reason
+                );
+                if (dedupedRecs.length === 0) return null;
+                return (
+                  <div className={`space-y-1.5 ${validationSummary.warnings?.length || validationSummary.blockers?.length ? 'mt-4 pt-4 border-t border-gray-100' : ''}`}>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <RiLightbulbLine className="h-4 w-4 text-blue-600" />
+                      <p className="font-semibold text-blue-800 text-sm">Recommendations</p>
+                    </div>
+                    {dedupedRecs.map((rec, index) => (
+                      <p key={`rec-${rec.code}-${index}`} className="text-xs text-gray-600 pl-5">
+                        → {rec.message}
+                      </p>
+                    ))}
+                  </div>
+                );
+              })()}
+
+              {nextQuestions.length > 0 && (
+                <div
+                  ref={questionsSectionRef}
+                  id="questions-section"
+                  className="mt-3 space-y-2 text-xs text-gray-600 scroll-mt-4"
+                >
+                  <p className="font-semibold text-gray-700">Re-check document</p>
+                  {nextQuestions.map((question) => (
+                    <div key={question.factKey} className="block rounded-md bg-gray-50 p-2">
+                      <span className="text-gray-700 font-medium">• {question.question}</span>
+                      {question.helpText && (
+                        <span className="block text-[11px] text-gray-400 mt-1">{question.helpText}</span>
+                      )}
+                      {renderQuestionInput(question)}
+                      {questionErrors[question.factKey] && (
+                        <span className="mt-1 block text-[11px] text-red-600">
+                          {questionErrors[question.factKey]}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    disabled={answerSubmitting}
+                    onClick={async () => {
+                      setAnswerSubmitting(true);
+                      try {
+                        setQuestionErrors({});
+                        const response = await fetch('/api/wizard/answer-questions', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            caseId,
+                            answers: questionAnswers,
+                          }),
+                        });
+                        const data = await response.json();
+                        if (!response.ok) {
+                          if (Array.isArray(data?.errors)) {
+                            const errorMap: Record<string, string> = {};
+                            data.errors.forEach((item: { factKey: string; message: string }) => {
+                              errorMap[item.factKey] = item.message;
+                            });
+                            setQuestionErrors(errorMap);
+                          }
+                          return;
+                        }
+                        if (data.validation_summary || data.validation) {
+                          const summary = (data.validation_summary ?? data.validation) as UploadValidationSummary;
+                          setValidationSummary(summary);
+                        }
+                        if (Array.isArray(data?.recommendations)) {
+                          setValidationRecommendations(data.recommendations);
+                        } else if (Array.isArray(data?.validation?.recommendations)) {
+                          setValidationRecommendations(data.validation.recommendations);
+                        }
+
+                        // Get new next_questions
+                        const newNextQuestions: QuestionDefinition[] = Array.isArray(data?.next_questions)
+                          ? data.next_questions
+                          : Array.isArray(data?.validation?.next_questions)
+                            ? data.validation.next_questions
+                            : [];
+
+                        // FIX: Clear answered questions from local state
+                        // Keep only answers for questions that are still in next_questions
+                        // This prevents stale state and ensures clean UI
+                        const nextQuestionKeys = new Set(newNextQuestions.map((q: QuestionDefinition) => q.factKey));
+                        setQuestionAnswers((prev) => {
+                          const filtered: Record<string, any> = {};
+                          for (const key of Object.keys(prev)) {
+                            if (nextQuestionKeys.has(key)) {
+                              // Keep answer if question is still showing (e.g., validation error)
+                              filtered[key] = prev[key];
+                            }
+                            // Otherwise, answer was accepted and persisted server-side, so we can drop it
+                          }
+                          return filtered;
+                        });
+
+                        setNextQuestions(newNextQuestions);
+                      } catch (err) {
+                        console.error('Failed to submit answers', err);
+                      } finally {
+                        setAnswerSubmitting(false);
+                      }
+                    }}
+                    className="mt-2 rounded bg-purple-600 px-2 py-1 text-xs text-white disabled:opacity-50"
+                  >
+                    {answerSubmitting ? 'Re-checking…' : 'Save answers & re-check'}
+                  </button>
+                </div>
+              )}
+
+              {/* CTA Section - immediately below issues */}
+              <div className="mt-4 space-y-2 rounded-md border border-purple-100 bg-purple-50 p-3 text-xs">
+                <p className="font-semibold text-purple-800">Recommended next step</p>
+                {(() => {
+                  const status = validationSummary.status ?? 'warning';
+                  const isInvalid = status === 'invalid' || status === 'warning';
+                  const derivedValidatorKey =
+                    validationSummary.validator_key ?? questionId.replace('validator_', '');
+                  const generatorLinks: Record<string, string> = {
+                    section_21: '/tools/free-section-21-notice-generator',
+                    section_8: '/tools/free-section-8-notice-generator',
+                  };
+                  const generatorLink = generatorLinks[derivedValidatorKey];
+                  const ctas = getWizardCta({
+                    jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
+                    validator_key: validationSummary.validator_key,
+                    validation_summary: validationSummary,
+                    caseId,
+                    source: 'validator',
+                  });
+                  const primaryLabel = isInvalid
+                    ? 'Generate a court-ready notice'
+                    : 'Download notice + serving steps';
+                  const secondaryLabel = isInvalid ? ctas.secondary?.label : 'Need the full court pack?';
+                  return (
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href={ctas.primary.href}
+                        className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white"
+                      >
+                        {primaryLabel} (£{ctas.primary.price.toFixed(2)})
+                      </a>
+                      {ctas.secondary && (
+                        <a
+                          href={ctas.secondary.href}
+                          className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700"
+                        >
+                          {secondaryLabel} (£{ctas.secondary.price.toFixed(2)})
+                        </a>
+                      )}
+                      {isInvalid && generatorLink && (
+                        <a
+                          href={generatorLink}
+                          className="rounded border border-purple-200 bg-white px-3 py-2 text-xs font-medium text-purple-700"
+                        >
+                          Try free generator
+                        </a>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+              {toolUpsell && (
+                <div className="mt-6">
+                  {(() => {
+                    const ctas = getWizardCta({
+                      jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction ?? undefined,
+                      validator_key: validationSummary.validator_key,
+                      validation_summary: validationSummary,
+                      caseId,
+                      source: 'validator',
+                    });
+                    return (
+                      <ToolUpsellCard
+                        {...toolUpsell}
+                        ctaHref={ctas.primary.href}
+                        ctaLabel={`Upgrade to court-ready pack — £${ctas.primary.price.toFixed(2)}`}
+                      />
+                    );
+                  })()}
+                </div>
+              )}
+            </>
+          )}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -12,6 +12,8 @@
  */
 
 import { jsonCompletion, hasCustomJsonAIClient, ChatMessage, parseAIModel } from '@/lib/ai/openai-client';
+import { validateGround8Eligibility } from '@/lib/arrears-engine';
+import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 
 // =============================================================================
 // Types
@@ -60,20 +62,50 @@ export function normalizeRoute(route: string | undefined): string | undefined {
 }
 
 /**
+ * Derive jurisdiction from facts.
+ * Checks multiple possible field names.
+ */
+function deriveJurisdiction(facts: WizardFactsFlat): 'england' | 'wales' | 'scotland' | 'northern-ireland' {
+  const jurisdiction = facts.jurisdiction || facts.property_country || facts.country || 'england';
+  const normalized = jurisdiction.toLowerCase().replace(/[^a-z-]/g, '');
+
+  if (normalized.includes('wales')) return 'wales';
+  if (normalized.includes('scotland')) return 'scotland';
+  if (normalized.includes('northern') || normalized.includes('ireland') || normalized === 'ni') return 'northern-ireland';
+  return 'england';
+}
+
+/**
+ * Normalize Wales route values.
+ */
+function normalizeWalesRoute(route: string | undefined): string | undefined {
+  if (!route) return route;
+  const lower = route.toLowerCase();
+  if (lower.includes('section 173') || lower.includes('section_173') || lower.includes('wales_section_173')) return 'wales_section_173';
+  if (lower.includes('fault') || lower.includes('breach') || lower.includes('wales_fault')) return 'wales_fault_based';
+  return route;
+}
+
+/**
  * Run rule-based consistency checks on wizard facts.
  * These always run before generation.
+ *
+ * Now supports jurisdiction-aware validation for England, Wales, Scotland.
  */
 export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): ConsistencyIssue[] {
   const issues: ConsistencyIssue[] = [];
 
-  // Only run complete_pack specific checks for complete_pack/eviction_pack
-  if (product !== 'complete_pack' && product !== 'eviction_pack') {
+  // Only run complete_pack specific checks for complete_pack/eviction_pack/notice_only
+  if (product !== 'complete_pack' && product !== 'eviction_pack' && product !== 'notice_only') {
     return issues;
   }
 
+  // Derive jurisdiction
+  const jurisdiction = deriveJurisdiction(facts);
+
   // Normalize route to canonical slug (handles legacy "Section 8 (fault-based)" etc.)
   const rawRoute = facts.selected_notice_route || facts.eviction_route;
-  const route = normalizeRoute(rawRoute);
+  const route = jurisdiction === 'wales' ? normalizeWalesRoute(rawRoute) : normalizeRoute(rawRoute);
 
   // ========================================
   // Common Checks (both routes)
@@ -208,6 +240,33 @@ export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): Con
           fields: ['has_rent_arrears', 'total_arrears'],
           suggestion: 'Provide arrears amount and confirm arrears status',
         });
+      }
+
+      // Ground 8 threshold validation (2+ months arrears required)
+      if (groundsStr.includes('8') && (totalArrears || (facts.arrears_items && facts.arrears_items.length > 0))) {
+        const rentAmount = facts.rent_amount || 0;
+        const rentFrequency = (facts.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
+        const arrearsItems: ArrearsItem[] = facts.arrears_items || [];
+
+        if (rentAmount > 0) {
+          const ground8Result = validateGround8Eligibility({
+            arrears_items: arrearsItems,
+            rent_amount: rentAmount,
+            rent_frequency: rentFrequency,
+            jurisdiction: jurisdiction,
+            legacy_total_arrears: totalArrears || 0,
+          });
+
+          if (!ground8Result.is_eligible) {
+            issues.push({
+              code: 'GROUND_8_THRESHOLD_NOT_MET',
+              severity: 'blocker',
+              message: `Ground 8 requires at least 2 months\' arrears: ${ground8Result.explanation}`,
+              fields: ['total_arrears', 'arrears_items', 'rent_amount'],
+              suggestion: 'Arrears must be at least 2 months rent (8 weeks for weekly) at both notice date and hearing. Consider Ground 10/11 instead.',
+            });
+          }
+        }
       }
     }
 
@@ -369,6 +428,162 @@ export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): Con
         fields: ['no_retaliatory_notice', 'recent_repair_complaints'],
         suggestion: 'Wait 6 months after repair complaint resolution or use Section 8',
       });
+    }
+  }
+
+  // ========================================
+  // Wales Section 173 Specific Checks
+  // ========================================
+
+  if (jurisdiction === 'wales' && (route === 'wales_section_173' || route?.includes('173'))) {
+    // Wales requires 6 months notice for Section 173
+    const noticeServiceDate = facts.notice_served_date || facts.notice_service_date;
+    const noticeExpiry = facts.notice_expiry_date;
+
+    if (noticeServiceDate && noticeExpiry) {
+      const serviceDate = new Date(noticeServiceDate);
+      const expiryDate = new Date(noticeExpiry);
+      const daysDiff = Math.floor((expiryDate.getTime() - serviceDate.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDiff < 182) { // 6 months = ~182 days
+        issues.push({
+          code: 'WALES_S173_NOTICE_PERIOD_SHORT',
+          severity: 'blocker',
+          message: 'Wales Section 173 requires minimum 6 months notice period',
+          fields: ['notice_served_date', 'notice_expiry_date'],
+          suggestion: 'Section 173 notice must give at least 6 months notice per Renting Homes (Wales) Act 2016',
+        });
+      }
+    }
+
+    // Wales deposit protection (if deposit taken)
+    const depositTaken = facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0);
+    if (depositTaken) {
+      const depositProtected = facts.deposit_protected === true || facts.deposit_protected_wales === true;
+      if (!depositProtected) {
+        issues.push({
+          code: 'WALES_DEPOSIT_NOT_PROTECTED',
+          severity: 'blocker',
+          message: 'Wales Section 173 invalid without deposit protection',
+          fields: ['deposit_protected', 'deposit_protected_wales'],
+          suggestion: 'Deposit must be protected in an approved scheme within 30 days',
+        });
+      }
+    }
+
+    // Wales-specific: Written statement of occupation contract
+    if (facts.written_statement_provided === false) {
+      issues.push({
+        code: 'WALES_WRITTEN_STATEMENT_MISSING',
+        severity: 'warning',
+        message: 'Wales requires written statement of occupation contract',
+        fields: ['written_statement_provided'],
+        suggestion: 'Renting Homes (Wales) Act 2016 requires landlords to provide a written statement',
+      });
+    }
+  }
+
+  // ========================================
+  // Wales Fault-Based (Section 159) Checks
+  // ========================================
+
+  if (jurisdiction === 'wales' && (route === 'wales_fault_based' || route?.includes('fault'))) {
+    // Wales fault-based requires grounds under Renting Homes (Wales) Act 2016
+    // NOTE: section8_grounds is checked as legacy fallback for older wizard data
+    // New wizard data should use wales_breach_type field
+    const grounds = facts.wales_breach_type || facts.section8_grounds;
+    if (!grounds || (Array.isArray(grounds) && grounds.length === 0)) {
+      issues.push({
+        code: 'WALES_FAULT_NO_GROUNDS',
+        severity: 'blocker',
+        message: 'Wales fault-based notice requires breach grounds',
+        fields: ['wales_breach_type'],
+        suggestion: 'Specify the grounds for possession under Schedule 9 of Renting Homes (Wales) Act 2016',
+      });
+    }
+
+    // Wales fault-based notice period is 56 days (8 weeks) for Section 159
+    const noticeServiceDate = facts.notice_served_date || facts.notice_service_date;
+    const noticeExpiry = facts.notice_expiry_date;
+
+    if (noticeServiceDate && noticeExpiry) {
+      const serviceDate = new Date(noticeServiceDate);
+      const expiryDate = new Date(noticeExpiry);
+      const daysDiff = Math.floor((expiryDate.getTime() - serviceDate.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDiff < 56) {
+        issues.push({
+          code: 'WALES_FAULT_NOTICE_PERIOD_SHORT',
+          severity: 'blocker',
+          message: 'Wales Section 159 requires minimum 56 days (8 weeks) notice',
+          fields: ['notice_served_date', 'notice_expiry_date'],
+          suggestion: 'Discretionary grounds require 8 weeks notice per Renting Homes (Wales) Act 2016, s.159',
+        });
+      }
+    }
+  }
+
+  // ========================================
+  // Scotland Notice to Leave Checks
+  // ========================================
+
+  if (jurisdiction === 'scotland') {
+    // Scotland requires grounds for eviction
+    const grounds = facts.scotland_grounds || facts.notice_to_leave_grounds || facts.prt_grounds;
+    if (!grounds || (Array.isArray(grounds) && grounds.length === 0)) {
+      issues.push({
+        code: 'SCOTLAND_NO_GROUNDS',
+        severity: 'blocker',
+        message: 'Scotland Notice to Leave requires eviction grounds',
+        fields: ['scotland_grounds', 'notice_to_leave_grounds'],
+        suggestion: 'Select applicable grounds under Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3',
+      });
+    }
+
+    // Scotland landlord registration required
+    if (!facts.landlord_registration_number && !facts.landlord_reg_number) {
+      issues.push({
+        code: 'SCOTLAND_LANDLORD_NOT_REGISTERED',
+        severity: 'blocker',
+        message: 'Scotland requires landlord registration number',
+        fields: ['landlord_registration_number', 'landlord_reg_number'],
+        suggestion: 'Provide your Scottish Landlord Registration number (required by law)',
+      });
+    }
+
+    // Scotland pre-action protocol (for rent arrears)
+    const groundsStr = Array.isArray(grounds) ? grounds.join(' ').toLowerCase() : (grounds || '').toLowerCase();
+    if (groundsStr.includes('arrears') || groundsStr.includes('ground 1') || groundsStr.includes('rent')) {
+      if (facts.pre_action_completed !== true && facts.pre_action_protocol_followed !== true) {
+        issues.push({
+          code: 'SCOTLAND_PRE_ACTION_NOT_COMPLETED',
+          severity: 'blocker',
+          message: 'Scotland rent arrears eviction requires pre-action protocol compliance',
+          fields: ['pre_action_completed', 'pre_action_protocol_followed'],
+          suggestion: 'Complete Pre-Action Requirements per Private Residential Tenancies regulations before issuing notice',
+        });
+      }
+    }
+
+    // Scotland minimum notice periods vary by ground
+    // Ground 1 (rent arrears) = 28 days, Other grounds = 28-84 days depending on ground
+    const noticeServiceDate = facts.notice_served_date || facts.notice_service_date;
+    const noticeExpiry = facts.notice_expiry_date;
+
+    if (noticeServiceDate && noticeExpiry) {
+      const serviceDate = new Date(noticeServiceDate);
+      const expiryDate = new Date(noticeExpiry);
+      const daysDiff = Math.floor((expiryDate.getTime() - serviceDate.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDiff < 28) {
+        issues.push({
+          code: 'SCOTLAND_NOTICE_PERIOD_SHORT',
+          severity: 'blocker',
+          message: 'Scotland Notice to Leave requires minimum 28 days notice',
+          fields: ['notice_served_date', 'notice_expiry_date'],
+          suggestion: 'Most grounds require at least 28 days notice; some require 84 days',
+        });
+      }
     }
   }
 

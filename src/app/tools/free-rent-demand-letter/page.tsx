@@ -1,9 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
-import { RiAlertLine, RiInformationLine, RiExternalLinkLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -20,6 +25,26 @@ export default function RentDemandLetterGenerator() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const upsellConfig = {
+    toolName: 'Free Rent Demand Letter Generator',
+    toolType: 'generator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £199.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Basic demand letter PDF',
+      'Manual arrears follow-up',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'If the tenant does not pay, upgrade for a court-ready money claim bundle with forms and evidence templates.',
+  };
 
   // Set default payment deadline to 14 days from today
   useEffect(() => {
@@ -29,7 +54,8 @@ export default function RentDemandLetterGenerator() {
     setFormData((prev) => ({ ...prev, paymentDeadline: formattedDate }));
   }, []);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     // Validate all required fields
     if (!formData.landlordName?.trim()) {
       alert('Please enter your name');
@@ -318,7 +344,7 @@ export default function RentDemandLetterGenerator() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,
@@ -351,6 +377,17 @@ URL.revokeObjectURL(url);
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-demand-letter',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -365,8 +402,13 @@ URL.revokeObjectURL(url);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -394,6 +436,9 @@ URL.revokeObjectURL(url);
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -416,7 +461,7 @@ URL.revokeObjectURL(url);
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -645,7 +690,7 @@ URL.revokeObjectURL(url);
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Letter...'
@@ -657,50 +702,15 @@ URL.revokeObjectURL(url);
             <p className="text-sm text-success-800 font-medium">
               ✓ Demand letter generated successfully! Your PDF has been downloaded.
             </p>
+            <div className="mt-4">
+              <ToolUpsellCard {...upsellConfig} />
+            </div>
           </div>
         )}
       </form>
 
-      {/* Secondary Upgrade Box */}
-      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-linear-to-br from-purple-50 to-white p-6">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900">
-          Need to pursue a money claim?
-        </h3>
-        <p className="mb-4 text-sm text-gray-700">
-          If the tenant doesn't pay after receiving your demand letter, you may need to take
-          court action. Our Complete Money Claims Pack includes everything you need.
-        </p>
-        <div className="mb-4">
-          <p className="text-2xl font-bold text-blue-600">£179.99</p>
-          <ul className="mt-3 space-y-2 text-sm text-gray-700">
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Complete Money Claims Pack
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              N1 claim form (England & Wales)
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Form 3A (Scotland)
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Particulars of claim templates
-            </li>
-            <li className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
-              Evidence bundle templates
-            </li>
-          </ul>
-        </div>
-        <a
-          href="/products/money-claim"
-          className="block w-full rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-all hover:bg-blue-700 hover:scale-105"
-        >
-          Get Money Claims Pack
-        </a>
+      <div className="mt-8">
+        <ToolUpsellCard {...upsellConfig} />
       </div>
 
       {/* Educational Content */}
@@ -835,7 +845,7 @@ URL.revokeObjectURL(url);
                 (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10,
                 or 11. (2) Start a money claim through the courts to recover the debt (without seeking
                 possession). (3) Continue to pursue payment informally while considering your options.
-                Our Complete Eviction Pack (£149.99) includes Section 8 notices with compliance checks.
+                Our Complete Eviction Pack (£199.99) includes Section 8 notices with compliance checks.
               </p>
             </div>
 
@@ -872,6 +882,16 @@ URL.revokeObjectURL(url);
           </div>
         </Container>
       </div>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Demand Letter"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,145 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">GROUND 1: FAMILY MOVE-IN</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Landlord or family needs the property</text>
+
+  <!-- House with family -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="200" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- House -->
+    <g transform="translate(50, 20)">
+      <path d="M50 10 L95 45 L95 85 L5 85 L5 45 Z" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+      <rect x="38" y="55" width="24" height="30" rx="2" fill="#7C3AED"/>
+      <rect x="15" y="50" width="15" height="15" rx="2" fill="white" stroke="#7C3AED"/>
+      <rect x="70" y="50" width="15" height="15" rx="2" fill="white" stroke="#7C3AED"/>
+    </g>
+
+    <!-- Family icons -->
+    <g transform="translate(35, 115)">
+      <circle cx="20" cy="15" r="12" fill="#7C3AED"/>
+      <rect x="10" y="30" width="20" height="25" rx="4" fill="#6D28D9"/>
+
+      <circle cx="55" cy="15" r="12" fill="#A78BFA"/>
+      <rect x="45" y="30" width="20" height="25" rx="4" fill="#7C3AED"/>
+
+      <circle cx="90" cy="20" r="10" fill="#6D28D9"/>
+      <rect x="82" y="33" width="16" height="20" rx="3" fill="#A78BFA"/>
+
+      <circle cx="120" cy="22" r="8" fill="#A78BFA"/>
+      <rect x="114" y="33" width="12" height="18" rx="2" fill="#7C3AED"/>
+    </g>
+
+    <text x="100" y="185" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">GROUND 1</text>
+    <text x="100" y="198" text-anchor="middle" fill="#6D28D9" font-size="9">Mandatory Ground</text>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="220" height="200" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="220" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="220" height="12" fill="#7C3AED"/>
+    <text x="110" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY REQUIREMENTS</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#EF4444"/>
+      <text x="4" y="11" fill="white" font-size="10" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Prior notice at start</text>
+    </g>
+    <g transform="translate(15, 73)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Landlord or close family</text>
+    </g>
+    <g transform="translate(15, 98)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">As main residence</text>
+    </g>
+    <g transform="translate(15, 123)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">2 months notice</text>
+    </g>
+
+    <rect x="15" y="150" width="190" height="40" rx="6" fill="#F3F1FF"/>
+    <text x="110" y="170" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">Court must grant if</text>
+    <text x="110" y="185" text-anchor="middle" fill="#6D28D9" font-size="8">requirements met</text>
+  </g>
+
+  <!-- Who qualifies -->
+  <g transform="translate(520, 80)">
+    <rect x="0" y="0" width="220" height="200" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="220" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="220" height="12" fill="#22C55E"/>
+    <text x="110" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHO CAN MOVE IN</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Landlord themselves</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Spouse / civil partner</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Parent</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Child (adult)</text>
+    </g>
+    <g transform="translate(15, 136)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">In-laws</text>
+    </g>
+
+    <rect x="15" y="155" width="190" height="35" rx="6" fill="#EF4444" opacity="0.1"/>
+    <text x="110" y="175" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">NOT: Friends, extended family</text>
+    <text x="110" y="185" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">or investment purposes</text>
+  </g>
+
+  <!-- Process and notes -->
+  <g transform="translate(60, 300)">
+    <rect x="0" y="0" width="680" height="145" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">IMPORTANT NOTES</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="80" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">PRIOR NOTICE</text>
+      <text x="100" y="38" text-anchor="middle" fill="#6D28D9" font-size="8">Must notify tenant at</text>
+      <text x="100" y="52" text-anchor="middle" fill="#6D28D9" font-size="8">START of tenancy that</text>
+      <text x="100" y="66" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 1 may be used</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="80" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">EVIDENCE NEEDED</text>
+      <text x="100" y="38" text-anchor="middle" fill="#6D28D9" font-size="8">• Prior notice proof</text>
+      <text x="100" y="52" text-anchor="middle" fill="#6D28D9" font-size="8">• Relationship evidence</text>
+      <text x="100" y="66" text-anchor="middle" fill="#6D28D9" font-size="8">• Genuine intention</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="80" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">TIMING</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="9">Notice period:</text>
+      <text x="100" y="58" text-anchor="middle" fill="#22C55E" font-size="14" font-weight="bold">2 months</text>
+      <text x="100" y="72" text-anchor="middle" fill="#6D28D9" font-size="8">Mandatory if proven</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

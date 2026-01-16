@@ -178,7 +178,7 @@ export default function HMOProDashboardPage() {
   if (V1_BLOCK_HMO) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <div className="bg-linear-to-r from-purple-600 to-indigo-700 text-white py-8">
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-8">
           <Container size="large" className="text-center">
             <h1 className="text-4xl font-extrabold mb-4">🚧 HMO Pro - Coming in V2</h1>
             <p className="text-xl opacity-90">
@@ -190,8 +190,8 @@ export default function HMOProDashboardPage() {
         <Container size="medium" className="py-12">
           <Card padding="large">
             <div className="text-center py-8">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <RiTimeLine className="w-10 h-10 text-[#7C3AED]" />
+              <div className="w-20 h-20 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                <RiTimeLine className="w-10 h-10 text-primary" />
               </div>
 
               <h2 className="text-2xl font-bold text-charcoal mb-3">
@@ -239,7 +239,7 @@ export default function HMOProDashboardPage() {
   if (!hasAccess) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <div className="bg-linear-to-r from-secondary to-primary text-white">
+        <div className="bg-gradient-to-r from-secondary to-primary text-white">
           <Container size="large" className="py-12 text-center">
             <h1 className="text-4xl font-extrabold mb-4">🏘️ HMO Pro Dashboard</h1>
             <p className="text-xl opacity-90">
@@ -251,8 +251,8 @@ export default function HMOProDashboardPage() {
         <Container size="medium" className="py-12">
           <Card padding="large">
             <div className="text-center py-8">
-              <div className="w-20 h-20 bg-primary-subtle rounded-full flex items-center justify-center mx-auto mb-6">
-                <RiLockLine className="w-10 h-10 text-[#7C3AED]" />
+              <div className="w-20 h-20 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                <RiLockLine className="w-10 h-10 text-primary" />
               </div>
 
               <h2 className="text-2xl font-bold text-charcoal mb-3">
@@ -265,7 +265,7 @@ export default function HMOProDashboardPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-left max-w-2xl mx-auto">
                 <div className="flex items-start gap-3">
-                  <RiCheckboxCircleLine className="w-6 h-6 text-[#7C3AED] shrink-0 mt-0.5" />
+                  <RiCheckboxCircleLine className="w-6 h-6 text-primary shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-charcoal">Manage up to 20 properties</div>
                     <div className="text-sm text-gray-600">Track all your HMOs in one place</div>
@@ -273,7 +273,7 @@ export default function HMOProDashboardPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <RiCheckboxCircleLine className="w-6 h-6 text-[#7C3AED] shrink-0 mt-0.5" />
+                  <RiCheckboxCircleLine className="w-6 h-6 text-primary shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-charcoal">Tenant management</div>
                     <div className="text-sm text-gray-600">Track leases, rent, and deposits</div>
@@ -281,7 +281,7 @@ export default function HMOProDashboardPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <RiCheckboxCircleLine className="w-6 h-6 text-[#7C3AED] shrink-0 mt-0.5" />
+                  <RiCheckboxCircleLine className="w-6 h-6 text-primary shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-charcoal">Compliance tracking</div>
                     <div className="text-sm text-gray-600">License expiry alerts and renewals</div>
@@ -289,7 +289,7 @@ export default function HMOProDashboardPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <RiCheckboxCircleLine className="w-6 h-6 text-[#7C3AED] shrink-0 mt-0.5" />
+                  <RiCheckboxCircleLine className="w-6 h-6 text-primary shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-charcoal">Portfolio analytics</div>
                     <div className="text-sm text-gray-600">Occupancy rates and rent tracking</div>
@@ -320,7 +320,7 @@ export default function HMOProDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-linear-to-r from-secondary to-primary text-white">
+      <div className="bg-gradient-to-r from-secondary to-primary text-white">
         <Container size="large" className="py-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -531,7 +531,9 @@ export default function HMOProDashboardPage() {
               <h3 className="font-semibold text-charcoal mb-4">Compliance Alerts</h3>
               {properties.filter((p) => p.compliance_status !== 'compliant').length === 0 ? (
                 <div className="text-center py-4">
-                  <RiCheckboxCircleLine className="w-12 h-12 text-[#7C3AED] mx-auto mb-2" />
+                  <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <RiCheckboxCircleLine className="w-7 h-7 text-primary" />
+                  </div>
                   <p className="text-sm text-green-700 font-medium">All compliant!</p>
                 </div>
               ) : (
@@ -561,12 +563,16 @@ export default function HMOProDashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/docs/hmo" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
-                  HMO Pro Guide
+                <Link href="/help" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiBookOpenLine className="w-4 h-4 text-primary" />
+                  </div>
+                  Help Center
                 </Link>
-                <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
+                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiCustomerService2Line className="w-4 h-4 text-primary" />
+                  </div>
                   Contact Support
                 </Link>
               </div>

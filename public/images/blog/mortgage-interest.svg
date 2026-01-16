@@ -1,0 +1,131 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">MORTGAGE INTEREST TAX RELIEF</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Understanding Section 24 and landlord tax changes</text>
+
+  <!-- Tax calculation icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Calculator with percentage -->
+    <g transform="translate(35, 10)">
+      <rect x="0" y="0" width="130" height="90" rx="6" fill="#6D28D9"/>
+      <!-- Screen -->
+      <rect x="10" y="10" width="110" height="30" rx="3" fill="#1a1a2e"/>
+      <text x="115" y="30" text-anchor="end" fill="#22C55E" font-size="14" font-family="monospace">20%</text>
+      <!-- Buttons -->
+      <rect x="10" y="48" width="25" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="40" y="48" width="25" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="70" y="48" width="25" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="100" y="48" width="20" height="18" rx="2" fill="#F59E0B"/>
+      <rect x="10" y="70" width="25" height="15" rx="2" fill="#7C3AED"/>
+      <rect x="40" y="70" width="25" height="15" rx="2" fill="#7C3AED"/>
+      <rect x="70" y="70" width="25" height="15" rx="2" fill="#7C3AED"/>
+      <rect x="100" y="70" width="20" height="15" rx="2" fill="#22C55E"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">TAX CREDIT</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">20% basic rate</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">relief only</text>
+  </g>
+
+  <!-- Before vs After Section 24 -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="240" height="12" fill="#EF4444"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SECTION 24 CHANGES</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="210" height="55" rx="6" fill="#F3F1FF"/>
+      <text x="105" y="18" text-anchor="middle" fill="#22C55E" font-size="9" font-weight="bold">BEFORE (Old Rules)</text>
+      <text x="105" y="35" text-anchor="middle" fill="#6D28D9" font-size="8">Deduct ALL mortgage interest</text>
+      <text x="105" y="50" text-anchor="middle" fill="#6D28D9" font-size="8">from rental income as expense</text>
+    </g>
+
+    <g transform="translate(15, 110)">
+      <rect x="0" y="0" width="210" height="55" rx="6" fill="#EF4444" opacity="0.1"/>
+      <text x="105" y="18" text-anchor="middle" fill="#EF4444" font-size="9" font-weight="bold">NOW (Since 2020)</text>
+      <text x="105" y="35" text-anchor="middle" fill="#6D28D9" font-size="8">20% tax credit instead</text>
+      <text x="105" y="50" text-anchor="middle" fill="#6D28D9" font-size="8">Higher rate taxpayers pay more</text>
+    </g>
+  </g>
+
+  <!-- Impact example -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHO IT AFFECTS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Higher rate taxpayers</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Individual landlords</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Highly leveraged</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Companies exempt</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Basic rate unaffected</text>
+    </g>
+  </g>
+
+  <!-- Calculation and strategies -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">TAX PLANNING STRATEGIES</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">EXAMPLE IMPACT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">£20,000 rent, £10,000 interest</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">OLD: Tax on £10,000 profit</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">NEW: Tax on £20,000 profit</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Then 20% credit: £2,000</text>
+      <text x="100" y="94" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">40% payer: £2,000 extra tax</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">MITIGATION OPTIONS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Transfer to lower earner</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Incorporate into company</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Pay down mortgage</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Review portfolio</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Seek accountant advice</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">COMPANY BENEFITS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Full interest deduction</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Corporation tax 25%</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Profit retention easier</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Higher mortgage rates</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Consider stamp duty costs</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

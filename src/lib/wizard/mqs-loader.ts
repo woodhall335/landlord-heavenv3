@@ -84,6 +84,15 @@ function deriveRoutesFromFacts(
       if (lower.includes('section_8') || lower.includes('section 8')) routes.push('section_8');
       if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
       if (lower.includes('notice to leave')) routes.push('notice_to_leave');
+      // Wales routes (Renting Homes Wales Act 2016)
+      if (lower.includes('wales_section_173') || lower.includes('section_173') || lower.includes('section 173')) {
+        routes.push('wales_section_173');
+        routes.push('section_173'); // Also add non-prefixed version for question routes matching
+      }
+      if (lower.includes('wales_fault_based') || lower.includes('fault_based') || lower.includes('fault-based') || lower.includes('fault based')) {
+        routes.push('wales_fault_based');
+        routes.push('fault_based'); // Also add non-prefixed version for question routes matching
+      }
     });
   } else if (routeAnswer) {
     const lower = String(routeAnswer).toLowerCase();
@@ -92,6 +101,15 @@ function deriveRoutesFromFacts(
     if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
     if (lower.includes('leave')) routes.push('notice_to_leave');
     if (lower.includes('quit')) routes.push('notice_to_quit');
+    // Wales routes (Renting Homes Wales Act 2016)
+    if (lower.includes('wales_section_173') || lower.includes('section_173') || lower.includes('section 173')) {
+      routes.push('wales_section_173');
+      routes.push('section_173'); // Also add non-prefixed version for question routes matching
+    }
+    if (lower.includes('wales_fault_based') || lower.includes('fault_based') || lower.includes('fault-based') || lower.includes('fault based')) {
+      routes.push('wales_fault_based');
+      routes.push('fault_based'); // Also add non-prefixed version for question routes matching
+    }
   }
 
   docRoutes.forEach((r) => {

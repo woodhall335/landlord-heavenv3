@@ -10,11 +10,12 @@
 // - NEVER return storage paths to unauthorized users
 // - Signed URLs expire after 15 minutes (900s default)
 // - Validate case ownership before generating signed URL
-// - For anonymous cases, validate using session or case-bound token
+// - For anonymous cases, validate using session token from x-session-token header
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { getSessionTokenFromRequest } from '@/lib/session-token';
 
 export const runtime = 'nodejs';
 
@@ -36,22 +37,43 @@ export async function GET(request: Request) {
 
     // Parse query parameters
     const url = new URL(request.url);
-    const caseId = url.searchParams.get('caseId');
+    let caseId = url.searchParams.get('caseId');
     const evidenceId = url.searchParams.get('evidenceId');
+    let documentFallback: { id: string; case_id: string; pdf_url: string | null } | null = null;
 
     // Validate required parameters
-    if (!caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
-    }
-
     if (!evidenceId) {
       return NextResponse.json({ error: 'evidenceId is required' }, { status: 400 });
     }
 
-    // Load case to verify ownership
+    if (!caseId) {
+      const { data: docRow, error: docError } = await supabase
+        .from('documents')
+        .select('id, case_id, pdf_url')
+        .eq('id', evidenceId)
+        .eq('document_type', 'evidence')
+        .maybeSingle();
+
+      if (docError) {
+        console.error('[evidence/download] Failed to load document for evidenceId:', docError);
+        return NextResponse.json({ error: 'Could not load evidence' }, { status: 500 });
+      }
+
+      if (docRow) {
+        documentFallback = docRow;
+        caseId = docRow.case_id;
+      } else {
+        return NextResponse.json(
+          { error: 'caseId is required when evidenceId is not a document record' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Load case to verify ownership (include session_token for anonymous validation)
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id')
+      .select('id, user_id, session_token')
       .eq('id', caseId)
       .maybeSingle();
 
@@ -68,38 +90,78 @@ export async function GET(request: Request) {
     // OWNERSHIP VALIDATION
     // =========================================================================
     // If the case has an owner, only that user can download evidence.
-    // For anonymous cases (user_id is null), we allow download if:
-    //   1. User is authenticated but case was started anonymously (migration case)
-    //   2. User is anonymous but owns the case session (future: add session validation)
-    //
-    // NOTE: Anonymous case downloads should ideally be further restricted
-    // by session token, but for now we follow the same pattern as upload.
+    // For anonymous cases (user_id is null), we require:
+    //   1. A matching session token from the x-session-token header
+    //   2. OR the user is now authenticated (migration case - anonymous to signed up)
     // =========================================================================
 
     if (caseRow.user_id) {
       // Case is owned - require the owner
-      if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      if (caseRow.user_id !== user.id) {
+      if (!user || caseRow.user_id !== user.id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
+    } else {
+      // Anonymous case - validate session token
+      // If user is now authenticated, allow access (they signed up after starting anonymously)
+      if (!user) {
+        // Anonymous user - must have matching session token
+        const requestSessionToken = getSessionTokenFromRequest(request);
+        const caseSessionToken = (caseRow as any).session_token;
+
+        // If case has a session token, require it to match
+        if (caseSessionToken) {
+          if (!requestSessionToken || requestSessionToken !== caseSessionToken) {
+            console.warn('[evidence/download] Session token mismatch for anonymous case', {
+              caseId,
+              hasRequestToken: !!requestSessionToken,
+              hasCaseToken: !!caseSessionToken,
+            });
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+          }
+        }
+        // If case has no session token (legacy), allow access for backwards compatibility
+        // New cases will have session tokens set on creation
+      }
+      // If user is authenticated, allow access to anonymous cases
+      // (they may have started anonymous and then signed up)
     }
-    // For anonymous cases (caseRow.user_id === null):
-    // - If user is logged in, allow access (they may be the anonymous creator)
-    // - If user is not logged in, allow access (anonymous session)
-    // This mirrors the upload behavior for consistency.
 
     // =========================================================================
     // LOAD EVIDENCE FROM CANONICAL SOURCE (facts.evidence.files[])
     // =========================================================================
-    const facts = await getOrCreateWizardFacts(supabase as any, caseId);
+    // caseId is guaranteed to be non-null at this point due to earlier validation
+    const facts = await getOrCreateWizardFacts(supabase as any, caseId!);
     const evidenceFiles: EvidenceFile[] = (facts as any)?.evidence?.files || [];
 
     // Find the specific evidence file by ID
     const evidenceFile = evidenceFiles.find((f: EvidenceFile) => f.id === evidenceId);
 
     if (!evidenceFile) {
+      if (documentFallback) {
+        const storagePath = documentFallback.pdf_url;
+        if (!storagePath || storagePath.startsWith('http')) {
+          console.warn('[evidence/download] Document has public URL instead of storage path:', evidenceId);
+          return NextResponse.json(
+            { error: 'Evidence file unavailable. Please re-upload.' },
+            { status: 410 }
+          );
+        }
+
+        const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+          .from('documents')
+          .createSignedUrl(storagePath, SIGNED_URL_EXPIRY_SECONDS);
+
+        if (signedUrlError || !signedUrlData?.signedUrl) {
+          console.error('[evidence/download] Failed to create signed URL:', signedUrlError);
+          return NextResponse.json({ error: 'Could not generate download URL' }, { status: 500 });
+        }
+
+        return NextResponse.json({
+          signedUrl: signedUrlData.signedUrl,
+          expiresIn: SIGNED_URL_EXPIRY_SECONDS,
+        });
+      }
+
       // Fallback: check documents table for evidence documents
       const { data: docRow, error: docError } = await supabase
         .from('documents')
@@ -181,17 +243,15 @@ export async function POST(request: Request) {
 
     const { caseId, evidenceId } = body;
 
-    if (!caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
-    }
-
     if (!evidenceId) {
       return NextResponse.json({ error: 'evidenceId is required' }, { status: 400 });
     }
 
     // Construct URL with query params and delegate to GET handler
     const url = new URL(request.url);
-    url.searchParams.set('caseId', caseId);
+    if (caseId) {
+      url.searchParams.set('caseId', caseId);
+    }
     url.searchParams.set('evidenceId', evidenceId);
 
     const getRequest = new Request(url.toString(), {

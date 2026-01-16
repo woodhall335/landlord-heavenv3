@@ -1,6 +1,395 @@
-<h1>Proof of Service</h1>
-<p>This template records how documents were served on the tenant.</p>
-<p>Landlord: {{landlord_full_name}}</p>
-<p>Tenant: {{tenant_full_name}}</p>
-<p>Service method: {{service_method}}</p>
-<p>Service address: {{service_address_line1}} {{service_address_town}} {{service_postcode}}</p>
+{{!--
+  ============================================================================
+  PROOF OF SERVICE CERTIFICATE
+  Legal Evidence Document
+  ============================================================================
+  Court-ready certificate documenting notice service
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Proof of Service Certificate</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1.5em;
+      border-bottom: 3px double #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 18pt;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 10pt;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Certificate Number */
+    .certificate-number {
+      text-align: right;
+      font-size: 9pt;
+      color: #666;
+      margin-bottom: 1.5em;
+    }
+
+    /* Declaration Section */
+    .declaration {
+      margin: 2em 0;
+      line-height: 2;
+    }
+
+    .declaration p {
+      margin: 1.5em 0;
+      text-align: justify;
+    }
+
+    /* Form Fields */
+    .field {
+      display: inline-block;
+      min-width: 200px;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 0 0.5em;
+      font-weight: 600;
+    }
+
+    .field.short {
+      min-width: 100px;
+    }
+
+    .field.long {
+      min-width: 300px;
+    }
+
+    /* Details Box */
+    .details-box {
+      margin: 2em 0;
+      border: 2px solid #1a1a1a;
+      padding: 1.5em;
+    }
+
+    .details-box h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      margin: 0 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid #ddd;
+      text-transform: uppercase;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0.75em 1em;
+    }
+
+    .details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .details-grid dd {
+      margin: 0;
+      border-bottom: 1px dotted #ccc;
+      padding-bottom: 0.25em;
+    }
+
+    /* Service Method */
+    .service-method {
+      margin: 2em 0;
+    }
+
+    .service-method h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      margin: 0 0 1em 0;
+      text-transform: uppercase;
+    }
+
+    .method-options {
+      display: grid;
+      gap: 0.75em;
+    }
+
+    .method-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75em;
+    }
+
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #1a1a1a;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checkbox.checked {
+      background: #1a1a1a;
+      position: relative;
+    }
+
+    .checkbox.checked::after {
+      content: "✓";
+      color: white;
+      position: absolute;
+      left: 2px;
+      top: -2px;
+      font-size: 14px;
+    }
+
+    .method-label {
+      font-weight: 600;
+    }
+
+    .method-description {
+      font-size: 9pt;
+      color: #666;
+    }
+
+    /* Signature Section */
+    .signature-section {
+      margin-top: 3em;
+      page-break-inside: avoid;
+    }
+
+    .signature-section h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      margin: 0 0 1.5em 0;
+      text-transform: uppercase;
+    }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+    }
+
+    .signature-box {
+      border: 1px solid #ddd;
+      padding: 1.5em;
+    }
+
+    .signature-box h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 1em 0;
+      color: #444;
+    }
+
+    .signature-line {
+      margin: 1.5em 0 0.5em 0;
+      border-bottom: 1px solid #1a1a1a;
+      height: 40px;
+    }
+
+    .signature-label {
+      font-size: 9pt;
+      color: #666;
+    }
+
+    /* Legal Notice */
+    .legal-notice {
+      margin-top: 2em;
+      padding: 1em;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      font-size: 8pt;
+      color: #666;
+    }
+
+    .legal-notice p {
+      margin: 0.5em 0;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 8pt;
+      color: #888;
+      text-align: center;
+    }
+
+    @media print {
+      .signature-section {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Certificate of Service</h1>
+  <div class="doc-subtitle">Proof of Notice Service for Court Proceedings</div>
+</div>
+
+<!-- Certificate Reference -->
+<div class="certificate-number">
+  Reference: POS-{{case_id}}-{{current_date_short}}
+</div>
+
+<!-- Declaration -->
+<div class="declaration">
+  <p>
+    I, <span class="field long">{{landlord_full_name}}</span>, being the landlord/agent
+    of the property known as:
+  </p>
+  <p style="text-align: center; font-weight: 600; font-size: 12pt;">
+    {{property_address}}
+  </p>
+  <p>
+    do hereby certify that the notice described below was served upon the tenant(s)
+    in the manner indicated.
+  </p>
+</div>
+
+<!-- Notice Details -->
+<div class="details-box">
+  <h2>Notice Details</h2>
+  <dl class="details-grid">
+    <dt>Notice Type:</dt>
+    <dd>{{notice_type}}</dd>
+    <dt>Tenant Name(s):</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Service Address:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Date of Service:</dt>
+    <dd>{{service_date_formatted}}</dd>
+    <dt>Time of Service:</dt>
+    <dd>_______________</dd>
+    <dt>Notice Expiry Date:</dt>
+    <dd>{{earliest_possession_date_formatted}}</dd>
+  </dl>
+</div>
+
+<!-- Service Method -->
+<div class="service-method">
+  <h2>Method of Service</h2>
+  <div class="method-options">
+    <div class="method-option">
+      <div class="checkbox {{#if (eq service_method 'hand')}}checked{{/if}}"></div>
+      <div>
+        <div class="method-label">Hand Delivery</div>
+        <div class="method-description">Delivered by hand through the letterbox or directly to the tenant</div>
+      </div>
+    </div>
+    <div class="method-option">
+      <div class="checkbox {{#if (eq service_method 'post')}}checked{{/if}}"></div>
+      <div>
+        <div class="method-label">First Class Post</div>
+        <div class="method-description">Sent via Royal Mail First Class post (deemed served 2 working days after posting)</div>
+      </div>
+    </div>
+    <div class="method-option">
+      <div class="checkbox {{#if (eq service_method 'recorded_delivery')}}checked{{/if}}"></div>
+      <div>
+        <div class="method-label">Recorded/Signed Delivery</div>
+        <div class="method-description">Sent via Royal Mail Recorded or Signed For delivery</div>
+      </div>
+    </div>
+    <div class="method-option">
+      <div class="checkbox"></div>
+      <div>
+        <div class="method-label">Other Method</div>
+        <div class="method-description">Please specify: ________________________________</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Additional Evidence -->
+<div class="details-box">
+  <h2>Supporting Evidence</h2>
+  <dl class="details-grid">
+    <dt>Witness Present:</dt>
+    <dd>Yes / No (circle)</dd>
+    <dt>Witness Name:</dt>
+    <dd>________________________________</dd>
+    <dt>Photo Taken:</dt>
+    <dd>Yes / No (circle)</dd>
+    <dt>Proof of Postage Ref:</dt>
+    <dd>________________________________</dd>
+    <dt>Tracking Number:</dt>
+    <dd>________________________________</dd>
+  </dl>
+</div>
+
+<!-- Signature Section -->
+<div class="signature-section">
+  <h2>Declaration & Signature</h2>
+
+  <p style="font-size: 10pt; margin-bottom: 1.5em;">
+    I declare that the information provided in this certificate is true and accurate to the best of my knowledge.
+    I understand that this document may be used as evidence in court proceedings.
+  </p>
+
+  <div class="signature-grid">
+    <div class="signature-box">
+      <h3>Landlord/Agent</h3>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Print Name</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Date</div>
+    </div>
+
+    <div class="signature-box">
+      <h3>Witness (if applicable)</h3>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Print Name</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Address</div>
+    </div>
+  </div>
+</div>
+
+<!-- Legal Notice -->
+<div class="legal-notice">
+  <p><strong>Important:</strong> This certificate should be completed at the time of service and kept with your records.
+  You may be required to produce this document as evidence in court proceedings.</p>
+  <p>Under the Housing Act 1988, proper service of notice is essential for valid possession proceedings.
+  False statements in this certificate may constitute contempt of court.</p>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p>Generated by Landlord Heaven | {{current_date}}</p>
+</div>
+
+</body>
+</html>

@@ -12,7 +12,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
@@ -20,6 +20,8 @@ import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
+
+export const runtime = 'nodejs';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
@@ -32,6 +34,7 @@ const checkpointSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/checkpoint', writesUsingAdmin: true });
     const body = await request.json();
     const validation = checkpointSchema.safeParse(body);
 
@@ -49,18 +52,15 @@ export async function POST(request: NextRequest) {
 
     const { case_id, facts: providedFacts, jurisdiction: providedJurisdiction, product: providedProduct, case_type: providedCaseType } = validation.data;
 
-    const user = await getServerUser().catch(() => null);
-    const supabase = await createServerSupabaseClient();
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createSupabaseAdminClient();
 
-    // Load case from database
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data: caseData, error: caseError } = await query.single();
+    // Load case from database using admin client to support anonymous users
+    const { data: caseData, error: caseError } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !caseData) {
       return NextResponse.json(
@@ -164,7 +164,8 @@ export async function POST(request: NextRequest) {
 
     // ADR-001 COMPLIANCE: Load WizardFacts from case_facts.facts (canonical source of truth)
     // Use providedFacts as fallback only for testing/stateless usage
-    const wizardFacts = providedFacts || await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const wizardFacts = providedFacts || await getOrCreateWizardFacts(adminSupabase, case_id);
 
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (CHECKPOINT STAGE)
@@ -241,7 +242,7 @@ export async function POST(request: NextRequest) {
 
     if (finalRecommendedRoute) {
       try {
-        await supabase
+        await adminSupabase
           .from('cases')
           .update({
             recommended_route: finalRecommendedRoute,

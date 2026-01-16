@@ -1,0 +1,136 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">NORTHERN IRELAND EVICTION GUIDE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Complete guide to ending tenancies in NI</text>
+
+  <!-- NI House icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- House with NI flag element -->
+    <g transform="translate(40, 15)">
+      <!-- House shape -->
+      <polygon points="60,0 120,40 120,80 0,80 0,40" fill="#6D28D9"/>
+      <!-- Roof -->
+      <polygon points="60,0 120,40 0,40" fill="#7C3AED"/>
+      <!-- Door -->
+      <rect x="45" y="45" width="30" height="35" rx="2" fill="#A78BFA"/>
+      <!-- Windows -->
+      <rect x="10" y="50" width="25" height="20" fill="white" opacity="0.8"/>
+      <rect x="85" y="50" width="25" height="20" fill="white" opacity="0.8"/>
+      <!-- Red hand symbol (NI) -->
+      <circle cx="60" cy="25" r="12" fill="#EF4444" opacity="0.9"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">NI EVICTION</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Different rules</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">from England</text>
+  </g>
+
+  <!-- Key differences -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY DIFFERENCES FROM ENGLAND</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">No Section 21 equivalent</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Notice to Quit (NTQ) required</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">County court proceedings</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Longer notice periods often</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Registration required</text>
+    </g>
+  </g>
+
+  <!-- Process overview -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PROCESS OVERVIEW</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Serve NTQ</text>
+    </g>
+    <g transform="translate(15, 78)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Wait notice period</text>
+    </g>
+    <g transform="translate(15, 108)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Apply to court</text>
+    </g>
+    <g transform="translate(15, 138)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#A78BFA"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Enforcement</text>
+    </g>
+  </g>
+
+  <!-- Detailed requirements -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EVICTION ESSENTIALS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">NOTICE PERIODS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Standard: 4 weeks minimum</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">5+ years: 8 weeks</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">10+ years: 12 weeks</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Rent arrears: 28 days</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Check tenancy length</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">COMMON MISTAKES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Using English forms</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Wrong notice period</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Not being registered</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Self-help eviction</text>
+      <text x="100" y="94" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">All invalidate process</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">TIMELINE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Notice: 4-12 weeks</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Court wait: 4-8 weeks</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">Hearing: 2-4 weeks</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">Enforcement: 2-4 weeks</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Total: 3-6+ months</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

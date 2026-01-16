@@ -72,14 +72,41 @@ export function getTenancyAgreementRequirements(
 
   // Jurisdiction-specific requirements
 
-  if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    // AST (Assured Shorthold Tenancy) requirements
+  if (jurisdiction === 'england') {
+    // AST (Assured Shorthold Tenancy) requirements - Housing Act 1988
     if (stage === 'generate' || stage === 'preview') {
       requiredNow.add('tenancy_type'); // ast, assured, etc.
       requiredNow.add('property_type'); // house, flat, etc.
     }
 
     // Tenant count
+    const jointTenants = facts.joint_tenants;
+    if (jointTenants === true) {
+      if (stage === 'generate' || stage === 'preview') {
+        requiredNow.add('tenant_2_name');
+      }
+    } else if (jointTenants === false) {
+      derived.add('tenant_2_name');
+    }
+
+    // Landlord count
+    const jointLandlords = facts.joint_landlords;
+    if (jointLandlords === true) {
+      if (stage === 'generate' || stage === 'preview') {
+        requiredNow.add('landlord_2_name');
+      }
+    } else if (jointLandlords === false) {
+      derived.add('landlord_2_name');
+    }
+
+  } else if (jurisdiction === 'wales') {
+    // Occupation Contract requirements - Renting Homes (Wales) Act 2016
+    // Wales uses "Standard Occupation Contract" not AST
+    if (stage === 'generate' || stage === 'preview') {
+      requiredNow.add('property_type'); // house, flat, etc.
+    }
+
+    // Tenant count (called "contract holders" in Wales)
     const jointTenants = facts.joint_tenants;
     if (jointTenants === true) {
       if (stage === 'generate' || stage === 'preview') {

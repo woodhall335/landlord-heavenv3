@@ -79,6 +79,7 @@ describe('WalesNoticeSection', () => {
   const defaultProps = {
     facts: {
       __meta: { product: 'notice_only', jurisdiction: 'wales' },
+      eviction_route: 'fault_based', // Required for fault-based flow
       tenancy_start_date: '2023-01-01',
       rent_amount: 1000,
       rent_frequency: 'monthly',
@@ -125,15 +126,15 @@ describe('WalesNoticeSection', () => {
       expect(screen.getByText(/Minimum notice period: 14 days/)).toBeInTheDocument();
     });
 
-    it('calculates maximum notice period when multiple grounds selected', () => {
+    it('calculates minimum notice period when multiple grounds selected', () => {
       const facts = {
         ...defaultProps.facts,
         wales_fault_grounds: ['rent_arrears_serious', 'rent_arrears_other'],
       };
       render(<WalesNoticeSection {...defaultProps} facts={facts} />);
 
-      // rent_arrears_serious = 14 days, rent_arrears_other = 30 days -> max = 30
-      expect(screen.getByText(/Minimum notice period: 30 days/)).toBeInTheDocument();
+      // rent_arrears_serious = 14 days, rent_arrears_other = 56 days -> min = 14
+      expect(screen.getByText(/Minimum notice period: 14 days/)).toBeInTheDocument();
     });
   });
 
@@ -235,7 +236,7 @@ describe('WalesNoticeSection', () => {
       };
       render(<WalesNoticeSection {...defaultProps} facts={facts} />);
 
-      expect(screen.getByText('Section 162 - Breach of Occupation Contract Details')).toBeInTheDocument();
+      expect(screen.getByText('Section 159 - Breach of Occupation Contract Details')).toBeInTheDocument();
       expect(screen.getByLabelText(/clause\/term breached/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/date\(s\) or period of breach/i)).toBeInTheDocument();
     });
@@ -249,7 +250,7 @@ describe('WalesNoticeSection', () => {
       };
       render(<WalesNoticeSection {...defaultProps} facts={facts} />);
 
-      expect(screen.getByText('Section 162 - False Statement Details')).toBeInTheDocument();
+      expect(screen.getByText('Section 159 - False Statement Details')).toBeInTheDocument();
       expect(screen.getByLabelText(/what false statement was made/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/when was this discovered/i)).toBeInTheDocument();
     });

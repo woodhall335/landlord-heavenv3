@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 
-import { resolveTemplatesForFlow } from "./templateRegistry";
+import { resolveTemplatesForFlow } from "./templateRegistry.ts";
 
 export type Jurisdiction = "england" | "wales" | "scotland" | "northern-ireland";
 export type Product = "notice_only" | "eviction_pack" | "money_claim" | "tenancy_agreement";

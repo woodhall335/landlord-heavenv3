@@ -1,0 +1,96 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Main contract document -->
+  <g transform="translate(220, 40)">
+    <rect x="0" y="0" width="360" height="420" rx="15" fill="white" stroke="#7C3AED" stroke-width="4"/>
+
+    <!-- Header -->
+    <rect x="0" y="0" width="360" height="80" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="65" width="360" height="15" fill="#7C3AED"/>
+    <text x="180" y="35" text-anchor="middle" fill="white" font-size="18" font-weight="bold" font-family="Arial">ASSURED SHORTHOLD</text>
+    <text x="180" y="58" text-anchor="middle" fill="white" font-size="18" font-weight="bold" font-family="Arial">TENANCY AGREEMENT</text>
+
+    <!-- Contract clauses -->
+    <g transform="translate(25, 100)">
+      <!-- Clause 1 -->
+      <text x="0" y="0" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">1. PARTIES</text>
+      <rect x="0" y="8" width="310" height="6" rx="3" fill="#A78BFA" opacity="0.5"/>
+      <rect x="0" y="20" width="280" height="6" rx="3" fill="#A78BFA" opacity="0.3"/>
+
+      <!-- Clause 2 -->
+      <text x="0" y="50" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">2. PROPERTY</text>
+      <rect x="0" y="58" width="300" height="6" rx="3" fill="#A78BFA" opacity="0.5"/>
+      <rect x="0" y="70" width="260" height="6" rx="3" fill="#A78BFA" opacity="0.3"/>
+
+      <!-- Clause 3 -->
+      <text x="0" y="100" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">3. TERM</text>
+      <rect x="0" y="108" width="200" height="6" rx="3" fill="#A78BFA" opacity="0.5"/>
+
+      <!-- Clause 4 -->
+      <text x="0" y="140" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">4. RENT</text>
+      <rect x="0" y="148" width="250" height="6" rx="3" fill="#A78BFA" opacity="0.5"/>
+      <rect x="0" y="160" width="220" height="6" rx="3" fill="#A78BFA" opacity="0.3"/>
+
+      <!-- Clause 5 -->
+      <text x="0" y="190" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">5. DEPOSIT</text>
+      <rect x="0" y="198" width="280" height="6" rx="3" fill="#A78BFA" opacity="0.5"/>
+    </g>
+
+    <!-- Signature section -->
+    <g transform="translate(25, 340)">
+      <line x1="0" y1="0" x2="310" y2="0" stroke="#A78BFA" stroke-width="1"/>
+
+      <!-- Landlord signature -->
+      <text x="0" y="25" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">LANDLORD:</text>
+      <rect x="0" y="35" width="130" height="35" rx="4" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4" fill="none"/>
+      <path d="M15 55 Q40 40 60 55 Q80 70 100 45" stroke="#6D28D9" stroke-width="2" fill="none" opacity="0.6"/>
+
+      <!-- Tenant signature -->
+      <text x="180" y="25" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">TENANT:</text>
+      <rect x="180" y="35" width="130" height="35" rx="4" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4" fill="none"/>
+      <path d="M195 55 Q220 45 245 55 Q270 65 290 50" stroke="#6D28D9" stroke-width="2" fill="none" opacity="0.6"/>
+    </g>
+  </g>
+
+  <!-- Key icon -->
+  <g transform="translate(620, 150)">
+    <ellipse cx="40" cy="40" rx="30" ry="25" fill="none" stroke="#7C3AED" stroke-width="4"/>
+    <rect x="55" y="32" width="60" height="16" rx="4" fill="#7C3AED"/>
+    <rect x="95" y="48" width="15" height="12" rx="2" fill="#7C3AED"/>
+    <rect x="105" y="48" width="10" height="8" rx="2" fill="#7C3AED"/>
+  </g>
+
+  <!-- House icon -->
+  <g transform="translate(80, 180)">
+    <polygon points="60,0 120,50 0,50" fill="#6D28D9"/>
+    <rect x="10" y="50" width="100" height="80" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="45" y="90" width="30" height="40" fill="#7C3AED"/>
+    <rect x="20" y="60" width="20" height="20" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+    <rect x="80" y="60" width="20" height="20" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+  </g>
+
+  <!-- Handshake icon -->
+  <g transform="translate(620, 280)">
+    <circle cx="50" cy="50" r="45" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <path d="M25 55 L40 55 L50 45 L60 55 L75 55" stroke="#7C3AED" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M40 55 L40 70 M60 55 L60 70" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom info bar -->
+  <g transform="translate(150, 430)">
+    <rect x="0" y="0" width="500" height="45" rx="22" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="250" y="18" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">Legally Binding Contract</text>
+    <text x="250" y="35" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">6 or 12 month fixed term typical</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="80" r="30" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="420" r="35" fill="#A78BFA" opacity="0.12"/>
+</svg>

@@ -21,6 +21,7 @@ import {
   hasAuthoritativeArrearsData,
   type ComputedArrears,
 } from '@/lib/arrears-engine';
+import { formatUkLegalDate } from '@/lib/case-facts/normalize';
 
 // ============================================================================
 // TYPES
@@ -60,13 +61,41 @@ export interface ParticularsText {
  * Convert ArrearsItem to ArrearsEntry for document templates.
  *
  * This is the ONLY place where this conversion should happen.
+ * Uses UK legal date format (e.g., "15 January 2026") for document clarity.
+ *
+ * @param item - The arrears item to convert
+ * @param rentDueDay - The day of month rent is due (1-31), from wizard tenancy 'Day rent is due'
  */
-export function mapArrearsItemToEntry(item: ArrearsItem): ArrearsEntry {
+export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | null): ArrearsEntry {
   const amount_owed = item.amount_owed ?? (item.rent_due - item.rent_paid);
 
+  // Format dates using UK legal format for document display
+  const startFormatted = formatUkLegalDate(item.period_start) || item.period_start;
+  const endFormatted = formatUkLegalDate(item.period_end) || item.period_end;
+
+  // Compute the actual due date based on rent_due_day within the period
+  let dueDate = item.period_end; // fallback to period_end if no rent_due_day
+  if (rentDueDay && rentDueDay >= 1 && rentDueDay <= 31) {
+    try {
+      // Use the period_start's month/year and apply the rent_due_day
+      const periodStart = new Date(item.period_start + 'T00:00:00.000Z');
+      const year = periodStart.getUTCFullYear();
+      const month = periodStart.getUTCMonth();
+      // Clamp to last day of month if rent_due_day exceeds days in month
+      const lastDayOfMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+      const actualDay = Math.min(rentDueDay, lastDayOfMonth);
+      const dueDateObj = new Date(Date.UTC(year, month, actualDay));
+      dueDate = dueDateObj.toISOString().split('T')[0];
+    } catch {
+      // Keep fallback on error
+    }
+  }
+
+  const dueDateFormatted = formatUkLegalDate(dueDate) || dueDate;
+
   return {
-    period: `${item.period_start} to ${item.period_end}`,
-    due_date: item.period_end,
+    period: `${startFormatted} to ${endFormatted}`,
+    due_date: dueDateFormatted,
     amount_due: item.rent_due,
     amount_paid: item.rent_paid,
     arrears: amount_owed,
@@ -75,9 +104,12 @@ export function mapArrearsItemToEntry(item: ArrearsItem): ArrearsEntry {
 
 /**
  * Map all arrears items to document entries.
+ *
+ * @param items - Array of arrears items to convert
+ * @param rentDueDay - The day of month rent is due (1-31), from wizard tenancy 'Day rent is due'
  */
-export function mapArrearsItemsToEntries(items: ArrearsItem[]): ArrearsEntry[] {
-  return (items || []).map(mapArrearsItemToEntry);
+export function mapArrearsItemsToEntries(items: ArrearsItem[], rentDueDay?: number | null): ArrearsEntry[] {
+  return (items || []).map((item) => mapArrearsItemToEntry(item, rentDueDay));
 }
 
 /**
@@ -91,6 +123,7 @@ export function getArrearsScheduleData(params: {
   total_arrears?: number | null;
   rent_amount: number;
   rent_frequency: TenancyFacts['rent_frequency'];
+  rent_due_day?: number | null;
   include_schedule: boolean;
 }): ArrearsScheduleData {
   const {
@@ -98,6 +131,7 @@ export function getArrearsScheduleData(params: {
     total_arrears,
     rent_amount,
     rent_frequency,
+    rent_due_day,
     include_schedule,
   } = params;
 
@@ -109,8 +143,8 @@ export function getArrearsScheduleData(params: {
     rent_frequency,
   });
 
-  // Map to document format
-  const arrears_schedule = mapArrearsItemsToEntries(computed.arrears_items);
+  // Map to document format, passing rent_due_day for proper due date computation
+  const arrears_schedule = mapArrearsItemsToEntries(computed.arrears_items, rent_due_day);
 
   return {
     arrears_schedule,
@@ -141,6 +175,7 @@ export function getArrearsScheduleFromFacts(
     total_arrears: facts.issues.rent_arrears.total_arrears,
     rent_amount: facts.tenancy.rent_amount || 0,
     rent_frequency: facts.tenancy.rent_frequency,
+    rent_due_day: facts.tenancy.rent_due_day,
     include_schedule,
   });
 }
@@ -205,7 +240,8 @@ export function generateArrearsParticulars(params: {
 }
 
 /**
- * Format arrears as a summary paragraph.
+ * Format arrears as a month-by-month bullet list.
+ * Uses UK legal date format for clarity.
  */
 function formatArrearsSummary(data: ArrearsScheduleData): string {
   const { arrears_schedule, arrears_total, arrears_in_months } = data;
@@ -214,14 +250,25 @@ function formatArrearsSummary(data: ArrearsScheduleData): string {
     return `No arrears schedule provided.`;
   }
 
-  const firstPeriod = arrears_schedule[0];
-  const lastPeriod = arrears_schedule[arrears_schedule.length - 1];
-  const periodsWithArrears = arrears_schedule.filter((p) => p.arrears > 0).length;
+  const periodsWithArrears = arrears_schedule.filter((p) => p.arrears > 0);
 
+  // Header with total
   let summary = `Rent arrears of £${arrears_total.toFixed(2)} are outstanding `;
-  summary += `(approximately ${arrears_in_months.toFixed(1)} months' rent). `;
-  summary += `The arrears have accrued over ${periodsWithArrears} payment period(s) `;
-  summary += `from ${firstPeriod.period} to ${lastPeriod.period}. `;
+  summary += `(approximately ${arrears_in_months.toFixed(1)} months' rent):\n\n`;
+
+  // Month-by-month bullet list
+  for (const entry of periodsWithArrears) {
+    // Extract period label (e.g., "1 January 2025 to 31 January 2025")
+    const periodParts = entry.period.split(' to ');
+    const periodLabel = periodParts.length === 2
+      ? `${periodParts[0]} – ${periodParts[1]}`
+      : entry.period;
+
+    summary += `• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding`;
+    summary += ` (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})\n`;
+  }
+
+  summary += `\nTotal arrears: £${arrears_total.toFixed(2)}. `;
   summary += `A detailed schedule of arrears is attached.`;
 
   return summary;

@@ -1,0 +1,168 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">EVIDENCE BUNDLE FOR COURT</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Essential documents for possession proceedings</text>
+
+  <!-- Folder/binder illustration -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Ring binder holes -->
+    <circle cx="25" cy="50" r="8" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <circle cx="25" cy="140" r="8" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <circle cx="25" cy="230" r="8" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Tabs -->
+    <rect x="170" y="40" width="35" height="25" rx="4" fill="#7C3AED"/>
+    <text x="187" y="57" text-anchor="middle" fill="white" font-size="8" font-weight="bold">A</text>
+    <rect x="170" y="80" width="35" height="25" rx="4" fill="#6D28D9"/>
+    <text x="187" y="97" text-anchor="middle" fill="white" font-size="8" font-weight="bold">B</text>
+    <rect x="170" y="120" width="35" height="25" rx="4" fill="#A78BFA"/>
+    <text x="187" y="137" text-anchor="middle" fill="white" font-size="8" font-weight="bold">C</text>
+    <rect x="170" y="160" width="35" height="25" rx="4" fill="#7C3AED"/>
+    <text x="187" y="177" text-anchor="middle" fill="white" font-size="8" font-weight="bold">D</text>
+
+    <!-- Cover text -->
+    <text x="100" y="220" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold">EVIDENCE</text>
+    <text x="100" y="238" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold">BUNDLE</text>
+    <rect x="50" y="250" width="100" height="3" fill="#7C3AED"/>
+    <text x="100" y="270" text-anchor="middle" fill="#6D28D9" font-size="8">Claimant: [Landlord]</text>
+  </g>
+
+  <!-- Required documents -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="450" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="450" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="450" height="12" fill="#7C3AED"/>
+    <text x="225" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">DOCUMENTS TO INCLUDE</text>
+
+    <!-- Section A -->
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#7C3AED"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">A</text>
+      <text x="28" y="13" fill="#7C3AED" font-size="10" font-weight="bold">TENANCY DOCUMENTS</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Signed tenancy agreement</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Inventory (signed)</text>
+      </g>
+    </g>
+
+    <!-- Section B -->
+    <g transform="translate(220, 45)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#6D28D9"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">B</text>
+      <text x="28" y="13" fill="#6D28D9" font-size="10" font-weight="bold">COMPLIANCE</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Gas Safety Certificate</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">EPC, EICR, How to Rent</text>
+      </g>
+    </g>
+
+    <!-- Section C -->
+    <g transform="translate(15, 105)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#A78BFA"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">C</text>
+      <text x="28" y="13" fill="#A78BFA" font-size="10" font-weight="bold">NOTICES SERVED</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Section 8 or Section 21 notice</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Proof of service (certificate)</text>
+      </g>
+    </g>
+
+    <!-- Section D -->
+    <g transform="translate(220, 105)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#7C3AED"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">D</text>
+      <text x="28" y="13" fill="#7C3AED" font-size="10" font-weight="bold">ARREARS EVIDENCE</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Rent statements</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Bank statements</text>
+      </g>
+    </g>
+
+    <!-- Section E -->
+    <g transform="translate(15, 165)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#22C55E"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">E</text>
+      <text x="28" y="13" fill="#22C55E" font-size="10" font-weight="bold">CORRESPONDENCE</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Letters/emails to tenant</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Text messages (dated)</text>
+      </g>
+    </g>
+
+    <!-- Section F -->
+    <g transform="translate(220, 165)">
+      <rect x="0" y="0" width="18" height="18" rx="4" fill="#EF4444"/>
+      <text x="9" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">F</text>
+      <text x="28" y="13" fill="#EF4444" font-size="10" font-weight="bold">BREACH EVIDENCE</text>
+      <g transform="translate(28, 18)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Photos (dated)</text>
+      </g>
+      <g transform="translate(28, 32)">
+        <circle cx="5" cy="5" r="3" fill="#6D28D9"/>
+        <text x="14" y="9" fill="#6D28D9" font-size="8">Witness statements</text>
+      </g>
+    </g>
+
+    <!-- Tips box -->
+    <rect x="15" y="220" width="420" height="48" rx="6" fill="#F3F1FF"/>
+    <text x="225" y="238" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">BUNDLE TIPS</text>
+    <text x="225" y="252" text-anchor="middle" fill="#6D28D9" font-size="8">• Index with page numbers • Chronological order • 3 copies required</text>
+    <text x="225" y="264" text-anchor="middle" fill="#6D28D9" font-size="8">• Highlight key passages • Paginate continuously</text>
+  </g>
+
+  <!-- Bottom section -->
+  <g transform="translate(60, 380)">
+    <rect x="0" y="0" width="670" height="70" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="335" y="22" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">SUBMISSION REQUIREMENTS</text>
+
+    <g transform="translate(30, 38)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">File 14 days before hearing</text>
+    </g>
+    <g transform="translate(210, 38)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Send copy to defendant</text>
+    </g>
+    <g transform="translate(395, 38)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Bring 3 copies to court</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

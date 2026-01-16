@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -22,6 +23,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 const startWizardSchema = z.object({
   product: z.enum([
@@ -36,6 +38,12 @@ const startWizardSchema = z.object({
   ]),
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
+  // Used by standalone validators (e.g., /tools/validators/section-21) to set the notice route
+  // so runLegalValidator knows which validator to apply
+  validator_key: z.string().optional(),
+  // Additional metadata from validator pages
+  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
+  product_variant: z.string().optional(),
 });
 
 type StartProduct =
@@ -113,6 +121,7 @@ function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuest
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/start', writesUsingAdmin: true });
     const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = startWizardSchema.safeParse(body);
@@ -124,7 +133,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product, jurisdiction, case_id } = validationResult.data;
+    const { product, jurisdiction, case_id, validator_key, product_variant } = validationResult.data;
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
@@ -164,8 +173,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create properly typed Supabase client
+    // Create properly typed Supabase client for user-scoped queries
     const supabase = await createServerSupabaseClient();
+
+    // Admin client bypasses RLS - used for creating cases for anonymous users
+    // The regular client would be blocked by RLS policies when user_id is null
+    const adminSupabase = createSupabaseAdminClient();
 
     let caseRecord: any = null;
 
@@ -215,15 +228,23 @@ export async function POST(request: Request) {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+          // Store validator_key so we can track which validator was used
+          ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+          ...(product_variant ? { product_variant: product_variant as string | null } : {}),
         },
         // IMPORTANT: root-level product_tier so MQS version questions see it as answered
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         // These help downstream normalization / analysis before property questions are answered
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
+        // CRITICAL: Set selected_notice_route from validator_key so runLegalValidator
+        // knows which validator to apply (e.g., "section_21" → validateSection21Notice)
+        ...(validator_key ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { data, error } = await supabase
+      // Use admin client to bypass RLS for anonymous case creation
+      // This is safe because we control all the data being inserted
+      const { data, error } = await adminSupabase
         .from('cases')
         .insert({
           user_id: user ? user.id : null,
@@ -247,7 +268,8 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
-    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id);
+    // Use admin client for case_facts operations to support anonymous users
+    let facts = await getOrCreateWizardFacts(adminSupabase, caseRecord.id);
 
     // For newly created cases, mirror meta + country into case_facts.facts
     if (!case_id) {
@@ -256,6 +278,8 @@ export async function POST(request: Request) {
         product: normalizedProduct as string | null,
         original_product: product as string | null,
         ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+        ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+        ...(product_variant ? { product_variant: product_variant as string | null } : {}),
       };
 
       const updatedFacts: any = {
@@ -264,9 +288,12 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+        // Ensure selected_notice_route is set for validators
+        ...(validator_key && !facts.selected_notice_route ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { error: updateError } = await supabase
+      // Use admin client for case_facts update to support anonymous users
+      const { error: updateError } = await adminSupabase
         .from('case_facts')
         .update({ facts: updatedFacts as any })
         .eq('case_id', caseRecord.id);

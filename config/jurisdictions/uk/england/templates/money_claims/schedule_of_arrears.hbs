@@ -1,14 +1,194 @@
-<h1>Schedule of Rent Arrears</h1>
-<p>Claim reference: {{claimant_reference}}</p>
+{{!--
+  ============================================================================
+  SCHEDULE OF RENT ARREARS
+  Section 8 Notice - Ground 8
+  ============================================================================
+  Harmonized design system matching other Notice Only Pack documents
+--}}
 
-<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule of Rent Arrears</title>
+  <style>
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - MATCH FORM 3 MARGINS ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    body {
+      padding: 0;
+      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+    }
+
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      line-height: 1.3;
+      color: #1a1a1a;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Case Details Box */
+    .case-details {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.4em 1em;
+      font-size: 10pt;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Arrears Table */
+    .arrears-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 10pt;
+    }
+
+    .arrears-table th,
+    .arrears-table td {
+      padding: 8px 10px;
+      border: 1px solid #1a1a1a;
+      text-align: left;
+    }
+
+    .arrears-table th {
+      background: #1a1a1a;
+      color: white;
+      font-weight: 600;
+    }
+
+    .arrears-table td {
+      background: #fff;
+    }
+
+    .arrears-table tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    .arrears-table .amount {
+      text-align: right;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Total Row */
+    .total-row {
+      background: #1a1a1a !important;
+      color: white;
+      font-weight: 700;
+    }
+
+    .total-row td {
+      background: #1a1a1a !important;
+      color: white !important;
+      border-color: #1a1a1a;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: #f8f8f8;
+      border-left: 4px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      font-size: 10pt;
+    }
+
+    /* Document Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #e5e7eb;
+      font-size: 9pt;
+      color: #6b7280;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    @media print {
+      .arrears-table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Schedule of Rent Arrears</h1>
+  <span class="doc-badge">Section 8 Notice – Ground 8</span>
+</div>
+
+<!-- Case Details -->
+<div class="case-details">
+  <dl class="case-details-grid">
+    <dt>Property:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Tenant:</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Landlord:</dt>
+    <dd>{{landlord_full_name}}</dd>
+    {{#if claimant_reference}}
+    <dt>Claim Reference:</dt>
+    <dd>{{claimant_reference}}</dd>
+    {{/if}}
+  </dl>
+</div>
+
+<!-- Arrears Schedule Table -->
+<table class="arrears-table">
   <thead>
     <tr>
       <th>Period</th>
-      <th>Due date</th>
-      <th>Amount due</th>
-      <th>Amount paid</th>
-      <th>Arrears</th>
+      <th>Due Date</th>
+      <th class="amount">Amount Due</th>
+      <th class="amount">Amount Paid</th>
+      <th class="amount">Arrears</th>
     </tr>
   </thead>
   <tbody>
@@ -16,17 +196,28 @@
     <tr>
       <td>{{period}}</td>
       <td>{{due_date}}</td>
-      <td>{{currency amount_due}}</td>
-      <td>{{currency amount_paid}}</td>
-      <td>{{currency arrears}}</td>
+      <td class="amount">{{currency amount_due}}</td>
+      <td class="amount">{{currency amount_paid}}</td>
+      <td class="amount">{{currency arrears}}</td>
     </tr>
     {{/each}}
+    <tr class="total-row">
+      <td colspan="4"><strong>Total Arrears</strong></td>
+      <td class="amount"><strong>{{currency arrears_total}}</strong></td>
+    </tr>
   </tbody>
 </table>
 
-<p><strong>Total arrears:</strong> {{currency arrears_total}}</p>
+<!-- Evidence Note -->
+<div class="info-box">
+  <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
+</div>
 
-<p>
-  Attach proof of payments received, bank statements and rent ledgers behind this schedule. The County Court
-  expects a clear period-by-period breakdown matching the tenancy rent frequency.
-</p>
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
+</div>
+
+</body>
+</html>

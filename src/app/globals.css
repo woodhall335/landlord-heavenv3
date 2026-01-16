@@ -68,15 +68,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Footer text styling */
 footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
-  color: #4A5568 !important;
+  color: #bdbdbd !important;
+}
+
+footer p {
+  color: #bdbdbd !important;
+}
+
+footer span {
+  color: #bdbdbd !important;
 }
 
 footer a {
-  color: #4A5568 !important;
+  color: #bdbdbd !important;
 }
 
 footer a:hover {
-  color: #718096 !important;
+  color: #ffffff !important;
 }
 
 p {
@@ -87,10 +95,18 @@ p {
 a {
   color: #7C3AED;
   transition: color 0.25s ease;
+  cursor: pointer;
 }
 
 a:hover {
   color: #6D28D9;
+}
+
+/* Ensure all clickable elements have pointer cursor */
+button,
+[role="button"],
+.cursor-pointer {
+  cursor: pointer;
 }
 
 /* Ensure buttons styled as links respect their text color classes */
@@ -120,61 +136,117 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 /* Hero Section Standardized Buttons */
 .hero-btn-primary {
   display: inline-block;
-  background-color: #7C3AED;
+  background-color: var(--primary);
   color: #ffffff;
   padding: 1rem 2rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   font-size: 1.125rem;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border: 2px solid #7C3AED;
+  border: 2px solid var(--primary);
+  cursor: pointer;
 }
 
 .hero-btn-primary:hover {
-  background-color: transparent;
-  color: #7C3AED;
-  border-color: #7C3AED;
+  background-color: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.hero-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.hero-btn-pulse {
+  display: inline-block;
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.hero-btn-pulse:hover {
+  background-color: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+  animation: none;
+}
+
+.hero-btn-pulse:active {
+  transform: scale(0.98);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(124, 58, 237, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 10px rgba(124, 58, 237, 0);
+  }
 }
 
 .hero-btn-secondary {
   display: inline-block;
   background-color: #ffffff;
-  color: #7C3AED;
+  color: var(--primary);
   padding: 1rem 2rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   font-size: 1.125rem;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border: 2px solid transparent;
+  border: 2px solid var(--primary);
+  cursor: pointer;
 }
 
 .hero-btn-secondary:hover {
-  background-color: transparent;
-  border-color: #7C3AED;
+  background-color: rgba(124, 58, 237, 0.05);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.hero-btn-secondary:active {
+  transform: scale(0.98);
 }
 
 /* Header Login Button - Matches hero button hover behavior */
 .header-login-btn {
   display: inline-block;
-  background-color: #7C3AED;
+  background-color: var(--primary);
   color: #ffffff;
   padding: 0.75rem 1.75rem;
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 0.875rem;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 2px solid #7C3AED;
+  border: 2px solid var(--primary);
   cursor: pointer;
 }
 
 .header-login-btn:hover {
-  background-color: transparent;
-  color: #692ED4;
-  border-color: #692ED4;
-  cursor: pointer;
+  background-color: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+.header-login-btn:active {
+  transform: scale(0.98);
 }
 
 /* Header Navigation Link Hover - Accent purple */
@@ -257,4 +329,76 @@ div.ask-heaven-panel,
   padding-right: 24px !important;
   padding-bottom: 24px !important;
   padding-top: 48px !important;
+}
+
+/* Card hover border effect - explicit CSS for reliability */
+.card-hover-border {
+  border: 2px solid #e5e7eb; /* gray-200 */
+  transition: all 0.3s ease;
+}
+
+.card-hover-border:hover {
+  border-color: #7C3AED !important;
+}
+
+/* Product card hover - for group hover pattern */
+.product-card-wrapper:hover .product-card-inner {
+  border-color: #7C3AED !important;
+}
+
+/* =============================================
+   Section 21 Banner - Fixed Header Integration
+   ============================================= */
+
+:root {
+  --s21-banner-height: 0px;
+}
+
+/* When banner is visible, set the height variable */
+body.s21-banner-visible {
+  --s21-banner-height: 44px;
+}
+
+/* Section 21 Banner - Fixed at very top */
+.s21-header-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60; /* Above header which is z-50 */
+  height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Header offset - pushed down when banner is visible */
+header.site-header {
+  top: var(--s21-banner-height) !important;
+}
+
+/* Body padding to account for fixed header + banner */
+body {
+  padding-top: calc(80px + var(--s21-banner-height));
+}
+
+/* Smooth transition for banner appearance */
+body.s21-banner-visible header.site-header {
+  transition: top 0.3s ease;
+}
+
+/* =============================================
+   Skeleton Shimmer Animation
+   ============================================= */
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
 }

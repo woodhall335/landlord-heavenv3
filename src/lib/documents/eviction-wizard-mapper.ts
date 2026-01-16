@@ -62,6 +62,32 @@ function normaliseFrequency(
   return 'monthly';
 }
 
+/**
+ * Derive deposit scheme checkbox flag for N5B form.
+ * Matches scheme name against known variants.
+ */
+function deriveDepositSchemeFlag(
+  schemeName: string | null | undefined,
+  scheme: 'dps' | 'mydeposits' | 'tds'
+): boolean {
+  if (!schemeName) return false;
+  const normalized = schemeName.toLowerCase().replace(/[\s\-_]/g, '');
+
+  switch (scheme) {
+    case 'dps':
+      return normalized.includes('dps') ||
+             normalized.includes('depositprotectionservice') ||
+             normalized.includes('thedeposit');
+    case 'mydeposits':
+      return normalized.includes('mydeposit');
+    case 'tds':
+      return normalized.includes('tds') ||
+             normalized.includes('tenancydepositscheme');
+    default:
+      return false;
+  }
+}
+
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
   // ==========================================================================
@@ -321,9 +347,16 @@ function buildCaseData(
     })(),
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,
+    // Standardize deposit scheme naming - output both variants for template compatibility
     deposit_scheme: (facts.tenancy.deposit_scheme_name as any) || undefined,
+    deposit_scheme_name: (facts.tenancy.deposit_scheme_name as any) || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     deposit_reference: facts.tenancy.deposit_reference || undefined,
+
+    // N5B deposit scheme checkboxes - derive from deposit_scheme_name
+    deposit_scheme_dps: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'dps'),
+    deposit_scheme_mydeposits: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'mydeposits'),
+    deposit_scheme_tds: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'tds'),
     solicitor_firm: evictionCase.solicitor_firm,
     solicitor_address: evictionCase.solicitor_address,
     solicitor_phone: evictionCase.solicitor_phone,
@@ -383,6 +416,32 @@ function buildCaseData(
     // (e.g., "Was EPC provided to tenant?") - NOT for attachment checkboxes
     epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
     gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
+
+    // =========================================================================
+    // N5 CHECKBOX FLAG DERIVATION
+    // =========================================================================
+    // These flags control checkboxes and conditional sections in the N5 form.
+    // They must be derived from the claim type and case data.
+    // =========================================================================
+
+    // Property type - always true for residential tenancies (AST)
+    property_is_dwelling: true,
+
+    // Claim type flags - derived from claim_type for checkbox rendering
+    ground_section_8: claimType === 'section_8',
+    ground_section_21: claimType === 'section_21',
+
+    // Arrears flags - controls arrears sections and "claiming rent arrears" checkbox
+    rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
+    claiming_rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
   } as CaseData;
 }
 

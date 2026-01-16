@@ -13,6 +13,8 @@ import {
   validateSection8ExpiryDate,
   validateSection21ExpiryDate,
   validateNoticeToLeaveDate,
+  calculateDeemedServiceDate,
+  addBusinessDays,
 } from '../notice-date-calculator';
 
 describe('Section 21 Calendar Month Calculations', () => {
@@ -561,5 +563,258 @@ describe('Section 8 Fixed Term Handling', () => {
     // 14 days from Jan 15 = Jan 29
     expect(result.earliest_valid_date).toBe('2025-01-29');
     expect(result.notice_period_days).toBe(14);
+  });
+});
+
+// ============================================================================
+// SECTION 21 DEEMED SERVICE DATE & POSTAL SERVICE TESTS
+// ============================================================================
+
+describe('Deemed Service Date Calculation', () => {
+  describe('calculateDeemedServiceDate helper', () => {
+    test('hand_delivery: deemed same day as serve date', () => {
+      const result = calculateDeemedServiceDate('2026-01-15', 'hand_delivery');
+      expect(result).toBe('2026-01-15');
+    });
+
+    test('leaving_at_property: deemed same day as serve date', () => {
+      const result = calculateDeemedServiceDate('2026-01-15', 'leaving_at_property');
+      expect(result).toBe('2026-01-15');
+    });
+
+    test('first_class_post: deemed 2 working days after posting', () => {
+      // Thursday 15 Jan → Friday 16 → Monday 19 (2 working days)
+      const result = calculateDeemedServiceDate('2026-01-15', 'first_class_post');
+      expect(result).toBe('2026-01-19');
+    });
+
+    test('second_class_post: deemed 2 working days after posting', () => {
+      const result = calculateDeemedServiceDate('2026-01-15', 'second_class_post');
+      expect(result).toBe('2026-01-19');
+    });
+
+    test('recorded_delivery: deemed 2 working days after posting', () => {
+      const result = calculateDeemedServiceDate('2026-01-15', 'recorded_delivery');
+      expect(result).toBe('2026-01-19');
+    });
+
+    test('no service method: defaults to same day (hand delivery)', () => {
+      const result = calculateDeemedServiceDate('2026-01-15', undefined);
+      expect(result).toBe('2026-01-15');
+    });
+  });
+
+  describe('addBusinessDays helper (weekend skipping)', () => {
+    test('Friday + 2 working days = Tuesday (skips weekend)', () => {
+      // Friday 16 Jan 2026 + 2 working days = Tuesday 20 Jan 2026
+      const friday = new Date('2026-01-16T00:00:00.000Z');
+      const result = addBusinessDays(friday, 2);
+      expect(result.getUTCFullYear()).toBe(2026);
+      expect(result.getUTCMonth()).toBe(0); // January
+      expect(result.getUTCDate()).toBe(20); // Tuesday
+    });
+
+    test('Saturday + 2 working days = Tuesday', () => {
+      // Saturday 17 Jan 2026 + 2 working days = Tuesday 20 Jan 2026
+      const saturday = new Date('2026-01-17T00:00:00.000Z');
+      const result = addBusinessDays(saturday, 2);
+      expect(result.getUTCDate()).toBe(20);
+    });
+
+    test('Monday + 2 working days = Wednesday (no weekend)', () => {
+      // Monday 19 Jan 2026 + 2 working days = Wednesday 21 Jan 2026
+      const monday = new Date('2026-01-19T00:00:00.000Z');
+      const result = addBusinessDays(monday, 2);
+      expect(result.getUTCDate()).toBe(21);
+    });
+
+    test('Wednesday + 2 working days = Friday (no weekend)', () => {
+      // Wednesday 14 Jan 2026 + 2 working days = Friday 16 Jan 2026
+      const wednesday = new Date('2026-01-14T00:00:00.000Z');
+      const result = addBusinessDays(wednesday, 2);
+      expect(result.getUTCDate()).toBe(16);
+    });
+  });
+});
+
+describe('Section 21 with Postal Service (Deemed Service Date)', () => {
+  describe('BUG FIX: Fixed term AST with first class post', () => {
+    test('MUST use fixed term end when it exceeds deemed service + 2 months (exact bug scenario)', () => {
+      // BUG SCENARIO FROM TASK:
+      // - Tenancy start: 14/07/2025
+      // - Fixed term end: 14/07/2026
+      // - Service method: First class post
+      // - Serve date: 15/01/2026 (Thursday)
+      //
+      // Calculation:
+      // - Deemed service: 15/01/2026 + 2 working days = 19/01/2026 (Monday)
+      // - 2 months from deemed: 19/03/2026
+      // - Fixed term end: 14/07/2026
+      // - Expiry = max(19/03/2026, 14/07/2026) = 14/07/2026
+      //
+      // OLD BUGGY RESULT: 14/04/2026 (WRONG)
+      // CORRECT RESULT: 14/07/2026
+
+      const result = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2025-07-14',
+        fixed_term: true,
+        fixed_term_end_date: '2026-07-14',
+        has_break_clause: false,
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // MUST be fixed term end date, NOT 2 months from deemed service
+      expect(result.earliest_valid_date).toBe('2026-07-14');
+      expect(result.explanation).toContain('fixed term');
+    });
+
+    test('MUST use deemed service + 2 months when fixed term ends earlier', () => {
+      // Fixed term already ended, so expiry = deemed service + 2 months
+      // - Serve date: 15/01/2026 (Thursday)
+      // - Deemed service (post): 19/01/2026 (Monday)
+      // - Fixed term end: 14/07/2025 (already passed)
+      // - 2 months from deemed: 19/03/2026
+      // - Expiry = max(19/03/2026, 14/07/2025) = 19/03/2026
+
+      const result = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2024-07-14',
+        fixed_term: true,
+        fixed_term_end_date: '2025-07-14', // Already ended
+        has_break_clause: false,
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // Should be 2 months from deemed service date (19 Jan + 2 months = 19 Mar)
+      expect(result.earliest_valid_date).toBe('2026-03-19');
+    });
+  });
+
+  describe('Postal service affects expiry date calculation', () => {
+    test('first_class_post adds 2 working days before 2-month calculation', () => {
+      // Without postal service: serve 15 Jan + 2 months = 15 Mar
+      // With postal service: serve 15 Jan → deemed 19 Jan + 2 months = 19 Mar
+
+      const resultNoPost = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2024-01-01',
+        fixed_term: true,
+        fixed_term_end_date: '2026-03-15', // Set to 2 months from serve date
+        rent_period: 'monthly',
+        // No service_method = hand delivery (same day)
+      });
+
+      const resultWithPost = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2024-01-01',
+        fixed_term: true,
+        fixed_term_end_date: '2026-03-19', // Set to 2 months from deemed service
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // Without post: expiry = max(15 Mar, 15 Mar) = 15 Mar
+      expect(resultNoPost.earliest_valid_date).toBe('2026-03-15');
+
+      // With post: expiry = max(19 Mar, 19 Mar) = 19 Mar
+      expect(resultWithPost.earliest_valid_date).toBe('2026-03-19');
+
+      // Verify the explanation mentions deemed service for postal
+      expect(resultWithPost.explanation).toContain('deemed service');
+    });
+
+    test('serve Friday via post: deemed service is Tuesday (skips weekend)', () => {
+      // Friday 16 Jan 2026 + 2 working days = Tuesday 20 Jan 2026
+      // Then 2 months from Tuesday 20 Jan = Friday 20 Mar
+
+      const result = calculateSection21ExpiryDate({
+        service_date: '2026-01-16', // Friday
+        tenancy_start_date: '2024-01-01',
+        fixed_term: true,
+        fixed_term_end_date: '2026-03-20', // Match 2 months from deemed
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // 20 Jan + 2 months = 20 Mar
+      expect(result.earliest_valid_date).toBe('2026-03-20');
+    });
+  });
+
+  describe('Break clause behavior (non-regression)', () => {
+    test('break clause allows earlier exit than fixed term end', () => {
+      // Fixed term: 14/07/2025 - 14/07/2026
+      // Break clause: 14/03/2026
+      // Serve: 15/01/2026 via post → deemed 19/01/2026
+      // 2 months from deemed: 19/03/2026
+      // Break clause: 14/03/2026
+      // Since break clause < fixed term end, use break clause as floor
+      // But 2 months from deemed (19 Mar) > break clause (14 Mar)
+      // So expiry = 19/03/2026
+
+      const result = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2025-07-14',
+        fixed_term: true,
+        fixed_term_end_date: '2026-07-14',
+        has_break_clause: true,
+        break_clause_date: '2026-03-14',
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // 2 months from deemed service (19 Mar) is after break clause (14 Mar)
+      // So expiry = 19 Mar (the later of the two)
+      expect(result.earliest_valid_date).toBe('2026-03-19');
+      // Should NOT be extended to fixed term end because break clause applies
+      expect(result.earliest_valid_date).not.toBe('2026-07-14');
+    });
+
+    test('break clause on/after fixed term end uses fixed term end as floor', () => {
+      // Break clause on same day as fixed term end - should use fixed term end
+      const result = calculateSection21ExpiryDate({
+        service_date: '2026-01-15',
+        tenancy_start_date: '2025-07-14',
+        fixed_term: true,
+        fixed_term_end_date: '2026-07-14',
+        has_break_clause: true,
+        break_clause_date: '2026-07-14', // Same as fixed term end
+        rent_period: 'monthly',
+        service_method: 'first_class_post',
+      });
+
+      // Should be fixed term end (14 Jul) since deemed + 2 months (19 Mar) < fixed term end
+      expect(result.earliest_valid_date).toBe('2026-07-14');
+    });
+  });
+});
+
+describe('Date Formatting for PDF', () => {
+  test('ISO date can be formatted as "14 July 2026" for Form 6A', () => {
+    const result = calculateSection21ExpiryDate({
+      service_date: '2026-01-15',
+      tenancy_start_date: '2025-07-14',
+      fixed_term: true,
+      fixed_term_end_date: '2026-07-14',
+      has_break_clause: false,
+      rent_period: 'monthly',
+      service_method: 'first_class_post',
+    });
+
+    // Result is ISO format
+    expect(result.earliest_valid_date).toBe('2026-07-14');
+
+    // Can be formatted for PDF display
+    const date = new Date(result.earliest_valid_date + 'T00:00:00.000Z');
+    const formatted = date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
+    expect(formatted).toBe('14 July 2026');
   });
 });

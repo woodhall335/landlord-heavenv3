@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import {
   loadMQS,
   getNextMQSQuestion,
@@ -36,9 +36,12 @@ import {
   type SmartReviewWarning,
   type EvidenceCategory,
 } from '@/lib/evidence';
+import { logMutation } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 // ==============================================================================
 // PHASE 1: DEBUG INSTRUMENTATION (behind NOTICE_ONLY_DEBUG=1 env flag)
@@ -558,7 +561,7 @@ function updateDerivedFacts(
 
 export async function POST(request: Request) {
   try {
-    await getServerUser().catch(() => null);
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/answer', writesUsingAdmin: true });
     const body = await request.json();
     const parsedBody = answerSchema.safeParse(body);
 
@@ -575,14 +578,13 @@ export async function POST(request: Request) {
     const isReviewMode =
       !isEnhanceOnly && (mode === 'edit' || include_answered === true || review_mode === true);
 
-    // Create properly typed Supabase client
-    const supabase = await createServerSupabaseClient();
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createSupabaseAdminClient();
 
     // ---------------------------------------
-    // 1. Load case - RLS policies handle access control
-    //    No need for manual user_id filtering
+    // 1. Load case - use admin client to support anonymous users
     // ---------------------------------------
-    const { data, error: fetchError } = await supabase
+    const { data, error: fetchError } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
@@ -600,6 +602,12 @@ export async function POST(request: Request) {
       if (errorResponse) {
         return errorResponse;
       }
+    }
+
+    // Check edit window - block if case has paid order with expired window
+    const mutationCheck = await checkMutationAllowed(case_id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
     }
 
     const caseRow = data as {
@@ -841,7 +849,8 @@ export async function POST(request: Request) {
     // ---------------------------------------
     // 3. Merge into WizardFacts (flat DB format)
     // ---------------------------------------
-    const currentFacts = await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const currentFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
 
     // PHASE 1: Debug instrumentation - log incoming answer
     debugLog('Incoming', {
@@ -1335,16 +1344,33 @@ export async function POST(request: Request) {
       }
     }
 
-    const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
+    // Use admin client to support anonymous users
+    const newFacts = await updateWizardFacts(adminSupabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
+
+    // Audit log for paid cases (non-blocking, fire-and-forget)
+    // Get user from supabase session for audit
+    const { data: userData } = await adminSupabase.auth.getUser();
+    const auditUserId = userData?.user?.id || null;
+    logMutation({
+      caseId: case_id,
+      userId: auditUserId,
+      action: 'wizard_answer_update',
+      changedKeys: [question_id, ...(question.maps_to || [])],
+      metadata: {
+        question_id,
+        input_type: (question as any).inputType,
+        source: 'wizard-answer',
+      },
+    }).catch(() => {}); // Fire and forget
 
     // ---------------------------------------
     // 4. Log conversation (user + assistant)
     // ---------------------------------------
 
     try {
-      await supabase.from('conversations').insert({
+      await adminSupabase.from('conversations').insert({
         case_id,
         role: 'user',
         content: rawAnswerText,
@@ -1403,7 +1429,7 @@ export async function POST(request: Request) {
 
     if (enhanced) {
       try {
-        await supabase.from('conversations').insert({
+        await adminSupabase.from('conversations').insert({
           case_id,
           role: 'assistant',
           content: enhanced.suggested_wording,
@@ -1543,7 +1569,8 @@ export async function POST(request: Request) {
           costUsd: responseData.smart_review?.cost_usd,
         };
 
-        await updateWizardFacts(supabase, case_id, (current) => ({
+        // Use admin client to support anonymous users
+        await updateWizardFacts(adminSupabase, case_id, (current) => ({
           ...current,
           __smart_review: persistedSmartReview,
         }));
@@ -1581,7 +1608,8 @@ export async function POST(request: Request) {
       updatePayload.wizard_completed_at = isComplete ? new Date().toISOString() : null;
     }
 
-    await supabase.from('cases').update(updatePayload as any).eq('id', case_id);
+    // Use admin client to support anonymous users
+    await adminSupabase.from('cases').update(updatePayload as any).eq('id', case_id);
 
     return NextResponse.json({
       case_id,

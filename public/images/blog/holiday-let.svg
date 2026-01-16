@@ -1,0 +1,171 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <g transform="translate(80, 25)">
+    <text x="320" y="28" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">HOLIDAY LET PROPERTIES</text>
+    <text x="320" y="48" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Short-term holiday rental accommodation</text>
+  </g>
+
+  <!-- Holiday cottage illustration -->
+  <g transform="translate(80, 70)">
+    <rect x="0" y="0" width="200" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- House with vacation elements -->
+    <polygon points="100,35 160,80 40,80" fill="#7C3AED"/>
+    <rect x="45" y="80" width="110" height="100" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="75" y="130" width="50" height="50" rx="3" fill="#7C3AED"/>
+    <circle cx="115" cy="155" r="4" fill="#A78BFA"/>
+
+    <!-- Windows -->
+    <rect x="55" y="95" width="30" height="25" rx="2" fill="white" stroke="#7C3AED"/>
+    <rect x="115" y="95" width="30" height="25" rx="2" fill="white" stroke="#7C3AED"/>
+
+    <!-- Sun icon -->
+    <circle cx="160" cy="50" r="18" fill="#A78BFA"/>
+    <line x1="160" y1="25" x2="160" y2="35" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="160" y1="65" x2="160" y2="75" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="135" y1="50" x2="145" y2="50" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="175" y1="50" x2="185" y2="50" stroke="#7C3AED" stroke-width="2"/>
+
+    <text x="100" y="210" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">HOLIDAY</text>
+    <text x="100" y="225" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">COTTAGE</text>
+
+    <!-- Stars rating -->
+    <g transform="translate(50, 240)">
+      <polygon points="10,0 13,8 21,8 15,13 17,21 10,16 3,21 5,13 -1,8 7,8" fill="#7C3AED" transform="scale(0.6)"/>
+      <polygon points="10,0 13,8 21,8 15,13 17,21 10,16 3,21 5,13 -1,8 7,8" fill="#7C3AED" transform="translate(20,0) scale(0.6)"/>
+      <polygon points="10,0 13,8 21,8 15,13 17,21 10,16 3,21 5,13 -1,8 7,8" fill="#7C3AED" transform="translate(40,0) scale(0.6)"/>
+      <polygon points="10,0 13,8 21,8 15,13 17,21 10,16 3,21 5,13 -1,8 7,8" fill="#7C3AED" transform="translate(60,0) scale(0.6)"/>
+      <polygon points="10,0 13,8 21,8 15,13 17,21 10,16 3,21 5,13 -1,8 7,8" fill="#A78BFA" transform="translate(80,0) scale(0.6)"/>
+    </g>
+  </g>
+
+  <!-- Key differences from AST -->
+  <g transform="translate(300, 70)">
+    <rect x="0" y="0" width="420" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="420" height="38" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="26" width="420" height="12" fill="#7C3AED"/>
+    <text x="210" y="26" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">KEY DIFFERENCES FROM STANDARD LETTING</text>
+
+    <g transform="translate(20, 55)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Short-term stays (days/weeks)</text>
+    </g>
+
+    <g transform="translate(20, 80)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Not a primary residence</text>
+    </g>
+
+    <g transform="translate(20, 105)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Different tax treatment (FHL rules)</text>
+    </g>
+
+    <g transform="translate(20, 130)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">No deposit protection required</text>
+    </g>
+
+    <g transform="translate(230, 55)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Furnished as standard</text>
+    </g>
+
+    <g transform="translate(230, 80)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Higher rental income potential</text>
+    </g>
+
+    <g transform="translate(230, 105)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">More management intensive</text>
+    </g>
+
+    <g transform="translate(230, 130)">
+      <circle cx="8" cy="8" r="6" fill="#6D28D9"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Seasonal demand variations</text>
+    </g>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(300, 255)">
+    <rect x="0" y="0" width="200" height="195" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="35" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="23" width="200" height="12" fill="#6D28D9"/>
+    <text x="100" y="24" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">REQUIREMENTS</text>
+
+    <g transform="translate(15, 50)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
+      <path d="M3 8 L7 12 L13 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Planning permission check</text>
+    </g>
+
+    <g transform="translate(15, 78)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
+      <path d="M3 8 L7 12 L13 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Fire safety regulations</text>
+    </g>
+
+    <g transform="translate(15, 106)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
+      <path d="M3 8 L7 12 L13 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Gas safety certificate</text>
+    </g>
+
+    <g transform="translate(15, 134)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
+      <path d="M3 8 L7 12 L13 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Insurance (public liability)</text>
+    </g>
+
+    <g transform="translate(15, 162)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#7C3AED"/>
+      <path d="M3 8 L7 12 L13 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Local licensing (if applicable)</text>
+    </g>
+  </g>
+
+  <!-- Tax benefits -->
+  <g transform="translate(520, 255)">
+    <rect x="0" y="0" width="200" height="195" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="35" rx="12" fill="#A78BFA"/>
+    <rect x="0" y="23" width="200" height="12" fill="#A78BFA"/>
+    <text x="100" y="24" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">FHL TAX BENEFITS</text>
+
+    <g transform="translate(15, 50)">
+      <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Capital allowances</text>
+    </g>
+
+    <g transform="translate(15, 75)">
+      <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Mortgage interest relief</text>
+    </g>
+
+    <g transform="translate(15, 100)">
+      <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Business rates (not council tax)</text>
+    </g>
+
+    <g transform="translate(15, 125)">
+      <circle cx="8" cy="8" r="6" fill="#A78BFA"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="9" font-family="Arial">CGT reliefs available</text>
+    </g>
+
+    <rect x="15" y="148" width="170" height="35" rx="6" fill="#F3F1FF"/>
+    <text x="100" y="163" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold" font-family="Arial">QUALIFYING CRITERIA</text>
+    <text x="100" y="176" text-anchor="middle" fill="#6D28D9" font-size="8" font-family="Arial">210 days available, 105 let</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

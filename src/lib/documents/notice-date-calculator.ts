@@ -51,13 +51,29 @@ export interface Section8DateParams {
   jurisdiction?: 'england' | 'wales'; // NEW: For Wales warnings
 }
 
+/**
+ * Service method for notice delivery
+ * Affects deemed service date calculation
+ */
+export type ServiceMethod =
+  | 'first_class_post'    // Deemed served 2 working days after posting
+  | 'second_class_post'   // Deemed served 2 working days after posting (same as first class per CPR)
+  | 'hand_delivery'       // Deemed served on same day
+  | 'leaving_at_property' // Deemed served on same day
+  | 'recorded_delivery';  // Deemed served 2 working days after posting
+
 export interface Section21DateParams {
-  service_date: string; // ISO date
+  service_date: string; // ISO date - the date notice is posted/delivered
   tenancy_start_date: string;
   fixed_term?: boolean;
   fixed_term_end_date?: string;
+  // Break clause fields (for fixed term tenancies)
+  has_break_clause?: boolean;
+  break_clause_date?: string; // ISO date
   rent_period: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   periodic_tenancy_start?: string; // When it became periodic (if converted)
+  // Service method determines deemed service date
+  service_method?: ServiceMethod;
 }
 
 export interface NoticeToLeaveDateParams {
@@ -92,11 +108,9 @@ export type NoticePeriodResult = {
  * Ground-specific notice periods (in days) as per Housing Act 1988, Schedule 2
  *
  * Legal requirements:
- * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
- * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+ * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
+ * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
  * - Immediate (0 days): Ground 14 (serious ASB), Ground 14A
- *
- * CRITICAL: Grounds 10 and 11 require 2 MONTHS, not 2 weeks!
  */
 const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
   1: 60,    // 2 months - landlord previously occupied
@@ -110,8 +124,8 @@ const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
   '7B': 14, // 2 weeks - abandonment (periodic)
   8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
   9: 60,    // 2 months - suitable alternative accommodation
-  10: 60,   // 2 MONTHS - some rent arrears (NOT 2 weeks!)
-  11: 60,   // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  10: 14,   // 2 weeks - some rent arrears
+  11: 14,   // 2 weeks - persistent delay in paying rent
   12: 14,   // 2 weeks - breach of tenancy obligation
   13: 14,   // 2 weeks - deterioration of dwelling
   14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
@@ -130,7 +144,6 @@ const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
  * - Ground 14A: Immediate (0 days) for domestic violence
  * - Ground 14 serious ASB: Immediate (0 days)
  * - Ground 14 moderate ASB: 14 days minimum
- * - Grounds 10, 11: 2 MONTHS (60 days) - NOT 2 weeks!
  * - Grounds 1, 2, 5, 6, 7, 9, 16: 2 months (60 days)
  * - All other grounds: 14 days minimum
  * - Wales: Generates warnings (wrong terminology)
@@ -355,20 +368,47 @@ export function validateSection8ExpiryDate(
  * 4. For fixed term: can be served during fixed term but expiry must be on or after last day of fixed term
  */
 export function calculateSection21ExpiryDate(params: Section21DateParams): DateCalculationResult {
-  const { service_date, tenancy_start_date, fixed_term, fixed_term_end_date, rent_period, periodic_tenancy_start } =
-    params;
+  const {
+    service_date,
+    tenancy_start_date,
+    fixed_term,
+    fixed_term_end_date,
+    has_break_clause,
+    break_clause_date,
+    rent_period,
+    periodic_tenancy_start,
+    service_method,
+  } = params;
 
   const serviceDateObj = parseUTCDate(service_date);
   const tenancyStartObj = parseUTCDate(tenancy_start_date);
 
   const warnings: string[] = [];
 
-  // Add 2 calendar months to service date (UTC-safe, handles end-of-month correctly)
+  // =============================================================================
+  // DEEMED SERVICE DATE CALCULATION
+  // For postal service (first class post, etc.), deemed service is 2 working days
+  // after posting. The 2-month notice period runs from DEEMED service, not posting.
+  // =============================================================================
+  const deemedServiceDateStr = calculateDeemedServiceDate(service_date, service_method);
+  const deemedServiceDateObj = parseUTCDate(deemedServiceDateStr);
+
+  // Add 2 calendar months to DEEMED service date (UTC-safe, handles end-of-month correctly)
   // CRITICAL: This is calendar months, NOT 60 days
   // Jan 31 + 2 months = Mar 31, NOT Apr 1
-  let expiryDateObj = addUTCMonths(serviceDateObj, 2);
+  let expiryDateObj = addUTCMonths(deemedServiceDateObj, 2);
 
-  let explanation = `Section 21 requires a minimum of 2 calendar months notice. We added 2 months to your service date (${formatDate(serviceDateObj)}). `;
+  // Build explanation based on whether deemed service differs from serve date
+  let explanation: string;
+  if (deemedServiceDateStr !== service_date) {
+    explanation =
+      `Section 21 requires a minimum of 2 calendar months notice from deemed service. ` +
+      `For ${service_method?.replace(/_/g, ' ')}, deemed service is 2 working days after posting. ` +
+      `Serve date: ${formatDate(serviceDateObj)}. Deemed service: ${formatDate(deemedServiceDateObj)}. ` +
+      `We added 2 months to the deemed service date. `;
+  } else {
+    explanation = `Section 21 requires a minimum of 2 calendar months notice. We added 2 months to your service date (${formatDate(serviceDateObj)}). `;
+  }
 
   // Check 4-month rule (for tenancies started after October 2015)
   const fourMonthsAfterStart = addUTCMonths(tenancyStartObj, 4);
@@ -381,12 +421,38 @@ export function calculateSection21ExpiryDate(params: Section21DateParams): DateC
     );
   }
 
-  // If fixed term, expiry must be on or after last day of fixed term
+  // If fixed term, expiry must be on or after:
+  // - Break clause date (if there is one), OR
+  // - Fixed term end date (if no break clause)
   if (fixed_term && fixed_term_end_date) {
     const fixedTermEndObj = parseUTCDate(fixed_term_end_date);
-    if (expiryDateObj < fixedTermEndObj) {
-      expiryDateObj = new Date(fixedTermEndObj);
-      explanation += `The expiry date has been set to the last day of the fixed term. `;
+
+    // Check if break clause allows earlier exit
+    if (has_break_clause && break_clause_date) {
+      const breakClauseDateObj = parseUTCDate(break_clause_date);
+
+      // Use break clause date if it's before fixed term end
+      if (breakClauseDateObj < fixedTermEndObj) {
+        if (expiryDateObj < breakClauseDateObj) {
+          expiryDateObj = new Date(breakClauseDateObj);
+          explanation += `The expiry date has been set to the break clause date (${formatDate(breakClauseDateObj)}), which allows earlier exit from the fixed term. `;
+        }
+      } else {
+        // Break clause is on/after fixed term end - use fixed term end
+        if (expiryDateObj < fixedTermEndObj) {
+          expiryDateObj = new Date(fixedTermEndObj);
+          explanation += `The expiry date has been set to the last day of the fixed term. `;
+        }
+        warnings.push(
+          'The break clause date is on or after the fixed term end date. The notice will expire at the fixed term end.'
+        );
+      }
+    } else {
+      // No break clause - must wait until fixed term ends
+      if (expiryDateObj < fixedTermEndObj) {
+        expiryDateObj = new Date(fixedTermEndObj);
+        explanation += `The expiry date has been set to the last day of the fixed term (no break clause allows earlier exit). `;
+      }
     }
   }
 
@@ -445,14 +511,18 @@ export function validateSection21ExpiryDate(
     );
   }
 
-  // Check 2-month notice (must be 2 calendar months, not 60 days)
-  const serviceDateObj = parseUTCDate(params.service_date);
-  const twoMonthsFromService = addUTCMonths(serviceDateObj, 2);
+  // Check 2-month notice from DEEMED service date (must be 2 calendar months, not 60 days)
+  const deemedServiceDateStr = calculateDeemedServiceDate(params.service_date, params.service_method);
+  const deemedServiceDateObj = parseUTCDate(deemedServiceDateStr);
+  const twoMonthsFromDeemedService = addUTCMonths(deemedServiceDateObj, 2);
 
-  if (proposedDateObj < twoMonthsFromService) {
+  if (proposedDateObj < twoMonthsFromDeemedService) {
+    const serviceMethodNote = params.service_method && deemedServiceDateStr !== params.service_date
+      ? ` (deemed service: ${formatDate(deemedServiceDateObj)} based on ${params.service_method.replace(/_/g, ' ')})`
+      : '';
     errors.push(
-      `Section 21 requires a minimum of 2 calendar months notice. ` +
-        `The earliest valid date is ${formatDate(twoMonthsFromService)}.`
+      `Section 21 requires a minimum of 2 calendar months notice from deemed service${serviceMethodNote}. ` +
+        `The earliest valid date is ${formatDate(twoMonthsFromDeemedService)}.`
     );
   }
 
@@ -919,21 +989,61 @@ export function formatDateUK(date: Date | string): string {
 }
 
 /**
- * Add business days (skip weekends)
- * Not currently used but useful for future enhancements
+ * Add business days (skip weekends) using UTC
+ * Used for deemed service date calculation for postal notices
  */
 export function addBusinessDays(date: Date, days: number): Date {
   const result = new Date(date);
   let addedDays = 0;
 
   while (addedDays < days) {
-    result.setDate(result.getDate() + 1);
-    const dayOfWeek = result.getDay();
+    result.setUTCDate(result.getUTCDate() + 1);
+    const dayOfWeek = result.getUTCDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      // Not Sunday or Saturday
+      // Not Sunday (0) or Saturday (6)
       addedDays++;
     }
   }
 
   return result;
+}
+
+/**
+ * Calculate deemed service date based on service method
+ *
+ * Legal rules (Civil Procedure Rules and common practice):
+ * - First class post / recorded delivery: deemed served 2 working days after posting
+ * - Second class post: deemed served 2 working days after posting
+ * - Hand delivery / leaving at property: deemed served on same day
+ *
+ * Working days exclude weekends (Sat/Sun). Bank holidays are not excluded
+ * as they vary by jurisdiction and the 2-day rule is a simplification.
+ *
+ * @param serveDate The date the notice is posted or delivered (ISO string)
+ * @param serviceMethod The method of service
+ * @returns The deemed service date as ISO string
+ */
+export function calculateDeemedServiceDate(
+  serveDate: string,
+  serviceMethod?: ServiceMethod
+): string {
+  const serveDateObj = parseUTCDate(serveDate);
+
+  // Default to hand delivery if not specified (deemed same day)
+  if (!serviceMethod || serviceMethod === 'hand_delivery' || serviceMethod === 'leaving_at_property') {
+    return serveDate;
+  }
+
+  // Postal methods: deemed served 2 working days after posting
+  if (
+    serviceMethod === 'first_class_post' ||
+    serviceMethod === 'second_class_post' ||
+    serviceMethod === 'recorded_delivery'
+  ) {
+    const deemedDate = addBusinessDays(serveDateObj, 2);
+    return toISODateString(deemedDate);
+  }
+
+  // Fallback: same day
+  return serveDate;
 }

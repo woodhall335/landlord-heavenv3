@@ -1,9 +1,16 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -29,6 +36,26 @@ export default function RentArrearsCalculator() {
   const [rentAmount, setRentAmount] = useState(750);
   const [frequency, setFrequency] = useState<'month' | 'week'>('month');
   const [schedule, setSchedule] = useState<ScheduleItem[]>(defaultSchedule);
+  const upsellConfig = {
+    toolName: 'Rent Arrears Calculator',
+    toolType: 'calculator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £199.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Arrears and interest totals',
+      'Basic schedule PDF export',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'Move from calculations to a court-ready money claim bundle with the required forms and evidence templates.',
+  };
 
   const totals = useMemo(() => {
     const today = new Date();
@@ -148,7 +175,8 @@ export default function RentArrearsCalculator() {
     setSchedule((prev) => (prev.length > 1 ? prev.filter((item) => item.id !== id) : prev));
   };
 
-  const handleSavePDF = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     if (schedule.length === 0 || totals.totalOutstanding === 0) {
       alert('Please add at least one arrears period first');
       return;
@@ -322,12 +350,28 @@ link.href = url;
       console.error('PDF error:', error);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [schedule, totals, rentAmount, estimatedInterest, daysOutstanding]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-arrears-calculator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleSavePDF = () => {
+    gate.checkGateAndProceed();
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -355,6 +399,9 @@ link.href = url;
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -509,7 +556,7 @@ link.href = url;
             <button
               onClick={handleSavePDF}
               disabled={totals.totalOutstanding === 0}
-              className="mt-6 w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hero-btn-primary mt-6 w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Save Schedule as PDF
             </button>
@@ -530,19 +577,29 @@ link.href = url;
                 </p>
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                    className="flex-1 text-center bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition"
+                    href="/wizard/flow?type=money_claim&jurisdiction=england&product=money_claim&src=product_page&topic=arrears"
+                    className="hero-btn-primary flex-1 text-center"
                   >
-                    Start Money Claim (E&W)
+                    Start Money Claim (England)
                   </Link>
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                    className="flex-1 text-center bg-white text-primary border-2 border-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition"
+                    href="/wizard/flow?type=money_claim&jurisdiction=wales&product=money_claim&src=product_page&topic=arrears"
+                    className="hero-btn-secondary flex-1 text-center"
+                  >
+                    Start Money Claim (Wales)
+                  </Link>
+                  <Link
+                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&src=product_page&topic=arrears"
+                    className="hero-btn-secondary flex-1 text-center"
                   >
                     Start Simple Procedure (Scotland)
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-8">
+              <ToolUpsellCard {...upsellConfig} />
             </div>
           </div>
         </Card>
@@ -641,6 +698,30 @@ link.href = url;
           </div>
         </Card>
       </Container>
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            productLinks.completePack,
+            toolLinks.section8Generator,
+            blogLinks.rentArrearsEviction,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
+      </Container>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Arrears Schedule"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

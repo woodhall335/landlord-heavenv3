@@ -1,0 +1,123 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#92400E" font-size="22" font-weight="bold" font-family="Arial">FORM N5B - ACCELERATED POSSESSION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#D97706" font-size="11" font-family="Arial">Claim form for accelerated possession under Section 21</text>
+
+  <!-- Form icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#D97706" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Form document -->
+      <rect x="20" y="10" width="100" height="80" rx="5" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+      <text x="70" y="30" text-anchor="middle" fill="#92400E" font-size="12" font-weight="bold">N5B</text>
+      <rect x="30" y="40" width="80" height="5" rx="2" fill="#D97706" opacity="0.5"/>
+      <rect x="30" y="50" width="60" height="5" rx="2" fill="#D97706" opacity="0.5"/>
+      <rect x="30" y="60" width="70" height="5" rx="2" fill="#D97706" opacity="0.5"/>
+      <rect x="30" y="70" width="50" height="5" rx="2" fill="#D97706" opacity="0.5"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#92400E" font-size="11" font-weight="bold">FORM N5B</text>
+    <text x="100" y="143" text-anchor="middle" fill="#D97706" font-size="9">Accelerated</text>
+    <text x="100" y="158" text-anchor="middle" fill="#D97706" font-size="9">possession claim</text>
+  </g>
+
+  <!-- When to use -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#92400E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHEN TO USE N5B</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Valid Section 21 served</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">AST tenancy only</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Written tenancy agreement</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Not claiming rent arrears</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#D97706" font-size="9" font-weight="bold">No hearing usually needed</text>
+    </g>
+  </g>
+
+  <!-- Required documents -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="200" height="12" fill="#EF4444"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ATTACH TO FORM</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Copy of Section 21</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#EF4444"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Tenancy agreement</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#991B1B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Proof of service</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#991B1B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Gas certificate</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#EF4444" font-size="9" font-weight="bold">EPC + How to Rent</text>
+    </g>
+  </g>
+
+  <!-- Process section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="680" height="12" fill="#92400E"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ACCELERATED POSSESSION PROCESS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#D97706" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#D97706" font-size="10" font-weight="bold">FILING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Complete N5B form</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Pay court fee</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Submit to county court</text>
+      <text x="100" y="94" text-anchor="middle" fill="#D97706" font-size="8" font-weight="bold">Online or by post</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">PROCESSING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Court serves on tenant</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">14 days to respond</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Judge reviews papers</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Usually no hearing</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">OUTCOME</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Possession order issued</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">14 days notice to leave</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Apply for warrant if needed</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Faster than standard</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#D97706" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#92400E" opacity="0.12"/>
+</svg>

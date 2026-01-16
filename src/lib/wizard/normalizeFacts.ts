@@ -117,6 +117,14 @@ export function normalizeFactKeys(facts?: Record<string, any>): Record<string, a
     }
   }
 
+  if (safeFacts.no_retaliatory_notice !== undefined && normalized.recent_repair_complaints === undefined) {
+    if (isTruthy(safeFacts.no_retaliatory_notice)) {
+      normalized.recent_repair_complaints = false;
+    } else if (isFalsy(safeFacts.no_retaliatory_notice)) {
+      normalized.recent_repair_complaints = true;
+    }
+  }
+
   // Handle nested objects (like notice_service.notice_date -> notice_service_date)
   if (safeFacts.notice_service) {
     if (safeFacts.notice_service.notice_date && !normalized.notice_service_date) {

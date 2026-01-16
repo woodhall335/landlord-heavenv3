@@ -3,6 +3,19 @@ import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata } from "@/lib/seo";
+import {
+  BadgePoundSterling,
+  Clock,
+  Target,
+  Sparkles,
+  CheckCircle2,
+  Zap,
+  Building2,
+  Database,
+  CreditCard,
+  FileText,
+  AlertTriangle
+} from "lucide-react";
 
 export const metadata: Metadata = generateMetadata({
   title: "About Us - Mission & Story",
@@ -54,7 +67,9 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="text-5xl mb-4">💸</div>
+                <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <BadgePoundSterling className="w-8 h-8 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
                 <p className="text-gray-700">
                   Solicitors charge £300-600 for eviction documents. For many landlords, this is unaffordable -
@@ -63,7 +78,9 @@ export default function AboutPage() {
               </div>
 
               <div className="text-center">
-                <div className="text-5xl mb-4">⏰</div>
+                <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Clock className="w-8 h-8 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Slow</h3>
                 <p className="text-gray-700">
                   Solicitors take days or weeks. DIY landlords spend hours researching forms, notice periods, and legal
@@ -72,7 +89,9 @@ export default function AboutPage() {
               </div>
 
               <div className="text-center">
-                <div className="text-5xl mb-4">🎯</div>
+                <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Target className="w-8 h-8 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Risky</h3>
                 <p className="text-gray-700">
                   One mistake (wrong notice period, missing deposit protection proof, incorrect grounds) can invalidate
@@ -92,7 +111,9 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-lg border border-gray-200 p-8">
-                <div className="text-4xl mb-4">🤖</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Sparkles className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Smart Document Generation</h3>
                 <p className="text-gray-700 mb-4">
                   Our system analyzes your case, selects the correct notice type, calculates notice periods,
@@ -107,7 +128,9 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-8">
-                <div className="text-4xl mb-4">✅</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">UK-Wide Coverage</h3>
                 <p className="text-gray-700 mb-4">
                   We support England & Wales, Scotland, AND Northern Ireland. Different
@@ -131,10 +154,12 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-8">
-                <div className="text-4xl mb-4">⚡</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Zap className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
                 <p className="text-gray-700 mb-4">
-                  Generate professional documents in 10-15 minutes for £29.99-£99.99. That's 95% cheaper than
+                  Generate professional documents in 10-15 minutes for £9.99-£199.99. That's 95% cheaper than
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
@@ -146,7 +171,9 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-8">
-                <div className="text-4xl mb-4">🏛️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Building2 className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Court-Ready Quality</h3>
                 <p className="text-gray-700 mb-4">
                   Our documents use official government forms and are accepted by all UK courts and tribunals.
@@ -289,7 +316,12 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="border border-gray-200 rounded-lg p-6">
-                <h4 className="font-semibold text-charcoal mb-2">🤖 Smart Document Generation</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </div>
+                  Smart Document Generation
+                </h4>
                 <p className="text-sm text-gray-700">
                   Advanced technology for legal reasoning. Analyzes your case, validates inputs, and generates
                   court-ready documents with proper legal language.
@@ -297,7 +329,12 @@ export default function AboutPage() {
               </div>
 
               <div className="border border-gray-200 rounded-lg p-6">
-                <h4 className="font-semibold text-charcoal mb-2">🗄️ Supabase (Database)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Database className="w-4 h-4 text-primary" />
+                  </div>
+                  Supabase (Database)
+                </h4>
                 <p className="text-sm text-gray-700">
                   Secure UK/EU cloud storage for your documents and account data. Enterprise-grade encryption and
                   backups.
@@ -305,14 +342,24 @@ export default function AboutPage() {
               </div>
 
               <div className="border border-gray-200 rounded-lg p-6">
-                <h4 className="font-semibold text-charcoal mb-2">💳 Stripe (Payments)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                  </div>
+                  Stripe (Payments)
+                </h4>
                 <p className="text-sm text-gray-700">
                   Industry-leading payment processing. PCI-DSS compliant. We never see or store your card details.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-6">
-                <h4 className="font-semibold text-charcoal mb-2">📄 Official Government Forms</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-primary" />
+                  </div>
+                  Official Government Forms
+                </h4>
                 <p className="text-sm text-gray-700">
                   We use actual Form 6A, N5, AT6, and other official forms - not generic templates. Courts require these
                   specific formats.
@@ -328,7 +375,10 @@ export default function AboutPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="bg-warning/10 border-l-4 border-warning p-8 rounded-r-lg">
-              <h3 className="text-2xl font-semibold text-charcoal mb-4">⚠️ Important Legal Notice</h3>
+              <h3 className="text-2xl font-semibold text-charcoal mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-7 h-7 text-warning" />
+                Important Legal Notice
+              </h3>
               <div className="prose prose-gray max-w-none text-gray-700">
                 <p className="mb-3">
                   <strong>Landlord Heaven is NOT a law firm and does NOT provide legal advice.</strong>
@@ -355,27 +405,28 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Join thousands of UK landlords who've saved time and money with Landlord Heaven.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/pricing"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                className="hero-btn-primary"
               >
-                View Pricing
+                View Pricing →
               </Link>
               <Link
                 href="/wizard"
-                className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors"
+                className="hero-btn-secondary"
               >
-                Start Wizard
+                Start Wizard →
               </Link>
             </div>
+            <p className="mt-4 text-sm text-gray-600">Court-ready documents • AI-powered • 80% cheaper than solicitors</p>
           </div>
         </Container>
       </section>

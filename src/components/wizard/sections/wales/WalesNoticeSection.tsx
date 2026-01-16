@@ -1,20 +1,25 @@
 /**
- * Wales Notice Section - Wales Eviction Notice Wizard
+ * Wales Notice Section - Notice Only Wizard
  *
- * Handles fault-based notices under the Renting Homes (Wales) Act 2016.
- * Mirrors England's Section 8 ground-driven behavior with conditional panels.
+ * Wales-specific replacement for NoticeSection.
+ * Handles Section 173 (no-fault) and fault-based notices under RH(W)A 2016.
  *
- * Fault-based grounds:
- * - Section 157: Serious rent arrears (at least 2 months) - 14 days notice
- * - Section 159: Some rent arrears (less than 2 months) - 30 days notice
- * - Section 161: Anti-social behaviour (serious) - 14 days notice
- * - Section 162: Breach of occupation contract - 30 days notice
+ * Key differences from England NoticeSection:
+ * - NO Section 21, Form 6A, or Housing Act 1988 references
+ * - NO "How to Rent" guide compliance
+ * - NO EPC compliance checks (handled differently in Wales)
+ * - Uses RHW terminology and notice periods
  *
  * Features:
  * - Conditional "ground details" panels BEFORE breach_description
  * - ArrearsScheduleStep for arrears grounds (reused from England)
  * - "Use details as starting point" buttons to prepopulate breach_description
  * - AskHeavenInlineEnhancer for breach_description enhancement
+ *
+ * Notice periods (Wales):
+ * - Section 173: 6 months minimum
+ * - Fault-based (serious breach): 1 month minimum
+ * - Fault-based (8+ weeks arrears): absolute ground
  */
 
 'use client';
@@ -24,6 +29,7 @@ import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 import { computeArrears } from '@/lib/arrears-engine';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface WalesNoticeSectionProps {
   facts: WizardFacts;
@@ -40,6 +46,7 @@ const WALES_FAULT_GROUNDS = [
     description: 'At least 2 months of rent unpaid',
     section: 157,
     period: 14,
+    mandatory: true,
     requiresArrearsSchedule: true,
   },
   {
@@ -47,7 +54,8 @@ const WALES_FAULT_GROUNDS = [
     label: 'Some rent arrears',
     description: 'Less than 2 months of rent unpaid',
     section: 159,
-    period: 30,
+    period: 56,
+    mandatory: false,
     requiresArrearsSchedule: true,
   },
   {
@@ -56,22 +64,43 @@ const WALES_FAULT_GROUNDS = [
     description: 'Serious anti-social behaviour or nuisance',
     section: 161,
     period: 14,
+    mandatory: true,
     requiresArrearsSchedule: false,
   },
   {
     value: 'breach_of_contract',
     label: 'Breach of occupation contract',
     description: 'Breach of terms in the occupation contract',
-    section: 162,
-    period: 30,
+    section: 159,
+    period: 56,
+    mandatory: false,
     requiresArrearsSchedule: false,
   },
   {
     value: 'false_statement',
     label: 'False statement',
     description: 'False statement made to obtain the contract',
-    section: 162,
-    period: 30,
+    section: 159,
+    period: 56,
+    mandatory: true,
+    requiresArrearsSchedule: false,
+  },
+  {
+    value: 'domestic_abuse',
+    label: 'Domestic abuse (perpetrator)',
+    description: 'Perpetrator of domestic abuse towards another occupier',
+    section: 159,
+    period: 14,
+    mandatory: true,
+    requiresArrearsSchedule: false,
+  },
+  {
+    value: 'estate_management',
+    label: 'Estate management grounds',
+    description: 'Estate management grounds for social landlords',
+    section: 159,
+    period: 60,
+    mandatory: false,
     requiresArrearsSchedule: false,
   },
 ];
@@ -79,7 +108,7 @@ const WALES_FAULT_GROUNDS = [
 const SERVICE_METHODS = [
   { value: 'first_class_post', label: 'First class post' },
   { value: 'recorded_delivery', label: 'Recorded delivery / signed for' },
-  { value: 'hand_delivered', label: 'Hand delivered to contract-holder' },
+  { value: 'hand_delivered', label: 'Hand delivered to contract holder' },
   { value: 'left_at_property', label: 'Left at the property' },
   { value: 'email', label: 'Email (if permitted by contract)' },
   { value: 'other', label: 'Other method' },
@@ -479,7 +508,7 @@ const BreachOfContractPanel: React.FC<BreachOfContractPanelProps> = ({
   onUseAsSummary,
 }) => {
   const generateBreachSummary = useCallback(() => {
-    const parts: string[] = ['BREACH OF OCCUPATION CONTRACT (Section 162):'];
+    const parts: string[] = ['BREACH OF OCCUPATION CONTRACT (Section 159):'];
 
     if (facts.wales_breach_clause) {
       parts.push(`The contract-holder has breached clause/term: ${facts.wales_breach_clause}.`);
@@ -493,7 +522,7 @@ const BreachOfContractPanel: React.FC<BreachOfContractPanelProps> = ({
       parts.push(`Evidence: ${facts.wales_breach_evidence}`);
     }
 
-    parts.push('This constitutes a breach of the occupation contract under Section 162 of the Renting Homes (Wales) Act 2016.');
+    parts.push('This constitutes a breach of the occupation contract under Section 159 of the Renting Homes (Wales) Act 2016.');
 
     return parts.join(' ');
   }, [facts]);
@@ -507,7 +536,7 @@ const BreachOfContractPanel: React.FC<BreachOfContractPanelProps> = ({
     <div className="space-y-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
       <div>
         <h4 className="text-sm font-semibold text-amber-900">
-          Section 162 - Breach of Occupation Contract Details
+          Section 159 - Breach of Occupation Contract Details
         </h4>
         <p className="text-xs text-amber-700 mt-1">
           Provide details of the contract term(s) that have been breached.
@@ -593,7 +622,7 @@ const FalseStatementPanel: React.FC<FalseStatementPanelProps> = ({
   onUseAsSummary,
 }) => {
   const generateFalseStatementSummary = useCallback(() => {
-    const parts: string[] = ['FALSE STATEMENT (Section 162):'];
+    const parts: string[] = ['FALSE STATEMENT (Section 159):'];
 
     if (facts.wales_false_statement_summary) {
       parts.push(`The contract-holder made the following false statement to obtain the contract: ${facts.wales_false_statement_summary}`);
@@ -607,7 +636,7 @@ const FalseStatementPanel: React.FC<FalseStatementPanelProps> = ({
       parts.push(`Evidence: ${facts.wales_false_statement_evidence}`);
     }
 
-    parts.push('This false statement was made to induce the landlord to enter into the occupation contract under Section 162 of the Renting Homes (Wales) Act 2016.');
+    parts.push('This false statement was made to induce the landlord to enter into the occupation contract under Section 159 of the Renting Homes (Wales) Act 2016.');
 
     return parts.join(' ');
   }, [facts]);
@@ -621,7 +650,7 @@ const FalseStatementPanel: React.FC<FalseStatementPanelProps> = ({
     <div className="space-y-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
       <div>
         <h4 className="text-sm font-semibold text-purple-900">
-          Section 162 - False Statement Details
+          Section 159 - False Statement Details
         </h4>
         <p className="text-xs text-purple-700 mt-1">
           Provide details of the false statement made to obtain the occupation contract.
@@ -698,36 +727,59 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   onUpdate,
   mode = 'notice_only',
 }) => {
+  const evictionRoute = facts.eviction_route as 'section_173' | 'fault_based' | undefined;
+  const isSection173 = evictionRoute === 'section_173';
+  const isFaultBased = evictionRoute === 'fault_based';
+
+  // Selected fault grounds
   const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
 
-  // Calculate minimum notice period based on selected grounds
+  // Track subflow completion for notice_only mode
+  const [subflowComplete, setSubflowComplete] = useState(false);
+
+  // Calculate minimum notice period based on route and grounds
   const minNoticePeriod = useMemo(() => {
-    if (selectedGrounds.length === 0) return 14;
-    // Find the maximum notice period among selected grounds
-    let maxPeriod = 14;
-    selectedGrounds.forEach((groundValue) => {
-      const ground = WALES_FAULT_GROUNDS.find((g) => g.value === groundValue);
-      if (ground && ground.period > maxPeriod) {
-        maxPeriod = ground.period;
-      }
-    });
-    return maxPeriod;
-  }, [selectedGrounds]);
+    if (isSection173) return 180; // 6 months for Section 173
+
+    if (isFaultBased && selectedGrounds.length > 0) {
+      // Find shortest notice period among selected grounds
+      let minPeriod = 60;
+      selectedGrounds.forEach((ground) => {
+        const groundInfo = WALES_FAULT_GROUNDS.find((g) => g.value === ground);
+        if (groundInfo && groundInfo.period < minPeriod) {
+          minPeriod = groundInfo.period;
+        }
+      });
+      return minPeriod;
+    }
+
+    return 30; // Default for fault-based
+  }, [isSection173, isFaultBased, selectedGrounds]);
 
   // Calculate suggested expiry date
   const today = new Date().toISOString().split('T')[0];
   const suggestedExpiryDate = useMemo(() => {
-    const serviceDate = facts.notice_service_date || facts.notice_served_date || today;
+    const serviceDate = facts.notice_date || facts.notice_service_date || facts.notice_served_date || today;
     const date = new Date(serviceDate);
     date.setDate(date.getDate() + minNoticePeriod);
     return date.toISOString().split('T')[0];
-  }, [facts.notice_service_date, facts.notice_served_date, minNoticePeriod, today]);
+  }, [facts.notice_date, facts.notice_service_date, facts.notice_served_date, minNoticePeriod, today]);
 
-  // Handle ground toggle
-  const handleGroundToggle = (groundValue: string) => {
-    const newGrounds = selectedGrounds.includes(groundValue)
-      ? selectedGrounds.filter((g) => g !== groundValue)
-      : [...selectedGrounds, groundValue];
+  // Initialize notice_date when entering this section
+  useEffect(() => {
+    if (!facts.notice_date && !facts.notice_service_date) {
+      onUpdate({
+        notice_date: today,
+        notice_service_date: today,
+      });
+    }
+  }, [facts.notice_date, facts.notice_service_date, today, onUpdate]);
+
+  // Handle ground toggle for fault-based
+  const handleGroundToggle = (ground: string) => {
+    const newGrounds = selectedGrounds.includes(ground)
+      ? selectedGrounds.filter((g) => g !== ground)
+      : [...selectedGrounds, ground];
     onUpdate({ wales_fault_grounds: newGrounds });
   };
 
@@ -780,265 +832,604 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
       clause: facts.wales_breach_clause,
       dates: facts.wales_breach_dates,
     } : undefined,
-    notice_type: 'fault_based',
+    notice_type: isFaultBased ? 'fault_based' : 'section_173',
     legal_framework: 'Renting Homes (Wales) Act 2016',
-  }), [selectedGrounds, arrearsSummary, facts, showASBPanel, showBreachPanel]);
+  }), [selectedGrounds, arrearsSummary, facts, showASBPanel, showBreachPanel, isFaultBased]);
+
+  // Check if section is complete
+  const isComplete = useCallback(() => {
+    if (!facts.notice_service_method) return false;
+    if (!facts.notice_date && !facts.notice_service_date) return false;
+    if (isFaultBased && selectedGrounds.length === 0) return false;
+    return true;
+  }, [facts.notice_service_method, facts.notice_date, facts.notice_service_date, isFaultBased, selectedGrounds]);
+
+  // Handle completion
+  const handleComplete = () => {
+    const serviceDate = facts.notice_date || facts.notice_service_date || today;
+    const updates: Record<string, any> = {
+      notice_served_date: serviceDate,
+      notice_date: serviceDate,
+      notice_service_date: serviceDate,
+      notice_expiry_date: facts.notice_expiry_date || suggestedExpiryDate,
+    };
+    onUpdate(updates);
+    setSubflowComplete(true);
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Wales-specific header */}
       <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
         <h4 className="text-sm font-medium text-purple-900">
-          Wales Fault-Based Notice
+          {isSection173
+            ? 'Generate Your Section 173 Notice'
+            : 'Generate Your Fault-Based Notice'}
         </h4>
         <p className="text-sm text-purple-700 mt-1">
-          Generate a fault-based eviction notice under the Renting Homes (Wales) Act 2016.
-          Select the grounds that apply to your case.
+          {isSection173
+            ? 'Section 173 of the Renting Homes (Wales) Act 2016 allows landlords to recover possession without giving a reason, subject to a 6-month notice period.'
+            : 'Fault-based eviction under the Renting Homes (Wales) Act 2016 requires specific grounds such as rent arrears, breach of contract, or antisocial behaviour.'}
         </p>
       </div>
 
-      {/* Grounds Selection */}
-      <div className="space-y-3">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Select Grounds for Possession
-            <span className="text-red-500 ml-1">*</span>
-          </label>
-          <p className="text-xs text-gray-500">
-            Select all grounds that apply. The notice period will be determined by the selected grounds.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-2">
-          {WALES_FAULT_GROUNDS.map((ground) => (
-            <label
-              key={ground.value}
-              className={`
-                flex items-start p-3 border rounded-lg cursor-pointer transition-all
-                ${selectedGrounds.includes(ground.value)
-                  ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
-              `}
-            >
-              <input
-                type="checkbox"
-                checked={selectedGrounds.includes(ground.value)}
-                onChange={() => handleGroundToggle(ground.value)}
-                className="mt-0.5 mr-3"
-              />
-              <div className="flex-1">
-                <span className="text-sm font-medium text-gray-900">
-                  {ground.label}
-                </span>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {ground.description}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
-                    Section {ground.section}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {ground.period} days notice
-                  </span>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
-
-        {selectedGrounds.length > 0 && (
-          <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-            <p className="text-sm text-purple-800">
-              <strong>Selected:</strong> {selectedGrounds.map((g) =>
-                WALES_FAULT_GROUNDS.find((wg) => wg.value === g)?.label
-              ).join(', ')}
-            </p>
-            <p className="text-xs text-purple-700 mt-1">
-              Minimum notice period: {minNoticePeriod} days
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* ================================================================== */}
-      {/* CONDITIONAL GROUND DETAILS PANELS */}
-      {/* Rendered BEFORE breach_description in deterministic order */}
-      {/* ================================================================== */}
-      {selectedGrounds.length > 0 && (
-        <div className="space-y-4">
-          <h4 className="text-sm font-medium text-gray-700 border-b pb-2">
-            Ground Details
-          </h4>
-
-          {/* Arrears panels first */}
-          {showArrearsPanel && (
-            <ArrearsDetailsPanel
-              facts={facts}
-              onUpdate={onUpdate}
-              selectedGrounds={selectedGrounds}
-              onUseAsSummary={handleUseAsSummary}
-            />
-          )}
-
-          {/* Then ASB panel */}
-          {showASBPanel && (
-            <ASBDetailsPanel
-              facts={facts}
-              onUpdate={onUpdate}
-              onUseAsSummary={handleUseAsSummary}
-            />
-          )}
-
-          {/* Then breach of contract panel */}
-          {showBreachPanel && (
-            <BreachOfContractPanel
-              facts={facts}
-              onUpdate={onUpdate}
-              onUseAsSummary={handleUseAsSummary}
-            />
-          )}
-
-          {/* Then false statement panel */}
-          {showFalseStatementPanel && (
-            <FalseStatementPanel
-              facts={facts}
-              onUpdate={onUpdate}
-              onUseAsSummary={handleUseAsSummary}
-            />
-          )}
-        </div>
-      )}
-
-      {/* ================================================================== */}
-      {/* BREACH DESCRIPTION TEXTAREA */}
-      {/* Always visible when grounds are selected */}
-      {/* ================================================================== */}
-      {selectedGrounds.length > 0 && (
-        <div className="pt-6 border-t border-gray-200 space-y-4">
-          <div>
-            <h4 className="text-base font-medium text-gray-900 mb-1">
-              Describe the breach or grounds
-            </h4>
-            <p className="text-sm text-gray-600">
-              Provide a detailed description of the grounds for possession.
-              This will appear in your notice documents.
-            </p>
-          </div>
-
-          {/* Breach description textarea */}
-          <div className="space-y-2">
-            <label htmlFor="breach_description" className="block text-sm font-medium text-gray-700">
-              Describe the breach or grounds
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <textarea
-              id="breach_description"
-              rows={6}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.breach_description || ''}
-              onChange={(e) => onUpdate({ breach_description: e.target.value })}
-              placeholder="Describe the grounds for possession in detail. Include dates, amounts, and specific incidents where applicable..."
-            />
+      {/* Section 173 flow */}
+      {isSection173 && !subflowComplete && (
+        <div className="space-y-6">
+          {/* Section 173 compliance checks */}
+          <div className="space-y-4">
+            <h5 className="text-sm font-medium text-gray-700">Section 173 Requirements</h5>
             <p className="text-xs text-gray-500">
-              Be specific and factual. Reference the conditional panels above to help draft this description.
+              Before serving a Section 173 notice, ensure these requirements are met.
             </p>
-          </div>
 
-          {/* Ask Heaven Inline Enhancer */}
-          <AskHeavenInlineEnhancer
-            questionId="breach_description"
-            questionText="Describe the breach or grounds for possession (Wales fault-based notice)"
-            answer={facts.breach_description || ''}
-            onApply={(newText) => onUpdate({ breach_description: newText })}
-            context={enhanceContext}
-            apiMode="generic"
-          />
-        </div>
-      )}
-
-      {/* ================================================================== */}
-      {/* SERVICE DETAILS */}
-      {/* ================================================================== */}
-      {selectedGrounds.length > 0 && (
-        <div className="pt-6 border-t border-gray-200 space-y-4">
-          <h4 className="text-base font-medium text-gray-900">
-            Notice Service Details
-          </h4>
-
-          {/* Service date */}
-          <div className="space-y-2">
-            <label htmlFor="notice_service_date" className="block text-sm font-medium text-gray-700">
-              Date notice will be served
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="notice_service_date"
-              type="date"
-              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.notice_service_date || facts.notice_served_date || today}
-              onChange={(e) => onUpdate({
-                notice_service_date: e.target.value,
-                notice_served_date: e.target.value,
-              })}
-            />
-          </div>
-
-          {/* Service method */}
-          <div className="space-y-2">
-            <label htmlFor="notice_service_method" className="block text-sm font-medium text-gray-700">
-              How will the notice be served?
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <select
-              id="notice_service_method"
-              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.notice_service_method || ''}
-              onChange={(e) => onUpdate({ notice_service_method: e.target.value })}
-            >
-              <option value="">Select service method...</option>
-              {SERVICE_METHODS.map((method) => (
-                <option key={method.value} value={method.value}>
-                  {method.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Expiry date */}
-          <div className="space-y-2">
-            <label htmlFor="notice_expiry_date" className="block text-sm font-medium text-gray-700">
-              Notice expiry date
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                id="notice_expiry_date"
-                type="date"
-                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.notice_expiry_date || ''}
-                onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
-              />
-              {!facts.notice_expiry_date && (
-                <button
-                  type="button"
-                  onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
-                  className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
-                >
-                  Use suggested: {suggestedExpiryDate}
-                </button>
+            {/* Rent Smart Wales registration */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Are you registered with Rent Smart Wales?
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="rent_smart_wales_registered"
+                    checked={facts.rent_smart_wales_registered === true}
+                    onChange={() => onUpdate({ rent_smart_wales_registered: true })}
+                    className="mr-2"
+                  />
+                  Yes
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="rent_smart_wales_registered"
+                    checked={facts.rent_smart_wales_registered === false}
+                    onChange={() => onUpdate({ rent_smart_wales_registered: false })}
+                    className="mr-2"
+                  />
+                  No
+                </label>
+              </div>
+              {facts.rent_smart_wales_registered === false && (
+                <p className="text-xs text-red-600 mt-1">
+                  Section 173 cannot be used if you are not registered with Rent Smart Wales.
+                </p>
               )}
             </div>
-            <p className="text-xs text-gray-500">
-              Minimum {minNoticePeriod} days from service date based on selected grounds.
-            </p>
+
+            {/* Written statement provided */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Was a written statement of the occupation contract provided?
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="written_statement_provided"
+                    checked={facts.written_statement_provided === true}
+                    onChange={() => onUpdate({ written_statement_provided: true })}
+                    className="mr-2"
+                  />
+                  Yes
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="written_statement_provided"
+                    checked={facts.written_statement_provided === false}
+                    onChange={() => onUpdate({ written_statement_provided: false })}
+                    className="mr-2"
+                  />
+                  No
+                </label>
+              </div>
+              {facts.written_statement_provided === false && (
+                <p className="text-xs text-red-600 mt-1">
+                  Section 173 cannot be used if the written statement was not provided.
+                </p>
+              )}
+            </div>
+
+            {/* Deposit protection (if applicable) */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Did you take a deposit from the contract holder?
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="deposit_taken_wales"
+                    checked={facts.deposit_taken === true}
+                    onChange={() => onUpdate({ deposit_taken: true })}
+                    className="mr-2"
+                  />
+                  Yes
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="deposit_taken_wales"
+                    checked={facts.deposit_taken === false}
+                    onChange={() => onUpdate({ deposit_taken: false })}
+                    className="mr-2"
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+
+            {/* Deposit protection - conditional */}
+            {facts.deposit_taken === true && (
+              <div className="space-y-2 pl-4 border-l-2 border-purple-200">
+                <label className="block text-sm font-medium text-gray-700">
+                  Is the deposit protected in an approved scheme?
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="deposit_protected_wales"
+                      checked={facts.deposit_protected === true}
+                      onChange={() => onUpdate({ deposit_protected: true })}
+                      className="mr-2"
+                    />
+                    Yes
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="deposit_protected_wales"
+                      checked={facts.deposit_protected === false}
+                      onChange={() => onUpdate({ deposit_protected: false })}
+                      className="mr-2"
+                    />
+                    No
+                  </label>
+                </div>
+                {facts.deposit_protected === false && (
+                  <p className="text-xs text-red-600 mt-1">
+                    Section 173 cannot be used if the deposit is not protected.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
+
+          {/* Service details */}
+          <div className="space-y-4 pt-4 border-t border-gray-200">
+            <h5 className="text-sm font-medium text-gray-700">Notice Service Details</h5>
+
+            {/* Service date */}
+            <div className="space-y-2">
+              <label htmlFor="notice_date" className="block text-sm font-medium text-gray-700">
+                Date you will serve the notice
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                id="notice_date"
+                type="date"
+                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                value={facts.notice_date || facts.notice_service_date || today}
+                onChange={(e) => onUpdate({
+                  notice_date: e.target.value,
+                  notice_service_date: e.target.value,
+                })}
+              />
+            </div>
+
+            {/* Service method */}
+            <div className="space-y-2">
+              <label htmlFor="notice_service_method" className="block text-sm font-medium text-gray-700">
+                How will you serve the notice?
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <select
+                id="notice_service_method"
+                className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                value={facts.notice_service_method || ''}
+                onChange={(e) => onUpdate({ notice_service_method: e.target.value })}
+              >
+                <option value="">Select service method...</option>
+                {SERVICE_METHODS.map((method) => (
+                  <option key={method.value} value={method.value}>
+                    {method.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Expiry info */}
+            <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <p className="text-sm text-purple-800">
+                <strong>Notice period:</strong> Section 173 requires a minimum of 6 months notice.
+                Your notice will expire on or after <strong>{suggestedExpiryDate}</strong>.
+              </p>
+            </div>
+          </div>
+
+          {/* Complete button */}
+          <button
+            type="button"
+            onClick={handleComplete}
+            disabled={!isComplete()}
+            className={`
+              w-full py-3 px-6 text-sm font-medium rounded-lg transition-colors
+              ${isComplete()
+                ? 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'}
+            `}
+          >
+            Complete Notice Setup
+          </button>
         </div>
       )}
 
-      {/* No grounds selected message */}
-      {selectedGrounds.length === 0 && (
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-          <p className="text-sm text-gray-600">
-            Please select at least one ground for possession to continue.
+      {/* Fault-based flow */}
+      {isFaultBased && !subflowComplete && (
+        <div className="space-y-6">
+          {/* Grounds selection */}
+          <div className="space-y-4">
+            <h5 className="text-sm font-medium text-gray-700">Select Grounds for Possession</h5>
+            <p className="text-xs text-gray-500">
+              Select all grounds that apply to your case. This determines the minimum notice period.
+            </p>
+
+            <div className="grid grid-cols-1 gap-2">
+              {WALES_FAULT_GROUNDS.map((ground) => (
+                <label
+                  key={ground.value}
+                  className={`
+                    flex items-start p-3 border rounded-lg cursor-pointer transition-all
+                    ${selectedGrounds.includes(ground.value)
+                      ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
+                  `}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedGrounds.includes(ground.value)}
+                    onChange={() => handleGroundToggle(ground.value)}
+                    className="mt-0.5 mr-3"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900">
+                      {ground.label}
+                    </span>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {ground.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`text-xs px-1.5 py-0.5 rounded ${
+                        ground.mandatory
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {ground.mandatory ? 'Absolute' : 'Discretionary'}
+                      </span>
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                        Section {ground.section}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {ground.period} days notice
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            {selectedGrounds.length > 0 && (
+              <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="text-sm text-purple-800">
+                  <strong>Selected:</strong> {selectedGrounds.map((g) =>
+                    WALES_FAULT_GROUNDS.find((wg) => wg.value === g)?.label
+                  ).join(', ')}
+                </p>
+                <p className="text-xs text-purple-700 mt-1">
+                  Minimum notice period: {minNoticePeriod} days
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* ================================================================== */}
+          {/* CONDITIONAL GROUND DETAILS PANELS */}
+          {/* Rendered BEFORE breach_description in deterministic order */}
+          {/* ================================================================== */}
+          {selectedGrounds.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-sm font-medium text-gray-700 border-b pb-2">
+                Ground Details
+              </h4>
+
+              {/* Arrears panels first */}
+              {showArrearsPanel && (
+                <ArrearsDetailsPanel
+                  facts={facts}
+                  onUpdate={onUpdate}
+                  selectedGrounds={selectedGrounds}
+                  onUseAsSummary={handleUseAsSummary}
+                />
+              )}
+
+              {/* Then ASB panel */}
+              {showASBPanel && (
+                <ASBDetailsPanel
+                  facts={facts}
+                  onUpdate={onUpdate}
+                  onUseAsSummary={handleUseAsSummary}
+                />
+              )}
+
+              {/* Then breach of contract panel */}
+              {showBreachPanel && (
+                <BreachOfContractPanel
+                  facts={facts}
+                  onUpdate={onUpdate}
+                  onUseAsSummary={handleUseAsSummary}
+                />
+              )}
+
+              {/* Then false statement panel */}
+              {showFalseStatementPanel && (
+                <FalseStatementPanel
+                  facts={facts}
+                  onUpdate={onUpdate}
+                  onUseAsSummary={handleUseAsSummary}
+                />
+              )}
+            </div>
+          )}
+
+          {/* ================================================================== */}
+          {/* BREACH DESCRIPTION TEXTAREA */}
+          {/* Always visible when grounds are selected */}
+          {/* ================================================================== */}
+          {selectedGrounds.length > 0 && (
+            <div className="pt-6 border-t border-gray-200 space-y-4">
+              <div>
+                <h4 className="text-base font-medium text-gray-900 mb-1">
+                  Describe the breach or grounds
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Provide a detailed description of the grounds for possession.
+                  This will appear in your notice documents.
+                </p>
+              </div>
+
+              {/* Breach description textarea */}
+              <div className="space-y-2">
+                <label htmlFor="breach_description" className="block text-sm font-medium text-gray-700">
+                  Describe the breach or grounds
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <textarea
+                  id="breach_description"
+                  rows={6}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                  value={facts.breach_description || ''}
+                  onChange={(e) => onUpdate({ breach_description: e.target.value })}
+                  placeholder="Describe the grounds for possession in detail. Include dates, amounts, and specific incidents where applicable..."
+                />
+                <p className="text-xs text-gray-500">
+                  Be specific and factual. Reference the conditional panels above to help draft this description.
+                </p>
+              </div>
+
+              {/* Ask Heaven Inline Enhancer */}
+              <AskHeavenInlineEnhancer
+                questionId="breach_description"
+                questionText="Describe the breach or grounds for possession (Wales fault-based notice)"
+                answer={facts.breach_description || ''}
+                onApply={(newText) => onUpdate({ breach_description: newText })}
+                context={enhanceContext}
+                apiMode="generic"
+              />
+            </div>
+          )}
+
+          {/* ================================================================== */}
+          {/* SERVICE DETAILS */}
+          {/* ================================================================== */}
+          {selectedGrounds.length > 0 && (
+            <div className="pt-6 border-t border-gray-200 space-y-4">
+              <h4 className="text-base font-medium text-gray-900">
+                Notice Service Details
+              </h4>
+
+              {/* Service date */}
+              <div className="space-y-2">
+                <label htmlFor="notice_service_date_fault" className="block text-sm font-medium text-gray-700">
+                  Date notice will be served
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <input
+                  id="notice_service_date_fault"
+                  type="date"
+                  className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                  value={facts.notice_date || facts.notice_service_date || today}
+                  onChange={(e) => onUpdate({
+                    notice_date: e.target.value,
+                    notice_service_date: e.target.value,
+                    notice_served_date: e.target.value,
+                  })}
+                />
+              </div>
+
+              {/* Service method */}
+              <div className="space-y-2">
+                <label htmlFor="notice_service_method_fault" className="block text-sm font-medium text-gray-700">
+                  How will the notice be served?
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <select
+                  id="notice_service_method_fault"
+                  className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                  value={facts.notice_service_method || ''}
+                  onChange={(e) => onUpdate({ notice_service_method: e.target.value })}
+                >
+                  <option value="">Select service method...</option>
+                  {SERVICE_METHODS.map((method) => (
+                    <option key={method.value} value={method.value}>
+                      {method.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Expiry date */}
+              <div className="space-y-2">
+                <label htmlFor="notice_expiry_date_fault" className="block text-sm font-medium text-gray-700">
+                  Notice expiry date
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    id="notice_expiry_date_fault"
+                    type="date"
+                    className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                    value={facts.notice_expiry_date || ''}
+                    onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
+                  />
+                  {!facts.notice_expiry_date && (
+                    <button
+                      type="button"
+                      onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
+                      className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
+                    >
+                      Use suggested: {suggestedExpiryDate}
+                    </button>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  Minimum {minNoticePeriod} days from service date based on selected grounds.
+                </p>
+              </div>
+
+              {/* Complete button */}
+              <button
+                type="button"
+                onClick={handleComplete}
+                disabled={!isComplete() || !facts.breach_description}
+                className={`
+                  w-full py-3 px-6 text-sm font-medium rounded-lg transition-colors
+                  ${isComplete() && facts.breach_description
+                    ? 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'}
+                `}
+              >
+                Complete Notice Setup
+              </button>
+            </div>
+          )}
+
+          {/* No grounds selected message */}
+          {selectedGrounds.length === 0 && (
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <p className="text-sm text-gray-600">
+                Please select at least one ground for possession to continue.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Completion state */}
+      {subflowComplete && (
+        <div className="space-y-4">
+          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <h4 className="text-sm font-medium text-green-800 flex items-center gap-2">
+              <RiCheckboxCircleLine className="w-5 h-5" />
+              Notice Setup Complete
+            </h4>
+            <p className="text-sm text-green-700 mt-1">
+              Your {isSection173 ? 'Section 173' : 'fault-based'} notice will be generated
+              when you complete the wizard.
+            </p>
+          </div>
+
+          {/* Summary */}
+          <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-2">
+            <h5 className="text-sm font-medium text-gray-700">Notice Details Summary</h5>
+            <dl className="text-sm">
+              <div className="flex gap-2">
+                <dt className="text-gray-500">Notice Type:</dt>
+                <dd className="text-gray-900">
+                  {isSection173 ? 'Section 173 (No-fault)' : 'Fault-based'}
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-gray-500">Service Date:</dt>
+                <dd className="text-gray-900">{facts.notice_date || facts.notice_service_date || '-'}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-gray-500">Service Method:</dt>
+                <dd className="text-gray-900">
+                  {SERVICE_METHODS.find((m) => m.value === facts.notice_service_method)?.label || '-'}
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-gray-500">Expiry Date:</dt>
+                <dd className="text-gray-900">{facts.notice_expiry_date || suggestedExpiryDate}</dd>
+              </div>
+              {isFaultBased && selectedGrounds.length > 0 && (
+                <div className="flex gap-2">
+                  <dt className="text-gray-500">Grounds:</dt>
+                  <dd className="text-gray-900">
+                    {selectedGrounds.map(g =>
+                      WALES_FAULT_GROUNDS.find(wg => wg.value === g)?.label || g
+                    ).join(', ')}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          {/* Edit button */}
+          <button
+            type="button"
+            onClick={() => setSubflowComplete(false)}
+            className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
+          >
+            Edit notice details
+          </button>
+        </div>
+      )}
+
+      {/* Notice generation info */}
+      {!subflowComplete && (isSection173 || (isFaultBased && selectedGrounds.length > 0)) && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg mt-6">
+          <h5 className="text-sm font-medium text-green-800 flex items-center gap-2">
+            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
+            Notice Will Be Generated
+          </h5>
+          <p className="text-sm text-green-700 mt-1">
+            Your {isSection173 ? 'Section 173' : 'fault-based'} notice will be generated
+            using the Renting Homes (Wales) Act 2016 prescribed form.
           </p>
         </div>
       )}

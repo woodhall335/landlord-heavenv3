@@ -14,7 +14,16 @@ import {
   calculateSection21ExpiryDate,
   validateSection21ExpiryDate,
   type Section21DateParams,
+  type ServiceMethod,
 } from './notice-date-calculator';
+import {
+  isFixedTermTenancy,
+  resolveFixedTermEndDate,
+  hasBreakClause,
+  resolveBreakClauseDate,
+  resolveServiceMethod,
+  logResolvedDateParams,
+} from './section21-payload-normalizer';
 
 // ============================================================================
 // TYPES
@@ -37,14 +46,19 @@ export interface Section21NoticeData {
   tenancy_start_date: string;
   fixed_term?: boolean;
   fixed_term_end_date?: string;
+  // Break clause fields (for fixed term tenancies)
+  has_break_clause?: boolean;
+  break_clause_date?: string;
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   periodic_tenancy_start?: string; // When it became periodic (if converted from fixed)
 
   // Notice details
   service_date?: string; // Date notice is served (defaults to today)
-  expiry_date: string; // Date tenant must leave by
+  service_method?: ServiceMethod; // How notice is being served (affects deemed service date)
+  expiry_date?: string; // Date tenant must leave by (auto-calculated if not provided)
   expiry_date_explanation?: string; // How we calculated this
+  serving_capacity?: 'landlord' | 'joint_landlords' | 'agent'; // Who is serving the notice
 
   // Compliance (checked by decision engine before allowing S21)
   deposit_protected?: boolean;
@@ -89,7 +103,23 @@ export async function generateSection21Notice(
     throw new Error('rent_frequency is required');
   }
 
-  // Auto-calculate expiry date if not provided or validate if provided
+  // =============================================================================
+  // SECTION 21 EXPIRY DATE: ALWAYS AUTO-CALCULATED (Jan 2026 Fix)
+  // =============================================================================
+  // For Section 21 notices, the expiry date MUST be computed server-side using
+  // the S21 validity engine. This ensures legal compliance with Housing Act 1988.
+  //
+  // IMPORTANT: Even if a user provides an expiry_date (from stale client or old data),
+  // we IGNORE it and compute the correct date. This is the single source of truth.
+  //
+  // The computed date considers:
+  // - Service date
+  // - Fixed term end date (if applicable)
+  // - Break clause date (if applicable)
+  // - 4-month restriction from tenancy start
+  // - 2 calendar months minimum notice
+  // - Periodic tenancy alignment
+  // =============================================================================
   const serviceDate = data.service_date || new Date().toISOString().split('T')[0];
 
   const dateParams: Section21DateParams = {
@@ -97,27 +127,78 @@ export async function generateSection21Notice(
     tenancy_start_date: data.tenancy_start_date,
     fixed_term: data.fixed_term,
     fixed_term_end_date: data.fixed_term_end_date,
+    has_break_clause: data.has_break_clause,
+    break_clause_date: data.break_clause_date,
     rent_period: data.rent_frequency,
     periodic_tenancy_start: data.periodic_tenancy_start,
+    service_method: data.service_method, // For deemed service date calculation
   };
 
-  // If expiry_date is provided, validate it
-  if (data.expiry_date) {
-    const validation = validateSection21ExpiryDate(data.expiry_date, dateParams);
-    if (!validation.valid) {
-      // Return 422 error with precise explanation
-      const error = new Error(validation.errors.join(' '));
-      (error as any).statusCode = 422;
-      (error as any).validationErrors = validation.errors;
-      (error as any).suggestedDate = validation.suggested_date;
-      throw error;
-    }
-  } else {
-    // Auto-calculate the expiry date
-    const calculatedDate = calculateSection21ExpiryDate(dateParams);
-    data.expiry_date = calculatedDate.earliest_valid_date;
-    data.expiry_date_explanation = calculatedDate.explanation;
+  // =============================================================================
+  // DEBUG LOGGING: Log resolved date parameters for verification
+  // This helps diagnose issues where fixed_term or fixed_term_end_date are mis-mapped
+  // =============================================================================
+  logResolvedDateParams(
+    {
+      fixed_term: !!data.fixed_term,
+      fixed_term_end_date: data.fixed_term_end_date,
+      has_break_clause: !!data.has_break_clause,
+      break_clause_date: data.break_clause_date,
+      service_method: data.service_method,
+      serve_date: serviceDate,
+    },
+    'S21Generator'
+  );
+
+  // =============================================================================
+  // SAFETY RAILS: Validate S21 can be served (4-month rule)
+  // =============================================================================
+  const tenancyStartObj = new Date(data.tenancy_start_date + 'T00:00:00.000Z');
+  const serviceDateObj = new Date(serviceDate + 'T00:00:00.000Z');
+  const fourMonthsAfterStart = new Date(tenancyStartObj);
+  fourMonthsAfterStart.setUTCMonth(fourMonthsAfterStart.getUTCMonth() + 4);
+
+  if (serviceDateObj < fourMonthsAfterStart) {
+    const error = new Error(
+      `Section 21 notice cannot be served within the first 4 months of the tenancy. ` +
+      `Tenancy started: ${data.tenancy_start_date}. ` +
+      `Earliest service date: ${fourMonthsAfterStart.toISOString().split('T')[0]}. ` +
+      `Legal basis: Housing Act 1988, Section 21(4B).`
+    );
+    (error as any).statusCode = 422;
+    (error as any).validationErrors = [(error as Error).message];
+    throw error;
   }
+
+  // =============================================================================
+  // SAFETY RAILS: Fixed term without break clause - ensure expiry >= fixed term end
+  // =============================================================================
+  if (data.fixed_term && data.fixed_term_end_date && !data.has_break_clause) {
+    const fixedTermEndObj = new Date(data.fixed_term_end_date + 'T00:00:00.000Z');
+    const twoMonthsFromService = new Date(serviceDateObj);
+    twoMonthsFromService.setUTCMonth(twoMonthsFromService.getUTCMonth() + 2);
+
+    // The calculated expiry will be the later of: (service + 2 months) OR fixed_term_end
+    // This is correct behavior, but if someone somehow bypasses and sets expiry < fixed_term_end,
+    // that's a bug. We validate this in the calculation.
+  }
+
+  // =============================================================================
+  // ALWAYS COMPUTE EXPIRY DATE (ignore user-provided values for S21)
+  // This is the SINGLE SOURCE OF TRUTH for Section 21 expiry dates.
+  // =============================================================================
+  const calculatedDate = calculateSection21ExpiryDate(dateParams);
+
+  // Log if user provided a different expiry date (for debugging)
+  if (data.expiry_date && data.expiry_date !== calculatedDate.earliest_valid_date) {
+    console.warn(
+      `[S21 Generator] User-provided expiry date (${data.expiry_date}) differs from calculated (${calculatedDate.earliest_valid_date}). ` +
+      `Using calculated date as single source of truth.`
+    );
+  }
+
+  data.expiry_date = calculatedDate.earliest_valid_date;
+  data.expiry_date_explanation = calculatedDate.explanation;
 
   // Compliance warnings (should be checked by decision engine before allowing S21)
   const complianceWarnings: string[] = [];
@@ -143,12 +224,248 @@ export async function generateSection21Notice(
     console.warn('Section 21 compliance warnings:', complianceWarnings);
   }
 
+  // =============================================================================
+  // TEMPLATE DATA PREPARATION (FIX: Ensure Form 6A template variables are set)
+  // Form 6A template expects these specific variable names:
+  // - notice_expiry_date (Section 2: "You are required to leave... after:")
+  // - service_date / notice_service_date / notice_date (Page 2 Date: field)
+  // - is_landlord_serving / is_joint_landlords_serving / is_agent_serving (capacity)
+  // =============================================================================
+  const templateData: Record<string, any> = {
+    ...data,
+    // CRITICAL: Form 6A Section 2 renders from notice_expiry_date (not expiry_date)
+    notice_expiry_date: data.expiry_date,
+    earliest_possession_date: data.expiry_date, // Fallback alias
+
+    // CRITICAL: Form 6A Page 2 "Date:" renders from service_date (and fallbacks)
+    service_date: serviceDate,
+    notice_service_date: serviceDate,
+    notice_date: serviceDate,
+    intended_service_date: serviceDate,
+
+    // Serving capacity flags for Form 6A checkbox rendering
+    is_landlord_serving: false,
+    is_joint_landlords_serving: false,
+    is_agent_serving: false,
+  };
+
+  // Set serving capacity based on wizard input
+  const servingCapacity = (data as any).serving_capacity;
+  if (servingCapacity === 'landlord') {
+    templateData.is_landlord_serving = true;
+  } else if (servingCapacity === 'joint_landlords') {
+    templateData.is_joint_landlords_serving = true;
+  } else if (servingCapacity === 'agent') {
+    templateData.is_agent_serving = true;
+  } else {
+    // Default to landlord if not specified
+    templateData.is_landlord_serving = true;
+  }
+
   return generateDocument({
     templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-    data,
+    data: templateData,
     isPreview,
     outputFormat: 'both',
   });
+}
+
+/**
+ * Validate Section 21 eligibility based on compliance requirements
+ * This should be called by the decision engine before allowing S21 route
+ */
+/**
+ * Map wizard facts to Section21NoticeData
+ *
+ * This provides a single source of truth for mapping wizard/case facts
+ * to the format expected by generateSection21Notice().
+ */
+export function mapWizardToSection21Data(
+  wizardFacts: Record<string, any>,
+  options?: { serviceDate?: string }
+): Section21NoticeData {
+  // Build addresses - prefer pre-concatenated, fallback to building from parts
+  const propertyAddress =
+    wizardFacts.property_address ||
+    [
+      wizardFacts.property_address_line1,
+      wizardFacts.property_address_line2,
+      wizardFacts.property_address_town,
+      wizardFacts.property_address_county,
+      wizardFacts.property_address_postcode,
+    ]
+      .filter(Boolean)
+      .join('\n') ||
+    '';
+
+  const landlordAddress =
+    wizardFacts.landlord_address ||
+    [
+      wizardFacts.landlord_address_line1,
+      wizardFacts.landlord_address_line2,
+      wizardFacts.landlord_address_town,
+      wizardFacts.landlord_address_county,
+      wizardFacts.landlord_address_postcode,
+    ]
+      .filter(Boolean)
+      .join('\n') ||
+    '';
+
+  // Normalize deposit scheme to expected enum
+  const normalizeDepositScheme = (
+    scheme: string | undefined
+  ): 'DPS' | 'MyDeposits' | 'TDS' | undefined => {
+    if (!scheme) return undefined;
+    const upper = scheme.toUpperCase();
+    if (upper === 'DPS' || upper.includes('DEPOSIT PROTECTION')) return 'DPS';
+    if (upper.includes('MYDEPOSIT')) return 'MyDeposits';
+    if (upper === 'TDS' || upper.includes('TENANCY DEPOSIT')) return 'TDS';
+    return undefined;
+  };
+
+  // =============================================================================
+  // RESOLVE SERVICE DATE FROM ALL POSSIBLE WIZARD PATHS
+  // The wizard stores service date in various locations depending on product/config.
+  // MQS maps_to: notice_service.notice_date creates nested structure.
+  // We need to check all possible paths to find the user-entered service date.
+  //
+  // CRITICAL FIX (Jan 2026): Added support for new field ID "notice_date" from MSQ fix.
+  // Old field was "notice_service_date" which didn't match maps_to path last segment.
+  // Now MSQ uses "notice_date" which correctly maps to "notice_service.notice_date".
+  // =============================================================================
+  const resolveServiceDate = (): string | undefined => {
+    // Priority 1: Explicit option passed from caller
+    if (options?.serviceDate) return options.serviceDate;
+
+    // Priority 2: Nested path from MQS maps_to (notice_service.notice_date)
+    const noticeService = wizardFacts.notice_service;
+    if (typeof noticeService === 'object' && noticeService?.notice_date) {
+      return noticeService.notice_date;
+    }
+
+    // Priority 3: Direct field IDs (flat keys in wizard facts)
+    // Check BOTH old and new field names for backwards compatibility
+    // New field ID (Jan 2026 fix): notice_date
+    if (wizardFacts.notice_date) return wizardFacts.notice_date;
+    // Old field ID (pre-fix): notice_service_date
+    if (wizardFacts.notice_service_date) return wizardFacts.notice_service_date;
+    // Other possible paths
+    if (wizardFacts.service_date) return wizardFacts.service_date;
+    if (wizardFacts.notice_served_date) return wizardFacts.notice_served_date;
+    if (wizardFacts.intended_service_date) return wizardFacts.intended_service_date;
+
+    return undefined;
+  };
+
+  // =============================================================================
+  // RESOLVE SERVING CAPACITY FROM NESTED WIZARD PATHS
+  // =============================================================================
+  type ServingCapacity = 'landlord' | 'joint_landlords' | 'agent';
+
+  const resolveServingCapacity = (): ServingCapacity | undefined => {
+    // Check nested path from MQS maps_to (notice_service.serving_capacity)
+    const noticeService = wizardFacts.notice_service;
+    if (typeof noticeService === 'object' && noticeService?.serving_capacity) {
+      const cap = noticeService.serving_capacity;
+      if (cap === 'landlord' || cap === 'joint_landlords' || cap === 'agent') {
+        return cap;
+      }
+    }
+
+    // Check flat keys
+    const flatCap = wizardFacts.serving_capacity;
+    if (flatCap === 'landlord' || flatCap === 'joint_landlords' || flatCap === 'agent') {
+      return flatCap;
+    }
+
+    return undefined;
+  };
+
+  // =============================================================================
+  // RESOLVE SERVICE METHOD FROM WIZARD PATHS
+  // Determines deemed service date calculation (postal = +2 working days)
+  // Uses centralized normalizer that handles label strings ("First class post" → "first_class_post")
+  // =============================================================================
+  // Imported from section21-payload-normalizer.ts - handles label → enum conversion
+
+  return {
+    // Landlord
+    landlord_full_name: wizardFacts.landlord_full_name || '',
+    landlord_2_name: wizardFacts.landlord_2_name || wizardFacts.joint_landlord_name,
+    landlord_address: landlordAddress,
+    landlord_email: wizardFacts.landlord_email,
+    landlord_phone: wizardFacts.landlord_phone,
+
+    // Tenant
+    tenant_full_name: wizardFacts.tenant_full_name || '',
+    tenant_2_name: wizardFacts.tenant_2_name || wizardFacts.joint_tenant_name,
+    property_address: propertyAddress,
+
+    // Tenancy
+    // Uses centralized normalizers to handle flat/nested payload shapes and label strings
+    tenancy_start_date: wizardFacts.tenancy_start_date || wizardFacts.tenancy?.start_date || '',
+    // isFixedTermTenancy handles: boolean flags, enum values ("ast_fixed"), and labels ("Fixed term")
+    fixed_term: isFixedTermTenancy(wizardFacts),
+    // resolveFixedTermEndDate checks: flat key, nested tenancy.fixed_term_end_date
+    fixed_term_end_date: resolveFixedTermEndDate(wizardFacts),
+    // Break clause fields (for fixed term tenancies)
+    // hasBreakClause handles: boolean flags, 'yes' strings, nested tenancy.has_break_clause
+    has_break_clause: hasBreakClause(wizardFacts),
+    break_clause_date: resolveBreakClauseDate(wizardFacts),
+    rent_amount: wizardFacts.rent_amount || 0,
+    rent_frequency: wizardFacts.rent_frequency || 'monthly',
+    periodic_tenancy_start: wizardFacts.periodic_tenancy_start,
+
+    // Notice details - service_date resolved from all possible wizard paths
+    // CRITICAL (Jan 2026): expiry_date is ALWAYS computed server-side for S21
+    // We do NOT pass any user-provided expiry_date - generateSection21Notice computes it.
+    service_date: resolveServiceDate(),
+    // Service method determines deemed service date (postal = +2 working days)
+    // resolveServiceMethod normalizes labels ("First class post" → "first_class_post")
+    service_method: resolveServiceMethod(wizardFacts),
+    // expiry_date is intentionally omitted - generateSection21Notice will compute it
+    // Include serving_capacity for Form 6A checkbox rendering
+    serving_capacity: resolveServingCapacity(),
+
+    // Compliance
+    // IMPORTANT: Section21ComplianceSection stores these as *_served but
+    // templates and interfaces use *_given/*_provided. Check all variants.
+    deposit_protected:
+      wizardFacts.deposit_protected === true ||
+      wizardFacts.deposit_protected === 'yes',
+    deposit_amount: wizardFacts.deposit_amount,
+    deposit_scheme: normalizeDepositScheme(
+      wizardFacts.deposit_scheme || wizardFacts.deposit_scheme_name
+    ),
+    deposit_reference: wizardFacts.deposit_reference,
+    prescribed_info_given:
+      wizardFacts.prescribed_info_given === true ||
+      wizardFacts.prescribed_info_given === 'yes' ||
+      wizardFacts.prescribed_info_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.prescribed_info_served === 'yes',
+    gas_certificate_provided:
+      wizardFacts.gas_certificate_provided === true ||
+      wizardFacts.gas_certificate_provided === 'yes' ||
+      wizardFacts.gas_safety_certificate === true ||
+      wizardFacts.gas_safety_cert_provided === true ||
+      wizardFacts.gas_safety_cert_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.gas_safety_cert_served === 'yes',
+    how_to_rent_provided:
+      wizardFacts.how_to_rent_provided === true ||
+      wizardFacts.how_to_rent_provided === 'yes' ||
+      wizardFacts.how_to_rent_given === true ||
+      wizardFacts.how_to_rent_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.how_to_rent_served === 'yes',
+    epc_provided:
+      wizardFacts.epc_provided === true ||
+      wizardFacts.epc_provided === 'yes' ||
+      wizardFacts.epc_served === true ||  // Section21ComplianceSection uses this
+      wizardFacts.epc_served === 'yes',
+    epc_rating: wizardFacts.epc_rating,
+
+    // Help information
+    council_phone: wizardFacts.council_phone,
+  };
 }
 
 /**
