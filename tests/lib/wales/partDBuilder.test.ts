@@ -275,6 +275,85 @@ describe('Part D NEVER contains England-specific strings', () => {
     // Should contain [REFERENCE REMOVED] where England strings were
     expect(result.text).toContain('[REFERENCE REMOVED]');
   });
+
+  it('should sanitize England strings from asb_description input', () => {
+    const paramsWithEnglandStrings: WalesPartDParams = {
+      wales_fault_grounds: ['antisocial_behaviour'],
+      is_community_landlord: false,
+      asb_description:
+        'Behaviour warranting Ground 8 under Section 8 Housing Act 1988. Section 21 notice also served.',
+      asb_incident_date: '2024-03-15',
+    };
+
+    const result = buildWalesPartDText(paramsWithEnglandStrings);
+
+    // Should NOT contain England strings (they should be sanitized)
+    for (const pattern of englandPatterns) {
+      if (typeof pattern === 'string') {
+        expect(result.text).not.toContain(pattern);
+      } else {
+        expect(result.text).not.toMatch(pattern);
+      }
+    }
+
+    // Should produce valid output with section 161
+    expect(result.success).toBe(true);
+    expect(result.text).toContain('section 161');
+  });
+
+  it('should sanitize England strings from false_statement_details input', () => {
+    const paramsWithEnglandStrings: WalesPartDParams = {
+      wales_fault_grounds: ['false_statement'],
+      is_community_landlord: false,
+      false_statement_details:
+        'False statement made on Form 6A under Section 21 Housing Act 1988 to obtain AST.',
+    };
+
+    const result = buildWalesPartDText(paramsWithEnglandStrings);
+
+    // Should NOT contain England strings (they should be sanitized)
+    for (const pattern of englandPatterns) {
+      if (typeof pattern === 'string') {
+        expect(result.text).not.toContain(pattern);
+      } else {
+        expect(result.text).not.toMatch(pattern);
+      }
+    }
+
+    // Should produce valid output with section 159
+    expect(result.success).toBe(true);
+    expect(result.text).toContain('section 159');
+  });
+
+  it('should not allow England terms to leak even with complex multi-ground input', () => {
+    const complexParams: WalesPartDParams = {
+      wales_fault_grounds: ['rent_arrears_serious', 'antisocial_behaviour', 'breach_of_contract'],
+      is_community_landlord: false,
+      total_arrears: 3000,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      breach_description: 'Multiple Section 8 grounds under Housing Act 1988.',
+      asb_description: 'Ground 8 threshold met. Section 21 notice pending.',
+    };
+
+    const result = buildWalesPartDText(complexParams);
+
+    // Verify no England terms leaked
+    for (const pattern of englandPatterns) {
+      if (typeof pattern === 'string') {
+        expect(result.text).not.toContain(pattern);
+      } else {
+        expect(result.text).not.toMatch(pattern);
+      }
+    }
+
+    // Should still produce valid multi-ground output
+    expect(result.success).toBe(true);
+    expect(result.groundsIncluded).toHaveLength(3);
+    expect(result.text).toContain('section 157');
+    expect(result.text).toContain('section 159');
+    expect(result.text).toContain('section 161');
+  });
 });
 
 // ============================================================================
