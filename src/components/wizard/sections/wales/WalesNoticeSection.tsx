@@ -29,6 +29,10 @@ import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 import { computeArrears } from '@/lib/arrears-engine';
+import {
+  generateWalesArrearsSummary,
+  isWalesSection157ThresholdMet,
+} from '@/lib/wales';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface WalesNoticeSectionProps {
@@ -189,32 +193,36 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
     }
   }, [facts.issues, onUpdate]);
 
-  // Generate summary text from arrears data
-  const generateArrearsSummary = useCallback(() => {
+  // Calculate Wales Section 157 threshold status
+  const thresholdResult = useMemo(() => {
+    if (!arrearsSummary || arrearsSummary.total_arrears === 0) return null;
+    const rentAmount = facts.rent_amount || 0;
+    const rentFrequency = facts.rent_frequency || 'monthly';
+    return isWalesSection157ThresholdMet(
+      arrearsSummary.total_arrears,
+      rentFrequency,
+      rentAmount
+    );
+  }, [arrearsSummary, facts.rent_amount, facts.rent_frequency]);
+
+  // Generate summary text from arrears data using Wales-specific function
+  const generateArrearsSummaryText = useCallback(() => {
     if (!arrearsSummary || arrearsSummary.total_arrears === 0) return '';
 
     const isSerious = selectedGrounds.includes('rent_arrears_serious');
-    const sectionRef = isSerious ? 'Section 157' : 'Section 159';
 
-    let summary = `RENT ARREARS (${sectionRef}):\n`;
-    summary += `The contract-holder owes £${arrearsSummary.total_arrears.toFixed(2)} in rent arrears, `;
-    summary += `representing ${arrearsSummary.arrears_in_months.toFixed(1)} months of unpaid rent. `;
-
-    if (arrearsSummary.periods_fully_unpaid > 0) {
-      summary += `There are ${arrearsSummary.periods_fully_unpaid} rental period(s) that are fully unpaid. `;
-    }
-
-    if (isSerious && arrearsSummary.arrears_in_months >= 2) {
-      summary += `This meets the threshold for serious arrears under Section 157 of the Renting Homes (Wales) Act 2016.`;
-    } else if (!isSerious) {
-      summary += `This constitutes rent arrears under Section 159 of the Renting Homes (Wales) Act 2016.`;
-    }
-
-    return summary;
-  }, [arrearsSummary, selectedGrounds]);
+    // Use the Wales-specific narrative generator with proper threshold checking
+    return generateWalesArrearsSummary(
+      arrearsSummary.total_arrears,
+      arrearsSummary.arrears_in_months,
+      arrearsSummary.periods_fully_unpaid,
+      isSerious,
+      thresholdResult?.met
+    );
+  }, [arrearsSummary, selectedGrounds, thresholdResult]);
 
   const handleUseSummary = () => {
-    const summary = generateArrearsSummary();
+    const summary = generateArrearsSummaryText();
     if (summary) {
       onUseAsSummary(summary);
     }
@@ -253,6 +261,7 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
           <ArrearsScheduleStep
             facts={scheduleStepFacts}
             onUpdate={handleArrearsUpdate}
+            jurisdiction="wales"
           />
 
           {/* Summary display */}
@@ -272,7 +281,48 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
                     {arrearsSummary.arrears_in_months.toFixed(2)}
                   </span>
                 </div>
+                {/* Wales Section 157 threshold display */}
+                {isSerious && thresholdResult && (
+                  <>
+                    <div>
+                      <span className="text-gray-600">Threshold required:</span>
+                      <span className="ml-2 font-semibold">
+                        {thresholdResult.thresholdLabel} (£{thresholdResult.thresholdAmount.toFixed(2)})
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Status:</span>
+                      <span className={`ml-2 font-semibold ${thresholdResult.met ? 'text-green-600' : 'text-amber-600'}`}>
+                        {thresholdResult.met ? 'Threshold Met' : 'Below Threshold'}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
+
+              {/* Wales Section 157 threshold status indicator */}
+              {isSerious && thresholdResult && (
+                <div className={`mt-3 p-2 rounded-lg ${
+                  thresholdResult.met
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-amber-50 border border-amber-200'
+                }`}>
+                  <p className={`text-sm font-medium ${
+                    thresholdResult.met ? 'text-green-800' : 'text-amber-800'
+                  }`}>
+                    {thresholdResult.met
+                      ? '✓ Section 157 Threshold Met'
+                      : '⚠ Section 157 Threshold Not Met'}
+                  </p>
+                  <p className={`text-xs mt-1 ${
+                    thresholdResult.met ? 'text-green-700' : 'text-amber-700'
+                  }`}>
+                    {thresholdResult.met
+                      ? `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} meet the statutory threshold for serious rent arrears under the Renting Homes (Wales) Act 2016.`
+                      : `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} are below the Section 157 threshold. You may use Section 159 (some rent arrears) instead.`}
+                  </p>
+                </div>
+              )}
 
               {/* Use summary button */}
               <div className="mt-3 pt-3 border-t border-blue-200">
