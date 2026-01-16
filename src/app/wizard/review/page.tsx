@@ -253,7 +253,17 @@ function ReviewPageInner() {
     }
 
     // UNPAID CASE: Go to preview/checkout
-    router.push(`/wizard/preview/${caseId}`);
+    // Include product param to ensure preview page correctly identifies product type
+    // This is critical for notice_only to use the correct preview API
+    const previewParams = new URLSearchParams();
+    if (product) {
+      previewParams.set('product', product);
+    }
+    if (jurisdiction) {
+      previewParams.set('jurisdiction', jurisdiction);
+    }
+    const queryString = previewParams.toString();
+    router.push(`/wizard/preview/${caseId}${queryString ? `?${queryString}` : ''}`);
   };
 
   const readinessBadge = (() => {

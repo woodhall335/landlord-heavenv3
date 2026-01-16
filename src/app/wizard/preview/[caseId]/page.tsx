@@ -180,14 +180,48 @@ export default function WizardPreviewPage() {
         // Try to generate/load preview
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
         const originalMeta = (fetchedCase.collected_facts as any)?.__meta || {};
-        const inferredProduct =
-          factsMeta.product || originalMeta.product || originalMeta.original_product;
+        const wizardFacts = (fetchedCase.collected_facts as any) || {};
+
+        // ROBUST PRODUCT INFERENCE ORDER:
+        // 1. URL query param (most explicit)
+        // 2. collected_facts.meta.product
+        // 3. collected_facts.__meta.product
+        // 4. collected_facts.__meta.original_product
+        // 5. Infer from notice-only specific facts (selected_notice_route present indicates notice_only)
+        const urlProduct = searchParams.get('product');
+        let inferredProduct =
+          urlProduct ||
+          factsMeta.product ||
+          originalMeta.product ||
+          originalMeta.original_product;
+
+        // If product still not determined, infer from case characteristics
+        // Notice-only cases have selected_notice_route set (from the wizard flow)
+        if (!inferredProduct) {
+          const hasNoticeOnlyMarkers =
+            wizardFacts.selected_notice_route ||
+            wizardFacts.eviction_route ||
+            (originalMeta.flow === 'notice_only');
+
+          // If we have notice-only markers and it's an eviction case, infer notice_only
+          if (hasNoticeOnlyMarkers && fetchedCase.case_type === 'eviction') {
+            console.log('[Preview] Inferred product=notice_only from case markers:', {
+              selected_notice_route: wizardFacts.selected_notice_route,
+              eviction_route: wizardFacts.eviction_route,
+              flow: originalMeta.flow,
+            });
+            inferredProduct = 'notice_only';
+          }
+        }
 
         if (inferredProduct === 'notice_only') {
           setSelectedProduct('notice_only');
         } else if (inferredProduct) {
           setSelectedProduct(inferredProduct);
         }
+
+        // Determine if this is a notice_only case (for choosing correct preview API)
+        const isNoticeOnly = inferredProduct === 'notice_only';
 
         // Validate with checkpoint if needed for eviction cases
         if (fetchedCase.case_type === 'eviction' && !fetchedCase.recommended_route) {
@@ -242,110 +276,158 @@ export default function WizardPreviewPage() {
           console.log('Could not fetch generated documents:', docsError);
         }
 
-        // Generate ALL preview documents for thumbnails based on product
+        // Generate preview documents for thumbnails based on product
         try {
-          // Determine if arrears schedule should be included (Section 8 + arrears grounds + data)
           const productForGen = inferredProduct || 'notice_only';
           const jurisdictionForGen = fetchedCase.jurisdiction || 'england';
           const routeForGen = fetchedCase.recommended_route || 'section_8';
           const facts = (fetchedCase.collected_facts as any) || {};
 
-          const shouldIncludeArrearsScheduleForGen = (): boolean => {
-            if (productForGen !== 'notice_only') return false;
-            if (routeForGen !== 'section_8' && routeForGen !== 'section-8') return false;
+          // =====================================================================
+          // NOTICE ONLY: Use merged preview endpoint (validates at checkout)
+          // This avoids calling /api/documents/generate which doesn't support
+          // all jurisdiction/route combinations (e.g., Wales routes)
+          // =====================================================================
+          if (isNoticeOnly) {
+            console.log('[Preview] Notice Only case - skipping individual document generation', {
+              caseId,
+              jurisdiction: jurisdictionForGen,
+              route: routeForGen,
+              product: productForGen,
+            });
 
-            // Check if arrears grounds are included
-            const needsSchedule = requiresRentSchedule(facts);
-            if (!needsSchedule) return false;
+            // For Notice Only, we don't generate individual preview documents
+            // The document cards will show based on getNoticeOnlyDocuments() config
+            // Actual PDF pack is generated post-payment via /api/notice-only/preview/${caseId}
+            //
+            // This prevents the "Route section_21 is not available for wales/notice_only"
+            // error that occurs when trying to use /api/documents/generate for Wales routes
 
-            // Check if arrears data exists
-            const arrearsItems = facts.arrears_items || [];
-            return arrearsItems.length > 0;
-          };
-
-          const documentTypesToGenerate = getDocumentTypesForProduct(
-            productForGen,
-            jurisdictionForGen,
-            routeForGen,
-            { includeArrearsSchedule: shouldIncludeArrearsScheduleForGen() }
-          );
-
-          console.log('[Preview] Generating preview documents:', documentTypesToGenerate);
-
-          // Generate documents in parallel (but limit concurrency to avoid overwhelming server)
-          let previewBlocked = false;
-
-          const generateDoc = async (docType: string) => {
+            // Call the notice-only validate endpoint to check if there are blocking issues
+            // This is a lightweight validation check without generating actual documents
             try {
-              if (previewBlocked) {
-                return null;
-              }
-              const response = await fetch('/api/documents/generate', {
-                method: 'POST',
+              const validateResponse = await fetch(`/api/notice-only/validate/${caseId}`, {
+                method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  case_id: caseId,
-                  document_type: docType,
-                  is_preview: true,
-                }),
               });
 
-              if (response.ok) {
-                const result = await response.json();
-                if (result.document?.id) {
-                  return {
-                    id: result.document.id,
-                    document_type: result.document.document_type,
-                    title: result.document.document_title || result.document.title,
-                  };
-                }
-              }
-              if (response.status === 422) {
-                const errorPayload = await response.json().catch(() => ({}));
-                console.warn('[Preview] Preview generation blocked:', {
+              if (validateResponse.status === 422) {
+                const validateData = await validateResponse.json().catch(() => ({}));
+                console.warn('[Preview] Notice Only validation found issues:', {
                   caseId,
-                  docType,
-                  errorPayload,
+                  blocking_issues: validateData.blocking_issues?.length || 0,
                 });
-                previewBlocked = true;
-                setValidationErrors({
-                  blocking_issues: normalizeValidationIssues(errorPayload.blocking_issues),
-                  warnings: normalizeValidationIssues(errorPayload.warnings),
+                if (validateData.blocking_issues?.length > 0) {
+                  setValidationErrors({
+                    blocking_issues: normalizeValidationIssues(validateData.blocking_issues),
+                    warnings: normalizeValidationIssues(validateData.warnings),
+                  });
+                  setError('VALIDATION_ERROR');
+                }
+              } else if (validateResponse.ok) {
+                console.log('[Preview] Notice Only validation passed');
+              }
+            } catch (validateError) {
+              // Validation endpoint may not exist - that's OK, continue without it
+              console.log('[Preview] Notice Only validation not available:', validateError);
+            }
+          } else {
+            // NON-NOTICE-ONLY: Use legacy individual document generation
+            // (complete_pack, money_claim, etc.)
+
+            const shouldIncludeArrearsScheduleForGen = (): boolean => {
+              if (productForGen !== 'notice_only') return false;
+              if (routeForGen !== 'section_8' && routeForGen !== 'section-8') return false;
+
+              const needsSchedule = requiresRentSchedule(facts);
+              if (!needsSchedule) return false;
+
+              const arrearsItems = facts.arrears_items || [];
+              return arrearsItems.length > 0;
+            };
+
+            const documentTypesToGenerate = getDocumentTypesForProduct(
+              productForGen,
+              jurisdictionForGen,
+              routeForGen,
+              { includeArrearsSchedule: shouldIncludeArrearsScheduleForGen() }
+            );
+
+            console.log('[Preview] Generating preview documents:', documentTypesToGenerate);
+
+            let previewBlocked = false;
+
+            const generateDoc = async (docType: string) => {
+              try {
+                if (previewBlocked) {
+                  return null;
+                }
+                const response = await fetch('/api/documents/generate', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    case_id: caseId,
+                    document_type: docType,
+                    is_preview: true,
+                  }),
                 });
-                setError('VALIDATION_ERROR');
+
+                if (response.ok) {
+                  const result = await response.json();
+                  if (result.document?.id) {
+                    return {
+                      id: result.document.id,
+                      document_type: result.document.document_type,
+                      title: result.document.document_title || result.document.title,
+                    };
+                  }
+                }
+                if (response.status === 422) {
+                  const errorPayload = await response.json().catch(() => ({}));
+                  console.warn('[Preview] Preview generation blocked:', {
+                    caseId,
+                    docType,
+                    errorPayload,
+                  });
+                  previewBlocked = true;
+                  setValidationErrors({
+                    blocking_issues: normalizeValidationIssues(errorPayload.blocking_issues),
+                    warnings: normalizeValidationIssues(errorPayload.warnings),
+                  });
+                  setError('VALIDATION_ERROR');
+                  return null;
+                }
+                return null;
+              } catch (err) {
+                console.log(`[Preview] Failed to generate ${docType}:`, err);
                 return null;
               }
-              return null;
-            } catch (err) {
-              console.log(`[Preview] Failed to generate ${docType}:`, err);
-              return null;
-            }
-          };
+            };
 
-          // Generate in batches of 3 to avoid overwhelming the server
-          const batchSize = 3;
-          const newDocs: GeneratedDocument[] = [];
+            const batchSize = 3;
+            const newDocs: GeneratedDocument[] = [];
 
-          for (let i = 0; i < documentTypesToGenerate.length; i += batchSize) {
-            if (previewBlocked) break;
-            const batch = documentTypesToGenerate.slice(i, i + batchSize);
-            const results = await Promise.all(batch.map(generateDoc));
-            results.forEach(doc => {
-              if (doc) newDocs.push(doc);
-            });
-            if (previewBlocked) break;
-          }
-
-          if (newDocs.length > 0) {
-            setGeneratedDocs(prev => {
-              const combined = [...prev];
-              newDocs.forEach(newDoc => {
-                if (!combined.some(d => d.id === newDoc.id)) {
-                  combined.push(newDoc);
-                }
+            for (let i = 0; i < documentTypesToGenerate.length; i += batchSize) {
+              if (previewBlocked) break;
+              const batch = documentTypesToGenerate.slice(i, i + batchSize);
+              const results = await Promise.all(batch.map(generateDoc));
+              results.forEach(doc => {
+                if (doc) newDocs.push(doc);
               });
-              return combined;
-            });
+              if (previewBlocked) break;
+            }
+
+            if (newDocs.length > 0) {
+              setGeneratedDocs(prev => {
+                const combined = [...prev];
+                newDocs.forEach(newDoc => {
+                  if (!combined.some(d => d.id === newDoc.id)) {
+                    combined.push(newDoc);
+                  }
+                });
+                return combined;
+              });
+            }
           }
         } catch (previewError) {
           console.log('Preview generation not available:', previewError);
