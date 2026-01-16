@@ -54,7 +54,7 @@ interface WizardSection {
   label: string;
   description: string;
   // Route-specific visibility
-  routes?: ('section_8' | 'section_21')[];
+  routes?: EvictionRoute[];
   // Validation function to check if section is complete
   isComplete: (facts: WizardFacts) => boolean;
   // Check if section has blockers
@@ -155,6 +155,8 @@ const SECTIONS: WizardSection[] = [
     id: 'notice',
     label: 'Notice Details',
     description: 'Grounds and service details',
+    // Show for England routes and Wales fault-based (Wales S173 uses different flow)
+    routes: ['section_8', 'section_21', 'wales_fault_based'],
     isComplete: (facts) => {
       const route = facts.eviction_route as string;
 
@@ -507,7 +509,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
     switch (currentSection.id) {
       case 'case_basics':
-        return <CaseBasicsSection {...sectionProps} />;
+        // Use Wales-specific case basics when jurisdiction is Wales
+        return jurisdiction === 'wales' ? (
+          <WalesCaseBasicsSection facts={facts} onUpdate={handleUpdate} />
+        ) : (
+          <CaseBasicsSection {...sectionProps} />
+        );
       case 'parties':
         return <PartiesSection {...sectionProps} />;
       case 'property':
