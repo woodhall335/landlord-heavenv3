@@ -278,7 +278,7 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     expect(getTypeLabel('england', 'section_8')).toBe('Section 8 (Fault-Based)');
   });
 
-  it('should not show Compliance section for Wales routes', async () => {
+  it('should show Wales Compliance section for Wales routes', async () => {
     const walesProps = {
       caseId: 'test-case-wales',
       jurisdiction: 'wales' as const,
@@ -293,8 +293,8 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     // Wait for component to load
     await screen.findByText(/Wales Eviction Notice/);
 
-    // Compliance section (Section 21 specific) should NOT appear for Wales
-    expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
+    // Wales Compliance section should appear for Wales routes
+    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
   });
 
   it('should show Compliance section for England Section 21 route', async () => {
