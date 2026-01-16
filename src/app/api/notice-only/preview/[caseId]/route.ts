@@ -159,12 +159,25 @@ export async function GET(
     validationJurisdiction = jurisdiction as JurisdictionKey;
 
     // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
+    // Check both selected_notice_route and eviction_route as wizard may store in either
     selected_route =
       wizardFacts.selected_notice_route ||
+      wizardFacts.eviction_route ||
       wizardFacts.route_recommendation?.recommended_route;
 
     console.log('[NOTICE-PREVIEW-API] Jurisdiction:', jurisdiction);
-    console.log('[NOTICE-PREVIEW-API] Selected route:', selected_route);
+    console.log('[NOTICE-PREVIEW-API] Selected route (raw):', selected_route);
+
+    // NORMALIZE WALES ROUTES: Add 'wales_' prefix if missing
+    // The wizard may store routes as 'section_173' or 'fault_based' but
+    // the capability matrix expects 'wales_section_173' or 'wales_fault_based'
+    if (jurisdiction === 'wales' && selected_route) {
+      if (selected_route === 'section_173' || selected_route === 'fault_based') {
+        const normalizedRoute = `wales_${selected_route}`;
+        console.log(`[NOTICE-PREVIEW-API] Normalizing Wales route: ${selected_route} -> ${normalizedRoute}`);
+        selected_route = normalizedRoute;
+      }
+    }
 
     // Apply jurisdiction-aware default if no route specified
     if (!selected_route) {
@@ -177,6 +190,8 @@ export async function GET(
       }
       console.log(`[NOTICE-PREVIEW-API] No route specified, using jurisdiction default: ${selected_route}`);
     }
+
+    console.log('[NOTICE-PREVIEW-API] Selected route (normalized):', selected_route);
 
     // DEFENSIVE FALLBACK: Fix jurisdiction based on selected_route
     // (In case E2E test or wizard created case with wrong jurisdiction)

@@ -14,6 +14,8 @@ import {
 interface ArrearsScheduleStepProps {
   facts: any;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Jurisdiction determines threshold terminology (England=Ground 8, Wales=Section 157) */
+  jurisdiction?: 'england' | 'wales';
 }
 
 type PaymentStatus = 'paid' | 'partial' | 'unpaid';
@@ -96,7 +98,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
   );
 };
 
-export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts, onUpdate }) => {
+export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
   // Extract tenancy and arrears data
   const tenancy = facts.tenancy || {};
   const issues = facts.issues || {};
@@ -418,25 +420,43 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
             </div>
           </div>
 
-          {/* Ground 8 eligibility indicator */}
+          {/* Threshold eligibility indicator - jurisdiction-aware */}
           {computed.arrears_in_months >= 2 ? (
             <div className="rounded-lg border border-green-200 bg-green-50 p-4">
               <p className="text-sm font-medium text-green-800">
-                ✓ Ground 8 Threshold Met
+                ✓ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met
               </p>
               <p className="text-sm text-green-700 mt-1">
-                Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Ground 8 threshold
-                (minimum 2 months required).
+                {jurisdiction === 'wales' ? (
+                  <>
+                    Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Section 157 threshold
+                    for serious rent arrears under the Renting Homes (Wales) Act 2016.
+                  </>
+                ) : (
+                  <>
+                    Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Ground 8 threshold
+                    (minimum 2 months required).
+                  </>
+                )}
               </p>
             </div>
           ) : computed.arrears_in_months > 0 ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
               <p className="text-sm font-medium text-amber-800">
-                ⚠ Ground 8 Threshold Not Met
+                ⚠ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Not Met
               </p>
               <p className="text-sm text-amber-700 mt-1">
-                Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Ground 8 threshold
-                (minimum 2 months required). You can still use Grounds 10 or 11 for arrears claims.
+                {jurisdiction === 'wales' ? (
+                  <>
+                    Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Section 157 threshold
+                    (minimum 2 months required). You can still use Section 159 for smaller arrears claims.
+                  </>
+                ) : (
+                  <>
+                    Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Ground 8 threshold
+                    (minimum 2 months required). You can still use Grounds 10 or 11 for arrears claims.
+                  </>
+                )}
               </p>
             </div>
           ) : null}
