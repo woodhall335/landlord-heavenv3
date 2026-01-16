@@ -39,6 +39,10 @@ import { NoticeSection } from '../sections/eviction/NoticeSection';
 import { OccupationContractSection } from '../sections/wales/OccupationContractSection';
 import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
 import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
+import { WalesComplianceSection } from '../sections/wales/WalesComplianceSection';
+
+// Wales compliance schema for blocking violations
+import { getBlockingViolations as getWalesBlockingViolations } from '@/lib/wales/compliance-schema';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
@@ -59,8 +63,10 @@ interface WizardSection {
   id: string;
   label: string;
   description: string;
-  // Route-specific visibility
+  // Route-specific visibility (England only - Wales filters these out)
   routes?: EvictionRoute[];
+  // Jurisdiction-specific visibility (for Wales-only sections)
+  jurisdiction?: 'england' | 'wales';
   // Validation function to check if section is complete
   isComplete: (facts: WizardFacts, jurisdiction?: 'england' | 'wales') => boolean;
   // Check if section has blockers
@@ -137,6 +143,66 @@ const SECTIONS: WizardSection[] = [
       Boolean(facts.rent_due_day),
   },
   {
+    id: 'wales_compliance',
+    label: 'Compliance',
+    description: 'Wales pre-service compliance requirements',
+    // Wales-only section - uses jurisdiction instead of routes to avoid route filtering
+    jurisdiction: 'wales',
+    isComplete: (facts, jurisdiction) => {
+      if (jurisdiction !== 'wales') return true; // Not applicable to England
+
+      const route = facts.eviction_route as string;
+      const isFaultBased = route === 'fault_based';
+
+      // Core compliance checks that apply to all Wales routes
+      const coreCompliance =
+        facts.rent_smart_wales_registered === true &&
+        facts.written_statement_provided === true;
+
+      // Deposit compliance (if deposit was taken)
+      const depositCompliance =
+        facts.deposit_taken !== true ||
+        (facts.deposit_protected === true && facts.prescribed_info_served === true);
+
+      // Safeguard checks (must be 'No' to proceed)
+      const safeguardCompliance =
+        facts.retaliatory_eviction_complaint === false &&
+        facts.local_authority_investigation === false;
+
+      // Declaration required
+      const declarationComplete = facts.user_declaration === true;
+
+      // For fault-based: also need evidence confirmation
+      const evidenceCompliance = !isFaultBased || facts.evidence_exists === true;
+
+      return (
+        coreCompliance &&
+        depositCompliance &&
+        safeguardCompliance &&
+        declarationComplete &&
+        evidenceCompliance
+      );
+    },
+    hasBlockers: (facts, jurisdiction) => {
+      if (jurisdiction !== 'wales') return [];
+
+      // Use the Wales compliance schema to get blocking violations
+      const route = facts.eviction_route as string;
+      const isFaultBased = route === 'fault_based';
+
+      // Get all blocking violations from the schema
+      const allViolations = getWalesBlockingViolations(facts);
+
+      // For section_173, filter out fault-based-only violations
+      const faultBasedOnlyCategories = ['fault_based_grounds', 'breach_evidence'];
+      const relevantViolations = isFaultBased
+        ? allViolations
+        : allViolations.filter((v) => !faultBasedOnlyCategories.includes(v.field.category));
+
+      return relevantViolations.map((v) => v.message);
+    },
+  },
+  {
     id: 'section21_compliance',
     label: 'Compliance',
     description: 'Compliance requirements for Section 21',
@@ -182,7 +248,7 @@ const SECTIONS: WizardSection[] = [
     id: 'notice',
     label: 'Notice Details',
     description: 'Grounds and service details',
-    isComplete: (facts, jurisdiction) => {
+    isComplete: (facts) => {
       const route = facts.eviction_route as string;
 
       // Wales: Section 173 (no-fault) - requires service method and date
@@ -358,6 +424,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         // England: only show if route matches
         if (!route) return false;
         return section.routes.includes(route as EvictionRoute);
+      }
+
+      // Jurisdiction-specific sections (e.g., Wales compliance)
+      if (section.jurisdiction) {
+        // Only show if jurisdiction matches
+        if (section.jurisdiction !== jurisdiction) return false;
+        // Also require valid route to be selected before showing
+        if (!hasValidRoute) return false;
+        return true;
       }
 
       // Non-route-specific sections: show case_basics always, others once route is valid
@@ -556,6 +631,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return isWales
           ? <OccupationContractSection {...sectionProps} />
           : <TenancySection {...sectionProps} />;
+      case 'wales_compliance':
+        // Wales-only compliance section
+        return <WalesComplianceSection {...sectionProps} />;
       case 'section21_compliance':
         return <Section21ComplianceSection {...sectionProps} />;
       case 'section8_arrears':
