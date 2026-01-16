@@ -40,6 +40,7 @@ import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
+import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales/grounds';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -932,6 +933,31 @@ export async function generateCompleteEvictionPack(
   console.log(`\n📦 Generating Complete Eviction Pack for ${jurisdiction}...`);
   console.log('='.repeat(80));
 
+  // ==========================================================================
+  // WALES GROUND_CODES DERIVATION (same as generateNoticeOnlyPack)
+  // The UI collects wales_fault_grounds (e.g., ['rent_arrears_serious']),
+  // but validation/templates expect ground_codes (e.g., ['section_157']).
+  // Preview endpoints derive this at request time, but paid generation reads
+  // raw collected_facts from DB. We must derive ground_codes here to match.
+  // ==========================================================================
+  if (jurisdiction === 'wales') {
+    const walesFaultGrounds = wizardFacts?.wales_fault_grounds;
+    const hasWalesFaultGrounds = Array.isArray(walesFaultGrounds) && walesFaultGrounds.length > 0;
+    const missingGroundCodes = !wizardFacts?.ground_codes ||
+                                (Array.isArray(wizardFacts.ground_codes) && wizardFacts.ground_codes.length === 0);
+
+    if (hasWalesFaultGrounds && missingGroundCodes) {
+      const derivedGroundCodes = mapWalesFaultGroundsToGroundCodes(walesFaultGrounds);
+
+      console.log('[generateCompleteEvictionPack] Derived ground_codes from wales_fault_grounds:', {
+        wales_fault_grounds: walesFaultGrounds,
+        derived_ground_codes: derivedGroundCodes,
+      });
+
+      wizardFacts.ground_codes = derivedGroundCodes;
+    }
+  }
+
   // Load jurisdiction-specific grounds
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
 
@@ -1178,6 +1204,44 @@ export async function generateNoticeOnlyPack(
   }
 
   console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
+
+  // ==========================================================================
+  // WALES GROUND_CODES DERIVATION
+  // The UI collects wales_fault_grounds (e.g., ['rent_arrears_serious']),
+  // but validation/templates expect ground_codes (e.g., ['section_157']).
+  // Preview endpoints derive this at request time, but paid generation reads
+  // raw collected_facts from DB. We must derive ground_codes here to match.
+  // Uses WALES_FAULT_GROUNDS definitions as the single source of truth.
+  // ==========================================================================
+  if (jurisdiction === 'wales') {
+    const walesFaultGrounds = wizardFacts?.wales_fault_grounds;
+    const noticeRouteForDerivation = wizardFacts?.selected_notice_route ||
+                                      wizardFacts?.eviction_route ||
+                                      wizardFacts?.recommended_route || '';
+
+    // Check if this is a fault-based route with wales_fault_grounds but no ground_codes
+    const isFaultBasedRoute = noticeRouteForDerivation === 'wales_fault_based' ||
+                               noticeRouteForDerivation === 'fault_based' ||
+                               noticeRouteForDerivation === 'section_8'; // Legacy mapping
+
+    const hasWalesFaultGrounds = Array.isArray(walesFaultGrounds) && walesFaultGrounds.length > 0;
+    const missingGroundCodes = !wizardFacts?.ground_codes ||
+                                (Array.isArray(wizardFacts.ground_codes) && wizardFacts.ground_codes.length === 0);
+
+    if (hasWalesFaultGrounds && missingGroundCodes) {
+      const derivedGroundCodes = mapWalesFaultGroundsToGroundCodes(walesFaultGrounds);
+
+      console.log('[generateNoticeOnlyPack] Derived ground_codes from wales_fault_grounds:', {
+        wales_fault_grounds: walesFaultGrounds,
+        derived_ground_codes: derivedGroundCodes,
+        route: noticeRouteForDerivation,
+      });
+
+      // Mutate wizardFacts to add derived ground_codes
+      // This ensures validation and template rendering see the correct data
+      wizardFacts.ground_codes = derivedGroundCodes;
+    }
+  }
 
   // Normalize Section 8 facts BEFORE validation
   // This backfills missing canonical fields from legacy/alternative locations:
