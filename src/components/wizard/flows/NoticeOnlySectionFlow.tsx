@@ -41,8 +41,11 @@ import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
 import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
 import { WalesComplianceSection } from '../sections/wales/WalesComplianceSection';
 
-// Wales compliance schema for blocking violations
-import { getBlockingViolations as getWalesBlockingViolations } from '@/lib/wales/compliance-schema';
+// Wales compliance schema for blocking violations and legacy migration
+import {
+  getBlockingViolations as getWalesBlockingViolations,
+  migrateWalesLegacyFacts,
+} from '@/lib/wales/compliance-schema';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
@@ -376,12 +379,20 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         setLoading(true);
         const loadedFacts = await getCaseFacts(caseId);
         if (loadedFacts && Object.keys(loadedFacts).length > 0) {
+          // FIX FOR ISSUE C: Apply legacy migration for Wales notice_only cases
+          // This handles old cases with different fact keys and normalizes data structures
+          const migratedFacts = migrateWalesLegacyFacts(
+            loadedFacts,
+            jurisdiction,
+            'notice_only'
+          );
+
           setFacts((prev) => ({
             ...prev,
-            ...loadedFacts,
+            ...migratedFacts,
             __meta: {
               ...prev.__meta,
-              ...loadedFacts.__meta,
+              ...(migratedFacts as Record<string, any>).__meta,
               product: 'notice_only',
               jurisdiction,
             },

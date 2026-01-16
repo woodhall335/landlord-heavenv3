@@ -722,6 +722,57 @@ interface WalesPartDParticularsProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
+/**
+ * FIX FOR ISSUE F: Patterns that indicate England-specific terminology in Wales Part D text.
+ * These patterns should trigger an amber warning and offer sanitization.
+ */
+const ENGLAND_TERMINOLOGY_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
+  { pattern: /Housing Act 1988/gi, label: 'Housing Act 1988' },
+  { pattern: /Section 8\b/gi, label: 'Section 8' },
+  { pattern: /Section 21\b/gi, label: 'Section 21' },
+  { pattern: /Ground 8\b/gi, label: 'Ground 8' },
+  { pattern: /Ground 10\b/gi, label: 'Ground 10' },
+  { pattern: /Form 6A/gi, label: 'Form 6A' },
+  { pattern: /assured shorthold tenancy/gi, label: 'assured shorthold tenancy' },
+  { pattern: /\bAST\b/g, label: 'AST' },
+];
+
+/**
+ * Detects England-specific terminology in the given text.
+ * Returns an array of found terms or empty array if none found.
+ */
+function detectEnglandTerminology(text: string): string[] {
+  if (!text) return [];
+  const foundTerms: string[] = [];
+  for (const { pattern, label } of ENGLAND_TERMINOLOGY_PATTERNS) {
+    if (pattern.test(text)) {
+      foundTerms.push(label);
+      // Reset the regex lastIndex for global patterns
+      pattern.lastIndex = 0;
+    }
+  }
+  return [...new Set(foundTerms)]; // Deduplicate
+}
+
+/**
+ * Sanitizes England-specific terminology from text.
+ * Replaces England references with Wales equivalents or removes them.
+ */
+function sanitizeEnglandTerminology(text: string): string {
+  if (!text) return text;
+  let sanitized = text;
+  // Replace with Wales equivalents
+  sanitized = sanitized.replace(/Housing Act 1988/gi, 'Renting Homes (Wales) Act 2016');
+  sanitized = sanitized.replace(/Section 8\b/gi, 'Section 157/159');
+  sanitized = sanitized.replace(/Section 21\b/gi, 'Section 173');
+  sanitized = sanitized.replace(/Ground 8\b/gi, 'Section 157 (serious rent arrears)');
+  sanitized = sanitized.replace(/Ground 10\b/gi, 'Section 159 (some rent arrears)');
+  sanitized = sanitized.replace(/Form 6A/gi, 'RHW form');
+  sanitized = sanitized.replace(/assured shorthold tenancy/gi, 'standard occupation contract');
+  sanitized = sanitized.replace(/\bAST\b/g, 'SOC');
+  return sanitized;
+}
+
 const WalesPartDParticulars: React.FC<WalesPartDParticularsProps> = ({
   facts,
   selectedGrounds,
@@ -731,6 +782,19 @@ const WalesPartDParticulars: React.FC<WalesPartDParticularsProps> = ({
   const particularsText = facts.wales_part_d_particulars || '';
   const [builderWarnings, setBuilderWarnings] = useState<string[]>([]);
   const [builderError, setBuilderError] = useState<string | null>(null);
+
+  // FIX FOR ISSUE F: Detect England terminology in the current text
+  const detectedEnglandTerms = useMemo(
+    () => detectEnglandTerminology(particularsText),
+    [particularsText]
+  );
+  const hasEnglandTerminology = detectedEnglandTerms.length > 0;
+
+  // FIX FOR ISSUE F: Handle sanitization action
+  const handleSanitizeTerminology = useCallback(() => {
+    const sanitized = sanitizeEnglandTerminology(particularsText);
+    onUpdate({ wales_part_d_particulars: sanitized });
+  }, [particularsText, onUpdate]);
 
   // Build the parameters for partDBuilder from current facts
   const builderParams = useMemo(() => ({
@@ -915,6 +979,30 @@ const WalesPartDParticulars: React.FC<WalesPartDParticularsProps> = ({
           <p className="text-sm text-red-800">
             <strong>Error:</strong> {builderError}
           </p>
+        </div>
+      )}
+
+      {/* FIX FOR ISSUE F: England terminology warning */}
+      {hasEnglandTerminology && (
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="text-sm font-medium text-amber-800 mb-2">
+            England terminology detected in your particulars
+          </p>
+          <p className="text-sm text-amber-700 mb-2">
+            Your Part D text contains references that apply to England law, not Wales.
+            Found: <strong>{detectedEnglandTerms.join(', ')}</strong>
+          </p>
+          <p className="text-xs text-amber-600 mb-3">
+            Wales eviction notices must use the Renting Homes (Wales) Act 2016 terminology.
+            Click below to automatically convert to Wales terminology.
+          </p>
+          <button
+            type="button"
+            onClick={handleSanitizeTerminology}
+            className="px-3 py-1.5 text-sm font-medium text-amber-700 bg-white border border-amber-300 rounded-md hover:bg-amber-50"
+          >
+            Sanitize to Wales terminology
+          </button>
         </div>
       )}
 
