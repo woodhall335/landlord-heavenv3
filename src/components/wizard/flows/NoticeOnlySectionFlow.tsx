@@ -34,11 +34,17 @@ import { TenancySection } from '../sections/eviction/TenancySection';
 import { Section21ComplianceSection } from '../sections/eviction/Section21ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
+import { WalesNoticeSection, WalesCaseBasicsSection } from '../sections/wales';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
+
+// Route types for England and Wales
+type EnglandRoute = 'section_8' | 'section_21';
+type WalesRoute = 'wales_fault_based' | 'wales_section_173';
+type EvictionRoute = EnglandRoute | WalesRoute;
 
 // Section definition type
 interface WizardSection {
@@ -46,11 +52,11 @@ interface WizardSection {
   label: string;
   description: string;
   // Route-specific visibility
-  routes?: ('section_8' | 'section_21')[];
+  routes?: EvictionRoute[];
   // Validation function to check if section is complete
-  isComplete: (facts: WizardFacts) => boolean;
+  isComplete: (facts: WizardFacts, jurisdiction?: 'england' | 'wales') => boolean;
   // Check if section has blockers
-  hasBlockers?: (facts: WizardFacts) => string[];
+  hasBlockers?: (facts: WizardFacts, jurisdiction?: 'england' | 'wales') => string[];
   // Check if section has warnings
   hasWarnings?: (facts: WizardFacts) => string[];
 }
@@ -61,9 +67,20 @@ const SECTIONS: WizardSection[] = [
     id: 'case_basics',
     label: 'Case Basics',
     description: 'Jurisdiction and eviction route',
-    isComplete: (facts) =>
-      Boolean(facts.eviction_route) &&
-      ['section_8', 'section_21'].includes(facts.eviction_route as string),
+    isComplete: (facts, jurisdiction) => {
+      const route = facts.eviction_route as string;
+      if (!route) return false;
+      // England routes
+      if (jurisdiction === 'england') {
+        return ['section_8', 'section_21'].includes(route);
+      }
+      // Wales routes
+      if (jurisdiction === 'wales') {
+        return ['wales_fault_based', 'wales_section_173'].includes(route);
+      }
+      // Fallback: accept any valid route
+      return ['section_8', 'section_21', 'wales_fault_based', 'wales_section_173'].includes(route);
+    },
   },
   {
     id: 'parties',
@@ -99,7 +116,8 @@ const SECTIONS: WizardSection[] = [
     id: 'section21_compliance',
     label: 'Compliance',
     description: 'Compliance requirements for Section 21',
-    routes: ['section_21'],
+    // Only for England Section 21 - Wales has different requirements
+    routes: ['section_21'] as EvictionRoute[],
     isComplete: (facts) => {
       const hasDeposit = facts.deposit_taken === true;
       if (hasDeposit) {
@@ -140,21 +158,44 @@ const SECTIONS: WizardSection[] = [
     id: 'notice',
     label: 'Notice Details',
     description: 'Grounds and service details',
-    isComplete: (facts) => {
-      // For Section 21: just need to confirm service method
-      if (facts.eviction_route === 'section_21') {
+    isComplete: (facts, jurisdiction) => {
+      const route = facts.eviction_route as string;
+
+      // For Section 21 (England): just need to confirm service method
+      if (route === 'section_21') {
         return Boolean(facts.notice_service_method);
       }
-      // For Section 8: need grounds selected
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+
+      // For Section 8 (England): need grounds selected
+      if (route === 'section_8') {
+        const selectedGrounds = (facts.section8_grounds as string[]) || [];
+        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+      }
+
+      // For Wales fault-based: need grounds, breach description, and service method
+      if (route === 'wales_fault_based') {
+        const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+        return (
+          selectedGrounds.length > 0 &&
+          Boolean(facts.breach_description) &&
+          Boolean(facts.notice_service_method)
+        );
+      }
+
+      // For Wales Section 173 (no-fault): just need service method
+      if (route === 'wales_section_173') {
+        return Boolean(facts.notice_service_method);
+      }
+
+      return false;
     },
   },
   {
     id: 'section8_arrears',
     label: 'Arrears',
     description: 'Rent arrears breakdown for Section 8',
-    routes: ['section_8'],
+    // Only for England Section 8 - Wales arrears is handled inline in WalesNoticeSection
+    routes: ['section_8'] as EvictionRoute[],
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const hasArrearsGround = selectedGrounds.some((g) =>
@@ -258,9 +299,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     void loadFacts();
   }, [caseId, jurisdiction]);
 
-  // Get visible sections based on eviction route
+  // Get visible sections based on eviction route and jurisdiction
   const visibleSections = useMemo(() => {
-    const route = facts.eviction_route as 'section_8' | 'section_21' | undefined;
+    const route = facts.eviction_route as EvictionRoute | undefined;
     return SECTIONS.filter((section) => {
       if (!section.routes) return true;
       if (!route) return section.id === 'case_basics';
@@ -344,23 +385,23 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   }, [caseId, router]);
 
   // Calculate progress
-  const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
+  const completedCount = visibleSections.filter((s) => s.isComplete(facts, jurisdiction)).length;
   const progress = Math.round((completedCount / visibleSections.length) * 100);
 
   // Get blockers and warnings for current section
-  const currentBlockers = currentSection?.hasBlockers?.(facts) || [];
+  const currentBlockers = currentSection?.hasBlockers?.(facts, jurisdiction) || [];
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
 
   // Check if all required sections are complete
   const allComplete = visibleSections
     .filter((s) => s.id !== 'review')
-    .every((s) => s.isComplete(facts));
+    .every((s) => s.isComplete(facts, jurisdiction));
 
   // Get overall blockers
   const getAllBlockers = useCallback(() => {
     const allBlockers: string[] = [];
     for (const section of visibleSections) {
-      const sectionBlockers = section.hasBlockers?.(facts) || [];
+      const sectionBlockers = section.hasBlockers?.(facts, jurisdiction) || [];
       allBlockers.push(...sectionBlockers);
     }
     return allBlockers;
@@ -378,6 +419,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
     switch (currentSection.id) {
       case 'case_basics':
+        // Use Wales-specific or England-specific case basics
+        if (jurisdiction === 'wales') {
+          return <WalesCaseBasicsSection {...sectionProps} />;
+        }
         return <CaseBasicsSection {...sectionProps} />;
       case 'parties':
         return <PartiesSection {...sectionProps} />;
@@ -390,6 +435,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
       case 'notice':
+        // Use Wales-specific notice section for Wales jurisdiction
+        if (jurisdiction === 'wales') {
+          return <WalesNoticeSection {...sectionProps} mode="notice_only" />;
+        }
         return <NoticeSection {...sectionProps} mode="notice_only" />;
       case 'review':
         return renderReviewSection();
@@ -402,7 +451,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const renderReviewSection = () => {
     const overallBlockers = getAllBlockers();
     const incompleteRequiredSections = visibleSections
-      .filter((s) => s.id !== 'review' && !s.isComplete(facts))
+      .filter((s) => s.id !== 'review' && !s.isComplete(facts, jurisdiction))
       .map((s) => s.label);
 
     return (
@@ -414,8 +463,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             {visibleSections
               .filter((s) => s.id !== 'review')
               .map((section) => {
-                const complete = section.isComplete(facts);
-                const blockers = section.hasBlockers?.(facts) || [];
+                const complete = section.isComplete(facts, jurisdiction);
+                const blockers = section.hasBlockers?.(facts, jurisdiction) || [];
                 const hasBlocker = blockers.length > 0;
 
                 return (
@@ -532,9 +581,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           {/* Section tabs */}
           <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
             {visibleSections.map((section, index) => {
-              const isComplete = section.isComplete(facts);
+              const isComplete = section.isComplete(facts, jurisdiction);
               const isCurrent = index === currentSectionIndex;
-              const hasBlocker = (section.hasBlockers?.(facts) || []).length > 0;
+              const hasBlocker = (section.hasBlockers?.(facts, jurisdiction) || []).length > 0;
 
               return (
                 <button
