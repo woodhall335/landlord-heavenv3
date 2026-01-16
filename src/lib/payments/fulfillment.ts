@@ -6,6 +6,7 @@ import {
 } from '@/lib/documents/money-claim-wizard-mapper';
 import { getPackContents } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
+import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 
 // =============================================================================
 // TYPES
@@ -159,10 +160,32 @@ export async function fulfillOrder({
     throw new Error('Case not found for fulfillment');
   }
 
-  const jurisdiction = (caseData as any).jurisdiction;
   const wizardFacts = (caseData as any).collected_facts || {};
   const route = wizardFacts.selected_notice_route || wizardFacts.eviction_route;
   const hasArrears = wizardFacts.has_arrears || wizardFacts.arrears_claimed;
+
+  // ===========================================================================
+  // CANONICAL JURISDICTION RESOLUTION
+  // Matches behavior in /api/wizard/analyze to handle Wales cases where DB
+  // jurisdiction is stored as "england" but property.country is "wales".
+  // This ensures Wales-specific validation and ground_codes derivation runs.
+  // ===========================================================================
+  const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
+
+  let canonicalJurisdiction =
+    normalizeJurisdiction((caseData as any).jurisdiction) ||
+    normalizeJurisdiction((caseData as any).property_location) ||
+    normalizeJurisdiction(caseFacts.property?.country as string | null);
+
+  // Critical fix: If jurisdiction is 'england' but property.country is 'wales',
+  // treat as Wales. This matches /api/wizard/analyze behavior.
+  if (canonicalJurisdiction === 'england' && caseFacts.property?.country === 'wales') {
+    console.log('[fulfillment] Correcting jurisdiction: DB has "england" but property.country is "wales"');
+    canonicalJurisdiction = 'wales';
+  }
+
+  // Fallback to the raw DB value if normalization fails (shouldn't happen)
+  const jurisdiction = canonicalJurisdiction || (caseData as any).jurisdiction || 'england';
 
   // ==========================================================================
   // VALIDATION: Check if fulfillment is already complete
@@ -227,7 +250,7 @@ export async function fulfillOrder({
     throw new Error('Unable to resolve user for fulfillment');
   }
 
-  const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
+  // caseFacts already defined above during canonical jurisdiction resolution
   let generatedDocsCount = 0;
 
   // Mark as processing before starting generation
