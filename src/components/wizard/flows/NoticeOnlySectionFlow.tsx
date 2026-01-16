@@ -73,6 +73,18 @@ interface WizardSection {
 const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 
+/**
+ * Normalize legacy Wales route values to canonical keys.
+ * Handles backward compatibility for sessions saved with 'wales_' prefix.
+ * Only applies to Wales routes - England routes pass through unchanged.
+ */
+const normalizeWalesRoute = (route: string | undefined): string | undefined => {
+  if (!route) return route;
+  if (route === 'wales_section_173') return 'section_173';
+  if (route === 'wales_fault_based') return 'fault_based';
+  return route;
+};
+
 // Define all sections with their visibility rules
 const SECTIONS: WizardSection[] = [
   {
@@ -328,8 +340,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
   // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
-    const route = facts.eviction_route as string | undefined;
     const isWales = jurisdiction === 'wales';
+    // Normalize route for Wales to handle legacy prefixed values (wales_section_173 -> section_173)
+    const rawRoute = facts.eviction_route as string | undefined;
+    const route = isWales ? normalizeWalesRoute(rawRoute) : rawRoute;
 
     // Determine if route is valid for this jurisdiction
     const hasValidRoute = isWales

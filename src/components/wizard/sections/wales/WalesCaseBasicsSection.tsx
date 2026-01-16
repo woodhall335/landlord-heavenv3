@@ -24,7 +24,16 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
   facts,
   onUpdate,
 }) => {
-  const evictionRoute = facts.eviction_route || '';
+  // Normalize legacy prefixed values to canonical keys
+  // This handles existing saved sessions that may have 'wales_' prefix
+  const normalizeRoute = (route: string | undefined): string => {
+    if (!route) return '';
+    if (route === 'wales_section_173') return 'section_173';
+    if (route === 'wales_fault_based') return 'fault_based';
+    return route;
+  };
+
+  const evictionRoute = normalizeRoute(facts.eviction_route as string);
 
   return (
     <div className="space-y-6">
@@ -55,7 +64,7 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
           <label
             className={`
               flex items-start p-4 border rounded-lg cursor-pointer transition-all
-              ${evictionRoute === 'wales_section_173'
+              ${evictionRoute === 'section_173'
                 ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
             `}
@@ -63,8 +72,8 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
             <input
               type="radio"
               name="eviction_route"
-              value="wales_section_173"
-              checked={evictionRoute === 'wales_section_173'}
+              value="section_173"
+              checked={evictionRoute === 'section_173'}
               onChange={(e) => onUpdate({ eviction_route: e.target.value })}
               className="mt-1 mr-3"
             />
@@ -91,7 +100,7 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
           <label
             className={`
               flex items-start p-4 border rounded-lg cursor-pointer transition-all
-              ${evictionRoute === 'wales_fault_based'
+              ${evictionRoute === 'fault_based'
                 ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
             `}
@@ -99,8 +108,8 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
             <input
               type="radio"
               name="eviction_route"
-              value="wales_fault_based"
-              checked={evictionRoute === 'wales_fault_based'}
+              value="fault_based"
+              checked={evictionRoute === 'fault_based'}
               onChange={(e) => onUpdate({ eviction_route: e.target.value })}
               className="mt-1 mr-3"
             />
@@ -132,7 +141,7 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
       </div>
 
       {/* Route-specific info boxes */}
-      {evictionRoute === 'wales_section_173' && (
+      {evictionRoute === 'section_173' && (
         <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="text-sm font-medium text-purple-900 mb-2">
             Section 173 Requirements
@@ -147,7 +156,7 @@ export const WalesCaseBasicsSection: React.FC<WalesCaseBasicsSectionProps> = ({
         </div>
       )}
 
-      {evictionRoute === 'wales_fault_based' && (
+      {evictionRoute === 'fault_based' && (
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <h4 className="text-sm font-medium text-amber-900 mb-2">
             Fault-Based Grounds (Renting Homes Act 2016)
