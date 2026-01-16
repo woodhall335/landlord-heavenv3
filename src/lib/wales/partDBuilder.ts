@@ -592,8 +592,13 @@ export function buildWalesPartDFromWizardFacts(wizardFacts: any): WalesPartDResu
       wizardFacts?.total_arrears ??
       wizardFacts?.arrears_total ??
       wizardFacts?.rent_arrears_amount ??
+      wizardFacts?.issues?.rent_arrears?.total_arrears ??
       null,
-    arrears_items: wizardFacts?.arrears_items ?? null,
+    // Read arrears_items from both canonical flat key and nested structure
+    arrears_items:
+      wizardFacts?.arrears_items ??
+      wizardFacts?.issues?.rent_arrears?.arrears_items ??
+      null,
     rent_amount: wizardFacts?.rent_amount ?? null,
     rent_frequency: wizardFacts?.rent_frequency ?? 'monthly',
     notice_service_date:
@@ -605,11 +610,29 @@ export function buildWalesPartDFromWizardFacts(wizardFacts: any): WalesPartDResu
       wizardFacts?.breach_description ??
       wizardFacts?.breach_details ??
       null,
-    asb_description: wizardFacts?.asb_description ?? null,
-    asb_incident_date: wizardFacts?.asb_incident_date ?? null,
-    asb_incident_time: wizardFacts?.asb_incident_time ?? null,
-    false_statement_details: wizardFacts?.false_statement_details ?? null,
-    breach_clause: wizardFacts?.breach_clause ?? null,
+    // Read Wales-specific ASB keys (wales_asb_*) with fallback to generic keys
+    asb_description:
+      wizardFacts?.wales_asb_description ??
+      wizardFacts?.asb_description ??
+      null,
+    asb_incident_date:
+      wizardFacts?.wales_asb_incident_date ??
+      wizardFacts?.asb_incident_date ??
+      null,
+    asb_incident_time:
+      wizardFacts?.wales_asb_incident_time ??
+      wizardFacts?.asb_incident_time ??
+      null,
+    // Read Wales-specific false statement key with fallback
+    false_statement_details:
+      wizardFacts?.wales_false_statement_summary ??
+      wizardFacts?.false_statement_details ??
+      null,
+    // Read Wales-specific breach clause key with fallback
+    breach_clause:
+      wizardFacts?.wales_breach_clause ??
+      wizardFacts?.breach_clause ??
+      null,
   };
 
   return buildWalesPartDText(params);

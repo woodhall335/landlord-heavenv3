@@ -1114,6 +1114,64 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
     }
   }, [facts.notice_date, facts.notice_service_date, today, onUpdate]);
 
+  // ========================================================================
+  // LEGACY KEY MIGRATION (Task E - backwards compatibility for older cases)
+  // ========================================================================
+  // Migrate legacy keys to new Wales-specific keys on section load.
+  // Never overwrite if user already has content in the new key.
+  useEffect(() => {
+    const migrations: Record<string, any> = {};
+
+    // Migrate breach_details -> breach_description
+    if (!facts.breach_description && facts.breach_details) {
+      migrations.breach_description = facts.breach_details;
+    }
+
+    // Migrate asb_description -> wales_asb_description
+    if (!facts.wales_asb_description && facts.asb_description) {
+      migrations.wales_asb_description = facts.asb_description;
+    }
+
+    // Migrate asb_incident_date -> wales_asb_incident_date
+    if (!facts.wales_asb_incident_date && facts.asb_incident_date) {
+      migrations.wales_asb_incident_date = facts.asb_incident_date;
+    }
+
+    // Migrate asb_incident_time -> wales_asb_incident_time
+    if (!facts.wales_asb_incident_time && facts.asb_incident_time) {
+      migrations.wales_asb_incident_time = facts.asb_incident_time;
+    }
+
+    // Migrate breach_clause -> wales_breach_clause
+    if (!facts.wales_breach_clause && facts.breach_clause) {
+      migrations.wales_breach_clause = facts.breach_clause;
+    }
+
+    // Migrate false_statement_details -> wales_false_statement_summary
+    if (!facts.wales_false_statement_summary && facts.false_statement_details) {
+      migrations.wales_false_statement_summary = facts.false_statement_details;
+    }
+
+    // Migrate nested arrears_items to flat canonical key
+    if (
+      (!facts.arrears_items || facts.arrears_items.length === 0) &&
+      facts.issues?.rent_arrears?.arrears_items &&
+      facts.issues.rent_arrears.arrears_items.length > 0
+    ) {
+      migrations.arrears_items = facts.issues.rent_arrears.arrears_items;
+      if (facts.issues.rent_arrears.total_arrears !== undefined) {
+        migrations.total_arrears = facts.issues.rent_arrears.total_arrears;
+      }
+    }
+
+    // Apply migrations if any were detected
+    if (Object.keys(migrations).length > 0) {
+      console.log('[WalesNoticeSection] Migrating legacy keys:', Object.keys(migrations));
+      onUpdate(migrations);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
+
   // Handle ground toggle for fault-based
   const handleGroundToggle = (ground: string) => {
     const newGrounds = selectedGrounds.includes(ground)
