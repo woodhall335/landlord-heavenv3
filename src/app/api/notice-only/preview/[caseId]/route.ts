@@ -38,7 +38,7 @@ import {
   computeIncludedGrounds,
 } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
-import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from '@/lib/wales';
+import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, buildWalesPartDFromWizardFacts } from '@/lib/wales';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -935,57 +935,38 @@ export async function GET(
       } else if (selected_route === 'wales_fault_based') {
         console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice (RHW23)');
         try {
-          // Map fault-based section to breach particulars
-          const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+          // ========================================================================
+          // WALES FAULT-BASED: Use Part D builder (SINGLE SOURCE OF TRUTH)
+          //
+          // CRITICAL: Uses buildWalesPartDFromWizardFacts() to generate Part D text
+          // from the Wales ground definitions. This ensures Part D NEVER contains
+          // England-specific references (Housing Act 1988, Section 8, Ground 8).
+          // ========================================================================
+          const partDResult = buildWalesPartDFromWizardFacts(wizardFacts);
 
-          // Detect breach type from multiple possible fields
-          const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
-          const isRentArrears =
-            breachType === 'rent_arrears' ||
-            breachType === 'arrears' ||
-            faultBasedSection.includes('Section 157') ||
-            faultBasedSection.includes('Section 159');
-
-          let breachParticulars = '';
-
-          // Build breach particulars based on section type or breach type
-          if (faultBasedSection.includes('Section 157')) {
-            // Serious rent arrears (2+ months) - Section 157
-            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
-            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
-          } else if (faultBasedSection.includes('Section 159')) {
-            // Rent arrears (less than 2 months) - Section 159
-            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
-            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
-          } else if (faultBasedSection.includes('Section 161')) {
-            // Anti-social behaviour - Section 161
-            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
-          } else if (faultBasedSection.includes('Section 162')) {
-            // Other breach - Section 162
-            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
-          } else if (isRentArrears) {
-            // Fallback: Detected rent arrears without specific section
-            // Default to Section 157 (serious arrears)
-            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
-            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
-            console.log(`[NOTICE-PREVIEW-API] Wales fault-based: Detected rent arrears (${arrearsAmount}), defaulting to Section 157`);
-          } else {
-            // Final fallback: Use breach_description or breach_details as-is
-            breachParticulars = wizardFacts.breach_description || wizardFacts.breach_details || wizardFacts.asb_description || '';
+          if (partDResult.warnings.length > 0) {
+            console.warn('[NOTICE-PREVIEW-API] Wales Part D builder warnings:', partDResult.warnings);
           }
 
-          // Log the computed breach particulars for debugging
-          console.log('[NOTICE-PREVIEW-API] Wales fault-based breach particulars:', {
-            faultBasedSection,
-            breachType,
-            arrearsAmount: wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount,
-            breach_particulars_length: breachParticulars.length,
-            breach_particulars_preview: breachParticulars.substring(0, 100),
+          if (!partDResult.success) {
+            console.error('[NOTICE-PREVIEW-API] Wales Part D builder failed:', partDResult.warnings);
+            // Continue with empty text if Part D builder fails - template may have fallback
+          }
+
+          console.log('[NOTICE-PREVIEW-API] Wales Part D generated:', {
+            groundsIncluded: partDResult.groundsIncluded.map(g => `${g.label} (section ${g.section})`),
+            textLength: partDResult.text.length,
           });
 
           const faultBasedData = {
             ...templateData,
-            breach_particulars: breachParticulars,
+            // Use the Part D builder output as breach_particulars
+            // (The RHW23 template renders this in Part D)
+            breach_particulars: partDResult.text,
+            // Also provide as rhw23_part_d_text for templates that use this field
+            rhw23_part_d_text: partDResult.text,
+            // Include metadata about grounds for template conditionals
+            wales_grounds_included: partDResult.groundsIncluded,
           };
 
           const faultDoc = await generateDocument({
