@@ -584,3 +584,181 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
     });
   });
 });
+
+/**
+ * Wales Next Button Fix Tests
+ *
+ * These tests verify that the Wales Notice Only wizard correctly shows
+ * all sections (not just case_basics) when a valid route is selected,
+ * enabling the Next button to work properly.
+ *
+ * Issue: Previously, WalesCaseBasicsSection was saving prefixed values
+ * (wales_section_173, wales_fault_based) but NoticeOnlySectionFlow
+ * expected unprefixed values (section_173, fault_based).
+ */
+describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
+  it('should show multiple sections (not just case_basics) with Wales section_173 route', async () => {
+    const walesProps = {
+      caseId: 'test-wales-section173',
+      jurisdiction: 'wales' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'wales' },
+        eviction_route: 'section_173',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...walesProps} />);
+    await screen.findByText(/Wales Eviction Notice/);
+
+    // With section_173 route, should see multiple section tabs (Parties, Property, etc.)
+    // not just Case Basics
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Occupation Contract/i })).toBeDefined();
+  });
+
+  it('should show multiple sections (not just case_basics) with Wales fault_based route', async () => {
+    const walesProps = {
+      caseId: 'test-wales-fault-based',
+      jurisdiction: 'wales' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'wales' },
+        eviction_route: 'fault_based',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...walesProps} />);
+    await screen.findByText(/Wales Eviction Notice/);
+
+    // With fault_based route, should see multiple section tabs
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Occupation Contract/i })).toBeDefined();
+  });
+
+  it('should handle legacy prefixed wales_section_173 value as section_173', async () => {
+    // This tests backward compatibility for sessions saved with old prefixed values
+    const walesProps = {
+      caseId: 'test-wales-legacy-173',
+      jurisdiction: 'wales' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'wales' },
+        eviction_route: 'wales_section_173', // Legacy prefixed value
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...walesProps} />);
+    await screen.findByText(/Wales Eviction Notice/);
+
+    // Should still show multiple sections (normalization converts wales_section_173 -> section_173)
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+  });
+
+  it('should handle legacy prefixed wales_fault_based value as fault_based', async () => {
+    // This tests backward compatibility for sessions saved with old prefixed values
+    const walesProps = {
+      caseId: 'test-wales-legacy-fault',
+      jurisdiction: 'wales' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'wales' },
+        eviction_route: 'wales_fault_based', // Legacy prefixed value
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...walesProps} />);
+    await screen.findByText(/Wales Eviction Notice/);
+
+    // Should still show multiple sections (normalization converts wales_fault_based -> fault_based)
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+  });
+
+  it('should show only case_basics when no Wales route is selected', async () => {
+    const walesProps = {
+      caseId: 'test-wales-no-route',
+      jurisdiction: 'wales' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'wales' },
+        // No eviction_route set
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...walesProps} />);
+    await screen.findByText(/Wales Eviction Notice/);
+
+    // Without a route, should only see Case Basics
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    // Other sections should not be visible yet
+    expect(screen.queryByRole('button', { name: /Parties/i })).toBeNull();
+  });
+});
+
+/**
+ * England Next Button Tests - Ensure England flows are unaffected
+ */
+describe('NoticeOnlySectionFlow - England Next Button (unchanged)', () => {
+  it('should show multiple sections with England section_21 route', async () => {
+    const englandProps = {
+      caseId: 'test-england-section21',
+      jurisdiction: 'england' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'england' },
+        eviction_route: 'section_21',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...englandProps} />);
+    await screen.findByText(/England Eviction Notice/);
+
+    // England section_21 should show multiple sections including Compliance
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+  });
+
+  it('should show multiple sections with England section_8 route', async () => {
+    const englandProps = {
+      caseId: 'test-england-section8',
+      jurisdiction: 'england' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'england' },
+        eviction_route: 'section_8',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...englandProps} />);
+    await screen.findByText(/England Eviction Notice/);
+
+    // England section_8 should show multiple sections including Arrears
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Arrears/i })).toBeDefined();
+  });
+
+  it('should NOT apply Wales normalization to England routes', async () => {
+    // Ensure the normalizeWalesRoute function doesn't affect England
+    const englandProps = {
+      caseId: 'test-england-no-normalize',
+      jurisdiction: 'england' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'england' },
+        eviction_route: 'section_21', // This should NOT be normalized
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...englandProps} />);
+    await screen.findByText(/England Eviction Notice/);
+
+    // England should work normally
+    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+  });
+});
