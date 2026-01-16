@@ -41,6 +41,8 @@ import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales/grounds';
+import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
+import { generateWalesSection173Notice } from './wales-section173-generator';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -1268,10 +1270,28 @@ export async function generateNoticeOnlyPack(
   const documents: EvictionPackDocument[] = [];
 
   // Determine notice route for template selection
-  const noticeRoute = wizardFacts?.selected_notice_route ||
+  const rawNoticeRoute = wizardFacts?.selected_notice_route ||
     wizardFacts?.eviction_route ||
     wizardFacts?.recommended_route ||
     'section_8';
+
+  // Normalize route to canonical form (section_8, section_21, section_173, fault_based, notice_to_leave)
+  const normalizedRoute = normalizeRoute(rawNoticeRoute);
+  const noticeRoute = normalizedRoute || rawNoticeRoute;
+
+  // ==========================================================================
+  // DEBUG LOG: Document type selection
+  // This log helps trace which document_type is chosen for the notice document
+  // ==========================================================================
+  console.log('[generateNoticeOnlyPack] Document type selection:', {
+    jurisdiction,
+    raw_notice_route: rawNoticeRoute,
+    normalized_route: normalizedRoute,
+    selected_notice_route: noticeRoute,
+  });
+
+  // Check for Wales-specific routes
+  const isWalesRoute = normalizedRoute === 'section_173' || normalizedRoute === 'fault_based';
 
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
@@ -1411,8 +1431,268 @@ export async function generateNoticeOnlyPack(
       } catch (err) {
         console.warn('Failed to generate Section 21 compliance declaration:', err);
       }
+    } else if (jurisdiction === 'wales' && isWalesRoute) {
+      // ==========================================================================
+      // WALES NOTICE-ONLY: Section 173 (no-fault) or fault_based (breach)
+      // These use Renting Homes (Wales) Act 2016 forms, NOT Section 8
+      // Section 8 is England-only (Housing Act 1988)
+      // ==========================================================================
+      console.log('[generateNoticeOnlyPack] Generating Wales notice documents:', {
+        route: normalizedRoute,
+        document_type: normalizedRoute === 'section_173' ? 'section173_notice' : 'fault_based_notice',
+      });
+
+      // Use mapNoticeOnlyFacts() to build template data (same as preview route)
+      const walesTemplateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Add formatted date versions
+      walesTemplateData.service_date_formatted = formatUKLegalDate(walesTemplateData.service_date || '');
+      walesTemplateData.notice_date_formatted = formatUKLegalDate(walesTemplateData.notice_date || '');
+      walesTemplateData.earliest_possession_date_formatted = formatUKLegalDate(walesTemplateData.earliest_possession_date || '');
+      walesTemplateData.generated_date = formatUKLegalDate(new Date().toISOString().split('T')[0]);
+
+      // Add contract start date (Wales-specific)
+      const contractStartDate = wizardFacts.contract_start_date || walesTemplateData.tenancy_start_date;
+      walesTemplateData.contract_start_date = contractStartDate;
+      walesTemplateData.contract_start_date_formatted = formatUKLegalDate(contractStartDate || '');
+
+      // Add Wales-specific convenience flags and fields
+      walesTemplateData.is_wales_section_173 = normalizedRoute === 'section_173';
+      walesTemplateData.is_wales_fault_based = normalizedRoute === 'fault_based';
+      walesTemplateData.contract_holder_full_name = wizardFacts.contract_holder_full_name || walesTemplateData.tenant_full_name;
+
+      if (normalizedRoute === 'section_173') {
+        // ========================================================================
+        // WALES SECTION 173 (No-fault / 6-month notice)
+        // Uses RHW16 or RHW17 forms depending on notice period
+        // ========================================================================
+        try {
+          const section173Data = {
+            landlord_full_name: walesTemplateData.landlord_full_name,
+            landlord_address: walesTemplateData.landlord_address,
+            contract_holder_full_name: walesTemplateData.contract_holder_full_name || walesTemplateData.tenant_full_name,
+            property_address: walesTemplateData.property_address,
+            contract_start_date: contractStartDate || walesTemplateData.tenancy_start_date,
+            rent_amount: walesTemplateData.rent_amount || 0,
+            rent_frequency: (walesTemplateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly',
+            service_date: walesTemplateData.service_date || walesTemplateData.notice_date,
+            notice_service_date: walesTemplateData.notice_date || walesTemplateData.service_date,
+            expiry_date: walesTemplateData.earliest_possession_date,
+            notice_expiry_date: walesTemplateData.earliest_possession_date,
+            wales_contract_category: wizardFacts.wales_contract_category || 'standard',
+            rent_smart_wales_registered: wizardFacts.rent_smart_wales_registered,
+            deposit_taken: wizardFacts.deposit_taken || walesTemplateData.deposit_taken,
+            deposit_protected: wizardFacts.deposit_protected || walesTemplateData.deposit_protected,
+          };
+
+          const section173Doc = await generateWalesSection173Notice(section173Data, false);
+          documents.push({
+            title: 'Section 173 Landlord\'s Notice (Wales)',
+            description: 'No-fault notice under Renting Homes (Wales) Act 2016',
+            category: 'notice',
+            document_type: 'section173_notice',
+            html: section173Doc.html,
+            pdf: section173Doc.pdf,
+            file_name: 'section173_notice.pdf',
+          });
+        } catch (err) {
+          console.error('[generateNoticeOnlyPack] Failed to generate Wales Section 173 notice:', err);
+          throw err;
+        }
+      } else if (normalizedRoute === 'fault_based') {
+        // ========================================================================
+        // WALES FAULT-BASED (Breach notice / RHW23)
+        // Sections 157, 159, 161, 162 under Renting Homes (Wales) Act 2016
+        // ========================================================================
+        try {
+          // Map fault-based section to breach particulars
+          const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+          const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+          const isRentArrears =
+            breachType === 'rent_arrears' ||
+            breachType === 'arrears' ||
+            faultBasedSection.includes('Section 157') ||
+            faultBasedSection.includes('Section 159');
+
+          let breachParticulars = '';
+
+          // Build breach particulars based on section type
+          if (faultBasedSection.includes('Section 157')) {
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+          } else if (faultBasedSection.includes('Section 159')) {
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+          } else if (faultBasedSection.includes('Section 161')) {
+            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
+          } else if (faultBasedSection.includes('Section 162')) {
+            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
+          } else if (isRentArrears) {
+            // Fallback: Detected rent arrears without specific section, default to Section 157
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+          } else {
+            // Final fallback: Use breach_description as-is
+            breachParticulars = wizardFacts.breach_description || wizardFacts.breach_details || wizardFacts.asb_description || '';
+          }
+
+          const faultBasedData = {
+            ...walesTemplateData,
+            breach_particulars: breachParticulars,
+          };
+
+          const faultDoc = await generateDocument({
+            templatePath: 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs',
+            data: faultBasedData,
+            isPreview: false,
+            outputFormat: 'both',
+          });
+
+          documents.push({
+            title: 'Notice Before Making a Possession Claim (RHW23)',
+            description: 'Fault-based notice under Renting Homes (Wales) Act 2016',
+            category: 'notice',
+            document_type: 'fault_based_notice',
+            html: faultDoc.html,
+            pdf: faultDoc.pdf,
+            file_name: 'fault_based_notice.pdf',
+          });
+        } catch (err) {
+          console.error('[generateNoticeOnlyPack] Failed to generate Wales fault-based notice:', err);
+          throw err;
+        }
+      }
+
+      // 2. Generate Service Instructions (Wales)
+      const walesServiceRoute = normalizedRoute === 'section_173' ? 'section_173' : 'fault_based';
+      try {
+        const serviceInstructionsDoc = await generateDocument({
+          templatePath: `uk/wales/templates/eviction/service_instructions_${walesServiceRoute}.hbs`,
+          data: walesTemplateData,
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service Instructions (Wales)',
+          description: `How to legally serve your ${normalizedRoute === 'section_173' ? 'Section 173' : 'fault-based'} notice`,
+          category: 'guidance',
+          document_type: 'service_instructions',
+          html: serviceInstructionsDoc.html,
+          pdf: serviceInstructionsDoc.pdf,
+          file_name: `service_instructions_wales_${walesServiceRoute}.pdf`,
+        });
+      } catch (err) {
+        console.warn('[generateNoticeOnlyPack] Failed to generate Wales service instructions:', err);
+      }
+
+      // 3. Generate Service & Validity Checklist (Wales)
+      try {
+        const checklistDoc = await generateDocument({
+          templatePath: `uk/wales/templates/eviction/checklist_${walesServiceRoute}.hbs`,
+          data: walesTemplateData,
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service & Validity Checklist (Wales)',
+          description: 'Verify your notice meets all Welsh legal requirements',
+          category: 'guidance',
+          document_type: 'validity_checklist',
+          html: checklistDoc.html,
+          pdf: checklistDoc.pdf,
+          file_name: `validity_checklist_wales_${walesServiceRoute}.pdf`,
+        });
+      } catch (err) {
+        console.warn('[generateNoticeOnlyPack] Failed to generate Wales validity checklist:', err);
+      }
+
+      // 4. Generate Compliance Declaration (Wales)
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
+          data: walesTemplateData,
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Pre-Service Compliance Checklist (Wales)',
+          description: 'Evidence of your compliance with Welsh landlord obligations',
+          category: 'guidance',
+          document_type: 'compliance_declaration',
+          html: complianceDoc.html,
+          pdf: complianceDoc.pdf,
+          file_name: 'compliance_checklist_wales.pdf',
+        });
+      } catch (err) {
+        console.warn('[generateNoticeOnlyPack] Failed to generate Wales compliance checklist:', err);
+      }
+
+      // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
+      if (normalizedRoute === 'fault_based') {
+        const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+        const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+        const isRentArrearsCase =
+          breachType === 'rent_arrears' ||
+          breachType === 'arrears' ||
+          faultBasedSection.includes('Section 157') ||
+          faultBasedSection.includes('Section 159');
+
+        const arrearsItems = wizardFacts.arrears_items || [];
+
+        if (isRentArrearsCase && arrearsItems.length > 0) {
+          try {
+            const arrearsData = getArrearsScheduleData({
+              arrears_items: arrearsItems,
+              total_arrears: wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || null,
+              rent_amount: walesTemplateData.rent_amount || 0,
+              rent_frequency: walesTemplateData.rent_frequency || 'monthly',
+              include_schedule: true,
+            });
+
+            if (arrearsData.arrears_schedule.length > 0 || arrearsData.arrears_total > 0) {
+              const arrearsScheduleDoc = await generateDocument({
+                templatePath: 'uk/wales/templates/money_claims/schedule_of_arrears.hbs',
+                data: {
+                  ...walesTemplateData,
+                  arrears_schedule: arrearsData.arrears_schedule,
+                  arrears_total: arrearsData.arrears_total,
+                  claimant_reference: caseId,
+                },
+                isPreview: false,
+                outputFormat: 'both',
+              });
+              documents.push({
+                title: 'Rent Schedule / Arrears Statement (Wales)',
+                description: 'Period-by-period breakdown of rent arrears',
+                category: 'evidence_tool',
+                document_type: 'arrears_schedule',
+                html: arrearsScheduleDoc.html,
+                pdf: arrearsScheduleDoc.pdf,
+                file_name: 'rent_schedule_wales.pdf',
+              });
+            }
+          } catch (err) {
+            console.warn('[generateNoticeOnlyPack] Failed to generate Wales rent schedule:', err);
+          }
+        }
+      }
     } else {
-      // Section 8
+      // ==========================================================================
+      // ENGLAND SECTION 8 (Fault-based eviction)
+      // Housing Act 1988 - England only
+      // ==========================================================================
+
+      // GUARD: Prevent Section 8 generation for Wales
+      // If we reach here with jurisdiction=wales, it means an invalid route was passed
+      // (e.g., section_8 for Wales). Section 8 only exists in England.
+      if (jurisdiction === 'wales') {
+        throw new Error(
+          `Section 8 notices do not exist in Wales. ` +
+          `Wales uses Renting Homes (Wales) Act 2016 with routes: section_173 (no-fault) or fault_based (breach). ` +
+          `Received route: ${noticeRoute}`
+        );
+      }
+
       // Build Section 8 template data FIRST to resolve service_date from wizardFacts
       // This ensures service_date_formatted, earliest_possession_date_formatted,
       // tenancy_start_date_formatted, and ground_descriptions are available for templates
