@@ -423,8 +423,8 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     field_id: 'wales_fault_grounds',
     category: 'fault_based_grounds',
     label: 'Statutory Ground Selection',
-    question_text: 'Select the ground for your fault-based breach notice:',
-    input_type: 'enum',
+    question_text: 'Select the ground(s) for your fault-based breach notice:',
+    input_type: 'enum_multi',
     enum_values: [
       'rent_arrears_serious', // serious arrears threshold must be met
       'rent_arrears_other',   // arrears exist but below serious threshold
@@ -438,7 +438,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     source_reference: 'Service Instructions for Fault-Based Breach Notice (Wales)',
     feeds_documents: ['pre_service_checklist', 'service_validity_checklist'],
     appears_on_notice: false,
-    block_message: 'You must select a ground for the fault-based breach notice.',
+    block_message: 'You must select at least one ground for the fault-based breach notice.',
   },
 
   // ============================================
@@ -484,7 +484,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Weeks of Rent Unpaid',
     question_text: 'Approximately how many weeks of rent are currently unpaid?',
     input_type: 'number',
-    applies_if: "wales_fault_grounds === 'rent_arrears_serious' || wales_fault_grounds === 'rent_arrears_other'",
+    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
     blocking_level: 'HARD_BLOCK',
     legal_basis:
       'Used to validate whether the serious arrears threshold is met and to ensure the correct arrears ground is selected.',
@@ -499,7 +499,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Arrears Amount',
     question_text: 'What is the total amount of rent arrears currently outstanding?',
     input_type: 'number',
-    applies_if: "wales_fault_grounds === 'rent_arrears_serious' || wales_fault_grounds === 'rent_arrears_other'",
+    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
     blocking_level: 'HARD_BLOCK',
     legal_basis: 'Arrears amount should be known and supported by records.',
     source_reference: 'Service Instructions (Rent arrears evidence)',
@@ -513,7 +513,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Arrears Schedule Available',
     question_text: 'Do you have a rent schedule / payment history you could produce if needed?',
     input_type: 'boolean',
-    applies_if: "wales_fault_grounds === 'rent_arrears_serious' || wales_fault_grounds === 'rent_arrears_other'",
+    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
     blocking_level: 'SOFT_BLOCK',
     expected_boolean_value: true,
     legal_basis: 'A rent schedule is strongly recommended to support rent arrears grounds.',
@@ -532,7 +532,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'ASB Incident Description',
     question_text: 'Describe the anti-social behaviour (include dates, times, what occurred, and who was affected):',
     input_type: 'text',
-    applies_if: "wales_fault_grounds === 'antisocial_behaviour'",
+    applies_if: "wales_fault_grounds.includes('antisocial_behaviour')",
     blocking_level: 'HARD_BLOCK',
     legal_basis: 'Particulars are necessary to describe the breach being relied upon.',
     source_reference: 'Service Instructions (Anti-social behaviour evidence)',
@@ -546,7 +546,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'ASB Supporting Records Available',
     question_text: 'Do you have supporting records (incident logs, complaints, witness statements, reports) you could produce if needed?',
     input_type: 'boolean',
-    applies_if: "wales_fault_grounds === 'antisocial_behaviour'",
+    applies_if: "wales_fault_grounds.includes('antisocial_behaviour')",
     blocking_level: 'SOFT_BLOCK',
     expected_boolean_value: true,
     legal_basis: 'Supporting records strengthen ASB claims and reduce dispute risk.',
@@ -565,7 +565,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Breached Clause Identified',
     question_text: 'Which clause or term of the occupation contract has been breached?',
     input_type: 'text',
-    applies_if: "wales_fault_grounds === 'breach_of_contract'",
+    applies_if: "wales_fault_grounds.includes('breach_of_contract')",
     blocking_level: 'HARD_BLOCK',
     legal_basis: 'You should identify the specific contract term relied upon.',
     source_reference: 'Service Instructions (Breach of contract evidence)',
@@ -579,7 +579,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Breach Description',
     question_text: 'Describe how the contract-holder breached this term (include dates and details):',
     input_type: 'text',
-    applies_if: "wales_fault_grounds === 'breach_of_contract'",
+    applies_if: "wales_fault_grounds.includes('breach_of_contract')",
     blocking_level: 'HARD_BLOCK',
     legal_basis: 'You need clear particulars of the breach being relied upon.',
     source_reference: 'Service Instructions (Breach of contract evidence)',
@@ -593,7 +593,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'False Statement Description',
     question_text: 'What false statement was made to obtain the occupation contract?',
     input_type: 'text',
-    applies_if: "wales_fault_grounds === 'false_statement'",
+    applies_if: "wales_fault_grounds.includes('false_statement')",
     blocking_level: 'HARD_BLOCK',
     legal_basis: 'You must identify the false statement relied upon.',
     source_reference: 'Service Instructions (False statement evidence)',
@@ -607,7 +607,7 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Discovery Date',
     question_text: 'When did you discover the statement was false?',
     input_type: 'date',
-    applies_if: "wales_fault_grounds === 'false_statement'",
+    applies_if: "wales_fault_grounds.includes('false_statement')",
     blocking_level: 'INFO_ONLY',
     legal_basis: 'Helps record context for audit trail.',
     source_reference: 'Service Instructions (False statement evidence)',
@@ -729,6 +729,37 @@ export const WALES_COMPLIANCE_SCHEMA: WalesComplianceSchema = {
 // ============================================
 
 /**
+ * Normalize wales_fault_grounds to a consistent string[] shape.
+ * Handles backward compatibility with legacy data formats:
+ * - string -> [string]
+ * - undefined/null -> []
+ * - array -> array (as-is)
+ *
+ * This ensures all components read/write using the canonical array shape.
+ */
+export function normalizeWalesFaultGrounds(value: unknown): string[] {
+  if (value === undefined || value === null) {
+    return [];
+  }
+  if (typeof value === 'string') {
+    return value.trim() ? [value] : [];
+  }
+  if (Array.isArray(value)) {
+    return value.filter((v): v is string => typeof v === 'string' && v.trim() !== '');
+  }
+  return [];
+}
+
+/**
+ * Check if any arrears ground is selected in wales_fault_grounds.
+ * Useful for conditionally showing arrears-related UI/guidance.
+ */
+export function hasArrearsGroundSelected(walesFaultGrounds: unknown): boolean {
+  const grounds = normalizeWalesFaultGrounds(walesFaultGrounds);
+  return grounds.includes('rent_arrears_serious') || grounds.includes('rent_arrears_other');
+}
+
+/**
  * Get a compliance field by ID
  */
 export function getComplianceFieldById(fieldId: string): ComplianceField | undefined {
@@ -823,28 +854,34 @@ export function shouldFieldApply(fieldId: string, facts: Record<string, unknown>
  * Enforces:
  * - serious arrears requires >= 8 weeks unpaid
  * - "other arrears" must be < 8 weeks (otherwise select serious)
+ *
+ * Note: wales_fault_grounds is now an array (string[]), so we use
+ * normalizeWalesFaultGrounds() and .includes() for checking.
  */
 export function getGroundLogicViolations(
   facts: Record<string, unknown>
 ): Array<{ message: string }> {
   const violations: Array<{ message: string }> = [];
 
-  const ground = facts['wales_fault_grounds'];
+  const grounds = normalizeWalesFaultGrounds(facts['wales_fault_grounds']);
   const weeks = typeof facts['arrears_weeks_unpaid'] === 'number' ? (facts['arrears_weeks_unpaid'] as number) : null;
 
-  if (ground === 'rent_arrears_serious') {
+  const hasSerious = grounds.includes('rent_arrears_serious');
+  const hasOther = grounds.includes('rent_arrears_other');
+
+  if (hasSerious) {
     if (weeks === null) {
       violations.push({ message: 'Please provide the number of weeks of rent unpaid for serious rent arrears.' });
     } else if (weeks < 8) {
-      violations.push({ message: 'Serious rent arrears requires at least 8 weeks unpaid. Select “Other rent arrears” or adjust the ground.' });
+      violations.push({ message: 'Serious rent arrears requires at least 8 weeks unpaid. Select "Other rent arrears" or adjust the ground.' });
     }
   }
 
-  if (ground === 'rent_arrears_other') {
+  if (hasOther) {
     if (weeks === null) {
       violations.push({ message: 'Please provide the number of weeks of rent unpaid for rent arrears.' });
     } else if (weeks >= 8) {
-      violations.push({ message: 'You have 8+ weeks unpaid. Select “Serious rent arrears” instead of “Other rent arrears”.' });
+      violations.push({ message: 'You have 8+ weeks unpaid. Select "Serious rent arrears" instead of "Other rent arrears".' });
     }
   }
 
@@ -928,7 +965,7 @@ export function getBlockingViolations(
         category: 'fault_based_grounds',
         label: 'Ground Selection',
         question_text: '',
-        input_type: 'enum',
+        input_type: 'enum_multi',
         applies_if: null,
         blocking_level: 'HARD_BLOCK',
         legal_basis: '',

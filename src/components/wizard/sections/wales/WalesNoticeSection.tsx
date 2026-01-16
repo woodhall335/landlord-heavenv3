@@ -36,6 +36,7 @@ import {
   getWalesFaultGroundByValue,
   type WalesFaultGroundDef,
 } from '@/lib/wales';
+import { normalizeWalesFaultGrounds } from '@/lib/wales/compliance-schema';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface WalesNoticeSectionProps {
@@ -706,6 +707,230 @@ const FalseStatementPanel: React.FC<FalseStatementPanelProps> = ({
 };
 
 // ============================================================================
+// WALES PART D PARTICULARS WITH ASK HEAVEN
+// ============================================================================
+// Court-ready particulars for Wales fault-based notices.
+// Provides inline AI enhancement using AskHeavenInlineEnhancer.
+// ============================================================================
+
+interface WalesPartDParticularsProps {
+  facts: WizardFacts;
+  selectedGrounds: string[];
+  arrearsSummary: ReturnType<typeof computeArrears> | null;
+  onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+}
+
+const WalesPartDParticulars: React.FC<WalesPartDParticularsProps> = ({
+  facts,
+  selectedGrounds,
+  arrearsSummary,
+  onUpdate,
+}) => {
+  const particularsText = facts.wales_part_d_particulars || '';
+
+  // Check which grounds are selected
+  const hasArrearsGround = selectedGrounds.includes('rent_arrears_serious') ||
+                           selectedGrounds.includes('rent_arrears_other');
+  const hasASBGround = selectedGrounds.includes('antisocial_behaviour');
+  const hasBreachGround = selectedGrounds.includes('breach_of_contract');
+  const hasFalseStatementGround = selectedGrounds.includes('false_statement');
+
+  // Generate a suggested starting point based on breach description and arrears data
+  const generateSuggestion = useCallback(() => {
+    const parts: string[] = [];
+
+    // Start with breach description if present
+    if (facts.breach_description) {
+      parts.push(facts.breach_description);
+    }
+
+    // Add arrears details if relevant
+    if (hasArrearsGround && arrearsSummary && arrearsSummary.total_arrears > 0) {
+      const isSerious = selectedGrounds.includes('rent_arrears_serious');
+      const section = isSerious ? 'Section 157' : 'Section 159';
+      parts.push(`\n\nARREARS PARTICULARS (${section}):`);
+      parts.push(`Total arrears outstanding: £${arrearsSummary.total_arrears.toFixed(2)}`);
+      parts.push(`Arrears equivalent to ${arrearsSummary.arrears_in_months.toFixed(1)} months of rent.`);
+      if (arrearsSummary.periods_fully_unpaid > 0) {
+        parts.push(`${arrearsSummary.periods_fully_unpaid} rental period(s) are fully unpaid.`);
+      }
+      if (isSerious) {
+        parts.push('This meets the threshold for serious rent arrears under Section 157 of the Renting Homes (Wales) Act 2016.');
+      }
+    }
+
+    // Add ASB details if relevant
+    if (hasASBGround && facts.wales_asb_description) {
+      parts.push('\n\nANTI-SOCIAL BEHAVIOUR PARTICULARS (Section 161):');
+      if (facts.wales_asb_incident_date) {
+        parts.push(`Incident date: ${facts.wales_asb_incident_date}`);
+      }
+      parts.push(facts.wales_asb_description);
+      if (facts.wales_asb_police_involved === true) {
+        parts.push(`Police were involved${facts.wales_asb_police_ref ? ` (Reference: ${facts.wales_asb_police_ref})` : ''}.`);
+      }
+    }
+
+    // Add breach of contract details if relevant
+    if (hasBreachGround && facts.wales_breach_clause) {
+      parts.push('\n\nBREACH OF CONTRACT PARTICULARS (Section 162):');
+      parts.push(`Contract term breached: ${facts.wales_breach_clause}`);
+      if (facts.wales_breach_dates) {
+        parts.push(`Date(s) of breach: ${facts.wales_breach_dates}`);
+      }
+      if (facts.wales_breach_evidence) {
+        parts.push(`Evidence: ${facts.wales_breach_evidence}`);
+      }
+    }
+
+    // Add false statement details if relevant
+    if (hasFalseStatementGround && facts.wales_false_statement_summary) {
+      parts.push('\n\nFALSE STATEMENT PARTICULARS (Section 162):');
+      parts.push(`False statement: ${facts.wales_false_statement_summary}`);
+      if (facts.wales_false_statement_discovered_date) {
+        parts.push(`Discovered on: ${facts.wales_false_statement_discovered_date}`);
+      }
+    }
+
+    return parts.join('\n');
+  }, [
+    facts.breach_description,
+    facts.wales_asb_description,
+    facts.wales_asb_incident_date,
+    facts.wales_asb_police_involved,
+    facts.wales_asb_police_ref,
+    facts.wales_breach_clause,
+    facts.wales_breach_dates,
+    facts.wales_breach_evidence,
+    facts.wales_false_statement_summary,
+    facts.wales_false_statement_discovered_date,
+    hasArrearsGround,
+    hasASBGround,
+    hasBreachGround,
+    hasFalseStatementGround,
+    arrearsSummary,
+    selectedGrounds,
+  ]);
+
+  const handleUseSuggestion = () => {
+    const suggestion = generateSuggestion();
+    if (suggestion) {
+      onUpdate({ wales_part_d_particulars: suggestion });
+    }
+  };
+
+  // Build context for Ask Heaven enhancement
+  const partDEnhanceContext = useMemo(() => ({
+    jurisdiction: 'wales',
+    product: 'notice_only',
+    selected_grounds: selectedGrounds,
+    total_arrears: arrearsSummary?.total_arrears,
+    arrears_in_months: arrearsSummary?.arrears_in_months,
+    periods_fully_unpaid: arrearsSummary?.periods_fully_unpaid,
+    rent_amount: facts.rent_amount,
+    rent_frequency: facts.rent_frequency,
+    rent_due_day: facts.rent_due_day,
+    breach_description: facts.breach_description,
+    asb_description: facts.wales_asb_description,
+    asb_incident_date: facts.wales_asb_incident_date,
+    breach_clause: facts.wales_breach_clause,
+    breach_dates: facts.wales_breach_dates,
+    false_statement_summary: facts.wales_false_statement_summary,
+    legal_framework: 'Renting Homes (Wales) Act 2016',
+    notice_type: 'fault_based_breach_notice',
+    enhancement_goal: 'Improve clarity and court-readiness without inventing facts',
+  }), [
+    selectedGrounds,
+    arrearsSummary,
+    facts.rent_amount,
+    facts.rent_frequency,
+    facts.rent_due_day,
+    facts.breach_description,
+    facts.wales_asb_description,
+    facts.wales_asb_incident_date,
+    facts.wales_breach_clause,
+    facts.wales_breach_dates,
+    facts.wales_false_statement_summary,
+  ]);
+
+  // Check if we have enough data to suggest starting point
+  const canGenerateSuggestion = facts.breach_description ||
+    (hasArrearsGround && arrearsSummary && arrearsSummary.total_arrears > 0) ||
+    (hasASBGround && facts.wales_asb_description) ||
+    (hasBreachGround && facts.wales_breach_clause) ||
+    (hasFalseStatementGround && facts.wales_false_statement_summary);
+
+  return (
+    <div className="pt-6 border-t border-gray-200 space-y-4">
+      <div>
+        <h4 className="text-base font-medium text-gray-900 mb-1">
+          Part D - Particulars of Claim
+        </h4>
+        <p className="text-sm text-gray-600">
+          This is the court-ready statement of your claim. It should clearly set out the grounds
+          for possession and the facts supporting each ground. Use Ask Heaven to improve clarity.
+        </p>
+      </div>
+
+      {/* Quick start from breach description and other data */}
+      {canGenerateSuggestion && !particularsText && (
+        <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+          <p className="text-sm text-purple-800 mb-2">
+            <strong>Quick start:</strong> Generate particulars from the details you have entered above.
+          </p>
+          <button
+            type="button"
+            onClick={handleUseSuggestion}
+            className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-white border border-purple-300 rounded-md hover:bg-purple-50"
+          >
+            Use details as starting point
+          </button>
+        </div>
+      )}
+
+      {/* Part D particulars textarea */}
+      <div className="space-y-2">
+        <label htmlFor="wales_part_d_particulars" className="block text-sm font-medium text-gray-700">
+          Particulars of Claim
+          <span className="text-red-500 ml-1">*</span>
+        </label>
+        <textarea
+          id="wales_part_d_particulars"
+          rows={8}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+          value={particularsText}
+          onChange={(e) => onUpdate({ wales_part_d_particulars: e.target.value })}
+          placeholder="Enter the full particulars of your claim. Include:&#10;- The ground(s) being relied upon&#10;- Specific facts supporting each ground&#10;- Dates, amounts, and incidents&#10;- Reference to the Renting Homes (Wales) Act 2016 sections"
+        />
+        <p className="text-xs text-gray-500">
+          Be specific, factual, and clear. Do not invent or exaggerate facts.
+          Selected grounds: {selectedGrounds.join(', ') || 'None selected'}
+        </p>
+      </div>
+
+      {/* Ask Heaven Inline Enhancer for Part D */}
+      <AskHeavenInlineEnhancer
+        questionId="wales_part_d_particulars"
+        questionText="Part D - Particulars of Claim for Wales fault-based breach notice"
+        answer={particularsText}
+        onApply={(newText) => onUpdate({ wales_part_d_particulars: newText })}
+        context={partDEnhanceContext}
+        apiMode="generic"
+      />
+
+      {/* Guidance panel */}
+      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <p className="text-sm text-blue-800">
+          <strong>Tip:</strong> Click &quot;Enhance with Ask Heaven&quot; above to improve the clarity
+          and court-readiness of your particulars. The AI will refine your text without inventing
+          facts or changing the substance of your claim.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // MAIN WALES NOTICE SECTION COMPONENT
 // ============================================================================
 export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
@@ -717,8 +942,8 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   const isSection173 = evictionRoute === 'section_173';
   const isFaultBased = evictionRoute === 'fault_based';
 
-  // Selected fault grounds
-  const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+  // Selected fault grounds - use normalizer for backward compatibility
+  const selectedGrounds = normalizeWalesFaultGrounds(facts.wales_fault_grounds);
 
   // Track subflow completion for notice_only mode
   const [subflowComplete, setSubflowComplete] = useState(false);
@@ -1244,6 +1469,19 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
                 apiMode="generic"
               />
             </div>
+          )}
+
+          {/* ================================================================== */}
+          {/* PART D - PARTICULARS OF CLAIM (with Ask Heaven) */}
+          {/* Court-ready particulars for fault-based notices */}
+          {/* ================================================================== */}
+          {selectedGrounds.length > 0 && (
+            <WalesPartDParticulars
+              facts={facts}
+              selectedGrounds={selectedGrounds}
+              arrearsSummary={arrearsSummary}
+              onUpdate={onUpdate}
+            />
           )}
 
           {/* ================================================================== */}
