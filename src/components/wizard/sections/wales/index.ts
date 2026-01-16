@@ -14,3 +14,4 @@
 
 export { OccupationContractSection } from './OccupationContractSection';
 export { WalesNoticeSection } from './WalesNoticeSection';
+export { WalesCaseBasicsSection } from './WalesCaseBasicsSection';
