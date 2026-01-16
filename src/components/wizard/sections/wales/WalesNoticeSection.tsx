@@ -32,6 +32,7 @@ import { computeArrears } from '@/lib/arrears-engine';
 import {
   generateWalesArrearsSummary,
   isWalesSection157ThresholdMet,
+  WALES_FAULT_GROUNDS,
 } from '@/lib/wales';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
@@ -41,73 +42,6 @@ interface WalesNoticeSectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   mode?: 'complete_pack' | 'notice_only';
 }
-
-// Wales fault-based grounds under Renting Homes (Wales) Act 2016
-const WALES_FAULT_GROUNDS = [
-  {
-    value: 'rent_arrears_serious',
-    label: 'Serious rent arrears (8+ weeks)',
-    description: 'At least 2 months of rent unpaid',
-    section: 157,
-    period: 14,
-    mandatory: true,
-    requiresArrearsSchedule: true,
-  },
-  {
-    value: 'rent_arrears_other',
-    label: 'Some rent arrears',
-    description: 'Less than 2 months of rent unpaid',
-    section: 159,
-    period: 56,
-    mandatory: false,
-    requiresArrearsSchedule: true,
-  },
-  {
-    value: 'antisocial_behaviour',
-    label: 'Anti-social behaviour',
-    description: 'Serious anti-social behaviour or nuisance',
-    section: 161,
-    period: 14,
-    mandatory: true,
-    requiresArrearsSchedule: false,
-  },
-  {
-    value: 'breach_of_contract',
-    label: 'Breach of occupation contract',
-    description: 'Breach of terms in the occupation contract',
-    section: 159,
-    period: 56,
-    mandatory: false,
-    requiresArrearsSchedule: false,
-  },
-  {
-    value: 'false_statement',
-    label: 'False statement',
-    description: 'False statement made to obtain the contract',
-    section: 159,
-    period: 56,
-    mandatory: true,
-    requiresArrearsSchedule: false,
-  },
-  {
-    value: 'domestic_abuse',
-    label: 'Domestic abuse (perpetrator)',
-    description: 'Perpetrator of domestic abuse towards another occupier',
-    section: 159,
-    period: 14,
-    mandatory: true,
-    requiresArrearsSchedule: false,
-  },
-  {
-    value: 'estate_management',
-    label: 'Estate management grounds',
-    description: 'Estate management grounds for social landlords',
-    section: 159,
-    period: 60,
-    mandatory: false,
-    requiresArrearsSchedule: false,
-  },
-];
 
 const SERVICE_METHODS = [
   { value: 'first_class_post', label: 'First class post' },

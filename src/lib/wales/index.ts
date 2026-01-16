@@ -25,3 +25,13 @@ export {
   type WalesArrearsNarrativeParams,
   type WalesArrearsNarrativeResult,
 } from './arrearsNarrative';
+
+export {
+  WALES_FAULT_GROUNDS,
+  getWalesFaultGroundDefinitions,
+  mapWalesFaultGroundsToGroundCodes,
+  getWalesFaultGroundByValue,
+  getWalesFaultGroundsBySection,
+  calculateWalesMinNoticePeriod,
+  type WalesFaultGroundDef,
+} from './grounds';

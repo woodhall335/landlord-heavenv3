@@ -38,6 +38,7 @@ import {
   computeIncludedGrounds,
 } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
+import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -270,6 +271,28 @@ export async function GET(
     }
 
     const groundCodes = extractGroundCodes(wizardFacts.section8_grounds || []);
+
+    // ========================================================================
+    // DERIVE ground_codes FOR WALES FAULT-BASED ROUTE
+    // Wales UI collects wales_fault_grounds (e.g., ['rent_arrears_serious']),
+    // but validator requires ground_codes (e.g., ['section_157']).
+    // Derive from same definitions that power the UI (single source of truth).
+    // ========================================================================
+    if (jurisdiction === 'wales' && selected_route === 'wales_fault_based') {
+      const existingGroundCodes = wizardFacts.ground_codes;
+      const hasGroundCodes = Array.isArray(existingGroundCodes) && existingGroundCodes.length > 0;
+      const walesFaultGrounds = wizardFacts.wales_fault_grounds;
+      const hasFaultGrounds = Array.isArray(walesFaultGrounds) && walesFaultGrounds.length > 0;
+
+      if (!hasGroundCodes && hasFaultGrounds) {
+        const derivedGroundCodes = mapWalesFaultGroundsToGroundCodes(walesFaultGrounds);
+        wizardFacts.ground_codes = derivedGroundCodes;
+        console.log('[NOTICE-PREVIEW-API] Derived ground_codes from wales_fault_grounds:', {
+          wales_fault_grounds: walesFaultGrounds,
+          derived_ground_codes: derivedGroundCodes,
+        });
+      }
+    }
 
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
