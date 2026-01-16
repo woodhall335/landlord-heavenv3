@@ -40,3 +40,10 @@ export {
   type WalesFaultGroundDef,
   type WalesGroundsFilterOptions,
 } from './grounds';
+
+export {
+  buildWalesPartDText,
+  buildWalesPartDFromWizardFacts,
+  type WalesPartDParams,
+  type WalesPartDResult,
+} from './partDBuilder';
