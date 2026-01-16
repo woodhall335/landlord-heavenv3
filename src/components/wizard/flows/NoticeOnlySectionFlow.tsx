@@ -362,6 +362,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  // Track the current question ID for Ask Heaven contextual help
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | undefined>(undefined);
 
   // Debounce ref for save operations to prevent excessive API calls
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -633,7 +635,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           : <TenancySection {...sectionProps} />;
       case 'wales_compliance':
         // Wales-only compliance section
-        return <WalesComplianceSection {...sectionProps} />;
+        return <WalesComplianceSection {...sectionProps} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'section21_compliance':
         return <Section21ComplianceSection {...sectionProps} />;
       case 'section8_arrears':
@@ -944,7 +946,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
               caseType="eviction"
               jurisdiction={jurisdiction}
               product="notice_only"
-              currentQuestionId={undefined}
+              currentQuestionId={currentQuestionId}
             />
           </div>
         </aside>

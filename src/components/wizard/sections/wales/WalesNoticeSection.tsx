@@ -36,6 +36,7 @@ import {
   getWalesFaultGroundByValue,
   type WalesFaultGroundDef,
 } from '@/lib/wales';
+import { normalizeWalesFaultGrounds } from '@/lib/wales/compliance-schema';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface WalesNoticeSectionProps {
@@ -717,8 +718,8 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   const isSection173 = evictionRoute === 'section_173';
   const isFaultBased = evictionRoute === 'fault_based';
 
-  // Selected fault grounds
-  const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+  // Selected fault grounds - use normalizer for backward compatibility
+  const selectedGrounds = normalizeWalesFaultGrounds(facts.wales_fault_grounds);
 
   // Track subflow completion for notice_only mode
   const [subflowComplete, setSubflowComplete] = useState(false);

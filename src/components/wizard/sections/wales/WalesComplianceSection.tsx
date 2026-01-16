@@ -29,12 +29,16 @@ import {
   shouldFieldApply,
   getBlockingViolations,
   getSoftBlockWarnings,
+  normalizeWalesFaultGrounds,
+  hasArrearsGroundSelected,
 } from '@/lib/wales/compliance-schema';
 
 interface WalesComplianceSectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales';
   onUpdate: (updates: Record<string, unknown>) => void | Promise<void>;
+  /** Optional callback to set the current question ID for Ask Heaven context */
+  onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
 }
 
 /**
@@ -117,12 +121,13 @@ const YesNoToggle: React.FC<{
   blockingMessage?: string;
   isBlocker?: boolean;
   expectedValue?: boolean;
-}> = ({ id, value, onChange, label, required, helperText, blockingMessage, isBlocker, expectedValue = true }) => {
+  onFocus?: () => void;
+}> = ({ id, value, onChange, label, required, helperText, blockingMessage, isBlocker, expectedValue = true, onFocus }) => {
   // Determine if current value triggers a block
   const showBlockMessage = value !== undefined && value !== expectedValue && blockingMessage;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" onFocus={onFocus}>
       <label className="block text-sm font-medium text-gray-700">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
@@ -139,6 +144,7 @@ const YesNoToggle: React.FC<{
             name={id}
             checked={value === true}
             onChange={() => onChange(true)}
+            onFocus={onFocus}
             className="mr-2"
           />
           <span className="text-sm">Yes</span>
@@ -154,6 +160,7 @@ const YesNoToggle: React.FC<{
             name={id}
             checked={value === false}
             onChange={() => onChange(false)}
+            onFocus={onFocus}
             className="mr-2"
           />
           <span className="text-sm">No</span>
@@ -176,7 +183,8 @@ const ComplianceFieldInput: React.FC<{
   field: ComplianceField;
   value: unknown;
   onChange: (value: unknown) => void;
-}> = ({ field, value, onChange }) => {
+  onFocus?: () => void;
+}> = ({ field, value, onChange, onFocus }) => {
   const isBlocker = field.blocking_level === 'HARD_BLOCK';
 
   switch (field.input_type) {
@@ -192,35 +200,72 @@ const ComplianceFieldInput: React.FC<{
           blockingMessage={field.block_message}
           isBlocker={isBlocker}
           expectedValue={field.expected_boolean_value ?? true}
+          onFocus={onFocus}
         />
       );
 
-    case 'enum':
-      // Special handling for fault grounds
+    case 'enum_multi':
+      // Multi-select checkboxes for wales_fault_grounds
       if (field.field_id === 'wales_fault_grounds') {
+        const selectedGrounds = normalizeWalesFaultGrounds(value);
+
+        const handleGroundToggle = (ground: string) => {
+          const newGrounds = selectedGrounds.includes(ground)
+            ? selectedGrounds.filter((g) => g !== ground)
+            : [...selectedGrounds, ground];
+          onChange(newGrounds);
+        };
+
         return (
-          <div className="space-y-2">
+          <div className="space-y-3" onFocus={onFocus}>
             <label className="block text-sm font-medium text-gray-700">
               {field.question_text}
               {isBlocker && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <select
-              id={field.field_id}
-              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={(value as string) || ''}
-              onChange={(e) => onChange(e.target.value || undefined)}
-            >
-              <option value="">Select a ground...</option>
+            <div className="grid grid-cols-1 gap-2">
               {field.enum_values?.map((enumVal) => (
-                <option key={enumVal} value={enumVal}>
-                  {WALES_FAULT_GROUND_LABELS[enumVal] || enumVal}
-                </option>
+                <label
+                  key={enumVal}
+                  className={`
+                    flex items-start p-3 border rounded-lg cursor-pointer transition-all
+                    ${selectedGrounds.includes(enumVal)
+                      ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
+                  `}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedGrounds.includes(enumVal)}
+                    onChange={() => handleGroundToggle(enumVal)}
+                    onFocus={onFocus}
+                    className="mt-0.5 mr-3"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900">
+                      {WALES_FAULT_GROUND_LABELS[enumVal] || enumVal}
+                    </span>
+                  </div>
+                </label>
               ))}
-            </select>
+            </div>
+            {selectedGrounds.length > 0 && (
+              <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="text-sm text-purple-800">
+                  <strong>Selected:</strong> {selectedGrounds.map((g) =>
+                    WALES_FAULT_GROUND_LABELS[g] || g
+                  ).join(', ')}
+                </p>
+              </div>
+            )}
             <p className="text-xs text-gray-500">{field.legal_basis}</p>
           </div>
         );
       }
+      // Generic enum_multi (if any other fields use it)
+      return null;
+
+    case 'enum':
+      // Single-select dropdown (not used for wales_fault_grounds anymore)
 
       // Special handling for deposit scheme
       if (field.field_id === 'deposit_scheme') {
@@ -234,6 +279,7 @@ const ComplianceFieldInput: React.FC<{
               className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={(value as string) || ''}
               onChange={(e) => onChange(e.target.value || undefined)}
+              onFocus={onFocus}
             >
               <option value="">Select scheme...</option>
               {WALES_DEPOSIT_SCHEMES.map((scheme) => (
@@ -259,6 +305,7 @@ const ComplianceFieldInput: React.FC<{
             className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={(value as string) || ''}
             onChange={(e) => onChange(e.target.value || undefined)}
+            onFocus={onFocus}
           >
             <option value="">Select...</option>
             {field.enum_values?.map((enumVal) => (
@@ -289,6 +336,7 @@ const ComplianceFieldInput: React.FC<{
               const val = e.target.value;
               onChange(val === '' ? undefined : parseFloat(val));
             }}
+            onFocus={onFocus}
             placeholder={field.field_id.includes('amount') ? '0.00' : '0'}
           />
           <p className="text-xs text-gray-500">{field.legal_basis}</p>
@@ -308,6 +356,7 @@ const ComplianceFieldInput: React.FC<{
             className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={(value as string) || ''}
             onChange={(e) => onChange(e.target.value || undefined)}
+            onFocus={onFocus}
           />
           <p className="text-xs text-gray-500">{field.legal_basis}</p>
         </div>
@@ -317,7 +366,7 @@ const ComplianceFieldInput: React.FC<{
       // For evidence_guidance, show as read-only guidance
       if (field.field_id === 'evidence_guidance') {
         return (
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg" onFocus={onFocus} tabIndex={0}>
             <div className="flex items-start gap-2">
               <RiInformationLine className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
@@ -352,6 +401,7 @@ const ComplianceFieldInput: React.FC<{
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={(value as string) || ''}
             onChange={(e) => onChange(e.target.value || undefined)}
+            onFocus={onFocus}
             placeholder="Enter details..."
           />
           <p className="text-xs text-gray-500">{field.legal_basis}</p>
@@ -364,6 +414,42 @@ const ComplianceFieldInput: React.FC<{
 };
 
 /**
+ * Arrears Schedule Guidance Panel
+ * Shown when an arrears ground is selected in Wales fault-based notice
+ */
+const ArrearsScheduleGuidancePanel: React.FC<{
+  onFocus?: () => void;
+}> = ({ onFocus }) => {
+  return (
+    <div
+      className="p-4 bg-blue-50 border border-blue-200 rounded-lg"
+      onFocus={onFocus}
+      tabIndex={0}
+    >
+      <div className="flex items-start gap-2">
+        <RiInformationLine className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div>
+          <h5 className="text-sm font-medium text-blue-900 mb-2">Rent Schedule Guidance</h5>
+          <p className="text-sm text-blue-800 mb-2">
+            For rent arrears grounds, you should prepare a rent schedule or payment history. This is essential
+            if you need to proceed with possession proceedings later.
+          </p>
+          <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
+            <li>Include all dates rent was due and amounts charged</li>
+            <li>Record all payments received with dates and amounts</li>
+            <li>Show running balance after each transaction</li>
+            <li>Calculate total arrears as at the date of notice</li>
+          </ul>
+          <p className="text-xs text-blue-600 mt-2 italic">
+            For Notice Only, you confirm you have this documentation but do not need to upload it now.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
  * Render a category of compliance fields
  */
 const ComplianceCategorySection: React.FC<{
@@ -371,11 +457,15 @@ const ComplianceCategorySection: React.FC<{
   fields: ComplianceField[];
   facts: WizardFacts;
   onUpdate: (updates: Record<string, unknown>) => void;
-}> = ({ category, fields, facts, onUpdate }) => {
+  onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
+}> = ({ category, fields, facts, onUpdate, onSetCurrentQuestionId }) => {
   // Filter fields to those that apply based on current facts
   const applicableFields = fields.filter((field) => shouldFieldApply(field.field_id, facts));
 
-  if (applicableFields.length === 0) {
+  // Check if arrears guidance should show (for breach_evidence category with arrears grounds)
+  const showArrearsGuidance = category === 'breach_evidence' && hasArrearsGroundSelected(facts.wales_fault_grounds);
+
+  if (applicableFields.length === 0 && !showArrearsGuidance) {
     return null;
   }
 
@@ -387,12 +477,20 @@ const ComplianceCategorySection: React.FC<{
       </div>
 
       <div className="space-y-6 pl-0 md:pl-2">
+        {/* Show arrears schedule guidance at the top of breach_evidence when arrears grounds selected */}
+        {showArrearsGuidance && (
+          <ArrearsScheduleGuidancePanel
+            onFocus={() => onSetCurrentQuestionId?.('arrears_schedule_guidance')}
+          />
+        )}
+
         {applicableFields.map((field) => (
           <ComplianceFieldInput
             key={field.field_id}
             field={field}
             value={facts[field.field_id as keyof WizardFacts]}
             onChange={(value) => onUpdate({ [field.field_id]: value })}
+            onFocus={() => onSetCurrentQuestionId?.(field.field_id)}
           />
         ))}
       </div>
@@ -406,6 +504,7 @@ const ComplianceCategorySection: React.FC<{
 export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
   facts,
   onUpdate,
+  onSetCurrentQuestionId,
 }) => {
   const route = facts.eviction_route as string | undefined;
   const isFaultBased = route === 'fault_based';
@@ -540,6 +639,7 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
             fields={categoryFields}
             facts={facts}
             onUpdate={handleUpdate}
+            onSetCurrentQuestionId={onSetCurrentQuestionId}
           />
         );
       })}
@@ -558,6 +658,7 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
               expectedValue={true}
               blockingMessage="You must confirm the declaration to proceed."
               isBlocker={true}
+              onFocus={() => onSetCurrentQuestionId?.('user_declaration')}
             />
           </div>
         </div>
@@ -577,6 +678,7 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
               expectedValue={true}
               blockingMessage="You must confirm the declaration to proceed."
               isBlocker={true}
+              onFocus={() => onSetCurrentQuestionId?.('user_declaration')}
             />
           </div>
         </div>
