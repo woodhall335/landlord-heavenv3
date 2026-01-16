@@ -25,7 +25,7 @@ section_157_grounds:
       eligibility_rules:
         - "arrears_total >= rent_amount * 2 (monthly equivalent)"
         - "arrears at notice and hearing meet threshold"
-      statute: "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8"
+      statute: "Renting Homes (Wales) Act 2016, Section 157"
 
     persistent_rent_arrears:
       title: "Persistent rent arrears"
@@ -41,7 +41,7 @@ section_157_grounds:
         - arrears_history
       eligibility_rules:
         - "count(arrears_history >= rent_amount * 2) >= 3"
-      statute: "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8A"
+      statute: "Renting Homes (Wales) Act 2016, Section 157"
 
 section_159_grounds:
   discretionary:
@@ -53,7 +53,7 @@ section_159_grounds:
       required_facts:
         - rent_amount
         - arrears_total
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 10"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
     breach_of_contract:
       title: "Breach of occupation contract"
       notice_period_days: 56
@@ -61,7 +61,7 @@ section_159_grounds:
       description: "Non-rent breach of a contract term"
       required_facts:
         - ground_particulars
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 12"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
     antisocial_behaviour:
       title: "Anti-social behaviour / criminal conduct"
       notice_period_days: 56
@@ -69,7 +69,7 @@ section_159_grounds:
       description: "Nuisance/annoyance or relevant conviction"
       required_facts:
         - ground_particulars
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 14"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
     property_deterioration:
       title: "Deterioration of dwelling"
       notice_period_days: 56
@@ -77,7 +77,7 @@ section_159_grounds:
       description: "Damage or neglect beyond wear and tear"
       required_facts:
         - ground_particulars
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 13"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
     false_statement:
       title: "False statement induced contract"
       notice_period_days: 56
@@ -85,7 +85,7 @@ section_159_grounds:
       description: "Contract granted on basis of false statement"
       required_facts:
         - ground_particulars
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 17"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
     suitable_alternative_accommodation:
       title: "Suitable alternative accommodation"
       notice_period_days: 56
@@ -93,7 +93,7 @@ section_159_grounds:
       description: "Suitable alternative accommodation available"
       required_facts:
         - ground_particulars
-      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 9"
+      statute: "Renting Homes (Wales) Act 2016, Section 159"
 
 notice_periods:
   section_157:

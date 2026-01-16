@@ -94,6 +94,12 @@
     {{/if}}
   </div>
 
+  {{!--
+    Estate management grounds (section 160 and Schedule 8)
+    ONLY shown for community landlords - NOT for private landlords.
+    Private landlords cannot rely on estate management grounds.
+  --}}
+  {{#if is_community_landlord}}
   <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1.5em;">Estate management grounds (section 160 and Schedule 8)</h3>
   <p style="margin-left: 1em;">Tick as applicable to indicate the paragraph of Schedule 8 relied upon.</p>
   <div style="margin-left: 1em; margin-top: 0.5em;">
@@ -107,13 +113,15 @@
     <p><span class="checkbox"></span> Ground H (joint contract-holders)</p>
     <p><span class="checkbox"></span> Ground I (other estate management reasons) - State the reasons overleaf.</p>
   </div>
+  {{/if}}
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1.5em; page-break-before: auto;">Contract-holder's failure to give up possession of the dwelling following the contract-holder providing notice to end the contract (section 165, 170 or 191)</h3>
-  <div class="field-value" style="min-height: 2em; margin-left: 1em;">
-    {{#if failure_particulars}}
-      {{{failure_particulars}}}
-    {{/if}}
-  </div>
+  {{!--
+    NOTE: Sections 165, 170, 191 (contract-holder's failure to give up possession
+    after their own notice) are NOT included in this fault-based notice form.
+    That is a SEPARATE route/notice process, not part of RHW23 for breach/arrears/ASB.
+    If the contract-holder gave notice to end the contract and failed to leave,
+    a different prescribed form and process applies.
+  --}}
 </div>
 
 <div class="section avoid-break" style="margin-top: 2em;">
@@ -148,11 +156,10 @@
 
   <p>The landlord may not make a possession claim in reliance on a breach of any other term of the occupation contract before the end of the period of one month starting with the day on which the landlord gives the contract-holder a possession notice specifying a breach of that term. In either case, the landlord may not make a possession claim after the end of the period of six months starting with the day on which the landlord gives the contract-holder the possession notice.</p>
 
+  {{#if is_community_landlord}}
   <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Restriction applicable to the estate management grounds</h3>
   <p>The landlord may not make a possession claim before the end of the period of one month starting with the day on which the landlord gives the contract-holder a possession notice, or after the end of the period of six months starting with the day on which the landlord gives the contract-holder the possession notice.</p>
-
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Restrictions applicable to the recovery of possession ground</h3>
-  <p>The landlord may make a possession claim on or after the day on which the landlord gives the contract-holder a possession notice, but the landlord may not make a possession claim after the end of the period of six months starting with that day.</p>
+  {{/if}}
 </div>
 
 </body>

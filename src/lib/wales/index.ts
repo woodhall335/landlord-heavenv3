@@ -28,10 +28,15 @@ export {
 
 export {
   WALES_FAULT_GROUNDS,
+  WALES_ARREARS_GROUND_VALUES,
   getWalesFaultGroundDefinitions,
+  getAllWalesFaultGroundDefinitions,
   mapWalesFaultGroundsToGroundCodes,
   getWalesFaultGroundByValue,
   getWalesFaultGroundsBySection,
   calculateWalesMinNoticePeriod,
+  hasWalesArrearsGroundSelected,
+  hasWalesSection157Selected,
   type WalesFaultGroundDef,
+  type WalesGroundsFilterOptions,
 } from './grounds';
