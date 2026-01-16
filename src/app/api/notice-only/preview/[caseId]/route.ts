@@ -1,16 +1,28 @@
 /**
- * Notice Only Preview API
+ * Notice Only Pack Generation API (POST-PAYMENT ENDPOINT)
  *
  * GET /api/notice-only/preview/[caseId]
- * Generates a preview of the complete Notice Only pack (watermarks removed as part of simplified UX)
+ *
+ * ⚠️ SECURITY NOTE: Despite the "preview" name (historical), this is a PAID endpoint.
+ * - Requires `assertPaidEntitlement()` before returning any documents
+ * - Returns complete, final PDFs suitable for court use
+ * - No watermarks (removed as part of simplified UX post-payment)
+ *
+ * This endpoint generates the complete Notice Only pack after payment has been verified.
+ * The "preview" route name is legacy; consider renaming to /api/notice-only/pack/[caseId]
+ * in a future refactor for clarity.
  */
 
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
+import {
+  generateSection21Notice,
+  mapWizardToSection21Data,
+} from '@/lib/documents/section21-generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
@@ -20,6 +32,12 @@ import {
   deriveCanonicalJurisdiction,
 } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
+import { assertPaidEntitlement } from '@/lib/payments/entitlement';
+import {
+  validateNoticeOnlyCase,
+  computeIncludedGrounds,
+} from '@/lib/validation/notice-only-case-validator';
+import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -65,22 +83,19 @@ export async function GET(
   try {
     const resolvedParams = await params;
     caseId = resolvedParams.caseId;
-    console.log('[NOTICE-PREVIEW-API] Generating preview for case:', caseId);
+    console.log('[NOTICE-PREVIEW-API] Generating pack for case:', caseId);
 
-    const supabase = await createServerSupabaseClient();
+    // CRITICAL: Payment verification MUST happen before returning any documents.
+    // This prevents free access to final PDFs. Do NOT remove or bypass this check.
+    await assertPaidEntitlement({ caseId, product: 'notice_only' });
 
-    // Try to get the current user (but allow anonymous access)
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await tryGetServerUser();
+    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
 
-    // Build query to allow viewing own cases or anonymous cases
     let query = supabase.from('cases').select('*').eq('id', caseId);
 
     if (user) {
-      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
-    } else {
-      query = query.is('user_id', null);
+      query = query.eq('user_id', user.id);
     }
 
     const { data, error: fetchError } = await query.single();
@@ -94,6 +109,15 @@ export async function GET(
 
     // Get wizard facts
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
+
+    // ========================================================================
+    // NORMALIZE SECTION 8 FACTS BEFORE VALIDATION
+    // This backfills missing canonical fields from legacy/alternative locations:
+    // - arrears_total from issues.rent_arrears.total_arrears
+    // - ground_particulars.ground_8.summary from section8_details
+    // ========================================================================
+    normalizeSection8Facts(wizardFacts);
+
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
@@ -218,6 +242,52 @@ export async function GET(
       return validationError; // Already a NextResponse with standardized 422 payload
     }
 
+    // ============================================================================
+    // NOTICE-ONLY SPECIFIC VALIDATION (Arrears Schedule Enforcement)
+    // ============================================================================
+    // For Section 8 route, enforce rent schedule data when arrears grounds are included
+    // This is critical for post-payment document generation to prevent blank documents
+    if (selected_route === 'section_8') {
+      const noticeValidation = validateNoticeOnlyCase(wizardFacts);
+
+      if (!noticeValidation.valid) {
+        const primaryError = noticeValidation.errors[0];
+        console.error('[NOTICE-PREVIEW-API] Notice-only validation failed (POST-PAYMENT):', {
+          case_id: caseId,
+          error_code: primaryError?.code,
+          included_grounds: noticeValidation.includedGrounds,
+          arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+          notice: 'This should not happen post-payment - checkout should have blocked',
+        });
+
+        return NextResponse.json(
+          {
+            code: primaryError?.code || 'NOTICE_ONLY_VALIDATION_FAILED',
+            error: primaryError?.message || 'Notice-only case validation failed',
+            user_message: 'Unable to generate your documents. Some required data is missing. Please contact support if this issue persists.',
+            blocking_issues: noticeValidation.errors.map(e => ({
+              code: e.code,
+              description: e.message,
+            })),
+            warnings: noticeValidation.warnings.map(w => ({
+              code: w.code,
+              description: w.message,
+            })),
+            included_grounds: noticeValidation.includedGrounds,
+            arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
+            notice_period_days: noticeValidation.noticePeriodDays,
+            // Include helpful metadata for debugging
+            _debug: {
+              stage: 'post-payment-pack-generation',
+              jurisdiction,
+              route: selected_route,
+            },
+          },
+          { status: 422 }
+        );
+      }
+    }
+
     // ========================================================================
     // LEGACY CONFIG-DRIVEN VALIDATION
     //
@@ -331,10 +401,42 @@ export async function GET(
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-      // Debug: Log the resolved service date to verify it matches user input
-      if (process.env.NOTICE_ONLY_DEBUG === '1') {
-        console.log('[NOTICE-PREVIEW-API] Resolved service_date:', templateData.service_date);
-        console.log('[NOTICE-PREVIEW-API] Resolved notice_date:', templateData.notice_date);
+      // Debug: Log all critical fields to verify correct data flow
+      // This helps diagnose blank dates and false compliance in Notice Only pack PDFs
+      if (process.env.NOTICE_ONLY_DEBUG === '1' || process.env.NODE_ENV === 'development') {
+        console.log('[NOTICE-PREVIEW-API] === SECTION 21 TEMPLATE DATA DEBUG ===');
+        console.log('[NOTICE-PREVIEW-API] Key Dates:');
+        console.log('  - tenancy_start_date:', templateData.tenancy_start_date);
+        console.log('  - service_date:', templateData.service_date);
+        console.log('  - notice_date:', templateData.notice_date);
+        console.log('  - notice_expiry_date:', templateData.notice_expiry_date);
+        console.log('  - earliest_possession_date:', templateData.earliest_possession_date);
+        console.log('  - display_possession_date:', templateData.display_possession_date);
+        console.log('[NOTICE-PREVIEW-API] Compliance Fields:');
+        console.log('  - prescribed_info_given:', templateData.prescribed_info_given);
+        console.log('  - gas_certificate_provided:', templateData.gas_certificate_provided);
+        console.log('  - epc_provided:', templateData.epc_provided);
+        console.log('  - how_to_rent_provided:', templateData.how_to_rent_provided);
+        console.log('  - hmo_license_required:', templateData.hmo_license_required);
+        console.log('  - hmo_license_valid:', templateData.hmo_license_valid);
+        console.log('[NOTICE-PREVIEW-API] Licensing/Retaliatory Fields (BUG AUDIT):');
+        console.log('  - licensing_required:', templateData.licensing_required, '(template)');
+        console.log('  - wizardFacts.licensing_required:', wizardFacts.licensing_required, '(raw)');
+        console.log('  - retaliatory_eviction_clear:', templateData.retaliatory_eviction_clear, '(template)');
+        console.log('  - no_repair_complaint:', templateData.no_repair_complaint, '(template)');
+        console.log('  - wizardFacts.no_retaliatory_notice:', wizardFacts.no_retaliatory_notice, '(raw)');
+        console.log('  - wizardFacts.retaliatory_eviction_clear:', wizardFacts.retaliatory_eviction_clear, '(raw)');
+        console.log('  - wizardFacts.repair_complaint_within_6_months:', wizardFacts.repair_complaint_within_6_months, '(raw)');
+        console.log('[NOTICE-PREVIEW-API] Deposit Fields:');
+        console.log('  - deposit_taken:', templateData.deposit_taken);
+        console.log('  - deposit_protected:', templateData.deposit_protected);
+        console.log('  - deposit_scheme:', templateData.deposit_scheme);
+        console.log('[NOTICE-PREVIEW-API] Raw wizardFacts sample (nested check):');
+        console.log('  - wizardFacts.section21:', JSON.stringify(wizardFacts.section21 || null));
+        console.log('  - wizardFacts.notice_service:', JSON.stringify(wizardFacts.notice_service || null));
+        console.log('  - wizardFacts.tenancy:', JSON.stringify(wizardFacts.tenancy || null));
+        console.log('  - wizardFacts.compliance:', JSON.stringify(wizardFacts.compliance || null));
+        console.log('[NOTICE-PREVIEW-API] === END DEBUG ===');
       }
 
       // JURISDICTION VALIDATION: Block Section 8/21 for Wales
@@ -529,38 +631,15 @@ export async function GET(
           console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
         }
       } else if (selected_route === 'section_21') {
-        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
+        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice via canonical generator');
         try {
-          // Calculate first anniversary date if tenancy start date is available
-          let firstAnniversaryDate = null;
-          let firstAnniversaryDateFormatted = null;
-          if (templateData.tenancy_start_date) {
-            try {
-              const tenancyStart = new Date(templateData.tenancy_start_date);
-              const anniversary = new Date(tenancyStart);
-              anniversary.setFullYear(anniversary.getFullYear() + 1);
-              firstAnniversaryDate = anniversary.toISOString().split('T')[0];
-              firstAnniversaryDateFormatted = formatUKDate(firstAnniversaryDate);
-            } catch (e) {
-              console.error('[NOTICE-PREVIEW-API] Failed to calculate first anniversary:', e);
-            }
-          }
-
-          // FIX: Use templateData (enriched with formatted addresses/dates) instead of caseFacts
-          const section21Data = {
-            ...templateData,
-            // Section 21 requires possession_date (2 months from service)
-            possession_date: templateData.earliest_possession_date_formatted || templateData.earliest_possession_date,
-            // Add first anniversary date
-            first_anniversary_date: firstAnniversaryDateFormatted || firstAnniversaryDate,
-          };
-
-          const section21Doc = await generateDocument({
-            templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-            data: section21Data,
-            outputFormat: 'pdf',
-            isPreview: true,
+          // Use canonical mapper and generator for Form 6A compliance
+          // This ensures ALL Section 21 generation paths produce identical output
+          const section21NoticeData = mapWizardToSection21Data(wizardFacts, {
+            serviceDate: templateData.service_date || templateData.notice_date,
           });
+
+          const section21Doc = await generateSection21Notice(section21NoticeData, true);
           if (section21Doc.pdf) {
             documents.push({
               title: 'Section 21 Notice (Form 6A)',
@@ -613,6 +692,78 @@ export async function GET(
         }
       } catch (err) {
         console.error(`[NOTICE-PREVIEW-API] ${checklistRoute} checklist generation failed:`, err);
+      }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      // Use dedicated Section 21 compliance checklist for Section 21 notices
+      // to ensure correct mapping of wizard answers and proper labeling
+      const complianceTemplatePath = selected_route === 'section_21'
+        ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
+        : 'uk/england/templates/eviction/compliance_checklist.hbs';
+
+      console.log(`[NOTICE-PREVIEW-API] Generating ${selected_route === 'section_21' ? 'Section 21' : 'Section 8'} compliance checklist`);
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: complianceTemplatePath,
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: selected_route === 'section_21'
+              ? 'Section 21 Pre-Service Compliance Checklist'
+              : 'Pre-Service Compliance Checklist',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error(`[NOTICE-PREVIEW-API] ${selected_route === 'section_21' ? 'Section 21' : 'England'} compliance checklist generation failed:`, err);
+      }
+
+      // 5. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
+      if (selected_route === 'section_8') {
+        const noticeValidation = validateNoticeOnlyCase(wizardFacts);
+        const arrearsItems = wizardFacts.arrears_items || [];
+
+        if (noticeValidation.includesArrearsGrounds && arrearsItems.length > 0) {
+          console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule (arrears grounds detected)');
+          try {
+            const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+            const arrearsScheduleData = getArrearsScheduleData({
+              arrears_items: arrearsItems,
+              total_arrears: wizardFacts.total_arrears || null,
+              rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+              rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+              include_schedule: true,
+            });
+
+            if (arrearsScheduleData.arrears_schedule.length > 0) {
+              const scheduleDoc = await generateDocument({
+                templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+                data: {
+                  claimant_reference: caseId,
+                  arrears_schedule: arrearsScheduleData.arrears_schedule,
+                  arrears_total: arrearsScheduleData.arrears_total,
+                },
+                outputFormat: 'pdf',
+              });
+
+              if (scheduleDoc.pdf) {
+                documents.push({
+                  title: 'Rent Schedule / Arrears Statement',
+                  category: 'schedule',
+                  pdf: scheduleDoc.pdf,
+                });
+                console.log('[NOTICE-PREVIEW-API] Rent Schedule generated successfully');
+              }
+            }
+          } catch (err) {
+            console.error('[NOTICE-PREVIEW-API] Rent Schedule generation failed:', err);
+          }
+        }
       }
     }
 
@@ -826,6 +977,77 @@ export async function GET(
       } catch (err) {
         console.error(`[NOTICE-PREVIEW-API] Wales ${checklistRoute} checklist generation failed:`, err);
       }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      console.log('[NOTICE-PREVIEW-API] Generating Wales compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Pre-Service Compliance Checklist (Wales)',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Wales compliance checklist generation failed:', err);
+      }
+
+      // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
+      if (selected_route === 'wales_fault_based') {
+        const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+        const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+        const isRentArrearsCase =
+          breachType === 'rent_arrears' ||
+          breachType === 'arrears' ||
+          faultBasedSection.includes('Section 157') ||
+          faultBasedSection.includes('Section 159');
+
+        const arrearsItems = wizardFacts.arrears_items || [];
+
+        if (isRentArrearsCase && arrearsItems.length > 0) {
+          console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Wales fault-based rent arrears');
+          try {
+            const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+            const arrearsScheduleData = getArrearsScheduleData({
+              arrears_items: arrearsItems,
+              total_arrears: wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || null,
+              rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+              rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+              include_schedule: true,
+            });
+
+            if (arrearsScheduleData.arrears_schedule.length > 0) {
+              const scheduleDoc = await generateDocument({
+                templatePath: 'uk/wales/templates/money_claims/schedule_of_arrears.hbs',
+                data: {
+                  claimant_reference: caseId,
+                  arrears_schedule: arrearsScheduleData.arrears_schedule,
+                  arrears_total: arrearsScheduleData.arrears_total,
+                },
+                outputFormat: 'pdf',
+              });
+
+              if (scheduleDoc.pdf) {
+                documents.push({
+                  title: 'Rent Schedule / Arrears Statement (Wales)',
+                  category: 'schedule',
+                  pdf: scheduleDoc.pdf,
+                });
+                console.log('[NOTICE-PREVIEW-API] Wales Rent Schedule generated successfully');
+              }
+            }
+          } catch (err) {
+            console.error('[NOTICE-PREVIEW-API] Wales Rent Schedule generation failed:', err);
+          }
+        }
+      }
     }
 
     // ===========================================================================
@@ -1002,6 +1224,68 @@ export async function GET(
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] Notice to Leave checklist generation failed:', err);
       }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      console.log('[NOTICE-PREVIEW-API] Generating Scotland compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/scotland/templates/eviction/compliance_checklist.hbs',
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Pre-Service Compliance Checklist (Scotland)',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Scotland compliance checklist generation failed:', err);
+      }
+
+      // 5. Generate Rent Schedule for Scotland Ground 1 (rent arrears)
+      // Note: hasGround1 is already computed above in Scotland date calculation section
+      const scotlandArrearsItems = wizardFacts.arrears_items || [];
+
+      if (hasGround1 && scotlandArrearsItems.length > 0) {
+        console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Scotland Ground 1 (rent arrears)');
+        try {
+          const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+
+          const scotlandArrearsData = getArrearsScheduleData({
+            arrears_items: scotlandArrearsItems,
+            total_arrears: wizardFacts.total_arrears || wizardFacts.arrears_amount || null,
+            rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+            rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+            include_schedule: true,
+          });
+
+          if (scotlandArrearsData.arrears_schedule.length > 0) {
+            const scheduleDoc = await generateDocument({
+              templatePath: 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs',
+              data: {
+                claimant_reference: caseId,
+                arrears_schedule: scotlandArrearsData.arrears_schedule,
+                arrears_total: scotlandArrearsData.arrears_total,
+              },
+              outputFormat: 'pdf',
+            });
+
+            if (scheduleDoc.pdf) {
+              documents.push({
+                title: 'Rent Schedule / Arrears Statement (Scotland)',
+                category: 'schedule',
+                pdf: scheduleDoc.pdf,
+              });
+              console.log('[NOTICE-PREVIEW-API] Scotland Rent Schedule generated successfully');
+            }
+          }
+        } catch (err) {
+          console.error('[NOTICE-PREVIEW-API] Scotland Rent Schedule generation failed:', err);
+        }
+      }
     }
 
     // ===========================================================================
@@ -1037,6 +1321,10 @@ export async function GET(
       },
     });
   } catch (err: any) {
+    if (err instanceof Response) {
+      return err;
+    }
+
     console.error('[NOTICE-PREVIEW-API] Error:', err);
 
     // Build structured JSON error response

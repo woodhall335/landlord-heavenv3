@@ -2,8 +2,8 @@ import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 
-import { getCapabilityMatrix, type Jurisdiction, type Product } from "../jurisdictions/capabilities/matrix";
-import { collectSchemaKeys } from "../jurisdictions/facts/referenceScanner";
+import { getCapabilityMatrix, type Jurisdiction, type Product } from "../jurisdictions/capabilities/matrix.ts";
+import { collectSchemaKeys } from "../jurisdictions/facts/referenceScanner.ts";
 
 export interface FlowMapping {
   jurisdiction: Jurisdiction;

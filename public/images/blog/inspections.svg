@@ -1,0 +1,123 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">PROPERTY INSPECTIONS GUIDE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Regular inspections to protect your investment</text>
+
+  <!-- Inspection icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(35, 10)">
+      <!-- House with magnifying glass -->
+      <polygon points="65,20 105,50 105,90 25,90 25,50" fill="white" stroke="#7C3AED" stroke-width="2"/>
+      <polygon points="65,15 110,52 20,52" fill="#7C3AED"/>
+      <rect x="50" y="60" width="30" height="30" fill="#6D28D9"/>
+      <!-- Magnifying glass -->
+      <circle cx="100" cy="75" r="20" fill="none" stroke="#F59E0B" stroke-width="3"/>
+      <line x1="115" y1="90" x2="130" y2="105" stroke="#F59E0B" stroke-width="4"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">INSPECTIONS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Regular checks protect</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">property and tenancy</text>
+  </g>
+
+  <!-- Types of inspections -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">INSPECTION TYPES</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Check-in inventory</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Routine inspections</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Maintenance checks</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#F59E0B"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Check-out inventory</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Every 3-6 months routine</text>
+    </g>
+  </g>
+
+  <!-- Notice requirements -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">NOTICE REQUIRED</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">24 hours minimum</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">In writing preferred</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Reasonable hours only</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Cannot force entry</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#F59E0B" font-size="9" font-weight="bold">Respect tenant's rights</text>
+    </g>
+  </g>
+
+  <!-- What to check -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">INSPECTION CHECKLIST</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">SAFETY ITEMS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Smoke alarms working</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">CO detectors functioning</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Fire escape routes clear</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Electrical sockets OK</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">PROPERTY CONDITION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Damp or mould signs</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Window condition</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Plumbing issues</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Appliance function</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">TENANCY CHECK</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Property kept clean</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">No unauthorized changes</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Garden maintained</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Note any issues found</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
+</svg>

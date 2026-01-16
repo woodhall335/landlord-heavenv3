@@ -38,6 +38,11 @@ import {
 } from './classify';
 import { extractFromImage, extractFromMultipleImages, VisionExtractionInput } from './vision-extract';
 import { extractFromText } from './text-extract';
+import {
+  fetchPdfText,
+  fetchDocumentAsBase64,
+  renderPdfPagesToBase64,
+} from './storage';
 import { compareFacts, WizardFacts, ComparisonConfig, DEFAULT_COMPARISON_CONFIG } from './compare';
 
 // =============================================================================
@@ -835,17 +840,22 @@ async function processTextDocument(
     };
   }
 
-  // TODO: In production, fetch document content from storage
-  // For now, we'll create a placeholder that needs actual text
-  // This would integrate with your Supabase storage
-
   try {
-    // Placeholder: In real implementation, fetch text from PDF
-    // const pdfText = await fetchPdfText(upload.storageKey);
-    const pdfText: string | null = ''; // Placeholder - needs actual implementation
+    // Fetch and extract text from the PDF using Supabase storage
+    const textResult = await fetchPdfText(upload.storageKey);
 
-    if (!pdfText || pdfText.trim().length < 50) {
-      // No text found - may need Vision
+    if (!textResult.success) {
+      return {
+        upload,
+        extraction: null,
+        error: textResult.error || 'Failed to fetch document from storage',
+        wasProcessed: true,
+      };
+    }
+
+    // Check if we got usable text
+    if (!textResult.text || textResult.text.trim().length < 50 || textResult.isLowText) {
+      // No text found or low text - document may need Vision OCR
       return {
         upload,
         extraction: null,
@@ -856,7 +866,7 @@ async function processTextDocument(
 
     const result = await extractFromText({
       upload,
-      text: pdfText,
+      text: textResult.text,
     });
 
     if (result.success && result.facts) {
@@ -880,6 +890,7 @@ async function processTextDocument(
       wasProcessed: true,
     };
   } catch (error: any) {
+    console.error('[SmartReview] processTextDocument error:', error.message);
     return {
       upload,
       extraction: null,
@@ -900,6 +911,7 @@ async function processVisionDocument(
   maxPages: number = 3
 ): Promise<DocumentExtractionResult> {
   const upload = classification.upload;
+  const isPdf = upload.mimeType === 'application/pdf';
 
   // Check cache by hash
   if (upload.sha256) {
@@ -924,26 +936,106 @@ async function processVisionDocument(
   }
 
   try {
-    // TODO: In production, fetch and convert document to base64
-    // For images: fetch directly
-    // For PDFs: render pages to images
+    // For PDFs: render pages to images and process with Vision
+    if (isPdf) {
+      const renderResult = await renderPdfPagesToBase64(upload.storageKey, maxPages);
 
-    // Placeholder: In real implementation, fetch and convert
-    // const imageBase64 = await fetchDocumentAsBase64(upload.storageKey);
-    const imageBase64 = ''; // Placeholder - needs actual implementation
+      if (!renderResult.success || renderResult.pages.length === 0) {
+        // Fallback: try to get the PDF as base64 for single-image vision
+        const base64Result = await fetchDocumentAsBase64(upload.storageKey, upload.mimeType);
 
-    if (!imageBase64) {
+        if (!base64Result.success || !base64Result.base64) {
+          return {
+            upload,
+            extraction: null,
+            error: renderResult.error || base64Result.error || 'Could not render PDF for Vision processing',
+            wasProcessed: true,
+          };
+        }
+
+        // Process as single image
+        const visionInput: VisionExtractionInput = {
+          upload,
+          imageBase64: base64Result.base64,
+          mimeType: 'application/pdf',
+        };
+
+        const result = await extractFromImage(visionInput);
+
+        if (result.success && result.facts) {
+          // Cache the result
+          if (upload.sha256) {
+            extractionCache.byHash.set(upload.sha256, result.facts);
+          }
+          extractionCache.byId.set(upload.id, result.facts);
+
+          return {
+            upload,
+            extraction: result.facts,
+            wasProcessed: true,
+          };
+        }
+
+        return {
+          upload,
+          extraction: null,
+          error: result.error || 'Vision extraction failed',
+          wasProcessed: true,
+        };
+      }
+
+      // Process multiple pages with Vision
+      const visionInputs: VisionExtractionInput[] = renderResult.pages.map((dataUrl, index) => {
+        // Extract base64 from data URL (format: data:image/png;base64,...)
+        const base64 = dataUrl.includes(',') ? dataUrl.split(',')[1] : dataUrl;
+        return {
+          upload,
+          imageBase64: base64,
+          mimeType: 'image/png',
+          pageNumber: index + 1,
+          totalPages: renderResult.pages.length,
+        };
+      });
+
+      const result = await extractFromMultipleImages(visionInputs);
+
+      if (result.success && result.facts) {
+        // Cache the result
+        if (upload.sha256) {
+          extractionCache.byHash.set(upload.sha256, result.facts);
+        }
+        extractionCache.byId.set(upload.id, result.facts);
+
+        return {
+          upload,
+          extraction: result.facts,
+          wasProcessed: true,
+        };
+      }
+
       return {
         upload,
         extraction: null,
-        error: 'Could not load document for Vision processing',
+        error: result.error || 'Vision extraction failed',
+        wasProcessed: true,
+      };
+    }
+
+    // For images: fetch as base64 and process directly
+    const base64Result = await fetchDocumentAsBase64(upload.storageKey, upload.mimeType);
+
+    if (!base64Result.success || !base64Result.base64) {
+      return {
+        upload,
+        extraction: null,
+        error: base64Result.error || 'Could not load image for Vision processing',
         wasProcessed: true,
       };
     }
 
     const visionInput: VisionExtractionInput = {
       upload,
-      imageBase64,
+      imageBase64: base64Result.base64,
       mimeType: upload.mimeType,
     };
 
@@ -970,6 +1062,7 @@ async function processVisionDocument(
       wasProcessed: true,
     };
   } catch (error: any) {
+    console.error('[SmartReview] processVisionDocument error:', error.message);
     return {
       upload,
       extraction: null,

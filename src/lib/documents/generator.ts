@@ -2,15 +2,131 @@
  * Document Generator
  *
  * Generates legal documents (Section 8 notices, ASTs, letters) from Handlebars templates.
- * Converts to PDF using Puppeteer.
+ * Converts to PDF using Puppeteer (with @sparticuz/chromium for serverless/Vercel).
  */
 
 import Handlebars from 'handlebars';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import puppeteer from 'puppeteer';
-import { SITE_CONFIG } from '@/config/site';
+import puppeteerCore from 'puppeteer-core';
+import { SITE_CONFIG } from '@/lib/site-config';
+
+// Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
+type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
+
+/**
+ * Get a browser instance that works in both local dev and Vercel serverless.
+ * - Local: Uses system Chrome or puppeteer's bundled Chromium
+ * - Vercel: Uses @sparticuz/chromium which bundles a serverless-compatible Chromium
+ */
+async function getBrowser(): Promise<BrowserInstance> {
+  const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+  if (isVercel) {
+    // Use @sparticuz/chromium for Vercel/AWS Lambda
+    // This package bundles a serverless-compatible Chromium binary
+    console.log('[getBrowser] Vercel environment detected, loading @sparticuz/chromium');
+
+    try {
+      const chromium = await import('@sparticuz/chromium');
+      const execPath = await chromium.default.executablePath();
+
+      console.log('[getBrowser] Chromium executable path:', execPath);
+      console.log('[getBrowser] Chromium args:', chromium.default.args.length, 'args');
+
+      return puppeteerCore.launch({
+        args: chromium.default.args,
+        defaultViewport: { width: 1200, height: 1600 },
+        executablePath: execPath,
+        headless: true,
+      });
+    } catch (err: any) {
+      console.error('[getBrowser] Failed to load @sparticuz/chromium:', err.message);
+      throw new Error(`Vercel Chromium initialization failed: ${err.message}`);
+    }
+  } else {
+    // Local development - try to find Chrome in common locations
+    const possiblePaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      process.env.PUPPETEER_EXECUTABLE_PATH,
+    ].filter(Boolean) as string[];
+
+    let executablePath: string | undefined;
+    for (const path of possiblePaths) {
+      if (existsSync(path)) {
+        executablePath = path;
+        break;
+      }
+    }
+
+    // If no system Chrome found, try using puppeteer's bundled version
+    if (!executablePath) {
+      try {
+        const puppeteer = await import('puppeteer');
+        const browser = await puppeteer.default.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
+        // Cast to our type - the APIs are compatible at runtime
+        return browser as unknown as BrowserInstance;
+      } catch (e) {
+        throw new Error(
+          'No Chrome browser found. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.'
+        );
+      }
+    }
+
+    return puppeteerCore.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath,
+    });
+  }
+}
+
+/**
+ * Get diagnostics about browser/chromium setup for debugging
+ * Safe for production - does not expose secrets
+ */
+export async function getBrowserDiagnostics(): Promise<Record<string, unknown>> {
+  const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+  const diagnostics: Record<string, unknown> = {
+    isVercel,
+    nodeVersion: process.version,
+    platform: process.platform,
+    arch: process.arch,
+  };
+
+  if (isVercel) {
+    try {
+      const chromium = await import('@sparticuz/chromium');
+      const execPath = await chromium.default.executablePath();
+      diagnostics.chromiumLoaded = true;
+      diagnostics.executablePath = execPath;
+      diagnostics.executableExists = existsSync(execPath);
+      diagnostics.argsCount = chromium.default.args.length;
+    } catch (err: any) {
+      diagnostics.chromiumLoaded = false;
+      diagnostics.chromiumError = err.message;
+    }
+  } else {
+    // Local: check for available browsers
+    const possiblePaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+    ];
+    diagnostics.localBrowsers = possiblePaths.filter(p => existsSync(p));
+  }
+
+  return diagnostics;
+}
 
 // ESM compatibility: Get __dirname equivalent
 const __filename_esm = typeof __filename !== 'undefined' ? __filename : fileURLToPath(import.meta.url);
@@ -44,6 +160,7 @@ export interface GeneratedDocument {
     generatedAt: string;
     documentId: string;
     isPreview: boolean;
+    jurisdiction?: string;
   };
 }
 
@@ -700,10 +817,7 @@ export async function htmlToPdf(
   }
 
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await getBrowser();
 
     const page = await browser.newPage();
 
@@ -1069,4 +1183,366 @@ function generateDocumentId(): string {
 export async function savePdf(pdfBuffer: Buffer, outputPath: string): Promise<void> {
   const fs = await import('fs/promises');
   await fs.writeFile(outputPath, pdfBuffer);
+}
+
+// ============================================================================
+// PREVIEW THUMBNAIL GENERATION
+// ============================================================================
+
+/**
+ * Generate a watermarked JPEG thumbnail of the first page of a document
+ * Used for document preview cards on the checkout page
+ */
+export async function htmlToPreviewThumbnail(
+  html: string,
+  options?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    watermarkText?: string;
+  }
+): Promise<Buffer> {
+  const width = options?.width || 400;
+  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
+  const quality = options?.quality || 80;
+  const watermarkText = options?.watermarkText || 'PREVIEW';
+
+  let browser;
+
+  try {
+    browser = await getBrowser();
+
+    const page = await browser.newPage();
+
+    // Set viewport to A4-like dimensions for rendering
+    await page.setViewport({
+      width: 794, // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI
+      deviceScaleFactor: 1,
+    });
+
+    // Add watermark overlay to the HTML
+    const watermarkedHtml = addWatermarkOverlay(html, watermarkText);
+
+    // Check if it's a full HTML document or fragment
+    const finalHtml = isFullHtmlDocument(watermarkedHtml)
+      ? watermarkedHtml
+      : wrapHtmlFragment(watermarkedHtml);
+
+    // Use 'domcontentloaded' instead of 'networkidle0' for faster rendering
+    // since we're setting content directly, not loading external resources
+    await page.setContent(finalHtml, {
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
+    });
+
+    // Take screenshot of the first page only
+    const screenshot = await page.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: 794,
+        height: 1123,
+      },
+    });
+
+    // Close browser
+    await browser.close();
+
+    // Resize if needed (Puppeteer returns full size, we may want smaller)
+    // For now, return as-is - can add sharp/jimp for resizing if needed
+    return screenshot as Buffer;
+  } catch (error) {
+    if (browser) {
+      await browser.close();
+    }
+    throw error;
+  }
+}
+
+/**
+ * Add a diagonal watermark overlay to HTML content
+ */
+function addWatermarkOverlay(html: string, watermarkText: string): string {
+  const watermarkStyles = `
+    <style>
+      .preview-watermark-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        overflow: hidden;
+      }
+      .preview-watermark-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 120px;
+        font-weight: bold;
+        color: rgba(200, 200, 200, 0.3);
+        white-space: nowrap;
+        font-family: Arial, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 20px;
+      }
+      .preview-watermark-repeat {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        transform: rotate(-45deg);
+      }
+      .preview-watermark-item {
+        font-size: 48px;
+        font-weight: bold;
+        color: rgba(180, 180, 180, 0.15);
+        padding: 60px 80px;
+        font-family: Arial, sans-serif;
+        text-transform: uppercase;
+      }
+    </style>
+  `;
+
+  // Create repeating watermark pattern
+  const watermarkItems = Array(20).fill(`<span class="preview-watermark-item">${watermarkText}</span>`).join('');
+
+  const watermarkOverlay = `
+    <div class="preview-watermark-overlay">
+      <div class="preview-watermark-text">${watermarkText}</div>
+      <div class="preview-watermark-repeat">
+        ${watermarkItems}
+      </div>
+    </div>
+  `;
+
+  // Inject watermark into HTML
+  if (html.toLowerCase().includes('</body>')) {
+    // Insert before closing body tag
+    return html.replace(
+      /<\/body>/i,
+      `${watermarkStyles}${watermarkOverlay}</body>`
+    );
+  } else if (html.toLowerCase().includes('</html>')) {
+    // Insert before closing html tag
+    return html.replace(
+      /<\/html>/i,
+      `${watermarkStyles}${watermarkOverlay}</html>`
+    );
+  } else {
+    // Append to end
+    return html + watermarkStyles + watermarkOverlay;
+  }
+}
+
+/**
+ * Wrap an HTML fragment in a basic document structure for thumbnail rendering
+ */
+function wrapHtmlFragment(fragment: string): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        * { box-sizing: border-box; }
+        body {
+          font-family: 'Times New Roman', Times, serif;
+          font-size: 12pt;
+          line-height: 1.5;
+          margin: 0;
+          padding: 40px;
+          background: white;
+        }
+        h1 { font-size: 18pt; font-weight: bold; margin: 0 0 15px 0; }
+        h2 { font-size: 14pt; font-weight: bold; margin: 15px 0 10px 0; }
+        h3 { font-size: 13pt; font-weight: bold; margin: 12px 0 8px 0; }
+        p { margin: 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        table, th, td { border: 1px solid #000; }
+        th, td { padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      ${fragment}
+    </body>
+    </html>
+  `;
+}
+
+/**
+ * Generate a watermarked JPEG thumbnail from a PDF URL
+ * Uses Puppeteer to render the first page of the PDF
+ */
+export async function pdfToPreviewThumbnail(
+  pdfUrl: string,
+  options?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    watermarkText?: string;
+  }
+): Promise<Buffer> {
+  const width = options?.width || 400;
+  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
+  const quality = options?.quality || 80;
+  const watermarkText = options?.watermarkText || 'PREVIEW';
+
+  let browser;
+
+  try {
+    browser = await getBrowser();
+
+    const page = await browser.newPage();
+
+    // Set viewport to A4-like dimensions for rendering
+    await page.setViewport({
+      width: 794, // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI
+      deviceScaleFactor: 1,
+    });
+
+    // Navigate to the PDF URL - Puppeteer can render PDFs natively
+    await page.goto(pdfUrl, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    // Wait a moment for PDF to fully render
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Take screenshot of first page
+    const screenshot = await page.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: 794,
+        height: 1123,
+      },
+    });
+
+    await browser.close();
+
+    // Now we need to add watermark to the screenshot
+    // Re-open browser to add watermark overlay
+    browser = await getBrowser();
+
+    const watermarkPage = await browser.newPage();
+    await watermarkPage.setViewport({
+      width: 794,
+      height: 1123,
+      deviceScaleFactor: 1,
+    });
+
+    // Create HTML with the screenshot as background and watermark overlay
+    const base64Image = (screenshot as Buffer).toString('base64');
+    const watermarkHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body {
+            width: 794px;
+            height: 1123px;
+            position: relative;
+            background-image: url(data:image/jpeg;base64,${base64Image});
+            background-size: cover;
+            background-position: top left;
+          }
+          .watermark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+          }
+          .watermark-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 120px;
+            font-weight: bold;
+            color: rgba(200, 200, 200, 0.4);
+            white-space: nowrap;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 20px;
+          }
+          .watermark-repeat {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(-45deg);
+          }
+          .watermark-item {
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(180, 180, 180, 0.2);
+            padding: 60px 80px;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="watermark-overlay">
+          <div class="watermark-text">${watermarkText}</div>
+          <div class="watermark-repeat">
+            ${Array(20).fill(`<span class="watermark-item">${watermarkText}</span>`).join('')}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await watermarkPage.setContent(watermarkHtml, {
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
+    });
+
+    // Take final screenshot with watermark
+    const finalScreenshot = await watermarkPage.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      },
+    });
+
+    await browser.close();
+
+    return finalScreenshot as Buffer;
+  } catch (error) {
+    if (browser) {
+      await browser.close();
+    }
+    throw error;
+  }
 }

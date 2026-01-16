@@ -1,69 +1,93 @@
 // src/app/api/wizard/upload-evidence/route.ts
-// Thin wrapper that re-uses the canonical API implementation.
-// This keeps any legacy /wizard/upload-evidence calls working,
-// but ensures all logic lives in one place.      
+// Evidence upload endpoint with robust error handling and correlation IDs.
+// All errors return structured JSON responses with debug_id for tracing.
 
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
-import { createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
-import { chatCompletion } from '@/lib/ai/openai-client';
 import { isEvidenceCategory, EvidenceCategory } from '@/lib/evidence/schema';
+import { analyzeEvidence } from '@/lib/evidence/analyze-evidence';
+import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
+import { runLegalValidator } from '@/lib/validators/run-legal-validator';
+import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
+import { classifyDocument } from '@/lib/evidence/classify-document';
+import {
+  mergeExtractedFacts,
+  applyMergedFacts,
+  generateConfirmationQuestions,
+} from '@/lib/evidence/merge-extracted-facts';
 
 export const runtime = 'nodejs';
+
+/**
+ * Structured error response format for tracing
+ */
+interface ErrorResponse {
+  ok: false;
+  error: string;
+  error_code: string;
+  stage: string;
+  debug_id: string;
+  details?: Record<string, any>;
+}
+
+/**
+ * Create a structured error response with correlation ID
+ */
+function createErrorResponse(
+  error: string,
+  errorCode: string,
+  stage: string,
+  debugId: string,
+  status: number,
+  details?: Record<string, any>
+): NextResponse<ErrorResponse> {
+  const body: ErrorResponse = {
+    ok: false,
+    error,
+    error_code: errorCode,
+    stage,
+    debug_id: debugId,
+    ...(details && { details }),
+  };
+
+  console.error('[upload-evidence][error]', JSON.stringify({
+    ...body,
+    status,
+  }));
+
+  return NextResponse.json(body, {
+    status,
+    headers: { 'x-debug-id': debugId },
+  });
+}
 
 function sanitizeFilename(name: string) {
   const trimmed = name?.trim() || 'upload';
   return trimmed.replace(/[^a-zA-Z0-9_.-]+/g, '_');
 }
 
-async function analyseDocument(
-  fileBuffer: Buffer,
-  metadata: { fileName: string; mimeType: string; category?: string },
-  facts: Record<string, any>,
-): Promise<Record<string, any> | null> {
-  if (!process.env.OPENAI_API_KEY) return null;
+const MAX_ANALYSIS_FACTS_KEYS = [
+  'tenant_full_name',
+  'landlord_full_name',
+  'rent_amount',
+  'rent_frequency',
+  'tenancy_start_date',
+  'deposit_amount',
+  'deposit_scheme',
+  'property_address_line1',
+  'notice_date',
+  'notice_expiry_date',
+];
 
-  const snippet = (() => {
-    if (metadata.mimeType?.startsWith('text/')) {
-      const text = fileBuffer.toString('utf8');
-      return text.slice(0, 2000);
-    }
-    return `Binary file preview unavailable. Name: ${metadata.fileName}.`;
-  })();
-
-  try {
-    const aiResponse = await chatCompletion(
-      [
-        {
-          role: 'system',
-          content:
-            'You are a legal evidence triage assistant. Return JSON only with keys detected_type, extracted_fields, confidence (0-1) and warnings (array). Do not invent facts; if unsure, keep fields empty.',
-        },
-        {
-          role: 'user',
-          content: `Jurisdiction: ${facts?.property?.country || 'unknown'}. Category: ${
-            metadata.category || 'unspecified'
-          }. File name: ${metadata.fileName}. Mime: ${metadata.mimeType}. Known parties: landlord ${
-            facts?.landlord?.name || ''
-          }, tenant ${facts?.tenant?.name || ''}. Property: ${
-            facts?.property?.address_line1 || facts?.property?.property_address_line1 || ''
-          }. Known arrears: ${facts?.issues?.rent_arrears?.total_arrears ?? 'unknown'}. Snippet: ${snippet}`,
-        },
-      ],
-      { model: 'gpt-4o-mini', max_tokens: 300, temperature: 0 },
-    );
-
-    const parsed = JSON.parse(aiResponse.content || '{}');
-    if (!parsed.detected_type) {
-      parsed.detected_type = metadata.category || metadata.mimeType || 'unknown';
-    }
-    parsed.confidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0.35;
-    return parsed;
-  } catch (err) {
-    console.warn('Evidence analysis failed, continuing without AI flags', err);
-    return null;
-  }
+function pickFactsSnapshot(facts: Record<string, any>) {
+  const snapshot: Record<string, any> = {};
+  MAX_ANALYSIS_FACTS_KEYS.forEach((key) => {
+    if (facts[key] !== undefined) snapshot[key] = facts[key];
+  });
+  return snapshot;
 }
 
 function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: string) {
@@ -137,9 +161,20 @@ function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: strin
 }
 
 export async function POST(request: Request) {
+  // Generate correlation ID for this request (use client-provided or generate new)
+  const clientDebugId = request.headers.get('x-debug-id');
+  const debugId = clientDebugId || randomUUID().slice(0, 8);
+  const startTime = Date.now();
+
+  console.log('[upload-evidence][start]', JSON.stringify({
+    debug_id: debugId,
+    timestamp: new Date().toISOString(),
+  }));
+
   try {
     // Admin client bypasses Supabase RLS for this route
-    const supabase = createAdminClient();
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/upload-evidence', writesUsingAdmin: true });
+    const supabase = createSupabaseAdminClient();
 
     // Cookie-based server user (may be null if anonymous)
     const user = await getServerUser();
@@ -151,15 +186,33 @@ export async function POST(request: Request) {
     const file = formData.get('file');
 
     if (typeof caseId !== 'string' || !caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
+      return createErrorResponse(
+        'caseId is required',
+        'MISSING_CASE_ID',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     if (typeof questionId !== 'string' || !questionId) {
-      return NextResponse.json({ error: 'questionId is required' }, { status: 400 });
+      return createErrorResponse(
+        'questionId is required',
+        'MISSING_QUESTION_ID',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'file is required' }, { status: 400 });
+      return createErrorResponse(
+        'file is required',
+        'MISSING_FILE',
+        'validation',
+        debugId,
+        400
+      );
     }
 
     // =========================================================================
@@ -170,14 +223,13 @@ export async function POST(request: Request) {
     const categoryString = typeof category === 'string' && category.length > 0 ? category : undefined;
 
     if (categoryString && !isEvidenceCategory(categoryString)) {
-      const validCategories = Object.values(EvidenceCategory).join(', ');
-      return NextResponse.json(
-        {
-          error: `Invalid evidence category: "${categoryString}". ` +
-                 `Must be one of: ${validCategories}`,
-          valid_categories: Object.values(EvidenceCategory),
-        },
-        { status: 400 }
+      return createErrorResponse(
+        `Invalid evidence category: "${categoryString}"`,
+        'INVALID_CATEGORY',
+        'validation',
+        debugId,
+        400,
+        { valid_categories: Object.values(EvidenceCategory) }
       );
     }
 
@@ -198,19 +250,25 @@ export async function POST(request: Request) {
 
     const fileSize = (file as any).size;
     if (typeof fileSize === 'number' && fileSize > MAX_FILE_SIZE_BYTES) {
-      return NextResponse.json(
-        { error: `File too large. Maximum size is 10MB, received ${(fileSize / 1024 / 1024).toFixed(2)}MB` },
-        { status: 400 }
+      return createErrorResponse(
+        `File too large. Maximum size is 10MB, received ${(fileSize / 1024 / 1024).toFixed(2)}MB`,
+        'FILE_TOO_LARGE',
+        'validation',
+        debugId,
+        400,
+        { max_size_mb: 10, received_size_mb: fileSize / 1024 / 1024 }
       );
     }
 
     const mimeType = ((file as any).type || '').toLowerCase();
     if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
-      return NextResponse.json(
-        {
-          error: `File type not allowed. Accepted types: PDF, JPEG, PNG, WebP, GIF. Received: ${mimeType || 'unknown'}`,
-        },
-        { status: 400 }
+      return createErrorResponse(
+        `File type not allowed. Accepted types: PDF, JPEG, PNG, WebP, GIF. Received: ${mimeType || 'unknown'}`,
+        'INVALID_FILE_TYPE',
+        'validation',
+        debugId,
+        400,
+        { allowed_types: ALLOWED_MIME_TYPES, received_type: mimeType }
       );
     }
 
@@ -222,20 +280,45 @@ export async function POST(request: Request) {
 
     if (caseError) {
       console.error('Failed to load case', caseError);
-      return NextResponse.json({ error: 'Could not load case' }, { status: 500 });
+      return createErrorResponse(
+        'Could not load case',
+        'CASE_LOAD_ERROR',
+        'case_lookup',
+        debugId,
+        500,
+        { supabase_error: caseError.message }
+      );
     }
 
     if (!caseRow) {
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      return createErrorResponse(
+        'Case not found',
+        'CASE_NOT_FOUND',
+        'case_lookup',
+        debugId,
+        404
+      );
     }
 
     // If the case is owned, enforce that only the owning user can upload to it
     if (caseRow.user_id) {
       if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return createErrorResponse(
+          'Please sign in to upload evidence for this case',
+          'UNAUTHORIZED',
+          'auth',
+          debugId,
+          401
+        );
       }
       if (caseRow.user_id !== user.id) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        return createErrorResponse(
+          'You do not have permission to upload evidence to this case',
+          'FORBIDDEN',
+          'auth',
+          debugId,
+          403
+        );
       }
     }
 
@@ -255,7 +338,14 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error('Failed to upload file to storage', uploadError);
-      return NextResponse.json({ error: 'Could not upload file' }, { status: 500 });
+      return createErrorResponse(
+        'Could not upload file to storage',
+        'STORAGE_UPLOAD_ERROR',
+        'storage_upload',
+        debugId,
+        500,
+        { storage_error: uploadError.message }
+      );
     }
 
     // SECURITY: Do NOT use getPublicUrl() for evidence files.
@@ -278,7 +368,14 @@ export async function POST(request: Request) {
 
     if (documentError || !documentRow) {
       console.error('Failed to insert document record', documentError);
-      return NextResponse.json({ error: 'Could not save document' }, { status: 500 });
+      return createErrorResponse(
+        'Could not save document record',
+        'DOCUMENT_INSERT_ERROR',
+        'document_insert',
+        debugId,
+        500,
+        { db_error: documentError?.message }
+      );
     }
 
     const evidenceEntry = {
@@ -291,6 +388,9 @@ export async function POST(request: Request) {
       storage_path: objectKey,
       mime_type: (file as any).type || null,
       size_bytes: typeof (file as any).size === 'number' ? (file as any).size : null,
+      doc_type: null,
+      doc_type_confidence: null,
+      doc_type_reasons: null,
       uploaded_at: new Date().toISOString(),
     };
 
@@ -332,61 +432,436 @@ export async function POST(request: Request) {
     });
 
     // ------------------------------------------------------------------
-    // Optional AI analysis (non-blocking)
+    // AI analysis + document intelligence + legal validation (non-blocking)
     // ------------------------------------------------------------------
+    let analysisResult: any = null;
+    let validationResult: any = null;
+    let validationKey: any = null;
+    let validationRecommendations: Array<{ code: string; message: string }> = [];
+    let validationNextQuestions: Array<{ id: string; question: string }> = [];
+    let validationSummary: any = null;
+    let intelligenceSnapshot: any = null;
+    let documentIntel: any = null;
+    let docClassification: { docType: string; confidence: number; reasons: string[] } | null =
+      classifyDocument({
+        fileName: file.name || safeFilename,
+        mimeType: (file as any).type || null,
+        extractedText: null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
+      });
+    let extractionMeta: {
+      merged_facts_count: number;
+      low_confidence_keys: string[];
+      provenance_count: number;
+    } | null = null;
+    let confirmationQuestions: Array<{ factKey: string; question: string; type: string; helpText?: string }> = [];
+
     try {
-      const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
-      const analysis = await analyseDocument(
+      const signed = await supabase.storage
+        .from('documents')
+        .createSignedUrl(objectKey, 60);
+
+      // Extract validatorKey from questionId (e.g., "validator_tenancy_agreement" -> "tenancy_agreement")
+      const validatorKey = questionId.startsWith('validator_')
+        ? questionId.replace('validator_', '')
+        : validatedCategory ?? null;
+
+      console.log('[upload-evidence][analysis_start]', JSON.stringify({
+        debug_id: debugId,
+        filename: file.name,
+        mimeType: (file as any).type,
+        validatorKey,
+      }));
+
+      const analysis = await analyzeEvidence({
+        storageBucket: 'documents',
+        storagePath: objectKey,
+        mimeType: (file as any).type || 'application/octet-stream',
+        filename: file.name || safeFilename,
+        caseId,
+        questionId,
+        category: validatedCategory,
+        signedUrl: signed.data?.signedUrl ?? null,
         fileBuffer,
-        {
-          fileName: file.name || safeFilename,
-          mimeType: (file as any).type || 'application/octet-stream',
-          category: validatedCategory, // P0-C: Use validated canonical category
-        },
-        (factsSnapshot as any) || {},
+        validatorKey,
+        jurisdiction: caseRow.jurisdiction,
+        debugId, // Pass correlation ID for tracing
+      });
+
+      console.log('[upload-evidence][analysis_complete]', JSON.stringify({
+        debug_id: debugId,
+        analysis_debug_id: analysis.debug_id,
+        detected_type: analysis.detected_type,
+        confidence: analysis.confidence,
+        duration_ms: analysis.duration_ms,
+        final_stage: analysis.final_stage,
+      }));
+
+      analysisResult = analysis;
+
+      // Debug logging for extracted fields - helps diagnose validator field matching issues
+      console.log('[upload-evidence] Extracted fields:', JSON.stringify(analysis.extracted_fields, null, 2));
+      console.log('[upload-evidence] Extraction quality:', JSON.stringify(analysis.extraction_quality, null, 2));
+
+      docClassification = classifyDocument({
+        fileName: file.name || safeFilename,
+        mimeType: (file as any).type || null,
+        extractedText: analysis.raw_text || null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
+        extractionQuality: analysis.extraction_quality || undefined, // Pass extraction quality for better classification
+      });
+
+      console.log('[upload-evidence] Classification result:', {
+        docType: docClassification.docType,
+        confidence: docClassification.confidence,
+        reasons: docClassification.reasons,
+        rawTextLength: analysis.raw_text?.length ?? 0,
+        categoryHint: validatedCategory,
+      });
+
+      // =========================================================================
+      // EARLY TERMINAL BLOCKER: Wrong document type detection
+      // Short-circuit immediately if classification detects wrong doc type
+      // with high confidence (>= 0.70). This prevents Q&A block from rendering.
+      // =========================================================================
+      const WRONG_DOC_CONFIDENCE_THRESHOLD = 0.70;
+      const classifiedDocType = docClassification.docType?.toLowerCase() ?? '';
+      const normalizedValidatorKey = validatorKey?.toLowerCase() ?? '';
+
+      // Check for S21 validator receiving S8 notice
+      const isS21ValidatorWithS8Doc =
+        (normalizedValidatorKey === 'notice_s21' || normalizedValidatorKey.includes('section_21')) &&
+        (classifiedDocType === 'notice_s8' || classifiedDocType.includes('section_8') || classifiedDocType.includes('section 8'));
+
+      // Check for S8 validator receiving S21 notice
+      const isS8ValidatorWithS21Doc =
+        (normalizedValidatorKey === 'notice_s8' || normalizedValidatorKey.includes('section_8')) &&
+        (classifiedDocType === 'notice_s21' || classifiedDocType.includes('section_21') || classifiedDocType.includes('section 21'));
+
+      if ((isS21ValidatorWithS8Doc || isS8ValidatorWithS21Doc) && docClassification.confidence >= WRONG_DOC_CONFIDENCE_THRESHOLD) {
+        const blockerCode = isS21ValidatorWithS8Doc ? 'S21-WRONG-DOC-TYPE' : 'S8-WRONG-DOC-TYPE';
+        const blockerMessage = isS21ValidatorWithS8Doc
+          ? 'This appears to be a Section 8 notice (Form 3), but you are using the Section 21 validator. Please use the Section 8 validator instead.'
+          : 'This appears to be a Section 21 notice (Form 6A), but you are using the Section 8 validator. Please use the Section 21 validator instead.';
+
+        console.log('[upload-evidence][terminal_blocker] Wrong document type detected early:', {
+          debug_id: debugId,
+          validatorKey,
+          classifiedDocType: docClassification.docType,
+          confidence: docClassification.confidence,
+          blockerCode,
+        });
+
+        const totalDuration = Date.now() - startTime;
+
+        // Return terminal_blocker response immediately - no questions, no evidence list, no upsell
+        return NextResponse.json({
+          success: true,
+          debug_id: debugId,
+          document: documentRow,
+          evidence: {
+            files: [evidenceEntry],
+            flags: {},
+            analysis: analysisResult,
+            classification: docClassification,
+          },
+          validation: {
+            validator_key: validatorKey,
+            status: 'invalid',
+            blockers: [{ code: blockerCode, message: blockerMessage }],
+            warnings: [],
+            upsell: null,
+            recommendations: [],
+            next_questions: [], // CRITICAL: Empty - no Q&A block
+            terminal_blocker: true,
+          },
+          validation_summary: {
+            validator_key: validatorKey,
+            status: 'invalid',
+            blockers: [{ code: blockerCode, message: blockerMessage }],
+            warnings: [],
+            upsell: null,
+            terminal_blocker: true,
+          },
+          recommendations: [],
+          next_questions: [], // CRITICAL: Empty - no Q&A block
+          document_intel: null,
+          fact_snapshot: null,
+          extraction: null,
+          duration_ms: totalDuration,
+        }, {
+          headers: { 'x-debug-id': debugId },
+        });
+      }
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
+        const updatedFiles = files.map((entry: any) =>
+          entry.id === evidenceEntry.id
+            ? {
+                ...entry,
+                doc_type: docClassification?.docType ?? entry.doc_type,
+                doc_type_confidence: docClassification?.confidence ?? entry.doc_type_confidence,
+                doc_type_reasons: docClassification?.reasons ?? entry.doc_type_reasons,
+              }
+            : entry
+        );
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            files: updatedFiles,
+          },
+        } as typeof current;
+      });
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const analysisMap = { ...(existingEvidence.analysis || {}) };
+        analysisMap[evidenceEntry.id] = analysis;
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            analysis: analysisMap,
+          },
+        } as typeof current;
+      });
+
+      // =========================================================================
+      // NEW: SMART EXTRACTION MERGE
+      // Merge AI-extracted fields into canonical facts BEFORE document intel
+      // =========================================================================
+      const mergeOutput = mergeExtractedFacts({
+        caseId,
+        evidenceId: evidenceEntry.id,
+        jurisdiction: caseRow.jurisdiction,
+        docType: docClassification?.docType ?? analysis.detected_type,
+        validatorKey,
+        analysisResult: analysis,
+      });
+
+      // Apply merged facts to case
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        return applyMergedFacts(current, mergeOutput) as typeof current;
+      });
+
+      // Generate confirmation questions for low-confidence extractions
+      confirmationQuestions = generateConfirmationQuestions(
+        mergeOutput.lowConfidenceKeys,
+        validatorKey
       );
 
-      if (analysis) {
+      // Track extraction metadata for response
+      extractionMeta = {
+        merged_facts_count: Object.keys(mergeOutput.mergedFactsPatch).length,
+        low_confidence_keys: mergeOutput.lowConfidenceKeys,
+        provenance_count: Object.keys(mergeOutput.provenance).length,
+      };
+
+      const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
+      const evidenceFiles = ((factsSnapshot as any)?.evidence?.files || []) as any[];
+      const analysisMapForFlags = ((factsSnapshot as any)?.evidence?.analysis || {}) as Record<string, any>;
+      const mappedFacts = mapEvidenceToFacts({
+        facts: (factsSnapshot as any) || {},
+        evidenceFiles,
+        analysisMap: analysisMapForFlags,
+      });
+
+      // Apply document intelligence on top of merged facts
+      const intelligence = applyDocumentIntelligence(mappedFacts as any);
+      intelligenceSnapshot = pickFactsSnapshot(intelligence.facts as any);
+      documentIntel = {
+        derived_routes: intelligence.derivedRoutes,
+        inconsistencies: intelligence.inconsistencies,
+        compliance_hints: intelligence.complianceHints,
+        recommended_uploads: intelligence.recommendedUploads,
+      };
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        return {
+          ...current,
+          ...(intelligence.facts as any),
+        } as typeof current;
+      });
+
+      const validatorOutcome = runLegalValidator({
+        product: (factsSnapshot as any)?.__meta?.product || (factsSnapshot as any)?.product,
+        jurisdiction: caseRow.jurisdiction,
+        facts: intelligence.facts as any,
+        analysis,
+      });
+
+      validationResult = validatorOutcome.result;
+      validationKey = validatorOutcome.validator_key;
+      validationRecommendations = validatorOutcome.recommendations ?? [];
+
+      // Level A mode: Use follow-up questions instead of evidence upload requirements
+      const isLevelAMode = validatorOutcome.level_a_mode === true;
+      const levelAQuestions = validatorOutcome.level_a_questions ?? [];
+
+      if (isLevelAMode && levelAQuestions.length > 0) {
+        // In Level A mode, use the Level A questions as next questions
+        // Map them to have id property for compatibility
+        validationNextQuestions = levelAQuestions.map((q: any) => ({
+          id: q.factKey,
+          factKey: q.factKey,
+          question: q.question,
+          type: q.type || 'yes_no_unsure',
+          helpText: q.helpText,
+          options: q.options, // Include options for select/multi_select types
+          isLevelA: true,
+        }));
+      } else {
+        // Legacy mode: Merge validator questions with low-confidence confirmation questions
+        const validatorQuestions = validatorOutcome.missing_questions ?? [];
+        // Filter out confirmation questions for facts that validator already has questions for
+        const validatorFactKeys = new Set(validatorQuestions.map((q: any) => q.factKey || q.id));
+        const filteredConfirmationQuestions = confirmationQuestions.filter(
+          q => !validatorFactKeys.has(q.factKey)
+        );
+        // Map confirmation questions to have id property for compatibility
+        const mappedConfirmationQuestions = filteredConfirmationQuestions.map(q => ({
+          id: q.factKey,
+          question: q.question,
+        }));
+        validationNextQuestions = [...validatorQuestions, ...mappedConfirmationQuestions];
+      }
+
+      if (validationResult) {
+        validationSummary = {
+          validator_key: validationKey,
+          status: validationResult.status,
+          blockers: validationResult.blockers,
+          warnings: validationResult.warnings,
+          upsell: validationResult.upsell ?? null,
+          terminal_blocker: validationResult.terminal_blocker ?? false,
+          level_a_mode: isLevelAMode,
+        };
+
         await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
           const current = (currentRaw as any) || {};
-          const existingEvidence = (current as any).evidence || {};
-          const analysisMap = { ...(existingEvidence.analysis || {}) };
-          analysisMap[evidenceEntry.id] = analysis;
           return {
             ...current,
-            evidence: {
-              ...existingEvidence,
-              analysis: analysisMap,
-            },
+            validation_summary: validationSummary,
+            recommendations: validationRecommendations,
+            next_questions: validationNextQuestions,
+            validation_version: 'upload_v1',
+            level_a_mode: isLevelAMode,
           } as typeof current;
         });
       }
     } catch (analysisErr) {
       console.warn('Evidence analysis skipped due to error', analysisErr);
+      analysisResult = analysisResult || {
+        detected_type: validatedCategory || 'unknown',
+        extracted_fields: {},
+        confidence: 0,
+        warnings: ['Analysis failed; upload saved without extraction.'],
+      };
+    }
+
+    if (docClassification) {
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
+        const updatedFiles = files.map((entry: any) =>
+          entry.id === evidenceEntry.id
+            ? {
+                ...entry,
+                doc_type: entry.doc_type ?? docClassification.docType,
+                doc_type_confidence: entry.doc_type_confidence ?? docClassification.confidence,
+                doc_type_reasons: entry.doc_type_reasons ?? docClassification.reasons,
+              }
+            : entry
+        );
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            files: updatedFiles,
+          },
+        } as typeof current;
+      });
     }
 
     const evidenceFacts: any = (updatedFacts as any).evidence || {};
 
+    const latestFacts = await getOrCreateWizardFacts(supabase as any, caseId);
+    const latestEvidenceFacts: any = (latestFacts as any).evidence || evidenceFacts;
+
+    const totalDuration = Date.now() - startTime;
+    console.log('[upload-evidence][success]', JSON.stringify({
+      debug_id: debugId,
+      duration_ms: totalDuration,
+      validator_key: validationKey,
+      validation_status: validationResult?.status,
+    }));
+
     return NextResponse.json({
       success: true,
+      debug_id: debugId,
       document: documentRow,
       evidence: {
-        files: evidenceFacts.files || [],
+        files: latestEvidenceFacts.files || evidenceFacts.files || [],
         flags: {
-          tenancy_agreement_uploaded: !!evidenceFacts.tenancy_agreement_uploaded,
-          rent_schedule_uploaded: !!evidenceFacts.rent_schedule_uploaded,
-          correspondence_uploaded: !!evidenceFacts.correspondence_uploaded,
-          damage_photos_uploaded: !!evidenceFacts.damage_photos_uploaded,
-          authority_letters_uploaded: !!evidenceFacts.authority_letters_uploaded,
-          bank_statements_uploaded: !!evidenceFacts.bank_statements_uploaded,
-          safety_certificates_uploaded: !!evidenceFacts.safety_certificates_uploaded,
-          asb_evidence_uploaded: !!evidenceFacts.asb_evidence_uploaded,
-          other_evidence_uploaded: !!evidenceFacts.other_evidence_uploaded,
+          tenancy_agreement_uploaded: !!latestEvidenceFacts.tenancy_agreement_uploaded,
+          rent_schedule_uploaded: !!latestEvidenceFacts.rent_schedule_uploaded,
+          correspondence_uploaded: !!latestEvidenceFacts.correspondence_uploaded,
+          damage_photos_uploaded: !!latestEvidenceFacts.damage_photos_uploaded,
+          authority_letters_uploaded: !!latestEvidenceFacts.authority_letters_uploaded,
+          bank_statements_uploaded: !!latestEvidenceFacts.bank_statements_uploaded,
+          safety_certificates_uploaded: !!latestEvidenceFacts.safety_certificates_uploaded,
+          asb_evidence_uploaded: !!latestEvidenceFacts.asb_evidence_uploaded,
+          other_evidence_uploaded: !!latestEvidenceFacts.other_evidence_uploaded,
         },
+        analysis: analysisResult,
+        classification: docClassification,
       },
+      validation: validationResult
+        ? {
+            validator_key: validationKey,
+            status: validationResult.status,
+            blockers: validationResult.blockers,
+            warnings: validationResult.warnings,
+            upsell: validationResult.upsell ?? null,
+            recommendations: validationRecommendations,
+            next_questions: validationNextQuestions,
+            terminal_blocker: validationResult.terminal_blocker ?? false,
+            level_a_mode: validationSummary?.level_a_mode ?? false,
+          }
+        : null,
+      validation_summary: validationSummary,
+      recommendations: validationRecommendations,
+      next_questions: validationNextQuestions,
+      document_intel: documentIntel,
+      fact_snapshot: intelligenceSnapshot,
+      extraction: extractionMeta,
+      duration_ms: totalDuration,
+    }, {
+      headers: { 'x-debug-id': debugId },
     });
   } catch (error) {
-    console.error('Unexpected error in upload-evidence route', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const duration = Date.now() - startTime;
+    console.error('[upload-evidence][unexpected_error]', JSON.stringify({
+      debug_id: debugId,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      duration_ms: duration,
+    }));
+
+    return createErrorResponse(
+      'Internal server error',
+      'INTERNAL_ERROR',
+      'unknown',
+      debugId,
+      500,
+      { error_message: error instanceof Error ? error.message : 'Unknown error' }
+    );
   }
 }

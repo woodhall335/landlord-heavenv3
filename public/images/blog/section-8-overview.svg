@@ -1,0 +1,133 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Large Section 8 badge -->
+  <g transform="translate(300, 60)">
+    <rect x="0" y="0" width="200" height="80" rx="16" fill="#7C3AED"/>
+    <text x="100" y="55" text-anchor="middle" fill="white" font-size="42" font-weight="bold" font-family="Arial">§ 8</text>
+  </g>
+
+  <!-- Three grounds columns -->
+  <!-- Mandatory Grounds -->
+  <g transform="translate(80, 160)">
+    <rect x="0" y="0" width="180" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <rect x="0" y="0" width="180" height="50" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="38" width="180" height="12" fill="#7C3AED"/>
+    <text x="90" y="35" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">MANDATORY</text>
+
+    <!-- Ground items -->
+    <g transform="translate(15, 65)">
+      <circle cx="12" cy="12" r="12" fill="#6D28D9"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">1</text>
+      <text x="35" y="17" fill="#6D28D9" font-size="10" font-family="Arial">Owner occupation</text>
+    </g>
+    <g transform="translate(15, 100)">
+      <circle cx="12" cy="12" r="12" fill="#6D28D9"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">2</text>
+      <text x="35" y="17" fill="#6D28D9" font-size="10" font-family="Arial">Mortgage lender</text>
+    </g>
+    <g transform="translate(15, 135)">
+      <circle cx="12" cy="12" r="12" fill="#6D28D9"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">7</text>
+      <text x="35" y="17" fill="#6D28D9" font-size="10" font-family="Arial">Deceased tenant</text>
+    </g>
+    <g transform="translate(15, 170)">
+      <circle cx="12" cy="12" r="12" fill="#6D28D9"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">8</text>
+      <text x="35" y="17" fill="#6D28D9" font-size="10" font-family="Arial">2+ months arrears</text>
+    </g>
+
+    <!-- Must grant indicator -->
+    <rect x="15" y="210" width="150" height="30" rx="15" fill="#F3F1FF"/>
+    <text x="90" y="230" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">Court MUST grant</text>
+
+    <!-- Gavel icon -->
+    <g transform="translate(75, 248)">
+      <rect x="0" y="0" width="30" height="10" rx="2" fill="#7C3AED"/>
+      <rect x="10" y="10" width="10" height="15" rx="1" fill="#6D28D9"/>
+    </g>
+  </g>
+
+  <!-- Discretionary Grounds -->
+  <g transform="translate(310, 160)">
+    <rect x="0" y="0" width="180" height="280" rx="12" fill="white" stroke="#A78BFA" stroke-width="3"/>
+    <rect x="0" y="0" width="180" height="50" rx="12" fill="#A78BFA"/>
+    <rect x="0" y="38" width="180" height="12" fill="#A78BFA"/>
+    <text x="90" y="35" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">DISCRETIONARY</text>
+
+    <!-- Ground items -->
+    <g transform="translate(15, 65)">
+      <circle cx="12" cy="12" r="12" fill="#7C3AED"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">10</text>
+      <text x="35" y="17" fill="#7C3AED" font-size="10" font-family="Arial">Some rent due</text>
+    </g>
+    <g transform="translate(15, 100)">
+      <circle cx="12" cy="12" r="12" fill="#7C3AED"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">11</text>
+      <text x="35" y="17" fill="#7C3AED" font-size="10" font-family="Arial">Persistent delay</text>
+    </g>
+    <g transform="translate(15, 135)">
+      <circle cx="12" cy="12" r="12" fill="#7C3AED"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">12</text>
+      <text x="35" y="17" fill="#7C3AED" font-size="10" font-family="Arial">Breach of terms</text>
+    </g>
+    <g transform="translate(15, 170)">
+      <circle cx="12" cy="12" r="12" fill="#7C3AED"/>
+      <text x="12" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">14</text>
+      <text x="35" y="17" fill="#7C3AED" font-size="10" font-family="Arial">Anti-social</text>
+    </g>
+
+    <!-- May grant indicator -->
+    <rect x="15" y="210" width="150" height="30" rx="15" fill="#F3F1FF"/>
+    <text x="90" y="230" text-anchor="middle" fill="#A78BFA" font-size="10" font-weight="bold" font-family="Arial">Court MAY grant</text>
+
+    <!-- Scale icon -->
+    <g transform="translate(70, 248)">
+      <line x1="20" y1="5" x2="20" y2="20" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="5" y1="10" x2="35" y2="10" stroke="#A78BFA" stroke-width="2"/>
+      <circle cx="5" cy="15" r="6" fill="#A78BFA"/>
+      <circle cx="35" cy="15" r="6" fill="#A78BFA"/>
+    </g>
+  </g>
+
+  <!-- Notice periods info -->
+  <g transform="translate(540, 160)">
+    <rect x="0" y="0" width="180" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <rect x="0" y="0" width="180" height="50" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="38" width="180" height="12" fill="#6D28D9"/>
+    <text x="90" y="35" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">NOTICE PERIODS</text>
+
+    <!-- Notice period items with calendar icons -->
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="150" height="50" rx="6" fill="#F3F1FF"/>
+      <rect x="8" y="8" width="25" height="20" rx="2" fill="#7C3AED"/>
+      <rect x="8" y="8" width="25" height="6" rx="2" fill="#6D28D9"/>
+      <text x="95" y="22" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">2 weeks</text>
+      <text x="95" y="38" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Ground 14 (ASB)</text>
+    </g>
+    <g transform="translate(15, 130)">
+      <rect x="0" y="0" width="150" height="50" rx="6" fill="#F3F1FF"/>
+      <rect x="8" y="8" width="25" height="20" rx="2" fill="#7C3AED"/>
+      <rect x="8" y="8" width="25" height="6" rx="2" fill="#6D28D9"/>
+      <text x="95" y="22" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">2 weeks</text>
+      <text x="95" y="38" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Ground 8 (Arrears)</text>
+    </g>
+    <g transform="translate(15, 190)">
+      <rect x="0" y="0" width="150" height="50" rx="6" fill="#F3F1FF"/>
+      <rect x="8" y="8" width="25" height="20" rx="2" fill="#7C3AED"/>
+      <rect x="8" y="8" width="25" height="6" rx="2" fill="#6D28D9"/>
+      <text x="95" y="22" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">2 months</text>
+      <text x="95" y="38" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Other grounds</text>
+    </g>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="80" r="30" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="40" fill="#A78BFA" opacity="0.12"/>
+</svg>

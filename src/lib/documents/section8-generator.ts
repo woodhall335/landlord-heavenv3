@@ -11,6 +11,7 @@ import {
   validateSection8ExpiryDate,
   type Section8DateParams,
 } from './notice-date-calculator';
+import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 
 // ============================================================================
 // TYPES
@@ -23,6 +24,7 @@ export interface Section8Ground {
   particulars: string;
   supporting_evidence?: string;
   mandatory: boolean;
+  statutory_text?: string; // Full text from Schedule 2 of Housing Act 1988
 }
 
 export interface Section8NoticeData {
@@ -403,6 +405,19 @@ export async function generateSection8Notice(
   // Determine if mandatory/discretionary
   data.any_mandatory_ground = data.grounds.some((g) => g.mandatory);
   data.any_discretionary_ground = data.grounds.some((g) => !g.mandatory);
+
+  // Enrich grounds with statutory_text from Schedule 2 if not already present
+  // This ensures Form 3 compliance: "Give the full text (as set out in Schedule 2...)"
+  data.grounds = data.grounds.map((ground) => {
+    if (ground.statutory_text) {
+      return ground;
+    }
+    const def = SECTION8_GROUND_DEFINITIONS[ground.code];
+    return {
+      ...ground,
+      statutory_text: def?.full_text || '',
+    };
+  });
 
   // Add rent period description if missing
   if (!data.rent_period_description) {

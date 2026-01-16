@@ -1,0 +1,126 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">MANDATORY vs DISCRETIONARY</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Understanding Section 8 eviction grounds</text>
+
+  <!-- Mandatory icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+
+    <!-- Gavel/hammer icon -->
+    <g transform="translate(50, 10)">
+      <rect x="35" y="30" width="30" height="50" rx="4" fill="#22C55E"/>
+      <rect x="25" y="20" width="50" height="20" rx="4" fill="#22C55E"/>
+      <rect x="45" y="80" width="10" height="15" fill="#6D28D9"/>
+      <!-- Sound effect -->
+      <path d="M85 55 Q95 45 105 55" fill="none" stroke="#22C55E" stroke-width="2"/>
+      <path d="M90 50 Q100 38 115 50" fill="none" stroke="#22C55E" stroke-width="2"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#22C55E" font-size="14" font-weight="bold">MANDATORY</text>
+    <text x="100" y="145" text-anchor="middle" fill="#6D28D9" font-size="9">Court MUST grant</text>
+    <text x="100" y="163" text-anchor="middle" fill="#6D28D9" font-size="9">possession if proved</text>
+  </g>
+
+  <!-- Discretionary icon -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+
+    <!-- Scales icon -->
+    <g transform="translate(35, 10)">
+      <line x1="65" y1="15" x2="65" y2="45" stroke="#F59E0B" stroke-width="4"/>
+      <line x1="25" y1="45" x2="105" y2="45" stroke="#F59E0B" stroke-width="3"/>
+      <line x1="25" y1="45" x2="15" y2="75" stroke="#F59E0B" stroke-width="2"/>
+      <line x1="105" y1="45" x2="115" y2="70" stroke="#F59E0B" stroke-width="2"/>
+      <!-- Left pan (lower) -->
+      <ellipse cx="15" cy="78" rx="18" ry="8" fill="#F59E0B" opacity="0.3"/>
+      <!-- Right pan (higher) -->
+      <ellipse cx="115" cy="73" rx="18" ry="8" fill="#F59E0B" opacity="0.3"/>
+      <circle cx="65" cy="12" r="8" fill="#F59E0B"/>
+      <!-- Question mark -->
+      <text x="65" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">?</text>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#F59E0B" font-size="14" font-weight="bold">DISCRETIONARY</text>
+    <text x="100" y="145" text-anchor="middle" fill="#6D28D9" font-size="9">Court decides if</text>
+    <text x="100" y="163" text-anchor="middle" fill="#6D28D9" font-size="9">reasonable to grant</text>
+  </g>
+
+  <!-- Comparison table -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY DIFFERENCES</text>
+
+    <!-- Two columns -->
+    <line x1="120" y1="40" x2="120" y2="170" stroke="#E9E5FF" stroke-width="2"/>
+
+    <text x="60" y="55" text-anchor="middle" fill="#22C55E" font-size="9" font-weight="bold">MANDATORY</text>
+    <text x="180" y="55" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="bold">DISCRETIONARY</text>
+
+    <text x="60" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Automatic order</text>
+    <text x="180" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Reasonable test</text>
+
+    <text x="60" y="95" text-anchor="middle" fill="#6D28D9" font-size="8">Grounds 1-8</text>
+    <text x="180" y="95" text-anchor="middle" fill="#6D28D9" font-size="8">Grounds 9-17</text>
+
+    <text x="60" y="115" text-anchor="middle" fill="#6D28D9" font-size="8">High success rate</text>
+    <text x="180" y="115" text-anchor="middle" fill="#6D28D9" font-size="8">Judge's discretion</text>
+
+    <text x="60" y="135" text-anchor="middle" fill="#6D28D9" font-size="8">Prove ground only</text>
+    <text x="180" y="135" text-anchor="middle" fill="#6D28D9" font-size="8">Prove + reasonable</text>
+
+    <text x="60" y="155" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Stronger</text>
+    <text x="180" y="155" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Weaker</text>
+  </g>
+
+  <!-- Ground examples -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON GROUNDS BY TYPE</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">MANDATORY</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 1: Landlord occupation</text>
+      <text x="100" y="53" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 2: Mortgage default</text>
+      <text x="100" y="66" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 7: Death of tenant</text>
+      <text x="100" y="79" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 8: 2+ months arrears</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Automatic possession</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">DISCRETIONARY</text>
+      <text x="100" y="40" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 10: Some arrears</text>
+      <text x="100" y="53" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 11: Persistent delay</text>
+      <text x="100" y="66" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 12: Any breach</text>
+      <text x="100" y="79" text-anchor="middle" fill="#6D28D9" font-size="8">Ground 14: Nuisance/ASB</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Court decides</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">STRATEGY</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Use mandatory if possible</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Combine grounds</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Strong evidence for both</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Discretionary as backup</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Maximise success</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

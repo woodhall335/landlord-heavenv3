@@ -17,10 +17,6 @@
         "N1_1224.pdf": {
           "name": "N1 - Claim Form",
           "fillable": true
-        },
-        "form_6a.pdf": {
-          "name": "Form 6A - Section 21 Notice",
-          "fillable": true
         }
       }
     },

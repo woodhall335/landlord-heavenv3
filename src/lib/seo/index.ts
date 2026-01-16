@@ -6,6 +6,7 @@
 
 export { generateMetadata, defaultMetadata } from './metadata';
 export type { SEOMetadataConfig } from './metadata';
+export { SITE_ORIGIN, getCanonicalUrl } from './urls';
 
 export {
   organizationSchema,
@@ -20,3 +21,22 @@ export {
 } from './structured-data';
 
 export type { Product, FAQItem } from './structured-data';
+
+export {
+  productLinks,
+  toolLinks,
+  blogLinks,
+  landingPageLinks,
+  evictionRelatedLinks,
+  section21RelatedLinks,
+  section8RelatedLinks,
+  rentArrearsRelatedLinks,
+  tenancyRelatedLinks,
+} from './internal-links';
+
+export {
+  submitUrlToIndexNow,
+  submitUrlsToIndexNow,
+  submitSitemapToIndexNow,
+  getKeyPageUrls,
+} from './indexnow';

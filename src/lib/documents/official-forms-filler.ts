@@ -27,6 +27,7 @@ import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
+export const OFFICIAL_FORM_OUTPUT_ROOT = path.join(process.cwd(), '.tmp', 'official-form-output');
 
 // =============================================================================
 // JURISDICTION-BASED FORM SELECTION
@@ -77,6 +78,20 @@ export function getFormFilename(formType: 'n5' | 'n5b' | 'n119', jurisdiction?: 
  */
 export function getCourtFormFiles(jurisdiction: 'england' | 'wales'): { n5: string; n5b: string; n119: string } {
   return COURT_FORM_FILES[jurisdiction];
+}
+
+function assertNotInOfficialFormsDir(targetPath: string) {
+  const normalizedTarget = path.resolve(targetPath);
+  const normalizedRoot = path.resolve(OFFICIAL_FORMS_ROOT);
+
+  if (normalizedTarget === normalizedRoot || normalizedTarget.startsWith(`${normalizedRoot}${path.sep}`)) {
+    throw new Error(
+      `Refusing to write generated output inside public/official-forms. Use a tmp path such as ${path.join(
+        OFFICIAL_FORM_OUTPUT_ROOT,
+        '<filename>.pdf',
+      )}.`,
+    );
+  }
 }
 
 // =============================================================================
@@ -1601,8 +1616,20 @@ export async function fillOfficialForm(formType: 'n5' | 'n5b' | 'n119' | 'n1' | 
 
 /**
  * Save filled form to file (for testing)
+ *
+ * Writes are blocked if the target path is anywhere under public/official-forms.
+ * Callers can omit outputPath to default to a repo-scoped tmp directory that is
+ * .gitignored and safe for local inspection.
  */
-export async function saveFilledForm(pdfBytes: Uint8Array, outputPath: string): Promise<void> {
-  await fs.writeFile(outputPath, pdfBytes);
-  console.log(`💾 Saved filled form to: ${outputPath}`);
+export async function saveFilledForm(pdfBytes: Uint8Array, outputPath?: string): Promise<void> {
+  const targetPath = outputPath ?? path.join(OFFICIAL_FORM_OUTPUT_ROOT, `filled-form-${Date.now()}.pdf`);
+  assertNotInOfficialFormsDir(targetPath);
+
+  const resolvedTarget = path.resolve(targetPath);
+  const dir = path.dirname(resolvedTarget);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(resolvedTarget, pdfBytes);
+
+  console.log(`💾 Saved filled form to: ${resolvedTarget}`);
+  console.log(`📁 Note: official form outputs are restricted to tmp/test directories (not public/official-forms).`);
 }

@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free HMO License Checker | Do I Need an HMO License? | Landlord Heaven',
+  title: 'Free HMO License Checker',
   description:
     'Check if your rental property needs HMO licensing. Free HMO checker for UK landlords. Get instant assessment and guidance on HMO requirements.',
   keywords: [
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
     description:
       'Check if your property needs HMO licensing. Free instant assessment tool for UK landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/hmo-license-checker'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/hmo-license-checker'),
   },
 };
 

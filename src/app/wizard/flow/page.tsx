@@ -13,12 +13,22 @@ import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
 import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFlow';
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
+import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { trackWizardStartWithAttribution } from '@/lib/analytics';
+import {
+  getWizardAttribution,
+  setWizardAttribution,
+  hasWizardStarted,
+  markWizardStarted,
+  extractAttributionFromUrl,
+} from '@/lib/wizard/wizardAttribution';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
 const USE_EVICTION_SECTION_FLOW = true;
 const USE_NOTICE_ONLY_SECTION_FLOW = true;
+const USE_TENANCY_SECTION_FLOW = true;
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
@@ -68,6 +78,47 @@ function WizardFlowContent() {
 
     return null;
   })();
+
+  // Track wizard_start on mount with dedupe
+  // This fires when user actually reaches the flow page (not just clicks start)
+  const hasTrackedStartRef = useRef(false);
+
+  useEffect(() => {
+    // Only track once per component mount AND per session
+    if (hasTrackedStartRef.current) return;
+    if (!hasRequiredParams || !product || !jurisdiction) return;
+
+    // Check if wizard_start was already fired this session (prevents duplicate on refresh)
+    if (hasWizardStarted()) {
+      hasTrackedStartRef.current = true;
+      return;
+    }
+
+    // Update attribution with URL params (in case user deep-linked directly to /wizard/flow)
+    const urlAttribution = extractAttributionFromUrl(searchParams);
+    const attribution = setWizardAttribution({
+      ...urlAttribution,
+      product: product,
+      jurisdiction: jurisdiction,
+    });
+
+    // Track wizard_start with full attribution
+    trackWizardStartWithAttribution({
+      product: product,
+      jurisdiction: jurisdiction,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+
+    // Mark as started to prevent duplicates
+    markWizardStarted();
+    hasTrackedStartRef.current = true;
+  }, [hasRequiredParams, product, jurisdiction, searchParams]);
 
   // Initialize case for structured wizard / section flows
   const startStructuredWizard = useCallback(async () => {
@@ -176,18 +227,27 @@ function WizardFlowContent() {
   }
 
   const handleComplete = (completedCaseId: string) => {
-    // For eviction cases, respect product so notice-only flows do not get sent to review
+    // For eviction cases, all products now go through the review page for analysis
     if (type === 'eviction') {
-      const destination =
-        askHeavenProduct === 'notice_only'
-          ? `/wizard/preview/${completedCaseId}`
-          : `/wizard/review?case_id=${completedCaseId}&product=${askHeavenProduct ?? 'complete_pack'}`;
-
-      router.push(destination);
+      const productParam = askHeavenProduct ?? 'complete_pack';
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
       return;
     }
 
-    // Navigate to preview/checkout page for other case types
+    // For money claim cases, go to review page (same as eviction complete_pack flow)
+    if (type === 'money_claim') {
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=money_claim`);
+      return;
+    }
+
+    // For tenancy agreements, go to review page for validation and obligations reminder
+    if (type === 'tenancy_agreement') {
+      const productParam = askHeavenProduct ?? 'ast_standard';
+      router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
+      return;
+    }
+
+    // Navigate to preview/checkout page for any other case types
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 
@@ -217,18 +277,19 @@ function WizardFlowContent() {
     );
   }
 
-  // 🟩 NEW: For eviction complete_pack in England/Wales, use the redesigned section-based flow
+  // 🟩 NEW: For eviction complete_pack in England/Wales/Scotland, use the redesigned section-based flow
   // This provides a logical, court-ready, jurisdiction-aware wizard experience.
+  // Scotland support added: uses Scotland-specific sections (grounds, tribunal) and 6-month rule validation.
   if (
     type === 'eviction' &&
     askHeavenProduct === 'complete_pack' &&
     USE_EVICTION_SECTION_FLOW &&
-    (jurisdiction === 'england' || jurisdiction === 'wales')
+    (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <EvictionSectionFlow
         caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales'}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
     );
   }
@@ -249,7 +310,28 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for tenancy agreements and Scotland eviction flows
+  // 🟪 NEW: For tenancy_agreement in England/Wales, use the redesigned section-based flow
+  // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
+  if (
+    type === 'tenancy_agreement' &&
+    USE_TENANCY_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <TenancySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+        product={
+          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium'
+            ? normalizedProduct
+            : 'tenancy_agreement'
+        }
+      />
+    );
+  }
+
+  // Use existing StructuredWizard for NI/Scotland tenancy agreements and NI eviction flows
+  // Note: Scotland eviction complete_pack now uses EvictionSectionFlow (above)
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard

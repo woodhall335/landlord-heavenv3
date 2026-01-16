@@ -14,7 +14,7 @@ import React from "react";
 import { clsx } from "clsx";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "heroPrimary" | "heroSecondary";
   size?: "small" | "medium" | "large";
   loading?: boolean;
   fullWidth?: boolean;
@@ -80,6 +80,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "active:scale-[0.98]",
         "focus:ring-error/50"
       ),
+      heroPrimary: "hero-btn-primary",
+      heroSecondary: "hero-btn-secondary",
     };
 
     const sizeStyles = {
@@ -89,16 +91,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const widthStyles = fullWidth ? "w-full" : "";
+    const isHeroVariant = variant === "heroPrimary" || variant === "heroSecondary";
 
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         className={clsx(
-          baseStyles,
+          // Hero variants use their own complete styling from globals.css
+          isHeroVariant ? null : baseStyles,
           variantStyles[variant],
-          sizeStyles[size],
+          isHeroVariant ? null : sizeStyles[size],
           widthStyles,
+          // Ensure disabled states work for hero variants
+          isHeroVariant && (disabled || loading) && "opacity-60 cursor-not-allowed",
           className
         )}
         {...props}

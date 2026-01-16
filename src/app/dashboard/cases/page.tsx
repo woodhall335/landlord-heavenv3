@@ -6,14 +6,15 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiFileTextLine, RiCalendarLine } from 'react-icons/ri';
+import { RiFileTextLine, RiCalendarLine, RiLoginBoxLine } from 'react-icons/ri';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 interface Case {
   id: string;
@@ -23,6 +24,12 @@ interface Case {
   wizard_progress: number;
   created_at: string;
   updated_at: string;
+  // Derived display status from API
+  display_status?: string;
+  display_label?: string;
+  display_badge_variant?: 'neutral' | 'warning' | 'success';
+  has_paid_order?: boolean;
+  has_fulfilled_order?: boolean;
 }
 
 type FilterStatus = 'all' | 'draft' | 'in_progress' | 'completed';
@@ -30,22 +37,17 @@ type SortBy = 'newest' | 'oldest' | 'progress';
 
 export default function CasesListPage() {
   const router = useRouter();
+  const { isLoading: authLoading, isAuthenticated } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
   const [filteredCases, setFilteredCases] = useState<Case[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(false);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<SortBy>('newest');
 
-  useEffect(() => {
-    fetchCases();
-  }, []);
+  const fetchCases = useCallback(async () => {
+    if (!isAuthenticated) return;
 
-  useEffect(() => {
-    applyFiltersAndSort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cases, filterStatus, sortBy]);
-
-  const fetchCases = async () => {
+    setIsLoadingData(true);
     try {
       const response = await fetch('/api/cases');
 
@@ -56,9 +58,21 @@ export default function CasesListPage() {
     } catch (error) {
       console.error('Failed to fetch cases:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingData(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  // Only fetch data once auth check completes and user is authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      fetchCases();
+    }
+  }, [authLoading, isAuthenticated, fetchCases]);
+
+  useEffect(() => {
+    applyFiltersAndSort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cases, filterStatus, sortBy]);
 
   const applyFiltersAndSort = () => {
     let filtered = [...cases];
@@ -111,8 +125,13 @@ export default function CasesListPage() {
     return labels[jurisdiction] || jurisdiction;
   };
 
-  const getStatusColor = (status: string): 'neutral' | 'warning' | 'success' => {
-    switch (status) {
+  const getStatusColor = (caseItem: Case): 'neutral' | 'warning' | 'success' => {
+    // Use derived badge variant if available
+    if (caseItem.display_badge_variant) {
+      return caseItem.display_badge_variant;
+    }
+    // Fallback to status-based color
+    switch (caseItem.status) {
       case 'completed':
         return 'success';
       case 'in_progress':
@@ -122,7 +141,56 @@ export default function CasesListPage() {
     }
   };
 
-  if (isLoading) {
+  const getStatusLabel = (caseItem: Case): string => {
+    // Use derived display label if available
+    if (caseItem.display_label) {
+      return caseItem.display_label;
+    }
+    // Fallback to raw status
+    return caseItem.status.replace('_', ' ');
+  };
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card padding="large" className="max-w-md mx-auto text-center">
+          <RiLoginBoxLine className="w-16 h-16 text-primary mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
+          <p className="text-gray-600 mb-6">
+            Please log in to view your cases.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link href="/auth/login">
+              <Button variant="primary" size="large" className="w-full">
+                Log In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button variant="secondary" size="large" className="w-full">
+                Create Account
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show loading while fetching data
+  if (isLoadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -253,8 +321,8 @@ export default function CasesListPage() {
                       {getJurisdictionLabel(caseItem.jurisdiction)}
                     </p>
                   </div>
-                  <Badge variant={getStatusColor(caseItem.status)}>
-                    {caseItem.status.replace('_', ' ')}
+                  <Badge variant={getStatusColor(caseItem)}>
+                    {getStatusLabel(caseItem)}
                   </Badge>
                 </div>
 

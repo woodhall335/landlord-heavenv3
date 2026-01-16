@@ -26,11 +26,18 @@ const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
     section_8: ["uk/england/templates/notice_only/form_3_section8/notice.hbs"],
   },
   wales: {
+    // Full prefixed route names (as used in MQS)
     wales_section_173: [
       "uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs",
       "uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs",
     ],
     wales_fault_based: ["uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"],
+    // Non-prefixed aliases (for route normalization compatibility)
+    section_173: [
+      "uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs",
+      "uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs",
+    ],
+    fault_based: ["uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"],
   },
   scotland: {
     notice_to_leave: ["uk/scotland/templates/eviction/notice_to_leave_official.hbs"],

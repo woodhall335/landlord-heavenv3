@@ -3,54 +3,92 @@
  *
  * Entry point for the conversational wizard
  * Users select document type and jurisdiction, then start the guided flow
+ *
+ * Supports URL params:
+ * - product: notice_only, complete_pack, money_claim, ast_standard, ast_premium, tenancy_agreement
+ * - jurisdiction: england, wales, scotland, northern-ireland
+ * - src: tracking source (product_page, template, validator, tool, blog, ask_heaven, nav, footer)
+ * - topic: eviction, arrears, tenancy, deposit, compliance
+ * - utm_source, utm_medium, utm_campaign: UTM tracking
  */
 
 'use client';
 
-import React, { Suspense, useMemo, useState, useRef } from 'react';
+import React, { Suspense, useMemo, useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
-import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine } from 'react-icons/ri';
+import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
+import {
+  trackWizardEntryViewWithAttribution,
+  trackWizardStartWithAttribution,
+  trackWizardIncompatibleChoice,
+} from '@/lib/analytics';
+import type { WizardJurisdiction, WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
+import {
+  isProductSupportedInJurisdiction,
+  getUnsupportedProductMessage,
+  getFallbackProduct,
+} from '@/lib/wizard/buildWizardLink';
+import {
+  initializeAttribution,
+  setWizardAttribution,
+  getWizardAttribution,
+  resetCompletedSteps,
+} from '@/lib/wizard/wizardAttribution';
 
-// Product-specific hero content
+// Product-specific hero content (jurisdiction-neutral)
 interface HeroContent {
   title: string;
   subtitle: string;
   eyebrow: string;
 }
 
-function getHeroContent(product: string | null): HeroContent {
+function getHeroContent(product: string | null, jurisdiction: string | null): HeroContent {
   switch (product) {
     case 'notice_only':
       return {
         title: 'Serve the Right Possession Notice',
-        subtitle: 'Jurisdiction Specific & Validated Notices',
+        subtitle: jurisdiction === 'scotland'
+          ? 'Notice to Leave for Scottish Private Residential Tenancies'
+          : jurisdiction === 'wales'
+            ? 'Renting Homes (Wales) Act Compliant Notices'
+            : 'Jurisdiction-Specific & Validated Notices',
         eyebrow: 'Notice Only',
       };
     case 'complete_pack':
       return {
         title: 'Complete Eviction Pack',
-        subtitle: 'From Notice to Possession Order - Everything You Need',
+        subtitle: jurisdiction === 'scotland'
+          ? 'Notice to Leave + First-tier Tribunal Forms'
+          : 'From Notice to Possession Order - Everything You Need',
         eyebrow: 'Complete Pack',
       };
     case 'ast_standard':
       return {
         title: 'Standard Tenancy Agreement',
-        subtitle: 'Create a Compliant AST for Your Property',
-        eyebrow: 'Standard AST',
+        subtitle: jurisdiction === 'scotland'
+          ? 'Private Residential Tenancy (PRT) for Scotland'
+          : jurisdiction === 'wales'
+            ? 'Standard Occupation Contract for Wales'
+            : jurisdiction === 'northern-ireland'
+              ? 'Private Tenancy Agreement for NI'
+              : 'Create a Compliant Tenancy Agreement',
+        eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Standard AST',
       };
     case 'ast_premium':
       return {
         title: 'Premium Tenancy Agreement',
-        subtitle: 'Comprehensive AST with Enhanced Clauses & Schedules',
-        eyebrow: 'Premium AST',
+        subtitle: 'Comprehensive Agreement with Enhanced Clauses & Schedules',
+        eyebrow: 'Premium',
       };
     case 'money_claim':
       return {
         title: 'Money Claim Pack',
-        subtitle: 'Recover Rent Arrears & Damages Through the Courts',
+        subtitle: jurisdiction === 'scotland'
+          ? 'Simple Procedure for Scottish Sheriff Courts'
+          : 'Recover Rent Arrears & Damages Through the Courts',
         eyebrow: 'Money Claim',
       };
     default:
@@ -76,32 +114,33 @@ interface JurisdictionOption {
   flag: string;
 }
 
+// Jurisdiction-neutral document descriptions
 const documentOptions: DocumentOption[] = [
   {
     type: 'notice_only',
     title: 'Eviction Notices',
-    description: 'Section 8, Section 21, and devolved equivalents with service instructions',
+    description: 'Court-ready possession notices for England, Wales & Scotland with service instructions',
     icon: '📄',
-    price: 'From £29.99',
+    price: 'From £39.99',
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
-    description: 'Full bundle from notice to possession order with court forms and guidance',
+    description: 'Full bundle from notice to possession order with court/tribunal forms and guidance',
     icon: '⚖️',
-    price: '£149.99',
+    price: '£199.99',
   },
   {
     type: 'money_claim',
     title: 'Money Claims',
-    description: 'Rent arrears claims with evidence checklists and POC templates',
+    description: 'Rent arrears claims with evidence checklists and court form templates',
     icon: '💰',
-    price: '£179.99',
+    price: '£199.99',
   },
   {
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
-    description: 'Compliant ASTs with optional clauses for HMOs and students',
+    description: 'AST (England), Occupation Contract (Wales), PRT (Scotland), or NI Tenancy Agreement',
     icon: '📝',
     price: 'From £9.99',
   },
@@ -142,7 +181,7 @@ function getDisabledReason(
   }
 
   if (jurisdiction === 'northern-ireland' && documentType !== 'tenancy_agreement') {
-    return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
+    return 'Eviction and money claim flows are not yet available for Northern Ireland. Tenancy agreements only.';
   }
 
   return null;
@@ -161,6 +200,7 @@ function mapProductToDocumentType(
       return 'money_claim';
     case 'ast_standard':
     case 'ast_premium':
+    case 'tenancy_agreement':
       return 'tenancy_agreement';
     default:
       return null;
@@ -182,6 +222,11 @@ function getWizardFlowType(documentType: DocumentOption['type']): string {
   }
 }
 
+// Validate jurisdiction param
+function isValidJurisdiction(value: string | null): value is WizardJurisdiction {
+  return value === 'england' || value === 'wales' || value === 'scotland' || value === 'northern-ireland';
+}
+
 /**
  * NOTE:
  * useSearchParams() must be rendered under a <Suspense> boundary in Next 15/16
@@ -190,38 +235,129 @@ function getWizardFlowType(documentType: DocumentOption['type']): string {
 function WizardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Parse URL params
   const productParam = searchParams.get('product');
+  const jurisdictionParam = searchParams.get('jurisdiction');
+  const srcParam = searchParams.get('src') as WizardSource | null;
+  const topicParam = searchParams.get('topic') as WizardTopic | null;
+  const utmSource = searchParams.get('utm_source');
+  const utmMedium = searchParams.get('utm_medium');
+  const utmCampaign = searchParams.get('utm_campaign');
+
   const documentSectionRef = useRef<HTMLDivElement>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
 
+  // Pre-select document based on product param
   const preselectedDocument = useMemo(() => {
     if (!productParam) return null;
-
     const docType = mapProductToDocumentType(productParam);
     return docType ? documentOptions.find((d) => d.type === docType) ?? null : null;
   }, [productParam]);
 
+  // Pre-select jurisdiction if valid and compatible
+  const preselectedJurisdiction = useMemo(() => {
+    if (!isValidJurisdiction(jurisdictionParam)) return null;
+    const docType = preselectedDocument?.type ?? null;
+    // Check compatibility
+    if (docType && !isJurisdictionEnabled(jurisdictionParam, docType)) {
+      return null; // Don't preselect if incompatible
+    }
+    return allJurisdictions.find((j) => j.value === jurisdictionParam) ?? null;
+  }, [jurisdictionParam, preselectedDocument]);
+
   const [selectedDocument, setSelectedDocument] =
     useState<DocumentOption | null>(preselectedDocument);
   const [selectedJurisdiction, setSelectedJurisdiction] =
-    useState<JurisdictionOption | null>(null);
-  const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
+    useState<JurisdictionOption | null>(preselectedJurisdiction);
+
+  // Determine initial step
+  const initialStep = useMemo(() => {
+    if (preselectedDocument && preselectedJurisdiction) return 2; // Both selected, show jurisdiction (confirmation)
+    if (preselectedDocument) return 2; // Product selected, need jurisdiction
+    return 1; // Need product selection
+  }, [preselectedDocument, preselectedJurisdiction]);
+
+  const [step, setStep] = useState<1 | 2>(initialStep);
+
+  // Show incompatibility warning if URL params are incompatible
+  const [showIncompatibilityWarning, setShowIncompatibilityWarning] = useState(false);
+  const incompatibilityMessage = useMemo(() => {
+    if (!productParam || !jurisdictionParam) return null;
+    if (!isValidJurisdiction(jurisdictionParam)) return null;
+    const docType = mapProductToDocumentType(productParam);
+    if (!docType) return null;
+    return getUnsupportedProductMessage(
+      productParam as any,
+      jurisdictionParam
+    );
+  }, [productParam, jurisdictionParam]);
+
+  // Handle NI incompatibility with auto-fallback
+  const [autoSwitchedProduct, setAutoSwitchedProduct] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (incompatibilityMessage) {
+      setShowIncompatibilityWarning(true);
+
+      // Auto-switch to tenancy agreement for NI
+      if (jurisdictionParam === 'northern-ireland' && productParam) {
+        const fallbackProduct = getFallbackProduct(productParam as any, 'northern-ireland');
+
+        // Track the incompatible choice
+        trackWizardIncompatibleChoice({
+          attemptedProduct: productParam,
+          jurisdiction: 'northern-ireland',
+          resolvedProduct: fallbackProduct,
+          action: 'auto_switch',
+          src: srcParam || undefined,
+          topic: topicParam || undefined,
+        });
+
+        // Auto-select tenancy agreement
+        const tenancyDoc = documentOptions.find((d) => d.type === 'tenancy_agreement');
+        if (tenancyDoc) {
+          setSelectedDocument(tenancyDoc);
+          setAutoSwitchedProduct(fallbackProduct);
+        }
+      }
+    }
+  }, [incompatibilityMessage, jurisdictionParam, productParam, srcParam, topicParam]);
+
+  // Initialize attribution and track entry view on mount
+  useEffect(() => {
+    // Initialize attribution from URL params
+    const attribution = initializeAttribution();
+
+    // Reset completed steps for fresh wizard session
+    resetCompletedSteps();
+
+    // Track entry view with full attribution
+    trackWizardEntryViewWithAttribution({
+      product: productParam || 'not_selected',
+      jurisdiction: jurisdictionParam || 'not_selected',
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Get product-specific hero content
-  const heroContent = getHeroContent(productParam);
+  const heroContent = getHeroContent(productParam, jurisdictionParam);
 
   // All jurisdictions are shown, but some may be disabled
   const availableJurisdictions = allJurisdictions;
 
   // Handle Start Now button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
-    // Scroll to the current step's section
     setTimeout(() => {
       if (step === 2) {
-        // When product is pre-selected, scroll to jurisdiction selection
         locationSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
-        // Default: scroll to document selection
         documentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
@@ -229,6 +365,10 @@ function WizardPageInner() {
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
+    // Reset jurisdiction if not compatible
+    if (selectedJurisdiction && !isJurisdictionEnabled(selectedJurisdiction.value, doc.type)) {
+      setSelectedJurisdiction(null);
+    }
     setStep(2);
   };
 
@@ -240,14 +380,45 @@ function WizardPageInner() {
     if (selectedDocument && selectedJurisdiction) {
       const flowType = getWizardFlowType(selectedDocument.type);
 
+      // Get the product to use (may have been auto-switched)
+      const effectiveProduct = autoSwitchedProduct || productParam || selectedDocument.type;
+
+      // Update attribution with selected product and jurisdiction
+      const attribution = setWizardAttribution({
+        product: effectiveProduct,
+        jurisdiction: selectedJurisdiction.value,
+      });
+
+      // Track wizard start with full attribution
+      // Note: The actual wizard_start will fire on /wizard/flow mount with dedupe
+      // This is click-based tracking for backwards compatibility
+      trackWizardStartWithAttribution({
+        product: effectiveProduct,
+        jurisdiction: selectedJurisdiction.value,
+        src: attribution.src,
+        topic: attribution.topic,
+        utm_source: attribution.utm_source,
+        utm_medium: attribution.utm_medium,
+        utm_campaign: attribution.utm_campaign,
+        landing_url: attribution.landing_url,
+        first_seen_at: attribution.first_seen_at,
+      });
+
+      // Build URL with tracking params preserved
       const urlParams = new URLSearchParams({
         type: flowType,
         jurisdiction: selectedJurisdiction.value,
-        product: selectedDocument.type,
+        product: effectiveProduct,
       });
 
-      const url = `/wizard/flow?${urlParams.toString()}`;
+      // Preserve tracking params for the flow page
+      if (srcParam) urlParams.set('src', srcParam);
+      if (topicParam) urlParams.set('topic', topicParam);
+      if (utmSource) urlParams.set('utm_source', utmSource);
+      if (utmMedium) urlParams.set('utm_medium', utmMedium);
+      if (utmCampaign) urlParams.set('utm_campaign', utmCampaign);
 
+      const url = `/wizard/flow?${urlParams.toString()}`;
       router.push(url);
     }
   };
@@ -269,6 +440,30 @@ function WizardPageInner() {
         }
       />
       <Container size="large" className="py-12">
+        {/* Incompatibility Warning */}
+        {showIncompatibilityWarning && incompatibilityMessage && (
+          <div className="max-w-2xl mx-auto mb-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <RiAlertLine className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-amber-800 font-medium">Product Not Available for Northern Ireland</p>
+                <p className="text-amber-700 text-sm mt-1">{incompatibilityMessage}</p>
+                {autoSwitchedProduct && (
+                  <p className="text-amber-700 text-sm mt-2">
+                    <strong>We&apos;ve automatically selected Tenancy Agreements</strong> which is available for Northern Ireland properties.
+                  </p>
+                )}
+                <button
+                  onClick={() => setShowIncompatibilityWarning(false)}
+                  className="text-amber-600 text-sm underline mt-2 hover:text-amber-800"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Step Indicator */}
         <div className="max-w-md mx-auto mb-12">
           <div className="flex items-center justify-center gap-4">

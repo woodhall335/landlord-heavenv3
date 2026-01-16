@@ -128,21 +128,85 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
 
       {/* Fixed term end date (conditional) */}
       {isFixedTerm && (
-        <div className="space-y-2 pl-4 border-l-2 border-purple-200">
-          <label htmlFor="fixed_term_end_date" className="block text-sm font-medium text-gray-700">
-            Fixed term end date
-            <span className="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="fixed_term_end_date"
-            type="date"
-            className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.fixed_term_end_date || ''}
-            onChange={(e) => onUpdate({ fixed_term_end_date: e.target.value })}
-          />
-          <p className="text-xs text-gray-500">
-            Section 21 notices cannot expire before the fixed term ends.
-          </p>
+        <div className="space-y-4 pl-4 border-l-2 border-purple-200">
+          <div className="space-y-2">
+            <label htmlFor="fixed_term_end_date" className="block text-sm font-medium text-gray-700">
+              Fixed term end date
+              <span className="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="fixed_term_end_date"
+              type="date"
+              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.fixed_term_end_date || ''}
+              onChange={(e) => onUpdate({ fixed_term_end_date: e.target.value })}
+            />
+            <p className="text-xs text-gray-500">
+              Section 21 notices cannot expire before the fixed term ends (unless there is a break clause).
+            </p>
+          </div>
+
+          {/* Break clause question */}
+          <div className="space-y-2">
+            <label htmlFor="has_break_clause" className="block text-sm font-medium text-gray-700">
+              Does the tenancy agreement contain a break clause?
+            </label>
+            <select
+              id="has_break_clause"
+              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.has_break_clause === true ? 'yes' : facts.has_break_clause === false ? 'no' : ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                onUpdate({
+                  has_break_clause: val === 'yes' ? true : val === 'no' ? false : null,
+                  // Clear break clause date if no break clause
+                  ...(val !== 'yes' ? { break_clause_date: null } : {}),
+                });
+              }}
+            >
+              <option value="">Not sure</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <p className="text-xs text-gray-500">
+              A break clause allows either party to end the tenancy early. Check your tenancy agreement.
+            </p>
+          </div>
+
+          {/* Break clause date (if has break clause) */}
+          {facts.has_break_clause === true && (
+            <div className="space-y-2 pl-4 border-l-2 border-blue-200">
+              <label htmlFor="break_clause_date" className="block text-sm font-medium text-gray-700">
+                Earliest break clause date
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                id="break_clause_date"
+                type="date"
+                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                value={facts.break_clause_date || ''}
+                onChange={(e) => onUpdate({ break_clause_date: e.target.value })}
+              />
+              <p className="text-xs text-gray-500">
+                The earliest date the break clause can be exercised. This is often 6 months after tenancy start.
+                Section 21 notices can expire on or after this date (subject to 2-month notice period).
+              </p>
+            </div>
+          )}
+
+          {/* Info box for fixed term and Section 21 */}
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <h5 className="text-sm font-medium text-blue-900 mb-1">Fixed Term & Section 21</h5>
+            <p className="text-xs text-blue-800">
+              {facts.has_break_clause === true ? (
+                <>If you have a break clause, you can serve a Section 21 notice that expires on or after the break clause date (subject to minimum 2-month notice).</>
+              ) : facts.has_break_clause === false ? (
+                <>Without a break clause, a Section 21 notice cannot expire before the fixed term end date. You can still serve the notice during the fixed term, but it will expire on the fixed term end date (or 2 months from service, whichever is later).</>
+              ) : (
+                <>If the tenancy has a break clause, you may be able to serve a Section 21 notice that expires before the fixed term end date. Check your tenancy agreement.</>
+              )}
+            </p>
+          </div>
         </div>
       )}
 

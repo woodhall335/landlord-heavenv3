@@ -1,9 +1,9 @@
 {{! Fault-Based Notice - Renting Homes (Wales) Act 2016 }}
-{{! This template covers breach of contract notices under Sections 157, 159, 161, 162 }}
+{{! This template covers breach of contract notices under Section 157 (serious arrears) and Section 159 (discretionary grounds) }}
 
 LANDLORD'S BREACH OF CONTRACT NOTICE
 
-Renting Homes (Wales) Act 2016, Sections 157-162
+Renting Homes (Wales) Act 2016, Section 157 (Serious Arrears) & Section 159 (Discretionary Grounds)
 
 ---
 
@@ -117,15 +117,17 @@ Under the Renting Homes (Wales) Act 2016, the landlord may apply to the court fo
 {{#if wales_breach_type_rent_arrears}}
 **Rent Arrears Grounds:**
 - Section 157 - At least 2 months' rent arrears (mandatory ground if arrears exist at notice date and court hearing)
-- Section 159 - Persistent rent arrears
+- Section 159, Schedule 9 - Other rent arrears or persistent late payment
 
 The breach described above constitutes grounds for possession under the Renting Homes (Wales) Act 2016.
 {{else}}
-**Breach of Contract Grounds:**
-- Section 161 - Breach of contract by contract-holder (standard contracts)
-- Section 162 - Serious breach of contract (immediate possession may be ordered)
+**Breach of Contract Grounds (Section 159, Schedule 9):**
+- Ground 12 - Breach of occupation contract (other than rent payment)
+- Ground 13 - Property condition deterioration
+- Ground 14 - Anti-social behaviour
+- Ground 17 - False statement
 
-The breach described above constitutes grounds for possession under the Renting Homes (Wales) Act 2016.
+The breach described above constitutes grounds for possession under the Renting Homes (Wales) Act 2016, Section 159 (discretionary grounds).
 {{/if}}
 
 ---
@@ -139,9 +141,9 @@ This notice was served on: **{{service_date}}**
 {{/if}}
 
 {{#if wales_breach_type_rent_arrears}}
-**Notice period:** 14 days (for rent arrears grounds)
+**Notice period:** 14 days (for Section 157 serious rent arrears)
 {{else}}
-**Notice period:** 14 days or one month (depending on breach type)
+**Notice period:** 56 days (8 weeks) for Section 159 discretionary grounds
 {{/if}}
 
 ---

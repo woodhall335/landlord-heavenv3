@@ -8,16 +8,20 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
+import { getSelectedGrounds } from '@/lib/grounds';
+
+export const runtime = 'nodejs';
 
 const analyzeSchema = z.object({
-  case_id: z.string().min(1),
+  case_id: z.string().uuid(),
   // Optional Ask Heaven question for Q&A-style analysis
   question: z.string().optional(),
 });
@@ -310,8 +314,10 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     has_arrears: hasArrears,
     damages,
     other_charges,
-    interest_rate: facts.money_claim.interest_rate,
-    interest_start_date: facts.money_claim.interest_start_date,
+    // Interest: only include if user explicitly opted in
+    charge_interest: facts.money_claim.charge_interest === true,
+    interest_rate: facts.money_claim.charge_interest === true ? facts.money_claim.interest_rate : null,
+    interest_start_date: facts.money_claim.charge_interest === true ? facts.money_claim.interest_start_date : null,
     sheriffdom: facts.money_claim.sheriffdom,
     route: jurisdiction === 'scotland' ? 'simple_procedure' : 'money_claim',
 
@@ -503,8 +509,9 @@ function craftAskHeavenAnswer(
   const { score, red_flags, compliance } = computeStrength(facts);
   const summary = buildCaseSummary(facts, jurisdiction);
   const arrears = facts.issues.rent_arrears.total_arrears;
-  const interestRate =
-    facts.money_claim.interest_rate ?? (jurisdiction === 'scotland' ? 8 : 8);
+  // Interest: only show if user explicitly opted in via charge_interest === true
+  const claimInterest = facts.money_claim.charge_interest === true;
+  const interestRate = claimInterest ? (facts.money_claim.interest_rate ?? 8) : null;
   const hasDamages = (facts.money_claim.damage_items || []).length > 0;
   const hasOther = (facts.money_claim.other_charges || []).length > 0;
   const isMoneyClaim = isMoneyClaimCase(facts);
@@ -562,9 +569,11 @@ function craftAskHeavenAnswer(
     }
   }
 
-  const interestLine =
-    ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
-    ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.';
+  // Interest line: only include if user explicitly opted in
+  const interestLine = claimInterest && interestRate
+    ? ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
+      ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.'
+    : '';
 
   const disclaimer =
     ' This explanation is for information only and is not legal advice. Courts make their own decisions, and a strong claim on paper can still be defended or refused if the facts or evidence do not support it.';
@@ -576,6 +585,7 @@ function craftAskHeavenAnswer(
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/analyze', writesUsingAdmin: true });
     const user = await getServerUser();
     const body = await request.json();
     const validation = analyzeSchema.safeParse(body);
@@ -589,24 +599,22 @@ export async function POST(request: Request) {
 
     const { case_id, question } = validation.data;
 
-    // Create properly typed Supabase client
-    const supabase = await createServerSupabaseClient();
+    // Use admin client to bypass RLS - we do our own access control below
+    const adminSupabase = createSupabaseAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data, error: caseError } = await query.single();
+    // Fetch the case using admin client (bypasses RLS)
+    const { data, error: caseError } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !data) {
       console.error('Case not found:', caseError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    // Type assertion: we know data exists after the null check
+    // Type assertion for the case record properties we need
     const caseData = data as {
       id: string;
       jurisdiction: string;
@@ -615,10 +623,21 @@ export async function POST(request: Request) {
       wizard_progress: number | null;
     };
 
+    // Manual access control: user can access if:
+    // 1. They own the case (user_id matches)
+    // 2. The case is anonymous (user_id is null) - anyone can access
+    const isOwner = user && caseData.user_id === user.id;
+    const isAnonymousCase = caseData.user_id === null;
+
+    if (!isOwner && !isAnonymousCase) {
+      console.error('Access denied to case:', { case_id, userId: user?.id, caseUserId: caseData.user_id });
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+    }
+
     let canonicalJurisdiction = normalizeJurisdiction(caseData.jurisdiction);
 
     // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
-    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
+    const wizardFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
     const facts = wizardFactsToCaseFacts(wizardFacts);
 
     if (!canonicalJurisdiction) {
@@ -749,21 +768,44 @@ export async function POST(request: Request) {
       }
     }
 
+    // Ground-aware evidence suggestions for eviction cases
+    // Only show suggestions relevant to the user's selected grounds
     if (caseData.case_type === 'eviction') {
+      // Get user's selected grounds from wizard facts
+      const selectedGrounds: string[] = getSelectedGrounds(wizardFacts as any);
+      const normalizeGround = (g: string) => g.replace(/^ground\s*/i, '').trim();
+      const normalizedSelectedGrounds = selectedGrounds.map(normalizeGround);
+
+      // Check if arrears grounds (8, 10, 11) are selected
+      const hasArrearsGrounds = normalizedSelectedGrounds.some(g => ['8', '10', '11'].includes(g));
+      // Check if damage/deterioration grounds (13, 15) are selected
+      const hasDamageGrounds = normalizedSelectedGrounds.some(g => ['13', '15'].includes(g));
+      // Check if ASB grounds (14, 14ZA) are selected
+      const hasASBGrounds = normalizedSelectedGrounds.some(g => ['14', '14ZA', '14A'].includes(g));
+
+      // Tenancy agreement is always relevant
       if (!evidence.tenancy_agreement_uploaded) {
-        compliance.push('Tenancy agreement not uploaded yet – add it under evidence to strengthen your position.');
+        compliance.push('If you have it, a copy of your tenancy agreement will strengthen your case.');
       }
-      if (!evidence.rent_schedule_uploaded) {
-        compliance.push('Rent schedule missing – courts expect a clear arrears schedule. Upload it under evidence.');
+
+      // Rent schedule only relevant for arrears grounds
+      if (hasArrearsGrounds && !evidence.rent_schedule_uploaded) {
+        compliance.push('A detailed rent schedule showing arrears will support your arrears claim.');
       }
+
+      // Correspondence is generally useful but phrased conditionally
       if (!evidence.correspondence_uploaded) {
-        compliance.push('No correspondence uploaded – add key emails or letters showing the dispute history.');
+        compliance.push('If available, correspondence with the tenant about the issues can support your case.');
       }
-      if (!evidence.damage_photos_uploaded) {
-        compliance.push('Damage/photos evidence missing – upload photos if you rely on property damage or disrepair.');
+
+      // Damage photos only relevant for damage/deterioration grounds
+      if (hasDamageGrounds && !evidence.damage_photos_uploaded) {
+        compliance.push('Photographs of damage will support your property deterioration claim.');
       }
-      if (!evidence.authority_letters_uploaded) {
-        compliance.push('Council/police letters not uploaded – include them if anti-social behaviour is part of your case.');
+
+      // Council/police letters only relevant for ASB grounds
+      if (hasASBGrounds && !evidence.authority_letters_uploaded) {
+        compliance.push('Council or police correspondence will significantly strengthen your ASB case.');
       }
     }
 
@@ -781,15 +823,57 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (product === 'notice_only' && decisionEngineOutput) {
-      // NOTICE_ONLY: Decision engine ALWAYS wins (no user override allowed)
-      // The decision engine auto-routes to the legally valid option
+      // NOTICE_ONLY: Respect user's explicit route selection when that route is allowed
+      // Only auto-route when user's selection is blocked or no explicit selection made
 
       const allowedRoutes = decisionEngineOutput.allowed_routes || [];
       const recommendedRoute = decisionEngineOutput.recommended_routes[0] || null;
       const blockedRoutes = decisionEngineOutput.blocked_routes || [];
 
-      // If S21 is blocked, auto-route to S8/Notice to Leave
-      if (blockedRoutes.includes('section_21')) {
+      // Check for user's explicit route selection (eviction_route from CaseBasicsSection)
+      const userExplicitRoute = (wizardFacts as any).eviction_route ||
+                                (wizardFacts as any).selected_notice_route ||
+                                null;
+
+      // If user explicitly selected a route and it's allowed, use it
+      if (userExplicitRoute && !blockedRoutes.includes(userExplicitRoute)) {
+        finalRecommendedRoute = userExplicitRoute;
+
+        // If decision engine recommended a different route, log it but respect user choice
+        if (recommendedRoute && recommendedRoute !== userExplicitRoute) {
+          console.log(`[NOTICE_ONLY] User explicitly selected ${userExplicitRoute}, respecting choice (decision engine recommended ${recommendedRoute})`);
+        }
+      }
+      // If user selected a blocked route, auto-route to alternative
+      else if (userExplicitRoute && blockedRoutes.includes(userExplicitRoute)) {
+        const fallbackRoute =
+          userExplicitRoute === 'section_21'
+            ? 'section_8'
+            : userExplicitRoute === 'section_8' && allowedRoutes.includes('section_21')
+            ? 'section_21'
+            : recommendedRoute || (canonicalJurisdiction === 'scotland'
+              ? 'notice_to_leave'
+              : canonicalJurisdiction === 'wales'
+              ? 'wales_section_173'
+              : 'section_8');
+        finalRecommendedRoute = fallbackRoute;
+
+        const blockingIssues = decisionEngineOutput.blocking_issues
+          .filter(b => b.route === userExplicitRoute && b.severity === 'blocking')
+          .map(b => b.description);
+
+        const routeExplanation = decisionEngineOutput.route_explanations?.[userExplicitRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+          `${userExplicitRoute.replace('_', ' ')} is not available due to compliance issues.`;
+
+        route_override = {
+          from: userExplicitRoute,
+          to: fallbackRoute,
+          reason: routeExplanation,
+          blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+        };
+      }
+      // If S21 is blocked (legacy check for when no explicit selection)
+      else if (blockedRoutes.includes('section_21')) {
         const fallbackRoute =
           canonicalJurisdiction === 'scotland'
             ? 'notice_to_leave'
@@ -812,24 +896,8 @@ export async function POST(request: Request) {
           blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
         };
       } else if (recommendedRoute) {
-        // Use decision engine recommendation
+        // No explicit user selection - use decision engine recommendation
         finalRecommendedRoute = recommendedRoute;
-
-        // Check if wizard has already auto-selected a route (selected_notice_route)
-        // This would be set by the answer endpoint after deposit_and_compliance
-        const wizardSelectedRoute = (wizardFacts as any).selected_notice_route || null;
-
-        // If wizard already selected a route that differs from decision engine, note the override
-        if (wizardSelectedRoute && wizardSelectedRoute !== recommendedRoute) {
-          const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
-            `Based on your case details, ${recommendedRoute.replace('_', ' ')} is the legally valid route.`;
-
-          route_override = {
-            from: wizardSelectedRoute,
-            to: recommendedRoute,
-            reason: routeExplanation,
-          };
-        }
       } else if (allowedRoutes.length > 0) {
         // Fallback to first allowed route
         finalRecommendedRoute = allowedRoutes[0];
@@ -888,7 +956,7 @@ export async function POST(request: Request) {
       finalRecommendedRoute = route;
     }
 
-    await supabase
+    await adminSupabase
       .from('cases')
       .update({
         recommended_route: finalRecommendedRoute,
@@ -1079,6 +1147,18 @@ export async function POST(request: Request) {
       }
     }
 
+    // Build case_facts object for review page consumption
+    // Contains persisted wizard facts relevant to grounds selection and review display
+    const caseFacts = {
+      section8_grounds: getSelectedGrounds(wizardFacts as any),
+      include_recommended_grounds: (wizardFacts as any)?.include_recommended_grounds || false,
+      arrears_items: (wizardFacts as any)?.arrears_items || [],
+      recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
+      jurisdiction: canonicalJurisdiction,
+      eviction_route: (wizardFacts as any)?.eviction_route || null,
+      selected_notice_route: (wizardFacts as any)?.selected_notice_route || null,
+    };
+
     return NextResponse.json({
       case_id,
       jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
@@ -1102,6 +1182,8 @@ export async function POST(request: Request) {
       decision_engine: decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
+      // Case facts for review page - contains persisted wizard data
+      case_facts: caseFacts,
     });
 
   } catch (error: any) {

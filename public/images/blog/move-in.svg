@@ -1,0 +1,126 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">TENANT MOVE-IN GUIDE</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Checklist for a smooth tenant move-in day</text>
+
+  <!-- Move-in icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- House outline -->
+      <path d="M60 25 L95 10 L130 25" fill="none" stroke="#6D28D9" stroke-width="3"/>
+      <rect x="65" y="25" width="60" height="50" fill="#E9E5FF" stroke="#6D28D9" stroke-width="2"/>
+      <rect x="88" y="45" width="15" height="30" rx="2" fill="#7C3AED"/>
+      <!-- Arrow into house -->
+      <path d="M25 50 L55 50" stroke="#22C55E" stroke-width="4"/>
+      <polygon points="55,42 70,50 55,58" fill="#22C55E"/>
+      <!-- Key -->
+      <circle cx="40" cy="75" r="8" fill="none" stroke="#7C3AED" stroke-width="2"/>
+      <rect x="47" y="72" width="20" height="6" rx="2" fill="#7C3AED"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">MOVE-IN</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Tenant</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">check-in</text>
+  </g>
+
+  <!-- Before move-in -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEFORE MOVE-IN</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Complete inventory</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Take dated photos</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Test all appliances</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Read meter readings</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Deep clean complete</text>
+    </g>
+  </g>
+
+  <!-- On the day -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ON THE DAY</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Hand over keys</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Sign tenancy agreement</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Walk through property</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Sign inventory</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Collect first rent</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MOVE-IN ESSENTIALS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">DOCUMENTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Signed tenancy agreement</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Inventory checklist</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">How to Rent guide</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">EPC and safety certs</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">INFORMATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Appliance manuals</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Bin collection days</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Emergency contacts</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">How to report issues</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">UTILITIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Meter locations shown</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Stopcock location</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Fuse box explained</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Heating controls</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
+</svg>

@@ -61,6 +61,50 @@ const mockMQS: MasterQuestionSet = {
   ] as ExtendedWizardQuestion[],
 };
 
+// Wales MQS mock for testing Wales routes (Renting Homes Wales Act 2016)
+const mockWalesMQS: MasterQuestionSet = {
+  id: 'notice_only_wales',
+  product: 'notice_only',
+  jurisdiction: 'wales',
+  version: '1.0.0',
+  questions: [
+    {
+      id: 'selected_notice_route',
+      question: 'Which type of notice?',
+      inputType: 'select',
+      section: 'Notice Type',
+      options: [
+        { value: 'wales_section_173', label: 'Section 173 (no-fault)' },
+        { value: 'wales_fault_based', label: 'Fault-based' },
+      ],
+      maps_to: ['selected_notice_route'],
+    },
+    {
+      id: 'wales_fault_based_section',
+      question: 'Describe the breach',
+      inputType: 'textarea',
+      section: 'Breach Details',
+      routes: ['fault_based'],
+      maps_to: ['wales_fault_based_section'],
+    },
+    {
+      id: 'section_173_notice_period',
+      question: 'Notice period (6 months standard)',
+      inputType: 'info',
+      section: 'Notice Period',
+      routes: ['section_173'],
+      maps_to: [],
+    },
+    {
+      id: 'contract_holder_name',
+      question: 'Contract holder name',
+      inputType: 'text',
+      section: 'Parties',
+      maps_to: ['tenant_full_name'],
+    },
+  ] as ExtendedWizardQuestion[],
+};
+
 describe('MQS Route Filtering', () => {
   describe('deriveRoutesFromFacts', () => {
     it('should derive section_8 route from selected_notice_route fact', () => {
@@ -105,6 +149,52 @@ describe('MQS Route Filtering', () => {
     it('should auto-add notice_to_leave for Scotland', () => {
       const routes = deriveRoutesFromFacts({}, 'scotland');
       expect(routes).toContain('notice_to_leave');
+    });
+
+    // Wales routes (Renting Homes Wales Act 2016)
+    it('should derive wales_section_173 route from selected_notice_route fact', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: 'wales_section_173' },
+        'wales'
+      );
+      expect(routes).toContain('wales_section_173');
+      expect(routes).toContain('section_173'); // Also adds non-prefixed version for question matching
+    });
+
+    it('should derive wales_fault_based route from selected_notice_route fact', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: 'wales_fault_based' },
+        'wales'
+      );
+      expect(routes).toContain('wales_fault_based');
+      expect(routes).toContain('fault_based'); // Also adds non-prefixed version for question matching
+    });
+
+    it('should handle section_173 without wales_ prefix', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: 'section_173' },
+        'wales'
+      );
+      expect(routes).toContain('wales_section_173');
+      expect(routes).toContain('section_173');
+    });
+
+    it('should handle fault_based route for Wales', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: 'fault_based' },
+        'wales'
+      );
+      expect(routes).toContain('wales_fault_based');
+      expect(routes).toContain('fault_based');
+    });
+
+    it('should handle fault-based with hyphen for Wales', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: 'fault-based' },
+        'wales'
+      );
+      expect(routes).toContain('wales_fault_based');
+      expect(routes).toContain('fault_based');
     });
   });
 
@@ -172,6 +262,62 @@ describe('MQS Route Filtering', () => {
       const isApplicable = questionIsApplicable(mockMQS, epcQuestion!, {});
 
       expect(isApplicable).toBe(false);
+    });
+  });
+
+  describe('questionIsApplicable - Wales Route Filtering (Renting Homes Wales Act 2016)', () => {
+    it('should show fault_based question when route=wales_fault_based', () => {
+      const breachQuestion = mockWalesMQS.questions.find((q) => q.id === 'wales_fault_based_section');
+
+      const isApplicable = questionIsApplicable(mockWalesMQS, breachQuestion!, {
+        selected_notice_route: 'wales_fault_based',
+      });
+
+      expect(isApplicable).toBe(true);
+    });
+
+    it('should hide fault_based question when route=wales_section_173', () => {
+      const breachQuestion = mockWalesMQS.questions.find((q) => q.id === 'wales_fault_based_section');
+
+      const isApplicable = questionIsApplicable(mockWalesMQS, breachQuestion!, {
+        selected_notice_route: 'wales_section_173',
+      });
+
+      expect(isApplicable).toBe(false);
+    });
+
+    it('should show section_173 notice period info when route=wales_section_173', () => {
+      const noticePeriodQuestion = mockWalesMQS.questions.find((q) => q.id === 'section_173_notice_period');
+
+      const isApplicable = questionIsApplicable(mockWalesMQS, noticePeriodQuestion!, {
+        selected_notice_route: 'wales_section_173',
+      });
+
+      expect(isApplicable).toBe(true);
+    });
+
+    it('should hide section_173 notice period info when route=wales_fault_based', () => {
+      const noticePeriodQuestion = mockWalesMQS.questions.find((q) => q.id === 'section_173_notice_period');
+
+      const isApplicable = questionIsApplicable(mockWalesMQS, noticePeriodQuestion!, {
+        selected_notice_route: 'wales_fault_based',
+      });
+
+      expect(isApplicable).toBe(false);
+    });
+
+    it('should show contract holder name question for any Wales route (no routes filter)', () => {
+      const contractHolderQuestion = mockWalesMQS.questions.find((q) => q.id === 'contract_holder_name');
+
+      const isApplicableS173 = questionIsApplicable(mockWalesMQS, contractHolderQuestion!, {
+        selected_notice_route: 'wales_section_173',
+      });
+      const isApplicableFault = questionIsApplicable(mockWalesMQS, contractHolderQuestion!, {
+        selected_notice_route: 'wales_fault_based',
+      });
+
+      expect(isApplicableS173).toBe(true);
+      expect(isApplicableFault).toBe(true);
     });
   });
 });

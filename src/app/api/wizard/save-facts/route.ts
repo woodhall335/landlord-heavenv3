@@ -8,10 +8,16 @@
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { logMutation, getChangedKeys } from '@/lib/auth/audit-log';
+import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
+
+export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/save-facts', writesUsingAdmin: true });
     const body = await request.json();
     const { case_id, facts } = body;
 
@@ -29,23 +35,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check edit window - block if case has paid order with expired window
+    const mutationCheck = await checkMutationAllowed(case_id);
+    if (!mutationCheck.allowed) {
+      return mutationCheck.errorResponse;
+    }
+
     const supabase = await createServerSupabaseClient();
+
+    // Admin client bypasses RLS - used for creating cases/case_facts for anonymous users
+    const adminSupabase = createSupabaseAdminClient();
 
     // Try to get the user (but don't require auth for wizard saves)
     const { data: { user } } = await supabase.auth.getUser();
 
-    // First, check if the case exists
-    let query = supabase
+    // First, check if the case exists using admin client to support anonymous users
+    const { data: existingCase, error: fetchError } = await adminSupabase
       .from('cases')
       .select('id, user_id, collected_facts')
-      .eq('id', case_id);
-
-    // If logged in, also check ownership
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data: existingCase, error: fetchError } = await query.single();
+      .eq('id', case_id)
+      .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
       console.error('Error fetching case:', fetchError);
@@ -73,7 +82,8 @@ export async function POST(request: NextRequest) {
     if (existingCase) {
       // Update existing case - write to BOTH tables for consistency
       // 1. Update case_facts.facts (source of truth)
-      const { data: existingCaseFacts } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { data: existingCaseFacts } = await adminSupabase
         .from('case_facts')
         .select('version')
         .eq('case_id', case_id)
@@ -81,7 +91,8 @@ export async function POST(request: NextRequest) {
 
       if (existingCaseFacts) {
         // Update existing case_facts row
-        const { error: caseFactsError } = await supabase
+        // Use admin client to bypass RLS for anonymous users
+        const { error: caseFactsError } = await adminSupabase
           .from('case_facts')
           .update({
             facts: mergedFacts,
@@ -96,7 +107,8 @@ export async function POST(request: NextRequest) {
         }
       } else {
         // Create case_facts row if it doesn't exist
-        const { error: insertCaseFactsError } = await supabase
+        // Use admin client to bypass RLS for anonymous users
+        const { error: insertCaseFactsError } = await adminSupabase
           .from('case_facts')
           .insert({
             case_id,
@@ -111,7 +123,8 @@ export async function POST(request: NextRequest) {
       }
 
       // 2. Update cases.collected_facts (mirrored copy)
-      const { error: updateError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: updateError } = await adminSupabase
         .from('cases')
         .update({
           collected_facts: mergedFacts,
@@ -127,6 +140,18 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Audit log for paid cases (non-blocking)
+      const changedKeys = getChangedKeys(existingFacts, facts);
+      if (changedKeys.length > 0) {
+        logMutation({
+          caseId: case_id,
+          userId: user?.id || null,
+          action: 'case_facts_update',
+          changedKeys,
+          metadata: { source: 'save-facts', fieldsUpdated: changedKeys.length },
+        }).catch(() => {}); // Fire and forget
+      }
+
       return NextResponse.json({
         success: true,
         message: 'Facts saved successfully',
@@ -139,7 +164,8 @@ export async function POST(request: NextRequest) {
       const caseType = meta.case_type || 'money_claim';
 
       // Allow anonymous case creation (user_id can be null for "try before you buy")
-      const { error: insertError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertError } = await adminSupabase
         .from('cases')
         .insert({
           id: case_id,
@@ -159,7 +185,8 @@ export async function POST(request: NextRequest) {
       }
 
       // Also create case_facts row (source of truth)
-      const { error: insertCaseFactsError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertCaseFactsError } = await adminSupabase
         .from('case_facts')
         .insert({
           case_id,

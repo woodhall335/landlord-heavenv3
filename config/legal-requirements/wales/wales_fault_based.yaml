@@ -1,0 +1,23 @@
+requiredOfficialForms:
+  - public/official-forms/N5_WALES_1222.pdf
+  - public/official-forms/N119_WALES_1222.pdf
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: fault_based_notice
+    description: "Fault-based prescribed wording"
+    mustAppearIn: template
+    match: "fault"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: breach_details
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: true
+  mustShowUserWarningIfInvalid: true
+legislationReferences:
+  - "Renting Homes (Wales) Act 2016"

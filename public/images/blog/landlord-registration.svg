@@ -1,0 +1,128 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#6D28D9" font-size="22" font-weight="bold" font-family="Arial">LANDLORD REGISTRATION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">Understanding landlord registration requirements</text>
+
+  <!-- Registration icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Registration card -->
+      <rect x="15" y="15" width="85" height="60" rx="5" fill="#E9E5FF" stroke="#6D28D9" stroke-width="2"/>
+      <!-- Photo placeholder -->
+      <rect x="22" y="22" width="25" height="30" rx="3" fill="#7C3AED"/>
+      <!-- Text lines -->
+      <line x1="55" y1="28" x2="92" y2="28" stroke="#6D28D9" stroke-width="2"/>
+      <line x1="55" y1="38" x2="85" y2="38" stroke="#7C3AED" stroke-width="1"/>
+      <line x1="55" y1="48" x2="92" y2="48" stroke="#7C3AED" stroke-width="1"/>
+      <line x1="22" y1="62" x2="92" y2="62" stroke="#7C3AED" stroke-width="1"/>
+      <!-- Check badge -->
+      <circle cx="90" cy="65" r="12" fill="#22C55E"/>
+      <path d="M84 65 L88 69 L96 61" stroke="white" stroke-width="2" fill="none"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#6D28D9" font-size="11" font-weight="bold">REGISTRATION</text>
+    <text x="100" y="143" text-anchor="middle" fill="#7C3AED" font-size="9">Landlord</text>
+    <text x="100" y="158" text-anchor="middle" fill="#7C3AED" font-size="9">requirements</text>
+  </g>
+
+  <!-- Where required -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="240" height="12" fill="#6D28D9"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHERE REQUIRED</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Scotland: Mandatory</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Wales: Rent Smart Wales</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">England: Selective areas</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">NI: Check local rules</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#7C3AED" font-size="9" font-weight="bold">Check your local council</text>
+    </g>
+  </g>
+
+  <!-- Benefits -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BENEFITS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Legal compliance</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenant confidence</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Training included</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#065F46"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Professional standing</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Avoid penalties</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="20" width="680" height="12" fill="#6D28D9"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">REGISTRATION PROCESS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">APPLICATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Online application</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Personal details</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Property information</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Pay registration fee</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">REQUIREMENTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Fit and proper check</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Criminal record check</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Training completion</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Valid contact details</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">RENEWAL</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Typically 3-5 years</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Keep details updated</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Renewal reminders</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Don't let it lapse</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#6D28D9" opacity="0.12"/>
+</svg>

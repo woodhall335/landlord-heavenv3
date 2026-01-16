@@ -158,11 +158,11 @@ export function SmartReviewPanel({
         className={`w-full px-4 py-3 flex items-center justify-between hover:opacity-90 transition-opacity ${headerBgColor}`}
       >
         <div className="flex items-center gap-3">
-          {/* Icon */}
+          {/* Icon - different based on warning state */}
           {hasWarnings ? (
-            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
+            <RiAlertLine className="w-5 h-5 text-amber-500" />
           ) : (
-            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
+            <RiCheckboxCircleLine className="w-5 h-5 text-green-500" />
           )}
 
           {/* Title */}

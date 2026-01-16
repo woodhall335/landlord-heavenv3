@@ -189,14 +189,14 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
     bank_account_name: getValueAtPath(wizardFacts, 'bank_account_name'),
     bank_sort_code: getValueAtPath(wizardFacts, 'bank_sort_code'),
     bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
-    first_payment: Number(getValueAtPath(wizardFacts, 'first_payment')),
+    first_payment: Number(getValueAtPath(wizardFacts, 'first_payment')) || 0,
     first_payment_date: getValueAtPath(wizardFacts, 'first_payment_date'),
     rent_includes: getValueAtPath(wizardFacts, 'rent_includes'),
     rent_excludes: getValueAtPath(wizardFacts, 'rent_excludes'),
 
     // Deposit - use CaseFacts for core fields
+    // NI type only supports deposit_scheme (not deposit_scheme_name)
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
-    // TODO: deposit_scheme (flat field) not yet in CaseFacts
     deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name || getValueAtPath(wizardFacts, 'deposit_scheme_name') || getValueAtPath(wizardFacts, 'deposit_scheme')),
 
     // Bills & Utilities - TODO: not yet in CaseFacts
@@ -261,7 +261,7 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
     hmo_licence_status: getValueAtPath(wizardFacts, 'hmo_licence_status'),
     hmo_licence_number: getValueAtPath(wizardFacts, 'hmo_licence_number'),
     hmo_licence_expiry: getValueAtPath(wizardFacts, 'hmo_licence_expiry'),
-    number_of_sharers: Number(getValueAtPath(wizardFacts, 'number_of_sharers')),
+    number_of_sharers: Number(getValueAtPath(wizardFacts, 'number_of_sharers')) || 0,
 
     // Premium Enhanced Features - Meter Readings - TODO: not yet in CaseFacts
     meter_reading_gas: getValueAtPath(wizardFacts, 'meter_reading_gas'),
@@ -271,17 +271,17 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
 
     // Premium Enhanced Features - Late Payment Interest - TODO: not yet in CaseFacts
     late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
-    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')),
-    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')),
-    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')),
+    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')) || 0,
+    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')) || 0,
+    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) || 0,
 
     // Premium Enhanced Features - Key Schedule - TODO: not yet in CaseFacts
-    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')),
-    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')),
-    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')),
-    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')),
-    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')),
-    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')),
+    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')) || 0,
+    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')) || 0,
+    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')) || 0,
+    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')) || 0,
+    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')) || 0,
+    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')) || 0,
     other_keys_notes: getValueAtPath(wizardFacts, 'other_keys_notes'),
 
     // Premium Enhanced Features - Contractor Access - TODO: not yet in CaseFacts
@@ -337,7 +337,7 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
     regular_cleaning_expectations: getValueAtPath(wizardFacts, 'regular_cleaning_expectations'),
     deep_cleaning_areas: getValueAtPath(wizardFacts, 'deep_cleaning_areas'),
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
-    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')),
+    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) || 0,
 
     // Document metadata - use CaseFacts.meta
     product_tier: caseFacts.meta.product_tier || getValueAtPath(wizardFacts, 'tenancy_tier'),

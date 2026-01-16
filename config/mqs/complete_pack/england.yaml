@@ -325,17 +325,32 @@ questions:
         validation:
           required: true
         width: half
+      - id: prescribed_info_date
+        label: "Date prescribed info served (optional)"
+        inputType: date
+        helperText: "For compliance audit - must be within 30 days of deposit protection"
+        width: half
       - id: how_to_rent_served
         label: "'How to Rent' guide served?"
         inputType: yes_no
         validation:
           required: true
         width: half
+      - id: how_to_rent_date
+        label: "Date How to Rent served (optional)"
+        inputType: date
+        helperText: "For compliance audit records"
+        width: half
       - id: epc_served
         label: "EPC served to tenant?"
         inputType: yes_no
         validation:
           required: true
+        width: half
+      - id: epc_certificate_date
+        label: "EPC certificate date (optional)"
+        inputType: date
+        helperText: "Date on the EPC certificate - must be valid (within 10 years)"
         width: half
       - id: no_retaliatory_notice
         label: "No retaliatory eviction (6 months after complaint)?"
@@ -346,8 +361,11 @@ questions:
     maps_to:
       - section21.deposit_protected
       - section21.prescribed_info_served
+      - section21.prescribed_info_date
       - section21.how_to_rent_served
+      - section21.how_to_rent_date
       - section21.epc_served
+      - section21.epc_certificate_date
       - section21.no_retaliatory_notice
 
   # ============================================================
@@ -371,18 +389,70 @@ questions:
 
   - id: gas_safety_cert_served
     section: Section 21 Compliance
-    question: "Was the Gas Safety Certificate served to the tenant?"
-    inputType: yes_no
+    question: "Gas Safety Certificate details"
+    inputType: group
     routes:
       - section_21
     dependsOn:
       questionId: has_gas_appliances
       value: true
     helperText: "A copy of the current Gas Safety Certificate (CP12) must be provided to tenants within 28 days of the check."
-    validation:
-      required: true
+    fields:
+      - id: gas_cert_served
+        label: "Was the Gas Safety Certificate served to the tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: full
+      - id: gas_cert_date
+        label: "Gas certificate date (optional)"
+        inputType: date
+        helperText: "Date of the gas safety check on the certificate"
+        width: half
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date (optional)"
+        inputType: date
+        helperText: "Usually 12 months from check date"
+        width: half
     maps_to:
       - section21.gas_safety_cert_served
+      - section21.gas_cert_date
+      - section21.gas_cert_expiry
+
+  # ============================================================
+  # ELECTRICAL SAFETY (EICR - Required since June 2020)
+  # ============================================================
+  - id: electrical_safety
+    section: Section 21 Compliance
+    question: "Electrical safety (EICR)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Since 1 July 2020, landlords must have an EICR (Electrical Installation Condition Report) every 5 years."
+    fields:
+      - id: eicr_provided
+        label: "Has a valid EICR been provided to the tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: full
+      - id: eicr_date
+        label: "EICR certificate date (optional)"
+        inputType: date
+        helperText: "Date of the electrical inspection - must be within 5 years"
+        width: half
+      - id: eicr_expiry
+        label: "EICR expiry date (optional)"
+        inputType: date
+        helperText: "Usually 5 years from inspection date, or earlier if stated on report"
+        width: half
+    maps_to:
+      - section21.eicr_provided
+      - section21.eicr_date
+      - section21.eicr_expiry
 
   # ============================================================
   # LICENSING (Phase 3.3: S21 can be blocked if unlicensed)
@@ -793,27 +863,49 @@ questions:
   - id: evidence_tenancy_agreement
     section: Evidence
     question: "Tenancy Agreement"
-    inputType: upload
-    helperText: "Upload the signed tenancy agreement or AST. Used to verify tenant/landlord names, property address, rent amount, and tenancy start date."
-    validation:
-      required: false
+    inputType: group
+    helperText: "Upload the signed tenancy agreement or describe if you don't have it available to upload."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload tenancy agreement"
+        inputType: upload
+        helperText: "Upload the signed tenancy agreement or AST"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or describe if not available to upload"
+        inputType: textarea
+        helperText: "If you can't upload, describe the key details: tenancy start date, rent amount, tenant/landlord names as they appear on the agreement"
+        placeholder: "E.g., Fixed term AST dated 01/01/2024, rent £1200/month, between Jane Landlord and John Tenant..."
+        width: full
     maps_to:
       - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
 
   - id: evidence_bank_statements
     section: Evidence
     question: "Bank Statements / Rent Records"
-    inputType: upload
-    helperText: "Upload bank statements or rent payment records showing rent payments received."
-    validation:
-      required: false
+    inputType: group
+    helperText: "Upload bank statements or describe the payment history if not available to upload."
     routes:
       - section_8
     dependsOn:
       questionId: eviction_route
       value: "section_8"
+    fields:
+      - id: bank_statements_upload
+        label: "Upload bank statements or rent records"
+        inputType: upload
+        helperText: "Upload bank statements showing rent payments received"
+        width: full
+      - id: bank_statements_describe
+        label: "Or describe payment history"
+        inputType: textarea
+        helperText: "If you can't upload, describe the payment pattern: when payments stopped, any partial payments, last payment date and amount"
+        placeholder: "E.g., Tenant paid regularly until June 2024. Last payment received 01/06/2024 for £1200. No payments since. Tenant made partial payment of £500 on 15/08/2024..."
+        width: full
     maps_to:
       - evidence.bank_statements_uploads
+      - evidence.bank_statements_description
 
   - id: evidence_deposit_protection
     section: Evidence
@@ -900,22 +992,44 @@ questions:
   - id: evidence_notice_service
     section: Evidence
     question: "Notice Service Proof"
-    inputType: upload
-    helperText: "Upload proof of notice service (photo of notice, proof of postage, email confirmation)."
-    validation:
-      required: false
+    inputType: group
+    helperText: "Upload proof of service or describe how you served the notice."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Upload proof of postage, photo of notice, email confirmation"
+        width: full
+      - id: notice_service_describe
+        label: "Or describe how notice was served"
+        inputType: textarea
+        helperText: "Describe: date/time of service, method used, who was present, any photos taken"
+        placeholder: "E.g., Served by recorded delivery on 15/01/2025. Tracking number: AB123456789GB. Notice addressed to tenant at property address. Proof of delivery obtained 17/01/2025..."
+        width: full
     maps_to:
       - evidence.notice_service_uploads
+      - evidence.notice_service_description
 
   - id: evidence_correspondence
     section: Evidence
     question: "Tenant Correspondence"
-    inputType: upload
-    helperText: "Upload relevant correspondence with the tenant(s)."
-    validation:
-      required: false
+    inputType: group
+    helperText: "Upload correspondence or summarize key communications."
+    fields:
+      - id: correspondence_upload
+        label: "Upload correspondence"
+        inputType: upload
+        helperText: "Upload emails, letters, text messages with tenant"
+        width: full
+      - id: correspondence_describe
+        label: "Or summarize key correspondence"
+        inputType: textarea
+        helperText: "Summarize important communications: dates, what was discussed, tenant's responses"
+        placeholder: "E.g., 01/06/2024 - Emailed tenant re: missed rent payment, tenant replied saying would pay next week. 15/06/2024 - Sent formal written warning by post..."
+        width: full
     maps_to:
       - evidence.correspondence_uploads
+      - evidence.correspondence_description
 
   - id: evidence_other
     section: Evidence
@@ -941,3 +1055,546 @@ questions:
     maps_to:
       - evidence.pack_documents_uploaded
       - evidence.other_uploads
+
+  # ============================================================
+  # PHASE 3: RISK INDICATORS (For Case Risk Assessment)
+  # ============================================================
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors (helps assess case strength)"
+    inputType: group
+    helperText: "This information helps generate a more accurate risk assessment for your case."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the tenant may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, deposit issues, harassment, discrimination, retaliatory eviction"
+        placeholder: "Describe any known or anticipated tenant defences..."
+        width: full
+      - id: previous_court_proceedings
+        label: "Have there been previous court proceedings about this tenancy?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: disrepair_complaints
+        label: "Has the tenant complained about disrepair?"
+        inputType: yes_no
+        helperText: "IMPORTANT: Section 21 may be invalid if served within 6 months of a disrepair complaint"
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues complained about"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any tenant vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children in household"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider vulnerability when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
+  # ============================================================
+  # PHASE 4: PER-GROUND QUESTION SETS (Section 8)
+  # Detailed questions for each ground to improve witness statement quality
+  # ============================================================
+
+  # GROUND 8 - Serious Rent Arrears (2+ months)
+  - id: ground_8_details
+    section: Ground 8 Details
+    question: "Ground 8 - Serious rent arrears details"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 8"
+    helperText: "Ground 8 is MANDATORY if arrears are 8+ weeks (weekly/fortnightly) or 2+ months (monthly) at both notice date AND court hearing."
+    fields:
+      - id: g8_arrears_at_notice
+        label: "Arrears when notice was served (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g8_arrears_current
+        label: "Current arrears (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g8_last_payment_date
+        label: "Date of last rent payment"
+        inputType: date
+        width: half
+      - id: g8_last_payment_amount
+        label: "Amount of last payment (£)"
+        inputType: number
+        width: half
+      - id: g8_payment_demands_sent
+        label: "What payment demands have you sent?"
+        inputType: textarea
+        helperText: "List dates and methods of rent demands/reminders sent"
+        validation:
+          required: true
+        width: full
+      - id: g8_tenant_response
+        label: "How has the tenant responded to payment demands?"
+        inputType: textarea
+        helperText: "Describe any responses, promises to pay, or lack of response"
+        width: full
+    maps_to:
+      - ground_8.arrears_at_notice
+      - ground_8.arrears_current
+      - ground_8.last_payment_date
+      - ground_8.last_payment_amount
+      - ground_8.payment_demands_sent
+      - ground_8.tenant_response
+
+  # GROUND 10 - Some Rent Arrears
+  - id: ground_10_details
+    section: Ground 10 Details
+    question: "Ground 10 - Rent arrears details"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 10"
+    helperText: "Ground 10 is DISCRETIONARY - some rent is owed. Court considers reasonableness."
+    fields:
+      - id: g10_arrears_amount
+        label: "Current arrears (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g10_arrears_history
+        label: "Arrears history"
+        inputType: textarea
+        helperText: "Describe the history of arrears - when they started, any partial payments, patterns"
+        validation:
+          required: true
+        width: full
+      - id: g10_attempts_to_recover
+        label: "What attempts have you made to recover the arrears?"
+        inputType: textarea
+        helperText: "Include dates and methods of contact"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - ground_10.arrears_amount
+      - ground_10.arrears_history
+      - ground_10.attempts_to_recover
+
+  # GROUND 11 - Persistent Delay
+  - id: ground_11_details
+    section: Ground 11 Details
+    question: "Ground 11 - Persistent delay in paying rent"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 11"
+    helperText: "Ground 11 is DISCRETIONARY - tenant persistently delays rent even if eventually paid."
+    fields:
+      - id: g11_pattern_description
+        label: "Describe the pattern of late payments"
+        inputType: textarea
+        helperText: "How often is rent late? By how many days/weeks typically?"
+        validation:
+          required: true
+        width: full
+      - id: g11_late_payment_dates
+        label: "List specific late payment instances"
+        inputType: textarea
+        helperText: "Include dates rent was due and dates actually paid"
+        validation:
+          required: true
+        width: full
+      - id: g11_warnings_issued
+        label: "What warnings have you given about late payment?"
+        inputType: textarea
+        helperText: "Dates and content of any written warnings"
+        width: full
+    maps_to:
+      - ground_11.pattern_description
+      - ground_11.late_payment_dates
+      - ground_11.warnings_issued
+
+  # GROUND 12 - Breach of Tenancy
+  - id: ground_12_details
+    section: Ground 12 Details
+    question: "Ground 12 - Breach of tenancy agreement"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 12"
+    helperText: "Ground 12 is DISCRETIONARY - tenant has breached tenancy terms (other than rent)."
+    fields:
+      - id: g12_breach_type
+        label: "Type of breach"
+        inputType: multiselect
+        options:
+          - "Unauthorized subletting"
+          - "Unauthorized occupants"
+          - "Unauthorized pets"
+          - "Property damage"
+          - "Commercial use of property"
+          - "Failure to allow access for repairs"
+          - "Other breach"
+        validation:
+          required: true
+        width: full
+      - id: g12_tenancy_clause
+        label: "Which tenancy clause(s) were breached?"
+        inputType: textarea
+        helperText: "Quote or reference the specific clause(s) from the tenancy agreement"
+        validation:
+          required: true
+        width: full
+      - id: g12_breach_dates
+        label: "When did the breach(es) occur?"
+        inputType: textarea
+        helperText: "Specific dates or ongoing period"
+        validation:
+          required: true
+        width: full
+      - id: g12_breach_evidence
+        label: "What evidence do you have of the breach?"
+        inputType: textarea
+        helperText: "Photos, inspection reports, witness accounts, correspondence"
+        validation:
+          required: true
+        width: full
+      - id: g12_warnings_issued
+        label: "Have you warned the tenant about this breach?"
+        inputType: textarea
+        helperText: "Dates and content of any written warnings, tenant's response"
+        width: full
+    maps_to:
+      - ground_12.breach_type
+      - ground_12.tenancy_clause
+      - ground_12.breach_dates
+      - ground_12.breach_evidence
+      - ground_12.warnings_issued
+
+  # GROUND 13 - Waste/Neglect/Damage
+  - id: ground_13_details
+    section: Ground 13 Details
+    question: "Ground 13 - Waste, neglect, or acts causing deterioration"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 13"
+    helperText: "Ground 13 is DISCRETIONARY - tenant or lodger has caused deterioration."
+    fields:
+      - id: g13_damage_description
+        label: "Describe the damage or deterioration"
+        inputType: textarea
+        helperText: "Be specific about what damage has occurred"
+        validation:
+          required: true
+        width: full
+      - id: g13_damage_discovered_date
+        label: "When was the damage discovered?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: g13_damage_cost
+        label: "Estimated cost to repair (£)"
+        inputType: number
+        width: half
+      - id: g13_evidence_available
+        label: "What evidence do you have?"
+        inputType: textarea
+        helperText: "Photos, inspection reports, contractor quotes, inventory comparison"
+        validation:
+          required: true
+        width: full
+      - id: g13_tenant_notified
+        label: "Has the tenant been notified of this damage?"
+        inputType: yes_no
+        width: half
+      - id: g13_tenant_response
+        label: "Tenant's response to damage notification"
+        inputType: textarea
+        width: full
+    maps_to:
+      - ground_13.damage_description
+      - ground_13.damage_discovered_date
+      - ground_13.damage_cost
+      - ground_13.evidence_available
+      - ground_13.tenant_notified
+      - ground_13.tenant_response
+
+  # GROUND 14 - Nuisance/Annoyance
+  - id: ground_14_details
+    section: Ground 14 Details
+    question: "Ground 14 - Nuisance, annoyance, or illegal activity"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 14"
+    helperText: "Ground 14 is DISCRETIONARY (or mandatory for serious ASB). Document ALL incidents thoroughly."
+    fields:
+      - id: g14_behaviour_type
+        label: "Type of behaviour"
+        inputType: multiselect
+        options:
+          - "Noise nuisance"
+          - "Verbal abuse/threats"
+          - "Physical violence"
+          - "Harassment of neighbours"
+          - "Criminal activity"
+          - "Drug dealing/use"
+          - "Damage to common areas"
+          - "Intimidation"
+          - "Other antisocial behaviour"
+        validation:
+          required: true
+        width: full
+      - id: g14_incident_count
+        label: "How many incidents have there been?"
+        inputType: number
+        validation:
+          required: true
+          min: 1
+        width: half
+      - id: g14_incidents_description
+        label: "Describe each incident with dates"
+        inputType: textarea
+        helperText: "For each incident: date, time, what happened, who was affected, any witnesses"
+        validation:
+          required: true
+        width: full
+      - id: g14_affected_parties
+        label: "Who has been affected?"
+        inputType: textarea
+        helperText: "Neighbours, other residents, landlord, visitors - include names if possible"
+        validation:
+          required: true
+        width: full
+      - id: g14_witnesses
+        label: "Are there witnesses who can provide statements?"
+        inputType: yes_no
+        width: half
+      - id: g14_witness_names
+        label: "Witness names and contact details"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: g14_witnesses
+          value: true
+      - id: g14_police_involved
+        label: "Has the police been involved?"
+        inputType: yes_no
+        width: half
+      - id: g14_police_reference
+        label: "Police reference numbers"
+        inputType: textarea
+        helperText: "Include crime reference numbers, dates of reports"
+        width: full
+        dependsOn:
+          fieldId: g14_police_involved
+          value: true
+      - id: g14_council_involved
+        label: "Has the local council (ASB team) been involved?"
+        inputType: yes_no
+        width: half
+      - id: g14_council_reference
+        label: "Council/ASB team reference"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: g14_council_involved
+          value: true
+      - id: g14_warnings_issued
+        label: "What warnings have you given the tenant?"
+        inputType: textarea
+        helperText: "Dates, content, and tenant's response to any written warnings"
+        width: full
+    maps_to:
+      - ground_14.behaviour_type
+      - ground_14.incident_count
+      - ground_14.incidents_description
+      - ground_14.affected_parties
+      - ground_14.witnesses
+      - ground_14.witness_names
+      - ground_14.police_involved
+      - ground_14.police_reference
+      - ground_14.council_involved
+      - ground_14.council_reference
+      - ground_14.warnings_issued
+
+  # GROUND 15 - Damage to Furniture
+  - id: ground_15_details
+    section: Ground 15 Details
+    question: "Ground 15 - Damage to furniture"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 15"
+    helperText: "Ground 15 is DISCRETIONARY - tenant has caused damage to landlord's furniture."
+    fields:
+      - id: g15_furniture_damaged
+        label: "List the furniture items damaged"
+        inputType: textarea
+        helperText: "Describe each item, its condition before and after"
+        validation:
+          required: true
+        width: full
+      - id: g15_damage_cost
+        label: "Estimated cost of damage (£)"
+        inputType: number
+        width: half
+      - id: g15_inventory_available
+        label: "Do you have an inventory from move-in?"
+        inputType: yes_no
+        width: half
+      - id: g15_evidence_description
+        label: "Evidence of damage"
+        inputType: textarea
+        helperText: "Photos, inventory comparison, receipts for items"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - ground_15.furniture_damaged
+      - ground_15.damage_cost
+      - ground_15.inventory_available
+      - ground_15.evidence_description
+
+  # GROUND 17 - False Statement
+  - id: ground_17_details
+    section: Ground 17 Details
+    question: "Ground 17 - False statement by tenant"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 17"
+    helperText: "Ground 17 is DISCRETIONARY - tenant made a false statement to obtain tenancy."
+    fields:
+      - id: g17_false_statement
+        label: "What false statement was made?"
+        inputType: textarea
+        helperText: "Quote or describe the false statement"
+        validation:
+          required: true
+        width: full
+      - id: g17_when_discovered
+        label: "When did you discover it was false?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: g17_how_discovered
+        label: "How did you discover the statement was false?"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: g17_evidence
+        label: "What evidence proves the statement was false?"
+        inputType: textarea
+        helperText: "Documents, records, third-party confirmation"
+        validation:
+          required: true
+        width: full
+      - id: g17_induced_granting
+        label: "Did the false statement induce you to grant the tenancy?"
+        inputType: yes_no
+        helperText: "Would you have refused the tenancy if you knew the truth?"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - ground_17.false_statement
+      - ground_17.when_discovered
+      - ground_17.how_discovered
+      - ground_17.evidence
+      - ground_17.induced_granting
+
+  # ============================================================
+  # PHASE 5: COMMUNICATION TIMELINE
+  # Structured log of communications with tenant
+  # ============================================================
+  - id: communication_timeline
+    section: Communication History
+    question: "Key communications with tenant"
+    inputType: group
+    helperText: "Document important communications - these strengthen your witness statement and show reasonable attempts to resolve issues."
+    fields:
+      - id: communication_log
+        label: "Communication log"
+        inputType: textarea
+        helperText: "For each communication, include: DATE | METHOD (email/letter/phone/in-person) | SUMMARY | TENANT'S RESPONSE"
+        placeholder: "Example:\n15/01/2025 | Email | Sent rent demand for £1,200 | Tenant promised to pay by 20th\n22/01/2025 | Phone | Called re unpaid rent | No answer\n25/01/2025 | Letter | Formal written warning | Tenant replied saying would pay in February"
+        validation:
+          required: false
+        width: full
+      - id: total_contact_attempts
+        label: "Total number of contact attempts made"
+        inputType: number
+        width: half
+      - id: tenant_responsiveness
+        label: "How responsive has the tenant been?"
+        inputType: select
+        options:
+          - value: "responsive"
+            label: "Generally responsive"
+          - value: "sometimes"
+            label: "Sometimes responds"
+          - value: "rarely"
+            label: "Rarely responds"
+          - value: "never"
+            label: "Never responds"
+        width: half
+    maps_to:
+      - communication.log
+      - communication.total_attempts
+      - communication.tenant_responsiveness

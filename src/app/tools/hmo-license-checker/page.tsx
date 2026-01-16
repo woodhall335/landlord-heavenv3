@@ -1,9 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import councilsData from '@/config/jurisdictions/uk/england/councils.json';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -29,8 +37,30 @@ export default function HMOLicenseChecker() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const upsellConfig = {
+    toolName: 'HMO License Checker',
+    toolType: 'checker' as const,
+    productName: 'Complete Eviction Pack',
+    ctaLabel: `Upgrade to court-ready pack — ${PRODUCTS.complete_pack.displayPrice}`,
+    ctaHref: '/products/complete-pack',
+    jurisdiction: 'england',
+    jurisdictionLabel: 'England only',
+    freeIncludes: [
+      'HMO licensing likelihood check',
+      'Council lookup by postcode',
+      'PDF summary download',
+    ],
+    paidIncludes: [
+      'Court-ready eviction notice pack',
+      'HMO compliance reminders in the workflow',
+      'Serving steps and court forms bundle',
+    ],
+    description:
+      'If HMO compliance affects your eviction timeline, upgrade for the court-ready notice and forms pack.',
+  };
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -294,7 +324,7 @@ export default function HMOLicenseChecker() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,
@@ -325,6 +355,17 @@ export default function HMOLicenseChecker() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:hmo-license-checker',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -336,8 +377,13 @@ export default function HMOLicenseChecker() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -365,6 +411,9 @@ export default function HMOLicenseChecker() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -398,7 +447,7 @@ export default function HMOLicenseChecker() {
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="checker" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -543,7 +592,7 @@ export default function HMOLicenseChecker() {
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Assessment...'
@@ -555,9 +604,16 @@ export default function HMOLicenseChecker() {
             <p className="text-sm text-success-800 font-medium">
               ✓ Assessment generated successfully! Your PDF has been downloaded.
             </p>
+            <div className="mt-4">
+              <ToolUpsellCard {...upsellConfig} />
+            </div>
           </div>
         )}
       </form>
+
+      <div className="mt-8">
+        <ToolUpsellCard {...upsellConfig} />
+      </div>
 
       {/* Educational Content */}
       <div className="mt-12 space-y-8">
@@ -699,6 +755,27 @@ export default function HMOLicenseChecker() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.tenancyAgreement,
+          toolLinks.rentArrearsCalculator,
+          toolLinks.section21Generator,
+          toolLinks.section8Generator,
+        ]}
+      />
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="HMO License Assessment"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

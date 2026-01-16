@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiMailLine } from 'react-icons/ri';
 
 function VerifyEmailContent() {
@@ -19,17 +20,22 @@ function VerifyEmailContent() {
   const email = searchParams.get('email');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Verification"
+        title="Check Your Email"
+        subtitle="We've sent you a verification link"
+        variant="pastel"
+      />
+
+      <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">
         <Card padding="large">
           <div className="text-center py-8">
             <div className="w-20 h-20 bg-primary-subtle rounded-full flex items-center justify-center mx-auto mb-6">
               <RiMailLine className="w-10 h-10 text-[#7C3AED]" />
             </div>
-
-            <h1 className="text-2xl font-extrabold text-charcoal mb-3">
-              Check Your Email
-            </h1>
 
             <p className="text-gray-600 mb-2">
               We've sent a verification link to:
@@ -52,7 +58,7 @@ function VerifyEmailContent() {
             </div>
 
             <Link href="/auth/login">
-              <Button variant="primary" fullWidth>
+              <Button variant="heroPrimary" fullWidth>
                 Go to login
               </Button>
             </Link>
@@ -63,6 +69,7 @@ function VerifyEmailContent() {
           </div>
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

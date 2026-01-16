@@ -6,15 +6,17 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
-import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine } from 'react-icons/ri';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
+import type { OrderBySessionResponse } from '@/app/api/orders/by-session/route';
 
 interface Case {
   id: string;
@@ -23,6 +25,11 @@ interface Case {
   status: string;
   wizard_progress: number;
   created_at: string;
+  // Derived display status from API
+  display_status?: string;
+  display_label?: string;
+  display_badge_variant?: 'neutral' | 'warning' | 'success';
+  has_paid_order?: boolean;
 }
 
 interface Document {
@@ -35,16 +42,47 @@ interface Document {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isLoading: authLoading, isAuthenticated, user } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const statsSectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  // Session ID fallback redirect handling
+  const sessionId = searchParams.get('session_id');
+  const [sessionOrder, setSessionOrder] = useState<OrderBySessionResponse | null>(null);
+  const [sessionOrderLoading, setSessionOrderLoading] = useState(false);
 
-  const fetchDashboardData = async () => {
+  const handleScrollToStats = () => {
+    setTimeout(() => {
+      statsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
+
+  // Fetch order by session_id if present
+  const fetchSessionOrder = useCallback(async () => {
+    if (!sessionId || !isAuthenticated) return;
+
+    setSessionOrderLoading(true);
+    try {
+      const response = await fetch(`/api/orders/by-session?session_id=${encodeURIComponent(sessionId)}`);
+      if (response.ok) {
+        const data: OrderBySessionResponse = await response.json();
+        setSessionOrder(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch session order:', error);
+    } finally {
+      setSessionOrderLoading(false);
+    }
+  }, [sessionId, isAuthenticated]);
+
+  const fetchDashboardData = useCallback(async () => {
+    if (!isAuthenticated) return;
+
+    setIsLoadingData(true);
     try {
       const [casesRes, docsRes, statsRes] = await Promise.all([
         fetch('/api/cases'),
@@ -69,9 +107,17 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingData(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  // Only fetch data once auth check completes and user is authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      fetchDashboardData();
+      fetchSessionOrder();
+    }
+  }, [authLoading, isAuthenticated, fetchDashboardData, fetchSessionOrder]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -81,7 +127,8 @@ export default function DashboardPage() {
     });
   };
 
-  if (isLoading) {
+  // Show loading while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -92,26 +139,114 @@ export default function DashboardPage() {
     );
   }
 
+  // Show login prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card padding="large" className="max-w-md mx-auto text-center">
+          <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <RiLoginBoxLine className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
+          <p className="text-gray-600 mb-6">
+            Please log in to access your dashboard and manage your cases.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link href="/auth/login">
+              <Button variant="primary" size="large" className="w-full">
+                Log In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button variant="secondary" size="large" className="w-full">
+                Create Account
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show loading while fetching data
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading your data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero
         title="Dashboard"
-        subtitle="Overview of your cases & activity"
-        eyebrow="Workspace"
-        actions={
-          <Link href="/wizard">
-            <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90">
-              + New Document
-            </Button>
-          </Link>
+        subtitle={
+          <button onClick={handleScrollToStats} className="hero-btn-pulse">
+            Overview of your cases & activity →
+          </button>
         }
+        eyebrow={`Welcome${user?.full_name ? `, ${user.full_name}` : ''}`}
         align="left"
       />
 
       <Container size="large" className="py-8">
+        {/* Session Order Banner - shown when redirected from Stripe with session_id */}
+        {sessionId && !sessionOrderLoading && sessionOrder && (
+          <>
+            {sessionOrder.found && sessionOrder.paid && sessionOrder.case_id ? (
+              <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
+                <div className="flex items-start gap-3">
+                  <div className="text-success text-2xl">✔</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-charcoal">Payment confirmed</h3>
+                    <p className="text-gray-700 mt-1">
+                      Your payment was successful. View your case to download your documents.
+                    </p>
+                    <div className="mt-4">
+                      <Link href={`/dashboard/cases/${sessionOrder.case_id}`}>
+                        <Button variant="primary">
+                          View Your Case
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : sessionOrder.found && !sessionOrder.paid ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Payment pending</h3>
+                    <p className="text-gray-600 mt-1">
+                      Your payment is being processed. Please check back shortly or contact support if you believe this is an error.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : !sessionOrder.found ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Session not found</h3>
+                    <p className="text-gray-600 mt-1">
+                      We couldn't find a purchase associated with this session. If you recently made a payment, it may still be processing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
+
         {/* Stats Overview */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Total Cases</div>
               <div className="text-3xl font-bold text-charcoal">{stats.overview.total}</div>
@@ -165,13 +300,13 @@ export default function DashboardPage() {
                             {caseItem.case_type.replace('_', ' ')}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {caseItem.jurisdiction === 'england-wales' ? 'England & Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : 'Northern Ireland'}
+                            {caseItem.jurisdiction === 'england' ? 'England' : caseItem.jurisdiction === 'wales' ? 'Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : caseItem.jurisdiction === 'northern-ireland' ? 'Northern Ireland' : caseItem.jurisdiction}
                           </div>
                         </div>
                         <Badge
-                          variant={caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral'}
+                          variant={caseItem.display_badge_variant || (caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral')}
                         >
-                          {caseItem.status}
+                          {caseItem.display_label || caseItem.status.replace('_', ' ')}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -206,7 +341,9 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <RiFileTextLine className="w-8 h-8 text-[#7C3AED] shrink-0" />
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                          <RiFileTextLine className="w-5 h-5 text-primary" />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-charcoal truncate">{doc.document_title}</div>
                           <div className="text-xs text-gray-500">{formatDate(doc.created_at)}</div>
@@ -233,9 +370,10 @@ export default function DashboardPage() {
                     📝 Create New Document
                   </button>
                 </Link>
-                <Link href="/dashboard/hmo">
-                  <button className="w-full px-4 py-3 bg-linear-to-r from-secondary to-primary text-white rounded-lg hover:opacity-90 transition-opacity text-left font-medium">
-                    🏘️ HMO Pro Dashboard
+                {/* HMO Pro Dashboard removed - parked for later review */}
+                <Link href="/dashboard/billing">
+                  <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
+                    💳 Billing & Orders
                   </button>
                 </Link>
                 <Link href="/dashboard/settings">
@@ -250,12 +388,16 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/docs" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
-                  Documentation
+                <Link href="/help" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiBookOpenLine className="w-4 h-4 text-primary" />
+                  </div>
+                  Help Center
                 </Link>
-                <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
+                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiCustomerService2Line className="w-4 h-4 text-primary" />
+                  </div>
                   Contact Support
                 </Link>
               </div>

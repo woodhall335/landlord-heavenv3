@@ -1,0 +1,120 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">DEPOSIT PROTECTION OVERVIEW</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Complete guide for Welsh landlords</text>
+
+  <!-- Shield with money -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <g transform="translate(40, 10)">
+      <path d="M60 5 L110 20 L110 60 C110 85 60 100 60 100 C60 100 10 85 10 60 L10 20 Z" fill="#22C55E" opacity="0.2" stroke="#22C55E" stroke-width="2"/>
+      <text x="60" y="60" text-anchor="middle" fill="#22C55E" font-size="32" font-weight="bold">£</text>
+    </g>
+    <text x="100" y="130" text-anchor="middle" fill="#22C55E" font-size="11" font-weight="bold">PROTECTED</text>
+    <text x="100" y="148" text-anchor="middle" fill="#6D28D9" font-size="9">Deposit must be</text>
+    <text x="100" y="163" text-anchor="middle" fill="#6D28D9" font-size="9">protected by law</text>
+  </g>
+
+  <!-- Why protect -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHY PROTECT</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Tenant security</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Legal requirement</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Enables eviction rights</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Fair dispute resolution</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#F59E0B"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Max 2 months rent</text>
+    </g>
+  </g>
+
+  <!-- Approved schemes -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SCHEMES</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">DPS (free custodial)</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">MyDeposits</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">TDS</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Custodial or insured</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#F59E0B" font-size="9" font-weight="bold">Choose one scheme</text>
+    </g>
+  </g>
+
+  <!-- Process -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY STEPS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">STEP 1: PROTECT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Within 30 days</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Choose scheme</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Register deposit</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Get certificate</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">STEP 2: INFORM</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Give prescribed info</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Within 30 days</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Use scheme forms</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Keep proof</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">STEP 3: RETURN</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Within 10 days of end</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Agree deductions</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Use ADR if dispute</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Release funds</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>
