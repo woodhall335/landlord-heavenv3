@@ -212,10 +212,12 @@ function buildSection157Text(params: WalesPartDParams, groundDef: WalesFaultGrou
         'applicable to this occupation contract.'
       );
     }
-  }
 
-  parts.push('');
-  parts.push('A schedule of arrears is attached setting out each rent period, the amount due, payments received (if any), and the amount outstanding.');
+    // Add schedule sentence only in fallback path
+    // (the detailed narrative from buildWalesArrearsNarrativeFromSchedule already includes it)
+    parts.push('');
+    parts.push('A schedule of arrears is attached setting out each rent period, the amount due, payments received (if any), and the amount outstanding.');
+  }
 
   return parts.join('\n');
 }

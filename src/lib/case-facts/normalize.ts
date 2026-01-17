@@ -3503,6 +3503,173 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
+  // WALES COMPLIANCE SCHEMA FIELDS (pre-service checklist)
+  // These map directly from WizardFacts as stored by WalesComplianceSection
+  // =============================================================================
+
+  // Prescribed info - template uses prescribed_info_served, wizard may use either
+  templateData.prescribed_info_served = coerceBoolean(
+    getFirstValue(wizard, [
+      'prescribed_info_served',
+      'prescribed_info_given',
+      'prescribed_info_provided',
+      'compliance.prescribed_info_served',
+    ])
+  );
+
+  // Gas supply and safety
+  templateData.gas_supply_present = coerceBoolean(
+    getFirstValue(wizard, [
+      'gas_supply_present',
+      'has_gas_supply',
+      'gas_supply',
+      'property_has_gas',
+    ])
+  );
+
+  templateData.gas_safety_certificate_valid = coerceBoolean(
+    getFirstValue(wizard, [
+      'gas_safety_certificate_valid',
+      'gas_safety_cert_valid',
+      'gas_safety_cert_provided',
+      'gas_cert_provided',
+      'gas_safety_cert_served',
+      'compliance.gas_safety_cert_provided',
+    ])
+  );
+
+  // EICR - template uses eicr_valid
+  templateData.eicr_valid = coerceBoolean(
+    getFirstValue(wizard, [
+      'eicr_valid',
+      'eicr_provided',
+      'eicr_certificate_valid',
+      'electrical_cert_provided',
+      'electrical_safety_cert_provided',
+      'compliance.eicr_provided',
+    ])
+  );
+
+  // EPC
+  templateData.epc_available = coerceBoolean(
+    getFirstValue(wizard, [
+      'epc_available',
+      'epc_provided',
+      'epc_valid',
+      'compliance.epc_provided',
+    ])
+  );
+
+  // Smoke alarms - schema uses smoke_alarms_working
+  templateData.smoke_alarms_working = coerceBoolean(
+    getFirstValue(wizard, [
+      'smoke_alarms_working',
+      'smoke_alarms_installed',
+      'smoke_alarms_tested',
+      'smoke_alarm_installed',
+      'compliance.smoke_alarms_working',
+    ])
+  );
+  // Aliases for template compatibility
+  templateData.smoke_alarms_installed = templateData.smoke_alarms_working;
+  templateData.smoke_alarms_tested = templateData.smoke_alarms_working;
+
+  // Solid fuel appliance and CO alarms
+  templateData.solid_fuel_appliance_present = coerceBoolean(
+    getFirstValue(wizard, [
+      'solid_fuel_appliance_present',
+      'has_solid_fuel_appliance',
+      'co_alarm_required',
+    ])
+  );
+  // Alias for template compatibility
+  templateData.co_alarm_required = templateData.solid_fuel_appliance_present;
+
+  templateData.co_alarms_working = coerceBoolean(
+    getFirstValue(wizard, [
+      'co_alarms_working',
+      'co_alarm_installed',
+      'co_alarm_working',
+      'co_detector_installed',
+      'compliance.co_alarms_working',
+    ])
+  );
+  // Alias for template compatibility
+  templateData.co_alarm_installed = templateData.co_alarms_working;
+
+  // Fitness for habitation
+  templateData.property_fit_for_habitation = coerceBoolean(
+    getFirstValue(wizard, [
+      'property_fit_for_habitation',
+      'property_fitness_confirmed',
+      'dwelling_fit_for_habitation',
+      'fitness_for_habitation',
+    ])
+  );
+
+  // Eviction safeguards
+  templateData.retaliatory_eviction_complaint = coerceBoolean(
+    getFirstValue(wizard, [
+      'retaliatory_eviction_complaint',
+      'repair_complaint_within_6_months',
+      'recent_repair_complaint',
+    ])
+  );
+
+  templateData.local_authority_investigation = coerceBoolean(
+    getFirstValue(wizard, [
+      'local_authority_investigation',
+      'la_investigation_ongoing',
+      'council_investigation',
+    ])
+  );
+
+  // Wales fault grounds and evidence
+  const walesFaultGrounds = getWizardValue(wizard, 'wales_fault_grounds');
+  if (Array.isArray(walesFaultGrounds)) {
+    templateData.wales_fault_grounds = walesFaultGrounds;
+    // Build display string for template
+    if (walesFaultGrounds.length > 0) {
+      templateData.selected_grounds_display = walesFaultGrounds
+        .map((g: string) => {
+          // Convert ground value to human-readable label
+          const labels: Record<string, string> = {
+            'rent_arrears_serious': 'Section 157 - Serious Rent Arrears',
+            'rent_arrears_other': 'Section 159 - Rent Arrears (Other)',
+            'breach_of_contract': 'Section 159 - Breach of Occupation Contract',
+            'anti_social_behaviour': 'Section 161 - Anti-Social Behaviour',
+            'domestic_abuse': 'Section 159 - Domestic Abuse Perpetrator',
+            'false_statement': 'Section 159 - False Statement',
+            'estate_management': 'Section 160 - Estate Management',
+          };
+          return labels[g] || g;
+        })
+        .join(', ');
+    }
+  } else if (walesFaultGrounds && typeof walesFaultGrounds === 'string') {
+    templateData.wales_fault_grounds = [walesFaultGrounds];
+    templateData.selected_grounds_display = walesFaultGrounds;
+  }
+
+  templateData.evidence_exists = coerceBoolean(
+    getFirstValue(wizard, [
+      'evidence_exists',
+      'evidence_available',
+      'has_evidence',
+      'evidence_confirmed',
+    ])
+  );
+
+  // User declaration
+  templateData.user_declaration = coerceBoolean(
+    getFirstValue(wizard, [
+      'user_declaration',
+      'declaration_confirmed',
+      'compliance_declaration',
+    ])
+  );
+
+  // =============================================================================
   // ROUTE & GROUNDS
   // =============================================================================
   templateData.selected_notice_route = extractString(
