@@ -15,6 +15,7 @@
 import {
   WALES_COMPLIANCE_FIELDS,
   shouldFieldApply,
+  evaluateCondition,
   normalizeWalesFaultGrounds,
   isNumericValueMissing,
   isArrearsValueInvalid,
@@ -396,6 +397,32 @@ describe('Issue C: Legacy case migration', () => {
       const result2 = migrateWalesLegacyFacts(result1, 'wales', 'notice_only');
       expect(result1).toEqual(result2);
     });
+  });
+});
+
+// ============================================================================
+// evaluateCondition literal boolean handling
+// ============================================================================
+
+describe('evaluateCondition literal boolean handling', () => {
+  it('should return false for literal "false" string', () => {
+    expect(evaluateCondition('false', {})).toBe(false);
+  });
+
+  it('should return true for literal "true" string', () => {
+    expect(evaluateCondition('true', {})).toBe(true);
+  });
+
+  it('should return true for empty string (default behavior)', () => {
+    expect(evaluateCondition('', {})).toBe(true);
+  });
+
+  it('should handle "false" with whitespace', () => {
+    expect(evaluateCondition('  false  ', {})).toBe(false);
+  });
+
+  it('should handle "true" with whitespace', () => {
+    expect(evaluateCondition('  true  ', {})).toBe(true);
   });
 });
 
