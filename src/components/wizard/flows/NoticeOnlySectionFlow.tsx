@@ -175,8 +175,26 @@ const SECTIONS: WizardSection[] = [
       // Declaration required
       const declarationComplete = facts.user_declaration === true;
 
-      // For fault-based: also need evidence confirmation
-      const evidenceCompliance = !isFaultBased || facts.evidence_exists === true;
+      // For fault-based: check evidence_exists OR derive from actual data
+      // This allows completion even before visiting Notice Details tab
+      let evidenceCompliance = true;
+      if (isFaultBased) {
+        // Accept explicit evidence_exists = true
+        if (facts.evidence_exists === true) {
+          evidenceCompliance = true;
+        } else {
+          // Auto-derive from actual data: arrears schedule or breach description
+          const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+          const hasArrearsGround = selectedGrounds.includes('rent_arrears_serious') ||
+                                   selectedGrounds.includes('rent_arrears_other');
+          const arrearsItems = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
+          const hasArrearsEvidence = !hasArrearsGround || (Array.isArray(arrearsItems) && arrearsItems.length > 0);
+          const hasBreachDescription = Boolean(facts.breach_description);
+
+          // Evidence is sufficient if arrears grounds have schedule AND we have breach description
+          evidenceCompliance = hasArrearsEvidence && hasBreachDescription;
+        }
+      }
 
       return (
         coreCompliance &&
@@ -189,18 +207,17 @@ const SECTIONS: WizardSection[] = [
     hasBlockers: (facts, jurisdiction) => {
       if (jurisdiction !== 'wales') return [];
 
-      // Use the Wales compliance schema to get blocking violations
-      const route = facts.eviction_route as string;
-      const isFaultBased = route === 'fault_based';
-
       // Get all blocking violations from the schema
       const allViolations = getWalesBlockingViolations(facts);
 
-      // For section_173, filter out fault-based-only violations
-      const faultBasedOnlyCategories = ['fault_based_grounds', 'breach_evidence'];
-      const relevantViolations = isFaultBased
-        ? allViolations
-        : allViolations.filter((v) => !faultBasedOnlyCategories.includes(v.field.category));
+      // Always filter out categories handled by Notice Details tab (WalesNoticeSection)
+      // This applies to BOTH section_173 and fault_based routes
+      // - fault_based_grounds: Ground selection and arrears validation
+      // - breach_evidence: evidence_exists, arrears_amount, arrears_weeks_unpaid (auto-derived)
+      const categoriesHandledByNoticeDetails = ['fault_based_grounds', 'breach_evidence'];
+      const relevantViolations = allViolations.filter(
+        (v) => !categoriesHandledByNoticeDetails.includes(v.field.category)
+      );
 
       return relevantViolations.map((v) => v.message);
     },
