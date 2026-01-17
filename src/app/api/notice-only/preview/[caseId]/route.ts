@@ -1065,16 +1065,24 @@ export async function GET(
           faultBasedSection.includes('Section 157') ||
           faultBasedSection.includes('Section 159');
 
-        const arrearsItems = wizardFacts.arrears_items || [];
+        // Check both flat and nested locations for arrears_items
+        const arrearsItems = wizardFacts.arrears_items ||
+                             wizardFacts.issues?.rent_arrears?.arrears_items ||
+                             [];
 
         if ((isRentArrearsCase || legacyArrearsDetected) && arrearsItems.length > 0) {
           console.log('[NOTICE-PREVIEW-API] Generating Rent Schedule for Wales fault-based rent arrears');
           try {
             const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
 
+            // Check both flat and nested locations for total_arrears
+            const totalArrears = wizardFacts.total_arrears ||
+                                 wizardFacts.issues?.rent_arrears?.total_arrears ||
+                                 wizardFacts.rent_arrears_amount ||
+                                 null;
             const arrearsScheduleData = getArrearsScheduleData({
               arrears_items: arrearsItems,
-              total_arrears: wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || null,
+              total_arrears: totalArrears,
               rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
               rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
               include_schedule: true,
