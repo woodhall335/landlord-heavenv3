@@ -808,6 +808,10 @@ export function evaluateCondition(expr: string, facts: Record<string, unknown>):
   const trimmed = expr.trim();
   if (!trimmed) return true;
 
+  // Handle literal boolean strings (for auto-derived fields that should never show)
+  if (trimmed === 'false') return false;
+  if (trimmed === 'true') return true;
+
   // OR-split
   const orParts = trimmed.split('||').map((p) => p.trim()).filter(Boolean);
   if (orParts.length > 1) {
