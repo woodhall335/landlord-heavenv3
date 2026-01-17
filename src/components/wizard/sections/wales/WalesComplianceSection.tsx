@@ -21,7 +21,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { RiErrorWarningLine, RiAlertLine, RiInformationLine } from 'react-icons/ri';
 
-import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
+import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   WALES_COMPLIANCE_FIELDS,
   type ComplianceField,
@@ -30,11 +30,9 @@ import {
   getBlockingViolations,
   getSoftBlockWarnings,
   normalizeWalesFaultGrounds,
-  hasArrearsGroundSelected,
 } from '@/lib/wales/compliance-schema';
-import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
-import { computeArrears } from '@/lib/arrears-engine';
-import { isWalesSection157ThresholdMet, calculateWalesArrearsInWeeks } from '@/lib/wales/seriousArrearsThreshold';
+// NOTE: ArrearsScheduleStep, computeArrears, and threshold functions are now
+// used ONLY in WalesNoticeSection.tsx (Notice Details tab) - the single source of truth
 
 interface WalesComplianceSectionProps {
   facts: WizardFacts;
@@ -57,12 +55,32 @@ const GENERAL_COMPLIANCE_CATEGORIES: ComplianceCategory[] = [
 ];
 
 /**
- * Categories that only apply to fault-based routes.
+ * Categories that are handled ONLY by WalesNoticeSection.tsx (Notice Details tab).
+ *
+ * These are EXCLUDED from the Compliance tab to fix duplicate UI issue:
+ * - Ground selection (wales_fault_grounds)
+ * - Arrears schedule (ArrearsScheduleStep)
+ * - Ground-specific evidence panels (ASB, breach of contract, false statement)
+ * - Breach description and Part D particulars
+ *
+ * The Compliance tab now focuses solely on PRE-SERVICE compliance:
+ * - Landlord registration (Rent Smart Wales)
+ * - Occupation contract (written statement)
+ * - Deposit protection
+ * - Property safety (gas, EICR, EPC, alarms)
+ * - Eviction safeguards (retaliatory eviction, LA investigation)
  */
-const FAULT_BASED_ONLY_CATEGORIES: ComplianceCategory[] = [
+const CATEGORIES_HANDLED_BY_NOTICE_DETAILS: ComplianceCategory[] = [
   'fault_based_grounds',
   'breach_evidence',
 ];
+
+/**
+ * Categories that only apply to fault-based routes (rendered on Compliance tab).
+ * NOTE: This is now empty because fault-based ground selection and evidence
+ * are handled exclusively in WalesNoticeSection.tsx (Notice Details tab).
+ */
+const FAULT_BASED_ONLY_CATEGORIES: ComplianceCategory[] = [];
 
 /**
  * Human-readable category titles
@@ -416,41 +434,8 @@ const ComplianceFieldInput: React.FC<{
   }
 };
 
-/**
- * Arrears Schedule Guidance Panel
- * Shown when an arrears ground is selected in Wales fault-based notice
- */
-const ArrearsScheduleGuidancePanel: React.FC<{
-  onFocus?: () => void;
-}> = ({ onFocus }) => {
-  return (
-    <div
-      className="p-4 bg-blue-50 border border-blue-200 rounded-lg"
-      onFocus={onFocus}
-      tabIndex={0}
-    >
-      <div className="flex items-start gap-2">
-        <RiInformationLine className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-        <div>
-          <h5 className="text-sm font-medium text-blue-900 mb-2">Rent Schedule Guidance</h5>
-          <p className="text-sm text-blue-800 mb-2">
-            For rent arrears grounds, you should prepare a rent schedule or payment history. This is essential
-            if you need to proceed with possession proceedings later.
-          </p>
-          <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
-            <li>Include all dates rent was due and amounts charged</li>
-            <li>Record all payments received with dates and amounts</li>
-            <li>Show running balance after each transaction</li>
-            <li>Calculate total arrears as at the date of notice</li>
-          </ul>
-          <p className="text-xs text-blue-600 mt-2 italic">
-            For Notice Only, you confirm you have this documentation but do not need to upload it now.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
+// ArrearsScheduleGuidancePanel - REMOVED
+// Guidance is now shown in WalesNoticeSection.tsx within the ArrearsDetailsPanel
 
 /**
  * Fields that are rendered in dedicated UI blocks (not via schema-driven rendering).
@@ -477,10 +462,10 @@ const ComplianceCategorySection: React.FC<{
     shouldFieldApply(field.field_id, facts) && !FIELDS_WITH_DEDICATED_UI.includes(field.field_id)
   );
 
-  // Check if arrears guidance should show (for breach_evidence category with arrears grounds)
-  const showArrearsGuidance = category === 'breach_evidence' && hasArrearsGroundSelected(facts.wales_fault_grounds);
+  // NOTE: Arrears guidance is now shown in WalesNoticeSection.tsx (Notice Details tab)
+  // The breach_evidence and fault_based_grounds categories are no longer rendered here
 
-  if (applicableFields.length === 0 && !showArrearsGuidance) {
+  if (applicableFields.length === 0) {
     return null;
   }
 
@@ -492,13 +477,6 @@ const ComplianceCategorySection: React.FC<{
       </div>
 
       <div className="space-y-6 pl-0 md:pl-2">
-        {/* Show arrears schedule guidance at the top of breach_evidence when arrears grounds selected */}
-        {showArrearsGuidance && (
-          <ArrearsScheduleGuidancePanel
-            onFocus={() => onSetCurrentQuestionId?.('arrears_schedule_guidance')}
-          />
-        )}
-
         {applicableFields.map((field) => (
           <ComplianceFieldInput
             key={field.field_id}
@@ -514,209 +492,17 @@ const ComplianceCategorySection: React.FC<{
 };
 
 // ============================================================================
-// ARREARS SCHEDULE SECTION
+// ARREARS SCHEDULE SECTION - REMOVED
 // ============================================================================
-interface ArrearsScheduleSectionProps {
-  facts: WizardFacts;
-  onUpdate: (updates: Record<string, unknown>) => void | Promise<void>;
-}
-
-/**
- * Renders the ArrearsScheduleStep for Wales arrears grounds.
- * Shows a period-by-period rent schedule table editor.
- */
-const ArrearsScheduleSection: React.FC<ArrearsScheduleSectionProps> = ({
-  facts,
-  onUpdate,
-}) => {
-  // Get arrears items from facts (check both locations)
-  const arrearsItems: ArrearsItem[] = useMemo(() => {
-    return facts.issues?.rent_arrears?.arrears_items ||
-           facts.arrears_items ||
-           [];
-  }, [facts.issues?.rent_arrears?.arrears_items, facts.arrears_items]);
-
-  // Calculate arrears summary
-  const arrearsSummary = useMemo(() => {
-    if (!arrearsItems || arrearsItems.length === 0) return null;
-    const rentAmount = facts.rent_amount || 0;
-    const rentFrequency = facts.rent_frequency || 'monthly';
-    return computeArrears(arrearsItems, rentFrequency, rentAmount);
-  }, [arrearsItems, facts.rent_amount, facts.rent_frequency]);
-
-  // Calculate Wales Section 157 threshold status
-  const thresholdResult = useMemo(() => {
-    if (!arrearsSummary || arrearsSummary.total_arrears === 0) return null;
-    const rentAmount = facts.rent_amount || 0;
-    const rentFrequency = facts.rent_frequency || 'monthly';
-    return isWalesSection157ThresholdMet(
-      arrearsSummary.total_arrears,
-      rentFrequency,
-      rentAmount
-    );
-  }, [arrearsSummary, facts.rent_amount, facts.rent_frequency]);
-
-  // Convert facts to format expected by ArrearsScheduleStep
-  const scheduleStepFacts = useMemo(() => ({
-    tenancy: {
-      start_date: facts.tenancy_start_date,
-      rent_amount: facts.rent_amount,
-      rent_frequency: facts.rent_frequency,
-    },
-    tenancy_start_date: facts.tenancy_start_date,
-    rent_amount: facts.rent_amount,
-    rent_frequency: facts.rent_frequency,
-    notice: {
-      notice_date: facts.notice_served_date,
-    },
-    notice_date: facts.notice_served_date,
-    issues: {
-      rent_arrears: {
-        arrears_items: arrearsItems,
-        has_arrears: arrearsItems.length > 0,
-      },
-    },
-  }), [facts, arrearsItems]);
-
-  // Handle updates from ArrearsScheduleStep
-  // Auto-derives arrears_amount, arrears_weeks_unpaid, and arrears_schedule_confirmed
-  const handleArrearsUpdate = useCallback(async (updates: Record<string, any>) => {
-    if (updates.issues?.rent_arrears) {
-      const arrearsData = updates.issues.rent_arrears;
-      const totalArrears = arrearsData.total_arrears || 0;
-      const arrearsItems = arrearsData.arrears_items || [];
-      const rentAmount = facts.rent_amount || 0;
-      const rentFrequency = facts.rent_frequency || 'monthly';
-
-      // Calculate weeks of rent unpaid from the schedule data
-      const weeksUnpaid = rentAmount > 0 && totalArrears > 0
-        ? calculateWalesArrearsInWeeks(totalArrears, rentAmount, rentFrequency)
-        : 0;
-
-      await onUpdate({
-        // Canonical flat keys (same as England)
-        arrears_items: arrearsItems,
-        total_arrears: totalArrears,
-        arrears_at_notice_date: arrearsData.arrears_at_notice_date,
-        // Auto-derived compliance fields (no longer asked as questions)
-        arrears_amount: totalArrears,
-        arrears_weeks_unpaid: weeksUnpaid,
-        arrears_schedule_confirmed: arrearsItems.length > 0,
-        // Also keep nested structure for compatibility
-        issues: {
-          ...facts.issues,
-          rent_arrears: arrearsData,
-        },
-      });
-    } else {
-      await onUpdate(updates);
-    }
-  }, [facts.issues, facts.rent_amount, facts.rent_frequency, onUpdate]);
-
-  // Check prerequisites
-  const missingPrerequisites: string[] = [];
-  if (!facts.tenancy_start_date) missingPrerequisites.push('Tenancy start date');
-  if (!facts.rent_amount) missingPrerequisites.push('Rent amount');
-  if (!facts.rent_frequency) missingPrerequisites.push('Rent frequency');
-
-  // Determine if serious arrears ground is selected
-  const selectedGrounds = normalizeWalesFaultGrounds(facts.wales_fault_grounds);
-  const isSerious = selectedGrounds.includes('rent_arrears_serious');
-
-  return (
-    <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <div>
-        <h4 className="text-sm font-semibold text-blue-900">
-          {isSerious ? 'Section 157 - Serious Rent Arrears Schedule' : 'Section 159 - Rent Arrears Schedule'}
-        </h4>
-        <p className="text-xs text-blue-700 mt-1">
-          {isSerious
-            ? 'Complete the arrears schedule below. At least 2 months arrears required for Section 157.'
-            : 'Complete the arrears schedule below to document the rent arrears.'}
-        </p>
-      </div>
-
-      {missingPrerequisites.length > 0 ? (
-        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-          <p className="text-sm text-amber-800 font-medium">Missing Information</p>
-          <p className="text-xs text-amber-700 mt-1">
-            Please complete the Tenancy section first: {missingPrerequisites.join(', ')}
-          </p>
-        </div>
-      ) : (
-        <>
-          <ArrearsScheduleStep
-            facts={scheduleStepFacts}
-            onUpdate={handleArrearsUpdate}
-            jurisdiction="wales"
-          />
-
-          {/* Summary display */}
-          {arrearsSummary && arrearsSummary.total_arrears > 0 && (
-            <div className="p-3 bg-white border border-blue-200 rounded-lg">
-              <h5 className="text-sm font-medium text-blue-900 mb-2">Arrears Summary</h5>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <span className="text-gray-600">Total arrears:</span>
-                  <span className="ml-2 font-semibold text-red-600">
-                    £{arrearsSummary.total_arrears.toFixed(2)}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-600">In months:</span>
-                  <span className="ml-2 font-semibold">
-                    {arrearsSummary.arrears_in_months.toFixed(2)}
-                  </span>
-                </div>
-                {/* Wales Section 157 threshold display */}
-                {isSerious && thresholdResult && (
-                  <>
-                    <div>
-                      <span className="text-gray-600">Threshold required:</span>
-                      <span className="ml-2 font-semibold">
-                        {thresholdResult.thresholdLabel} (£{thresholdResult.thresholdAmount.toFixed(2)})
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Status:</span>
-                      <span className={`ml-2 font-semibold ${thresholdResult.met ? 'text-green-600' : 'text-amber-600'}`}>
-                        {thresholdResult.met ? 'Threshold Met' : 'Below Threshold'}
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Wales Section 157 threshold status indicator */}
-              {isSerious && thresholdResult && (
-                <div className={`mt-3 p-2 rounded-lg ${
-                  thresholdResult.met
-                    ? 'bg-green-50 border border-green-200'
-                    : 'bg-amber-50 border border-amber-200'
-                }`}>
-                  <p className={`text-sm font-medium ${
-                    thresholdResult.met ? 'text-green-800' : 'text-amber-800'
-                  }`}>
-                    {thresholdResult.met
-                      ? '✓ Section 157 Threshold Met'
-                      : '⚠ Section 157 Threshold Not Met'}
-                  </p>
-                  <p className={`text-xs mt-1 ${
-                    thresholdResult.met ? 'text-green-700' : 'text-amber-700'
-                  }`}>
-                    {thresholdResult.met
-                      ? `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} meet the statutory threshold for serious rent arrears under the Renting Homes (Wales) Act 2016.`
-                      : `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} are below the Section 157 threshold. You may use Section 159 (some rent arrears) instead.`}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-};
+// The ArrearsScheduleSection component has been REMOVED from this file.
+// Arrears schedule is now handled ONLY in WalesNoticeSection.tsx (Notice Details tab)
+// to eliminate duplicate UI and ensure a single source of truth.
+//
+// Data flow:
+// - User enters arrears data in WalesNoticeSection.tsx -> ArrearsDetailsPanel
+// - ArrearsScheduleStep updates facts.arrears_items, facts.total_arrears, etc.
+// - These values flow to document generation (partDBuilder, HSB files)
+// ============================================================================
 
 /**
  * Main Wales Compliance Section component
@@ -755,26 +541,24 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
   }, [visibleCategories]);
 
   // Get blocking violations and soft warnings
+  // Filter out categories handled by Notice Details tab (fault_based_grounds, breach_evidence)
+  // These are validated in WalesNoticeSection.tsx, not here
   const blockingViolations = useMemo(() => {
-    // For section_173, filter out fault-based-only violations
     const allViolations = getBlockingViolations(facts);
-    if (isSection173) {
-      return allViolations.filter(
-        (v) => !FAULT_BASED_ONLY_CATEGORIES.includes(v.field.category)
-      );
-    }
-    return allViolations;
-  }, [facts, isSection173]);
+    // Always filter out categories handled by Notice Details tab
+    // This prevents showing "select a ground" errors on the Compliance tab
+    return allViolations.filter(
+      (v) => !CATEGORIES_HANDLED_BY_NOTICE_DETAILS.includes(v.field.category)
+    );
+  }, [facts]);
 
   const softWarnings = useMemo(() => {
     const allWarnings = getSoftBlockWarnings(facts);
-    if (isSection173) {
-      return allWarnings.filter(
-        (w) => !FAULT_BASED_ONLY_CATEGORIES.includes(w.field.category)
-      );
-    }
-    return allWarnings;
-  }, [facts, isSection173]);
+    // Always filter out categories handled by Notice Details tab
+    return allWarnings.filter(
+      (w) => !CATEGORIES_HANDLED_BY_NOTICE_DETAILS.includes(w.field.category)
+    );
+  }, [facts]);
 
   // Handle updates
   const handleUpdate = useCallback(
@@ -796,8 +580,8 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
             <>
               Before serving a fault-based breach notice in Wales, you must verify compliance
               with Rent Smart Wales registration, occupation contract requirements, deposit
-              protection (if applicable), and safety certificates. You must also confirm you
-              have evidence to support the breach.
+              protection (if applicable), and safety certificates. Ground selection and
+              breach evidence are provided in the Notice Details section.
             </>
           ) : (
             <>
@@ -865,17 +649,15 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
       })}
 
       {/* =================================================================== */}
-      {/* ARREARS SCHEDULE EDITOR - shown when arrears grounds are selected */}
+      {/* ARREARS SCHEDULE - REMOVED: Now handled in WalesNoticeSection.tsx */}
+      {/* The Notice Details tab is the single source of truth for:           */}
+      {/* - Ground selection (wales_fault_grounds)                           */}
+      {/* - Arrears schedule (ArrearsScheduleStep)                           */}
+      {/* - Ground-specific evidence panels                                  */}
       {/* =================================================================== */}
-      {isFaultBased && hasArrearsGroundSelected(facts.wales_fault_grounds) && (
-        <ArrearsScheduleSection
-          facts={facts}
-          onUpdate={handleUpdate}
-        />
-      )}
 
-      {/* User declaration - always shown at the end */}
-      {fieldsByCategory.has('breach_evidence') && isFaultBased && (
+      {/* User declaration - shown for fault-based routes */}
+      {isFaultBased && (
         <div className="pt-4 border-t border-gray-200">
           <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
             <h4 className="text-sm font-medium text-gray-900 mb-3">Declaration</h4>
