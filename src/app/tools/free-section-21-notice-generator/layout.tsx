@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Section 21 Notice Generator | Landlord Heaven',
+  title: 'Free Section 21 Notice Generator (England)',
   description:
-    'Generate a free Section 21 notice template for England & Wales. Get a court-ready version with legal validation for £14.99. Free landlord tool.',
+    'Generate a free Section 21 notice template for England. Create a court-ready version with validation using the paid pack. Free landlord tool.',
   keywords: [
     'free section 21 notice generator',
     'section 21 template',
@@ -11,13 +12,17 @@ export const metadata: Metadata = {
     'section 21 form',
     'landlord tools',
     'free eviction notice',
-    'section 21 notice England Wales',
+    'section 21 notice England',
   ],
   openGraph: {
-    title: 'Free Section 21 Notice Generator | Landlord Heaven',
+    title: 'Free Section 21 Notice Generator (England) | Landlord Heaven',
     description:
-      'Generate a free Section 21 notice template. Upgrade for court-ready version.',
+      'Generate a free Section 21 notice template for England. Upgrade for a court-ready version.',
     type: 'website',
+    url: getCanonicalUrl('/tools/free-section-21-notice-generator'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-section-21-notice-generator'),
   },
 };
 
@@ -37,7 +42,7 @@ export default function FreeSection21Layout({
             '@type': 'HowTo',
             name: 'How to Generate a Section 21 Notice',
             description:
-              'Generate a Section 21 notice template for ending an assured shorthold tenancy in England & Wales',
+              'Generate a Section 21 notice template for ending an assured shorthold tenancy in England',
             estimatedCost: {
               '@type': 'MonetaryAmount',
               currency: 'GBP',

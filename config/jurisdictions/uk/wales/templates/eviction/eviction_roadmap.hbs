@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wales Eviction Roadmap</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #333; }
+    .header { text-align: center; border-bottom: 2px solid #c8102e; padding-bottom: 15px; margin-bottom: 20px; }
+    h1 { color: #c8102e; margin-bottom: 5px; }
+    .subtitle { color: #555; font-size: 14pt; }
+    .step { margin-bottom: 20px; padding: 15px; border-left: 4px solid #c8102e; background: #fafafa; }
+    .step-number { display: inline-block; width: 30px; height: 30px; background: #c8102e; color: white; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+    .step-title { font-size: 14pt; font-weight: bold; color: #333; }
+    .step-content { margin-top: 10px; }
+    .timeline { background: #fff3cd; padding: 10px; border-radius: 4px; margin-top: 10px; }
+    .warning { background: #f8d7da; padding: 10px; border-radius: 4px; margin-top: 10px; }
+    .warning strong { color: #721c24; }
+    .tip { background: #d4edda; padding: 10px; border-radius: 4px; margin-top: 10px; }
+    .footer { margin-top: 30px; text-align: center; font-size: 10pt; color: #777; border-top: 1px solid #ddd; padding-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>WALES EVICTION ROADMAP</h1>
+    <p class="subtitle">Renting Homes (Wales) Act 2016 - Step by Step Guide</p>
+  </div>
+
+  <p><strong>Property:</strong> {{property.full_address}}</p>
+  <p><strong>Contract-Holder:</strong> {{tenant.full_name}}</p>
+  <p><strong>Notice Type:</strong> {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}Section 173 (No-Fault){{else}}Fault-Based (Section 157/159/161/162){{/if}}</p>
+
+  <hr>
+
+  <div class="step">
+    <span class="step-number">1</span>
+    <span class="step-title">Verify Your Compliance</span>
+    <div class="step-content">
+      <p>Before serving any notice, ensure you meet ALL requirements:</p>
+      <ul>
+        <li>☐ Registered with <strong>Rent Smart Wales</strong></li>
+        <li>☐ Deposit protected in approved scheme (if taken)</li>
+        <li>☐ Written statement of occupation contract provided</li>
+        <li>☐ All required documents given to contract-holder</li>
+      </ul>
+      <div class="warning">
+        <strong>⚠️ Critical:</strong> You cannot serve a valid eviction notice without Rent Smart Wales registration.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">2</span>
+    <span class="step-title">Serve Your Notice</span>
+    <div class="step-content">
+      <p>Serve the notice correctly:</p>
+      <ul>
+        <li>Hand delivery (keep detailed notes)</li>
+        <li>First class post (add 2 working days to notice period)</li>
+        <li>Leave at property in prominent position</li>
+      </ul>
+      <div class="timeline">
+        <strong>Notice Period:</strong>
+        {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}
+          Minimum 6 months (Section 173 no-fault)
+        {{else}}
+          Varies by ground - check your notice for specific period
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">3</span>
+    <span class="step-title">Wait for Notice Period to Expire</span>
+    <div class="step-content">
+      <p>During this time:</p>
+      <ul>
+        <li>Document any further breaches</li>
+        <li>Keep records of all communication</li>
+        <li>Prepare your evidence bundle</li>
+        <li>Consider if contract-holder may vacate voluntarily</li>
+      </ul>
+      <div class="tip">
+        <strong>💡 Tip:</strong> Many contract-holders leave before court proceedings. Maintain communication.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">4</span>
+    <span class="step-title">Apply to Court</span>
+    <div class="step-content">
+      <p>If contract-holder hasn't vacated:</p>
+      <ul>
+        <li>Complete Form N5 (standard possession) or Form N5B (accelerated - Section 173 only)</li>
+        <li>Prepare Form N119 (Particulars of Claim)</li>
+        <li>Pay court fee (currently £355 online, £391 paper)</li>
+        <li>File at your local County Court</li>
+      </ul>
+      <div class="timeline">
+        <strong>Timeline:</strong> Court hearing typically 4-8 weeks after filing
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">5</span>
+    <span class="step-title">Attend Court Hearing</span>
+    <div class="step-content">
+      <p>For standard possession claims:</p>
+      <ul>
+        <li>Bring all original documents</li>
+        <li>Bring proof of Rent Smart Wales registration</li>
+        <li>Bring evidence of deposit protection</li>
+        <li>Prepare to answer questions from District Judge</li>
+      </ul>
+      <p><em>Note: Accelerated procedure (N5B) usually decided on papers without hearing.</em></p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">6</span>
+    <span class="step-title">Obtain Possession Order</span>
+    <div class="step-content">
+      <p>If successful, court grants possession order:</p>
+      <ul>
+        <li>Usually 14 days for contract-holder to vacate</li>
+        <li>Can be extended to 42 days in exceptional circumstances</li>
+        <li>Order specifies exact date possession required</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-number">7</span>
+    <span class="step-title">Enforcement (If Needed)</span>
+    <div class="step-content">
+      <p>If contract-holder still refuses to leave:</p>
+      <ul>
+        <li>Apply for Warrant of Possession (Form N325)</li>
+        <li>Pay bailiff fee (currently £130)</li>
+        <li>County Court Bailiff will attend to evict</li>
+        <li>You may attend but cannot assist physically</li>
+      </ul>
+      <div class="warning">
+        <strong>⚠️ Never:</strong> Attempt to physically remove the contract-holder yourself - this is illegal.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Generated by Landlord Heaven | www.landlordheaven.co.uk</p>
+    <p>This guide is for information only and does not constitute legal advice.</p>
+  </div>
+</body>
+</html>

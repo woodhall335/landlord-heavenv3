@@ -73,7 +73,7 @@ describe('Money claim pack generator', () => {
       const pack = await generateMoneyClaimPack(sampleCase);
 
       expect(pack.documents.length).toBeGreaterThanOrEqual(5);
-      expect(pack.documents.some((doc) => doc.file_name === 'n1-claim-form.pdf')).toBe(true);
+      expect(pack.documents.some((doc) => doc.file_name === '10-n1-claim-form.pdf')).toBe(true);
       expect(pack.metadata.includes_official_pdf).toBe(true);
       expect(pack.metadata.total_with_fees).toBeGreaterThan(0);
     },
@@ -100,5 +100,52 @@ describe('Money claim pack generator', () => {
         jurisdiction: 'scotland' as any,
       }),
     ).rejects.toThrow('England & Wales');
+  });
+
+  describe('conditional interest document generation', () => {
+    it('excludes interest calculation document when claim_interest is undefined', async () => {
+      const caseWithoutInterest = {
+        ...sampleCase,
+        claim_interest: undefined,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithoutInterest);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeUndefined();
+    });
+
+    it('excludes interest calculation document when claim_interest is false', async () => {
+      const caseWithInterestFalse = {
+        ...sampleCase,
+        claim_interest: false,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithInterestFalse);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeUndefined();
+    });
+
+    it('includes interest calculation document when claim_interest is true', async () => {
+      const caseWithInterest = {
+        ...sampleCase,
+        claim_interest: true,
+        interest_rate: 8,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithInterest);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeDefined();
+      expect(interestDoc?.category).toBe('guidance');
+      expect(interestDoc?.description).toContain('Section 69');
+    });
   });
 });

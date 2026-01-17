@@ -1,0 +1,160 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">FINDING CONTRACTORS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Reliable tradespeople for property maintenance</text>
+
+  <!-- Worker icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Person with hard hat -->
+    <g transform="translate(55, 15)">
+      <!-- Hard hat -->
+      <ellipse cx="45" cy="25" rx="35" ry="12" fill="#F59E0B"/>
+      <rect x="15" y="25" width="60" height="8" fill="#F59E0B"/>
+      <!-- Head -->
+      <circle cx="45" cy="45" r="20" fill="#7C3AED"/>
+      <!-- Body -->
+      <rect x="25" y="65" width="40" height="45" rx="5" fill="#6D28D9"/>
+      <!-- Tool -->
+      <rect x="70" y="75" width="25" height="8" rx="2" fill="#A78BFA"/>
+      <rect x="85" y="68" width="8" height="22" rx="2" fill="#7C3AED"/>
+    </g>
+
+    <text x="100" y="140" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">CONTRACTORS</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">Skilled tradespeople</text>
+    <text x="100" y="170" text-anchor="middle" fill="#6D28D9" font-size="9">for your property</text>
+  </g>
+
+  <!-- Types of contractors -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMMON TRADES NEEDED</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Plumbers</text>
+    </g>
+    <g transform="translate(120, 45)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Electricians</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Gas engineers</text>
+    </g>
+    <g transform="translate(120, 68)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Decorators</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Roofers</text>
+    </g>
+    <g transform="translate(120, 91)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Locksmiths</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Cleaners</text>
+    </g>
+    <g transform="translate(120, 114)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Gardeners</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Builders</text>
+    </g>
+    <g transform="translate(120, 137)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Handymen</text>
+    </g>
+  </g>
+
+  <!-- What to check -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">VETTING CHECKLIST</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Gas Safe registered</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Public liability insurance</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">References available</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Written quotes</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#6D28D9"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">TrustMark/trade body</text>
+    </g>
+  </g>
+
+  <!-- Tips section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">FINDING AND MANAGING CONTRACTORS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">WHERE TO FIND</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Checkatrade / MyBuilder</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Local recommendations</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Landlord forums</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Trade associations</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Agent referrals</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold">GETTING QUOTES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Get 3 quotes minimum</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Written itemised quotes</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Agree payment terms</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Timeline commitment</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• VAT included?</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">BEST PRACTICE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Build reliable network</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Keep records/receipts</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Pay promptly</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Leave reviews</text>
+      <text x="100" y="94" text-anchor="middle" fill="#6D28D9" font-size="8">• Emergency contacts</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

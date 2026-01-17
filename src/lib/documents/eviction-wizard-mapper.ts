@@ -4,9 +4,53 @@ import type { GroundClaim, EvictionCase } from './eviction-pack-generator';
 import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
+import { generateArrearsParticulars } from './arrears-schedule-mapper';
+import { EvidenceCategory } from '@/lib/evidence/schema';
+import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
+}
+
+// =============================================================================
+// P0-2: N5B ATTACHMENT CHECKBOX TRUTHFULNESS HELPER
+// =============================================================================
+// This helper checks if an evidence file with a specific category has been
+// uploaded. It examines the facts.evidence.files[] array (canonical source)
+// for files matching the given category.
+//
+// Used to determine whether N5B attachment checkboxes (E, F, G) should be
+// ticked based on ACTUAL uploads, not compliance flags.
+// =============================================================================
+
+interface EvidenceFileEntry {
+  id: string;
+  category?: string;
+  [key: string]: any;
+}
+
+/**
+ * Check if an evidence file exists for a given category in the evidence files list.
+ * This is the source of truth for N5B attachment checkboxes.
+ *
+ * @param evidenceFiles - The evidence.files array from wizard facts
+ * @param category - The evidence category to check (from EvidenceCategory enum)
+ * @returns true if at least one file with the matching category exists
+ */
+function hasUploadForCategory(
+  evidenceFiles: EvidenceFileEntry[] | undefined,
+  category: EvidenceCategory | string
+): boolean {
+  if (!Array.isArray(evidenceFiles) || evidenceFiles.length === 0) {
+    return false;
+  }
+
+  // Check for exact category match
+  return evidenceFiles.some((file) => {
+    const fileCategory = file.category?.toLowerCase();
+    const targetCategory = category.toLowerCase();
+    return fileCategory === targetCategory;
+  });
 }
 
 function normaliseFrequency(
@@ -18,9 +62,52 @@ function normaliseFrequency(
   return 'monthly';
 }
 
+/**
+ * Derive deposit scheme checkbox flag for N5B form.
+ * Matches scheme name against known variants.
+ */
+function deriveDepositSchemeFlag(
+  schemeName: string | null | undefined,
+  scheme: 'dps' | 'mydeposits' | 'tds'
+): boolean {
+  if (!schemeName) return false;
+  const normalized = schemeName.toLowerCase().replace(/[\s\-_]/g, '');
+
+  switch (scheme) {
+    case 'dps':
+      return normalized.includes('dps') ||
+             normalized.includes('depositprotectionservice') ||
+             normalized.includes('thedeposit');
+    case 'mydeposits':
+      return normalized.includes('mydeposit');
+    case 'tds':
+      return normalized.includes('tds') ||
+             normalized.includes('tenancydepositscheme');
+    default:
+      return false;
+  }
+}
+
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
-  const hasSection21 = route.some((r) => typeof r === 'string' && r.toLowerCase().includes('section 21'));
+  // ==========================================================================
+  // CASE TYPE DERIVATION
+  // ==========================================================================
+  // The wizard emits eviction_route as either 'section_21' or 'section_8'.
+  // We check for Section 21 variants (with underscores, spaces, or concatenated)
+  // and classify those as 'no_fault' evictions. All other routes (including
+  // Section 8 with any grounds - arrears, ASB, breach) are classified as
+  // 'rent_arrears' which is the general eviction case type.
+  //
+  // Note: Section 8 can be used for non-arrears grounds (e.g., Ground 14 ASB),
+  // but for court form purposes, the 'rent_arrears' case_type covers all
+  // fault-based evictions. The actual grounds are specified separately.
+  // ==========================================================================
+  const hasSection21 = route.some((r) => {
+    if (typeof r !== 'string') return false;
+    const normalized = r.toLowerCase().replace(/_/g, ' ');
+    return normalized.includes('section 21') || normalized === 'section21';
+  });
   if (hasSection21) return 'no_fault';
   return 'rent_arrears';
 }
@@ -39,7 +126,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   return selections.map((selection) => {
     const { code, codeNum, title } = parseGround(selection);
 
-    // ✅ FIX: Look up ground definition to get legal_basis and mandatory status
+    // Look up ground definition to get legal_basis and mandatory status
     const groundDef = GROUND_DEFINITIONS[codeNum];
     const legal_basis = groundDef?.legal_basis || 'Housing Act 1988, Schedule 2';
     const mandatory = groundDef?.mandatory || false;
@@ -47,12 +134,22 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
-      particulars =
-        (facts.issues.section8_grounds.arrears_breakdown as string) ||
-        (facts.issues.rent_arrears.total_arrears
-          ? `Rent arrears outstanding: £${facts.issues.rent_arrears.total_arrears}`
-          : '') ||
-        '';
+      // Use canonical arrears mapper for arrears grounds particulars
+      // This ensures particulars are generated from authoritative arrears_items
+      if (facts.issues.section8_grounds.arrears_breakdown) {
+        // If user has manually entered arrears breakdown, use that
+        particulars = facts.issues.section8_grounds.arrears_breakdown as string;
+      } else {
+        // Otherwise, generate from canonical arrears data
+        const arrearsParticulars = generateArrearsParticulars({
+          arrears_items: facts.issues.rent_arrears.arrears_items,
+          total_arrears: facts.issues.rent_arrears.total_arrears,
+          rent_amount: facts.tenancy.rent_amount || 0,
+          rent_frequency: facts.tenancy.rent_frequency,
+          include_full_schedule: false, // Summary for notice, full schedule as separate PDF
+        });
+        particulars = arrearsParticulars.particulars;
+      }
     } else if (code === 'Ground 12') {
       particulars = facts.issues.section8_grounds.breach_details || '';
     } else if (code === 'Ground 13' || code === 'Ground 15') {
@@ -66,9 +163,9 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     return {
       code,
       title: groundDef?.title || title,  // Use canonical title from definitions
-      legal_basis,  // ✅ FIX: Add legal_basis
+      legal_basis,
       particulars,
-      mandatory,  // ✅ FIX: Use correct mandatory status from definitions
+      mandatory,
     };
   });
 }
@@ -97,9 +194,9 @@ function buildEvictionCaseFromFacts(
   // Ensure canonical jurisdiction
   let jurisdiction = (facts.meta.jurisdiction as any) || 'england';
   if (jurisdiction === 'england-wales') {
-    // Migrate based on property_location if available
-    const propertyLocation = (wizardFacts as any)?.property_location;
-    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+    // Migrate based on property country if available
+    const propertyCountry = facts.property.country;
+    jurisdiction = propertyCountry === 'wales' ? 'wales' : 'england';
   }
 
   const evictionCase: EvictionCase = {
@@ -155,6 +252,7 @@ function buildEvictionCaseFromFacts(
     deposit_protected: facts.tenancy.deposit_protected || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     court_name: facts.court.court_name || undefined,
+    court_address: facts.court.court_address || undefined,
   };
 
   return { evictionCase, caseType };
@@ -196,12 +294,22 @@ function buildCaseData(
     section_21_notice_date: wizardFacts.section_21_notice_date || facts.notice.notice_date || undefined,
     notice_served_date:
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
+    // ✅ FIX: Map notice_service_method for N5B form field 10a ("How was the notice served")
+    notice_service_method:
+      wizardFacts.notice_service_method ||
+      wizardFacts.service_method ||
+      wizardFacts['notice_service.service_method'] ||
+      facts.notice.service_method ||
+      undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
       wizardFacts.total_arrears ||
       wizardFacts.rent_arrears_amount ||
       facts.issues.rent_arrears.total_arrears ||
       undefined,
+
+    // Arrears items for N119 particulars generation
+    arrears_items: facts.issues.rent_arrears.arrears_items || undefined,
 
     // ✅ FIXED: removed invalid amount_owing access
     arrears_at_notice_date:
@@ -210,12 +318,45 @@ function buildCaseData(
       facts.issues.rent_arrears.total_arrears ||
       undefined,
 
-    court_fee: facts.court.claim_amount_costs || undefined,
+    // =========================================================================
+    // COURT FEE AUTO-CALCULATION
+    // =========================================================================
+    // If no manual fee is provided, auto-calculate based on claim type and arrears.
+    // Uses HMCTS fee structure from hmcts-fees.ts.
+    // - Standard/Accelerated possession: £355
+    // - Plus money claim fee if claiming arrears (banded by amount)
+    // =========================================================================
+    court_fee: (() => {
+      // Use manually entered fee if provided
+      if (facts.court.claim_amount_costs) {
+        return facts.court.claim_amount_costs;
+      }
+
+      // Auto-calculate based on claim type and arrears
+      const totalArrears =
+        wizardFacts.total_arrears ||
+        wizardFacts.rent_arrears_amount ||
+        facts.issues.rent_arrears.total_arrears ||
+        0;
+
+      // Map claim type to fee calculator type
+      const feeClaimType = claimType === 'section_21' ? 'accelerated_section21' : 'section_8';
+      const calculatedFees = calculatePossessionFees(feeClaimType, totalArrears);
+
+      return calculatedFees.totalFee;
+    })(),
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,
+    // Standardize deposit scheme naming - output both variants for template compatibility
     deposit_scheme: (facts.tenancy.deposit_scheme_name as any) || undefined,
+    deposit_scheme_name: (facts.tenancy.deposit_scheme_name as any) || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     deposit_reference: facts.tenancy.deposit_reference || undefined,
+
+    // N5B deposit scheme checkboxes - derive from deposit_scheme_name
+    deposit_scheme_dps: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'dps'),
+    deposit_scheme_mydeposits: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'mydeposits'),
+    deposit_scheme_tds: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'tds'),
     solicitor_firm: evictionCase.solicitor_firm,
     solicitor_address: evictionCase.solicitor_address,
     solicitor_phone: evictionCase.solicitor_phone,
@@ -228,10 +369,79 @@ function buildCaseData(
     service_postcode: evictionCase.service_postcode,
     service_phone: evictionCase.service_phone,
     service_email: evictionCase.service_email,
-    court_name: evictionCase.court_name || wizardFacts.court_name || 'County Court',
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: new Date().toISOString().split('T')[0],
+    court_name: evictionCase.court_name || wizardFacts.court_name,
+    court_address: evictionCase.court_address || wizardFacts.court_address,
+    signatory_name: wizardFacts.signatory_name || evictionCase.landlord_full_name,
+    signature_date: wizardFacts.signature_date || new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - A, B, B1 (document availability)
+    // =========================================================================
+    // These control whether attachments A/B/B1 are marked as included
+    tenancy_agreement_uploaded: facts.evidence.tenancy_agreement_uploaded || undefined,
+    notice_copy_available: wizardFacts.notice_copy_available || wizardFacts.notice_uploaded || undefined,
+    service_proof_available: wizardFacts.service_proof_available || wizardFacts.proof_of_service_uploaded || undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - E, F, G (UPLOAD-BASED TRUTHFULNESS)
+    // =========================================================================
+    // P0-2 FIX: These MUST be based on ACTUAL file uploads, NOT compliance flags.
+    // The N5B form checkboxes for E, F, G declare that documents are ATTACHED.
+    // Ticking these without the actual document is a false statement.
+    //
+    // Source of truth: facts.evidence.files[] (from wizard uploads)
+    // Category mapping uses EvidenceCategory enum from schema.ts:
+    //   - deposit_protection_certificate -> Checkbox E
+    //   - epc -> Checkbox F
+    //   - gas_safety_certificate -> Checkbox G
+    // =========================================================================
+    deposit_certificate_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE
+    ),
+    epc_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.EPC
+    ),
+    gas_safety_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.GAS_SAFETY_CERTIFICATE
+    ),
+
+    // =========================================================================
+    // COMPLIANCE FLAGS (kept for other N5B questions, NOT for attachment boxes)
+    // =========================================================================
+    // These are used for N5B questions about whether documents were PROVIDED to tenant
+    // (e.g., "Was EPC provided to tenant?") - NOT for attachment checkboxes
+    epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
+    gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
+
+    // =========================================================================
+    // N5 CHECKBOX FLAG DERIVATION
+    // =========================================================================
+    // These flags control checkboxes and conditional sections in the N5 form.
+    // They must be derived from the claim type and case data.
+    // =========================================================================
+
+    // Property type - always true for residential tenancies (AST)
+    property_is_dwelling: true,
+
+    // Claim type flags - derived from claim_type for checkbox rendering
+    ground_section_8: claimType === 'section_8',
+    ground_section_21: claimType === 'section_21',
+
+    // Arrears flags - controls arrears sections and "claiming rent arrears" checkbox
+    rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
+    claiming_rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
   } as CaseData;
 }
 

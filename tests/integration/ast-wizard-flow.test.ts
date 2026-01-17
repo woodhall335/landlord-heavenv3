@@ -138,6 +138,7 @@ vi.mock('@/lib/supabase/server', () => ({
   getServerUser: async () => null,
   requireServerAuth: async () => { throw new Error('Unauthorized - Please log in'); },
   createAdminClient: () => mockSupabase,
+  tryGetServerUser: async () => ({ id: 'user-1' }),
 }));
 
 // Mock the document generator's PDF creation (we only care about HTML in these tests)

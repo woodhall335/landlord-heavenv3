@@ -211,16 +211,28 @@ export function mapWizardToPRTData(wizardFacts: WizardFacts): PRTData {
     approved_pets: normalizeApprovedPets(getValueAtPath(wizardFacts, 'approved_pets')),
     smoking_allowed: coerceBoolean(getValueAtPath(wizardFacts, 'smoking_allowed')),
 
-    // Legal Compliance & Safety - TODO: not yet in CaseFacts
+    // Legal Compliance & Safety - boolean flags
     gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
     epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
-    epc_expiry: getValueAtPath(wizardFacts, 'epc_expiry'),
     electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
     smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
     carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
-    repairing_standard_statement: coerceBoolean(getValueAtPath(wizardFacts, 'repairing_standard_statement')),
+    repairing_standard_statement: coerceBoolean(getValueAtPath(wizardFacts, 'repairing_standard_compliance')),
 
-    // Maintenance & Repairs - TODO: not yet in CaseFacts
+    // Safety Certificate Dates - for compliance verification
+    gas_safety_certificate_date: getValueAtPath(wizardFacts, 'gas_safety_certificate_date'),
+    gas_safety_certificate_expiry: getValueAtPath(wizardFacts, 'gas_safety_certificate_expiry'),
+    epc_certificate_date: getValueAtPath(wizardFacts, 'epc_certificate_date'),
+    eicr_certificate_date: getValueAtPath(wizardFacts, 'eicr_certificate_date'),
+    eicr_next_inspection_date: getValueAtPath(wizardFacts, 'eicr_next_inspection_date'),
+    smoke_alarm_test_date: getValueAtPath(wizardFacts, 'smoke_alarm_test_date'),
+
+    // Deposit Compliance Dates - 30 WORKING DAYS requirement
+    deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
+    deposit_protection_date: getValueAtPath(wizardFacts, 'deposit_protection_date'),
+    prescribed_information_date: getValueAtPath(wizardFacts, 'prescribed_information_date'),
+
+    // Maintenance & Repairs
     landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),
     repairs_reporting_method: getValueAtPath(wizardFacts, 'repairs_reporting_method'),
     emergency_contact: getValueAtPath(wizardFacts, 'emergency_contact'),

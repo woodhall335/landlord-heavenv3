@@ -1,0 +1,129 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">PORTFOLIO FINANCING</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Funding strategies for property portfolio growth</text>
+
+  <!-- Money and building icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Stack of money with property -->
+    <g transform="translate(30, 10)">
+      <!-- Money notes stacked -->
+      <rect x="0" y="50" width="80" height="40" rx="3" fill="#22C55E"/>
+      <rect x="5" y="45" width="80" height="40" rx="3" fill="#22C55E"/>
+      <rect x="10" y="40" width="80" height="40" rx="3" fill="#22C55E"/>
+      <!-- Pound symbols -->
+      <text x="50" y="67" text-anchor="middle" fill="white" font-size="18" font-weight="bold">£</text>
+      <!-- Building icon -->
+      <rect x="100" y="30" width="40" height="60" rx="2" fill="#7C3AED"/>
+      <rect x="105" y="35" width="10" height="12" fill="white" opacity="0.5"/>
+      <rect x="120" y="35" width="10" height="12" fill="white" opacity="0.5"/>
+      <rect x="105" y="52" width="10" height="12" fill="white" opacity="0.5"/>
+      <rect x="120" y="52" width="10" height="12" fill="white" opacity="0.5"/>
+      <rect x="112" y="70" width="15" height="20" fill="#F59E0B"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">FINANCING</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Fund your</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">portfolio</text>
+  </g>
+
+  <!-- Financing options -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">FINANCING OPTIONS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#7C3AED" opacity="0.1"/>
+      <text x="10" y="18" fill="#7C3AED" font-size="9" font-weight="bold">Buy-to-Let Mortgage</text>
+      <text x="210" y="18" text-anchor="end" fill="#6D28D9" font-size="8">Most common</text>
+    </g>
+    <g transform="translate(15, 80)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#6D28D9" opacity="0.1"/>
+      <text x="10" y="18" fill="#6D28D9" font-size="9" font-weight="bold">Portfolio Mortgage</text>
+      <text x="210" y="18" text-anchor="end" fill="#6D28D9" font-size="8">4+ properties</text>
+    </g>
+    <g transform="translate(15, 115)">
+      <rect x="0" y="0" width="210" height="28" rx="4" fill="#A78BFA" opacity="0.2"/>
+      <text x="10" y="18" fill="#A78BFA" font-size="9" font-weight="bold">Bridging Finance</text>
+      <text x="210" y="18" text-anchor="end" fill="#6D28D9" font-size="8">Short-term</text>
+    </g>
+  </g>
+
+  <!-- Key metrics -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY METRICS</text>
+
+    <g transform="translate(15, 48)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">LTV (Loan to Value)</text>
+      <text x="170" y="12" text-anchor="end" fill="#22C55E" font-size="10" font-weight="bold">75%</text>
+    </g>
+    <g transform="translate(15, 73)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">ICR (Interest Cover)</text>
+      <text x="170" y="12" text-anchor="end" fill="#22C55E" font-size="10" font-weight="bold">125%+</text>
+    </g>
+    <g transform="translate(15, 98)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">Typical rates</text>
+      <text x="170" y="12" text-anchor="end" fill="#F59E0B" font-size="10" font-weight="bold">5-7%</text>
+    </g>
+    <g transform="translate(15, 130)">
+      <rect x="0" y="0" width="170" height="28" rx="4" fill="#7C3AED" opacity="0.1"/>
+      <text x="85" y="18" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Shop around for best deals</text>
+    </g>
+  </g>
+
+  <!-- Strategies -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">FINANCING STRATEGIES</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">REMORTGAGING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Release equity</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Fund next purchase</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Compound growth</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• BRRR strategy</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Recycle your capital</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">LIMITED COMPANY</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Tax efficiency for growth</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Full interest deduction</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Easier portfolio lending</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Higher rates typically</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Consider long-term</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">CASH RESERVES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Emergency fund essential</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Cover void periods</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Maintenance fund</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Opportunity money</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">6 months costs minimum</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

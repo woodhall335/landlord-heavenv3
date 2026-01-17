@@ -42,7 +42,7 @@ export interface WitnessStatementContext {
   arrears_total?: number;
   has_arrears: boolean;
   has_conduct_issues: boolean;
-  jurisdiction: 'england-wales' | 'scotland';
+  legalFramework: 'ew_shared_framework' | 'scotland'; // NOT a jurisdiction - internal framework identifier
 }
 
 // =============================================================================
@@ -82,7 +82,7 @@ export async function generateWitnessStatement(
     const prompt = buildWitnessStatementPrompt(caseFacts, context);
 
     // Call LLM
-    const aiStatement = await callWitnessStatementLLM(prompt, context.jurisdiction);
+    const aiStatement = await callWitnessStatementLLM(prompt, context.legalFramework);
 
     // Merge AI with fallback (AI takes precedence)
     return mergeWithFallback(aiStatement, fallbackStatement);
@@ -104,7 +104,7 @@ function buildWitnessStatementPrompt(
   caseFacts: CaseFacts,
   context: WitnessStatementContext
 ): string {
-  const isScotland = context.jurisdiction === 'scotland';
+  const isScotland = context.legalFramework === 'scotland';
 
   return `
 You are drafting a witness statement for a landlord seeking possession of a residential property.
@@ -150,12 +150,13 @@ CRITICAL REQUIREMENTS:
 
 /**
  * Calls LLM to generate witness statement content
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 async function callWitnessStatementLLM(
   prompt: string,
-  jurisdiction: 'england-wales' | 'scotland'
+  legalFramework: 'ew_shared_framework' | 'scotland'
 ): Promise<Partial<WitnessStatementJSON>> {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
 
   const systemPrompt = `
 ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
@@ -258,7 +259,7 @@ function generateFallbackWitnessStatement(
   caseFacts: CaseFacts,
   context: WitnessStatementContext
 ): WitnessStatementJSON {
-  const isScotland = context.jurisdiction === 'scotland';
+  const isScotland = context.legalFramework === 'scotland';
 
   // Introduction
   const introduction = `I, ${context.landlord_name}, am the landlord of the property at ${context.property_address}. I make this statement in support of my application for possession of the property. The contents of this statement are true to the best of my knowledge and belief.`;
@@ -334,16 +335,17 @@ ${context.has_conduct_issues ? `- Exhibit 4: Evidence of conduct issues (photos,
 export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessStatementContext {
   const cf: any = caseFacts as any;
 
-  // Jurisdiction: WitnessStatementContext only supports england-wales | scotland
+  // Map to internal legal framework identifier (NOT a jurisdiction)
+  // England and Wales share the same legal framework for witness statements
   const rawJurisdiction =
     cf?.jurisdiction ??
     cf?.meta?.jurisdiction ??
     cf?.property?.jurisdiction ??
     cf?.eviction?.jurisdiction ??
-    'england-wales';
+    'england';
 
-  const jurisdiction: 'england-wales' | 'scotland' =
-    rawJurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+  const legalFramework: 'ew_shared_framework' | 'scotland' =
+    rawJurisdiction === 'scotland' ? 'scotland' : 'ew_shared_framework';
 
   const eviction: any = cf?.eviction ?? {};
   const tenancy: any = cf?.tenancy ?? {};
@@ -417,6 +419,6 @@ export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessSta
     arrears_total: arrearsTotal,
     has_arrears,
     has_conduct_issues,
-    jurisdiction,
+    legalFramework,
   };
 }

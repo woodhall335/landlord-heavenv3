@@ -8,16 +8,33 @@
  */
 
 import type { CaseFacts } from '../case-facts/schema';
+import { normalizeJurisdiction, type CanonicalJurisdiction, type LegacyJurisdiction } from '../types/jurisdiction';
+import {
+  resolveGasCertificateFacts,
+  resolveHowToRentFacts,
+  resolveEPCFacts,
+  resolveLicensingFacts,
+} from '../wizard/complianceFactResolvers';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
+/**
+ * DeepPartial utility type for nested optional properties
+ */
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+export type ValidationStage = 'wizard' | 'checkpoint' | 'preview' | 'generate';
+
 export interface DecisionInput {
-  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'england-wales'; // england-wales for backward compatibility
+  jurisdiction: CanonicalJurisdiction | LegacyJurisdiction; // england-wales allowed for backward compatibility only
   product: 'notice_only' | 'complete_pack' | 'money_claim';
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  facts: Partial<CaseFacts>;
+  facts: DeepPartial<CaseFacts>;
+  stage?: ValidationStage; // Stage-aware validation (wizard=warn, checkpoint/preview/generate=block)
 }
 
 export interface GroundRecommendation {
@@ -52,11 +69,7 @@ export interface DecisionOutput {
   allowed_routes: string[]; // ['section_21', 'section_8'] - Legally permitted routes (no blocking issues)
   blocked_routes: string[]; // ['section_21'] - Routes that are legally blocked
   recommended_grounds: GroundRecommendation[];
-  notice_period_suggestions: {
-    section_8?: number;
-    section_21?: number;
-    notice_to_leave?: number;
-  };
+  notice_period_suggestions: Record<string, number>; // Allows any route key (section_8, section_21, notice_to_leave, wales_section_173, etc.)
   pre_action_requirements: {
     required: boolean;
     met: boolean | null;
@@ -65,11 +78,7 @@ export interface DecisionOutput {
   blocking_issues: BlockingIssue[]; // All blocking issues, grouped by route
   warnings: string[];
   analysis_summary: string;
-  route_explanations: {
-    section_8?: string;
-    section_21?: string;
-    notice_to_leave?: string;
-  };
+  route_explanations: Record<string, string>; // Allows any route key (section_8, section_21, notice_to_leave, wales_section_173, wales_fault_based, etc.)
 }
 
 // ============================================================================
@@ -77,7 +86,7 @@ export interface DecisionOutput {
 // ============================================================================
 
 function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: [],
     allowed_routes: [],
@@ -93,83 +102,210 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 
   // Check Section 21 eligibility and blocking issues
   const s21Blocks: BlockingIssue[] = [];
+  const isWizardStage = stage === 'wizard';
+  // Preview stage should also treat compliance doc/proof checks as warnings, not blockers
+  // Only 'generate' stage should fully block for missing docs
+  const isPreviewOrWizardStage = stage === 'wizard' || stage === 'preview';
 
   // Deposit protection (CRITICAL)
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
     if (facts.tenancy.deposit_protected !== true) {
-      s21Blocks.push({
+      // Get the user's actual answer to show them what they selected
+      const depositProtectedAnswer = facts.tenancy.deposit_protected === false ? 'No' :
+        facts.tenancy.deposit_protected === undefined ? 'Not answered' : String(facts.tenancy.deposit_protected);
+      const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'deposit_not_protected',
-        description: 'Deposit not protected in approved scheme',
+        description: `Deposit not protected in approved scheme (you selected: "${depositProtectedAnswer}")`,
         action_required: 'Protect deposit in DPS, MyDeposits, or TDS before serving Section 21',
-        severity: 'blocking',
-      });
+        severity: isWizardStage ? 'warning' : 'blocking',
+      };
+      if (isWizardStage) {
+        output.warnings.push(issue.description);
+      } else {
+        s21Blocks.push(issue);
+      }
+    }
+
+    // Deposit cap check (Tenant Fees Act 2019 - applies to tenancies from 1 June 2019)
+    // Maximum: 5 weeks' rent (or 6 weeks if annual rent > £50,000)
+    // Part D: Coerce values to numbers to avoid "toFixed is not a function" crashes
+    const rawRentAmount = facts.tenancy?.rent_amount ?? (input.facts as any).rent_amount;
+    const rentFrequency = facts.tenancy?.rent_frequency ?? (input.facts as any).rent_frequency ?? 'monthly';
+    const rawDepositAmount = facts.tenancy?.deposit_amount ?? (input.facts as any).deposit_amount;
+
+    // Coerce to numbers (wizard may store as strings from form input)
+    const rentAmount = typeof rawRentAmount === 'string' ? parseFloat(rawRentAmount) : Number(rawRentAmount);
+    const depositAmount = typeof rawDepositAmount === 'string' ? parseFloat(rawDepositAmount) : Number(rawDepositAmount);
+
+    // Only proceed if both are valid finite numbers
+    if (Number.isFinite(rentAmount) && Number.isFinite(depositAmount) && rentAmount > 0 && depositAmount > 0) {
+      // Calculate annual rent
+      let annualRent = rentAmount;
+      if (rentFrequency === 'weekly') {
+        annualRent = rentAmount * 52;
+      } else if (rentFrequency === 'fortnightly') {
+        annualRent = rentAmount * 26;
+      } else if (rentFrequency === 'monthly') {
+        annualRent = rentAmount * 12;
+      } else if (rentFrequency === 'quarterly') {
+        annualRent = rentAmount * 4;
+      }
+
+      // Calculate weekly rent and max deposit
+      const weeklyRent = annualRent / 52;
+      const maxWeeks = annualRent > 50000 ? 6 : 5;
+      const maxDeposit = weeklyRent * maxWeeks;
+
+      // Check if landlord has confirmed they've reduced the deposit to legal cap
+      const depositCapConfirmed = (input.facts as any).deposit_reduced_to_legal_cap_confirmed === true;
+
+      if (depositAmount > maxDeposit && !depositCapConfirmed) {
+        // Deposit cap is ALWAYS a warning, never blocking (user may have already refunded)
+        // This is a product decision to maintain warnings-only behavior for deposit cap
+        const issue: BlockingIssue = {
+          route: 'section_21', // Section 21 specific - deposit issues can block S21 notices
+          issue: 'deposit_exceeds_cap',
+          description: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent)`,
+          action_required: `Refund excess deposit (£${(depositAmount - maxDeposit).toFixed(2)}) to tenant before proceeding`,
+          severity: 'warning', // Always warning - deposit cap never blocks
+          legal_basis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
+        };
+        output.warnings.push(issue.description);
+      }
     }
   }
 
   // Prescribed information (CRITICAL)
-  const prescribedInfoGiven = facts.tenancy?.deposit_protection_date ||
-    (input.facts as any).prescribed_info_given;
+  // Check canonical location first (facts.tenancy.prescribed_info_given), then legacy/root fallbacks
+  const prescribedInfoGiven =
+    facts.tenancy?.prescribed_info_given ??
+    (input.facts as any).prescribed_info_given ??
+    (input.facts as any).prescribed_info_provided ??
+    (input.facts as any).prescribed_info_served;
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
-    if (!prescribedInfoGiven) {
-      s21Blocks.push({
+    // Only block if explicitly false (not given), not if undefined (not yet answered)
+    if (prescribedInfoGiven === false) {
+      const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'prescribed_info_not_given',
         description: 'Prescribed information not given to tenant within 30 days',
         action_required: 'Provide prescribed information before Section 21 is valid',
-        severity: 'blocking',
-      });
+        severity: isWizardStage ? 'warning' : 'blocking',
+      };
+      if (isWizardStage) {
+        output.warnings.push(issue.description);
+      } else {
+        s21Blocks.push(issue);
+      }
+    } else if (prescribedInfoGiven === undefined || prescribedInfoGiven === null) {
+      // Undefined means not answered yet - warn but don't block in early stages
+      if (!isWizardStage) {
+        output.warnings.push('Prescribed information status not confirmed');
+      }
     }
   }
 
   // Gas safety certificate (CRITICAL)
-  const gasCertProvided = (input.facts as any).gas_safety_cert_provided;
-  if (gasCertProvided === false) {
-    s21Blocks.push({
+  // Use resolver to handle key aliases: gas_certificate_provided, gas_safety_cert_provided, etc.
+  const gasCertFacts = resolveGasCertificateFacts(input.facts as Record<string, any>);
+  // Only check if gas appliances exist AND certificate not provided
+  // If has_gas_appliances is null/undefined, we fall back to checking certificate status alone
+  const shouldCheckGasCert = gasCertFacts.hasGasAppliances === true || gasCertFacts.hasGasAppliances === null;
+  if (shouldCheckGasCert && gasCertFacts.certificateProvided === false) {
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'gas_safety_not_provided',
-      description: 'Gas safety certificate not provided before tenancy start',
+      description: 'Gas safety certificate not provided before tenancy start (you selected: "No")',
       action_required: 'Cannot use Section 21 if gas cert not provided at start',
-      severity: 'blocking',
-    });
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
+    };
+    if (isPreviewOrWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // How to Rent guide (CRITICAL for England)
-  const howToRentGiven = (input.facts as any).how_to_rent_given ||
-    (input.facts as any).how_to_rent_guide_provided;
-  if (howToRentGiven === false) {
-    s21Blocks.push({
+  // Use resolver to handle key aliases: how_to_rent_provided, how_to_rent_given, h2r_provided, etc.
+  const howToRentFacts = resolveHowToRentFacts(input.facts as Record<string, any>);
+  if (howToRentFacts.provided === false) {
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'how_to_rent_not_provided',
-      description: '"How to Rent" guide not provided at start of tenancy',
+      description: '"How to Rent" guide not provided at start of tenancy (you selected: "No")',
       action_required: 'Cannot use Section 21 without providing How to Rent guide',
-      severity: 'blocking',
-    });
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
+    };
+    if (isPreviewOrWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // EPC provided (CRITICAL)
-  const epcProvided = (input.facts as any).epc_provided;
-  if (epcProvided === false) {
-    s21Blocks.push({
+  // Use resolver to handle key aliases: epc_provided, epc_certificate_provided, etc.
+  const epcFacts = resolveEPCFacts(input.facts as Record<string, any>);
+  if (epcFacts.provided === false) {
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'epc_not_provided',
-      description: 'Energy Performance Certificate not provided to tenant',
+      description: 'Energy Performance Certificate not provided to tenant (you selected: "No")',
       action_required: 'Provide EPC before Section 21 is valid',
-      severity: 'blocking',
-    });
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
+    };
+    if (isPreviewOrWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // HMO licensing (CRITICAL)
-  const hmoLicenseRequired = (input.facts as any).hmo_license_required;
-  const hmoLicenseValid = (input.facts as any).hmo_license_valid;
-  if (hmoLicenseRequired === true && hmoLicenseValid !== true) {
-    s21Blocks.push({
+  // Use resolver to handle key aliases: property_licensing_status, hmo_license_required, etc.
+  const licensingFacts = resolveLicensingFacts(input.facts as Record<string, any>);
+  // Block if property is unlicensed OR if HMO is required but not valid
+  if (licensingFacts.status === 'unlicensed' ||
+      (licensingFacts.hmoRequired === true && licensingFacts.hmoValid !== true)) {
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'hmo_not_licensed',
-      description: 'HMO/selective licence required but not in place',
-      action_required: 'Obtain HMO/selective licence before serving Section 21',
-      severity: 'blocking',
-    });
+      description: licensingFacts.status === 'unlicensed'
+        ? `Property requires licensing but is not licensed (status: "${licensingFacts.status}")`
+        : 'HMO/selective licence required but not in place',
+      action_required: 'Obtain required licence before serving Section 21',
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
+  }
+
+  // Retaliatory eviction check (CRITICAL for England)
+  // Deregulation Act 2015 s.33 - Section 21 invalid if served within 6 months of local authority notice
+  // Also blocked if tenant has made repair complaints in last 6 months
+  const recentRepairComplaints = (input.facts as any).recent_repair_complaints ??
+    (facts as any).compliance?.recent_repair_complaints ??
+    (input.facts as any).repair_complaints ??
+    (input.facts as any).outstanding_repairs ?? false;
+  if (recentRepairComplaints === true) {
+    const issue: BlockingIssue = {
+      route: 'section_21',
+      issue: 'retaliatory_eviction',
+      description: 'Section 21 may be invalid due to recent repair complaints from tenant (you selected: "Yes")',
+      action_required: 'Cannot use Section 21 within 6 months of tenant repair complaint. Consider Section 8 instead.',
+      severity: isWizardStage ? 'warning' : 'blocking',
+      legal_basis: 'Deregulation Act 2015 s.33 - retaliatory eviction protection',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   output.blocking_issues = s21Blocks;
@@ -190,16 +326,19 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   const section8Grounds: GroundRecommendation[] = [];
 
   // Ground 8: Serious rent arrears
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawRentAmountForArrears = facts.tenancy?.rent_amount;
+  const totalArrears = typeof rawTotalArrears === 'string' ? parseFloat(rawTotalArrears) : Number(rawTotalArrears) || 0;
+  const rentAmountForArrears = typeof rawRentAmountForArrears === 'string' ? parseFloat(rawRentAmountForArrears) : Number(rawRentAmountForArrears) || 0;
   const rentFrequency = facts.tenancy?.rent_frequency;
 
-  if (totalArrears > 0 && rentAmount > 0) {
+  if (Number.isFinite(totalArrears) && Number.isFinite(rentAmountForArrears) && totalArrears > 0 && rentAmountForArrears > 0) {
     let arrearsMonths = 0;
     if (rentFrequency === 'monthly') {
-      arrearsMonths = totalArrears / rentAmount;
+      arrearsMonths = totalArrears / rentAmountForArrears;
     } else if (rentFrequency === 'weekly') {
-      arrearsMonths = (totalArrears / rentAmount) / 4.33;
+      arrearsMonths = (totalArrears / rentAmountForArrears) / 4.33;
     }
 
     if (arrearsMonths >= 2) {
@@ -305,7 +444,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 // ============================================================================
 
 function analyzeWales(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: [],
     allowed_routes: [],
@@ -326,41 +465,57 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
 
   // Check Section 173 eligibility (Wales no-fault notice)
   const s173Blocks: BlockingIssue[] = [];
+  const isWizardStage = stage === 'wizard';
 
   // Section 173 is ONLY available for standard occupation contracts
   if (contractCategory === 'supported_standard' || contractCategory === 'secure') {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'contract_type_incompatible',
       description: 'Section 173 is only available for standard occupation contracts',
       action_required: 'Use fault-based notice routes (Section 157, 159, 161, or 162) instead',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   // Rent Smart Wales registration (CRITICAL for Section 173)
   const rentSmartRegistered = (facts as any).rent_smart_wales_registered;
   if (rentSmartRegistered === false) {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'rent_smart_not_registered',
       description: 'Not registered with Rent Smart Wales',
       action_required: 'Register with Rent Smart Wales before serving Section 173 notice',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   // Deposit protection (CRITICAL if deposit taken)
   const depositTaken = (facts as any).deposit_taken;
   const depositProtected = (facts as any).deposit_protected;
   if (depositTaken === true && depositProtected !== true) {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'deposit_not_protected',
       description: 'Deposit not protected in approved scheme',
       action_required: 'Protect deposit in approved Wales scheme before serving Section 173',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   output.blocking_issues = s173Blocks;
@@ -404,11 +559,14 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
   const faultGrounds: GroundRecommendation[] = [];
 
   // Section 157: Serious rent arrears (2+ months)
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawWalesTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawWalesRentAmount = facts.tenancy?.rent_amount;
+  const walesTotalArrears = typeof rawWalesTotalArrears === 'string' ? parseFloat(rawWalesTotalArrears) : Number(rawWalesTotalArrears) || 0;
+  const walesRentAmount = typeof rawWalesRentAmount === 'string' ? parseFloat(rawWalesRentAmount) : Number(rawWalesRentAmount) || 0;
 
-  if (totalArrears > 0 && rentAmount > 0) {
-    const arrearsMonths = totalArrears / rentAmount;
+  if (Number.isFinite(walesTotalArrears) && Number.isFinite(walesRentAmount) && walesTotalArrears > 0 && walesRentAmount > 0) {
+    const arrearsMonths = walesTotalArrears / walesRentAmount;
 
     if (arrearsMonths >= 2) {
       faultGrounds.push({
@@ -486,7 +644,7 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
 // ============================================================================
 
 function analyzeScotland(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: ['notice_to_leave'], // Scotland only has Notice to Leave
     allowed_routes: [], // Will be populated based on pre-action requirements
@@ -501,14 +659,18 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
   };
 
   const grounds: GroundRecommendation[] = [];
+  const isWizardStage = stage === 'wizard';
 
   // Ground 1: Rent arrears (REQUIRES PRE-ACTION)
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawScotlandTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawScotlandRentAmount = facts.tenancy?.rent_amount;
+  const scotlandTotalArrears = typeof rawScotlandTotalArrears === 'string' ? parseFloat(rawScotlandTotalArrears) : Number(rawScotlandTotalArrears) || 0;
+  const scotlandRentAmount = typeof rawScotlandRentAmount === 'string' ? parseFloat(rawScotlandRentAmount) : Number(rawScotlandRentAmount) || 0;
   const preActionConfirmed = facts.issues?.rent_arrears?.pre_action_confirmed;
 
-  if (totalArrears > 0 && rentAmount > 0) {
-    const arrearsMonths = totalArrears / (rentAmount || 1);
+  if (Number.isFinite(scotlandTotalArrears) && Number.isFinite(scotlandRentAmount) && scotlandTotalArrears > 0 && scotlandRentAmount > 0) {
+    const arrearsMonths = scotlandTotalArrears / scotlandRentAmount;
 
     if (arrearsMonths >= 3) {
       if (preActionConfirmed === true) {
@@ -527,13 +689,18 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
           details: ['Pre-action requirements confirmed for rent arrears'],
         };
       } else {
-        output.blocking_issues.push({
+        const issue: BlockingIssue = {
           route: 'notice_to_leave',
           issue: 'pre_action_not_met',
           description: 'Pre-action requirements not completed for rent arrears eviction',
           action_required: 'Contact tenant about arrears, signpost support, attempt resolution before serving Notice',
-          severity: 'blocking',
-        });
+          severity: isWizardStage ? 'warning' : 'blocking',
+        };
+        if (isWizardStage) {
+          output.warnings.push(issue.description);
+        } else {
+          output.blocking_issues.push(issue);
+        }
         output.pre_action_requirements = {
           required: true,
           met: false,
@@ -611,17 +778,17 @@ export function runDecisionEngine(input: DecisionInput): DecisionOutput {
   }
 
   // Normalize jurisdiction to handle both canonical and legacy values
-  const jurisdiction = input.jurisdiction.toLowerCase();
+  const jurisdiction = normalizeJurisdiction(input.jurisdiction);
+
+  if (!jurisdiction) {
+    throw new Error(`Unsupported jurisdiction: ${input.jurisdiction}`);
+  }
 
   switch (jurisdiction) {
     case 'england':
       return analyzeEnglandWales(input);
     case 'wales':
       return analyzeWales(input);
-    case 'england-wales':
-      // Legacy value - default to England analysis
-      console.warn('[DECISION ENGINE] Using legacy england-wales jurisdiction - defaulting to England rules');
-      return analyzeEnglandWales(input);
     case 'scotland':
       return analyzeScotland(input);
     case 'northern-ireland':

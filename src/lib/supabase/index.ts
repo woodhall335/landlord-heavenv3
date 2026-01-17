@@ -7,7 +7,6 @@
 export { createClient, getSupabaseBrowserClient } from './client';
 export {
   createServerSupabaseClient,
-  createAdminClient,
   getServerUser,
   requireServerAuth,
   tryCreateServerSupabaseClient,

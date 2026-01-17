@@ -1,0 +1,115 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- HMO Building with multiple units -->
+  <g transform="translate(80, 60)">
+    <!-- Main building structure -->
+    <rect x="0" y="50" width="300" height="350" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Roof -->
+    <polygon points="150,-20 320,50 -20,50" fill="#6D28D9"/>
+    <polygon points="150,0 300,50 0,50" fill="#7C3AED"/>
+
+    <!-- Floor 3 - 3 rooms -->
+    <rect x="20" y="70" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="112" y="70" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="205" y="70" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <!-- Occupant icons -->
+    <circle cx="57" cy="100" r="12" fill="#7C3AED" opacity="0.6"/>
+    <ellipse cx="57" cy="125" rx="15" ry="10" fill="#7C3AED" opacity="0.6"/>
+    <circle cx="150" cy="100" r="12" fill="#A78BFA" opacity="0.6"/>
+    <ellipse cx="150" cy="125" rx="15" ry="10" fill="#A78BFA" opacity="0.6"/>
+    <circle cx="243" cy="100" r="12" fill="#7C3AED" opacity="0.6"/>
+    <ellipse cx="243" cy="125" rx="15" ry="10" fill="#7C3AED" opacity="0.6"/>
+
+    <!-- Floor 2 - 3 rooms -->
+    <rect x="20" y="170" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="112" y="170" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="205" y="170" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <circle cx="57" cy="200" r="12" fill="#6D28D9" opacity="0.6"/>
+    <ellipse cx="57" cy="225" rx="15" ry="10" fill="#6D28D9" opacity="0.6"/>
+    <circle cx="150" cy="200" r="12" fill="#7C3AED" opacity="0.6"/>
+    <ellipse cx="150" cy="225" rx="15" ry="10" fill="#7C3AED" opacity="0.6"/>
+
+    <!-- Floor 1 - 2 rooms + door -->
+    <rect x="20" y="270" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="205" y="270" width="75" height="80" rx="3" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <circle cx="57" cy="300" r="12" fill="#7C3AED" opacity="0.6"/>
+    <ellipse cx="57" cy="325" rx="15" ry="10" fill="#7C3AED" opacity="0.6"/>
+
+    <!-- Door -->
+    <rect x="125" y="320" width="50" height="80" rx="4" fill="#7C3AED"/>
+    <circle cx="160" cy="360" r="4" fill="#A78BFA"/>
+
+    <!-- HMO badge on building -->
+    <g transform="translate(200, 360)">
+      <rect x="0" y="0" width="80" height="35" rx="5" fill="#6D28D9"/>
+      <text x="40" y="15" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">HMO</text>
+      <text x="40" y="28" text-anchor="middle" fill="#F3F1FF" font-size="8" font-family="Arial">Licensed</text>
+    </g>
+  </g>
+
+  <!-- License document -->
+  <g transform="translate(430, 60)">
+    <rect x="0" y="0" width="280" height="340" rx="12" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Header -->
+    <rect x="0" y="0" width="280" height="60" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="48" width="280" height="12" fill="#7C3AED"/>
+    <text x="140" y="40" text-anchor="middle" fill="white" font-size="18" font-weight="bold" font-family="Arial">HMO LICENCE</text>
+
+    <!-- Council logo placeholder -->
+    <circle cx="140" cy="100" r="35" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+    <text x="140" y="95" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">LOCAL</text>
+    <text x="140" y="110" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">COUNCIL</text>
+
+    <!-- License details -->
+    <text x="20" y="160" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Licence Number:</text>
+    <rect x="20" y="165" width="240" height="22" rx="4" fill="#F3F1FF"/>
+    <text x="140" y="180" text-anchor="middle" fill="#7C3AED" font-size="11" font-family="Arial">HMO/2024/12345</text>
+
+    <text x="20" y="205" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Max Occupants:</text>
+    <circle cx="200" cy="200" r="18" fill="#7C3AED"/>
+    <text x="200" y="206" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">6</text>
+
+    <text x="20" y="245" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Valid From:</text>
+    <rect x="20" y="250" width="100" height="22" rx="4" fill="#F3F1FF"/>
+
+    <text x="150" y="245" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Expires:</text>
+    <rect x="150" y="250" width="110" height="22" rx="4" fill="#F3F1FF"/>
+
+    <!-- Conditions checklist -->
+    <text x="20" y="295" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Conditions Met:</text>
+    <g transform="translate(20, 302)">
+      <circle cx="8" cy="10" r="6" fill="#7C3AED"/>
+      <path d="M5 10 L7 12 L11 8" stroke="white" stroke-width="1.5" fill="none"/>
+      <text x="20" y="14" fill="#6D28D9" font-size="9" font-family="Arial">Fire safety</text>
+    </g>
+    <g transform="translate(110, 302)">
+      <circle cx="8" cy="10" r="6" fill="#7C3AED"/>
+      <path d="M5 10 L7 12 L11 8" stroke="white" stroke-width="1.5" fill="none"/>
+      <text x="20" y="14" fill="#6D28D9" font-size="9" font-family="Arial">Room sizes</text>
+    </g>
+    <g transform="translate(200, 302)">
+      <circle cx="8" cy="10" r="6" fill="#7C3AED"/>
+      <path d="M5 10 L7 12 L11 8" stroke="white" stroke-width="1.5" fill="none"/>
+      <text x="20" y="14" fill="#6D28D9" font-size="9" font-family="Arial">Amenities</text>
+    </g>
+  </g>
+
+  <!-- 5+ households reminder -->
+  <g transform="translate(100, 430)">
+    <rect x="0" y="0" width="600" height="50" rx="25" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="300" y="22" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">Mandatory licensing: 5+ people in 2+ households</text>
+    <text x="300" y="40" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Additional licensing may apply in your area</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="750" cy="450" r="30" fill="#7C3AED" opacity="0.1"/>
+</svg>

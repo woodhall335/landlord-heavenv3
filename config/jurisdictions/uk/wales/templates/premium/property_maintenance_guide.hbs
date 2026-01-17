@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Maintenance Guide</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a202c;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 24pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #4a5568;
+      margin-top: 8px;
+    }
+
+    .section {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      border-left: 4px solid #2c5282;
+    }
+
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    .calendar-table th {
+      background: #2c5282;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 10pt;
+    }
+
+    .calendar-table td {
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    .calendar-table tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+
+    .info-box {
+      background: #f0fff4;
+      border-left: 4px solid #38a169;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #e53e3e;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .task-list {
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .task-list li {
+      padding: 8px 0;
+      padding-left: 30px;
+      position: relative;
+      line-height: 1.8;
+    }
+
+    .task-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      font-size: 12pt;
+      color: #38a169;
+      font-weight: bold;
+    }
+
+    h3 {
+      color: #2c5282;
+      margin: 20px 0 10px 0;
+      font-size: 12pt;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="document-title">
+      Property Maintenance Guide
+    </div>
+    <div class="subtitle">12-Month Maintenance Calendar & Best Practices</div>
+    <div class="subtitle">{{property_address}}</div>
+    <div class="subtitle" style="margin-top: 15px; font-style: italic;">
+      Standard Occupation Contract (Wales) | Renting Homes (Wales) Act 2016
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Annual Maintenance Calendar</div>
+
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Maintenance Tasks</th>
+          <th>Responsible Party</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>January</strong></td>
+          <td>
+            • Check heating system performance<br/>
+            • Test smoke and CO alarms<br/>
+            • Inspect for ice damage to pipes
+          </td>
+          <td>Contract-Holder (visual checks)<br/>Landlord (repairs)</td>
+        </tr>
+        <tr>
+          <td><strong>February</strong></td>
+          <td>
+            • Clean kitchen extractor filters<br/>
+            • Check washing machine hoses<br/>
+            • Ventilate dwelling to prevent damp
+          </td>
+          <td>Contract-Holder</td>
+        </tr>
+        <tr>
+          <td><strong>March</strong></td>
+          <td>
+            • {{#if gutter_cleaning_frequency}}Gutter cleaning ({{gutter_cleaning_responsibility}})<br/>{{/if}}
+            • Garden preparation for spring<br/>
+            • Check outdoor taps
+          </td>
+          <td>{{gutter_cleaning_responsibility}}<br/>{{lawn_mowing_responsibility}}</td>
+        </tr>
+        <tr>
+          <td><strong>April</strong></td>
+          <td>
+            • Begin regular lawn mowing<br/>
+            • Check exterior drainage<br/>
+            • Window cleaning (inside)
+          </td>
+          <td>{{lawn_mowing_responsibility}}<br/>Contract-Holder</td>
+        </tr>
+        <tr>
+          <td><strong>May</strong></td>
+          <td>
+            • Garden maintenance ongoing<br/>
+            • Test smoke and CO alarms<br/>
+            • Check for any winter damage repairs
+          </td>
+          <td>{{lawn_mowing_responsibility}}<br/>Contract-Holder</td>
+        </tr>
+        <tr>
+          <td><strong>June</strong></td>
+          <td>
+            • {{#if boiler_service_frequency}}Annual boiler service ({{boiler_service_responsibility}})<br/>{{/if}}
+            • Garden maintenance ongoing<br/>
+            • Check air conditioning (if fitted)
+          </td>
+          <td>{{boiler_service_responsibility}}<br/>{{lawn_mowing_responsibility}}</td>
+        </tr>
+        <tr>
+          <td><strong>July</strong></td>
+          <td>
+            • Garden maintenance ongoing<br/>
+            • Check outdoor furniture condition<br/>
+            • Clean patio/decking areas
+          </td>
+          <td>{{lawn_mowing_responsibility}}<br/>Contract-Holder</td>
+        </tr>
+        <tr>
+          <td><strong>August</strong></td>
+          <td>
+            • Test smoke and CO alarms<br/>
+            • Garden maintenance ongoing<br/>
+            • Check roof for loose tiles
+          </td>
+          <td>Contract-Holder<br/>{{lawn_mowing_responsibility}}<br/>Landlord</td>
+        </tr>
+        <tr>
+          <td><strong>September</strong></td>
+          <td>
+            • {{#if gutter_cleaning_frequency}}Gutter cleaning ({{gutter_cleaning_responsibility}})<br/>{{/if}}
+            • Prepare heating system for winter<br/>
+            • Check window seals and draught-proofing
+          </td>
+          <td>{{gutter_cleaning_responsibility}}<br/>Contract-Holder</td>
+        </tr>
+        <tr>
+          <td><strong>October</strong></td>
+          <td>
+            • Clear leaves from gutters and drains<br/>
+            • Test heating system<br/>
+            • Garden: final lawn mowing
+          </td>
+          <td>{{gutter_cleaning_responsibility}}<br/>Contract-Holder<br/>{{lawn_mowing_responsibility}}</td>
+        </tr>
+        <tr>
+          <td><strong>November</strong></td>
+          <td>
+            • Test smoke and CO alarms<br/>
+            • Bleed radiators if necessary<br/>
+            • Check insulation in loft
+          </td>
+          <td>Contract-Holder<br/>Landlord (if issues)</td>
+        </tr>
+        <tr>
+          <td><strong>December</strong></td>
+          <td>
+            • Deep clean before holidays<br/>
+            • Check pipes don't freeze<br/>
+            • Review maintenance for year ahead
+          </td>
+          <td>Contract-Holder<br/>Both parties</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Regular Maintenance Tasks</div>
+
+    <h3>Weekly Tasks (Contract-Holder Responsibility)</h3>
+    <ul class="task-list">
+      <li>Clean kitchen surfaces, hob, and sink</li>
+      <li>Clean bathrooms (toilet, bath/shower, sink)</li>
+      <li>Vacuum/sweep floors</li>
+      <li>Empty bins and recycling</li>
+      <li>Wipe down appliances</li>
+    </ul>
+
+    <h3>Monthly Tasks (Contract-Holder Responsibility)</h3>
+    <ul class="task-list">
+      <li>Deep clean kitchen (including oven, microwave, fridge)</li>
+      <li>Clean extractor fan filters</li>
+      <li>Test smoke and CO alarms</li>
+      <li>Check for leaks under sinks</li>
+      <li>Clean washing machine filter</li>
+      <li>Descale kettle and shower heads</li>
+      <li>Check and clean drains</li>
+    </ul>
+
+    <h3>Quarterly Tasks</h3>
+    <ul class="task-list">
+      <li>Deep clean all rooms</li>
+      <li>Wash windows (inside)</li>
+      <li>Check and replace HVAC filters (if applicable)</li>
+      <li>Inspect seals around windows and doors</li>
+      <li>Clean gutters ({{gutter_cleaning_responsibility}})</li>
+    </ul>
+
+    <h3>Annual Tasks</h3>
+    <ul class="task-list">
+      <li>Gas safety check (Landlord - legally required)</li>
+      <li>Boiler service ({{boiler_service_responsibility}})</li>
+      <li>Electrical safety check (Landlord - every 5 years)</li>
+      <li>Professional carpet clean ({{professional_cleaning_standard}})</li>
+      <li>Gutter cleaning ({{gutter_cleaning_responsibility}})</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Contract-Holder Responsibilities</div>
+
+    <div class="info-box">
+      <strong>Under the Renting Homes (Wales) Act 2016, you are responsible for:</strong>
+    </div>
+    <ul class="task-list">
+      <li>Keeping the dwelling clean and in good condition</li>
+      <li>Reporting any damage or maintenance issues promptly</li>
+      <li>Not causing damage through negligence</li>
+      <li>Allowing access for inspections and repairs (with proper notice)</li>
+      <li>Testing smoke and CO alarms monthly</li>
+      <li>Preventing frozen pipes in winter</li>
+      <li>Ventilating dwelling to prevent damp and mould</li>
+      <li>Minor maintenance (light bulbs, batteries in alarms)</li>
+      <li>Garden maintenance as specified: {{lawn_mowing_responsibility}}</li>
+    </ul>
+
+    <div class="warning-box">
+      <strong>Failure to maintain the dwelling properly may result in:</strong><br/>
+      • Deductions from your deposit<br/>
+      • Liability for repairs caused by neglect<br/>
+      • Potential breach of your occupation contract
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Appliance Care Instructions</div>
+
+    {{#if appliance_maintenance_notes}}
+    <div class="info-box">
+      <strong>Specific Appliance Notes:</strong><br/>
+      {{appliance_maintenance_notes}}
+    </div>
+    {{/if}}
+
+    <h3>Washing Machine</h3>
+    <ul class="task-list">
+      <li>Clean filter monthly</li>
+      <li>Run maintenance wash (hot, empty cycle) monthly</li>
+      <li>Check hoses for leaks quarterly</li>
+      <li>Leave door open after use to prevent mould</li>
+    </ul>
+
+    <h3>Dishwasher</h3>
+    <ul class="task-list">
+      <li>Clean filter weekly</li>
+      <li>Top up salt and rinse aid regularly</li>
+      <li>Run empty hot wash with cleaner monthly</li>
+      <li>Wipe door seals regularly</li>
+    </ul>
+
+    <h3>Oven & Hob</h3>
+    <ul class="task-list">
+      <li>Wipe down after each use</li>
+      <li>Deep clean monthly</li>
+      <li>Clean extractor filters monthly</li>
+      <li>Professional clean at end of contract ({{professional_cleaning_standard}})</li>
+    </ul>
+
+    <h3>Fridge/Freezer</h3>
+    <ul class="task-list">
+      <li>Clean spills immediately</li>
+      <li>Deep clean monthly</li>
+      <li>Defrost freezer when ice builds up</li>
+      <li>Check and clean drainage hole</li>
+    </ul>
+
+    <h3>Boiler & Heating</h3>
+    <ul class="task-list">
+      <li>Annual service by Gas Safe engineer ({{boiler_service_responsibility}})</li>
+      <li>Bleed radiators if cold spots appear</li>
+      <li>Maintain pressure at 1-1.5 bar</li>
+      <li>Report any unusual noises or smells immediately</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Emergency Procedures</div>
+
+    <h3>Water Leak</h3>
+    <ul class="task-list">
+      <li>Turn off water at main stopcock: <strong>{{water_shutoff_location}}</strong></li>
+      <li>Turn off water heater/boiler</li>
+      <li>Move furniture and possessions away from leak</li>
+      <li>Call landlord immediately: <strong>{{emergency_landlord_phone}}</strong></li>
+      <li>If major leak, call emergency plumber: <strong>{{emergency_plumber_phone}}</strong></li>
+    </ul>
+
+    <h3>Gas Leak</h3>
+    <ul class="task-list">
+      <li>Do NOT use any electrical switches or naked flames</li>
+      <li>Turn off gas at meter: <strong>{{gas_shutoff_location}}</strong></li>
+      <li>Open windows and doors</li>
+      <li>Evacuate dwelling</li>
+      <li>Call Wales & West Utilities Gas Emergency: <strong>0800 111 999</strong></li>
+      <li>Then call landlord: <strong>{{emergency_landlord_phone}}</strong></li>
+    </ul>
+
+    <h3>Power Cut</h3>
+    <ul class="task-list">
+      <li>Check if neighbours affected (network issue vs dwelling issue)</li>
+      <li>Check fuse box: <strong>{{electricity_fuse_box_location}}</strong></li>
+      <li>If fuse box tripped, try resetting switches one at a time</li>
+      <li>If won't reset, call landlord: <strong>{{emergency_landlord_phone}}</strong></li>
+      <li>For network issues, call 105 (Power Cut Helpline)</li>
+    </ul>
+
+    <h3>Boiler Breakdown</h3>
+    <ul class="task-list">
+      <li>Check pressure gauge (should be 1-1.5 bar)</li>
+      <li>Check error code and note it down</li>
+      <li>Do NOT attempt to fix yourself</li>
+      <li>Call landlord: <strong>{{emergency_landlord_phone}}</strong></li>
+      <li>Emergency engineer: <strong>{{emergency_gas_engineer_phone}}</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Reporting Repairs</div>
+
+    <div class="info-box">
+      <strong>How to Report Non-Emergency Repairs:</strong>
+    </div>
+    <ul class="task-list">
+      <li>Contact: {{landlord_full_name}}</li>
+      <li>Phone: {{landlord_phone}}</li>
+      <li>Email: {{landlord_email}}</li>
+      <li>Provide clear description and photos if possible</li>
+      <li>Landlord will arrange contractor access with {{contractor_access_notice_period}} notice</li>
+      <li>Access hours: {{contractor_access_hours}}</li>
+      {{#if tenant_presence_required}}
+      <li>You must be present during contractor visits</li>
+      {{else}}
+      <li>Contractor can access without you being present</li>
+      {{/if}}
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p><strong>Questions about maintenance?</strong></p>
+    <p>Contact: {{landlord_full_name}} | Phone: {{landlord_phone}} | Email: {{landlord_email}}</p>
+    <p style="margin-top: 10px;">This Maintenance Guide forms part of your Standard Occupation Contract</p>
+    <p>Renting Homes (Wales) Act 2016</p>
+  </div>
+</body>
+</html>

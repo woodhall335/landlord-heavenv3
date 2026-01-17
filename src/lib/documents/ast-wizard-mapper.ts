@@ -144,14 +144,14 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
   // Build addresses from CaseFacts
   const property_address = buildAddress(
     caseFacts.property.address_line1,
-    caseFacts.property.address_line1,
+    caseFacts.property.address_line2 ?? null,
     caseFacts.property.city,
     caseFacts.property.postcode
   );
 
   const landlord_address = buildAddress(
     caseFacts.parties.landlord.address_line1,
-    caseFacts.parties.landlord.address_line1,
+    caseFacts.parties.landlord.address_line2 ?? null,
     caseFacts.parties.landlord.city,
     caseFacts.parties.landlord.postcode
   );
@@ -179,7 +179,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     agent_name: caseFacts.parties.agent.name ?? undefined,
     agent_address: buildAddress(
       caseFacts.parties.agent.address_line1,
-      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.address_line2 ?? null,
       caseFacts.parties.agent.city,
       caseFacts.parties.agent.postcode
     ),
@@ -222,7 +222,9 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
 
     // Deposit - use CaseFacts
+    // Output both deposit_scheme and deposit_scheme_name for template compatibility
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
+    deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
     deposit_protection_date: caseFacts.tenancy.deposit_protection_date ?? undefined,
@@ -261,12 +263,23 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     how_to_rent_provision_date: getValueAtPath(wizardFacts, 'how_to_rent_provision_date'),
     how_to_rent_guide_provided: coerceBoolean(getValueAtPath(wizardFacts, 'how_to_rent_guide_provided')),
 
-    // Safety Certificates
+    // Safety Certificates - boolean flags
     gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
     epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
     electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
     smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
     carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
+
+    // Safety Certificate Dates - for compliance verification
+    gas_safety_certificate_date: getValueAtPath(wizardFacts, 'gas_safety_certificate_date'),
+    gas_safety_certificate_expiry: getValueAtPath(wizardFacts, 'gas_safety_certificate_expiry'),
+    epc_certificate_date: getValueAtPath(wizardFacts, 'epc_certificate_date'),
+    eicr_certificate_date: getValueAtPath(wizardFacts, 'eicr_certificate_date'),
+    eicr_next_inspection_date: getValueAtPath(wizardFacts, 'eicr_next_inspection_date'),
+    how_to_rent_guide_date: getValueAtPath(wizardFacts, 'how_to_rent_guide_date'),
+
+    // Prescribed Information Date
+    prescribed_information_date: getValueAtPath(wizardFacts, 'prescribed_information_date'),
 
     // Maintenance
     landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),
@@ -311,17 +324,17 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
 
     // Premium Enhanced Features - Late Payment Interest
     late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
-    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')),
-    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')),
-    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')),
+    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')) ?? 0,
+    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')) ?? 0,
+    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) ?? 0,
 
     // Premium Enhanced Features - Key Schedule
-    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')),
-    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')),
-    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')),
-    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')),
-    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')),
-    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')),
+    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')) ?? 0,
+    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')) ?? 0,
+    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')) ?? 0,
+    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')) ?? 0,
+    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')) ?? 0,
+    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')) ?? 0,
     other_keys_notes: getValueAtPath(wizardFacts, 'other_keys_notes'),
 
     // Premium Enhanced Features - Contractor Access
@@ -377,7 +390,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     regular_cleaning_expectations: getValueAtPath(wizardFacts, 'regular_cleaning_expectations'),
     deep_cleaning_areas: getValueAtPath(wizardFacts, 'deep_cleaning_areas'),
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
-    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')),
+    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) ?? 0,
 
     // Jurisdiction
     jurisdiction_england: true,

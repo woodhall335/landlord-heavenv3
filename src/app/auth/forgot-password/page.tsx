@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
+import { StandardHero } from '@/components/marketing/StandardHero';
+import { RiCheckLine } from 'react-icons/ri';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -46,24 +48,22 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <Container size="small">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-charcoal mb-2">
-            Reset Your Password
-          </h1>
-          <p className="text-gray-600">
-            We'll send you a link to reset your password
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Recovery"
+        title="Reset Your Password"
+        subtitle="We'll send you a link to reset your password"
+        variant="pastel"
+      />
 
+      <div className="flex items-center justify-center py-12 px-4">
+      <Container size="small">
         <Card padding="large">
           {success ? (
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <RiCheckLine className="w-8 h-8 text-[#7C3AED]" />
               </div>
               <h2 className="text-xl font-semibold text-charcoal mb-2">
                 Check your email
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                 If an account exists for <strong>{email}</strong>, you'll receive a password reset link shortly.
               </p>
               <Link href="/auth/login">
-                <Button variant="primary" fullWidth>
+                <Button variant="heroPrimary" fullWidth>
                   Back to login
                 </Button>
               </Link>
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
 
               <Button
                 type="submit"
-                variant="primary"
+                variant="heroPrimary"
                 size="large"
                 loading={isLoading}
                 fullWidth
@@ -117,6 +117,7 @@ export default function ForgotPasswordPage() {
           )}
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

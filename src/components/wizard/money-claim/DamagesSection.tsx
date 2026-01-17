@@ -3,6 +3,7 @@
 'use client';
 
 import React from 'react';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 interface SectionProps {
   facts: any;
@@ -172,11 +173,22 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           Anything else the court should know about these amounts?
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={otherCostsNotes}
           onChange={(e) => handleNotesChange(e.target.value)}
           placeholder="For example: some figures are estimates pending final contractor invoices, or you agreed a reduced amount with the tenant but they still did not pay."
         />
+
+        {/* Ask Heaven Inline Enhancer */}
+        <AskHeavenInlineEnhancer
+          questionId="other_costs_notes"
+          questionText="Additional notes about damages and costs claimed"
+          answer={otherCostsNotes}
+          onApply={(newText) => handleNotesChange(newText)}
+          context={{ product: 'money_claim', damage_items: items }}
+          apiMode="generic"
+        />
+
         <p className="text-xs text-gray-500">
           This helps explain your schedule of damages and can be used in the particulars
           of claim.

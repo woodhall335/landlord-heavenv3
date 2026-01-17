@@ -4,10 +4,21 @@
   <meta charset="UTF-8">
   <title>Service Instructions - {{notice_type}} Notice</title>
   <style>
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - NARROW MARGINS ===== */
+    /* Override print.css defaults to match Form 6A narrow margins */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    /* Zero out body padding since @page handles margins */
     body {
       font-family: Arial, sans-serif;
       line-height: 1.6;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
       color: #333;
     }
     h1 {
@@ -74,10 +85,21 @@
       font-size: 0.9em;
       color: #6b7280;
     }
+    .info-box {
+      background: #f8f8f8;
+      border-left: 4px solid #1a1a1a;
+      padding: 15px;
+      margin: 20px 0;
+    }
   </style>
 </head>
 <body>
   <h1>Service Instructions for {{notice_type}} Notice</h1>
+
+  <!-- Legal Disclaimer -->
+  <div class="info-box">
+    <strong>ℹ️ Important:</strong> Landlord Heaven provides document generation and general information only. We are not a law firm and do not provide legal advice. Court outcomes depend on your evidence, service, and the facts of the case.
+  </div>
 
   <div class="section">
     <p><strong>Property:</strong> {{property_address}}</p>

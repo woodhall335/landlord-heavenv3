@@ -1,0 +1,144 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">SUCCESSFUL MARKETING</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">How to effectively market your rental property</text>
+
+  <!-- Megaphone icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Megaphone -->
+    <g transform="translate(30, 15)">
+      <!-- Megaphone body -->
+      <polygon points="20,30 100,10 100,70 20,50" fill="#7C3AED"/>
+      <ellipse cx="100" cy="40" rx="15" ry="32" fill="#6D28D9"/>
+      <!-- Handle -->
+      <rect x="5" y="32" width="20" height="18" rx="5" fill="#F59E0B"/>
+      <!-- Sound waves -->
+      <path d="M115 25 Q130 40 115 55" stroke="#22C55E" stroke-width="3" fill="none"/>
+      <path d="M125 15 Q145 40 125 65" stroke="#22C55E" stroke-width="3" fill="none"/>
+      <path d="M135 5 Q160 40 135 75" stroke="#22C55E" stroke-width="3" fill="none"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">MARKETING</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Reach more</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">tenants</text>
+  </g>
+
+  <!-- Key elements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#22C55E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MARKETING ESSENTIALS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Professional photos</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Compelling description</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Accurate floor plan</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Competitive pricing</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Virtual tour/video</text>
+    </g>
+  </g>
+
+  <!-- Where to advertise -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="200" height="12" fill="#7C3AED"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WHERE TO LIST</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rightmove</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Zoopla</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">OpenRent</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">SpareRoom (rooms)</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <circle cx="7" cy="7" r="5" fill="#A78BFA"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Social media</text>
+    </g>
+  </g>
+
+  <!-- Marketing tips detail -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MARKETING STRATEGY</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">PHOTOGRAPHY TIPS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Use natural daylight</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Declutter first</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Wide angle lens</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Show every room</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">First impressions count</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">DESCRIPTION WRITING</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Lead with key features</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Be accurate and honest</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Include transport links</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Mention local amenities</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Sell the lifestyle</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">PRICING RIGHT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Research comparables</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Consider seasonality</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Include bills option</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Review if no interest</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Price attracts interest</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

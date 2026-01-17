@@ -12,9 +12,8 @@ interface FailedPayment {
   user_email: string;
   user_name: string | null;
   product_type: string;
-  amount: number;
-  status: string;
-  error_message: string | null;
+  total_amount: number;
+  payment_status: string;
   stripe_payment_intent_id: string | null;
   created_at: string;
 }
@@ -53,11 +52,11 @@ export default function AdminFailedPaymentsPage() {
   const loadFailedPayments = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
-      // Fetch orders with failed or pending status
+      // Fetch orders with failed or pending status - use payment_status from schema
       const { data: orders, error } = await supabase
         .from("orders")
         .select("*")
-        .in("status", ["failed", "requires_payment_method", "requires_action"])
+        .in("payment_status", ["failed", "pending"])
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -77,9 +76,8 @@ export default function AdminFailedPaymentsPage() {
             user_email: userData?.email || "Unknown",
             user_name: userData?.full_name || null,
             product_type: order.product_type,
-            amount: order.amount,
-            status: order.status,
-            error_message: order.error_message || null,
+            total_amount: order.total_amount,
+            payment_status: order.payment_status,
             stripe_payment_intent_id: order.stripe_payment_intent_id,
             created_at: order.created_at,
           };
@@ -116,10 +114,8 @@ export default function AdminFailedPaymentsPage() {
     switch (status) {
       case "failed":
         return "bg-red-100 text-red-700";
-      case "requires_payment_method":
+      case "pending":
         return "bg-yellow-100 text-yellow-700";
-      case "requires_action":
-        return "bg-orange-100 text-orange-700";
       default:
         return "bg-gray-100 text-gray-700";
     }
@@ -230,17 +226,17 @@ export default function AdminFailedPaymentsPage() {
                       </td>
                       <td className="p-4">
                         <span className="text-sm font-semibold text-charcoal">
-                          £{(payment.amount / 100).toFixed(2)}
+                          £{(payment.total_amount / 100).toFixed(2)}
                         </span>
                       </td>
                       <td className="p-4">
-                        <span className={`inline-block px-2 py-1 rounded-full text-xs ${getStatusColor(payment.status)}`}>
-                          {payment.status}
+                        <span className={`inline-block px-2 py-1 rounded-full text-xs ${getStatusColor(payment.payment_status)}`}>
+                          {payment.payment_status}
                         </span>
                       </td>
                       <td className="p-4">
                         <span className="text-xs text-red-600">
-                          {payment.error_message || "Unknown error"}
+                          Payment failed or pending
                         </span>
                       </td>
                     </tr>
@@ -287,14 +283,14 @@ export default function AdminFailedPaymentsPage() {
             <p className="text-3xl font-bold text-red-600">
               £
               {(
-                failedPayments.reduce((sum, p) => sum + p.amount, 0) / 100
+                failedPayments.reduce((sum, p) => sum + p.total_amount, 0) / 100
               ).toFixed(2)}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Requires Action</p>
+            <p className="text-sm text-gray-600 mb-1">Pending</p>
             <p className="text-3xl font-bold text-orange-600">
-              {failedPayments.filter((p) => p.status === "requires_action").length}
+              {failedPayments.filter((p) => p.payment_status === "pending").length}
             </p>
           </div>
         </div>

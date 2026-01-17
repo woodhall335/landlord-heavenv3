@@ -3,10 +3,12 @@
  *
  * GET /api/cases
  * Lists all cases for the authenticated user with optional filtering
+ * Includes order status information for derived display status
  */
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { deriveDisplayStatus } from '@/lib/case-status';
 
 export async function GET(request: Request) {
   try {
@@ -19,6 +21,7 @@ export async function GET(request: Request) {
     const jurisdiction = searchParams.get('jurisdiction');
     const status = searchParams.get('status');
     const councilCode = searchParams.get('council_code');
+    const includeArchived = searchParams.get('include_archived') === 'true';
 
     // Build query
     let query = supabase
@@ -26,6 +29,11 @@ export async function GET(request: Request) {
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
+
+    // Exclude archived by default unless explicitly requested
+    if (!includeArchived && !status) {
+      query = query.neq('status', 'archived');
+    }
 
     // Apply filters
     if (caseType) {
@@ -54,18 +62,96 @@ export async function GET(request: Request) {
       );
     }
 
-    // Calculate statistics
+    // Fetch orders for all cases to include payment/fulfillment status
+    const caseIds = (cases || []).map((c: any) => c.id);
+    const { data: orders } = caseIds.length > 0
+      ? await supabase
+          .from('orders')
+          .select('case_id, payment_status, fulfillment_status')
+          .in('case_id', caseIds)
+      : { data: [] };
+
+    // Create a map of case_id to order info (use most recent paid order if multiple)
+    const orderMap = new Map<string, { payment_status: string; fulfillment_status: string }>();
+    for (const order of orders || []) {
+      const existing = orderMap.get(order.case_id);
+      // Prefer paid orders over unpaid
+      if (!existing || order.payment_status === 'paid') {
+        orderMap.set(order.case_id, {
+          payment_status: order.payment_status,
+          fulfillment_status: order.fulfillment_status,
+        });
+      }
+    }
+
+    // Fetch document counts for fulfilled cases
+    const fulfilledCaseIds = Array.from(orderMap.entries())
+      .filter(([_, o]) => o.payment_status === 'paid')
+      .map(([caseId]) => caseId);
+
+    const { data: docCounts } = fulfilledCaseIds.length > 0
+      ? await supabase
+          .from('documents')
+          .select('case_id')
+          .in('case_id', fulfilledCaseIds)
+          .eq('is_preview', false)
+      : { data: [] };
+
+    // Count documents per case
+    const docCountMap = new Map<string, number>();
+    for (const doc of docCounts || []) {
+      docCountMap.set(doc.case_id, (docCountMap.get(doc.case_id) || 0) + 1);
+    }
+
+    // Enhance cases with order info and derived status
+    const enhancedCases = (cases || []).map((c: any) => {
+      const orderInfo = orderMap.get(c.id);
+      const hasFinalDocuments = (docCountMap.get(c.id) || 0) > 0;
+
+      const displayStatusInfo = deriveDisplayStatus({
+        caseStatus: c.status,
+        wizardProgress: c.wizard_progress,
+        wizardCompletedAt: c.wizard_completed_at,
+        paymentStatus: orderInfo?.payment_status || null,
+        fulfillmentStatus: orderInfo?.fulfillment_status || null,
+        hasFinalDocuments,
+      });
+
+      return {
+        ...c,
+        // Order status flags for UI
+        has_paid_order: orderInfo?.payment_status === 'paid',
+        has_fulfilled_order: orderInfo?.fulfillment_status === 'fulfilled',
+        payment_status: orderInfo?.payment_status || null,
+        fulfillment_status: orderInfo?.fulfillment_status || null,
+        has_final_documents: hasFinalDocuments,
+        // Derived display status
+        display_status: displayStatusInfo.status,
+        display_label: displayStatusInfo.label,
+        display_badge_variant: displayStatusInfo.badgeVariant,
+      };
+    });
+
+    // Calculate statistics (exclude archived from totals unless included)
+    const activeCases = includeArchived
+      ? enhancedCases
+      : enhancedCases.filter((c: any) => c.status !== 'archived');
+
     const stats = {
-      total: cases?.length || 0,
-      in_progress: cases?.filter((c) => (c as any).status === 'in_progress').length || 0,
-      completed: cases?.filter((c) => (c as any).status === 'completed').length || 0,
-      archived: cases?.filter((c) => (c as any).status === 'archived').length || 0,
+      total: activeCases.length,
+      in_progress: activeCases.filter((c: any) =>
+        c.display_status === 'in_progress' || c.display_status === 'ready_to_purchase'
+      ).length,
+      completed: activeCases.filter((c: any) =>
+        c.display_status === 'documents_ready' || c.display_status === 'completed'
+      ).length,
+      archived: enhancedCases.filter((c: any) => c.status === 'archived').length,
     };
 
     return NextResponse.json(
       {
         success: true,
-        cases: cases || [],
+        cases: enhancedCases,
         stats,
       },
       { status: 200 }

@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Rent Demand Letter Generator | Formal Arrears Demand | Landlord Heaven',
+  title: 'Free Rent Demand Letter Generator',
   description:
     'Generate a free rent demand letter template for UK landlords. Professional arrears demand letters for unpaid rent with formal legal warning.',
   keywords: [
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
     description:
       'Generate professional rent demand letters for unpaid rent. Free template for UK landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/free-rent-demand-letter'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-rent-demand-letter'),
   },
 };
 

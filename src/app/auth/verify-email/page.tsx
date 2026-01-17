@@ -12,25 +12,30 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { StandardHero } from '@/components/marketing/StandardHero';
+import { RiMailLine } from 'react-icons/ri';
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <StandardHero
+        badge="Account Verification"
+        title="Check Your Email"
+        subtitle="We've sent you a verification link"
+        variant="pastel"
+      />
+
+      <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">
         <Card padding="large">
           <div className="text-center py-8">
             <div className="w-20 h-20 bg-primary-subtle rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+              <RiMailLine className="w-10 h-10 text-[#7C3AED]" />
             </div>
-
-            <h1 className="text-2xl font-extrabold text-charcoal mb-3">
-              Check Your Email
-            </h1>
 
             <p className="text-gray-600 mb-2">
               We've sent a verification link to:
@@ -53,7 +58,7 @@ function VerifyEmailContent() {
             </div>
 
             <Link href="/auth/login">
-              <Button variant="primary" fullWidth>
+              <Button variant="heroPrimary" fullWidth>
                 Go to login
               </Button>
             </Link>
@@ -64,6 +69,7 @@ function VerifyEmailContent() {
           </div>
         </Card>
       </Container>
+      </div>
     </div>
   );
 }

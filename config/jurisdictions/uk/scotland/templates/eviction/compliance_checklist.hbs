@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pre-Service Compliance Checklist - Scotland</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #333; }
+    .header { text-align: center; border-bottom: 2px solid #0065bd; padding-bottom: 15px; margin-bottom: 20px; }
+    h1 { color: #0065bd; margin-bottom: 5px; font-size: 18pt; }
+    h2 { color: #333; font-size: 14pt; margin-top: 25px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+    .subtitle { color: #555; font-size: 12pt; }
+    .case-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
+    .case-info p { margin: 5px 0; }
+    .checklist-section { margin: 20px 0; }
+    .check-item { display: flex; align-items: flex-start; margin: 10px 0; padding: 10px; background: #fafafa; border-left: 4px solid #ddd; }
+    .check-item.critical { border-left-color: #0065bd; background: #f0f7ff; }
+    .check-item.pass { border-left-color: #28a745; }
+    .check-item.fail { border-left-color: #dc3545; }
+    .check-item.warning { border-left-color: #ffc107; background: #fffbe6; }
+    .checkbox { width: 20px; height: 20px; border: 2px solid #333; margin-right: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .checkbox.checked { background: #28a745; color: white; border-color: #28a745; }
+    .checkbox.failed { background: #dc3545; color: white; border-color: #dc3545; }
+    .check-content { flex: 1; }
+    .check-title { font-weight: bold; }
+    .check-detail { font-size: 10pt; color: #666; margin-top: 5px; }
+    .critical-warning { background: #e2f3ff; border: 2px solid #0065bd; padding: 15px; margin: 20px 0; }
+    .critical-warning strong { color: #0065bd; }
+    .info-box { background: #d1ecf1; border: 1px solid #0c5460; padding: 15px; margin: 15px 0; }
+    .footer { margin-top: 30px; text-align: center; font-size: 10pt; color: #777; border-top: 1px solid #ddd; padding-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>PRE-SERVICE COMPLIANCE CHECKLIST</h1>
+    <p class="subtitle">Scotland - Private Housing (Tenancies) (Scotland) Act 2016</p>
+  </div>
+
+  <div class="case-info">
+    <p><strong>Property:</strong> {{property.full_address}}</p>
+    <p><strong>Landlord:</strong> {{landlord.full_name}}</p>
+    <p><strong>Tenant:</strong> {{tenant.full_name}}</p>
+    <p><strong>Notice Type:</strong> Notice to Leave (Private Residential Tenancy)</p>
+    <p><strong>Date:</strong> {{generated_date}}</p>
+  </div>
+
+  <div class="critical-warning">
+    <strong>⚠️ SCOTLAND - PRIVATE RESIDENTIAL TENANCY</strong>
+    <p>The Private Housing (Tenancies) (Scotland) Act 2016 governs all private residential tenancies in Scotland. Applications for possession are made to the First-tier Tribunal for Scotland (Housing and Property Chamber), NOT the courts.</p>
+  </div>
+
+  <h2>1. Landlord Registration (CRITICAL)</h2>
+  <div class="checklist-section">
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.landlord_registered}}checked{{else}}failed{{/if}}">
+        {{#if compliance.landlord_registered}}✓{{else}}✗{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Registered with Local Authority</div>
+        <div class="check-detail">
+          {{#if compliance.landlord_registered}}
+            Registration confirmed. Number: {{compliance.landlord_registration_number}}
+          {{else}}
+            You are NOT registered as a landlord. ALL landlords in Scotland must be registered with their local authority. You CANNOT proceed with eviction until registered.
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>2. Deposit Protection</h2>
+  <div class="checklist-section">
+    {{#if deposit.taken}}
+    <div class="check-item">
+      <div class="checkbox {{#if deposit.protected}}checked{{else}}failed{{/if}}">
+        {{#if deposit.protected}}✓{{else}}✗{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Deposit Protected in Approved Scheme</div>
+        <div class="check-detail">
+          {{#if deposit.protected}}
+            Deposit of £{{deposit.amount}} protected with {{deposit.scheme_name}}.
+            <br>Approved schemes in Scotland: SafeDeposits Scotland, MyDeposits Scotland, Letting Protection Service Scotland
+          {{else}}
+            Deposit has NOT been protected. Must be protected within 30 working days of receipt.
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if deposit.prescribed_info_given}}checked{{/if}}">
+        {{#if deposit.prescribed_info_given}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Prescribed Information Provided</div>
+        <div class="check-detail">The prescribed information about the deposit protection must be provided to the tenant within 30 working days.</div>
+      </div>
+    </div>
+    {{else}}
+    <div class="check-item">
+      <div class="checkbox checked">✓</div>
+      <div class="check-content">
+        <div class="check-title">No Deposit Taken</div>
+        <div class="check-detail">No deposit was taken for this tenancy.</div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <h2>3. Tenant Information Pack</h2>
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.tenant_info_pack_provided}}checked{{/if}}">
+        {{#if compliance.tenant_info_pack_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Tenant Information Pack Provided</div>
+        <div class="check-detail">The Scottish Government's Tenant Information Pack must be provided at the start of the tenancy. This includes the "Easy Read Notes" and tenancy terms.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>4. Safety Certificates</h2>
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.gas_cert_provided}}checked{{/if}}">
+        {{#if compliance.gas_cert_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Gas Safety Certificate (CP12)</div>
+        <div class="check-detail">Annual gas safety check by Gas Safe registered engineer. Copy must be provided to tenant within 28 days of the check.</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.electrical_cert_provided}}checked{{/if}}">
+        {{#if compliance.electrical_cert_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Electrical Installation Condition Report (EICR)</div>
+        <div class="check-detail">Required for all private residential tenancies in Scotland. Valid for 5 years. Copy must be provided to tenant.</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.epc_provided}}checked{{/if}}">
+        {{#if compliance.epc_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Energy Performance Certificate (EPC)</div>
+        <div class="check-detail">Valid EPC must be available. Property must meet minimum energy efficiency standard (MEES).</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>5. Pre-Action Requirements (Rent Arrears - Ground 1)</h2>
+  {{#if (or compliance.ground_1_claimed ground_1_claimed)}}
+  <div class="checklist-section">
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.arrears_info_provided}}checked{{/if}}">
+        {{#if compliance.arrears_info_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Written Notice of Arrears Sent</div>
+        <div class="check-detail">You must send written notice to the tenant specifying the amount of arrears and how it has been calculated.</div>
+      </div>
+    </div>
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.debt_advice_signposted}}checked{{/if}}">
+        {{#if compliance.debt_advice_signposted}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Signposted to Advice Services</div>
+        <div class="check-detail">You must provide information about debt advice services (Citizens Advice Scotland, Shelter Scotland, StepChange).</div>
+      </div>
+    </div>
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.discussion_attempted}}checked{{/if}}">
+        {{#if compliance.discussion_attempted}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Attempted Discussion About Arrears</div>
+        <div class="check-detail">You must make reasonable efforts to discuss the arrears and consider any payment arrangement proposed.</div>
+      </div>
+    </div>
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.time_given}}checked{{/if}}">
+        {{#if compliance.time_given}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Reasonable Time to Pay</div>
+        <div class="check-detail">You must give the tenant reasonable time to clear or reduce the arrears (at least 28 days after notice).</div>
+      </div>
+    </div>
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.circumstances_considered}}checked{{/if}}">
+        {{#if compliance.circumstances_considered}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Considered Tenant's Circumstances</div>
+        <div class="check-detail">You must consider the tenant's personal and financial circumstances before applying to tribunal.</div>
+      </div>
+    </div>
+  </div>
+  {{else}}
+  <div class="info-box">
+    <p>Pre-Action Requirements for rent arrears only apply when using Ground 1. If you are not using Ground 1, you can skip this section.</p>
+  </div>
+  {{/if}}
+
+  <h2>6. Repairing Standard</h2>
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox">☐</div>
+      <div class="check-content">
+        <div class="check-title">Property Meets Repairing Standard</div>
+        <div class="check-detail">The property must be wind and watertight, have safe installations for water, gas and electricity, adequate heating, and be in reasonable repair. Tenants can use disrepair as a defence at tribunal.</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox">☐</div>
+      <div class="check-content">
+        <div class="check-title">No Outstanding Repair Complaints</div>
+        <div class="check-detail">Address any outstanding repair issues before applying to tribunal. The Housing and Property Chamber can refuse eviction if there are unresolved repairing standard issues.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Declaration</h2>
+  <div class="checklist-section">
+    <p>I confirm that I have verified each of the above requirements and that to the best of my knowledge, I am in compliance with the Private Housing (Tenancies) (Scotland) Act 2016 and all associated regulations.</p>
+    <br>
+    <p><strong>Signed:</strong> ________________________________</p>
+    <p><strong>Print Name:</strong> {{landlord.full_name}}</p>
+    <p><strong>Date:</strong> ________________________________</p>
+  </div>
+
+  <div class="info-box">
+    <strong>Remember:</strong>
+    <ul>
+      <li>Keep copies of all compliance documents to bring to tribunal</li>
+      <li>Use the correct prescribed Notice to Leave form</li>
+      <li>Document how and when you serve the notice (Certificate of Service)</li>
+      <li>Applications go to First-tier Tribunal, NOT the courts</li>
+      <li>If in doubt, seek legal advice before proceeding</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p>Generated by Landlord Heaven | www.landlordheaven.co.uk</p>
+    <p>This checklist is for guidance only and does not constitute legal advice.</p>
+  </div>
+</body>
+</html>
