@@ -1604,10 +1604,14 @@ export async function generateNoticeOnlyPack(
         console.warn('[generateNoticeOnlyPack] Failed to generate Wales validity checklist:', err);
       }
 
-      // 4. Generate Compliance Declaration (Wales)
+      // 4. Generate Pre-Service Compliance Checklist (Wales)
+      // For fault_based, use the fault-specific template; for section_173, use the general template
       try {
+        const complianceTemplatePath = normalizedRoute === 'fault_based'
+          ? 'uk/wales/templates/eviction/pre_service_checklist_fault_based.hbs'
+          : 'uk/wales/templates/eviction/compliance_checklist.hbs';
         const complianceDoc = await generateDocument({
-          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
+          templatePath: complianceTemplatePath,
           data: walesTemplateData,
           isPreview: false,
           outputFormat: 'both',
@@ -1616,10 +1620,12 @@ export async function generateNoticeOnlyPack(
           title: 'Pre-Service Compliance Checklist (Wales)',
           description: 'Evidence of your compliance with Welsh landlord obligations',
           category: 'guidance',
-          document_type: 'compliance_declaration',
+          document_type: 'pre_service_compliance_checklist',
           html: complianceDoc.html,
           pdf: complianceDoc.pdf,
-          file_name: 'compliance_checklist_wales.pdf',
+          file_name: normalizedRoute === 'fault_based'
+            ? 'pre_service_compliance_checklist_fault_based.pdf'
+            : 'compliance_checklist_wales.pdf',
         });
       } catch (err) {
         console.warn('[generateNoticeOnlyPack] Failed to generate Wales compliance checklist:', err);
