@@ -377,7 +377,9 @@ function getWalesNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   // Arrears schedule for fault-based cases with rent arrears
-  if (route === 'fault_based' && (has_arrears || include_arrears_schedule)) {
+  // Handle both 'fault_based' and 'wales_fault_based' route values
+  const isFaultBased = route === 'fault_based' || route === 'wales_fault_based' || route === 'fault-based';
+  if (isFaultBased && (has_arrears || include_arrears_schedule)) {
     items.push({
       key: 'arrears_schedule',
       title: 'Rent Arrears Schedule',
