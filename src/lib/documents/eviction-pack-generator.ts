@@ -1640,13 +1640,21 @@ export async function generateNoticeOnlyPack(
           faultBasedSection.includes('Section 157') ||
           faultBasedSection.includes('Section 159');
 
-        const arrearsItems = wizardFacts.arrears_items || [];
+        // Check both flat and nested locations for arrears_items
+        const arrearsItems = wizardFacts.arrears_items ||
+                             wizardFacts.issues?.rent_arrears?.arrears_items ||
+                             [];
 
         if ((isRentArrearsCase || legacyArrearsDetected) && arrearsItems.length > 0) {
           try {
+            // Check both flat and nested locations for total_arrears
+            const totalArrears = wizardFacts.total_arrears ||
+                                 wizardFacts.issues?.rent_arrears?.total_arrears ||
+                                 wizardFacts.rent_arrears_amount ||
+                                 null;
             const arrearsData = getArrearsScheduleData({
               arrears_items: arrearsItems,
-              total_arrears: wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || null,
+              total_arrears: totalArrears,
               rent_amount: walesTemplateData.rent_amount || 0,
               rent_frequency: walesTemplateData.rent_frequency || 'monthly',
               include_schedule: true,
