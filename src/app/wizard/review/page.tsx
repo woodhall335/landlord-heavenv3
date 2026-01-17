@@ -1594,8 +1594,22 @@ function NoticeOnlyReviewContent({
 
   // Check if arrears grounds are included and if arrears schedule is complete
   const includesArrearsGrounds = hasArrearsGround(includedGroundCodes);
-  const arrearsItems = caseFacts?.arrears_items || [];
+  const arrearsItems = caseFacts?.arrears_items || caseFacts?.issues?.rent_arrears?.arrears_items || [];
   const arrearsEvidenceStatus = isArrearsEvidenceComplete(includedGroundCodes, arrearsItems);
+
+  // =========================================================================
+  // Wales Fault-Based Grounds Logic
+  // =========================================================================
+  const walesFaultGrounds: string[] = caseFacts?.wales_fault_grounds || [];
+  const isWalesFaultBased = isWales && (
+    recommendedRoute === 'fault_based' ||
+    recommendedRoute === 'wales_fault_based' ||
+    caseFacts?.eviction_route === 'fault_based' ||
+    caseFacts?.eviction_route === 'wales_fault_based'
+  );
+  const hasWalesArrearsGround = walesFaultGrounds.includes('rent_arrears_serious') ||
+                                 walesFaultGrounds.includes('rent_arrears_other');
+  const walesArrearsScheduleComplete = hasWalesArrearsGround && arrearsItems.length > 0;
 
   // Get ground-aware suggestions
   const evidenceOverview = analysis?.evidence_overview || {};
@@ -2135,7 +2149,7 @@ function NoticeOnlyReviewContent({
             <>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                RHW Notice Form
+                {isWalesFaultBased ? 'Fault-Based Notice (RHW23)' : 'Section 173 Notice (RHW16/17)'}
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
@@ -2143,8 +2157,14 @@ function NoticeOnlyReviewContent({
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Compliance Checklist
+                Service & Validity Checklist
               </li>
+              {isWalesFaultBased && hasWalesArrearsGround && walesArrearsScheduleComplete && (
+                <li className="flex items-center gap-2 text-gray-700">
+                  <RiFileTextLine className="w-4 h-4 text-green-500" />
+                  Rent Schedule / Arrears Statement
+                </li>
+              )}
             </>
           ) : isScotland ? (
             <>
