@@ -196,9 +196,13 @@ export function getNoticeOnlyDocuments(
     );
   }
 
-  // Optional: Include arrears schedule for arrears grounds (8/10/11)
-  // This is required for Section 8 notices with rent arrears grounds
-  if (options.includeArrearsSchedule && (noticeRoute === 'section_8' || noticeRoute === 'section-8')) {
+  // Optional: Include arrears schedule for arrears grounds
+  // This is required for Section 8 notices with rent arrears grounds (8/10/11)
+  // and Wales fault-based notices with rent arrears grounds (Section 157/159)
+  const isSection8 = noticeRoute === 'section_8' || noticeRoute === 'section-8';
+  const isWalesFaultBased = noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based';
+
+  if (options.includeArrearsSchedule && (isSection8 || isWalesFaultBased)) {
     documents.push({
       id: 'arrears-schedule',
       title: 'Rent Schedule / Arrears Statement',
