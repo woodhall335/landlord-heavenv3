@@ -293,6 +293,9 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   // ============================================================================
   // GATE 2: Deposit Questions - Consistency
   // ============================================================================
+  // NOTE: Deposit protection is ONLY a blocking requirement for Section 21 notices
+  // in England. For other routes (Section 8, Wales fault-based, Scotland),
+  // deposit questions are informational only and should not block document generation.
 
   const depositTaken = resolveFactValue(facts, 'deposit_taken');
   const depositAmount = resolveFactValue(facts, 'deposit_amount') ??
@@ -305,20 +308,30 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
                               resolveFactValue(facts, 'prescribed_info_provided') ??
                               resolveFactValue(facts, 'prescribed_info_served');
 
-  // If deposit taken, must have deposit_amount
+  // Determine if this is a Section 21 route (only route where deposit is a blocking requirement)
+  const isSection21Route = selectedRoute === 'section_21' ||
+                           selectedRoute === 'section-21' ||
+                           selectedRoute?.toLowerCase().includes('section 21') ||
+                           selectedRoute?.toLowerCase().includes('section_21');
+
+  // If deposit taken, must have deposit_amount - but only block for Section 21
   if (depositTaken === true) {
     if (depositAmount === undefined || depositAmount === null) {
-      blocking.push({
-        code: 'DEPOSIT_AMOUNT_REQUIRED',
-        message: 'Deposit amount must be specified when deposit was taken',
-        fields: ['deposit_amount'],
-        user_fix_hint: 'Please provide the deposit amount that was collected from the tenant',
-        affected_question_id: 'deposit_amount',
-      });
+      if (isSection21Route) {
+        // Section 21 requires deposit compliance - this is a blocking issue
+        blocking.push({
+          code: 'DEPOSIT_AMOUNT_REQUIRED',
+          message: 'Deposit amount must be specified when deposit was taken',
+          fields: ['deposit_amount'],
+          user_fix_hint: 'Please provide the deposit amount that was collected from the tenant',
+          affected_question_id: 'deposit_amount',
+        });
+      }
+      // For non-Section 21 routes, don't block - deposit is informational only
     }
 
-    // If deposit amount > 0, must specify if protected
-    if (depositAmount > 0 && depositProtected === undefined) {
+    // If deposit amount > 0, must specify if protected - only for Section 21
+    if (isSection21Route && depositAmount > 0 && depositProtected === undefined) {
       blocking.push({
         code: 'DEPOSIT_PROTECTION_STATUS_REQUIRED',
         message: 'You must specify whether the deposit is protected in an approved scheme',
@@ -328,7 +341,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
       });
     }
 
-    if (depositAmount > 0 && depositProtected === true) {
+    if (isSection21Route && depositAmount > 0 && depositProtected === true) {
       // Check for deposit scheme name - look for 'deposit_scheme' (new MQS field)
       // with fallback to legacy 'deposit_protected_scheme' for backward compatibility
       const depositScheme =

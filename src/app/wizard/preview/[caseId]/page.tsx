@@ -25,6 +25,7 @@ import {
   computeIncludedGrounds,
   validateNoticeOnlyCase,
 } from '@/lib/validation/notice-only-case-validator';
+import { hasWalesArrearsGroundSelected } from '@/lib/wales';
 import { Loader2 } from 'lucide-react';
 import { trackWizardPreviewViewed, trackCheckoutStarted } from '@/lib/analytics';
 
@@ -337,13 +338,25 @@ export default function WizardPreviewPage() {
 
             const shouldIncludeArrearsScheduleForGen = (): boolean => {
               if (productForGen !== 'notice_only') return false;
-              if (routeForGen !== 'section_8' && routeForGen !== 'section-8') return false;
 
-              const needsSchedule = requiresRentSchedule(facts);
-              if (!needsSchedule) return false;
+              // Check for arrears data (both flat and nested locations)
+              const arrearsItems = facts.arrears_items ||
+                                   facts.issues?.rent_arrears?.arrears_items || [];
+              if (arrearsItems.length === 0) return false;
 
-              const arrearsItems = facts.arrears_items || [];
-              return arrearsItems.length > 0;
+              // England Section 8 with arrears grounds (8/10/11)
+              if (routeForGen === 'section_8' || routeForGen === 'section-8') {
+                const needsSchedule = requiresRentSchedule(facts);
+                return needsSchedule;
+              }
+
+              // Wales fault-based with arrears grounds (Section 157/159)
+              if (routeForGen === 'fault_based' || routeForGen === 'wales_fault_based') {
+                const walesFaultGrounds = facts.wales_fault_grounds || [];
+                return hasWalesArrearsGroundSelected(walesFaultGrounds);
+              }
+
+              return false;
             };
 
             const documentTypesToGenerate = getDocumentTypesForProduct(
@@ -483,18 +496,28 @@ export default function WizardPreviewPage() {
     let baseDocuments: DocumentInfo[];
 
     // Determine if arrears schedule should be included for Notice Only packs
-    // Requires: Section 8 route + arrears grounds (8/10/11) + arrears data exists
+    // Requires: (Section 8 route + arrears grounds) OR (Wales fault-based + arrears grounds) + arrears data exists
     const shouldIncludeArrearsSchedule = (): boolean => {
       if (product !== 'notice_only') return false;
-      if (noticeRoute !== 'section_8' && noticeRoute !== 'section-8') return false;
 
-      // Check if arrears grounds are included
-      const needsSchedule = requiresRentSchedule(facts);
-      if (!needsSchedule) return false;
+      // Check for arrears data (both flat and nested locations)
+      const arrearsItems = facts.arrears_items ||
+                           facts.issues?.rent_arrears?.arrears_items || [];
+      if (arrearsItems.length === 0) return false;
 
-      // Check if arrears data exists
-      const arrearsItems = facts.arrears_items || [];
-      return arrearsItems.length > 0;
+      // England Section 8 with arrears grounds (8/10/11)
+      if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
+        const needsSchedule = requiresRentSchedule(facts);
+        return needsSchedule;
+      }
+
+      // Wales fault-based with arrears grounds (Section 157/159)
+      if (noticeRoute === 'fault_based' || noticeRoute === 'wales_fault_based') {
+        const walesFaultGrounds = facts.wales_fault_grounds || [];
+        return hasWalesArrearsGroundSelected(walesFaultGrounds);
+      }
+
+      return false;
     };
 
     const includeArrearsSchedule = shouldIncludeArrearsSchedule();
