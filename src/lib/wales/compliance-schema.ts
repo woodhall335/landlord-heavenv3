@@ -17,6 +17,9 @@
  *   we do NOT require evidence uploads for Notice Only.
  */
 
+import { calculateWalesArrearsInWeeks } from './seriousArrearsThreshold';
+import type { TenancyFacts } from '../case-facts/schema';
+
 /**
  * Blocking levels for compliance fields
  */
@@ -93,6 +96,13 @@ export interface ComplianceField {
    * - Use false for safeguard questions where "Yes" should block (e.g. LA investigation).
    */
   expected_boolean_value?: boolean;
+
+  /**
+   * If true, this field is auto-derived from the ArrearsScheduleStep and should NOT
+   * be displayed as a question. The value is computed from arrears_items.
+   * Used for: arrears_weeks_unpaid, arrears_amount, arrears_schedule_confirmed
+   */
+  auto_derived_from_schedule?: boolean;
 }
 
 /**
@@ -477,6 +487,8 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
 
   // ----------------------------
   // Rent arrears specifics (notice-only)
+  // These fields are AUTO-DERIVED from the ArrearsScheduleStep table editor.
+  // They are NOT displayed as questions - values come from the arrears schedule.
   // ----------------------------
   {
     field_id: 'arrears_weeks_unpaid',
@@ -484,14 +496,16 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Weeks of Rent Unpaid',
     question_text: 'Approximately how many weeks of rent are currently unpaid?',
     input_type: 'number',
-    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
+    // Hidden from UI - auto-derived from ArrearsScheduleStep
+    applies_if: 'false',
+    auto_derived_from_schedule: true,
     blocking_level: 'HARD_BLOCK',
     legal_basis:
-      'Used to validate whether the serious arrears threshold is met and to ensure the correct arrears ground is selected.',
-    source_reference: 'Service Instructions (Rent arrears evidence)',
+      'Derived from the arrears schedule to validate whether the serious arrears threshold is met.',
+    source_reference: 'Section 157 - Serious Rent Arrears Schedule',
     feeds_documents: ['pre_service_checklist'],
     appears_on_notice: false,
-    block_message: 'Please enter how many weeks of rent are unpaid.',
+    block_message: 'Please complete the arrears schedule to calculate weeks of rent unpaid.',
   },
   {
     field_id: 'arrears_amount',
@@ -499,13 +513,15 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Arrears Amount',
     question_text: 'What is the total amount of rent arrears currently outstanding?',
     input_type: 'number',
-    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
+    // Hidden from UI - auto-derived from ArrearsScheduleStep (total_arrears)
+    applies_if: 'false',
+    auto_derived_from_schedule: true,
     blocking_level: 'HARD_BLOCK',
-    legal_basis: 'Arrears amount should be known and supported by records.',
-    source_reference: 'Service Instructions (Rent arrears evidence)',
+    legal_basis: 'Derived from the arrears schedule total.',
+    source_reference: 'Section 157 - Serious Rent Arrears Schedule',
     feeds_documents: ['pre_service_checklist'],
     appears_on_notice: false,
-    block_message: 'Please enter the arrears amount.',
+    block_message: 'Please complete the arrears schedule to calculate the total arrears amount.',
   },
   {
     field_id: 'arrears_schedule_confirmed',
@@ -513,14 +529,16 @@ export const WALES_COMPLIANCE_FIELDS: ComplianceField[] = [
     label: 'Arrears Schedule Available',
     question_text: 'Do you have a rent schedule / payment history you could produce if needed?',
     input_type: 'boolean',
-    applies_if: "wales_fault_grounds.includes('rent_arrears_serious') || wales_fault_grounds.includes('rent_arrears_other')",
+    // Hidden from UI - auto-confirmed when ArrearsScheduleStep has entries
+    applies_if: 'false',
+    auto_derived_from_schedule: true,
     blocking_level: 'SOFT_BLOCK',
     expected_boolean_value: true,
-    legal_basis: 'A rent schedule is strongly recommended to support rent arrears grounds.',
-    source_reference: 'Service Instructions (Evidence of Breach)',
+    legal_basis: 'Confirmed automatically when the arrears schedule is completed.',
+    source_reference: 'Section 157 - Serious Rent Arrears Schedule',
     feeds_documents: ['pre_service_checklist'],
     appears_on_notice: false,
-    block_message: 'A rent schedule/payment history is strongly recommended. Proceeding without one increases risk.',
+    block_message: 'Please complete the arrears schedule to confirm you have a rent schedule.',
   },
 
   // ----------------------------
@@ -915,6 +933,9 @@ export function isArrearsValueInvalid(
  *
  * Note: wales_fault_grounds is now an array (string[]), so we use
  * normalizeWalesFaultGrounds() and .includes() for checking.
+ *
+ * Values are derived from the ArrearsScheduleStep (total_arrears) when available.
+ * The weeks are calculated from total_arrears using the rent amount and frequency.
  */
 export function getGroundLogicViolations(
   facts: Record<string, unknown>
@@ -922,29 +943,48 @@ export function getGroundLogicViolations(
   const violations: Array<{ message: string }> = [];
 
   const grounds = normalizeWalesFaultGrounds(facts['wales_fault_grounds']);
-  const weeksRaw = facts['arrears_weeks_unpaid'];
-  const weeks = typeof weeksRaw === 'number' && !Number.isNaN(weeksRaw) ? weeksRaw : null;
-
-  const amountRaw = facts['arrears_amount'];
-  const amount = typeof amountRaw === 'number' && !Number.isNaN(amountRaw) ? amountRaw : null;
-
   const hasSerious = grounds.includes('rent_arrears_serious');
   const hasOther = grounds.includes('rent_arrears_other');
   const hasAnyArrears = hasSerious || hasOther;
 
-  // FIX FOR ISSUE B: Arrears amount must be > 0 when arrears grounds selected
-  if (hasAnyArrears) {
-    // Check arrears amount (0 is invalid, not "missing")
-    if (amount === null) {
-      violations.push({ message: 'Please provide the arrears amount for rent arrears grounds.' });
-    } else if (amount === 0) {
-      violations.push({ message: 'Arrears amount must be greater than zero when claiming rent arrears grounds.' });
-    }
+  if (!hasAnyArrears) {
+    return violations;
+  }
+
+  // Get arrears amount - prefer total_arrears (derived from schedule) over arrears_amount
+  const totalArrearsRaw = facts['total_arrears'];
+  const arrearsAmountRaw = facts['arrears_amount'];
+  const amount =
+    (typeof totalArrearsRaw === 'number' && !Number.isNaN(totalArrearsRaw) ? totalArrearsRaw : null) ??
+    (typeof arrearsAmountRaw === 'number' && !Number.isNaN(arrearsAmountRaw) ? arrearsAmountRaw : null);
+
+  // Get rent details needed to calculate weeks
+  const rentAmountRaw = facts['rent_amount'];
+  const rentAmount = typeof rentAmountRaw === 'number' && !Number.isNaN(rentAmountRaw) ? rentAmountRaw : null;
+  const rentFrequency = (facts['rent_frequency'] as TenancyFacts['rent_frequency']) || 'monthly';
+
+  // Calculate weeks from total_arrears if we have the necessary data
+  let weeks: number | null = null;
+
+  // First try to derive weeks from the schedule data (total_arrears)
+  if (amount !== null && amount > 0 && rentAmount !== null && rentAmount > 0) {
+    weeks = calculateWalesArrearsInWeeks(amount, rentAmount, rentFrequency);
+  } else {
+    // Fall back to explicit arrears_weeks_unpaid if schedule not completed
+    const weeksRaw = facts['arrears_weeks_unpaid'];
+    weeks = typeof weeksRaw === 'number' && !Number.isNaN(weeksRaw) ? weeksRaw : null;
+  }
+
+  // Arrears amount must be > 0 when arrears grounds selected
+  if (amount === null) {
+    violations.push({ message: 'Please complete the arrears schedule to calculate the total arrears amount.' });
+  } else if (amount === 0) {
+    violations.push({ message: 'Arrears amount must be greater than zero when claiming rent arrears grounds.' });
   }
 
   if (hasSerious) {
     if (weeks === null) {
-      violations.push({ message: 'Please provide the number of weeks of rent unpaid for serious rent arrears.' });
+      violations.push({ message: 'Please complete the arrears schedule to calculate weeks of rent unpaid for serious rent arrears.' });
     } else if (weeks === 0) {
       violations.push({ message: 'Weeks unpaid must be greater than zero for serious rent arrears.' });
     } else if (weeks < 8) {
@@ -954,7 +994,7 @@ export function getGroundLogicViolations(
 
   if (hasOther) {
     if (weeks === null) {
-      violations.push({ message: 'Please provide the number of weeks of rent unpaid for rent arrears.' });
+      violations.push({ message: 'Please complete the arrears schedule to calculate weeks of rent unpaid for rent arrears.' });
     } else if (weeks === 0) {
       violations.push({ message: 'Weeks unpaid must be greater than zero for rent arrears.' });
     } else if (weeks >= 8) {

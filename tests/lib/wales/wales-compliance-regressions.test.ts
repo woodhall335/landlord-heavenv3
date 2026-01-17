@@ -211,6 +211,72 @@ describe('Issue B: Numeric validation', () => {
       );
       expect(zeroErrors.length).toBe(0);
     });
+
+    // Tests for auto-derived values from ArrearsScheduleStep
+    describe('auto-derived from total_arrears', () => {
+      it('should use total_arrears when available (preferred over arrears_amount)', () => {
+        // When total_arrears is set (from schedule), it should be used instead of arrears_amount
+        const violations = getGroundLogicViolations({
+          wales_fault_grounds: ['rent_arrears_serious'],
+          total_arrears: 2000, // From schedule
+          rent_amount: 100, // £100/week = 20 weeks unpaid
+          rent_frequency: 'weekly',
+        });
+
+        // Should not have "please complete" errors since total_arrears is present
+        const scheduleErrors = violations.filter((v) =>
+          v.message.toLowerCase().includes('please complete')
+        );
+        expect(scheduleErrors.length).toBe(0);
+      });
+
+      it('should calculate weeks from total_arrears and rent_amount', () => {
+        // £800 total / £100 weekly = 8 weeks (exactly meets serious threshold)
+        const violations = getGroundLogicViolations({
+          wales_fault_grounds: ['rent_arrears_serious'],
+          total_arrears: 800,
+          rent_amount: 100,
+          rent_frequency: 'weekly',
+        });
+
+        // Should not have threshold errors since 8 weeks meets serious arrears threshold
+        const thresholdErrors = violations.filter((v) =>
+          v.message.toLowerCase().includes('at least 8 weeks')
+        );
+        expect(thresholdErrors.length).toBe(0);
+      });
+
+      it('should flag when total_arrears results in less than 8 weeks for serious arrears', () => {
+        // £700 total / £100 weekly = 7 weeks (below serious threshold)
+        const violations = getGroundLogicViolations({
+          wales_fault_grounds: ['rent_arrears_serious'],
+          total_arrears: 700,
+          rent_amount: 100,
+          rent_frequency: 'weekly',
+        });
+
+        // Should have threshold error since 7 weeks is below 8 weeks threshold
+        const thresholdErrors = violations.filter((v) =>
+          v.message.toLowerCase().includes('at least 8 weeks')
+        );
+        expect(thresholdErrors.length).toBeGreaterThan(0);
+      });
+
+      it('should prompt to complete schedule when total_arrears is missing', () => {
+        const violations = getGroundLogicViolations({
+          wales_fault_grounds: ['rent_arrears_serious'],
+          // No total_arrears, no arrears_amount
+          rent_amount: 100,
+          rent_frequency: 'weekly',
+        });
+
+        // Should prompt to complete the arrears schedule
+        const scheduleErrors = violations.filter((v) =>
+          v.message.toLowerCase().includes('complete the arrears schedule')
+        );
+        expect(scheduleErrors.length).toBeGreaterThan(0);
+      });
+    });
   });
 });
 
@@ -339,24 +405,43 @@ describe('Issue C: Legacy case migration', () => {
 
 describe('Issue D: Ground-driven conditional field visibility', () => {
   describe('shouldFieldApply() with applies_if conditions', () => {
-    it('should show arrears_weeks_unpaid when rent_arrears_serious selected', () => {
+    // NOTE: arrears_weeks_unpaid, arrears_amount, arrears_schedule_confirmed are now
+    // auto-derived from the ArrearsScheduleStep and are NOT shown as questions.
+    // Their applies_if is set to 'false' so they don't appear in the UI.
+    it('should NOT show arrears_weeks_unpaid (auto-derived from schedule)', () => {
       const field = WALES_COMPLIANCE_FIELDS.find(
         (f) => f.field_id === 'arrears_weeks_unpaid'
       );
       expect(field).toBeDefined();
+      expect(field?.auto_derived_from_schedule).toBe(true);
 
+      // Should always return false since the field is auto-derived
       const facts = { wales_fault_grounds: ['rent_arrears_serious'] };
-      expect(shouldFieldApply('arrears_weeks_unpaid', facts)).toBe(true);
-    });
-
-    it('should show arrears_weeks_unpaid when rent_arrears_other selected', () => {
-      const facts = { wales_fault_grounds: ['rent_arrears_other'] };
-      expect(shouldFieldApply('arrears_weeks_unpaid', facts)).toBe(true);
-    });
-
-    it('should NOT show arrears_weeks_unpaid when no arrears ground selected', () => {
-      const facts = { wales_fault_grounds: ['antisocial_behaviour'] };
       expect(shouldFieldApply('arrears_weeks_unpaid', facts)).toBe(false);
+    });
+
+    it('should NOT show arrears_amount (auto-derived from schedule)', () => {
+      const field = WALES_COMPLIANCE_FIELDS.find(
+        (f) => f.field_id === 'arrears_amount'
+      );
+      expect(field).toBeDefined();
+      expect(field?.auto_derived_from_schedule).toBe(true);
+
+      // Should always return false since the field is auto-derived
+      const facts = { wales_fault_grounds: ['rent_arrears_serious'] };
+      expect(shouldFieldApply('arrears_amount', facts)).toBe(false);
+    });
+
+    it('should NOT show arrears_schedule_confirmed (auto-derived from schedule)', () => {
+      const field = WALES_COMPLIANCE_FIELDS.find(
+        (f) => f.field_id === 'arrears_schedule_confirmed'
+      );
+      expect(field).toBeDefined();
+      expect(field?.auto_derived_from_schedule).toBe(true);
+
+      // Should always return false since the field is auto-derived
+      const facts = { wales_fault_grounds: ['rent_arrears_serious'] };
+      expect(shouldFieldApply('arrears_schedule_confirmed', facts)).toBe(false);
     });
 
     it('should show asb_incident_description when antisocial_behaviour selected', () => {
@@ -388,18 +473,31 @@ describe('Issue D: Ground-driven conditional field visibility', () => {
 
 describe('Issue E: Wales rent schedule conditional display', () => {
   describe('Arrears ground detection for rent schedule', () => {
-    it('should require arrears schedule when rent_arrears_serious selected', () => {
+    // NOTE: The arrears fields are now auto-derived from ArrearsScheduleStep.
+    // The rent schedule is conditionally shown by the ArrearsScheduleSection
+    // component based on hasArrearsGroundSelected(), not by field applies_if.
+    it('arrears_weeks_unpaid should be marked as auto-derived from schedule', () => {
       const field = WALES_COMPLIANCE_FIELDS.find(
         (f) => f.field_id === 'arrears_weeks_unpaid'
       );
-      expect(field?.applies_if).toContain('rent_arrears_serious');
+      expect(field?.auto_derived_from_schedule).toBe(true);
+      expect(field?.applies_if).toBe('false'); // Hidden from UI, auto-derived
     });
 
-    it('should require arrears schedule when rent_arrears_other selected', () => {
+    it('arrears_amount should be marked as auto-derived from schedule', () => {
       const field = WALES_COMPLIANCE_FIELDS.find(
-        (f) => f.field_id === 'arrears_weeks_unpaid'
+        (f) => f.field_id === 'arrears_amount'
       );
-      expect(field?.applies_if).toContain('rent_arrears_other');
+      expect(field?.auto_derived_from_schedule).toBe(true);
+      expect(field?.applies_if).toBe('false'); // Hidden from UI, auto-derived
+    });
+
+    it('arrears_schedule_confirmed should be marked as auto-derived from schedule', () => {
+      const field = WALES_COMPLIANCE_FIELDS.find(
+        (f) => f.field_id === 'arrears_schedule_confirmed'
+      );
+      expect(field?.auto_derived_from_schedule).toBe(true);
+      expect(field?.applies_if).toBe('false'); // Hidden from UI, auto-derived
     });
   });
 });
