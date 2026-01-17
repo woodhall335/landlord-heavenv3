@@ -190,6 +190,32 @@ describe('Part D for rent_arrears_serious contains Wales law references', () => 
 
     expect(result.text).toMatch(/schedule.*arrears/i);
   });
+
+  it('should contain only ONE "schedule of arrears" sentence (no duplication)', () => {
+    const result = buildWalesPartDText(baseArrearsParams);
+
+    // Count occurrences of schedule sentence variations
+    const scheduleMatches = result.text.match(/schedule\s+(?:of\s+)?arrears/gi) || [];
+
+    // Should appear exactly once, not duplicated
+    expect(scheduleMatches.length).toBe(1);
+  });
+
+  it('should contain only ONE schedule reference for Section 159 rent arrears', () => {
+    const result = buildWalesPartDText({
+      wales_fault_grounds: ['rent_arrears_other'],
+      total_arrears: 800,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-04-01',
+    });
+
+    // Count occurrences of schedule sentence variations
+    const scheduleMatches = result.text.match(/schedule\s+(?:of\s+)?arrears/gi) || [];
+
+    // Should appear exactly once, not duplicated
+    expect(scheduleMatches.length).toBe(1);
+  });
 });
 
 // ============================================================================
