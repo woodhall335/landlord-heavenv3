@@ -21,7 +21,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { RiErrorWarningLine, RiAlertLine, RiInformationLine } from 'react-icons/ri';
 
-import type { WizardFacts } from '@/lib/case-facts/schema';
+import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import {
   WALES_COMPLIANCE_FIELDS,
   type ComplianceField,
@@ -32,6 +32,9 @@ import {
   normalizeWalesFaultGrounds,
   hasArrearsGroundSelected,
 } from '@/lib/wales/compliance-schema';
+import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
+import { computeArrears } from '@/lib/arrears-engine';
+import { isWalesSection157ThresholdMet } from '@/lib/wales/seriousArrearsThreshold';
 
 interface WalesComplianceSectionProps {
   facts: WizardFacts;
@@ -510,6 +513,196 @@ const ComplianceCategorySection: React.FC<{
   );
 };
 
+// ============================================================================
+// ARREARS SCHEDULE SECTION
+// ============================================================================
+interface ArrearsScheduleSectionProps {
+  facts: WizardFacts;
+  onUpdate: (updates: Record<string, unknown>) => void | Promise<void>;
+}
+
+/**
+ * Renders the ArrearsScheduleStep for Wales arrears grounds.
+ * Shows a period-by-period rent schedule table editor.
+ */
+const ArrearsScheduleSection: React.FC<ArrearsScheduleSectionProps> = ({
+  facts,
+  onUpdate,
+}) => {
+  // Get arrears items from facts (check both locations)
+  const arrearsItems: ArrearsItem[] = useMemo(() => {
+    return facts.issues?.rent_arrears?.arrears_items ||
+           facts.arrears_items ||
+           [];
+  }, [facts.issues?.rent_arrears?.arrears_items, facts.arrears_items]);
+
+  // Calculate arrears summary
+  const arrearsSummary = useMemo(() => {
+    if (!arrearsItems || arrearsItems.length === 0) return null;
+    const rentAmount = facts.rent_amount || 0;
+    const rentFrequency = facts.rent_frequency || 'monthly';
+    return computeArrears(arrearsItems, rentFrequency, rentAmount);
+  }, [arrearsItems, facts.rent_amount, facts.rent_frequency]);
+
+  // Calculate Wales Section 157 threshold status
+  const thresholdResult = useMemo(() => {
+    if (!arrearsSummary || arrearsSummary.total_arrears === 0) return null;
+    const rentAmount = facts.rent_amount || 0;
+    const rentFrequency = facts.rent_frequency || 'monthly';
+    return isWalesSection157ThresholdMet(
+      arrearsSummary.total_arrears,
+      rentFrequency,
+      rentAmount
+    );
+  }, [arrearsSummary, facts.rent_amount, facts.rent_frequency]);
+
+  // Convert facts to format expected by ArrearsScheduleStep
+  const scheduleStepFacts = useMemo(() => ({
+    tenancy: {
+      start_date: facts.tenancy_start_date,
+      rent_amount: facts.rent_amount,
+      rent_frequency: facts.rent_frequency,
+    },
+    tenancy_start_date: facts.tenancy_start_date,
+    rent_amount: facts.rent_amount,
+    rent_frequency: facts.rent_frequency,
+    notice: {
+      notice_date: facts.notice_served_date,
+    },
+    notice_date: facts.notice_served_date,
+    issues: {
+      rent_arrears: {
+        arrears_items: arrearsItems,
+        has_arrears: arrearsItems.length > 0,
+      },
+    },
+  }), [facts, arrearsItems]);
+
+  // Handle updates from ArrearsScheduleStep
+  const handleArrearsUpdate = useCallback(async (updates: Record<string, any>) => {
+    if (updates.issues?.rent_arrears) {
+      const arrearsData = updates.issues.rent_arrears;
+      await onUpdate({
+        // Canonical flat keys (same as England)
+        arrears_items: arrearsData.arrears_items,
+        total_arrears: arrearsData.total_arrears,
+        arrears_at_notice_date: arrearsData.arrears_at_notice_date,
+        // Also keep nested structure for compatibility
+        issues: {
+          ...facts.issues,
+          rent_arrears: arrearsData,
+        },
+      });
+    } else {
+      await onUpdate(updates);
+    }
+  }, [facts.issues, onUpdate]);
+
+  // Check prerequisites
+  const missingPrerequisites: string[] = [];
+  if (!facts.tenancy_start_date) missingPrerequisites.push('Tenancy start date');
+  if (!facts.rent_amount) missingPrerequisites.push('Rent amount');
+  if (!facts.rent_frequency) missingPrerequisites.push('Rent frequency');
+
+  // Determine if serious arrears ground is selected
+  const selectedGrounds = normalizeWalesFaultGrounds(facts.wales_fault_grounds);
+  const isSerious = selectedGrounds.includes('rent_arrears_serious');
+
+  return (
+    <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div>
+        <h4 className="text-sm font-semibold text-blue-900">
+          {isSerious ? 'Section 157 - Serious Rent Arrears Schedule' : 'Section 159 - Rent Arrears Schedule'}
+        </h4>
+        <p className="text-xs text-blue-700 mt-1">
+          {isSerious
+            ? 'Complete the arrears schedule below. At least 2 months arrears required for Section 157.'
+            : 'Complete the arrears schedule below to document the rent arrears.'}
+        </p>
+      </div>
+
+      {missingPrerequisites.length > 0 ? (
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="text-sm text-amber-800 font-medium">Missing Information</p>
+          <p className="text-xs text-amber-700 mt-1">
+            Please complete the Tenancy section first: {missingPrerequisites.join(', ')}
+          </p>
+        </div>
+      ) : (
+        <>
+          <ArrearsScheduleStep
+            facts={scheduleStepFacts}
+            onUpdate={handleArrearsUpdate}
+            jurisdiction="wales"
+          />
+
+          {/* Summary display */}
+          {arrearsSummary && arrearsSummary.total_arrears > 0 && (
+            <div className="p-3 bg-white border border-blue-200 rounded-lg">
+              <h5 className="text-sm font-medium text-blue-900 mb-2">Arrears Summary</h5>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <span className="text-gray-600">Total arrears:</span>
+                  <span className="ml-2 font-semibold text-red-600">
+                    £{arrearsSummary.total_arrears.toFixed(2)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-600">In months:</span>
+                  <span className="ml-2 font-semibold">
+                    {arrearsSummary.arrears_in_months.toFixed(2)}
+                  </span>
+                </div>
+                {/* Wales Section 157 threshold display */}
+                {isSerious && thresholdResult && (
+                  <>
+                    <div>
+                      <span className="text-gray-600">Threshold required:</span>
+                      <span className="ml-2 font-semibold">
+                        {thresholdResult.thresholdLabel} (£{thresholdResult.thresholdAmount.toFixed(2)})
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Status:</span>
+                      <span className={`ml-2 font-semibold ${thresholdResult.met ? 'text-green-600' : 'text-amber-600'}`}>
+                        {thresholdResult.met ? 'Threshold Met' : 'Below Threshold'}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Wales Section 157 threshold status indicator */}
+              {isSerious && thresholdResult && (
+                <div className={`mt-3 p-2 rounded-lg ${
+                  thresholdResult.met
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-amber-50 border border-amber-200'
+                }`}>
+                  <p className={`text-sm font-medium ${
+                    thresholdResult.met ? 'text-green-800' : 'text-amber-800'
+                  }`}>
+                    {thresholdResult.met
+                      ? '✓ Section 157 Threshold Met'
+                      : '⚠ Section 157 Threshold Not Met'}
+                  </p>
+                  <p className={`text-xs mt-1 ${
+                    thresholdResult.met ? 'text-green-700' : 'text-amber-700'
+                  }`}>
+                    {thresholdResult.met
+                      ? `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} meet the statutory threshold for serious rent arrears under the Renting Homes (Wales) Act 2016.`
+                      : `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} are below the Section 157 threshold. You may use Section 159 (some rent arrears) instead.`}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
 /**
  * Main Wales Compliance Section component
  */
@@ -655,6 +848,16 @@ export const WalesComplianceSection: React.FC<WalesComplianceSectionProps> = ({
           />
         );
       })}
+
+      {/* =================================================================== */}
+      {/* ARREARS SCHEDULE EDITOR - shown when arrears grounds are selected */}
+      {/* =================================================================== */}
+      {isFaultBased && hasArrearsGroundSelected(facts.wales_fault_grounds) && (
+        <ArrearsScheduleSection
+          facts={facts}
+          onUpdate={handleUpdate}
+        />
+      )}
 
       {/* User declaration - always shown at the end */}
       {fieldsByCategory.has('breach_evidence') && isFaultBased && (
