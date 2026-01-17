@@ -1188,6 +1188,54 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on mount
 
+  // ========================================================================
+  // AUTO-DERIVE evidence_exists (FIX: HARD_BLOCK field must be auto-set)
+  // ========================================================================
+  // Automatically set evidence_exists = true when user has filled in evidence
+  // for the selected grounds. This field is required by the compliance schema
+  // but was never being asked in the UI.
+  useEffect(() => {
+    if (!isFaultBased || selectedGrounds.length === 0) return;
+
+    // Determine if we have sufficient evidence for selected grounds
+    const hasArrearsGround = selectedGrounds.includes('rent_arrears_serious') ||
+                             selectedGrounds.includes('rent_arrears_other');
+    const hasASBGround = selectedGrounds.includes('antisocial_behaviour');
+    const hasBreachGround = selectedGrounds.includes('breach_of_contract');
+    const hasFalseStatementGround = selectedGrounds.includes('false_statement');
+
+    // Check evidence for each ground type
+    const arrearsEvidence = !hasArrearsGround || (arrearsItems.length > 0);
+    const asbEvidence = !hasASBGround || Boolean(facts.wales_asb_description);
+    const breachEvidence = !hasBreachGround || Boolean(facts.wales_breach_clause);
+    const falseStatementEvidence = !hasFalseStatementGround || Boolean(facts.wales_false_statement_summary);
+
+    // Also require breach_description to be filled
+    const hasBreachDescription = Boolean(facts.breach_description);
+
+    // evidence_exists should be true if all selected grounds have evidence
+    const shouldHaveEvidence = arrearsEvidence && asbEvidence && breachEvidence &&
+                               falseStatementEvidence && hasBreachDescription;
+
+    // Only update if the value needs to change to avoid infinite loops
+    if (shouldHaveEvidence && facts.evidence_exists !== true) {
+      onUpdate({ evidence_exists: true });
+    } else if (!shouldHaveEvidence && facts.evidence_exists === true) {
+      // If user removes evidence, reset the flag
+      onUpdate({ evidence_exists: false });
+    }
+  }, [
+    isFaultBased,
+    selectedGrounds,
+    arrearsItems.length,
+    facts.wales_asb_description,
+    facts.wales_breach_clause,
+    facts.wales_false_statement_summary,
+    facts.breach_description,
+    facts.evidence_exists,
+    onUpdate,
+  ]);
+
   // Handle ground toggle for fault-based
   const handleGroundToggle = (ground: string) => {
     const newGrounds = selectedGrounds.includes(ground)
