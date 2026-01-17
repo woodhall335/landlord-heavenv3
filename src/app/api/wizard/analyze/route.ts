@@ -1152,11 +1152,15 @@ export async function POST(request: Request) {
     const caseFacts = {
       section8_grounds: getSelectedGrounds(wizardFacts as any),
       include_recommended_grounds: (wizardFacts as any)?.include_recommended_grounds || false,
-      arrears_items: (wizardFacts as any)?.arrears_items || [],
+      // Check both flat and nested locations for arrears_items (notice_only stores in nested location)
+      arrears_items: (wizardFacts as any)?.arrears_items ||
+                     (wizardFacts as any)?.issues?.rent_arrears?.arrears_items || [],
       recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
       jurisdiction: canonicalJurisdiction,
       eviction_route: (wizardFacts as any)?.eviction_route || null,
       selected_notice_route: (wizardFacts as any)?.selected_notice_route || null,
+      // Wales fault-based grounds for document list display
+      wales_fault_grounds: (wizardFacts as any)?.wales_fault_grounds || [],
     };
 
     return NextResponse.json({
