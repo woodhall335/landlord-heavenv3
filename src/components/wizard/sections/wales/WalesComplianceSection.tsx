@@ -34,7 +34,7 @@ import {
 } from '@/lib/wales/compliance-schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { computeArrears } from '@/lib/arrears-engine';
-import { isWalesSection157ThresholdMet } from '@/lib/wales/seriousArrearsThreshold';
+import { isWalesSection157ThresholdMet, calculateWalesArrearsInWeeks } from '@/lib/wales/seriousArrearsThreshold';
 
 interface WalesComplianceSectionProps {
   facts: WizardFacts;
@@ -579,14 +579,29 @@ const ArrearsScheduleSection: React.FC<ArrearsScheduleSectionProps> = ({
   }), [facts, arrearsItems]);
 
   // Handle updates from ArrearsScheduleStep
+  // Auto-derives arrears_amount, arrears_weeks_unpaid, and arrears_schedule_confirmed
   const handleArrearsUpdate = useCallback(async (updates: Record<string, any>) => {
     if (updates.issues?.rent_arrears) {
       const arrearsData = updates.issues.rent_arrears;
+      const totalArrears = arrearsData.total_arrears || 0;
+      const arrearsItems = arrearsData.arrears_items || [];
+      const rentAmount = facts.rent_amount || 0;
+      const rentFrequency = facts.rent_frequency || 'monthly';
+
+      // Calculate weeks of rent unpaid from the schedule data
+      const weeksUnpaid = rentAmount > 0 && totalArrears > 0
+        ? calculateWalesArrearsInWeeks(totalArrears, rentAmount, rentFrequency)
+        : 0;
+
       await onUpdate({
         // Canonical flat keys (same as England)
-        arrears_items: arrearsData.arrears_items,
-        total_arrears: arrearsData.total_arrears,
+        arrears_items: arrearsItems,
+        total_arrears: totalArrears,
         arrears_at_notice_date: arrearsData.arrears_at_notice_date,
+        // Auto-derived compliance fields (no longer asked as questions)
+        arrears_amount: totalArrears,
+        arrears_weeks_unpaid: weeksUnpaid,
+        arrears_schedule_confirmed: arrearsItems.length > 0,
         // Also keep nested structure for compatibility
         issues: {
           ...facts.issues,
@@ -596,7 +611,7 @@ const ArrearsScheduleSection: React.FC<ArrearsScheduleSectionProps> = ({
     } else {
       await onUpdate(updates);
     }
-  }, [facts.issues, onUpdate]);
+  }, [facts.issues, facts.rent_amount, facts.rent_frequency, onUpdate]);
 
   // Check prerequisites
   const missingPrerequisites: string[] = [];
