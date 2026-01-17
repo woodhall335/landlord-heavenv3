@@ -1188,6 +1188,46 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on mount
 
+  // Handle ground toggle for fault-based
+  const handleGroundToggle = (ground: string) => {
+    const newGrounds = selectedGrounds.includes(ground)
+      ? selectedGrounds.filter((g) => g !== ground)
+      : [...selectedGrounds, ground];
+    onUpdate({ wales_fault_grounds: newGrounds });
+  };
+
+  // Handle adding summary text to breach_description
+  const handleUseAsSummary = useCallback((summary: string) => {
+    const currentDescription = facts.breach_description || '';
+    if (currentDescription.trim()) {
+      // Append with delimiter if there's existing content
+      onUpdate({
+        breach_description: `${currentDescription}\n\n---\n\n${summary}`,
+      });
+    } else {
+      onUpdate({ breach_description: summary });
+    }
+  }, [facts.breach_description, onUpdate]);
+
+  // Check which conditional panels to show
+  const showArrearsPanel = selectedGrounds.includes('rent_arrears_serious') ||
+                           selectedGrounds.includes('rent_arrears_other');
+  const showASBPanel = selectedGrounds.includes('antisocial_behaviour');
+  const showBreachPanel = selectedGrounds.includes('breach_of_contract');
+  const showFalseStatementPanel = selectedGrounds.includes('false_statement');
+
+  // Get arrears summary for context
+  const arrearsItems: ArrearsItem[] = useMemo(() => {
+    return facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+  }, [facts.issues?.rent_arrears?.arrears_items, facts.arrears_items]);
+
+  const arrearsSummary = useMemo(() => {
+    if (!arrearsItems || arrearsItems.length === 0) return null;
+    const rentAmount = facts.rent_amount || 0;
+    const rentFrequency = facts.rent_frequency || 'monthly';
+    return computeArrears(arrearsItems, rentFrequency, rentAmount);
+  }, [arrearsItems, facts.rent_amount, facts.rent_frequency]);
+
   // ========================================================================
   // AUTO-DERIVE evidence_exists (FIX: HARD_BLOCK field must be auto-set)
   // ========================================================================
@@ -1235,46 +1275,6 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
     facts.evidence_exists,
     onUpdate,
   ]);
-
-  // Handle ground toggle for fault-based
-  const handleGroundToggle = (ground: string) => {
-    const newGrounds = selectedGrounds.includes(ground)
-      ? selectedGrounds.filter((g) => g !== ground)
-      : [...selectedGrounds, ground];
-    onUpdate({ wales_fault_grounds: newGrounds });
-  };
-
-  // Handle adding summary text to breach_description
-  const handleUseAsSummary = useCallback((summary: string) => {
-    const currentDescription = facts.breach_description || '';
-    if (currentDescription.trim()) {
-      // Append with delimiter if there's existing content
-      onUpdate({
-        breach_description: `${currentDescription}\n\n---\n\n${summary}`,
-      });
-    } else {
-      onUpdate({ breach_description: summary });
-    }
-  }, [facts.breach_description, onUpdate]);
-
-  // Check which conditional panels to show
-  const showArrearsPanel = selectedGrounds.includes('rent_arrears_serious') ||
-                           selectedGrounds.includes('rent_arrears_other');
-  const showASBPanel = selectedGrounds.includes('antisocial_behaviour');
-  const showBreachPanel = selectedGrounds.includes('breach_of_contract');
-  const showFalseStatementPanel = selectedGrounds.includes('false_statement');
-
-  // Get arrears summary for context
-  const arrearsItems: ArrearsItem[] = useMemo(() => {
-    return facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
-  }, [facts.issues?.rent_arrears?.arrears_items, facts.arrears_items]);
-
-  const arrearsSummary = useMemo(() => {
-    if (!arrearsItems || arrearsItems.length === 0) return null;
-    const rentAmount = facts.rent_amount || 0;
-    const rentFrequency = facts.rent_frequency || 'monthly';
-    return computeArrears(arrearsItems, rentFrequency, rentAmount);
-  }, [arrearsItems, facts.rent_amount, facts.rent_frequency]);
 
   // Build context for Ask Heaven enhancement
   const enhanceContext = useMemo(() => ({
