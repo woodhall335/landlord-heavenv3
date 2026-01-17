@@ -3477,6 +3477,32 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
+  // WALES-SPECIFIC COMPLIANCE FIELDS
+  // =============================================================================
+  // These are required for Wales compliance checklist templates
+  templateData.rent_smart_wales_number = extractString(
+    getFirstValue(wizard, ['rent_smart_wales_number', 'rsw_number', 'rsw_registration_number'])
+  );
+
+  templateData.written_statement_provided = coerceBoolean(
+    getFirstValue(wizard, ['written_statement_provided', 'written_statement_given', 'occupation_contract_provided'])
+  );
+
+  templateData.written_statement_date = extractString(
+    getFirstValue(wizard, ['written_statement_date', 'written_statement_provided_date', 'occupation_contract_date'])
+  );
+
+  templateData.electrical_cert_provided = coerceBoolean(
+    getFirstValue(wizard, [
+      'electrical_cert_provided',
+      'eicr_provided',
+      'eicr_certificate_provided',
+      'electrical_safety_cert_provided',
+      'compliance.eicr_provided',
+    ])
+  );
+
+  // =============================================================================
   // ROUTE & GROUNDS
   // =============================================================================
   templateData.selected_notice_route = extractString(
@@ -3661,6 +3687,17 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     city: propertyCity,
     postcode: propertyPostcode,
     address: templateData.property_address,
+    // full_address alias for Wales compliance_checklist.hbs
+    full_address: templateData.property_address,
+  };
+
+  // Templates expect nested landlord object (Wales compliance checklist uses landlord.full_name)
+  templateData.landlord = {
+    full_name: templateData.landlord_full_name,
+    name_2: templateData.landlord_2_name,
+    address: templateData.landlord_address,
+    phone: templateData.landlord_phone,
+    email: templateData.landlord_email,
   };
 
   // Templates expect nested tenant object
@@ -3689,6 +3726,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // Templates expect nested compliance object
   templateData.compliance = {
+    // Common compliance fields
     gas_cert_provided: templateData.gas_certificate_provided || templateData.gas_safety_cert_provided,
     gas_cert_expiry: null, // Can be added if we have this data
     epc_provided: templateData.epc_provided,
@@ -3696,6 +3734,19 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     how_to_rent_given: templateData.how_to_rent_given || templateData.how_to_rent_provided,
     hmo_license_required: templateData.hmo_license_required,
     hmo_license_valid: templateData.hmo_license_valid,
+    // Wales-specific compliance fields (Renting Homes (Wales) Act 2016)
+    rent_smart_wales_registered: templateData.rent_smart_wales_registered,
+    rent_smart_wales_number: templateData.rent_smart_wales_number,
+    written_statement_provided: templateData.written_statement_provided,
+    written_statement_date: templateData.written_statement_date,
+    electrical_cert_provided: templateData.electrical_cert_provided,
+  };
+
+  // Templates expect nested notice object (for Wales compliance_checklist.hbs route conditionals)
+  templateData.notice = {
+    route: templateData.selected_notice_route,
+    date: templateData.notice_date,
+    expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
   };
 
   // Templates expect notice_service_date and notice_expiry_date (in addition to service_date and expiry_date)

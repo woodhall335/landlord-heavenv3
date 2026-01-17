@@ -27,7 +27,7 @@
 
   <p><strong>Property:</strong> {{property.full_address}}</p>
   <p><strong>Contract-Holder:</strong> {{tenant.full_name}}</p>
-  <p><strong>Notice Type:</strong> {{#if (eq notice.route 'wales_section_173')}}Section 173 (No-Fault){{else}}Fault-Based (Section 157/159/161/162){{/if}}</p>
+  <p><strong>Notice Type:</strong> {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}Section 173 (No-Fault){{else}}Fault-Based (Section 157/159/161/162){{/if}}</p>
 
   <hr>
 
@@ -43,7 +43,7 @@
         <li>☐ All required documents given to contract-holder</li>
       </ul>
       <div class="warning">
-        <strong>⚠️ Critical:</strong> You cannot serve a valid Section 173 notice without Rent Smart Wales registration.
+        <strong>⚠️ Critical:</strong> You cannot serve a valid eviction notice without Rent Smart Wales registration.
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
       </ul>
       <div class="timeline">
         <strong>Notice Period:</strong>
-        {{#if (eq notice.route 'wales_section_173')}}
+        {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}
           Minimum 6 months (Section 173 no-fault)
         {{else}}
           Varies by ground - check your notice for specific period

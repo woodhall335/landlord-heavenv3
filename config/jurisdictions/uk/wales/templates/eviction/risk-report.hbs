@@ -42,8 +42,8 @@ WALES-SPECIFIC RISK FACTORS
 {{#if compliance.rent_smart_wales_registered}}
 ✅ Registered with Rent Smart Wales - Essential requirement met
 {{else}}
-❌ NOT REGISTERED - This is a FATAL flaw. Your Section 173 notice is INVALID.
-   Register immediately at rentsmartswales.gov.wales
+❌ NOT REGISTERED - This is a FATAL flaw. Your eviction notice may be INVALID.
+   All landlords in Wales must be registered. Register immediately at rentsmartswales.gov.wales
 {{/if}}
 
 2. WRITTEN STATEMENT PROVIDED
@@ -55,7 +55,7 @@ WALES-SPECIFIC RISK FACTORS
 {{/if}}
 
 3. SECTION 173 TIMING
-{{#if (eq notice.route 'wales_section_173')}}
+{{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}
    - Contract must be at least 6 months old to serve Section 173
    - Notice period must be at least 6 months
    {{#if risk_assessment.s173_timing_valid}}
