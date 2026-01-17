@@ -40,6 +40,7 @@ import { OccupationContractSection } from '../sections/wales/OccupationContractS
 import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
 import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
 import { WalesComplianceSection } from '../sections/wales/WalesComplianceSection';
+import { WalesArrearsSection } from '../sections/wales/WalesArrearsSection';
 
 // Wales compliance schema for blocking violations and legacy migration
 import {
@@ -336,6 +337,56 @@ const SECTIONS: WizardSection[] = [
     },
   },
   {
+    id: 'wales_arrears',
+    label: 'Arrears',
+    description: 'Rent arrears schedule for Wales fault-based',
+    // Only for Wales fault_based with arrears grounds
+    jurisdiction: 'wales',
+    isComplete: (facts, jurisdiction) => {
+      if (jurisdiction !== 'wales') return true;
+
+      const route = facts.eviction_route as string;
+      if (route !== 'fault_based') return true;
+
+      const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+      const hasArrearsGround = selectedGrounds.some((g) =>
+        ['rent_arrears_serious', 'rent_arrears_other'].includes(g)
+      );
+
+      if (!hasArrearsGround) return true;
+
+      // Arrears ground selected - need arrears schedule and Part D particulars
+      const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+      const hasArrearsItems = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+      const hasParticulars = Boolean(facts.wales_part_d_particulars);
+
+      return hasArrearsItems && hasParticulars;
+    },
+    hasBlockers: (facts, jurisdiction) => {
+      if (jurisdiction !== 'wales') return [];
+
+      const route = facts.eviction_route as string;
+      if (route !== 'fault_based') return [];
+
+      const blockers: string[] = [];
+      const selectedGrounds = (facts.wales_fault_grounds as string[]) || [];
+      const hasSerious = selectedGrounds.includes('rent_arrears_serious');
+
+      if (hasSerious) {
+        const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+        const rentAmount = facts.rent_amount || 0;
+        const rentFrequency = facts.rent_frequency || 'monthly';
+
+        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+          blockers.push('Section 157 (serious arrears) requires a detailed arrears schedule');
+        }
+        // Note: Threshold validation is shown in the section UI, not as a blocker
+        // because the user might still be filling in the schedule
+      }
+      return blockers;
+    },
+  },
+  {
     id: 'review',
     label: 'Review',
     description: 'Review and generate notice',
@@ -439,12 +490,23 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return section.routes.includes(route as EvictionRoute);
       }
 
-      // Jurisdiction-specific sections (e.g., Wales compliance)
+      // Jurisdiction-specific sections (e.g., Wales compliance, Wales arrears)
       if (section.jurisdiction) {
         // Only show if jurisdiction matches
         if (section.jurisdiction !== jurisdiction) return false;
         // Also require valid route to be selected before showing
         if (!hasValidRoute) return false;
+
+        // Special handling for wales_arrears: only show for fault_based with arrears grounds
+        if (section.id === 'wales_arrears') {
+          if (route !== 'fault_based') return false;
+          const walesGrounds = (facts.wales_fault_grounds as string[]) || [];
+          const hasArrearsGround = walesGrounds.some((g) =>
+            ['rent_arrears_serious', 'rent_arrears_other'].includes(g)
+          );
+          return hasArrearsGround;
+        }
+
         return true;
       }
 
@@ -477,7 +539,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     }
 
     return filteredSections;
-  }, [jurisdiction, facts.eviction_route]);
+  }, [jurisdiction, facts.eviction_route, facts.wales_fault_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
 
@@ -651,6 +713,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return <Section21ComplianceSection {...sectionProps} />;
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
+      case 'wales_arrears':
+        return <WalesArrearsSection {...sectionProps} />;
       case 'notice':
         // Wales uses WalesNoticeSection, England uses NoticeSection
         return isWales
