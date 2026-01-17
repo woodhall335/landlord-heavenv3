@@ -120,6 +120,14 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           category: 'notice',
         },
         {
+          id: 'pre-service-checklist-fault',
+          templatePath: 'uk/wales/templates/eviction/pre_service_checklist_fault_based.hbs',
+          title: 'Pre-Service Compliance Checklist (Wales)',
+          type: 'checklist',
+          description: 'Wales compliance checklist to verify before serving notice',
+          category: 'checklist',
+        },
+        {
           id: 'service-instructions-fault',
           templatePath: 'uk/wales/templates/eviction/service_instructions_fault_based.hbs',
           title: 'Service Instructions (Wales)',

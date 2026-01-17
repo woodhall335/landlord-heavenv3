@@ -118,6 +118,14 @@ export function getNoticeOnlyDocuments(
           category: 'Notice',
         },
         {
+          id: 'pre-service-checklist-fault',
+          title: 'Pre-Service Compliance Checklist (Wales)',
+          description: 'Wales compliance checklist to verify before serving notice',
+          icon: 'checklist',
+          pages: '2-3 pages',
+          category: 'Checklists',
+        },
+        {
           id: 'service-instructions-fault',
           title: 'Service Instructions (Wales)',
           description: 'How to properly serve your fault-based notice',
