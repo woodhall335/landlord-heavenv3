@@ -62,6 +62,7 @@ import { ScotlandComplianceSection } from '../sections/eviction/ScotlandComplian
 
 // Scotland utilities
 import { validateSixMonthRule } from '@/lib/scotland/grounds';
+import { calculateConsecutiveArrearsStreak } from '@/lib/scotland/notice-utils';
 
 // Wales compliance schema for blocking violations and legacy migration
 import {
@@ -561,19 +562,27 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
     },
     hasWarnings: (facts) => {
       const warnings: string[] = [];
-      // Warn if Ground 18 is selected but arrears schedule is missing or threshold not met
+      // Warn if Ground 18 is selected but arrears schedule is missing or consecutive threshold not met
       const SCOTLAND_RENT_ARREARS_GROUND = 18;
       if (facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND) {
         const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
         if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
           warnings.push('Ground 18 requires a rent arrears schedule. Please complete the arrears schedule above.');
         } else {
-          // Check if threshold is met (3 months with arrears)
-          const periodsWithArrears = arrearsItems.filter(
-            (item: any) => (item.amount_owed ?? ((item.rent_due || 0) - (item.rent_paid || 0))) > 0
-          ).length;
-          if (periodsWithArrears < 3) {
-            warnings.push(`Ground 18 requires 3+ consecutive months of arrears. Currently showing ${periodsWithArrears} period(s) with arrears.`);
+          // Check if consecutive threshold is met (3 consecutive months with arrears)
+          const streakResult = calculateConsecutiveArrearsStreak(arrearsItems);
+          const { maxConsecutiveStreak, periodsWithArrears } = streakResult;
+          if (maxConsecutiveStreak < 3) {
+            if (periodsWithArrears >= 3 && maxConsecutiveStreak < 3) {
+              // User has enough periods but they're not consecutive
+              warnings.push(
+                `Ground 18 requires 3+ consecutive months of arrears. Currently showing ${maxConsecutiveStreak} consecutive month(s) with arrears (${periodsWithArrears} total periods with arrears).`
+              );
+            } else {
+              warnings.push(
+                `Ground 18 requires 3+ consecutive months of arrears. Currently showing ${maxConsecutiveStreak} consecutive month(s) with arrears.`
+              );
+            }
           }
         }
       }
