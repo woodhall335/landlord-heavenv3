@@ -35,7 +35,14 @@ import {
   calculateWalesArrearsInWeeks,
   getWalesFaultGroundDefinitions,
   getWalesFaultGroundByValue,
+  validateSection173Timing,
+  calculateSection173ExpiryDate,
+  getSection173RequirementsSummary,
+  isSection173Route,
+  isWalesFaultBasedRoute,
+  addCalendarMonths,
   type WalesFaultGroundDef,
+  type Section173ValidationResult,
 } from '@/lib/wales';
 import { normalizeWalesFaultGrounds } from '@/lib/wales/compliance-schema';
 import { buildWalesPartDFromWizardFacts, type WalesPartDResult } from '@/lib/wales/partDBuilder';
@@ -1068,6 +1075,194 @@ const WalesPartDParticulars: React.FC<WalesPartDParticularsProps> = ({
 };
 
 // ============================================================================
+// SECTION 173 TIMING VALIDATION PANEL
+// ============================================================================
+// Displays court-grade validation of Section 173 timing requirements.
+// Shows hard errors (blocking) and soft warnings (advisory).
+// ============================================================================
+
+interface Section173TimingValidationPanelProps {
+  facts: WizardFacts;
+  onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+}
+
+const Section173TimingValidationPanel: React.FC<Section173TimingValidationPanelProps> = ({
+  facts,
+  onUpdate,
+}) => {
+  // Build validation facts
+  const validationFacts = useMemo(() => ({
+    contract_start_date: facts.contract_start_date || facts.tenancy_start_date || '',
+    service_date: facts.notice_date || facts.notice_service_date || '',
+    expiry_date: facts.notice_expiry_date || '',
+    wales_contract_category: facts.wales_contract_category as 'standard' | 'supported_standard' | 'secure' | undefined,
+    fixed_term_end_date: facts.fixed_term_end_date,
+    has_break_clause: facts.has_break_clause,
+    break_clause_date: facts.break_clause_date,
+  }), [facts]);
+
+  // Run validation
+  const validation: Section173ValidationResult | null = useMemo(() => {
+    if (!validationFacts.contract_start_date) return null;
+    try {
+      return validateSection173Timing(validationFacts);
+    } catch (error) {
+      console.error('[Section173TimingValidationPanel] Validation error:', error);
+      return null;
+    }
+  }, [validationFacts]);
+
+  // Get requirements summary
+  const requirements = useMemo(() => {
+    if (!validationFacts.contract_start_date) return [];
+    return getSection173RequirementsSummary(validationFacts);
+  }, [validationFacts]);
+
+  // Handle using earliest valid expiry date
+  const handleUseEarliestExpiry = useCallback(() => {
+    if (validation?.earliestExpiryDate) {
+      onUpdate({ notice_expiry_date: validation.earliestExpiryDate });
+    }
+  }, [validation?.earliestExpiryDate, onUpdate]);
+
+  // Handle using earliest valid service date
+  const handleUseEarliestService = useCallback(() => {
+    if (validation?.earliestServiceDate) {
+      onUpdate({
+        notice_date: validation.earliestServiceDate,
+        notice_service_date: validation.earliestServiceDate,
+      });
+    }
+  }, [validation?.earliestServiceDate, onUpdate]);
+
+  // Don't render if no contract start date (can't validate)
+  if (!validationFacts.contract_start_date) {
+    return (
+      <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+        <p className="text-sm text-amber-800">
+          <strong>Contract start date required</strong> - Please enter the contract start date
+          in the Occupation Contract section to enable Section 173 timing validation.
+        </p>
+      </div>
+    );
+  }
+
+  const hasErrors = validation && validation.errors.length > 0;
+  const hasWarnings = validation && validation.warnings.length > 0;
+  const isValid = validation?.isValid ?? false;
+
+  return (
+    <div className="space-y-4">
+      {/* Section 173 Requirements Summary */}
+      <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+        <h5 className="text-sm font-semibold text-purple-900 mb-2">
+          Section 173 Requirements (No-Fault Route)
+        </h5>
+        <ul className="text-xs text-purple-700 space-y-1">
+          {requirements.map((req, index) => (
+            <li key={index} className="flex items-start gap-2">
+              <span className="text-purple-500">•</span>
+              <span>{req}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Validation Status */}
+      {validation && (
+        <div className={`p-4 rounded-lg border ${
+          hasErrors
+            ? 'bg-red-50 border-red-200'
+            : hasWarnings
+            ? 'bg-amber-50 border-amber-200'
+            : 'bg-green-50 border-green-200'
+        }`}>
+          <h5 className={`text-sm font-semibold mb-2 ${
+            hasErrors
+              ? 'text-red-900'
+              : hasWarnings
+              ? 'text-amber-900'
+              : 'text-green-900'
+          }`}>
+            {hasErrors
+              ? '⚠ Section 173 Timing Issues'
+              : hasWarnings
+              ? '⚡ Section 173 Warnings'
+              : '✓ Section 173 Timing Valid'}
+          </h5>
+
+          {/* Hard Errors */}
+          {hasErrors && (
+            <div className="mb-3">
+              <p className="text-xs font-medium text-red-800 mb-1">
+                The following issues must be resolved before the notice can be served:
+              </p>
+              <ul className="text-xs text-red-700 space-y-2">
+                {validation.errors.map((error, index) => (
+                  <li key={index} className="p-2 bg-red-100 rounded">
+                    {error}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Quick fix buttons */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {validation.errors.some(e => e.includes('PROHIBITED_PERIOD')) && (
+                  <button
+                    type="button"
+                    onClick={handleUseEarliestService}
+                    className="px-3 py-1.5 text-xs font-medium text-red-700 bg-white border border-red-300 rounded hover:bg-red-50"
+                  >
+                    Use earliest valid service date ({validation.earliestServiceDate})
+                  </button>
+                )}
+                {validation.errors.some(e => e.includes('INSUFFICIENT_NOTICE')) && (
+                  <button
+                    type="button"
+                    onClick={handleUseEarliestExpiry}
+                    className="px-3 py-1.5 text-xs font-medium text-red-700 bg-white border border-red-300 rounded hover:bg-red-50"
+                  >
+                    Use earliest valid expiry date ({validation.earliestExpiryDate})
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Warnings */}
+          {hasWarnings && (
+            <ul className="text-xs text-amber-700 space-y-1">
+              {validation.warnings.map((warning, index) => (
+                <li key={index} className="p-2 bg-amber-100 rounded">
+                  {warning}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Valid status */}
+          {isValid && !hasWarnings && (
+            <p className="text-xs text-green-700">
+              All Section 173 timing requirements are satisfied. The notice can be served.
+            </p>
+          )}
+
+          {/* Recommended form info */}
+          {validation.recommendedForm && (
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <p className="text-xs text-gray-600">
+                <strong>Prescribed form:</strong> {validation.recommendedForm} (
+                {validation.recommendedForm === 'RHW16' ? '6-month notice' : '2-month notice'})
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================================
 // MAIN WALES NOTICE SECTION COMPONENT
 // ============================================================================
 export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
@@ -1337,9 +1532,13 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
       {/* Section 173 flow */}
       {isSection173 && !subflowComplete && (
         <div className="space-y-6">
+          {/* COURT-GRADE GUARDRAILS: Section 173 Timing Validation Panel */}
+          {/* Shows errors/warnings for prohibited period and notice duration */}
+          <Section173TimingValidationPanel facts={facts} onUpdate={onUpdate} />
+
           {/* Section 173 compliance checks */}
           <div className="space-y-4">
-            <h5 className="text-sm font-medium text-gray-700">Section 173 Requirements</h5>
+            <h5 className="text-sm font-medium text-gray-700">Section 173 Compliance Requirements</h5>
             <p className="text-xs text-gray-500">
               Before serving a Section 173 notice, ensure these requirements are met.
             </p>

@@ -12,6 +12,12 @@ import {
   type WalesSection173DateParams,
 } from './notice-date-calculator';
 import { getWalesSection173Rule } from '@/server/config/wales-notice-periods';
+import {
+  determineSection173Form,
+  validateSection173Timing,
+  calculateSection173ExpiryDate as calculateSection173ExpiryDateGuardrail,
+  type Section173Form,
+} from '@/lib/wales/section173FormSelector';
 
 export interface WalesSection173NoticeData {
   landlord_full_name: string;
@@ -137,35 +143,83 @@ export async function generateWalesSection173Notice(
   // Our official sources are English-only. System now defaults to English output.
   // Bilingual option has been removed from MQS and compliance checks.
   // ============================================================================
-  // DYNAMIC TEMPLATE SELECTION: RHW16 vs RHW17
+  // COURT-GRADE GUARDRAILS: DYNAMIC TEMPLATE SELECTION (RHW16 vs RHW17)
   // ============================================================================
-  // RHW16 = 6-month minimum notice period (>=183 days)
-  // RHW17 = 2-month minimum notice period (<183 days / ~60 days)
+  // RHW16 = 6-month minimum notice period (post-December 2022)
+  // RHW17 = 2-month minimum notice period (original 2016-2022)
   //
-  // Determination:
-  // 1. Preferred: Use computed notice period days from compliance calculator
-  // 2. Fallback: Calculate days between service_date and expiry_date
+  // CRITICAL: Use the canonical determineSection173Form() function from
+  // section173FormSelector.ts which implements proper calendar month semantics
+  // and legal period rules based on effective dates.
+  // ============================================================================
 
-  let noticePeriodDays = 0;
   const actualServiceDate = data.service_date || data.notice_service_date || serviceDate;
   const actualExpiryDate = data.expiry_date || data.notice_expiry_date;
 
+  // Use canonical form selector for deterministic template selection
+  const formSelectorFacts = {
+    contract_start_date: data.contract_start_date,
+    service_date: actualServiceDate,
+    expiry_date: actualExpiryDate,
+    wales_contract_category: data.wales_contract_category,
+  };
+
+  const selectedForm: Section173Form = determineSection173Form(formSelectorFacts);
+
+  // Validate timing and get any auto-corrections
+  const validation = validateSection173Timing(formSelectorFacts);
+
+  // Log any validation warnings (non-blocking)
+  if (validation.warnings.length > 0) {
+    console.warn('[Wales S173 Generator] Validation warnings:', validation.warnings);
+  }
+
+  // If there are timing errors, log them but continue (they should have been
+  // caught earlier in the wizard flow)
+  if (validation.errors.length > 0) {
+    console.error('[Wales S173 Generator] Validation errors:', validation.errors);
+    // Re-throw if prohibited period is violated - this is a hard block
+    const prohibitedPeriodError = validation.errors.find((e) =>
+      e.includes('WALES_SECTION173_PROHIBITED_PERIOD')
+    );
+    if (prohibitedPeriodError) {
+      throw new Error(`LEGAL_COMPLIANCE_ERROR: ${prohibitedPeriodError}`);
+    }
+  }
+
+  // Calculate and potentially auto-correct expiry date
+  const expiryResult = calculateSection173ExpiryDateGuardrail({
+    ...formSelectorFacts,
+    expiry_date: actualExpiryDate,
+  });
+
+  // If expiry date was auto-corrected, log it
+  if (expiryResult.wasCorrected) {
+    console.warn(
+      `[Wales S173 Generator] Expiry date auto-corrected: ${expiryResult.correctionMessage}`
+    );
+    // Update the data with the corrected expiry date
+    data.expiry_date = expiryResult.expiryDate;
+  }
+
+  // Calculate notice period days for logging and template data
+  let noticePeriodDays = 0;
   if (actualExpiryDate && actualServiceDate) {
     const serviceMs = new Date(actualServiceDate).getTime();
-    const expiryMs = new Date(actualExpiryDate).getTime();
+    const expiryMs = new Date(data.expiry_date || actualExpiryDate).getTime();
     noticePeriodDays = Math.ceil((expiryMs - serviceMs) / (1000 * 60 * 60 * 24));
   }
 
-  // Select template based on notice period
-  // RHW16 requires >= 6 months (183 days)
-  // RHW17 requires >= 2 months (typically 60 days)
-  const templatePath = noticePeriodDays >= 183
-    ? 'uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs'
-    : 'uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs';
+  // Select template based on canonical form determination
+  const templatePath =
+    selectedForm === 'RHW16'
+      ? 'uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs'
+      : 'uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs';
 
   console.log(
     `[Wales S173 Generator] Template selection: ` +
-    `${noticePeriodDays} days -> ${noticePeriodDays >= 183 ? 'RHW16 (6-month)' : 'RHW17 (2-month)'}`
+      `Form ${selectedForm} (${noticePeriodDays} days, ` +
+      `${expiryResult.minimumNoticeMonths} month minimum)`
   );
 
   // Generate document
