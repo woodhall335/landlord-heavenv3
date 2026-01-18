@@ -198,7 +198,20 @@ export function getNoticeOnlyRequirements(
       if (stage === 'generate' || stage === 'preview') {
         // Scotland notice_expiry_date is computed server-side like Section 21
         derived.add('notice_expiry_date');
-        requiredNow.add('ground_codes'); // Scotland eviction grounds
+
+        // Scotland uses scotland_eviction_ground (number) for ground selection
+        // The wizard writes ground_codes for new cases, but for backward compatibility
+        // we also accept scotland_eviction_ground as satisfying the ground requirement
+        const hasGroundCodes = facts.ground_codes && Array.isArray(facts.ground_codes) && (facts.ground_codes as string[]).length > 0;
+        const hasScotlandGround = facts.scotland_eviction_ground !== undefined && facts.scotland_eviction_ground !== null;
+
+        if (hasGroundCodes || hasScotlandGround) {
+          // Ground is provided - mark as derived (satisfied)
+          derived.add('ground_codes');
+        } else {
+          // No ground selected - require it
+          requiredNow.add('ground_codes');
+        }
       } else if (stage === 'checkpoint') {
         warnNow.add('ground_codes');
       }
