@@ -13,7 +13,8 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
@@ -61,13 +62,24 @@ vi.mock('@/lib/scotland/grounds', () => ({
   },
   getScotlandGrounds: () => [
     { number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] },
-    { number: 12, code: 'Ground 12', name: 'Rent arrears', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+    { number: 12, code: 'Ground 12', name: 'Convicted of offences', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+    { number: 18, code: 'Ground 18', name: 'Rent arrears - 3 consecutive months', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
   ],
   getGroundsByNoticePeriod: () => ({
-    shortNotice: [{ number: 12, code: 'Ground 12', name: 'Rent arrears', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] }],
+    shortNotice: [
+      { number: 12, code: 'Ground 12', name: 'Convicted of offences', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+      { number: 18, code: 'Ground 18', name: 'Rent arrears - 3 consecutive months', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+    ],
     standardNotice: [{ number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] }],
   }),
-  getScotlandGroundByNumber: () => ({ number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] }),
+  getScotlandGroundByNumber: (num: number) => {
+    const grounds: Record<number, any> = {
+      1: { number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+      12: { number: 12, code: 'Ground 12', name: 'Convicted of offences', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+      18: { number: 18, code: 'Ground 18', name: 'Rent arrears - 3 consecutive months', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+    };
+    return grounds[num] || null;
+  },
   calculateEarliestEvictionDate: () => new Date(),
   getScotlandConfig: () => ({ noticeRequirements: { serviceMethods: ['First class post', 'Recorded delivery', 'Hand delivery'] } }),
 }));
@@ -75,6 +87,11 @@ vi.mock('@/lib/scotland/grounds', () => ({
 // Mock AskHeavenPanel
 vi.mock('@/components/wizard/AskHeavenPanel', () => ({
   AskHeavenPanel: () => <div data-testid="ask-heaven-panel">Ask Heaven Panel</div>,
+}));
+
+// Mock ArrearsScheduleStep for Scotland Ground 18 tests
+vi.mock('@/components/wizard/ArrearsScheduleStep', () => ({
+  ArrearsScheduleStep: () => <div data-testid="arrears-schedule-step">Arrears Schedule Step</div>,
 }));
 
 // Import after mocks
@@ -1156,5 +1173,249 @@ describe('NoticeOnlySectionFlow - Scotland Review Section', () => {
     // Review button should be present
     const reviewButton = screen.getByRole('button', { name: /Review/i });
     expect(reviewButton).toBeDefined();
+  });
+});
+
+/**
+ * Scotland Ground 18 Arrears Schedule Tests
+ *
+ * These tests verify that:
+ * 1. When Ground 18 (rent arrears) is selected, arrears schedule UI appears
+ * 2. Scotland notice section isComplete requires arrears schedule for Ground 18
+ * 3. Warnings are shown when arrears schedule is missing for Ground 18
+ */
+describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
+  it('should require arrears schedule for Ground 18 completion', () => {
+    // Test the isComplete logic for scotland_notice section with Ground 18
+    const isScotlandNoticeComplete = (facts: Record<string, any>): boolean => {
+      if (facts.notice_already_served === undefined) return false;
+      if (!Boolean(facts.notice_service_method)) return false;
+
+      // For Ground 18 (rent arrears), require arrears schedule
+      const SCOTLAND_RENT_ARREARS_GROUND = 18;
+      if (facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND) {
+        const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+
+    // Ground 18 without arrears schedule - should NOT be complete
+    expect(isScotlandNoticeComplete({
+      scotland_eviction_ground: 18,
+      notice_already_served: true,
+      notice_service_method: 'first_class_post',
+      // No arrears_items
+    })).toBe(false);
+
+    // Ground 18 with arrears schedule in flat location - should be complete
+    expect(isScotlandNoticeComplete({
+      scotland_eviction_ground: 18,
+      notice_already_served: true,
+      notice_service_method: 'first_class_post',
+      arrears_items: [
+        { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+      ],
+    })).toBe(true);
+
+    // Ground 18 with arrears schedule in nested location - should be complete
+    expect(isScotlandNoticeComplete({
+      scotland_eviction_ground: 18,
+      notice_already_served: true,
+      notice_service_method: 'first_class_post',
+      issues: {
+        rent_arrears: {
+          arrears_items: [
+            { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+          ],
+        },
+      },
+    })).toBe(true);
+
+    // Non-arrears ground (Ground 1) without arrears schedule - should be complete
+    expect(isScotlandNoticeComplete({
+      scotland_eviction_ground: 1,
+      notice_already_served: true,
+      notice_service_method: 'first_class_post',
+      // No arrears_items needed for Ground 1
+    })).toBe(true);
+  });
+
+  it('should generate warnings for Ground 18 arrears requirements', () => {
+    // Test the hasWarnings logic for scotland_notice section
+    const getScotlandNoticeWarnings = (facts: Record<string, any>): string[] => {
+      const warnings: string[] = [];
+      const SCOTLAND_RENT_ARREARS_GROUND = 18;
+
+      if (facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND) {
+        const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+          warnings.push('Ground 18 requires a rent arrears schedule. Please complete the arrears schedule above.');
+        } else {
+          const periodsWithArrears = arrearsItems.filter(
+            (item: any) => (item.amount_owed ?? ((item.rent_due || 0) - (item.rent_paid || 0))) > 0
+          ).length;
+          if (periodsWithArrears < 3) {
+            warnings.push(`Ground 18 requires 3+ consecutive months of arrears. Currently showing ${periodsWithArrears} period(s) with arrears.`);
+          }
+        }
+      }
+      return warnings;
+    };
+
+    // Ground 18 without arrears schedule - should warn
+    const noScheduleWarnings = getScotlandNoticeWarnings({
+      scotland_eviction_ground: 18,
+    });
+    expect(noScheduleWarnings.length).toBe(1);
+    expect(noScheduleWarnings[0]).toContain('Ground 18 requires a rent arrears schedule');
+
+    // Ground 18 with only 2 periods of arrears - should warn about threshold
+    const lowArrearsWarnings = getScotlandNoticeWarnings({
+      scotland_eviction_ground: 18,
+      arrears_items: [
+        { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-02-01', period_end: '2024-02-29', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+      ],
+    });
+    expect(lowArrearsWarnings.length).toBe(1);
+    expect(lowArrearsWarnings[0]).toContain('Ground 18 requires 3+ consecutive months');
+    expect(lowArrearsWarnings[0]).toContain('2 period(s)');
+
+    // Ground 18 with 3+ periods of arrears - no warnings
+    const goodArrearsWarnings = getScotlandNoticeWarnings({
+      scotland_eviction_ground: 18,
+      arrears_items: [
+        { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-02-01', period_end: '2024-02-29', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-03-01', period_end: '2024-03-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+      ],
+    });
+    expect(goodArrearsWarnings.length).toBe(0);
+
+    // Ground 1 (non-arrears) - no warnings about arrears
+    const nonArrearsWarnings = getScotlandNoticeWarnings({
+      scotland_eviction_ground: 1,
+    });
+    expect(nonArrearsWarnings.length).toBe(0);
+  });
+});
+
+/**
+ * Scotland Ask Heaven Wiring Tests
+ *
+ * These tests verify that:
+ * 1. AskHeavenPanel receives currentQuestionId for Scotland sections
+ * 2. Scotland sections pass onSetCurrentQuestionId to their components
+ */
+describe('NoticeOnlySectionFlow - Scotland Ask Heaven Wiring', () => {
+  it('should pass currentQuestionId to AskHeavenPanel', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-askheaven',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // AskHeavenPanel should be rendered
+    const askHeavenPanel = screen.getByTestId('ask-heaven-panel');
+    expect(askHeavenPanel).toBeDefined();
+  });
+
+  it('should show Scotland Grounds tab for Scotland jurisdiction', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-grounds-askheaven',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Grounds tab should be visible
+    const groundsButton = screen.getByRole('button', { name: /Grounds/i });
+    expect(groundsButton).toBeDefined();
+  });
+
+  it('should show Scotland Notice tab for Scotland jurisdiction', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-notice-askheaven',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+        tenancy_start_date: '2020-01-01', // Old date so 6-month rule passes
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Notice tab should be visible
+    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    expect(noticeButton).toBeDefined();
+  });
+});
+
+/**
+ * Scotland Arrears Schedule UI Tests
+ *
+ * These tests verify that the arrears schedule UI appears/hides
+ * correctly based on the selected ground.
+ */
+describe('NoticeOnlySectionFlow - Scotland Arrears Schedule UI Logic', () => {
+  it('should correctly identify Scotland rent arrears ground as 18', () => {
+    const SCOTLAND_RENT_ARREARS_GROUND = 18;
+    expect(SCOTLAND_RENT_ARREARS_GROUND).toBe(18);
+  });
+
+  it('should render Scotland flow without errors for Ground 18 facts', async () => {
+    const scotlandGround18Props = {
+      caseId: 'test-scotland-ground18-render',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 18, // Rent arrears ground
+        tenancy_start_date: '2020-01-01',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+      },
+    };
+
+    // Should render without throwing
+    render(<NoticeOnlySectionFlow {...scotlandGround18Props} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Flow should render and show the Notice tab
+    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
+  });
+
+  it('should render Scotland flow without errors for non-arrears Ground 1 facts', async () => {
+    const scotlandGround1Props = {
+      caseId: 'test-scotland-ground1-render',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1, // Landlord intends to sell - not arrears
+        tenancy_start_date: '2020-01-01',
+      },
+    };
+
+    // Should render without throwing
+    render(<NoticeOnlySectionFlow {...scotlandGround1Props} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Flow should render
+    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
   });
 });

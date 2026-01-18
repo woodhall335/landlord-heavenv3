@@ -14,8 +14,8 @@ import {
 interface ArrearsScheduleStepProps {
   facts: any;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
-  /** Jurisdiction determines threshold terminology (England=Ground 8, Wales=Section 157) */
-  jurisdiction?: 'england' | 'wales';
+  /** Jurisdiction determines threshold terminology (England=Ground 8, Wales=Section 157, Scotland=Ground 18) */
+  jurisdiction?: 'england' | 'wales' | 'scotland';
 }
 
 type PaymentStatus = 'paid' | 'partial' | 'unpaid';
@@ -421,7 +421,32 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
           </div>
 
           {/* Threshold eligibility indicator - jurisdiction-aware */}
-          {computed.arrears_in_months >= 2 ? (
+          {/* Scotland uses 3-month threshold, England/Wales use 2-month threshold */}
+          {jurisdiction === 'scotland' ? (
+            // Scotland Ground 18 threshold (3 months)
+            computed.arrears_in_months >= 3 ? (
+              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+                <p className="text-sm font-medium text-green-800">
+                  ✓ Ground 18 Threshold Met
+                </p>
+                <p className="text-sm text-green-700 mt-1">
+                  Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Ground 18 threshold
+                  (minimum 3 consecutive months required). The Tribunal will consider whether eviction is reasonable.
+                </p>
+              </div>
+            ) : computed.arrears_in_months > 0 ? (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <p className="text-sm font-medium text-amber-800">
+                  ⚠ Ground 18 Threshold Not Met
+                </p>
+                <p className="text-sm text-amber-700 mt-1">
+                  Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Ground 18 threshold
+                  (minimum 3 consecutive months required). You may still proceed but evidence strength is reduced.
+                </p>
+              </div>
+            ) : null
+          ) : computed.arrears_in_months >= 2 ? (
+            // England/Wales 2-month threshold
             <div className="rounded-lg border border-green-200 bg-green-50 p-4">
               <p className="text-sm font-medium text-green-800">
                 ✓ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met

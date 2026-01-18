@@ -12,7 +12,7 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   getScotlandGrounds,
@@ -23,17 +23,32 @@ import {
 interface ScotlandGroundsSectionProps {
   facts: WizardFacts;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Optional callback to set the current question ID for Ask Heaven context */
+  onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
 }
 
 export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
   facts,
   onUpdate,
+  onSetCurrentQuestionId,
 }) => {
   // Load grounds dynamically from config
   const grounds = useMemo(() => getScotlandGrounds(), []);
   const { shortNotice, standardNotice } = useMemo(() => getGroundsByNoticePeriod(), []);
 
   const selectedGround = facts.scotland_eviction_ground as number | undefined;
+
+  // Set current question ID for Ask Heaven context when section renders
+  useEffect(() => {
+    if (onSetCurrentQuestionId) {
+      onSetCurrentQuestionId('scotland_eviction_ground');
+    }
+    return () => {
+      if (onSetCurrentQuestionId) {
+        onSetCurrentQuestionId(undefined);
+      }
+    };
+  }, [onSetCurrentQuestionId]);
 
   const handleGroundSelect = (groundNumber: number) => {
     const ground = grounds.find(g => g.number === groundNumber);
