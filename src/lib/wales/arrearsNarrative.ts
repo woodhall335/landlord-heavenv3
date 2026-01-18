@@ -121,6 +121,17 @@ function getOrdinalSuffix(day: number): string {
 }
 
 /**
+ * Format currency with thousand separators for UK locale.
+ * Returns formatted number string (without £ symbol) e.g., "2,500.00"
+ */
+function formatCurrency(amount: number): string {
+  return amount.toLocaleString('en-GB', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/**
  * Format rent due day for display.
  */
 function formatRentDueDay(
@@ -202,12 +213,12 @@ export function buildWalesSection157ArrearsNarrative(
 
   // Arrears amount and period count
   parts.push(
-    `As at ${formattedDate}, rent arrears total £${totalArrears.toFixed(2)}, ` +
+    `As at ${formattedDate}, rent arrears total £${formatCurrency(totalArrears)}, ` +
       `arising from ${unpaidPeriodCount} rent period(s) that are unpaid or part-paid.`
   );
 
   // Rent terms
-  let rentTerms = `The rent due is £${rentAmount.toFixed(2)} ${frequencyLabel}`;
+  let rentTerms = `The rent due is £${formatCurrency(rentAmount)} ${frequencyLabel}`;
   if (dueDayText) {
     rentTerms += `, payable ${dueDayText}`;
   }
@@ -325,7 +336,7 @@ export function generateWalesArrearsSummary(
   const sectionRef = isSerious ? 'Section 157' : 'Section 159';
 
   let summary = `RENT ARREARS (${sectionRef}):\n`;
-  summary += `The contract-holder owes £${totalArrears.toFixed(2)} in rent arrears, `;
+  summary += `The contract-holder owes £${formatCurrency(totalArrears)} in rent arrears, `;
   summary += `representing ${arrearsInMonths.toFixed(1)} months of unpaid rent. `;
 
   if (periodsFullyUnpaid > 0) {
