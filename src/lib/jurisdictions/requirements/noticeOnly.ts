@@ -242,6 +242,94 @@ export function getNoticeOnlyRequirements(
       } else {
         derived.add('fixed_term_end_date');
       }
+
+      // === SCOTLAND COMPLIANCE REQUIREMENTS ===
+      // All compliance issues in Scotland are WARNINGS, not blockers
+      // because all grounds are discretionary. The tribunal considers
+      // reasonableness in every case.
+
+      if (stage === 'generate' || stage === 'preview') {
+        // Landlord registration - required by law in Scotland
+        if (facts.landlord_registered === undefined) {
+          warnNow.add('landlord_registered');
+        }
+
+        // Deposit compliance (if deposit was taken)
+        const depositTaken = isTruthy(facts.deposit_taken);
+        const depositNotTaken = isFalsy(facts.deposit_taken);
+
+        if (depositTaken) {
+          // Deposit protection required
+          if (facts.deposit_protected === undefined) {
+            warnNow.add('deposit_protected');
+          }
+          if (facts.deposit_protected === true && !facts.deposit_scheme_name) {
+            warnNow.add('deposit_scheme_name');
+          }
+          if (facts.prescribed_info_served === undefined) {
+            warnNow.add('prescribed_info_served');
+          }
+        } else if (depositNotTaken) {
+          // No deposit - mark as derived
+          derived.add('deposit_amount');
+          derived.add('deposit_protected');
+          derived.add('deposit_scheme_name');
+          derived.add('prescribed_info_served');
+        } else {
+          // deposit_taken not yet answered
+          warnNow.add('deposit_taken');
+          derived.add('deposit_amount');
+          derived.add('deposit_protected');
+          derived.add('deposit_scheme_name');
+          derived.add('prescribed_info_served');
+        }
+
+        // Gas safety (if gas appliances)
+        const hasGas = isTruthy(facts.has_gas_appliances);
+        const noGas = isFalsy(facts.has_gas_appliances);
+
+        if (hasGas) {
+          if (facts.gas_safety_cert_served === undefined) {
+            warnNow.add('gas_safety_cert_served');
+          }
+        } else if (noGas) {
+          derived.add('gas_safety_cert_served');
+        } else {
+          // has_gas_appliances not yet answered
+          warnNow.add('has_gas_appliances');
+          derived.add('gas_safety_cert_served');
+        }
+
+        // EPC - required for all Scottish tenancies
+        if (facts.epc_served === undefined) {
+          warnNow.add('epc_served');
+        }
+
+        // EICR - Scotland-specific requirement
+        if (facts.eicr_served === undefined) {
+          warnNow.add('eicr_served');
+        }
+
+        // Repairing standard
+        if (facts.repairing_standard_met === undefined) {
+          warnNow.add('repairing_standard_met');
+        }
+
+        // HMO licensing (if applicable)
+        const isHmo = isTruthy(facts.is_hmo);
+        const notHmo = isFalsy(facts.is_hmo);
+
+        if (isHmo) {
+          if (facts.hmo_licensed === undefined) {
+            warnNow.add('hmo_licensed');
+          }
+        } else if (notHmo) {
+          derived.add('hmo_licensed');
+        } else {
+          // is_hmo not yet answered - don't warn, it's optional info
+          derived.add('hmo_licensed');
+        }
+      }
     }
   }
 

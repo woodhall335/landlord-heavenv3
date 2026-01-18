@@ -58,6 +58,7 @@ import { WalesComplianceSection } from '../sections/wales/WalesComplianceSection
 // Scotland-specific section components
 import { ScotlandGroundsSection } from '../sections/eviction/ScotlandGroundsSection';
 import { ScotlandNoticeSection } from '../sections/eviction/ScotlandNoticeSection';
+import { ScotlandComplianceSection } from '../sections/eviction/ScotlandComplianceSection';
 
 // Scotland utilities
 import { validateSixMonthRule } from '@/lib/scotland/grounds';
@@ -440,6 +441,79 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
           warnings.push(validation.message);
         }
       }
+      return warnings;
+    },
+  },
+  {
+    id: 'scotland_compliance',
+    label: 'Compliance',
+    description: 'Landlord registration and compliance checks',
+    jurisdiction: 'scotland',
+    isComplete: (facts) => {
+      // Core requirements: landlord registration must be answered
+      if (facts.landlord_registered === undefined) return false;
+
+      // Deposit compliance (if deposit was taken)
+      const depositTaken = facts.deposit_taken === true;
+      if (depositTaken) {
+        if (facts.deposit_protected === undefined) return false;
+        if (facts.deposit_protected === true && !facts.deposit_scheme_name) return false;
+      }
+
+      // Gas safety (if gas appliances)
+      const hasGas = facts.has_gas_appliances === true;
+      if (hasGas && facts.gas_safety_cert_served === undefined) return false;
+
+      // EPC and EICR
+      if (facts.epc_served === undefined) return false;
+      if (facts.eicr_served === undefined) return false;
+
+      // Repairing standard
+      if (facts.repairing_standard_met === undefined) return false;
+
+      // HMO (if applicable)
+      if (facts.is_hmo === true && facts.hmo_licensed === undefined) return false;
+
+      return true;
+    },
+    hasWarnings: (facts) => {
+      const warnings: string[] = [];
+
+      // Landlord not registered
+      if (facts.landlord_registered === false) {
+        warnings.push('Unregistered landlords may face penalties and tribunal may view case unfavourably.');
+      }
+
+      // Deposit not protected
+      if (facts.deposit_taken === true && facts.deposit_protected === false) {
+        warnings.push('Unprotected deposit may result in penalties up to 3x deposit amount.');
+      }
+
+      // Gas safety missing
+      if (facts.has_gas_appliances === true && facts.gas_safety_cert_served === false) {
+        warnings.push('Missing gas safety certificate is a serious compliance issue.');
+      }
+
+      // EPC missing
+      if (facts.epc_served === false) {
+        warnings.push('Missing EPC can result in fines.');
+      }
+
+      // EICR missing
+      if (facts.eicr_served === false) {
+        warnings.push('Missing EICR can result in fines up to £5,000.');
+      }
+
+      // Repairing standard not met
+      if (facts.repairing_standard_met === false) {
+        warnings.push('Property not meeting repairing standard may face enforcement action.');
+      }
+
+      // HMO not licensed
+      if (facts.is_hmo === true && facts.hmo_licensed === false) {
+        warnings.push('Operating an unlicensed HMO can result in fines.');
+      }
+
       return warnings;
     },
   },
@@ -850,6 +924,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             </div>
           </div>
         );
+      case 'scotland_compliance':
+        return <ScotlandComplianceSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'scotland_grounds':
         return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'scotland_notice':
