@@ -56,7 +56,7 @@
 
     .doc-badge {
       display: inline-block;
-      background: #dc2626;
+      background: #1a1a1a;
       color: white;
       padding: 0.3em 0.8em;
       font-size: 10pt;
@@ -97,7 +97,7 @@
     }
 
     .details-section h2 .num {
-      background: #dc2626;
+      background: #1a1a1a;
       color: white;
       width: 1.5em;
       height: 1.5em;
@@ -300,7 +300,7 @@
     <dt>Notice Service Date:</dt>
     <dd>{{service_date_formatted}}</dd>
     <dt>Earliest Possession Date:</dt>
-    <dd>{{expiry_date}}</dd>
+    <dd>{{expiry_date_formatted}}</dd>
   </dl>
 </div>
 
@@ -331,7 +331,7 @@
   </div>
 
   <div class="alert-box warning">
-    <h4>⚠️ Keep All Evidence</h4>
+    <h4>Keep All Evidence</h4>
     <p>If you need to apply for a possession order, you must prove service. Without clear evidence, your claim may be rejected by the court.</p>
   </div>
 </div>
@@ -349,7 +349,7 @@
         <li><span class="checkbox"></span> The landlord has given at least six months' notice as required by section 173 of the Renting Homes (Wales) Act 2016. The notice expiry date is not earlier than six months after the date of service.</li>
         <li><span class="checkbox"></span> Notice not served within the first 6 months of occupation contract (prohibited period)</li>
         <li><span class="checkbox"></span> Contract is a standard occupation contract (not secure or prohibited)</li>
-        <li><span class="checkbox"></span> Notice specifies possession date is on or after: <strong>{{expiry_date}}</strong></li>
+        <li><span class="checkbox"></span> Notice specifies possession date is on or after: <strong>{{expiry_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Notice signed and dated by landlord or landlord's agent</li>
         <li><span class="checkbox"></span> Landlord is registered with Rent Smart Wales (legally required)</li>
         <li><span class="checkbox"></span> If deposit taken, deposit protected in approved Welsh scheme (DPS Wales, TDS Wales, MyDeposits Wales)</li>
@@ -358,7 +358,7 @@
   </div>
 
   <div class="alert-box critical">
-    <h4>⚠️ CRITICAL WALES-SPECIFIC REQUIREMENTS</h4>
+    <h4>CRITICAL: Wales-Specific Requirements</h4>
     <ul>
       <li>Section 173 notices can only be used for standard occupation contracts (most AST-equivalent tenancies)</li>
       <li>You must be registered with Rent Smart Wales - unlicensed landlords cannot serve valid notices</li>
@@ -376,7 +376,7 @@
     <h3>Post-Service Actions</h3>
     <div class="content">
       <ul>
-        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{expiry_date}}</strong></li>
+        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{expiry_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Do not change locks or remove contract-holder belongings (illegal eviction)</li>
         <li><span class="checkbox"></span> Do not harass contract-holder or cut off utilities</li>
         <li><span class="checkbox"></span> If contract-holder remains after possession date, apply to court for possession order</li>

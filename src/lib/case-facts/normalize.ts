@@ -3809,6 +3809,48 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     }
   }
 
+  // =============================================================================
+  // WALES SECTION 173 EXPIRY DATE CALCULATION
+  // =============================================================================
+  // Section 173 (Renting Homes (Wales) Act 2016) requires 6 months minimum notice.
+  // This is HARD-LOCKED - we do not support the 2-month regime (RHW17).
+  // Expiry date = service_date + 6 calendar months (using addCalendarMonths for legal correctness)
+  // =============================================================================
+  const isWalesSection173Route =
+    templateData.selected_notice_route === 'section_173' ||
+    templateData.selected_notice_route === 'wales_section_173';
+
+  if (isWalesSection173Route && templateData.service_date) {
+    // Use addCalendarMonths for legal correctness (e.g., Jan 31 + 6 months = Jul 31)
+    const addCalendarMonths = (dateStr: string, months: number): string => {
+      const date = new Date(dateStr + 'T00:00:00Z');
+      const originalDay = date.getUTCDate();
+      date.setUTCMonth(date.getUTCMonth() + months);
+      // Handle end-of-month edge cases
+      if (date.getUTCDate() !== originalDay) {
+        date.setUTCDate(0); // Last day of previous month
+      }
+      return date.toISOString().split('T')[0];
+    };
+
+    const SECTION_173_LOCKED_NOTICE_MONTHS = 6;
+    const section173ExpiryDate = addCalendarMonths(templateData.service_date, SECTION_173_LOCKED_NOTICE_MONTHS);
+
+    // Calculate days for logging
+    const serviceDateMs = new Date(templateData.service_date).getTime();
+    const expiryDateMs = new Date(section173ExpiryDate).getTime();
+    const noticePeriodDays = Math.ceil((expiryDateMs - serviceDateMs) / (1000 * 60 * 60 * 24));
+
+    // Set the calculated expiry date
+    templateData.expiry_date = section173ExpiryDate;
+    templateData.earliest_possession_date = section173ExpiryDate;
+    templateData.notice_period_days = noticePeriodDays;
+    templateData.notice_period_months = SECTION_173_LOCKED_NOTICE_MONTHS;
+    templateData.notice_period_description = 'six months';
+
+    console.log(`[mapNoticeOnlyFacts] Wales Section 173 expiry calculated: ${section173ExpiryDate} (${noticePeriodDays} days, 6 months)`);
+  }
+
   // Calculate earliest_possession_date if not provided (SECTION 8 FALLBACK)
   // IMPORTANT: Notice period depends on selected grounds!
   // Most grounds require 2 weeks (14 days); some require 2 months (60 days)
@@ -3935,6 +3977,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.earliest_possession_date_formatted = formatUkLegalDate(templateData.earliest_possession_date);
   templateData.tenancy_start_date_formatted = formatUkLegalDate(templateData.tenancy_start_date);
   templateData.notice_expiry_date_formatted = formatUkLegalDate(templateData.notice_expiry_date || templateData.earliest_possession_date);
+  templateData.expiry_date_formatted = formatUkLegalDate(templateData.expiry_date || templateData.earliest_possession_date);
   templateData.fixed_term_end_date_formatted = formatUkLegalDate(templateData.fixed_term_end_date);
 
   // =============================================================================
