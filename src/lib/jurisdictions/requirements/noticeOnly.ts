@@ -212,6 +212,23 @@ export function getNoticeOnlyRequirements(
           // No ground selected - require it
           requiredNow.add('ground_codes');
         }
+
+        // Scotland Ground 18 (rent arrears) requires arrears schedule
+        // Ground 18 = 3 or more consecutive months of arrears
+        const SCOTLAND_RENT_ARREARS_GROUND = 18;
+        const isRentArrearsGround = facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND;
+
+        if (isRentArrearsGround) {
+          // Check if arrears schedule exists
+          const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items;
+          const hasArrearsSchedule = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+
+          if (!hasArrearsSchedule) {
+            // WARN at both preview and generate - Scotland grounds are all discretionary
+            // so we warn rather than block, allowing user to proceed with reduced evidence
+            warnNow.add('arrears_items');
+          }
+        }
       } else if (stage === 'checkpoint') {
         warnNow.add('ground_codes');
       }

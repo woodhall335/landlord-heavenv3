@@ -5,13 +5,14 @@
  * - 6-MONTH RULE VALIDATION: Notice cannot be served within first 6 months of tenancy
  * - Notice period calculation based on selected ground (from config)
  * - Service methods
+ * - ARREARS SCHEDULE: Conditional arrears collection for Ground 18 (rent arrears)
  *
  * CRITICAL: Enforces the 6-month rule which is unique to Scotland.
  */
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   validateSixMonthRule,
@@ -19,17 +20,39 @@ import {
   calculateEarliestEvictionDate,
   getScotlandConfig,
 } from '@/lib/scotland/grounds';
+import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
+
+// Scotland Ground 18 is the rent arrears ground (3 consecutive months)
+const SCOTLAND_RENT_ARREARS_GROUND = 18;
 
 interface ScotlandNoticeSectionProps {
   facts: WizardFacts;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Optional callback to set the current question ID for Ask Heaven context */
+  onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
 }
 
 export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
   facts,
   onUpdate,
+  onSetCurrentQuestionId,
 }) => {
   const config = getScotlandConfig();
+
+  // Check if Ground 18 (rent arrears) is selected
+  const isRentArrearsGround = facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND;
+
+  // Set current question ID for Ask Heaven context when section renders
+  useEffect(() => {
+    if (onSetCurrentQuestionId) {
+      onSetCurrentQuestionId('notice_service_method');
+    }
+    return () => {
+      if (onSetCurrentQuestionId) {
+        onSetCurrentQuestionId(undefined);
+      }
+    };
+  }, [onSetCurrentQuestionId]);
   const tenancyStartDate = facts.tenancy_start_date as string | undefined;
   const selectedGround = facts.scotland_eviction_ground as number | undefined;
   const groundData = selectedGround ? getScotlandGroundByNumber(selectedGround) : undefined;
@@ -100,6 +123,67 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
             For <strong>{groundData.code} ({groundData.name})</strong>, you must give{' '}
             <strong>{groundData.noticePeriodDays} days</strong> notice.
           </p>
+        </div>
+      )}
+
+      {/* Scotland Arrears Schedule - Only for Ground 18 (Rent Arrears) */}
+      {isRentArrearsGround && (
+        <div className="space-y-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h4 className="font-semibold text-amber-800 flex items-center gap-2">
+              <span className="text-lg">📋</span>
+              Ground 18 - Rent Arrears Schedule Required
+            </h4>
+            <p className="text-amber-700 text-sm mt-2">
+              Ground 18 requires evidence of rent arrears for 3 or more consecutive months.
+              Complete the schedule below to document each rent period.
+            </p>
+          </div>
+
+          <div
+            className="bg-white border border-gray-200 rounded-lg p-4"
+            onFocus={() => onSetCurrentQuestionId?.('arrears_items')}
+          >
+            <ArrearsScheduleStep
+              facts={facts}
+              onUpdate={onUpdate}
+              jurisdiction="scotland"
+            />
+          </div>
+
+          {/* Scotland 3-month threshold info */}
+          {(() => {
+            const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+            if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) return null;
+
+            const periodsWithArrears = arrearsItems.filter(
+              (item: any) => (item.amount_owed ?? (item.rent_due - item.rent_paid)) > 0
+            ).length;
+
+            return (
+              <div className={`rounded-lg border p-4 ${
+                periodsWithArrears >= 3
+                  ? 'bg-green-50 border-green-200'
+                  : 'bg-amber-50 border-amber-200'
+              }`}>
+                <p className={`text-sm font-medium ${
+                  periodsWithArrears >= 3 ? 'text-green-800' : 'text-amber-800'
+                }`}>
+                  {periodsWithArrears >= 3
+                    ? '✓ Ground 18 Threshold Met'
+                    : '⚠ Ground 18 Threshold Not Yet Met'}
+                </p>
+                <p className={`text-sm mt-1 ${
+                  periodsWithArrears >= 3 ? 'text-green-700' : 'text-amber-700'
+                }`}>
+                  {periodsWithArrears} period{periodsWithArrears !== 1 ? 's' : ''} with arrears.
+                  {periodsWithArrears < 3
+                    ? ` Ground 18 requires 3 or more consecutive months of arrears.`
+                    : ` The Tribunal will consider whether eviction is reasonable.`}
+                </p>
+              </div>
+            );
+          })()}
         </div>
       )}
 

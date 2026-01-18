@@ -460,7 +460,18 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
     jurisdiction: 'scotland',
     isComplete: (facts) => {
       if (facts.notice_already_served === undefined) return false;
-      return Boolean(facts.notice_service_method);
+      if (!Boolean(facts.notice_service_method)) return false;
+
+      // For Ground 18 (rent arrears), require arrears schedule
+      const SCOTLAND_RENT_ARREARS_GROUND = 18;
+      if (facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND) {
+        const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+          return false;
+        }
+      }
+
+      return true;
     },
     hasBlockers: (facts) => {
       const blockers: string[] = [];
@@ -472,6 +483,26 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
         }
       }
       return blockers;
+    },
+    hasWarnings: (facts) => {
+      const warnings: string[] = [];
+      // Warn if Ground 18 is selected but arrears schedule is missing or threshold not met
+      const SCOTLAND_RENT_ARREARS_GROUND = 18;
+      if (facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND) {
+        const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+          warnings.push('Ground 18 requires a rent arrears schedule. Please complete the arrears schedule above.');
+        } else {
+          // Check if threshold is met (3 months with arrears)
+          const periodsWithArrears = arrearsItems.filter(
+            (item: any) => (item.amount_owed ?? ((item.rent_due || 0) - (item.rent_paid || 0))) > 0
+          ).length;
+          if (periodsWithArrears < 3) {
+            warnings.push(`Ground 18 requires 3+ consecutive months of arrears. Currently showing ${periodsWithArrears} period(s) with arrears.`);
+          }
+        }
+      }
+      return warnings;
     },
   },
   {
@@ -820,9 +851,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           </div>
         );
       case 'scotland_grounds':
-        return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} />;
+        return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'scotland_notice':
-        return <ScotlandNoticeSection facts={facts} onUpdate={handleUpdate} />;
+        return <ScotlandNoticeSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
 
       // England/Wales sections
       case 'case_basics':
