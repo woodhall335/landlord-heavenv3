@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
     title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
     description: 'Create a legally compliant AST for England. Updated for 2026. Standard (£9.99) and Premium (£14.99) options.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/tenancy-agreements/england',
+    url: getCanonicalUrl('/tenancy-agreements/england'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tenancy-agreements/england'),
   },
 };
 

@@ -68,6 +68,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/tenant-not-paying-rent', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/possession-claim-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/how-to-evict-tenant', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/wales-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/scotland-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
     // Q2 2026 SEO pages
     { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession', priority: 0.8, changeFrequency: 'weekly' as const },

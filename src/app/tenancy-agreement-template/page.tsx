@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
@@ -79,7 +80,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tenancy Agreement Template UK - Free Download | Landlord Heaven',
     description: 'Download a free UK tenancy agreement template. AST templates for England, Wales, Scotland.',
+    url: getCanonicalUrl('/tenancy-agreement-template'),
     type: 'website',
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tenancy-agreement-template'),
   },
 };
 
