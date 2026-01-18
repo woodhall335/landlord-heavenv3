@@ -899,7 +899,7 @@ export async function GET(
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
-          // Use the wales-section173-generator which automatically selects RHW16 or RHW17
+          // Use the wales-section173-generator (HARD-LOCKED to RHW16, 6-month notice)
           const { generateWalesSection173Notice } = await import('@/lib/documents/wales-section173-generator');
 
           // Prepare data for generator (it handles date calculations and template selection)

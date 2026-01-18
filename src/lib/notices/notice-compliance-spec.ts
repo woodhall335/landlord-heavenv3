@@ -258,12 +258,14 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
       },
     ],
     template_paths: [
+      // HARD-LOCKED: Only RHW16 (6-month notice) is used for standard occupation contracts
       'config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs',
-      'config/jurisdictions/uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs',
+      // RHW17 template retained for document classification but NOT used for generation
+      // 'config/jurisdictions/uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs',
     ],
     required_phrases: ['Renting Homes (Wales) Act 2016'],
     forbidden_phrases: ['Section 21'],
-    notes: 'Dynamic template selection: RHW16 (>=6 months notice) or RHW17 (<6 months notice) based on computed notice period',
+    notes: 'HARD-LOCKED: Always uses RHW16 (6-month notice). We do not support the 2-month regime (RHW17) for standard occupation contracts.',
   },
   {
     jurisdiction: 'wales',
