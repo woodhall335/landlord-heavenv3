@@ -23,7 +23,9 @@ import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface TenancySectionProps {
   facts: WizardFacts;
-  jurisdiction: 'england' | 'wales';
+  // Scotland uses the same tenancy date/rent fields as England/Wales - no jurisdiction-specific logic
+  // Note: Scotland's PRT-specific validations (6-month rule) are handled in NoticeOnlySectionFlow
+  jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 

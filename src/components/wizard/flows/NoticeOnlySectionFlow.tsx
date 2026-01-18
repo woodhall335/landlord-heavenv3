@@ -136,8 +136,13 @@ const SECTIONS: WizardSection[] = [
       if (jurisdiction === 'wales') {
         return WALES_ROUTES.includes(route as typeof WALES_ROUTES[number]);
       }
-      // Fallback: accept any valid route
-      return [...ENGLAND_ROUTES, ...WALES_ROUTES].includes(route as any);
+      // Scotland routes - note: Scotland uses separate SCOTLAND_SECTIONS, but this fallback
+      // handles edge cases where case_basics from SECTIONS array could be hit for Scotland
+      if (jurisdiction === 'scotland') {
+        return SCOTLAND_ROUTES.includes(route as typeof SCOTLAND_ROUTES[number]);
+      }
+      // Fallback: accept any valid route from any jurisdiction
+      return [...ENGLAND_ROUTES, ...WALES_ROUTES, ...SCOTLAND_ROUTES].includes(route as any);
     },
   },
   {
@@ -827,21 +832,21 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         }
         return <CaseBasicsSection {...englandWalesProps} />;
       case 'parties':
-        // Scotland uses the same Parties section
+        // Scotland uses the same Parties section - pass actual jurisdiction for type safety
         if (isScotland) {
-          return <PartiesSection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+          return <PartiesSection facts={facts} jurisdiction="scotland" onUpdate={handleUpdate} />;
         }
         return <PartiesSection {...englandWalesProps} />;
       case 'property':
-        // Scotland uses the same Property section
+        // Scotland uses the same Property section - pass actual jurisdiction for type safety
         if (isScotland) {
-          return <PropertySection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+          return <PropertySection facts={facts} jurisdiction="scotland" onUpdate={handleUpdate} />;
         }
         return <PropertySection {...englandWalesProps} />;
       case 'tenancy':
         // Scotland uses TenancySection, Wales uses OccupationContractSection, England uses TenancySection
         if (isScotland) {
-          return <TenancySection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+          return <TenancySection facts={facts} jurisdiction="scotland" onUpdate={handleUpdate} />;
         }
         return isWales
           ? <OccupationContractSection {...englandWalesProps} />

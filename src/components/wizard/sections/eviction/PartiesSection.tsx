@@ -20,7 +20,8 @@ import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface PartiesSectionProps {
   facts: WizardFacts;
-  jurisdiction: 'england' | 'wales';
+  // Scotland uses the same party fields as England/Wales - no jurisdiction-specific logic
+  jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 

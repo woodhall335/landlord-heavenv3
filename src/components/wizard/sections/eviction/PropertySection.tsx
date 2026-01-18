@@ -20,7 +20,8 @@ import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface PropertySectionProps {
   facts: WizardFacts;
-  jurisdiction: 'england' | 'wales';
+  // Scotland uses the same property address fields as England/Wales - no jurisdiction-specific logic
+  jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
