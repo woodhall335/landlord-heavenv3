@@ -1,10 +1,10 @@
 /**
- * Notice Only Section Flow - England/Wales
+ * Notice Only Section Flow - England/Wales/Scotland
  *
  * Section-based wizard for generating eviction notices, matching the
  * EvictionSectionFlow design language for consistency.
  *
- * Flow Structure:
+ * Flow Structure (England/Wales):
  * 1. Case Basics - Jurisdiction and eviction route selection
  * 2. Parties - Landlord(s) and Tenant(s) with joint support
  * 3. Property - Full address and postcode
@@ -13,6 +13,20 @@
  * 6. Notice Details - Grounds and service details (S8 grounds selected here BEFORE arrears)
  * 7. Section 8 Arrears - S8 only using ArrearsScheduleStep (needs grounds to be selected first)
  * 8. Review - Generate and download notice
+ *
+ * Flow Structure (Scotland):
+ * 1. Case Basics - Jurisdiction (Scotland, PRT)
+ * 2. Parties - Landlord and Tenant details
+ * 3. Property - Full address and postcode
+ * 4. Tenancy - Start date, rent amount, frequency (6-month rule validation)
+ * 5. Grounds - Select eviction ground (ALL discretionary in Scotland)
+ * 6. Notice - Notice to Leave details (6-month rule enforced)
+ * 7. Review - Generate and download notice
+ *
+ * Scotland-specific rules:
+ * - NO MANDATORY GROUNDS - All 18 grounds are discretionary
+ * - 6-MONTH RULE - Notice cannot be served within first 6 months
+ * - NOTICE PERIODS - 28 or 84 days from config (not hardcoded)
  *
  * Design: Matches EvictionSectionFlow UI exactly (gray-50 background, purple-600
  * primary #7C3AED, section tabs, progress bar, white card content area)
@@ -41,6 +55,13 @@ import { WalesNoticeSection } from '../sections/wales/WalesNoticeSection';
 import { WalesCaseBasicsSection } from '../sections/wales/WalesCaseBasicsSection';
 import { WalesComplianceSection } from '../sections/wales/WalesComplianceSection';
 
+// Scotland-specific section components
+import { ScotlandGroundsSection } from '../sections/eviction/ScotlandGroundsSection';
+import { ScotlandNoticeSection } from '../sections/eviction/ScotlandNoticeSection';
+
+// Scotland utilities
+import { validateSixMonthRule } from '@/lib/scotland/grounds';
+
 // Wales compliance schema for blocking violations and legacy migration
 import {
   getBlockingViolations as getWalesBlockingViolations,
@@ -56,10 +77,11 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
-// Route types for England and Wales
+// Route types for England, Wales, and Scotland
 type EnglandRoute = 'section_8' | 'section_21';
 type WalesRoute = 'section_173' | 'fault_based';
-type EvictionRoute = EnglandRoute | WalesRoute;
+type ScotlandRoute = 'notice_to_leave';
+type EvictionRoute = EnglandRoute | WalesRoute | ScotlandRoute;
 
 // Section definition type
 interface WizardSection {
@@ -68,19 +90,22 @@ interface WizardSection {
   description: string;
   // Route-specific visibility (England only - Wales filters these out)
   routes?: EvictionRoute[];
-  // Jurisdiction-specific visibility (for Wales-only sections)
-  jurisdiction?: 'england' | 'wales';
+  // Jurisdiction-specific visibility (for jurisdiction-only sections)
+  jurisdiction?: 'england' | 'wales' | 'scotland';
+  // Which jurisdictions this section applies to (for multi-jurisdiction sections)
+  jurisdictions?: ('england' | 'wales' | 'scotland')[];
   // Validation function to check if section is complete
-  isComplete: (facts: WizardFacts, jurisdiction?: 'england' | 'wales') => boolean;
+  isComplete: (facts: WizardFacts, jurisdiction?: 'england' | 'wales' | 'scotland') => boolean;
   // Check if section has blockers
-  hasBlockers?: (facts: WizardFacts, jurisdiction?: 'england' | 'wales') => string[];
+  hasBlockers?: (facts: WizardFacts, jurisdiction?: 'england' | 'wales' | 'scotland') => string[];
   // Check if section has warnings
-  hasWarnings?: (facts: WizardFacts) => string[];
+  hasWarnings?: (facts: WizardFacts, jurisdiction?: 'england' | 'wales' | 'scotland') => string[];
 }
 
 // Valid routes by jurisdiction
 const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
+const SCOTLAND_ROUTES = ['notice_to_leave'] as const;
 
 /**
  * Normalize legacy Wales route values to canonical keys.
@@ -360,9 +385,110 @@ const SECTIONS: WizardSection[] = [
   },
 ];
 
+// Scotland-specific sections for notice_only
+// ALL GROUNDS IN SCOTLAND ARE DISCRETIONARY - no mandatory/discretionary split
+const SCOTLAND_SECTIONS: WizardSection[] = [
+  {
+    id: 'scotland_basics',
+    label: 'Case Basics',
+    description: 'Private Residential Tenancy (Scotland)',
+    jurisdiction: 'scotland',
+    isComplete: () => true, // Auto-complete as Scotland is pre-selected
+  },
+  {
+    id: 'parties',
+    label: 'Parties',
+    description: 'Landlord and tenant details',
+    jurisdiction: 'scotland',
+    isComplete: (facts) =>
+      Boolean(facts.landlord_full_name) &&
+      Boolean(facts.landlord_address_line1) &&
+      Boolean(facts.landlord_address_town) &&
+      Boolean(facts.landlord_address_postcode) &&
+      Boolean(facts.tenant_full_name),
+  },
+  {
+    id: 'property',
+    label: 'Property',
+    description: 'Property address',
+    jurisdiction: 'scotland',
+    isComplete: (facts) =>
+      Boolean(facts.property_address_line1) &&
+      Boolean(facts.property_address_town) &&
+      Boolean(facts.property_address_postcode),
+  },
+  {
+    id: 'tenancy',
+    label: 'Tenancy',
+    description: 'Tenancy details and rent',
+    jurisdiction: 'scotland',
+    isComplete: (facts) =>
+      Boolean(facts.tenancy_start_date) &&
+      Boolean(facts.rent_amount) &&
+      Boolean(facts.rent_frequency),
+    hasWarnings: (facts) => {
+      const warnings: string[] = [];
+      // Check 6-month rule
+      if (facts.tenancy_start_date) {
+        const validation = validateSixMonthRule(facts.tenancy_start_date as string);
+        if (!validation.valid && validation.message) {
+          warnings.push(validation.message);
+        }
+      }
+      return warnings;
+    },
+  },
+  {
+    id: 'scotland_grounds',
+    label: 'Grounds',
+    description: 'Select eviction ground (all discretionary)',
+    jurisdiction: 'scotland',
+    isComplete: (facts) => Boolean(facts.scotland_eviction_ground),
+    hasWarnings: () => [
+      'All grounds in Scotland are discretionary. The First-tier Tribunal may refuse eviction even if grounds are proven.',
+    ],
+  },
+  {
+    id: 'scotland_notice',
+    label: 'Notice',
+    description: 'Notice to Leave details',
+    jurisdiction: 'scotland',
+    isComplete: (facts) => {
+      if (facts.notice_already_served === undefined) return false;
+      return Boolean(facts.notice_service_method);
+    },
+    hasBlockers: (facts) => {
+      const blockers: string[] = [];
+      // 6-month rule blocker
+      if (facts.tenancy_start_date) {
+        const validation = validateSixMonthRule(facts.tenancy_start_date as string);
+        if (!validation.valid && validation.message) {
+          blockers.push(validation.message);
+        }
+      }
+      return blockers;
+    },
+  },
+  {
+    id: 'review',
+    label: 'Review',
+    description: 'Review and generate notice',
+    jurisdiction: 'scotland',
+    isComplete: () => false, // Always navigable for final review
+  },
+];
+
+// Helper to get sections based on jurisdiction
+function getSectionsForJurisdiction(jurisdiction: 'england' | 'wales' | 'scotland'): WizardSection[] {
+  if (jurisdiction === 'scotland') {
+    return SCOTLAND_SECTIONS;
+  }
+  return SECTIONS;
+}
+
 interface NoticeOnlySectionFlowProps {
   caseId: string;
-  jurisdiction: 'england' | 'wales';
+  jurisdiction: 'england' | 'wales' | 'scotland';
   initialFacts?: WizardFacts;
 }
 
@@ -437,6 +563,13 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
     const isWales = jurisdiction === 'wales';
+    const isScotland = jurisdiction === 'scotland';
+
+    // Scotland uses different sections entirely - no route-based filtering needed
+    if (isScotland) {
+      return getSectionsForJurisdiction('scotland');
+    }
+
     // Normalize route for Wales to handle legacy prefixed values (wales_section_173 -> section_173)
     const rawRoute = facts.eviction_route as string | undefined;
     const route = isWales ? normalizeWalesRoute(rawRoute) : rawRoute;
@@ -644,35 +777,87 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     };
 
     const isWales = jurisdiction === 'wales';
+    const isScotland = jurisdiction === 'scotland';
+
+    // Type-narrowed props for England/Wales sections
+    const englandWalesProps = {
+      facts,
+      jurisdiction: jurisdiction as 'england' | 'wales',
+      onUpdate: handleUpdate,
+    };
 
     switch (currentSection.id) {
+      // Scotland-specific sections
+      case 'scotland_basics':
+        return (
+          <div className="space-y-6">
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 className="font-semibold text-blue-800">Private Residential Tenancy (Scotland)</h4>
+              <p className="text-blue-700 text-sm mt-2">
+                This wizard is configured for Scottish law under the Private Housing (Tenancies) (Scotland) Act 2016.
+              </p>
+            </div>
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <h4 className="font-semibold text-amber-800">Important: All Grounds are Discretionary</h4>
+              <p className="text-amber-700 text-sm mt-2">
+                Unlike England, Scotland has <strong>no mandatory grounds</strong> for eviction.
+                The First-tier Tribunal has discretion on all grounds and may refuse eviction
+                even if you prove your case.
+              </p>
+            </div>
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <h4 className="font-medium text-gray-800">6-Month Rule</h4>
+              <p className="text-gray-700 text-sm mt-2">
+                A Notice to Leave cannot be served within the first 6 months of the tenancy.
+                We will check this when you enter your tenancy details.
+              </p>
+            </div>
+          </div>
+        );
+      case 'scotland_grounds':
+        return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} />;
+      case 'scotland_notice':
+        return <ScotlandNoticeSection facts={facts} onUpdate={handleUpdate} />;
+
+      // England/Wales sections
       case 'case_basics':
         // Use Wales-specific or England-specific case basics
         if (isWales) {
-          return <WalesCaseBasicsSection {...sectionProps} />;
+          return <WalesCaseBasicsSection {...englandWalesProps} />;
         }
-        return <CaseBasicsSection {...sectionProps} />;
+        return <CaseBasicsSection {...englandWalesProps} />;
       case 'parties':
-        return <PartiesSection {...sectionProps} />;
+        // Scotland uses the same Parties section
+        if (isScotland) {
+          return <PartiesSection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+        }
+        return <PartiesSection {...englandWalesProps} />;
       case 'property':
-        return <PropertySection {...sectionProps} />;
+        // Scotland uses the same Property section
+        if (isScotland) {
+          return <PropertySection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+        }
+        return <PropertySection {...englandWalesProps} />;
       case 'tenancy':
-        // Wales uses OccupationContractSection, England uses TenancySection
+        // Scotland uses TenancySection, Wales uses OccupationContractSection, England uses TenancySection
+        if (isScotland) {
+          return <TenancySection facts={facts} jurisdiction="england" onUpdate={handleUpdate} />;
+        }
         return isWales
-          ? <OccupationContractSection {...sectionProps} />
-          : <TenancySection {...sectionProps} />;
+          ? <OccupationContractSection {...englandWalesProps} />
+          : <TenancySection {...englandWalesProps} />;
       case 'wales_compliance':
         // Wales-only compliance section
-        return <WalesComplianceSection {...sectionProps} onSetCurrentQuestionId={setCurrentQuestionId} />;
+        return <WalesComplianceSection {...englandWalesProps} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'section21_compliance':
-        return <Section21ComplianceSection {...sectionProps} />;
+        return <Section21ComplianceSection {...englandWalesProps} />;
       case 'section8_arrears':
-        return <Section8ArrearsSection {...sectionProps} />;
+        return <Section8ArrearsSection {...englandWalesProps} />;
       case 'notice':
         // Wales uses WalesNoticeSection, England uses NoticeSection
         return isWales
-          ? <WalesNoticeSection {...sectionProps} mode="notice_only" />
-          : <NoticeSection {...sectionProps} mode="notice_only" />;
+          ? <WalesNoticeSection {...englandWalesProps} mode="notice_only" />
+          : <NoticeSection {...englandWalesProps} mode="notice_only" />;
       case 'review':
         return renderReviewSection();
       default:
@@ -762,6 +947,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             <p>
               <strong>Type:</strong>{' '}
               {(() => {
+                // Scotland routes
+                if (jurisdiction === 'scotland') {
+                  return 'Notice to Leave (Scotland)';
+                }
                 // Wales routes
                 if (jurisdiction === 'wales') {
                   if (facts.eviction_route === 'section_173') {
@@ -778,7 +967,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
               })()}
             </p>
             <p>
-              <strong>Jurisdiction:</strong> {jurisdiction === 'england' ? 'England' : 'Wales'}
+              <strong>Jurisdiction:</strong>{' '}
+              {jurisdiction === 'england' ? 'England' : jurisdiction === 'wales' ? 'Wales' : 'Scotland'}
             </p>
             {/* England Section 8 grounds */}
             {jurisdiction === 'england' && facts.eviction_route === 'section_8' && (
@@ -792,6 +982,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
               <p>
                 <strong>Grounds:</strong>{' '}
                 {((facts.wales_fault_grounds as string[]) || []).join(', ') || 'Not selected'}
+              </p>
+            )}
+            {/* Scotland grounds */}
+            {jurisdiction === 'scotland' && facts.scotland_eviction_ground && (
+              <p>
+                <strong>Ground:</strong> Ground {facts.scotland_eviction_ground}
               </p>
             )}
           </div>
@@ -818,7 +1014,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-semibold text-gray-900">
-              {jurisdiction === 'england' ? 'England' : 'Wales'} Eviction Notice
+              {jurisdiction === 'scotland'
+                ? 'Scotland Notice to Leave'
+                : `${jurisdiction === 'england' ? 'England' : 'Wales'} Eviction Notice`}
             </h1>
             <span className="text-sm text-gray-500">
               {completedCount} of {visibleSections.length} sections complete
