@@ -1508,8 +1508,10 @@ export async function generateNoticeOnlyPack(
             service_date: walesTemplateData.service_date || walesTemplateData.notice_date,
             notice_service_date: walesTemplateData.notice_date || walesTemplateData.service_date,
             // DO NOT pass expiry_date here - generator will auto-calculate 6 months
-            // Only pass user-explicit expiry dates from wizard (if any)
-            expiry_date: wizardFacts.expiry_date || wizardFacts.notice_expiry_date || undefined,
+            // The notice_expiry_date from mapNoticeOnlyFacts is a 14-day fallback for
+            // England notices and is NOT valid for Wales Section 173.
+            // Only pass user-explicit expiry dates if specifically set by the wizard.
+            // expiry_date: undefined - let generator handle it
             wales_contract_category: wizardFacts.wales_contract_category || 'standard',
             rent_smart_wales_registered: wizardFacts.rent_smart_wales_registered,
             deposit_taken: wizardFacts.deposit_taken || walesTemplateData.deposit_taken,
