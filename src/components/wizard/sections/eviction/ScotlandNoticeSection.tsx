@@ -11,6 +11,7 @@
  * - Service methods (planned, for the notice we will generate)
  * - ARREARS SCHEDULE: Conditional arrears collection for Ground 18 (rent arrears)
  * - CONSECUTIVE ARREARS STREAK: Ground 18 requires 3+ consecutive months
+ * - GROUND PARTICULARS: Textarea with Ask Heaven enhancement
  *
  * CRITICAL: Enforces the 6-month rule which is unique to Scotland.
  */
@@ -28,7 +29,9 @@ import {
   calculateConsecutiveArrearsStreak,
   mapScotlandServiceMethodToKey,
 } from '@/lib/scotland/notice-utils';
+import { buildScotlandParticularsStatement } from '@/lib/scotland/noticeNarrativeBuilder';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 // Scotland Ground 18 is the rent arrears ground (3 consecutive months)
 const SCOTLAND_RENT_ARREARS_GROUND = 18;
@@ -38,17 +41,22 @@ interface ScotlandNoticeSectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   /** Optional callback to set the current question ID for Ask Heaven context */
   onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
+  /** Case ID for Ask Heaven API calls */
+  caseId?: string;
 }
 
 export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
   facts,
   onUpdate,
   onSetCurrentQuestionId,
+  caseId,
 }) => {
   const config = getScotlandConfig();
 
   // Check if Ground 18 (rent arrears) is selected
   const isRentArrearsGround = facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND;
+  const selectedGround = facts.scotland_eviction_ground as number | undefined;
+  const groundParticulars = (facts.scotland_ground_particulars as string) || '';
 
   // Set current question ID for Ask Heaven context when section renders
   // Default to notice_service_method, but switch to arrears_items when user interacts with arrears
@@ -72,8 +80,19 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
   const handleServiceMethodFocus = useCallback(() => {
     onSetCurrentQuestionId?.('notice_service_method');
   }, [onSetCurrentQuestionId]);
+
+  // Handler for when user focuses on ground particulars
+  const handleParticularsFocus = useCallback(() => {
+    onSetCurrentQuestionId?.('scotland_ground_particulars');
+  }, [onSetCurrentQuestionId]);
+
+  // "Use gathered details as starting point" handler for particulars
+  const handleUseGatheredDetails = useCallback(() => {
+    const { suggestedText } = buildScotlandParticularsStatement(facts as any);
+    onUpdate({ scotland_ground_particulars: suggestedText });
+  }, [facts, onUpdate]);
+
   const tenancyStartDate = facts.tenancy_start_date as string | undefined;
-  const selectedGround = facts.scotland_eviction_ground as number | undefined;
   const groundData = selectedGround ? getScotlandGroundByNumber(selectedGround) : undefined;
 
   const noticeServiceMethod = facts.notice_service_method as string | undefined;
@@ -129,6 +148,67 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
             For <strong>{groundData.code} ({groundData.name})</strong>, you must give{' '}
             <strong>{groundData.noticePeriodDays} days</strong> notice.
           </p>
+        </div>
+      )}
+
+      {/* Ground Particulars / Statement - with Ask Heaven enhancement */}
+      {groundData && (
+        <div
+          className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg"
+          onFocusCapture={handleParticularsFocus}
+        >
+          <label htmlFor="ground_particulars" className="block text-sm font-medium text-gray-800">
+            Statement of Particulars
+            <span className="text-gray-500 font-normal ml-2">(Optional)</span>
+          </label>
+          <p className="text-xs text-gray-600">
+            Provide details supporting your eviction ground. This will be included in your Notice to Leave.
+          </p>
+
+          {/* "Use gathered details" button */}
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={handleUseGatheredDetails}
+              className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-md hover:bg-purple-100 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Use gathered details as starting point
+            </button>
+          </div>
+
+          <textarea
+            id="ground_particulars"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] bg-white"
+            rows={8}
+            value={groundParticulars}
+            onChange={(e) => onUpdate({ scotland_ground_particulars: e.target.value })}
+            placeholder={`Describe the specific circumstances supporting ${groundData.code}. Include relevant dates, amounts, and any correspondence.`}
+          />
+
+          {/* Ask Heaven inline enhancer */}
+          <div className="mt-2">
+            <AskHeavenInlineEnhancer
+              caseId={caseId}
+              questionId="scotland_ground_particulars"
+              answer={groundParticulars}
+              onApply={(newText) => onUpdate({ scotland_ground_particulars: newText })}
+              questionText="Provide details supporting your eviction ground for the Notice to Leave"
+              context={{
+                jurisdiction: 'scotland',
+                ground_number: selectedGround,
+                ground_name: groundData?.name,
+                field_type: 'ground_particulars',
+              }}
+              apiMode="generic"
+              minChars={20}
+              buttonLabel="Enhance with Ask Heaven"
+              helperText="AI will improve clarity and tribunal-readiness"
+              compact
+            />
+          </div>
         </div>
       )}
 
