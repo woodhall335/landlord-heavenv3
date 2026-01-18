@@ -533,7 +533,8 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
     description: 'Notice to Leave details',
     jurisdiction: 'scotland',
     isComplete: (facts) => {
-      if (facts.notice_already_served === undefined) return false;
+      // Scotland notice_only is GENERATE ONLY - no notice_already_served question
+      // Only require notice_service_method for generation
       if (!Boolean(facts.notice_service_method)) return false;
 
       // For Ground 18 (rent arrears), require arrears schedule
@@ -634,11 +635,21 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         if (loadedFacts && Object.keys(loadedFacts).length > 0) {
           // FIX FOR ISSUE C: Apply legacy migration for Wales notice_only cases
           // This handles old cases with different fact keys and normalizes data structures
-          const migratedFacts = migrateWalesLegacyFacts(
+          let migratedFacts = migrateWalesLegacyFacts(
             loadedFacts,
             jurisdiction,
             'notice_only'
           );
+
+          // Scotland notice_only backward compatibility migration:
+          // Scotland notice_only is now GENERATE ONLY - we no longer ask "Have you already served?"
+          // Old cases may have notice_already_served=true saved. We need to unset it so the
+          // generate-only flow works correctly. The value is no longer used for Scotland notice_only.
+          if (jurisdiction === 'scotland') {
+            const { notice_already_served, notice_served_date, ...restFacts } = migratedFacts as Record<string, any>;
+            // Remove already-served related fields - they no longer apply to Scotland notice_only
+            migratedFacts = restFacts as typeof migratedFacts;
+          }
 
           setFacts((prev) => ({
             ...prev,
