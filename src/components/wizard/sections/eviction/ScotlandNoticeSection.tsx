@@ -221,7 +221,7 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
               Ground 18 - Rent Arrears Schedule Required
             </h4>
             <p className="text-amber-700 text-sm mt-2">
-              Ground 18 requires evidence of rent arrears for 3 or more consecutive months.
+              Ground 18 requires evidence of rent arrears for 3 or more consecutive rent periods.
               Complete the schedule below to document each rent period.
             </p>
           </div>
@@ -265,15 +265,15 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
                 }`}>
                   {thresholdMet ? (
                     <>
-                      {maxConsecutiveStreak} consecutive month{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
+                      {maxConsecutiveStreak} consecutive rent period{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
                       ({periodsWithArrears} total period{periodsWithArrears !== 1 ? 's' : ''} with arrears).
                       The Tribunal will consider whether eviction is reasonable.
                     </>
                   ) : (
                     <>
-                      {maxConsecutiveStreak} consecutive month{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
+                      {maxConsecutiveStreak} consecutive rent period{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
                       ({periodsWithArrears} total period{periodsWithArrears !== 1 ? 's' : ''} with arrears).
-                      Ground 18 requires 3 or more consecutive months of arrears.
+                      Ground 18 requires 3 or more consecutive rent periods of arrears.
                     </>
                   )}
                 </p>

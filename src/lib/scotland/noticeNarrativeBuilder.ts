@@ -62,18 +62,23 @@ interface NarrativeResult {
 
 /**
  * Format a date for display in tribunal documents.
+ * Returns "[date]" placeholder for invalid or missing dates to avoid "Invalid Date" in documents.
  */
 function formatDate(dateStr: string | undefined): string {
   if (!dateStr) return '[date]';
   try {
     const date = new Date(dateStr);
+    // Check for Invalid Date - new Date() doesn't throw for invalid strings
+    if (Number.isNaN(date.getTime())) {
+      return '[date]';
+    }
     return date.toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
   } catch {
-    return dateStr;
+    return '[date]';
   }
 }
 
@@ -193,13 +198,13 @@ export function buildScotlandNoticeNarrative(
 
       if (streakResult.maxConsecutiveStreak >= 3) {
         sections.push(
-          `This meets the Ground 18 threshold of 3 or more consecutive months of rent arrears.`
+          `This meets the Ground 18 threshold of 3 or more consecutive rent periods of arrears.`
         );
       } else {
         sections.push(
-          `[Note: Ground 18 requires 3 or more consecutive months of arrears. Currently showing ${streakResult.maxConsecutiveStreak} consecutive month(s).]`
+          `[Note: Ground 18 requires 3 or more consecutive rent periods of arrears. Currently showing ${streakResult.maxConsecutiveStreak} consecutive rent period(s).]`
         );
-        missingInputs.push('Ground 18 threshold not yet met - need 3+ consecutive months');
+        missingInputs.push('Ground 18 threshold not yet met - need 3+ consecutive rent periods');
       }
 
       // Add arrears schedule summary

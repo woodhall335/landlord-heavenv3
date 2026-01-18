@@ -60,8 +60,8 @@ describe('buildScotlandNoticeNarrative', () => {
       const result = buildScotlandNoticeNarrative(facts, 'particulars');
 
       expect(result.suggestedText).toContain('2 consecutive rent period');
-      expect(result.suggestedText).toContain('[Note: Ground 18 requires 3 or more consecutive months');
-      expect(result.missingInputs).toContain('Ground 18 threshold not yet met - need 3+ consecutive months');
+      expect(result.suggestedText).toContain('[Note: Ground 18 requires 3 or more consecutive rent periods');
+      expect(result.missingInputs).toContain('Ground 18 threshold not yet met - need 3+ consecutive rent periods');
     });
 
     it('should warn when arrears schedule is missing', () => {
@@ -279,5 +279,124 @@ describe('Arrears schedule in particulars', () => {
     // Should show first 6 and indicate there are more
     expect(result.suggestedText).toContain('additional period(s)');
     expect(result.suggestedText).toContain('see full schedule');
+  });
+});
+
+describe('Invalid date handling (formatDate hardening)', () => {
+  it('should use [date] placeholder when tenancy_start_date is invalid', () => {
+    const facts = {
+      scotland_eviction_ground: 1,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: 'invalid-date-string',
+      rent_amount: 1000,
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    // Should NOT contain "Invalid Date" literal string
+    expect(result.suggestedText).not.toContain('Invalid Date');
+    // Should use placeholder instead
+    expect(result.suggestedText).toContain('[date]');
+  });
+
+  it('should use [date] placeholder when tenancy_start_date is empty', () => {
+    const facts = {
+      scotland_eviction_ground: 1,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: '',
+      rent_amount: 1000,
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    expect(result.suggestedText).not.toContain('Invalid Date');
+    expect(result.suggestedText).toContain('[date]');
+  });
+
+  it('should use [date] placeholder when arrears period_start is invalid', () => {
+    const facts = {
+      scotland_eviction_ground: 18,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1000,
+      arrears_items: [
+        { period_start: 'garbage', amount_owed: 1000 },
+        { period_start: 'also-garbage', amount_owed: 1000 },
+        { period_start: 'not-a-date', amount_owed: 1000 },
+      ],
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    // Should NOT produce "Invalid Date" in the arrears schedule
+    expect(result.suggestedText).not.toContain('Invalid Date');
+  });
+
+  it('should format valid ISO date as UK long format', () => {
+    const facts = {
+      scotland_eviction_ground: 1,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: '2024-12-25',
+      rent_amount: 1000,
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    // Should format as "25 December 2024" (UK long format)
+    expect(result.suggestedText).toContain('25');
+    expect(result.suggestedText).toContain('December');
+    expect(result.suggestedText).toContain('2024');
+  });
+});
+
+describe('Ground 18 uses "rent period(s)" not "month(s)"', () => {
+  it('should use "rent period(s)" terminology in threshold met message', () => {
+    const facts = {
+      scotland_eviction_ground: 18,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1000,
+      arrears_items: [
+        { period_start: '2024-01-01', amount_owed: 1000 },
+        { period_start: '2024-02-01', amount_owed: 1000 },
+        { period_start: '2024-03-01', amount_owed: 1000 },
+      ],
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    // Should say "consecutive rent periods" not "consecutive months"
+    expect(result.suggestedText).toContain('consecutive rent period');
+    expect(result.suggestedText).not.toMatch(/consecutive month[s]? of (rent )?arrears/i);
+  });
+
+  it('should use "rent period(s)" terminology in threshold not met warning', () => {
+    const facts = {
+      scotland_eviction_ground: 18,
+      landlord_full_name: 'John Landlord',
+      tenant_full_name: 'Jane Tenant',
+      property_address_line1: '123 Main Street',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1000,
+      arrears_items: [
+        { period_start: '2024-01-01', amount_owed: 1000 },
+      ],
+    };
+
+    const result = buildScotlandNoticeNarrative(facts, 'particulars');
+
+    // Note should say "rent periods" not "months"
+    expect(result.suggestedText).toContain('consecutive rent period');
+    expect(result.missingInputs.some(msg => msg.includes('rent period'))).toBe(true);
   });
 });

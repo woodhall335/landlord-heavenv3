@@ -430,8 +430,8 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   ✓ Ground 18 Threshold Met
                 </p>
                 <p className="text-sm text-green-700 mt-1">
-                  Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Ground 18 threshold
-                  (minimum 3 consecutive months required). The Tribunal will consider whether eviction is reasonable.
+                  Arrears of {computed.arrears_in_months.toFixed(2)} rent periods meet the Ground 18 threshold
+                  (minimum 3 consecutive rent periods required). The Tribunal will consider whether eviction is reasonable.
                 </p>
               </div>
             ) : computed.arrears_in_months > 0 ? (
@@ -440,8 +440,8 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   ⚠ Ground 18 Threshold Not Met
                 </p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Ground 18 threshold
-                  (minimum 3 consecutive months required). You may still proceed but evidence strength is reduced.
+                  Arrears of {computed.arrears_in_months.toFixed(2)} rent periods do not meet the Ground 18 threshold
+                  (minimum 3 consecutive rent periods required). You may still proceed but evidence strength is reduced.
                 </p>
               </div>
             ) : null
