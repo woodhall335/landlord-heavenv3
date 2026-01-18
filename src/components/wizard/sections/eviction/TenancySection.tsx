@@ -60,6 +60,13 @@ const ENGLAND_TENANCY_TYPES = [
  *
  * NOTE: Scotland does NOT use AST. The PRT replaced the old SAT/AT system in 2017.
  * We use distinct internal codes to avoid confusion with England types.
+ *
+ * TODO(LEGAL): Scotland legacy tenancy types (SAT, AT, Regulated) may require
+ * different eviction procedures than PRT. Currently we show them as options but
+ * the notice_only flow is optimized for PRT. Product/legal review needed to:
+ * 1. Determine if we should support legacy tenancy evictions or redirect users
+ * 2. If supporting, verify correct grounds/forms/procedures for each type
+ * 3. Consider adding "not supported" messaging for legacy types if appropriate
  */
 const SCOTLAND_TENANCY_TYPES = [
   { value: 'prt', label: 'Private Residential Tenancy (PRT) (2017–present)' },
@@ -71,6 +78,11 @@ const SCOTLAND_TENANCY_TYPES = [
 /**
  * Get tenancy types for the given jurisdiction.
  * Wales uses a separate OccupationContractSection, but we include a fallback.
+ *
+ * TODO(LEGAL): Wales fallback types below should NOT be reached in normal flow.
+ * If this code path is triggered, it indicates a routing bug - Wales eviction
+ * should use OccupationContractSection, not TenancySection. Monitor for usage
+ * and consider adding error logging if this fallback is ever invoked.
  */
 function getTenancyTypesForJurisdiction(jurisdiction: 'england' | 'wales' | 'scotland') {
   switch (jurisdiction) {
@@ -79,6 +91,7 @@ function getTenancyTypesForJurisdiction(jurisdiction: 'england' | 'wales' | 'sco
     case 'wales':
       // Wales should use OccupationContractSection, but provide fallback
       // TODO(LEGAL): Wales fallback - should not be reached in normal flow
+      console.warn('[TenancySection] Wales fallback triggered - should use OccupationContractSection');
       return [
         { value: 'standard_periodic', label: 'Standard Contract (Periodic)' },
         { value: 'standard_fixed', label: 'Standard Contract (Fixed term)' },
