@@ -8,35 +8,42 @@
  *
  * Fields:
  * - scotland_eviction_ground: The selected ground number
+ * - scotland_evidence_description: Evidence description text with Ask Heaven enhancement
  */
 
 'use client';
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useCallback, useState } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   getScotlandGrounds,
   getGroundsByNoticePeriod,
   type ScotlandGround,
 } from '@/lib/scotland/grounds';
+import { buildScotlandEvidenceSummary } from '@/lib/scotland/noticeNarrativeBuilder';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 interface ScotlandGroundsSectionProps {
   facts: WizardFacts;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   /** Optional callback to set the current question ID for Ask Heaven context */
   onSetCurrentQuestionId?: (fieldId: string | undefined) => void;
+  /** Case ID for Ask Heaven API calls */
+  caseId?: string;
 }
 
 export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
   facts,
   onUpdate,
   onSetCurrentQuestionId,
+  caseId,
 }) => {
   // Load grounds dynamically from config
   const grounds = useMemo(() => getScotlandGrounds(), []);
   const { shortNotice, standardNotice } = useMemo(() => getGroundsByNoticePeriod(), []);
 
   const selectedGround = facts.scotland_eviction_ground as number | undefined;
+  const evidenceDescription = (facts.scotland_evidence_description as string) || '';
 
   // Set current question ID for Ask Heaven context when section renders
   useEffect(() => {
@@ -49,6 +56,22 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
       }
     };
   }, [onSetCurrentQuestionId]);
+
+  // Handler for evidence textarea focus - switches Ask Heaven context
+  const handleEvidenceFocus = useCallback(() => {
+    onSetCurrentQuestionId?.('scotland_evidence_description');
+  }, [onSetCurrentQuestionId]);
+
+  // Handler for ground selection focus - switches Ask Heaven context back
+  const handleGroundsFocus = useCallback(() => {
+    onSetCurrentQuestionId?.('scotland_eviction_ground');
+  }, [onSetCurrentQuestionId]);
+
+  // "Use gathered details as starting point" handler
+  const handleUseGatheredDetails = useCallback(() => {
+    const { suggestedText } = buildScotlandEvidenceSummary(facts as any);
+    onUpdate({ scotland_evidence_description: suggestedText });
+  }, [facts, onUpdate]);
 
   const handleGroundSelect = (groundNumber: number) => {
     const ground = grounds.find(g => g.number === groundNumber);
@@ -116,7 +139,7 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
       </div>
 
       {/* Ground selection */}
-      <div className="space-y-3">
+      <div className="space-y-3" onFocusCapture={handleGroundsFocus}>
         <label className="block text-sm font-medium text-gray-700">
           Select Ground for Notice to Leave
           <span className="text-red-500 ml-1">*</span>
@@ -192,22 +215,63 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
                   </div>
                 )}
 
-                {/* Evidence description input */}
-                <div className="mt-4 pt-4 border-t border-blue-200">
+                {/* Evidence description input with Ask Heaven enhancement */}
+                <div
+                  className="mt-4 pt-4 border-t border-blue-200"
+                  onFocusCapture={handleEvidenceFocus}
+                >
                   <label htmlFor="evidence_description" className="block text-sm font-medium text-blue-800 mb-2">
                     Describe the evidence you have for this ground
                   </label>
+
+                  {/* "Use gathered details" button */}
+                  <div className="mb-2">
+                    <button
+                      type="button"
+                      onClick={handleUseGatheredDetails}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-md hover:bg-purple-100 transition-colors"
+                    >
+                      <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Use gathered details as starting point
+                    </button>
+                  </div>
+
                   <textarea
                     id="evidence_description"
                     className="w-full rounded-md border border-blue-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] bg-white"
-                    rows={4}
-                    value={facts.scotland_evidence_description || ''}
+                    rows={6}
+                    value={evidenceDescription}
                     onChange={(e) => onUpdate({ scotland_evidence_description: e.target.value })}
                     placeholder="Briefly describe the evidence you have to support this ground. For example: 'I have 3 months of rent statements showing continuous arrears, emails requesting payment, and records of the tenant's partial payment attempts.'"
                   />
+
                   <p className="text-xs text-blue-500 mt-1">
                     This helps prepare your case for the First-tier Tribunal.
                   </p>
+
+                  {/* Ask Heaven inline enhancer */}
+                  <div className="mt-3">
+                    <AskHeavenInlineEnhancer
+                      caseId={caseId}
+                      questionId="scotland_evidence_description"
+                      answer={evidenceDescription}
+                      onApply={(newText) => onUpdate({ scotland_evidence_description: newText })}
+                      questionText="Describe the evidence you have to support this eviction ground"
+                      context={{
+                        jurisdiction: 'scotland',
+                        ground_number: selectedGround,
+                        ground_name: ground?.name,
+                        field_type: 'evidence_description',
+                      }}
+                      apiMode="generic"
+                      minChars={20}
+                      buttonLabel="Enhance with Ask Heaven"
+                      helperText="AI will improve clarity and tribunal-readiness"
+                      compact
+                    />
+                  </div>
                 </div>
               </div>
             );
