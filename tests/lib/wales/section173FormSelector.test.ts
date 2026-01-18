@@ -4,13 +4,15 @@
  * Tests for court-grade guardrails for Wales no-fault (Section 173) notices.
  *
  * Coverage:
- * 1. determineSection173Form returns correct form based on service date
- * 2. getSection173MinimumNoticeDays returns correct notice period
+ * 1. determineSection173Form returns correct form based on notice regime
+ * 2. getSection173MinimumNoticePeriod returns correct notice period (calendar months)
  * 3. validateSection173Timing catches prohibited period violations
  * 4. validateSection173Timing catches insufficient notice period
- * 5. calculateSection173ExpiryDate auto-corrects invalid dates
- * 6. addCalendarMonths helper uses proper calendar month semantics
- * 7. Route detection helpers work correctly
+ * 5. validateSection173Timing catches fixed term violations (HARD ERROR when no break clause)
+ * 6. calculateSection173ExpiryDate auto-corrects invalid dates
+ * 7. addCalendarMonths helper uses proper calendar month semantics
+ * 8. Route detection helpers work correctly
+ * 9. Explicit notice regime override takes precedence over inferred
  *
  * WALES ONLY - No Housing Act 1988, Section 8, Section 21, Form 6A references.
  */
@@ -18,6 +20,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   determineSection173Form,
+  determineSection173FormWithMetadata,
+  getSection173MinimumNoticePeriod,
   getSection173MinimumNoticeDays,
   validateSection173Timing,
   calculateSection173ExpiryDate,
@@ -28,6 +32,7 @@ import {
   isWalesFaultBasedRoute,
   getSection173RequirementsSummary,
   type Section173Facts,
+  type Section173NoticeRegime,
 } from '@/lib/wales/section173FormSelector';
 
 describe('Wales Section 173 Form Selector', () => {
@@ -71,9 +76,124 @@ describe('Wales Section 173 Form Selector', () => {
       };
       expect(determineSection173Form(facts)).toBe('RHW16');
     });
+
+    describe('explicit notice regime override', () => {
+      it('should use explicit 2_month regime even for post-December 2022 dates', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          wales_section173_notice_regime: '2_month',
+        };
+        expect(determineSection173Form(facts)).toBe('RHW17');
+      });
+
+      it('should use explicit 6_month regime even for pre-December 2022 dates', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2020-01-01',
+          service_date: '2022-11-15',
+          wales_section173_notice_regime: '6_month',
+        };
+        expect(determineSection173Form(facts)).toBe('RHW16');
+      });
+    });
   });
 
-  describe('getSection173MinimumNoticeDays', () => {
+  describe('determineSection173FormWithMetadata', () => {
+    it('should return regimeSource as explicit when regime is set', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+        wales_section173_notice_regime: '6_month',
+      };
+      const result = determineSection173FormWithMetadata(facts);
+      expect(result.regimeSource).toBe('explicit');
+      expect(result.regime).toBe('6_month');
+      expect(result.form).toBe('RHW16');
+    });
+
+    it('should return regimeSource as inferred when regime is not set', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+      };
+      const result = determineSection173FormWithMetadata(facts);
+      expect(result.regimeSource).toBe('inferred');
+      expect(result.regime).toBe('6_month');
+    });
+
+    it('should include warning for dates near transition boundary when inferred', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2022-01-01',
+        service_date: '2023-03-15', // Within 6 months of Dec 2022 transition
+      };
+      const result = determineSection173FormWithMetadata(facts);
+      expect(result.regimeSource).toBe('inferred');
+      expect(result.warnings.length).toBeGreaterThan(0);
+      expect(result.warnings[0]).toContain('REGIME_INFERRED');
+    });
+
+    it('should not include warning when regime is explicit', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2022-01-01',
+        service_date: '2023-03-15',
+        wales_section173_notice_regime: '6_month',
+      };
+      const result = determineSection173FormWithMetadata(facts);
+      expect(result.regimeSource).toBe('explicit');
+      expect(result.warnings).toHaveLength(0);
+    });
+  });
+
+  describe('getSection173MinimumNoticePeriod', () => {
+    it('should return 6 months for post-December 2022 service dates', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+      };
+      const result = getSection173MinimumNoticePeriod(facts);
+      expect(result.months).toBe(6);
+      expect(result.noticeRegime).toBe('6_month');
+      expect(result.form).toBe('RHW16');
+      expect(result.description).toContain('Six calendar months');
+      expect(result.legalReference).toContain('Renting Homes (Wales) Act 2016');
+    });
+
+    it('should return 2 months for explicit 2_month regime', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+        wales_section173_notice_regime: '2_month',
+      };
+      const result = getSection173MinimumNoticePeriod(facts);
+      expect(result.months).toBe(2);
+      expect(result.noticeRegime).toBe('2_month');
+      expect(result.form).toBe('RHW17');
+    });
+
+    it('should include approximateDays for display purposes', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+      };
+      const result = getSection173MinimumNoticePeriod(facts);
+      // 6 months * 30.44 ≈ 183 days
+      expect(result.approximateDays).toBeGreaterThanOrEqual(182);
+      expect(result.approximateDays).toBeLessThanOrEqual(184);
+    });
+
+    it('should NOT contain England-specific terminology', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2023-01-01',
+        service_date: '2024-01-15',
+      };
+      const result = getSection173MinimumNoticePeriod(facts);
+      expect(result.legalReference).not.toContain('Housing Act 1988');
+      expect(result.legalReference).not.toContain('Section 21');
+      expect(result.legalReference).not.toContain('Form 6A');
+    });
+  });
+
+  describe('getSection173MinimumNoticeDays (deprecated)', () => {
     it('should return 6 months for post-December 2022 service dates', () => {
       const facts: Section173Facts = {
         contract_start_date: '2023-01-01',
@@ -234,7 +354,7 @@ describe('Wales Section 173 Form Selector', () => {
     });
 
     describe('fixed term validation', () => {
-      it('should return warning when expiry is before fixed term end without break clause', () => {
+      it('should return HARD ERROR when expiry is before fixed term end and has_break_clause is false', () => {
         const facts: Section173Facts = {
           contract_start_date: '2023-01-01',
           service_date: '2024-01-15',
@@ -243,7 +363,9 @@ describe('Wales Section 173 Form Selector', () => {
           has_break_clause: false,
         };
         const result = validateSection173Timing(facts);
-        expect(result.warnings.some(w => w.includes('fixed term'))).toBe(true);
+        expect(result.isValid).toBe(false);
+        expect(result.errors.some(e => e.includes('FIXED_TERM_VIOLATION'))).toBe(true);
+        expect(result.errors.some(e => e.includes('No break clause exists'))).toBe(true);
       });
 
       it('should return warning when expiry is before break clause date', () => {
@@ -256,7 +378,78 @@ describe('Wales Section 173 Form Selector', () => {
           break_clause_date: '2024-09-01',
         };
         const result = validateSection173Timing(facts);
+        // This is a WARNING, not an error - break clause allows early termination
         expect(result.warnings.some(w => w.includes('break clause'))).toBe(true);
+        expect(result.errors.filter(e => e.includes('FIXED_TERM'))).toHaveLength(0);
+      });
+
+      it('should return warning (not error) when break clause status is unknown', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          expiry_date: '2024-07-15',
+          fixed_term_end_date: '2024-12-31',
+          // has_break_clause not set - unknown status
+        };
+        const result = validateSection173Timing(facts);
+        // Should be warning, not error, as we don't know break clause status
+        expect(result.warnings.some(w => w.includes('fixed term end'))).toBe(true);
+        expect(result.warnings.some(w => w.includes('confirm whether a break clause exists'))).toBe(true);
+        expect(result.errors.filter(e => e.includes('FIXED_TERM'))).toHaveLength(0);
+      });
+
+      it('should be valid when expiry is on or after fixed term end', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          expiry_date: '2025-01-15',
+          fixed_term_end_date: '2024-12-31',
+          has_break_clause: false,
+        };
+        const result = validateSection173Timing(facts);
+        expect(result.errors.filter(e => e.includes('FIXED_TERM'))).toHaveLength(0);
+      });
+
+      it('should be valid when break clause date allows early termination', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          expiry_date: '2024-08-15', // After break clause date
+          fixed_term_end_date: '2024-12-31',
+          has_break_clause: true,
+          break_clause_date: '2024-08-01',
+        };
+        const result = validateSection173Timing(facts);
+        expect(result.errors).toHaveLength(0);
+        expect(result.warnings.filter(w => w.includes('break clause'))).toHaveLength(0);
+      });
+    });
+
+    describe('validation result includes regime info', () => {
+      it('should include noticeRegime in validation result', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          expiry_date: '2024-07-15',
+        };
+        const result = validateSection173Timing(facts);
+        expect(result.noticeRegime).toBe('6_month');
+        expect(result.regimeSource).toBe('inferred');
+      });
+
+      it('should use explicit regime when provided', () => {
+        const facts: Section173Facts = {
+          contract_start_date: '2023-01-01',
+          service_date: '2024-01-15',
+          expiry_date: '2024-03-15',
+          wales_section173_notice_regime: '2_month',
+        };
+        const result = validateSection173Timing(facts);
+        expect(result.noticeRegime).toBe('2_month');
+        expect(result.regimeSource).toBe('explicit');
+        expect(result.minimumNoticeMonths).toBe(2);
+        // With 2-month regime, 2024-03-15 is valid (2 months from Jan 15)
+        expect(result.errors.filter(e => e.includes('INSUFFICIENT_NOTICE'))).toHaveLength(0);
       });
     });
 

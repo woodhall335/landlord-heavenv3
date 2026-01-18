@@ -50,6 +50,9 @@ export {
 
 export {
   determineSection173Form,
+  determineSection173FormWithMetadata,
+  getSection173MinimumNoticePeriod,
+  /** @deprecated Use getSection173MinimumNoticePeriod instead */
   getSection173MinimumNoticeDays,
   validateSection173Timing,
   calculateSection173ExpiryDate,
@@ -60,7 +63,8 @@ export {
   isWalesFaultBasedRoute,
   getSection173RequirementsSummary,
   type Section173Form,
+  type Section173NoticeRegime,
   type Section173Facts,
   type Section173ValidationResult,
-  type MinimumNoticeDaysResult,
+  type Section173NoticePeriodResult,
 } from './section173FormSelector';

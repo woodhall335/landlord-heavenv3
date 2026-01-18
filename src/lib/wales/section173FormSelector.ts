@@ -21,6 +21,13 @@
 
 export type Section173Form = 'RHW16' | 'RHW17';
 
+/**
+ * Notice regime determines the minimum notice period.
+ * - '6_month': Current regime (post-December 2022) - requires RHW16
+ * - '2_month': Legacy regime (pre-December 2022 or specific exemptions) - requires RHW17
+ */
+export type Section173NoticeRegime = '6_month' | '2_month';
+
 export interface Section173Facts {
   /** ISO date string (YYYY-MM-DD) - when the contract started */
   contract_start_date: string;
@@ -38,6 +45,12 @@ export interface Section173Facts {
   has_break_clause?: boolean;
   /** Break clause date if applicable */
   break_clause_date?: string;
+  /**
+   * EXPLICIT notice regime override.
+   * If not provided, the regime is inferred from service date.
+   * Use this when the regime cannot be safely derived (e.g., transitional cases).
+   */
+  wales_section173_notice_regime?: Section173NoticeRegime;
 }
 
 export interface Section173ValidationResult {
@@ -55,17 +68,32 @@ export interface Section173ValidationResult {
   recommendedForm: Section173Form;
   /** Minimum notice period in calendar months */
   minimumNoticeMonths: number;
+  /** The notice regime being applied */
+  noticeRegime: Section173NoticeRegime;
+  /** Whether the regime was explicitly set or inferred */
+  regimeSource: 'explicit' | 'inferred';
 }
 
-export interface MinimumNoticeDaysResult {
-  /** Number of calendar days (approximate) */
-  days: number;
-  /** Number of calendar months (authoritative) */
+/**
+ * Result type for getSection173MinimumNoticePeriod.
+ * The authoritative value is `months` - use `approximateDays` only for display.
+ */
+export interface Section173NoticePeriodResult {
+  /** Number of calendar months (AUTHORITATIVE - use this for legal calculations) */
   months: number;
+  /**
+   * Approximate number of days (FOR DISPLAY ONLY - do NOT use for legal calculations).
+   * @deprecated Use `months` for all legal date calculations.
+   */
+  approximateDays: number;
   /** Description for display */
   description: string;
   /** Legal reference */
   legalReference: string;
+  /** The notice regime being applied */
+  noticeRegime: Section173NoticeRegime;
+  /** Prescribed form for this regime */
+  form: Section173Form;
 }
 
 // ============================================================================
@@ -79,29 +107,48 @@ export interface MinimumNoticeDaysResult {
 const PROHIBITED_PERIOD_MONTHS = 6;
 
 /**
- * Notice period rules by effective date
- * As of December 2022, the minimum is 6 months for most cases
- * Prior to December 2022, it was 2 months
+ * Notice period rules by effective date.
+ * As of December 2022, the minimum is 6 months for most cases.
+ * Prior to December 2022, it was 2 months.
  */
 const NOTICE_PERIOD_RULES: Array<{
   effectiveFrom: string;
   periodMonths: number;
   form: Section173Form;
+  regime: Section173NoticeRegime;
   legalReference: string;
 }> = [
   {
     effectiveFrom: '2022-12-01',
     periodMonths: 6,
     form: 'RHW16',
+    regime: '6_month',
     legalReference: 'Renting Homes (Wales) Act 2016, s.173 (as amended December 2022)',
   },
   {
     effectiveFrom: '2016-12-01',
     periodMonths: 2,
     form: 'RHW17',
+    regime: '2_month',
     legalReference: 'Renting Homes (Wales) Act 2016, s.173 (original)',
   },
 ];
+
+/**
+ * Map from notice regime to form and period.
+ */
+const REGIME_TO_FORM: Record<Section173NoticeRegime, { form: Section173Form; months: number; legalReference: string }> = {
+  '6_month': {
+    form: 'RHW16',
+    months: 6,
+    legalReference: 'Renting Homes (Wales) Act 2016, s.173 (as amended December 2022)',
+  },
+  '2_month': {
+    form: 'RHW17',
+    months: 2,
+    legalReference: 'Renting Homes (Wales) Act 2016, s.173 (original)',
+  },
+};
 
 // ============================================================================
 // CALENDAR MONTH HELPERS
@@ -202,11 +249,12 @@ function parseUTCDate(isoDate: string): Date {
  * Selects the rule with the latest effective_from date that is <= service date.
  *
  * @param serviceDate ISO date string (YYYY-MM-DD)
- * @returns The applicable rule
+ * @returns The applicable rule with regime information
  */
-function getApplicableRule(serviceDate: string): {
+function getApplicableRuleByDate(serviceDate: string): {
   periodMonths: number;
   form: Section173Form;
+  regime: Section173NoticeRegime;
   legalReference: string;
 } {
   const serviceDateObj = parseUTCDate(serviceDate);
@@ -218,6 +266,7 @@ function getApplicableRule(serviceDate: string): {
       return {
         periodMonths: rule.periodMonths,
         form: rule.form,
+        regime: rule.regime,
         legalReference: rule.legalReference,
       };
     }
@@ -228,7 +277,48 @@ function getApplicableRule(serviceDate: string): {
   return {
     periodMonths: fallback.periodMonths,
     form: fallback.form,
+    regime: fallback.regime,
     legalReference: fallback.legalReference,
+  };
+}
+
+/**
+ * Resolve the applicable notice regime from facts.
+ *
+ * Priority:
+ * 1. Explicit wales_section173_notice_regime if provided
+ * 2. Inferred from service date
+ *
+ * Returns the regime along with source information for warnings.
+ */
+function resolveNoticeRegime(facts: Section173Facts): {
+  regime: Section173NoticeRegime;
+  source: 'explicit' | 'inferred';
+  form: Section173Form;
+  months: number;
+  legalReference: string;
+} {
+  // Priority 1: Explicit regime override
+  if (facts.wales_section173_notice_regime) {
+    const regimeConfig = REGIME_TO_FORM[facts.wales_section173_notice_regime];
+    return {
+      regime: facts.wales_section173_notice_regime,
+      source: 'explicit',
+      form: regimeConfig.form,
+      months: regimeConfig.months,
+      legalReference: regimeConfig.legalReference,
+    };
+  }
+
+  // Priority 2: Infer from service date
+  const serviceDate = facts.service_date || toISODateString(new Date());
+  const rule = getApplicableRuleByDate(serviceDate);
+  return {
+    regime: rule.regime,
+    source: 'inferred',
+    form: rule.form,
+    months: rule.periodMonths,
+    legalReference: rule.legalReference,
   };
 }
 
@@ -239,43 +329,115 @@ function getApplicableRule(serviceDate: string): {
 /**
  * Determine which Section 173 form to use.
  *
- * - RHW16: 6-month minimum notice (post-December 2022)
- * - RHW17: 2-month minimum notice (original 2016-2022, or periodic contracts
- *          that predate the change if applicable)
+ * LEGAL REQUIREMENT:
+ * - RHW16: 6-month minimum notice (post-December 2022 regime)
+ * - RHW17: 2-month minimum notice (pre-December 2022 regime, or explicit override)
+ *
+ * Form selection is based on the applicable notice regime, NOT solely by service date.
+ * If an explicit regime is provided via wales_section173_notice_regime, it takes precedence.
+ *
+ * CONSERVATIVE DEFAULT: If the regime cannot be safely derived and no explicit
+ * override is provided, defaults to RHW16 (6-month) to avoid insufficient notice.
  *
  * @param facts The Section 173 case facts
- * @returns 'RHW16' or 'RHW17'
+ * @returns Object containing the form and regime information
  */
 export function determineSection173Form(facts: Section173Facts): Section173Form {
-  const serviceDate = facts.service_date || toISODateString(new Date());
-  const rule = getApplicableRule(serviceDate);
-  return rule.form;
+  const resolved = resolveNoticeRegime(facts);
+  return resolved.form;
+}
+
+/**
+ * Extended form determination with full metadata.
+ *
+ * Use this when you need to know whether the regime was explicit or inferred,
+ * and to surface appropriate warnings.
+ */
+export function determineSection173FormWithMetadata(facts: Section173Facts): {
+  form: Section173Form;
+  regime: Section173NoticeRegime;
+  regimeSource: 'explicit' | 'inferred';
+  months: number;
+  legalReference: string;
+  warnings: string[];
+} {
+  const resolved = resolveNoticeRegime(facts);
+  const warnings: string[] = [];
+
+  // If regime was inferred, add a warning for cases that might be ambiguous
+  if (resolved.source === 'inferred') {
+    const serviceDate = facts.service_date || toISODateString(new Date());
+    const serviceDateObj = parseUTCDate(serviceDate);
+    const transitionDate = parseUTCDate('2022-12-01');
+
+    // Warn if service date is close to the transition boundary (within 6 months)
+    const sixMonthsAfterTransition = new Date(transitionDate);
+    sixMonthsAfterTransition.setUTCMonth(sixMonthsAfterTransition.getUTCMonth() + 6);
+
+    if (serviceDateObj >= transitionDate && serviceDateObj <= sixMonthsAfterTransition) {
+      warnings.push(
+        `WALES_SECTION173_REGIME_INFERRED: Notice regime inferred as ${resolved.regime} ` +
+        `based on service date ${serviceDate}. For contracts that started before December 2022, ` +
+        `verify the correct regime applies. Set wales_section173_notice_regime explicitly if needed.`
+      );
+    }
+  }
+
+  return {
+    form: resolved.form,
+    regime: resolved.regime,
+    regimeSource: resolved.source,
+    months: resolved.months,
+    legalReference: resolved.legalReference,
+    warnings,
+  };
 }
 
 /**
  * Get the minimum notice period for Section 173.
  *
- * Returns both calendar months (authoritative) and approximate days.
+ * IMPORTANT: The authoritative value is `months` - use `approximateDays` only for display.
+ * Legal compliance must be calculated using calendar months, not day approximations.
  *
  * @param facts The Section 173 case facts
  * @returns Minimum notice period information
  */
-export function getSection173MinimumNoticeDays(facts: Section173Facts): MinimumNoticeDaysResult {
-  const serviceDate = facts.service_date || toISODateString(new Date());
-  const rule = getApplicableRule(serviceDate);
+export function getSection173MinimumNoticePeriod(facts: Section173Facts): Section173NoticePeriodResult {
+  const resolved = resolveNoticeRegime(facts);
 
-  // Calculate approximate days (for display purposes)
+  // Calculate approximate days (for display purposes ONLY)
   // Use 30.44 average days per month
-  const approximateDays = Math.ceil(rule.periodMonths * 30.44);
+  const approximateDays = Math.ceil(resolved.months * 30.44);
 
   return {
-    days: approximateDays,
-    months: rule.periodMonths,
+    months: resolved.months,
+    approximateDays,
     description:
-      rule.periodMonths === 6
+      resolved.months === 6
         ? 'Six calendar months (minimum)'
         : 'Two calendar months (minimum)',
-    legalReference: rule.legalReference,
+    legalReference: resolved.legalReference,
+    noticeRegime: resolved.regime,
+    form: resolved.form,
+  };
+}
+
+/**
+ * @deprecated Use getSection173MinimumNoticePeriod instead.
+ * This function is retained for backwards compatibility but will be removed.
+ */
+export function getSection173MinimumNoticeDays(facts: Section173Facts): {
+  days: number;
+  months: number;
+  description: string;
+  legalReference: string;
+} {
+  const result = getSection173MinimumNoticePeriod(facts);
+  return {
+    days: result.approximateDays,
+    months: result.months,
+    description: result.description,
+    legalReference: result.legalReference,
   };
 }
 
@@ -285,7 +447,10 @@ export function getSection173MinimumNoticeDays(facts: Section173Facts): MinimumN
  * Checks:
  * 1. Service date must be >= occupation start date + 6 months (hard error)
  * 2. Expiry date must be >= service date + required minimum (hard error)
- * 3. Fixed term checks: cannot expire before fixed term end unless break clause
+ * 3. Fixed term checks:
+ *    - HARD ERROR: Cannot expire before fixed term end when no break clause
+ *    - WARNING: Break clause date constraints
+ * 4. Contract category validation
  *
  * @param facts The Section 173 case facts
  * @returns Validation result with errors, warnings, and computed dates
@@ -309,11 +474,17 @@ export function validateSection173Timing(facts: Section173Facts): Section173Vali
       isValid: false,
       recommendedForm: 'RHW16',
       minimumNoticeMonths: 6,
+      noticeRegime: '6_month',
+      regimeSource: 'inferred',
     };
   }
 
-  // Get applicable rule
-  const rule = getApplicableRule(serviceDate);
+  // Resolve notice regime (uses explicit if provided, otherwise infers from service date)
+  const resolved = resolveNoticeRegime(facts);
+
+  // Add warning if regime was inferred near transition boundary
+  const formMetadata = determineSection173FormWithMetadata(facts);
+  warnings.push(...formMetadata.warnings);
 
   // Calculate earliest valid service date (contract start + 6 months prohibited period)
   const earliestServiceDate = addCalendarMonths(contractStartDate, PROHIBITED_PERIOD_MONTHS);
@@ -334,14 +505,14 @@ export function validateSection173Timing(facts: Section173Facts): Section173Vali
   // Use the later of: service date or earliest service date
   const effectiveServiceDate =
     serviceDate >= earliestServiceDate ? serviceDate : earliestServiceDate;
-  const earliestExpiryDate = addCalendarMonths(effectiveServiceDate, rule.periodMonths);
+  const earliestExpiryDate = addCalendarMonths(effectiveServiceDate, resolved.months);
 
   // Check 2: Expiry date must be >= service date + minimum notice
   if (expiryDate && expiryDate < earliestExpiryDate) {
     const shortfallMonths = monthsDifference(expiryDate, earliestExpiryDate);
     errors.push(
       `WALES_SECTION173_INSUFFICIENT_NOTICE: Expiry date is too early. ` +
-        `Section 173 requires ${rule.periodMonths} calendar months notice. ` +
+        `Section 173 requires ${resolved.months} calendar months notice (${resolved.regime} regime). ` +
         `Service date: ${serviceDate}. ` +
         `Earliest valid expiry: ${earliestExpiryDate}. ` +
         `Your expiry date (${expiryDate}) is ${shortfallMonths.toFixed(1)} months short.`
@@ -349,24 +520,38 @@ export function validateSection173Timing(facts: Section173Facts): Section173Vali
   }
 
   // Check 3: Fixed term considerations
+  // IMPORTANT: Fixed term expiry before term end is a HARD ERROR when no break clause
   if (facts.fixed_term_end_date) {
     const fixedTermEndDate = facts.fixed_term_end_date;
 
-    // If there's a break clause, we can potentially end earlier
-    if (facts.has_break_clause && facts.break_clause_date) {
+    // Check if there's a break clause that allows early termination
+    if (facts.has_break_clause === true && facts.break_clause_date) {
+      // Break clause exists - check against break clause date
       const breakDate = facts.break_clause_date;
       if (expiryDate && expiryDate < breakDate) {
+        // Warning: expiry is before break clause date
         warnings.push(
-          `Section 173 notice cannot expire before the break clause date (${breakDate}). ` +
-            `Consider adjusting the expiry date.`
+          `Section 173 notice expiry date (${expiryDate}) is before the break clause date (${breakDate}). ` +
+            `Consider adjusting the expiry date to on or after the break clause date.`
+        );
+      }
+    } else if (facts.has_break_clause === false) {
+      // Explicitly no break clause - expiry before fixed term end is a HARD ERROR
+      if (expiryDate && expiryDate < fixedTermEndDate) {
+        errors.push(
+          `WALES_SECTION173_FIXED_TERM_VIOLATION: Section 173 notice cannot take effect ` +
+            `before the fixed term ends. Fixed term end date: ${fixedTermEndDate}. ` +
+            `Your expiry date: ${expiryDate}. No break clause exists. ` +
+            `The expiry date must be on or after ${fixedTermEndDate}.`
         );
       }
     } else {
-      // No break clause - cannot expire before fixed term end
+      // Break clause status unknown (not explicitly set) - warning for safety
       if (expiryDate && expiryDate < fixedTermEndDate) {
         warnings.push(
-          `Section 173 notice cannot take effect before the fixed term ends (${fixedTermEndDate}). ` +
-            `The notice can be served now but will only take effect at or after the fixed term end.`
+          `Section 173 notice expiry date (${expiryDate}) is before the fixed term end (${fixedTermEndDate}). ` +
+            `If there is no break clause, the notice cannot take effect until the fixed term ends. ` +
+            `Please confirm whether a break clause exists.`
         );
       }
     }
@@ -397,8 +582,10 @@ export function validateSection173Timing(facts: Section173Facts): Section173Vali
     earliestServiceDate,
     earliestExpiryDate,
     isValid,
-    recommendedForm: rule.form,
-    minimumNoticeMonths: rule.periodMonths,
+    recommendedForm: resolved.form,
+    minimumNoticeMonths: resolved.months,
+    noticeRegime: resolved.regime,
+    regimeSource: resolved.source,
   };
 }
 
@@ -487,10 +674,10 @@ export function isWalesFaultBasedRoute(
  */
 export function getSection173RequirementsSummary(facts: Section173Facts): string[] {
   const validation = validateSection173Timing(facts);
-  const rule = getApplicableRule(facts.service_date);
+  const resolved = resolveNoticeRegime(facts);
 
   const requirements: string[] = [
-    `Minimum notice period: ${rule.periodMonths} calendar months`,
+    `Minimum notice period: ${resolved.months} calendar months`,
     `Prescribed form: ${validation.recommendedForm}`,
     `Prohibited period: Cannot serve within first 6 months of contract`,
     `Legal basis: Renting Homes (Wales) Act 2016, Section 173`,
