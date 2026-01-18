@@ -569,18 +569,18 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
         if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
           warnings.push('Ground 18 requires a rent arrears schedule. Please complete the arrears schedule above.');
         } else {
-          // Check if consecutive threshold is met (3 consecutive months with arrears)
+          // Check if consecutive threshold is met (3 consecutive rent periods with arrears)
           const streakResult = calculateConsecutiveArrearsStreak(arrearsItems);
           const { maxConsecutiveStreak, periodsWithArrears } = streakResult;
           if (maxConsecutiveStreak < 3) {
             if (periodsWithArrears >= 3 && maxConsecutiveStreak < 3) {
               // User has enough periods but they're not consecutive
               warnings.push(
-                `Ground 18 requires 3+ consecutive months of arrears. Currently showing ${maxConsecutiveStreak} consecutive month(s) with arrears (${periodsWithArrears} total periods with arrears).`
+                `Ground 18 requires 3+ consecutive rent periods of arrears. Currently showing ${maxConsecutiveStreak} consecutive rent period(s) with arrears (${periodsWithArrears} total periods with arrears).`
               );
             } else {
               warnings.push(
-                `Ground 18 requires 3+ consecutive months of arrears. Currently showing ${maxConsecutiveStreak} consecutive month(s) with arrears.`
+                `Ground 18 requires 3+ consecutive rent periods of arrears. Currently showing ${maxConsecutiveStreak} consecutive rent period(s) with arrears.`
               );
             }
           }
