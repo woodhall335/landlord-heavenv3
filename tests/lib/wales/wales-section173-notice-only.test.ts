@@ -853,3 +853,303 @@ describe('Wales Section 173 Template Regression - No RHW17 in Guidance', () => {
     }
   });
 });
+
+// ============================================================================
+// SECTION J: Template Date Regression Tests - Checklist Dates Match Notice
+// ============================================================================
+// These tests verify that the checklist "Earliest Possession Date" matches
+// the notice expiry date (both should be service_date + 6 months).
+// ============================================================================
+
+describe('J) Wales Section 173 Template Date Regression Tests', () => {
+  /**
+   * Helper to add calendar months (handles month-end edge cases)
+   */
+  const addCalendarMonths = (dateStr: string, months: number): string => {
+    const date = new Date(dateStr + 'T00:00:00Z');
+    const originalDay = date.getUTCDate();
+    date.setUTCMonth(date.getUTCMonth() + months);
+    // Handle end-of-month edge cases (e.g., Jan 31 + 1 month = Feb 28)
+    if (date.getUTCDate() !== originalDay) {
+      date.setUTCDate(0); // Last day of previous month
+    }
+    return date.toISOString().split('T')[0];
+  };
+
+  /**
+   * Helper to format date as UK legal date (e.g., "1 October 2024")
+   */
+  const formatUkLegalDate = (dateStr: string): string => {
+    const date = new Date(dateStr + 'T00:00:00Z');
+    const day = date.getUTCDate();
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const month = monthNames[date.getUTCMonth()];
+    const year = date.getUTCFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
+  describe('checklist Earliest Possession Date equals notice expiry date', () => {
+    it('should have matching dates in notice and checklist for standard case', async () => {
+      const serviceDate = '2024-04-01';
+      const expectedExpiry = addCalendarMonths(serviceDate, 6); // 2024-10-01
+      const expectedFormattedDate = formatUkLegalDate(expectedExpiry); // "1 October 2024"
+
+      const wizardFacts = {
+        ...baseWalesSection173Facts,
+        service_date: serviceDate,
+        notice_date: serviceDate,
+        notice_service_date: serviceDate,
+      };
+
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      // Find the notice document
+      const noticeDoc = pack.documents.find((d) => d.category === 'notice');
+      expect(noticeDoc).toBeDefined();
+
+      // Find the checklist document
+      const checklistDoc = pack.documents.find(
+        (d) => d.document_type === 'validity_checklist'
+      );
+      expect(checklistDoc).toBeDefined();
+
+      // Notice should contain the expiry date (Part D)
+      // Allow for various date formats: "1 October 2024" or "01 October 2024" or "1st October 2024"
+      expect(noticeDoc?.html).toMatch(/1\s*(st)?\s*October\s*2024/i);
+
+      // Checklist should have the same expiry date in "Earliest Possession Date" field
+      // The checklist uses {{expiry_date}} which should be formatted the same way
+      expect(checklistDoc?.html).toMatch(/1\s*(st)?\s*October\s*2024/i);
+    });
+
+    it('should have matching dates for end-of-month edge case (Jan 31 + 6 months)', async () => {
+      // Jan 31 + 6 months = July 31
+      const serviceDate = '2024-01-31';
+      const expectedExpiry = addCalendarMonths(serviceDate, 6); // 2024-07-31
+
+      const wizardFacts = {
+        ...baseWalesSection173Facts,
+        service_date: serviceDate,
+        notice_date: serviceDate,
+        notice_service_date: serviceDate,
+      };
+
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      const noticeDoc = pack.documents.find((d) => d.category === 'notice');
+      const checklistDoc = pack.documents.find(
+        (d) => d.document_type === 'validity_checklist'
+      );
+
+      // Both should show July 31, 2024
+      expect(noticeDoc?.html).toMatch(/31\s*(st)?\s*July\s*2024/i);
+      expect(checklistDoc?.html).toMatch(/31\s*(st)?\s*July\s*2024/i);
+    });
+
+    it('checklist "possession date is on or after" line uses expiry date', async () => {
+      const serviceDate = '2024-06-15';
+      const expectedExpiry = addCalendarMonths(serviceDate, 6); // 2024-12-15
+
+      const wizardFacts = {
+        ...baseWalesSection173Facts,
+        service_date: serviceDate,
+        notice_date: serviceDate,
+        notice_service_date: serviceDate,
+      };
+
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      const checklistDoc = pack.documents.find(
+        (d) => d.document_type === 'validity_checklist'
+      );
+      expect(checklistDoc).toBeDefined();
+
+      // The checklist should contain a line about possession date
+      // Should match: "possession date is on or after: <date>" or similar
+      const html = checklistDoc?.html || '';
+
+      // Look for the expiry date in the checklist (December 15, 2024)
+      expect(html).toMatch(/15\s*(th)?\s*December\s*2024/i);
+    });
+  });
+});
+
+// ============================================================================
+// SECTION K: Template Content Regression Tests - Six Months & No England Refs
+// ============================================================================
+// These tests ensure Section 173 supporting documents (service instructions
+// and checklist) contain "six months" and do NOT contain "two months" or
+// England law references.
+// ============================================================================
+
+describe('K) Wales Section 173 Supporting Docs Content Regression', () => {
+  const templateDir = path.resolve(process.cwd());
+
+  const SECTION_173_SUPPORTING_TEMPLATES = [
+    'config/jurisdictions/uk/wales/templates/eviction/service_instructions_section_173.hbs',
+    'config/jurisdictions/uk/wales/templates/eviction/checklist_section_173.hbs',
+  ];
+
+  // England law references that must NOT appear in Wales Section 173 supporting docs
+  const ENGLAND_FORBIDDEN_TERMS_REGEX = [
+    /Housing Act 1988/i,
+    /\bSection\s+8\b/i, // Section 8 (England grounds)
+    /\bGround\s+8\b/i, // Ground 8 (rent arrears)
+    /\bSection\s+21\b/i, // Section 21 (England no-fault)
+    /Form\s*6A/i, // Form 6A (England Section 21 form)
+    /assured\s+shorthold\s+tenancy/i, // AST terminology
+  ];
+
+  describe('templates contain "six months" notice period', () => {
+    SECTION_173_SUPPORTING_TEMPLATES.forEach((templatePath) => {
+      it(`${templatePath} should contain "six months"`, () => {
+        const fullPath = path.join(templateDir, templatePath);
+
+        if (!fs.existsSync(fullPath)) {
+          throw new Error(`Template not found: ${fullPath}`);
+        }
+
+        const content = fs.readFileSync(fullPath, 'utf-8');
+
+        // Should contain "six months" reference
+        expect(content.toLowerCase()).toContain('six months');
+      });
+    });
+  });
+
+  describe('templates do NOT contain "two months" for Section 173 notice period', () => {
+    SECTION_173_SUPPORTING_TEMPLATES.forEach((templatePath) => {
+      it(`${templatePath} should NOT contain "two months" as notice period`, () => {
+        const fullPath = path.join(templateDir, templatePath);
+
+        if (!fs.existsSync(fullPath)) {
+          throw new Error(`Template not found: ${fullPath}`);
+        }
+
+        const content = fs.readFileSync(fullPath, 'utf-8');
+
+        // Should NOT contain "two months" in context of Section 173 notice period
+        // Note: "two months" might appear in other contexts (e.g., "within two months")
+        // but NOT as the Section 173 notice period
+        expect(content).not.toMatch(
+          /Section\s*173.*(?:minimum|notice\s*period|requires?).*two\s*months/i
+        );
+        expect(content).not.toMatch(
+          /two\s*months.*(?:from\s*service|notice\s*period).*Section\s*173/i
+        );
+        expect(content).not.toMatch(/2-month\s*regime/i);
+        expect(content).not.toMatch(/RHW17/i); // RHW17 is the 2-month form
+      });
+    });
+  });
+
+  describe('templates do NOT contain England law references', () => {
+    SECTION_173_SUPPORTING_TEMPLATES.forEach((templatePath) => {
+      it(`${templatePath} should NOT contain England law references`, () => {
+        const fullPath = path.join(templateDir, templatePath);
+
+        if (!fs.existsSync(fullPath)) {
+          throw new Error(`Template not found: ${fullPath}`);
+        }
+
+        const content = fs.readFileSync(fullPath, 'utf-8');
+
+        // Strip comments to avoid false positives from template comments
+        const cleanContent = content
+          .replace(/<!--[\s\S]*?-->/g, '')
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/\{\{!--[\s\S]*?--\}\}/g, '')
+          .replace(/\{\{![\s\S]*?\}\}/g, '');
+
+        ENGLAND_FORBIDDEN_TERMS_REGEX.forEach((regex) => {
+          const match = cleanContent.match(regex);
+          if (match) {
+            throw new Error(
+              `REGRESSION: Template ${templatePath} contains England law reference: "${match[0]}"\n` +
+                `Wales Section 173 documents must only reference Welsh law.`
+            );
+          }
+        });
+      });
+    });
+  });
+
+  describe('generated checklist and service instructions have correct content', () => {
+    /**
+     * Helper to strip CSS and HTML comments from HTML for content checking.
+     * This avoids false positives from comments in included stylesheets.
+     */
+    const stripAllComments = (html: string): string => {
+      return html
+        .replace(/<!--[\s\S]*?-->/g, '') // HTML comments
+        .replace(/\/\*[\s\S]*?\*\//g, '') // CSS comments
+        .replace(/\{\{!--[\s\S]*?--\}\}/g, '') // Handlebars comments
+        .replace(/\{\{![\s\S]*?\}\}/g, ''); // Handlebars comments
+    };
+
+    it('generated checklist should contain "six months" and no England refs', async () => {
+      const wizardFacts = { ...baseWalesSection173Facts };
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      const checklistDoc = pack.documents.find(
+        (d) => d.document_type === 'validity_checklist'
+      );
+      expect(checklistDoc).toBeDefined();
+
+      const html = checklistDoc?.html || '';
+
+      // Should contain "six months"
+      expect(html.toLowerCase()).toContain('six months');
+
+      // Should NOT contain England law references (strip comments first to avoid false positives from CSS)
+      const cleanHtml = stripAllComments(html);
+      ENGLAND_FORBIDDEN_TERMS_REGEX.forEach((regex) => {
+        expect(cleanHtml).not.toMatch(regex);
+      });
+    });
+
+    it('generated service instructions should contain "six months" and no England refs', async () => {
+      const wizardFacts = { ...baseWalesSection173Facts };
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      const serviceInstructionsDoc = pack.documents.find(
+        (d) => d.document_type === 'service_instructions'
+      );
+      expect(serviceInstructionsDoc).toBeDefined();
+
+      const html = serviceInstructionsDoc?.html || '';
+
+      // Should contain "six months"
+      expect(html.toLowerCase()).toContain('six months');
+
+      // Should NOT contain England law references (strip comments first to avoid false positives from CSS)
+      const cleanHtml = stripAllComments(html);
+      ENGLAND_FORBIDDEN_TERMS_REGEX.forEach((regex) => {
+        expect(cleanHtml).not.toMatch(regex);
+      });
+    });
+
+    it('generated documents should use Wales terminology', async () => {
+      const wizardFacts = { ...baseWalesSection173Facts };
+      const pack = await generateNoticeOnlyPack(wizardFacts);
+
+      const checklistDoc = pack.documents.find(
+        (d) => d.document_type === 'validity_checklist'
+      );
+      const serviceInstructionsDoc = pack.documents.find(
+        (d) => d.document_type === 'service_instructions'
+      );
+
+      // Both should use "contract-holder" terminology
+      expect(checklistDoc?.html?.toLowerCase()).toContain('contract-holder');
+      expect(serviceInstructionsDoc?.html?.toLowerCase()).toContain('contract-holder');
+
+      // Both should reference Renting Homes (Wales) Act
+      expect(checklistDoc?.html).toContain('Renting Homes (Wales) Act');
+      expect(serviceInstructionsDoc?.html).toContain('Renting Homes (Wales) Act');
+    });
+  });
+});

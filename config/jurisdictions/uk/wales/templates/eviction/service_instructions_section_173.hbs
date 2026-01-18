@@ -1,328 +1,611 @@
+{{!--
+  ============================================================================
+  SERVICE INSTRUCTIONS - SECTION 173 LANDLORD'S NOTICE (WALES)
+  Renting Homes (Wales) Act 2016, Section 173
+  ============================================================================
+  Harmonized design system matching Wales fault_based templates
+  HARD-LOCKED: Section 173 is locked to 6 months minimum notice period (RHW16)
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Service Instructions - Section 173 Notice (Wales)</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 40px;
-      color: #333;
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - NARROW MARGINS ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
     }
-    h1 {
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .keep-together {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* ===== HARMONIZED DOCUMENT STYLES ===== */
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      line-height: 1.3;
       color: #1a1a1a;
-      border-bottom: 3px solid #059669;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
     }
-    h2 {
-      color: #059669;
-      margin-top: 30px;
-      margin-bottom: 15px;
+
+    .doc-badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
-    h3 {
+
+    .notice-details {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+
+    .notice-details-grid {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0.4em 1em;
+      font-size: 10pt;
+    }
+
+    .notice-details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .notice-details-grid dd {
+      margin: 0;
       color: #1a1a1a;
-      margin-top: 20px;
-      margin-bottom: 10px;
     }
-    .section {
-      margin: 30px 0;
+
+    .alert-box {
+      padding: 1em;
+      margin: 1.5em 0;
+      border-left: 4px solid;
+      page-break-inside: avoid;
     }
-    .warning {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 15px;
-      margin: 20px 0;
+
+    .alert-box.critical {
+      background: #fef2f2;
+      border-color: #dc2626;
     }
-    .critical {
-      background: #fee2e2;
-      border-left: 4px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-      font-weight: bold;
+
+    .alert-box.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
     }
-    .success {
-      background: #d1fae5;
-      border-left: 4px solid #10b981;
-      padding: 15px;
-      margin: 20px 0;
+
+    .alert-box.success {
+      background: #f0fdf4;
+      border-color: #22c55e;
     }
-    .info {
-      background: #dbeafe;
-      border-left: 4px solid #3b82f6;
-      padding: 15px;
-      margin: 20px 0;
+
+    .alert-box.info {
+      background: #f8f8f8;
+      border-color: #1a1a1a;
     }
-    ul {
-      margin-left: 20px;
+
+    .alert-box h4 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
     }
-    li {
-      margin: 10px 0;
+
+    .alert-box p, .alert-box li {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.3em 0;
     }
-    .checklist {
-      background: #f3f4f6;
-      padding: 15px;
-      border-radius: 5px;
-      margin: 15px 0;
+
+    .alert-box ul {
+      margin: 0.5em 0;
+      padding-left: 1.25em;
     }
-    .evidence-item {
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    .method-block {
+      margin: 1.25em 0;
+      border: 1px solid #ddd;
       background: #fff;
-      border: 1px solid #e5e7eb;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 3px;
     }
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 2px solid #e5e7eb;
-      font-size: 0.9em;
-      color: #6b7280;
+
+    .method-block-header {
+      padding: 0.6em 0.8em;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .method-block-header.recommended {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .method-block-header.not-recommended {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .method-block-content {
+      padding: 0.8em;
+    }
+
+    .method-block-content ul {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+
+    .method-block-content li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.4em 0;
+    }
+
+    .checklist-box {
+      border: 1px solid #1a1a1a;
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .checklist-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .checklist-box .content {
+      padding: 1em;
+      background: #fff;
+    }
+
+    .checklist-box ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      padding-left: 1.75em;
+      position: relative;
+    }
+
+    .checklist-box li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    .template-box {
+      margin: 1em 0;
+      border: 1px dashed #999;
+      background: #fafafa;
+    }
+
+    .template-box-header {
+      padding: 0.5em 0.75em;
+      background: #f0f0f0;
+      border-bottom: 1px dashed #999;
+      font-size: 10pt;
+      font-weight: 600;
+    }
+
+    .template-box-content {
+      padding: 0.75em;
+      font-size: 10pt;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .mistakes-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mistakes-list li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      padding-left: 1.75em;
+      position: relative;
+    }
+
+    .mistakes-list li::before {
+      content: "✗";
+      position: absolute;
+      left: 0;
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .legal-basis {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f5f5f5;
+      border-left: 3px solid #1a1a1a;
+    }
+
+    .legal-basis p {
+      font-size: 10pt;
+      margin: 0.3em 0;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    @media print {
+      .method-block,
+      .checklist-box,
+      .alert-box {
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Service Instructions for Section 173 Notice</h1>
 
-  <div class="section">
-    <p><strong>Property:</strong> {{property_address}}</p>
-    <p><strong>Contract-Holder:</strong> {{contract_holder_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
-    <p><strong>Notice Type:</strong> Section 173 Landlord's Notice</p>
-    <p><strong>Service Date:</strong> {{service_date_formatted}}</p>
-  </div>
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Service Instructions</h1>
+  <span class="doc-badge">Section 173 Notice (Wales)</span>
+</div>
 
-  <div class="info">
-    ℹ️ <strong>IMPORTANT: WALES-SPECIFIC NOTICE</strong><br>
-    This guidance is for serving eviction notices under the <strong>Renting Homes (Wales) Act 2016</strong>. Wales has different laws from England. Do not use English guidance or forms.
-  </div>
+<!-- Notice Details -->
+<div class="notice-details">
+  <dl class="notice-details-grid">
+    <dt>Property:</dt>
+    <dd>{{#if property_address}}{{property_address}}{{else}}{{property_address_line1}}{{#if property_address_town}}, {{property_address_town}}{{/if}}{{/if}}</dd>
+    <dt>Contract-Holder:</dt>
+    <dd>{{#if contract_holder_full_name}}{{contract_holder_full_name}}{{else}}{{tenant_full_name}}{{/if}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Notice Type:</dt>
+    <dd>Section 173 Landlord's Notice (No-Fault)</dd>
+    <dt>Service Date:</dt>
+    <dd>{{service_date_formatted}}</dd>
+  </dl>
+</div>
 
-  <div class="info" style="background: #f8f8f8; border-color: #9ca3af;">
-    ℹ️ <strong>Language Information:</strong> This notice is generated in English. Notices served in English are valid in Wales. Welsh-language versions of prescribed forms are available from the Welsh Government (gov.wales) if required.
-  </div>
+<!-- Wales-Specific Notice -->
+<div class="alert-box info">
+  <h4>Important: Wales-Specific Notice</h4>
+  <p>This guidance is for serving Section 173 notices under the <strong>Renting Homes (Wales) Act 2016</strong>. Wales has different laws from England. Do not use English guidance or forms.</p>
+</div>
 
-  <div class="critical">
-    ⚠️ <strong>CRITICAL:</strong> You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection.
-  </div>
+<div class="alert-box info">
+  <h4>Language Information</h4>
+  <p>This notice is generated in English. Notices served in English are valid in Wales. Welsh-language versions of prescribed forms are available from the Welsh Government (gov.wales) if required.</p>
+</div>
 
-  <div class="section">
-    <h2>Before You Serve - Compliance Requirements</h2>
-    <p>You <strong>MUST</strong> have complied with all legal requirements before serving any notice:</p>
+<!-- Critical Warning -->
+<div class="alert-box critical">
+  <h4>CRITICAL</h4>
+  <p>You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection.</p>
+</div>
 
-    <h3>✅ Rent Smart Wales Registration</h3>
+<!-- Pre-Service Compliance -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Before You Serve - Compliance Requirements</h2>
+</div>
+
+<p style="font-size: 10pt; line-height: 1.5;">You <strong>MUST</strong> have complied with all legal requirements before serving any notice:</p>
+
+<div class="checklist-box">
+  <h3>Rent Smart Wales Registration</h3>
+  <div class="content">
     <ul>
       <li>All landlords and letting agents in Wales must be registered with Rent Smart Wales</li>
       <li>Check: www.rentsmart.gov.wales</li>
-      <li>Penalty: Serving a notice while unregistered may invalidate the notice</li>
+      <li>Serving a notice while unregistered may invalidate the notice</li>
     </ul>
+  </div>
+</div>
 
-    <h3>✅ Deposit Protection (if deposit taken)</h3>
+<div class="checklist-box">
+  <h3>Deposit Protection (if deposit taken)</h3>
+  <div class="content">
     <ul>
-      <li>Must be protected in a Welsh government-approved scheme:
-        <ul>
-          <li>Deposit Protection Service Wales</li>
-          <li>MyDeposits Wales</li>
-          <li>Tenancy Deposit Scheme Wales</li>
-        </ul>
-      </li>
+      <li>Must be protected in a Welsh government-approved scheme (DPS Wales, MyDeposits Wales, or TDS Wales)</li>
       <li>Must have provided prescribed information within 30 days</li>
-      <li><strong>Penalty:</strong> Cannot serve Section 173 notice if deposit not protected</li>
+      <li>Cannot serve Section 173 notice if deposit not protected</li>
     </ul>
+  </div>
+</div>
 
-    <h3>✅ Written Statement of Contract</h3>
+<div class="checklist-box">
+  <h3>Written Statement of Contract</h3>
+  <div class="content">
     <ul>
       <li>Must have provided contract-holder with written statement within 14 days of occupation</li>
-      <li>Penalty: Cannot serve possession notice until provided</li>
+      <li>Cannot serve possession notice until provided</li>
     </ul>
+  </div>
+</div>
 
-    <h3>✅ Gas Safety (if applicable)</h3>
+<div class="checklist-box">
+  <h3>Property Safety Requirements</h3>
+  <div class="content">
     <ul>
-      <li>Annual gas safety check by Gas Safe engineer</li>
-      <li>Copy given to contract-holder</li>
-    </ul>
-
-    <h3>✅ Electrical Safety</h3>
-    <ul>
+      <li>Annual gas safety check by Gas Safe engineer (copy given to contract-holder)</li>
       <li>Electrical Installation Condition Report (EICR) within last 5 years</li>
-      <li>Copy given to contract-holder</li>
-    </ul>
-
-    <h3>✅ Smoke and Carbon Monoxide Alarms</h3>
-    <ul>
       <li>Working smoke alarms on each storey</li>
       <li>Carbon monoxide alarms in rooms with solid fuel appliances</li>
-      <li>Tested at start of contract</li>
     </ul>
+  </div>
+</div>
 
-    <h3>✅ Prohibited Period (Section 173 only)</h3>
+<div class="checklist-box">
+  <h3>Prohibited Period (Section 173 only)</h3>
+  <div class="content">
     <ul>
-      <li>Cannot serve Section 173 notice in first 6 months of contract</li>
+      <li>Cannot serve Section 173 notice in first 6 months of occupation contract</li>
       <li>Earliest service date: 6 months after contract start</li>
     </ul>
   </div>
+</div>
 
-  <div class="section">
-    <h2>How to Serve This Notice</h2>
-    <p>Under Welsh law, you can serve a notice by:</p>
+<!-- How to Serve -->
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>How to Serve This Notice</h2>
+</div>
 
-    <h3>✅ RECOMMENDED METHOD: Personal Service</h3>
+<p style="font-size: 10pt; line-height: 1.5;">Under Welsh law, you can serve a notice by the following methods:</p>
+
+<!-- Recommended Method -->
+<div class="method-block">
+  <div class="method-block-header recommended">RECOMMENDED: Personal Service</div>
+  <div class="method-block-content">
     <ul>
       <li>Hand the notice directly to the contract-holder</li>
       <li>Get them to sign a copy confirming receipt</li>
       <li>If they refuse to sign, have a witness present</li>
       <li>Take a photo of the handover</li>
     </ul>
+  </div>
+</div>
 
-    <div class="success">
-      ✓ <strong>Why this is best:</strong> Clear proof that the contract-holder received the notice. If they dispute service, you have witness testimony and photographic evidence.
-    </div>
+<div class="alert-box success">
+  <h4>Why This is Best</h4>
+  <p>Clear proof that the contract-holder received the notice. If they dispute service, you have witness testimony and photographic evidence.</p>
+</div>
 
-    <h3>Alternative Method 1: Leaving at the Dwelling</h3>
+<!-- Alternative Method 1 -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: Leaving at the Dwelling</div>
+  <div class="method-block-content">
     <ul>
       <li>Leave the notice at the dwelling in a sealed envelope</li>
       <li>Address it to the contract-holder</li>
       <li>Put it through the letterbox or hand it to an adult at the property</li>
       <li>Take a photo as evidence</li>
     </ul>
+  </div>
+</div>
 
-    <h3>Alternative Method 2: Postal Service</h3>
+<!-- Alternative Method 2 -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: Postal Service</div>
+  <div class="method-block-content">
     <ul>
       <li>Send by First Class post to the dwelling address</li>
       <li><strong>RECOMMENDED:</strong> Use Royal Mail Signed For or Special Delivery</li>
       <li>Keep proof of postage (certificate of posting or tracking number)</li>
       <li>Notice is deemed served when it would be delivered in ordinary course of post (usually 2 working days)</li>
     </ul>
+  </div>
+</div>
 
-    <div class="warning">
-      ⚠️ <strong>Note:</strong> If using postal service, add extra days to be safe. The contract-holder can claim non-receipt.
-    </div>
+<div class="alert-box warning">
+  <h4>Note</h4>
+  <p>If using postal service, add extra days to be safe. The contract-holder can claim non-receipt.</p>
+</div>
 
-    <h3>Alternative Method 3: Email (Only If Agreed in Contract)</h3>
+<!-- Not Recommended -->
+<div class="method-block">
+  <div class="method-block-header not-recommended">NOT RECOMMENDED: Email</div>
+  <div class="method-block-content">
     <ul>
       <li>Can only use email if the contract specifically allows it</li>
       <li>Keep a copy of the sent email and any read receipts</li>
+      <li>Most contracts do NOT allow email service - check your contract carefully</li>
       <li>Follow up with postal or personal service to be safe</li>
     </ul>
-
-    <div class="warning">
-      ⚠️ <strong>Risk:</strong> Most contracts do NOT allow email service. Check your contract carefully before using this method.
-    </div>
   </div>
+</div>
 
-  <div class="section">
-    <h2>Evidence You Must Keep</h2>
-    <p><strong>CRITICAL:</strong> You will need to prove service when applying to court.</p>
+<!-- Evidence Section -->
+<div class="section-header">
+  <span class="num">3</span>
+  <h2>Evidence You Must Keep</h2>
+</div>
 
-    <div class="checklist">
-      <h3>Service Evidence Checklist:</h3>
-      <ul>
-        <li>✓ Original copy of the notice (for your records)</li>
-        <li>✓ Copy showing date of service</li>
-        <li>✓ Proof of service:
-          <ul>
-            <li>Personal service: Signed acknowledgment or witness statement</li>
-            <li>Postal service: Certificate of posting or tracking receipt</li>
-            <li>Email: Sent email with timestamp and read receipt</li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+<p style="font-size: 10pt; line-height: 1.5;"><strong>CRITICAL:</strong> You will need to prove service when applying to court.</p>
 
-    <div class="evidence-item">
-      <h3>Certificate of Service Template:</h3>
-      <p><strong>CERTIFICATE OF SERVICE</strong></p>
-      <p>Property: {{property_address}}</p>
-      <p>Contract-Holder(s): {{contract_holder_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}</p>
-      <p>I certify that on [DATE], I served the Section 173 Landlord's Notice dated [NOTICE DATE] by:</p>
-      <p>
-        [✓] Personal service - handed to contract-holder at [TIME] on [DATE]<br>
-        [ ] Left at dwelling - left in sealed envelope at [TIME] on [DATE]<br>
-        [ ] Postal service - sent by [METHOD] on [DATE], tracking/reference: [REF]<br>
-        [ ] Email - sent to [EMAIL] at [TIME] on [DATE]
-      </p>
-      <p>Served by: ___________________________</p>
-      <p>Signature: ___________________________</p>
-      <p>Date: ___________________________</p>
-      <p>Witness (if applicable):<br>
-      Name: ___________________________<br>
-      Signature: ___________________________<br>
-      Date: ___________________________</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>What Happens After Service?</h2>
-
-    <h3>Waiting Period</h3>
-    <p><strong>Section 173 Notice Period:</strong> At least six months from the date of service. The notice expiry date must not be earlier than six months after the date of service.</p>
-    <p>You cannot apply to court before this date expires.</p>
-
-    <h3>If Contract-Holder Does Not Leave</h3>
-    <p>You <strong>CANNOT:</strong></p>
+<div class="checklist-box">
+  <h3>Service Evidence Checklist</h3>
+  <div class="content">
     <ul>
-      <li>❌ Change the locks</li>
-      <li>❌ Remove their belongings</li>
-      <li>❌ Cut off utilities</li>
-      <li>❌ Harass or threaten them</li>
-      <li>❌ Enter without permission</li>
-    </ul>
-
-    <div class="critical">
-      <strong>These are criminal offences in Wales</strong>
-    </div>
-
-    <p>You <strong>MUST:</strong></p>
-    <ul>
-      <li>✓ Apply to the county court for a possession order</li>
-      <li>✓ Wait for the court hearing</li>
-      <li>✓ Only evict with a court order and bailiff</li>
+      <li>Original copy of the notice (for your records)</li>
+      <li>Copy showing date of service</li>
+      <li>Personal service: Signed acknowledgment or witness statement</li>
+      <li>Postal service: Certificate of posting or tracking receipt</li>
+      <li>Email: Sent email with timestamp and read receipt</li>
     </ul>
   </div>
+</div>
 
-  <div class="section">
-    <h2>Common Mistakes to Avoid</h2>
-    <ul>
-      <li>❌ Wrong notice period - Section 173 requires at least six months' notice. The notice expiry date must not be earlier than six months after the date of service.</li>
-      <li>❌ Not registered with Rent Smart Wales</li>
-      <li>❌ Deposit not protected before serving notice</li>
-      <li>❌ Serving in prohibited period (first 6 months of contract)</li>
-      <li>❌ Poor proof of service - always get evidence</li>
-      <li>❌ Self-help eviction - never change locks without court order</li>
-    </ul>
-  </div>
+<div class="template-box">
+  <div class="template-box-header">Certificate of Service Template</div>
+  <div class="template-box-content"><strong>CERTIFICATE OF SERVICE</strong>
 
-  <div class="section">
-    <h2>Useful Contacts</h2>
-    <p><strong>Rent Smart Wales:</strong></p>
-    <ul>
-      <li>Website: www.rentsmart.gov.wales</li>
-      <li>Phone: 03000 133 344</li>
-    </ul>
+Property: {{#if property_address}}{{property_address}}{{else}}{{property_address_line1}}{{/if}}
+Contract-Holder(s): {{#if contract_holder_full_name}}{{contract_holder_full_name}}{{else}}{{tenant_full_name}}{{/if}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
 
-    <p><strong>HM Courts & Tribunals Service:</strong></p>
-    <ul>
-      <li>Website: www.gov.uk/government/organisations/hm-courts-and-tribunals-service</li>
-      <li>Phone: 0300 123 1372</li>
-    </ul>
+I certify that on [DATE], I served the Section 173 Landlord's Notice dated [NOTICE DATE] by:
 
-    <p><strong>Shelter Cymru:</strong></p>
-    <ul>
-      <li>Website: www.sheltercymru.org.uk</li>
-      <li>Phone: 0345 075 5005</li>
-    </ul>
-  </div>
+[ ] Personal service - handed to contract-holder at [TIME] on [DATE]
+[ ] Left at dwelling - left in sealed envelope at [TIME] on [DATE]
+[ ] Postal service - sent by [METHOD] on [DATE], tracking/reference: [REF]
+[ ] Email - sent to [EMAIL] at [TIME] on [DATE]
 
-  <div class="section">
+Served by: ___________________________
+Signature: ___________________________
+Date: ___________________________
+
+Witness (if applicable):
+Name: ___________________________
+Signature: ___________________________
+Date: ___________________________</div>
+</div>
+
+<!-- What Happens After Service -->
+<div class="section-header">
+  <span class="num">4</span>
+  <h2>What Happens After Service</h2>
+</div>
+
+<h3 style="font-size: 11pt; margin-top: 1em;">Notice Period</h3>
+<p style="font-size: 10pt; line-height: 1.5;"><strong>Section 173 Notice Period:</strong> At least six months from the date of service. The notice expiry date must not be earlier than six months after the date of service.</p>
+<p style="font-size: 10pt; line-height: 1.5;">You cannot apply to court before this date expires.</p>
+
+<h3 style="font-size: 11pt; margin-top: 1.25em;">If Contract-Holder Does Not Leave</h3>
+<div class="alert-box critical">
+  <h4>Do NOT</h4>
+  <ul>
+    <li>Change the locks</li>
+    <li>Remove their belongings</li>
+    <li>Cut off utilities</li>
+    <li>Harass or threaten them</li>
+    <li>Enter without permission</li>
+  </ul>
+  <p style="margin-top: 0.75em;"><strong>These are criminal offences in Wales.</strong></p>
+</div>
+
+<p style="font-size: 10pt; line-height: 1.5;">You <strong>MUST</strong>:</p>
+<ul style="font-size: 10pt; line-height: 1.6;">
+  <li>Apply to the county court for a possession order</li>
+  <li>Wait for the court hearing</li>
+  <li>Only evict with a court order and bailiff</li>
+</ul>
+
+<!-- Common Mistakes -->
+<div class="section-header">
+  <span class="num">5</span>
+  <h2>Common Mistakes to Avoid</h2>
+</div>
+
+<ul class="mistakes-list">
+  <li>Wrong notice period - Section 173 requires at least six months' notice. The notice expiry date must not be earlier than six months after the date of service.</li>
+  <li>Not registered with Rent Smart Wales</li>
+  <li>Deposit not protected before serving notice</li>
+  <li>Serving in prohibited period (first 6 months of occupation contract)</li>
+  <li>Poor proof of service - always get evidence</li>
+  <li>Self-help eviction - never change locks without court order</li>
+</ul>
+
+<!-- Useful Contacts -->
+<div class="section-header">
+  <span class="num">6</span>
+  <h2>Useful Contacts</h2>
+</div>
+
+<div class="legal-basis">
+  <p><strong>Rent Smart Wales:</strong> www.rentsmart.gov.wales | Phone: 03000 133 344</p>
+  <p><strong>HM Courts & Tribunals Service:</strong> www.gov.uk/government/organisations/hm-courts-and-tribunals-service | Phone: 0300 123 1372</p>
+  <p><strong>Shelter Cymru:</strong> www.sheltercymru.org.uk | Phone: 0345 075 5005</p>
+</div>
+
+<!-- Legal Basis -->
+<div class="keep-together">
+  <div class="section-header">
+    <span class="num">7</span>
     <h2>Legal Basis</h2>
+  </div>
+
+  <div class="legal-basis">
     <p><strong>Service Requirements:</strong> Renting Homes (Wales) Act 2016, Section 173</p>
     <p><strong>Deposit Protection:</strong> Renting Homes (Wales) Act 2016</p>
     <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
   </div>
+</div>
 
-  <footer>
-    <p><strong>Important:</strong> This is guidance only and does not constitute legal advice. If you're unsure about any step, consult a solicitor or legal advisor.</p>
-    <p><strong>Generated:</strong> {{generated_date}}</p>
-    <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
-  </footer>
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Important:</strong> This is guidance only and does not constitute legal advice. If you're unsure about any step, consult a solicitor or legal advisor.</p>
+  <p><strong>Generated:</strong> {{generated_date}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
+</div>
+
 </body>
 </html>
