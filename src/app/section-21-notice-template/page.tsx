@@ -59,8 +59,8 @@ const complianceLinks = {
 };
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template (England) – Free Form 6A',
-  description: 'Download a free Section 21 notice template for England or generate a court-ready Form 6A in minutes. Valid until May 2026. Trusted by 10,000+ UK landlords.',
+  title: 'Section 21 Notice Template 2026 for Landlords | Free Form 6A',
+  description: 'For landlords who need a compliant Section 21 notice fast, use our template or build a court-ready Form 6A to avoid delays, costs, and invalid notices. Try the template.',
   keywords: [
     'section 21 notice template',
     'section 21 template',
@@ -73,8 +73,8 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/section-21-notice-template',
   },
   openGraph: {
-    title: 'Section 21 Notice Template (England) - Free Form 6A | Landlord Heaven',
-    description: 'Get a free Section 21 notice template for England or generate a court-ready Form 6A. Valid until May 2026.',
+    title: 'Section 21 Notice Template 2026 for Landlords | Free Form 6A',
+    description: 'Free Section 21 notice template for landlords in England. Build a compliant Form 6A fast and avoid costly delays.',
     type: 'website',
   },
 };
@@ -423,6 +423,65 @@ export default function Section21NoticeTemplatePage() {
                       Step-by-step guide on how to properly serve the notice
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Timeline + Validity */}
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Section 21 Timeline, Costs & Validity Checklist
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Keep your notice compliant and avoid delays by planning the timeline, knowing the costs,
+                and confirming every required document before service.
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Notice timeline</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Minimum 2 months notice period.</li>
+                    <li>Notice must expire after the fixed term ends.</li>
+                    <li>Issue court proceedings within 6 months of expiry.</li>
+                    <li>Typical possession timeline: 4–6 months end to end.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Deposit protected + prescribed info served.</li>
+                    <li>EPC, gas safety, and “How to Rent” delivered.</li>
+                    <li>Correct Form 6A version and dates.</li>
+                    <li>Licensing and HMO rules satisfied.</li>
+                  </ul>
+                  <Link
+                    href="/tools/validators/section-21"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    Check notice validity →
+                  </Link>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Using an outdated Form 6A template.</li>
+                    <li>Miscalculating the expiry date.</li>
+                    <li>Serving without proof of service.</li>
+                    <li>Skipping compliance documents.</li>
+                  </ul>
+                  <Link
+                    href="/how-to-evict-tenant"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    See the full eviction process →
+                  </Link>
                 </div>
               </div>
             </div>

@@ -23,6 +23,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
+import { LegalTrustBanner } from "@/components/seo/LegalTrustBanner";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
@@ -39,12 +40,12 @@ const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Complete Eviction Pack 2026 - ${price}`,
+  title: `Eviction Pack 2026 for Landlords | Complete Court Forms ${price}`,
   description:
-    `Complete eviction pack 2026 with all court forms from notice to possession order. 7-9 documents including N5, N119, AI Witness Statement. England, Wales & Scotland. ${price} one-time.`,
+    `For landlords who need the full eviction process fast, this eviction pack covers notice to possession order with compliant court forms. Save time, reduce mistakes, and get your complete pack.`,
   openGraph: {
-    title: `Complete Eviction Pack 2026 - ${price}`,
-    description: "Complete eviction pack with all court forms. Notice + Court Forms + AI Witness Statement. England, Wales, Scotland. Preview before you buy.",
+    title: `Eviction Pack 2026 for Landlords | Complete Court Forms ${price}`,
+    description: "Complete eviction pack for landlords with notice, court forms, and guidance. Built to reduce delays, costs, and compliance risk.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
   alternates: {
@@ -133,6 +134,14 @@ export default function CompleteEvictionPackPage() {
               </span>
             </div>
 
+            <div className="mb-8 max-w-xl mx-auto text-left">
+              <LegalTrustBanner
+                jurisdiction="UK"
+                reviewedDate="10 January 2026"
+                updatedFor="2026"
+              />
+            </div>
+
             <Link
               href="/wizard?product=complete_pack&src=product_page&topic=eviction"
               className="hero-btn-primary"
@@ -151,6 +160,48 @@ export default function CompleteEvictionPackPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <WhatYouGet product="complete_pack" />
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+              Eviction Pack Timeline & Costs
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Plan your eviction steps, budget for court fees, and keep the process moving with the
+              correct documents from day one.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Notice period: 2 weeks to 2 months.</li>
+                  <li>Court claim: 4–10 weeks to hearing/order.</li>
+                  <li>Bailiff stage (if needed): 2–6 weeks.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Costs to expect</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Court fees vary by claim route.</li>
+                  <li>Solicitor fees often run £1,500+.</li>
+                  <li>Pack keeps documents compliant to avoid re-filing.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Next legal steps</h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  After the notice expires, file the correct court or tribunal claim promptly to
+                  prevent the notice from expiring.
+                </p>
+                <Link href="/how-to-evict-tenant" className="text-primary text-sm font-medium hover:underline">
+                  View the eviction process →
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

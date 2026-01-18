@@ -3,6 +3,46 @@ import { ImagePlaceholder } from '@/components/blog/ImagePlaceholder';
 import { BlogCTA } from '@/components/blog/BlogCTA';
 import { BlogPost } from './types';
 
+const section21TemplateCta = (
+  <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
+    Need a compliant notice fast? Use the{' '}
+    <Link href="/section-21-notice-template" className="text-primary font-semibold hover:underline">
+      Section 21 notice template
+    </Link>{' '}
+    for court-ready Form 6A paperwork.
+  </p>
+);
+
+const section8TemplateCta = (
+  <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
+    Serving a grounds-based notice? Start with the{' '}
+    <Link href="/section-8-notice-template" className="text-primary font-semibold hover:underline">
+      Section 8 notice template
+    </Link>{' '}
+    to keep your Form 3 compliant.
+  </p>
+);
+
+const walesEvictionCta = (
+  <p className="text-sm text-red-900 bg-red-50 border border-red-200 rounded-lg p-4 my-6">
+    Wales uses different notices. See the{' '}
+    <Link href="/wales-eviction-notices" className="text-primary font-semibold hover:underline">
+      Wales eviction notice guide
+    </Link>{' '}
+    for Renting Homes Act steps.
+  </p>
+);
+
+const scotlandEvictionCta = (
+  <p className="text-sm text-blue-900 bg-blue-50 border border-blue-200 rounded-lg p-4 my-6">
+    Scotland requires a Notice to Leave. Follow the{' '}
+    <Link href="/scotland-eviction-notices" className="text-primary font-semibold hover:underline">
+      Scottish eviction notice guide
+    </Link>{' '}
+    to keep tribunal filings on track.
+  </p>
+);
+
 export const blogPosts: BlogPost[] = [
   // ============================================
   // POST 0: Renters Reform Bill (FEATURED - URGENT)
@@ -586,7 +626,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'what-is-section-21-notice',
-    title: 'What Is a Section 21 Notice? Complete Guide for UK Landlords (2026)',
+    title: 'Section 21 Notice Explained: Complete Guide for UK Landlords (2026)',
     description: 'Everything you need to know about Section 21 no-fault eviction notices, including how to serve one correctly before the 2026 ban takes effect.',
     metaDescription: 'Learn what a Section 21 notice is, how to serve one correctly, and why you must act before the May 2026 ban. Complete guide for UK landlords.',
     date: '2026-01-02',
@@ -622,6 +662,7 @@ export const blogPosts: BlogPost[] = [
           the simplest and most straightforward way for landlords to regain possession of their
           property since the Housing Act 1988 was introduced.
         </p>
+        {section21TemplateCta}
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-amber-800 text-lg mb-2">Critical Deadline Approaching</p>
@@ -962,7 +1003,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'section-21-vs-section-8',
-    title: 'Section 21 vs Section 8: Which Eviction Notice Should You Use? (2026)',
+    title: 'Section 21 vs Section 8 Explained: Which Eviction Notice Should You Use? (2026)',
     description: 'Compare Section 21 and Section 8 eviction notices. Learn when to use each type, the key differences, and which is best for your situation.',
     metaDescription: 'Section 21 vs Section 8 explained. Compare notice periods, costs, and success rates to choose the right eviction notice for UK landlords in 2026.',
     date: '2026-01-02',
@@ -998,6 +1039,8 @@ export const blogPosts: BlogPost[] = [
           requirements, and timelines. Understanding these differences could save you months of delays and thousands
           of pounds in legal fees.
         </p>
+        {section21TemplateCta}
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Quick Summary</p>
@@ -2703,7 +2746,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-21-process',
-    title: 'Section 21 Eviction Process England - Complete Guide 2026',
+    title: 'Section 21 Eviction Process Explained (England, 2026)',
     description: 'Step-by-step guide to the Section 21 eviction process in England. Learn the requirements, timeline, court procedures, and why you must act before May 2026 when Section 21 is abolished.',
     metaDescription: 'Complete Section 21 eviction process guide for England. Step-by-step instructions, timeline, court forms, and deadline warning. Section 21 ends May 2026.',
     date: '2026-01-03',
@@ -2740,6 +2783,7 @@ export const blogPosts: BlogPost[] = [
           you to end an Assured Shorthold Tenancy without proving any wrongdoing by the tenant. This guide
           walks you through every step of the process—but time is running out.
         </p>
+        {section21TemplateCta}
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Critical Deadline: 30 April 2026</p>
@@ -3161,7 +3205,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-process',
-    title: 'Section 8 Eviction Process England - Step by Step Guide 2026',
+    title: 'Section 8 Eviction Process Explained (England, 2026)',
     description: 'Complete guide to Section 8 eviction in England. Learn all 17 grounds for possession, notice periods, court procedures, and when to use Section 8 instead of Section 21.',
     metaDescription: 'Section 8 eviction guide for England 2026. All grounds explained, notice periods, court process, and step-by-step instructions. Essential after Section 21 ends.',
     date: '2026-01-03',
@@ -3199,6 +3243,7 @@ export const blogPosts: BlogPost[] = [
           ending in May 2026, Section 8 will become the <strong>only route to eviction</strong> for
           most landlords in England.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-purple-800 text-lg mb-2">Post-Section 21 World</p>
@@ -3649,7 +3694,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-8',
-    title: 'Section 8 Ground 8 - Mandatory Rent Arrears Eviction Guide 2026',
+    title: 'Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)',
     description: 'Complete guide to Section 8 Ground 8 for rent arrears eviction in England. Learn the 2-month threshold, how to prove arrears, court procedures, and common tenant defences.',
     metaDescription: 'Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 2+ months arrears. Step-by-step process, evidence requirements, and tenant defences explained.',
     date: '2026-01-03',
@@ -3687,6 +3732,7 @@ export const blogPosts: BlogPost[] = [
           grant a possession order—no exceptions, no discretion. This guide explains exactly how Ground 8
           works and how to use it effectively.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-green-800 text-lg mb-2">Why Ground 8 Is So Powerful</p>
@@ -5090,7 +5136,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-10-11',
-    title: 'Section 8 Ground 10 & 11 - Discretionary Rent Arrears Eviction (England)',
+    title: 'Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)',
     description: 'Grounds 10 and 11 are discretionary rent arrears grounds. Learn when to use them, how they differ from Ground 8, and how to convince the court possession is reasonable.',
     metaDescription: 'Section 8 Ground 10 and 11 explained for England landlords. Discretionary rent arrears eviction when Ground 8 fails. Court considerations and success strategies.',
     date: '2026-01-03',
@@ -5128,6 +5174,7 @@ export const blogPosts: BlogPost[] = [
           guarantee possession—the court must also decide it&apos;s <em>reasonable</em> to evict. However,
           they&apos;re invaluable when Ground 8 conditions aren&apos;t met or as a backup strategy.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Strategic Importance</p>
@@ -5538,7 +5585,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-14',
-    title: 'Section 8 Ground 14 - Antisocial Behaviour Eviction (England Guide)',
+    title: 'Section 8 Ground 14 Explained: Antisocial Behaviour Eviction (England)',
     description: 'Ground 14 allows eviction for antisocial behaviour, nuisance, or illegal activities. Learn what qualifies as ASB, evidence requirements, and the court process.',
     metaDescription: 'Section 8 Ground 14 antisocial behaviour eviction guide. What counts as ASB, how to gather evidence, notice periods, and court requirements for England landlords.',
     date: '2026-01-03',
@@ -5575,6 +5622,7 @@ export const blogPosts: BlogPost[] = [
           conduct makes life unbearable for neighbours or damages the property. Understanding what qualifies and how
           to build a strong case is essential for success.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Discretionary but Powerful</p>
@@ -5975,7 +6023,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-17',
-    title: 'Section 8 Ground 17 - False Statement by Tenant (England Guide)',
+    title: 'Section 8 Ground 17 Explained: False Statement by Tenant (England)',
     description: 'Ground 17 allows eviction when a tenant obtained the tenancy through false statements. Learn what qualifies, how to prove fraud, and the court process.',
     metaDescription: 'Section 8 Ground 17 false statement eviction. Evict tenants who lied to get the tenancy. What counts as fraud, evidence needed, and landlord guide for England.',
     date: '2026-01-03',
@@ -6010,6 +6058,7 @@ export const blogPosts: BlogPost[] = [
           lied to you or your agent, and that lie induced you to grant the tenancy. It&apos;s an important tool
           when you discover a tenant misrepresented themselves during the application process.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Key Requirements</p>
@@ -6309,7 +6358,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-1',
-    title: 'Section 8 Ground 1 - Landlord Returning to Property (England Guide)',
+    title: 'Section 8 Ground 1 Explained: Landlord Returning to Property (England)',
     description: 'Ground 1 lets landlords recover their property to live in it themselves. Learn the prior notice requirement, when this ground applies, and how to use it correctly.',
     metaDescription: 'Section 8 Ground 1 explained. Recover your property to live in it as your home. Prior notice requirements, eligibility, and step-by-step England landlord guide.',
     date: '2026-01-03',
@@ -6344,6 +6393,7 @@ export const blogPosts: BlogPost[] = [
           occupied the property themselves, or who always intended to return to it. However, there&apos;s a
           crucial requirement: you must have given the tenant written notice at the start of the tenancy.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-green-800 text-lg mb-2">Mandatory Ground</p>
@@ -6638,7 +6688,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-2',
-    title: 'Section 8 Ground 2 - Mortgage Lender Repossession (England Guide)',
+    title: 'Section 8 Ground 2 Explained: Mortgage Lender Repossession (England)',
     description: 'Ground 2 allows mortgage lenders to recover a property from tenants when the landlord defaults. Learn how this ground works and what it means for landlords and tenants.',
     metaDescription: 'Section 8 Ground 2 mortgage lender repossession explained. What happens when landlords default on mortgages. Guide for England landlords and affected tenants.',
     date: '2026-01-03',
@@ -6673,6 +6723,7 @@ export const blogPosts: BlogPost[] = [
           who find themselves living in a property that the lender is repossessing, but landlords should understand
           it to manage their obligations and protect their tenants.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Lender Ground</p>
@@ -6949,7 +7000,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-7',
-    title: 'Section 8 Ground 7 - Death of Tenant (England Guide)',
+    title: 'Section 8 Ground 7 Explained: Death of Tenant (England)',
     description: 'Ground 7 allows possession when the original tenant has died and proceedings are brought within 12 months. Learn succession rights, timing, and the court process.',
     metaDescription: 'Section 8 Ground 7 death of tenant explained. Regain possession after a tenant dies. Succession rights, 12-month time limit, and step-by-step guide for England.',
     date: '2026-01-03',
@@ -6984,6 +7035,7 @@ export const blogPosts: BlogPost[] = [
           from whoever is occupying the property, but only if proceedings are brought within 12 months of the
           tenant&apos;s death (or within 12 months of the court accepting that death occurred).
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Sensitive Situation</p>
@@ -7271,7 +7323,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-12',
-    title: 'Section 8 Ground 12 - Breach of Tenancy Terms (England Guide 2026)',
+    title: 'Section 8 Ground 12 Explained: Breach of Tenancy Terms (2026)',
     description: 'Ground 12 allows eviction when tenants breach any obligation of the tenancy agreement. Learn what counts as a breach, evidence requirements, and how to use this discretionary ground.',
     metaDescription: 'Section 8 Ground 12 explained. Evict tenants for breach of tenancy terms in England. Evidence needed, notice periods, and step-by-step court process guide.',
     date: '2026-01-03',
@@ -7307,6 +7359,7 @@ export const blogPosts: BlogPost[] = [
           Whether your tenant is subletting without permission, keeping unauthorised pets, running a business from the
           property, or persistently causing minor nuisance, Ground 12 provides a legal pathway to eviction.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Discretionary Ground</p>
@@ -11162,7 +11215,7 @@ export const blogPosts: BlogPost[] = [
   // Article 22: Scotland Eviction Process
   {
     slug: 'scotland-eviction-process',
-    title: 'Scotland Eviction Process - Complete Landlord Guide 2026',
+    title: 'Scotland Eviction Process Explained - Landlord Guide 2026',
     description: 'Complete guide to the Scotland eviction process for landlords. Learn about Notice to Leave, First-tier Tribunal applications, eviction orders, and enforcement.',
     metaDescription: 'Scotland eviction process guide for landlords. Learn Notice to Leave, Tribunal applications, eviction orders, and enforcement steps in 2026.',
     date: '2026-01-03',
@@ -11198,6 +11251,7 @@ export const blogPosts: BlogPost[] = [
           &quot;no-fault&quot; eviction - you must prove one of 18 statutory grounds applies.
           This guide walks you through each step of the Scottish eviction process.
         </p>
+        {scotlandEvictionCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
           <h4 className="font-semibold text-blue-900">Key Points</h4>
@@ -17191,7 +17245,7 @@ export const blogPosts: BlogPost[] = [
   // Article 43: Wales Eviction Process
   {
     slug: 'wales-eviction-process',
-    title: 'Wales Eviction Process - Complete Landlord Guide 2026',
+    title: 'Wales Eviction Process Explained - Landlord Guide 2026',
     description: 'Step-by-step guide to evicting tenants in Wales under the Renting Homes Act. Learn about Section 173, Section 181, notice periods, and court procedures.',
     metaDescription: 'Complete guide to the Wales eviction process under the Renting Homes Act. Section 173 and 181 notices, court procedures, and landlord requirements.',
     date: '2026-01-03',
@@ -17226,6 +17280,7 @@ export const blogPosts: BlogPost[] = [
           periods and stricter requirements. This guide explains exactly how to evict
           legally in Wales.
         </p>
+        {walesEvictionCta}
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Wales-Only Procedures</h4>

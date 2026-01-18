@@ -2,14 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 
 export const metadata: Metadata = {
-  title: 'PRT Agreement Scotland 2026 | From £9.99',
-  description: 'Create a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Updated for 2026 under the Private Housing (Tenancies) (Scotland) Act 2016. From £9.99.',
+  title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
+  description: 'For Scotland landlords who need a compliant PRT fast, this private residential tenancy agreement is updated for 2026 and designed to avoid delays and mistakes. Start your agreement.',
   keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
   openGraph: {
-    title: 'Private Residential Tenancy Agreement (PRT) Scotland 2026 | From £9.99',
-    description: 'Create a legally compliant PRT for Scotland. Updated for 2026. Open-ended tenancy with full legal compliance.',
+    title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
+    description: 'Landlord-ready PRT agreement for Scotland with 2026 compliance and clear landlord obligations.',
     type: 'website',
     url: getCanonicalUrl('/tenancy-agreements/scotland'),
   },
@@ -191,6 +192,13 @@ export default function ScotlandPRTPage() {
             <p className="text-xl text-gray-700 mb-8">
               Create a legally compliant Private Residential Tenancy agreement in minutes. Fully compliant with the Private Housing (Tenancies) (Scotland) Act 2016 and all current Scottish legislation.
             </p>
+            <div className="mb-8 max-w-2xl mx-auto text-left">
+              <LegalTrustBanner
+                jurisdiction="Scotland"
+                reviewedDate="10 January 2026"
+                updatedFor="2026"
+              />
+            </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
@@ -928,6 +936,39 @@ export default function ScotlandPRTPage() {
                     Landlords can increase rent once per year with <strong>3 months' notice</strong> using the prescribed Rent Increase Notice form. Tenants can challenge increases via the First-tier Tribunal if they believe the new rent is unreasonable.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              PRT Notice Periods & Compliance Checklist
+            </h2>
+            <p className="text-gray-700 mb-8">
+              Landlords can only end a PRT with valid grounds and the correct notice length. This
+              checklist helps avoid tribunal delays or rejected notices.
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Notice periods</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>28 days for rent arrears and antisocial behaviour.</li>
+                  <li>84 days for most other landlord grounds.</li>
+                  <li>Ground and notice must be cited on the Notice to Leave.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Incorrect ground or notice period.</li>
+                  <li>Missing landlord registration number.</li>
+                  <li>Applying to the wrong forum.</li>
+                </ul>
+                <Link href="/scotland-eviction-notices" className="text-blue-600 hover:underline text-sm font-semibold inline-flex mt-3">
+                  See Notice to Leave guidance →
+                </Link>
               </div>
             </div>
           </div>
