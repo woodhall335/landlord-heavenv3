@@ -17,6 +17,7 @@ import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-li
 import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
+import { LegalTrustBanner } from "@/components/seo/LegalTrustBanner";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
@@ -31,13 +32,13 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreements 2026 - Standard ${standardPrice} / Premium ${premiumPrice}`,
+  title: `Tenancy Agreement Pack 2026 for Landlords | From ${standardPrice}`,
   description:
-    `Legally compliant tenancy agreements 2026 for UK landlords. AST (England), Occupation Contract (Wales), PRT (Scotland), NI Tenancy. Preview before you buy. Standard ${standardPrice}, Premium ${premiumPrice}.`,
+    `For landlords who need compliant tenancy agreements without legal delays. AST (England), Occupation Contract (Wales), PRT (Scotland), NI tenancy templates in one pack.`,
   openGraph: {
-    title: `Tenancy Agreements 2026 - From ${standardPrice}`,
+    title: `Tenancy Agreement Pack 2026 for Landlords | From ${standardPrice}`,
     description:
-      "Legally compliant tenancy agreements for UK landlords 2026. AST England, Occupation Contract Wales, PRT Scotland, Northern Ireland. Preview before you buy.",
+      "Landlord-ready tenancy agreements for 2026: AST, occupation contracts, PRT, and NI templates. Built for compliance and speed.",
     type: 'website',
     url: getCanonicalUrl('/products/ast'),
   },
@@ -125,6 +126,14 @@ export default function ASTPage() {
               </span>
             </div>
 
+            <div className="mb-8 max-w-xl mx-auto text-left">
+              <LegalTrustBanner
+                jurisdiction="UK"
+                reviewedDate="10 January 2026"
+                updatedFor="2026"
+              />
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
@@ -140,6 +149,49 @@ export default function ASTPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">One-time payment • Unlimited regenerations • No subscription</p>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+              Tenancy Agreement Compliance Checklist
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Ensure your agreement matches the correct jurisdiction, includes mandatory clauses,
+              and avoids costly compliance errors.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Use the right agreement</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>AST for England tenancies.</li>
+                  <li>Occupation Contract for Wales.</li>
+                  <li>PRT for Scotland (open-ended).</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Mandatory details</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Correct landlord registration details.</li>
+                  <li>Deposit and rent terms stated clearly.</li>
+                  <li>Required clauses and repair obligations.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Avoid common mistakes</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Using an outdated template.</li>
+                  <li>Missing signatures or dates.</li>
+                  <li>Mixing England/Wales/Scotland terms.</li>
+                </ul>
+                <Link href="/tenancy-agreements/scotland" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
+                  Scotland PRT guidance →
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

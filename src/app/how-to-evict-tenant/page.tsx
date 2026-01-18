@@ -46,9 +46,9 @@ const complianceLinks = {
 };
 
 export const metadata: Metadata = {
-  title: 'How to Evict a Tenant UK (Landlord Guide 2026)',
+  title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
   description:
-    'Landlord-only guide to evicting tenants across the UK. Clear steps, notice periods, court routes, and compliant templates for England, Wales, Scotland & Northern Ireland.',
+    'For landlords who need a compliant eviction route without wasted time or court delays. Clear steps, notice periods, and templates for England, Wales, Scotland & Northern Ireland.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
     'renting homes wales act eviction',
   ],
   openGraph: {
-    title: 'How to Evict a Tenant in the UK - Complete 2026 Guide',
+    title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
     description:
-      'Complete guide to legally evicting a tenant across all UK jurisdictions. England, Wales, Scotland & Northern Ireland.',
+      'Landlord guide to legal eviction steps, timelines, and compliant notices across the UK.',
     type: 'article',
     url: getCanonicalUrl('/how-to-evict-tenant'),
   },
@@ -712,6 +712,59 @@ export default function HowToEvictTenantPage() {
               >
                 Northern Ireland Tenancy Agreements →
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Eviction Costs, Timelines & Validity Checklist
+              </h2>
+              <p className="text-gray-600 mb-10">
+                The biggest delays come from missing documents or incorrect notice dates. Use this
+                checklist to keep your eviction on track.
+              </p>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Typical timelines</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>England & Wales: 3–6 months.</li>
+                    <li>Scotland: 4–8 months.</li>
+                    <li>Contested cases take longer.</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Costs to plan for</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Court or tribunal fees by route.</li>
+                    <li>Process server or witness costs.</li>
+                    <li>Bailiff/enforcement fees if needed.</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Deposit protected and prescribed info served.</li>
+                    <li>EPC, gas safety, and guide served on time.</li>
+                    <li>Correct notice, dates, and service proof.</li>
+                  </ul>
+                  <Link
+                    href="/section-21-notice-template"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    Section 21 template →
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-6 text-sm text-gray-600">
+                Need grounds-based eviction? Use a{' '}
+                <Link href="/section-8-notice-template" className="text-primary font-medium hover:underline">
+                  Section 8 notice template
+                </Link>{' '}
+                to support rent arrears or breach cases.
+              </div>
             </div>
           </div>
         </section>

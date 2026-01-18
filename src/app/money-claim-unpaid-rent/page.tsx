@@ -18,9 +18,9 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Claim Unpaid Rent UK (Landlord Money Claim Guide 2026)',
+  title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
   description:
-    'Landlord guide to reclaiming rent arrears via MCOL (England & Wales), Simple Procedure (Scotland), and NI small claims. Templates, costs, and timelines.',
+    'For landlords reclaiming unpaid rent without costly delays. Follow the compliant money-claim process, understand fees and timelines, and use landlord-ready templates.',
   keywords: [
     'money claim online',
     'mcol',
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     'N1 claim form',
   ],
   openGraph: {
-    title: 'Claim Unpaid Rent UK - MCOL, Scotland & NI Guide',
+    title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
     description:
-      'Complete guide to recovering unpaid rent through the courts in England, Wales, Scotland and Northern Ireland.',
+      'Landlord guide to recovering unpaid rent through courts in England, Wales, Scotland and Northern Ireland.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-unpaid-rent'),
   },
@@ -319,6 +319,52 @@ export default function MoneyClaimUnpaidRentPage() {
                       Any tenant correspondence
                     </li>
                   </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Money Claim Costs, Timelines & Common Mistakes
+              </h2>
+              <p className="text-gray-600 mb-10">
+                Courts move faster when landlords submit the right evidence and follow the
+                pre-action rules. Use these checkpoints to avoid delays.
+              </p>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Timeline overview</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Letter before claim: 14 days.</li>
+                    <li>Default judgment: 2–4 weeks.</li>
+                    <li>Defended claim: 3–6 months.</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Costs to plan</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>MCOL fees based on claim value.</li>
+                    <li>Simple Procedure fees in Scotland.</li>
+                    <li>Enforcement fees if tenant ignores judgment.</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Skipping the letter before action.</li>
+                    <li>Missing proof of arrears.</li>
+                    <li>Incorrect tenant address for service.</li>
+                  </ul>
+                  <Link
+                    href="/products/money-claim"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    Get the Money Claim Pack →
+                  </Link>
                 </div>
               </div>
             </div>

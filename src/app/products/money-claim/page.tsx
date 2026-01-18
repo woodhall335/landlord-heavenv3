@@ -18,6 +18,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
+import { LegalTrustBanner } from "@/components/seo/LegalTrustBanner";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
@@ -33,12 +34,12 @@ const product = PRODUCTS.money_claim;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Money Claim Pack 2026 - ${price}`,
+  title: `Money Claim Pack 2026 for Landlords | ${price}`,
   description:
-    `Recover unpaid rent, property damage & costs through UK courts 2026. 11 documents including N1 form, Particulars of Claim, PAP-DEBT compliance. England, Wales & Scotland. ${price} one-time.`,
+    `For landlords reclaiming unpaid rent fast, this money claim pack keeps you compliant with court rules, saves time, and reduces costly mistakes. Start your pack.`,
   openGraph: {
-    title: `Money Claim Pack 2026 - Recover Rent Arrears - ${price}`,
-    description: "Recover unpaid rent, property damage and cleaning costs through UK courts. MCOL and Scottish Simple Procedure. PAP-DEBT compliance.",
+    title: `Money Claim Pack 2026 for Landlords | ${price}`,
+    description: "Money claim pack for landlords to recover rent arrears with compliant forms, letters, and court-ready guidance.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -127,6 +128,14 @@ export default function MoneyClaimPage() {
               </span>
             </div>
 
+            <div className="mb-8 max-w-xl mx-auto text-left">
+              <LegalTrustBanner
+                jurisdiction="UK"
+                reviewedDate="10 January 2026"
+                updatedFor="2026"
+              />
+            </div>
+
             <Link
               href="/wizard?product=money_claim&src=product_page&topic=arrears"
               className="hero-btn-primary"
@@ -162,6 +171,49 @@ export default function MoneyClaimPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <WhatYouGet product="money_claim" />
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+              Money Claim Timeline, Fees & Evidence
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Prepare the right evidence, understand court fees, and keep your claim moving without
+              unnecessary delays.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Letter before claim: 14 days.</li>
+                  <li>Default judgment: 2–4 weeks.</li>
+                  <li>Defended claims: 3–6 months.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Court fees</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Fees vary by claim size and route.</li>
+                  <li>Most fees can be added to the claim.</li>
+                  <li>Pack includes fee guidance by jurisdiction.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Evidence checklist</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Tenancy agreement + rent schedule.</li>
+                  <li>Bank statements showing missed payments.</li>
+                  <li>Demand letters and tenant responses.</li>
+                </ul>
+                <Link href="/money-claim-unpaid-rent" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
+                  See the landlord money claim guide →
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

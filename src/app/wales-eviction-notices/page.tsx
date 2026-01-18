@@ -15,9 +15,9 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Wales Eviction Notice Guide for Landlords (Renting Homes Act)',
+  title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
   description:
-    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act 2016. Notice periods, occupation contracts, and possession routes.',
+    'For landlords needing compliant Welsh eviction notices without delays or wasted costs. Notice periods, occupation contracts, and possession routes under the Renting Homes (Wales) Act.',
   keywords: [
     'eviction notice wales',
     'renting homes wales act',
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     'contract holder wales',
   ],
   openGraph: {
-    title: 'Eviction Notices in Wales - Renting Homes Act Guide',
+    title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
     description:
-      'How to legally evict a tenant in Wales under the Renting Homes (Wales) Act 2016. Occupation contracts and possession procedures.',
+      'Landlord guide to Welsh eviction notices, notice periods, and compliant possession steps under the Renting Homes (Wales) Act.',
     type: 'article',
     url: getCanonicalUrl('/wales-eviction-notices'),
   },
@@ -498,6 +498,46 @@ export default function WalesEvictionNoticesPage() {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 lg:py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Wales Eviction Checklist & Common Mistakes
+              </h2>
+              <p className="text-gray-600 mb-10">
+                Welsh possession cases are often delayed by missing documents or incorrect notice
+                wording. Use this checklist before you serve notice.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">Validity checklist</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Correct occupation contract type and notice form.</li>
+                    <li>Deposit protected and information served.</li>
+                    <li>Landlord registration and required records.</li>
+                    <li>Accurate dates and service evidence.</li>
+                  </ul>
+                </div>
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">Common mistakes</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Using England Section 21/8 templates.</li>
+                    <li>Serving the wrong notice period.</li>
+                    <li>Missing proof of service.</li>
+                    <li>Skipping pre-action communication.</li>
+                  </ul>
+                  <Link
+                    href="/how-to-evict-tenant"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    See UK eviction steps →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

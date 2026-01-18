@@ -16,9 +16,9 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Scotland Eviction Notice Guide for Landlords (Notice to Leave)',
+  title: 'Scottish Eviction Notice 2026 for Landlords | Notice to Leave',
   description:
-    'Landlord guide to Scottish eviction notices. Notice to Leave, PRT rules, eviction grounds, and First-tier Tribunal steps for Scotland.',
+    'For landlords needing compliant Scottish eviction notices without costly delays. Notice to Leave rules, PRT grounds, and tribunal steps for 2026.',
   keywords: [
     'notice to leave scotland',
     'eviction notice scotland',
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     'evict tenant scotland',
   ],
   openGraph: {
-    title: 'Eviction Notices in Scotland - Notice to Leave & PRT Guide',
+    title: 'Scottish Eviction Notice 2026 for Landlords | Notice to Leave',
     description:
-      'How to legally evict a tenant in Scotland using Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016.',
+      'Landlord guide to Scotland Notice to Leave requirements, eviction grounds, and tribunal steps.',
     type: 'article',
     url: getCanonicalUrl('/scotland-eviction-notices'),
   },
@@ -656,6 +656,46 @@ export default function ScotlandEvictionNoticesPage() {
                       <strong>Evidence:</strong> Police reports, neighbour statements
                     </li>
                   </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 lg:py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Notice to Leave Checklist & Common Mistakes
+              </h2>
+              <p className="text-gray-600 mb-10">
+                Scottish Tribunal cases stall when the notice is incomplete or evidence is weak.
+                Use this checklist before you serve.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Correct eviction ground and notice period.</li>
+                    <li>Landlord registration number included.</li>
+                    <li>Pre-action steps completed for arrears.</li>
+                    <li>Proof of service retained.</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Using England Section 21/8 forms.</li>
+                    <li>Serving the wrong notice length.</li>
+                    <li>Missing evidence for grounds.</li>
+                    <li>Applying to court instead of Tribunal.</li>
+                  </ul>
+                  <Link
+                    href="/tenancy-agreements/scotland"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    Review Scotland PRT rules →
+                  </Link>
                 </div>
               </div>
             </div>

@@ -39,8 +39,8 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice (Form 3) UK - Free Template Download (England)',
-  description: 'Download a free Section 8 notice template for England. Grounds-based eviction for rent arrears, antisocial behaviour, and property damage. Court-ready Form 3 documents for UK landlords.',
+  title: 'Section 8 Notice Template 2026 for Landlords | Free Form 3',
+  description: 'For landlords who need a grounds-based eviction notice fast, use this Section 8 template to avoid delays, costs, and compliance errors. Free Form 3 template included.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -61,8 +61,8 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/section-8-notice-template',
   },
   openGraph: {
-    title: 'Section 8 Notice (Form 3) UK - Free Template Download | Landlord Heaven',
-    description: 'Download a free Section 8 notice template for England. Grounds-based eviction with court-ready Form 3 documents for UK landlords.',
+    title: 'Section 8 Notice Template 2026 for Landlords | Free Form 3',
+    description: 'Free Section 8 notice template for landlords in England. Serve the correct Form 3 with grounds, timelines, and compliance clarity.',
     type: 'website',
   },
 };
@@ -308,6 +308,59 @@ export default function Section8NoticeTemplatePage() {
                       (discretionary). This gives you a backup if arrears drop below 2 months before the hearing.
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Timeline + Evidence */}
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Section 8 Timeline, Costs & Evidence Checklist
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Section 8 is grounds-based, so the quality of evidence and compliance matters as much
+                as the notice itself. Use this checklist to avoid delays.
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Notice period</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Ground 8/10/11: 2 weeks for serious arrears.</li>
+                    <li>Most other grounds: 2 months.</li>
+                    <li>Notice valid for 12 months after service.</li>
+                    <li>Typical possession timeline: 3–6 months.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Evidence to prepare</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Rent schedule and arrears calculation.</li>
+                    <li>Tenancy agreement + breach evidence.</li>
+                    <li>Communication history with tenant.</li>
+                    <li>Photos, reports, or witness statements.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li>Choosing the wrong grounds.</li>
+                    <li>Missing mandatory evidence at hearing.</li>
+                    <li>Incorrect service method or dates.</li>
+                    <li>Not linking grounds to specific facts.</li>
+                  </ul>
+                  <Link
+                    href="/how-to-evict-tenant"
+                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                  >
+                    See the full eviction process →
+                  </Link>
                 </div>
               </div>
             </div>
