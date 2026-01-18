@@ -722,3 +722,134 @@ describe('H) Wales Section 173 - HARD-LOCKED 6 Months (Regression Tests)', () =>
     });
   });
 });
+
+// ============================================================================
+// SECTION I: TEMPLATE REGRESSION TESTS - Prevent RHW17 Reintroduction
+// ============================================================================
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+describe('Wales Section 173 Template Regression - No RHW17 in Guidance', () => {
+  /**
+   * CRITICAL REGRESSION TEST
+   *
+   * This test ensures that customer-facing guidance templates do NOT suggest
+   * that RHW17 (2-month notice) is selectable or available for Section 173.
+   *
+   * The official RHW16 form template (notice.hbs) contains guidance text that
+   * mentions RHW17 as an alternative - that's OK because it's official Welsh
+   * Government form text. But our custom guidance templates must NOT imply
+   * RHW17 is an option.
+   *
+   * Forbidden patterns in guidance templates:
+   * - "RHW17" as a selectable option
+   * - "2 months" / "two months" as Section 173 notice period
+   * - "2-month regime" / "2_month"
+   */
+
+  const GUIDANCE_TEMPLATES = [
+    'config/jurisdictions/uk/wales/templates/eviction/compliance-audit.hbs',
+    'config/jurisdictions/uk/wales/templates/eviction/service_instructions.hbs',
+    'config/jurisdictions/uk/wales/templates/eviction/checklist_section_173.hbs',
+    'config/jurisdictions/uk/wales/templates/eviction/service_instructions_section_173.hbs',
+  ];
+
+  // Patterns that must NOT appear in guidance templates
+  // These patterns suggest RHW17 is selectable or 2-month notice is valid
+  const FORBIDDEN_PATTERNS = [
+    // RHW17 as a bullet point / listed option
+    /[-•]\s*RHW17/i,
+    // RHW17: description (as if it's a choice)
+    /RHW17:\s*Section\s*173/i,
+    // "2 months" in context of Section 173 notice period (not rent arrears)
+    /Section\s*173.*(?:minimum|notice\s*period).*2\s*months/i,
+    /2\s*months?.*(?:from\s*service|notice\s*period).*Section\s*173/i,
+    // "2-month regime" or "2_month"
+    /2-month\s*regime/i,
+    /wales_section173_notice_regime.*2_month/i,
+  ];
+
+  // Template files to check
+  const templateDir = path.resolve(process.cwd());
+
+  GUIDANCE_TEMPLATES.forEach((templatePath) => {
+    const fullPath = path.join(templateDir, templatePath);
+
+    it(`${templatePath} should not suggest RHW17 is selectable`, () => {
+      // Skip if file doesn't exist
+      if (!fs.existsSync(fullPath)) {
+        console.warn(`Template not found: ${fullPath}`);
+        return;
+      }
+
+      const content = fs.readFileSync(fullPath, 'utf-8');
+
+      FORBIDDEN_PATTERNS.forEach((pattern) => {
+        const match = content.match(pattern);
+        if (match) {
+          throw new Error(
+            `REGRESSION: Template ${templatePath} contains forbidden pattern ` +
+              `suggesting RHW17 is selectable: "${match[0]}"\n` +
+              `Section 173 is hard-locked to 6 months (RHW16 only).`
+          );
+        }
+      });
+    });
+  });
+
+  it('compliance-audit.hbs should only list RHW16 for Section 173', () => {
+    const auditPath = path.join(
+      templateDir,
+      'config/jurisdictions/uk/wales/templates/eviction/compliance-audit.hbs'
+    );
+
+    if (!fs.existsSync(auditPath)) {
+      console.warn('compliance-audit.hbs not found');
+      return;
+    }
+
+    const content = fs.readFileSync(auditPath, 'utf-8');
+
+    // Should contain RHW16
+    expect(content).toMatch(/RHW16/);
+
+    // Should NOT contain RHW17 as a bullet point option
+    expect(content).not.toMatch(/[-•]\s*RHW17/);
+
+    // The forms list should only show RHW16 for Section 173
+    const formsSection = content.match(
+      /Prescribed forms.*?:[\s\S]*?(?=\d\.|$)/i
+    );
+    if (formsSection) {
+      expect(formsSection[0]).not.toMatch(/RHW17/);
+    }
+  });
+
+  it('service_instructions.hbs should state 6 months for Section 173', () => {
+    const instructionsPath = path.join(
+      templateDir,
+      'config/jurisdictions/uk/wales/templates/eviction/service_instructions.hbs'
+    );
+
+    if (!fs.existsSync(instructionsPath)) {
+      console.warn('service_instructions.hbs not found');
+      return;
+    }
+
+    const content = fs.readFileSync(instructionsPath, 'utf-8');
+
+    // Look for Section 173 Notice Period section specifically
+    // This matches the block under "Wait for the Notice Period to Expire"
+    const noticePeriodSection = content.match(
+      /Section 173 Notice Period:[\s\S]*?(?=\{\{\/if\}\}|\{\{#if)/
+    );
+    if (noticePeriodSection) {
+      // Should mention 6 months, not 2 months
+      expect(noticePeriodSection[0]).toMatch(/6\s*months/i);
+      expect(noticePeriodSection[0]).not.toMatch(
+        /(?:minimum|notice\s*period).*2\s*months/i
+      );
+    }
+  });
+});
