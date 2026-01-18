@@ -11,7 +11,7 @@
  */
 
 // Type for arrears items matching the canonical schema
-interface ArrearsItem {
+export interface ArrearsItem {
   period_start?: string;
   period_end?: string;
   rent_due?: number;

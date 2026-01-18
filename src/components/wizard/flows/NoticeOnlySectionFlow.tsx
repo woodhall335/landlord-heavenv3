@@ -947,9 +947,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'scotland_compliance':
         return <ScotlandComplianceSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'scotland_grounds':
-        return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
+        return <ScotlandGroundsSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} caseId={caseId} />;
       case 'scotland_notice':
-        return <ScotlandNoticeSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} />;
+        return <ScotlandNoticeSection facts={facts} onUpdate={handleUpdate} onSetCurrentQuestionId={setCurrentQuestionId} caseId={caseId} />;
 
       // England/Wales sections
       case 'case_basics':
