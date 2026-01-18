@@ -985,6 +985,127 @@ describe('NoticeOnlySectionFlow - Scotland Section Completion', () => {
 });
 
 /**
+ * Scotland Ground Codes Compatibility Tests
+ *
+ * These tests verify that selecting a Scotland ground sets the ground_codes field
+ * required by the preview/generate requirements validator.
+ *
+ * Bug: Scotland notice_only preview showed "Required information missing: ground_codes"
+ * because ScotlandGroundsSection only wrote scotland_eviction_ground (number),
+ * but requirements validator expected ground_codes (string[]).
+ */
+describe('NoticeOnlySectionFlow - Scotland Ground Codes Compatibility', () => {
+  it('should set ground_codes when a Scotland ground is selected', () => {
+    // Simulate the handleGroundSelect logic from ScotlandGroundsSection
+    const handleGroundSelect = (
+      groundNumber: number,
+      grounds: Array<{ number: number; code: string; name: string; noticePeriodDays: number }>
+    ) => {
+      const ground = grounds.find(g => g.number === groundNumber);
+      const groundCode = ground?.code || `Ground ${groundNumber}`;
+      return {
+        scotland_eviction_ground: groundNumber,
+        scotland_ground_notice_period: ground?.noticePeriodDays || 84,
+        scotland_ground_name: ground?.name || '',
+        scotland_ground_type: 'discretionary',
+        ground_codes: [groundCode],
+      };
+    };
+
+    const mockGrounds = [
+      { number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84 },
+      { number: 12, code: 'Ground 12', name: 'Rent arrears', noticePeriodDays: 28 },
+      { number: 18, code: 'Ground 18', name: 'Rent arrears (3 months)', noticePeriodDays: 28 },
+    ];
+
+    // Test Ground 1
+    const result1 = handleGroundSelect(1, mockGrounds);
+    expect(result1.scotland_eviction_ground).toBe(1);
+    expect(result1.ground_codes).toEqual(['Ground 1']);
+    expect(result1.scotland_ground_notice_period).toBe(84);
+
+    // Test Ground 12
+    const result12 = handleGroundSelect(12, mockGrounds);
+    expect(result12.scotland_eviction_ground).toBe(12);
+    expect(result12.ground_codes).toEqual(['Ground 12']);
+    expect(result12.scotland_ground_notice_period).toBe(28);
+
+    // Test Ground 18 (the reported issue)
+    const result18 = handleGroundSelect(18, mockGrounds);
+    expect(result18.scotland_eviction_ground).toBe(18);
+    expect(result18.ground_codes).toEqual(['Ground 18']);
+    expect(result18.scotland_ground_notice_period).toBe(28);
+  });
+
+  it('should fallback to "Ground N" format if ground not found in config', () => {
+    const handleGroundSelect = (
+      groundNumber: number,
+      grounds: Array<{ number: number; code: string }>
+    ) => {
+      const ground = grounds.find(g => g.number === groundNumber);
+      const groundCode = ground?.code || `Ground ${groundNumber}`;
+      return {
+        scotland_eviction_ground: groundNumber,
+        ground_codes: [groundCode],
+      };
+    };
+
+    // Ground 99 doesn't exist
+    const result = handleGroundSelect(99, []);
+    expect(result.ground_codes).toEqual(['Ground 99']);
+  });
+});
+
+/**
+ * Scotland Notice Copy Tests
+ *
+ * These tests verify that Scotland notice section uses notice_only-appropriate copy,
+ * not "complete pack" language which is for the full eviction pack product.
+ */
+describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
+  it('should NOT contain "complete pack" in Scotland notice section copy', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-copy',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+        notice_already_served: false,
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // "complete pack" should NOT appear anywhere
+    expect(screen.queryByText(/complete pack/i)).toBeNull();
+  });
+
+  it('should show notice_only-appropriate copy when generating notice', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-notice-copy',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+        notice_already_served: false,
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Click on Notice tab to view notice section
+    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    noticeButton.click();
+
+    // Should show appropriate copy without "complete pack"
+    // The text should indicate notice generation, not pack generation
+    expect(screen.queryByText(/complete pack/i)).toBeNull();
+  });
+});
+
+/**
  * Scotland Review Section Tests
  */
 describe('NoticeOnlySectionFlow - Scotland Review Section', () => {

@@ -37,11 +37,16 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
 
   const handleGroundSelect = (groundNumber: number) => {
     const ground = grounds.find(g => g.number === groundNumber);
+    // Write both Scotland-specific fields AND generic ground_codes for requirements validation
+    // ground_codes is expected by the notice_only preview requirements validator
+    const groundCode = ground?.code || `Ground ${groundNumber}`;
     onUpdate({
       scotland_eviction_ground: groundNumber,
       scotland_ground_notice_period: ground?.noticePeriodDays || 84,
       scotland_ground_name: ground?.name || '',
       scotland_ground_type: 'discretionary', // All Scotland grounds are discretionary
+      // Also set ground_codes for compatibility with requirements validator
+      ground_codes: [groundCode],
     });
   };
 

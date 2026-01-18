@@ -216,7 +216,7 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
         <div className="space-y-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="font-medium text-purple-900">Notice to Leave Will Be Generated</h4>
           <p className="text-purple-700 text-sm">
-            Your complete pack will include a Notice to Leave document using{' '}
+            We will generate a Notice to Leave for you using{' '}
             {groundData ? `${groundData.code} (${groundData.name})` : 'your selected ground'}.
           </p>
 
