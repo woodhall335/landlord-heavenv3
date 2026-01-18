@@ -151,68 +151,8 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
         </div>
       )}
 
-      {/* Ground Particulars / Statement - with Ask Heaven enhancement */}
-      {groundData && (
-        <div
-          className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg"
-          onFocusCapture={handleParticularsFocus}
-        >
-          <label htmlFor="ground_particulars" className="block text-sm font-medium text-gray-800">
-            Statement of Particulars
-            <span className="text-gray-500 font-normal ml-2">(Optional)</span>
-          </label>
-          <p className="text-xs text-gray-600">
-            Provide details supporting your eviction ground. This will be included in your Notice to Leave.
-          </p>
-
-          {/* "Use gathered details" button */}
-          <div className="mt-2">
-            <button
-              type="button"
-              onClick={handleUseGatheredDetails}
-              className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-md hover:bg-purple-100 transition-colors"
-            >
-              <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Use gathered details as starting point
-            </button>
-          </div>
-
-          <textarea
-            id="ground_particulars"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] bg-white"
-            rows={8}
-            value={groundParticulars}
-            onChange={(e) => onUpdate({ scotland_ground_particulars: e.target.value })}
-            placeholder={`Describe the specific circumstances supporting ${groundData.code}. Include relevant dates, amounts, and any correspondence.`}
-          />
-
-          {/* Ask Heaven inline enhancer */}
-          <div className="mt-2">
-            <AskHeavenInlineEnhancer
-              caseId={caseId}
-              questionId="scotland_ground_particulars"
-              answer={groundParticulars}
-              onApply={(newText) => onUpdate({ scotland_ground_particulars: newText })}
-              questionText="Provide details supporting your eviction ground for the Notice to Leave"
-              context={{
-                jurisdiction: 'scotland',
-                ground_number: selectedGround,
-                ground_name: groundData?.name,
-                field_type: 'ground_particulars',
-              }}
-              apiMode="generic"
-              minChars={20}
-              buttonLabel="Enhance with Ask Heaven"
-              helperText="AI will improve clarity and tribunal-readiness"
-              compact
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Scotland Arrears Schedule - Only for Ground 18 (Rent Arrears) */}
+      {/* Scotland Arrears Schedule - FIRST for Ground 18 (Rent Arrears) */}
+      {/* REORDERED: Arrears schedule now comes BEFORE particulars per task requirements */}
       {isRentArrearsGround && (
         <div className="space-y-4">
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
@@ -286,6 +226,75 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
               </div>
             );
           })()}
+        </div>
+      )}
+
+      {/* Ground details & supporting statement - CONSOLIDATED (replaces duplicate evidence/particulars fields) */}
+      {/* UPDATED per task requirements: Single field combining evidence description + statement of particulars */}
+      {groundData && (
+        <div
+          className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg"
+          onFocusCapture={handleParticularsFocus}
+        >
+          <label htmlFor="ground_particulars" className="block text-sm font-medium text-gray-800">
+            Ground details &amp; supporting statement
+          </label>
+          <p className="text-xs text-gray-600">
+            {isRentArrearsGround ? (
+              <>Summarise the rent arrears and supporting details. This will be included in your Notice to Leave.</>
+            ) : (
+              <>Provide details supporting your eviction ground. This will be included in your Notice to Leave.</>
+            )}
+          </p>
+
+          {/* "Use gathered details" button - auto-populates from arrears schedule for Ground 18 */}
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={handleUseGatheredDetails}
+              className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-md hover:bg-purple-100 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              {isRentArrearsGround
+                ? 'Auto-generate from arrears schedule'
+                : 'Use gathered details as starting point'}
+            </button>
+          </div>
+
+          <textarea
+            id="ground_particulars"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] bg-white"
+            rows={8}
+            value={groundParticulars}
+            onChange={(e) => onUpdate({ scotland_ground_particulars: e.target.value })}
+            placeholder={isRentArrearsGround
+              ? `Click "Auto-generate from arrears schedule" above to populate this with your arrears details (rent amount, unpaid periods, total arrears). You can then edit as needed.`
+              : `Describe the specific circumstances supporting ${groundData.code}. Include relevant dates, amounts, and any correspondence.`}
+          />
+
+          {/* Ask Heaven inline enhancer */}
+          <div className="mt-2">
+            <AskHeavenInlineEnhancer
+              caseId={caseId}
+              questionId="scotland_ground_particulars"
+              answer={groundParticulars}
+              onApply={(newText) => onUpdate({ scotland_ground_particulars: newText })}
+              questionText="Provide details supporting your eviction ground for the Notice to Leave"
+              context={{
+                jurisdiction: 'scotland',
+                ground_number: selectedGround,
+                ground_name: groundData?.name,
+                field_type: 'ground_particulars',
+              }}
+              apiMode="generic"
+              minChars={20}
+              buttonLabel="Enhance with Ask Heaven"
+              helperText="AI will improve clarity and tribunal-readiness"
+              compact
+            />
+          </div>
         </div>
       )}
 

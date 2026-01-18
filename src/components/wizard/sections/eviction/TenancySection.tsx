@@ -5,36 +5,90 @@
  *
  * Fields:
  * - tenancy_start_date: When the tenancy began
- * - tenancy_type: Fixed term AST, periodic AST, etc.
- * - fixed_term_end_date: If fixed term (affects notice timing)
+ * - tenancy_type: Jurisdiction-specific tenancy type
+ * - fixed_term_end_date: If fixed term (England only - affects notice timing)
  * - rent_amount: Monthly/weekly rent amount
  * - rent_frequency: weekly/fortnightly/monthly
  * - rent_due_day: Day rent is due (critical for Section 8 wording)
  *
  * Legal context:
  * - rent_due_day is REQUIRED for Section 8 notices to describe the rental period
- * - fixed_term_end_date affects when notices can expire
+ * - fixed_term_end_date affects when notices can expire (England only)
+ *
+ * JURISDICTION-SPECIFIC TENANCY TYPES:
+ * - England: AST (Fixed/Periodic), Assured Tenancy, Regulated Tenancy
+ * - Scotland: PRT (2017+), SAT (1989-2017), AT (legacy), Regulated (pre-1989)
+ * - Wales: Uses separate OccupationContractSection component
+ *
+ * CROSS-JURISDICTION TERMINOLOGY GUARDRAILS:
+ * - Scotland MUST NOT show: "Section 21", "Assured Shorthold Tenancy", "How to Rent",
+ *   "fixed term end date", "break clause", "2 months notice"
+ * - Scotland MUST show: "First-tier Tribunal", "Notice to Leave", discretionary grounds
  */
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface TenancySectionProps {
   facts: WizardFacts;
-  // Scotland uses the same tenancy date/rent fields as England/Wales - no jurisdiction-specific logic
-  // Note: Scotland's PRT-specific validations (6-month rule) are handled in NoticeOnlySectionFlow
   jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
-const TENANCY_TYPES = [
+// =============================================================================
+// JURISDICTION-SPECIFIC TENANCY TYPES
+// =============================================================================
+// CRITICAL: These mappings ensure correct legal terminology per jurisdiction.
+// Do NOT mix England terminology (AST, Section 21) into Scotland or vice versa.
+
+/**
+ * England tenancy types (Housing Act 1988)
+ * Internal codes: ast_fixed, ast_periodic, assured, regulated
+ */
+const ENGLAND_TENANCY_TYPES = [
   { value: 'ast_fixed', label: 'Assured Shorthold Tenancy (Fixed term)' },
   { value: 'ast_periodic', label: 'Assured Shorthold Tenancy (Periodic/Rolling)' },
   { value: 'assured', label: 'Assured Tenancy (pre-1997)' },
   { value: 'regulated', label: 'Regulated Tenancy (pre-1989)' },
 ];
+
+/**
+ * Scotland tenancy types (Private Housing (Tenancies) (Scotland) Act 2016)
+ * Internal codes: prt, sat, assured_scotland, regulated_scotland
+ *
+ * NOTE: Scotland does NOT use AST. The PRT replaced the old SAT/AT system in 2017.
+ * We use distinct internal codes to avoid confusion with England types.
+ */
+const SCOTLAND_TENANCY_TYPES = [
+  { value: 'prt', label: 'Private Residential Tenancy (PRT) (2017–present)' },
+  { value: 'sat', label: 'Short Assured Tenancy (SAT) (1989–2017) [legacy]' },
+  { value: 'assured_scotland', label: 'Assured Tenancy (AT) (1989–present) [legacy]' },
+  { value: 'regulated_scotland', label: 'Regulated Tenancy (pre-1989) [legacy/rare]' },
+];
+
+/**
+ * Get tenancy types for the given jurisdiction.
+ * Wales uses a separate OccupationContractSection, but we include a fallback.
+ */
+function getTenancyTypesForJurisdiction(jurisdiction: 'england' | 'wales' | 'scotland') {
+  switch (jurisdiction) {
+    case 'scotland':
+      return SCOTLAND_TENANCY_TYPES;
+    case 'wales':
+      // Wales should use OccupationContractSection, but provide fallback
+      // TODO(LEGAL): Wales fallback - should not be reached in normal flow
+      return [
+        { value: 'standard_periodic', label: 'Standard Contract (Periodic)' },
+        { value: 'standard_fixed', label: 'Standard Contract (Fixed term)' },
+        { value: 'secure', label: 'Secure Contract (social landlord)' },
+      ];
+    case 'england':
+    default:
+      return ENGLAND_TENANCY_TYPES;
+  }
+}
 
 const RENT_FREQUENCIES = [
   { value: 'weekly', label: 'Weekly' },
@@ -45,11 +99,21 @@ const RENT_FREQUENCIES = [
 
 export const TenancySection: React.FC<TenancySectionProps> = ({
   facts,
+  jurisdiction,
   onUpdate,
 }) => {
+  // Get jurisdiction-specific tenancy types
+  const tenancyTypes = useMemo(() => getTenancyTypesForJurisdiction(jurisdiction), [jurisdiction]);
+
   const tenancyType = facts.tenancy_type || '';
   const rentFrequency = facts.rent_frequency || 'monthly';
-  const isFixedTerm = tenancyType === 'ast_fixed';
+
+  // Fixed term logic differs by jurisdiction:
+  // - England: ast_fixed is fixed term
+  // - Wales: standard_fixed is fixed term (handled by OccupationContractSection)
+  // - Scotland: PRT has NO fixed term concept - all PRTs are open-ended
+  const isScotland = jurisdiction === 'scotland';
+  const isFixedTerm = !isScotland && (tenancyType === 'ast_fixed' || tenancyType === 'standard_fixed');
 
   // Initialize default values for rent_frequency and rent_due_day
   // This ensures displayed defaults are saved to facts for isComplete checks
@@ -99,15 +163,20 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
           onChange={(e) => onUpdate({ tenancy_start_date: e.target.value })}
         />
         <p className="text-xs text-gray-500">
-          The date the current tenancy began. This affects notice period calculations
-          and the &apos;How to Rent&apos; requirement.
+          {isScotland ? (
+            // Scotland: No "How to Rent" requirement - reference 6-month rule instead
+            <>The date the current tenancy began. This affects notice period calculations and the 6-month rule.</>
+          ) : (
+            // England: "How to Rent" guide is an England-specific requirement
+            <>The date the current tenancy began. This affects notice period calculations and the &apos;How to Rent&apos; requirement.</>
+          )}
         </p>
       </div>
 
       {/* Tenancy type */}
       <div className="space-y-2">
         <label htmlFor="tenancy_type" className="block text-sm font-medium text-gray-700">
-          Tenancy type
+          {isScotland ? 'Tenancy type' : 'Tenancy type'}
           <span className="text-red-500 ml-1">*</span>
         </label>
         <select
@@ -116,17 +185,57 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
           value={tenancyType}
           onChange={(e) => onUpdate({ tenancy_type: e.target.value })}
         >
-          <option value="">Select tenancy type...</option>
-          {TENANCY_TYPES.map((type) => (
+          <option value="">{isScotland ? 'Select tenancy type...' : 'Select tenancy type...'}</option>
+          {tenancyTypes.map((type) => (
             <option key={type.value} value={type.value}>
               {type.label}
             </option>
           ))}
         </select>
         <p className="text-xs text-gray-500">
-          The tenancy type affects which notices can be used and notice periods.
+          {isScotland ? (
+            // Scotland: reference tribunal and discretionary grounds
+            <>The tenancy type affects which grounds apply. Most modern tenancies are PRTs.</>
+          ) : (
+            // England: reference notices and periods
+            <>The tenancy type affects which notices can be used and notice periods.</>
+          )}
         </p>
       </div>
+
+      {/* Scotland PRT info banner - show when PRT is selected */}
+      {isScotland && tenancyType === 'prt' && (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="text-sm font-medium text-blue-900 mb-1">
+            Private Residential Tenancy (PRT)
+          </h4>
+          <p className="text-sm text-blue-800">
+            PRTs are open-ended tenancies with no fixed term. To end a PRT, landlords must
+            serve a Notice to Leave and apply to the First-tier Tribunal (Housing and Property Chamber).
+            All eviction grounds are discretionary — the Tribunal considers reasonableness.
+          </p>
+        </div>
+      )}
+
+      {/* Scotland legacy tenancy warning */}
+      {isScotland && (tenancyType === 'sat' || tenancyType === 'assured_scotland' || tenancyType === 'regulated_scotland') && (
+        <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <h4 className="text-sm font-medium text-amber-900 mb-1">
+            Legacy Tenancy Type
+          </h4>
+          <p className="text-sm text-amber-800">
+            {tenancyType === 'sat' && (
+              <>Short Assured Tenancies (SATs) could not be created after 1 December 2017. If this tenancy started after that date, it is likely a PRT.</>
+            )}
+            {tenancyType === 'assured_scotland' && (
+              <>Assured Tenancies are rare for private lets created after 1989. Most private tenancies are now PRTs.</>
+            )}
+            {tenancyType === 'regulated_scotland' && (
+              <>Regulated Tenancies are very rare and provide strong tenant protections. Seek specialist legal advice.</>
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Fixed term end date (conditional) */}
       {isFixedTerm && (
@@ -302,8 +411,8 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
         )}
       </div>
 
-      {/* Legal info for Section 8 */}
-      {facts.eviction_route === 'section_8' && (
+      {/* Legal info for Section 8 (England only) */}
+      {!isScotland && facts.eviction_route === 'section_8' && (
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <h4 className="text-sm font-medium text-amber-900 mb-1">
             Section 8 Rent Details
@@ -312,6 +421,20 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
             The rent amount and due day are critical for Section 8 notices, especially Ground 8
             (rent arrears). The notice must accurately describe the rental period and calculate
             whether arrears meet the 2-month threshold.
+          </p>
+        </div>
+      )}
+
+      {/* Legal info for Scotland rent arrears (Ground 18) */}
+      {isScotland && (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="text-sm font-medium text-blue-900 mb-1">
+            Scotland Rent Details
+          </h4>
+          <p className="text-sm text-blue-800">
+            Accurate rent details are essential if you plan to use Ground 18 (rent arrears) for
+            eviction. The First-tier Tribunal requires evidence of 3 or more consecutive rent
+            periods of arrears.
           </p>
         </div>
       )}
