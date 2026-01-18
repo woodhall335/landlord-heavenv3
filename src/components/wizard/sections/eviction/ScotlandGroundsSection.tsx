@@ -182,20 +182,33 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
                   <div className="mt-4">
                     <p className="text-blue-800 font-medium text-sm">Required Evidence:</p>
                     <ul className="mt-1 space-y-1">
-                      {ground.requiredEvidence.slice(0, 4).map((ev, i) => (
+                      {ground.requiredEvidence.map((ev, i) => (
                         <li key={i} className="text-sm text-blue-600 flex items-start gap-2">
-                          <span>•</span>
+                          <span className="text-blue-400">•</span>
                           <span>{ev}</span>
                         </li>
                       ))}
-                      {ground.requiredEvidence.length > 4 && (
-                        <li className="text-sm text-blue-500 italic ml-4">
-                          + {ground.requiredEvidence.length - 4} more
-                        </li>
-                      )}
                     </ul>
                   </div>
                 )}
+
+                {/* Evidence description input */}
+                <div className="mt-4 pt-4 border-t border-blue-200">
+                  <label htmlFor="evidence_description" className="block text-sm font-medium text-blue-800 mb-2">
+                    Describe the evidence you have for this ground
+                  </label>
+                  <textarea
+                    id="evidence_description"
+                    className="w-full rounded-md border border-blue-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] bg-white"
+                    rows={4}
+                    value={facts.scotland_evidence_description || ''}
+                    onChange={(e) => onUpdate({ scotland_evidence_description: e.target.value })}
+                    placeholder="Briefly describe the evidence you have to support this ground. For example: 'I have 3 months of rent statements showing continuous arrears, emails requesting payment, and records of the tenant's partial payment attempts.'"
+                  />
+                  <p className="text-xs text-blue-500 mt-1">
+                    This helps prepare your case for the First-tier Tribunal.
+                  </p>
+                </div>
               </div>
             );
           })()}
