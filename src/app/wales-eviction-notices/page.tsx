@@ -82,8 +82,33 @@ const faqs = [
 ];
 
 export default function WalesEvictionNoticesPage() {
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Eviction Notices in Wales - Renting Homes (Wales) Act Guide',
+    description:
+      'Complete guide to evicting tenants in Wales under the Renting Homes (Wales) Act 2016, including notice types, possession claims, and rent arrears routes.',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': getCanonicalUrl('/wales-eviction-notices'),
+    },
+    author: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://landlordheaven.co.uk/og-image.png',
+      },
+    },
+  };
+
   return (
     <>
+      <StructuredData data={articleSchema} />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([

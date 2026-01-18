@@ -115,8 +115,33 @@ const evictionGrounds = [
 ];
 
 export default function ScotlandEvictionNoticesPage() {
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Eviction Notices in Scotland - Notice to Leave & PRT Guide',
+    description:
+      'Complete guide to Scotland eviction notices, including Notice to Leave, PRT requirements, eviction grounds, and tribunal steps.',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': getCanonicalUrl('/scotland-eviction-notices'),
+    },
+    author: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://landlordheaven.co.uk/og-image.png',
+      },
+    },
+  };
+
   return (
     <>
+      <StructuredData data={articleSchema} />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'Occupation Contract Wales 2026 | From £9.99',
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
     title: 'Occupation Contract Wales 2026 | From £9.99',
     description: 'Create a legally compliant Occupation Contract for Wales. Updated for 2026. Standard (£9.99) and Premium (£14.99) options.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/tenancy-agreements/wales',
+    url: getCanonicalUrl('/tenancy-agreements/wales'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tenancy-agreements/wales'),
   },
 };
 

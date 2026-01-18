@@ -107,8 +107,33 @@ const faqs = [
 ];
 
 export default function MoneyClaimUnpaidRentPage() {
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Claim Unpaid Rent UK - Money Claim Online (MCOL) Guide',
+    description:
+      'Guide to reclaiming unpaid rent from tenants via Money Claim Online (England & Wales), Simple Procedure (Scotland), and Northern Ireland court routes.',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': getCanonicalUrl('/money-claim-unpaid-rent'),
+    },
+    author: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Landlord Heaven',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://landlordheaven.co.uk/og-image.png',
+      },
+    },
+  };
+
   return (
     <>
+      <StructuredData data={articleSchema} />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
