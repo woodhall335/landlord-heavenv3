@@ -3,7 +3,11 @@ import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { AlertTriangle, Calendar, Scale, CheckCircle } from 'lucide-react';
-import { StructuredData, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { getCanonicalUrl } from '@/lib/seo';
+import { landingPageLinks, productLinks, blogLinks } from '@/lib/seo/internal-links';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 
 export const metadata: Metadata = {
   title: 'Section 21 Ban 2026 - Act Before May',
@@ -11,6 +15,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Section 21 Ends 1 May 2026 - Act Now',
     description: 'Last chance to serve no-fault eviction notices. Generate court-ready documents before the ban.',
+    url: getCanonicalUrl('/section-21-ban'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/section-21-ban'),
   },
 };
 
@@ -39,10 +47,26 @@ const faqs = [
 ];
 
 export default function Section21BanPage() {
+  const breadcrumbItems = [
+    { name: 'Home', url: 'https://landlordheaven.co.uk' },
+    { name: 'Section 21 Ban', url: 'https://landlordheaven.co.uk/section-21-ban' },
+  ];
+
   return (
     <main>
       {/* Structured Data for SEO */}
+      <StructuredData
+        data={articleSchema({
+          headline: 'Section 21 Ban 2026 - Landlord Deadline',
+          description:
+            'Landlord guidance on the Section 21 ban deadline, key dates, and next legal steps.',
+          url: getCanonicalUrl('/section-21-ban'),
+          datePublished: '2026-01-01',
+          dateModified: '2026-01-01',
+        })}
+      />
       <StructuredData data={faqPageSchema(faqs)} />
+      <StructuredData data={breadcrumbSchema(breadcrumbItems)} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary to-primary/80 text-white py-16 sm:py-24">
         <Container>
@@ -62,6 +86,15 @@ export default function Section21BanPage() {
 
             <div className="mb-10">
               <Section21Countdown variant="large" className="[&_*]:text-white" />
+            </div>
+
+            <div className="mb-8 max-w-2xl mx-auto text-left">
+              <LegalTrustBanner
+                jurisdiction="England"
+                reviewedDate="10 January 2026"
+                updatedFor="2026"
+                className="bg-white/10 text-white border-white/20"
+              />
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -331,6 +364,42 @@ export default function Section21BanPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <NextLegalSteps
+              jurisdictionLabel="England eviction deadlines"
+              scenarioLabel="post-ban eviction planning"
+              primaryCTA={{
+                label: 'Generate Section 21 notice — £39.99',
+                href: productLinks.noticeOnly.href,
+              }}
+              secondaryCTA={{
+                label: 'Complete eviction pack — £199.99',
+                href: productLinks.completePack.href,
+              }}
+              relatedLinks={[
+                {
+                  href: landingPageLinks.section21Template.href,
+                  title: landingPageLinks.section21Template.title,
+                  description: landingPageLinks.section21Template.description,
+                },
+                {
+                  href: landingPageLinks.section8Template.href,
+                  title: landingPageLinks.section8Template.title,
+                  description: landingPageLinks.section8Template.description,
+                },
+                {
+                  href: blogLinks.section21VsSection8.href,
+                  title: blogLinks.section21VsSection8.title,
+                  description: blogLinks.section21VsSection8.description,
+                },
+              ]}
+            />
           </div>
         </Container>
       </section>

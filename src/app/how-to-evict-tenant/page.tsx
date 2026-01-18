@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import {
   AlertTriangle,
@@ -11,9 +11,11 @@ import {
   Scale,
   FileText,
   MapPin,
-  Info,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 
 // Pre-built Ask Heaven compliance links for eviction page
 const complianceLinks = {
@@ -44,9 +46,9 @@ const complianceLinks = {
 };
 
 export const metadata: Metadata = {
-  title: 'How to Evict a Tenant in the UK - Complete Guide 2026',
+  title: 'How to Evict a Tenant UK (Landlord Guide 2026)',
   description:
-    'Step-by-step guide to legally evicting a tenant in England, Wales, Scotland & Northern Ireland. Section 21, Section 8, Notice to Leave, Renting Homes Act. Free tools and templates.',
+    'Landlord-only guide to evicting tenants across the UK. Clear steps, notice periods, court routes, and compliant templates for England, Wales, Scotland & Northern Ireland.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',
@@ -135,6 +137,16 @@ const faqs = [
 export default function HowToEvictTenantPage() {
   return (
     <>
+      <StructuredData
+        data={articleSchema({
+          headline: 'How to Evict a Tenant in the UK',
+          description:
+            'Landlord guide to eviction steps, notice periods, court routes, and compliant documents across the UK.',
+          url: getCanonicalUrl('/how-to-evict-tenant'),
+          datePublished: '2026-01-01',
+          dateModified: '2026-01-01',
+        })}
+      />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
@@ -154,7 +166,7 @@ export default function HowToEvictTenantPage() {
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                How to Evict a Tenant in the UK
+                How to Evict a Tenant in the UK (Landlord Guide)
               </h1>
 
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
@@ -164,16 +176,13 @@ export default function HowToEvictTenantPage() {
                 court procedures.
               </p>
 
-              {/* Disclaimer */}
-              <div className="bg-blue-900/50 border border-blue-700 rounded-lg p-4 mb-8 text-left max-w-2xl mx-auto">
-                <p className="text-sm text-blue-200 flex items-start gap-2">
-                  <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Not legal advice:</strong> This guide provides general information
-                    only. Laws differ between jurisdictions and change over time. For complex
-                    cases, consult a qualified solicitor.
-                  </span>
-                </p>
+              <div className="mb-8 max-w-2xl mx-auto text-left">
+                <LegalTrustBanner
+                  jurisdiction="UK"
+                  reviewedDate="10 January 2026"
+                  updatedFor="2026"
+                  className="bg-white/10 text-white border-white/20"
+                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -734,6 +743,47 @@ export default function HowToEvictTenantPage() {
           </div>
         </section>
 
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <NextLegalSteps
+                jurisdictionLabel="UK eviction routes"
+                scenarioLabel="tenant eviction"
+                primaryCTA={{
+                  label: 'Generate eviction notice — £39.99',
+                  href: productLinks.noticeOnly.href,
+                }}
+                secondaryCTA={{
+                  label: 'Complete eviction pack — £199.99',
+                  href: productLinks.completePack.href,
+                }}
+                relatedLinks={[
+                  {
+                    href: landingPageLinks.evictionTemplate.href,
+                    title: landingPageLinks.evictionTemplate.title,
+                    description: landingPageLinks.evictionTemplate.description,
+                  },
+                  {
+                    href: landingPageLinks.section21Template.href,
+                    title: landingPageLinks.section21Template.title,
+                    description: landingPageLinks.section21Template.description,
+                  },
+                  {
+                    href: guideLinks.walesEviction.href,
+                    title: guideLinks.walesEviction.title,
+                    description: 'Wales-specific Renting Homes Act notices.',
+                  },
+                  {
+                    href: guideLinks.scotlandEviction.href,
+                    title: guideLinks.scotlandEviction.title,
+                    description: 'Notice to Leave and PRT rules for Scotland.',
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
@@ -741,59 +791,6 @@ export default function HowToEvictTenantPage() {
           showContactCTA={false}
           variant="white"
         />
-
-        {/* Related Links */}
-        <section className="py-12 bg-gray-100 border-t">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Related Pages</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Link
-                  href="/section-21-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Section 21 Template</span>
-                  <p className="text-sm text-gray-500">England only</p>
-                </Link>
-                <Link
-                  href="/section-8-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Section 8 Template</span>
-                  <p className="text-sm text-gray-500">England only</p>
-                </Link>
-                <Link
-                  href="/eviction-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Eviction Notice Templates</span>
-                  <p className="text-sm text-gray-500">All UK regions</p>
-                </Link>
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Letter</span>
-                  <p className="text-sm text-gray-500">Pre-action letter</p>
-                </Link>
-                <Link
-                  href="/money-claim-unpaid-rent"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Money Claim Guide</span>
-                  <p className="text-sm text-gray-500">Recover unpaid rent</p>
-                </Link>
-                <Link
-                  href="/tools/rent-arrears-calculator"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Calculator</span>
-                  <p className="text-sm text-gray-500">Free tool</p>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );

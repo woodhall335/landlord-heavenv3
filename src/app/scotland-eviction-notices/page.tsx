@@ -1,22 +1,24 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   AlertTriangle,
   CheckCircle,
   ArrowRight,
   FileText,
-  Info,
   Home,
   Gavel,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Eviction Notices in Scotland - Notice to Leave & PRT Guide',
+  title: 'Scotland Eviction Notice Guide for Landlords (Notice to Leave)',
   description:
-    'Complete guide to evicting tenants in Scotland. Notice to Leave, Private Residential Tenancy (PRT), 18 eviction grounds, First-tier Tribunal process. Scotland landlord guide.',
+    'Landlord guide to Scottish eviction notices. Notice to Leave, PRT rules, eviction grounds, and First-tier Tribunal steps for Scotland.',
   keywords: [
     'notice to leave scotland',
     'eviction notice scotland',
@@ -115,33 +117,18 @@ const evictionGrounds = [
 ];
 
 export default function ScotlandEvictionNoticesPage() {
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'Eviction Notices in Scotland - Notice to Leave & PRT Guide',
-    description:
-      'Complete guide to Scotland eviction notices, including Notice to Leave, PRT requirements, eviction grounds, and tribunal steps.',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': getCanonicalUrl('/scotland-eviction-notices'),
-    },
-    author: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://landlordheaven.co.uk/og-image.png',
-      },
-    },
-  };
-
   return (
     <>
-      <StructuredData data={articleSchema} />
+      <StructuredData
+        data={articleSchema({
+          headline: 'Scotland Eviction Notices (Landlord Guide)',
+          description:
+            'Landlord guide to Scottish eviction notices, Notice to Leave requirements, and tribunal steps.',
+          url: getCanonicalUrl('/scotland-eviction-notices'),
+          datePublished: '2026-01-01',
+          dateModified: '2026-01-01',
+        })}
+      />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
@@ -161,7 +148,7 @@ export default function ScotlandEvictionNoticesPage() {
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                Eviction Notices in Scotland
+                Scotland Eviction Notices (Landlord Guide)
               </h1>
 
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -180,6 +167,15 @@ export default function ScotlandEvictionNoticesPage() {
                     Private Housing (Tenancies) (Scotland) Act 2016.
                   </span>
                 </p>
+              </div>
+
+              <div className="mb-8 max-w-2xl mx-auto text-left">
+                <LegalTrustBanner
+                  jurisdiction="Scotland"
+                  reviewedDate="10 January 2026"
+                  updatedFor="2026"
+                  className="bg-white/10 text-white border-white/20"
+                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -201,22 +197,6 @@ export default function ScotlandEvictionNoticesPage() {
           </div>
         </section>
 
-        {/* Disclaimer */}
-        <section className="py-6 bg-amber-50 border-b border-amber-200">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <p className="text-sm text-amber-900 flex items-start gap-2">
-                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>
-                  <strong>Not legal advice:</strong> This guide provides general information
-                  about Scottish tenancy law. Laws change regularly - always check the latest
-                  Scottish Government guidance or consult a solicitor for your specific
-                  situation.
-                </span>
-              </p>
-            </div>
-          </div>
-        </section>
 
         {/* Key Differences Section */}
         <section className="py-12 lg:py-16">
@@ -709,6 +689,47 @@ export default function ScotlandEvictionNoticesPage() {
           </div>
         </section>
 
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <NextLegalSteps
+                jurisdictionLabel="Scotland eviction notices"
+                scenarioLabel="Notice to Leave + Tribunal process"
+                primaryCTA={{
+                  label: 'Generate Notice to Leave — £39.99',
+                  href: productLinks.noticeOnly.href,
+                }}
+                secondaryCTA={{
+                  label: 'Complete eviction pack — £199.99',
+                  href: productLinks.completePack.href,
+                }}
+                relatedLinks={[
+                  {
+                    href: '/tenancy-agreements/scotland',
+                    title: 'Scotland PRT agreements',
+                    description: 'Create compliant private residential tenancy agreements.',
+                  },
+                  {
+                    href: '/blog/scotland-eviction-process',
+                    title: 'Scotland eviction process',
+                    description: 'Tribunal steps from Notice to Leave to enforcement.',
+                  },
+                  {
+                    href: '/blog/scotland-notice-to-leave',
+                    title: 'Notice to Leave guide',
+                    description: 'Notice periods and prescribed content.',
+                  },
+                  {
+                    href: '/money-claim-unpaid-rent',
+                    title: 'Unpaid rent claim guide',
+                    description: 'Recover arrears via Scottish Simple Procedure.',
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
@@ -716,59 +737,6 @@ export default function ScotlandEvictionNoticesPage() {
           showContactCTA={false}
           variant="white"
         />
-
-        {/* Related Links */}
-        <section className="py-12 bg-gray-100 border-t">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Related Pages</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Link
-                  href="/how-to-evict-tenant"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">UK Eviction Guide</span>
-                  <p className="text-sm text-gray-500">All jurisdictions</p>
-                </Link>
-                <Link
-                  href="/tenancy-agreements/scotland"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Scotland PRT Agreements</span>
-                  <p className="text-sm text-gray-500">Create compliant contracts</p>
-                </Link>
-                <Link
-                  href="/wales-eviction-notices"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Wales Eviction</span>
-                  <p className="text-sm text-gray-500">Renting Homes Act</p>
-                </Link>
-                <Link
-                  href="/section-21-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Section 21 Template</span>
-                  <p className="text-sm text-gray-500">England only</p>
-                </Link>
-                <Link
-                  href="/money-claim-unpaid-rent"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Money Claim Guide</span>
-                  <p className="text-sm text-gray-500">Recover unpaid rent</p>
-                </Link>
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Letter</span>
-                  <p className="text-sm text-gray-500">Pre-action letter</p>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );

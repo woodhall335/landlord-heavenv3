@@ -47,6 +47,15 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface ArticleSchemaInput {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+  image?: string;
+}
+
 /**
  * Organization structured data
  * Use this on the homepage and footer
@@ -269,6 +278,38 @@ export function websiteSchema() {
     "name": "Landlord Heaven",
     "url": SITE_URL
     // SearchAction removed - no search page exists
+  };
+}
+
+/**
+ * Article structured data
+ * Use this on guides and long-form content pages
+ */
+export function articleSchema(input: ArticleSchemaInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": input.headline,
+    "description": input.description,
+    "image": input.image || `${SITE_URL}/og-image.png`,
+    "datePublished": input.datePublished,
+    "dateModified": input.dateModified || input.datePublished,
+    "author": {
+      "@type": "Organization",
+      "name": "Landlord Heaven"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Landlord Heaven",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE_URL}/logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": input.url
+    }
   };
 }
 

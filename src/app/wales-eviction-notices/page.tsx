@@ -1,21 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   AlertTriangle,
   CheckCircle,
   ArrowRight,
   Scale,
-  Info,
   Home,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Eviction Notices in Wales - Renting Homes (Wales) Act Guide',
+  title: 'Wales Eviction Notice Guide for Landlords (Renting Homes Act)',
   description:
-    'Complete guide to evicting tenants in Wales under the Renting Homes (Wales) Act 2016. Occupation contracts, notice periods, possession claims. Wales-specific landlord guide.',
+    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act 2016. Notice periods, occupation contracts, and possession routes.',
   keywords: [
     'eviction notice wales',
     'renting homes wales act',
@@ -82,33 +84,18 @@ const faqs = [
 ];
 
 export default function WalesEvictionNoticesPage() {
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'Eviction Notices in Wales - Renting Homes (Wales) Act Guide',
-    description:
-      'Complete guide to evicting tenants in Wales under the Renting Homes (Wales) Act 2016, including notice types, possession claims, and rent arrears routes.',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': getCanonicalUrl('/wales-eviction-notices'),
-    },
-    author: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://landlordheaven.co.uk/og-image.png',
-      },
-    },
-  };
-
   return (
     <>
-      <StructuredData data={articleSchema} />
+      <StructuredData
+        data={articleSchema({
+          headline: 'Eviction Notices in Wales (Landlord Guide)',
+          description:
+            'Landlord guide to Wales eviction notices, notice periods, and possession routes under the Renting Homes (Wales) Act 2016.',
+          url: getCanonicalUrl('/wales-eviction-notices'),
+          datePublished: '2026-01-01',
+          dateModified: '2026-01-01',
+        })}
+      />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
@@ -128,7 +115,7 @@ export default function WalesEvictionNoticesPage() {
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                Eviction Notices in Wales
+                Wales Eviction Notices (Landlord Guide)
               </h1>
 
               <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
@@ -146,6 +133,15 @@ export default function WalesEvictionNoticesPage() {
                     Renting Homes (Wales) Act 2016.
                   </span>
                 </p>
+              </div>
+
+              <div className="mb-8 max-w-2xl mx-auto text-left">
+                <LegalTrustBanner
+                  jurisdiction="Wales"
+                  reviewedDate="10 January 2026"
+                  updatedFor="2026"
+                  className="bg-white/10 text-white border-white/20"
+                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -167,22 +163,6 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
-        {/* Disclaimer */}
-        <section className="py-6 bg-amber-50 border-b border-amber-200">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <p className="text-sm text-amber-900 flex items-start gap-2">
-                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>
-                  <strong>Not legal advice:</strong> This guide provides general information
-                  about Welsh tenancy law. Laws change regularly - always check the latest
-                  Welsh Government guidance or consult a solicitor for your specific
-                  situation.
-                </span>
-              </p>
-            </div>
-          </div>
-        </section>
 
         {/* Key Differences Section */}
         <section className="py-12 lg:py-16">
@@ -550,6 +530,47 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <NextLegalSteps
+                jurisdictionLabel="Wales eviction notices"
+                scenarioLabel="Renting Homes Act possession"
+                primaryCTA={{
+                  label: 'Generate Wales notice — £39.99',
+                  href: productLinks.noticeOnly.href,
+                }}
+                secondaryCTA={{
+                  label: 'Complete eviction pack — £199.99',
+                  href: productLinks.completePack.href,
+                }}
+                relatedLinks={[
+                  {
+                    href: '/tenancy-agreements/wales',
+                    title: 'Wales occupation contracts',
+                    description: 'Create compliant occupation contracts.',
+                  },
+                  {
+                    href: '/blog/wales-eviction-process',
+                    title: 'Wales eviction process',
+                    description: 'Step-by-step Section 173 / possession flow.',
+                  },
+                  {
+                    href: '/blog/wales-notice-periods-landlords',
+                    title: 'Wales notice periods',
+                    description: 'Current notice periods under Welsh law.',
+                  },
+                  {
+                    href: '/money-claim-unpaid-rent',
+                    title: 'Unpaid rent claim guide',
+                    description: 'Recover rent arrears through the courts.',
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
@@ -557,59 +578,6 @@ export default function WalesEvictionNoticesPage() {
           showContactCTA={false}
           variant="white"
         />
-
-        {/* Related Links */}
-        <section className="py-12 bg-gray-100 border-t">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Related Pages</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Link
-                  href="/how-to-evict-tenant"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">UK Eviction Guide</span>
-                  <p className="text-sm text-gray-500">All jurisdictions</p>
-                </Link>
-                <Link
-                  href="/tenancy-agreements/wales"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Wales Occupation Contracts</span>
-                  <p className="text-sm text-gray-500">Create compliant contracts</p>
-                </Link>
-                <Link
-                  href="/scotland-eviction-notices"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Scotland Eviction</span>
-                  <p className="text-sm text-gray-500">Notice to Leave</p>
-                </Link>
-                <Link
-                  href="/section-21-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Section 21 Template</span>
-                  <p className="text-sm text-gray-500">England only</p>
-                </Link>
-                <Link
-                  href="/money-claim-unpaid-rent"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Money Claim Guide</span>
-                  <p className="text-sm text-gray-500">Recover unpaid rent</p>
-                </Link>
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Letter</span>
-                  <p className="text-sm text-gray-500">Pre-action letter</p>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );

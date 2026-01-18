@@ -7,6 +7,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import {
   CheckCircle,
   FileText,
@@ -153,6 +154,14 @@ export default function EvictionNoticeTemplatePage() {
           {/* Countdown */}
           <div className="mb-4">
             <Section21Countdown variant="badge" />
+          </div>
+
+          <div className="mb-6 max-w-2xl mx-auto text-left">
+            <LegalTrustBanner
+              jurisdiction="UK"
+              reviewedDate="10 January 2026"
+              updatedFor="2026"
+            />
           </div>
 
           {/* Trust Signals */}

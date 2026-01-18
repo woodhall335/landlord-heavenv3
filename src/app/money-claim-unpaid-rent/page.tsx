@@ -1,24 +1,26 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
   Scale,
   FileText,
-  Info,
   PoundSterling,
   AlertTriangle,
   Calculator,
   Mail,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Claim Unpaid Rent UK - Money Claim Online (MCOL) Guide 2026',
+  title: 'Claim Unpaid Rent UK (Landlord Money Claim Guide 2026)',
   description:
-    'How to claim unpaid rent from tenants in the UK. Money Claim Online (MCOL) for England & Wales, Simple Procedure for Scotland, NI debt recovery. Letter before action templates.',
+    'Landlord guide to reclaiming rent arrears via MCOL (England & Wales), Simple Procedure (Scotland), and NI small claims. Templates, costs, and timelines.',
   keywords: [
     'money claim online',
     'mcol',
@@ -107,33 +109,18 @@ const faqs = [
 ];
 
 export default function MoneyClaimUnpaidRentPage() {
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'Claim Unpaid Rent UK - Money Claim Online (MCOL) Guide',
-    description:
-      'Guide to reclaiming unpaid rent from tenants via Money Claim Online (England & Wales), Simple Procedure (Scotland), and Northern Ireland court routes.',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': getCanonicalUrl('/money-claim-unpaid-rent'),
-    },
-    author: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Landlord Heaven',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://landlordheaven.co.uk/og-image.png',
-      },
-    },
-  };
-
   return (
     <>
-      <StructuredData data={articleSchema} />
+      <StructuredData
+        data={articleSchema({
+          headline: 'Claim Unpaid Rent in the UK (Landlord Guide)',
+          description:
+            'Landlord guide to reclaiming unpaid rent via MCOL (England & Wales), Simple Procedure (Scotland), and NI small claims.',
+          url: getCanonicalUrl('/money-claim-unpaid-rent'),
+          datePublished: '2026-01-01',
+          dateModified: '2026-01-01',
+        })}
+      />
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
@@ -153,7 +140,7 @@ export default function MoneyClaimUnpaidRentPage() {
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                Claim Unpaid Rent in the UK
+                Claim Unpaid Rent in the UK (Landlord Guide)
               </h1>
 
               <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
@@ -163,16 +150,13 @@ export default function MoneyClaimUnpaidRentPage() {
                 Northern Ireland.
               </p>
 
-              {/* Disclaimer */}
-              <div className="bg-green-950/50 border border-green-700 rounded-lg p-4 mb-8 text-left max-w-2xl mx-auto">
-                <p className="text-sm text-green-100 flex items-start gap-2">
-                  <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Not legal advice:</strong> This guide provides general information
-                    only. Court fees and processes can change. Check current government
-                    guidance or consult a solicitor for complex cases.
-                  </span>
-                </p>
+              <div className="mb-8 max-w-2xl mx-auto text-left">
+                <LegalTrustBanner
+                  jurisdiction="UK"
+                  reviewedDate="10 January 2026"
+                  updatedFor="2026"
+                  className="bg-white/10 text-white border-white/20"
+                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -791,6 +775,47 @@ export default function MoneyClaimUnpaidRentPage() {
           </div>
         </section>
 
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <NextLegalSteps
+                jurisdictionLabel="UK money claims"
+                scenarioLabel="recovering rent arrears"
+                primaryCTA={{
+                  label: 'Start money claim pack — £199.99',
+                  href: productLinks.moneyClaim.href,
+                }}
+                secondaryCTA={{
+                  label: 'Calculate arrears + interest',
+                  href: toolLinks.rentArrearsCalculator.href,
+                }}
+                relatedLinks={[
+                  {
+                    href: landingPageLinks.rentArrearsTemplate.href,
+                    title: landingPageLinks.rentArrearsTemplate.title,
+                    description: landingPageLinks.rentArrearsTemplate.description,
+                  },
+                  {
+                    href: '/blog/uk-money-claims-online-guide',
+                    title: 'UK Money Claim Online guide',
+                    description: 'MCOL steps, fees, and enforcement tips.',
+                  },
+                  {
+                    href: '/blog/england-money-claim-online',
+                    title: 'England & Wales MCOL guide',
+                    description: 'Claim routes and court forms for MCOL.',
+                  },
+                  {
+                    href: '/blog/scotland-simple-procedure',
+                    title: 'Scotland Simple Procedure',
+                    description: 'Sheriff Court route for arrears claims.',
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
@@ -798,59 +823,6 @@ export default function MoneyClaimUnpaidRentPage() {
           showContactCTA={false}
           variant="white"
         />
-
-        {/* Related Links */}
-        <section className="py-12 bg-gray-100 border-t">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Related Pages</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Letter</span>
-                  <p className="text-sm text-gray-500">Letter before action template</p>
-                </Link>
-                <Link
-                  href="/tools/rent-arrears-calculator"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Rent Arrears Calculator</span>
-                  <p className="text-sm text-gray-500">Calculate total with interest</p>
-                </Link>
-                <Link
-                  href="/tools/free-rent-demand-letter"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Free Demand Letter</span>
-                  <p className="text-sm text-gray-500">Generate demand letter</p>
-                </Link>
-                <Link
-                  href="/how-to-evict-tenant"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">UK Eviction Guide</span>
-                  <p className="text-sm text-gray-500">Complete eviction process</p>
-                </Link>
-                <Link
-                  href="/section-8-notice-template"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Section 8 Template</span>
-                  <p className="text-sm text-gray-500">Rent arrears eviction</p>
-                </Link>
-                <Link
-                  href="/products/money-claim"
-                  className="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all"
-                >
-                  <span className="font-medium text-gray-900">Money Claim Pack</span>
-                  <p className="text-sm text-gray-500">All documents included</p>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );

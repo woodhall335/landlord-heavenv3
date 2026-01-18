@@ -72,6 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/wales-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/scotland-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/money-claim-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/section-21-ban', priority: 0.85, changeFrequency: 'weekly' as const },
     // Q2 2026 SEO pages
     { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession', priority: 0.8, changeFrequency: 'weekly' as const },
