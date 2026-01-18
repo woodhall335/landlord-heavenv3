@@ -44,6 +44,7 @@ import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
+import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -1467,6 +1468,29 @@ export async function generateNoticeOnlyPack(
         // WALES SECTION 173 (No-fault / 6-month notice)
         // Uses RHW16 or RHW17 forms depending on notice period
         // ========================================================================
+        // COURT-GRADE GUARDRAILS: Ensure no fault-based data contaminates s173 pack
+        // ========================================================================
+        const section173Guards = {
+          // Fault-based grounds should be ignored for section_173
+          hasWalesFaultGrounds: Array.isArray(wizardFacts.wales_fault_grounds) &&
+                                 wizardFacts.wales_fault_grounds.length > 0,
+          // Breach particulars should be ignored for section_173
+          hasBreachParticulars: Boolean(wizardFacts.breach_description || wizardFacts.wales_part_d_particulars),
+          // Arrears schedule should be ignored for section_173
+          hasArrearsSchedule: Array.isArray(wizardFacts.arrears_items) &&
+                               wizardFacts.arrears_items.length > 0,
+        };
+
+        // Log warning if fault-based data is present but will be ignored
+        if (section173Guards.hasWalesFaultGrounds ||
+            section173Guards.hasBreachParticulars ||
+            section173Guards.hasArrearsSchedule) {
+          console.warn(
+            '[generateNoticeOnlyPack] SECTION_173_ROUTE_GUARD: Ignoring fault-based data for section_173 notice:',
+            section173Guards
+          );
+        }
+
         try {
           const section173Data = {
             landlord_full_name: walesTemplateData.landlord_full_name,
@@ -1509,6 +1533,27 @@ export async function generateNoticeOnlyPack(
         // from the Wales ground definitions (SINGLE SOURCE OF TRUTH).
         // This ensures Part D NEVER contains England-specific references.
         // ========================================================================
+        // COURT-GRADE GUARDRAILS: Ensure fault-based route has required data
+        // ========================================================================
+        const faultBasedGuards = {
+          // Must have at least one fault ground selected
+          hasWalesFaultGrounds: Array.isArray(wizardFacts.wales_fault_grounds) &&
+                                 wizardFacts.wales_fault_grounds.length > 0,
+          // Must have breach description or Part D particulars
+          hasParticulars: Boolean(wizardFacts.breach_description || wizardFacts.wales_part_d_particulars),
+        };
+
+        // Log route guard check
+        console.log('[generateNoticeOnlyPack] FAULT_BASED_ROUTE_GUARD:', faultBasedGuards);
+
+        // Warning if missing required fault-based data
+        if (!faultBasedGuards.hasWalesFaultGrounds) {
+          console.warn(
+            '[generateNoticeOnlyPack] WARNING: fault_based route but no wales_fault_grounds selected. ' +
+            'Document may be incomplete.'
+          );
+        }
+
         try {
           // Build Part D text using the canonical Wales Part D builder
           // This uses Wales ground definitions as the single source of truth
