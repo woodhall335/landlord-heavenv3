@@ -220,7 +220,9 @@ export function getNoticeOnlyRequirements(
 
         if (isRentArrearsGround) {
           // Check if arrears schedule exists
-          const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items;
+          // Cast issues to access nested rent_arrears structure
+          const issues = facts.issues as { rent_arrears?: { arrears_items?: unknown[] } } | undefined;
+          const arrearsItems = issues?.rent_arrears?.arrears_items || facts.arrears_items;
           const hasArrearsSchedule = Array.isArray(arrearsItems) && arrearsItems.length > 0;
 
           if (!hasArrearsSchedule) {
