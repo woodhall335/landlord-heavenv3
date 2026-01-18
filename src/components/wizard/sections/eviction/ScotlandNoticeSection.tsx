@@ -10,19 +10,24 @@
  * - Notice period calculation based on selected ground (from config)
  * - Service methods (planned, for the notice we will generate)
  * - ARREARS SCHEDULE: Conditional arrears collection for Ground 18 (rent arrears)
+ * - CONSECUTIVE ARREARS STREAK: Ground 18 requires 3+ consecutive months
  *
  * CRITICAL: Enforces the 6-month rule which is unique to Scotland.
  */
 
 'use client';
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   validateSixMonthRule,
   getScotlandGroundByNumber,
   getScotlandConfig,
 } from '@/lib/scotland/grounds';
+import {
+  calculateConsecutiveArrearsStreak,
+  mapScotlandServiceMethodToKey,
+} from '@/lib/scotland/notice-utils';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 
 // Scotland Ground 18 is the rent arrears ground (3 consecutive months)
@@ -46,6 +51,7 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
   const isRentArrearsGround = facts.scotland_eviction_ground === SCOTLAND_RENT_ARREARS_GROUND;
 
   // Set current question ID for Ask Heaven context when section renders
+  // Default to notice_service_method, but switch to arrears_items when user interacts with arrears
   useEffect(() => {
     if (onSetCurrentQuestionId) {
       onSetCurrentQuestionId('notice_service_method');
@@ -55,6 +61,16 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
         onSetCurrentQuestionId(undefined);
       }
     };
+  }, [onSetCurrentQuestionId]);
+
+  // Handler for when user focuses on arrears schedule
+  const handleArrearsContainerFocus = useCallback(() => {
+    onSetCurrentQuestionId?.('arrears_items');
+  }, [onSetCurrentQuestionId]);
+
+  // Handler for when user focuses on service method
+  const handleServiceMethodFocus = useCallback(() => {
+    onSetCurrentQuestionId?.('notice_service_method');
   }, [onSetCurrentQuestionId]);
   const tenancyStartDate = facts.tenancy_start_date as string | undefined;
   const selectedGround = facts.scotland_eviction_ground as number | undefined;
@@ -132,7 +148,7 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
 
           <div
             className="bg-white border border-gray-200 rounded-lg p-4"
-            onFocus={() => onSetCurrentQuestionId?.('arrears_items')}
+            onFocusCapture={handleArrearsContainerFocus}
           >
             <ArrearsScheduleStep
               facts={facts}
@@ -141,36 +157,52 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
             />
           </div>
 
-          {/* Scotland 3-month threshold info */}
+          {/* Scotland 3-month consecutive threshold info */}
           {(() => {
             const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
             if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) return null;
 
-            const periodsWithArrears = arrearsItems.filter(
-              (item: any) => (item.amount_owed ?? (item.rent_due - item.rent_paid)) > 0
-            ).length;
+            // Use consecutive streak calculation for Ground 18
+            const streakResult = calculateConsecutiveArrearsStreak(arrearsItems);
+            const { maxConsecutiveStreak, periodsWithArrears } = streakResult;
+            const thresholdMet = maxConsecutiveStreak >= 3;
 
             return (
               <div className={`rounded-lg border p-4 ${
-                periodsWithArrears >= 3
+                thresholdMet
                   ? 'bg-green-50 border-green-200'
                   : 'bg-amber-50 border-amber-200'
               }`}>
                 <p className={`text-sm font-medium ${
-                  periodsWithArrears >= 3 ? 'text-green-800' : 'text-amber-800'
+                  thresholdMet ? 'text-green-800' : 'text-amber-800'
                 }`}>
-                  {periodsWithArrears >= 3
+                  {thresholdMet
                     ? '✓ Ground 18 Threshold Met'
                     : '⚠ Ground 18 Threshold Not Yet Met'}
                 </p>
                 <p className={`text-sm mt-1 ${
-                  periodsWithArrears >= 3 ? 'text-green-700' : 'text-amber-700'
+                  thresholdMet ? 'text-green-700' : 'text-amber-700'
                 }`}>
-                  {periodsWithArrears} period{periodsWithArrears !== 1 ? 's' : ''} with arrears.
-                  {periodsWithArrears < 3
-                    ? ` Ground 18 requires 3 or more consecutive months of arrears.`
-                    : ` The Tribunal will consider whether eviction is reasonable.`}
+                  {thresholdMet ? (
+                    <>
+                      {maxConsecutiveStreak} consecutive month{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
+                      ({periodsWithArrears} total period{periodsWithArrears !== 1 ? 's' : ''} with arrears).
+                      The Tribunal will consider whether eviction is reasonable.
+                    </>
+                  ) : (
+                    <>
+                      {maxConsecutiveStreak} consecutive month{maxConsecutiveStreak !== 1 ? 's' : ''} with arrears
+                      ({periodsWithArrears} total period{periodsWithArrears !== 1 ? 's' : ''} with arrears).
+                      Ground 18 requires 3 or more consecutive months of arrears.
+                    </>
+                  )}
                 </p>
+                {!thresholdMet && periodsWithArrears >= 3 && maxConsecutiveStreak < 3 && (
+                  <p className="text-sm mt-2 text-amber-600 italic">
+                    Note: You have {periodsWithArrears} periods with arrears, but they are not all consecutive.
+                    Ground 18 requires arrears in 3 consecutive rent periods.
+                  </p>
+                )}
               </div>
             );
           })()}
@@ -178,7 +210,10 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
       )}
 
       {/* Notice Generation - GENERATE ONLY (Scotland notice_only) */}
-      <div className="space-y-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+      <div
+        className="space-y-4 p-4 bg-purple-50 border border-purple-200 rounded-lg"
+        onFocusCapture={handleServiceMethodFocus}
+      >
         <h4 className="font-medium text-purple-900">Notice to Leave Will Be Generated</h4>
         <p className="text-purple-700 text-sm">
           We will generate a Notice to Leave for you using{' '}
@@ -197,7 +232,7 @@ export const ScotlandNoticeSection: React.FC<ScotlandNoticeSectionProps> = ({
           >
             <option value="">Select how you plan to serve notice...</option>
             {config.noticeRequirements.serviceMethods.map((method, i) => (
-              <option key={i} value={method.toLowerCase().replace(/\s+/g, '_')}>
+              <option key={i} value={mapScotlandServiceMethodToKey(method)}>
                 {method}
               </option>
             ))}
