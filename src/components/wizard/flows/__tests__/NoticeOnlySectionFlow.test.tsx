@@ -970,35 +970,49 @@ describe('NoticeOnlySectionFlow - Scotland Section Completion', () => {
   });
 
   /**
-   * Test Scotland notice section completion logic
+   * Test Scotland notice section completion logic (GENERATE ONLY)
+   * Scotland notice_only is GENERATE ONLY - no notice_already_served question
    */
-  it('should mark Scotland notice as complete when required fields are set', () => {
+  it('should mark Scotland notice as complete when notice_service_method is set (GENERATE ONLY)', () => {
+    // Scotland notice_only is GENERATE ONLY - only requires notice_service_method
     const isNoticeComplete = (facts: Record<string, any>): boolean => {
-      if (facts.notice_already_served === undefined) return false;
+      // Scotland notice_only is GENERATE ONLY - no notice_already_served question
+      // Only require notice_service_method for generation
       return Boolean(facts.notice_service_method);
     };
 
-    // Already served with method
+    // Service method set - complete
     expect(isNoticeComplete({
-      notice_already_served: true,
       notice_service_method: 'first_class_post',
     })).toBe(true);
 
-    // Generating with method
+    // Service method set with any other fields - still complete
     expect(isNoticeComplete({
-      notice_already_served: false,
       notice_service_method: 'hand_delivered',
+      scotland_eviction_ground: 1,
     })).toBe(true);
 
-    // Missing notice_already_served
+    // Missing notice_service_method - NOT complete
     expect(isNoticeComplete({
-      notice_service_method: 'first_class_post',
+      scotland_eviction_ground: 1,
     })).toBe(false);
 
-    // Missing notice_service_method
+    // Empty facts - NOT complete
+    expect(isNoticeComplete({})).toBe(false);
+  });
+
+  it('should NOT require notice_already_served for Scotland notice_only (GENERATE ONLY)', () => {
+    // This test confirms that notice_already_served is NOT required for Scotland notice_only
+    const isNoticeComplete = (facts: Record<string, any>): boolean => {
+      // Scotland notice_only is GENERATE ONLY - no notice_already_served question
+      return Boolean(facts.notice_service_method);
+    };
+
+    // Even without notice_already_served, should be complete if service method is set
     expect(isNoticeComplete({
-      notice_already_served: true,
-    })).toBe(false);
+      notice_service_method: 'first_class_post',
+      // note: no notice_already_served field
+    })).toBe(true);
   });
 });
 
@@ -1088,7 +1102,7 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
       initialFacts: {
         __meta: { product: 'notice_only', jurisdiction: 'scotland' },
         scotland_eviction_ground: 1,
-        notice_already_served: false,
+        // note: no notice_already_served - Scotland notice_only is GENERATE ONLY
       },
     };
 
@@ -1106,7 +1120,7 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
       initialFacts: {
         __meta: { product: 'notice_only', jurisdiction: 'scotland' },
         scotland_eviction_ground: 1,
-        notice_already_served: false,
+        // note: no notice_already_served - Scotland notice_only is GENERATE ONLY
       },
     };
 
@@ -1120,6 +1134,32 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
     // Should show appropriate copy without "complete pack"
     // The text should indicate notice generation, not pack generation
     expect(screen.queryByText(/complete pack/i)).toBeNull();
+  });
+
+  it('should NOT render "Have you already served a Notice to Leave?" question for Scotland', async () => {
+    const scotlandProps = {
+      caseId: 'test-scotland-no-already-served',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+        tenancy_start_date: '2020-01-01', // Old date so 6-month rule passes
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Click on Notice tab to view notice section
+    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    noticeButton.click();
+
+    // Scotland notice_only is GENERATE ONLY - the question should NOT appear
+    expect(screen.queryByText(/Have you already served a Notice to Leave/i)).toBeNull();
+    expect(screen.queryByText(/Yes, I have already served notice/i)).toBeNull();
+
+    // Should show generate-only messaging instead
+    expect(screen.getByText(/Notice to Leave Will Be Generated/i)).toBeDefined();
   });
 });
 
@@ -1145,7 +1185,7 @@ describe('NoticeOnlySectionFlow - Scotland Review Section', () => {
         rent_amount: 1000,
         rent_frequency: 'monthly',
         scotland_eviction_ground: 1,
-        notice_already_served: true,
+        // note: no notice_already_served - Scotland notice_only is GENERATE ONLY
         notice_service_method: 'first_class_post',
       },
     };
@@ -1184,12 +1224,15 @@ describe('NoticeOnlySectionFlow - Scotland Review Section', () => {
  * 1. When Ground 18 (rent arrears) is selected, arrears schedule UI appears
  * 2. Scotland notice section isComplete requires arrears schedule for Ground 18
  * 3. Warnings are shown when arrears schedule is missing for Ground 18
+ *
+ * Note: Scotland notice_only is GENERATE ONLY - no notice_already_served question
  */
 describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
   it('should require arrears schedule for Ground 18 completion', () => {
     // Test the isComplete logic for scotland_notice section with Ground 18
+    // Scotland notice_only is GENERATE ONLY - no notice_already_served question
     const isScotlandNoticeComplete = (facts: Record<string, any>): boolean => {
-      if (facts.notice_already_served === undefined) return false;
+      // Scotland notice_only is GENERATE ONLY - only requires notice_service_method
       if (!Boolean(facts.notice_service_method)) return false;
 
       // For Ground 18 (rent arrears), require arrears schedule
@@ -1207,7 +1250,6 @@ describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
     // Ground 18 without arrears schedule - should NOT be complete
     expect(isScotlandNoticeComplete({
       scotland_eviction_ground: 18,
-      notice_already_served: true,
       notice_service_method: 'first_class_post',
       // No arrears_items
     })).toBe(false);
@@ -1215,7 +1257,6 @@ describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
     // Ground 18 with arrears schedule in flat location - should be complete
     expect(isScotlandNoticeComplete({
       scotland_eviction_ground: 18,
-      notice_already_served: true,
       notice_service_method: 'first_class_post',
       arrears_items: [
         { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
@@ -1225,7 +1266,6 @@ describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
     // Ground 18 with arrears schedule in nested location - should be complete
     expect(isScotlandNoticeComplete({
       scotland_eviction_ground: 18,
-      notice_already_served: true,
       notice_service_method: 'first_class_post',
       issues: {
         rent_arrears: {
@@ -1239,7 +1279,6 @@ describe('NoticeOnlySectionFlow - Scotland Ground 18 Arrears Schedule', () => {
     // Non-arrears ground (Ground 1) without arrears schedule - should be complete
     expect(isScotlandNoticeComplete({
       scotland_eviction_ground: 1,
-      notice_already_served: true,
       notice_service_method: 'first_class_post',
       // No arrears_items needed for Ground 1
     })).toBe(true);
@@ -1737,5 +1776,121 @@ describe('NoticeOnlySectionFlow - Scotland Evidence Description', () => {
 
     expect(evidenceFacts.scotland_evidence_description).toBeDefined();
     expect(evidenceFacts.scotland_evidence_description).toContain('estate agent');
+  });
+});
+
+/**
+ * England/Wales Smoke Tests - Ensure unchanged behavior
+ *
+ * These tests verify that removing the "already served" question for Scotland
+ * does NOT affect England or Wales flows.
+ */
+describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)', () => {
+  it('England notice_only should still use notice_service_method for Section 21 completion', () => {
+    // England Section 21 notice completion logic (should remain unchanged)
+    const isEnglandS21NoticeComplete = (facts: Record<string, any>): boolean => {
+      const route = facts.eviction_route as string;
+      if (route === 'section_21') {
+        return Boolean(facts.notice_service_method);
+      }
+      return false;
+    };
+
+    // Section 21 with service method - complete
+    expect(isEnglandS21NoticeComplete({
+      eviction_route: 'section_21',
+      notice_service_method: 'first_class_post',
+    })).toBe(true);
+
+    // Section 21 without service method - NOT complete
+    expect(isEnglandS21NoticeComplete({
+      eviction_route: 'section_21',
+    })).toBe(false);
+  });
+
+  it('England notice_only should still require grounds for Section 8 completion', () => {
+    // England Section 8 notice completion logic (should remain unchanged)
+    const isEnglandS8NoticeComplete = (facts: Record<string, any>): boolean => {
+      const route = facts.eviction_route as string;
+      if (route === 'section_8') {
+        const selectedGrounds = (facts.section8_grounds as string[]) || [];
+        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+      }
+      return false;
+    };
+
+    // Section 8 with grounds and service method - complete
+    expect(isEnglandS8NoticeComplete({
+      eviction_route: 'section_8',
+      section8_grounds: ['Ground 8'],
+      notice_service_method: 'first_class_post',
+    })).toBe(true);
+
+    // Section 8 without grounds - NOT complete
+    expect(isEnglandS8NoticeComplete({
+      eviction_route: 'section_8',
+      section8_grounds: [],
+      notice_service_method: 'first_class_post',
+    })).toBe(false);
+  });
+
+  it('Wales notice_only should still require service method and date for Section 173 completion', () => {
+    // Wales Section 173 notice completion logic (should remain unchanged)
+    const isWalesS173NoticeComplete = (facts: Record<string, any>): boolean => {
+      const route = facts.eviction_route as string;
+      if (route === 'section_173') {
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasServiceMethod && hasServiceDate;
+      }
+      return false;
+    };
+
+    // Section 173 with service method and date - complete
+    expect(isWalesS173NoticeComplete({
+      eviction_route: 'section_173',
+      notice_service_method: 'first_class_post',
+      notice_date: '2024-01-01',
+    })).toBe(true);
+
+    // Section 173 without date - NOT complete
+    expect(isWalesS173NoticeComplete({
+      eviction_route: 'section_173',
+      notice_service_method: 'first_class_post',
+    })).toBe(false);
+  });
+
+  it('Wales notice_only should still require grounds for fault_based completion', () => {
+    // Wales fault-based notice completion logic (should remain unchanged)
+    const isWalesFaultBasedNoticeComplete = (facts: Record<string, any>): boolean => {
+      const route = facts.eviction_route as string;
+      if (route === 'fault_based') {
+        const walesGrounds = (facts.wales_fault_grounds as string[]) || [];
+        const hasGrounds = walesGrounds.length > 0;
+        const hasBreachDescription = Boolean(facts.breach_description);
+        const hasServiceMethod = Boolean(facts.notice_service_method);
+        const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
+        return hasGrounds && hasBreachDescription && hasServiceMethod && hasServiceDate;
+      }
+      return false;
+    };
+
+    // Fault-based with all required - complete
+    expect(isWalesFaultBasedNoticeComplete({
+      eviction_route: 'fault_based',
+      wales_fault_grounds: ['rent_arrears_serious'],
+      breach_description: 'Tenant has not paid rent',
+      notice_service_method: 'recorded_delivery',
+      notice_date: '2024-01-01',
+    })).toBe(true);
+
+    // Fault-based without grounds - NOT complete
+    expect(isWalesFaultBasedNoticeComplete({
+      eviction_route: 'fault_based',
+      wales_fault_grounds: [],
+      breach_description: 'Tenant has not paid rent',
+      notice_service_method: 'recorded_delivery',
+      notice_date: '2024-01-01',
+    })).toBe(false);
   });
 });
