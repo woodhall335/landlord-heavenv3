@@ -294,18 +294,18 @@ function WizardFlowContent() {
     );
   }
 
-  // 🟨 NEW: For eviction notice_only in England/Wales, use the redesigned section-based flow
+  // 🟨 NEW: For eviction notice_only in England/Wales/Scotland, use the redesigned section-based flow
   // This matches the EvictionSectionFlow design for UI consistency.
   if (
     type === 'eviction' &&
     askHeavenProduct === 'notice_only' &&
     USE_NOTICE_ONLY_SECTION_FLOW &&
-    (jurisdiction === 'england' || jurisdiction === 'wales')
+    (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <NoticeOnlySectionFlow
         caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales'}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
     );
   }

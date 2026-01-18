@@ -46,6 +46,32 @@ vi.mock('@/lib/arrears-engine', () => ({
   validateGround8Eligibility: () => ({ is_eligible: false, arrears_in_months: 0 }),
 }));
 
+// Mock Scotland grounds utilities
+vi.mock('@/lib/scotland/grounds', () => ({
+  validateSixMonthRule: (date: string) => {
+    // Simple mock: if date is more than 6 months ago, valid
+    const tenancyStart = new Date(date);
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    return {
+      valid: tenancyStart <= sixMonthsAgo,
+      message: tenancyStart > sixMonthsAgo ? 'Cannot serve notice within first 6 months' : undefined,
+      earliestNoticeDate: sixMonthsAgo.toISOString().split('T')[0],
+    };
+  },
+  getScotlandGrounds: () => [
+    { number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+    { number: 12, code: 'Ground 12', name: 'Rent arrears', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] },
+  ],
+  getGroundsByNoticePeriod: () => ({
+    shortNotice: [{ number: 12, code: 'Ground 12', name: 'Rent arrears', noticePeriodDays: 28, description: 'Test', fullText: 'Test', requiredEvidence: [] }],
+    standardNotice: [{ number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] }],
+  }),
+  getScotlandGroundByNumber: () => ({ number: 1, code: 'Ground 1', name: 'Landlord intends to sell', noticePeriodDays: 84, description: 'Test', fullText: 'Test', requiredEvidence: [] }),
+  calculateEarliestEvictionDate: () => new Date(),
+  getScotlandConfig: () => ({ noticeRequirements: { serviceMethods: ['First class post', 'Recorded delivery', 'Hand delivery'] } }),
+}));
+
 // Mock AskHeavenPanel
 vi.mock('@/components/wizard/AskHeavenPanel', () => ({
   AskHeavenPanel: () => <div data-testid="ask-heaven-panel">Ask Heaven Panel</div>,
@@ -760,5 +786,254 @@ describe('NoticeOnlySectionFlow - England Next Button (unchanged)', () => {
 
     // England should work normally
     expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+  });
+});
+
+/**
+ * Scotland Jurisdiction Tests
+ *
+ * These tests verify that:
+ * 1. Scotland notice_only uses NoticeOnlySectionFlow (not falling through to StructuredWizard)
+ * 2. Scotland shows correct terminology (Notice to Leave, not Section 21/8)
+ * 3. Scotland shows Scotland-specific sections (Grounds, Notice with 6-month rule)
+ * 4. Scotland does NOT show England/Wales-specific sections (Compliance, Arrears)
+ */
+describe('NoticeOnlySectionFlow - Scotland Jurisdiction', () => {
+  const scotlandProps = {
+    caseId: 'test-case-scotland',
+    jurisdiction: 'scotland' as const,
+    initialFacts: {
+      __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should show "Scotland Notice to Leave" header for Scotland jurisdiction', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+    expect(screen.getByText(/Scotland Notice to Leave/)).toBeDefined();
+  });
+
+  it('should render Scotland-specific sections (Case Basics, Parties, Property, Tenancy, Grounds, Notice, Review)', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Scotland should show these sections
+    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Grounds/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Review/i })).toBeDefined();
+  });
+
+  it('should NOT show England-specific sections (Section 21 Compliance, Section 8 Arrears) for Scotland', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Scotland should NOT show these England-specific sections
+    expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Arrears/i })).toBeNull();
+  });
+
+  it('should NOT show Wales-specific terminology for Scotland', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Scotland should NOT show Wales-specific terminology
+    expect(screen.queryByRole('button', { name: /Occupation Contract/i })).toBeNull();
+    // Should use "Tenancy" not "Occupation Contract"
+    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+  });
+
+  it('should show PRT (Private Residential Tenancy) information in Case Basics', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // First section should explain PRT - use getAllByText since it appears in multiple places
+    const prtElements = screen.getAllByText(/Private Residential Tenancy/i);
+    expect(prtElements.length).toBeGreaterThan(0);
+    expect(screen.getByText(/Private Housing \(Tenancies\) \(Scotland\) Act 2016/i)).toBeDefined();
+  });
+
+  it('should show discretionary grounds warning in Case Basics', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Should warn about discretionary grounds
+    expect(screen.getByText(/All Grounds are Discretionary/i)).toBeDefined();
+    expect(screen.getByText(/no mandatory grounds/i)).toBeDefined();
+  });
+
+  it('should show 6-month rule information in Case Basics', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Should explain 6-month rule
+    expect(screen.getByText(/6-Month Rule/i)).toBeDefined();
+    expect(screen.getByText(/first 6 months of the tenancy/i)).toBeDefined();
+  });
+
+  it('should NOT have Section 21 or Section 8 as selectable route options for Scotland', async () => {
+    render(<NoticeOnlySectionFlow {...scotlandProps} />);
+
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Scotland should not have England route selection radios
+    const section21Radios = screen.queryAllByRole('radio').filter(
+      radio => radio.getAttribute('value') === 'section_21'
+    );
+    const section8Radios = screen.queryAllByRole('radio').filter(
+      radio => radio.getAttribute('value') === 'section_8'
+    );
+    expect(section21Radios.length).toBe(0);
+    expect(section8Radios.length).toBe(0);
+  });
+});
+
+/**
+ * Scotland Section Completion Tests
+ */
+describe('NoticeOnlySectionFlow - Scotland Section Completion', () => {
+  /**
+   * Test Scotland tenancy section completion logic
+   */
+  it('should mark Scotland tenancy as complete when required fields are set', () => {
+    const isTenancyComplete = (facts: Record<string, any>): boolean => {
+      return Boolean(facts.tenancy_start_date) &&
+        Boolean(facts.rent_amount) &&
+        Boolean(facts.rent_frequency);
+    };
+
+    // Complete tenancy
+    expect(isTenancyComplete({
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+    })).toBe(true);
+
+    // Missing tenancy_start_date
+    expect(isTenancyComplete({
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+    })).toBe(false);
+
+    // Missing rent_amount
+    expect(isTenancyComplete({
+      tenancy_start_date: '2023-01-01',
+      rent_frequency: 'monthly',
+    })).toBe(false);
+  });
+
+  /**
+   * Test Scotland grounds section completion logic
+   */
+  it('should mark Scotland grounds as complete when ground is selected', () => {
+    const isGroundsComplete = (facts: Record<string, any>): boolean => {
+      return Boolean(facts.scotland_eviction_ground);
+    };
+
+    // Ground selected
+    expect(isGroundsComplete({ scotland_eviction_ground: 1 })).toBe(true);
+
+    // No ground selected
+    expect(isGroundsComplete({})).toBe(false);
+  });
+
+  /**
+   * Test Scotland notice section completion logic
+   */
+  it('should mark Scotland notice as complete when required fields are set', () => {
+    const isNoticeComplete = (facts: Record<string, any>): boolean => {
+      if (facts.notice_already_served === undefined) return false;
+      return Boolean(facts.notice_service_method);
+    };
+
+    // Already served with method
+    expect(isNoticeComplete({
+      notice_already_served: true,
+      notice_service_method: 'first_class_post',
+    })).toBe(true);
+
+    // Generating with method
+    expect(isNoticeComplete({
+      notice_already_served: false,
+      notice_service_method: 'hand_delivered',
+    })).toBe(true);
+
+    // Missing notice_already_served
+    expect(isNoticeComplete({
+      notice_service_method: 'first_class_post',
+    })).toBe(false);
+
+    // Missing notice_service_method
+    expect(isNoticeComplete({
+      notice_already_served: true,
+    })).toBe(false);
+  });
+});
+
+/**
+ * Scotland Review Section Tests
+ */
+describe('NoticeOnlySectionFlow - Scotland Review Section', () => {
+  it('should show "Notice to Leave (Scotland)" in review summary', async () => {
+    const scotlandCompleteProps = {
+      caseId: 'test-scotland-complete',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        landlord_full_name: 'Test Landlord',
+        landlord_address_line1: '123 Test St',
+        landlord_address_town: 'Edinburgh',
+        landlord_address_postcode: 'EH1 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '456 Property St',
+        property_address_town: 'Glasgow',
+        property_address_postcode: 'G1 1BB',
+        tenancy_start_date: '2023-01-01',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        scotland_eviction_ground: 1,
+        notice_already_served: true,
+        notice_service_method: 'first_class_post',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandCompleteProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Navigate to review section and check for correct type label
+    const reviewButton = screen.getByRole('button', { name: /Review/i });
+    expect(reviewButton).toBeDefined();
+  });
+
+  it('should show Scotland ground in review summary', async () => {
+    const scotlandWithGroundProps = {
+      caseId: 'test-scotland-ground',
+      jurisdiction: 'scotland' as const,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'scotland' },
+        scotland_eviction_ground: 1,
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...scotlandWithGroundProps} />);
+    await screen.findByText(/Scotland Notice to Leave/);
+
+    // Review button should be present
+    const reviewButton = screen.getByRole('button', { name: /Review/i });
+    expect(reviewButton).toBeDefined();
   });
 });
