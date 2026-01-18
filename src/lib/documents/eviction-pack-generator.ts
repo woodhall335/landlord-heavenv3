@@ -1466,7 +1466,8 @@ export async function generateNoticeOnlyPack(
       if (normalizedRoute === 'section_173') {
         // ========================================================================
         // WALES SECTION 173 (No-fault / 6-month notice)
-        // Uses RHW16 or RHW17 forms depending on notice period
+        // HARD-LOCKED: Always uses RHW16 (6-month notice). We do not support the
+        // 2-month regime (RHW17) for standard occupation contracts.
         // ========================================================================
         // COURT-GRADE GUARDRAILS: Ensure no fault-based data contaminates s173 pack
         // ========================================================================
@@ -1492,6 +1493,10 @@ export async function generateNoticeOnlyPack(
         }
 
         try {
+          // HARD-LOCKED: Section 173 is locked to 6 months minimum notice period.
+          // DO NOT pass expiry_date/notice_expiry_date here - let the generator
+          // auto-calculate them using the LOCKED 6-month period.
+          // If user explicitly provided an expiry date, it will be validated by the generator.
           const section173Data = {
             landlord_full_name: walesTemplateData.landlord_full_name,
             landlord_address: walesTemplateData.landlord_address,
@@ -1502,8 +1507,9 @@ export async function generateNoticeOnlyPack(
             rent_frequency: (walesTemplateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly',
             service_date: walesTemplateData.service_date || walesTemplateData.notice_date,
             notice_service_date: walesTemplateData.notice_date || walesTemplateData.service_date,
-            expiry_date: walesTemplateData.earliest_possession_date,
-            notice_expiry_date: walesTemplateData.earliest_possession_date,
+            // DO NOT pass expiry_date here - generator will auto-calculate 6 months
+            // Only pass user-explicit expiry dates from wizard (if any)
+            expiry_date: wizardFacts.expiry_date || wizardFacts.notice_expiry_date || undefined,
             wales_contract_category: wizardFacts.wales_contract_category || 'standard',
             rent_smart_wales_registered: wizardFacts.rent_smart_wales_registered,
             deposit_taken: wizardFacts.deposit_taken || walesTemplateData.deposit_taken,

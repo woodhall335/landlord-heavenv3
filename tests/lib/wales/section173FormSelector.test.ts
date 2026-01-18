@@ -1,18 +1,21 @@
 /**
  * Wales Section 173 Form Selector Tests
  *
+ * HARD-LOCKED: Section 173 is locked to 6 months minimum notice period (RHW16).
+ * We do not support the 2-month regime (RHW17) for standard occupation contracts.
+ *
  * Tests for court-grade guardrails for Wales no-fault (Section 173) notices.
  *
  * Coverage:
- * 1. determineSection173Form returns correct form based on notice regime
- * 2. getSection173MinimumNoticePeriod returns correct notice period (calendar months)
- * 3. validateSection173Timing catches prohibited period violations
- * 4. validateSection173Timing catches insufficient notice period
- * 5. validateSection173Timing catches fixed term violations (HARD ERROR when no break clause)
- * 6. calculateSection173ExpiryDate auto-corrects invalid dates
- * 7. addCalendarMonths helper uses proper calendar month semantics
- * 8. Route detection helpers work correctly
- * 9. Explicit notice regime override takes precedence over inferred
+ * 1. determineSection173Form ALWAYS returns RHW16 (6-month notice)
+ * 2. getSection173MinimumNoticePeriod ALWAYS returns 6 months
+ * 3. Attempting to use 2_month regime throws an error
+ * 4. validateSection173Timing catches prohibited period violations
+ * 5. validateSection173Timing catches insufficient notice period (< 6 months)
+ * 6. validateSection173Timing catches fixed term violations (HARD ERROR when no break clause)
+ * 7. calculateSection173ExpiryDate auto-corrects invalid dates using 6 months
+ * 8. addCalendarMonths helper uses proper calendar month semantics
+ * 9. Route detection helpers work correctly
  *
  * WALES ONLY - No Housing Act 1988, Section 8, Section 21, Form 6A references.
  */
@@ -23,6 +26,9 @@ import {
   determineSection173FormWithMetadata,
   getSection173MinimumNoticePeriod,
   getSection173MinimumNoticeDays,
+  getSection173MinimumNoticeMonths,
+  getSection173MinimumNoticeLabel,
+  SECTION_173_LOCKED_NOTICE_MONTHS,
   validateSection173Timing,
   calculateSection173ExpiryDate,
   addCalendarMonths,
@@ -53,20 +59,24 @@ describe('Wales Section 173 Form Selector', () => {
       expect(determineSection173Form(facts)).toBe('RHW16');
     });
 
-    it('should return RHW17 for service dates before December 2022', () => {
+    // HARD-LOCKED: Always returns RHW16 regardless of service date
+    // We do not support the 2-month regime (RHW17) for standard occupation contracts.
+    it('should return RHW16 for ALL service dates (HARD-LOCKED to 6 months)', () => {
+      // Even for pre-December 2022 dates, we return RHW16 because we don't support RHW17
       const facts: Section173Facts = {
         contract_start_date: '2020-01-01',
         service_date: '2022-11-30',
       };
-      expect(determineSection173Form(facts)).toBe('RHW17');
+      expect(determineSection173Form(facts)).toBe('RHW16');
     });
 
-    it('should return RHW17 for service dates in 2021', () => {
+    it('should return RHW16 for all historical dates (HARD-LOCKED)', () => {
       const facts: Section173Facts = {
         contract_start_date: '2020-01-01',
         service_date: '2021-06-15',
       };
-      expect(determineSection173Form(facts)).toBe('RHW17');
+      // HARD-LOCKED: Even for 2021 dates, we return RHW16
+      expect(determineSection173Form(facts)).toBe('RHW16');
     });
 
     it('should return RHW16 for current service dates (2026)', () => {
@@ -78,16 +88,17 @@ describe('Wales Section 173 Form Selector', () => {
     });
 
     describe('explicit notice regime override', () => {
-      it('should use explicit 2_month regime even for post-December 2022 dates', () => {
+      // HARD-LOCKED: 2_month regime is NOT supported - should throw error
+      it('should throw error when explicit 2_month regime is requested', () => {
         const facts: Section173Facts = {
           contract_start_date: '2023-01-01',
           service_date: '2024-01-15',
           wales_section173_notice_regime: '2_month',
         };
-        expect(determineSection173Form(facts)).toBe('RHW17');
+        expect(() => determineSection173Form(facts)).toThrow('WALES_SECTION173_UNSUPPORTED_REGIME');
       });
 
-      it('should use explicit 6_month regime even for pre-December 2022 dates', () => {
+      it('should accept explicit 6_month regime', () => {
         const facts: Section173Facts = {
           contract_start_date: '2020-01-01',
           service_date: '2022-11-15',
@@ -158,16 +169,14 @@ describe('Wales Section 173 Form Selector', () => {
       expect(result.legalReference).toContain('Renting Homes (Wales) Act 2016');
     });
 
-    it('should return 2 months for explicit 2_month regime', () => {
+    // HARD-LOCKED: 2_month regime is NOT supported - should throw error
+    it('should throw error when explicit 2_month regime is requested', () => {
       const facts: Section173Facts = {
         contract_start_date: '2023-01-01',
         service_date: '2024-01-15',
         wales_section173_notice_regime: '2_month',
       };
-      const result = getSection173MinimumNoticePeriod(facts);
-      expect(result.months).toBe(2);
-      expect(result.noticeRegime).toBe('2_month');
-      expect(result.form).toBe('RHW17');
+      expect(() => getSection173MinimumNoticePeriod(facts)).toThrow('WALES_SECTION173_UNSUPPORTED_REGIME');
     });
 
     it('should include approximateDays for display purposes', () => {
@@ -206,14 +215,16 @@ describe('Wales Section 173 Form Selector', () => {
       expect(result.legalReference).toContain('as amended');
     });
 
-    it('should return 2 months for pre-December 2022 service dates', () => {
+    // HARD-LOCKED: Always returns 6 months regardless of service date
+    it('should always return 6 months (HARD-LOCKED)', () => {
       const facts: Section173Facts = {
         contract_start_date: '2020-01-01',
         service_date: '2022-11-15',
       };
       const result = getSection173MinimumNoticeDays(facts);
-      expect(result.months).toBe(2);
-      expect(result.description).toContain('Two calendar months');
+      // HARD-LOCKED to 6 months
+      expect(result.months).toBe(6);
+      expect(result.description).toContain('Six calendar months');
       expect(result.legalReference).toContain('Renting Homes (Wales) Act 2016');
     });
 
@@ -437,19 +448,15 @@ describe('Wales Section 173 Form Selector', () => {
         expect(result.regimeSource).toBe('inferred');
       });
 
-      it('should use explicit regime when provided', () => {
+      // HARD-LOCKED: Attempting to use 2_month regime should throw error
+      it('should throw error when 2_month regime is requested', () => {
         const facts: Section173Facts = {
           contract_start_date: '2023-01-01',
           service_date: '2024-01-15',
           expiry_date: '2024-03-15',
           wales_section173_notice_regime: '2_month',
         };
-        const result = validateSection173Timing(facts);
-        expect(result.noticeRegime).toBe('2_month');
-        expect(result.regimeSource).toBe('explicit');
-        expect(result.minimumNoticeMonths).toBe(2);
-        // With 2-month regime, 2024-03-15 is valid (2 months from Jan 15)
-        expect(result.errors.filter(e => e.includes('INSUFFICIENT_NOTICE'))).toHaveLength(0);
+        expect(() => validateSection173Timing(facts)).toThrow('WALES_SECTION173_UNSUPPORTED_REGIME');
       });
     });
 
@@ -515,15 +522,16 @@ describe('Wales Section 173 Form Selector', () => {
       expect(result.minimumNoticeMonths).toBe(6);
     });
 
-    it('should return RHW17 for pre-December 2022 dates', () => {
+    // HARD-LOCKED: Always returns RHW16 (6 months) regardless of date
+    it('should always return RHW16 and 6 months (HARD-LOCKED)', () => {
       const facts: Section173Facts = {
         contract_start_date: '2020-01-01',
         service_date: '2022-11-15',
-        expiry_date: '2023-01-15',
+        expiry_date: '2023-05-15', // Must be >= 6 months from service
       };
       const result = calculateSection173ExpiryDate(facts);
-      expect(result.form).toBe('RHW17');
-      expect(result.minimumNoticeMonths).toBe(2);
+      expect(result.form).toBe('RHW16');
+      expect(result.minimumNoticeMonths).toBe(6);
     });
   });
 
@@ -734,5 +742,155 @@ describe('Pack contents guards for section_173', () => {
     // This is documentation of expected behavior
     expect(excludedForFaultBased).toContain('section173_notice');
     expect(includedForFaultBased).toContain('fault_based_notice');
+  });
+});
+
+// ============================================================================
+// HARD-LOCKED 6 MONTHS REGRESSION TESTS
+// ============================================================================
+// These tests ensure the Section 173 notice period is permanently locked to
+// 6 months. We do not support the 2-month regime (RHW17) for standard
+// occupation contracts.
+// ============================================================================
+
+describe('Wales Section 173 - HARD-LOCKED 6 Months (Regression Tests)', () => {
+  describe('canonical notice period helpers', () => {
+    it('getSection173MinimumNoticeMonths always returns 6', () => {
+      // Test with various facts - should always return 6
+      expect(getSection173MinimumNoticeMonths()).toBe(6);
+      expect(getSection173MinimumNoticeMonths({ contract_start_date: '2020-01-01' })).toBe(6);
+      expect(getSection173MinimumNoticeMonths({ contract_start_date: '2025-07-14', service_date: '2026-01-25' })).toBe(6);
+    });
+
+    it('getSection173MinimumNoticeLabel always returns "6 months"', () => {
+      expect(getSection173MinimumNoticeLabel()).toBe('6 months');
+    });
+
+    it('SECTION_173_LOCKED_NOTICE_MONTHS constant equals 6', () => {
+      expect(SECTION_173_LOCKED_NOTICE_MONTHS).toBe(6);
+    });
+  });
+
+  describe('specific test case from requirements', () => {
+    // For a standard contract with start date 2025-07-14 and service date 2026-01-25:
+    // - minimum notice months == 6
+    // - earliest expiry == 2026-07-25 (calendar months)
+    // - form == RHW16
+    // - any attempt to select RHW17 fails (expect throw or error return)
+
+    const standardContractFacts: Section173Facts = {
+      contract_start_date: '2025-07-14',
+      service_date: '2026-01-25',
+      wales_contract_category: 'standard',
+    };
+
+    it('minimum notice months equals 6', () => {
+      const result = getSection173MinimumNoticePeriod(standardContractFacts);
+      expect(result.months).toBe(6);
+    });
+
+    it('earliest expiry equals service date + 6 calendar months (2026-07-25)', () => {
+      const earliestExpiry = addCalendarMonths('2026-01-25', 6);
+      expect(earliestExpiry).toBe('2026-07-25');
+
+      // Also verify via validation
+      const validation = validateSection173Timing(standardContractFacts);
+      expect(validation.earliestExpiryDate).toBe('2026-07-25');
+    });
+
+    it('form is always RHW16', () => {
+      expect(determineSection173Form(standardContractFacts)).toBe('RHW16');
+    });
+
+    it('any attempt to select RHW17 fails with error', () => {
+      const factsWithRHW17Request: Section173Facts = {
+        ...standardContractFacts,
+        wales_section173_notice_regime: '2_month',
+      };
+      expect(() => determineSection173Form(factsWithRHW17Request)).toThrow('WALES_SECTION173_UNSUPPORTED_REGIME');
+    });
+  });
+
+  describe('expiry date validation', () => {
+    const testFacts: Section173Facts = {
+      contract_start_date: '2025-01-01',
+      service_date: '2026-01-18', // Today's date in the test scenario
+      wales_contract_category: 'standard',
+    };
+
+    it('expiry date earlier than service + 6 months triggers error', () => {
+      const factsWithEarlyExpiry: Section173Facts = {
+        ...testFacts,
+        expiry_date: '2026-03-18', // Only 2 months from service
+      };
+      const validation = validateSection173Timing(factsWithEarlyExpiry);
+      expect(validation.isValid).toBe(false);
+      expect(validation.errors.some(e => e.includes('WALES_SECTION173_INSUFFICIENT_NOTICE'))).toBe(true);
+    });
+
+    it('expiry date equal to service + 6 months is valid', () => {
+      const minimumExpiry = addCalendarMonths('2026-01-18', 6); // 2026-07-18
+      const factsWithMinimumExpiry: Section173Facts = {
+        ...testFacts,
+        expiry_date: minimumExpiry,
+      };
+      const validation = validateSection173Timing(factsWithMinimumExpiry);
+      expect(validation.isValid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+    });
+
+    it('expiry date later than service + 6 months is valid (not shortened)', () => {
+      const factsWithLaterExpiry: Section173Facts = {
+        ...testFacts,
+        expiry_date: '2026-09-18', // 8 months from service - longer than required
+      };
+      const validation = validateSection173Timing(factsWithLaterExpiry);
+      expect(validation.isValid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+    });
+  });
+
+  describe('no RHW17 leakage in output', () => {
+    it('getSection173RequirementsSummary shows 6 months and RHW16', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2025-07-14',
+        service_date: '2026-01-25',
+      };
+      const requirements = getSection173RequirementsSummary(facts);
+      const allText = requirements.join(' ');
+
+      expect(allText).toContain('6');
+      expect(allText).toContain('RHW16');
+      expect(allText).not.toContain('RHW17');
+      expect(allText).not.toContain('2 months');
+      expect(allText).not.toContain('two months');
+    });
+
+    it('validation result always shows 6_month regime and RHW16', () => {
+      const facts: Section173Facts = {
+        contract_start_date: '2025-01-01',
+        service_date: '2026-01-18',
+      };
+      const validation = validateSection173Timing(facts);
+
+      expect(validation.noticeRegime).toBe('6_month');
+      expect(validation.recommendedForm).toBe('RHW16');
+      expect(validation.minimumNoticeMonths).toBe(6);
+    });
+  });
+
+  describe('calendar month calculation correctness', () => {
+    it('correctly handles 6-month calculation across year boundary', () => {
+      // Jan 25, 2026 + 6 months = Jul 25, 2026
+      expect(addCalendarMonths('2026-01-25', 6)).toBe('2026-07-25');
+    });
+
+    it('correctly handles end-of-month edge cases', () => {
+      // Aug 31 + 6 months = Feb 28/29 (depending on year)
+      expect(addCalendarMonths('2025-08-31', 6)).toBe('2026-02-28'); // 2026 is not leap year
+
+      // Feb 29 + 6 months = Aug 29 (leap year)
+      expect(addCalendarMonths('2024-02-29', 6)).toBe('2024-08-29');
+    });
   });
 });

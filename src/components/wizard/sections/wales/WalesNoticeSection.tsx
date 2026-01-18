@@ -4,6 +4,10 @@
  * Wales-specific replacement for NoticeSection.
  * Handles Section 173 (no-fault) and fault-based notices under RH(W)A 2016.
  *
+ * HARD-LOCKED: Section 173 is locked to 6 months minimum notice period.
+ * We do not support the 2-month regime; Section 173 is locked to 6 months
+ * for standard occupation contracts.
+ *
  * Key differences from England NoticeSection:
  * - NO Section 21, Form 6A, or Housing Act 1988 references
  * - NO "How to Rent" guide compliance
@@ -17,7 +21,7 @@
  * - AskHeavenInlineEnhancer for breach_description enhancement
  *
  * Notice periods (Wales):
- * - Section 173: 6 months minimum
+ * - Section 173: 6 months minimum (HARD-LOCKED)
  * - Fault-based (serious breach): 1 month minimum
  * - Fault-based (8+ weeks arrears): absolute ground
  */
@@ -38,6 +42,9 @@ import {
   validateSection173Timing,
   calculateSection173ExpiryDate,
   getSection173RequirementsSummary,
+  getSection173MinimumNoticeMonths,
+  getSection173MinimumNoticeLabel,
+  SECTION_173_LOCKED_NOTICE_MONTHS,
   isSection173Route,
   isWalesFaultBasedRoute,
   addCalendarMonths,
@@ -1247,12 +1254,14 @@ const Section173TimingValidationPanel: React.FC<Section173TimingValidationPanelP
             </p>
           )}
 
-          {/* Recommended form info */}
+          {/* Recommended form info - HARD-LOCKED to RHW16 */}
           {validation.recommendedForm && (
             <div className="mt-3 pt-3 border-t border-gray-200">
               <p className="text-xs text-gray-600">
-                <strong>Prescribed form:</strong> {validation.recommendedForm} (
-                {validation.recommendedForm === 'RHW16' ? '6-month notice' : '2-month notice'})
+                <strong>Prescribed form:</strong> RHW16 ({getSection173MinimumNoticeLabel()} notice)
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Section 173 requires at least six months notice for standard occupation contracts.
               </p>
             </div>
           )}
@@ -1288,8 +1297,13 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   }, [isCommunityLandlord]);
 
   // Calculate minimum notice period based on route and grounds
+  // HARD-LOCKED: Section 173 is always 6 months (approximately 183 days)
   const minNoticePeriod = useMemo(() => {
-    if (isSection173) return 180; // 6 months for Section 173
+    if (isSection173) {
+      // HARD-LOCKED: 6 months notice period for Section 173
+      // Use approximate days for display (30.44 days/month * 6 = ~183 days)
+      return Math.ceil(SECTION_173_LOCKED_NOTICE_MONTHS * 30.44);
+    }
 
     if (isFaultBased && selectedGrounds.length > 0) {
       // Find shortest notice period among selected grounds
@@ -1307,13 +1321,22 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
   }, [isSection173, isFaultBased, selectedGrounds]);
 
   // Calculate suggested expiry date
+  // HARD-LOCKED: For Section 173, use addCalendarMonths for legal correctness
   const today = new Date().toISOString().split('T')[0];
   const suggestedExpiryDate = useMemo(() => {
     const serviceDate = facts.notice_date || facts.notice_service_date || facts.notice_served_date || today;
+
+    if (isSection173) {
+      // HARD-LOCKED: Use calendar months for Section 173 (6 months minimum)
+      // This ensures legal correctness (e.g., Jan 31 + 6 months = Jul 31)
+      return addCalendarMonths(serviceDate, SECTION_173_LOCKED_NOTICE_MONTHS);
+    }
+
+    // For fault-based, use days calculation
     const date = new Date(serviceDate);
     date.setDate(date.getDate() + minNoticePeriod);
     return date.toISOString().split('T')[0];
-  }, [facts.notice_date, facts.notice_service_date, facts.notice_served_date, minNoticePeriod, today]);
+  }, [facts.notice_date, facts.notice_service_date, facts.notice_served_date, minNoticePeriod, today, isSection173]);
 
   // Initialize notice_date when entering this section
   useEffect(() => {
@@ -1723,10 +1746,13 @@ export const WalesNoticeSection: React.FC<WalesNoticeSectionProps> = ({
               </select>
             </div>
 
-            {/* Expiry info */}
+            {/* Expiry info - HARD-LOCKED to 6 months */}
             <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
               <p className="text-sm text-purple-800">
-                <strong>Notice period:</strong> Section 173 requires a minimum of 6 months notice.
+                <strong>Notice period:</strong> Section 173 requires at least {getSection173MinimumNoticeLabel()} notice.
+                The notice expiry date must not be earlier than six months after the date of service.
+              </p>
+              <p className="text-sm text-purple-800 mt-2">
                 Your notice will expire on or after <strong>{suggestedExpiryDate}</strong>.
               </p>
             </div>

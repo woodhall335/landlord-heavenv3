@@ -348,7 +348,7 @@ export async function GET(
       html = compileTemplate(content, templateData);
     } else if (templatePath === 'SECTION173_SPECIAL') {
       // Use dedicated Section 173 generator template
-      // RHW16/RHW17 selection is handled by the generator but we just need HTML for thumbnail
+      // HARD-LOCKED to RHW16 (6-month notice) for standard occupation contracts
       const { generateWalesSection173Notice } = await import('@/lib/documents/wales-section173-generator');
       const contractStartDate = wizardFacts.contract_start_date || templateData.tenancy_start_date;
       const section173Data = {

@@ -52,7 +52,10 @@ export {
   determineSection173Form,
   determineSection173FormWithMetadata,
   getSection173MinimumNoticePeriod,
-  /** @deprecated Use getSection173MinimumNoticePeriod instead */
+  getSection173MinimumNoticeMonths,
+  getSection173MinimumNoticeLabel,
+  SECTION_173_LOCKED_NOTICE_MONTHS,
+  /** @deprecated Use getSection173MinimumNoticePeriod or getSection173MinimumNoticeMonths instead */
   getSection173MinimumNoticeDays,
   validateSection173Timing,
   calculateSection173ExpiryDate,

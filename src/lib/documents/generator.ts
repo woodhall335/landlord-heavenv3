@@ -454,7 +454,7 @@ export function loadTemplate(templatePath: string): string {
       `[TEMPLATE GUARD] Attempted to load deleted Wales bilingual template: ${templatePath}\n` +
       `BLOCKED: Wales bilingual templates have been removed.\n` +
       `Use English-only prescribed forms:\n` +
-      `  - For Section 173: Use generateWalesSection173Notice() (auto-selects RHW16 or RHW17)\n` +
+      `  - For Section 173: Use generateWalesSection173Notice() (HARD-LOCKED to RHW16, 6-month notice)\n` +
       `  - For fault-based: Use 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'`
     );
   }
@@ -473,7 +473,7 @@ export function loadTemplate(templatePath: string): string {
     throw new Error(
       `[TEMPLATE GUARD] Attempted to load bilingual Wales template: ${templatePath}\n` +
       `BLOCKED: Bilingual templates are not available.\n` +
-      `Wales templates are English-only prescribed forms (RHW16, RHW17, RHW23).`
+      `Wales templates are English-only prescribed forms (RHW16 for Section 173, RHW23 for fault-based).`
     );
   }
 
