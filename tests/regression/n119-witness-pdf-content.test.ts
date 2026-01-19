@@ -86,15 +86,24 @@ describe('N119 + Witness Statement PDF Content Regression', () => {
       console.log('');
     });
 
-    it('Q2: should have tenant name in persons in possession field', () => {
+    it('Q2: should have tenant name in persons in possession field (clean, no parentheticals)', () => {
       // Field name with curly apostrophe
       const occupantsFieldName = "To the best of the claimant\u2019s knowledge the following persons are in possession of the property:";
       const occupantsValue = fieldValues.get(occupantsFieldName) || '';
 
       console.log('Q2 OCCUPANTS field value:', occupantsValue);
 
+      // Must contain tenant name
       expect(occupantsValue).toContain('Sonia Shezadi');
       expect(occupantsValue).not.toBe('');
+
+      // CRITICAL: Must NOT contain "(the defendant)" or other parentheticals
+      // Court requirement: Clean name only
+      expect(occupantsValue).not.toContain('(the defendant)');
+      expect(occupantsValue).not.toContain('(defendant)');
+
+      // Should be exactly the tenant name (possibly with additional occupants)
+      expect(occupantsValue).toBe('Sonia Shezadi');
     });
 
     it('Q6: should have notice type filled', () => {
@@ -107,7 +116,7 @@ describe('N119 + Witness Statement PDF Content Regression', () => {
       expect(noticeTypeValue).not.toBe('');
     });
 
-    it('Q6: should have notice served date filled', () => {
+    it('Q6: should have notice served date filled in readable UK format', () => {
       const noticeDayMonthFieldName = '6. Day and month notice served';
       const noticeYearFieldName = '6. Year notice served';
 
@@ -117,10 +126,16 @@ describe('N119 + Witness Statement PDF Content Regression', () => {
       console.log('Q6 NOTICE_DATE_DAY_MONTH:', dayMonth);
       console.log('Q6 NOTICE_DATE_YEAR:', year);
 
-      // Day/month should be DD/MM format
-      expect(dayMonth).toMatch(/^\d{1,2}\/\d{1,2}$/);
-      // Year should be 2-digit
+      // Day/month should be "DD Month" format (e.g., "19 January") - NOT DD/MM
+      // This ensures the rendered PDF sentence is complete and readable
+      expect(dayMonth).toMatch(/^\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December)$/);
+
+      // Year should be 2-digit (e.g., "26" for 2026)
       expect(year).toMatch(/^\d{2}$/);
+
+      // Verify specific values for the test fixture (notice date is 2026-01-19)
+      expect(dayMonth).toBe('19 January');
+      expect(year).toBe('26');
     });
 
     it('Frequency: should have monthly rent frequency marked', () => {
@@ -318,15 +333,35 @@ describe('N119 + Witness Statement PDF Content Regression', () => {
       // Verify field values
       const fieldValues = await extractFilledFieldValues(n119Bytes);
 
-      // Q2 - Persons in possession
+      // Q2 - Persons in possession (clean name, no parentheticals)
       const occupantsKey = "To the best of the claimant\u2019s knowledge the following persons are in possession of the property:";
-      expect(fieldValues.get(occupantsKey)).toContain('Sonia Shezadi');
+      const occupantsValue = fieldValues.get(occupantsKey) || '';
+      expect(occupantsValue).toBe('Sonia Shezadi');
+      expect(occupantsValue).not.toContain('(the defendant)');
 
-      // Q6 - Notice type
-      expect(fieldValues.get('6. Other type of notice')).toContain('Notice seeking possession');
-
-      // Frequency - Monthly selected
+      // Q3(b) - Frequency: Monthly selected, others empty
       expect(fieldValues.get('3(b) The current rent is payable each month')).toBe('X');
+      expect(fieldValues.get('3(b) The current rent is payable each week')).toBeFalsy();
+      expect(fieldValues.get('3(b) The current rent is payable each fortnight')).toBeFalsy();
+
+      // Q6 - Notice type and readable date
+      expect(fieldValues.get('6. Other type of notice')).toContain('Notice seeking possession');
+      expect(fieldValues.get('6. Day and month notice served')).toMatch(/^\d{1,2} [A-Z][a-z]+$/);
+      expect(fieldValues.get('6. Year notice served')).toMatch(/^\d{2}$/);
+    });
+
+    it('should NOT produce broken sentence fragments in Q6', async () => {
+      const { caseData } = wizardFactsToEnglandWalesEviction('test-case', goldenFixture as any);
+      const n119Bytes = await fillN119Form(caseData, { flatten: false });
+      const fieldValues = await extractFilledFieldValues(n119Bytes);
+
+      // Collect all filled values to check for broken fragments
+      const allValues = Array.from(fieldValues.values()).join(' ');
+
+      // These malformed fragments should NEVER appear
+      expect(allValues).not.toContain(') was served on the defendant on 20 .');
+      expect(allValues).not.toContain(') was served on the defendant on 20.');
+      expect(allValues).not.toMatch(/\d{1,2}\/\d{1,2}/); // No DD/MM format in date fields
     });
   });
 });
