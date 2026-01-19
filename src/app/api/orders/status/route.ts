@@ -31,6 +31,8 @@ export interface OrderStatusResponse {
   edit_window_open: boolean;
   /** ISO string of when the edit window ends (null if not paid) */
   edit_window_ends_at: string | null;
+  /** Product type from the order (e.g., 'notice_only', 'complete_pack') */
+  product_type: string | null;
 }
 
 export async function GET(request: Request) {
@@ -53,7 +55,7 @@ export async function GET(request: Request) {
     // Build order query
     let orderQuery = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency')
+      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type')
       .eq('case_id', caseId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
@@ -115,6 +117,7 @@ export async function GET(request: Request) {
       last_final_document_created_at: lastFinalDocCreatedAt,
       edit_window_open: editWindow.isPaid && editWindow.isOpen,
       edit_window_ends_at: editWindow.endsAt,
+      product_type: order?.product_type || null,
     };
 
     return NextResponse.json(response, { status: 200 });

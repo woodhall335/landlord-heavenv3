@@ -52,6 +52,42 @@ function WizardFlowContent() {
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
 
+  // SAFETY GUARD: For editing paid cases, use order's product_type to prevent downgrade
+  const [effectiveProduct, setEffectiveProduct] = useState<string | null>(product);
+  const [orderCheckDone, setOrderCheckDone] = useState(!editCaseId); // Skip check if no editCaseId
+
+  // Check order status to get authoritative product_type for paid cases
+  useEffect(() => {
+    if (!editCaseId || orderCheckDone) return;
+
+    const checkOrderProduct = async () => {
+      try {
+        const response = await fetch(`/api/orders/status?case_id=${editCaseId}`);
+        if (response.ok) {
+          const data = await response.json();
+          // If this is a paid order, use its product_type (prevents downgrade)
+          if (data.paid && data.product_type) {
+            console.log('[WizardFlow] Paid case detected - using order product_type:', data.product_type);
+            setEffectiveProduct(data.product_type);
+          } else {
+            // Not paid, use URL product param
+            setEffectiveProduct(product);
+          }
+        } else {
+          // API error or no order found, fall back to URL param
+          setEffectiveProduct(product);
+        }
+      } catch (err) {
+        console.error('[WizardFlow] Failed to check order status:', err);
+        setEffectiveProduct(product);
+      } finally {
+        setOrderCheckDone(true);
+      }
+    };
+
+    checkOrderProduct();
+  }, [editCaseId, product, orderCheckDone]);
+
   const hasRequiredParams = Boolean(type && jurisdiction);
 
   useEffect(() => {
@@ -60,8 +96,8 @@ function WizardFlowContent() {
     }
   }, [hasRequiredParams, router]);
 
-  // Normalize product for Ask Heaven / wizard
-  const normalizedProduct = product;
+  // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
+  const normalizedProduct = effectiveProduct;
 
   // Derive a coarse product label for Ask Heaven (its Product union)
   const askHeavenProduct: AskHeavenProduct | null = (() => {
@@ -251,8 +287,8 @@ function WizardFlowContent() {
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 
-  // Show loading state while initializing
-  if (loading || !caseId) {
+  // Show loading state while initializing or checking order status
+  if (loading || !caseId || !orderCheckDone) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
