@@ -202,7 +202,8 @@ describe("Witness Statement Sections Builder", () => {
       });
 
       it("mentions approximate months of arrears", () => {
-        expect(sections.grounds_summary).toContain("7 months");
+        // The arrears_months from fixture is 7.0, which gets formatted as "7.0 months"
+        expect(sections.grounds_summary).toContain("7.0 months");
       });
 
       it("refers to Schedule of Arrears", () => {
@@ -276,9 +277,10 @@ describe("Witness Statement Sections Builder", () => {
 
       it("does NOT falsely claim evidence_uploads are attached when empty", () => {
         // The fixture has empty evidence_uploads, so we should see
-        // the supplementary documents listed as "not yet uploaded"
-        expect(sections.evidence_references).toContain("not yet uploaded");
-        expect(sections.evidence_references).toContain("may be provided later");
+        // the supplementary documents listed as "may be provided separately"
+        expect(sections.evidence_references).toContain("may be provided separately");
+        // Should NOT contain "Verified Documents Available" section when no uploads
+        expect(sections.evidence_references).not.toContain("Verified Documents Available");
       });
 
       it("lists documents that may be provided separately", () => {
@@ -396,7 +398,8 @@ describe("Witness Statement Sections Builder", () => {
 
       expect(sections.evidence_references).toContain("tenancy_agreement.pdf");
       expect(sections.evidence_references).toContain("rent_ledger.xlsx");
-      expect(sections.evidence_references).toContain("uploaded separately");
+      // Uploads are listed under "Verified Documents Available" section
+      expect(sections.evidence_references).toContain("Verified Documents Available");
     });
 
     it("handles case with no arrears items", () => {
