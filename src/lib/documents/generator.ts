@@ -649,11 +649,29 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       print_css: printCssContent,
     };
 
-    // Safe-convert all data values to prevent [object Object] leaks
+    // Safe-convert data values to prevent [object Object] leaks
+    // IMPORTANT: Preserve certain nested objects that templates expect to access with dot notation
+    // e.g., witness_statement.introduction, arrears.items, etc.
+    const PRESERVE_NESTED_KEYS = [
+      'witness_statement', // Used by witness-statement.hbs: {{{witness_statement.introduction}}}
+      'arrears',           // Used for arrears breakdown: {{arrears.total}}
+      'grounds',           // Used for grounds arrays: {{#each grounds}}
+      'sections',          // Used for section-based templates
+      'compliance',        // Used for compliance data display
+    ];
+
     const safeData = Object.entries(enrichedData).reduce((acc, [key, value]) => {
-      acc[key] = typeof value === 'object' && value !== null && !Array.isArray(value)
-        ? safeText(value)
-        : value;
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        // Preserve nested objects that templates expect
+        if (PRESERVE_NESTED_KEYS.includes(key)) {
+          acc[key] = value;
+        } else {
+          // Convert other objects to strings to prevent [object Object] in output
+          acc[key] = safeText(value);
+        }
+      } else {
+        acc[key] = value;
+      }
       return acc;
     }, {} as Record<string, any>);
 
