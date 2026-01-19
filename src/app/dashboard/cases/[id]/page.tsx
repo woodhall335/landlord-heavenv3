@@ -498,22 +498,85 @@ export default function CaseDetailPage() {
     });
   };
 
+  // Get effective product type - prioritizes order's product_type over inferred values
+  const getEffectiveProduct = (): string => {
+    // First, check if we have a paid order with product_type
+    if (orderStatus?.paid && orderStatus.product_type) {
+      return orderStatus.product_type;
+    }
+
+    // Fall back to inferring from case details
+    const params = getProductAndParams();
+    return params?.product || 'notice_only';
+  };
+
   const getCaseTypeLabel = (caseType: string): string => {
+    // For eviction cases, check product type to distinguish between notice_only and complete_pack
+    if (caseType === 'eviction') {
+      const product = getEffectiveProduct();
+      return product === 'complete_pack' ? 'Eviction Pack' : 'Eviction Notice';
+    }
+
     const labels: Record<string, string> = {
-      eviction: 'Eviction Notice',
       money_claim: 'Money Claim',
       tenancy_agreement: 'Tenancy Agreement',
     };
     return labels[caseType] || caseType;
   };
 
+  // Get detailed case header including jurisdiction and route
+  const getCaseHeaderDetails = (): { title: string; subtitle: string } => {
+    const caseType = caseDetails?.case_type || '';
+    const title = getCaseTypeLabel(caseType);
+
+    // Build detailed subtitle
+    const parts: string[] = [];
+
+    // Add jurisdiction
+    if (caseDetails?.jurisdiction) {
+      parts.push(getJurisdictionLabel(caseDetails.jurisdiction));
+    }
+
+    // Add route for eviction cases
+    if (caseType === 'eviction') {
+      const facts = caseDetails?.collected_facts || {};
+      const route = facts.route || facts.notice_route || facts.eviction_route;
+      if (route) {
+        const routeLabels: Record<string, string> = {
+          section_8: 'Section 8',
+          section_21: 'Section 21',
+          section_173: 'Section 173',
+          fault_based: 'Fault-Based',
+          notice_to_leave: 'Notice to Leave',
+        };
+        const routeLabel = routeLabels[route] || route.replace(/_/g, ' ');
+
+        // Add grounds info for Section 8
+        if (route === 'section_8' && facts.ground_codes?.length > 0) {
+          const groundsList = facts.ground_codes.join(', ');
+          parts.push(`${routeLabel} (Ground${facts.ground_codes.length > 1 ? 's' : ''} ${groundsList})`);
+        } else {
+          parts.push(routeLabel);
+        }
+      }
+    }
+
+    return {
+      title,
+      subtitle: parts.join(' — '),
+    };
+  };
+
   const getJurisdictionLabel = (jurisdiction: string): string => {
     const labels: Record<string, string> = {
+      england: 'England',
+      wales: 'Wales',
       'england-wales': 'England & Wales',
       scotland: 'Scotland',
       'northern-ireland': 'Northern Ireland',
     };
-    return labels[jurisdiction] || jurisdiction;
+    // Capitalize first letter as fallback
+    return labels[jurisdiction] || jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1);
   };
 
   const getStatusColor = (status: string): 'neutral' | 'warning' | 'success' => {
@@ -533,20 +596,27 @@ export default function CaseDetailPage() {
 
     const facts = caseDetails.collected_facts || {};
 
-    // Determine product type from case_type and facts
-    let product = facts.product || facts.original_product || '';
+    // PRIORITY: Use order's product_type if available (authoritative for paid cases)
+    // This prevents accidental product downgrade for paid complete_pack cases
+    let product = '';
+    if (orderStatus?.paid && orderStatus.product_type) {
+      product = orderStatus.product_type;
+    } else {
+      // Fall back to facts-based inference for unpaid cases
+      product = facts.product || facts.original_product || '';
 
-    // Map case_type to product if not explicitly set
-    if (!product) {
-      if (caseDetails.case_type === 'money_claim') {
-        product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
-      } else if (caseDetails.case_type === 'tenancy_agreement') {
-        product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
-      } else if (caseDetails.case_type === 'eviction') {
-        product = facts.pack_type === 'complete_pack' ? 'complete_pack' : 'notice_only';
-      } else {
-        // Fallback - try to infer from pack_type
-        product = facts.pack_type || 'notice_only';
+      // Map case_type to product if not explicitly set
+      if (!product) {
+        if (caseDetails.case_type === 'money_claim') {
+          product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+        } else if (caseDetails.case_type === 'tenancy_agreement') {
+          product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
+        } else if (caseDetails.case_type === 'eviction') {
+          product = facts.pack_type === 'complete_pack' ? 'complete_pack' : 'notice_only';
+        } else {
+          // Fallback - try to infer from pack_type
+          product = facts.pack_type || 'notice_only';
+        }
       }
     }
 
@@ -664,8 +734,16 @@ export default function CaseDetailPage() {
   };
 
   const handleContinueWizard = () => {
-    const params = getProductAndParams();
-    const product = params?.product || '';
+    // SAFETY GUARD: For paid cases, always use the order's product_type
+    // This prevents accidental downgrade from complete_pack to notice_only
+    let product = '';
+    if (orderStatus?.paid && orderStatus.product_type) {
+      product = orderStatus.product_type;
+    } else {
+      const params = getProductAndParams();
+      product = params?.product || '';
+    }
+
     const productParam = product ? `&product=${product}` : '';
     router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${caseDetails?.jurisdiction}&case_id=${caseId}${productParam}`);
   };
@@ -738,12 +816,19 @@ export default function CaseDetailPage() {
               >
                 ← Back to Cases
               </Link>
-              <h1 className="text-3xl font-extrabold text-charcoal">
-                {getCaseTypeLabel(caseDetails.case_type)}
-              </h1>
-              <p className="text-gray-600 mt-1">
-                {getJurisdictionLabel(caseDetails.jurisdiction)}
-              </p>
+              {(() => {
+                const headerDetails = getCaseHeaderDetails();
+                return (
+                  <>
+                    <h1 className="text-3xl font-extrabold text-charcoal">
+                      {headerDetails.title}
+                    </h1>
+                    <p className="text-gray-600 mt-1">
+                      {headerDetails.subtitle}
+                    </p>
+                  </>
+                );
+              })()}
             </div>
             <Badge variant={getStatusColor(caseDetails.status)} size="large">
               {caseDetails.status.replace('_', ' ')}
