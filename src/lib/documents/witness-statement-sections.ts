@@ -331,18 +331,36 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
     const arrearsMonths = input.arrears?.arrears_months || 0;
     const arrearsAtNotice = input.arrearsAtNoticeDate ?? totalArrears;
     const arrearsAtStatement = input.arrearsAtStatementDate ?? totalArrears;
+    const rentAmount = input.tenancy.rent_amount || 0;
+
+    // Calculate Ground 8 threshold (2 months' rent)
+    const ground8Threshold = rentAmount * 2;
+
+    // Calculate months equivalent at notice date
+    const monthsAtNotice = rentAmount > 0 ? arrearsAtNotice / rentAmount : 0;
 
     lines.push('');
     lines.push('Ground 8 is a mandatory ground for possession. Ground 8 requires that at least two months\' rent be unpaid both at the date of the notice and at the date of the hearing.');
-    lines.push('');
 
-    // Arrears at notice date (Ground 8 proof requirement #1)
+    // Arrears at notice date with months equivalent and threshold comparison (Ground 8 proof requirement #1)
     if (input.notice.served_date && arrearsAtNotice > 0) {
-      lines.push(`At the date the Section 8 Notice was served (${formatUKDate(input.notice.served_date)}), the arrears stood at ${formatCurrency(arrearsAtNotice)}.`);
+      lines.push('');
+      let noticeStatement = `At the date of service of the Section 8 Notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
+      if (monthsAtNotice > 0) {
+        noticeStatement += `, representing approximately ${monthsAtNotice.toFixed(1)} months' rent`;
+      }
+      noticeStatement += '.';
+      lines.push(noticeStatement);
+
+      // Add threshold comparison if we have valid rent amount
+      if (ground8Threshold > 0 && arrearsAtNotice >= ground8Threshold) {
+        lines.push(`This significantly exceeds the Ground 8 threshold of 2 months' rent (${formatCurrency(ground8Threshold)}).`);
+      }
     }
 
     // Arrears at statement date (Ground 8 proof requirement #2)
     if (arrearsAtStatement > 0) {
+      lines.push('');
       const statementDate = input.signing?.signature_date || new Date().toISOString().split('T')[0];
       let arrearsStatement = `As at the date of this statement (${formatUKDate(statementDate)}), the total rent arrears amount to ${formatCurrency(arrearsAtStatement)}`;
       if (arrearsMonths > 0) {
