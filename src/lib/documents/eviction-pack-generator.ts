@@ -432,8 +432,20 @@ async function generateEvidenceChecklist(
 ): Promise<EvictionPackDocument> {
   const templatePath = 'shared/templates/evidence_collection_checklist.hbs';
 
+  // Determine case type label based on grounds
+  const hasSection8Grounds = evictionCase.grounds.length > 0;
+  const caseTypeLabel = hasSection8Grounds
+    ? `Section 8 (${evictionCase.grounds.map(g => g.code).join(', ')})`
+    : evictionCase.case_type === 'no_fault' ? 'Section 21' : 'Possession Claim';
+
   const data = {
     ...evictionCase,
+    // Map tenant_full_name to tenant_name for template compatibility
+    tenant_name: evictionCase.tenant_full_name,
+    // Map case type for display
+    case_type: caseTypeLabel,
+    // Add current date
+    current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
     grounds_data: groundsData,
     required_evidence: evictionCase.grounds.map((g) => {
       const groundDetails = getGroundDetails(groundsData, g.code);
@@ -464,17 +476,93 @@ async function generateEvidenceChecklist(
 }
 
 /**
+ * Get notice type label based on eviction case type and grounds
+ */
+function getNoticeTypeLabel(evictionCase: EvictionCase): string {
+  // Check if this is a Section 8 case (has grounds for possession)
+  const hasSection8Grounds = evictionCase.grounds && evictionCase.grounds.length > 0;
+
+  if (hasSection8Grounds) {
+    return 'Section 8 Notice (Form 3)';
+  }
+
+  // Section 21 (no-fault eviction)
+  if (evictionCase.case_type === 'no_fault') {
+    return 'Section 21 Notice (Form 6A)';
+  }
+
+  // Scotland Notice to Leave
+  if (evictionCase.jurisdiction === 'scotland') {
+    return 'Notice to Leave';
+  }
+
+  // Wales routes
+  if (evictionCase.jurisdiction === 'wales') {
+    return evictionCase.case_type === 'no_fault'
+      ? 'Section 173 Notice (No-fault)'
+      : 'Possession Notice (Fault-based)';
+  }
+
+  return 'Possession Notice';
+}
+
+/**
+ * Map service method code to checkbox-friendly value
+ */
+function mapServiceMethodForTemplate(method: string | undefined): string {
+  if (!method) return '';
+
+  const methodMap: Record<string, string> = {
+    'first_class_post': 'post',
+    'post': 'post',
+    'recorded_delivery': 'recorded_delivery',
+    'signed_for': 'recorded_delivery',
+    'hand_delivered': 'hand',
+    'hand': 'hand',
+    'left_at_property': 'hand',
+    'letterbox': 'hand',
+    'email': 'email',
+  };
+
+  return methodMap[method.toLowerCase()] || '';
+}
+
+/**
  * Generate Proof of Service Templates
  */
 async function generateProofOfService(
-  evictionCase: EvictionCase
+  evictionCase: EvictionCase,
+  serviceDetails?: {
+    service_date?: string;
+    expiry_date?: string;
+    service_method?: string;
+  }
 ): Promise<EvictionPackDocument> {
   const templatePath = 'shared/templates/proof_of_service.hbs';
 
+  // Get notice type based on case
+  const noticeType = getNoticeTypeLabel(evictionCase);
+
+  // Format dates if provided
+  const serviceDateFormatted = serviceDetails?.service_date
+    ? formatUKLegalDate(serviceDetails.service_date)
+    : '';
+  const expiryDateFormatted = serviceDetails?.expiry_date
+    ? formatUKLegalDate(serviceDetails.expiry_date)
+    : '';
+
   const data = {
     ...evictionCase,
-    service_date: '',
-    service_method: '',
+    // Map notice type based on route
+    notice_type: noticeType,
+    // Map service details
+    service_date_formatted: serviceDateFormatted,
+    earliest_possession_date_formatted: expiryDateFormatted,
+    // Map service method for checkbox matching
+    service_method: mapServiceMethodForTemplate(serviceDetails?.service_method),
+    // Add current date for reference
+    current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
+    current_date_short: new Date().toISOString().split('T')[0].replace(/-/g, ''),
     served_by: '',
   };
 
@@ -1052,9 +1140,18 @@ export async function generateCompleteEvictionPack(
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
+            // Header fields for schedule of arrears
+            property_address: evictionCase.property_address,
+            tenant_full_name: evictionCase.tenant_full_name,
+            tenant_2_name: evictionCase.tenant_2_name,
+            landlord_full_name: evictionCase.landlord_full_name,
+            landlord_2_name: evictionCase.landlord_2_name,
+            // Reference and arrears data
             claimant_reference: wizardFacts?.claimant_reference || evictionCase.case_id,
             arrears_schedule: arrearsData.arrears_schedule,
             arrears_total: arrearsData.arrears_total,
+            // Add generation date
+            generated_date: new Date().toISOString().split('T')[0],
           },
           isPreview: false,
           outputFormat: 'both',
@@ -1089,7 +1186,19 @@ export async function generateCompleteEvictionPack(
   const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
   documents.push(evidenceChecklist);
 
-  const proofOfService = await generateProofOfService(evictionCase);
+  // Extract service details from wizard facts for proof of service
+  const serviceDetails = {
+    service_date: wizardFacts?.notice_served_date ||
+                  wizardFacts?.notice?.service_date ||
+                  wizardFacts?.service_date,
+    expiry_date: wizardFacts?.notice_expiry_date ||
+                 wizardFacts?.notice?.expiry_date ||
+                 wizardFacts?.expiry_date,
+    service_method: wizardFacts?.notice_service_method ||
+                    wizardFacts?.notice?.service_method ||
+                    wizardFacts?.service_method,
+  };
+  const proofOfService = await generateProofOfService(evictionCase, serviceDetails);
   documents.push(proofOfService);
 
   // 3.1 Generate witness statement (AI-powered premium feature)
@@ -1102,8 +1211,13 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         witness_statement: witnessStatementContent,
+        // Map to template-expected field names
+        landlord_name: evictionCase.landlord_full_name,
+        tenant_name: evictionCase.tenant_full_name,
         landlord_address: evictionCase.landlord_address,
         court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
+        // Add generation date
+        generated_date: new Date().toISOString().split('T')[0],
       },
       isPreview: false,
       outputFormat: 'both',

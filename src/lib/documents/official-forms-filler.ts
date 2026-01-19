@@ -1202,72 +1202,90 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
 // =============================================================================
 
 /**
- * Generate detailed particulars of claim based on case data
- * This creates proper legal particulars for the N119 form Section 4
+ * Build N119 Reason for Possession (Section 4) - SHORT VERSION
+ *
+ * Creates a court-appropriate short statement for N119 Question 4(a) that:
+ * - Is legally sensible for the selected grounds
+ * - References the attached Schedule of Arrears for detailed breakdown
+ * - Does NOT include period-by-period bullet lists (prevents field overflow)
+ * - For Ground 8: phrases arrears requirement correctly without asserting "at hearing" as fact
+ *
+ * @param data - CaseData with grounds, arrears, and tenancy information
+ * @returns A short particulars string suitable for N119 field 4(a)
  */
-function generateParticularsOfClaim(data: CaseData): string {
+export function buildN119ReasonForPossession(data: CaseData): string {
   const parts: string[] = [];
 
-  // Parse ground numbers
+  // Parse ground codes/numbers
   const grounds = data.ground_numbers?.split(',').map(g => g.trim()) || [];
   const hasGround8 = grounds.includes('8') || data.ground_codes?.includes('ground_8');
   const hasGround10 = grounds.includes('10') || data.ground_codes?.includes('ground_10');
   const hasGround11 = grounds.includes('11') || data.ground_codes?.includes('ground_11');
   const hasArrearsGrounds = hasGround8 || hasGround10 || hasGround11;
 
-  // Section 8 rent arrears grounds
-  if (hasArrearsGrounds || data.total_arrears) {
-    // Ground 8 - Mandatory ground (2+ months arrears)
-    if (hasGround8) {
-      parts.push('The claimant relies on Ground 8 of Schedule 2 to the Housing Act 1988 (mandatory ground).');
-      parts.push('Both at the date of service of the notice seeking possession and at the date of the hearing:');
-      if (data.rent_frequency === 'weekly') {
-        parts.push('- at least 8 weeks\' rent was unpaid.');
-      } else {
-        parts.push('- at least 2 months\' rent was unpaid.');
-      }
-    }
+  // Ground 8 - Mandatory ground for serious rent arrears
+  if (hasGround8) {
+    parts.push('The claimant relies on Ground 8 of Schedule 2 to the Housing Act 1988 (mandatory ground).');
 
-    // Ground 10 - Discretionary ground (some arrears)
-    if (hasGround10) {
-      parts.push('The claimant also relies on Ground 10 of Schedule 2 to the Housing Act 1988.');
-      parts.push('Some rent lawfully due from the tenant is unpaid on the date on which proceedings are begun.');
-    }
+    // Legally sensible statement: phrase as requirement + current facts
+    // DO NOT assert "at the hearing" as a fact - instead cite the requirement
+    const threshold = data.rent_frequency === 'weekly' ? '8 weeks\'' : '2 months\'';
+    parts.push(
+      `Under Ground 8, the court must order possession if at least ${threshold} rent was unpaid ` +
+      `both at the date of service of the notice and at the date of the hearing.`
+    );
 
-    // Ground 11 - Discretionary ground (persistent delay)
-    if (hasGround11) {
-      parts.push('The claimant also relies on Ground 11 of Schedule 2 to the Housing Act 1988.');
-      parts.push('The tenant has persistently delayed paying rent which has become lawfully due.');
+    // State total arrears and reference the attached schedule
+    if (data.total_arrears) {
+      parts.push(`At the date of service of the notice, £${data.total_arrears.toFixed(2)} was outstanding.`);
     }
+    parts.push('Full details of rent periods and payments are set out in the attached Schedule of Arrears.');
+  }
 
-    // Use the arrears breakdown generator for detailed arrears information
-    // This leverages the canonical arrears schedule if available
-    if (data.total_arrears || data.arrears_items) {
-      const arrearsBreakdown = generateArrearsBreakdownForCourt({
-        arrears_items: data.arrears_items,
-        total_arrears: data.total_arrears,
-        rent_amount: data.rent_amount || 0,
-        rent_frequency: data.rent_frequency,
-      });
-      parts.push(arrearsBreakdown);
-    }
+  // Ground 10 - Discretionary ground (some arrears)
+  if (hasGround10) {
+    const prefix = parts.length > 0 ? 'The claimant also relies on' : 'The claimant relies on';
+    parts.push(`${prefix} Ground 10 of Schedule 2 to the Housing Act 1988 (discretionary ground).`);
+    parts.push('Some rent lawfully due from the tenant is unpaid on the date on which proceedings are begun.');
+  }
 
-    // Note arrears at notice date if different from current
-    if (data.arrears_at_notice_date && data.total_arrears &&
-        data.arrears_at_notice_date !== data.total_arrears) {
-      parts.push(`At the date of the notice, arrears stood at £${data.arrears_at_notice_date.toFixed(2)}.`);
+  // Ground 11 - Discretionary ground (persistent delay)
+  if (hasGround11) {
+    const prefix = parts.length > 0 ? 'The claimant also relies on' : 'The claimant relies on';
+    parts.push(`${prefix} Ground 11 of Schedule 2 to the Housing Act 1988 (discretionary ground).`);
+    parts.push('The tenant has persistently delayed paying rent which has become lawfully due.');
+  }
+
+  // For arrears grounds without specific Ground 8/10/11, still reference schedule
+  if (!hasGround8 && !hasGround10 && !hasGround11 && (hasArrearsGrounds || data.total_arrears)) {
+    if (data.total_arrears) {
+      parts.push(`Total arrears outstanding: £${data.total_arrears.toFixed(2)}.`);
     }
-  } else if (data.ground_numbers) {
-    // Other grounds - provide generic statement
+    parts.push('Full details are set out in the attached Schedule of Arrears.');
+  }
+
+  // Other grounds - provide generic statement
+  if (!hasArrearsGrounds && !data.total_arrears && data.ground_numbers) {
     parts.push(`The claimant relies on Ground(s) ${data.ground_numbers} of Schedule 2 to the Housing Act 1988.`);
   }
 
-  // If no particulars could be generated, return a basic statement
+  // Fallback if no particulars generated
   if (parts.length === 0) {
     return 'The defendant has not paid the rent lawfully due under the tenancy agreement.';
   }
 
   return parts.join(' ');
+}
+
+/**
+ * Generate detailed particulars of claim based on case data
+ * This creates proper legal particulars for the N119 form Section 4
+ *
+ * Uses the short version (buildN119ReasonForPossession) to prevent field overflow.
+ */
+function generateParticularsOfClaim(data: CaseData): string {
+  // Use the short version to prevent overflow in PDF form fields
+  return buildN119ReasonForPossession(data);
 }
 
 // =============================================================================
@@ -1366,12 +1384,15 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   }
 
   // === NOTICE DATES (Section 6) ===
+  // The N119 form uses "on 20__" format for year, requiring 2-digit year only
   const noticeDate = data.section_8_notice_date || data.section_21_notice_date;
   if (noticeDate) {
     const dateParts = noticeDate.split('-');
     if (dateParts.length === 3) {
       setTextOptional(form, N119_FIELDS.NOTICE_DATE_DAY_MONTH, `${dateParts[2]}/${dateParts[1]}`, ctx);
-      setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, dateParts[0], ctx);
+      // Use 2-digit year (e.g., "26" for 2026) to match form's "on 20__" format
+      const twoDigitYear = dateParts[0].slice(-2);
+      setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, twoDigitYear, ctx);
     }
   }
 

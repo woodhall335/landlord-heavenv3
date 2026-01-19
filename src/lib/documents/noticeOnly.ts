@@ -177,6 +177,37 @@ export function validateCompletePackBeforeGeneration(params: {
   }
 
   // ============================================================================
+  // PROCEDURAL DATE RULE: Signature date must be after notice expiry (Section 8)
+  // Court claim forms cannot be validly signed/issued before the notice period expires.
+  // ============================================================================
+  if (caseType !== 'no_fault' && selectedGroundCodes.length > 0) {
+    const noticeExpiryDate = facts.notice_expiry_date ||
+                              facts.expiry_date ||
+                              facts.notice?.expiry_date;
+    const signatureDate = facts.signature_date ||
+                           facts.signing?.signature_date;
+
+    if (noticeExpiryDate && signatureDate) {
+      // Parse dates and compare
+      const expiryDateObj = new Date(noticeExpiryDate + 'T00:00:00Z');
+      const sigDateObj = new Date(signatureDate + 'T00:00:00Z');
+
+      if (!isNaN(expiryDateObj.getTime()) && !isNaN(sigDateObj.getTime())) {
+        if (sigDateObj < expiryDateObj) {
+          // Signature date is before notice expiry - this is a procedural error
+          blocking.push({
+            code: 'COMPLETE_PACK_SIGNATURE_BEFORE_NOTICE_EXPIRY',
+            user_message: `Court claim forms cannot be signed before the notice period expires. ` +
+                         `Notice expires ${noticeExpiryDate}, but signature date is ${signatureDate}.`,
+            fields: ['signature_date', 'notice_expiry_date'],
+            user_fix_hint: `Set the signature date to ${noticeExpiryDate} or later (earliest permissible date is the notice expiry date).`,
+          });
+        }
+      }
+    }
+  }
+
+  // ============================================================================
   // Ground 8 threshold enforcement for complete pack
   // Must be a hard blocker (not just warning) for court submission
   // Uses canonical arrears engine for validation
