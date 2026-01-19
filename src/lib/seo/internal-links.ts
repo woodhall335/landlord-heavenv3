@@ -295,6 +295,15 @@ export const tenancyRelatedLinks = [
   landingPageLinks.tenancyTemplate,
 ];
 
+// Ask Heaven - Free Q&A tool (defined early so it can be used in jurisdiction link groups)
+export const askHeavenLink = {
+  href: '/ask-heaven',
+  title: 'Ask Heaven',
+  description: 'Free UK landlord Q&A tool',
+  icon: 'legal' as const,
+  type: 'tool' as const,
+};
+
 // Jurisdiction-specific link groups (with Ask Heaven for uncertainty resolution)
 export const walesRelatedLinks = [
   askHeavenLink,
@@ -321,15 +330,6 @@ export const moneyClaimRelatedLinks = [
   toolLinks.rentDemandLetter,
   landingPageLinks.rentArrearsTemplate,
 ];
-
-// Ask Heaven - Free Q&A tool
-export const askHeavenLink = {
-  href: '/ask-heaven',
-  title: 'Ask Heaven',
-  description: 'Free UK landlord Q&A tool',
-  icon: 'legal' as const,
-  type: 'tool' as const,
-};
 
 // Ask Heaven related links group
 export const askHeavenRelatedLinks = [
