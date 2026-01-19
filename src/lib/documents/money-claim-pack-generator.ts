@@ -36,6 +36,8 @@ export interface ArrearsEntry {
   amount_due: number;
   amount_paid: number;
   arrears: number;
+  running_balance?: number;
+  notes?: string;
 }
 
 export interface ClaimLineItem {

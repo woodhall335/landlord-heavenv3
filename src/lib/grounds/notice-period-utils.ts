@@ -56,12 +56,12 @@ export function hasArrearsGround(grounds: Array<string | number>): boolean {
 }
 
 /**
- * Normalize ground code to string format (handles "Ground 8", "8", 8)
+ * Normalize ground code to string format (handles "Ground 8", "ground_8", "8", 8)
  */
 export function normalizeGroundCode(code: string | number): string {
   const codeStr = String(code).toUpperCase();
-  // Remove "GROUND " prefix if present
-  return codeStr.replace(/^GROUND\s*/i, '').trim();
+  // Remove "GROUND " or "GROUND_" prefix if present
+  return codeStr.replace(/^GROUND[\s_]*/i, '').trim();
 }
 
 /**

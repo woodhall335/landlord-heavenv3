@@ -1278,33 +1278,78 @@ function EvictionReviewContent({
         {analysis.recommended_route === 'section_8' && (
           <div>
             <h3 className="text-sm font-medium text-gray-700 mb-2">Section 8 grounds:</h3>
-            {analysis.decision_engine?.recommended_grounds?.length > 0 ? (
-              <div className="space-y-2">
-                {analysis.decision_engine.recommended_grounds.map((ground: any) => (
-                  <div key={ground.code} className="p-3 bg-gray-50 rounded border">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-medium">
-                          Ground {ground.code}: {ground.title}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">{ground.description}</p>
-                      </div>
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          ground.type === 'mandatory'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}
-                      >
-                        {ground.type?.toUpperCase?.() || 'GROUND'}
-                      </span>
-                    </div>
+            {/* Use user's selected grounds from case_facts, falling back to decision engine recommendations */}
+            {(() => {
+              const userSelectedGrounds: string[] = analysis.case_facts?.section8_grounds || [];
+              const decisionEngineGrounds = analysis.decision_engine?.recommended_grounds || [];
+
+              // If user has selected grounds, show those
+              if (userSelectedGrounds.length > 0) {
+                return (
+                  <div className="space-y-2">
+                    {userSelectedGrounds.map((ground: string, index: number) => {
+                      // Parse the ground string (e.g., "Ground 8 - serious rent arrears" or just "8")
+                      const groundInfo = getGroundDescription(ground);
+                      return (
+                        <div key={`${groundInfo.code}-${index}`} className="p-3 bg-gray-50 rounded border">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="font-medium">
+                                Ground {groundInfo.code}: {groundInfo.title}
+                              </p>
+                              <p className="text-sm text-gray-600 mt-1">
+                                Notice period: {groundInfo.noticePeriodDays} days
+                              </p>
+                            </div>
+                            <span
+                              className={`px-2 py-1 rounded text-xs font-medium ${
+                                groundInfo.type === 'mandatory'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-yellow-100 text-yellow-800'
+                              }`}
+                            >
+                              {groundInfo.type.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-600">No grounds selected yet.</p>
-            )}
+                );
+              }
+
+              // Fallback to decision engine recommendations if no user selection
+              if (decisionEngineGrounds.length > 0) {
+                return (
+                  <div className="space-y-2">
+                    {decisionEngineGrounds.map((ground: any) => (
+                      <div key={ground.code} className="p-3 bg-gray-50 rounded border">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-medium">
+                              Ground {ground.code}: {ground.title}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-1">{ground.description || ground.reasoning}</p>
+                          </div>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-medium ${
+                              ground.type === 'mandatory'
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                          >
+                            {ground.type?.toUpperCase?.() || 'GROUND'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+
+              // No grounds at all
+              return <p className="text-sm text-gray-600">No grounds selected yet.</p>;
+            })()}
           </div>
         )}
 

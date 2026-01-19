@@ -48,6 +48,7 @@ import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
+import { validateCourtReady, logValidationResults, type ValidationResult } from './court-ready-validator';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 
 // ============================================================================
@@ -1143,6 +1144,30 @@ export async function generateCompleteEvictionPack(
 
       if (arrearsData.include_schedule_pdf) {
         const jurisdictionKey = jurisdiction === 'wales' ? 'wales' : 'england';
+        const today = new Date().toISOString().split('T')[0];
+
+        // Calculate Ground 8 threshold
+        const ground8ThresholdAmount = rentAmount * 2; // 2 months' rent for Ground 8
+        const arrearsAtScheduleDate = arrearsData.arrears_total;
+        const arrearsAtNoticeDate = arrearsData.arrears_at_notice_date ?? arrearsAtScheduleDate;
+        const meetsThresholdAtNotice = arrearsAtNoticeDate >= ground8ThresholdAmount;
+        const meetsThresholdAtSchedule = arrearsAtScheduleDate >= ground8ThresholdAmount;
+
+        // Format rent frequency for display
+        const rentFrequencyDisplay: Record<string, string> = {
+          weekly: 'weekly',
+          fortnightly: 'fortnightly',
+          monthly: 'monthly',
+          quarterly: 'quarterly',
+          yearly: 'yearly',
+        };
+
+        // Get notice date from wizard facts
+        const noticeDate = wizardFacts?.notice_served_date ||
+                          wizardFacts?.notice?.service_date ||
+                          wizardFacts?.notice?.served_date ||
+                          null;
+
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
@@ -1156,8 +1181,20 @@ export async function generateCompleteEvictionPack(
             claimant_reference: wizardFacts?.claimant_reference || evictionCase.case_id,
             arrears_schedule: arrearsData.arrears_schedule,
             arrears_total: arrearsData.arrears_total,
+            // Schedule and notice dates
+            schedule_date: today,
+            notice_date: noticeDate,
+            // Arrears at key dates
+            arrears_at_notice_date: arrearsAtNoticeDate,
+            arrears_at_schedule_date: arrearsAtScheduleDate,
+            // Ground 8 threshold data
+            ground8_threshold: ground8ThresholdAmount,
+            ground8_threshold_description: '2 months\' rent',
+            meets_threshold_at_notice: meetsThresholdAtNotice,
+            meets_threshold_at_schedule: meetsThresholdAtSchedule,
+            rent_frequency: rentFrequencyDisplay[rentFrequency] || rentFrequency,
             // Add generation date
-            generated_date: new Date().toISOString().split('T')[0],
+            generated_date: today,
           },
           isPreview: false,
           outputFormat: 'both',
@@ -1220,7 +1257,13 @@ export async function generateCompleteEvictionPack(
     if (isSection8Case && jurisdiction === 'england') {
       // Use deterministic builder for England Section 8 cases
       // This generates court-ready content from case facts without AI
-      const sectionsInput = extractWitnessStatementSectionsInput(wizardFacts);
+      // Pass evictionCase which has properly mapped data (plus wizardFacts for any extra fields)
+      const sectionsInput = extractWitnessStatementSectionsInput({
+        ...wizardFacts,
+        ...evictionCase,
+        // Ensure arrears at notice date is passed explicitly
+        arrears_at_notice_date: evictionCase.arrears_at_notice_date,
+      });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       console.log('📝 Using deterministic witness statement builder for Section 8 case');
     } else {
@@ -1245,6 +1288,13 @@ export async function generateCompleteEvictionPack(
       isPreview: false,
       outputFormat: 'both',
     });
+
+    // Validate court-readiness (no placeholders or template text)
+    const wsValidation = validateCourtReady(witnessStatementDoc.html || '', 'witness_statement');
+    if (!wsValidation.isValid) {
+      console.warn('⚠️  Witness statement has validation issues:');
+      logValidationResults([wsValidation]);
+    }
 
     documents.push({
       title: 'Witness Statement',
@@ -1332,37 +1382,51 @@ export async function generateCompleteEvictionPack(
     console.error('⚠️  Failed to generate hearing checklist:', error);
   }
 
-  // Engagement letter template (for arrears cases)
+  // Engagement letter (for arrears cases) - generated as FINAL FORM for court packs
   if (hasArrearsGroundsSelected(selectedGroundCodes)) {
     try {
+      // Generate as final form (fully populated, no placeholders) for complete pack
+      const today = new Date();
       const arrearsLetterDoc = await generateDocument({
         templatePath: `uk/${jurisdiction}/templates/eviction/arrears_letter_template.hbs`,
         data: {
           ...evictionCase,
           landlord_full_name: evictionCase.landlord_full_name,
           landlord_address: evictionCase.landlord_address,
+          landlord_phone: evictionCase.landlord_phone,
+          landlord_email: evictionCase.landlord_email,
           tenant_full_name: evictionCase.tenant_full_name,
           property_address: evictionCase.property_address,
           arrears_total: evictionCase.current_arrears || 0,
-          generated_date: new Date().toISOString().split('T')[0],
+          // Final form mode - fully populate all fields
+          is_final_form: true,
+          letter_date: today.toISOString(),
+          calculation_date: today.toISOString(),
         },
         isPreview: false,
         outputFormat: 'both',
       });
 
+      // Validate court-readiness (no placeholders or template text)
+      const letterValidation = validateCourtReady(arrearsLetterDoc.html || '', 'arrears_engagement_letter');
+      if (!letterValidation.isValid) {
+        console.warn('⚠️  Arrears engagement letter has validation issues:');
+        logValidationResults([letterValidation]);
+      }
+
       documents.push({
-        title: 'Arrears Engagement Letter (Template)',
-        description: 'Template letter for pre-action engagement with tenant',
+        title: 'Arrears Engagement Letter',
+        description: 'Pre-action engagement letter for rent arrears',
         category: 'bonus',
-        document_type: 'arrears_letter_template',
+        document_type: 'arrears_engagement_letter',
         html: arrearsLetterDoc.html,
         pdf: arrearsLetterDoc.pdf,
-        file_name: 'arrears_engagement_letter_template.pdf',
+        file_name: 'arrears_engagement_letter.pdf',
       });
 
-      console.log('✅ Generated arrears engagement letter template');
+      console.log('✅ Generated arrears engagement letter (final form)');
     } catch (error) {
-      console.error('⚠️  Failed to generate arrears letter template:', error);
+      console.error('⚠️  Failed to generate arrears engagement letter:', error);
     }
   }
 
