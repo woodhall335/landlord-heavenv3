@@ -77,6 +77,153 @@ function formatUKLegalDate(dateString: string | null | undefined): string {
   }
 }
 
+// ============================================================================
+// PRO-RATA HELPER - For Partial Rent Periods
+// ============================================================================
+
+/**
+ * Calculate the number of days in a period (inclusive).
+ */
+function daysBetween(startDate: string, endDate: string): number {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end.getTime() - start.getTime());
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 for inclusive
+}
+
+/**
+ * Get the number of days in a month for a given date.
+ */
+function daysInMonth(dateStr: string): number {
+  const date = new Date(dateStr);
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+}
+
+/**
+ * Pro-rate partial periods in an arrears schedule.
+ *
+ * For monthly rent, if the last period is less than a full month (based on the
+ * schedule end date), pro-rate the rent due amount.
+ *
+ * @param schedule - The arrears schedule entries
+ * @param rentAmount - The full rent amount per period
+ * @param rentFrequency - The rent frequency (monthly, weekly, etc.)
+ * @param scheduleEndDate - The date up to which arrears are calculated (e.g., notice date)
+ * @returns The schedule with the last period pro-rated if applicable
+ */
+function proRatePartialPeriods(
+  schedule: Array<{
+    period: string;
+    due_date: string;
+    amount_due: number;
+    amount_paid: number;
+    arrears: number;
+    running_balance?: number;
+    notes?: string;
+  }>,
+  rentAmount: number,
+  rentFrequency: string,
+  scheduleEndDate?: string | null
+): Array<{
+  period: string;
+  due_date: string;
+  amount_due: number;
+  amount_paid: number;
+  arrears: number;
+  running_balance?: number;
+  notes?: string;
+}> {
+  if (!schedule || schedule.length === 0 || !scheduleEndDate) {
+    return schedule;
+  }
+
+  // Only handle monthly frequency for now (most common)
+  if (rentFrequency !== 'monthly') {
+    return schedule;
+  }
+
+  // Work on a copy
+  const result = [...schedule];
+  const lastIndex = result.length - 1;
+  const lastEntry = result[lastIndex];
+
+  // Parse period dates from the "X to Y" format
+  // Format is "D Month YYYY to D Month YYYY" (UK legal format)
+  const periodMatch = lastEntry.period.match(/^(.+?)\s+to\s+(.+)$/i);
+  if (!periodMatch) {
+    return schedule;
+  }
+
+  const periodStartStr = periodMatch[1].trim();
+  const periodEndStr = periodMatch[2].trim();
+
+  // Parse UK date format (e.g., "14 January 2026") to Date
+  const parseUKDate = (ukDateStr: string): Date | null => {
+    const months: Record<string, number> = {
+      january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+      july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+    };
+    const match = ukDateStr.match(/(\d+)\s+(\w+)\s+(\d{4})/);
+    if (!match) return null;
+    const day = parseInt(match[1], 10);
+    const month = months[match[2].toLowerCase()];
+    const year = parseInt(match[3], 10);
+    if (month === undefined) return null;
+    return new Date(year, month, day);
+  };
+
+  const periodStart = parseUKDate(periodStartStr);
+  const periodEnd = parseUKDate(periodEndStr);
+  const scheduleEnd = new Date(scheduleEndDate);
+
+  if (!periodStart || !periodEnd) {
+    return schedule;
+  }
+
+  // Calculate expected full period length (days in the month)
+  const fullPeriodDays = daysInMonth(periodStart.toISOString().split('T')[0]);
+
+  // Calculate actual period days
+  const actualDays = daysBetween(
+    periodStart.toISOString().split('T')[0],
+    periodEnd.toISOString().split('T')[0]
+  );
+
+  // Check if this is a partial period (less than full month)
+  // Allow 3 day tolerance (for months with 28-31 days)
+  if (actualDays >= fullPeriodDays - 3) {
+    return schedule; // Not a partial period
+  }
+
+  // Pro-rate the rent
+  const dailyRate = rentAmount / fullPeriodDays;
+  const proRatedAmount = Math.round(dailyRate * actualDays * 100) / 100;
+
+  // Calculate the difference from what was originally charged
+  const originalAmount = lastEntry.amount_due;
+  const adjustment = originalAmount - proRatedAmount;
+
+  // Update the last entry
+  result[lastIndex] = {
+    ...lastEntry,
+    amount_due: proRatedAmount,
+    arrears: Math.round((lastEntry.arrears - adjustment) * 100) / 100,
+    notes: `Pro-rated for ${actualDays} days (daily rate: £${dailyRate.toFixed(2)})`,
+  };
+
+  // Recalculate running balances
+  let runningBalance = 0;
+  for (let i = 0; i < result.length; i++) {
+    runningBalance += result[i].arrears;
+    result[i] = {
+      ...result[i],
+      running_balance: Math.round(runningBalance * 100) / 100,
+    };
+  }
+
+  return result;
+}
+
 /**
  * Build formatted date fields for Section 8 templates.
  * Ensures service_date_formatted, earliest_possession_date_formatted,
@@ -1168,6 +1315,18 @@ export async function generateCompleteEvictionPack(
                           wizardFacts?.notice?.served_date ||
                           null;
 
+        // Apply pro-rata to partial periods (if the last period is less than a full month)
+        const proRatedSchedule = proRatePartialPeriods(
+          arrearsData.arrears_schedule,
+          rentAmount,
+          rentFrequency,
+          noticeDate || today
+        );
+
+        // Recalculate total arrears from pro-rated schedule
+        const proRatedTotal = proRatedSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
+        const roundedProRatedTotal = Math.round(proRatedTotal * 100) / 100;
+
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
@@ -1179,8 +1338,8 @@ export async function generateCompleteEvictionPack(
             landlord_2_name: evictionCase.landlord_2_name,
             // Reference and arrears data
             claimant_reference: wizardFacts?.claimant_reference || evictionCase.case_id,
-            arrears_schedule: arrearsData.arrears_schedule,
-            arrears_total: arrearsData.arrears_total,
+            arrears_schedule: proRatedSchedule,
+            arrears_total: roundedProRatedTotal,
             // Schedule and notice dates
             schedule_date: today,
             notice_date: noticeDate,
@@ -1387,6 +1546,14 @@ export async function generateCompleteEvictionPack(
     try {
       // Generate as final form (fully populated, no placeholders) for complete pack
       const today = new Date();
+
+      // Extract total arrears from multiple possible wizard facts locations
+      // This mirrors the robust extraction used for Schedule of Arrears
+      const letterTotalArrears = wizardFacts?.total_arrears ||
+                                  wizardFacts?.arrears_total ||
+                                  wizardFacts?.issues?.rent_arrears?.total_arrears ||
+                                  evictionCase.current_arrears || 0;
+
       const arrearsLetterDoc = await generateDocument({
         templatePath: `uk/${jurisdiction}/templates/eviction/arrears_letter_template.hbs`,
         data: {
@@ -1397,7 +1564,7 @@ export async function generateCompleteEvictionPack(
           landlord_email: evictionCase.landlord_email,
           tenant_full_name: evictionCase.tenant_full_name,
           property_address: evictionCase.property_address,
-          arrears_total: evictionCase.current_arrears || 0,
+          arrears_total: letterTotalArrears,
           // Final form mode - fully populate all fields
           is_final_form: true,
           letter_date: today.toISOString(),
@@ -2022,12 +2189,25 @@ export async function generateNoticeOnlyPack(
             });
 
             if (arrearsData.arrears_schedule.length > 0 || arrearsData.arrears_total > 0) {
+              // Apply pro-rata to partial periods (if the last period is less than a full month)
+              const noticeDate = wizardFacts?.notice_served_date ||
+                                  wizardFacts?.notice?.service_date ||
+                                  new Date().toISOString().split('T')[0];
+              const proRatedSchedule = proRatePartialPeriods(
+                arrearsData.arrears_schedule,
+                walesTemplateData.rent_amount || 0,
+                walesTemplateData.rent_frequency || 'monthly',
+                noticeDate
+              );
+              const proRatedTotal = proRatedSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
+              const roundedProRatedTotal = Math.round(proRatedTotal * 100) / 100;
+
               const arrearsScheduleDoc = await generateDocument({
                 templatePath: 'uk/wales/templates/money_claims/schedule_of_arrears.hbs',
                 data: {
                   ...walesTemplateData,
-                  arrears_schedule: arrearsData.arrears_schedule,
-                  arrears_total: arrearsData.arrears_total,
+                  arrears_schedule: proRatedSchedule,
+                  arrears_total: roundedProRatedTotal,
                   claimant_reference: caseId,
                 },
                 isPreview: false,
@@ -2198,12 +2378,25 @@ export async function generateNoticeOnlyPack(
           });
 
           if (arrearsData.arrears_schedule.length > 0 || arrearsData.arrears_total > 0) {
+            // Apply pro-rata to partial periods (if the last period is less than a full month)
+            const noticeDate = wizardFacts?.notice_served_date ||
+                                wizardFacts?.notice?.service_date ||
+                                new Date().toISOString().split('T')[0];
+            const proRatedSchedule = proRatePartialPeriods(
+              arrearsData.arrears_schedule,
+              evictionCase.rent_amount || 0,
+              evictionCase.rent_frequency || 'monthly',
+              noticeDate
+            );
+            const proRatedTotal = proRatedSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
+            const roundedProRatedTotal = Math.round(proRatedTotal * 100) / 100;
+
             const arrearsScheduleDoc = await generateDocument({
               templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
               data: {
                 ...section8TemplateData,
-                arrears_schedule: arrearsData.arrears_schedule,
-                arrears_total: arrearsData.arrears_total,
+                arrears_schedule: proRatedSchedule,
+                arrears_total: roundedProRatedTotal,
                 claimant_reference: caseId,
               },
               isPreview: false,
