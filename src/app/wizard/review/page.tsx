@@ -57,6 +57,7 @@ function ReviewPageInner() {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [editWindowOpen, setEditWindowOpen] = useState(false);
   const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(true); // Start true to prevent UI flash
+  const [regenerationError, setRegenerationError] = useState<string | null>(null);
 
   // Compute derived values BEFORE any conditional returns (null-safe)
   // This ensures hooks are called in the same order on every render
@@ -205,6 +206,18 @@ function ReviewPageInner() {
     document.getElementById('critical-issues')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Navigate to Court & Signing step to fix signature date issues
+  const handleFixSignatureDate = () => {
+    const params = new URLSearchParams({
+      case_id: caseId || '',
+      type: caseType,
+      jurisdiction: jurisdiction || 'england',
+      product,
+      step: 'court_signing', // Go directly to Court & Signing section
+    });
+    router.push(`/wizard/flow?${params.toString()}`);
+  };
+
   const handleProceed = async () => {
     if (hasBlockingIssues && !hasAcknowledgedBlockers) {
       return;
@@ -225,6 +238,7 @@ function ReviewPageInner() {
     // PAID CASE: Trigger document regeneration instead of going to checkout
     if (isPaid && editWindowOpen) {
       setIsRegenerating(true);
+      setRegenerationError(null); // Clear any previous error
       try {
         const response = await fetch('/api/orders/regenerate', {
           method: 'POST',
@@ -235,17 +249,26 @@ function ReviewPageInner() {
           }),
         });
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || 'Failed to regenerate documents');
+        const responseData = await response.json().catch(() => ({}));
+
+        if (!response.ok || responseData.ok === false) {
+          // Extract the user-friendly error message from server response
+          const errorMessage = responseData.message || responseData.error || 'Failed to regenerate documents';
+          setRegenerationError(errorMessage);
+          setIsRegenerating(false);
+          // Scroll to error banner
+          setTimeout(() => {
+            document.getElementById('regeneration-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+          return;
         }
 
         // Success - redirect to dashboard with regeneration success flag
         router.push(`/dashboard/cases/${caseId}?regenerated=true`);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Regeneration failed:', error);
-        alert(
-          'Failed to regenerate documents. Please try again or contact support if the issue persists.'
+        setRegenerationError(
+          error.message || 'Failed to regenerate documents. Please try again or contact support.'
         );
         setIsRegenerating(false);
       }
@@ -367,6 +390,8 @@ function ReviewPageInner() {
     isPaid={isPaid}
     isRegenerating={isRegenerating}
     isLoadingPaymentStatus={isLoadingPaymentStatus}
+    regenerationError={regenerationError}
+    onFixSignatureDate={handleFixSignatureDate}
   />;
 }
 
@@ -900,6 +925,8 @@ interface EvictionReviewContentProps {
   isPaid?: boolean;
   isRegenerating?: boolean;
   isLoadingPaymentStatus?: boolean;
+  regenerationError?: string | null;
+  onFixSignatureDate?: () => void;
 }
 
 function EvictionReviewContent({
@@ -922,6 +949,8 @@ function EvictionReviewContent({
   isPaid,
   isRegenerating,
   isLoadingPaymentStatus,
+  regenerationError,
+  onFixSignatureDate,
 }: EvictionReviewContentProps) {
   const recommendedRouteLabel: string =
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
@@ -973,6 +1002,31 @@ function EvictionReviewContent({
           )}
         </div>
       </div>
+
+      {/* Regeneration Error Banner - shows server error with Fix CTA */}
+      {regenerationError && (
+        <Card id="regeneration-error" className="p-4 border-red-300 bg-red-50">
+          <div className="flex items-start gap-3">
+            <RiErrorWarningLine className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h2 className="text-sm font-semibold text-red-900 mb-1">
+                Document Regeneration Failed
+              </h2>
+              <p className="text-sm text-red-800">{regenerationError}</p>
+              {/* Show Fix CTA for signature date issues */}
+              {regenerationError.includes('signature') && onFixSignatureDate && (
+                <button
+                  onClick={onFixSignatureDate}
+                  className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors"
+                >
+                  <RiCalendarCheckLine className="h-4 w-4" />
+                  Fix signature date
+                </button>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Readiness summary */}
       {readinessSummary && (
@@ -1196,61 +1250,79 @@ function EvictionReviewContent({
       )}
 
       {/* Legal Assessment: routes & grounds (England/Wales only) */}
+      {/* ROUTE-SCOPED: Only show assessment content relevant to the selected route */}
       {jurisdiction !== 'scotland' && (
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Legal Assessment</h2>
 
-        {/* Available Routes */}
+        {/* Selected Route - show the authoritative route, not all recommended routes */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Available routes:</h3>
-          {analysis.decision_engine?.recommended_routes?.length > 0 ? (
+          <h3 className="text-sm font-medium text-gray-700 mb-2">Selected route:</h3>
+          {analysis.recommended_route ? (
             <div className="flex flex-wrap gap-2">
-              {analysis.decision_engine.recommended_routes.map((route: string) => (
-                <span
-                  key={route}
-                  className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
-                >
-                  <RiCheckboxCircleLine className="inline h-4 w-4 mr-1 text-[#7C3AED]" />
-                  {route.toUpperCase()}
-                </span>
-              ))}
+              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                <RiCheckboxCircleLine className="inline h-4 w-4 mr-1 text-[#7C3AED]" />
+                {analysis.recommended_route === 'section_8'
+                  ? 'SECTION 8 (Fault-based)'
+                  : analysis.recommended_route === 'section_21'
+                  ? 'SECTION 21 (No-fault)'
+                  : analysis.recommended_route.toUpperCase().replace(/_/g, ' ')}
+              </span>
             </div>
           ) : (
-            <p className="text-sm text-red-600">No routes currently available.</p>
+            <p className="text-sm text-red-600">No route selected.</p>
           )}
         </div>
 
-        {/* Recommended Grounds */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Recommended grounds:</h3>
-          {analysis.decision_engine?.recommended_grounds?.length > 0 ? (
-            <div className="space-y-2">
-              {analysis.decision_engine.recommended_grounds.map((ground: any) => (
-                <div key={ground.code} className="p-3 bg-gray-50 rounded border">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-medium">
-                        Ground {ground.code}: {ground.title}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-1">{ground.description}</p>
+        {/* Section 8 Grounds - ONLY show for Section 8 route */}
+        {analysis.recommended_route === 'section_8' && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">Section 8 grounds:</h3>
+            {analysis.decision_engine?.recommended_grounds?.length > 0 ? (
+              <div className="space-y-2">
+                {analysis.decision_engine.recommended_grounds.map((ground: any) => (
+                  <div key={ground.code} className="p-3 bg-gray-50 rounded border">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-medium">
+                          Ground {ground.code}: {ground.title}
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1">{ground.description}</p>
+                      </div>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          ground.type === 'mandatory'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {ground.type?.toUpperCase?.() || 'GROUND'}
+                      </span>
                     </div>
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        ground.type === 'mandatory'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}
-                    >
-                      {ground.type?.toUpperCase?.() || 'GROUND'}
-                    </span>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-600">No grounds recommended.</p>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">No grounds selected yet.</p>
+            )}
+          </div>
+        )}
+
+        {/* Section 21 Compliance Summary - ONLY show for Section 21 route */}
+        {analysis.recommended_route === 'section_21' && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">Section 21 compliance:</h3>
+            <p className="text-sm text-gray-600">
+              Section 21 (no-fault) eviction requires compliance with statutory obligations
+              including deposit protection, EPC, gas safety, and How to Rent guide.
+            </p>
+            {(analysis.red_flags?.length > 0 || analysis.compliance_issues?.length > 0) && (
+              <p className="text-sm text-amber-700 mt-2">
+                ⚠️ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
+              </p>
+            )}
+          </div>
+        )}
       </Card>
       )}
 

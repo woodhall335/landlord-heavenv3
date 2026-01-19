@@ -8,23 +8,28 @@
  * - court_address: Optional - address for reference
  * - signatory_name: Person signing the Statement of Truth (required)
  * - signatory_capacity: claimant / solicitor / agent (required)
- * - signature_date: Date of signature (defaults to today, editable)
+ * - signature_date: Date of signature (defaults based on route)
  *
  * Legal Context:
  * - N5, N5B, N119 all require a Statement of Truth
  * - False statements are contempt of court
  * - Signatory must have authority to sign (landlord, solicitor, or agent)
+ *
+ * Section 8 Complete Pack: signature_date MUST be >= notice_expiry_date
+ * - Auto-defaults to notice_expiry_date (earliest permissible date)
+ * - User can choose a later date but not an earlier one
  */
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
-import { RiExternalLinkLine } from 'react-icons/ri';
+import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 interface CourtSigningSectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales';
+  product?: string;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
@@ -40,11 +45,45 @@ const SIGNATORY_CAPACITIES = [
 
 export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
   facts,
+  product = 'complete_pack',
   onUpdate,
 }) => {
-  // Default signature date to today if not set
   const today = new Date().toISOString().split('T')[0];
-  const signatureDate = facts.signature_date || today;
+
+  // Determine route from facts (Section 8 vs Section 21)
+  const route = facts.eviction_route || facts.selected_notice_route || '';
+  const isSection8 = route === 'section_8' || route === 'section8_notice';
+  const isCompletePack = product === 'complete_pack';
+
+  // Get notice expiry date (for Section 8 signature date validation)
+  const noticeExpiryDate = facts.notice_expiry_date ||
+                           facts.expiry_date ||
+                           (facts.notice as any)?.expiry_date;
+
+  // Calculate the minimum allowed signature date for Section 8 complete pack
+  const minSignatureDate = useMemo(() => {
+    if (isSection8 && isCompletePack && noticeExpiryDate) {
+      return noticeExpiryDate;
+    }
+    return today;
+  }, [isSection8, isCompletePack, noticeExpiryDate, today]);
+
+  // Compute the effective signature date (respecting the minimum)
+  const signatureDate = useMemo(() => {
+    const currentValue = facts.signature_date;
+    if (!currentValue) {
+      // No value set - use the minimum allowed date
+      return minSignatureDate;
+    }
+    // For Section 8 complete pack, ensure signature date is not before notice expiry
+    if (isSection8 && isCompletePack && noticeExpiryDate && currentValue < noticeExpiryDate) {
+      return noticeExpiryDate;
+    }
+    return currentValue;
+  }, [facts.signature_date, minSignatureDate, isSection8, isCompletePack, noticeExpiryDate]);
+
+  // Validate signature date - show error if before notice expiry
+  const [signatureDateError, setSignatureDateError] = useState<string | null>(null);
 
   // Initialize default values for signatory_name and signature_date
   // This ensures displayed defaults are saved to facts for isComplete checks
@@ -56,16 +95,42 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
       updates.signatory_name = facts.landlord_full_name;
     }
 
-    // If signature_date not set, default to today
+    // For Section 8 complete pack: default signature_date to notice_expiry_date
+    // Otherwise default to today
     if (!facts.signature_date) {
-      updates.signature_date = today;
+      if (isSection8 && isCompletePack && noticeExpiryDate) {
+        updates.signature_date = noticeExpiryDate;
+      } else {
+        updates.signature_date = today;
+      }
+    } else if (isSection8 && isCompletePack && noticeExpiryDate) {
+      // If signature_date is set but is before notice_expiry_date, correct it
+      if (facts.signature_date < noticeExpiryDate) {
+        updates.signature_date = noticeExpiryDate;
+      }
     }
 
     if (Object.keys(updates).length > 0) {
       onUpdate(updates);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount - intentionally empty deps
+  }, [noticeExpiryDate]); // Re-run when notice_expiry_date changes
+
+  // Handle signature date change with validation
+  const handleSignatureDateChange = (newDate: string) => {
+    // For Section 8 complete pack, validate against notice expiry
+    if (isSection8 && isCompletePack && noticeExpiryDate && newDate < noticeExpiryDate) {
+      setSignatureDateError(
+        `Signature date cannot be before notice expiry (${noticeExpiryDate}). ` +
+        `Court forms can only be signed after the notice period expires.`
+      );
+      // Still update but show the error
+      onUpdate({ signature_date: newDate });
+    } else {
+      setSignatureDateError(null);
+      onUpdate({ signature_date: newDate });
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -194,13 +259,29 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             <input
               id="signature_date"
               type="date"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              className={`w-full rounded-md border px-3 py-2 text-sm focus:ring-1 ${
+                signatureDateError
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:border-[#7C3AED] focus:ring-[#7C3AED]'
+              }`}
               value={signatureDate}
-              onChange={(e) => onUpdate({ signature_date: e.target.value })}
+              min={isSection8 && isCompletePack && noticeExpiryDate ? noticeExpiryDate : undefined}
+              onChange={(e) => handleSignatureDateChange(e.target.value)}
             />
-            <p className="text-xs text-gray-500">
-              Usually the date you submit the claim. Defaults to today.
-            </p>
+            {signatureDateError ? (
+              <div className="flex items-start gap-2 text-xs text-red-600 mt-1">
+                <RiErrorWarningLine className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>{signatureDateError}</span>
+              </div>
+            ) : isSection8 && isCompletePack && noticeExpiryDate ? (
+              <p className="text-xs text-gray-500">
+                For Section 8 claims, signature date must be on or after notice expiry ({noticeExpiryDate}).
+              </p>
+            ) : (
+              <p className="text-xs text-gray-500">
+                Usually the date you submit the claim. Defaults to today.
+              </p>
+            )}
           </div>
         </div>
 

@@ -654,7 +654,7 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
       case 'evidence':
         return <EvidenceSection {...englandWalesProps} caseId={caseId} />;
       case 'court_signing':
-        return <CourtSigningSection {...englandWalesProps} />;
+        return <CourtSigningSection {...englandWalesProps} product="complete_pack" />;
       case 'review':
         return (
           <ReviewSection
