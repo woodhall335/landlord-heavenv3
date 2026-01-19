@@ -17,7 +17,6 @@ import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-li
 import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
-import { LegalTrustBanner } from "@/components/seo/LegalTrustBanner";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
@@ -124,14 +123,6 @@ export default function ASTPage() {
               <span className="flex items-center gap-1 text-gray-700">
                 <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
               </span>
-            </div>
-
-            <div className="mb-8 max-w-xl mx-auto text-left">
-              <LegalTrustBanner
-                jurisdiction="UK"
-                reviewedDate="10 January 2026"
-                updatedFor="2026"
-              />
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

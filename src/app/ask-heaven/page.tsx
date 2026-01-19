@@ -9,7 +9,6 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQSection } from '@/components/marketing/FAQSection';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 
 // Compliance topics data for SSR section
@@ -282,15 +281,6 @@ export default function AskHeavenPage(): React.ReactElement {
                 covers <strong>England</strong>, <strong>Wales</strong>, <strong>Scotland</strong>,
                 and <strong>Northern Ireland</strong>.
               </p>
-            </div>
-
-            {/* Trust Banner */}
-            <div className="mb-8 max-w-2xl mx-auto">
-              <LegalTrustBanner
-                jurisdiction="UK"
-                reviewedDate="15 January 2026"
-                updatedFor="2026"
-              />
             </div>
 
             {/* Jurisdiction coverage cards */}

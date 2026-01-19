@@ -11,7 +11,6 @@ import {
   Gavel,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
@@ -168,15 +167,6 @@ export default function ScotlandEvictionNoticesPage() {
                     Private Housing (Tenancies) (Scotland) Act 2016.
                   </span>
                 </p>
-              </div>
-
-              <div className="mb-8 max-w-2xl mx-auto text-left">
-                <LegalTrustBanner
-                  jurisdiction="Scotland"
-                  reviewedDate="10 January 2026"
-                  updatedFor="2026"
-                  className="bg-white/10 text-white border-white/20"
-                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

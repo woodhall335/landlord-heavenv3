@@ -23,7 +23,6 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
 import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
-import { LegalTrustBanner } from "@/components/seo/LegalTrustBanner";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
@@ -132,14 +131,6 @@ export default function CompleteEvictionPackPage() {
               <span className="flex items-center gap-1 text-gray-700">
                 <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
               </span>
-            </div>
-
-            <div className="mb-8 max-w-xl mx-auto text-left">
-              <LegalTrustBanner
-                jurisdiction="UK"
-                reviewedDate="10 January 2026"
-                updatedFor="2026"
-              />
             </div>
 
             <Link

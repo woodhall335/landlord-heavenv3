@@ -13,7 +13,6 @@ import {
   Mail,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
 
@@ -149,15 +148,6 @@ export default function MoneyClaimUnpaidRentPage() {
                 <strong>Simple Procedure</strong> in Scotland, and court processes in
                 Northern Ireland.
               </p>
-
-              <div className="mb-8 max-w-2xl mx-auto text-left">
-                <LegalTrustBanner
-                  jurisdiction="UK"
-                  reviewedDate="10 January 2026"
-                  updatedFor="2026"
-                  className="bg-white/10 text-white border-white/20"
-                />
-              </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link

@@ -8,7 +8,6 @@ import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import {
   CheckCircle,
   FileText,
@@ -186,14 +185,6 @@ export default function Section21NoticeTemplatePage() {
                 Scotland (Notice to Leave)
               </Link>.
             </p>
-          </div>
-
-          <div className="mb-6 max-w-2xl mx-auto text-left">
-            <LegalTrustBanner
-              jurisdiction="England"
-              reviewedDate="10 January 2026"
-              updatedFor="2026"
-            />
           </div>
 
           {/* Trust Signals */}

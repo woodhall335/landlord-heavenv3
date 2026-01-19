@@ -6,7 +6,6 @@ import { AlertTriangle, Calendar, Scale, CheckCircle } from 'lucide-react';
 import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { landingPageLinks, productLinks, blogLinks } from '@/lib/seo/internal-links';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 
 export const metadata: Metadata = {
@@ -86,15 +85,6 @@ export default function Section21BanPage() {
 
             <div className="mb-10">
               <Section21Countdown variant="large" className="[&_*]:text-white" />
-            </div>
-
-            <div className="mb-8 max-w-2xl mx-auto text-left">
-              <LegalTrustBanner
-                jurisdiction="England"
-                reviewedDate="10 January 2026"
-                updatedFor="2026"
-                className="bg-white/10 text-white border-white/20"
-              />
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
