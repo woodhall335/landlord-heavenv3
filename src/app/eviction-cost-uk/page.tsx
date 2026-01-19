@@ -459,6 +459,65 @@ export default function EvictionCostUkPage() {
           </div>
         </section>
 
+        {/* Alternative: Money Claim Section */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-200">
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                  <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <PoundSterling className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                      Alternative: Just Want Your Money Back?
+                    </h2>
+                    <p className="text-gray-600 mb-4">
+                      If your tenant has already left but still owes rent, you don&apos;t need to evict —
+                      you need a <strong>Money Claim</strong>. Court claim costs are often lower than eviction,
+                      and you can claim up to £100,000 through Money Claim Online.
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-3 mb-6 text-sm text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Court fees from £35 (claims up to £300)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Add 8% statutory interest</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>CCJ affects tenant&apos;s credit for 6 years</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Multiple enforcement options</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                      <Link
+                        href="/products/money-claim"
+                        className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                      >
+                        <Gavel className="w-5 h-5" />
+                        Get Money Claim Pack — £199.99
+                      </Link>
+                      <Link
+                        href="/money-claim-unpaid-rent"
+                        className="inline-flex items-center gap-2 text-green-700 font-medium hover:underline"
+                      >
+                        Read the full guide
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
