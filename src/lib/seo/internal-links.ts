@@ -380,8 +380,10 @@ export const possessionClaimRelatedLinks = [
 export const evictionCostRelatedLinks = [
   productLinks.noticeOnly,
   productLinks.completePack,
+  productLinks.moneyClaim,
   guideLinks.howToEvictTenant,
   guideLinks.possessionClaimGuide,
+  guideLinks.moneyClaimGuide,
   toolLinks.rentArrearsCalculator,
 ];
 
