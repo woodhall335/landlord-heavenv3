@@ -98,16 +98,15 @@ export default function HomeContent() {
             </div>
 
             {/* Right Column - Mascot Illustration */}
-            <div className="flex justify-center lg:justify-end items-center order-first lg:order-last">
-              <div className="relative w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[550px] aspect-square">
-                <Image
-                  src="/images/heromascot.png"
-                  alt="Landlord Heaven mascot - helpful owl with legal documents"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+            <div className="flex justify-center lg:justify-end items-center order-first lg:order-last lg:-mr-12 xl:-mr-20">
+              <Image
+                src="/images/heromascot.png"
+                alt="Landlord Heaven mascot - helpful owl with legal documents"
+                width={700}
+                height={700}
+                className="w-[300px] h-auto sm:w-[380px] md:w-[480px] lg:w-[580px] xl:w-[700px]"
+                priority
+              />
             </div>
           </div>
         </Container>
