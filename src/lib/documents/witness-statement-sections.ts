@@ -96,6 +96,24 @@ export interface WitnessStatementSectionsInput {
   // Evidence uploads (used to determine what documents can be claimed as attached)
   evidence_uploads?: string[];
 
+  // Compliance information (for verified compliance assertions)
+  // IMPORTANT: Only assert compliance if verified evidence fields are true
+  compliance?: {
+    deposit_protected?: boolean;
+    deposit_scheme?: string;
+    deposit_protection_date?: string;
+    gas_safety_provided?: boolean;
+    gas_safety_date?: string;
+    epc_provided?: boolean;
+    epc_rating?: string;
+    how_to_rent_provided?: boolean;
+    eicr_provided?: boolean;
+  };
+
+  // Arrears at specific dates (for Ground 8 proof requirements)
+  arrearsAtNoticeDate?: number;
+  arrearsAtStatementDate?: number;
+
   // Signing information
   signing?: {
     signatory_name: string;
@@ -294,8 +312,9 @@ function getOrdinalSuffix(day: number): string {
  *
  * For Ground 8 (mandatory arrears):
  * - State Ground 8 is relied upon
- * - Include current arrears total and approximate months
- * - Refer to the attached Schedule of Arrears
+ * - Confirm arrears at notice date (Ground 8 requirement)
+ * - Confirm arrears at date of statement generation
+ * - Add commitment to provide updated schedule before hearing
  * - Phrase Ground 8 correctly (no assertions about hearing outcomes)
  */
 function buildGroundsForPossession(input: WitnessStatementSectionsInput): string {
@@ -310,23 +329,36 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
   if (grounds.some(g => g === 'Ground 8')) {
     const totalArrears = input.arrears?.total_arrears || 0;
     const arrearsMonths = input.arrears?.arrears_months || 0;
+    const arrearsAtNotice = input.arrearsAtNoticeDate ?? totalArrears;
+    const arrearsAtStatement = input.arrearsAtStatementDate ?? totalArrears;
 
     lines.push('');
     lines.push('Ground 8 is a mandatory ground for possession. Ground 8 requires that at least two months\' rent be unpaid both at the date of the notice and at the date of the hearing.');
     lines.push('');
 
-    // Current arrears statement
-    if (totalArrears > 0) {
-      let arrearsStatement = `As at the date of this statement, the total rent arrears amount to ${formatCurrency(totalArrears)}`;
+    // Arrears at notice date (Ground 8 proof requirement #1)
+    if (input.notice.served_date && arrearsAtNotice > 0) {
+      lines.push(`At the date the Section 8 Notice was served (${formatUKDate(input.notice.served_date)}), the arrears stood at ${formatCurrency(arrearsAtNotice)}.`);
+    }
+
+    // Arrears at statement date (Ground 8 proof requirement #2)
+    if (arrearsAtStatement > 0) {
+      const statementDate = input.signing?.signature_date || new Date().toISOString().split('T')[0];
+      let arrearsStatement = `As at the date of this statement (${formatUKDate(statementDate)}), the total rent arrears amount to ${formatCurrency(arrearsAtStatement)}`;
       if (arrearsMonths > 0) {
-        arrearsStatement += `, representing approximately ${arrearsMonths} ${arrearsMonths === 1 ? 'month' : 'months'} of unpaid rent`;
+        arrearsStatement += `, representing approximately ${arrearsMonths.toFixed(1)} ${arrearsMonths === 1 ? 'month' : 'months'} of unpaid rent`;
       }
       arrearsStatement += '.';
       lines.push(arrearsStatement);
     }
 
     // Reference to Schedule of Arrears
+    lines.push('');
     lines.push('A detailed Schedule of Arrears showing the period-by-period breakdown of rent due and payments received is attached to this pack.');
+
+    // Commitment to provide updated schedule (Ground 8 proof requirement #3)
+    lines.push('');
+    lines.push('I will provide an updated Schedule of Arrears to the court before the hearing to confirm the arrears position at that date.');
   }
 
   // Ground 10 specific content (discretionary serious rent arrears)
@@ -342,6 +374,79 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
   }
 
   return lines.join('\n');
+}
+
+/**
+ * Build Compliance Section (optional)
+ *
+ * CRITICAL RULE: Only assert compliance if verified evidence fields are true.
+ * If compliance data is unknown/missing, either omit the section entirely
+ * or use neutral wording like "I am obtaining/providing..."
+ *
+ * Do NOT auto-assert compliance (deposit/gas/EICR/EPC/How to Rent) unless
+ * there is verified evidence.
+ */
+function buildComplianceSection(input: WitnessStatementSectionsInput): string | undefined {
+  const compliance = input.compliance;
+  if (!compliance) {
+    return undefined; // No compliance data - omit section entirely
+  }
+
+  const lines: string[] = [];
+  let hasVerifiedCompliance = false;
+
+  // Deposit protection - only assert if verified
+  if (compliance.deposit_protected === true && compliance.deposit_scheme) {
+    hasVerifiedCompliance = true;
+    let depositStatement = `The tenant's deposit is protected with ${compliance.deposit_scheme}`;
+    if (compliance.deposit_protection_date) {
+      depositStatement += ` and was protected on ${formatUKDate(compliance.deposit_protection_date)}`;
+    }
+    depositStatement += '.';
+    lines.push(depositStatement);
+  }
+
+  // Gas safety - only assert if verified
+  if (compliance.gas_safety_provided === true) {
+    hasVerifiedCompliance = true;
+    let gasStatement = 'A valid Gas Safety Certificate was provided to the tenant';
+    if (compliance.gas_safety_date) {
+      gasStatement += ` on ${formatUKDate(compliance.gas_safety_date)}`;
+    }
+    gasStatement += '.';
+    lines.push(gasStatement);
+  }
+
+  // EPC - only assert if verified
+  if (compliance.epc_provided === true) {
+    hasVerifiedCompliance = true;
+    let epcStatement = 'An Energy Performance Certificate (EPC) was provided to the tenant';
+    if (compliance.epc_rating) {
+      epcStatement += ` with a rating of ${compliance.epc_rating}`;
+    }
+    epcStatement += '.';
+    lines.push(epcStatement);
+  }
+
+  // How to Rent guide - only assert if verified
+  if (compliance.how_to_rent_provided === true) {
+    hasVerifiedCompliance = true;
+    lines.push('The "How to Rent" guide was provided to the tenant as required.');
+  }
+
+  // EICR - only assert if verified
+  if (compliance.eicr_provided === true) {
+    hasVerifiedCompliance = true;
+    lines.push('An Electrical Installation Condition Report (EICR) was provided to the tenant.');
+  }
+
+  // Only return the section if we have at least one verified compliance item
+  if (hasVerifiedCompliance && lines.length > 0) {
+    return 'Regarding the landlord\'s compliance obligations:\n\n' + lines.join('\n');
+  }
+
+  // Return undefined to omit the section if nothing is verified
+  return undefined;
 }
 
 /**
@@ -404,53 +509,93 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
 /**
  * Build Section 5: SUPPORTING EVIDENCE
  *
- * Split into two lists:
- * - "Attached to this pack": Schedule of Arrears, Section 8 Notice, Certificate/Proof of Service
- * - "Not uploaded yet / may be provided later": Tenancy agreement, Rent statements, Correspondence
+ * Split into structured exhibit references:
+ * - Pack documents (always included): Schedule of Arrears, Section 8 Notice, Proof of Service
+ * - Verified compliance documents (if confirmed uploaded)
+ * - Documents for the landlord to provide separately
  *
- * IMPORTANT: Do NOT state a document is attached unless evidence_uploads confirms it.
+ * IMPORTANT: Do NOT state a document is attached unless evidence_uploads or
+ * compliance fields confirm it. This prevents false claims about attached documents.
  */
 function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
   const lines: string[] = [];
+  const compliance = input.compliance;
 
+  // === PACK DOCUMENTS (always generated as part of this pack) ===
   lines.push('The following documents are included in this possession pack:');
   lines.push('');
 
-  // Documents generated as part of the pack (always included)
-  const attachedDocs = [
-    'Schedule of Arrears (period-by-period breakdown of rent due and payments)',
-    'Section 8 Notice (notice seeking possession served on the tenant)',
-    'Proof of Service Certificate (template for evidencing service)',
-  ];
-
-  lines.push('Attached to this pack:');
-  attachedDocs.forEach(doc => {
-    lines.push(`• ${doc}`);
-  });
-
+  // Court forms (always included in court pack)
+  lines.push('Court Forms:');
+  lines.push('• Form N5 - Claim for Possession of Property');
+  lines.push('• Form N119 - Particulars of Claim for Possession');
   lines.push('');
+
+  // Notice documents (always included)
+  lines.push('Notice Documents:');
+  lines.push('• Section 8 Notice (Form 3) - Notice seeking possession served on the tenant');
+  lines.push('• Proof of Service Certificate - Template for evidencing service');
+  lines.push('');
+
+  // Arrears documents (included if arrears case)
+  if (input.arrears && input.arrears.total_arrears > 0) {
+    lines.push('Arrears Documentation:');
+    lines.push('• Schedule of Arrears - Period-by-period breakdown of rent due, payments received, and running balance');
+    lines.push('');
+  }
+
+  // === VERIFIED UPLOADED/CONFIRMED DOCUMENTS ===
+  const verifiedDocs: string[] = [];
+
+  // Check evidence uploads
+  if (input.evidence_uploads && input.evidence_uploads.length > 0) {
+    verifiedDocs.push(...input.evidence_uploads.map(upload => upload));
+  }
+
+  // Check compliance-related uploads (only if explicitly verified)
+  if (compliance?.deposit_protected === true && compliance.deposit_scheme) {
+    verifiedDocs.push(`Tenancy Deposit Certificate (${compliance.deposit_scheme})`);
+  }
+  if (compliance?.gas_safety_provided === true) {
+    verifiedDocs.push('Gas Safety Certificate (CP12)');
+  }
+  if (compliance?.epc_provided === true) {
+    verifiedDocs.push(`Energy Performance Certificate (EPC)${compliance.epc_rating ? ` - Rating ${compliance.epc_rating}` : ''}`);
+  }
+  if (compliance?.eicr_provided === true) {
+    verifiedDocs.push('Electrical Installation Condition Report (EICR)');
+  }
+  if (compliance?.how_to_rent_provided === true) {
+    verifiedDocs.push('"How to Rent" Guide - Government prescribed information');
+  }
+
+  if (verifiedDocs.length > 0) {
+    lines.push('Verified Documents Available:');
+    verifiedDocs.forEach(doc => {
+      lines.push(`• ${doc}`);
+    });
+    lines.push('');
+  }
+
+  // === DOCUMENTS TO BE PROVIDED SEPARATELY ===
   lines.push('The following documents may be provided separately to the court:');
   lines.push('');
 
-  // Documents that user may need to provide
   const supplementaryDocs = [
     'Tenancy agreement (original signed agreement)',
     'Bank statements or rent ledger (showing payment history)',
     'Correspondence with tenant regarding arrears',
   ];
 
-  // Check if any evidence was actually uploaded
-  const hasUploads = input.evidence_uploads && input.evidence_uploads.length > 0;
-
-  if (hasUploads) {
-    lines.push('Documents uploaded separately:');
-    input.evidence_uploads!.forEach(upload => {
-      lines.push(`• ${upload}`);
-    });
-    lines.push('');
-    lines.push('Additional documents that may be required:');
-  } else {
-    lines.push('Documents not yet uploaded (may be provided later):');
+  // Add compliance docs to supplementary if NOT verified
+  if (!(compliance?.deposit_protected === true && compliance.deposit_scheme)) {
+    supplementaryDocs.push('Tenancy deposit protection certificate');
+  }
+  if (compliance?.gas_safety_provided !== true) {
+    supplementaryDocs.push('Gas Safety Certificate (if applicable)');
+  }
+  if (compliance?.epc_provided !== true) {
+    supplementaryDocs.push('Energy Performance Certificate (EPC)');
   }
 
   supplementaryDocs.forEach(doc => {

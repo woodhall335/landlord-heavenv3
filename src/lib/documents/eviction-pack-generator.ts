@@ -1265,6 +1265,107 @@ export async function generateCompleteEvictionPack(
   // 3.2 Compliance audit and risk assessment removed as of Jan 2026 pack restructure
   // These documents are no longer included in the Complete Pack
 
+  // 3.3 Generate value-add documents for court pack
+  // - Court bundle index
+  // - Hearing checklist
+  // - Engagement letter template (for arrears cases)
+
+  // Court bundle index
+  try {
+    const bundleIndexDoc = await generateDocument({
+      templatePath: `uk/${jurisdiction}/templates/eviction/court_bundle_index.hbs`,
+      data: {
+        ...evictionCase,
+        landlord_full_name: evictionCase.landlord_full_name,
+        tenant_full_name: evictionCase.tenant_full_name,
+        property_address: evictionCase.property_address,
+        generated_date: new Date().toISOString().split('T')[0],
+        court_name: evictionCase.court_name || 'County Court',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Court Bundle Index',
+      description: 'Index of all documents for court filing',
+      category: 'evidence_tool',
+      document_type: 'court_bundle_index',
+      html: bundleIndexDoc.html,
+      pdf: bundleIndexDoc.pdf,
+      file_name: 'court_bundle_index.pdf',
+    });
+
+    console.log('✅ Generated court bundle index');
+  } catch (error) {
+    console.error('⚠️  Failed to generate court bundle index:', error);
+  }
+
+  // Hearing checklist
+  try {
+    const hearingChecklistDoc = await generateDocument({
+      templatePath: `uk/${jurisdiction}/templates/eviction/hearing_checklist.hbs`,
+      data: {
+        ...evictionCase,
+        landlord_full_name: evictionCase.landlord_full_name,
+        tenant_full_name: evictionCase.tenant_full_name,
+        property_address: evictionCase.property_address,
+        generated_date: new Date().toISOString().split('T')[0],
+        court_name: evictionCase.court_name,
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Hearing Checklist',
+      description: 'Preparation checklist for the possession hearing',
+      category: 'guidance',
+      document_type: 'hearing_checklist',
+      html: hearingChecklistDoc.html,
+      pdf: hearingChecklistDoc.pdf,
+      file_name: 'hearing_checklist.pdf',
+    });
+
+    console.log('✅ Generated hearing checklist');
+  } catch (error) {
+    console.error('⚠️  Failed to generate hearing checklist:', error);
+  }
+
+  // Engagement letter template (for arrears cases)
+  if (hasArrearsGroundsSelected(selectedGroundCodes)) {
+    try {
+      const arrearsLetterDoc = await generateDocument({
+        templatePath: `uk/${jurisdiction}/templates/eviction/arrears_letter_template.hbs`,
+        data: {
+          ...evictionCase,
+          landlord_full_name: evictionCase.landlord_full_name,
+          landlord_address: evictionCase.landlord_address,
+          tenant_full_name: evictionCase.tenant_full_name,
+          property_address: evictionCase.property_address,
+          arrears_total: evictionCase.current_arrears || 0,
+          generated_date: new Date().toISOString().split('T')[0],
+        },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+
+      documents.push({
+        title: 'Arrears Engagement Letter (Template)',
+        description: 'Template letter for pre-action engagement with tenant',
+        category: 'bonus',
+        document_type: 'arrears_letter_template',
+        html: arrearsLetterDoc.html,
+        pdf: arrearsLetterDoc.pdf,
+        file_name: 'arrears_engagement_letter_template.pdf',
+      });
+
+      console.log('✅ Generated arrears engagement letter template');
+    } catch (error) {
+      console.error('⚠️  Failed to generate arrears letter template:', error);
+    }
+  }
+
   // 4. Generate case summary document
   const caseSummaryDoc = await generateDocument({
     templatePath: 'shared/templates/eviction_case_summary.hbs',
