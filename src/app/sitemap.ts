@@ -63,6 +63,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-letter-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Jurisdiction-specific template pages
+    { path: '/wales-eviction-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/scotland-notice-to-leave-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Q1 2026 SEO pages
     { path: '/tenant-wont-leave', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenant-not-paying-rent', priority: 0.8, changeFrequency: 'weekly' as const },

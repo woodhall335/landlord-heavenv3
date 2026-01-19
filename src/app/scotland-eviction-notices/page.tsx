@@ -13,7 +13,8 @@ import {
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
-import { productLinks } from '@/lib/seo/internal-links';
+import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 
 export const metadata: Metadata = {
   title: 'Scottish Eviction Notice 2026 for Landlords | Notice to Leave',
@@ -729,6 +730,23 @@ export default function ScotlandEvictionNoticesPage() {
           </div>
         </section>
 
+        {/* Ask Heaven Section */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <AskHeavenWidget
+                variant="banner"
+                source="page_cta"
+                topic="eviction"
+                jurisdiction="scotland"
+                title="Not sure which eviction ground applies?"
+                description="Ask Heaven can help you understand the 18 Scottish eviction grounds, Notice to Leave requirements, and First-tier Tribunal process."
+                utm_campaign="scotland-eviction-notices"
+              />
+            </div>
+          </div>
+        </section>
+
         <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
@@ -745,6 +763,11 @@ export default function ScotlandEvictionNoticesPage() {
                 }}
                 relatedLinks={[
                   {
+                    href: askHeavenLink.href,
+                    title: 'Ask Heaven',
+                    description: 'Free Q&A for landlord questions.',
+                  },
+                  {
                     href: '/tenancy-agreements/scotland',
                     title: 'Scotland PRT agreements',
                     description: 'Create compliant private residential tenancy agreements.',
@@ -753,11 +776,6 @@ export default function ScotlandEvictionNoticesPage() {
                     href: '/blog/scotland-eviction-process',
                     title: 'Scotland eviction process',
                     description: 'Tribunal steps from Notice to Leave to enforcement.',
-                  },
-                  {
-                    href: '/blog/scotland-notice-to-leave',
-                    title: 'Notice to Leave guide',
-                    description: 'Notice periods and prescribed content.',
                   },
                   {
                     href: '/money-claim-unpaid-rent',

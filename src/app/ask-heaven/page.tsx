@@ -9,6 +9,8 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
+import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 
 // Compliance topics data for SSR section
 interface ComplianceTopic {
@@ -282,6 +284,15 @@ export default function AskHeavenPage(): React.ReactElement {
               </p>
             </div>
 
+            {/* Trust Banner */}
+            <div className="mb-8 max-w-2xl mx-auto">
+              <LegalTrustBanner
+                jurisdiction="UK"
+                reviewedDate="15 January 2026"
+                updatedFor="2026"
+              />
+            </div>
+
             {/* Jurisdiction coverage cards */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
@@ -462,6 +473,9 @@ export default function AskHeavenPage(): React.ReactElement {
                 ))}
               </div>
             </details>
+
+            {/* SEO Disclaimer */}
+            <SeoDisclaimer />
           </div>
         </div>
       </div>
