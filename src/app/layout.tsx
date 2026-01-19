@@ -7,7 +7,7 @@ import { defaultMetadata } from "@/lib/seo";
 import { SITE_ORIGIN } from "@/lib/seo/urls";
 import {
   organizationSchema,
-  softwareApplicationSchema
+  // softwareApplicationSchema removed from global injection - see SEO note below
 } from "@/lib/seo/structured-data";
 import { PopupProvider } from "@/components/providers/PopupProvider";
 import { TrackingPixels } from "@/components/analytics/TrackingPixels";
@@ -51,15 +51,27 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.facebook.com" />
 
-        {/* JSON-LD Structured Data for SEO - Organization + SoftwareApplication globally */}
-        {/* WebSite schema is injected on homepage only */}
+        {/* JSON-LD Structured Data for SEO - Organization schema globally */}
+        {/*
+          SEO FIX (Jan 2026): SoftwareApplication schema REMOVED from global injection.
+
+          PROBLEM: Google was showing incorrect snippets on product pages:
+          "4.8(247) · £19.99 · Business/Productivity" instead of actual product prices.
+
+          ROOT CAUSE: Global SoftwareApplication schema was being combined with
+          Product schema on /products/* pages, causing Google to misclassify products
+          as "BusinessApplication" with wrong price (AggregateOffer lowPrice).
+
+          SOLUTION:
+          - Product pages use their own Product + Offer schema with correct prices
+          - SoftwareApplication schema should only be used on tool pages if intentionally desired
+          - Organization schema remains global (correct for all pages)
+
+          DO NOT re-add softwareApplicationSchema() here without SEO review.
+        */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema()) }}
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
