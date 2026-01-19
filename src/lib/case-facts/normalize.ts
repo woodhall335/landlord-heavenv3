@@ -380,6 +380,8 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
     getWizardValue(wizard, 'defendant_full_name') ||
     getWizardValue(wizard, 'defender_full_name') ||
     getWizardValue(wizard, 'tenant_full_name') || // IMPORTANT: Notice Only YAML maps to this
+    getWizardValue(wizard, 'tenant.full_name') || // Nested object format (complete_pack fixture)
+    getWizardValue(wizard, 'tenant.name') || // Nested object format (alternative)
     getWizardValue(wizard, 'tenant1_name') ||
     getWizardValue(wizard, 'defendant_name');
 
@@ -687,6 +689,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'property_address',
     'property_address_line1',
     'property.address_line1',
+    'property.address_line_1', // Nested object format (complete_pack fixture)
   ]);
   base.property.address_line2 ??= getFirstValue(wizard, [
     'case_facts.property.address_line2',
@@ -833,6 +836,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'claimant_full_name',
     'pursuer_full_name',
     'landlord.name',
+    'landlord.full_name', // Nested object format (complete_pack fixture)
     'landlord_full_name',
   ]);
   base.parties.landlord.co_claimant ??= getFirstValue(wizard, [
@@ -863,6 +867,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'claimant_address.address_line1',
     'pursuer_address.address_line1',
     'landlord.address_line1',
+    'landlord.address_line_1', // Nested object format (complete_pack fixture)
     'landlord_address',
   ]);
   base.parties.landlord.address_line2 ??= getFirstValue(wizard, [
