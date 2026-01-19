@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 
 export const metadata: Metadata = {
   title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
@@ -192,13 +191,6 @@ export default function ScotlandPRTPage() {
             <p className="text-xl text-gray-700 mb-8">
               Create a legally compliant Private Residential Tenancy agreement in minutes. Fully compliant with the Private Housing (Tenancies) (Scotland) Act 2016 and all current Scottish legislation.
             </p>
-            <div className="mb-8 max-w-2xl mx-auto text-left">
-              <LegalTrustBanner
-                jurisdiction="Scotland"
-                reviewedDate="10 January 2026"
-                updatedFor="2026"
-              />
-            </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"

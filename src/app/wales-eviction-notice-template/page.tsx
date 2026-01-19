@@ -5,7 +5,6 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
-import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import {
@@ -156,14 +155,6 @@ export default function WalesEvictionNoticeTemplatePage() {
                 .
               </span>
             </p>
-          </div>
-
-          <div className="mb-6 max-w-2xl mx-auto text-left">
-            <LegalTrustBanner
-              jurisdiction="Wales"
-              reviewedDate="15 January 2026"
-              updatedFor="2026"
-            />
           </div>
 
           {/* Trust Signals */}
