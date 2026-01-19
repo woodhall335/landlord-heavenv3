@@ -44,84 +44,54 @@ export default function HomeContent() {
         </div>
 
         <Container className="relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left Column - Text Content */}
-            <div className="text-left">
-              {/* Trust Badge with Rating */}
-              <div className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 mb-6 shadow-sm">
-                <RiShieldCheckLine className="w-5 h-5 text-primary" />
-                <span className="text-sm font-semibold text-gray-800">Trusted by UK Landlords</span>
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className={`w-4 h-4 ${i < 4 ? 'text-yellow-400' : 'text-yellow-400/50'}`} fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-sm text-gray-600">Rated 4.8 / 5.0 from 247 reviews</span>
-              </div>
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Main Headline */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+              Legal Documents
+              <span className="block text-primary italic">in Minutes, Not Days</span>
+            </h1>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-                Legal Documents
-                <span className="block text-primary italic">in Minutes, Not Days</span>
-              </h1>
+            {/* Subheadline */}
+            <p className="text-lg md:text-xl mb-8 text-gray-700 max-w-2xl mx-auto">
+              Generate compliant eviction notices, court forms, and tenancy agreements —
+              <span className="font-semibold"> save 80%+ vs solicitor</span>
+            </p>
 
-              {/* Subheadline */}
-              <p className="text-lg md:text-xl mb-8 text-gray-700 max-w-lg">
-                Generate compliant eviction notices, court forms, and tenancy agreements —
-                <span className="font-semibold"> save 80%+ vs solicitor</span>
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-start gap-3 mb-8">
-                <Link
-                  href="/wizard"
-                  className="hero-btn-primary"
-                >
-                  Generate Your Documents →
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="hero-btn-secondary bg-white/80 backdrop-blur-sm"
-                >
-                  View Pricing →
-                </Link>
-              </div>
-
-              {/* Trust Indicators - Grid Layout */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-700 mb-6">
-                <span className="flex items-center gap-2">
-                  <RiCheckLine className="w-5 h-5 text-primary" />
-                  Download instant UK notices & forms
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiCheckLine className="w-5 h-5 text-primary" />
-                  Covers Section 21, Section 8,
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiCheckLine className="w-5 h-5 text-primary" />
-                  England, Wales & Scotland
-                </span>
-              </div>
-
-              {/* Social Proof Counter */}
-              <div>
-                <SocialProofCounter variant="today" className="justify-start" />
-              </div>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+              <Link
+                href="/wizard"
+                className="hero-btn-primary"
+              >
+                Generate Your Documents →
+              </Link>
+              <Link
+                href="/pricing"
+                className="hero-btn-secondary bg-white/80 backdrop-blur-sm"
+              >
+                View Pricing →
+              </Link>
             </div>
 
-            {/* Right Column - Mascot Illustration */}
-            <div className="hidden lg:flex justify-center lg:justify-end items-center">
-              <div className="relative w-full max-w-[500px] aspect-square">
-                <Image
-                  src="/images/heromascot.png"
-                  alt="Landlord Heaven mascot - helpful owl with legal documents"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-700 mb-6">
+              <span className="flex items-center gap-2">
+                <RiCheckLine className="w-5 h-5 text-primary" />
+                Download instant UK notices & forms
+              </span>
+              <span className="flex items-center gap-2">
+                <RiCheckLine className="w-5 h-5 text-primary" />
+                Covers Section 21, Section 8,
+              </span>
+              <span className="flex items-center gap-2">
+                <RiCheckLine className="w-5 h-5 text-primary" />
+                England, Wales & Scotland
+              </span>
+            </div>
+
+            {/* Social Proof Counter */}
+            <div>
+              <SocialProofCounter variant="today" className="justify-center" />
             </div>
           </div>
         </Container>
