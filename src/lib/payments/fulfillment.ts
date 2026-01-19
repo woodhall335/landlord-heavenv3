@@ -188,6 +188,47 @@ export async function fulfillOrder({
   const jurisdiction = canonicalJurisdiction || (caseData as any).jurisdiction || 'england';
 
   // ==========================================================================
+  // SECTION 8 COMPLETE PACK: Auto-normalize signature_date to notice_expiry_date
+  // This ensures existing paid cases can regenerate successfully.
+  // The signature date MUST be >= notice_expiry_date for Section 8 court forms.
+  // ==========================================================================
+  const isSection8Route = route === 'section_8' || route === 'section8_notice';
+  const isCompletePack = productType === 'complete_pack';
+
+  if (isSection8Route && isCompletePack) {
+    const noticeExpiryDate = wizardFacts.notice_expiry_date ||
+                              wizardFacts.expiry_date ||
+                              wizardFacts.notice?.expiry_date;
+    const currentSignatureDate = wizardFacts.signature_date ||
+                                  wizardFacts.signing?.signature_date;
+
+    if (noticeExpiryDate) {
+      const needsUpdate = !currentSignatureDate || currentSignatureDate < noticeExpiryDate;
+
+      if (needsUpdate) {
+        console.log(
+          `[fulfillment] Section 8 complete_pack: Auto-normalizing signature_date from ` +
+          `"${currentSignatureDate || 'unset'}" to "${noticeExpiryDate}" (notice expiry)`
+        );
+
+        // Update the wizardFacts in memory for this generation
+        wizardFacts.signature_date = noticeExpiryDate;
+
+        // Also persist to database so the fix is permanent
+        const updatedFacts = {
+          ...(caseData as any).collected_facts,
+          signature_date: noticeExpiryDate,
+        };
+
+        await supabase
+          .from('cases')
+          .update({ collected_facts: updatedFacts })
+          .eq('id', caseId);
+      }
+    }
+  }
+
+  // ==========================================================================
   // VALIDATION: Check if fulfillment is already complete
   // This replaces the old "any doc exists" check with proper validation
   // ==========================================================================
