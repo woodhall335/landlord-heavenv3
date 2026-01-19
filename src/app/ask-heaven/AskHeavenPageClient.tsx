@@ -9,7 +9,7 @@ import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
-import { RiSendPlaneFill, RiAddLine, RiMicLine, RiBookLine, RiArrowRightLine, RiShieldCheckLine } from 'react-icons/ri';
+import { RiSendPlaneFill, RiSearchLine, RiBookLine, RiArrowRightLine } from 'react-icons/ri';
 import ReactMarkdown from 'react-markdown';
 import {
   ASK_HEAVEN_RECOMMENDATION_MAP,
@@ -654,10 +654,11 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
   return (
     <div className="min-h-[80vh] relative">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50 opacity-70" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-200/30 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-200/30 via-transparent to-transparent" />
+      {/* Hero background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/images/herobg.png)' }}
+      />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         {/* Jurisdiction Toggle - Copilot-style pill buttons with flags */}
@@ -821,16 +822,16 @@ export default function AskHeavenPageClient(): React.ReactElement {
           {isWelcomeState ? (
             /* Welcome State - Copilot-inspired centered layout */
             <div className="px-6 py-12 md:px-12 md:py-16">
-              {/* Ask Heaven Branding */}
-              <div className="flex items-center justify-center gap-3 mb-8">
+              {/* Owl Icon */}
+              <div className="flex justify-center mb-6">
                 <Image
                   src="/favicon.png"
                   alt="Ask Heaven"
-                  width={48}
-                  height={48}
-                  className="rounded-xl"
+                  width={64}
+                  height={64}
+                  className="drop-shadow-lg"
+                  priority
                 />
-                <span className="text-2xl font-bold text-gray-900">Ask Heaven</span>
               </div>
 
               <div className="text-center mb-10">
@@ -853,36 +854,23 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 className="max-w-2xl mx-auto mb-10"
               >
                 <div className="relative">
-                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                    <button
-                      type="button"
-                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
-                      aria-label="Add attachment"
-                      disabled
-                    >
-                      <RiAddLine className="w-5 h-5" />
-                    </button>
+                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-full shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                    <div className="pl-5 text-gray-400">
+                      <RiSearchLine className="w-5 h-5" />
+                    </div>
                     <input
                       ref={inputRef}
                       type="text"
-                      className="flex-1 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
+                      className="flex-1 py-4 px-3 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
                       placeholder="Ask about evictions, rent arrears, deposits..."
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       disabled={isSending}
                     />
                     <button
-                      type="button"
-                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
-                      aria-label="Voice input"
-                      disabled
-                    >
-                      <RiMicLine className="w-5 h-5" />
-                    </button>
-                    <button
                       type="submit"
                       disabled={isSending || !input.trim()}
-                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                       aria-label="Send message"
                     >
                       <RiSendPlaneFill className="w-5 h-5" />
@@ -891,39 +879,45 @@ export default function AskHeavenPageClient(): React.ReactElement {
                 </div>
               </form>
 
-              {/* Quick Prompt Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                {quickPrompts.map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => handleQuickPrompt(item.prompt)}
-                    className="group p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-lg text-left transition-all duration-200"
-                  >
-                    <span className="text-2xl mb-2 block">{item.icon}</span>
-                    <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      {item.label}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.prompt}</p>
-                  </button>
-                ))}
+              {/* Popular Topics Section with Mascot */}
+              <div className="relative max-w-3xl mx-auto">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 pr-32 md:pr-48">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xl">📋</span>
+                    <h3 className="font-bold text-gray-900">Popular Topics</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {quickPrompts.map((item) => (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => handleQuickPrompt(item.prompt)}
+                        className="group w-full flex items-start gap-3 p-3 bg-gray-50 hover:bg-primary/5 rounded-xl border border-gray-100 hover:border-primary/30 text-left transition-all duration-200"
+                      >
+                        <span className="text-lg flex-shrink-0">{item.icon}</span>
+                        <div>
+                          <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                            {item.label}
+                          </p>
+                          <p className="text-sm text-gray-500">{item.prompt}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Mascot positioned on the right */}
+                <div className="absolute -right-4 md:-right-8 bottom-0 w-32 md:w-56 pointer-events-none">
+                  <Image
+                    src="/images/heromascot.png"
+                    alt="Ask Heaven Mascot"
+                    width={224}
+                    height={280}
+                    className="w-full h-auto drop-shadow-xl"
+                    priority
+                  />
+                </div>
               </div>
 
-              {/* Trust indicators */}
-              <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-gray-500">
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  Free to use
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  No sign-up required
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  UK law focused
-                </span>
-              </div>
             </div>
           ) : (
             /* Chat State - Fixed container with scrollable messages */
