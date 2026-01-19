@@ -7,6 +7,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui";
 import { clsx } from "clsx";
 
@@ -103,23 +104,31 @@ export function StandardHero({
 }: StandardHeroProps) {
   const TitleTag = titleAs;
 
-  const bgClass =
-    variant === "pastel"
-      ? "bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50"
-      : "bg-white";
-
   const alignmentClass = align === "center" ? "text-center mx-auto" : "text-left";
   const subtitleAlignClass = align === "center" ? "mx-auto" : "";
 
   return (
     <section
       className={clsx(
-        "pt-28 pb-16 md:pt-32 md:pb-36",
-        bgClass,
+        "relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden",
+        variant === "white" ? "bg-white" : "",
         className
       )}
     >
-      <Container>
+      {/* Background Image */}
+      {variant === "pastel" && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herobg.png"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      )}
+
+      <Container className="relative z-10">
         <div className={clsx("max-w-3xl", alignmentClass)}>
           {/* Badge */}
           {badge && (
