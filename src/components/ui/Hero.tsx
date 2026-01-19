@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface HeroProps {
   title: string;
@@ -48,7 +49,7 @@ export function Hero({
     variant === 'gradient'
       ? 'bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700'
       : variant === 'secondary'
-      ? 'bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50'
+      ? ''
       : 'bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700';
 
   const textClass = variant === 'secondary' ? 'text-gray-900' : 'text-white';
@@ -59,6 +60,19 @@ export function Hero({
 
   return (
     <section className={`relative overflow-hidden ${bgClass}`}>
+      {/* Background Image for secondary variant */}
+      {variant === 'secondary' && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herobg.png"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      )}
+
       {/* Grid pattern overlay for depth (only on dark variants) */}
       {variant !== 'secondary' && (
         <div
@@ -70,7 +84,7 @@ export function Hero({
         />
       )}
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:pt-32 md:pb-36 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16 md:pt-32 md:pb-36 lg:px-8">
         <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
           {/* Badge */}
           {badge && (

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { clsx } from "clsx";
 
 interface TealHeroProps {
@@ -21,14 +22,19 @@ export function TealHero({
   const alignment = align === "center" ? "text-center items-center" : "text-left items-start";
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 text-gray-900">
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-purple-200/50 blur-3xl" />
-        <div className="absolute right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-purple-300/40 blur-3xl" />
-        <div className="absolute left-1/3 top-1/3 h-64 w-64 rounded-full bg-purple-200/40 blur-3xl" />
+    <section className="relative overflow-hidden text-gray-900">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/herobg.png"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-32 md:pb-20">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-32 md:pb-20">
         <div className={clsx("flex flex-col gap-7", alignment)}>
           {breadcrumb && <div className="text-sm text-gray-600">{breadcrumb}</div>}
           {eyebrow && (

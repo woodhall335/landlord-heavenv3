@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
 import {
   MessageCircle,
@@ -25,8 +26,19 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container size="medium">
+      <section className="relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herobg.png"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+
+        <Container size="medium" className="relative z-10">
           <div className="text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Get In Touch</span>

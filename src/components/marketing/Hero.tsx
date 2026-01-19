@@ -9,6 +9,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui";
 import { clsx } from "clsx";
 
@@ -72,9 +73,6 @@ export function Hero({
   align = "center",
   maxWidth = "3xl",
 }: HeroProps) {
-  // Both variants now use the same homepage gradient
-  const bgClass = "bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50";
-
   const maxWidthClass = {
     sm: "max-w-sm",
     md: "max-w-md",
@@ -88,8 +86,19 @@ export function Hero({
   const alignmentClass = align === "center" ? "text-center mx-auto" : "text-left";
 
   return (
-    <section className={clsx(bgClass, "pt-28 pb-16 md:pt-32 md:pb-36")}>
-      <Container>
+    <section className={clsx("relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden")}>
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/herobg.png"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+        />
+      </div>
+
+      <Container className="relative z-10">
         <div className={clsx(maxWidthClass, alignmentClass)}>
           {/* Badge */}
           {badge && (
