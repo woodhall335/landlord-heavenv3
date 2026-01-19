@@ -1127,8 +1127,8 @@ export async function generateCompleteEvictionPack(
                             wizardFacts?.issues?.rent_arrears?.total_arrears || 0;
       const rentAmount = wizardFacts?.rent_amount ||
                           wizardFacts?.tenancy?.rent_amount || 0;
-      const rentFrequency = (wizardFacts?.rent_frequency ||
-                              wizardFacts?.tenancy?.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
+      const rentFrequency = wizardFacts?.rent_frequency ||
+                              wizardFacts?.tenancy?.rent_frequency || 'monthly';
 
       const rentDueDay = wizardFacts?.rent_due_day ||
                           wizardFacts?.tenancy?.rent_due_day || null;
