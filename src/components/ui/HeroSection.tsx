@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { clsx } from "clsx";
 
 interface HeroSectionProps {
@@ -27,7 +28,7 @@ export function HeroSection({
   const alignment = align === "center" ? "text-center items-center" : "text-left items-start";
   
   const bgClasses = {
-    lavender: "bg-gradient-to-br from-lavender-100 via-lavender-200 to-lavender-100",
+    lavender: "",
     white: "bg-white",
     cream: "bg-cream",
     dark: "bg-gradient-to-br from-gray-900 to-gray-800 text-white",
@@ -38,15 +39,20 @@ export function HeroSection({
 
   return (
     <section className={clsx("relative overflow-hidden", bgClasses[background])}>
+      {/* Background Image for lavender variant */}
       {background === "lavender" && (
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-purple-200/50 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-purple-300/40 blur-3xl" />
-          <div className="absolute left-1/3 top-1/3 h-64 w-64 rounded-full bg-purple-200/40 blur-3xl" />
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herobg.png"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
         </div>
       )}
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-36 md:pb-36 lg:pt-40 lg:pb-36">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-36 md:pb-36 lg:pt-40 lg:pb-36">
         <div className={clsx("grid gap-12", mediaSlot ? "lg:grid-cols-2 lg:items-center" : "")}>
           <div className={clsx("flex flex-col gap-6", !mediaSlot && alignment)}>
             {breadcrumb && (
