@@ -1548,11 +1548,18 @@ export async function generateCompleteEvictionPack(
       const today = new Date();
 
       // Extract total arrears from multiple possible wizard facts locations
-      // This mirrors the robust extraction used for Schedule of Arrears
-      const letterTotalArrears = wizardFacts?.total_arrears ||
-                                  wizardFacts?.arrears_total ||
+      // Priority order: most specific nested path first, then flat paths
+      const letterTotalArrears = wizardFacts?.arrears?.total_arrears ||  // Primary: nested arrears object
+                                  wizardFacts?.total_arrears ||           // Flat path
+                                  wizardFacts?.arrears_total ||           // Alternative flat path
                                   wizardFacts?.issues?.rent_arrears?.total_arrears ||
-                                  evictionCase.current_arrears || 0;
+                                  evictionCase.total_arrears ||           // From CaseData
+                                  evictionCase.current_arrears;
+
+      // For court packs, arrears figure must be present and non-zero for arrears grounds
+      if (letterTotalArrears === undefined || letterTotalArrears === null || letterTotalArrears === 0) {
+        console.warn('⚠️  Arrears engagement letter: No valid arrears amount found. Letter will show £0.00 which may be incorrect.');
+      }
 
       const arrearsLetterDoc = await generateDocument({
         templatePath: `uk/${jurisdiction}/templates/eviction/arrears_letter_template.hbs`,
