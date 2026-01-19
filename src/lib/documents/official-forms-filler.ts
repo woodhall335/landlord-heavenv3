@@ -331,7 +331,8 @@ const N119_FIELDS = {
 
   // Property details
   POSSESSION_OF: 'The claimant has a right to possession of:',
-  OCCUPANTS: "To the best of the claimant's knowledge the following persons are in possession of the property:",
+  // Note: PDF field uses curly apostrophe (U+2019) not straight apostrophe
+  OCCUPANTS: "To the best of the claimant’s knowledge the following persons are in possession of the property:",
 
   // Tenancy details (Section 3)
   TENANCY_TYPE: '3(a) Type of tenancy',
@@ -356,8 +357,8 @@ const N119_FIELDS = {
   NOTICE_DATE_DAY_MONTH: '6. Day and month notice served',
   NOTICE_DATE_YEAR: '6. Year notice served',
 
-  // Defendant circumstances (Section 7)
-  DEFENDANT_CIRCUMSTANCES: "7. The following information is known about the defendant's circumstances:",
+  // Defendant circumstances (Section 7) - uses curly apostrophe
+  DEFENDANT_CIRCUMSTANCES: "7. The following information is known about the defendant’s circumstances:",
 
   // Financial info (Section 8)
   FINANCIAL_INFO: '8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:',
@@ -382,7 +383,8 @@ const N119_FIELDS = {
   STATEMENT_DATE_DD: 'Date Statement of Truth is signed - DD',
   STATEMENT_DATE_YYYY: 'Date Statement of Truth is signed - YYYY',
   SIGNATORY_NAME: 'Full name of person signing the Statement of Truth',
-  SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+  // Uses curly apostrophes (U+2019)
+  SOLICITOR_FIRM: "Name of claimant’s legal representative’s firm",
   POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
 } as const;
 
@@ -415,7 +417,8 @@ const N119_CHECKBOXES = {
   SOT_AUTHORISED: 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement',
   SOT_CLAIMANT: 'Statement of Truth signed by Claimant',
   SOT_LITIGATION_FRIEND: 'Statement of Truth signed by Litigation friend (where claimant is a child or a patient)',
-  SOT_LEGAL_REP: "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))",
+  // Uses curly apostrophe (U+2019)
+  SOT_LEGAL_REP: "Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))",
 } as const;
 
 // =============================================================================
@@ -1595,9 +1598,22 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     setTextOptional(form, N119_FIELDS.STEPS_TAKEN, stepsText, ctx);
   }
 
-  // === NOTICE DATES (Section 6) ===
-  // The N119 form uses "on 20__" format for year, requiring 2-digit year only
-  const noticeDate = data.section_8_notice_date || data.section_21_notice_date;
+  // === NOTICE DETAILS (Section 6) ===
+  // Q6: Notice type and date served
+  // The form asks "(a) notice seeking possession..." or "(g) some other notice (specify)"
+  // For Section 8 cases, we use "Notice seeking possession (Form 3)"
+  // For Section 21 cases, we use "Section 21 Notice"
+
+  // Determine notice type based on claim type
+  const noticeType = data.claim_type === 'section_8'
+    ? 'Notice seeking possession (Form 3)'
+    : data.claim_type === 'section_21'
+      ? 'Section 21 Notice'
+      : 'Notice seeking possession';
+  setTextOptional(form, N119_FIELDS.NOTICE_OTHER_TYPE, noticeType, ctx);
+
+  // Notice served date - The N119 form uses "on 20__" format for year, requiring 2-digit year only
+  const noticeDate = data.section_8_notice_date || data.section_21_notice_date || data.notice_served_date;
   if (noticeDate) {
     const dateParts = noticeDate.split('-');
     if (dateParts.length === 3) {
