@@ -25,6 +25,10 @@ import {
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
+import {
+  buildWitnessStatementSections,
+  extractWitnessStatementSectionsInput,
+} from './witness-statement-sections';
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
@@ -1203,10 +1207,27 @@ export async function generateCompleteEvictionPack(
   const proofOfService = await generateProofOfService(evictionCase, serviceDetails);
   documents.push(proofOfService);
 
-  // 3.1 Generate witness statement (AI-powered premium feature)
+  // 3.1 Generate witness statement
+  // For Section 8 cases, use deterministic buildWitnessStatementSections for court-ready content.
+  // This ensures all sections are populated with factual, court-appropriate text derived from case facts.
+  // For other cases, fall back to AI-powered generation.
   try {
-    const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
-    const witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
+    // Determine if this is a Section 8 case (has fault-based grounds)
+    const isSection8Case = evictionCase.grounds && evictionCase.grounds.length > 0;
+
+    let witnessStatementContent;
+
+    if (isSection8Case && jurisdiction === 'england') {
+      // Use deterministic builder for England Section 8 cases
+      // This generates court-ready content from case facts without AI
+      const sectionsInput = extractWitnessStatementSectionsInput(wizardFacts);
+      witnessStatementContent = buildWitnessStatementSections(sectionsInput);
+      console.log('📝 Using deterministic witness statement builder for Section 8 case');
+    } else {
+      // Fall back to AI-powered generation for other cases
+      const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
+      witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
+    }
 
     const witnessStatementDoc = await generateDocument({
       templatePath: `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`,
@@ -1219,7 +1240,7 @@ export async function generateCompleteEvictionPack(
         landlord_address: evictionCase.landlord_address,
         court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
         // Add generation date
-        generated_date: new Date().toISOString().split('T')[0],
+        generated_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
       },
       isPreview: false,
       outputFormat: 'both',
@@ -1227,7 +1248,7 @@ export async function generateCompleteEvictionPack(
 
     documents.push({
       title: 'Witness Statement',
-      description: 'AI-drafted witness statement for court proceedings',
+      description: 'Court-ready witness statement for possession proceedings',
       category: 'court_form',
       document_type: 'witness_statement',
       html: witnessStatementDoc.html,
