@@ -785,14 +785,16 @@ function getPersonsInPossession(caseData: CaseData): string {
   const tenantsText = persons.join(' and ');
 
   // If we have known occupants collected from the landlord, append them
+  // Q2 requirement: Just names, no parentheticals like "(the defendant)"
   if (caseData.knownOccupants && caseData.knownOccupants.length > 0) {
     const occupantsList = caseData.knownOccupants.join(', ');
-    return `${tenantsText} (the defendant${persons.length > 1 ? 's' : ''}), and ${occupantsList}`;
+    return `${tenantsText}, ${occupantsList}`;
   }
 
   // Just the tenants if no known occupants
+  // Q2 requirement: Clean name only, no extra text
   if (persons.length > 0) {
-    return `${tenantsText} (the defendant${persons.length > 1 ? 's' : ''})`;
+    return tenantsText;
   }
 
   return '';
@@ -1612,15 +1614,38 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
       : 'Notice seeking possession';
   setTextOptional(form, N119_FIELDS.NOTICE_OTHER_TYPE, noticeType, ctx);
 
-  // Notice served date - The N119 form uses "on 20__" format for year, requiring 2-digit year only
+  // Notice served date - Q6 requires a complete, readable date
+  // Day/month field: "DD Month" format (e.g., "19 January") - field is 88px wide
+  // Year field: 2-digit year (e.g., "26") - field is only 22px wide
   const noticeDate = data.section_8_notice_date || data.section_21_notice_date || data.notice_served_date;
   if (noticeDate) {
-    const dateParts = noticeDate.split('-');
-    if (dateParts.length === 3) {
-      setTextOptional(form, N119_FIELDS.NOTICE_DATE_DAY_MONTH, `${dateParts[2]}/${dateParts[1]}`, ctx);
-      // Use 2-digit year (e.g., "26" for 2026) to match form's "on 20__" format
-      const twoDigitYear = dateParts[0].slice(-2);
-      setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, twoDigitYear, ctx);
+    try {
+      const date = new Date(noticeDate);
+      if (!isNaN(date.getTime())) {
+        const day = date.getDate();
+        const months = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const month = months[date.getMonth()];
+        const year = String(date.getFullYear()).slice(-2);
+
+        // Format as "19 January" for day/month field (clear, readable format)
+        setTextOptional(form, N119_FIELDS.NOTICE_DATE_DAY_MONTH, `${day} ${month}`, ctx);
+        // 2-digit year for year field (e.g., "26" for 2026)
+        setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, year, ctx);
+      }
+    } catch {
+      // Fallback: parse date parts manually if Date parsing fails
+      const dateParts = noticeDate.split('-');
+      if (dateParts.length === 3) {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthIdx = parseInt(dateParts[1], 10) - 1;
+        const monthName = monthNames[monthIdx] || dateParts[1];
+        setTextOptional(form, N119_FIELDS.NOTICE_DATE_DAY_MONTH, `${dateParts[2]} ${monthName}`, ctx);
+        setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, dateParts[0].slice(-2), ctx);
+      }
     }
   }
 
