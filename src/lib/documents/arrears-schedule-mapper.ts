@@ -103,13 +103,21 @@ export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | n
 }
 
 /**
- * Map all arrears items to document entries.
+ * Map all arrears items to document entries with running balance.
  *
  * @param items - Array of arrears items to convert
  * @param rentDueDay - The day of month rent is due (1-31), from wizard tenancy 'Day rent is due'
  */
 export function mapArrearsItemsToEntries(items: ArrearsItem[], rentDueDay?: number | null): ArrearsEntry[] {
-  return (items || []).map((item) => mapArrearsItemToEntry(item, rentDueDay));
+  let runningBalance = 0;
+  return (items || []).map((item) => {
+    const entry = mapArrearsItemToEntry(item, rentDueDay);
+    runningBalance += entry.arrears;
+    return {
+      ...entry,
+      running_balance: Math.round(runningBalance * 100) / 100,
+    };
+  });
 }
 
 /**

@@ -3,15 +3,16 @@
   ARREARS LETTER TEMPLATE
   Good Practice / Engagement Letter
   ============================================================================
-  This is a TEMPLATE for the landlord to use - it should be clearly labelled
-  as such and NOT state that it was sent unless the landlord confirms.
+  This template supports two modes:
+  - Template mode (is_final_form = false): Shows placeholders for manual completion
+  - Final form mode (is_final_form = true): Fully populated for court packs
 --}}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Arrears Letter Template</title>
+  <title>{{#if is_final_form}}Arrears Engagement Letter{{else}}Arrears Letter Template{{/if}}</title>
   <style>
     {{{print_css}}}
 
@@ -104,11 +105,13 @@
 </head>
 <body>
 
-<!-- Template Notice -->
+{{!-- Only show template notice in template mode --}}
+{{#unless is_final_form}}
 <div class="template-notice">
   <h3>⚠ TEMPLATE DOCUMENT</h3>
   <p>This is a template letter. You must customise and send it yourself. Do not claim you have sent this letter unless you actually have.</p>
 </div>
+{{/unless}}
 
 <!-- Letter Header -->
 <div class="letter-header">
@@ -117,7 +120,12 @@
     {{#if landlord_address}}
     {{landlord_address}}<br>
     {{/if}}
-    <span class="fill-in">[Your Contact Details]</span>
+    {{#if is_final_form}}
+      {{#if landlord_phone}}Tel: {{landlord_phone}}<br>{{/if}}
+      {{#if landlord_email}}Email: {{landlord_email}}{{/if}}
+    {{else}}
+      <span class="fill-in">[Your Contact Details]</span>
+    {{/if}}
   </div>
 
   <div class="address-block">
@@ -126,8 +134,12 @@
   </div>
 
   <div class="date-line">
-    <span class="fill-in">[Date]</span>
-    <div class="instruction">Enter the date you send this letter</div>
+    {{#if is_final_form}}
+      {{format_date letter_date}}
+    {{else}}
+      <span class="fill-in">[Date]</span>
+      <div class="instruction">Enter the date you send this letter</div>
+    {{/if}}
   </div>
 </div>
 
@@ -148,7 +160,7 @@
   </p>
 
   <p>
-    According to my records, the current rent arrears amount to <strong>{{currency arrears_total}}</strong> as at <span class="fill-in">[date of calculation]</span>.
+    According to my records, the current rent arrears amount to <strong>{{currency arrears_total}}</strong> as at {{#if is_final_form}}{{format_date calculation_date}}{{else}}<span class="fill-in">[date of calculation]</span>{{/if}}.
   </p>
 
   <div class="action-box">
@@ -195,7 +207,8 @@
   <p>Landlord</p>
 </div>
 
-<!-- Instructions -->
+{{!-- Only show instructions in template mode --}}
+{{#unless is_final_form}}
 <div class="instruction" style="margin-top: 3em;">
   <strong>Instructions for use:</strong>
   <ul>
@@ -205,6 +218,7 @@
     <li>If you do not receive a response, this letter can be evidence that you attempted to engage with the tenant before taking formal action</li>
   </ul>
 </div>
+{{/unless}}
 
 </body>
 </html>

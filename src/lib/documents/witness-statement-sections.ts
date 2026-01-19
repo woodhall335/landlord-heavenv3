@@ -668,85 +668,224 @@ export function buildWitnessStatementSections(
 }
 
 /**
- * Extract WitnessStatementSectionsInput from wizard facts.
+ * Extract WitnessStatementSectionsInput from wizard facts or eviction case data.
  *
- * This function handles the mapping from various wizard fact formats
+ * This function handles the mapping from various data formats
  * to the standardized input structure.
  *
- * @param wizardFacts - Raw wizard facts (various formats supported)
+ * Supports:
+ * - Nested wizard facts format (landlord.full_name, property.address_line_1)
+ * - Flat eviction case format (landlord_full_name, property_address_line1)
+ * - Mixed formats
+ *
+ * @param data - Raw wizard facts or eviction case data (various formats supported)
  * @returns Normalized input for buildWitnessStatementSections
  */
 export function extractWitnessStatementSectionsInput(
-  wizardFacts: any
+  data: any
 ): WitnessStatementSectionsInput {
-  // Handle different data structures (fixture format vs CaseFacts format)
-  const landlord = wizardFacts.landlord || wizardFacts.parties?.landlord || {};
-  const tenant = wizardFacts.tenant || wizardFacts.parties?.tenants?.[0] || {};
-  const property = wizardFacts.property || {};
-  const tenancy = wizardFacts.tenancy || {};
-  const notice = wizardFacts.notice || {};
-  const section8 = wizardFacts.section8 || {};
-  const arrears = wizardFacts.arrears || wizardFacts.issues?.rent_arrears || {};
-  const signing = wizardFacts.signing || {};
+  // Handle different data structures (fixture format vs CaseFacts format vs EvictionCase format)
+  // Prioritize nested format, fall back to flat format (eviction case format)
 
-  // Extract grounds from various possible locations
-  const grounds = section8.grounds ||
-    wizardFacts.section8_grounds ||
-    wizardFacts.issues?.section8_grounds?.selected_grounds ||
+  // Landlord data extraction
+  const nestedLandlord = data.landlord || data.parties?.landlord || {};
+  const landlordFullName =
+    nestedLandlord.full_name ||
+    nestedLandlord.name ||
+    data.landlord_full_name ||
+    '';
+  const landlordAddressLine1 =
+    nestedLandlord.address_line_1 ||
+    nestedLandlord.address_line1 ||
+    data.landlord_address_line1 ||
+    '';
+  const landlordAddressLine2 =
+    nestedLandlord.address_line_2 ||
+    nestedLandlord.address_line2 ||
+    '';
+  const landlordCity =
+    nestedLandlord.city ||
+    data.landlord_address_town ||
+    '';
+  const landlordPostcode =
+    nestedLandlord.postcode ||
+    data.landlord_address_postcode ||
+    '';
+
+  // Tenant data extraction
+  const nestedTenant = data.tenant || data.parties?.tenants?.[0] || {};
+  const tenantFullName =
+    nestedTenant.full_name ||
+    nestedTenant.name ||
+    data.tenant_full_name ||
+    '';
+
+  // Property data extraction
+  const nestedProperty = data.property || {};
+  const propertyAddressLine1 =
+    nestedProperty.address_line_1 ||
+    nestedProperty.address_line1 ||
+    data.property_address_line1 ||
+    '';
+  const propertyAddressLine2 =
+    nestedProperty.address_line_2 ||
+    nestedProperty.address_line2 ||
+    '';
+  const propertyCity =
+    nestedProperty.city ||
+    data.property_address_town ||
+    '';
+  const propertyPostcode =
+    nestedProperty.postcode ||
+    data.property_address_postcode ||
+    '';
+  // For full address fallback
+  const fullPropertyAddress = data.property_address || '';
+
+  // Tenancy data extraction
+  const nestedTenancy = data.tenancy || {};
+  const tenancyStartDate =
+    nestedTenancy.start_date ||
+    data.tenancy_start_date ||
+    '';
+  const rentAmount =
+    nestedTenancy.rent_amount ||
+    data.rent_amount ||
+    0;
+  const rentFrequency =
+    nestedTenancy.rent_frequency ||
+    data.rent_frequency ||
+    'monthly';
+  const rentDueDay =
+    nestedTenancy.rent_due_day ||
+    data.payment_day ||
+    undefined;
+  const tenancyType =
+    nestedTenancy.tenancy_type ||
+    (data.tenancy_type === 'fixed_term' ? 'ast_fixed_term' :
+      data.tenancy_type === 'periodic' ? 'ast_periodic' : 'ast_fixed_term');
+  const fixedTermEndDate =
+    nestedTenancy.fixed_term_end_date ||
+    data.fixed_term_end_date ||
+    undefined;
+
+  // Notice data extraction
+  const nestedNotice = data.notice || {};
+  const noticeServedDate =
+    nestedNotice.served_date ||
+    nestedNotice.notice_date ||
+    data.notice_served_date ||
+    data.notice_date ||
+    '';
+  const noticeExpiryDate =
+    nestedNotice.expiry_date ||
+    nestedNotice.notice_expiry_date ||
+    data.notice_expiry_date ||
+    '';
+  const serviceMethod =
+    nestedNotice.service_method ||
+    data.service_method ||
+    data.notice_service_method ||
+    'first_class_post';
+
+  // Section 8 / Grounds extraction
+  const nestedSection8 = data.section8 || {};
+  const section8Grounds =
+    nestedSection8.grounds ||
+    data.section8_grounds ||
+    data.issues?.section8_grounds?.selected_grounds ||
+    // Extract from EvictionCase grounds array
+    (Array.isArray(data.grounds) ? data.grounds.map((g: any) =>
+      typeof g === 'string' ? g : g.code || g.ground_code || ''
+    ) : []);
+
+  // Arrears data extraction
+  const nestedArrears = data.arrears || data.issues?.rent_arrears || {};
+  const arrearsTotal =
+    nestedArrears.total_arrears ||
+    nestedArrears.arrears_total ||
+    data.current_arrears ||
+    0;
+  const arrearsItems =
+    nestedArrears.items ||
+    nestedArrears.arrears_items ||
+    data.arrears_breakdown ||
     [];
+  const arrearsAtNoticeDate =
+    data.arrearsAtNoticeDate ||
+    data.arrears_at_notice_date ||
+    undefined;
+
+  // Calculate arrears months if not provided
+  let arrearsMonths = nestedArrears.arrears_months;
+  if (!arrearsMonths && rentAmount > 0 && arrearsTotal > 0) {
+    arrearsMonths = arrearsTotal / rentAmount;
+  }
 
   // Extract evidence uploads
-  const evidenceUploads = wizardFacts.evidence_uploads ||
-    wizardFacts.evidence?.files?.map((f: any) => f.name) ||
+  const evidenceUploads = data.evidence_uploads ||
+    data.evidence?.files?.map((f: any) => f.name) ||
     [];
+
+  // Signing data extraction
+  const nestedSigning = data.signing || {};
+  const signatoryName =
+    nestedSigning.signatory_name ||
+    landlordFullName;
+  const signatureDate =
+    nestedSigning.signature_date ||
+    new Date().toISOString().split('T')[0];
 
   return {
     landlord: {
-      full_name: landlord.full_name || landlord.name || '',
-      address_line_1: landlord.address_line_1 || landlord.address_line1 || '',
-      address_line_2: landlord.address_line_2 || landlord.address_line2 || '',
-      city: landlord.city || '',
-      postcode: landlord.postcode || '',
-      has_joint_landlords: landlord.has_joint_landlords || false,
+      full_name: landlordFullName,
+      address_line_1: landlordAddressLine1,
+      address_line_2: landlordAddressLine2,
+      city: landlordCity,
+      postcode: landlordPostcode,
+      has_joint_landlords: nestedLandlord.has_joint_landlords || false,
     },
     tenant: {
-      full_name: tenant.full_name || tenant.name || '',
+      full_name: tenantFullName,
     },
     property: {
-      address_line_1: property.address_line_1 || property.address_line1 || '',
-      address_line_2: property.address_line_2 || property.address_line2 || '',
-      city: property.city || '',
-      postcode: property.postcode || '',
+      // If we don't have structured address but have full address, parse it
+      address_line_1: propertyAddressLine1 || (fullPropertyAddress.split(',')[0]?.trim() || ''),
+      address_line_2: propertyAddressLine2,
+      city: propertyCity || (fullPropertyAddress.split(',')[1]?.trim() || ''),
+      postcode: propertyPostcode || (fullPropertyAddress.split(',').pop()?.trim() || ''),
     },
     tenancy: {
-      start_date: tenancy.start_date || '',
-      tenancy_type: tenancy.tenancy_type || 'ast_fixed_term',
-      fixed_term_end_date: tenancy.fixed_term_end_date || undefined,
-      has_break_clause: tenancy.has_break_clause || false,
-      rent_amount: tenancy.rent_amount || 0,
-      rent_frequency: tenancy.rent_frequency || 'monthly',
-      rent_due_day: tenancy.rent_due_day || undefined,
+      start_date: tenancyStartDate,
+      tenancy_type: tenancyType,
+      fixed_term_end_date: fixedTermEndDate,
+      has_break_clause: nestedTenancy.has_break_clause || false,
+      rent_amount: rentAmount,
+      rent_frequency: rentFrequency as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly',
+      rent_due_day: rentDueDay,
     },
     notice: {
-      already_served_valid_notice: notice.already_served_valid_notice || false,
-      served_date: notice.served_date || notice.notice_date || '',
-      service_method: notice.service_method || 'first_class_post',
-      expiry_date: notice.expiry_date || notice.notice_expiry_date || '',
+      already_served_valid_notice: nestedNotice.already_served_valid_notice || false,
+      served_date: noticeServedDate,
+      service_method: serviceMethod,
+      expiry_date: noticeExpiryDate,
     },
     section8: {
-      grounds: Array.isArray(grounds) ? grounds : [grounds].filter(Boolean),
-      particulars_text: section8.particulars_text || '',
+      grounds: Array.isArray(section8Grounds) ? section8Grounds.filter(Boolean) : [section8Grounds].filter(Boolean),
+      particulars_text: nestedSection8.particulars_text || '',
     },
     arrears: {
-      items: arrears.items || arrears.arrears_items || [],
-      total_arrears: arrears.total_arrears || arrears.arrears_total || 0,
-      arrears_months: arrears.arrears_months || undefined,
+      items: arrearsItems,
+      total_arrears: arrearsTotal,
+      arrears_months: arrearsMonths,
     },
+    arrearsAtNoticeDate: arrearsAtNoticeDate,
+    arrearsAtStatementDate: arrearsTotal,
     evidence_uploads: evidenceUploads,
     signing: {
-      signatory_name: signing.signatory_name || landlord.full_name || landlord.name || '',
-      capacity: signing.capacity || 'claimant_landlord',
-      signature_date: signing.signature_date || '',
+      signatory_name: signatoryName,
+      capacity: nestedSigning.capacity || 'claimant_landlord',
+      signature_date: signatureDate,
     },
   };
 }

@@ -506,6 +506,10 @@ export interface CaseData {
     description: string;
   }>;
 
+  // Other breach details (for N119 Q4(b) - only populate if user has provided)
+  // Do NOT invent or fabricate breach details - leave blank if not provided
+  other_breach_details?: string;
+
   // Solicitor
   solicitor_firm?: string;
   solicitor_address?: string;
@@ -1496,13 +1500,19 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // === TENANCY DETAILS (Section 3) ===
   const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
   setTextOptional(form, N119_FIELDS.TENANCY_TYPE, tenancyType, ctx);
-  setTextOptional(form, N119_FIELDS.TENANCY_DATE, data.tenancy_start_date, ctx);
+  // Format tenancy date in UK legal format (e.g., "14 July 2025")
+  const tenancyDateFormatted = data.tenancy_start_date ? formatUKLegalDate(data.tenancy_start_date) : '';
+  setTextOptional(form, N119_FIELDS.TENANCY_DATE, tenancyDateFormatted, ctx);
 
-  // Rent amount
+  // Rent amount - ensure proper currency formatting without duplicates
   if (data.rent_amount !== undefined) {
-    setTextOptional(form, N119_FIELDS.RENT, `£${data.rent_amount}`, ctx);
+    // Format as currency: ensure it's a number and add single £ prefix
+    const rentNum = typeof data.rent_amount === 'number' ? data.rent_amount :
+      parseFloat(String(data.rent_amount).replace(/[£,]/g, '')) || 0;
+    setTextOptional(form, N119_FIELDS.RENT, `£${rentNum.toFixed(2)}`, ctx);
 
-    // Tick appropriate rent frequency
+    // Tick ONLY the appropriate rent frequency (single selection, not multiple)
+    // Clear any that shouldn't be checked to ensure only one is marked
     if (data.rent_frequency === 'weekly') {
       setTextOptional(form, N119_FIELDS.RENT_WEEKLY, 'X', ctx);
     } else if (data.rent_frequency === 'fortnightly') {
@@ -1510,20 +1520,73 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     } else if (data.rent_frequency === 'monthly') {
       setTextOptional(form, N119_FIELDS.RENT_MONTHLY, 'X', ctx);
     } else if (data.rent_frequency) {
+      // Only use "other period" if it's not one of the standard options
       setTextOptional(form, N119_FIELDS.RENT_OTHER_PERIOD, data.rent_frequency, ctx);
     }
 
-    // Daily rate for arrears calculation
-    const dailyRate = data.rent_frequency === 'weekly' ? data.rent_amount / 7 :
-                      data.rent_frequency === 'monthly' ? data.rent_amount / 30 :
-                      data.rent_amount / 30;
+    // Daily rate for arrears calculation (properly formatted)
+    const dailyRate = data.rent_frequency === 'weekly' ? rentNum / 7 :
+                      data.rent_frequency === 'fortnightly' ? rentNum / 14 :
+                      data.rent_frequency === 'monthly' ? rentNum / 30 :
+                      data.rent_frequency === 'quarterly' ? rentNum / 91 :
+                      rentNum / 30;
     setTextOptional(form, N119_FIELDS.DAILY_RATE, dailyRate.toFixed(2), ctx);
   }
 
-  // === REASON FOR POSSESSION (Section 4) ===
-  // Generate detailed particulars if not provided
-  const reason = data.particulars_of_claim || generateParticularsOfClaim(data);
-  setTextOptional(form, N119_FIELDS.REASON_A, reason, ctx);
+  // === REASON FOR POSSESSION (Section 4) - Q4(a), Q4(b), Q4(c) ===
+  // The N119 form has THREE separate sections for Section 4:
+  // 4(a) - Rent arrears statement
+  // 4(b) - Other breach details (only if provided, otherwise leave blank)
+  // 4(c) - Statutory grounds (MUST be populated for Section 8 with explicit statutory basis)
+
+  // Q4(a) - Rent Arrears
+  // For arrears cases, state rent unpaid and reference the attached schedule
+  if (data.total_arrears && data.total_arrears > 0) {
+    const arrearsStatement = `Rent lawfully due under the tenancy agreement has not been paid. ` +
+      `As at the date of service of the Section 8 Notice, the arrears amounted to £${data.total_arrears.toFixed(2)}. ` +
+      `Full details of rent periods, payments, and outstanding arrears are set out in the attached Schedule of Arrears.`;
+    setTextOptional(form, N119_FIELDS.REASON_A, arrearsStatement, ctx);
+  } else if (data.particulars_of_claim) {
+    // Use custom particulars if provided
+    setTextOptional(form, N119_FIELDS.REASON_A, data.particulars_of_claim, ctx);
+  }
+
+  // Q4(b) - Other Breach Details
+  // IMPORTANT: Only populate if user has explicitly provided other breach details
+  // Do NOT invent breaches or insert placeholders
+  if (data.other_breach_details) {
+    setTextOptional(form, N119_FIELDS.REASON_B, data.other_breach_details, ctx);
+  }
+  // If no other breach details, leave Q4(b) blank (do not fill with anything)
+
+  // Q4(c) - Statutory Grounds
+  // MUST ALWAYS be populated for Section 8 cases with explicit statutory basis
+  // This is legally mandatory for Ground 8 claims
+  const grounds = data.ground_numbers?.split(',').map(g => g.trim()) || [];
+  const hasGround8 = grounds.includes('8') || data.ground_codes?.includes('ground_8');
+  const hasGround10 = grounds.includes('10') || data.ground_codes?.includes('ground_10');
+  const hasGround11 = grounds.includes('11') || data.ground_codes?.includes('ground_11');
+
+  const statutoryGroundsParts: string[] = [];
+  if (hasGround8) {
+    statutoryGroundsParts.push('Ground 8, Schedule 2, Housing Act 1988 (mandatory ground for serious rent arrears)');
+  }
+  if (hasGround10) {
+    statutoryGroundsParts.push('Ground 10, Schedule 2, Housing Act 1988 (discretionary ground for rent arrears)');
+  }
+  if (hasGround11) {
+    statutoryGroundsParts.push('Ground 11, Schedule 2, Housing Act 1988 (discretionary ground for persistent delay)');
+  }
+  // If other grounds are specified, add them
+  if (statutoryGroundsParts.length === 0 && data.ground_numbers) {
+    statutoryGroundsParts.push(`Ground(s) ${data.ground_numbers}, Schedule 2, Housing Act 1988`);
+  }
+
+  if (statutoryGroundsParts.length > 0) {
+    const statutoryBasis = 'The claimant relies on the following statutory grounds for possession: ' +
+      statutoryGroundsParts.join('; ') + '.';
+    setTextOptional(form, N119_FIELDS.REASON_C, statutoryBasis, ctx);
+  }
 
   // === STEPS TAKEN (Section 5 / Q5 - Steps to recover arrears) ===
   // CRITICAL: Do NOT fabricate steps. Use only recorded steps or a safe neutral default.
