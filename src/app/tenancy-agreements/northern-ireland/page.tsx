@@ -71,6 +71,7 @@ export default function NorthernIrelandTenancyPage() {
     '@type': 'Product',
     name: 'Private Tenancy Agreement (Northern Ireland)',
     description: 'Legally compliant Private Tenancy Agreement for Northern Ireland',
+    image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       {
         '@type': 'Offer',

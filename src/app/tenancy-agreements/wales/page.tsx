@@ -79,6 +79,7 @@ export default function WalesOccupationContractPage() {
     '@type': 'Product',
     name: 'Occupation Contract - Wales',
     description: 'Legally compliant Occupation Contract for Wales under Renting Homes (Wales) Act 2016',
+    image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       {
         '@type': 'Offer',

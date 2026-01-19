@@ -94,6 +94,7 @@ export default function EnglandASTPage() {
     '@type': 'Product',
     name: 'Assured Shorthold Tenancy Agreement (AST) - England',
     description: 'Legally compliant AST agreement for England under Housing Act 1988',
+    image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       {
         '@type': 'Offer',
