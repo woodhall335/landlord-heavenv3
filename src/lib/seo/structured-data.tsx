@@ -3,11 +3,40 @@
  *
  * Generate schema.org structured data for SEO
  *
- * IMPORTANT: Hardcoded aggregateRating values are risky for Google rich results.
- * Google may penalize sites with fake/unverified ratings. Only enable structured
- * ratings if you have real, verifiable review data from a third-party source.
+ * =============================================================================
+ * CRITICAL SEO NOTES - READ BEFORE MODIFYING
+ * =============================================================================
  *
- * Set ENABLE_STRUCTURED_RATINGS=true in env to include ratings in schema.
+ * 1. AGGREGATERATING (4.8/247):
+ *    - Hardcoded aggregateRating values are risky for Google rich results.
+ *    - Google may penalize sites with fake/unverified ratings.
+ *    - Only enable ENABLE_STRUCTURED_RATINGS=true if you have real review data.
+ *    - Default is FALSE to avoid Google penalties.
+ *
+ * 2. SOFTWAREAPPLICATION SCHEMA:
+ *    - NOT injected globally anymore (removed from layout.tsx Jan 2026)
+ *    - Previously caused Google to show wrong snippets on product pages:
+ *      "4.8(247) · £19.99 · Business/Productivity"
+ *    - Product pages must use Product schema with correct prices ONLY.
+ *    - If you need SoftwareApplication for a specific tool page, add it there.
+ *    - DO NOT re-add to global layout without SEO team approval.
+ *
+ * 3. CORRECT PRODUCT PRICES (as of Jan 2026):
+ *    - Notice Only: £39.99
+ *    - Complete Pack: £199.99
+ *    - Money Claim: £199.99
+ *    - AST Standard: £9.99
+ *    - AST Premium: £14.99
+ *    - All prices come from PRODUCTS config - single source of truth.
+ *
+ * 4. SCHEMA USAGE BY PAGE TYPE:
+ *    - Global (layout.tsx): Organization ONLY
+ *    - Product pages (/products/*): Product + Offer + FAQ + Breadcrumb
+ *    - Tool pages (/tools/*): HowTo or WebApplication (page-specific)
+ *    - Blog: Article + Breadcrumb
+ *    - Homepage: WebSite + Organization (via layout)
+ *
+ * =============================================================================
  */
 
 import React from 'react';
@@ -355,6 +384,13 @@ export function localBusinessSchema() {
 /**
  * SoftwareApplication structured data
  * For the overall platform
+ *
+ * @deprecated DO NOT USE GLOBALLY - removed from layout.tsx in Jan 2026.
+ * This schema caused Google to show wrong snippets on product pages:
+ * "4.8(247) · £19.99 · Business/Productivity" instead of actual product prices.
+ *
+ * Only use this on specific tool pages where SoftwareApplication classification
+ * is intentionally desired, NOT on product pages.
  *
  * Price range is derived from PRODUCTS to stay in sync with actual pricing.
  * aggregateRating is only included if ENABLE_STRUCTURED_RATINGS=true.
