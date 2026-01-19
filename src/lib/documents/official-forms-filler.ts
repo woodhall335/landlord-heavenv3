@@ -535,6 +535,20 @@ export interface CaseData {
   [key: string]: any;
 }
 
+/**
+ * Options for form filler functions
+ */
+export interface FormFillerOptions {
+  /**
+   * Whether to flatten the PDF after filling.
+   * Flattened PDFs have form fields converted to static content.
+   *
+   * - true (default): Flatten for court submission - ensures fields visible in all viewers
+   * - false: Keep form fields editable - useful for testing or preview
+   */
+  flatten?: boolean;
+}
+
 // =============================================================================
 // STRICT FIELD HELPERS
 // =============================================================================
@@ -840,7 +854,8 @@ function getStepsToRecoverArrears(caseData: CaseData): string {
  * FIELD INVENTORY: 34 text fields, 20 checkboxes
  * Field inventory updated: December 2025
  */
-export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N5';
   const formFile = getFormFilename('n5', data.jurisdiction);
   console.log(`📄 Filling N5 form (Claim for possession) - using ${formFile}...`);
@@ -990,10 +1005,13 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   console.log(`✅ N5 form filled successfully (${listFormFieldNames(form).length} fields available, key fields set)`);
 
   // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  const flattenedBytes = await flattenPdf(pdfBytes);
-  console.log(`📄 N5 form flattened for court submission`);
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N5 form flattened for court submission`);
+    return flattenedBytes;
+  }
 
-  return flattenedBytes;
+  return pdfBytes;
 }
 
 // =============================================================================
@@ -1013,7 +1031,8 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
  * IMPORTANT: This form requires specific compliance data to be collected.
  * We only fill fields where we have actual data - no hardcoding of answers.
  */
-export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
+export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N5B';
   const formFile = getFormFilename('n5b', data.jurisdiction);
   console.log(`📄 Filling N5B form (Accelerated possession - Section 21) - using ${formFile}...`);
@@ -1321,10 +1340,13 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
   console.log(`✅ N5B form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
   // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  const flattenedBytes = await flattenPdf(pdfBytes);
-  console.log(`📄 N5B form flattened for court submission`);
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N5B form flattened for court submission`);
+    return flattenedBytes;
+  }
 
-  return flattenedBytes;
+  return pdfBytes;
 }
 
 // =============================================================================
@@ -1431,7 +1453,8 @@ function generateParticularsOfClaim(data: CaseData): string {
  * FIELD INVENTORY: 38 text fields, 16 checkboxes
  * Field inventory updated: December 2025
  */
-export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN119Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N119';
   const formFile = getFormFilename('n119', data.jurisdiction);
   console.log(`📄 Filling N119 form (Particulars of claim) - using ${formFile}...`);
@@ -1558,10 +1581,13 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   console.log(`✅ N119 form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
   // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  const flattenedBytes = await flattenPdf(pdfBytes);
-  console.log(`📄 N119 form flattened for court submission`);
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N119 form flattened for court submission`);
+    return flattenedBytes;
+  }
 
-  return flattenedBytes;
+  return pdfBytes;
 }
 
 // =============================================================================
@@ -1574,7 +1600,8 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
  * Official PDF: /public/official-forms/N1_1224.pdf
  * Source: https://assets.publishing.service.gov.uk/media/674d7ea12e91c6fb83fb5162/N1_1224.pdf
  */
-export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N1';
   console.log('📄 Filling N1 form (Money claim)...');
 
@@ -1688,10 +1715,13 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
   console.log(`✅ N1 form filled successfully`);
 
   // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  const flattenedBytes = await flattenPdf(pdfBytes);
-  console.log(`📄 N1 form flattened for court submission`);
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N1 form flattened for court submission`);
+    return flattenedBytes;
+  }
 
-  return flattenedBytes;
+  return pdfBytes;
 }
 
 // =============================================================================

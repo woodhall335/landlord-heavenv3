@@ -88,7 +88,7 @@ describe('Court Forms Value Mapping', () => {
         court_name: 'Birmingham Civil Justice Centre',
       });
 
-      const pdfBytes = await fillN5Form(data);
+      const pdfBytes = await fillN5Form(data, { flatten: false });
       const courtName = await getTextFieldValue(pdfBytes, 'In the court');
 
       expect(courtName).toBe('Birmingham Civil Justice Centre');
@@ -100,7 +100,7 @@ describe('Court Forms Value Mapping', () => {
         landlord_address: '10 High Street\nLondon\nW1A 1AA',
       });
 
-      const pdfBytes = await fillN5Form(data);
+      const pdfBytes = await fillN5Form(data, { flatten: false });
       // N5 PDF uses straight apostrophe (') in field name
       const claimantDetails = await getTextFieldValue(pdfBytes, "claimant's details");
 
@@ -115,7 +115,7 @@ describe('Court Forms Value Mapping', () => {
         property_address: '20 Oak Avenue\nBirmingham\nB1 1AA',
       });
 
-      const pdfBytes = await fillN5Form(data);
+      const pdfBytes = await fillN5Form(data, { flatten: false });
       // N5 PDF uses curly apostrophe (') in field name
       const defendantDetails = await getTextFieldValue(pdfBytes, "defendant's details");
 
@@ -129,7 +129,7 @@ describe('Court Forms Value Mapping', () => {
         property_address: '99 Test Lane\nLeeds\nLS1 1AA',
       });
 
-      const pdfBytes = await fillN5Form(data);
+      const pdfBytes = await fillN5Form(data, { flatten: false });
       const possessionOf = await getTextFieldValue(pdfBytes, 'possession of');
 
       expect(possessionOf).toBe('99 Test Lane\nLeeds\nLS1 1AA');
@@ -184,7 +184,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const courtField = await getTextFieldValue(pdfBytes, 'Name and address of the court');
 
       // N5B has a single field for both name and address
@@ -200,7 +200,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const claimantNames = await getTextFieldValue(
         pdfBytes,
         'Enter the full names of the Claimants'
@@ -217,7 +217,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const defendantNames = await getTextFieldValue(
         pdfBytes,
         'Enter the full names of the Defendants'
@@ -233,7 +233,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const possessionAddress = await getTextFieldValue(
         pdfBytes,
         'The Claimant is claiming possession of'
@@ -248,7 +248,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const serviceMethod = await getTextFieldValue(pdfBytes, '10a How was the notice served');
 
       expect(serviceMethod).toBe('By hand');
@@ -261,7 +261,7 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
-      const pdfBytes = await fillN5BForm(data);
+      const pdfBytes = await fillN5BForm(data, { flatten: false });
       const courtField = await getTextFieldValue(pdfBytes, 'Name and address of the court');
 
       expect(courtField).toBe('Liverpool Civil and Family Court');
@@ -312,7 +312,7 @@ describe('Court Forms Value Mapping', () => {
         court_name: 'Leeds Combined Court Centre',
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const courtName = await getTextFieldValue(pdfBytes, 'name of court');
 
       expect(courtName).toBe('Leeds Combined Court Centre');
@@ -323,7 +323,7 @@ describe('Court Forms Value Mapping', () => {
         landlord_full_name: 'Property Holdings Ltd',
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const claimantName = await getTextFieldValue(pdfBytes, 'name of claimant');
 
       expect(claimantName).toBe('Property Holdings Ltd');
@@ -334,7 +334,7 @@ describe('Court Forms Value Mapping', () => {
         tenant_full_name: 'Thomas Wilson',
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const defendantName = await getTextFieldValue(pdfBytes, 'name of defendant');
 
       expect(defendantName).toBe('Thomas Wilson');
@@ -345,7 +345,7 @@ describe('Court Forms Value Mapping', () => {
         property_address: '77 Garden Way\nSheffield\nS1 1AA',
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const possessionAddress = await getTextFieldValue(
         pdfBytes,
         'The claimant has a right to possession of:'
@@ -359,7 +359,7 @@ describe('Court Forms Value Mapping', () => {
         tenancy_type: 'Periodic Tenancy',
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const tenancyType = await getTextFieldValue(pdfBytes, '3(a) Type of tenancy');
 
       expect(tenancyType).toBe('Periodic Tenancy');
@@ -370,7 +370,7 @@ describe('Court Forms Value Mapping', () => {
         tenancy_type: undefined,
       });
 
-      const pdfBytes = await fillN119Form(data);
+      const pdfBytes = await fillN119Form(data, { flatten: false });
       const tenancyType = await getTextFieldValue(pdfBytes, '3(a) Type of tenancy');
 
       expect(tenancyType).toBe('Assured Shorthold Tenancy');
@@ -404,9 +404,9 @@ describe('Court Forms Value Mapping', () => {
       });
 
       // Fill all forms
-      const n5Bytes = await fillN5Form(data);
-      const n5bBytes = await fillN5BForm(data);
-      const n119Bytes = await fillN119Form(data);
+      const n5Bytes = await fillN5Form(data, { flatten: false });
+      const n5bBytes = await fillN5BForm(data, { flatten: false });
+      const n119Bytes = await fillN119Form(data, { flatten: false });
 
       // Check N5
       const n5CourtName = await getTextFieldValue(n5Bytes, 'In the court');

@@ -8,7 +8,7 @@
  * - Grounds support and evidence checklists
  * - Premium features (lifetime storage, priority support)
  *
- * Pricing: £149.99 one-time payment
+ * Pricing: £199.99 one-time payment
  * Regions: England & Wales, Scotland
  */
 
@@ -1007,7 +1007,7 @@ async function generateScotlandEvictionPack(
  * - Timeline expectations
  * - Proof of service templates
  *
- * Price: £149.99 one-time
+ * Price: £199.99 one-time
  */
 export async function generateCompleteEvictionPack(
   wizardFacts: any
