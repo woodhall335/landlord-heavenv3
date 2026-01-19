@@ -79,6 +79,7 @@ export default function ScotlandPRTPage() {
     '@type': 'Product',
     name: 'Private Residential Tenancy Agreement (PRT)',
     description: 'Legally compliant PRT agreement for Scotland',
+    image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       {
         '@type': 'Offer',
