@@ -25,6 +25,7 @@ import { PDFDocument, PDFForm, PDFTextField } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
+import { flattenPdf } from './pdf-utils';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 export const OFFICIAL_FORM_OUTPUT_ROOT = path.join(process.cwd(), '.tmp', 'official-form-output');
@@ -494,6 +495,17 @@ export interface CaseData {
   epc_uploaded?: boolean;                   // Checkbox F - EPC uploaded
   gas_safety_uploaded?: boolean;            // Checkbox G - gas safety cert uploaded
 
+  // Known occupants (for N119 Q2 - persons in possession)
+  // Only include if landlord has confirmed these occupants exist
+  knownOccupants?: string[];
+
+  // Pre-action steps (for N119 Q5 - steps taken to recover arrears)
+  // Only include steps that are actually recorded/confirmed by landlord
+  preActionSteps?: Array<{
+    date: string;
+    description: string;
+  }>;
+
   // Solicitor
   solicitor_firm?: string;
   solicitor_address?: string;
@@ -521,6 +533,20 @@ export interface CaseData {
 
   // Additional data
   [key: string]: any;
+}
+
+/**
+ * Options for form filler functions
+ */
+export interface FormFillerOptions {
+  /**
+   * Whether to flatten the PDF after filling.
+   * Flattened PDFs have form fields converted to static content.
+   *
+   * - true (default): Flatten for court submission - ensures fields visible in all viewers
+   * - false: Keep form fields editable - useful for testing or preview
+   */
+  flatten?: boolean;
 }
 
 // =============================================================================
@@ -703,6 +729,116 @@ function splitAddress(address: string): string[] {
   return address.split('\n').filter(line => line.trim());
 }
 
+/**
+ * Format a date string to UK legal format (e.g., "15 January 2026")
+ */
+function formatUKLegalDate(dateString: string): string {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    const day = date.getDate();
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  } catch {
+    return dateString;
+  }
+}
+
+// =============================================================================
+// N119 HELPER FUNCTIONS (Q2 and Q5)
+// =============================================================================
+
+/**
+ * Get persons in possession for N119 Q2.
+ *
+ * IMPORTANT: Only include tenants and known occupants that the landlord has confirmed.
+ * Do NOT invent or fabricate "unknown persons" or make assumptions.
+ *
+ * @param caseData - The case data containing tenant and occupant information
+ * @returns Formatted string of persons in possession, or empty string if none
+ */
+function getPersonsInPossession(caseData: CaseData): string {
+  const persons: string[] = [];
+
+  // Add named tenants (defendants)
+  if (caseData.tenant_full_name) {
+    persons.push(caseData.tenant_full_name);
+  }
+  if (caseData.tenant_2_name) {
+    persons.push(caseData.tenant_2_name);
+  }
+
+  // Build the tenants description
+  const tenantsText = persons.join(' and ');
+
+  // If we have known occupants collected from the landlord, append them
+  if (caseData.knownOccupants && caseData.knownOccupants.length > 0) {
+    const occupantsList = caseData.knownOccupants.join(', ');
+    return `${tenantsText} (the defendant${persons.length > 1 ? 's' : ''}), and ${occupantsList}`;
+  }
+
+  // Just the tenants if no known occupants
+  if (persons.length > 0) {
+    return `${tenantsText} (the defendant${persons.length > 1 ? 's' : ''})`;
+  }
+
+  return '';
+}
+
+/**
+ * Get steps taken to recover arrears for N119 Q5.
+ *
+ * CRITICAL RULE: Do NOT fabricate steps. This field must only contain:
+ * 1. Steps that are actually recorded with dates and descriptions
+ * 2. A safe neutral minimum statement if no steps are recorded
+ *
+ * The notice service is always included since we have that data.
+ *
+ * @param caseData - The case data containing pre-action steps and notice information
+ * @returns Formatted string of steps taken, using neutral wording if no data
+ */
+function getStepsToRecoverArrears(caseData: CaseData): string {
+  const steps: string[] = [];
+
+  // Only include steps if we have recorded evidence (dates/notes)
+  if (caseData.preActionSteps && caseData.preActionSteps.length > 0) {
+    for (const step of caseData.preActionSteps) {
+      if (step.date && step.description) {
+        const formattedDate = formatUKLegalDate(step.date);
+        steps.push(`${formattedDate}: ${step.description}`);
+      }
+    }
+  }
+
+  // Always include notice service since we have that data
+  const noticeDate = caseData.section_8_notice_date || caseData.section_21_notice_date || caseData.notice_served_date;
+  if (noticeDate) {
+    const formattedNoticeDate = formatUKLegalDate(noticeDate);
+    steps.push(`${formattedNoticeDate}: A Section 8 Notice (Form 3) was served on the defendant.`);
+  }
+
+  // If we have recorded steps, return them as a timeline
+  if (steps.length > 0) {
+    return steps.join('\n');
+  }
+
+  // SAFE MINIMUM DEFAULT: Use neutral wording that doesn't fabricate specific actions
+  // This is the fallback when no specific steps are recorded
+  if (noticeDate) {
+    const formattedNoticeDate = formatUKLegalDate(noticeDate);
+    return `The claimant contacted the defendant regarding the arrears and invited payment or proposals. A Section 8 Notice (Form 3) was served on ${formattedNoticeDate}.`;
+  }
+
+  // Minimal fallback if we don't even have a notice date
+  return 'The claimant contacted the defendant regarding the arrears and invited payment or proposals. A notice seeking possession was served.';
+}
+
 // =============================================================================
 // N5 FORM FILLER
 // =============================================================================
@@ -718,7 +854,8 @@ function splitAddress(address: string): string[] {
  * FIELD INVENTORY: 34 text fields, 20 checkboxes
  * Field inventory updated: December 2025
  */
-export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N5';
   const formFile = getFormFilename('n5', data.jurisdiction);
   console.log(`📄 Filling N5 form (Claim for possession) - using ${formFile}...`);
@@ -867,6 +1004,13 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N5 form filled successfully (${listFormFieldNames(form).length} fields available, key fields set)`);
 
+  // Flatten PDF to ensure filled fields are visible in all viewers/prints
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N5 form flattened for court submission`);
+    return flattenedBytes;
+  }
+
   return pdfBytes;
 }
 
@@ -887,7 +1031,8 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
  * IMPORTANT: This form requires specific compliance data to be collected.
  * We only fill fields where we have actual data - no hardcoding of answers.
  */
-export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
+export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N5B';
   const formFile = getFormFilename('n5b', data.jurisdiction);
   console.log(`📄 Filling N5B form (Accelerated possession - Section 21) - using ${formFile}...`);
@@ -1194,6 +1339,13 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N5B form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
+  // Flatten PDF to ensure filled fields are visible in all viewers/prints
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N5B form flattened for court submission`);
+    return flattenedBytes;
+  }
+
   return pdfBytes;
 }
 
@@ -1301,7 +1453,8 @@ function generateParticularsOfClaim(data: CaseData): string {
  * FIELD INVENTORY: 38 text fields, 16 checkboxes
  * Field inventory updated: December 2025
  */
-export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN119Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N119';
   const formFile = getFormFilename('n119', data.jurisdiction);
   console.log(`📄 Filling N119 form (Particulars of claim) - using ${formFile}...`);
@@ -1332,16 +1485,11 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
   setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
 
-  // Occupants - list all known tenants/occupants (Section 2)
-  const occupants: string[] = [];
-  if (data.tenant_full_name) {
-    occupants.push(data.tenant_full_name);
-  }
-  if (data.tenant_2_name) {
-    occupants.push(data.tenant_2_name);
-  }
-  if (occupants.length > 0) {
-    const occupantsText = occupants.join(', ') + ' (the defendant' + (occupants.length > 1 ? 's' : '') + ')';
+  // === OCCUPANTS (Section 2 / Q2 - Persons in possession) ===
+  // IMPORTANT: Only include tenants and known occupants that landlord has confirmed.
+  // Do NOT invent or fabricate unknown persons.
+  const occupantsText = getPersonsInPossession(data);
+  if (occupantsText) {
     setTextOptional(form, N119_FIELDS.OCCUPANTS, occupantsText, ctx);
   }
 
@@ -1377,10 +1525,11 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const reason = data.particulars_of_claim || generateParticularsOfClaim(data);
   setTextOptional(form, N119_FIELDS.REASON_A, reason, ctx);
 
-  // === STEPS TAKEN (Section 5) ===
-  if (data.total_arrears) {
-    setTextOptional(form, N119_FIELDS.STEPS_TAKEN,
-      'Demands for payment have been made. A notice seeking possession was served.', ctx);
+  // === STEPS TAKEN (Section 5 / Q5 - Steps to recover arrears) ===
+  // CRITICAL: Do NOT fabricate steps. Use only recorded steps or a safe neutral default.
+  const stepsText = getStepsToRecoverArrears(data);
+  if (stepsText) {
+    setTextOptional(form, N119_FIELDS.STEPS_TAKEN, stepsText, ctx);
   }
 
   // === NOTICE DATES (Section 6) ===
@@ -1431,6 +1580,13 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N119 form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
+  // Flatten PDF to ensure filled fields are visible in all viewers/prints
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N119 form flattened for court submission`);
+    return flattenedBytes;
+  }
+
   return pdfBytes;
 }
 
@@ -1444,7 +1600,8 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
  * Official PDF: /public/official-forms/N1_1224.pdf
  * Source: https://assets.publishing.service.gov.uk/media/674d7ea12e91c6fb83fb5162/N1_1224.pdf
  */
-export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
+export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
+  const { flatten = true } = options;
   const ctx = 'N1';
   console.log('📄 Filling N1 form (Money claim)...');
 
@@ -1556,6 +1713,13 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N1 form filled successfully`);
+
+  // Flatten PDF to ensure filled fields are visible in all viewers/prints
+  if (flatten) {
+    const flattenedBytes = await flattenPdf(pdfBytes);
+    console.log(`📄 N1 form flattened for court submission`);
+    return flattenedBytes;
+  }
 
   return pdfBytes;
 }

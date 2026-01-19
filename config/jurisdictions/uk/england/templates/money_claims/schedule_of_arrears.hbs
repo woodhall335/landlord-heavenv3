@@ -1,9 +1,13 @@
 {{!--
   ============================================================================
-  SCHEDULE OF RENT ARREARS
+  SCHEDULE OF RENT ARREARS (Court-Ready)
   Section 8 Notice - Ground 8
   ============================================================================
-  Harmonized design system matching other Notice Only Pack documents
+  Court-credible arrears ledger with:
+  - Running balance column
+  - FIFO payment allocation
+  - Arrears snapshots (notice date / schedule date)
+  - Ground 8 threshold validation
 --}}
 
 <!DOCTYPE html>
@@ -80,17 +84,82 @@
       color: #1a1a1a;
     }
 
+    /* Ground 8 Summary Box */
+    .ground8-summary {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #f0f9ff;
+    }
+
+    .ground8-summary h3 {
+      margin: 0 0 0.8em 0;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .ground8-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8em 2em;
+    }
+
+    .ground8-item {
+      padding: 0.6em;
+      background: white;
+      border: 1px solid #ddd;
+    }
+
+    .ground8-item dt {
+      font-size: 9pt;
+      color: #666;
+      margin-bottom: 0.2em;
+    }
+
+    .ground8-item dd {
+      margin: 0;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .ground8-item.pass {
+      border-left: 4px solid #22c55e;
+    }
+
+    .ground8-item.fail {
+      border-left: 4px solid #ef4444;
+    }
+
+    .threshold-badge {
+      display: inline-block;
+      padding: 0.2em 0.5em;
+      font-size: 9pt;
+      font-weight: 600;
+      border-radius: 3px;
+      margin-left: 0.5em;
+    }
+
+    .threshold-badge.pass {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .threshold-badge.fail {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
     /* Arrears Table */
     .arrears-table {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5em 0;
-      font-size: 10pt;
+      font-size: 9pt;
     }
 
     .arrears-table th,
     .arrears-table td {
-      padding: 8px 10px;
+      padding: 6px 8px;
       border: 1px solid #1a1a1a;
       text-align: left;
     }
@@ -99,6 +168,7 @@
       background: #1a1a1a;
       color: white;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .arrears-table td {
@@ -112,6 +182,15 @@
     .arrears-table .amount {
       text-align: right;
       font-family: 'Courier New', monospace;
+    }
+
+    .arrears-table .period-col {
+      min-width: 180px;
+    }
+
+    .arrears-table .notes-col {
+      font-size: 8pt;
+      color: #666;
     }
 
     /* Total Row */
@@ -134,6 +213,11 @@
       padding: 1em;
       margin: 1.5em 0;
       font-size: 10pt;
+    }
+
+    .info-box.warning {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
     }
 
     /* Document Footer */
@@ -172,51 +256,106 @@
     <dt>Tenant:</dt>
     <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
     <dt>Landlord:</dt>
-    <dd>{{landlord_full_name}}</dd>
+    <dd>{{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
     {{#if claimant_reference}}
     <dt>Claim Reference:</dt>
     <dd>{{claimant_reference}}</dd>
     {{/if}}
+    <dt>Schedule Date:</dt>
+    <dd>{{format_date schedule_date "long"}}</dd>
   </dl>
 </div>
 
-<!-- Arrears Schedule Table -->
+<!-- Ground 8 Summary -->
+<div class="ground8-summary">
+  <h3>Ground 8 Arrears Summary</h3>
+  <div class="ground8-grid">
+    {{#if arrears_at_notice_date}}
+    <div class="ground8-item {{#if meets_threshold_at_notice}}pass{{else}}fail{{/if}}">
+      <dt>Arrears at Notice Service Date{{#if notice_date}} ({{format_date notice_date "short"}}){{/if}}</dt>
+      <dd>
+        {{currency arrears_at_notice_date}}
+        <span class="threshold-badge {{#if meets_threshold_at_notice}}pass{{else}}fail{{/if}}">
+          {{#if meets_threshold_at_notice}}✓ Meets Threshold{{else}}✗ Below Threshold{{/if}}
+        </span>
+      </dd>
+    </div>
+    {{/if}}
+    <div class="ground8-item {{#if meets_threshold_at_schedule}}pass{{else}}fail{{/if}}">
+      <dt>Arrears at Schedule Date ({{format_date schedule_date "short"}})</dt>
+      <dd>
+        {{currency arrears_at_schedule_date}}
+        <span class="threshold-badge {{#if meets_threshold_at_schedule}}pass{{else}}fail{{/if}}">
+          {{#if meets_threshold_at_schedule}}✓ Meets Threshold{{else}}✗ Below Threshold{{/if}}
+        </span>
+      </dd>
+    </div>
+    <div class="ground8-item">
+      <dt>Ground 8 Threshold ({{rent_frequency}} rent)</dt>
+      <dd>≥ {{currency ground8_threshold}} ({{ground8_threshold_description}})</dd>
+    </div>
+    <div class="ground8-item">
+      <dt>Arrears at Hearing Date</dt>
+      <dd><em>To be confirmed at hearing</em></dd>
+    </div>
+  </div>
+</div>
+
+<!-- Arrears Schedule Table with Running Balance -->
 <table class="arrears-table">
   <thead>
     <tr>
-      <th>Period</th>
+      <th class="period-col">Period</th>
       <th>Due Date</th>
-      <th class="amount">Amount Due</th>
-      <th class="amount">Amount Paid</th>
+      <th class="amount">Rent Due</th>
+      <th class="amount">Paid</th>
       <th class="amount">Arrears</th>
+      <th class="amount">Running Balance</th>
+      <th class="notes-col">Notes</th>
     </tr>
   </thead>
   <tbody>
     {{#each arrears_schedule}}
     <tr>
-      <td>{{period}}</td>
+      <td class="period-col">{{period}}</td>
       <td>{{due_date}}</td>
       <td class="amount">{{currency amount_due}}</td>
       <td class="amount">{{currency amount_paid}}</td>
       <td class="amount">{{currency arrears}}</td>
+      <td class="amount"><strong>{{currency running_balance}}</strong></td>
+      <td class="notes-col">{{#if notes}}{{notes}}{{/if}}</td>
     </tr>
     {{/each}}
     <tr class="total-row">
-      <td colspan="4"><strong>Total Arrears</strong></td>
+      <td colspan="4"><strong>Total Arrears Outstanding</strong></td>
       <td class="amount"><strong>{{currency arrears_total}}</strong></td>
+      <td class="amount"><strong>{{currency arrears_total}}</strong></td>
+      <td></td>
     </tr>
   </tbody>
 </table>
+
+<!-- Payment Allocation Note -->
+<div class="info-box">
+  <strong>Payment Allocation Method:</strong> Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.
+</div>
 
 <!-- Evidence Note -->
 <div class="info-box">
   <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
 </div>
 
+{{#unless meets_threshold_at_notice}}
+<div class="info-box warning">
+  <strong>⚠️ Warning:</strong> Based on the data provided, the arrears at the notice service date may not meet the Ground 8 threshold. Ground 8 requires at least {{ground8_threshold_description}} of arrears both at the notice date and at the hearing date. Consider reviewing the arrears data or relying on additional grounds.
+</div>
+{{/unless}}
+
 <!-- Footer -->
 <div class="doc-footer">
   <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
-  <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
+  <p><strong>Landlord Heaven Court Pack</strong> | England</p>
+  <p><em>This schedule will be updated before the hearing to reflect the current arrears position.</em></p>
 </div>
 
 </body>
