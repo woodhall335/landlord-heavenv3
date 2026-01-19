@@ -482,25 +482,27 @@ function getNoticeTypeLabel(evictionCase: EvictionCase): string {
   // Check if this is a Section 8 case (has grounds for possession)
   const hasSection8Grounds = evictionCase.grounds && evictionCase.grounds.length > 0;
 
-  if (hasSection8Grounds) {
-    return 'Section 8 Notice (Form 3)';
-  }
-
-  // Section 21 (no-fault eviction)
-  if (evictionCase.case_type === 'no_fault') {
-    return 'Section 21 Notice (Form 6A)';
-  }
-
-  // Scotland Notice to Leave
+  // Scotland Notice to Leave (check first before general no_fault)
   if (evictionCase.jurisdiction === 'scotland') {
     return 'Notice to Leave';
   }
 
-  // Wales routes
+  // Wales routes (check before general no_fault)
   if (evictionCase.jurisdiction === 'wales') {
-    return evictionCase.case_type === 'no_fault'
-      ? 'Section 173 Notice (No-fault)'
-      : 'Possession Notice (Fault-based)';
+    if (hasSection8Grounds) {
+      return 'Possession Notice (Fault-based)';
+    }
+    return 'Section 173 Notice (No-fault)';
+  }
+
+  // England routes
+  if (hasSection8Grounds) {
+    return 'Section 8 Notice (Form 3)';
+  }
+
+  // Section 21 (no-fault eviction) for England
+  if (evictionCase.case_type === 'no_fault') {
+    return 'Section 21 Notice (Form 6A)';
   }
 
   return 'Possession Notice';
