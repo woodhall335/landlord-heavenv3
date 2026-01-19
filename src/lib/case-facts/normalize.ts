@@ -752,6 +752,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.tenancy.start_date ??= getFirstValue(wizard, [
     'case_facts.tenancy.start_date',
     'tenancy_start_date',
+    'tenancy.start_date', // Nested object format (complete_pack fixture)
     'start_date',
   ]);
   base.tenancy.end_date ??= getFirstValue(wizard, [
@@ -790,15 +791,18 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.tenancy.fixed_term_months ??= getWizardValue(wizard, 'tenancy_fixed_term_months');
   base.tenancy.rent_amount ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_amount',
+    'tenancy.rent_amount', // Nested object format (complete_pack fixture)
     'rent_amount',
   ]);
   base.tenancy.rent_frequency ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_frequency',
+    'tenancy.rent_frequency', // Nested object format (complete_pack fixture)
     'rent_frequency',
     'rent_period',
   ]) as any;
   base.tenancy.rent_due_day ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_due_day',
+    'tenancy.rent_due_day', // Nested object format (complete_pack fixture)
     'rent_due_day',
   ]);
   base.tenancy.usual_payment_weekday ??= getFirstValue(wizard, [
@@ -985,6 +989,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     base.issues.rent_arrears.total_arrears ??
     getFirstValue(wizard, [
       'case_facts.issues.rent_arrears.total_arrears',
+      'arrears.total_arrears', // Nested object format (complete_pack fixture)
       'total_arrears',
       'arrears_total',
       'rent_arrears.total_arrears',
@@ -1032,6 +1037,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   if (!base.issues.rent_arrears.arrears_items.length) {
     const arrearsItems = getFirstValue(wizard, [
       'case_facts.issues.rent_arrears.arrears_items',
+      'arrears.items', // Nested object format (complete_pack fixture)
       'arrears_items',
     ]);
     if (Array.isArray(arrearsItems)) {
@@ -1082,6 +1088,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // Section 8 ground-specific details (England & Wales)
   const section8Grounds = getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.selected_grounds',
+    'section8.grounds', // Nested object format (complete_pack fixture)
     'section8_grounds',
     'section8_grounds_selection',
     'selected_grounds',
@@ -1094,6 +1101,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   base.issues.section8_grounds.arrears_breakdown ??= getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.arrears_breakdown',
+    'section8.particulars_text', // Nested object format (complete_pack fixture)
     'arrears_breakdown',
     'section8_arrears_details',
   ]);
@@ -1386,16 +1394,20 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.notice.notice_date ??= getFirstValue(wizard, [
     'notice_served_date',
     'case_facts.notice.notice_date',
+    'notice.served_date', // Nested object format (complete_pack fixture)
+    'notice.notice_date', // Nested object format variant
     'notice_date',
   ]);
   base.notice.service_date ??= getFirstValue(wizard, [
     'notice_served_date',
     'case_facts.notice.service_date',
+    'notice.served_date', // Nested object format (complete_pack fixture)
     'notice_service_date',
     'service_date',
   ]);
   base.notice.expiry_date ??= getFirstValue(wizard, [
     'case_facts.notice.expiry_date',
+    'notice.expiry_date', // Nested object format (complete_pack fixture)
     'notice_expiry_date',
     'expiry_date',
   ]);
@@ -1493,12 +1505,14 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   ]);
   base.court.court_name ??= getFirstValue(wizard, [
     'case_facts.court.court_name',
+    'court.court_name', // Nested object format (complete_pack fixture)
     'court_name',
     'preferred_court',
     'sheriffdom',
   ]);
   base.court.court_address ??= getFirstValue(wizard, [
     'case_facts.court.court_address',
+    'court.court_address', // Nested object format (complete_pack fixture)
     'court_address',
   ]);
   base.court.court_postcode ??= getFirstValue(wizard, [

@@ -113,7 +113,9 @@ function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
 }
 
 function parseGround(option: string): { code: string; codeNum: number | '14A'; title: string } {
-  const match = option.match(/ground\s*([0-9a-z]+)/i);
+  // Match ground number in formats: "ground 8", "ground_8", "Ground 8", "Ground_8"
+  // Uses [\s_]* to allow spaces, underscores, or nothing between "ground" and the number
+  const match = option.match(/ground[\s_]*([0-9a-z]+)/i);
   const codeStr = match ? match[1].toUpperCase() : '';
   const codeNum = (codeStr === '14A' ? '14A' : parseInt(codeStr)) as number | '14A';
   const code = codeStr ? `Ground ${codeStr}` : option.trim();
