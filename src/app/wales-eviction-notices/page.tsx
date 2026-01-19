@@ -12,7 +12,8 @@ import {
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { LegalTrustBanner } from '@/components/seo/LegalTrustBanner';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
-import { productLinks } from '@/lib/seo/internal-links';
+import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
@@ -570,6 +571,23 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
+        {/* Ask Heaven Section */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <AskHeavenWidget
+                variant="banner"
+                source="page_cta"
+                topic="eviction"
+                jurisdiction="wales"
+                title="Not sure which Wales notice applies?"
+                description="Ask Heaven can help you understand occupation contracts, notice periods, and the Renting Homes Act possession process."
+                utm_campaign="wales-eviction-notices"
+              />
+            </div>
+          </div>
+        </section>
+
         <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
@@ -586,6 +604,11 @@ export default function WalesEvictionNoticesPage() {
                 }}
                 relatedLinks={[
                   {
+                    href: askHeavenLink.href,
+                    title: 'Ask Heaven',
+                    description: 'Free Q&A for landlord questions.',
+                  },
+                  {
                     href: '/tenancy-agreements/wales',
                     title: 'Wales occupation contracts',
                     description: 'Create compliant occupation contracts.',
@@ -594,11 +617,6 @@ export default function WalesEvictionNoticesPage() {
                     href: '/blog/wales-eviction-process',
                     title: 'Wales eviction process',
                     description: 'Step-by-step Section 173 / possession flow.',
-                  },
-                  {
-                    href: '/blog/wales-notice-periods-landlords',
-                    title: 'Wales notice periods',
-                    description: 'Current notice periods under Welsh law.',
                   },
                   {
                     href: '/money-claim-unpaid-rent',

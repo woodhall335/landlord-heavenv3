@@ -161,6 +161,20 @@ export const landingPageLinks = {
     icon: 'document' as const,
     type: 'page' as const,
   },
+  walesEvictionTemplate: {
+    href: '/wales-eviction-notice-template',
+    title: 'Wales Eviction Notice Template',
+    description: 'Renting Homes Act notices',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  scotlandNoticeToLeaveTemplate: {
+    href: '/scotland-notice-to-leave-template',
+    title: 'Scotland Notice to Leave Template',
+    description: 'PRT eviction notices',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
 };
 
 // New guide pages for SEO authority
@@ -281,16 +295,20 @@ export const tenancyRelatedLinks = [
   landingPageLinks.tenancyTemplate,
 ];
 
-// Jurisdiction-specific link groups
+// Jurisdiction-specific link groups (with Ask Heaven for uncertainty resolution)
 export const walesRelatedLinks = [
+  askHeavenLink,
   guideLinks.walesEviction,
+  landingPageLinks.walesEvictionTemplate,
   guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
 ];
 
 export const scotlandRelatedLinks = [
+  askHeavenLink,
   guideLinks.scotlandEviction,
+  landingPageLinks.scotlandNoticeToLeaveTemplate,
   guideLinks.howToEvictTenant,
   productLinks.noticeOnly,
   productLinks.completePack,
