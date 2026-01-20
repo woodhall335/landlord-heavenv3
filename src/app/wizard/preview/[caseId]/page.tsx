@@ -141,7 +141,9 @@ export default function WizardPreviewPage() {
       types.push('ast_premium');
     }
 
-    return types;
+    // Deduplicate document types to prevent race conditions and duplicate DB inserts
+    // This is a belt-and-braces measure alongside the DB UPSERT
+    return [...new Set(types)];
   };
 
   // Fetch case data

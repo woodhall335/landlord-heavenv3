@@ -1563,24 +1563,84 @@ export async function POST(request: Request) {
       pdfUrl = publicUrlData.publicUrl;
     }
 
-    // Save document record
-    const { data: documentRecord, error: dbError } = await supabase
+    // Save document record using UPSERT to handle race conditions and retries
+    // This prevents 23505 duplicate key errors on idx_documents_case_type_preview_unique
+    const documentData = {
+      user_id: caseRow.user_id,
+      case_id,
+      document_type,
+      document_title: documentTitle,
+      jurisdiction: canonicalJurisdiction,
+      html_content: generatedDoc?.html || null,
+      pdf_url: pdfUrl,
+      is_preview,
+      qa_passed: false,
+      qa_score: null,
+      qa_issues: [],
+      updated_at: new Date().toISOString(),
+    };
+
+    let documentRecord: any = null;
+    let dbError: any = null;
+
+    // Primary: Use UPSERT with onConflict to handle duplicates gracefully
+    const { data: upsertData, error: upsertError } = await supabase
       .from('documents')
-      .insert({
-        user_id: caseRow.user_id,
-        case_id,
-        document_type,
-        document_title: documentTitle,
-        jurisdiction: canonicalJurisdiction,
-        html_content: generatedDoc?.html || null,
-        pdf_url: pdfUrl,
-        is_preview,
-        qa_passed: false,
-        qa_score: null,
-        qa_issues: [],
-      } as any)
+      .upsert(documentData as any, { onConflict: 'case_id,document_type,is_preview' })
       .select()
       .single();
+
+    if (upsertError) {
+      // Fallback: Handle 23505 duplicate key error (belt + braces)
+      // This can happen if another request inserted between our check
+      if (upsertError.code === '23505') {
+        console.warn(
+          `[generate] Duplicate document detected for case=${case_id} type=${document_type} preview=${is_preview}, fetching existing record`
+        );
+
+        // Fetch existing record and update it
+        const { data: existingDoc, error: fetchError } = await supabase
+          .from('documents')
+          .select()
+          .eq('case_id', case_id)
+          .eq('document_type', document_type)
+          .eq('is_preview', is_preview)
+          .single();
+
+        if (fetchError || !existingDoc) {
+          console.error('Failed to fetch existing document after 23505:', fetchError);
+          dbError = fetchError || new Error('Document not found after 23505');
+        } else {
+          // Update the existing record
+          const existingId = (existingDoc as any).id;
+          const { data: updatedDoc, error: updateError } = await supabase
+            .from('documents')
+            .update({
+              document_title: documentTitle,
+              html_content: generatedDoc?.html || null,
+              pdf_url: pdfUrl,
+              qa_passed: false,
+              qa_score: null,
+              qa_issues: [],
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', existingId)
+            .select()
+            .single();
+
+          if (updateError) {
+            console.error('Failed to update existing document:', updateError);
+            dbError = updateError;
+          } else {
+            documentRecord = updatedDoc;
+          }
+        }
+      } else {
+        dbError = upsertError;
+      }
+    } else {
+      documentRecord = upsertData;
+    }
 
     if (dbError) {
       console.error('Failed to save document record:', dbError);
