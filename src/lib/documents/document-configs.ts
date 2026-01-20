@@ -235,29 +235,18 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
   const noticeOnlyDocs = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
   documents.push(...noticeOnlyDocs);
 
-  // Add court forms
+  // Add court forms - route-specific (aligned with pack-contents.ts single source of truth)
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    documents.push(
-      {
-        id: 'form-n5',
-        title: 'Form N5 - Claim for Possession',
-        description: 'Official court form to start possession proceedings',
-        icon: 'court-form',
-        pages: '8 pages',
-        category: 'Court Forms',
-      },
-      {
-        id: 'form-n119',
-        title: 'Form N119 - Particulars of Claim',
-        description: 'Detailed grounds and particulars for your possession claim',
-        icon: 'court-form',
-        pages: '4-6 pages',
-        category: 'Court Forms',
-      }
-    );
+    // England Section 21 uses accelerated N5B procedure ONLY (no N5/N119)
+    // All other routes (England Section 8, Wales Section 173, Wales fault-based) use N5 + N119
+    const isEnglandSection21 =
+      jurisdiction === 'england' &&
+      (noticeRoute?.includes('21') ||
+        noticeRoute === 'accelerated_possession' ||
+        noticeRoute === 'accelerated_section21');
 
-    // N5B only for Section 21/Section 173 (no-fault)
-    if (noticeRoute?.includes('21') || noticeRoute?.includes('173') || noticeRoute === 'accelerated_possession' || noticeRoute === 'accelerated_section21') {
+    if (isEnglandSection21) {
+      // England Section 21: Use N5B accelerated procedure only
       documents.push({
         id: 'form-n5b',
         title: 'Form N5B - Accelerated Possession',
@@ -266,6 +255,26 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
         pages: '6 pages',
         category: 'Court Forms',
       });
+    } else {
+      // England Section 8, Wales Section 173, Wales fault-based: Use standard N5 + N119 procedure
+      documents.push(
+        {
+          id: 'form-n5',
+          title: 'Form N5 - Claim for Possession',
+          description: 'Official court form to start possession proceedings',
+          icon: 'court-form',
+          pages: '8 pages',
+          category: 'Court Forms',
+        },
+        {
+          id: 'form-n119',
+          title: 'Form N119 - Particulars of Claim',
+          description: 'Detailed grounds and particulars for your possession claim',
+          icon: 'court-form',
+          pages: '4-6 pages',
+          category: 'Court Forms',
+        }
+      );
     }
   }
 

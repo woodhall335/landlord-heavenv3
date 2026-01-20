@@ -116,13 +116,24 @@ export default function WizardPreviewPage() {
       // Complete pack: all eviction documents
       types.push(getNoticeType());
 
-      // Court forms (England/Wales only)
+      // Court forms (England/Wales only) - route-specific per pack-contents.ts
       if (jurisdiction === 'england' || jurisdiction === 'wales') {
-        types.push('n5_claim');
-        types.push('n119_particulars');
-        // N5B only for Section 21
-        if (noticeRoute === 'section_21' || noticeRoute === 'accelerated_possession') {
+        // England Section 21 uses accelerated N5B procedure ONLY (no N5/N119)
+        // All other routes (England Section 8, Wales Section 173, Wales fault-based) use N5 + N119
+        const isEnglandSection21 =
+          jurisdiction === 'england' &&
+          (noticeRoute === 'section_21' ||
+            noticeRoute === 'section-21' ||
+            noticeRoute === 'accelerated_possession' ||
+            noticeRoute === 'accelerated_section21');
+
+        if (isEnglandSection21) {
+          // England Section 21: Use N5B accelerated procedure only
           types.push('n5b_claim');
+        } else {
+          // England Section 8, Wales Section 173, Wales fault-based: Use standard N5 + N119 procedure
+          types.push('n5_claim');
+          types.push('n119_particulars');
         }
       }
 
@@ -614,21 +625,22 @@ export default function WizardPreviewPage() {
     }
 
     // Mapping from config document IDs to database document_type values
+    // This enables matching generated documents (stored with document_type) to config cards (with id)
     const docTypeMapping: Record<string, string[]> = {
       // Section 8 / Form 3
       'notice-section-8': ['section8_notice', 'form_3_section8'],
       // Section 21 / Form 6A
       'notice-section-21': ['section21_notice', 'form_6a_section21'],
       // Wales
-      'notice-section-173': ['section173_notice', 'wales_section_173'],
-      'notice-fault-based': ['fault_based_notice', 'wales_fault_based'],
+      'notice-section-173': ['section173_notice', 'wales_section_173', 'section_173_notice'],
+      'notice-fault-based': ['fault_based_notice', 'wales_fault_based', 'fault_notice'],
       // Scotland
       'notice-to-leave': ['notice_to_leave', 'scotland_notice_to_leave'],
-      // Court forms (PDF-based - no HTML thumbnails)
-      'form-n5': ['n5_claim', 'form_n5'],
-      'form-n119': ['n119_particulars', 'form_n119'],
-      'form-n5b': ['n5b_claim', 'form_n5b'],
-      'form-e': ['form_e', 'tribunal_application'],
+      // Court forms (PDF-based - thumbnails rendered from PDF page 1)
+      'form-n5': ['n5_claim', 'form_n5', 'n5_possession_claim'],
+      'form-n119': ['n119_particulars', 'form_n119', 'n119_particulars_of_claim'],
+      'form-n5b': ['n5b_claim', 'form_n5b', 'n5b_accelerated_possession'],
+      'form-e': ['form_e', 'tribunal_application', 'form_e_tribunal'],
       // AI documents
       'witness-statement': ['witness_statement'],
       'compliance-audit': ['compliance_audit'],
@@ -652,7 +664,7 @@ export default function WizardPreviewPage() {
       // Evidence
       'arrears-schedule': ['arrears_schedule'],
       'evidence-checklist': ['evidence_checklist'],
-      'proof-of-service': ['proof_of_service'],
+      'proof-of-service': ['proof_of_service', 'proof_of_service_certificate'],
     };
 
     // Enrich documents with generated document IDs for thumbnails
