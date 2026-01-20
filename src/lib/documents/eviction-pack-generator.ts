@@ -989,6 +989,23 @@ async function generateEnglandOrWalesEvictionPack(
     // Use canonical Section 21 notice generator (single source of truth)
     const section21Doc = await generateSection21Notice(section21Data, false);
 
+    // =========================================================================
+    // COURT-READY VALIDATION (Jan 2026 Audit)
+    // Scan the generated Form 6A for any placeholder text or template leakage.
+    // This is the LAST LINE OF DEFENSE before court submission.
+    // =========================================================================
+    const { validateSection21CourtReady, logValidationResults: logS21Validation } = await import('./court-ready-validator');
+    const s21Validation = validateSection21CourtReady(section21Doc.html || '', 'section21_form6a');
+    if (!s21Validation.isValid) {
+      console.error('🚨 Section 21 Form 6A FAILED court-ready validation:');
+      logS21Validation([s21Validation]);
+      // In production, this should block the pack generation
+      // For now, log the error but continue to allow existing flows
+      // TODO: Consider throwing here after sufficient testing
+    } else {
+      console.log('✅ Section 21 Form 6A passed court-ready validation');
+    }
+
     documents.push({
       title: 'Section 21 Notice - Form 6A',
       description: 'Official no-fault eviction notice (2 months) - England only',

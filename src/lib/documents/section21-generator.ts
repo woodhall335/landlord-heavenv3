@@ -633,3 +633,72 @@ export function validateSection21Eligibility(data: Section21NoticeData): {
     warnings,
   };
 }
+
+// =============================================================================
+// CANONICAL FORM 6A GENERATOR (Jan 2026 Audit)
+// =============================================================================
+// This is the SINGLE SOURCE OF TRUTH for Form 6A generation.
+// All Section 21 products (notice_only, complete_pack) MUST use this function.
+// =============================================================================
+
+/**
+ * Canonical template path for Form 6A - used by all Section 21 generation flows.
+ * Exported for use in tests to verify single source of truth.
+ */
+export const FORM_6A_TEMPLATE_PATH = 'uk/england/templates/notice_only/form_6a_section21/notice.hbs';
+
+/**
+ * Canonical parameters for Form 6A generation
+ */
+export interface Form6AGenerationParams {
+  /** Case facts from wizard or API */
+  caseFacts: Record<string, any>;
+  /** Jurisdiction (must be 'england' for Section 21) */
+  jurisdiction: string;
+  /** Optional case ID for debug stamps */
+  caseId?: string;
+  /** If true, skip blocking validation (for preview mode) */
+  isPreview?: boolean;
+}
+
+/**
+ * Generate Section 21 Form 6A Notice - CANONICAL ENTRY POINT
+ *
+ * This is the single source of truth for Form 6A generation. Both notice_only
+ * and complete_pack flows MUST use this function (or generateSection21Notice,
+ * which this wraps).
+ *
+ * @param params - Generation parameters including caseFacts and jurisdiction
+ * @returns Generated document with HTML and optional PDF
+ * @throws Error if jurisdiction is not 'england' or preconditions fail
+ */
+export async function generateSection21Form6A(
+  params: Form6AGenerationParams
+): Promise<import('./generator').GeneratedDocument> {
+  const { caseFacts, jurisdiction, caseId, isPreview = false } = params;
+
+  // Validate jurisdiction - Section 21 is England-only
+  if (jurisdiction !== 'england') {
+    throw new Error(
+      `Section 21 Form 6A is only valid in England. ${
+        jurisdiction === 'wales'
+          ? 'Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016.'
+          : `Received jurisdiction: ${jurisdiction}`
+      }`
+    );
+  }
+
+  // Map wizard facts to Section21NoticeData
+  const s21Data = mapWizardToSection21Data(caseFacts);
+
+  // Generate using the canonical generator
+  return generateSection21Notice(s21Data, isPreview, { caseId });
+}
+
+/**
+ * Verify that a template path matches the canonical Form 6A path.
+ * Used by tests to ensure all generation paths use the same template.
+ */
+export function isCanonicalForm6APath(templatePath: string): boolean {
+  return templatePath === FORM_6A_TEMPLATE_PATH;
+}
