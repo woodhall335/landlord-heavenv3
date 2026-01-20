@@ -20,6 +20,7 @@
  */
 
 import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { toWinAnsiSafeText } from './pdf-safe-text';
 
 export interface ProofOfServiceData {
   // SAFE to pre-fill (from case data)
@@ -88,8 +89,9 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   let y = height - margin;
 
   // Helper functions
+  // Use toWinAnsiSafeText to sanitize Unicode characters for WinAnsi encoding
   const drawText = (text: string, x: number, yPos: number, font: PDFFont, size: number, color = black) => {
-    page.drawText(text, { x, y: yPos, font, size, color });
+    page.drawText(toWinAnsiSafeText(text), { x, y: yPos, font, size, color });
   };
 
   const drawLine = (x1: number, y1: number, x2: number, y2: number, thickness = 1) => {

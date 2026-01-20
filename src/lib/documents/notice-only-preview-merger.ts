@@ -10,6 +10,7 @@
 
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
+import { toWinAnsiSafeText } from './pdf-safe-text';
 
 // ============================================================================
 // TYPES
@@ -232,7 +233,8 @@ async function addTableOfContents(
       return;
     }
 
-    tocPage.drawText(`${idx + 1}. ${doc.title}`, {
+    // Sanitize document title to prevent WinAnsi encoding errors
+    tocPage.drawText(toWinAnsiSafeText(`${idx + 1}. ${doc.title}`), {
       x: 60,
       y: yPos,
       size: 12,
