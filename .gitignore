@@ -60,10 +60,7 @@ sample-*.html
 test-*.html
 artifacts/notice_only/_reports/
 
-# Generated test output (PDFs and debug artifacts)
-tests/output/*.pdf
-tests/output/*.txt
-tests/output/*.json
-tests/output/n119-debug-overlay.pdf
+# Generated test output (PDFs, HTML, and debug artifacts)
+tests/output/
 
 .tmp/

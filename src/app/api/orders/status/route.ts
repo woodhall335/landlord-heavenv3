@@ -5,12 +5,20 @@
  *
  * Returns authoritative payment and fulfillment status from the orders table.
  * This is the source of truth for payment status - NOT the ?payment=success query param.
+ *
+ * This endpoint is backward-compatible with databases that don't have the
+ * orders.metadata column yet (handles Postgres error 42703 gracefully).
  */
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { getEditWindowStatus } from '@/lib/payments/edit-window';
+import {
+  isMetadataColumnMissingError,
+  setMetadataColumnExists,
+  extractOrderMetadata,
+} from '@/lib/payments/safe-order-metadata';
 
 export interface OrderStatusResponse {
   paid: boolean;
@@ -52,6 +60,10 @@ export interface OrderStatusResponse {
   } | null;
 }
 
+// Fields to select - with and without metadata
+const ORDER_SELECT_WITH_METADATA = 'id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type, metadata';
+const ORDER_SELECT_WITHOUT_METADATA = 'id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type';
+
 export async function GET(request: Request) {
   try {
     const user = await requireServerAuth();
@@ -69,20 +81,46 @@ export async function GET(request: Request) {
       );
     }
 
-    // Build order query
-    let orderQuery = adminClient
+    // Build order query - try with metadata first
+    let orderQueryWithMetadata = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type, metadata')
+      .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', caseId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     // Optionally filter by product type
     if (product) {
-      orderQuery = orderQuery.eq('product_type', product);
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    const { data: orders, error: orderError } = await orderQuery.limit(1);
+    let { data: orders, error: orderError } = await orderQueryWithMetadata.limit(1);
+
+    // Handle metadata column missing error (42703)
+    if (orderError && isMetadataColumnMissingError(orderError)) {
+      console.warn('[orders] metadata column missing - falling back', {
+        orderId: null,
+        route: '/api/orders/status',
+        action: 'select',
+      });
+      setMetadataColumnExists(false);
+
+      // Retry without metadata using a separate query
+      let orderQueryWithoutMetadata = adminClient
+        .from('orders')
+        .select(ORDER_SELECT_WITHOUT_METADATA)
+        .eq('case_id', caseId)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (product) {
+        orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
+      }
+
+      const fallbackResult = await orderQueryWithoutMetadata.limit(1);
+      orders = fallbackResult.data as any;
+      orderError = fallbackResult.error;
+    }
 
     if (orderError) {
       console.error('Failed to fetch order:', orderError);
@@ -111,8 +149,8 @@ export async function GET(request: Request) {
     const documentCount = finalDocCount || 0;
     const lastFinalDocCreatedAt = finalDocs?.[0]?.created_at || null;
 
-    // Extract fulfillment_error from metadata if available
-    const orderMetadata = order?.metadata as Record<string, any> | null;
+    // Extract metadata using safe helper (handles missing metadata gracefully)
+    const orderMetadata = extractOrderMetadata(order);
     const fulfillmentError: string | null = orderMetadata?.error || null;
 
     // Calculate edit window status

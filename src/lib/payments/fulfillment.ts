@@ -12,6 +12,7 @@ import {
   isSection21Case,
   type Section21MissingConfirmation,
 } from '@/lib/validation/section21-checkout-validator';
+import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
 
 // =============================================================================
 // TYPES
@@ -266,18 +267,19 @@ export async function fulfillOrder({
 
   if (preValidation.isComplete && preValidation.actualCount > 0) {
     // All expected documents exist - mark as fulfilled and return
-    await supabase
-      .from('orders')
-      .update({
+    await safeUpdateOrderWithMetadata(
+      supabase,
+      orderId,
+      {
         fulfillment_status: 'fulfilled',
         fulfilled_at: new Date().toISOString(),
-        metadata: {
-          total_documents: preValidation.actualCount,
-          expected_documents: preValidation.expectedCount,
-          validation: 'complete',
-        },
-      })
-      .eq('id', orderId);
+      },
+      {
+        total_documents: preValidation.actualCount,
+        expected_documents: preValidation.expectedCount,
+        validation: 'complete',
+      }
+    );
 
     // Sync case status to 'completed' (idempotent)
     await supabase
@@ -552,19 +554,20 @@ export async function fulfillOrder({
 
     if (postValidation.isComplete) {
       // All documents generated successfully - mark as fulfilled
-      await supabase
-        .from('orders')
-        .update({
+      await safeUpdateOrderWithMetadata(
+        supabase,
+        orderId,
+        {
           fulfillment_status: 'fulfilled',
           fulfilled_at: new Date().toISOString(),
-          metadata: {
-            total_documents: postValidation.actualCount,
-            expected_documents: postValidation.expectedCount,
-            generated_documents: generatedDocsCount,
-            validation: 'complete',
-          },
-        })
-        .eq('id', orderId);
+        },
+        {
+          total_documents: postValidation.actualCount,
+          expected_documents: postValidation.expectedCount,
+          generated_documents: generatedDocsCount,
+          validation: 'complete',
+        }
+      );
 
       // Sync case status to 'completed' (idempotent)
       await supabase
@@ -588,20 +591,19 @@ export async function fulfillOrder({
           `  Missing: ${postValidation.missingKeys.join(', ')}`
       );
 
-      await supabase
-        .from('orders')
-        .update({
-          fulfillment_status: 'processing', // Keep as processing for retry
-          metadata: {
-            total_documents: postValidation.actualCount,
-            expected_documents: postValidation.expectedCount,
-            generated_documents: generatedDocsCount,
-            validation: 'incomplete',
-            missing_keys: postValidation.missingKeys,
-            last_attempt: new Date().toISOString(),
-          },
-        })
-        .eq('id', orderId);
+      await safeUpdateOrderWithMetadata(
+        supabase,
+        orderId,
+        { fulfillment_status: 'processing' }, // Keep as processing for retry
+        {
+          total_documents: postValidation.actualCount,
+          expected_documents: postValidation.expectedCount,
+          generated_documents: generatedDocsCount,
+          validation: 'incomplete',
+          missing_keys: postValidation.missingKeys,
+          last_attempt: new Date().toISOString(),
+        }
+      );
 
       return {
         status: 'incomplete',
@@ -656,23 +658,22 @@ export async function fulfillOrder({
         hasArrears
       );
 
-      await supabase
-        .from('orders')
-        .update({
-          fulfillment_status: 'requires_action',
-          metadata: {
-            total_documents: postErrorValidation.actualCount,
-            expected_documents: postErrorValidation.expectedCount,
-            generated_documents: generatedDocsCount,
-            validation: 'requires_action',
-            section21_blockers: blockers.map((b: any) => b.code),
-            required_actions: requiredActions,
-            blocked_documents: blockedDocuments,
-            last_attempt: new Date().toISOString(),
-            error: error.message,
-          },
-        })
-        .eq('id', orderId);
+      await safeUpdateOrderWithMetadata(
+        supabase,
+        orderId,
+        { fulfillment_status: 'requires_action' },
+        {
+          total_documents: postErrorValidation.actualCount,
+          expected_documents: postErrorValidation.expectedCount,
+          generated_documents: generatedDocsCount,
+          validation: 'requires_action',
+          section21_blockers: blockers.map((b: any) => b.code),
+          required_actions: requiredActions,
+          blocked_documents: blockedDocuments,
+          last_attempt: new Date().toISOString(),
+          error: error.message,
+        }
+      );
 
       // Update case status to indicate action required
       await supabase
@@ -696,16 +697,15 @@ export async function fulfillOrder({
     // Generation failed - mark as processing (not failed) so it can be retried
     console.error(`[fulfillment] Generation error for order ${orderId}:`, error);
 
-    await supabase
-      .from('orders')
-      .update({
-        fulfillment_status: 'processing',
-        metadata: {
-          error: error.message,
-          last_attempt: new Date().toISOString(),
-        },
-      })
-      .eq('id', orderId);
+    await safeUpdateOrderWithMetadata(
+      supabase,
+      orderId,
+      { fulfillment_status: 'processing' },
+      {
+        error: error.message,
+        last_attempt: new Date().toISOString(),
+      }
+    );
 
     throw error;
   }
