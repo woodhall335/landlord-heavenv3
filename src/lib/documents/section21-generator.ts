@@ -7,6 +7,9 @@
  * This generator will throw an error if called for non-England jurisdictions.
  *
  * Form 6A is used for most assured shorthold tenancies.
+ *
+ * CRITICAL: This generator enforces statutory preconditions via validateSection21Preconditions().
+ * If any precondition is missing/unknown, generation is BLOCKED with explicit errors.
  */
 
 import { generateDocument, GeneratedDocument } from './generator';
@@ -24,6 +27,11 @@ import {
   resolveServiceMethod,
   logResolvedDateParams,
 } from './section21-payload-normalizer';
+import {
+  validateSection21Preconditions,
+  assertSection21Preconditions,
+  type Section21ValidationResult,
+} from '@/lib/validators/section21-preconditions';
 
 // ============================================================================
 // TYPES
@@ -81,10 +89,15 @@ export interface Section21NoticeData {
 
 /**
  * Generate a Section 21 notice (Form 6A)
+ *
+ * @param data - Section 21 notice data
+ * @param isPreview - If true, skip blocking validation (allows partial preview)
+ * @param options - Additional options for generation
  */
 export async function generateSection21Notice(
   data: Section21NoticeData,
-  isPreview = false
+  isPreview = false,
+  options?: { caseId?: string }
 ): Promise<GeneratedDocument> {
   // Validate required fields
   if (!data.landlord_full_name) {
@@ -104,6 +117,56 @@ export async function generateSection21Notice(
   }
 
   // =============================================================================
+  // CRITICAL: STATUTORY PRECONDITION VALIDATION (Jan 2026 Audit)
+  // =============================================================================
+  // Before generating ANY Section 21 notice, we MUST validate all statutory
+  // preconditions. If any are missing/unknown, generation is BLOCKED.
+  //
+  // This is the HARD GATE - no placeholders, no partial compliance assertions.
+  // The validator checks: deposit protection, prescribed info, gas cert, EPC,
+  // How to Rent, licensing, and retaliatory eviction bar.
+  // =============================================================================
+  const serviceDate = data.service_date || new Date().toISOString().split('T')[0];
+
+  // Build validation input from Section21NoticeData
+  const validationInput = {
+    deposit_taken: data.deposit_amount != null && data.deposit_amount > 0,
+    deposit_amount: data.deposit_amount,
+    deposit_protected: data.deposit_protected,
+    deposit_scheme: data.deposit_scheme,
+    prescribed_info_given: data.prescribed_info_given,
+    has_gas_appliances: data.gas_certificate_provided !== undefined, // If provided is defined, we assume gas is present
+    gas_certificate_provided: data.gas_certificate_provided,
+    epc_provided: data.epc_provided,
+    epc_rating: data.epc_rating,
+    how_to_rent_provided: data.how_to_rent_provided,
+    tenancy_start_date: data.tenancy_start_date,
+    service_date: serviceDate,
+    // These need to be passed in from wizard facts if available
+    licensing_required: (data as any).licensing_required,
+    has_valid_licence: (data as any).has_valid_licence,
+    improvement_notice_served: (data as any).improvement_notice_served,
+    no_retaliatory_notice: (data as any).no_retaliatory_notice,
+  };
+
+  // RUN THE HARD GATE: Throws if any blockers exist
+  if (!isPreview) {
+    // In preview mode, we skip blocking validation to allow users to see partial output
+    // In final generation mode, we enforce all preconditions
+    assertSection21Preconditions(validationInput);
+  } else {
+    // Even in preview mode, log the validation result for debugging
+    const previewValidation = validateSection21Preconditions(validationInput);
+    if (!previewValidation.ok) {
+      console.warn(
+        '[S21 Generator PREVIEW] Precondition validation would fail:',
+        previewValidation.summary,
+        previewValidation.blockers.map((b) => b.code).join(', ')
+      );
+    }
+  }
+
+  // =============================================================================
   // SECTION 21 EXPIRY DATE: ALWAYS AUTO-CALCULATED (Jan 2026 Fix)
   // =============================================================================
   // For Section 21 notices, the expiry date MUST be computed server-side using
@@ -120,7 +183,7 @@ export async function generateSection21Notice(
   // - 2 calendar months minimum notice
   // - Periodic tenancy alignment
   // =============================================================================
-  const serviceDate = data.service_date || new Date().toISOString().split('T')[0];
+  // NOTE: serviceDate already defined above in precondition validation section
 
   const dateParams: Section21DateParams = {
     service_date: serviceDate,
@@ -262,11 +325,21 @@ export async function generateSection21Notice(
     templateData.is_landlord_serving = true;
   }
 
+  // Build debug stamp if case ID is provided (for tracing generation source)
+  const debugStamp = options?.caseId
+    ? {
+        generatorName: 'section21-generator.ts',
+        caseId: options.caseId,
+        additionalTemplates: [],
+      }
+    : undefined;
+
   return generateDocument({
     templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
     data: templateData,
     isPreview,
     outputFormat: 'both',
+    debugStamp,
   });
 }
 
@@ -465,6 +538,43 @@ export function mapWizardToSection21Data(
 
     // Help information
     council_phone: wizardFacts.council_phone,
+
+    // ==========================================================================
+    // LICENSING & RETALIATORY EVICTION (Jan 2026 Audit)
+    // These fields are needed for validateSection21Preconditions()
+    // ==========================================================================
+    // Licensing
+    licensing_required: wizardFacts.licensing_required,
+    has_valid_licence:
+      wizardFacts.has_valid_licence === true ||
+      wizardFacts.has_valid_licence === 'yes',
+
+    // Retaliatory eviction
+    no_retaliatory_notice:
+      wizardFacts.no_retaliatory_notice === true ||
+      wizardFacts.no_retaliatory_notice === 'yes',
+    improvement_notice_served:
+      wizardFacts.improvement_notice_served === true ||
+      wizardFacts.improvement_notice_served === 'yes',
+    tenant_complaint_made:
+      wizardFacts.tenant_complaint_made === true ||
+      wizardFacts.tenant_complaint_made === 'yes',
+    council_involvement:
+      wizardFacts.council_involvement === true ||
+      wizardFacts.council_involvement === 'yes',
+
+    // Has gas appliances (needed for validation logic)
+    has_gas_appliances:
+      wizardFacts.has_gas_appliances === true ||
+      wizardFacts.has_gas_appliances === 'yes',
+  } as Section21NoticeData & {
+    licensing_required?: string;
+    has_valid_licence?: boolean;
+    no_retaliatory_notice?: boolean;
+    improvement_notice_served?: boolean;
+    tenant_complaint_made?: boolean;
+    council_involvement?: boolean;
+    has_gas_appliances?: boolean;
   };
 }
 

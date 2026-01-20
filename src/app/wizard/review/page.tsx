@@ -42,6 +42,9 @@ import {
 } from '@/lib/grounds/evidence-suggestions';
 import { saveCaseFacts } from '@/lib/wizard/facts-client';
 
+// Section 21 precondition validation
+import { validateSection21Preconditions } from '@/lib/validators/section21-preconditions';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -1833,59 +1836,154 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Section 21 Compliance Checklist */}
-      {isSection21 && !isWales && !isScotland && (
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-2">Section 21 Compliance Checklist</h2>
-          <p className="text-gray-600 text-sm mb-4">
-            A Section 21 notice is only valid if ALL requirements are met:
-          </p>
-          <div className="space-y-3">
-            {[
-              {
-                label: 'Deposit protected in government scheme within 30 days',
-                failed: complianceIssues.some((i) => i.toLowerCase().includes('deposit')),
-              },
-              {
-                label: 'Prescribed information given to tenant',
-                failed: complianceIssues.some((i) => i.toLowerCase().includes('prescribed')),
-              },
-              {
-                label: 'Valid EPC provided to tenant',
-                failed: complianceIssues.some((i) => i.toLowerCase().includes('epc')),
-              },
-              {
-                label: '"How to Rent" guide provided',
-                failed: complianceIssues.some((i) => i.toLowerCase().includes('how to rent')),
-                show: jurisdiction === 'england',
-              },
-              {
-                label: 'Gas safety certificate provided (if applicable)',
-                failed: complianceIssues.some((i) => i.toLowerCase().includes('gas')),
-              },
-            ]
-              .filter((item) => item.show !== false)
-              .map((item, index) => (
+      {/* Section 21 Compliance Checklist - Enhanced with Precondition Validation */}
+      {isSection21 && !isWales && !isScotland && (() => {
+        // Run the full Section 21 precondition validation
+        const s21Validation = validateSection21Preconditions({
+          deposit_taken: caseFacts?.deposit_taken,
+          deposit_amount: caseFacts?.deposit_amount,
+          deposit_protected: caseFacts?.deposit_protected,
+          prescribed_info_served: caseFacts?.prescribed_info_served,
+          has_gas_appliances: caseFacts?.has_gas_appliances,
+          gas_safety_cert_served: caseFacts?.gas_safety_cert_served,
+          epc_served: caseFacts?.epc_served,
+          epc_rating: caseFacts?.epc_rating,
+          how_to_rent_served: caseFacts?.how_to_rent_served,
+          licensing_required: caseFacts?.licensing_required,
+          has_valid_licence: caseFacts?.has_valid_licence,
+          no_retaliatory_notice: caseFacts?.no_retaliatory_notice,
+          improvement_notice_served: caseFacts?.improvement_notice_served,
+          tenancy_start_date: caseFacts?.tenancy_start_date,
+          service_date: caseFacts?.notice_served_date || caseFacts?.intended_service_date,
+        });
+
+        const hasBlockers = s21Validation.blockers.length > 0;
+
+        return (
+          <Card className={`p-6 ${hasBlockers ? 'border-red-300 bg-red-50' : ''}`}>
+            <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+              {hasBlockers ? (
+                <RiCloseLine className="w-5 h-5 text-red-600" />
+              ) : (
+                <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
+              )}
+              Section 21 Statutory Preconditions
+            </h2>
+            <p className="text-gray-600 text-sm mb-4">
+              {hasBlockers
+                ? 'Section 21 notice generation is BLOCKED because of missing statutory requirements:'
+                : 'All statutory preconditions verified. Section 21 notice can be generated.'}
+            </p>
+
+            {/* Show blockers if any */}
+            {hasBlockers && (
+              <div className="space-y-3 mb-4">
+                {s21Validation.blockers.map((blocker, index) => (
+                  <div key={index} className="flex items-start gap-3 p-4 bg-white rounded border border-red-200">
+                    <span className="text-red-500 mt-0.5">✕</span>
+                    <div className="flex-1">
+                      <p className="font-medium text-red-900">{blocker.code.replace('S21_', '').replace(/_/g, ' ')}</p>
+                      <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
+                      {blocker.legalBasis && (
+                        <p className="text-xs text-red-500 mt-1">
+                          Legal basis: {blocker.legalBasis}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Always show checklist */}
+            <div className="space-y-3">
+              {[
+                {
+                  label: 'Deposit protected in approved scheme',
+                  passed: caseFacts?.deposit_taken !== true || caseFacts?.deposit_protected === true,
+                  notApplicable: caseFacts?.deposit_taken !== true,
+                },
+                {
+                  label: 'Prescribed information given to tenant',
+                  passed: caseFacts?.deposit_taken !== true || caseFacts?.prescribed_info_served === true,
+                  notApplicable: caseFacts?.deposit_taken !== true,
+                },
+                {
+                  label: 'Gas Safety Certificate provided',
+                  passed: caseFacts?.has_gas_appliances !== true || caseFacts?.gas_safety_cert_served === true,
+                  notApplicable: caseFacts?.has_gas_appliances !== true,
+                },
+                {
+                  label: 'Energy Performance Certificate (EPC) provided',
+                  passed: caseFacts?.epc_served === true,
+                  notApplicable: false,
+                },
+                {
+                  label: 'How to Rent guide provided',
+                  passed: caseFacts?.how_to_rent_served === true,
+                  notApplicable: false,
+                },
+                {
+                  label: 'Property licensing compliance (if required)',
+                  passed: !caseFacts?.licensing_required || caseFacts?.licensing_required === 'not_required' || caseFacts?.has_valid_licence === true,
+                  notApplicable: !caseFacts?.licensing_required || caseFacts?.licensing_required === 'not_required',
+                },
+                {
+                  label: 'No retaliatory eviction bar in effect',
+                  passed: caseFacts?.improvement_notice_served !== true,
+                  notApplicable: false,
+                },
+              ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  {item.failed ? (
-                    <span className="text-red-500 text-xl">✕</span>
-                  ) : (
+                  {item.notApplicable ? (
+                    <span className="text-gray-400 text-xl">—</span>
+                  ) : item.passed ? (
                     <span className="text-green-500 text-xl">✓</span>
+                  ) : (
+                    <span className="text-red-500 text-xl">✕</span>
                   )}
-                  <span className={item.failed ? 'text-red-700 font-medium' : 'text-gray-700'}>
+                  <span className={
+                    item.notApplicable
+                      ? 'text-gray-400'
+                      : item.passed
+                      ? 'text-gray-700'
+                      : 'text-red-700 font-medium'
+                  }>
                     {item.label}
+                    {item.notApplicable && ' (not applicable)'}
                   </span>
                 </div>
               ))}
-          </div>
-          {hasComplianceIssues && (
-            <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
-              <strong>Warning:</strong> If any requirements are not met, your Section 21 notice
-              will be invalid and the court will not grant possession.
             </div>
-          )}
-        </Card>
-      )}
+
+            {/* Show warnings if any */}
+            {s21Validation.warnings.length > 0 && (
+              <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded">
+                <h4 className="font-medium text-amber-900 mb-2">Warnings</h4>
+                <ul className="space-y-2">
+                  {s21Validation.warnings.map((warning, index) => (
+                    <li key={index} className="text-sm text-amber-800">
+                      • {warning.message}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Critical blocking message */}
+            {hasBlockers && (
+              <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded text-sm">
+                <p className="text-red-900 font-medium">
+                  Generation Blocked: These statutory requirements MUST be satisfied before a valid Section 21 notice can be served.
+                </p>
+                <p className="text-red-700 mt-2">
+                  If you cannot satisfy these requirements, consider using Section 8 (grounds-based eviction) instead.
+                </p>
+              </div>
+            )}
+          </Card>
+        );
+      })()}
 
       {/* Section 8 Grounds - Selected vs Recommended (NEW IMPLEMENTATION) */}
       {isSection8 && (
