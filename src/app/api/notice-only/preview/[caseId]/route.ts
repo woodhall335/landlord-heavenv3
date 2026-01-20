@@ -1392,6 +1392,40 @@ export async function GET(
 
     console.error('[NOTICE-PREVIEW-API] Error:', err);
 
+    // Check if this is a WinAnsi encoding error (e.g., Unicode characters in PDF text)
+    const errorMessage = err?.message || '';
+    const isEncodingError =
+      errorMessage.includes('WinAnsi') ||
+      errorMessage.includes('encodeTextAsGlyphs') ||
+      errorMessage.includes('encodeUnicodeCodePoint') ||
+      err?.code === 'PDF_TEXT_ENCODING_ERROR';
+
+    if (isEncodingError) {
+      // Return 422 for encoding errors - these are client-fixable issues
+      return NextResponse.json(
+        {
+          code: 'PDF_TEXT_ENCODING_ERROR',
+          error: 'PDF generation failed due to unsupported characters',
+          user_message:
+            'The document contains characters that cannot be rendered in PDF format. ' +
+            'Please remove special symbols, emojis, or unusual punctuation from your input.',
+          hint: 'Common issues: warning symbols, emojis, smart quotes, or special Unicode characters.',
+          caseId: caseId || 'unknown',
+          jurisdiction,
+          route: selected_route,
+          blocking_issues: [
+            {
+              code: 'PDF_TEXT_ENCODING_ERROR',
+              fields: [],
+              user_fix_hint: 'Remove special characters from your input data and try again.',
+            },
+          ],
+          warnings: [],
+        },
+        { status: 422 }
+      );
+    }
+
     // Build structured JSON error response
     const errorResponse: Record<string, any> = {
       error: true,

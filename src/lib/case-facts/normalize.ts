@@ -2265,8 +2265,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'eviction',
         'meta',
         'case_health',
-        'notice',           // CaseFacts.notice (NoticeFacts)
-        'service_contact',  // CaseFacts.service_contact (ServiceContactFacts)
+        'notice',             // CaseFacts.notice (NoticeFacts)
+        'service_contact',    // CaseFacts.service_contact (ServiceContactFacts)
+        'scotland_pre_action', // Scotland-specific pre-action protocol facts
       ];
 
       if (knownStructures.includes(key)) {
