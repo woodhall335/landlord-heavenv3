@@ -134,6 +134,24 @@ questions:
       - notice_service_method
 
   # ============================================================
+  # NOTICE SERVICE METHOD DETAIL (Required when "other" selected)
+  # For N5B field 10a - must describe the service method used
+  # ============================================================
+  - id: notice_service_method_detail
+    section: Notice Service
+    question: "Please describe how the notice was served"
+    inputType: textarea
+    dependsOn:
+      questionId: notice_service_method
+      value: "other"
+    helperText: "Provide details of the service method used. This will appear on court forms (N5B field 10a)."
+    placeholder: "e.g., Served via process server on [date]"
+    validation:
+      required: true
+    maps_to:
+      - notice_service_method_detail
+
+  # ============================================================
   # RENT DETAILS (COMMON FOR BOTH ROUTES)
   # ============================================================
 
@@ -499,6 +517,70 @@ questions:
       assertMessage: "Section 21 cannot be used if the property requires a licence but does not have one. Apply for a licence or use Section 8 instead."
     maps_to:
       - has_valid_licence
+
+  # ============================================================
+  # RETALIATORY EVICTION BAR (Deregulation Act 2015, s.33)
+  # Section 21 is INVALID if local authority has issued:
+  # - Improvement notice (Housing Act 2004, s.11)
+  # - Emergency remedial action notice (Housing Act 2004, s.40)
+  # ============================================================
+  - id: improvement_notice_served
+    section: Section 21 Compliance
+    question: "Has the local authority served an improvement notice on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has served an improvement notice under Housing Act 2004 (s.11), you CANNOT serve a valid Section 21 notice for 6 months. This is the 'retaliatory eviction' protection."
+    validation:
+      required: true
+      # Block if YES - improvement notice blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while an improvement notice is in effect. Wait 6 months after compliance, or use Section 8 if grounds exist."
+    maps_to:
+      - improvement_notice_served
+
+  - id: emergency_remedial_action
+    section: Section 21 Compliance
+    question: "Has the local authority taken emergency remedial action on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has taken emergency remedial action under Housing Act 2004 (s.40), you CANNOT serve a valid Section 21 notice for 6 months."
+    validation:
+      required: true
+      # Block if YES - emergency action blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while emergency remedial action is in effect. Wait 6 months, or use Section 8 if grounds exist."
+    maps_to:
+      - emergency_remedial_action
+
+  # ============================================================
+  # PROHIBITED FEES CONFIRMATION (Tenant Fees Act 2019)
+  # Section 21 may be invalid if prohibited fees charged
+  # ============================================================
+  - id: no_prohibited_fees_confirmed
+    section: Section 21 Compliance
+    question: "Do you confirm no prohibited fees have been charged to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Under the Tenant Fees Act 2019 (s.13), a Section 21 notice cannot be given while the tenant is owed a prohibited payment. Prohibited fees include admin fees, check-out fees, and excessive deposits."
+    validation:
+      required: true
+      # Block if NO - prohibited fees block Section 21
+      assertValue: true
+      assertMessage: "Section 21 cannot be used if prohibited fees have been charged and not refunded. Refund any prohibited fees before serving notice."
+    maps_to:
+      - no_prohibited_fees_confirmed
 
   - id: deposit_details
     section: Deposit Information

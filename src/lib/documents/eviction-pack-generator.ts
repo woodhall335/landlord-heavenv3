@@ -1065,61 +1065,68 @@ async function generateEnglandOrWalesEvictionPack(
     });
   }
 
-  // 3. N5 Claim Form
-  // CRITICAL: Pass jurisdiction to select correct Wales/England forms
-  const service = buildServiceContact({ ...evictionCase, ...caseData });
+  // =========================================================================
+  // SECTION 21 ROUTE LOCK: N5 and N119 are ONLY for Section 8 (fault-based)
+  // Section 21 uses accelerated possession (N5B) - no N5/N119 needed
+  // This enforces the route-to-document mapping from pack-contents.ts
+  // =========================================================================
+  if (evictionCase.grounds.length > 0) {
+    // 3. N5 Claim Form (Section 8 only)
+    // CRITICAL: Pass jurisdiction to select correct Wales/England forms
+    const service = buildServiceContact({ ...evictionCase, ...caseData });
 
-  const enrichedCaseData: CaseData = {
-    ...caseData,
-    jurisdiction, // Ensures Wales uses N5_WALES/N119_WALES forms, England uses n5-eng/n119-eng
-    landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
-    landlord_address: caseData.landlord_address || evictionCase.landlord_address,
-    landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
-    landlord_phone: caseData.landlord_phone || evictionCase.landlord_phone,
-    landlord_email: caseData.landlord_email || evictionCase.landlord_email,
-    tenant_full_name: caseData.tenant_full_name || evictionCase.tenant_full_name,
-    property_address: caseData.property_address || evictionCase.property_address,
-    property_postcode: caseData.property_postcode || evictionCase.property_address_postcode,
-    tenancy_start_date: caseData.tenancy_start_date || evictionCase.tenancy_start_date,
-    rent_amount: caseData.rent_amount ?? evictionCase.rent_amount,
-    rent_frequency: caseData.rent_frequency || evictionCase.rent_frequency,
-    signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
-    signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
-    court_name: caseData.court_name || evictionCase.court_name || 'County Court',
-    notice_served_date:
-      caseData.notice_served_date ||
-      caseData.section_8_notice_date ||
-      caseData.section_21_notice_date ||
-      evictionCase['notice_date'],
-    service_address_line1: service.service_address_line1,
-    service_address_line2: service.service_address_line2,
-    service_address_town: service.service_address_town,
-    service_address_county: service.service_address_county,
-    service_postcode: service.service_postcode,
-    service_phone: service.service_phone,
-    service_email: service.service_email,
-  };
+    const enrichedCaseData: CaseData = {
+      ...caseData,
+      jurisdiction, // Ensures Wales uses N5_WALES/N119_WALES forms, England uses n5-eng/n119-eng
+      landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
+      landlord_address: caseData.landlord_address || evictionCase.landlord_address,
+      landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
+      landlord_phone: caseData.landlord_phone || evictionCase.landlord_phone,
+      landlord_email: caseData.landlord_email || evictionCase.landlord_email,
+      tenant_full_name: caseData.tenant_full_name || evictionCase.tenant_full_name,
+      property_address: caseData.property_address || evictionCase.property_address,
+      property_postcode: caseData.property_postcode || evictionCase.property_address_postcode,
+      tenancy_start_date: caseData.tenancy_start_date || evictionCase.tenancy_start_date,
+      rent_amount: caseData.rent_amount ?? evictionCase.rent_amount,
+      rent_frequency: caseData.rent_frequency || evictionCase.rent_frequency,
+      signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
+      signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
+      court_name: caseData.court_name || evictionCase.court_name || 'County Court',
+      notice_served_date:
+        caseData.notice_served_date ||
+        caseData.section_8_notice_date ||
+        caseData.section_21_notice_date ||
+        evictionCase['notice_date'],
+      service_address_line1: service.service_address_line1,
+      service_address_line2: service.service_address_line2,
+      service_address_town: service.service_address_town,
+      service_address_county: service.service_address_county,
+      service_postcode: service.service_postcode,
+      service_phone: service.service_phone,
+      service_email: service.service_email,
+    };
 
-  const n5Pdf = await fillN5Form(enrichedCaseData);
-  documents.push({
-    title: 'Form N5 - Claim for Possession',
-    description: 'Official court claim form for possession proceedings',
-    category: 'court_form',
-    document_type: 'n5_claim',
-    pdf: Buffer.from(n5Pdf),
-    file_name: 'n5_claim_for_possession.pdf',
-  });
+    const n5Pdf = await fillN5Form(enrichedCaseData);
+    documents.push({
+      title: 'Form N5 - Claim for Possession',
+      description: 'Official court claim form for possession proceedings',
+      category: 'court_form',
+      document_type: 'n5_claim',
+      pdf: Buffer.from(n5Pdf),
+      file_name: 'n5_claim_for_possession.pdf',
+    });
 
-  // 4. N119 Particulars of Claim
-  const n119Pdf = await fillN119Form(enrichedCaseData);
-  documents.push({
-    title: 'Form N119 - Particulars of Claim',
-    description: 'Detailed particulars supporting your possession claim',
-    category: 'court_form',
-    document_type: 'n119_particulars',
-    pdf: Buffer.from(n119Pdf),
-    file_name: 'n119_particulars_of_claim.pdf',
-  });
+    // 4. N119 Particulars of Claim (Section 8 only)
+    const n119Pdf = await fillN119Form(enrichedCaseData);
+    documents.push({
+      title: 'Form N119 - Particulars of Claim',
+      description: 'Detailed particulars supporting your possession claim',
+      category: 'court_form',
+      document_type: 'n119_particulars',
+      pdf: Buffer.from(n119Pdf),
+      file_name: 'n119_particulars_of_claim.pdf',
+    });
+  }
 
   return documents;
 }

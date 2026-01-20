@@ -1590,20 +1590,38 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // SMART REVIEW: Update warnings from backend response (complete_pack only)
       // ====================================================================================
       // Smart Review runs after evidence uploads for complete_pack/eviction_pack (all jurisdictions)
-      if (data.smart_review && product === 'complete_pack') {
-        const sr = data.smart_review;
-        setSmartReviewWarnings(sr.warnings || []);
-        if (sr.summary) {
+      // FIX: Also consume smart_review_warnings as fallback when smart_review object is missing
+      if (product === 'complete_pack') {
+        // Primary source: data.smart_review object
+        if (data.smart_review) {
+          const sr = data.smart_review;
+          setSmartReviewWarnings(sr.warnings || []);
+          if (sr.summary) {
+            setSmartReviewSummary({
+              documentsProcessed: sr.summary.documentsProcessed ?? 0,
+              warningsTotal: sr.summary.warningsTotal ?? 0,
+              warningsBlocker: sr.summary.warningsBlocker ?? 0,
+              warningsWarning: sr.summary.warningsWarning ?? 0,
+              warningsInfo: sr.summary.warningsInfo ?? 0,
+              ranAt: new Date().toISOString(),
+            });
+          }
+          console.log('[SMART-REVIEW-UI] Warnings received from smart_review:', sr.warnings?.length ?? 0);
+        }
+        // Fallback source: data.smart_review_warnings array (top-level convenience field)
+        // This ensures warnings are captured even if the full smart_review object is missing
+        else if (data.smart_review_warnings && Array.isArray(data.smart_review_warnings) && data.smart_review_warnings.length > 0) {
+          setSmartReviewWarnings(data.smart_review_warnings);
           setSmartReviewSummary({
-            documentsProcessed: sr.summary.documentsProcessed ?? 0,
-            warningsTotal: sr.summary.warningsTotal ?? 0,
-            warningsBlocker: sr.summary.warningsBlocker ?? 0,
-            warningsWarning: sr.summary.warningsWarning ?? 0,
-            warningsInfo: sr.summary.warningsInfo ?? 0,
+            documentsProcessed: 0, // Unknown from top-level array
+            warningsTotal: data.smart_review_warnings.length,
+            warningsBlocker: data.smart_review_warnings.filter((w: any) => w.severity === 'blocker').length,
+            warningsWarning: data.smart_review_warnings.filter((w: any) => w.severity === 'warning').length,
+            warningsInfo: data.smart_review_warnings.filter((w: any) => w.severity === 'info').length,
             ranAt: new Date().toISOString(),
           });
+          console.log('[SMART-REVIEW-UI] Warnings received from smart_review_warnings fallback:', data.smart_review_warnings.length);
         }
-        console.log('[SMART-REVIEW-UI] Warnings received:', sr.warnings?.length ?? 0);
       }
 
       // ====================================================================================

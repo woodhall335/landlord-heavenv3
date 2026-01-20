@@ -1,5 +1,9 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  wizardFactsToCaseFacts,
+  resolveNoticeServiceMethod,
+  resolveNoticeServiceMethodDetail,
+} from '@/lib/case-facts/normalize';
 import type { GroundClaim, EvictionCase } from './eviction-pack-generator';
 import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
@@ -297,12 +301,16 @@ function buildCaseData(
     notice_served_date:
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
     // ✅ FIX: Map notice_service_method for N5B form field 10a ("How was the notice served")
-    notice_service_method:
-      wizardFacts.notice_service_method ||
-      wizardFacts.service_method ||
-      wizardFacts['notice_service.service_method'] ||
-      facts.notice.service_method ||
-      undefined,
+    // Uses centralized resolveNoticeServiceMethod() for single source of truth
+    notice_service_method: (() => {
+      const method = resolveNoticeServiceMethod(wizardFacts);
+      if (method === 'other') {
+        // For "other" method, include the detail text
+        const detail = resolveNoticeServiceMethodDetail(wizardFacts);
+        return detail ? `Other: ${detail}` : 'Other method';
+      }
+      return method || facts.notice.service_method || undefined;
+    })(),
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
       wizardFacts.total_arrears ||
