@@ -134,6 +134,24 @@ questions:
       - notice_service_method
 
   # ============================================================
+  # NOTICE SERVICE METHOD DETAIL (Required when "other" selected)
+  # For N5B field 10a - must describe the service method used
+  # ============================================================
+  - id: notice_service_method_detail
+    section: Notice Service
+    question: "Please describe how the notice was served"
+    inputType: textarea
+    dependsOn:
+      questionId: notice_service_method
+      value: "other"
+    helperText: "Provide details of the service method used. This will appear on court forms (N5B field 10a)."
+    placeholder: "e.g., Served via process server on [date]"
+    validation:
+      required: true
+    maps_to:
+      - notice_service_method_detail
+
+  # ============================================================
   # RENT DETAILS (COMMON FOR BOTH ROUTES)
   # ============================================================
 
@@ -300,73 +318,230 @@ questions:
 
   # ============================================================
   # SECTION 21 QUESTIONS (ENGLAND ONLY)
+  # Comprehensive N5B-ready questions with inline validation
   # ============================================================
 
-  - id: section21_compliance
+  # -----------------------------------------------------------
+  # DEPOSIT COMPLIANCE (N5B Questions 12-14)
+  # -----------------------------------------------------------
+  - id: deposit_taken
     section: Section 21 Compliance
-    question: "Section 21 compliance checks"
+    question: "Was a deposit taken for this tenancy?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Includes any deposit for this tenancy or a prior tenancy at the same property."
+    validation:
+      required: true
+    maps_to:
+      - deposit_taken
+
+  - id: deposit_compliance
+    section: Section 21 Compliance
+    question: "Deposit protection compliance"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "CRITICAL: Deposit must be protected within 30 days AND prescribed information served within 30 days. Section 21 is INVALID if these requirements are not met."
+    fields:
+      - id: deposit_amount
+        label: "Deposit amount taken (£)"
+        inputType: number
+        helperText: "The amount of deposit collected from the tenant"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: deposit_protected
+        label: "Is the deposit protected in a government-approved scheme?"
+        inputType: yes_no
+        helperText: "Must be protected in DPS, MyDeposits, or TDS within 30 days of receipt"
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if deposit is not protected. Protect the deposit first or use Section 8."
+        width: half
+      - id: deposit_protected_within_30_days
+        label: "Was the deposit protected within 30 days of receipt?"
+        inputType: yes_no
+        helperText: "The 30-day deadline runs from when you received the deposit, not the tenancy start date."
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if deposit was protected late. The deposit must be protected within 30 days of receipt."
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "Date shown on your deposit protection certificate"
+        validation:
+          required: true
+        width: half
+      - id: prescribed_info_served
+        label: "Was the prescribed information served on the tenant?"
+        inputType: yes_no
+        helperText: "Prescribed info must be served within 30 days of protecting the deposit."
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if prescribed information was not served within 30 days of deposit protection."
+        width: half
+      - id: prescribed_info_date
+        label: "Date prescribed info was served"
+        inputType: date
+        helperText: "Must be within 30 days of deposit protection"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - deposit_amount
+      - deposit_protected
+      - deposit_protected_within_30_days
+      - deposit_protection_date
+      - section21.prescribed_info_served
+      - section21.prescribed_info_date
+
+  - id: deposit_returned
+    section: Section 21 Compliance
+    question: "Has the deposit been returned to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "For N5B question 13. If the deposit has been returned, answer YES."
+    validation:
+      required: true
+    maps_to:
+      - deposit_returned
+
+  # -----------------------------------------------------------
+  # DEPOSIT CAP VALIDATION (Tenant Fees Act 2019)
+  # Maximum: 5 weeks rent (<£50k annual) or 6 weeks (>£50k annual)
+  # The system AUTOMATICALLY calculates whether deposit exceeds cap
+  # based on rent_amount, rent_frequency, and deposit_amount.
+  # This confirmation is only needed if the deposit was OVER the cap
+  # and has since been reduced/refunded.
+  # -----------------------------------------------------------
+  - id: deposit_cap_info
+    section: Section 21 Compliance
+    question: "Deposit cap (Tenant Fees Act 2019)"
+    inputType: info
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "Under Tenant Fees Act 2019, the deposit cannot exceed 5 weeks rent (or 6 weeks if annual rent is £50,000+). The system will automatically check this based on your rent and deposit amounts."
+
+  - id: deposit_reduced_to_legal_cap_confirmed
+    section: Section 21 Compliance
+    question: "If your deposit originally exceeded the legal cap, have you reduced or refunded the excess?"
+    inputType: select
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "If your deposit was over the legal cap when collected, you must refund the excess before using Section 21. Select 'Not applicable' if your deposit was always within the cap."
+    options:
+      - value: "not_applicable"
+        label: "Not applicable - deposit was always within cap"
+      - value: "yes"
+        label: "Yes - I have refunded/reduced to within cap"
+      - value: "no"
+        label: "No - deposit still exceeds cap"
+    validation:
+      required: true
+    maps_to:
+      - deposit_reduced_to_legal_cap_confirmed
+
+  # -----------------------------------------------------------
+  # PRESCRIBED DOCUMENTS (Section 21A Housing Act 1988)
+  # -----------------------------------------------------------
+  - id: how_to_rent_compliance
+    section: Section 21 Compliance
+    question: "'How to Rent' guide compliance"
     inputType: group
     routes:
       - section_21
     dependsOn:
       questionId: eviction_route
       value: "section_21"
-    helperText: "All must be YES to use Section 21."
+    helperText: "The current 'How to Rent' guide must be provided to tenants at the start of each new tenancy (since 1 October 2015)."
     fields:
-      - id: deposit_protected
-        label: "Deposit protected within 30 days?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: prescribed_info_served
-        label: "Prescribed information served?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: prescribed_info_date
-        label: "Date prescribed info served (optional)"
-        inputType: date
-        helperText: "For compliance audit - must be within 30 days of deposit protection"
-        width: half
       - id: how_to_rent_served
-        label: "'How to Rent' guide served?"
+        label: "Was the 'How to Rent' guide provided to the tenant?"
         inputType: yes_no
         validation:
           required: true
-        width: half
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if the How to Rent guide was not provided. Provide it now (but note this may not cure the defect for existing tenancies)."
+        width: full
       - id: how_to_rent_date
-        label: "Date How to Rent served (optional)"
+        label: "Date How to Rent was provided"
         inputType: date
-        helperText: "For compliance audit records"
-        width: half
-      - id: epc_served
-        label: "EPC served to tenant?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: epc_certificate_date
-        label: "EPC certificate date (optional)"
-        inputType: date
-        helperText: "Date on the EPC certificate - must be valid (within 10 years)"
-        width: half
-      - id: no_retaliatory_notice
-        label: "No retaliatory eviction (6 months after complaint)?"
-        inputType: yes_no
-        validation:
-          required: true
+        helperText: "Must be the version current at the date provided"
         width: half
     maps_to:
-      - section21.deposit_protected
-      - section21.prescribed_info_served
-      - section21.prescribed_info_date
       - section21.how_to_rent_served
       - section21.how_to_rent_date
+
+  - id: epc_compliance
+    section: Section 21 Compliance
+    question: "Energy Performance Certificate (EPC) compliance"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "A valid EPC must be provided to tenants before they move in. EPCs are valid for 10 years."
+    fields:
+      - id: epc_served
+        label: "Was a valid EPC provided to the tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if EPC was not provided. Obtain and provide an EPC first."
+        width: full
+      - id: epc_certificate_date
+        label: "EPC certificate date"
+        inputType: date
+        helperText: "Date on the EPC - must be valid (within 10 years)"
+        width: half
+      - id: epc_rating
+        label: "EPC rating (A-G)"
+        inputType: select
+        options:
+          - value: "A"
+            label: "A"
+          - value: "B"
+            label: "B"
+          - value: "C"
+            label: "C"
+          - value: "D"
+            label: "D"
+          - value: "E"
+            label: "E"
+          - value: "F"
+            label: "F (may need improvement)"
+          - value: "G"
+            label: "G (may need improvement)"
+        helperText: "Minimum EPC rating E required for letting (unless exempt)"
+        width: half
+    maps_to:
       - section21.epc_served
       - section21.epc_certificate_date
-      - section21.no_retaliatory_notice
+      - section21.epc_rating
 
   # ============================================================
   # GAS APPLIANCES (Phase 3.3: Conditional gas cert requirement)
@@ -500,47 +675,169 @@ questions:
     maps_to:
       - has_valid_licence
 
-  - id: deposit_details
-    section: Deposit Information
-    question: "Deposit protection details"
+  # ============================================================
+  # RETALIATORY EVICTION BAR (Deregulation Act 2015, s.33)
+  # Section 21 is INVALID if local authority has issued:
+  # - Improvement notice (Housing Act 2004, s.11)
+  # - Emergency remedial action notice (Housing Act 2004, s.40)
+  # ============================================================
+  - id: improvement_notice_served
+    section: Section 21 Compliance
+    question: "Has the local authority served an improvement notice on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has served an improvement notice under Housing Act 2004 (s.11), you CANNOT serve a valid Section 21 notice for 6 months. This is the 'retaliatory eviction' protection."
+    validation:
+      required: true
+      # Block if YES - improvement notice blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while an improvement notice is in effect. Wait 6 months after compliance, or use Section 8 if grounds exist."
+    maps_to:
+      - improvement_notice_served
+
+  - id: emergency_remedial_action
+    section: Section 21 Compliance
+    question: "Has the local authority taken emergency remedial action on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has taken emergency remedial action under Housing Act 2004 (s.40), you CANNOT serve a valid Section 21 notice for 6 months."
+    validation:
+      required: true
+      # Block if YES - emergency action blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while emergency remedial action is in effect. Wait 6 months, or use Section 8 if grounds exist."
+    maps_to:
+      - emergency_remedial_action
+
+  # ============================================================
+  # PROHIBITED FEES CONFIRMATION (Tenant Fees Act 2019)
+  # Section 21 may be invalid if prohibited fees charged
+  # ============================================================
+  - id: no_prohibited_fees_confirmed
+    section: Section 21 Compliance
+    question: "Do you confirm no prohibited fees have been charged to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Under the Tenant Fees Act 2019 (s.13), a Section 21 notice cannot be given while the tenant is owed a prohibited payment. Prohibited fees include admin fees, check-out fees, and excessive deposits."
+    validation:
+      required: true
+      # Block if NO - prohibited fees block Section 21
+      assertValue: true
+      assertMessage: "Section 21 cannot be used if prohibited fees have been charged and not refunded. Refund any prohibited fees before serving notice."
+    maps_to:
+      - no_prohibited_fees_confirmed
+
+  # -----------------------------------------------------------
+  # 4-MONTH RESTRICTION (Section 21(4B) Housing Act 1988)
+  # Cannot serve Section 21 in first 4 months of tenancy
+  # -----------------------------------------------------------
+  - id: four_month_restriction
+    section: Section 21 Compliance
+    question: "4-month restriction compliance"
     inputType: group
     routes:
       - section_21
     dependsOn:
       questionId: eviction_route
       value: "section_21"
-    helperText: "Required for Form N5B accelerated possession claim."
+    helperText: "CRITICAL: Section 21 notice cannot be served in the first 4 months of a tenancy. The notice is INVALID if served too early."
     fields:
-      - id: deposit_amount
-        label: "Deposit amount (£)"
-        inputType: number
+      - id: tenancy_over_4_months
+        label: "Has the tenancy been running for at least 4 months?"
+        inputType: yes_no
+        helperText: "Count from the tenancy start date. If less than 4 months, you cannot serve Section 21 yet."
         validation:
           required: true
-        width: half
-      - id: deposit_protection_date
-        label: "Date deposit was protected"
-        inputType: date
-        validation:
-          required: true
-        width: half
+          assertValue: true
+          assertMessage: "Section 21 cannot be served in the first 4 months of a tenancy. Wait until 4 months have passed from the tenancy start date."
+        width: full
+    maps_to:
+      - tenancy_over_4_months
+
+  # -----------------------------------------------------------
+  # SUBSEQUENT TENANCY (N5B Question 8)
+  # -----------------------------------------------------------
+  - id: subsequent_tenancy
+    section: Section 21 Compliance
+    question: "Has any subsequent written tenancy agreement been entered into?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "For N5B question 8. If the original tenancy has been renewed or a new agreement signed, answer YES."
+    validation:
+      required: true
+    maps_to:
+      - subsequent_tenancy
+
+  # -----------------------------------------------------------
+  # TENANCY AGREEMENT DATE (N5B Question 7)
+  # This may differ from tenancy start date (Q6)
+  # -----------------------------------------------------------
+  - id: tenancy_agreement_date
+    section: Section 21 Compliance
+    question: "What date is the tenancy agreement dated?"
+    inputType: date
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Question 7: The date shown on the written tenancy agreement. Often the same as tenancy start date, but may differ."
+    validation:
+      required: true
+    maps_to:
+      - tenancy_agreement_date
+
+  # -----------------------------------------------------------
+  # DEPOSIT SCHEME DETAILS (Required for N5B)
+  # -----------------------------------------------------------
+  - id: deposit_scheme_details
+    section: Section 21 Compliance
+    question: "Deposit protection scheme details"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "Specify which scheme protects the deposit. Required for N5B form."
+    fields:
       - id: deposit_scheme_name
-        label: "Deposit protection scheme"
+        label: "Which scheme is the deposit protected with?"
         inputType: select
         options:
-          - "DPS"
-          - "MyDeposits"
-          - "TDS"
+          - value: "DPS"
+            label: "DPS (Deposit Protection Service)"
+          - value: "MyDeposits"
+            label: "MyDeposits"
+          - value: "TDS"
+            label: "TDS (Tenancy Deposit Scheme)"
         validation:
           required: true
         width: half
       - id: deposit_reference
         label: "Deposit reference number"
         inputType: text
-        helperText: "Optional - reference from protection scheme"
+        helperText: "Reference number from the protection scheme"
+        validation:
+          required: true
         width: half
     maps_to:
-      - deposit_amount
-      - deposit_protection_date
       - deposit_scheme_name
       - deposit_reference
 
@@ -848,213 +1145,122 @@ questions:
       - dx_number
 
   # ============================================================
-  # EVIDENCE UPLOADS - CATEGORIZED (Smart Review v1)
+  # DOCUMENT AVAILABILITY CONFIRMATIONS (Trust-Based)
   # ============================================================
-  # These categorized upload fields enable Smart Review AI extraction
-  # and fact comparison. The legacy evidence_uploads field is retained
-  # for backward compatibility - old uploads map to evidence.other_uploads.
+  # These questions confirm the user has the required documents
+  # to attach to their court forms. N5B requires specific attachments.
 
-  - id: evidence_section_header
-    section: Evidence
-    question: "Supporting Documents"
+  - id: document_confirmations_header
+    section: Documents for Court
+    question: "Documents to attach to your court forms"
     inputType: info
-    helperText: "Upload documents to support your case. Smart Review will verify details against your answers."
+    helperText: "You must attach certain documents to your N5B claim form. Confirm you have these available."
 
-  - id: evidence_tenancy_agreement
-    section: Evidence
-    question: "Tenancy Agreement"
-    inputType: group
-    helperText: "Upload the signed tenancy agreement or describe if you don't have it available to upload."
-    fields:
-      - id: tenancy_agreement_upload
-        label: "Upload tenancy agreement"
-        inputType: upload
-        helperText: "Upload the signed tenancy agreement or AST"
-        width: full
-      - id: tenancy_agreement_describe
-        label: "Or describe if not available to upload"
-        inputType: textarea
-        helperText: "If you can't upload, describe the key details: tenancy start date, rent amount, tenant/landlord names as they appear on the agreement"
-        placeholder: "E.g., Fixed term AST dated 01/01/2024, rent £1200/month, between Jane Landlord and John Tenant..."
-        width: full
-    maps_to:
-      - evidence.tenancy_agreement_uploads
-      - evidence.tenancy_agreement_description
-
-  - id: evidence_bank_statements
-    section: Evidence
-    question: "Bank Statements / Rent Records"
-    inputType: group
-    helperText: "Upload bank statements or describe the payment history if not available to upload."
-    routes:
-      - section_8
-    dependsOn:
-      questionId: eviction_route
-      value: "section_8"
-    fields:
-      - id: bank_statements_upload
-        label: "Upload bank statements or rent records"
-        inputType: upload
-        helperText: "Upload bank statements showing rent payments received"
-        width: full
-      - id: bank_statements_describe
-        label: "Or describe payment history"
-        inputType: textarea
-        helperText: "If you can't upload, describe the payment pattern: when payments stopped, any partial payments, last payment date and amount"
-        placeholder: "E.g., Tenant paid regularly until June 2024. Last payment received 01/06/2024 for £1200. No payments since. Tenant made partial payment of £500 on 15/08/2024..."
-        width: full
-    maps_to:
-      - evidence.bank_statements_uploads
-      - evidence.bank_statements_description
-
-  - id: evidence_deposit_protection
-    section: Evidence
-    question: "Deposit Protection Certificate"
-    inputType: upload
-    # P0-D: Canonical evidence category for N5B checkbox truthfulness
-    evidenceCategory: deposit_protection_certificate
-    helperText: "Upload the deposit protection certificate from DPS, MyDeposits, or TDS."
+  - id: document_tenancy_agreement
+    section: Documents for Court
+    question: "Do you have a copy of the tenancy agreement to attach?"
+    inputType: yes_no
+    helperText: "N5B Attachment A: A copy of the written tenancy agreement must be attached."
     validation:
-      required: false
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the tenancy agreement to your N5B form. Locate this document before proceeding."
+    maps_to:
+      - has_tenancy_agreement_copy
+
+  - id: document_section21_notice
+    section: Documents for Court
+    question: "Do you have a copy of the Section 21 notice to attach?"
+    inputType: yes_no
     routes:
       - section_21
     dependsOn:
       questionId: eviction_route
       value: "section_21"
-    maps_to:
-      - evidence.deposit_protection_uploads
-
-  - id: evidence_prescribed_info
-    section: Evidence
-    question: "Prescribed Information Proof"
-    inputType: upload
-    helperText: "Upload proof that prescribed deposit information was served to the tenant within 30 days."
+    helperText: "N5B Attachment B: A copy of the notice served on the tenant (Form 6A) must be attached."
     validation:
-      required: false
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the Section 21 notice to your N5B form."
+    maps_to:
+      - has_section21_notice_copy
+
+  - id: document_proof_of_service
+    section: Documents for Court
+    question: "Do you have proof of service for the notice?"
+    inputType: yes_no
+    helperText: "N5B Attachment B1: Evidence showing when and how the notice was served (e.g., proof of posting, delivery receipt, witness statement)."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You need proof showing when and how the notice was served."
+    maps_to:
+      - has_proof_of_service
+
+  - id: document_deposit_certificate
+    section: Documents for Court
+    question: "Do you have the deposit protection certificate to attach?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "N5B Attachment E: If a deposit was paid, attach the protection certificate from DPS, MyDeposits, or TDS."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach the deposit protection certificate if a deposit was taken."
+    maps_to:
+      - has_deposit_certificate_copy
+
+  - id: document_epc
+    section: Documents for Court
+    question: "Do you have the EPC to attach?"
+    inputType: yes_no
     routes:
       - section_21
     dependsOn:
       questionId: eviction_route
       value: "section_21"
-    maps_to:
-      - evidence.prescribed_info_uploads
-
-  - id: evidence_how_to_rent
-    section: Evidence
-    question: "How to Rent Guide Proof"
-    inputType: upload
-    helperText: "Upload proof the How to Rent guide was provided (email confirmation, signed acknowledgment)."
+    helperText: "N5B Attachment F: Attach a copy of the Energy Performance Certificate."
     validation:
-      required: false
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the EPC to your N5B form."
+    maps_to:
+      - has_epc_copy
+
+  - id: document_gas_safety
+    section: Documents for Court
+    question: "Do you have the Gas Safety Certificate to attach?"
+    inputType: yes_no
     routes:
       - section_21
-    dependsOn:
-      questionId: eviction_route
-      value: "section_21"
-    maps_to:
-      - evidence.how_to_rent_uploads
-
-  - id: evidence_epc
-    section: Evidence
-    question: "Energy Performance Certificate (EPC)"
-    inputType: upload
-    # P0-D: Canonical evidence category for N5B checkbox truthfulness
-    evidenceCategory: epc
-    helperText: "Upload the current Energy Performance Certificate for the property."
-    validation:
-      required: false
-    routes:
-      - section_21
-    dependsOn:
-      questionId: eviction_route
-      value: "section_21"
-    maps_to:
-      - evidence.epc_uploads
-
-  - id: evidence_gas_safety
-    section: Evidence
-    question: "Gas Safety Certificate"
-    inputType: upload
-    # P0-D: Canonical evidence category for N5B checkbox truthfulness
-    evidenceCategory: gas_safety_certificate
-    helperText: "Upload the current Gas Safety Certificate (CP12) for the property."
-    validation:
-      required: false
-    routes:
-      - section_21
-    # Phase 3.3: Only show if property has gas appliances
     dependsOn:
       questionId: has_gas_appliances
       value: true
+    helperText: "N5B Attachment G: If the property has gas appliances, attach a copy of the current Gas Safety Certificate (CP12)."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the Gas Safety Certificate if the property has gas appliances."
     maps_to:
-      - evidence.gas_safety_uploads
+      - has_gas_certificate_copy
 
-  - id: evidence_notice_service
-    section: Evidence
-    question: "Notice Service Proof"
-    inputType: group
-    helperText: "Upload proof of service or describe how you served the notice."
-    fields:
-      - id: notice_service_upload
-        label: "Upload proof of service"
-        inputType: upload
-        helperText: "Upload proof of postage, photo of notice, email confirmation"
-        width: full
-      - id: notice_service_describe
-        label: "Or describe how notice was served"
-        inputType: textarea
-        helperText: "Describe: date/time of service, method used, who was present, any photos taken"
-        placeholder: "E.g., Served by recorded delivery on 15/01/2025. Tracking number: AB123456789GB. Notice addressed to tenant at property address. Proof of delivery obtained 17/01/2025..."
-        width: full
+  # -----------------------------------------------------------
+  # OPTIONAL: Description of notice service for witness statement
+  # -----------------------------------------------------------
+  - id: notice_service_description
+    section: Documents for Court
+    question: "Describe how you served the notice"
+    inputType: textarea
+    helperText: "Provide details for your witness statement: date, time, method, who was present. This strengthens your case."
+    placeholder: "E.g., On 15 January 2025 at 10:30am, I posted the Section 21 notice by recorded delivery to the property address. Tracking number: AB123456789GB. I received confirmation of delivery on 17 January 2025."
+    validation:
+      required: true
     maps_to:
-      - evidence.notice_service_uploads
       - evidence.notice_service_description
-
-  - id: evidence_correspondence
-    section: Evidence
-    question: "Tenant Correspondence"
-    inputType: group
-    helperText: "Upload correspondence or summarize key communications."
-    fields:
-      - id: correspondence_upload
-        label: "Upload correspondence"
-        inputType: upload
-        helperText: "Upload emails, letters, text messages with tenant"
-        width: full
-      - id: correspondence_describe
-        label: "Or summarize key correspondence"
-        inputType: textarea
-        helperText: "Summarize important communications: dates, what was discussed, tenant's responses"
-        placeholder: "E.g., 01/06/2024 - Emailed tenant re: missed rent payment, tenant replied saying would pay next week. 15/06/2024 - Sent formal written warning by post..."
-        width: full
-    maps_to:
-      - evidence.correspondence_uploads
-      - evidence.correspondence_description
-
-  - id: evidence_other
-    section: Evidence
-    question: "Other Supporting Documents"
-    inputType: upload
-    helperText: "Upload any other supporting documents not covered above."
-    validation:
-      required: false
-    maps_to:
-      - evidence.other_uploads
-
-  # Legacy field - retained for backward compatibility
-  # Existing evidence_uploads values map to evidence.other_uploads
-  - id: evidence_uploads
-    section: Evidence
-    question: "Upload supporting documents"
-    inputType: upload
-    helperText: "Tenancy agreement, notice served, deposit certificate, rent statements, etc."
-    validation:
-      required: false
-    deprecated: true
-    deprecated_message: "Use categorized upload fields above for Smart Review support"
-    maps_to:
-      - evidence.pack_documents_uploaded
-      - evidence.other_uploads
 
   # ============================================================
   # PHASE 3: RISK INDICATORS (For Case Risk Assessment)

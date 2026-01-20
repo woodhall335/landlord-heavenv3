@@ -337,6 +337,180 @@ export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
   return null;
 }
 
+// =============================================================================
+// CANONICAL SERVICE METHOD RESOLUTION
+// =============================================================================
+
+/**
+ * Valid service method values for notices.
+ * These are the canonical values that map to N5B field 10a options.
+ */
+export type NoticeServiceMethod =
+  | 'first_class_post'
+  | 'recorded_delivery'
+  | 'hand_delivered'
+  | 'left_at_property'
+  | 'email'
+  | 'other';
+
+/**
+ * Resolves the canonical notice service method from wizard facts.
+ *
+ * This helper provides a single source of truth for how the notice was served,
+ * addressing the mismatch between wizard field IDs and maps_to paths.
+ *
+ * IMPORTANT: If the method is 'other', also call resolveNoticeServiceMethodDetail()
+ * to get the free-text description for N5B field 10a.
+ *
+ * PATHS CHECKED:
+ * - notice_service_method (direct MQS field)
+ * - notice_service.service_method (nested from maps_to)
+ * - service_method (legacy flat key)
+ * - section21.service_method (Section 21 specific)
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical service method string or null if not found
+ */
+export function resolveNoticeServiceMethod(wizard: WizardFacts): NoticeServiceMethod | string | null {
+  // Check all possible paths in precedence order
+  const candidates = [
+    // Direct MQS field (most common)
+    'notice_service_method',
+    // Nested from MQS maps_to
+    'notice_service.service_method',
+    'notice_service.method',
+    // Section 21 specific nested paths
+    'section21.notice_service_method',
+    'section21.service_method',
+    // Section 8 specific paths
+    'section8.service_method',
+    // Legacy flat keys
+    'service_method',
+    'method_of_service',
+    'delivery_method',
+    // Notice nested paths
+    'notice.service_method',
+    'notice.method',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      // Normalize common aliases to canonical values
+      const normalized = normalizeServiceMethod(value);
+      return normalized;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolves the service method detail text (used when method is 'other').
+ *
+ * This is required for N5B field 10a when the user selects "Other method".
+ *
+ * @param wizard - The wizard facts object
+ * @returns The service method detail text or null if not found
+ */
+export function resolveNoticeServiceMethodDetail(wizard: WizardFacts): string | null {
+  const candidates = [
+    // Direct MQS field
+    'notice_service_method_detail',
+    // Nested from MQS maps_to
+    'notice_service.service_method_detail',
+    'notice_service.method_detail',
+    // Legacy flat keys
+    'service_method_detail',
+    'service_method_other',
+    'other_service_method',
+    'delivery_method_detail',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Normalizes service method aliases to canonical values.
+ * Handles various input formats and common typos.
+ */
+function normalizeServiceMethod(value: string): NoticeServiceMethod | string {
+  const normalized = value.toLowerCase().replace(/[\s_-]+/g, '_').trim();
+
+  const aliases: Record<string, NoticeServiceMethod> = {
+    // First class post
+    'first_class_post': 'first_class_post',
+    'first_class': 'first_class_post',
+    'firstclass': 'first_class_post',
+    'post': 'first_class_post',
+    'postal': 'first_class_post',
+    'regular_post': 'first_class_post',
+
+    // Recorded delivery
+    'recorded_delivery': 'recorded_delivery',
+    'recorded': 'recorded_delivery',
+    'signed_for': 'recorded_delivery',
+    'signed': 'recorded_delivery',
+    'registered': 'recorded_delivery',
+    'registered_post': 'recorded_delivery',
+    'special_delivery': 'recorded_delivery',
+
+    // Hand delivered
+    'hand_delivered': 'hand_delivered',
+    'hand': 'hand_delivered',
+    'in_person': 'hand_delivered',
+    'personal': 'hand_delivered',
+    'personal_delivery': 'hand_delivered',
+    'personally': 'hand_delivered',
+    'delivered_by_hand': 'hand_delivered',
+
+    // Left at property
+    'left_at_property': 'left_at_property',
+    'letterbox': 'left_at_property',
+    'letter_box': 'left_at_property',
+    'through_letterbox': 'left_at_property',
+    'left_at_address': 'left_at_property',
+    'left_at_door': 'left_at_property',
+
+    // Email
+    'email': 'email',
+    'electronic': 'email',
+    'e_mail': 'email',
+
+    // Other
+    'other': 'other',
+    'other_method': 'other',
+  };
+
+  return aliases[normalized] || value;
+}
+
+/**
+ * Gets the display label for a service method value.
+ * Used for rendering on forms and documents.
+ */
+export function getServiceMethodLabel(method: NoticeServiceMethod | string | null): string {
+  if (!method) return '';
+
+  const labels: Record<NoticeServiceMethod, string> = {
+    'first_class_post': 'First class post',
+    'recorded_delivery': 'Recorded delivery / signed for',
+    'hand_delivered': 'Hand delivered to tenant',
+    'left_at_property': 'Left at the property',
+    'email': 'Email',
+    'other': 'Other method',
+  };
+
+  return labels[method as NoticeServiceMethod] || method;
+}
+
 /**
  * Helper to extract tenant data from flat wizard facts
  * Looks for keys like "tenants.0.full_name", "tenants.0.email", etc.

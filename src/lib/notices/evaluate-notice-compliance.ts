@@ -126,7 +126,9 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   const warnings: ComplianceResult['warnings'] = [];
   const computed: NonNullable<ComplianceResult['computed']> = {};
 
-  if (product !== 'notice_only') {
+  // Run compliance checks for notice_only and complete_pack products
+  // Section 21/Section 8 compliance is critical for both products
+  if (product !== 'notice_only' && product !== 'complete_pack') {
     return { ok: true, hardFailures, warnings };
   }
 
@@ -424,28 +426,84 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
         if (depositAmount > maxDeposit) {
           // Deposit exceeds cap - check for confirmation
           const confirmationValue = wizardFacts.deposit_reduced_to_legal_cap_confirmed;
-          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+          // Accept: 'yes', true, 'not_applicable' (user says it was always within cap)
+          const isConfirmed =
+            confirmationValue === 'yes' ||
+            confirmationValue === true ||
+            confirmationValue === 'not_applicable';
 
           if (!isConfirmed) {
-            pushStageIssue({
+            // If user explicitly says "no" or hasn't answered, block Section 21
+            const errorDetails = confirmationValue === 'no'
+              ? `You indicated the deposit still exceeds the cap.`
+              : `Deposit appears to exceed the legal maximum.`;
+
+            hardFailures.push({
               code: 'S21-DEPOSIT-CAP-EXCEEDED',
               affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
-              legal_reason: `Deposit exceeds legal maximum. Entered deposit: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent based on Tenant Fees Act 2019).`,
-              user_fix_hint: 'Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
+              legal_reason: `${errorDetails} Entered deposit: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent based on Tenant Fees Act 2019). Under the Tenant Fees Act 2019, excess deposits must be returned before Section 21 is valid.`,
+              user_fix_hint: 'Refund the excess deposit to the tenant before serving Section 21, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
+            });
+          }
+        } else {
+          // Deposit is within cap - user's confirmation should match
+          const confirmationValue = wizardFacts.deposit_reduced_to_legal_cap_confirmed;
+          if (confirmationValue === 'no') {
+            // User says deposit exceeds cap but our calculation says it doesn't
+            // This is a data inconsistency - warn but don't block
+            warnings.push({
+              code: 'S21-DEPOSIT-CAP-INCONSISTENT',
+              affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
+              legal_reason: `You indicated the deposit exceeds the cap, but based on your rent (£${rentAmount}/${rentFrequency}) and deposit (£${depositAmount}), the deposit appears to be within the legal limit of £${maxDeposit.toFixed(2)}.`,
+              user_fix_hint: 'Please verify your rent and deposit amounts are correct.',
             });
           }
         }
       }
     }
 
+    // -------------------------------------------------------------------------
+    // LICENSING HARD-BLOCK (Housing Act 2004, s.75/s.98)
+    // HMO licensing and selective licensing BLOCK Section 21 if:
+    // - Property requires licensing AND
+    // - No valid licence exists
+    // -------------------------------------------------------------------------
+    const licensingRequired = wizardFacts.licensing_required;
+    const hasValidLicence = wizardFacts.has_valid_licence;
+
+    // Check new MQS fields first (licensing_required + has_valid_licence)
+    if (licensingRequired && licensingRequired !== 'not_required') {
+      if (hasValidLicence === false) {
+        // HARD BLOCK - unlicensed property cannot use Section 21
+        hardFailures.push({
+          code: 'S21-LICENSING-REQUIRED',
+          affected_question_id: 'has_valid_licence',
+          legal_reason: `Section 21 notices are INVALID for properties that require licensing but are unlicensed. Housing Act 2004 (HMO: s.75, Selective: s.98) prevents serving a valid Section 21 notice.`,
+          user_fix_hint: 'Obtain the required licence before serving a Section 21 notice, or use Section 8 (fault-based) eviction instead.',
+        });
+      } else if (hasValidLicence === undefined || hasValidLicence === null) {
+        // Only block at generate stage if answer not provided
+        pushStageIssue(
+          {
+            code: 'S21-LICENSING-CONFIRM',
+            affected_question_id: 'has_valid_licence',
+            legal_reason: 'Property requires licensing - confirm you have a valid licence to use Section 21',
+            user_fix_hint: 'Confirm whether the property has a valid licence',
+          },
+          ['generate']
+        );
+      }
+    }
+
+    // Legacy field fallback (property_licensing_status)
     if (wizardFacts.property_licensing_status === 'unlicensed') {
-      pushStageIssue({
+      hardFailures.push({
         code: 'S21-LICENSING',
         affected_question_id: 'property_licensing',
-        legal_reason: 'Section 21 cannot be used while the property remains unlicensed',
-        user_fix_hint: 'Record a valid licence or resolve the licensing position to proceed',
+        legal_reason: 'Section 21 cannot be used while the property remains unlicensed. Housing Act 2004 prevents serving a valid Section 21 notice on unlicensed HMO or selectively licensed properties.',
+        user_fix_hint: 'Obtain the required licence before serving a Section 21 notice, or use Section 8 (fault-based) eviction instead.',
       });
-    } else if (wizardFacts.property_licensing_status === undefined) {
+    } else if (wizardFacts.property_licensing_status === undefined && !licensingRequired) {
       pushStageIssue(
         {
           code: 'S21-LICENSING',
@@ -520,12 +578,67 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
       );
     }
 
-    if (wizardFacts.recent_repair_complaints === true) {
+    // -------------------------------------------------------------------------
+    // RETALIATORY EVICTION BAR HARD-BLOCK (Deregulation Act 2015, s.33)
+    // Section 21 is INVALID if:
+    // - Local authority has served an improvement notice (Housing Act 2004, s.11)
+    // - Local authority has taken emergency remedial action (Housing Act 2004, s.40)
+    // The 6-month protection period applies from the date of the notice/action.
+    // -------------------------------------------------------------------------
+    const hasImprovementNotice = wizardFacts.improvement_notice_served === true ||
+                                   wizardFacts.local_authority_improvement_notice === true;
+    const hasEmergencyRemedialAction = wizardFacts.emergency_remedial_action === true ||
+                                          wizardFacts.local_authority_emergency_action === true;
+
+    if (hasImprovementNotice) {
+      hardFailures.push({
+        code: 'S21-RETALIATORY-IMPROVEMENT-NOTICE',
+        affected_question_id: 'improvement_notice_served',
+        legal_reason: 'Section 21 notice is INVALID while an improvement notice is in effect. Under the Deregulation Act 2015 (s.33) and Housing Act 2004, the retaliatory eviction bar prevents serving a valid Section 21 notice for 6 months after an improvement notice.',
+        user_fix_hint: 'Wait until the improvement notice has been complied with and 6 months have passed, or use Section 8 (fault-based) eviction if applicable grounds exist.',
+      });
+    }
+
+    if (hasEmergencyRemedialAction) {
+      hardFailures.push({
+        code: 'S21-RETALIATORY-EMERGENCY-ACTION',
+        affected_question_id: 'emergency_remedial_action',
+        legal_reason: 'Section 21 notice is INVALID while emergency remedial action notice is in effect. Under the Deregulation Act 2015 (s.33), the retaliatory eviction bar applies for 6 months after emergency remedial action.',
+        user_fix_hint: 'Wait until 6 months have passed after the emergency remedial action, or use Section 8 (fault-based) eviction if applicable grounds exist.',
+      });
+    }
+
+    // Softer warning for recent repair complaints (may lead to retaliatory bar)
+    if (wizardFacts.recent_repair_complaints === true && !hasImprovementNotice && !hasEmergencyRemedialAction) {
       warnings.push({
-        code: 'S21-RETALIATORY',
+        code: 'S21-RETALIATORY-RISK',
         affected_question_id: 'recent_repair_complaints_s21',
-        legal_reason: 'Recent repair complaints may trigger the retaliatory eviction bar',
-        user_fix_hint: 'Ensure no outstanding improvement or emergency remedial notices before serving',
+        legal_reason: 'Recent repair complaints may trigger the retaliatory eviction bar if the local authority issues an improvement notice or takes emergency remedial action',
+        user_fix_hint: 'Ensure no outstanding improvement or emergency remedial notices before serving. If the local authority takes action, you cannot serve Section 21 for 6 months.',
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // PROHIBITED FEES CONFIRMATION (Tenant Fees Act 2019)
+    // Section 21 validity may be affected if prohibited fees charged.
+    // User must confirm no prohibited fees have been charged.
+    // -------------------------------------------------------------------------
+    const prohibitedFeesCharged = wizardFacts.prohibited_fees_charged;
+    const prohibitedFeesConfirmed = wizardFacts.no_prohibited_fees_confirmed;
+
+    if (prohibitedFeesCharged === true) {
+      hardFailures.push({
+        code: 'S21-PROHIBITED-FEES',
+        affected_question_id: 'prohibited_fees_charged',
+        legal_reason: 'Section 21 notice may be INVALID if prohibited fees have been charged to the tenant. Under the Tenant Fees Act 2019 (s.13), a Section 21 notice cannot be given while the tenant is owed a prohibited payment.',
+        user_fix_hint: 'Refund any prohibited fees to the tenant before serving a Section 21 notice.',
+      });
+    } else if (prohibitedFeesConfirmed === false) {
+      hardFailures.push({
+        code: 'S21-PROHIBITED-FEES-UNCONFIRMED',
+        affected_question_id: 'no_prohibited_fees_confirmed',
+        legal_reason: 'You must confirm no prohibited fees have been charged to use Section 21. Under the Tenant Fees Act 2019, prohibited payments must be refunded before Section 21 is valid.',
+        user_fix_hint: 'Confirm that no prohibited fees have been charged to the tenant, or refund any prohibited fees before proceeding.',
       });
     }
 
