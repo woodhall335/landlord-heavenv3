@@ -15,7 +15,7 @@ import { getEditWindowStatus } from '@/lib/payments/edit-window';
 export interface OrderStatusResponse {
   paid: boolean;
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded' | 'partially_refunded';
-  fulfillment_status: 'pending' | 'ready_to_generate' | 'processing' | 'fulfilled' | 'failed' | null;
+  fulfillment_status: 'pending' | 'ready_to_generate' | 'processing' | 'fulfilled' | 'failed' | 'requires_action' | null;
   /** Human-readable error message if fulfillment failed */
   fulfillment_error: string | null;
   paid_at: string | null;
@@ -33,6 +33,23 @@ export interface OrderStatusResponse {
   edit_window_ends_at: string | null;
   /** Product type from the order (e.g., 'notice_only', 'complete_pack') */
   product_type: string | null;
+  /** Order metadata including required_actions for Section 21 cases */
+  metadata?: {
+    required_actions?: Array<{
+      fieldKey: string;
+      label: string;
+      errorCode: string;
+      helpText: string;
+    }>;
+    section21_blockers?: string[];
+    blocked_documents?: Array<{
+      documentType: string;
+      documentTitle: string;
+      blockingCodes: string[];
+      reason: string;
+    }>;
+    [key: string]: any;
+  } | null;
 }
 
 export async function GET(request: Request) {
@@ -55,7 +72,7 @@ export async function GET(request: Request) {
     // Build order query
     let orderQuery = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type')
+      .select('id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type, metadata')
       .eq('case_id', caseId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
@@ -94,9 +111,9 @@ export async function GET(request: Request) {
     const documentCount = finalDocCount || 0;
     const lastFinalDocCreatedAt = finalDocs?.[0]?.created_at || null;
 
-    // Note: fulfillment_error would need a dedicated column if we want to track it
-    // For now, return null since the orders table doesn't have a metadata column
-    const fulfillmentError: string | null = null;
+    // Extract fulfillment_error from metadata if available
+    const orderMetadata = order?.metadata as Record<string, any> | null;
+    const fulfillmentError: string | null = orderMetadata?.error || null;
 
     // Calculate edit window status
     const editWindow = getEditWindowStatus(order?.paid_at || null);
@@ -118,6 +135,7 @@ export async function GET(request: Request) {
       edit_window_open: editWindow.isPaid && editWindow.isOpen,
       edit_window_ends_at: editWindow.endsAt,
       product_type: order?.product_type || null,
+      metadata: orderMetadata || null,
     };
 
     return NextResponse.json(response, { status: 200 });
