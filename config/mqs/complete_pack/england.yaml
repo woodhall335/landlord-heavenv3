@@ -785,6 +785,25 @@ questions:
       - subsequent_tenancy
 
   # -----------------------------------------------------------
+  # TENANCY AGREEMENT DATE (N5B Question 7)
+  # This may differ from tenancy start date (Q6)
+  # -----------------------------------------------------------
+  - id: tenancy_agreement_date
+    section: Section 21 Compliance
+    question: "What date is the tenancy agreement dated?"
+    inputType: date
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Question 7: The date shown on the written tenancy agreement. Often the same as tenancy start date, but may differ."
+    validation:
+      required: true
+    maps_to:
+      - tenancy_agreement_date
+
+  # -----------------------------------------------------------
   # DEPOSIT SCHEME DETAILS (Required for N5B)
   # -----------------------------------------------------------
   - id: deposit_scheme_details

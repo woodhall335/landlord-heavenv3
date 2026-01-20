@@ -289,6 +289,10 @@ function buildCaseData(
     property_address: evictionCase.property_address,
     property_postcode: evictionCase.property_address_postcode,
     tenancy_start_date: evictionCase.tenancy_start_date,
+    // N5B Q7: Tenancy agreement date (may differ from start date)
+    tenancy_agreement_date:
+      wizardFacts.tenancy_agreement_date ||
+      evictionCase.tenancy_start_date, // Fallback to start date if not provided
     fixed_term: evictionCase.fixed_term,
     fixed_term_end_date: evictionCase.fixed_term_end_date,
     rent_amount: evictionCase.rent_amount,

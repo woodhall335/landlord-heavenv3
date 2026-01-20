@@ -1159,16 +1159,22 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // === Q5: DWELLING HOUSE (always yes for residential) ===
   setCheckbox(form, N5B_CHECKBOXES.DWELLING_YES, true, ctx);
 
-  // === Q6-7: TENANCY DATES ===
+  // === Q6: DATE PROPERTY LET ===
   const tenancyDate = splitDate(data.tenancy_start_date);
   if (tenancyDate) {
     setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_DAY, tenancyDate.day, ctx);
     setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_MONTH, tenancyDate.month, ctx);
     setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_YEAR, tenancyDate.year, ctx);
-    // Assume agreement dated same as let date (common case)
-    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_DAY, tenancyDate.day, ctx);
-    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_MONTH, tenancyDate.month, ctx);
-    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_YEAR, tenancyDate.year, ctx);
+  }
+
+  // === Q7: TENANCY AGREEMENT DATE (may differ from Q6) ===
+  // Use separate tenancy_agreement_date if provided, otherwise fallback to tenancy_start_date
+  const agreementDateValue = data.tenancy_agreement_date || data.tenancy_start_date;
+  const agreementDate = splitDate(agreementDateValue);
+  if (agreementDate) {
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_DAY, agreementDate.day, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_MONTH, agreementDate.month, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_YEAR, agreementDate.year, ctx);
   }
 
   // === Q8: SUBSEQUENT TENANCY ===
