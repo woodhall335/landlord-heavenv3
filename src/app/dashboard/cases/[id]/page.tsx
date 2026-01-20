@@ -1119,9 +1119,9 @@ export default function CaseDetailPage() {
           <div className="mb-6">
             <Section21ActionRequired
               caseId={caseId}
-              requiredActions={(orderStatus as any).metadata?.required_actions || [
+              requiredActions={orderStatus.metadata?.required_actions || [
                 // Fallback to blockers from metadata if required_actions not populated
-                ...((orderStatus as any).metadata?.section21_blockers || []).map((code: string) => ({
+                ...(orderStatus.metadata?.section21_blockers || []).map((code: string) => ({
                   fieldKey: code.toLowerCase().replace('s21_', '').replace('_unknown', '_served'),
                   label: code.replace('S21_', '').replace(/_/g, ' '),
                   errorCode: code,
