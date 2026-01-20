@@ -2269,6 +2269,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'service_contact',    // CaseFacts.service_contact (ServiceContactFacts)
         'scotland_pre_action', // Scotland-specific pre-action protocol facts
         'communication_timeline', // Structured communication history with entries array
+        'risk',               // CaseFacts.risk - Risk assessment factors (tenant defences, vulnerabilities, etc.)
       ];
 
       if (knownStructures.includes(key)) {
