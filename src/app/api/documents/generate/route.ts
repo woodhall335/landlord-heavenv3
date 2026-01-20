@@ -1135,6 +1135,20 @@ export async function POST(request: Request) {
           const rentFrequency = wizardFacts.rent_frequency ||
                                  caseFacts.tenancy?.rent_frequency || 'monthly';
 
+          // Determine the effective route for this case
+          const effectiveRouteForArrears = normalizeRoute(
+            (wizardFacts as any).selected_notice_route ||
+            (wizardFacts as any).eviction_route ||
+            caseRow?.recommended_route ||
+            undefined
+          );
+
+          // Check if route requires arrears schedule
+          // Section 21 (no-fault) does NOT require arrears schedule
+          const isSection21Route = effectiveRouteForArrears === 'section_21';
+          const isSection173Route = effectiveRouteForArrears === 'section_173';
+          const noFaultRoutes = isSection21Route || isSection173Route;
+
           const arrearsData = getArrearsScheduleData({
             arrears_items: arrearsItems,
             total_arrears: totalArrears,
@@ -1144,6 +1158,18 @@ export async function POST(request: Request) {
           });
 
           if (!arrearsData.include_schedule_pdf) {
+            // If route is no-fault (Section 21/173), skip instead of blocking
+            // This prevents preview from failing on optional documents
+            if (noFaultRoutes) {
+              return NextResponse.json({
+                skipped: true,
+                reason: 'NOT_REQUIRED_FOR_ROUTE',
+                message: `Arrears schedule is not required for ${isSection21Route ? 'Section 21' : 'Section 173'} (no-fault) route.`,
+                document_type: 'arrears_schedule',
+              });
+            }
+
+            // For Section 8 and other rent arrears routes, this is a blocking error
             return NextResponse.json(
               {
                 error: 'No arrears schedule data available',

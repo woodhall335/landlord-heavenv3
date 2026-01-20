@@ -93,6 +93,16 @@ export default function WizardPreviewPage() {
       return 'section8_notice';
     };
 
+    // Helper to check if route requires arrears schedule
+    // Section 21 (no-fault) does NOT require arrears schedule
+    // Section 8 and Wales fault-based routes need arrears schedule when arrears data exists
+    const routeRequiresArrearsSchedule = (): boolean => {
+      const isSection8 = noticeRoute === 'section_8' || noticeRoute === 'section-8';
+      const isWalesFaultBased = noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based';
+      const isScotlandWithArrears = jurisdiction === 'scotland'; // Scotland Notice to Leave can include arrears grounds
+      return isSection8 || isWalesFaultBased || isScotlandWithArrears;
+    };
+
     if (product === 'notice_only') {
       // Notice only: just the main notice + guidance
       types.push(getNoticeType());
@@ -134,7 +144,12 @@ export default function WizardPreviewPage() {
       // Evidence documents
       types.push('evidence_checklist');
       types.push('proof_of_service');
-      types.push('arrears_schedule');
+
+      // Arrears schedule: ONLY for routes that require it (Section 8, Wales fault-based, Scotland)
+      // Section 21 (no-fault) does NOT need arrears schedule
+      if (routeRequiresArrearsSchedule() && options.includeArrearsSchedule) {
+        types.push('arrears_schedule');
+      }
     } else if (product === 'ast_standard' || product === 'tenancy_agreement') {
       types.push('ast_standard');
     } else if (product === 'ast_premium') {
@@ -345,23 +360,38 @@ export default function WizardPreviewPage() {
             // (complete_pack, money_claim, etc.)
 
             const shouldIncludeArrearsScheduleForGen = (): boolean => {
-              if (productForGen !== 'notice_only') return false;
-
               // Check for arrears data (both flat and nested locations)
               const arrearsItems = facts.arrears_items ||
                                    facts.issues?.rent_arrears?.arrears_items || [];
+
+              // If no arrears data exists, don't include arrears schedule
               if (arrearsItems.length === 0) return false;
 
-              // England Section 8 with arrears grounds (8/10/11)
-              if (routeForGen === 'section_8' || routeForGen === 'section-8') {
-                const needsSchedule = requiresRentSchedule(facts);
-                return needsSchedule;
+              // For complete_pack: include arrears schedule only for routes that need it
+              // Section 21 (no-fault) does NOT require arrears schedule
+              if (productForGen === 'complete_pack') {
+                const isSection8 = routeForGen === 'section_8' || routeForGen === 'section-8';
+                const isWalesFaultBased = routeForGen === 'fault_based' || routeForGen === 'fault-based' || routeForGen === 'wales_fault_based';
+                const isScotland = jurisdictionForGen === 'scotland';
+                // Section 21 routes should NOT include arrears schedule
+                const isSection21 = routeForGen === 'section_21' || routeForGen === 'section-21' || routeForGen === 'accelerated_possession';
+                if (isSection21) return false;
+                return isSection8 || isWalesFaultBased || isScotland;
               }
 
-              // Wales fault-based with arrears grounds (Section 157/159)
-              if (routeForGen === 'fault_based' || routeForGen === 'wales_fault_based') {
-                const walesFaultGrounds = facts.wales_fault_grounds || [];
-                return hasWalesArrearsGroundSelected(walesFaultGrounds);
+              // For notice_only: existing logic for arrears grounds check
+              if (productForGen === 'notice_only') {
+                // England Section 8 with arrears grounds (8/10/11)
+                if (routeForGen === 'section_8' || routeForGen === 'section-8') {
+                  const needsSchedule = requiresRentSchedule(facts);
+                  return needsSchedule;
+                }
+
+                // Wales fault-based with arrears grounds (Section 157/159)
+                if (routeForGen === 'fault_based' || routeForGen === 'wales_fault_based') {
+                  const walesFaultGrounds = facts.wales_fault_grounds || [];
+                  return hasWalesArrearsGroundSelected(walesFaultGrounds);
+                }
               }
 
               return false;
