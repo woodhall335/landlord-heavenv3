@@ -1,0 +1,98 @@
+{
+  "$schema": "../../fixtures.schema.json",
+  "$comment": "Golden fixture for Section 21 England - valid case with all preconditions met",
+  "case_id": "s21-golden-001",
+  "jurisdiction": "england",
+  "product": "notice_only",
+  "eviction_route": "section_21",
+  "selected_notice_route": "section_21",
+
+  "landlord": {
+    "full_name": "James Alexander Thompson",
+    "address_line_1": "45 Victoria Gardens",
+    "city": "Manchester",
+    "postcode": "M1 4PQ",
+    "email": "j.thompson@example.com",
+    "phone": "07700 900123"
+  },
+
+  "tenant": {
+    "full_name": "Sarah Elizabeth Williams",
+    "email": "s.williams@example.com"
+  },
+
+  "property": {
+    "address_line_1": "Flat 12, Riverside Court",
+    "address_line_2": "124 Thames Street",
+    "city": "London",
+    "postcode": "SE1 9AA"
+  },
+
+  "tenancy": {
+    "start_date": "2023-06-01",
+    "tenancy_type": "ast",
+    "fixed_term": false,
+    "rent_amount": 1500,
+    "rent_frequency": "monthly",
+    "rent_due_day": 1
+  },
+
+  "notice": {
+    "served_date": "2026-01-20",
+    "service_method": "first_class_post"
+  },
+
+  "compliance": {
+    "$comment": "All Section 21 statutory preconditions met",
+    "deposit_taken": true,
+    "deposit_amount": 1500,
+    "deposit_protected": true,
+    "deposit_scheme_name": "DPS",
+    "deposit_protection_date": "2023-06-15",
+    "deposit_reference": "DPS-123456",
+    "prescribed_info_served": true,
+    "has_gas_appliances": true,
+    "gas_safety_cert_served": true,
+    "epc_served": true,
+    "epc_rating": "C",
+    "how_to_rent_served": true,
+    "licensing_required": "not_required",
+    "no_retaliatory_notice": true
+  },
+
+  "flat_facts": {
+    "$comment": "Flattened wizard facts as they would appear in storage",
+    "landlord_full_name": "James Alexander Thompson",
+    "landlord_address": "45 Victoria Gardens\nManchester\nM1 4PQ",
+    "landlord_email": "j.thompson@example.com",
+    "landlord_phone": "07700 900123",
+    "tenant_full_name": "Sarah Elizabeth Williams",
+    "property_address_line1": "Flat 12, Riverside Court",
+    "property_address_line2": "124 Thames Street",
+    "property_city": "London",
+    "property_postcode": "SE1 9AA",
+    "tenancy_start_date": "2023-06-01",
+    "tenancy_type": "ast",
+    "fixed_term": false,
+    "rent_amount": 1500,
+    "rent_frequency": "monthly",
+    "notice_served_date": "2026-01-20",
+    "service_method": "first_class_post",
+    "deposit_taken": true,
+    "deposit_amount": 1500,
+    "deposit_protected": true,
+    "deposit_scheme_name": "DPS",
+    "deposit_protection_date": "2023-06-15",
+    "deposit_reference": "DPS-123456",
+    "prescribed_info_served": true,
+    "has_gas_appliances": true,
+    "gas_safety_cert_served": true,
+    "epc_served": true,
+    "epc_rating": "C",
+    "how_to_rent_served": true,
+    "licensing_required": "not_required",
+    "no_retaliatory_notice": true,
+    "eviction_route": "section_21",
+    "selected_notice_route": "section_21"
+  }
+}

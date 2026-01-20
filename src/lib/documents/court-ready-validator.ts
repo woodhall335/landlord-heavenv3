@@ -7,6 +7,11 @@
  * CRITICAL: Any document included in a complete_pack must be final-form.
  * Template documents with placeholders should NOT be included in court submissions.
  *
+ * SECTION 21 AUDIT (Jan 2026):
+ * - Extended to detect Section 21 specific placeholders
+ * - Added compliance assertion detection (don't assert compliance unless verified)
+ * - Added Form 6A specific checks
+ *
  * @module court-ready-validator
  */
 
@@ -71,6 +76,42 @@ const TEMPLATE_TEXT_PATTERNS: Array<{ pattern: RegExp; description: string }> = 
   { pattern: /Instructions\s+for\s+use/gi, description: 'Instructions section' },
   { pattern: /You\s+must\s+customise/gi, description: 'Customization instruction' },
   { pattern: /Do\s+not\s+claim/gi, description: 'Warning instruction' },
+];
+
+/**
+ * SECTION 21 SPECIFIC PATTERNS (Jan 2026 Audit)
+ * These patterns detect Section 21 specific placeholders and incomplete data
+ */
+const SECTION21_PLACEHOLDER_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
+  // Form 6A specific placeholders
+  { pattern: /\(insert\s+full\s+name/gi, description: 'Form 6A: insert full name placeholder' },
+  { pattern: /\(insert\s+address/gi, description: 'Form 6A: insert address placeholder' },
+  { pattern: /\(insert\s+calendar\s+date/gi, description: 'Form 6A: insert calendar date placeholder' },
+  { pattern: /\(insert\s+date/gi, description: 'Form 6A: insert date placeholder' },
+
+  // Section 21 specific incomplete markers
+  { pattern: /You\s+are\s+required\s+to\s+leave.*after:\s*$/m, description: 'Section 21: Missing expiry date' },
+  { pattern: /To:\s*$/m, description: 'Section 21: Missing tenant name' },
+
+  // Empty date fields (DD/MM/YYYY pattern with blanks)
+  { pattern: /Date:\s*$/m, description: 'Missing date value' },
+  { pattern: /\/\s*\/\s*20\s/g, description: 'Incomplete date format (blank day/month)' },
+];
+
+/**
+ * COMPLIANCE ASSERTION PATTERNS (Jan 2026 Audit)
+ * These patterns detect statements that assert compliance without verification.
+ * Court documents should NOT claim compliance unless it's been verified.
+ */
+const COMPLIANCE_ASSERTION_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
+  // Deposit protection assertions without evidence
+  { pattern: /deposit\s+(?:is|was)\s+protected\s+in/gi, description: 'Compliance assertion: deposit protection' },
+  { pattern: /prescribed\s+information\s+(?:was|has\s+been)\s+(?:given|served|provided)/gi, description: 'Compliance assertion: prescribed info' },
+
+  // Gas/EPC/How to Rent assertions
+  { pattern: /gas\s+safety\s+certificate\s+(?:was|has\s+been)\s+provided/gi, description: 'Compliance assertion: gas safety' },
+  { pattern: /EPC\s+(?:was|has\s+been)\s+provided/gi, description: 'Compliance assertion: EPC' },
+  { pattern: /How\s+to\s+Rent\s+(?:was|has\s+been)\s+(?:given|provided)/gi, description: 'Compliance assertion: How to Rent' },
 ];
 
 /**
@@ -253,4 +294,181 @@ export function validateAndLog(
   }
 
   return content;
+}
+
+// =============================================================================
+// SECTION 21 SPECIFIC VALIDATION (Jan 2026 Audit)
+// =============================================================================
+
+/**
+ * Validate Section 21 specific document content (Form 6A, N5B, etc.)
+ *
+ * This adds Section 21 specific checks on top of the general court-ready validation:
+ * - Form 6A specific placeholders
+ * - Compliance assertion detection
+ * - Date completeness checks
+ *
+ * @param content - HTML or text content of the Section 21 document
+ * @param documentType - Type of document (e.g., 'form_6a', 'n5b')
+ * @param options - Additional validation options
+ */
+export function validateSection21CourtReady(
+  content: string,
+  documentType: string,
+  options?: {
+    /** If true, also check for compliance assertions (stricter mode) */
+    checkComplianceAssertions?: boolean;
+    /** Verified compliance facts - assertions matching these are allowed */
+    verifiedCompliance?: {
+      depositProtected?: boolean;
+      prescribedInfoServed?: boolean;
+      gasCertProvided?: boolean;
+      epcProvided?: boolean;
+      howToRentProvided?: boolean;
+    };
+  }
+): ValidationResult {
+  // Start with base validation
+  const baseResult = validateCourtReady(content, documentType);
+  const issues = [...baseResult.issues];
+
+  // Check Section 21 specific placeholders
+  for (const { pattern, description } of SECTION21_PLACEHOLDER_PATTERNS) {
+    const matches = content.match(pattern);
+    if (matches) {
+      for (const match of matches) {
+        issues.push({
+          severity: 'error',
+          type: 'placeholder',
+          message: `[Section 21] ${description}`,
+          match: match.substring(0, 50),
+        });
+      }
+    }
+  }
+
+  // Check compliance assertions if requested (stricter validation)
+  if (options?.checkComplianceAssertions) {
+    const verified = options.verifiedCompliance || {};
+
+    for (const { pattern, description } of COMPLIANCE_ASSERTION_PATTERNS) {
+      const matches = content.match(pattern);
+      if (matches) {
+        // Check if this assertion is verified
+        let isVerified = false;
+
+        if (description.includes('deposit protection') && verified.depositProtected === true) {
+          isVerified = true;
+        } else if (description.includes('prescribed info') && verified.prescribedInfoServed === true) {
+          isVerified = true;
+        } else if (description.includes('gas safety') && verified.gasCertProvided === true) {
+          isVerified = true;
+        } else if (description.includes('EPC') && verified.epcProvided === true) {
+          isVerified = true;
+        } else if (description.includes('How to Rent') && verified.howToRentProvided === true) {
+          isVerified = true;
+        }
+
+        if (!isVerified) {
+          for (const match of matches) {
+            issues.push({
+              severity: 'warning',
+              type: 'template_text',
+              message: `[Section 21] Unverified compliance assertion: ${description}. Ensure this is accurate.`,
+              match: match.substring(0, 50),
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    isValid: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+    documentType,
+  };
+}
+
+/**
+ * Assert Section 21 document is court-ready, throwing if not.
+ *
+ * Use this for Section 21 notices and related court documents.
+ */
+export function assertSection21CourtReady(
+  content: string,
+  documentType: string,
+  options?: Parameters<typeof validateSection21CourtReady>[2]
+): void {
+  const result = validateSection21CourtReady(content, documentType, options);
+
+  if (!result.isValid) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => `${i.message}${i.match ? `: "${i.match}"` : ''}`)
+      .join('; ');
+
+    throw new Error(
+      `Section 21 court-ready validation failed for ${documentType}: ${errorMessages}`
+    );
+  }
+}
+
+/**
+ * Final output scan for any placeholders in generated PDFs
+ *
+ * This is the LAST LINE OF DEFENSE - scans rendered/flattened PDF text
+ * for any remaining placeholder patterns that shouldn't appear in court documents.
+ *
+ * @param renderedText - Text extracted from the flattened PDF
+ * @param documentType - Type of document being validated
+ * @returns ValidationResult with any placeholder issues found
+ */
+export function scanFinalOutputForPlaceholders(
+  renderedText: string,
+  documentType: string
+): ValidationResult {
+  const issues: ValidationIssue[] = [];
+
+  // Universal placeholder patterns that should NEVER appear in final output
+  const finalOutputPatterns = [
+    // Square brackets with content (except legal citations like [2024] EWCA)
+    { pattern: /\[(?!(?:19|20)\d{2}\])[A-Za-z][^\]]{2,}\]/g, description: 'Placeholder in brackets' },
+
+    // Curly braces (unrendered templates)
+    { pattern: /\{\{[^}]+\}\}/g, description: 'Unrendered template variable' },
+
+    // Common placeholder text
+    { pattern: /\[Your\s/gi, description: 'Placeholder: [Your...]' },
+    { pattern: /\[Enter\s/gi, description: 'Placeholder: [Enter...]' },
+    { pattern: /\[Insert\s/gi, description: 'Placeholder: [Insert...]' },
+    { pattern: /\[insert\s/gi, description: 'Placeholder: [insert...]' },
+    { pattern: /TEMPLATE/gi, description: 'Template marker' },
+    { pattern: /Instructions\s+for\s+use/gi, description: 'Instructions text' },
+
+    // Form 6A specific
+    { pattern: /\(insert\s+full\s+name/gi, description: 'Form 6A placeholder' },
+    { pattern: /\(insert\s+address/gi, description: 'Form 6A placeholder' },
+    { pattern: /\(insert\s+calendar\s+date/gi, description: 'Form 6A placeholder' },
+  ];
+
+  for (const { pattern, description } of finalOutputPatterns) {
+    const matches = renderedText.match(pattern);
+    if (matches) {
+      for (const match of matches) {
+        issues.push({
+          severity: 'error',
+          type: 'placeholder',
+          message: `[FINAL OUTPUT] ${description}`,
+          match: match.substring(0, 50),
+        });
+      }
+    }
+  }
+
+  return {
+    isValid: issues.length === 0,
+    issues,
+    documentType,
+  };
 }
