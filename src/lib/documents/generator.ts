@@ -141,6 +141,16 @@ export interface DocumentGenerationOptions {
   data: Record<string, any>;
   isPreview?: boolean;
   outputFormat?: 'html' | 'pdf' | 'both';
+  /**
+   * Debug stamp configuration for development tracing.
+   * When provided, adds a footer with git SHA, generator name, templates, and case_id.
+   */
+  debugStamp?: {
+    generatorName: string;
+    caseId?: string;
+    /** Additional template files to list (besides templatePath) */
+    additionalTemplates?: string[];
+  };
 }
 
 export interface GeneratedDocument {
@@ -1137,7 +1147,7 @@ ${html}
 export async function generateDocument(
   options: DocumentGenerationOptions
 ): Promise<GeneratedDocument> {
-  const { templatePath, data, isPreview = false, outputFormat = 'both' } = options;
+  const { templatePath, data, isPreview = false, outputFormat = 'both', debugStamp } = options;
 
   // Load template
   const templateContent = loadTemplate(templatePath);
@@ -1149,7 +1159,18 @@ export async function generateDocument(
   };
 
   // Compile template
-  const html = compileTemplate(templateContent, enrichedData);
+  let html = compileTemplate(templateContent, enrichedData);
+
+  // Inject debug stamp if enabled (dev only)
+  if (debugStamp) {
+    const { addDebugStampToHtml } = await import('./debug-stamp');
+    const templateFiles = [templatePath, ...(debugStamp.additionalTemplates || [])];
+    html = addDebugStampToHtml(html, {
+      generatorName: debugStamp.generatorName,
+      templateFiles,
+      caseId: debugStamp.caseId,
+    });
+  }
 
   const metadata = {
     templateUsed: templatePath,

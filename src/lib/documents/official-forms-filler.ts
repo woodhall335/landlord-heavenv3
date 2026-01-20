@@ -331,8 +331,9 @@ const N119_FIELDS = {
 
   // Property details
   POSSESSION_OF: 'The claimant has a right to possession of:',
-  // Note: PDF field uses curly apostrophe (U+2019) not straight apostrophe
-  OCCUPANTS: "To the best of the claimant’s knowledge the following persons are in possession of the property:",
+  // Note: PDF field uses curly apostrophe (U+2019 = ') not straight apostrophe (')
+  // This MUST match exactly or the field won't be found
+  OCCUPANTS: "To the best of the claimant\u2019s knowledge the following persons are in possession of the property:",
 
   // Tenancy details (Section 3)
   TENANCY_TYPE: '3(a) Type of tenancy',
@@ -357,8 +358,8 @@ const N119_FIELDS = {
   NOTICE_DATE_DAY_MONTH: '6. Day and month notice served',
   NOTICE_DATE_YEAR: '6. Year notice served',
 
-  // Defendant circumstances (Section 7) - uses curly apostrophe
-  DEFENDANT_CIRCUMSTANCES: "7. The following information is known about the defendant’s circumstances:",
+  // Defendant circumstances (Section 7) - uses curly apostrophe (U+2019)
+  DEFENDANT_CIRCUMSTANCES: "7. The following information is known about the defendant\u2019s circumstances:",
 
   // Financial info (Section 8)
   FINANCIAL_INFO: '8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:',
@@ -384,7 +385,7 @@ const N119_FIELDS = {
   STATEMENT_DATE_YYYY: 'Date Statement of Truth is signed - YYYY',
   SIGNATORY_NAME: 'Full name of person signing the Statement of Truth',
   // Uses curly apostrophes (U+2019)
-  SOLICITOR_FIRM: "Name of claimant’s legal representative’s firm",
+  SOLICITOR_FIRM: "Name of claimant\u2019s legal representative\u2019s firm",
   POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
 } as const;
 
@@ -418,7 +419,7 @@ const N119_CHECKBOXES = {
   SOT_CLAIMANT: 'Statement of Truth signed by Claimant',
   SOT_LITIGATION_FRIEND: 'Statement of Truth signed by Litigation friend (where claimant is a child or a patient)',
   // Uses curly apostrophe (U+2019)
-  SOT_LEGAL_REP: "Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))",
+  SOT_LEGAL_REP: "Statement of Truth signed by Claimant\u2019s legal representative (as defined by CPR 2.3(1))",
 } as const;
 
 // =============================================================================
