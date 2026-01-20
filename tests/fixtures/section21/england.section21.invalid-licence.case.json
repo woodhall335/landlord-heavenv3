@@ -1,0 +1,57 @@
+{
+  "$schema": "../../fixtures.schema.json",
+  "$comment": "Section 21 England - INVALID case: property licensing required but missing",
+  "case_id": "s21-invalid-licence-001",
+  "jurisdiction": "england",
+  "product": "notice_only",
+  "eviction_route": "section_21",
+  "selected_notice_route": "section_21",
+
+  "flat_facts": {
+    "landlord_full_name": "James Alexander Thompson",
+    "landlord_address": "45 Victoria Gardens\nManchester\nM1 4PQ",
+    "landlord_email": "j.thompson@example.com",
+    "landlord_phone": "07700 900123",
+    "tenant_full_name": "Sarah Elizabeth Williams",
+    "property_address_line1": "Flat 12, Riverside Court",
+    "property_address_line2": "124 Thames Street",
+    "property_city": "London",
+    "property_postcode": "SE1 9AA",
+    "tenancy_start_date": "2023-06-01",
+    "tenancy_type": "ast",
+    "fixed_term": false,
+    "rent_amount": 1500,
+    "rent_frequency": "monthly",
+    "notice_served_date": "2026-01-20",
+    "service_method": "first_class_post",
+
+    "deposit_taken": true,
+    "deposit_amount": 1500,
+    "deposit_protected": true,
+    "deposit_scheme_name": "DPS",
+    "deposit_protection_date": "2023-06-15",
+    "deposit_reference": "DPS-123456",
+    "prescribed_info_served": true,
+
+    "has_gas_appliances": true,
+    "gas_safety_cert_served": true,
+
+    "epc_served": true,
+    "epc_rating": "C",
+    "how_to_rent_served": true,
+
+    "licensing_required": "hmo",
+    "has_valid_licence": false,
+
+    "no_retaliatory_notice": true,
+    "eviction_route": "section_21",
+    "selected_notice_route": "section_21"
+  },
+
+  "expected_error_code": "S21_LICENCE_MISSING",
+  "expected_blocker": {
+    "code": "S21_LICENCE_MISSING",
+    "message": "Property licence is required but not held",
+    "legalBasis": "Housing Act 2004, s.75 (mandatory HMO licensing) / Local authority selective licensing schemes"
+  }
+}
