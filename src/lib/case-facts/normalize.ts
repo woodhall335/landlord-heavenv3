@@ -2268,6 +2268,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'notice',             // CaseFacts.notice (NoticeFacts)
         'service_contact',    // CaseFacts.service_contact (ServiceContactFacts)
         'scotland_pre_action', // Scotland-specific pre-action protocol facts
+        'communication_timeline', // Structured communication history with entries array
       ];
 
       if (knownStructures.includes(key)) {

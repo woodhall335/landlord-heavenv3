@@ -55,6 +55,45 @@ import { normalizeRoute } from '@/lib/wizard/route-normalizer';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+/**
+ * Structured 422 logging helper
+ * Logs detailed information about blocked document generation for debugging
+ */
+function log422Blocked(params: {
+  case_id: string;
+  document_type: string;
+  route?: string;
+  product?: string;
+  canonicalJurisdiction?: string;
+  code?: string;
+  missingFields?: string[];
+  blockingIssues?: any[];
+  response?: any;
+}) {
+  const { case_id, document_type, route, product, canonicalJurisdiction, code, missingFields, blockingIssues, response } = params;
+
+  // Extract details from response if provided
+  const responseCode = code || response?.code || 'UNKNOWN';
+  const responseMissing = missingFields || response?.missingFields || response?.missing || [];
+  const responseBlocking = blockingIssues || response?.blocking_issues || [];
+
+  console.error(
+    `422 BLOCKED: doc=${document_type} code=${responseCode} ` +
+    `missing=[${responseMissing.join(', ')}] ` +
+    `blocking=[${responseBlocking.map((b: any) => b?.code || b?.user_fix_hint || String(b)).join('; ')}]`,
+    {
+      case_id,
+      document_type,
+      route,
+      product,
+      canonicalJurisdiction,
+      code: responseCode,
+      missingFields: responseMissing,
+      blocking_issues: responseBlocking,
+    }
+  );
+}
+
 // Validation schema
 const generateDocumentSchema = z.object({
   case_id: z.string().min(1),
@@ -548,6 +587,12 @@ export async function POST(request: Request) {
       deriveCanonicalJurisdiction(caseRow.jurisdiction, caseRow.collected_facts);
 
     if (!canonicalJurisdiction) {
+      log422Blocked({
+        case_id,
+        document_type,
+        code: 'INVALID_JURISDICTION',
+        blockingIssues: [{ code: 'INVALID_JURISDICTION', user_fix_hint: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.' }],
+      });
       return NextResponse.json({
         code: 'INVALID_JURISDICTION',
         error: 'Invalid or missing jurisdiction',
@@ -629,6 +674,14 @@ export async function POST(request: Request) {
             user_fix_hint: routeReason,
           }];
 
+      log422Blocked({
+        case_id,
+        document_type,
+        route: effectiveRoute,
+        code: 'SECTION_21_BLOCKED',
+        blockingIssues,
+      });
+
       console.warn('[GENERATE] Section 21 blocked by route selection:', {
         case_id,
         document_type,
@@ -659,6 +712,19 @@ export async function POST(request: Request) {
     });
 
     if (validationError) {
+      // Clone the response to log the body before returning
+      const clonedResponse = validationError.clone();
+      const errorBody = await clonedResponse.json().catch(() => ({}));
+
+      log422Blocked({
+        case_id,
+        document_type,
+        route,
+        product,
+        canonicalJurisdiction,
+        response: errorBody,
+      });
+
       console.warn('[GENERATE] Unified validation blocked generation:', {
         case_id,
         document_type,
@@ -676,6 +742,22 @@ export async function POST(request: Request) {
 
       if (!noticeValidation.valid) {
         const primaryError = noticeValidation.errors[0];
+        const blockingIssues = noticeValidation.errors.map(e => ({
+          code: e.code,
+          fields: [],
+          user_fix_hint: e.message,
+        }));
+
+        log422Blocked({
+          case_id,
+          document_type,
+          route,
+          product,
+          canonicalJurisdiction,
+          code: primaryError?.code || 'NOTICE_ONLY_VALIDATION_FAILED',
+          blockingIssues,
+        });
+
         console.warn('[GENERATE] Notice-only validation blocked generation:', {
           case_id,
           document_type,
@@ -689,11 +771,7 @@ export async function POST(request: Request) {
             code: primaryError?.code || 'NOTICE_ONLY_VALIDATION_FAILED',
             error: primaryError?.message || 'Notice-only case validation failed',
             user_message: primaryError?.message,
-            blocking_issues: noticeValidation.errors.map(e => ({
-              code: e.code,
-              fields: [],
-              user_fix_hint: e.message,
-            })),
+            blocking_issues: blockingIssues,
             warnings: noticeValidation.warnings.map(w => ({
               code: w.code,
               fields: [],
@@ -731,6 +809,15 @@ export async function POST(request: Request) {
           const missing = missingFieldsForSection8(safeCaseData);
 
           if (missing.length > 0) {
+            log422Blocked({
+              case_id,
+              document_type: 'section8_notice',
+              route,
+              product,
+              canonicalJurisdiction,
+              code: 'MISSING_REQUIRED_FIELDS',
+              missingFields: missing,
+            });
             return NextResponse.json(
               {
                 error: 'Missing required fields for Section 8 notice',
@@ -774,6 +861,16 @@ export async function POST(request: Request) {
                   user_fix_hint: routeReason,
                 }];
 
+            log422Blocked({
+              case_id,
+              document_type: 'section21_notice',
+              route: 'section_21',
+              product,
+              canonicalJurisdiction,
+              code: 'SECTION_21_BLOCKED',
+              blockingIssues,
+            });
+
             return NextResponse.json(
               {
                 code: 'SECTION_21_BLOCKED',
@@ -804,16 +901,28 @@ export async function POST(request: Request) {
               .filter(b => b.route === 'section_21')
               .map(b => b.description);
 
+            const blockingIssues = blockingReasons.map(reason => ({
+              code: 'SECTION_21_BLOCKED',
+              fields: [],
+              user_fix_hint: reason,
+            }));
+
+            log422Blocked({
+              case_id,
+              document_type: 'section21_notice',
+              route: 'section_21',
+              product,
+              canonicalJurisdiction,
+              code: 'SECTION_21_BLOCKED',
+              blockingIssues,
+            });
+
             return NextResponse.json(
               {
                 code: 'SECTION_21_BLOCKED',
                 error: 'SECTION_21_BLOCKED',
                 user_message: decisionOutput.route_explanations.section_21 || 'Section 21 eligibility requirements not met',
-                blocking_issues: blockingReasons.map(reason => ({
-                  code: 'SECTION_21_BLOCKED',
-                  fields: [],
-                  user_fix_hint: reason,
-                })),
+                blocking_issues: blockingIssues,
                 warnings: [],
                 alternative_routes: decisionOutput.allowed_routes,
                 suggested_action: 'Use Section 8 instead or resolve the compliance issues listed.',
@@ -828,6 +937,15 @@ export async function POST(request: Request) {
           const missing = missingFieldsForSection21(section21NoticeData as any);
 
           if (missing.length > 0) {
+            log422Blocked({
+              case_id,
+              document_type: 'section21_notice',
+              route: 'section_21',
+              product,
+              canonicalJurisdiction,
+              code: 'MISSING_REQUIRED_FIELDS',
+              missingFields: missing,
+            });
             return NextResponse.json(
               {
                 error: 'Missing required fields for Section 21 notice',

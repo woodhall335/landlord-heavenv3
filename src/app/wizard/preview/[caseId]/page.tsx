@@ -56,7 +56,13 @@ export default function WizardPreviewPage() {
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [validationErrors, setValidationErrors] = useState<{ blocking_issues: ValidationIssue[]; warnings: ValidationIssue[] } | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{
+    blocking_issues: ValidationIssue[];
+    warnings: ValidationIssue[];
+    failedDocumentType?: string;
+    errorCode?: string;
+    userMessage?: string;
+  } | null>(null);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
@@ -400,12 +406,36 @@ export default function WizardPreviewPage() {
                   console.warn('[Preview] Preview generation blocked:', {
                     caseId,
                     docType,
+                    code: errorPayload.code,
+                    user_message: errorPayload.user_message,
+                    blocking_issues: errorPayload.blocking_issues,
                     errorPayload,
                   });
                   previewBlocked = true;
+
+                  // Get user-friendly document title for display
+                  const docTypeLabels: Record<string, string> = {
+                    section8_notice: 'Section 8 Notice',
+                    section21_notice: 'Section 21 Notice (Form 6A)',
+                    n5_claim: 'Form N5 - Claim for Possession',
+                    n119_particulars: 'Form N119 - Particulars of Claim',
+                    n5b_claim: 'Form N5B - Accelerated Possession',
+                    witness_statement: 'Witness Statement',
+                    service_instructions: 'Service Instructions',
+                    service_checklist: 'Service Checklist',
+                    court_filing_guide: 'Court Filing Guide',
+                    evidence_checklist: 'Evidence Checklist',
+                    proof_of_service: 'Proof of Service',
+                    arrears_schedule: 'Arrears Schedule',
+                  };
+                  const docTitle = docTypeLabels[docType] || docType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
                   setValidationErrors({
                     blocking_issues: normalizeValidationIssues(errorPayload.blocking_issues),
                     warnings: normalizeValidationIssues(errorPayload.warnings),
+                    failedDocumentType: docTitle,
+                    errorCode: errorPayload.code,
+                    userMessage: errorPayload.user_message,
                   });
                   setError('VALIDATION_ERROR');
                   return null;
@@ -701,16 +731,45 @@ export default function WizardPreviewPage() {
   // Error state with structured validation errors
   if (error || !caseData) {
     if (error === 'VALIDATION_ERROR' && validationErrors) {
+      // Build descriptive title and message based on what failed
+      const hasBlockingIssues = validationErrors.blocking_issues && validationErrors.blocking_issues.length > 0;
+      const failedDoc = validationErrors.failedDocumentType;
+      const errorCode = validationErrors.errorCode;
+
+      // Determine title based on error type
+      let errorTitle = 'Unable to Generate Preview';
+      let errorDescription = 'We need some additional information to complete your documents.';
+
+      if (failedDoc) {
+        errorTitle = `${failedDoc} Generation Blocked`;
+        if (validationErrors.userMessage) {
+          errorDescription = validationErrors.userMessage;
+        } else if (errorCode === 'SECTION_21_BLOCKED') {
+          errorDescription = 'Section 21 eligibility requirements not met. You may need to switch to Section 8 or resolve compliance issues.';
+        } else if (errorCode === 'MISSING_REQUIRED_FIELDS') {
+          errorDescription = `Some required information is missing for the ${failedDoc}.`;
+        } else if (hasBlockingIssues) {
+          errorDescription = `The following issues must be resolved before generating ${failedDoc}.`;
+        }
+      } else if (!hasBlockingIssues && validationErrors.userMessage) {
+        errorDescription = validationErrors.userMessage;
+      }
+
       return (
         <div className="min-h-screen bg-gray-50 py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Unable to Generate Preview
+                {errorTitle}
               </h1>
               <p className="text-gray-600">
-                We need some additional information to complete your documents.
+                {errorDescription}
               </p>
+              {failedDoc && errorCode && (
+                <p className="text-sm text-gray-500 mt-2">
+                  Error code: {errorCode}
+                </p>
+              )}
             </div>
 
             <ValidationErrors
