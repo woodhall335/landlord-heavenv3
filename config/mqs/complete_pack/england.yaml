@@ -350,6 +350,14 @@ questions:
       value: true
     helperText: "CRITICAL: Deposit must be protected within 30 days AND prescribed information served within 30 days. Section 21 is INVALID if these requirements are not met."
     fields:
+      - id: deposit_amount
+        label: "Deposit amount taken (£)"
+        inputType: number
+        helperText: "The amount of deposit collected from the tenant"
+        validation:
+          required: true
+          min: 0
+        width: half
       - id: deposit_protected
         label: "Is the deposit protected in a government-approved scheme?"
         inputType: yes_no
@@ -358,7 +366,7 @@ questions:
           required: true
           assertValue: true
           assertMessage: "Section 21 cannot be used if deposit is not protected. Protect the deposit first or use Section 8."
-        width: full
+        width: half
       - id: deposit_protected_within_30_days
         label: "Was the deposit protected within 30 days of receipt?"
         inputType: yes_no
@@ -392,6 +400,7 @@ questions:
           required: true
         width: half
     maps_to:
+      - deposit_amount
       - deposit_protected
       - deposit_protected_within_30_days
       - deposit_protection_date
@@ -416,37 +425,43 @@ questions:
   # -----------------------------------------------------------
   # DEPOSIT CAP VALIDATION (Tenant Fees Act 2019)
   # Maximum: 5 weeks rent (<£50k annual) or 6 weeks (>£50k annual)
+  # The system AUTOMATICALLY calculates whether deposit exceeds cap
+  # based on rent_amount, rent_frequency, and deposit_amount.
+  # This confirmation is only needed if the deposit was OVER the cap
+  # and has since been reduced/refunded.
   # -----------------------------------------------------------
-  - id: deposit_cap_compliance
+  - id: deposit_cap_info
     section: Section 21 Compliance
-    question: "Deposit cap compliance check"
-    inputType: group
+    question: "Deposit cap (Tenant Fees Act 2019)"
+    inputType: info
     routes:
       - section_21
     dependsOn:
       questionId: deposit_taken
       value: true
-    helperText: "Under Tenant Fees Act 2019, the deposit cannot exceed 5 weeks rent (or 6 weeks if annual rent is £50,000+). Excess deposits must be returned."
-    fields:
-      - id: deposit_amount
-        label: "Deposit amount taken (£)"
-        inputType: number
-        validation:
-          required: true
-          min: 0
-        width: half
-      - id: deposit_within_cap
-        label: "Is the deposit within the legal cap?"
-        inputType: yes_no
-        helperText: "Calculate: If annual rent < £50k, max deposit = 5 weeks rent. If ≥£50k, max = 6 weeks rent."
-        validation:
-          required: true
-          assertValue: true
-          assertMessage: "Section 21 may be invalid if the deposit exceeds the legal cap. Return the excess amount to the tenant before serving notice."
-        width: half
+    helperText: "Under Tenant Fees Act 2019, the deposit cannot exceed 5 weeks rent (or 6 weeks if annual rent is £50,000+). The system will automatically check this based on your rent and deposit amounts."
+
+  - id: deposit_reduced_to_legal_cap_confirmed
+    section: Section 21 Compliance
+    question: "If your deposit originally exceeded the legal cap, have you reduced or refunded the excess?"
+    inputType: select
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "If your deposit was over the legal cap when collected, you must refund the excess before using Section 21. Select 'Not applicable' if your deposit was always within the cap."
+    options:
+      - value: "not_applicable"
+        label: "Not applicable - deposit was always within cap"
+      - value: "yes"
+        label: "Yes - I have refunded/reduced to within cap"
+      - value: "no"
+        label: "No - deposit still exceeds cap"
+    validation:
+      required: true
     maps_to:
-      - deposit_amount
-      - deposit_within_cap
+      - deposit_reduced_to_legal_cap_confirmed
 
   # -----------------------------------------------------------
   # PRESCRIBED DOCUMENTS (Section 21A Housing Act 1988)

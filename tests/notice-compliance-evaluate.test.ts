@@ -170,7 +170,8 @@ describe('evaluateNoticeCompliance', () => {
         stage: 'wizard',
       });
 
-      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      // Deposit cap exceeded is now a hard failure, not a warning
+      const capIssue = result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
       expect(capIssue).toBeTruthy();
     });
 
@@ -193,7 +194,8 @@ describe('evaluateNoticeCompliance', () => {
         stage: 'wizard',
       });
 
-      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      // Deposit cap exceeded is now a hard failure
+      const capIssue = result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
       expect(capIssue).toBeTruthy();
       // Check the message includes "Entered deposit" and "Maximum allowed"
       expect(capIssue?.legal_reason).toContain('Entered deposit');
@@ -222,7 +224,7 @@ describe('evaluateNoticeCompliance', () => {
         stage: 'wizard',
       });
 
-      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+      expect(result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
     });
 
     it('does not flag deposit cap when confirmed as reduced', () => {
@@ -244,7 +246,7 @@ describe('evaluateNoticeCompliance', () => {
         stage: 'wizard',
       });
 
-      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+      expect(result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
     });
 
     it('uses 6 weeks cap when annual rent exceeds 50000', () => {
@@ -269,7 +271,7 @@ describe('evaluateNoticeCompliance', () => {
       });
 
       // Should not trigger cap exceeded (6500 < 6923.08)
-      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+      expect(result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
     });
 
     it('handles string inputs for deposit and rent amounts', () => {
@@ -291,8 +293,8 @@ describe('evaluateNoticeCompliance', () => {
         stage: 'wizard',
       });
 
-      // Should correctly detect cap exceeded even with string inputs
-      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      // Should correctly detect cap exceeded even with string inputs (now a hard failure)
+      const capIssue = result.hardFailures.find((f) => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
       expect(capIssue).toBeTruthy();
     });
   });

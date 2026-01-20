@@ -426,14 +426,36 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
         if (depositAmount > maxDeposit) {
           // Deposit exceeds cap - check for confirmation
           const confirmationValue = wizardFacts.deposit_reduced_to_legal_cap_confirmed;
-          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+          // Accept: 'yes', true, 'not_applicable' (user says it was always within cap)
+          const isConfirmed =
+            confirmationValue === 'yes' ||
+            confirmationValue === true ||
+            confirmationValue === 'not_applicable';
 
           if (!isConfirmed) {
-            pushStageIssue({
+            // If user explicitly says "no" or hasn't answered, block Section 21
+            const errorDetails = confirmationValue === 'no'
+              ? `You indicated the deposit still exceeds the cap.`
+              : `Deposit appears to exceed the legal maximum.`;
+
+            hardFailures.push({
               code: 'S21-DEPOSIT-CAP-EXCEEDED',
               affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
-              legal_reason: `Deposit exceeds legal maximum. Entered deposit: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent based on Tenant Fees Act 2019).`,
-              user_fix_hint: 'Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
+              legal_reason: `${errorDetails} Entered deposit: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent based on Tenant Fees Act 2019). Under the Tenant Fees Act 2019, excess deposits must be returned before Section 21 is valid.`,
+              user_fix_hint: 'Refund the excess deposit to the tenant before serving Section 21, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
+            });
+          }
+        } else {
+          // Deposit is within cap - user's confirmation should match
+          const confirmationValue = wizardFacts.deposit_reduced_to_legal_cap_confirmed;
+          if (confirmationValue === 'no') {
+            // User says deposit exceeds cap but our calculation says it doesn't
+            // This is a data inconsistency - warn but don't block
+            warnings.push({
+              code: 'S21-DEPOSIT-CAP-INCONSISTENT',
+              affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
+              legal_reason: `You indicated the deposit exceeds the cap, but based on your rent (£${rentAmount}/${rentFrequency}) and deposit (£${depositAmount}), the deposit appears to be within the legal limit of £${maxDeposit.toFixed(2)}.`,
+              user_fix_hint: 'Please verify your rent and deposit amounts are correct.',
             });
           }
         }
