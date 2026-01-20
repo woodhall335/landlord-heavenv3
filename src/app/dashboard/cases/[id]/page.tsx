@@ -1115,7 +1115,21 @@ export default function CaseDetailPage() {
         )}
 
         {/* Section 21 Requires Action - user needs to confirm statutory requirements */}
-        {orderStatus?.paid && orderStatus.fulfillment_status === 'requires_action' && !orderStatus.has_final_documents && (
+        {/* Only show for Section 21 cases, not Section 8 or other routes */}
+        {orderStatus?.paid && orderStatus.fulfillment_status === 'requires_action' && !orderStatus.has_final_documents && (() => {
+          // Determine if this is a Section 21 case based on collected_facts
+          const route = caseDetails?.collected_facts?.selected_notice_route ||
+            caseDetails?.collected_facts?.eviction_route ||
+            caseDetails?.collected_facts?.notice_type ||
+            caseDetails?.case_type;
+          const routeLower = (route || '').toString().toLowerCase();
+          const isSection21 = routeLower.includes('section_21') ||
+            routeLower.includes('section 21') ||
+            routeLower === 'no_fault' ||
+            routeLower === 'accelerated_possession' ||
+            routeLower === 'accelerated_section21';
+          return isSection21;
+        })() && (
           <div className="mb-6">
             <Section21ActionRequired
               caseId={caseId}

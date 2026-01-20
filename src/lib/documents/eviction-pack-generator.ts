@@ -895,7 +895,8 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
 async function generateEnglandOrWalesEvictionPack(
   evictionCase: EvictionCase,
   caseData: CaseData,
-  groundsData: any
+  groundsData: any,
+  wizardFacts?: any
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
   const jurisdiction = evictionCase.jurisdiction; // 'england' or 'wales'
@@ -963,6 +964,7 @@ async function generateEnglandOrWalesEvictionPack(
     }
 
     // Build Section21NoticeData from evictionCase to use the canonical notice generator
+    // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
     const section21Data: Section21NoticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_2_name: evictionCase.landlord_2_name,
@@ -984,6 +986,18 @@ async function generateEnglandOrWalesEvictionPack(
       deposit_reference: evictionCase.deposit_reference,
       gas_certificate_provided: evictionCase.gas_safety_certificate,
       epc_rating: evictionCase.epc_rating,
+      // Compliance confirmations from wizard - check multiple possible field names
+      prescribed_info_given: wizardFacts?.prescribed_info_given ??
+        wizardFacts?.prescribed_info_served ??
+        wizardFacts?.tenancy?.prescribed_info_given ??
+        wizardFacts?.section21?.prescribed_info_given,
+      how_to_rent_provided: wizardFacts?.how_to_rent_provided ??
+        wizardFacts?.how_to_rent_served ??
+        wizardFacts?.section21?.how_to_rent_provided,
+      epc_provided: wizardFacts?.epc_provided ??
+        wizardFacts?.epc_served ??
+        wizardFacts?.section21?.epc_provided ??
+        (evictionCase.epc_rating ? true : undefined), // If EPC rating exists, EPC was provided
     };
 
     // Use canonical Section 21 notice generator (single source of truth)
@@ -1269,7 +1283,7 @@ export async function generateCompleteEvictionPack(
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase: ewCase, caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase = { ...ewCase, jurisdiction: jurisdiction as Jurisdiction };
-    regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, caseData, groundsData);
+    regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, caseData, groundsData, wizardFacts);
   } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
     evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
@@ -1872,6 +1886,7 @@ export async function generateNoticeOnlyPack(
       }
 
       // Build Section21NoticeData from evictionCase to use the canonical notice generator
+      // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
       const section21Data: Section21NoticeData = {
         landlord_full_name: evictionCase.landlord_full_name,
         landlord_2_name: evictionCase.landlord_2_name,
@@ -1893,6 +1908,18 @@ export async function generateNoticeOnlyPack(
         deposit_reference: evictionCase.deposit_reference,
         gas_certificate_provided: evictionCase.gas_safety_certificate,
         epc_rating: evictionCase.epc_rating,
+        // Compliance confirmations from wizard - check multiple possible field names
+        prescribed_info_given: wizardFacts?.prescribed_info_given ??
+          wizardFacts?.prescribed_info_served ??
+          wizardFacts?.tenancy?.prescribed_info_given ??
+          wizardFacts?.section21?.prescribed_info_given,
+        how_to_rent_provided: wizardFacts?.how_to_rent_provided ??
+          wizardFacts?.how_to_rent_served ??
+          wizardFacts?.section21?.how_to_rent_provided,
+        epc_provided: wizardFacts?.epc_provided ??
+          wizardFacts?.epc_served ??
+          wizardFacts?.section21?.epc_provided ??
+          (evictionCase.epc_rating ? true : undefined), // If EPC rating exists, EPC was provided
       };
 
       // 1. Generate Section 21 Notice
