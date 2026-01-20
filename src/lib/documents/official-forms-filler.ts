@@ -808,15 +808,17 @@ function getPersonsInPossession(caseData: CaseData): string {
  * 1. Steps that are actually recorded with dates and descriptions
  * 2. A safe neutral minimum statement if no steps are recorded
  *
- * The notice service is always included since we have that data.
+ * IMPORTANT: Notice service info belongs in Q6 ONLY, NOT in Q5.
+ * Q5 is for pre-action protocol steps (letters, contacts, payment plans).
  *
- * @param caseData - The case data containing pre-action steps and notice information
+ * @param caseData - The case data containing pre-action steps information
  * @returns Formatted string of steps taken, using neutral wording if no data
  */
 function getStepsToRecoverArrears(caseData: CaseData): string {
   const steps: string[] = [];
 
   // Only include steps if we have recorded evidence (dates/notes)
+  // This should be actual pre-action protocol steps like letters, calls, payment plan offers
   if (caseData.preActionSteps && caseData.preActionSteps.length > 0) {
     for (const step of caseData.preActionSteps) {
       if (step.date && step.description) {
@@ -826,27 +828,15 @@ function getStepsToRecoverArrears(caseData: CaseData): string {
     }
   }
 
-  // Always include notice service since we have that data
-  const noticeDate = caseData.section_8_notice_date || caseData.section_21_notice_date || caseData.notice_served_date;
-  if (noticeDate) {
-    const formattedNoticeDate = formatUKLegalDate(noticeDate);
-    steps.push(`${formattedNoticeDate}: A Section 8 Notice (Form 3) was served on the defendant.`);
-  }
-
   // If we have recorded steps, return them as a timeline
   if (steps.length > 0) {
     return steps.join('\n');
   }
 
-  // SAFE MINIMUM DEFAULT: Use neutral wording that doesn't fabricate specific actions
-  // This is the fallback when no specific steps are recorded
-  if (noticeDate) {
-    const formattedNoticeDate = formatUKLegalDate(noticeDate);
-    return `The claimant contacted the defendant regarding the arrears and invited payment or proposals. A Section 8 Notice (Form 3) was served on ${formattedNoticeDate}.`;
-  }
-
-  // Minimal fallback if we don't even have a notice date
-  return 'The claimant contacted the defendant regarding the arrears and invited payment or proposals. A notice seeking possession was served.';
+  // SAFE MINIMUM DEFAULT: Use neutral wording that doesn't fabricate specific actions.
+  // DO NOT mention notice service here - that info goes in Q6 only.
+  // This is the fallback when no specific pre-action steps are recorded.
+  return 'The claimant contacted the defendant regarding the arrears and invited payment or proposals.';
 }
 
 // =============================================================================
