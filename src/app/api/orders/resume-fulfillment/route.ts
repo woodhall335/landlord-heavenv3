@@ -9,6 +9,9 @@
  * 2. Re-validates Section 21 preconditions
  * 3. If valid, triggers fulfillment retry
  *
+ * This endpoint is backward-compatible with databases that don't have the
+ * orders.metadata column yet (handles Postgres error 42703 gracefully).
+ *
  * Request body:
  * {
  *   case_id: string;
@@ -23,12 +26,18 @@
  * }
  */
 
-import { createServerSupabaseClient, createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { validateSection21ForCheckout } from '@/lib/validation/section21-checkout-validator';
+import {
+  isMetadataColumnMissingError,
+  setMetadataColumnExists,
+  safeUpdateOrderWithMetadata,
+  extractOrderMetadata,
+} from '@/lib/payments/safe-order-metadata';
 
 // =============================================================================
 // VALIDATION SCHEMA
@@ -47,6 +56,10 @@ const resumeFulfillmentSchema = z.object({
     licensing_required: z.string().optional(),
   }),
 });
+
+// Fields to select - with and without metadata
+const ORDER_SELECT_WITH_METADATA = 'id, product_type, payment_status, fulfillment_status, metadata';
+const ORDER_SELECT_WITHOUT_METADATA = 'id, product_type, payment_status, fulfillment_status';
 
 // =============================================================================
 // HANDLER
@@ -101,10 +114,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Get the order that needs resume
-    const { data: order, error: orderError } = await adminSupabase
+    // 2. Get the order that needs resume - try with metadata first
+    let { data: order, error: orderError } = await adminSupabase
       .from('orders')
-      .select('id, product_type, payment_status, fulfillment_status, metadata')
+      .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', case_id)
       .eq('payment_status', 'paid')
       .in('fulfillment_status', ['requires_action', 'processing', 'failed'])
@@ -112,10 +125,48 @@ export async function POST(request: Request) {
       .limit(1)
       .single();
 
+    // Handle metadata column missing error (42703)
+    if (orderError && isMetadataColumnMissingError(orderError)) {
+      console.warn('[orders] metadata column missing - falling back', {
+        orderId: null,
+        route: '/api/orders/resume-fulfillment',
+        action: 'select',
+      });
+      setMetadataColumnExists(false);
+
+      // Retry without metadata
+      const fallbackResult = await adminSupabase
+        .from('orders')
+        .select(ORDER_SELECT_WITHOUT_METADATA)
+        .eq('case_id', case_id)
+        .eq('payment_status', 'paid')
+        .in('fulfillment_status', ['requires_action', 'processing', 'failed'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      order = fallbackResult.data as any;
+      orderError = fallbackResult.error;
+    }
+
     if (orderError || !order) {
+      // Check if it's a "no rows" error vs actual error
+      if (orderError?.code === 'PGRST116') {
+        // No rows found - this is expected when there's no order requiring action
+        logger.warn('No order found that requires action', {
+          caseId: case_id,
+          userId: user.id,
+        });
+        return NextResponse.json(
+          { error: 'No order found that requires action' },
+          { status: 404 }
+        );
+      }
+
       logger.warn('No order found that requires action', {
         caseId: case_id,
         userId: user.id,
+        error: orderError?.message,
       });
       return NextResponse.json(
         { error: 'No order found that requires action' },
@@ -184,18 +235,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // 6. Mark order as processing for retry
-    await adminSupabase
-      .from('orders')
-      .update({
-        fulfillment_status: 'processing',
-        metadata: {
-          ...(order.metadata as object || {}),
-          resume_attempt: new Date().toISOString(),
-          confirmations_added: Object.keys(confirmations),
-        },
-      })
-      .eq('id', order.id);
+    // 6. Mark order as processing for retry using safe helper
+    const existingMetadata = extractOrderMetadata(order) || {};
+    await safeUpdateOrderWithMetadata(
+      adminSupabase,
+      order.id,
+      { fulfillment_status: 'processing' },
+      {
+        ...existingMetadata,
+        resume_attempt: new Date().toISOString(),
+        confirmations_added: Object.keys(confirmations),
+      }
+    );
 
     // 7. Trigger fulfillment retry
     logger.info('Resuming fulfillment after confirmations added', {
