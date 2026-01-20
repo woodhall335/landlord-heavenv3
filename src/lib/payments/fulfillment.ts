@@ -7,6 +7,11 @@ import {
 import { getPackContents } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
+import {
+  validateSection21ForCheckout,
+  isSection21Case,
+  type Section21MissingConfirmation,
+} from '@/lib/validation/section21-checkout-validator';
 
 // =============================================================================
 // TYPES
@@ -29,10 +34,28 @@ interface FulfillmentValidation {
 }
 
 interface FulfillmentResult {
-  status: 'fulfilled' | 'already_fulfilled' | 'incomplete' | 'processing';
+  status: 'fulfilled' | 'already_fulfilled' | 'incomplete' | 'processing' | 'requires_action';
   documents: number;
   validation?: FulfillmentValidation;
   error?: string;
+  /** For requires_action status: documents that were blocked by validation */
+  blockedDocuments?: BlockedDocument[];
+  /** For requires_action status: actions needed to complete fulfillment */
+  requiredActions?: RequiredAction[];
+}
+
+interface BlockedDocument {
+  documentType: string;
+  documentTitle: string;
+  blockingCodes: string[];
+  reason: string;
+}
+
+interface RequiredAction {
+  fieldKey: string;
+  label: string;
+  errorCode: string;
+  helpText: string;
 }
 
 // =============================================================================
@@ -588,6 +611,88 @@ export async function fulfillOrder({
       };
     }
   } catch (error: any) {
+    // ==========================================================================
+    // SECTION 21 VALIDATION ERROR HANDLING (REQUIRES_ACTION)
+    // If this is a Section 21 validation error (statusCode 422 with section21Validation),
+    // mark as 'requires_action' instead of failed. This allows users to fix the issue
+    // and resume fulfillment without losing their payment.
+    // ==========================================================================
+    const isSection21ValidationError =
+      error.statusCode === 422 &&
+      error.section21Validation &&
+      (productType === 'notice_only' || productType === 'complete_pack');
+
+    if (isSection21ValidationError) {
+      console.warn(
+        `[fulfillment] Section 21 validation blocked for order ${orderId}. ` +
+        `Marking as REQUIRES_ACTION for user to fix.`
+      );
+
+      // Map Section 21 validation blockers to required actions
+      const blockers = error.section21Validation?.blockers || [];
+      const requiredActions: RequiredAction[] = blockers.map((b: any) => ({
+        fieldKey: b.evidenceFields?.[0] || b.code,
+        label: b.code.replace('S21_', '').replace(/_/g, ' '),
+        errorCode: b.code,
+        helpText: b.message,
+      }));
+
+      const blockedDocuments: BlockedDocument[] = [
+        {
+          documentType: 'section21_notice',
+          documentTitle: 'Section 21 Notice - Form 6A',
+          blockingCodes: blockers.map((b: any) => b.code),
+          reason: error.section21Validation?.summary || error.message,
+        },
+      ];
+
+      // Check how many documents were generated before the error
+      const postErrorValidation = await validateFulfillmentCompleteness(
+        supabase,
+        caseId,
+        productType,
+        jurisdiction,
+        route,
+        hasArrears
+      );
+
+      await supabase
+        .from('orders')
+        .update({
+          fulfillment_status: 'requires_action',
+          metadata: {
+            total_documents: postErrorValidation.actualCount,
+            expected_documents: postErrorValidation.expectedCount,
+            generated_documents: generatedDocsCount,
+            validation: 'requires_action',
+            section21_blockers: blockers.map((b: any) => b.code),
+            required_actions: requiredActions,
+            blocked_documents: blockedDocuments,
+            last_attempt: new Date().toISOString(),
+            error: error.message,
+          },
+        })
+        .eq('id', orderId);
+
+      // Update case status to indicate action required
+      await supabase
+        .from('cases')
+        .update({
+          status: 'action_required',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', caseId);
+
+      return {
+        status: 'requires_action',
+        documents: postErrorValidation.actualCount,
+        validation: postErrorValidation,
+        blockedDocuments,
+        requiredActions,
+        error: error.section21Validation?.summary || error.message,
+      };
+    }
+
     // Generation failed - mark as processing (not failed) so it can be retried
     console.error(`[fulfillment] Generation error for order ${orderId}:`, error);
 

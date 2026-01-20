@@ -26,6 +26,7 @@ import {
   validateNoticeOnlyCase,
   NoticeOnlyCaseValidationError,
 } from '@/lib/validation/notice-only-case-validator';
+import { validateSection21ForCheckout } from '@/lib/validation/section21-checkout-validator';
 import crypto from 'crypto';
 
 /**
@@ -354,6 +355,44 @@ export async function POST(request: Request) {
                 { status: 422 }
               );
             }
+          }
+        }
+
+        // =========================================================================
+        // SECTION 21 PRECONDITION VALIDATION (HARD GATE)
+        // For Section 21 complete_pack or notice_only, validate all statutory
+        // preconditions are confirmed BEFORE allowing payment.
+        // This prevents the "paid dead end" where users pay but can't get documents.
+        // =========================================================================
+        if (product_type === 'complete_pack' || product_type === 'notice_only') {
+          const collectedFacts = (caseData as any).collected_facts || {};
+          const section21Validation = validateSection21ForCheckout(
+            collectedFacts,
+            caseData.jurisdiction,
+            product_type
+          );
+
+          if (!section21Validation.canCheckout && section21Validation.isSection21Case) {
+            logger.warn('Section 21 checkout blocked due to missing preconditions', {
+              caseId: case_id,
+              userId: user.id,
+              productType: product_type,
+              missingConfirmations: section21Validation.missingConfirmations.map(c => c.errorCode),
+              message: section21Validation.message,
+            });
+
+            return NextResponse.json(
+              {
+                error: section21Validation.message,
+                code: 'SECTION21_PRECONDITIONS_MISSING',
+                details: {
+                  isSection21Case: section21Validation.isSection21Case,
+                  section21Validation: section21Validation.section21Validation,
+                  missingConfirmations: section21Validation.missingConfirmations,
+                },
+              },
+              { status: 422 }
+            );
           }
         }
       }
