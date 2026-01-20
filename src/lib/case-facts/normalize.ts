@@ -2270,10 +2270,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'scotland_pre_action', // Scotland-specific pre-action protocol facts
         'communication_timeline', // Structured communication history with entries array
         'risk',               // CaseFacts.risk - Risk assessment factors (tenant defences, vulnerabilities, etc.)
+        'section21',          // Section 21 notice configuration/facts object
+        'section8',           // Section 8 notice configuration/facts object
       ];
 
-      if (knownStructures.includes(key)) {
-        // Skip known nested structures
+      // Check if key matches ground_* pattern (e.g., ground_8, ground_10, ground_17)
+      // These are structured objects containing ground-specific details
+      const isGroundObject = /^ground[_\s]?\d+$/i.test(key);
+
+      if (knownStructures.includes(key) || isGroundObject) {
+        // Skip known nested structures and ground objects
         return;
       }
 
