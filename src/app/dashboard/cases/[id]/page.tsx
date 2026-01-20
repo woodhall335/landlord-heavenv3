@@ -13,7 +13,8 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine, RiAlertLine } from 'react-icons/ri';
+import { Section21ActionRequired } from '@/components/dashboard/Section21ActionRequired';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, type PurchaseAttribution } from '@/lib/analytics';
 import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
@@ -1113,6 +1114,33 @@ export default function CaseDetailPage() {
           </div>
         )}
 
+        {/* Section 21 Requires Action - user needs to confirm statutory requirements */}
+        {orderStatus?.paid && orderStatus.fulfillment_status === 'requires_action' && !orderStatus.has_final_documents && (
+          <div className="mb-6">
+            <Section21ActionRequired
+              caseId={caseId}
+              requiredActions={(orderStatus as any).metadata?.required_actions || [
+                // Fallback to blockers from metadata if required_actions not populated
+                ...((orderStatus as any).metadata?.section21_blockers || []).map((code: string) => ({
+                  fieldKey: code.toLowerCase().replace('s21_', '').replace('_unknown', '_served'),
+                  label: code.replace('S21_', '').replace(/_/g, ' '),
+                  errorCode: code,
+                  helpText: 'Please confirm this requirement has been met.',
+                })),
+              ]}
+              onResumeFulfillment={async () => {
+                // Refresh order status and documents after resume
+                await fetchOrderStatus();
+                await fetchCaseDocuments();
+              }}
+              onSuccess={() => {
+                // Start polling for documents
+                startPolling();
+              }}
+            />
+          </div>
+        )}
+
         {/* Fulfillment Failed State (from order status) */}
         {orderStatus?.paid && !retryErrorFatal && !retryError && orderStatus.fulfillment_status === 'failed' && !orderStatus.has_final_documents && !isRetrying && (
           <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
@@ -1143,7 +1171,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Finalizing Documents - shown when paid but documents still generating */}
-        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus.fulfillment_status !== 'failed' && (
+        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus.fulfillment_status !== 'failed' && orderStatus.fulfillment_status !== 'requires_action' && (
           <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
