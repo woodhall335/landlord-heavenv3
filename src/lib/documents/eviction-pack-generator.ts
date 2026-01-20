@@ -1547,18 +1547,76 @@ export async function generateCompleteEvictionPack(
       // Generate as final form (fully populated, no placeholders) for complete pack
       const today = new Date();
 
-      // Extract total arrears from multiple possible wizard facts locations
-      // Priority order: most specific nested path first, then flat paths
-      const letterTotalArrears = wizardFacts?.arrears?.total_arrears ||  // Primary: nested arrears object
-                                  wizardFacts?.total_arrears ||           // Flat path
-                                  wizardFacts?.arrears_total ||           // Alternative flat path
-                                  wizardFacts?.issues?.rent_arrears?.total_arrears ||
-                                  evictionCase.total_arrears ||           // From CaseData
-                                  evictionCase.current_arrears;
+      // ========================================================================
+      // ARREARS DATA SOURCE FIX (2026-01-19)
+      // Use the SAME authoritative source as the Schedule of Arrears generator.
+      // This ensures a single source of truth for arrears across all documents.
+      // ========================================================================
+
+      // Get arrears data using the SAME method as Schedule of Arrears above
+      const letterArrearsItems: ArrearsItem[] = wizardFacts?.arrears_items ||
+                                                  wizardFacts?.issues?.rent_arrears?.arrears_items || [];
+      const letterTotalArrearsFromFacts = wizardFacts?.total_arrears ||
+                                           wizardFacts?.arrears_total ||
+                                           wizardFacts?.issues?.rent_arrears?.total_arrears || null;
+      const letterRentAmount = wizardFacts?.rent_amount ||
+                                wizardFacts?.tenancy?.rent_amount || 0;
+      const letterRentFrequency = wizardFacts?.rent_frequency ||
+                                   wizardFacts?.tenancy?.rent_frequency || 'monthly';
+      const letterRentDueDay = wizardFacts?.rent_due_day ||
+                                wizardFacts?.tenancy?.rent_due_day || null;
+
+      // Use authoritative arrears calculation - SINGLE SOURCE OF TRUTH
+      const letterArrearsData = getArrearsScheduleData({
+        arrears_items: letterArrearsItems,
+        total_arrears: letterTotalArrearsFromFacts,
+        rent_amount: letterRentAmount,
+        rent_frequency: letterRentFrequency,
+        rent_due_day: letterRentDueDay,
+        include_schedule: false,
+      });
+
+      // Use the authoritative total from the arrears engine
+      const letterTotalArrears = letterArrearsData.arrears_total;
+
+      // DEBUG: Log all arrears paths for tracing (only in dev)
+      if (process.env.NODE_ENV !== 'production' || process.env.DEBUG_ARREARS === '1') {
+        const { logArrearsDebug } = await import('./debug-stamp');
+        const arrearsDebugLog = logArrearsDebug({
+          caseId: caseId,
+          wizardFacts,
+          evictionCase,
+          arrearsScheduleData: {
+            total: letterArrearsData.arrears_total,
+            itemCount: letterArrearsItems.length,
+            isAuthoritative: letterArrearsData.is_authoritative,
+          },
+          finalValue: letterTotalArrears,
+          sourceUsed: letterArrearsData.is_authoritative
+            ? 'arrears_schedule_mapper (authoritative)'
+            : 'arrears_schedule_mapper (legacy)',
+        });
+
+        // Write debug JSON to tests/output for inspection
+        try {
+          const fs = await import('fs/promises');
+          const path = await import('path');
+          const outputDir = path.join(process.cwd(), 'tests', 'output');
+          await fs.mkdir(outputDir, { recursive: true });
+          await fs.writeFile(
+            path.join(outputDir, 'arrears-letter-debug.json'),
+            JSON.stringify(arrearsDebugLog, null, 2)
+          );
+          console.log('✅ Wrote arrears debug log to tests/output/arrears-letter-debug.json');
+        } catch (writeErr) {
+          console.warn('⚠️  Could not write arrears debug log:', writeErr);
+        }
+      }
 
       // For court packs, arrears figure must be present and non-zero for arrears grounds
       if (letterTotalArrears === undefined || letterTotalArrears === null || letterTotalArrears === 0) {
         console.warn('⚠️  Arrears engagement letter: No valid arrears amount found. Letter will show £0.00 which may be incorrect.');
+        console.warn('    Checked paths: arrears_items, total_arrears, arrears_total, issues.rent_arrears.total_arrears');
       }
 
       const arrearsLetterDoc = await generateDocument({
@@ -1579,6 +1637,12 @@ export async function generateCompleteEvictionPack(
         },
         isPreview: false,
         outputFormat: 'both',
+        // Add debug stamp for PDF tracing
+        debugStamp: {
+          generatorName: 'eviction-pack-generator.ts',
+          caseId: caseId,
+          additionalTemplates: [],
+        },
       });
 
       // Validate court-readiness (no placeholders or template text)

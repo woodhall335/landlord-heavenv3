@@ -62,7 +62,8 @@ artifacts/notice_only/_reports/
 
 # Generated test output (PDFs and debug artifacts)
 tests/output/*.pdf
-tests/output/n119-field-values.json
+tests/output/*.txt
+tests/output/*.json
 tests/output/n119-debug-overlay.pdf
 
 .tmp/
