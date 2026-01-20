@@ -238,7 +238,7 @@ export function logArrearsDebug(params: {
       'evictionCase.total_arrears': evictionCase?.total_arrears,
       'evictionCase.current_arrears': evictionCase?.current_arrears,
     },
-    arrearsScheduleData,
+    arrearsScheduleData: arrearsScheduleData ?? null,
     finalComputedValue: finalValue,
     sourceUsed,
   };
