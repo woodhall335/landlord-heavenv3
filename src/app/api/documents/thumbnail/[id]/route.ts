@@ -29,6 +29,17 @@ const isDev = process.env.NODE_ENV === 'development';
 const isDebugMode = process.env.THUMBNAIL_DEBUG === '1';
 
 /**
+ * Structured debug log helper
+ */
+function debugLog(stage: string, data: Record<string, unknown>) {
+  console.log(`[Thumbnail API] [${stage}]`, JSON.stringify({
+    ...data,
+    isVercel,
+    timestamp: new Date().toISOString(),
+  }));
+}
+
+/**
  * Structured error response with code for debugging
  */
 function errorResponse(code: string, message: string, status: number, details?: Record<string, unknown>) {
@@ -121,11 +132,11 @@ export async function GET(
       }
     }
 
-    // Fetch document
+    // Fetch document (includes is_preview to ensure preview docs are supported)
     console.log(`[Thumbnail API] Fetching document ${id} (admin=${usingAdminClient})`);
     const { data: document, error: fetchError } = await supabase
       .from('documents')
-      .select('id, user_id, case_id, document_type, html_content, pdf_url, document_title')
+      .select('id, user_id, case_id, document_type, html_content, pdf_url, document_title, is_preview')
       .eq('id', id)
       .single();
 
@@ -163,6 +174,7 @@ export async function GET(
       html_content: string | null;
       pdf_url: string | null;
       document_title: string | null;
+      is_preview: boolean | null;
     };
 
     console.log(`[Thumbnail API] Document found:`, {
@@ -171,6 +183,7 @@ export async function GET(
       hasHtml: !!docRecord.html_content,
       hasPdf: !!docRecord.pdf_url,
       isAnonymous: docRecord.user_id === null,
+      isPreview: docRecord.is_preview ?? false,
       ownerId: docRecord.user_id,
     });
 
@@ -216,45 +229,78 @@ export async function GET(
     } else if (docRecord.pdf_url) {
       // PDF-based thumbnail
       generationMethod = 'pdf';
-      console.log(`[Thumbnail API] Generating PDF thumbnail for ${docRecord.document_type}`);
 
       let pdfAccessUrl = docRecord.pdf_url;
+      let usedSignedUrl = false;
+      let storagePath: string | null = null;
 
-      // Try to create signed URL if admin client available
-      if (usingAdminClient && supabase) {
-        try {
-          const publicMarker = '/storage/v1/object/public/documents/';
-          const publicIndex = docRecord.pdf_url.indexOf(publicMarker);
-
-          if (publicIndex !== -1) {
-            const filePath = docRecord.pdf_url.substring(publicIndex + publicMarker.length);
-            console.log(`[Thumbnail API] Creating signed URL for: ${filePath}`);
-
-            const { data: signedUrlData, error: signedUrlError } = await supabase
-              .storage
-              .from('documents')
-              .createSignedUrl(filePath, 120); // 120 seconds expiry for Vercel cold starts
-
-            if (signedUrlError) {
-              console.warn('[Thumbnail API] Signed URL failed, using public URL:', signedUrlError.message);
-            } else if (signedUrlData?.signedUrl) {
-              pdfAccessUrl = signedUrlData.signedUrl;
-              console.log('[Thumbnail API] Using signed URL');
-            }
-          }
-        } catch (urlErr: any) {
-          console.warn('[Thumbnail API] Signed URL error, falling back to public:', urlErr.message);
-        }
-      } else {
-        console.log('[Thumbnail API] Using public PDF URL (admin client unavailable)');
+      // Extract storage path for logging
+      const publicMarker = '/storage/v1/object/public/documents/';
+      const publicIndex = docRecord.pdf_url.indexOf(publicMarker);
+      if (publicIndex !== -1) {
+        storagePath = docRecord.pdf_url.substring(publicIndex + publicMarker.length);
       }
 
+      // Debug log: PDF generation start
+      debugLog('PDF_START', {
+        documentId: docRecord.id,
+        docType: docRecord.document_type,
+        storagePath,
+        originalUrlHostname: new URL(docRecord.pdf_url).hostname,
+        usingAdminClient,
+      });
+
+      // Try to create signed URL if admin client available
+      if (usingAdminClient && supabase && storagePath) {
+        try {
+          debugLog('SIGNED_URL_ATTEMPT', { storagePath });
+
+          const { data: signedUrlData, error: signedUrlError } = await supabase
+            .storage
+            .from('documents')
+            .createSignedUrl(storagePath, 120); // 120 seconds expiry for Vercel cold starts
+
+          if (signedUrlError) {
+            debugLog('SIGNED_URL_FAILED', { error: signedUrlError.message });
+          } else if (signedUrlData?.signedUrl) {
+            pdfAccessUrl = signedUrlData.signedUrl;
+            usedSignedUrl = true;
+            debugLog('SIGNED_URL_SUCCESS', { hostname: new URL(pdfAccessUrl).hostname });
+          }
+        } catch (urlErr: any) {
+          debugLog('SIGNED_URL_ERROR', { error: urlErr.message });
+        }
+      } else {
+        debugLog('USING_PUBLIC_URL', { reason: usingAdminClient ? 'no storage path' : 'admin unavailable' });
+      }
+
+      // Generate thumbnail using the new download-first approach
       try {
+        const pdfStartTime = Date.now();
+
         thumbnail = await pdfToPreviewThumbnail(pdfAccessUrl, {
           quality: 75,
           watermarkText: 'PREVIEW',
+          documentId: docRecord.id,
+        });
+
+        const pdfElapsed = Date.now() - pdfStartTime;
+        debugLog('PDF_SUCCESS', {
+          documentId: docRecord.id,
+          docType: docRecord.document_type,
+          usedSignedUrl,
+          thumbnailSize: thumbnail.length,
+          elapsed: `${pdfElapsed}ms`,
         });
       } catch (pdfErr: any) {
+        debugLog('PDF_ERROR', {
+          documentId: docRecord.id,
+          docType: docRecord.document_type,
+          error: pdfErr.message,
+          usedSignedUrl,
+          urlHostname: new URL(pdfAccessUrl).hostname,
+        });
+
         return errorResponse(
           'THUMBNAIL_PDF_ERROR',
           'Failed to generate thumbnail from PDF',
@@ -263,7 +309,7 @@ export async function GET(
             error: pdfErr.message,
             stack: isDev ? pdfErr.stack : undefined,
             docType: docRecord.document_type,
-            usedSignedUrl: pdfAccessUrl !== docRecord.pdf_url,
+            usedSignedUrl,
           }
         );
       }

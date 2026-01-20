@@ -1421,8 +1421,87 @@ function wrapHtmlFragment(fragment: string): string {
 }
 
 /**
+ * Download PDF bytes from URL with timeout and retry
+ * Handles Supabase signed URLs which may have Content-Disposition: attachment
+ */
+async function downloadPdfBytes(
+  pdfUrl: string,
+  options?: {
+    timeoutMs?: number;
+    maxRetries?: number;
+  }
+): Promise<{ bytes: Buffer; contentType: string; size: number }> {
+  const timeoutMs = options?.timeoutMs || 10000;
+  const maxRetries = options?.maxRetries || 1;
+
+  const transientErrors = ['ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND', 'EAI_AGAIN', 'ERR_ABORTED'];
+
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`[PDF Download] Attempt ${attempt + 1}/${maxRetries + 1} for URL: ${pdfUrl.substring(0, 100)}...`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      const response = await fetch(pdfUrl, {
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/pdf, */*',
+          'User-Agent': 'LandlordHeavenPDFThumbnail/1.0',
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get('content-type') || 'application/pdf';
+      const arrayBuffer = await response.arrayBuffer();
+      const bytes = Buffer.from(arrayBuffer);
+
+      console.log(`[PDF Download] Success: ${bytes.length} bytes, type: ${contentType}`);
+
+      return {
+        bytes,
+        contentType,
+        size: bytes.length,
+      };
+    } catch (error: any) {
+      lastError = error;
+      const errorMsg = error.message || String(error);
+      const isTransient = transientErrors.some(te => errorMsg.includes(te)) || error.name === 'AbortError';
+
+      console.error(`[PDF Download] Attempt ${attempt + 1} failed:`, errorMsg);
+
+      if (!isTransient || attempt >= maxRetries) {
+        throw new Error(`PDF download failed after ${attempt + 1} attempts: ${errorMsg}`);
+      }
+
+      // Exponential backoff: 1s, 2s
+      const delay = 1000 * (attempt + 1);
+      console.log(`[PDF Download] Retrying in ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError || new Error('PDF download failed');
+}
+
+/**
  * Generate a watermarked JPEG thumbnail from a PDF URL
- * Uses Puppeteer to render the first page of the PDF
+ *
+ * FIXED: No longer uses page.goto(pdfUrl) which fails with net::ERR_ABORTED
+ * on Supabase signed URLs due to Content-Disposition: attachment headers.
+ *
+ * New approach:
+ * 1. Download PDF bytes using fetch (with timeout + retry)
+ * 2. Write to /tmp/<uuid>.pdf (serverless-safe temp directory)
+ * 3. Use Puppeteer to render local file:// URL (no network issues)
+ * 4. Add watermark overlay
  */
 export async function pdfToPreviewThumbnail(
   pdfUrl: string,
@@ -1431,16 +1510,50 @@ export async function pdfToPreviewThumbnail(
     height?: number;
     quality?: number;
     watermarkText?: string;
+    documentId?: string;
   }
 ): Promise<Buffer> {
   const width = options?.width || 400;
   const height = options?.height || 566; // A4 aspect ratio (1:1.414)
   const quality = options?.quality || 80;
   const watermarkText = options?.watermarkText || 'PREVIEW';
+  const documentId = options?.documentId || `pdf-${Date.now()}`;
 
   let browser;
+  let tempFilePath: string | null = null;
+
+  const startTime = Date.now();
 
   try {
+    // Step 1: Download PDF bytes (avoids net::ERR_ABORTED from Chromium navigation)
+    console.log(`[pdfToPreviewThumbnail] Starting for document: ${documentId}`);
+    console.log(`[pdfToPreviewThumbnail] URL hostname: ${new URL(pdfUrl).hostname}`);
+
+    const downloadStart = Date.now();
+    const { bytes: pdfBytes, size: pdfSize } = await downloadPdfBytes(pdfUrl);
+    const downloadTime = Date.now() - downloadStart;
+
+    console.log(`[pdfToPreviewThumbnail] Downloaded ${pdfSize} bytes in ${downloadTime}ms`);
+
+    // Validate PDF header
+    const pdfHeader = pdfBytes.slice(0, 5).toString('utf-8');
+    if (!pdfHeader.startsWith('%PDF-')) {
+      throw new Error(`Invalid PDF: Header "${pdfHeader}" does not start with %PDF-`);
+    }
+
+    // Step 2: Write to temp file (serverless-safe /tmp directory)
+    const fs = await import('fs/promises');
+    const os = await import('os');
+    const path = await import('path');
+
+    const tmpDir = os.tmpdir();
+    tempFilePath = path.join(tmpDir, `thumbnail-${documentId}-${Date.now()}.pdf`);
+
+    await fs.writeFile(tempFilePath, pdfBytes);
+    console.log(`[pdfToPreviewThumbnail] Wrote temp file: ${tempFilePath}`);
+
+    // Step 3: Use Puppeteer to render local file
+    const renderStart = Date.now();
     browser = await getBrowser();
 
     const page = await browser.newPage();
@@ -1452,8 +1565,11 @@ export async function pdfToPreviewThumbnail(
       deviceScaleFactor: 1,
     });
 
-    // Navigate to the PDF URL - Puppeteer can render PDFs natively
-    await page.goto(pdfUrl, {
+    // Navigate to local file:// URL (avoids network issues entirely)
+    const fileUrl = `file://${tempFilePath}`;
+    console.log(`[pdfToPreviewThumbnail] Navigating to local file: ${fileUrl}`);
+
+    await page.goto(fileUrl, {
       waitUntil: 'networkidle0',
       timeout: 30000,
     });
@@ -1473,10 +1589,12 @@ export async function pdfToPreviewThumbnail(
       },
     });
 
+    const renderTime = Date.now() - renderStart;
+    console.log(`[pdfToPreviewThumbnail] Screenshot captured in ${renderTime}ms`);
+
     await browser.close();
 
-    // Now we need to add watermark to the screenshot
-    // Re-open browser to add watermark overlay
+    // Step 4: Add watermark overlay
     browser = await getBrowser();
 
     const watermarkPage = await browser.newPage();
@@ -1576,12 +1694,33 @@ export async function pdfToPreviewThumbnail(
     });
 
     await browser.close();
+    browser = null;
+
+    const totalTime = Date.now() - startTime;
+    console.log(`[pdfToPreviewThumbnail] Complete in ${totalTime}ms (download: ${downloadTime}ms, render: ${renderTime}ms)`);
 
     return finalScreenshot as Buffer;
-  } catch (error) {
-    if (browser) {
-      await browser.close();
-    }
+  } catch (error: any) {
+    console.error(`[pdfToPreviewThumbnail] Error:`, error.message);
     throw error;
+  } finally {
+    // Cleanup: close browser and remove temp file
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    }
+
+    if (tempFilePath) {
+      try {
+        const fs = await import('fs/promises');
+        await fs.unlink(tempFilePath);
+        console.log(`[pdfToPreviewThumbnail] Cleaned up temp file: ${tempFilePath}`);
+      } catch (e) {
+        // Ignore cleanup errors - temp files will be garbage collected
+      }
+    }
   }
 }
