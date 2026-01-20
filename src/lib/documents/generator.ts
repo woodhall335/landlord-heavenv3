@@ -1494,13 +1494,14 @@ async function downloadPdfBytes(
 /**
  * Generate a watermarked JPEG thumbnail from a PDF URL
  *
- * FIXED: No longer uses page.goto(pdfUrl) which fails with net::ERR_ABORTED
- * on Supabase signed URLs due to Content-Disposition: attachment headers.
+ * FIXED: Uses PDF.js in-browser rendering instead of page.goto(pdfUrl)
+ * which fails with net::ERR_ABORTED on both remote and local PDF URLs
+ * in Vercel's serverless Chromium environment.
  *
  * New approach:
  * 1. Download PDF bytes using fetch (with timeout + retry)
- * 2. Write to /tmp/<uuid>.pdf (serverless-safe temp directory)
- * 3. Use Puppeteer to render local file:// URL (no network issues)
+ * 2. Create HTML page with PDF.js that renders PDF from base64
+ * 3. Use Puppeteer to render the HTML page (works reliably)
  * 4. Add watermark overlay
  */
 export async function pdfToPreviewThumbnail(
@@ -1520,8 +1521,6 @@ export async function pdfToPreviewThumbnail(
   const documentId = options?.documentId || `pdf-${Date.now()}`;
 
   let browser;
-  let tempFilePath: string | null = null;
-
   const startTime = Date.now();
 
   try {
@@ -1541,18 +1540,12 @@ export async function pdfToPreviewThumbnail(
       throw new Error(`Invalid PDF: Header "${pdfHeader}" does not start with %PDF-`);
     }
 
-    // Step 2: Write to temp file (serverless-safe /tmp directory)
-    const fs = await import('fs/promises');
-    const os = await import('os');
-    const path = await import('path');
+    // Step 2: Convert PDF bytes to base64 for embedding in HTML
+    const pdfBase64 = pdfBytes.toString('base64');
+    console.log(`[pdfToPreviewThumbnail] PDF base64 length: ${pdfBase64.length}`);
 
-    const tmpDir = os.tmpdir();
-    tempFilePath = path.join(tmpDir, `thumbnail-${documentId}-${Date.now()}.pdf`);
-
-    await fs.writeFile(tempFilePath, pdfBytes);
-    console.log(`[pdfToPreviewThumbnail] Wrote temp file: ${tempFilePath}`);
-
-    // Step 3: Use Puppeteer to render local file
+    // Step 3: Create HTML page with PDF.js that renders PDF from base64
+    // This avoids any file:// or http:// navigation - everything is inline
     const renderStart = Date.now();
     browser = await getBrowser();
 
@@ -1565,17 +1558,118 @@ export async function pdfToPreviewThumbnail(
       deviceScaleFactor: 1,
     });
 
-    // Navigate to local file:// URL (avoids network issues entirely)
-    const fileUrl = `file://${tempFilePath}`;
-    console.log(`[pdfToPreviewThumbnail] Navigating to local file: ${fileUrl}`);
+    // Create HTML with inline PDF.js that renders the PDF to canvas
+    // Using unpkg CDN for PDF.js (loaded via script tag)
+    const pdfJsHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 794px;
+      height: 1123px;
+      background: white;
+      overflow: hidden;
+    }
+    #pdf-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: white;
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    #error {
+      color: red;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+    #loading {
+      padding: 20px;
+      font-family: sans-serif;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div id="pdf-container">
+    <div id="loading">Loading PDF...</div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+  <script type="module">
+    // PDF.js worker
+    const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
 
-    await page.goto(fileUrl, {
+    const container = document.getElementById('pdf-container');
+
+    try {
+      // Decode base64 PDF
+      const pdfData = atob('${pdfBase64}');
+      const pdfBytes = new Uint8Array(pdfData.length);
+      for (let i = 0; i < pdfData.length; i++) {
+        pdfBytes[i] = pdfData.charCodeAt(i);
+      }
+
+      // Load PDF
+      const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
+      const pdf = await loadingTask.promise;
+
+      // Render first page
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 }); // Higher scale for quality
+
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const context = canvas.getContext('2d');
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+
+      // Replace loading with canvas
+      container.innerHTML = '';
+      container.appendChild(canvas);
+
+      // Signal render complete
+      window.pdfRendered = true;
+    } catch (err) {
+      container.innerHTML = '<div id="error">Failed to render PDF: ' + err.message + '</div>';
+      window.pdfError = err.message;
+    }
+  </script>
+</body>
+</html>
+`;
+
+    // Set content and wait for PDF.js to render
+    await page.setContent(pdfJsHtml, {
       waitUntil: 'networkidle0',
       timeout: 30000,
     });
 
-    // Wait a moment for PDF to fully render
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Wait for PDF.js to finish rendering (check for pdfRendered flag)
+    await page.waitForFunction('window.pdfRendered === true || window.pdfError', {
+      timeout: 15000,
+    });
+
+    // Check for errors
+    const pdfError = await page.evaluate(() => (window as any).pdfError);
+    if (pdfError) {
+      throw new Error(`PDF.js rendering failed: ${pdfError}`);
+    }
+
+    // Additional wait for canvas to fully paint
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // Take screenshot of first page
     const screenshot = await page.screenshot({
@@ -1704,22 +1798,12 @@ export async function pdfToPreviewThumbnail(
     console.error(`[pdfToPreviewThumbnail] Error:`, error.message);
     throw error;
   } finally {
-    // Cleanup: close browser and remove temp file
+    // Cleanup: close browser
     if (browser) {
       try {
         await browser.close();
       } catch (e) {
         // Ignore cleanup errors
-      }
-    }
-
-    if (tempFilePath) {
-      try {
-        const fs = await import('fs/promises');
-        await fs.unlink(tempFilePath);
-        console.log(`[pdfToPreviewThumbnail] Cleaned up temp file: ${tempFilePath}`);
-      } catch (e) {
-        // Ignore cleanup errors - temp files will be garbage collected
       }
     }
   }
