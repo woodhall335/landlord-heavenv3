@@ -4,6 +4,12 @@
 
 This PR ensures the "Complete Eviction Pack" Section 21 route (N5B accelerated possession) is legally valid, asks the right questions to fully complete N5B, and does not generate Section 8 / standard-procedure documents.
 
+**Key Improvements:**
+- Bulletproof inline validation for all Section 21 compliance requirements
+- Trust-based document confirmations (no uploads required)
+- Complete N5B form field coverage
+- Conditional question logic matching Section 8 eviction packs
+
 ## Changes
 
 ### 1. Route Lock for Section 21 (N5B Only)
@@ -148,8 +154,44 @@ Extended evaluator to run for both products:
 - **Deregulation Act 2015, s.33** - Retaliatory eviction protection
 - **Tenant Fees Act 2019, s.13** - Prohibited payments and Section 21 validity
 
+### 7. MQS Questions Restructured (england.yaml)
+
+**Duplicate Questions Removed:**
+- Removed `no_retaliatory_notice` (now covered by explicit `improvement_notice_served` and `emergency_remedial_action`)
+- Consolidated deposit questions to avoid redundancy
+
+**Evidence Uploads Replaced with Trust-Based Confirmations:**
+- `document_tenancy_agreement` - Confirm you have tenancy agreement copy (N5B Attachment A)
+- `document_section21_notice` - Confirm you have Section 21 notice copy (N5B Attachment B)
+- `document_proof_of_service` - Confirm you have proof of service (N5B Attachment B1)
+- `document_deposit_certificate` - Confirm you have deposit certificate (N5B Attachment E)
+- `document_epc` - Confirm you have EPC copy (N5B Attachment F)
+- `document_gas_safety` - Confirm you have gas certificate copy (N5B Attachment G)
+
+**New Inline Validation Questions:**
+- `deposit_taken` - Whether a deposit was taken (controls conditional questions)
+- `deposit_protected` - Must be YES with assertValue validation
+- `deposit_protected_within_30_days` - Must be YES with assertValue validation
+- `prescribed_info_served` - Must be YES with assertValue validation
+- `deposit_returned` - For N5B Question 13
+- `deposit_within_cap` - Tenant Fees Act 2019 deposit cap check
+- `how_to_rent_served` - Must be YES with assertValue validation
+- `epc_served` - Must be YES with assertValue validation
+- `epc_rating` - EPC rating A-G with minimum E warning
+- `tenancy_over_4_months` - 4-month restriction check (must be YES)
+- `subsequent_tenancy` - For N5B Question 8
+- `notice_service_description` - Free text for witness statement
+
+**Conditional Logic:**
+All Section 21 questions use `dependsOn` to show only when:
+- `eviction_route === "section_21"` (base condition)
+- `deposit_taken === true` (deposit-related questions)
+- `has_gas_appliances === true` (gas certificate questions)
+- `licensing_required !== "not_required"` (licensing questions)
+
 ## Migration Notes
 
 - No database migrations required
 - New MQS questions will appear for Section 21 cases on next wizard visit
 - Existing cases without new fields will trigger generate-stage validation prompts
+- Trust-based document confirmations replace file upload requirements

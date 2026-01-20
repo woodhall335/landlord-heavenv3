@@ -386,38 +386,59 @@ function buildCaseData(
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
 
     // =========================================================================
-    // N5B ATTACHMENT CHECKBOXES - A, B, B1 (document availability)
+    // N5B QUESTION 8: SUBSEQUENT TENANCY
     // =========================================================================
-    // These control whether attachments A/B/B1 are marked as included
-    tenancy_agreement_uploaded: facts.evidence.tenancy_agreement_uploaded || undefined,
-    notice_copy_available: wizardFacts.notice_copy_available || wizardFacts.notice_uploaded || undefined,
-    service_proof_available: wizardFacts.service_proof_available || wizardFacts.proof_of_service_uploaded || undefined,
+    subsequent_tenancy: wizardFacts.subsequent_tenancy ?? false,
 
     // =========================================================================
-    // N5B ATTACHMENT CHECKBOXES - E, F, G (UPLOAD-BASED TRUTHFULNESS)
+    // N5B QUESTION 13: DEPOSIT RETURNED
     // =========================================================================
-    // P0-2 FIX: These MUST be based on ACTUAL file uploads, NOT compliance flags.
-    // The N5B form checkboxes for E, F, G declare that documents are ATTACHED.
-    // Ticking these without the actual document is a false statement.
-    //
-    // Source of truth: facts.evidence.files[] (from wizard uploads)
-    // Category mapping uses EvidenceCategory enum from schema.ts:
-    //   - deposit_protection_certificate -> Checkbox E
-    //   - epc -> Checkbox F
-    //   - gas_safety_certificate -> Checkbox G
+    deposit_returned: wizardFacts.deposit_returned ?? false,
+
     // =========================================================================
-    deposit_certificate_uploaded: hasUploadForCategory(
-      (wizardFacts as any)?.evidence?.files,
-      EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE
-    ),
-    epc_uploaded: hasUploadForCategory(
-      (wizardFacts as any)?.evidence?.files,
-      EvidenceCategory.EPC
-    ),
-    gas_safety_uploaded: hasUploadForCategory(
-      (wizardFacts as any)?.evidence?.files,
-      EvidenceCategory.GAS_SAFETY_CERTIFICATE
-    ),
+    // N5B ATTACHMENT CHECKBOXES - A, B, B1 (Trust-based document confirmations)
+    // =========================================================================
+    // These are now based on user confirmations that they HAVE the documents
+    // to attach, rather than requiring file uploads.
+    tenancy_agreement_uploaded:
+      wizardFacts.has_tenancy_agreement_copy === true ||
+      facts.evidence.tenancy_agreement_uploaded ||
+      undefined,
+    notice_copy_available:
+      wizardFacts.has_section21_notice_copy === true ||
+      wizardFacts.notice_copy_available ||
+      wizardFacts.notice_uploaded ||
+      undefined,
+    service_proof_available:
+      wizardFacts.has_proof_of_service === true ||
+      wizardFacts.service_proof_available ||
+      wizardFacts.proof_of_service_uploaded ||
+      undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - E, F, G (Trust-based document confirmations)
+    // =========================================================================
+    // These are now based on user confirmations that they HAVE the documents
+    // to attach. The user confirms they will attach these to the N5B form.
+    // Legacy: Also check for actual file uploads for backwards compatibility.
+    deposit_certificate_uploaded:
+      wizardFacts.has_deposit_certificate_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE
+      ),
+    epc_uploaded:
+      wizardFacts.has_epc_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.EPC
+      ),
+    gas_safety_uploaded:
+      wizardFacts.has_gas_certificate_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.GAS_SAFETY_CERTIFICATE
+      ),
 
     // =========================================================================
     // COMPLIANCE FLAGS (kept for other N5B questions, NOT for attachment boxes)
