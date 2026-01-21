@@ -17,6 +17,7 @@
 
 import React from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import { ValidatedInput } from '@/components/wizard/ValidatedField';
 
 interface PropertySectionProps {
   facts: WizardFacts;
@@ -24,6 +25,8 @@ interface PropertySectionProps {
   jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
+
+const SECTION_ID = 'property';
 
 export const PropertySection: React.FC<PropertySectionProps> = ({
   facts,
@@ -39,68 +42,49 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        <div className="space-y-2">
-          <label htmlFor="property_address_line1" className="block text-sm font-medium text-gray-700">
-            Building and street
-            <span className="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="property_address_line1"
-            type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.property_address_line1 || ''}
-            onChange={(e) => onUpdate({ property_address_line1: e.target.value })}
-            placeholder="e.g., 123 High Street, Flat 4A"
-          />
-        </div>
+        <ValidatedInput
+          id="property_address_line1"
+          label="Building and street"
+          value={facts.property_address_line1 as string}
+          onChange={(v) => onUpdate({ property_address_line1: v })}
+          validation={{ required: true }}
+          required
+          placeholder="e.g., 123 High Street, Flat 4A"
+          sectionId={SECTION_ID}
+        />
 
-        <div className="space-y-2">
-          <label htmlFor="property_address_line2" className="block text-sm font-medium text-gray-700">
-            Address line 2 (optional)
-          </label>
-          <input
-            id="property_address_line2"
-            type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.property_address_line2 || ''}
-            onChange={(e) => onUpdate({ property_address_line2: e.target.value })}
-            placeholder="e.g., Building name, district"
-          />
-        </div>
+        <ValidatedInput
+          id="property_address_line2"
+          label="Address line 2 (optional)"
+          value={facts.property_address_line2 as string}
+          onChange={(v) => onUpdate({ property_address_line2: v })}
+          placeholder="e.g., Building name, district"
+          sectionId={SECTION_ID}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="property_address_town" className="block text-sm font-medium text-gray-700">
-              Town/City
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="property_address_town"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.property_address_town || ''}
-              onChange={(e) => onUpdate({ property_address_town: e.target.value })}
-              placeholder="e.g., Manchester"
-            />
-          </div>
+          <ValidatedInput
+            id="property_address_town"
+            label="Town/City"
+            value={facts.property_address_town as string}
+            onChange={(v) => onUpdate({ property_address_town: v })}
+            validation={{ required: true }}
+            required
+            placeholder="e.g., Manchester"
+            sectionId={SECTION_ID}
+          />
 
-          <div className="space-y-2">
-            <label htmlFor="property_address_postcode" className="block text-sm font-medium text-gray-700">
-              Postcode
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="property_address_postcode"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.property_address_postcode || ''}
-              onChange={(e) => onUpdate({ property_address_postcode: e.target.value.toUpperCase() })}
-              placeholder="e.g., M1 1AA"
-            />
-            <p className="text-xs text-gray-500">
-              The postcode determines which County Court will handle your claim.
-            </p>
-          </div>
+          <ValidatedInput
+            id="property_address_postcode"
+            label="Postcode"
+            value={facts.property_address_postcode as string}
+            onChange={(v) => onUpdate({ property_address_postcode: String(v).toUpperCase() })}
+            validation={{ required: true, pattern: '^[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}$' }}
+            required
+            placeholder="e.g., M1 1AA"
+            helperText="The postcode determines which County Court will handle your claim."
+            sectionId={SECTION_ID}
+          />
         </div>
       </div>
 

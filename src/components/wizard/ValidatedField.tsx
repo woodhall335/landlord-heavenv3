@@ -21,6 +21,7 @@
 
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { validateField, type ValidationRule } from '@/lib/validation/mqs-field-validator';
+import { useValidationContextSafe } from './ValidationContext';
 
 // ============================================================================
 // TYPES
@@ -41,6 +42,8 @@ interface BaseFieldProps {
   error?: string;
   /** Show validation on blur only (not while typing) */
   validateOnBlur?: boolean;
+  /** Section ID for context error registration (enables hasErrors gating) */
+  sectionId?: string;
 }
 
 interface ValidatedInputProps extends BaseFieldProps {
@@ -98,13 +101,34 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
   min,
   max,
   step,
+  sectionId,
 }) => {
   const [internalError, setInternalError] = useState<string | undefined>();
   const [touched, setTouched] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const ctx = useValidationContextSafe();
 
   const error = externalError || (touched ? internalError : undefined);
   const isRequired = required || validation?.required;
+
+  // Register/clear error with context for hasErrors gating
+  useEffect(() => {
+    if (!ctx || !sectionId) return;
+    if (error) {
+      ctx.setFieldError(id, { field: id, message: error, severity: 'error', section: sectionId });
+    } else {
+      ctx.clearFieldError(id);
+    }
+  }, [ctx, id, error, sectionId]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (ctx && sectionId) {
+        ctx.clearFieldError(id);
+      }
+    };
+  }, [ctx, id, sectionId]);
 
   // Validate on change
   const handleChange = useCallback(
@@ -200,12 +224,33 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
   className = '',
   error: externalError,
   options,
+  sectionId,
 }) => {
   const [internalError, setInternalError] = useState<string | undefined>();
   const [touched, setTouched] = useState(false);
+  const ctx = useValidationContextSafe();
 
   const error = externalError || (touched ? internalError : undefined);
   const isRequired = required || validation?.required;
+
+  // Register/clear error with context for hasErrors gating
+  useEffect(() => {
+    if (!ctx || !sectionId) return;
+    if (error) {
+      ctx.setFieldError(id, { field: id, message: error, severity: 'error', section: sectionId });
+    } else {
+      ctx.clearFieldError(id);
+    }
+  }, [ctx, id, error, sectionId]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (ctx && sectionId) {
+        ctx.clearFieldError(id);
+      }
+    };
+  }, [ctx, id, sectionId]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -293,12 +338,33 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
   error: externalError,
   validateOnBlur = false,
   rows = 4,
+  sectionId,
 }) => {
   const [internalError, setInternalError] = useState<string | undefined>();
   const [touched, setTouched] = useState(false);
+  const ctx = useValidationContextSafe();
 
   const error = externalError || (touched ? internalError : undefined);
   const isRequired = required || validation?.required;
+
+  // Register/clear error with context for hasErrors gating
+  useEffect(() => {
+    if (!ctx || !sectionId) return;
+    if (error) {
+      ctx.setFieldError(id, { field: id, message: error, severity: 'error', section: sectionId });
+    } else {
+      ctx.clearFieldError(id);
+    }
+  }, [ctx, id, error, sectionId]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (ctx && sectionId) {
+        ctx.clearFieldError(id);
+      }
+    };
+  }, [ctx, id, sectionId]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -391,12 +457,33 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
   error: externalError,
   min,
   max,
+  sectionId,
 }) => {
   const [internalError, setInternalError] = useState<string | undefined>();
   const [touched, setTouched] = useState(false);
+  const ctx = useValidationContextSafe();
 
   const error = externalError || (touched ? internalError : undefined);
   const isRequired = required || validation?.required;
+
+  // Register/clear error with context for hasErrors gating
+  useEffect(() => {
+    if (!ctx || !sectionId) return;
+    if (error) {
+      ctx.setFieldError(id, { field: id, message: error, severity: 'error', section: sectionId });
+    } else {
+      ctx.clearFieldError(id);
+    }
+  }, [ctx, id, error, sectionId]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (ctx && sectionId) {
+        ctx.clearFieldError(id);
+      }
+    };
+  }, [ctx, id, sectionId]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -491,6 +578,8 @@ interface ValidatedYesNoToggleProps {
   blockingMessage?: string;
   disabled?: boolean;
   className?: string;
+  /** Section ID for context error registration (enables hasErrors gating) */
+  sectionId?: string;
 }
 
 export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
@@ -503,9 +592,30 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
   blockingMessage,
   disabled = false,
   className = '',
+  sectionId,
 }) => {
   const [touched, setTouched] = useState(false);
+  const ctx = useValidationContextSafe();
   const showBlockingMessage = touched && value === false && blockingMessage;
+
+  // Register/clear error with context for hasErrors gating
+  useEffect(() => {
+    if (!ctx || !sectionId) return;
+    if (showBlockingMessage) {
+      ctx.setFieldError(id, { field: id, message: blockingMessage!, severity: 'error', section: sectionId });
+    } else {
+      ctx.clearFieldError(id);
+    }
+  }, [ctx, id, showBlockingMessage, blockingMessage, sectionId]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (ctx && sectionId) {
+        ctx.clearFieldError(id);
+      }
+    };
+  }, [ctx, id, sectionId]);
 
   return (
     <div className={`space-y-2 ${className}`}>
