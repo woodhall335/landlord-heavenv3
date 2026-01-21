@@ -63,6 +63,7 @@ import {
   type JointPartyData,
 } from './court-ready-validator';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
+import { calculateSection21ExpiryDate, type Section21DateParams, type ServiceMethod } from './notice-date-calculator';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -1584,16 +1585,43 @@ export async function generateCompleteEvictionPack(
   documents.push(evidenceChecklist);
 
   // Extract service details from wizard facts for proof of service
+  // FIX 3 (Jan 2026): Ensure expiry_date is always populated for cross-document consistency
+  const posServiceDate = wizardFacts?.notice_served_date ||
+                         wizardFacts?.notice?.service_date ||
+                         wizardFacts?.service_date;
+  const posServiceMethod = wizardFacts?.notice_service_method ||
+                           wizardFacts?.notice?.service_method ||
+                           wizardFacts?.service_method;
+
+  // Calculate expiry date if not provided (same as Form 6A)
+  let posExpiryDate = wizardFacts?.notice_expiry_date ||
+                      wizardFacts?.notice?.expiry_date ||
+                      wizardFacts?.expiry_date ||
+                      wizardFacts?.earliest_possession_date;
+
+  // Fallback: Calculate from service date for Section 21
+  if (!posExpiryDate && posServiceDate && evictionCase.tenancy_start_date) {
+    try {
+      const params: Section21DateParams = {
+        service_date: posServiceDate,
+        tenancy_start_date: evictionCase.tenancy_start_date,
+        fixed_term: evictionCase.fixed_term || false,
+        fixed_term_end_date: evictionCase.fixed_term_end_date,
+        rent_period: (evictionCase.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly',
+        service_method: (posServiceMethod?.toLowerCase().includes('post') ? 'first_class_post' : 'hand_delivery') as ServiceMethod,
+      };
+      const result = calculateSection21ExpiryDate(params);
+      posExpiryDate = result.earliest_valid_date;
+      console.log(`📅 Calculated notice_expiry_date for Proof of Service: ${posExpiryDate}`);
+    } catch (err) {
+      console.warn('⚠️  Could not calculate notice_expiry_date for Proof of Service:', err);
+    }
+  }
+
   const serviceDetails = {
-    service_date: wizardFacts?.notice_served_date ||
-                  wizardFacts?.notice?.service_date ||
-                  wizardFacts?.service_date,
-    expiry_date: wizardFacts?.notice_expiry_date ||
-                 wizardFacts?.notice?.expiry_date ||
-                 wizardFacts?.expiry_date,
-    service_method: wizardFacts?.notice_service_method ||
-                    wizardFacts?.notice?.service_method ||
-                    wizardFacts?.service_method,
+    service_date: posServiceDate,
+    expiry_date: posExpiryDate,
+    service_method: posServiceMethod,
   };
   const proofOfService = await generateProofOfService(evictionCase, serviceDetails);
   documents.push(proofOfService);
@@ -1664,8 +1692,45 @@ export async function generateCompleteEvictionPack(
         how_to_rent_method: caseData?.how_to_rent_method,
         notice_served_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
         notice_service_method: caseData?.notice_service_method,
-        // FIX 3: Ensure notice_expiry_date is always provided (no placeholder)
-        notice_expiry_date: caseData?.notice_expiry_date || evictionCase.notice_expiry_date || wizardFacts?.notice_expiry_date,
+        // FIX 2 (Jan 2026): Ensure notice_expiry_date is ALWAYS provided (no placeholder)
+        // Calculate it if not provided in any source
+        notice_expiry_date: (() => {
+          // Try all known sources first
+          const existing = caseData?.notice_expiry_date ||
+            evictionCase.notice_expiry_date ||
+            wizardFacts?.notice_expiry_date ||
+            wizardFacts?.earliest_possession_date;
+          if (existing) return existing;
+
+          // Fallback: Calculate from service date and tenancy params
+          const serviceDate = caseData?.section_21_notice_date ||
+            caseData?.notice_served_date ||
+            wizardFacts?.notice_served_date ||
+            wizardFacts?.notice_service_date;
+          const tenancyStart = caseData?.tenancy_start_date ||
+            evictionCase.tenancy_start_date ||
+            wizardFacts?.tenancy_start_date;
+
+          if (serviceDate && tenancyStart) {
+            try {
+              const params: Section21DateParams = {
+                service_date: serviceDate,
+                tenancy_start_date: tenancyStart,
+                fixed_term: caseData?.fixed_term || false,
+                fixed_term_end_date: caseData?.fixed_term_end_date,
+                rent_period: (caseData?.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly',
+                service_method: (caseData?.notice_service_method?.toLowerCase().includes('post') ? 'first_class_post' : 'hand_delivery') as ServiceMethod,
+              };
+              const result = calculateSection21ExpiryDate(params);
+              console.log(`📅 Calculated notice_expiry_date for witness statement: ${result.earliest_valid_date}`);
+              return result.earliest_valid_date;
+            } catch (err) {
+              console.warn('⚠️  Could not calculate notice_expiry_date:', err);
+              return undefined;
+            }
+          }
+          return undefined;
+        })(),
         fixed_term: caseData?.fixed_term,
         fixed_term_end_date: caseData?.fixed_term_end_date,
         // FIX 4: Add statement date (claim generation date) for auto-dating witness statement

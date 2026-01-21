@@ -32,8 +32,11 @@ export interface ProofOfServiceData {
   expiry_date?: string;       // Notice expiry date (if known)
   service_address?: string;   // Only if different from property
 
+  // FIX 3 (Jan 2026): Service method can be pre-ticked if known from wizard
+  // This helps with consistency across court pack documents
+  service_method?: 'hand_delivery' | 'letterbox' | 'first_class_post' | 'recorded_delivery' | 'email' | 'other';
+
   // NOT pre-filled (landlord must complete)
-  // service_method - checkboxes, never pre-checked
   // time_of_service - text field, left empty
   // tracking_number - text field, left empty
   // server_name - text field, left empty (may be different from landlord)
@@ -203,20 +206,24 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('(Tick ONE box only)', margin + 115, y, helvetica, 9, gray);
   y -= 18;
 
-  // Checkboxes for service methods - NEVER pre-check these
+  // Checkboxes for service methods
+  // FIX 3 (Jan 2026): Pre-tick if service_method is provided for consistency with Form 6A
   const methods = [
-    { id: 'method_hand', label: 'Personal delivery (handed directly to tenant)', note: '' },
-    { id: 'method_letterbox', label: 'Through the letterbox at the property', note: '' },
-    { id: 'method_post', label: 'By first class post', note: '(add 2 working days for deemed service)' },
-    { id: 'method_recorded', label: 'By recorded/signed for delivery', note: '(keep tracking receipt)' },
-    { id: 'method_email', label: 'By email', note: '(only if permitted by tenancy agreement)' },
-    { id: 'method_other', label: 'Other method (specify below)', note: '' },
+    { id: 'method_hand', key: 'hand_delivery', label: 'Personal delivery (handed directly to tenant)', note: '' },
+    { id: 'method_letterbox', key: 'letterbox', label: 'Through the letterbox at the property', note: '' },
+    { id: 'method_post', key: 'first_class_post', label: 'By first class post', note: '(add 2 working days for deemed service)' },
+    { id: 'method_recorded', key: 'recorded_delivery', label: 'By recorded/signed for delivery', note: '(keep tracking receipt)' },
+    { id: 'method_email', key: 'email', label: 'By email', note: '(only if permitted by tenancy agreement)' },
+    { id: 'method_other', key: 'other', label: 'Other method (specify below)', note: '' },
   ];
 
   for (const method of methods) {
     const checkbox = form.createCheckBox(method.id);
     checkbox.addToPage(page, { x: margin + 10, y: y - 2, width: 11, height: 11 });
-    // CRITICAL: Do NOT check any checkbox - landlord must select
+    // FIX 3: Pre-tick if service method matches (for cross-document consistency)
+    if (data.service_method && data.service_method === method.key) {
+      checkbox.check();
+    }
     drawText(method.label, margin + 28, y, helvetica, 9);
     if (method.note) {
       drawText(method.note, margin + 250, y, helvetica, 8, gray);

@@ -195,6 +195,13 @@ const N5_CHECKBOXES = {
 /**
  * N5B form field names (subset - key fields only)
  * Source: public/official-forms/n5b-eng.pdf
+ *
+ * IMPORTANT FIX (Jan 2026): The official N5B PDF form has internal field names
+ * that are swapped relative to their visual labels on Page 2. The field labeled
+ * visually as "First name(s)" has internal name "First Claimant's last name",
+ * and the field labeled "Last name" has internal name "First Claimant's first names".
+ * The constants below use semantic names (FIRST_NAMES = where first name goes)
+ * but the VALUES point to the actual PDF field names needed for correct display.
  */
 const N5B_FIELDS = {
   // Header
@@ -206,26 +213,26 @@ const N5B_FIELDS = {
   COURT_FEE: 'Court fee',
   LEGAL_COSTS: 'Legal representatives costs',
   TOTAL_AMOUNT: 'Total amount',
-  // First Claimant
-  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's first names",
-  FIRST_CLAIMANT_LAST_NAME: "First Claimant's last name",
+  // First Claimant - FIX: Field names swapped to match visual positions on form
+  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's last name",   // Visually "First name(s)" field
+  FIRST_CLAIMANT_LAST_NAME: "First Claimant's first names",   // Visually "Last name" field
   FIRST_CLAIMANT_ADDRESS_STREET: "First Claimant's address: building and street",
   FIRST_CLAIMANT_ADDRESS_LINE2: "First Claimant's address: second line of address",
   FIRST_CLAIMANT_ADDRESS_TOWN: "First Claimant's address: town or city",
   FIRST_CLAIMANT_ADDRESS_POSTCODE: "First Claimant's address: postcode",
-  // Second Claimant
-  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's first names",
-  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's last name",
-  // First Defendant
-  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's first name(s)",
-  FIRST_DEFENDANT_LAST_NAME: "First Defendant's last name",
+  // Second Claimant - FIX: Field names swapped to match visual positions on form
+  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's last name",   // Visually "First name(s)" field
+  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's first names",   // Visually "Last name" field
+  // First Defendant - FIX: Field names swapped to match visual positions on form
+  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's last name",   // Visually "First name(s)" field
+  FIRST_DEFENDANT_LAST_NAME: "First Defendant's first name(s)", // Visually "Last name" field
   FIRST_DEFENDANT_ADDRESS_STREET: "First Defendant's address: building and street",
   FIRST_DEFENDANT_ADDRESS_LINE2: "First Defendant's address: second line of address",
   FIRST_DEFENDANT_ADDRESS_TOWN: "First Defendant's address: town or city",
   FIRST_DEFENDANT_ADDRESS_POSTCODE: "First Defendant's address: postcode",
-  // Second Defendant
-  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's first names",
-  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's last name",
+  // Second Defendant - FIX: Field names swapped to match visual positions on form
+  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's last name",   // Visually "First name(s)" field
+  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's first names",   // Visually "Last name" field
   SECOND_DEFENDANT_ADDRESS_STREET: "Second Defendant's address: building and street",
   SECOND_DEFENDANT_ADDRESS_LINE2: "Second Defendant's address: second line of address",
   SECOND_DEFENDANT_ADDRESS_TOWN: "Second Defendant's address: town or city",
