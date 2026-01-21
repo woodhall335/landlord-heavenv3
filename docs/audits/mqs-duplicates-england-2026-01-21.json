@@ -1,0 +1,18 @@
+{
+  "configPath": "/home/user/landlord-heavenv3/config/mqs/complete_pack/england.yaml",
+  "timestamp": "2026-01-21T10:55:42.446Z",
+  "product": "complete_pack",
+  "jurisdiction": "england",
+  "version": "2.4.0",
+  "totalQuestions": 57,
+  "totalFactKeys": 131,
+  "duplicateGroups": [],
+  "summary": {
+    "duplicateCount": 0,
+    "affectedFactKeys": 0,
+    "criticalDuplicates": [],
+    "recommendations": [
+      "No duplicates found. Config is clean."
+    ]
+  }
+}

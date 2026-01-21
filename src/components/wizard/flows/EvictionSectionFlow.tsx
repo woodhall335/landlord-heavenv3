@@ -73,6 +73,9 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { getWizardAttribution, isStepCompleted, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
+// Validation context for live field validation
+import { ValidationProvider, useValidationContext } from '@/components/wizard/ValidationContext';
+
 // Section definition type
 interface WizardSection {
   id: string;
@@ -402,12 +405,19 @@ interface EvictionSectionFlowProps {
   initialFacts?: WizardFacts;
 }
 
-export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
+/**
+ * Inner component that uses the validation context.
+ * Wrapped by EvictionSectionFlow with ValidationProvider.
+ */
+const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   caseId,
   jurisdiction,
   initialFacts,
 }) => {
   const router = useRouter();
+
+  // Validation context for live field validation
+  const { hasErrors, uploadsInProgress } = useValidationContext();
 
   // State
   const [facts, setFacts] = useState<WizardFacts>(initialFacts || { __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction } });
@@ -863,28 +873,28 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
               {currentSection?.id === 'review' ? (
                 <button
                   onClick={handleComplete}
-                  disabled={currentBlockers.length > 0}
+                  disabled={currentBlockers.length > 0 || hasErrors || uploadsInProgress}
                   className={`
                     px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${currentBlockers.length > 0
+                    ${currentBlockers.length > 0 || hasErrors || uploadsInProgress
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       : 'bg-green-600 text-white hover:bg-green-700'}
                   `}
                 >
-                  Generate Documents
+                  {uploadsInProgress ? 'Uploading...' : 'Generate Documents'}
                 </button>
               ) : (
                 <button
                   onClick={handleNext}
-                  disabled={currentSectionIndex === visibleSections.length - 1}
+                  disabled={currentSectionIndex === visibleSections.length - 1 || hasErrors || uploadsInProgress}
                   className={`
                     px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${currentSectionIndex === visibleSections.length - 1
+                    ${currentSectionIndex === visibleSections.length - 1 || hasErrors || uploadsInProgress
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                       : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
                   `}
                 >
-                  Next →
+                  {uploadsInProgress ? 'Uploading...' : 'Next →'}
                 </button>
               )}
             </div>
@@ -905,6 +915,18 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
         </aside>
       </div>
     </div>
+  );
+};
+
+/**
+ * Main exported component that wraps the inner flow with ValidationProvider.
+ * This enables live field validation across all sections.
+ */
+export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = (props) => {
+  return (
+    <ValidationProvider>
+      <EvictionSectionFlowInner {...props} />
+    </ValidationProvider>
   );
 };
 
