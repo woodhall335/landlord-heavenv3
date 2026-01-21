@@ -1622,6 +1622,12 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
   }
 
+  // How to Rent document (marked H) - only if How to Rent was ACTUALLY UPLOADED
+  // P0 FIX: This checkbox was previously missing from the attachments section
+  if (data.how_to_rent_uploaded === true) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_HOW_TO_RENT, true, ctx);
+  }
+
   // === SERVICE ADDRESS ===
   const serviceAddressLines = splitAddress(data.service_address_line1 || data.landlord_address);
   setTextOptional(form, N5B_FIELDS.SERVICE_ADDRESS_STREET, serviceAddressLines[0], ctx);

@@ -34,6 +34,7 @@ function formatServiceMethodForCourt(method: string | null | undefined): string 
     'registered_post': 'Registered post',
     // Hand delivery
     'hand_delivery': 'By hand',
+    'hand_delivered': 'By hand',
     'by_hand': 'By hand',
     'in_person': 'By hand',
     'personal_service': 'Personal service',
@@ -500,6 +501,13 @@ function buildCaseData(
       hasUploadForCategory(
         (wizardFacts as any)?.evidence?.files,
         EvidenceCategory.GAS_SAFETY_CERTIFICATE
+      ),
+    // P0 FIX: How to Rent attachment checkbox (H) was missing
+    how_to_rent_uploaded:
+      wizardFacts.has_how_to_rent_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.HOW_TO_RENT_PROOF
       ),
 
     // =========================================================================

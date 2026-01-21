@@ -793,3 +793,348 @@ export function logConsistencyResults(result: ConsistencyResult): void {
     console.log('✅ Cross-document consistency validation passed');
   }
 }
+
+// =============================================================================
+// SECTION 21 COMPLIANCE TIMING VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Compliance timing data for Section 21 validation
+ *
+ * CRITICAL: Section 21 notices are INVALID if compliance documents were not
+ * provided at the correct times:
+ * - EPC: Must be provided before tenancy start (for tenancies after Oct 2015)
+ * - Gas Safety: Must be provided within 28 days of gas check AND before occupation
+ * - How to Rent: Must be provided before tenancy start (for tenancies after Oct 2015)
+ * - Deposit Info: Must be provided within 30 days of deposit receipt
+ */
+export interface ComplianceTimingData {
+  tenancy_start_date?: string;
+  occupation_date?: string; // When tenant moved in (may differ from tenancy start)
+
+  // EPC timing
+  epc_provided_date?: string;
+  epc_valid_until?: string;
+
+  // Gas Safety timing
+  gas_safety_check_date?: string;
+  gas_safety_provided_date?: string;
+  has_gas_at_property?: boolean;
+
+  // How to Rent timing
+  how_to_rent_provided_date?: string;
+
+  // Deposit timing
+  deposit_received_date?: string;
+  prescribed_info_served_date?: string;
+}
+
+export interface TimingValidationIssue {
+  severity: 'error' | 'warning';
+  field: string;
+  message: string;
+  expected?: string;
+  actual?: string;
+}
+
+export interface TimingValidationResult {
+  isValid: boolean;
+  issues: TimingValidationIssue[];
+}
+
+/**
+ * Parse a date string safely, handling various formats
+ */
+function parseDate(dateStr: string | undefined): Date | null {
+  if (!dateStr) return null;
+
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) return date;
+
+  // Try UK format DD/MM/YYYY
+  const ukMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (ukMatch) {
+    const [, day, month, year] = ukMatch;
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
+  return null;
+}
+
+/**
+ * Validate compliance document timing for Section 21 evictions.
+ *
+ * CRITICAL: These validations ensure documents were provided at legally required times.
+ * Failure to meet these timings makes Section 21 notices INVALID.
+ *
+ * @param data - Compliance timing data
+ * @returns TimingValidationResult with any timing violations
+ */
+export function validateComplianceTiming(data: ComplianceTimingData): TimingValidationResult {
+  const issues: TimingValidationIssue[] = [];
+
+  const tenancyStart = parseDate(data.tenancy_start_date);
+  const occupation = parseDate(data.occupation_date) || tenancyStart;
+
+  // ==========================================================================
+  // EPC TIMING - Must be provided BEFORE tenancy start
+  // ==========================================================================
+  if (data.epc_provided_date && tenancyStart) {
+    const epcDate = parseDate(data.epc_provided_date);
+    if (epcDate && epcDate > tenancyStart) {
+      issues.push({
+        severity: 'error',
+        field: 'epc_timing',
+        message: 'EPC was provided AFTER tenancy start date. For Section 21 validity, EPC must be provided BEFORE the tenancy begins.',
+        expected: `Before ${data.tenancy_start_date}`,
+        actual: data.epc_provided_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // GAS SAFETY TIMING - Must be provided BEFORE occupation
+  // ==========================================================================
+  if (data.has_gas_at_property !== false && data.gas_safety_provided_date && occupation) {
+    const gasProvidedDate = parseDate(data.gas_safety_provided_date);
+    if (gasProvidedDate && gasProvidedDate > occupation) {
+      issues.push({
+        severity: 'error',
+        field: 'gas_safety_timing',
+        message: 'Gas safety certificate was provided AFTER tenant occupation. For Section 21 validity, gas safety record must be provided BEFORE occupation.',
+        expected: `Before ${data.occupation_date || data.tenancy_start_date}`,
+        actual: data.gas_safety_provided_date,
+      });
+    }
+
+    // Also check gas safety check date - must be within 12 months
+    if (data.gas_safety_check_date) {
+      const checkDate = parseDate(data.gas_safety_check_date);
+      const now = new Date();
+      if (checkDate) {
+        const monthsSinceCheck = (now.getTime() - checkDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+        if (monthsSinceCheck > 12) {
+          issues.push({
+            severity: 'error',
+            field: 'gas_safety_expiry',
+            message: 'Gas safety certificate is more than 12 months old. A valid Section 21 requires a current gas safety record.',
+            expected: 'Within last 12 months',
+            actual: data.gas_safety_check_date,
+          });
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // HOW TO RENT TIMING - Must be provided BEFORE tenancy start (post Oct 2015)
+  // ==========================================================================
+  if (data.how_to_rent_provided_date && tenancyStart) {
+    const htrDate = parseDate(data.how_to_rent_provided_date);
+    if (htrDate && htrDate > tenancyStart) {
+      issues.push({
+        severity: 'warning', // Warning as courts sometimes allow slight delays
+        field: 'how_to_rent_timing',
+        message: 'How to Rent guide was provided AFTER tenancy start. Best practice is to provide BEFORE the tenancy begins.',
+        expected: `Before ${data.tenancy_start_date}`,
+        actual: data.how_to_rent_provided_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // DEPOSIT PRESCRIBED INFO TIMING - Must be within 30 days of receipt
+  // ==========================================================================
+  if (data.deposit_received_date && data.prescribed_info_served_date) {
+    const depositDate = parseDate(data.deposit_received_date);
+    const prescribedDate = parseDate(data.prescribed_info_served_date);
+
+    if (depositDate && prescribedDate) {
+      const daysDiff = (prescribedDate.getTime() - depositDate.getTime()) / (1000 * 60 * 60 * 24);
+      if (daysDiff > 30) {
+        issues.push({
+          severity: 'error',
+          field: 'prescribed_info_timing',
+          message: `Prescribed information was served ${Math.round(daysDiff)} days after deposit receipt. Must be within 30 days for valid Section 21.`,
+          expected: `Within 30 days of ${data.deposit_received_date}`,
+          actual: data.prescribed_info_served_date,
+        });
+      }
+    }
+  }
+
+  return {
+    isValid: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert compliance timing is valid, throwing if critical violations found.
+ */
+export function assertComplianceTiming(data: ComplianceTimingData): void {
+  const result = validateComplianceTiming(data);
+
+  if (!result.isValid) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => `${i.field}: ${i.message}`)
+      .join('; ');
+
+    throw new Error(
+      `Compliance timing validation failed: ${errorMessages}. ` +
+      `Section 21 notice may be INVALID.`
+    );
+  }
+
+  // Log warnings
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`⚠️  Timing warning (${issue.field}): ${issue.message}`);
+  }
+}
+
+// =============================================================================
+// JOINT PARTY VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Joint party data for validation
+ */
+export interface JointPartyData {
+  has_joint_landlords?: boolean;
+  landlord_full_name?: string;
+  landlord_2_name?: string;
+
+  has_joint_tenants?: boolean;
+  tenant_full_name?: string;
+  tenant_2_name?: string;
+  tenant_3_name?: string;
+  tenant_4_name?: string;
+}
+
+export interface JointPartyValidationResult {
+  isValid: boolean;
+  issues: Array<{
+    severity: 'error' | 'warning';
+    field: string;
+    message: string;
+  }>;
+}
+
+/**
+ * Validate joint party completeness.
+ *
+ * CRITICAL: If user indicates joint landlords/tenants exist but doesn't provide names,
+ * the resulting documents will be INVALID - notices must name ALL parties.
+ *
+ * @param data - Joint party data from wizard
+ * @returns JointPartyValidationResult with any missing party issues
+ */
+export function validateJointParties(data: JointPartyData): JointPartyValidationResult {
+  const issues: Array<{ severity: 'error' | 'warning'; field: string; message: string }> = [];
+
+  // ==========================================================================
+  // JOINT LANDLORD VALIDATION
+  // ==========================================================================
+  if (data.has_joint_landlords === true) {
+    if (!data.landlord_full_name) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_full_name',
+        message: 'Joint landlords indicated but primary landlord name is missing.',
+      });
+    }
+    if (!data.landlord_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_2_name',
+        message: 'Joint landlords indicated but second landlord name is missing. ALL landlords must be named on court forms.',
+      });
+    }
+  }
+
+  // ==========================================================================
+  // JOINT TENANT VALIDATION
+  // ==========================================================================
+  if (data.has_joint_tenants === true) {
+    if (!data.tenant_full_name) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_full_name',
+        message: 'Joint tenants indicated but primary tenant name is missing.',
+      });
+    }
+    if (!data.tenant_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_2_name',
+        message: 'Joint tenants indicated but second tenant name is missing. ALL tenants named on the tenancy MUST be named on the notice.',
+      });
+    }
+  }
+
+  // ==========================================================================
+  // PRIMARY PARTY VALIDATION (always required)
+  // ==========================================================================
+  if (!data.landlord_full_name) {
+    issues.push({
+      severity: 'error',
+      field: 'landlord_full_name',
+      message: 'Landlord name is required for all court documents.',
+    });
+  }
+
+  if (!data.tenant_full_name) {
+    issues.push({
+      severity: 'error',
+      field: 'tenant_full_name',
+      message: 'Tenant name is required for all notices and court documents.',
+    });
+  }
+
+  return {
+    isValid: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert joint parties are complete, throwing if validation fails.
+ *
+ * Use this BEFORE generating Section 21 documents to ensure all parties are named.
+ */
+export function assertJointPartiesComplete(data: JointPartyData): void {
+  const result = validateJointParties(data);
+
+  if (!result.isValid) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => `${i.field}: ${i.message}`)
+      .join('; ');
+
+    throw new Error(
+      `Joint party validation failed: ${errorMessages}. ` +
+      `Notices and court forms with missing party names are INVALID.`
+    );
+  }
+}
+
+/**
+ * Log joint party validation results
+ */
+export function logJointPartyResults(result: JointPartyValidationResult): void {
+  if (!result.isValid) {
+    console.error('❌ Joint party validation FAILED:');
+    for (const issue of result.issues.filter(i => i.severity === 'error')) {
+      console.error(`  🚨 [${issue.field}] ${issue.message}`);
+    }
+  }
+
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`  ⚠️  [${issue.field}] ${issue.message}`);
+  }
+
+  if (result.isValid && result.issues.length === 0) {
+    console.log('✅ Joint party validation passed');
+  }
+}

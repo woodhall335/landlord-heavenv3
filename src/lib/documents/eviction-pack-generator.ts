@@ -53,8 +53,14 @@ import {
   logValidationResults,
   validateCrossDocumentConsistency,
   logConsistencyResults,
+  validateComplianceTiming,
+  assertComplianceTiming,
+  validateJointParties,
+  assertJointPartiesComplete,
   type ValidationResult,
   type CrossDocumentData,
+  type ComplianceTimingData,
+  type JointPartyData,
 } from './court-ready-validator';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 
@@ -984,6 +990,63 @@ async function generateEnglandOrWalesEvictionPack(
         `Section 21 (no-fault eviction) is not available in ${jurisdiction}. ` +
         `${jurisdiction === 'wales' ? 'Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016.' : ''}`
       );
+    }
+
+    // =========================================================================
+    // P0 FIX: JOINT PARTY VALIDATION (Jan 2026)
+    // Block generation if joint landlords/tenants indicated but names missing.
+    // A Section 21 notice with missing party names is INVALID.
+    // =========================================================================
+    const jointPartyData: JointPartyData = {
+      has_joint_landlords: wizardFacts?.has_joint_landlords,
+      landlord_full_name: evictionCase.landlord_full_name,
+      landlord_2_name: evictionCase.landlord_2_name,
+      has_joint_tenants: wizardFacts?.has_joint_tenants,
+      tenant_full_name: evictionCase.tenant_full_name,
+      tenant_2_name: evictionCase.tenant_2_name,
+      tenant_3_name: wizardFacts?.tenant3_name,
+      tenant_4_name: wizardFacts?.tenant4_name,
+    };
+
+    const jointPartyResult = validateJointParties(jointPartyData);
+    if (!jointPartyResult.isValid) {
+      const errors = jointPartyResult.issues
+        .filter(i => i.severity === 'error')
+        .map(i => `${i.field}: ${i.message}`)
+        .join('; ');
+      throw new Error(
+        `Cannot generate Section 21 pack: ${errors}. ` +
+        `ALL landlords and tenants named on the tenancy MUST be named on the notice.`
+      );
+    }
+
+    // =========================================================================
+    // P0 FIX: COMPLIANCE TIMING VALIDATION (Jan 2026)
+    // Validate that compliance documents were provided at legally required times.
+    // Log warnings but don't block - let landlord decide if timing is acceptable.
+    // =========================================================================
+    const timingData: ComplianceTimingData = {
+      tenancy_start_date: evictionCase.tenancy_start_date,
+      epc_provided_date: wizardFacts?.epc_provided_date,
+      gas_safety_check_date: wizardFacts?.gas_safety_check_date,
+      gas_safety_provided_date: wizardFacts?.gas_safety_served_date,
+      has_gas_at_property: wizardFacts?.has_gas_at_property,
+      how_to_rent_provided_date: wizardFacts?.how_to_rent_date,
+      deposit_received_date: wizardFacts?.deposit_received_date,
+      prescribed_info_served_date: wizardFacts?.prescribed_info_served_date,
+    };
+
+    const timingResult = validateComplianceTiming(timingData);
+    if (!timingResult.isValid) {
+      console.warn('⚠️  COMPLIANCE TIMING WARNINGS (Section 21 may be invalid):');
+      for (const issue of timingResult.issues) {
+        const severity = issue.severity === 'error' ? '🚨' : '⚠️';
+        console.warn(`  ${severity} [${issue.field}] ${issue.message}`);
+        if (issue.expected) console.warn(`     Expected: ${issue.expected}`);
+        if (issue.actual) console.warn(`     Actual: ${issue.actual}`);
+      }
+      // Don't throw - landlord may have valid reasons (e.g., tenancy predates requirements)
+      // The warning is logged so landlord is aware of potential issues
     }
 
     // Build Section21NoticeData from evictionCase to use the canonical notice generator
