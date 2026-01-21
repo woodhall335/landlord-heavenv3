@@ -312,25 +312,31 @@ Navigation is safe. Users cannot bypass critical compliance checks even without 
 
 ## Summary of Changes Made
 
-### This Audit Made No Code Changes
+### Code Changes Implemented
 
-The merged implementation is legally safe and functionally correct for N5B generation.
+> **UPDATED 2026-01-21**: All recommended follow-up actions have been implemented.
 
-### Recommended Follow-Up Actions
+1. **Spec Update** - COMPLETED
+   - Updated `docs/notice-only-rules-audit.md` Appendix D
+   - Changed "validation fires ONLY after Save/Next" to blur-triggered with touched state
 
-1. **Spec Update** (LOW priority)
-   - Update `docs/notice-only-rules-audit.md` Appendix D
-   - Change "validation fires ONLY after Save/Next" to "validation fires on blur, errors shown after touched"
+2. **Wire ValidatedField Components** - COMPLETED
+   - `Section21ComplianceSection.tsx` - Full validation wiring
+   - `TenancySection.tsx` - Full validation wiring
+   - `PartiesSection.tsx` - Full validation wiring
+   - `PropertySection.tsx` - Full validation wiring
+   - `CourtSigningSection.tsx` - Full validation wiring
 
-2. **Wire ValidatedField Components** (MEDIUM priority — noted in PR as "Next Steps")
-   - `Section21ComplianceSection.tsx`
-   - `TenancySection.tsx`
-   - `PartiesSection.tsx`
-   - `PropertySection.tsx`
+3. **Register Errors with Context** - COMPLETED
+   - Updated ValidatedField to call `setFieldError()` on validation failure
+   - Added `sectionId` prop to all validated components
+   - Errors auto-clear on unmount to prevent stale state
+   - `hasErrors` now properly gates navigation
 
-3. **Register Errors with Context** (MEDIUM priority)
-   - Update ValidatedField to call `setFieldError()` on validation failure
-   - This enables `hasErrors` to properly gate navigation
+### Commits
+
+1. `c4ca47f` - docs: add post-merge validation verification report
+2. `8c1fc20` - feat: wire ValidatedField components into eviction wizard sections
 
 ---
 
@@ -339,8 +345,7 @@ The merged implementation is legally safe and functionally correct for N5B gener
 | Risk | Severity | Mitigation |
 |------|----------|------------|
 | User confirms document but doesn't attach | LOW | Statement of Truth liability |
-| Field validation doesn't block Next | LOW | Section blockers still work |
-| ValidatedField not wired to sections | LOW | Noted as future work |
+| NoticeSection not updated | LOW | Uses different component pattern |
 
 ---
 
