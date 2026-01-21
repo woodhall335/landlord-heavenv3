@@ -24,6 +24,11 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import {
+  ValidatedInput,
+  ValidatedSelect,
+  ValidatedTextarea,
+} from '@/components/wizard/ValidatedField';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 interface CourtSigningSectionProps {
@@ -32,6 +37,8 @@ interface CourtSigningSectionProps {
   product?: string;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
+
+const SECTION_ID = 'court_signing';
 
 const HMCTS_COURT_FINDER_URL =
   'https://www.find-court-tribunal.service.gov.uk/services/money/housing/nearest/search-by-postcode';
@@ -117,18 +124,19 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
   }, [noticeExpiryDate]); // Re-run when notice_expiry_date changes
 
   // Handle signature date change with validation
-  const handleSignatureDateChange = (newDate: string) => {
+  const handleSignatureDateChange = (newDate: string | number) => {
+    const dateStr = String(newDate);
     // For Section 8 complete pack, validate against notice expiry
-    if (isSection8 && isCompletePack && noticeExpiryDate && newDate < noticeExpiryDate) {
+    if (isSection8 && isCompletePack && noticeExpiryDate && dateStr < noticeExpiryDate) {
       setSignatureDateError(
         `Signature date cannot be before notice expiry (${noticeExpiryDate}). ` +
         `Court forms can only be signed after the notice period expires.`
       );
       // Still update but show the error
-      onUpdate({ signature_date: newDate });
+      onUpdate({ signature_date: dateStr });
     } else {
       setSignatureDateError(null);
-      onUpdate({ signature_date: newDate });
+      onUpdate({ signature_date: dateStr });
     }
   };
 
@@ -159,40 +167,28 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
           </a>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="court_name" className="block text-sm font-medium text-gray-700">
-            Court name
-            <span className="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="court_name"
-            type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.court_name || ''}
-            onChange={(e) => onUpdate({ court_name: e.target.value })}
-            placeholder="e.g., Manchester County Court"
-          />
-          <p className="text-xs text-gray-500">
-            Copy the court name exactly as shown in the Court Finder results.
-          </p>
-        </div>
+        <ValidatedInput
+          id="court_name"
+          label="Court name"
+          value={facts.court_name as string}
+          onChange={(v) => onUpdate({ court_name: v })}
+          validation={{ required: true }}
+          required
+          placeholder="e.g., Manchester County Court"
+          helperText="Copy the court name exactly as shown in the Court Finder results."
+          sectionId={SECTION_ID}
+        />
 
-        <div className="space-y-2">
-          <label htmlFor="court_address" className="block text-sm font-medium text-gray-700">
-            Court address (optional)
-          </label>
-          <textarea
-            id="court_address"
-            rows={3}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.court_address || ''}
-            onChange={(e) => onUpdate({ court_address: e.target.value })}
-            placeholder="e.g., 1 Bridge Street West, Manchester, M60 9DJ"
-          />
-          <p className="text-xs text-gray-500">
-            For your reference. Include the full address and postcode.
-          </p>
-        </div>
+        <ValidatedTextarea
+          id="court_address"
+          label="Court address (optional)"
+          value={facts.court_address as string}
+          onChange={(v) => onUpdate({ court_address: v })}
+          rows={3}
+          placeholder="e.g., 1 Bridge Street West, Manchester, M60 9DJ"
+          helperText="For your reference. Include the full address and postcode."
+          sectionId={SECTION_ID}
+        />
       </div>
 
       {/* Statement of Truth */}
@@ -213,74 +209,52 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="signatory_name" className="block text-sm font-medium text-gray-700">
-              Full name of person signing
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="signatory_name"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.signatory_name || facts.landlord_full_name || ''}
-              onChange={(e) => onUpdate({ signatory_name: e.target.value })}
-              placeholder="Full legal name"
-            />
-          </div>
+          <ValidatedInput
+            id="signatory_name"
+            label="Full name of person signing"
+            value={(facts.signatory_name || facts.landlord_full_name || '') as string}
+            onChange={(v) => onUpdate({ signatory_name: v })}
+            validation={{ required: true }}
+            required
+            placeholder="Full legal name"
+            sectionId={SECTION_ID}
+          />
+
+          <ValidatedSelect
+            id="signatory_capacity"
+            label="Capacity"
+            value={facts.signatory_capacity as string}
+            onChange={(v) => onUpdate({ signatory_capacity: v })}
+            options={SIGNATORY_CAPACITIES}
+            validation={{ required: true }}
+            required
+            helperText="The signatory must have authority to sign on behalf of the claimant(s)."
+            sectionId={SECTION_ID}
+          />
 
           <div className="space-y-2">
-            <label htmlFor="signatory_capacity" className="block text-sm font-medium text-gray-700">
-              Capacity
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <select
-              id="signatory_capacity"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.signatory_capacity || ''}
-              onChange={(e) => onUpdate({ signatory_capacity: e.target.value })}
-            >
-              <option value="">Select capacity...</option>
-              {SIGNATORY_CAPACITIES.map((cap) => (
-                <option key={cap.value} value={cap.value}>
-                  {cap.label}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500">
-              The signatory must have authority to sign on behalf of the claimant(s).
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="signature_date" className="block text-sm font-medium text-gray-700">
-              Date of signature
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
+            <ValidatedInput
               id="signature_date"
+              label="Date of signature"
               type="date"
-              className={`w-full rounded-md border px-3 py-2 text-sm focus:ring-1 ${
-                signatureDateError
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:border-[#7C3AED] focus:ring-[#7C3AED]'
-              }`}
               value={signatureDate}
+              onChange={handleSignatureDateChange}
+              validation={{ required: true }}
+              required
               min={isSection8 && isCompletePack && noticeExpiryDate ? noticeExpiryDate : undefined}
-              onChange={(e) => handleSignatureDateChange(e.target.value)}
+              error={signatureDateError || undefined}
+              helperText={
+                isSection8 && isCompletePack && noticeExpiryDate
+                  ? `For Section 8 claims, signature date must be on or after notice expiry (${noticeExpiryDate}).`
+                  : 'Usually the date you submit the claim. Defaults to today.'
+              }
+              sectionId={SECTION_ID}
             />
-            {signatureDateError ? (
-              <div className="flex items-start gap-2 text-xs text-red-600 mt-1">
+            {signatureDateError && (
+              <div className="flex items-start gap-2 text-xs text-red-600">
                 <RiErrorWarningLine className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{signatureDateError}</span>
               </div>
-            ) : isSection8 && isCompletePack && noticeExpiryDate ? (
-              <p className="text-xs text-gray-500">
-                For Section 8 claims, signature date must be on or after notice expiry ({noticeExpiryDate}).
-              </p>
-            ) : (
-              <p className="text-xs text-gray-500">
-                Usually the date you submit the claim. Defaults to today.
-              </p>
             )}
           </div>
         </div>

@@ -30,12 +30,20 @@
 
 import React, { useEffect, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import {
+  ValidatedInput,
+  ValidatedSelect,
+  ValidatedCurrencyInput,
+  ValidatedYesNoToggle,
+} from '@/components/wizard/ValidatedField';
 
 interface TenancySectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
+
+const SECTION_ID = 'tenancy';
 
 // =============================================================================
 // JURISDICTION-SPECIFIC TENANCY TYPES
@@ -60,13 +68,6 @@ const ENGLAND_TENANCY_TYPES = [
  *
  * NOTE: Scotland does NOT use AST. The PRT replaced the old SAT/AT system in 2017.
  * We use distinct internal codes to avoid confusion with England types.
- *
- * TODO(LEGAL): Scotland legacy tenancy types (SAT, AT, Regulated) may require
- * different eviction procedures than PRT. Currently we show them as options but
- * the notice_only flow is optimized for PRT. Product/legal review needed to:
- * 1. Determine if we should support legacy tenancy evictions or redirect users
- * 2. If supporting, verify correct grounds/forms/procedures for each type
- * 3. Consider adding "not supported" messaging for legacy types if appropriate
  */
 const SCOTLAND_TENANCY_TYPES = [
   { value: 'prt', label: 'Private Residential Tenancy (PRT) (2017–present)' },
@@ -78,11 +79,6 @@ const SCOTLAND_TENANCY_TYPES = [
 /**
  * Get tenancy types for the given jurisdiction.
  * Wales uses a separate OccupationContractSection, but we include a fallback.
- *
- * TODO(LEGAL): Wales fallback types below should NOT be reached in normal flow.
- * If this code path is triggered, it indicates a routing bug - Wales eviction
- * should use OccupationContractSection, not TenancySection. Monitor for usage
- * and consider adding error logging if this fallback is ever invoked.
  */
 function getTenancyTypesForJurisdiction(jurisdiction: 'england' | 'wales' | 'scotland') {
   switch (jurisdiction) {
@@ -90,7 +86,6 @@ function getTenancyTypesForJurisdiction(jurisdiction: 'england' | 'wales' | 'sco
       return SCOTLAND_TENANCY_TYPES;
     case 'wales':
       // Wales should use OccupationContractSection, but provide fallback
-      // TODO(LEGAL): Wales fallback - should not be reached in normal flow
       console.warn('[TenancySection] Wales fallback triggered - should use OccupationContractSection');
       return [
         { value: 'standard_periodic', label: 'Standard Contract (Periodic)' },
@@ -110,6 +105,12 @@ const RENT_FREQUENCIES = [
   { value: 'quarterly', label: 'Quarterly' },
 ];
 
+const BREAK_CLAUSE_OPTIONS = [
+  { value: '', label: 'Not sure' },
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+];
+
 export const TenancySection: React.FC<TenancySectionProps> = ({
   facts,
   jurisdiction,
@@ -127,6 +128,10 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
   // - Scotland: PRT has NO fixed term concept - all PRTs are open-ended
   const isScotland = jurisdiction === 'scotland';
   const isFixedTerm = !isScotland && (tenancyType === 'ast_fixed' || tenancyType === 'standard_fixed');
+
+  // N5B-specific questions only apply to England Section 21 complete pack
+  const isSection21 = facts.eviction_route === 'section_21' || facts.selected_notice_route === 'section_21';
+  const showN5BQuestions = jurisdiction === 'england' && isSection21;
 
   // Initialize default values for rent_frequency and rent_due_day
   // This ensures displayed defaults are saved to facts for isComplete checks
@@ -163,58 +168,64 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
   return (
     <div className="space-y-6">
       {/* Tenancy start date */}
-      <div className="space-y-2">
-        <label htmlFor="tenancy_start_date" className="block text-sm font-medium text-gray-700">
-          Tenancy start date
-          <span className="text-red-500 ml-1">*</span>
-        </label>
-        <input
-          id="tenancy_start_date"
-          type="date"
-          className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-          value={facts.tenancy_start_date || ''}
-          onChange={(e) => onUpdate({ tenancy_start_date: e.target.value })}
-        />
-        <p className="text-xs text-gray-500">
-          {isScotland ? (
-            // Scotland: No "How to Rent" requirement - reference 6-month rule instead
-            <>The date the current tenancy began. This affects notice period calculations and the 6-month rule.</>
-          ) : (
-            // England: "How to Rent" guide is an England-specific requirement
-            <>The date the current tenancy began. This affects notice period calculations and the &apos;How to Rent&apos; requirement.</>
-          )}
-        </p>
-      </div>
+      <ValidatedInput
+        id="tenancy_start_date"
+        label="Tenancy start date"
+        type="date"
+        value={facts.tenancy_start_date as string}
+        onChange={(v) => onUpdate({ tenancy_start_date: v })}
+        validation={{ required: true }}
+        required
+        helperText={isScotland
+          ? 'The date the current tenancy began. This affects notice period calculations and the 6-month rule.'
+          : "The date the current tenancy began. This affects notice period calculations and the 'How to Rent' requirement."
+        }
+        sectionId={SECTION_ID}
+        className="max-w-xs"
+      />
 
       {/* Tenancy type */}
-      <div className="space-y-2">
-        <label htmlFor="tenancy_type" className="block text-sm font-medium text-gray-700">
-          {isScotland ? 'Tenancy type' : 'Tenancy type'}
-          <span className="text-red-500 ml-1">*</span>
-        </label>
-        <select
-          id="tenancy_type"
-          className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-          value={tenancyType}
-          onChange={(e) => onUpdate({ tenancy_type: e.target.value })}
-        >
-          <option value="">{isScotland ? 'Select tenancy type...' : 'Select tenancy type...'}</option>
-          {tenancyTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-        <p className="text-xs text-gray-500">
-          {isScotland ? (
-            // Scotland: reference tribunal and discretionary grounds
-            <>The tenancy type affects which grounds apply. Most modern tenancies are PRTs.</>
-          ) : (
-            // England: reference notices and periods
-            <>The tenancy type affects which notices can be used and notice periods.</>
-          )}
-        </p>
-      </div>
+      <ValidatedSelect
+        id="tenancy_type"
+        label="Tenancy type"
+        value={tenancyType}
+        onChange={(v) => onUpdate({ tenancy_type: v })}
+        options={tenancyTypes}
+        validation={{ required: true }}
+        required
+        helperText={isScotland
+          ? 'The tenancy type affects which grounds apply. Most modern tenancies are PRTs.'
+          : 'The tenancy type affects which notices can be used and notice periods.'
+        }
+        sectionId={SECTION_ID}
+        className="max-w-md"
+      />
+
+      {/* N5B Q7: Tenancy Agreement Date (England Section 21 only) */}
+      {showN5BQuestions && (
+        <ValidatedInput
+          id="tenancy_agreement_date"
+          label="Tenancy agreement date"
+          type="date"
+          value={(facts.tenancy_agreement_date || facts.tenancy_start_date) as string}
+          onChange={(v) => onUpdate({ tenancy_agreement_date: v })}
+          helperText="The date shown on your written tenancy agreement. Usually the same as the start date, but may be earlier if you signed before the tenancy began."
+          sectionId={SECTION_ID}
+          className="max-w-xs"
+        />
+      )}
+
+      {/* N5B Q8: Subsequent Tenancy (England Section 21 only) */}
+      {showN5BQuestions && (
+        <ValidatedYesNoToggle
+          id="subsequent_tenancy"
+          label="Has any subsequent written tenancy agreement been entered into since the original?"
+          value={facts.subsequent_tenancy}
+          onChange={(v) => onUpdate({ subsequent_tenancy: v })}
+          helperText="For example, a renewal or new fixed-term agreement with the same tenant."
+          sectionId={SECTION_ID}
+        />
+      )}
 
       {/* Scotland PRT info banner - show when PRT is selected */}
       {isScotland && tenancyType === 'prt' && (
@@ -253,68 +264,53 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
       {/* Fixed term end date (conditional) */}
       {isFixedTerm && (
         <div className="space-y-4 pl-4 border-l-2 border-purple-200">
-          <div className="space-y-2">
-            <label htmlFor="fixed_term_end_date" className="block text-sm font-medium text-gray-700">
-              Fixed term end date
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="fixed_term_end_date"
-              type="date"
-              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.fixed_term_end_date || ''}
-              onChange={(e) => onUpdate({ fixed_term_end_date: e.target.value })}
-            />
-            <p className="text-xs text-gray-500">
-              Section 21 notices cannot expire before the fixed term ends (unless there is a break clause).
-            </p>
-          </div>
+          <ValidatedInput
+            id="fixed_term_end_date"
+            label="Fixed term end date"
+            type="date"
+            value={facts.fixed_term_end_date as string}
+            onChange={(v) => onUpdate({ fixed_term_end_date: v })}
+            validation={{ required: true }}
+            required
+            helperText="Section 21 notices cannot expire before the fixed term ends (unless there is a break clause)."
+            sectionId={SECTION_ID}
+            className="max-w-xs"
+          />
 
           {/* Break clause question */}
-          <div className="space-y-2">
-            <label htmlFor="has_break_clause" className="block text-sm font-medium text-gray-700">
-              Does the tenancy agreement contain a break clause?
-            </label>
-            <select
-              id="has_break_clause"
-              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.has_break_clause === true ? 'yes' : facts.has_break_clause === false ? 'no' : ''}
-              onChange={(e) => {
-                const val = e.target.value;
-                onUpdate({
-                  has_break_clause: val === 'yes' ? true : val === 'no' ? false : null,
-                  // Clear break clause date if no break clause
-                  ...(val !== 'yes' ? { break_clause_date: null } : {}),
-                });
-              }}
-            >
-              <option value="">Not sure</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-            <p className="text-xs text-gray-500">
-              A break clause allows either party to end the tenancy early. Check your tenancy agreement.
-            </p>
-          </div>
+          <ValidatedSelect
+            id="has_break_clause"
+            label="Does the tenancy agreement contain a break clause?"
+            value={facts.has_break_clause === true ? 'yes' : facts.has_break_clause === false ? 'no' : ''}
+            onChange={(v) => {
+              const val = v as string;
+              onUpdate({
+                has_break_clause: val === 'yes' ? true : val === 'no' ? false : null,
+                // Clear break clause date if no break clause
+                ...(val !== 'yes' ? { break_clause_date: null } : {}),
+              });
+            }}
+            options={BREAK_CLAUSE_OPTIONS}
+            helperText="A break clause allows either party to end the tenancy early. Check your tenancy agreement."
+            sectionId={SECTION_ID}
+            className="max-w-xs"
+          />
 
           {/* Break clause date (if has break clause) */}
           {facts.has_break_clause === true && (
-            <div className="space-y-2 pl-4 border-l-2 border-blue-200">
-              <label htmlFor="break_clause_date" className="block text-sm font-medium text-gray-700">
-                Earliest break clause date
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
+            <div className="pl-4 border-l-2 border-blue-200">
+              <ValidatedInput
                 id="break_clause_date"
+                label="Earliest break clause date"
                 type="date"
-                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.break_clause_date || ''}
-                onChange={(e) => onUpdate({ break_clause_date: e.target.value })}
+                value={facts.break_clause_date as string}
+                onChange={(v) => onUpdate({ break_clause_date: v })}
+                validation={{ required: true }}
+                required
+                helperText="The earliest date the break clause can be exercised. This is often 6 months after tenancy start. Section 21 notices can expire on or after this date (subject to 2-month notice period)."
+                sectionId={SECTION_ID}
+                className="max-w-xs"
               />
-              <p className="text-xs text-gray-500">
-                The earliest date the break clause can be exercised. This is often 6 months after tenancy start.
-                Section 21 notices can expire on or after this date (subject to 2-month notice period).
-              </p>
             </div>
           )}
 
@@ -340,66 +336,49 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Rent amount */}
-          <div className="space-y-2">
-            <label htmlFor="rent_amount" className="block text-sm font-medium text-gray-700">
-              Rent amount (£)
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-              <input
-                id="rent_amount"
-                type="number"
-                min="0"
-                step="0.01"
-                className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.rent_amount || ''}
-                onChange={(e) => onUpdate({ rent_amount: parseFloat(e.target.value) || 0 })}
-                placeholder="0.00"
-              />
-            </div>
-          </div>
+          <ValidatedCurrencyInput
+            id="rent_amount"
+            label="Rent amount"
+            value={facts.rent_amount}
+            onChange={(v) => onUpdate({ rent_amount: parseFloat(String(v)) || 0 })}
+            validation={{ required: true, min: 0 }}
+            required
+            min={0}
+            placeholder="0.00"
+            sectionId={SECTION_ID}
+          />
 
           {/* Rent frequency */}
-          <div className="space-y-2">
-            <label htmlFor="rent_frequency" className="block text-sm font-medium text-gray-700">
-              Frequency
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <select
-              id="rent_frequency"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={rentFrequency}
-              onChange={(e) => onUpdate({ rent_frequency: e.target.value })}
-            >
-              {RENT_FREQUENCIES.map((freq) => (
-                <option key={freq.value} value={freq.value}>
-                  {freq.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <ValidatedSelect
+            id="rent_frequency"
+            label="Frequency"
+            value={rentFrequency}
+            onChange={(v) => onUpdate({ rent_frequency: v })}
+            options={RENT_FREQUENCIES}
+            validation={{ required: true }}
+            required
+            sectionId={SECTION_ID}
+          />
 
           {/* Rent due day */}
-          <div className="space-y-2">
-            <label htmlFor="rent_due_day" className="block text-sm font-medium text-gray-700">
-              Day rent is due
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="rent_due_day"
-              type="number"
-              min="1"
-              max={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? 7 : 31}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.rent_due_day || ''}
-              onChange={(e) => onUpdate({ rent_due_day: parseInt(e.target.value) || 1 })}
-              placeholder={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? '1-7' : '1-31'}
-            />
-            <p className="text-xs text-gray-500">
-              {getRentDueDayHelper()}
-            </p>
-          </div>
+          <ValidatedInput
+            id="rent_due_day"
+            label="Day rent is due"
+            type="number"
+            value={facts.rent_due_day}
+            onChange={(v) => onUpdate({ rent_due_day: parseInt(String(v)) || 1 })}
+            validation={{
+              required: true,
+              min: 1,
+              max: rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? 7 : 31,
+            }}
+            required
+            min={1}
+            max={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? 7 : 31}
+            placeholder={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? '1-7' : '1-31'}
+            helperText={getRentDueDayHelper()}
+            sectionId={SECTION_ID}
+          />
         </div>
 
         {/* Rent calculation preview */}

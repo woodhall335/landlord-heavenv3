@@ -30,12 +30,20 @@
 
 import React from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import {
+  ValidatedInput,
+  ValidatedSelect,
+  ValidatedCurrencyInput,
+  ValidatedYesNoToggle,
+} from '@/components/wizard/ValidatedField';
 
 interface Section21ComplianceSectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
+
+const SECTION_ID = 'section21_compliance';
 
 const DEPOSIT_SCHEMES = [
   { value: 'DPS', label: 'Deposit Protection Service (DPS)' },
@@ -49,56 +57,6 @@ const LICENSING_OPTIONS = [
   { value: 'hmo_additional', label: 'Additional HMO licence required' },
   { value: 'selective', label: 'Selective licence required' },
 ];
-
-// Helper component for yes/no toggle
-const YesNoToggle: React.FC<{
-  id: string;
-  value: boolean | undefined;
-  onChange: (value: boolean) => void;
-  label: string;
-  required?: boolean;
-  helperText?: string;
-  blockingMessage?: string;
-}> = ({ id, value, onChange, label, required, helperText, blockingMessage }) => (
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      {label}
-      {required && <span className="text-red-500 ml-1">*</span>}
-    </label>
-    <div className="flex items-center gap-4">
-      <label className={`
-        flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-        ${value === true ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'}
-      `}>
-        <input
-          type="radio"
-          name={id}
-          checked={value === true}
-          onChange={() => onChange(true)}
-          className="mr-2"
-        />
-        <span className="text-sm">Yes</span>
-      </label>
-      <label className={`
-        flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-        ${value === false ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
-      `}>
-        <input
-          type="radio"
-          name={id}
-          checked={value === false}
-          onChange={() => onChange(false)}
-          className="mr-2"
-        />
-        <span className="text-sm">No</span>
-      </label>
-    </div>
-    {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-    {value === false && blockingMessage && (
-      <p className="text-sm text-red-600 font-medium">{blockingMessage}</p>
-    )}
-  </div>
-);
 
 export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProps> = ({
   facts,
@@ -126,108 +84,96 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Deposit Protection
         </h3>
 
-        <YesNoToggle
+        <ValidatedYesNoToggle
           id="deposit_taken"
+          label="Did you take a deposit from the tenant?"
           value={facts.deposit_taken}
           onChange={(v) => onUpdate({ deposit_taken: v })}
-          label="Did you take a deposit from the tenant?"
           required
+          sectionId={SECTION_ID}
         />
 
         {depositTaken && (
           <div className="pl-4 border-l-2 border-purple-200 space-y-4">
             {/* Deposit amount */}
-            <div className="space-y-2">
-              <label htmlFor="deposit_amount" className="block text-sm font-medium text-gray-700">
-                Deposit amount (£)
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <div className="relative max-w-xs">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-                <input
-                  id="deposit_amount"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                  value={facts.deposit_amount || ''}
-                  onChange={(e) => onUpdate({ deposit_amount: parseFloat(e.target.value) || 0 })}
-                />
-              </div>
-            </div>
+            <ValidatedCurrencyInput
+              id="deposit_amount"
+              label="Deposit amount"
+              value={facts.deposit_amount}
+              onChange={(v) => onUpdate({ deposit_amount: parseFloat(String(v)) || 0 })}
+              validation={{ required: true, min: 0 }}
+              required
+              min={0}
+              sectionId={SECTION_ID}
+            />
 
-            <YesNoToggle
+            <ValidatedYesNoToggle
               id="deposit_protected"
+              label="Is the deposit protected in an approved scheme?"
               value={facts.deposit_protected}
               onChange={(v) => onUpdate({ deposit_protected: v })}
-              label="Is the deposit protected in an approved scheme?"
               required
               helperText="Must be protected within 30 days of receipt."
               blockingMessage="Section 21 cannot be used if deposit is not protected."
+              sectionId={SECTION_ID}
             />
 
             {facts.deposit_protected === true && (
               <>
-                <div className="space-y-2">
-                  <label htmlFor="deposit_scheme_name" className="block text-sm font-medium text-gray-700">
-                    Deposit protection scheme
-                    <span className="text-red-500 ml-1">*</span>
-                  </label>
-                  <select
-                    id="deposit_scheme_name"
-                    className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                    value={facts.deposit_scheme_name || ''}
-                    onChange={(e) => onUpdate({ deposit_scheme_name: e.target.value })}
-                  >
-                    <option value="">Select scheme...</option>
-                    {DEPOSIT_SCHEMES.map((scheme) => (
-                      <option key={scheme.value} value={scheme.value}>
-                        {scheme.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <ValidatedSelect
+                  id="deposit_scheme_name"
+                  label="Deposit protection scheme"
+                  value={facts.deposit_scheme_name as string}
+                  onChange={(v) => onUpdate({ deposit_scheme_name: v })}
+                  options={DEPOSIT_SCHEMES}
+                  validation={{ required: true }}
+                  required
+                  sectionId={SECTION_ID}
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="deposit_protection_date" className="block text-sm font-medium text-gray-700">
-                      Date deposit was protected
-                      <span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <input
-                      id="deposit_protection_date"
-                      type="date"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                      value={facts.deposit_protection_date || ''}
-                      onChange={(e) => onUpdate({ deposit_protection_date: e.target.value })}
-                    />
-                  </div>
+                  <ValidatedInput
+                    id="deposit_protection_date"
+                    label="Date deposit was protected"
+                    type="date"
+                    value={facts.deposit_protection_date as string}
+                    onChange={(v) => onUpdate({ deposit_protection_date: v })}
+                    validation={{ required: true }}
+                    required
+                    sectionId={SECTION_ID}
+                  />
 
-                  <div className="space-y-2">
-                    <label htmlFor="deposit_reference" className="block text-sm font-medium text-gray-700">
-                      Deposit reference number
-                    </label>
-                    <input
-                      id="deposit_reference"
-                      type="text"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                      value={facts.deposit_reference || ''}
-                      onChange={(e) => onUpdate({ deposit_reference: e.target.value })}
-                      placeholder="Optional - scheme reference"
-                    />
-                  </div>
+                  <ValidatedInput
+                    id="deposit_reference"
+                    label="Deposit reference number"
+                    value={facts.deposit_reference as string}
+                    onChange={(v) => onUpdate({ deposit_reference: v })}
+                    placeholder="Optional - scheme reference"
+                    sectionId={SECTION_ID}
+                  />
                 </div>
               </>
             )}
 
-            <YesNoToggle
+            <ValidatedYesNoToggle
               id="prescribed_info_served"
+              label="Was prescribed information served within 30 days?"
               value={facts.prescribed_info_served}
               onChange={(v) => onUpdate({ prescribed_info_served: v })}
-              label="Was prescribed information served within 30 days?"
               required
               helperText="You must provide the tenant with prescribed information about the deposit protection."
               blockingMessage="Section 21 cannot be used if prescribed information was not served."
+              sectionId={SECTION_ID}
+            />
+
+            {/* N5B Q13: Deposit Returned */}
+            <ValidatedYesNoToggle
+              id="deposit_returned"
+              label="Has the deposit been returned to the tenant?"
+              value={facts.deposit_returned}
+              onChange={(v) => onUpdate({ deposit_returned: v })}
+              helperText="Select 'Yes' if you have already returned the deposit to the tenant (e.g., at the end of a fixed term)."
+              sectionId={SECTION_ID}
             />
           </div>
         )}
@@ -239,25 +185,27 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Gas Safety
         </h3>
 
-        <YesNoToggle
+        <ValidatedYesNoToggle
           id="has_gas_appliances"
+          label="Does the property have gas appliances?"
           value={facts.has_gas_appliances}
           onChange={(v) => onUpdate({ has_gas_appliances: v })}
-          label="Does the property have gas appliances?"
           required
           helperText="Gas boiler, gas hob, gas fire, etc."
+          sectionId={SECTION_ID}
         />
 
         {hasGasAppliances && (
           <div className="pl-4 border-l-2 border-purple-200">
-            <YesNoToggle
+            <ValidatedYesNoToggle
               id="gas_safety_cert_served"
+              label="Was the Gas Safety Certificate provided to the tenant?"
               value={facts.gas_safety_cert_served}
               onChange={(v) => onUpdate({ gas_safety_cert_served: v })}
-              label="Was the Gas Safety Certificate provided to the tenant?"
               required
               helperText="A copy of the current CP12 must be provided annually."
               blockingMessage="Section 21 cannot be used if gas safety certificate was not provided."
+              sectionId={SECTION_ID}
             />
           </div>
         )}
@@ -269,14 +217,15 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Energy Performance Certificate
         </h3>
 
-        <YesNoToggle
+        <ValidatedYesNoToggle
           id="epc_served"
+          label="Was an EPC provided to the tenant before the tenancy started?"
           value={facts.epc_served}
           onChange={(v) => onUpdate({ epc_served: v })}
-          label="Was an EPC provided to the tenant before the tenancy started?"
           required
           helperText="The property must have a valid EPC with a rating of E or above."
           blockingMessage="Section 21 cannot be used if EPC was not provided."
+          sectionId={SECTION_ID}
         />
       </div>
 
@@ -286,14 +235,15 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           How to Rent Guide
         </h3>
 
-        <YesNoToggle
+        <ValidatedYesNoToggle
           id="how_to_rent_served"
+          label="Was the 'How to Rent' guide provided?"
           value={facts.how_to_rent_served}
           onChange={(v) => onUpdate({ how_to_rent_served: v })}
-          label="Was the 'How to Rent' guide provided?"
           required
           helperText="Required for tenancies starting on or after 1 October 2015."
           blockingMessage="Section 21 cannot be used if 'How to Rent' guide was not provided."
+          sectionId={SECTION_ID}
         />
       </div>
 
@@ -303,38 +253,28 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Property Licensing
         </h3>
 
-        <div className="space-y-2">
-          <label htmlFor="licensing_required" className="block text-sm font-medium text-gray-700">
-            Is the property required to be licensed?
-            <span className="text-red-500 ml-1">*</span>
-          </label>
-          <select
-            id="licensing_required"
-            className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-            value={facts.licensing_required || ''}
-            onChange={(e) => onUpdate({ licensing_required: e.target.value })}
-          >
-            <option value="">Select...</option>
-            {LICENSING_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <p className="text-xs text-gray-500">
-            Check with your local council if unsure. HMOs and some areas require licensing.
-          </p>
-        </div>
+        <ValidatedSelect
+          id="licensing_required"
+          label="Is the property required to be licensed?"
+          value={facts.licensing_required as string}
+          onChange={(v) => onUpdate({ licensing_required: v })}
+          options={LICENSING_OPTIONS}
+          validation={{ required: true }}
+          required
+          helperText="Check with your local council if unsure. HMOs and some areas require licensing."
+          sectionId={SECTION_ID}
+        />
 
         {licensingRequired && (
           <div className="pl-4 border-l-2 border-purple-200">
-            <YesNoToggle
+            <ValidatedYesNoToggle
               id="has_valid_licence"
+              label="Do you have a valid licence for this property?"
               value={facts.has_valid_licence}
               onChange={(v) => onUpdate({ has_valid_licence: v })}
-              label="Do you have a valid licence for this property?"
               required
               blockingMessage="Section 21 cannot be used if the property requires a licence but does not have one."
+              sectionId={SECTION_ID}
             />
           </div>
         )}
@@ -346,14 +286,15 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Retaliatory Eviction
         </h3>
 
-        <YesNoToggle
+        <ValidatedYesNoToggle
           id="no_retaliatory_notice"
+          label="Is this notice being served more than 6 months after any repair complaint?"
           value={facts.no_retaliatory_notice}
           onChange={(v) => onUpdate({ no_retaliatory_notice: v })}
-          label="Is this notice being served more than 6 months after any repair complaint?"
           required
           helperText="Section 21 notices served within 6 months of a repair complaint may be deemed retaliatory and invalid."
           blockingMessage="This may be considered a retaliatory eviction. Consider waiting or using Section 8."
+          sectionId={SECTION_ID}
         />
       </div>
     </div>

@@ -17,6 +17,7 @@
 
 import React from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import { ValidatedInput } from '@/components/wizard/ValidatedField';
 
 interface PartiesSectionProps {
   facts: WizardFacts;
@@ -24,6 +25,8 @@ interface PartiesSectionProps {
   jurisdiction: 'england' | 'wales' | 'scotland';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
+
+const SECTION_ID = 'parties';
 
 export const PartiesSection: React.FC<PartiesSectionProps> = ({
   facts,
@@ -41,90 +44,71 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2 space-y-2">
-            <label htmlFor="landlord_full_name" className="block text-sm font-medium text-gray-700">
-              Full name
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
+          <div className="md:col-span-2">
+            <ValidatedInput
               id="landlord_full_name"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_full_name || ''}
-              onChange={(e) => onUpdate({ landlord_full_name: e.target.value })}
+              label="Full name"
+              value={facts.landlord_full_name as string}
+              onChange={(v) => onUpdate({ landlord_full_name: v })}
+              validation={{ required: true }}
+              required
               placeholder="e.g., John Smith"
+              sectionId={SECTION_ID}
             />
           </div>
 
-          <div className="md:col-span-2 space-y-2">
-            <label htmlFor="landlord_address_line1" className="block text-sm font-medium text-gray-700">
-              Address line 1
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
+          <div className="md:col-span-2">
+            <ValidatedInput
               id="landlord_address_line1"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_address_line1 || ''}
-              onChange={(e) => onUpdate({ landlord_address_line1: e.target.value })}
+              label="Address line 1"
+              value={facts.landlord_address_line1 as string}
+              onChange={(v) => onUpdate({ landlord_address_line1: v })}
+              validation={{ required: true }}
+              required
               placeholder="Street address"
+              sectionId={SECTION_ID}
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="landlord_address_town" className="block text-sm font-medium text-gray-700">
-              Town/City
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="landlord_address_town"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_address_town || ''}
-              onChange={(e) => onUpdate({ landlord_address_town: e.target.value })}
-            />
-          </div>
+          <ValidatedInput
+            id="landlord_address_town"
+            label="Town/City"
+            value={facts.landlord_address_town as string}
+            onChange={(v) => onUpdate({ landlord_address_town: v })}
+            validation={{ required: true }}
+            required
+            sectionId={SECTION_ID}
+          />
 
-          <div className="space-y-2">
-            <label htmlFor="landlord_address_postcode" className="block text-sm font-medium text-gray-700">
-              Postcode
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
-              id="landlord_address_postcode"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_address_postcode || ''}
-              onChange={(e) => onUpdate({ landlord_address_postcode: e.target.value })}
-              placeholder="e.g., SW1A 1AA"
-            />
-          </div>
+          <ValidatedInput
+            id="landlord_address_postcode"
+            label="Postcode"
+            value={facts.landlord_address_postcode as string}
+            onChange={(v) => onUpdate({ landlord_address_postcode: v })}
+            validation={{ required: true, pattern: '^[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}$' }}
+            required
+            placeholder="e.g., SW1A 1AA"
+            sectionId={SECTION_ID}
+          />
 
-          <div className="space-y-2">
-            <label htmlFor="landlord_email" className="block text-sm font-medium text-gray-700">
-              Email (optional)
-            </label>
-            <input
-              id="landlord_email"
-              type="email"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_email || ''}
-              onChange={(e) => onUpdate({ landlord_email: e.target.value })}
-            />
-          </div>
+          <ValidatedInput
+            id="landlord_email"
+            label="Email (optional)"
+            type="email"
+            value={facts.landlord_email as string}
+            onChange={(v) => onUpdate({ landlord_email: v })}
+            validation={{ pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' }}
+            sectionId={SECTION_ID}
+          />
 
-          <div className="space-y-2">
-            <label htmlFor="landlord_phone" className="block text-sm font-medium text-gray-700">
-              Phone (optional)
-            </label>
-            <input
-              id="landlord_phone"
-              type="tel"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.landlord_phone || ''}
-              onChange={(e) => onUpdate({ landlord_phone: e.target.value })}
-            />
-          </div>
+          <ValidatedInput
+            id="landlord_phone"
+            label="Phone (optional)"
+            type="tel"
+            value={facts.landlord_phone as string}
+            onChange={(v) => onUpdate({ landlord_phone: v })}
+            sectionId={SECTION_ID}
+          />
         </div>
 
         {/* Joint landlords toggle */}
@@ -149,20 +133,16 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
         {hasJointLandlords && (
           <div className="pt-4 pl-4 border-l-2 border-purple-200 space-y-4">
             <h4 className="text-sm font-medium text-gray-900">Second Landlord</h4>
-            <div className="space-y-2">
-              <label htmlFor="landlord2_name" className="block text-sm font-medium text-gray-700">
-                Full name
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
-                id="landlord2_name"
-                type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.landlord2_name || ''}
-                onChange={(e) => onUpdate({ landlord2_name: e.target.value })}
-                placeholder="e.g., Jane Smith"
-              />
-            </div>
+            <ValidatedInput
+              id="landlord2_name"
+              label="Full name"
+              value={facts.landlord2_name as string}
+              onChange={(v) => onUpdate({ landlord2_name: v })}
+              validation={{ required: true }}
+              required
+              placeholder="e.g., Jane Smith"
+              sectionId={SECTION_ID}
+            />
           </div>
         )}
       </div>
@@ -174,46 +154,37 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2 space-y-2">
-            <label htmlFor="tenant_full_name" className="block text-sm font-medium text-gray-700">
-              Full name
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <input
+          <div className="md:col-span-2">
+            <ValidatedInput
               id="tenant_full_name"
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.tenant_full_name || ''}
-              onChange={(e) => onUpdate({ tenant_full_name: e.target.value })}
+              label="Full name"
+              value={facts.tenant_full_name as string}
+              onChange={(v) => onUpdate({ tenant_full_name: v })}
+              validation={{ required: true }}
+              required
               placeholder="e.g., Alice Johnson"
+              sectionId={SECTION_ID}
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="tenant_email" className="block text-sm font-medium text-gray-700">
-              Email (optional)
-            </label>
-            <input
-              id="tenant_email"
-              type="email"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.tenant_email || ''}
-              onChange={(e) => onUpdate({ tenant_email: e.target.value })}
-            />
-          </div>
+          <ValidatedInput
+            id="tenant_email"
+            label="Email (optional)"
+            type="email"
+            value={facts.tenant_email as string}
+            onChange={(v) => onUpdate({ tenant_email: v })}
+            validation={{ pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' }}
+            sectionId={SECTION_ID}
+          />
 
-          <div className="space-y-2">
-            <label htmlFor="tenant_phone" className="block text-sm font-medium text-gray-700">
-              Phone (optional)
-            </label>
-            <input
-              id="tenant_phone"
-              type="tel"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-              value={facts.tenant_phone || ''}
-              onChange={(e) => onUpdate({ tenant_phone: e.target.value })}
-            />
-          </div>
+          <ValidatedInput
+            id="tenant_phone"
+            label="Phone (optional)"
+            type="tel"
+            value={facts.tenant_phone as string}
+            onChange={(v) => onUpdate({ tenant_phone: v })}
+            sectionId={SECTION_ID}
+          />
         </div>
 
         {/* Joint tenants toggle */}
@@ -239,45 +210,31 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
           <div className="pt-4 pl-4 border-l-2 border-purple-200 space-y-4">
             <h4 className="text-sm font-medium text-gray-900">Additional Tenants</h4>
 
-            <div className="space-y-2">
-              <label htmlFor="tenant2_name" className="block text-sm font-medium text-gray-700">
-                Second tenant full name
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
-                id="tenant2_name"
-                type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.tenant2_name || ''}
-                onChange={(e) => onUpdate({ tenant2_name: e.target.value })}
-              />
-            </div>
+            <ValidatedInput
+              id="tenant2_name"
+              label="Second tenant full name"
+              value={facts.tenant2_name as string}
+              onChange={(v) => onUpdate({ tenant2_name: v })}
+              validation={{ required: true }}
+              required
+              sectionId={SECTION_ID}
+            />
 
-            <div className="space-y-2">
-              <label htmlFor="tenant3_name" className="block text-sm font-medium text-gray-700">
-                Third tenant full name (if applicable)
-              </label>
-              <input
-                id="tenant3_name"
-                type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.tenant3_name || ''}
-                onChange={(e) => onUpdate({ tenant3_name: e.target.value })}
-              />
-            </div>
+            <ValidatedInput
+              id="tenant3_name"
+              label="Third tenant full name (if applicable)"
+              value={facts.tenant3_name as string}
+              onChange={(v) => onUpdate({ tenant3_name: v })}
+              sectionId={SECTION_ID}
+            />
 
-            <div className="space-y-2">
-              <label htmlFor="tenant4_name" className="block text-sm font-medium text-gray-700">
-                Fourth tenant full name (if applicable)
-              </label>
-              <input
-                id="tenant4_name"
-                type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                value={facts.tenant4_name || ''}
-                onChange={(e) => onUpdate({ tenant4_name: e.target.value })}
-              />
-            </div>
+            <ValidatedInput
+              id="tenant4_name"
+              label="Fourth tenant full name (if applicable)"
+              value={facts.tenant4_name as string}
+              onChange={(v) => onUpdate({ tenant4_name: v })}
+              sectionId={SECTION_ID}
+            />
 
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
               <p className="text-xs text-amber-800">
