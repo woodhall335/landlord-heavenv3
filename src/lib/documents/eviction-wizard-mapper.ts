@@ -332,6 +332,9 @@ function buildCaseData(
     claimant_reference: facts.court.claimant_reference || undefined,
     tenant_full_name: evictionCase.tenant_full_name,
     tenant_2_name: evictionCase.tenant_2_name,
+    // P0 FIX: Support up to 4 joint tenants
+    tenant_3_name: wizardFacts.tenant3_name || undefined,
+    tenant_4_name: wizardFacts.tenant4_name || undefined,
     property_address: evictionCase.property_address,
     property_postcode: evictionCase.property_address_postcode,
     tenancy_start_date: evictionCase.tenancy_start_date,

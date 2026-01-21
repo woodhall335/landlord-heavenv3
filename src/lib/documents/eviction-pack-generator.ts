@@ -997,11 +997,23 @@ async function generateEnglandOrWalesEvictionPack(
     // Block generation if joint landlords/tenants indicated but names missing.
     // A Section 21 notice with missing party names is INVALID.
     // =========================================================================
+    // Count provided party names for validation
+    const landlordCount = [evictionCase.landlord_full_name, evictionCase.landlord_2_name]
+      .filter(Boolean).length;
+    const tenantCount = [
+      evictionCase.tenant_full_name,
+      evictionCase.tenant_2_name,
+      wizardFacts?.tenant3_name,
+      wizardFacts?.tenant4_name,
+    ].filter(Boolean).length;
+
     const jointPartyData: JointPartyData = {
       has_joint_landlords: wizardFacts?.has_joint_landlords,
+      num_landlords: wizardFacts?.num_landlords || (wizardFacts?.has_joint_landlords ? Math.max(landlordCount, 2) : 1),
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_2_name: evictionCase.landlord_2_name,
       has_joint_tenants: wizardFacts?.has_joint_tenants,
+      num_tenants: wizardFacts?.num_tenants || (wizardFacts?.has_joint_tenants ? Math.max(tenantCount, 2) : 1),
       tenant_full_name: evictionCase.tenant_full_name,
       tenant_2_name: evictionCase.tenant_2_name,
       tenant_3_name: wizardFacts?.tenant3_name,
@@ -1038,15 +1050,47 @@ async function generateEnglandOrWalesEvictionPack(
 
     const timingResult = validateComplianceTiming(timingData);
     if (!timingResult.isValid) {
-      console.warn('⚠️  COMPLIANCE TIMING WARNINGS (Section 21 may be invalid):');
+      // =========================================================================
+      // P0 FINAL GATE: BLOCK GENERATION ON COMPLIANCE TIMING VIOLATIONS
+      // =========================================================================
+      // LEGAL RATIONALE: Courts WILL dismiss Section 21 claims where compliance
+      // documents were not provided at the legally required times:
+      // - EPC: Must be provided before tenancy start (Energy Performance of
+      //   Buildings Regulations 2012)
+      // - Gas Safety: Must be provided before occupation (Gas Safety Regulations 1998)
+      // - How to Rent: Must be provided before tenancy (Deregulation Act 2015,
+      //   for tenancies starting on/after 1 October 2015)
+      // - Prescribed Info: Must be within 30 days (Housing Act 2004, s.213)
+      //
+      // BYPASS: If landlord believes they have valid reasons (e.g., tenancy predates
+      // requirements), they must set `bypass_compliance_timing_validation: true` in
+      // wizard facts. This is logged for audit purposes.
+      // =========================================================================
+      const bypassValidation = wizardFacts?.bypass_compliance_timing_validation === true;
+
+      console.error('🚨 COMPLIANCE TIMING VIOLATIONS DETECTED (Section 21 may be INVALID):');
       for (const issue of timingResult.issues) {
-        const severity = issue.severity === 'error' ? '🚨' : '⚠️';
-        console.warn(`  ${severity} [${issue.field}] ${issue.message}`);
-        if (issue.expected) console.warn(`     Expected: ${issue.expected}`);
-        if (issue.actual) console.warn(`     Actual: ${issue.actual}`);
+        const severity = issue.severity === 'error' ? '🚨 BLOCK:' : '⚠️ WARN:';
+        console.error(`  ${severity} [${issue.field}] ${issue.message}`);
+        if (issue.expected) console.error(`     Expected: ${issue.expected}`);
+        if (issue.actual) console.error(`     Actual: ${issue.actual}`);
       }
-      // Don't throw - landlord may have valid reasons (e.g., tenancy predates requirements)
-      // The warning is logged so landlord is aware of potential issues
+
+      if (bypassValidation) {
+        console.warn('⚠️  COMPLIANCE BYPASS ENABLED - Proceeding despite timing violations.');
+        console.warn('    Landlord has confirmed valid reasons (e.g., tenancy predates requirements).');
+        console.warn('    This bypass is logged for audit purposes.');
+      } else {
+        const errors = timingResult.issues
+          .filter(i => i.severity === 'error')
+          .map(i => `${i.field}: ${i.message}`)
+          .join('; ');
+        throw new Error(
+          `Cannot generate Section 21 pack - compliance timing violations: ${errors}. ` +
+          `Fix the timing issues or set bypass_compliance_timing_validation=true if you have valid reasons ` +
+          `(e.g., tenancy predates the legal requirement).`
+        );
+      }
     }
 
     // Build Section21NoticeData from evictionCase to use the canonical notice generator
