@@ -400,6 +400,16 @@ function buildCaseData(
     deposit_returned: wizardFacts.deposit_returned ?? false,
 
     // =========================================================================
+    // N5B QUESTION 14a: PRESCRIBED INFORMATION GIVEN
+    // =========================================================================
+    // Maps from Section 21 compliance question to N5B Q14a checkbox
+    // Note: This is a Statement of Truth - only true if actually served
+    deposit_prescribed_info_given:
+      wizardFacts.prescribed_info_served ??
+      facts.tenancy.prescribed_info_given ??
+      undefined,
+
+    // =========================================================================
     // N5B ATTACHMENT CHECKBOXES - A, B, B1 (Trust-based document confirmations)
     // =========================================================================
     // These are now based on user confirmations that they HAVE the documents

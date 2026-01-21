@@ -34,6 +34,7 @@ import {
   ValidatedInput,
   ValidatedSelect,
   ValidatedCurrencyInput,
+  ValidatedYesNoToggle,
 } from '@/components/wizard/ValidatedField';
 
 interface TenancySectionProps {
@@ -128,6 +129,10 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
   const isScotland = jurisdiction === 'scotland';
   const isFixedTerm = !isScotland && (tenancyType === 'ast_fixed' || tenancyType === 'standard_fixed');
 
+  // N5B-specific questions only apply to England Section 21 complete pack
+  const isSection21 = facts.eviction_route === 'section_21' || facts.selected_notice_route === 'section_21';
+  const showN5BQuestions = jurisdiction === 'england' && isSection21;
+
   // Initialize default values for rent_frequency and rent_due_day
   // This ensures displayed defaults are saved to facts for isComplete checks
   useEffect(() => {
@@ -195,6 +200,32 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
         sectionId={SECTION_ID}
         className="max-w-md"
       />
+
+      {/* N5B Q7: Tenancy Agreement Date (England Section 21 only) */}
+      {showN5BQuestions && (
+        <ValidatedInput
+          id="tenancy_agreement_date"
+          label="Tenancy agreement date"
+          type="date"
+          value={(facts.tenancy_agreement_date || facts.tenancy_start_date) as string}
+          onChange={(v) => onUpdate({ tenancy_agreement_date: v })}
+          helperText="The date shown on your written tenancy agreement. Usually the same as the start date, but may be earlier if you signed before the tenancy began."
+          sectionId={SECTION_ID}
+          className="max-w-xs"
+        />
+      )}
+
+      {/* N5B Q8: Subsequent Tenancy (England Section 21 only) */}
+      {showN5BQuestions && (
+        <ValidatedYesNoToggle
+          id="subsequent_tenancy"
+          label="Has any subsequent written tenancy agreement been entered into since the original?"
+          value={facts.subsequent_tenancy}
+          onChange={(v) => onUpdate({ subsequent_tenancy: v })}
+          helperText="For example, a renewal or new fixed-term agreement with the same tenant."
+          sectionId={SECTION_ID}
+        />
+      )}
 
       {/* Scotland PRT info banner - show when PRT is selected */}
       {isScotland && tenancyType === 'prt' && (

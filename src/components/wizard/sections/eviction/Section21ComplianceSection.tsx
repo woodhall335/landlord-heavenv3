@@ -165,6 +165,16 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               blockingMessage="Section 21 cannot be used if prescribed information was not served."
               sectionId={SECTION_ID}
             />
+
+            {/* N5B Q13: Deposit Returned */}
+            <ValidatedYesNoToggle
+              id="deposit_returned"
+              label="Has the deposit been returned to the tenant?"
+              value={facts.deposit_returned}
+              onChange={(v) => onUpdate({ deposit_returned: v })}
+              helperText="Select 'Yes' if you have already returned the deposit to the tenant (e.g., at the end of a fixed term)."
+              sectionId={SECTION_ID}
+            />
           </div>
         )}
       </div>
