@@ -137,18 +137,20 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
 
   try {
     // Map service_method string to ServiceMethod type
+    // Valid ServiceMethod values: first_class_post, second_class_post, hand_delivery, leaving_at_property, recorded_delivery
     let serviceMethod: ServiceMethod = 'hand_delivery';
     if (params.service_method) {
       const method = params.service_method.toLowerCase();
-      if (method.includes('post') || method.includes('first class')) {
+      if (method.includes('first class') || method.includes('first_class') || method.includes('post')) {
         serviceMethod = 'first_class_post';
+      } else if (method.includes('second class') || method.includes('second_class')) {
+        serviceMethod = 'second_class_post';
       } else if (method.includes('recorded') || method.includes('signed')) {
         serviceMethod = 'recorded_delivery';
-      } else if (method.includes('letterbox')) {
-        serviceMethod = 'letterbox';
-      } else if (method.includes('email')) {
-        serviceMethod = 'email';
+      } else if (method.includes('leaving') || method.includes('letterbox')) {
+        serviceMethod = 'leaving_at_property';
       }
+      // hand_delivery, email, and other methods default to hand_delivery (same-day deemed service)
     }
 
     const dateParams: Section21DateParams = {
