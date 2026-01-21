@@ -1,0 +1,385 @@
+{{!--
+  ============================================================================
+  COURT BUNDLE INDEX
+  Section 21 Accelerated Possession Proceedings
+  ============================================================================
+  Index of all documents to be filed with the court for accelerated possession
+  proceedings under Section 21, Housing Act 1988.
+
+  IMPORTANT: This bundle is for Section 21 (no-fault) evictions only.
+  Section 8 evictions require different documentation.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Bundle Index - Section 21 Accelerated Possession</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .bundle-header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .bundle-header h1 {
+      font-size: 16pt;
+      margin: 0 0 0.5em 0;
+    }
+
+    .bundle-header h2 {
+      font-size: 12pt;
+      font-weight: normal;
+      color: #555;
+      margin: 0;
+    }
+
+    .procedure-note {
+      background: #e8f4fd;
+      border: 1px solid #0277bd;
+      border-radius: 4px;
+      padding: 1em;
+      margin-bottom: 1.5em;
+      font-size: 9pt;
+    }
+
+    .procedure-note strong {
+      color: #01579b;
+    }
+
+    .case-details {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-bottom: 2em;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.5em 1em;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+    }
+
+    .index-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2em;
+    }
+
+    .index-table th,
+    .index-table td {
+      padding: 8px 12px;
+      border: 1px solid #1a1a1a;
+      text-align: left;
+    }
+
+    .index-table th {
+      background: #1a1a1a;
+      color: white;
+      font-weight: 600;
+    }
+
+    .index-table tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    .tab-number {
+      font-weight: bold;
+      text-align: center;
+      width: 50px;
+    }
+
+    .page-ref {
+      text-align: center;
+      width: 80px;
+    }
+
+    .section-header td {
+      background: #e9ecef !important;
+      font-weight: 600;
+      padding-top: 12px;
+    }
+
+    .checkbox-col {
+      width: 30px;
+      text-align: center;
+    }
+
+    .checkbox {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1px solid #1a1a1a;
+      background: white;
+    }
+
+    .required-tag {
+      display: inline-block;
+      background: #dc2626;
+      color: white;
+      font-size: 7pt;
+      padding: 1px 4px;
+      border-radius: 2px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .notes-section {
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-top: 2em;
+    }
+
+    .notes-section h3 {
+      margin-top: 0;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 4px;
+      padding: 1em;
+      margin: 1.5em 0;
+      font-size: 9pt;
+    }
+
+    .warning-box strong {
+      color: #b45309;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .index-table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bundle Header -->
+<div class="bundle-header">
+  <h1>COURT BUNDLE INDEX</h1>
+  <h2>Section 21 Accelerated Possession Proceedings</h2>
+</div>
+
+<!-- Accelerated Procedure Note -->
+<div class="procedure-note">
+  <strong>Accelerated Possession Procedure:</strong> This claim is made under the accelerated possession procedure
+  (CPR Part 55.11-55.19). The court may decide this claim without a hearing if the defendant does not respond
+  or does not request a hearing. All documents listed below must be attached to Form N5B.
+</div>
+
+<!-- Case Details -->
+<div class="case-details">
+  <dl class="case-details-grid">
+    <dt>Case Number:</dt>
+    <dd><em>[To be assigned by court]</em></dd>
+    <dt>Claimant:</dt>
+    <dd>{{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
+    <dt>Defendant:</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Property:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Notice Expiry:</dt>
+    <dd>{{#if notice_expiry_date}}{{format_date notice_expiry_date "long"}}{{else}}<em>[Check Form 6A]</em>{{/if}}</dd>
+    <dt>Bundle Prepared:</dt>
+    <dd>{{format_date generated_date "long"}}</dd>
+  </dl>
+</div>
+
+<!-- Bundle Index Table -->
+<table class="index-table">
+  <thead>
+    <tr>
+      <th class="checkbox-col">&#10003;</th>
+      <th class="tab-number">Tab</th>
+      <th>Document</th>
+      <th>Description</th>
+      <th class="page-ref">Pages</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Section A: Court Forms -->
+    <tr class="section-header">
+      <td colspan="5">A. COURT FORMS</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">A1</td>
+      <td>Form N5B <span class="required-tag">REQUIRED</span></td>
+      <td>Claim for Possession (Accelerated Procedure) - Housing Act 1988, Section 21</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section B: Notice Documents -->
+    <tr class="section-header">
+      <td colspan="5">B. NOTICE DOCUMENTS</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">B1</td>
+      <td>Section 21 Notice (Form 6A) <span class="required-tag">REQUIRED</span></td>
+      <td>Notice requiring possession - prescribed form under Housing Act 1988</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">B2</td>
+      <td>Proof of Service <span class="required-tag">REQUIRED</span></td>
+      <td>Certificate of service showing date, method, and manner of service</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section C: Tenancy Agreement -->
+    <tr class="section-header">
+      <td colspan="5">C. TENANCY DOCUMENTATION</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">C1</td>
+      <td>Tenancy Agreement <span class="required-tag">REQUIRED</span></td>
+      <td>First written tenancy agreement (marked "A" on N5B)</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section D: Deposit Protection -->
+    <tr class="section-header">
+      <td colspan="5">D. DEPOSIT PROTECTION</td>
+    </tr>
+    {{#if deposit_amount}}
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">D1</td>
+      <td>Deposit Protection Certificate <span class="required-tag">REQUIRED</span></td>
+      <td>Certificate from {{#if deposit_scheme}}{{deposit_scheme}}{{else}}deposit protection scheme{{/if}} (marked "E" on N5B)</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">D2</td>
+      <td>Prescribed Information</td>
+      <td>Proof that prescribed information was provided to tenant within 30 days</td>
+      <td class="page-ref"></td>
+    </tr>
+    {{else}}
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">D1</td>
+      <td colspan="3"><em>No deposit taken - N/A</em></td>
+    </tr>
+    {{/if}}
+
+    <!-- Section E: Compliance Certificates -->
+    <tr class="section-header">
+      <td colspan="5">E. COMPLIANCE CERTIFICATES</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E1</td>
+      <td>Energy Performance Certificate (EPC) <span class="required-tag">REQUIRED</span></td>
+      <td>Valid EPC provided to tenant (marked "F" on N5B)</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E2</td>
+      <td>Gas Safety Certificate (CP12) <span class="required-tag">REQUIRED</span></td>
+      <td>Current gas safety record provided to tenant (marked "G" on N5B)</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E3</td>
+      <td>How to Rent Guide <span class="required-tag">REQUIRED</span></td>
+      <td>Proof that current version of "How to rent" guide was provided (marked "H" on N5B)</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E4</td>
+      <td>EICR (Electrical Safety)</td>
+      <td>Electrical Installation Condition Report (if applicable)</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section F: Witness Evidence (Optional for accelerated) -->
+    <tr class="section-header">
+      <td colspan="5">F. WITNESS EVIDENCE (if relevant)</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">F1</td>
+      <td>Witness Statement</td>
+      <td>Witness statement of {{landlord_full_name}} (optional for accelerated procedure)</td>
+      <td class="page-ref"></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Important Warning -->
+<div class="warning-box">
+  <strong>Important - Document Matching:</strong> The information in your documents must be consistent:
+  <ul style="margin: 0.5em 0 0 0; padding-left: 1.5em;">
+    <li>Notice expiry date must match between Form 6A and N5B Q10(e)</li>
+    <li>Service method must match between Proof of Service and N5B Q10(a)</li>
+    <li>Service date must match between Proof of Service and N5B Q10(b)</li>
+    <li>All tenant names must appear on all documents</li>
+  </ul>
+</div>
+
+<!-- Notes Section -->
+<div class="notes-section">
+  <h3>Bundle Preparation Notes</h3>
+  <ul>
+    <li>Number all pages consecutively throughout the bundle</li>
+    <li>Include this index at the front of the bundle</li>
+    <li>Prepare THREE copies: one for the court, one for each defendant, one for yourself</li>
+    <li>The accelerated procedure is paper-based - the court may decide without a hearing</li>
+    <li>If the defendant responds seeking postponement, you may need to attend a hearing</li>
+    <li>Court fee for accelerated possession: check current HMCTS fees (currently {{#if court_fee}}&pound;{{court_fee}}{{else}}&pound;355{{/if}})</li>
+    <li>File at the court covering the property address (usually the County Court)</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p><strong>Prepared by:</strong> {{landlord_full_name}}</p>
+  <p><strong>Date:</strong> {{format_date generated_date "long"}}</p>
+  <p>Generated by Landlord Heaven Court Pack | Section 21 Accelerated Possession Bundle</p>
+</div>
+
+</body>
+</html>

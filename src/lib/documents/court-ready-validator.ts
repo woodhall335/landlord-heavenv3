@@ -472,3 +472,324 @@ export function scanFinalOutputForPlaceholders(
     documentType,
   };
 }
+
+// =============================================================================
+// CROSS-DOCUMENT CONSISTENCY VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Cross-document consistency data for validation
+ *
+ * CRITICAL: The following MUST match exactly across Form 6A, N5B, and Proof of Service:
+ * - Notice expiry date
+ * - Service method
+ * - Service date
+ * - Party names (all landlords and tenants)
+ */
+export interface CrossDocumentData {
+  // From Form 6A
+  form6a_expiry_date?: string;
+  form6a_tenant_names?: string[];
+  form6a_landlord_names?: string[];
+  form6a_property_address?: string;
+
+  // From N5B
+  n5b_expiry_date?: string;
+  n5b_service_method?: string;
+  n5b_service_date?: string;
+  n5b_tenant_names?: string[];
+  n5b_landlord_names?: string[];
+  n5b_property_address?: string;
+
+  // From Proof of Service
+  proof_service_method?: string;
+  proof_service_date?: string;
+  proof_recipient_names?: string[];
+}
+
+export interface ConsistencyIssue {
+  severity: 'error' | 'warning';
+  field: string;
+  message: string;
+  form6a_value?: string;
+  n5b_value?: string;
+  proof_value?: string;
+}
+
+export interface ConsistencyResult {
+  isConsistent: boolean;
+  issues: ConsistencyIssue[];
+}
+
+/**
+ * Normalize a date string to YYYY-MM-DD for comparison
+ */
+function normalizeDateForComparison(dateStr: string | undefined): string | null {
+  if (!dateStr) return null;
+
+  // Try to parse and normalize the date
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) {
+    // If standard parsing fails, try UK date format (DD/MM/YYYY)
+    const ukMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (ukMatch) {
+      const [, day, month, year] = ukMatch;
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+    return dateStr.toLowerCase().trim();
+  }
+
+  return date.toISOString().split('T')[0];
+}
+
+/**
+ * Normalize names for comparison (case-insensitive, trim whitespace)
+ */
+function normalizeNameForComparison(name: string | undefined): string {
+  if (!name) return '';
+  return name.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Normalize service method for comparison
+ */
+function normalizeServiceMethodForComparison(method: string | undefined): string {
+  if (!method) return '';
+  return method
+    .toLowerCase()
+    .replace(/[\s_-]+/g, '_')
+    .replace(/first_class_post|first_class|post|postal/, 'post')
+    .replace(/recorded_delivery|recorded|signed_for/, 'recorded')
+    .replace(/by_hand|hand_delivery|in_person/, 'hand')
+    .trim();
+}
+
+/**
+ * Validate cross-document consistency for Section 21 accelerated possession.
+ *
+ * CRITICAL: This validation ensures that Form 6A, N5B, and Proof of Service
+ * all contain matching information. Mismatches WILL cause court rejection.
+ *
+ * @param data - Cross-document data extracted from generated documents
+ * @returns ConsistencyResult with any mismatches found
+ */
+export function validateCrossDocumentConsistency(data: CrossDocumentData): ConsistencyResult {
+  const issues: ConsistencyIssue[] = [];
+
+  // ==========================================================================
+  // NOTICE EXPIRY DATE - MUST match between Form 6A and N5B Q10e
+  // ==========================================================================
+  if (data.form6a_expiry_date || data.n5b_expiry_date) {
+    const form6aDate = normalizeDateForComparison(data.form6a_expiry_date);
+    const n5bDate = normalizeDateForComparison(data.n5b_expiry_date);
+
+    if (form6aDate && n5bDate && form6aDate !== n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'Notice expiry date mismatch between Form 6A and N5B Q10(e). These MUST be identical.',
+        form6a_value: data.form6a_expiry_date,
+        n5b_value: data.n5b_expiry_date,
+      });
+    }
+
+    if (!form6aDate && n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'Form 6A is missing expiry date but N5B has one. Both must be present and match.',
+        n5b_value: data.n5b_expiry_date,
+      });
+    }
+
+    if (form6aDate && !n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'N5B Q10(e) is missing expiry date but Form 6A has one. Both must be present and match.',
+        form6a_value: data.form6a_expiry_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // SERVICE METHOD - MUST match between N5B Q10a and Proof of Service
+  // ==========================================================================
+  if (data.n5b_service_method || data.proof_service_method) {
+    const n5bMethod = normalizeServiceMethodForComparison(data.n5b_service_method);
+    const proofMethod = normalizeServiceMethodForComparison(data.proof_service_method);
+
+    if (n5bMethod && proofMethod && n5bMethod !== proofMethod) {
+      issues.push({
+        severity: 'error',
+        field: 'service_method',
+        message: 'Service method mismatch between N5B Q10(a) and Proof of Service. These MUST be identical.',
+        n5b_value: data.n5b_service_method,
+        proof_value: data.proof_service_method,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // SERVICE DATE - MUST match between N5B Q10b and Proof of Service
+  // ==========================================================================
+  if (data.n5b_service_date || data.proof_service_date) {
+    const n5bDate = normalizeDateForComparison(data.n5b_service_date);
+    const proofDate = normalizeDateForComparison(data.proof_service_date);
+
+    if (n5bDate && proofDate && n5bDate !== proofDate) {
+      issues.push({
+        severity: 'error',
+        field: 'service_date',
+        message: 'Service date mismatch between N5B Q10(b) and Proof of Service. These MUST be identical.',
+        n5b_value: data.n5b_service_date,
+        proof_value: data.proof_service_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // TENANT NAMES - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_tenant_names && data.n5b_tenant_names) {
+    const form6aTenants = data.form6a_tenant_names.map(normalizeNameForComparison).sort();
+    const n5bTenants = data.n5b_tenant_names.map(normalizeNameForComparison).sort();
+
+    // Check count mismatch
+    if (form6aTenants.length !== n5bTenants.length) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_names',
+        message: `Tenant count mismatch: Form 6A has ${form6aTenants.length} tenant(s), N5B has ${n5bTenants.length}. ALL tenants must be named on ALL documents.`,
+        form6a_value: data.form6a_tenant_names.join(', '),
+        n5b_value: data.n5b_tenant_names.join(', '),
+      });
+    } else {
+      // Check for name mismatches
+      for (let i = 0; i < form6aTenants.length; i++) {
+        if (form6aTenants[i] !== n5bTenants[i]) {
+          issues.push({
+            severity: 'error',
+            field: 'tenant_names',
+            message: 'Tenant name mismatch between Form 6A and N5B. Names must be identical.',
+            form6a_value: data.form6a_tenant_names.join(', '),
+            n5b_value: data.n5b_tenant_names.join(', '),
+          });
+          break;
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // LANDLORD NAMES - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_landlord_names && data.n5b_landlord_names) {
+    const form6aLandlords = data.form6a_landlord_names.map(normalizeNameForComparison).sort();
+    const n5bLandlords = data.n5b_landlord_names.map(normalizeNameForComparison).sort();
+
+    if (form6aLandlords.length !== n5bLandlords.length) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_names',
+        message: `Landlord count mismatch: Form 6A has ${form6aLandlords.length} landlord(s), N5B has ${n5bLandlords.length}. ALL landlords must be named on ALL documents.`,
+        form6a_value: data.form6a_landlord_names.join(', '),
+        n5b_value: data.n5b_landlord_names.join(', '),
+      });
+    } else {
+      for (let i = 0; i < form6aLandlords.length; i++) {
+        if (form6aLandlords[i] !== n5bLandlords[i]) {
+          issues.push({
+            severity: 'error',
+            field: 'landlord_names',
+            message: 'Landlord name mismatch between Form 6A and N5B. Names must be identical.',
+            form6a_value: data.form6a_landlord_names.join(', '),
+            n5b_value: data.n5b_landlord_names.join(', '),
+          });
+          break;
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // PROPERTY ADDRESS - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_property_address && data.n5b_property_address) {
+    const form6aAddress = normalizeNameForComparison(data.form6a_property_address);
+    const n5bAddress = normalizeNameForComparison(data.n5b_property_address);
+
+    if (form6aAddress !== n5bAddress) {
+      issues.push({
+        severity: 'warning', // Warning because minor formatting differences may be acceptable
+        field: 'property_address',
+        message: 'Property address differs between Form 6A and N5B. Verify these refer to the same property.',
+        form6a_value: data.form6a_property_address,
+        n5b_value: data.n5b_property_address,
+      });
+    }
+  }
+
+  return {
+    isConsistent: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert cross-document consistency, throwing if critical mismatches found.
+ *
+ * CRITICAL: Use this before generating final court bundle to ensure consistency.
+ */
+export function assertCrossDocumentConsistency(data: CrossDocumentData): void {
+  const result = validateCrossDocumentConsistency(data);
+
+  if (!result.isConsistent) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => {
+        let msg = `${i.field}: ${i.message}`;
+        if (i.form6a_value) msg += ` Form 6A: "${i.form6a_value}"`;
+        if (i.n5b_value) msg += ` N5B: "${i.n5b_value}"`;
+        if (i.proof_value) msg += ` Proof: "${i.proof_value}"`;
+        return msg;
+      })
+      .join('; ');
+
+    throw new Error(
+      `Cross-document consistency validation failed: ${errorMessages}. ` +
+      `Courts will reject Section 21 claims with mismatched documents.`
+    );
+  }
+
+  // Log warnings even if validation passes
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`⚠️  Cross-document warning (${issue.field}): ${issue.message}`);
+  }
+}
+
+/**
+ * Log cross-document consistency issues with appropriate formatting
+ */
+export function logConsistencyResults(result: ConsistencyResult): void {
+  if (!result.isConsistent) {
+    console.error('❌ Cross-document consistency validation FAILED:');
+    for (const issue of result.issues.filter(i => i.severity === 'error')) {
+      console.error(`  🚨 [${issue.field}] ${issue.message}`);
+      if (issue.form6a_value) console.error(`     Form 6A: "${issue.form6a_value}"`);
+      if (issue.n5b_value) console.error(`     N5B: "${issue.n5b_value}"`);
+      if (issue.proof_value) console.error(`     Proof: "${issue.proof_value}"`);
+    }
+  }
+
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`  ⚠️  [${issue.field}] ${issue.message}`);
+    if (issue.form6a_value) console.warn(`     Form 6A: "${issue.form6a_value}"`);
+    if (issue.n5b_value) console.warn(`     N5B: "${issue.n5b_value}"`);
+    if (issue.proof_value) console.warn(`     Proof: "${issue.proof_value}"`);
+  }
+
+  if (result.isConsistent && result.issues.length === 0) {
+    console.log('✅ Cross-document consistency validation passed');
+  }
+}

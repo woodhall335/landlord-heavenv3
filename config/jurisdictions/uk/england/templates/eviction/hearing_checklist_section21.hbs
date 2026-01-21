@@ -1,0 +1,505 @@
+{{!--
+  ============================================================================
+  HEARING CHECKLIST
+  Section 21 Accelerated Possession Proceedings
+  ============================================================================
+  Pre-hearing preparation checklist for Section 21 accelerated possession claims.
+
+  IMPORTANT: The accelerated procedure is primarily paper-based. A hearing will
+  only occur if the defendant responds and requests one, or if the judge requires
+  clarification.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Section 21 Accelerated Possession - Hearing Checklist</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 16pt;
+      margin: 0 0 0.5em 0;
+    }
+
+    .doc-header h2 {
+      font-size: 12pt;
+      font-weight: normal;
+      color: #555;
+      margin: 0;
+    }
+
+    .info-box {
+      background: #e8f4fd;
+      border: 1px solid #0277bd;
+      border-radius: 4px;
+      padding: 1em;
+      margin-bottom: 1.5em;
+      font-size: 9pt;
+    }
+
+    .info-box strong {
+      color: #01579b;
+    }
+
+    .case-details {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-bottom: 2em;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.5em 1em;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75em;
+      padding: 0.75em 1em;
+      border-bottom: 1px solid #eee;
+      background: white;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #1a1a1a;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checklist-item-content {
+      flex: 1;
+    }
+
+    .checklist-item-title {
+      font-weight: 600;
+    }
+
+    .checklist-item-description {
+      color: #666;
+      font-size: 9pt;
+      margin-top: 0.25em;
+    }
+
+    .subsection {
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 1em 0;
+      overflow: hidden;
+    }
+
+    .subsection-header {
+      background: #e9ecef;
+      padding: 0.5em 1em;
+      font-weight: 600;
+      font-size: 10pt;
+    }
+
+    .process-box {
+      background: #f0fdf4;
+      border: 1px solid #22c55e;
+      border-radius: 4px;
+      padding: 1em;
+      margin: 1.5em 0;
+    }
+
+    .process-box h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      color: #15803d;
+    }
+
+    .process-box ol {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+
+    .process-box li {
+      font-size: 9pt;
+      margin: 0.4em 0;
+      color: #166534;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 4px;
+      padding: 1em;
+      margin: 1.5em 0;
+      font-size: 9pt;
+    }
+
+    .warning-box strong {
+      color: #b45309;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .subsection {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>SECTION 21 ACCELERATED POSSESSION</h1>
+  <h2>Hearing Preparation Checklist</h2>
+</div>
+
+<!-- Accelerated Procedure Explanation -->
+<div class="info-box">
+  <strong>About the Accelerated Procedure:</strong> Section 21 claims using Form N5B are decided under the
+  "accelerated possession procedure" (CPR 55.11-55.19). This means:
+  <ul style="margin: 0.5em 0 0 0; padding-left: 1.5em;">
+    <li>The court will usually decide the claim on paper, without a hearing</li>
+    <li>A hearing will only occur if the defendant responds and requests postponement</li>
+    <li>You cannot claim rent arrears in the N5B - only possession</li>
+    <li>If you need to attend a hearing, it will be for the judge to consider any defence raised</li>
+  </ul>
+</div>
+
+<!-- Case Details -->
+<div class="case-details">
+  <dl class="case-details-grid">
+    <dt>Case Number:</dt>
+    <dd><em>[To be assigned]</em></dd>
+    <dt>Claimant:</dt>
+    <dd>{{landlord_full_name}}</dd>
+    <dt>Defendant:</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Property:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Hearing Date:</dt>
+    <dd><em>[If required - to be notified by court]</em></dd>
+  </dl>
+</div>
+
+<!-- Section 1: Understanding the Process -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Understanding the Process</h2>
+</div>
+
+<div class="process-box">
+  <h3>How Section 21 Accelerated Possession Works</h3>
+  <ol>
+    <li><strong>File N5B:</strong> You submit Form N5B with all required documents to the court</li>
+    <li><strong>Service on Defendant:</strong> The court serves the claim on the defendant</li>
+    <li><strong>Defendant Response Period:</strong> The defendant has 14 days to respond</li>
+    <li><strong>Paper Decision:</strong> If no response, the judge decides the claim on paper</li>
+    <li><strong>Hearing (if needed):</strong> If the defendant requests postponement, a hearing may be listed</li>
+    <li><strong>Possession Order:</strong> If granted, the order gives a date for the tenant to vacate</li>
+  </ol>
+</div>
+
+<!-- Section 2: Before Filing -->
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>Before Filing Checklist</h2>
+</div>
+
+<div class="subsection">
+  <div class="subsection-header">Form N5B Completion</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">All questions answered on N5B</div>
+      <div class="checklist-item-description">Questions 9a-9g (AST verification), Q10 (notice details), Q12-14 (deposit), Q15-18 (compliance), Q19 (Tenant Fees Act)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Statement of Truth signed</div>
+      <div class="checklist-item-description">The declaration confirming all facts are true and accurate</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Court fee paid</div>
+      <div class="checklist-item-description">Current fee is &pound;355 (check HMCTS website for updates)</div>
+    </div>
+  </div>
+</div>
+
+<div class="subsection">
+  <div class="subsection-header">Required Attachments</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Tenancy Agreement (marked A)</div>
+      <div class="checklist-item-description">First written tenancy agreement, signed by both parties</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Section 21 Notice - Form 6A (marked B)</div>
+      <div class="checklist-item-description">Completed prescribed form with correct notice period</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof of Service (marked B1)</div>
+      <div class="checklist-item-description">Evidence of how and when notice was served</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Deposit Protection Certificate (marked E)</div>
+      <div class="checklist-item-description">If deposit was taken - certificate from DPS/TDS/MyDeposits</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">EPC (marked F)</div>
+      <div class="checklist-item-description">Energy Performance Certificate provided to tenant</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Gas Safety Certificate (marked G)</div>
+      <div class="checklist-item-description">Current CP12 certificate provided to tenant</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">How to Rent Guide (marked H)</div>
+      <div class="checklist-item-description">Evidence current version was provided at tenancy start</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: If a Hearing is Listed -->
+<div class="section-header">
+  <span class="num">3</span>
+  <h2>If a Hearing is Required</h2>
+</div>
+
+<div class="warning-box">
+  <strong>When a hearing may be listed:</strong>
+  <ul style="margin: 0.5em 0 0 0; padding-left: 1.5em;">
+    <li>The defendant responds and requests postponement of the possession date</li>
+    <li>The defendant raises a defence (e.g., notice invalid, non-compliance)</li>
+    <li>The judge requires clarification on any issue</li>
+    <li>There is a dispute about the facts in the claim</li>
+  </ul>
+</div>
+
+<div class="subsection">
+  <div class="subsection-header">Hearing Preparation</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Bring original documents</div>
+      <div class="checklist-item-description">Original tenancy agreement, notice, certificates - the court may want to see originals</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Bring court bundle copies</div>
+      <div class="checklist-item-description">One for you, one for the judge, one for the defendant if they attend</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Review defendant's response</div>
+      <div class="checklist-item-description">Understand what defence or arguments they have raised</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Prepare to address any compliance issues</div>
+      <div class="checklist-item-description">Be ready to explain how you complied with all statutory requirements</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Common Defences -->
+<div class="section-header">
+  <span class="num">4</span>
+  <h2>Common Defences to Section 21</h2>
+</div>
+
+<div class="subsection">
+  <div class="subsection-header">Be prepared to address:</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Deposit protection compliance</div>
+      <div class="checklist-item-description">Deposit protected within 30 days, prescribed information served within 30 days</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Gas safety compliance</div>
+      <div class="checklist-item-description">Certificate provided before occupation and annually thereafter</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">EPC compliance</div>
+      <div class="checklist-item-description">Valid EPC provided to tenant at or before tenancy start</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">How to Rent guide compliance</div>
+      <div class="checklist-item-description">Current version provided at tenancy start (for tenancies after 1 October 2015)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Notice validity</div>
+      <div class="checklist-item-description">Correct form used, correct notice period given, served correctly</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Tenant Fees Act compliance</div>
+      <div class="checklist-item-description">No prohibited fees charged, or all refunded</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 5: After the Order -->
+<div class="section-header">
+  <span class="num">5</span>
+  <h2>After Possession Order Granted</h2>
+</div>
+
+<div class="subsection">
+  <div class="subsection-header">Next Steps</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Note the possession date</div>
+      <div class="checklist-item-description">The order will specify a date by which the tenant must leave (usually 14 days)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Serve the order on tenant</div>
+      <div class="checklist-item-description">Send a copy of the possession order to the tenant</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Apply for warrant if needed</div>
+      <div class="checklist-item-description">If tenant doesn't leave, apply to court for a warrant of possession (Form N325)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Bailiff enforcement</div>
+      <div class="checklist-item-description">Only county court bailiffs can physically evict - NEVER use self-help remedies</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+  <p><strong>Landlord Heaven</strong> | Section 21 Accelerated Possession Hearing Checklist</p>
+</div>
+
+</body>
+</html>
