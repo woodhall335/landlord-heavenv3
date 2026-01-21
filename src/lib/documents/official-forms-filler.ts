@@ -214,9 +214,11 @@ const N5B_FIELDS = {
   COURT_FEE: 'Court fee',
   LEGAL_COSTS: 'Legal representatives costs',
   TOTAL_AMOUNT: 'Total amount',
-  // First Claimant - CORRECTED: Direct mapping (first names -> first names field)
-  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's first names",   // Visual "First name(s)" field
-  FIRST_CLAIMANT_LAST_NAME: "First Claimant's last name",       // Visual "Last name" field
+  // First Claimant - PDF field names are SWAPPED relative to visual labels!
+  // The PDF field "First Claimant's last name" visually renders as "First name(s)"
+  // The PDF field "First Claimant's first names" visually renders as "Last name"
+  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's last name",    // Visual "First name(s)" field
+  FIRST_CLAIMANT_LAST_NAME: "First Claimant's first names",    // Visual "Last name" field
   FIRST_CLAIMANT_ADDRESS_STREET: "First Claimant's address: building and street",
   FIRST_CLAIMANT_ADDRESS_LINE2: "First Claimant's address: second line of address",
   FIRST_CLAIMANT_ADDRESS_TOWN: "First Claimant's address: town or city",
