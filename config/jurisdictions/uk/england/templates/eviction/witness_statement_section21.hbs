@@ -471,6 +471,8 @@
     <div class="signature-field">
       <label>Dated:</label>
       <div class="line"></div>
+      {{!-- FIX 4: Auto-populate statement date with generation date --}}
+      <div class="value">{{#if statement_date}}{{statement_date}}{{/if}}</div>
     </div>
   </div>
 </div>

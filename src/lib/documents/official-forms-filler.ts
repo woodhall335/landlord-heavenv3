@@ -230,6 +230,12 @@ const N5B_FIELDS = {
   SECOND_DEFENDANT_ADDRESS_LINE2: "Second Defendant's address: second line of address",
   SECOND_DEFENDANT_ADDRESS_TOWN: "Second Defendant's address: town or city",
   SECOND_DEFENDANT_ADDRESS_POSTCODE: "Second Defendant's address: postcode",
+  // FIX 2: Defendant's address for service (N5B Page 5)
+  DEFENDANT_SERVICE_ADDRESS_STREET: "Defendant's address for service: building and street",
+  DEFENDANT_SERVICE_ADDRESS_LINE2: "Defendant's address for service: second line of address",
+  DEFENDANT_SERVICE_ADDRESS_TOWN: "Defendant's address for service: town or city",
+  DEFENDANT_SERVICE_ADDRESS_COUNTY: "Defendant's address for service: county (optional)",
+  DEFENDANT_SERVICE_ADDRESS_POSTCODE: "Defendant's address for service: postcode",
   // Possession address
   POSSESSION_STREET: 'Claimant seeks an order that the Defendant gives possession of: building and street',
   POSSESSION_LINE2: 'Claimant seeks an order that the Defendant gives possession of: second line of address',
@@ -290,6 +296,11 @@ const N5B_FIELDS = {
   GAS_SAFETY_SERVED_DATE_DAY: '17b. On what date was the current gas safety record served on the Defendant? Day',
   GAS_SAFETY_SERVED_DATE_MONTH: '17b. On what date was the current gas safety record served on the Defendant? Month',
   GAS_SAFETY_SERVED_DATE_YEAR: '17b. On what date was the current gas safety record served on the Defendant? Year',
+  // FIX 7: Gas safety dates table (N5B Page 13)
+  // These are the table rows for multiple gas safety record service dates
+  GAS_SAFETY_SERVICE_DATE_1: 'Date of service of gas safety record - 1',
+  GAS_SAFETY_SERVICE_DATE_2: 'Date of service of gas safety record - 2',
+  GAS_SAFETY_SERVICE_DATE_3: 'Date of service of gas safety record - 3',
   // Q18c: Date How to Rent provided
   HOW_TO_RENT_DATE_DAY: '18c. On what date was the current version of the document provided? Day',
   HOW_TO_RENT_DATE_MONTH: '18c. On what date was the current version of the document provided? Month',
@@ -602,6 +613,8 @@ export interface CaseData {
   gas_safety_before_occupation_date?: string; // Q16: Date gas record made available before occupation
   gas_safety_check_date?: string;        // Q17a: Date gas safety check carried out
   gas_safety_served_date?: string;       // Q17b: Date gas safety record served
+  // FIX 7: Gas safety service dates table (N5B Page 13)
+  gas_safety_service_dates?: string[];   // Array of gas safety record service dates (up to 3)
   // Q18: How to Rent
   how_to_rent_date?: string;             // Q18c: Date How to Rent provided
   how_to_rent_method?: 'hardcopy' | 'email'; // Q18d: Method of provision
@@ -623,6 +636,7 @@ export interface CaseData {
   defendant_service_address_same_as_property?: boolean;
   defendant_service_address_line1?: string;
   defendant_service_address_town?: string;
+  defendant_service_address_county?: string;  // FIX 2: Added for N5B Page 5
   defendant_service_address_postcode?: string;
 
   // Known occupants (for N119 Q2 - persons in possession)
@@ -1280,6 +1294,23 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_ADDRESS_POSTCODE, data.property_postcode, ctx);
   }
 
+  // === FIX 2: DEFENDANT'S ADDRESS FOR SERVICE (N5B Page 5) ===
+  // Default to property address unless explicitly overridden
+  const defServiceAddress = data.defendant_service_address_line1 || data.property_address;
+  const defServiceAddressLines = splitAddress(defServiceAddress);
+  setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_STREET, defServiceAddressLines[0], ctx);
+  if (defServiceAddressLines.length > 1) {
+    setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_LINE2, defServiceAddressLines[1], ctx);
+  }
+  if (defServiceAddressLines.length > 2) {
+    setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_TOWN, defServiceAddressLines[2], ctx);
+  }
+  // County is optional - only set if provided
+  if (data.defendant_service_address_county) {
+    setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_COUNTY, data.defendant_service_address_county, ctx);
+  }
+  setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_POSTCODE, data.defendant_service_address_postcode || data.property_postcode, ctx);
+
   // === POSSESSION ADDRESS ===
   setTextOptional(form, N5B_FIELDS.POSSESSION_STREET, propertyAddressLines[0], ctx);
   if (propertyAddressLines.length > 1) {
@@ -1495,6 +1526,43 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
       setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_MONTH, gasServedDate.month, ctx);
       setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_YEAR, gasServedDate.year, ctx);
     }
+  }
+
+  // =========================================================================
+  // FIX 7: GAS SAFETY DATES TABLE (N5B Page 13)
+  // =========================================================================
+  // Populate the gas safety service dates table.
+  // Option A (preferred): Populate first gas safety issue + service date if captured.
+  // If dates not captured but gas_safety_before_occupation === true, use that date.
+  // =========================================================================
+  const gasServiceDates: string[] = [];
+
+  // Add gas_safety_served_date as the first entry if available
+  if (data.gas_safety_served_date) {
+    gasServiceDates.push(formatUKLegalDate(data.gas_safety_served_date));
+  }
+  // Add any additional dates from gas_safety_service_dates array
+  if (data.gas_safety_service_dates && Array.isArray(data.gas_safety_service_dates)) {
+    data.gas_safety_service_dates.forEach((dateStr) => {
+      if (dateStr && !gasServiceDates.includes(formatUKLegalDate(dateStr))) {
+        gasServiceDates.push(formatUKLegalDate(dateStr));
+      }
+    });
+  }
+  // If still empty but gas_safety_before_occupation_date is available, use it
+  if (gasServiceDates.length === 0 && data.gas_safety_before_occupation_date) {
+    gasServiceDates.push(formatUKLegalDate(data.gas_safety_before_occupation_date));
+  }
+
+  // Populate the table fields (up to 3 rows)
+  if (gasServiceDates.length > 0) {
+    setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVICE_DATE_1, gasServiceDates[0], ctx);
+  }
+  if (gasServiceDates.length > 1) {
+    setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVICE_DATE_2, gasServiceDates[1], ctx);
+  }
+  if (gasServiceDates.length > 2) {
+    setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVICE_DATE_3, gasServiceDates[2], ctx);
   }
 
   // =========================================================================
