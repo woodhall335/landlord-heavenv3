@@ -92,6 +92,86 @@ function formatUKLegalDate(dateString: string | null | undefined): string {
 }
 
 // ============================================================================
+// FIX 3: UNIFIED NOTICE EXPIRY DATE CALCULATOR (Jan 2026)
+// ============================================================================
+// This function provides a SINGLE SOURCE OF TRUTH for notice expiry dates
+// across all documents in the Section 21 pack. It ensures consistency between:
+// - Form 6A (Section 2: "leave after" date)
+// - N5B Q10(e) (notice expiry date)
+// - Proof of Service (notice expiry)
+// - Witness Statement (para 3.3)
+//
+// RULE IMPLEMENTED (Option A): The expiry date is calculated as 2 calendar
+// months from the ACTUAL service date (not deemed service). Deemed service
+// affects when notice is "legally received" but the 2-month period runs from
+// the date of actual service/posting.
+//
+// Legal basis: Housing Act 1988, Section 21(4) - minimum 2 months notice
+// ============================================================================
+
+interface UnifiedExpiryParams {
+  service_date: string;
+  tenancy_start_date: string;
+  fixed_term?: boolean;
+  fixed_term_end_date?: string;
+  has_break_clause?: boolean;
+  break_clause_date?: string;
+  rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+  service_method?: string;
+}
+
+/**
+ * Get the unified notice expiry date for all documents in a Section 21 pack.
+ *
+ * This is the SINGLE SOURCE OF TRUTH for expiry dates. All documents
+ * (Form 6A, N5B, Proof of Service, Witness Statement) MUST use this function.
+ *
+ * @param params - Notice parameters
+ * @returns ISO date string (YYYY-MM-DD) or undefined if cannot calculate
+ */
+function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undefined {
+  if (!params.service_date || !params.tenancy_start_date) {
+    console.warn('[getUnifiedNoticeExpiryDate] Missing required params');
+    return undefined;
+  }
+
+  try {
+    // Map service_method string to ServiceMethod type
+    let serviceMethod: ServiceMethod = 'hand_delivery';
+    if (params.service_method) {
+      const method = params.service_method.toLowerCase();
+      if (method.includes('post') || method.includes('first class')) {
+        serviceMethod = 'first_class_post';
+      } else if (method.includes('recorded') || method.includes('signed')) {
+        serviceMethod = 'recorded_delivery';
+      } else if (method.includes('letterbox')) {
+        serviceMethod = 'letterbox';
+      } else if (method.includes('email')) {
+        serviceMethod = 'email';
+      }
+    }
+
+    const dateParams: Section21DateParams = {
+      service_date: params.service_date,
+      tenancy_start_date: params.tenancy_start_date,
+      fixed_term: params.fixed_term || false,
+      fixed_term_end_date: params.fixed_term_end_date,
+      has_break_clause: params.has_break_clause,
+      break_clause_date: params.break_clause_date,
+      rent_period: params.rent_frequency || 'monthly',
+      service_method: serviceMethod,
+    };
+
+    const result = calculateSection21ExpiryDate(dateParams);
+    console.log(`📅 [getUnifiedNoticeExpiryDate] Computed expiry: ${result.earliest_valid_date}`);
+    return result.earliest_valid_date;
+  } catch (err) {
+    console.warn('[getUnifiedNoticeExpiryDate] Calculation failed:', err);
+    return undefined;
+  }
+}
+
+// ============================================================================
 // PRO-RATA HELPER - For Partial Rent Periods
 // ============================================================================
 
@@ -1118,6 +1198,46 @@ async function generateEnglandOrWalesEvictionPack(
       }
     }
 
+    // =========================================================================
+    // FIX 2 & 3 (Jan 2026): COMPUTE UNIFIED EXPIRY DATE FIRST
+    // =========================================================================
+    // Calculate the notice expiry date ONCE using the unified function.
+    // This ensures Form 6A, N5B Q10(e), Proof of Service, and Witness Statement
+    // all show the SAME expiry date.
+    // =========================================================================
+    const section21ServiceDate =
+      caseData.section_21_notice_date ||
+      caseData.notice_served_date ||
+      wizardFacts?.notice_served_date ||
+      wizardFacts?.notice_service_date ||
+      wizardFacts?.notice_date ||
+      new Date().toISOString().split('T')[0];
+
+    const section21ServiceMethod =
+      caseData.notice_service_method ||
+      wizardFacts?.notice_service_method ||
+      wizardFacts?.service_method ||
+      'First class post'; // Default to postal service
+
+    // Compute unified expiry date for cross-document consistency
+    const unifiedExpiryDate = getUnifiedNoticeExpiryDate({
+      service_date: section21ServiceDate,
+      tenancy_start_date: evictionCase.tenancy_start_date,
+      fixed_term: evictionCase.fixed_term,
+      fixed_term_end_date: evictionCase.fixed_term_end_date,
+      has_break_clause: wizardFacts?.has_break_clause,
+      break_clause_date: wizardFacts?.break_clause_date,
+      rent_frequency: evictionCase.rent_frequency,
+      service_method: section21ServiceMethod,
+    });
+
+    console.log(`📅 Section 21 pack unified expiry date: ${unifiedExpiryDate}`);
+
+    // Store in caseData for all downstream document generators
+    if (unifiedExpiryDate) {
+      caseData.notice_expiry_date = unifiedExpiryDate;
+    }
+
     // Build Section21NoticeData from evictionCase to use the canonical notice generator
     // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
     const section21Data: Section21NoticeData = {
@@ -1134,7 +1254,9 @@ async function generateEnglandOrWalesEvictionPack(
       fixed_term_end_date: evictionCase.fixed_term_end_date,
       rent_amount: evictionCase.rent_amount,
       rent_frequency: evictionCase.rent_frequency,
-      expiry_date: '', // Will be auto-calculated by generateSection21Notice
+      expiry_date: unifiedExpiryDate || '', // Use pre-computed unified expiry date
+      service_date: section21ServiceDate,
+      service_method: section21ServiceMethod.toLowerCase().includes('post') ? 'first_class_post' : 'hand_delivery',
       deposit_protected: evictionCase.deposit_protected,
       deposit_amount: evictionCase.deposit_amount,
       deposit_scheme: toEnglandDepositScheme(evictionCase.deposit_scheme_name),
@@ -1187,13 +1309,16 @@ async function generateEnglandOrWalesEvictionPack(
 
     // Accelerated possession claim (N5B)
     // CRITICAL: Pass jurisdiction to select correct Wales/England form
+    // FIX 2 (Jan 2026): Ensure notice_expiry_date is ALWAYS populated for Q10(e)
     const n5bPdf = await fillN5BForm({
       ...caseData,
       jurisdiction, // Ensures Wales uses N5B_WALES_0323.pdf, England uses n5b-eng.pdf
       landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
+      landlord_2_name: caseData.landlord_2_name || evictionCase.landlord_2_name, // FIX 1: Support second claimant
       landlord_address: caseData.landlord_address || evictionCase.landlord_address,
       landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
       tenant_full_name: caseData.tenant_full_name || evictionCase.tenant_full_name,
+      tenant_2_name: caseData.tenant_2_name || evictionCase.tenant_2_name, // FIX 1: Support second defendant
       property_address: caseData.property_address || evictionCase.property_address,
       property_postcode: caseData.property_postcode || evictionCase.property_address_postcode,
       tenancy_start_date: caseData.tenancy_start_date || evictionCase.tenancy_start_date,
@@ -1202,12 +1327,22 @@ async function generateEnglandOrWalesEvictionPack(
       deposit_protection_date: caseData.deposit_protection_date,
       deposit_reference: caseData.deposit_reference,
       deposit_scheme: caseData.deposit_scheme,
-      section_21_notice_date:
-        caseData.section_21_notice_date || caseData.notice_served_date || new Date().toISOString().split('T')[0],
-      notice_expiry_date: caseData.notice_expiry_date,
+      // FIX 2 & 3: Use unified service date and expiry date
+      section_21_notice_date: section21ServiceDate,
+      notice_service_method: section21ServiceMethod,
+      notice_expiry_date: unifiedExpiryDate || caseData.notice_expiry_date, // FIX 2: Ensure Q10(e) is ALWAYS populated
       signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
       signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
       court_name: caseData.court_name || 'County Court',
+      // FIX 4: Deterministic attachment checkbox flags
+      tenancy_agreement_uploaded: true, // Section 21 pack always includes tenancy details
+      notice_copy_available: true, // Pack always includes Form 6A
+      service_proof_available: true, // Pack always includes Proof of Service template
+      deposit_certificate_available: evictionCase.deposit_protected === true,
+      epc_provided: wizardFacts?.epc_provided === true,
+      gas_safety_provided: wizardFacts?.gas_safety_provided === true && wizardFacts?.has_gas_at_property !== false,
+      has_gas_at_property: wizardFacts?.has_gas_at_property,
+      how_to_rent_provided: wizardFacts?.how_to_rent_provided === true,
     });
 
     documents.push({
