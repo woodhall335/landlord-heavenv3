@@ -5,8 +5,15 @@
 <p>Tenant: {{tenant_full_name}}</p>
 <p>Property: {{property_address}}</p>
 <p>Grounds:</p>
+{{!-- FIX 5: Handle Section 21 no-fault eviction cases --}}
+{{#if is_section_21}}
+<ul>
+  <li><strong>Section 21 (No-fault eviction)</strong> — Housing Act 1988</li>
+</ul>
+{{else}}
 <ul>
   {{#each grounds}}
     <li>{{this.code}} - {{this.title}}</li>
   {{/each}}
 </ul>
+{{/if}}

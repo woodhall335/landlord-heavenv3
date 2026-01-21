@@ -695,19 +695,43 @@ function getNoticeTypeLabel(evictionCase: EvictionCase): string {
 function mapServiceMethodForTemplate(method: string | undefined): string {
   if (!method) return '';
 
+  // FIX 6: Expanded mapping to handle all common service method labels
   const methodMap: Record<string, string> = {
+    // Post variations
     'first_class_post': 'post',
+    'first class post': 'post',
+    'firstclasspost': 'post',
     'post': 'post',
+    'postal': 'post',
+    'royal mail': 'post',
+    // Recorded delivery variations
     'recorded_delivery': 'recorded_delivery',
+    'recorded delivery': 'recorded_delivery',
+    'recordeddelivery': 'recorded_delivery',
     'signed_for': 'recorded_delivery',
+    'signed for': 'recorded_delivery',
+    'signedfor': 'recorded_delivery',
+    'special delivery': 'recorded_delivery',
+    // Hand delivery variations
     'hand_delivered': 'hand',
+    'hand delivered': 'hand',
+    'handdelivered': 'hand',
     'hand': 'hand',
+    'in person': 'hand',
+    'personal': 'hand',
     'left_at_property': 'hand',
+    'left at property': 'hand',
     'letterbox': 'hand',
+    'letter box': 'hand',
+    'through letterbox': 'hand',
+    // Email
     'email': 'email',
+    'e-mail': 'email',
   };
 
-  return methodMap[method.toLowerCase()] || '';
+  // Normalize to lowercase and remove extra spaces
+  const normalized = method.toLowerCase().trim().replace(/\s+/g, ' ');
+  return methodMap[normalized] || '';
 }
 
 /**
@@ -1640,9 +1664,12 @@ export async function generateCompleteEvictionPack(
         how_to_rent_method: caseData?.how_to_rent_method,
         notice_served_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
         notice_service_method: caseData?.notice_service_method,
-        notice_expiry_date: caseData?.notice_expiry_date,
+        // FIX 3: Ensure notice_expiry_date is always provided (no placeholder)
+        notice_expiry_date: caseData?.notice_expiry_date || evictionCase.notice_expiry_date || wizardFacts?.notice_expiry_date,
         fixed_term: caseData?.fixed_term,
         fixed_term_end_date: caseData?.fixed_term_end_date,
+        // FIX 4: Add statement date (claim generation date) for auto-dating witness statement
+        statement_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
         // Add generation date
         generated_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
       },
@@ -1906,6 +1933,8 @@ export async function generateCompleteEvictionPack(
     data: {
       ...evictionCase,
       grounds_data: groundsData,
+      // FIX 5: Add flag for Section 21 no-fault eviction to populate Grounds field
+      is_section_21: evictionCase.case_type === 'no_fault',
       generated_at: new Date().toISOString(),
     },
     isPreview: false,

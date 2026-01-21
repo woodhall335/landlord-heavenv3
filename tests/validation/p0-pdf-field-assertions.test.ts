@@ -138,6 +138,25 @@ describe('P0 PDF Field Assertions - N5B Form', () => {
       expect(firstName).toBe('John');
       expect(lastName).toBe('Smith');
     });
+
+    it('correctly splits name "Tariq Mohammed" (FIX 1 regression)', async () => {
+      // FIX 1: Ensure first/last names are in correct order
+      // Input: "Tariq Mohammed" -> First names: "Tariq", Last name: "Mohammed"
+      const dataWithTariq: CaseData = {
+        ...baseCaseData,
+        landlord_full_name: 'Tariq Mohammed',
+        landlord_2_name: undefined,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithTariq, { flatten: false });
+
+      const firstName = await getTextFieldValue(pdfBytes, "First Claimant's first names");
+      const lastName = await getTextFieldValue(pdfBytes, "First Claimant's last name");
+
+      // FIX 1 assertion: First name(s) field contains "Tariq", Last name field contains "Mohammed"
+      expect(firstName).toBe('Tariq');
+      expect(lastName).toBe('Mohammed');
+    });
   });
 
   describe('First Defendant Name Fields', () => {
