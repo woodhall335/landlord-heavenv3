@@ -419,33 +419,47 @@ For any `(jurisdiction, route)` combination, we can definitively answer:
 
 ## Appendix D: Validation Timing Rules
 
-**Critical UX Principle**: Validation fires ONLY after Save/Next, never while typing.
+**Critical UX Principle**: Errors display ONLY after user has interacted with a field ("touched" state).
+
+> **Updated 2026-01-21**: Live validation provides better UX than Save/Next-only validation.
+> The `touched` state guard ensures users don't see premature errors.
 
 ### When Validation Runs
 
-| Event | Validation Runs? | Notes |
-|-------|-----------------|-------|
-| User types in field | **NO** | Never validate incomplete input |
-| User changes dropdown | **NO** | Wait for Save/Next |
-| User presses Save/Next | **YES** | Full validation runs |
-| Question loads (after save) | **YES** | Show issues for saved data |
-| User navigates back | **NO** | Previous data already validated |
+| Event | Validation Runs? | Errors Shown? | Notes |
+|-------|-----------------|---------------|-------|
+| User types in field | YES (optional) | **NO** | Can validate onChange, but errors hidden until blur |
+| User leaves field (blur) | **YES** | **YES** | Field marked "touched", errors display |
+| User changes dropdown | **YES** | **YES** (if touched) | Immediate validation on change |
+| User presses Save/Next | **YES** | **YES** | Full validation for current section |
+| Question loads (after save) | **YES** | **YES** | Show issues for saved data |
+| User navigates back | **NO** | **NO** | Previous data already validated |
+
+### Touched State Logic
+
+A field is "touched" when:
+- User has focused and blurred the field (left it)
+- User has made a selection in a dropdown
+- User has clicked a Yes/No toggle
+
+Errors only display for touched fields, preventing premature validation messages.
 
 ### What Validation Shows
 
 | Stage | What's Shown | Blocking? |
 |-------|-------------|-----------|
-| **Wizard inline** | Guidance for CURRENT step only | Non-blocking |
+| **Wizard inline** | Errors for touched fields in CURRENT step | Non-blocking |
+| **Wizard inline** | Section blockers (compliance failures) | Non-blocking |
 | **Wizard inline** | Route suggestion if blocked | Non-blocking |
 | **Preview** | All blocking issues | **BLOCKS** generation |
 | **Generate** | All blocking issues | **BLOCKS** generation |
 
 ### Never Shown
 
-- Issues for unanswered questions
-- Issues for future steps
-- Issues for steps not yet visited
-- Validation while typing
+- Issues for untouched fields (user hasn't interacted)
+- Issues for future steps (fields not yet visited)
+- Issues for hidden/conditional fields (dependsOn not met)
+- Flickering errors while typing (errors appear on blur)
 
 ---
 
