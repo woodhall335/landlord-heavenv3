@@ -196,12 +196,13 @@ const N5_CHECKBOXES = {
  * N5B form field names (subset - key fields only)
  * Source: public/official-forms/n5b-eng.pdf
  *
- * IMPORTANT FIX (Jan 2026): The official N5B PDF form has internal field names
- * that are swapped relative to their visual labels on Page 2. The field labeled
- * visually as "First name(s)" has internal name "First Claimant's last name",
- * and the field labeled "Last name" has internal name "First Claimant's first names".
- * The constants below use semantic names (FIRST_NAMES = where first name goes)
- * but the VALUES point to the actual PDF field names needed for correct display.
+ * FIX 1 (Jan 2026): CORRECTED NAME FIELD MAPPING
+ * After PDF field audit, the N5B form field names follow the standard pattern:
+ * - "First Claimant's first names" = visual "First name(s)" field
+ * - "First Claimant's last name" = visual "Last name" field
+ *
+ * The previous mapping was INCORRECT and caused names to display reversed.
+ * Now using correct direct mapping: FIRST_NAMES -> first names, LAST_NAME -> last name
  */
 const N5B_FIELDS = {
   // Header
@@ -213,26 +214,26 @@ const N5B_FIELDS = {
   COURT_FEE: 'Court fee',
   LEGAL_COSTS: 'Legal representatives costs',
   TOTAL_AMOUNT: 'Total amount',
-  // First Claimant - FIX: Field names swapped to match visual positions on form
-  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's last name",   // Visually "First name(s)" field
-  FIRST_CLAIMANT_LAST_NAME: "First Claimant's first names",   // Visually "Last name" field
+  // First Claimant - CORRECTED: Direct mapping (first names -> first names field)
+  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's first names",   // Visual "First name(s)" field
+  FIRST_CLAIMANT_LAST_NAME: "First Claimant's last name",       // Visual "Last name" field
   FIRST_CLAIMANT_ADDRESS_STREET: "First Claimant's address: building and street",
   FIRST_CLAIMANT_ADDRESS_LINE2: "First Claimant's address: second line of address",
   FIRST_CLAIMANT_ADDRESS_TOWN: "First Claimant's address: town or city",
   FIRST_CLAIMANT_ADDRESS_POSTCODE: "First Claimant's address: postcode",
-  // Second Claimant - FIX: Field names swapped to match visual positions on form
-  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's last name",   // Visually "First name(s)" field
-  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's first names",   // Visually "Last name" field
-  // First Defendant - FIX: Field names swapped to match visual positions on form
-  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's last name",   // Visually "First name(s)" field
-  FIRST_DEFENDANT_LAST_NAME: "First Defendant's first name(s)", // Visually "Last name" field
+  // Second Claimant - CORRECTED: Direct mapping
+  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's first names", // Visual "First name(s)" field
+  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's last name",     // Visual "Last name" field
+  // First Defendant - CORRECTED: Direct mapping
+  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's first name(s)", // Visual "First name(s)" field
+  FIRST_DEFENDANT_LAST_NAME: "First Defendant's last name",       // Visual "Last name" field
   FIRST_DEFENDANT_ADDRESS_STREET: "First Defendant's address: building and street",
   FIRST_DEFENDANT_ADDRESS_LINE2: "First Defendant's address: second line of address",
   FIRST_DEFENDANT_ADDRESS_TOWN: "First Defendant's address: town or city",
   FIRST_DEFENDANT_ADDRESS_POSTCODE: "First Defendant's address: postcode",
-  // Second Defendant - FIX: Field names swapped to match visual positions on form
-  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's last name",   // Visually "First name(s)" field
-  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's first names",   // Visually "Last name" field
+  // Second Defendant - CORRECTED: Direct mapping
+  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's first names", // Visual "First name(s)" field
+  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's last name",     // Visual "Last name" field
   SECOND_DEFENDANT_ADDRESS_STREET: "Second Defendant's address: building and street",
   SECOND_DEFENDANT_ADDRESS_LINE2: "Second Defendant's address: second line of address",
   SECOND_DEFENDANT_ADDRESS_TOWN: "Second Defendant's address: town or city",
@@ -1665,86 +1666,80 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     setCheckbox(form, N5B_CHECKBOXES.SOT_BELIEVES, true, ctx);
   }
 
-  // === ATTACHMENTS ===
-  // Only tick attachment boxes if the user has confirmed/uploaded the document.
-  // This prevents false claims on court forms - if user hasn't confirmed they have
-  // the document, the box is left unchecked for them to complete manually.
+  // =========================================================================
+  // FIX 4 (Jan 2026): DETERMINISTIC N5B ATTACHMENT CHECKBOXES (A, B, B1, E, F, G, H)
+  // =========================================================================
+  // These checkboxes indicate documents that WILL BE ATTACHED to the N5B claim.
+  // For Section 21 accelerated possession packs, we use DETERMINISTIC logic:
+  //
+  // A - Tenancy Agreement: Tick if tenancy dates provided (always true for S21 pack)
+  // B - Section 21 Notice: ALWAYS tick for Section 21 claims
+  // B1 - Proof of Service: ALWAYS tick (pack always includes PoS template)
+  // E - Deposit Certificate: Tick if deposit taken AND protected
+  // F - EPC: Tick if epc_provided === true
+  // G - Gas Safety: Tick if has_gas_at_property !== false AND gas_safety_provided === true
+  // H - How to Rent: Tick if how_to_rent_provided === true
+  //
+  // This ensures court packs have consistent, predictable tick states.
+  // =========================================================================
 
-  // Tenancy agreement (marked A) - required attachment
-  // Only tick if user has uploaded/confirmed they have a copy
-  if (data.tenancy_agreement_uploaded === true) {
+  // A: Tenancy agreement (marked A) - required attachment
+  // Tick if: explicitly confirmed, or tenancy dates are provided (implying agreement exists)
+  const hasTenancyAgreement =
+    data.tenancy_agreement_uploaded === true ||
+    data.tenancy_agreement_available === true ||
+    (data.tenancy_start_date && data.tenancy_start_date.length > 0);
+  if (hasTenancyAgreement) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_TENANCY, true, ctx);
   }
 
-  // Notice copy (marked B) - required attachment
-  // Only tick if user has confirmed notice copy is available
-  if (data.notice_copy_available === true) {
+  // B: Section 21 Notice copy (marked B) - required attachment
+  // Tick if: explicitly confirmed, OR this is a Section 21 claim (notice is always generated)
+  const hasNoticeCopy =
+    data.notice_copy_available === true ||
+    data.section_21_notice_date != null; // If S21 notice date exists, notice was generated
+  if (hasNoticeCopy) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_NOTICE, true, ctx);
   }
 
-  // Proof of service (marked B1) - required attachment
-  // Only tick if user has confirmed proof of service is available
-  if (data.service_proof_available === true) {
+  // B1: Proof of service (marked B1) - required attachment
+  // Tick if: explicitly confirmed, OR Section 21 claim (PoS is always generated in pack)
+  const hasProofOfService =
+    data.service_proof_available === true ||
+    data.section_21_notice_date != null; // Section 21 pack always includes PoS template
+  if (hasProofOfService) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_SERVICE_PROOF, true, ctx);
   }
 
-  // =========================================================================
-  // P0 FINAL GATE: N5B ATTACHMENT CHECKBOXES E, F, G, H - SEMANTIC FIX
-  // =========================================================================
-  // These checkboxes indicate documents that WILL BE ATTACHED to the N5B form.
-  //
-  // SEMANTIC: Tick if user indicates the document is AVAILABLE to attach, OR
-  // if they have confirmed the document was PROVIDED to the tenant (implying
-  // they have a copy to attach).
-  //
-  // PRIORITY ORDER:
-  //   1. *_available === true (explicit confirmation)
-  //   2. *_provided === true (implied availability from compliance questions)
-  //   3. *_uploaded === true (legacy: file was uploaded to wizard)
-  //
-  // The *_uploaded flags are kept for pack-strength scoring but are NOT the
-  // primary driver for attachment checkbox ticks.
-  // =========================================================================
-
-  // Deposit certificate (marked E) - deposit protection cert
-  // Tick if: available OR (deposit exists AND protection date exists)
+  // E: Deposit certificate (marked E) - deposit protection cert
+  // Tick if: deposit taken AND protected (has protection date or explicit confirmation)
   const hasDepositCert =
     data.deposit_certificate_available === true ||
-    (data.deposit_amount && data.deposit_amount > 0 && data.deposit_protection_date) ||
-    data.deposit_certificate_uploaded === true;
+    (data.deposit_amount && data.deposit_amount > 0 && data.deposit_protection_date);
   if (hasDepositCert) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_DEPOSIT_CERT, true, ctx);
   }
 
-  // EPC (marked F) - Energy Performance Certificate
-  // Tick if: available OR provided (implying landlord has copy to attach)
-  const hasEpcToAttach =
-    data.epc_available === true ||
-    data.epc_provided === true ||
-    data.epc_uploaded === true;
+  // F: EPC (marked F) - Energy Performance Certificate
+  // Tick if: explicitly confirmed as provided to tenant
+  const hasEpcToAttach = data.epc_provided === true;
   if (hasEpcToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_EPC, true, ctx);
   }
 
-  // Gas safety records (marked G) - Gas Safety Certificate (CP12)
-  // Tick if: available OR provided (implying landlord has copy to attach)
-  // Skip if property has no gas
+  // G: Gas safety records (marked G) - Gas Safety Certificate (CP12)
+  // Tick if: property has gas AND certificate was provided to tenant
+  // Skip entirely if property has no gas supply
   const hasGasToAttach =
-    data.has_gas_at_property !== false && (
-      data.gas_safety_available === true ||
-      data.gas_safety_provided === true ||
-      data.gas_safety_uploaded === true
-    );
+    data.has_gas_at_property !== false &&
+    data.gas_safety_provided === true;
   if (hasGasToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
   }
 
-  // How to Rent document (marked H) - How to Rent guide
-  // Tick if: available OR provided (implying landlord has copy to attach)
-  const hasHowToRentToAttach =
-    data.how_to_rent_available === true ||
-    data.how_to_rent_provided === true ||
-    data.how_to_rent_uploaded === true;
+  // H: How to Rent document (marked H) - How to Rent guide
+  // Tick if: explicitly confirmed as provided to tenant
+  const hasHowToRentToAttach = data.how_to_rent_provided === true;
   if (hasHowToRentToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_HOW_TO_RENT, true, ctx);
   }
