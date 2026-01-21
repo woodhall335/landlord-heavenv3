@@ -929,13 +929,21 @@ export function validateComplianceTiming(data: ComplianceTimingData): TimingVali
   // ==========================================================================
   // HOW TO RENT TIMING - Must be provided BEFORE tenancy start (post Oct 2015)
   // ==========================================================================
+  // LEGAL BASIS: The Assured Shorthold Tenancy Notices and Prescribed Requirements
+  // (England) Regulations 2015, reg. 2(1)(b) - applies to tenancies starting on/after
+  // 1 October 2015. Section 21 is INVALID if How to Rent not provided.
+  //
+  // RATIONALE FOR BLOCK: While some courts have been lenient on timing, the statute
+  // requires provision "before" the tenancy. Blocking ensures landlords fix timing
+  // issues before proceeding, avoiding potential claim dismissal.
+  // ==========================================================================
   if (data.how_to_rent_provided_date && tenancyStart) {
     const htrDate = parseDate(data.how_to_rent_provided_date);
     if (htrDate && htrDate > tenancyStart) {
       issues.push({
-        severity: 'warning', // Warning as courts sometimes allow slight delays
+        severity: 'error', // BLOCK - statutory requirement for post-Oct 2015 tenancies
         field: 'how_to_rent_timing',
-        message: 'How to Rent guide was provided AFTER tenancy start. Best practice is to provide BEFORE the tenancy begins.',
+        message: 'How to Rent guide was provided AFTER tenancy start. For tenancies starting after 1 October 2015, How to Rent MUST be provided BEFORE the tenancy begins for a valid Section 21.',
         expected: `Before ${data.tenancy_start_date}`,
         actual: data.how_to_rent_provided_date,
       });
@@ -999,13 +1007,19 @@ export function assertComplianceTiming(data: ComplianceTimingData): void {
 
 /**
  * Joint party data for validation
+ *
+ * CAPACITY:
+ * - Landlords: Up to 2 (N5B has 2 claimant detail sections)
+ * - Tenants: Up to 4 (N5B has 2 defendant detail sections, but header accepts more)
  */
 export interface JointPartyData {
   has_joint_landlords?: boolean;
+  num_landlords?: number;  // P0: Count of landlords (max 2)
   landlord_full_name?: string;
   landlord_2_name?: string;
 
   has_joint_tenants?: boolean;
+  num_tenants?: number;  // P0: Count of tenants (max 4)
   tenant_full_name?: string;
   tenant_2_name?: string;
   tenant_3_name?: string;
@@ -1027,51 +1041,18 @@ export interface JointPartyValidationResult {
  * CRITICAL: If user indicates joint landlords/tenants exist but doesn't provide names,
  * the resulting documents will be INVALID - notices must name ALL parties.
  *
+ * LIMITS:
+ * - N5B supports up to 2 claimants (landlords) with individual detail sections
+ * - N5B supports up to 2 defendants (tenants) with individual detail sections
+ * - BUT: The "full names" header fields can contain more names (concatenated)
+ * - We support up to 4 tenants (concatenated in header, first 2 in detail sections)
+ * - We support up to 2 landlords
+ *
  * @param data - Joint party data from wizard
  * @returns JointPartyValidationResult with any missing party issues
  */
 export function validateJointParties(data: JointPartyData): JointPartyValidationResult {
   const issues: Array<{ severity: 'error' | 'warning'; field: string; message: string }> = [];
-
-  // ==========================================================================
-  // JOINT LANDLORD VALIDATION
-  // ==========================================================================
-  if (data.has_joint_landlords === true) {
-    if (!data.landlord_full_name) {
-      issues.push({
-        severity: 'error',
-        field: 'landlord_full_name',
-        message: 'Joint landlords indicated but primary landlord name is missing.',
-      });
-    }
-    if (!data.landlord_2_name) {
-      issues.push({
-        severity: 'error',
-        field: 'landlord_2_name',
-        message: 'Joint landlords indicated but second landlord name is missing. ALL landlords must be named on court forms.',
-      });
-    }
-  }
-
-  // ==========================================================================
-  // JOINT TENANT VALIDATION
-  // ==========================================================================
-  if (data.has_joint_tenants === true) {
-    if (!data.tenant_full_name) {
-      issues.push({
-        severity: 'error',
-        field: 'tenant_full_name',
-        message: 'Joint tenants indicated but primary tenant name is missing.',
-      });
-    }
-    if (!data.tenant_2_name) {
-      issues.push({
-        severity: 'error',
-        field: 'tenant_2_name',
-        message: 'Joint tenants indicated but second tenant name is missing. ALL tenants named on the tenancy MUST be named on the notice.',
-      });
-    }
-  }
 
   // ==========================================================================
   // PRIMARY PARTY VALIDATION (always required)
@@ -1090,6 +1071,71 @@ export function validateJointParties(data: JointPartyData): JointPartyValidation
       field: 'tenant_full_name',
       message: 'Tenant name is required for all notices and court documents.',
     });
+  }
+
+  // ==========================================================================
+  // JOINT LANDLORD VALIDATION
+  // ==========================================================================
+  if (data.has_joint_landlords === true) {
+    if (!data.landlord_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_2_name',
+        message: 'Joint landlords indicated but second landlord name is missing. ALL landlords must be named on court forms.',
+      });
+    }
+  }
+
+  // Check for >2 landlords (not supported by N5B individual detail sections)
+  // Note: If a user has more than 2 landlords, they need legal advice for complex ownership
+  if (data.num_landlords && data.num_landlords > 2) {
+    issues.push({
+      severity: 'error',
+      field: 'num_landlords',
+      message: `You indicated ${data.num_landlords} landlords, but N5B only supports up to 2 claimants with individual details. For complex ownership structures (e.g., company ownership, trusts, >2 joint owners), please seek legal advice.`,
+    });
+  }
+
+  // ==========================================================================
+  // JOINT TENANT VALIDATION
+  // ==========================================================================
+  if (data.has_joint_tenants === true) {
+    if (!data.tenant_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_2_name',
+        message: 'Joint tenants indicated but second tenant name is missing. ALL tenants named on the tenancy MUST be named on the notice.',
+      });
+    }
+  }
+
+  // Count provided tenant names
+  const tenantNames = [
+    data.tenant_full_name,
+    data.tenant_2_name,
+    data.tenant_3_name,
+    data.tenant_4_name,
+  ].filter(Boolean);
+
+  // Check for >4 tenants (max supported)
+  if (data.num_tenants && data.num_tenants > 4) {
+    issues.push({
+      severity: 'error',
+      field: 'num_tenants',
+      message: `You indicated ${data.num_tenants} tenants, but this system supports up to 4 joint tenants. For tenancies with more than 4 tenants, please seek legal advice or manually edit the N5B form.`,
+    });
+  }
+
+  // If joint tenants indicated but names don't match count
+  if (data.has_joint_tenants === true && data.num_tenants) {
+    if (tenantNames.length < data.num_tenants) {
+      const missing = data.num_tenants - tenantNames.length;
+      issues.push({
+        severity: 'error',
+        field: 'tenant_names',
+        message: `You indicated ${data.num_tenants} tenants but only provided ${tenantNames.length} names. ${missing} tenant name(s) missing. ALL tenants on the tenancy must be named.`,
+      });
+    }
   }
 
   return {

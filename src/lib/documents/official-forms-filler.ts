@@ -505,6 +505,8 @@ export interface CaseData {
   // Tenant details
   tenant_full_name: string;
   tenant_2_name?: string;
+  tenant_3_name?: string;  // P0 FIX: Support up to 4 joint tenants
+  tenant_4_name?: string;  // P0 FIX: Support up to 4 joint tenants
   property_address: string;
   property_postcode?: string;
 
@@ -554,13 +556,29 @@ export interface CaseData {
   notice_copy_available?: boolean;
   service_proof_available?: boolean;
 
-  // P0-2: Upload-based attachment flags for N5B checkboxes E, F, G
-  // CRITICAL: These must be based on ACTUAL file uploads, NOT compliance flags.
-  // Ticking these boxes falsely is a false statement on a court form.
-  deposit_certificate_uploaded?: boolean;  // Checkbox E - deposit protection cert uploaded
-  epc_uploaded?: boolean;                   // Checkbox F - EPC uploaded
-  gas_safety_uploaded?: boolean;            // Checkbox G - gas safety cert uploaded
-  how_to_rent_uploaded?: boolean;           // Checkbox H - how to rent doc uploaded
+  // =========================================================================
+  // N5B ATTACHMENT CHECKBOXES (Page 20) - "Available to Attach" Flags
+  // =========================================================================
+  // These flags indicate whether the user has the document AVAILABLE to attach
+  // to the N5B form. This is different from:
+  // - *_uploaded: whether a file was uploaded to the wizard (for pack scoring)
+  // - *_provided: whether the document was provided to the tenant (for Q15-18)
+  //
+  // The attachment checkbox should be ticked if the user confirms they WILL
+  // attach the document, OR if we can infer availability from other data.
+  //
+  // SEMANTIC: Tick if (document_available === true) OR (document_provided === true)
+  // =========================================================================
+  deposit_certificate_available?: boolean;  // Checkbox E - deposit cert will be attached
+  epc_available?: boolean;                   // Checkbox F - EPC will be attached
+  gas_safety_available?: boolean;            // Checkbox G - gas safety will be attached
+  how_to_rent_available?: boolean;           // Checkbox H - how to rent will be attached
+
+  // Legacy upload flags - kept for pack-strength scoring, NOT for court form ticks
+  deposit_certificate_uploaded?: boolean;
+  epc_uploaded?: boolean;
+  gas_safety_uploaded?: boolean;
+  how_to_rent_uploaded?: boolean;
 
   // =========================================================================
   // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
@@ -1179,10 +1197,18 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     ? `${data.court_name}\n${data.court_address}`
     : data.court_name;
 
-  setTextRequired(form, N5B_FIELDS.CLAIMANTS_NAMES,
-    data.landlord_full_name + (data.landlord_2_name ? ', ' + data.landlord_2_name : ''), ctx);
-  setTextRequired(form, N5B_FIELDS.DEFENDANTS_NAMES,
-    data.tenant_full_name + (data.tenant_2_name ? ', ' + data.tenant_2_name : ''), ctx);
+  // P0 FIX: Concatenate ALL landlord/tenant names for header fields
+  // N5B supports up to 2 individual claimant/defendant detail sections, but the
+  // "Enter the full names" fields can contain all parties.
+  const allLandlords = [data.landlord_full_name, data.landlord_2_name]
+    .filter(Boolean)
+    .join(', ');
+  const allTenants = [data.tenant_full_name, data.tenant_2_name, data.tenant_3_name, data.tenant_4_name]
+    .filter(Boolean)
+    .join(', ');
+
+  setTextRequired(form, N5B_FIELDS.CLAIMANTS_NAMES, allLandlords, ctx);
+  setTextRequired(form, N5B_FIELDS.DEFENDANTS_NAMES, allTenants, ctx);
   setTextRequired(form, N5B_FIELDS.COURT_NAME_ADDRESS, courtNameAndAddress, ctx);
   setTextRequired(form, N5B_FIELDS.CLAIMING_POSSESSION_OF, data.property_address, ctx);
 
@@ -1588,43 +1614,63 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   }
 
   // =========================================================================
-  // P0-2 FIX: N5B ATTACHMENT CHECKBOXES E, F, G - TRUTHFULNESS
+  // P0 FINAL GATE: N5B ATTACHMENT CHECKBOXES E, F, G, H - SEMANTIC FIX
   // =========================================================================
-  // CRITICAL: These checkboxes declare that documents are ATTACHED to the claim.
-  // Ticking these boxes without the actual document uploaded is a FALSE STATEMENT.
+  // These checkboxes indicate documents that WILL BE ATTACHED to the N5B form.
   //
-  // OLD BEHAVIOR (WRONG):
-  //   - E: Ticked if depositPaid (regardless of certificate upload)
-  //   - F: Ticked if epc_provided compliance flag (regardless of upload)
-  //   - G: Ticked if gas_safety_provided compliance flag (regardless of upload)
+  // SEMANTIC: Tick if user indicates the document is AVAILABLE to attach, OR
+  // if they have confirmed the document was PROVIDED to the tenant (implying
+  // they have a copy to attach).
   //
-  // NEW BEHAVIOR (CORRECT):
-  //   - E: Only tick if deposit_certificate_uploaded === true
-  //   - F: Only tick if epc_uploaded === true
-  //   - G: Only tick if gas_safety_uploaded === true
+  // PRIORITY ORDER:
+  //   1. *_available === true (explicit confirmation)
+  //   2. *_provided === true (implied availability from compliance questions)
+  //   3. *_uploaded === true (legacy: file was uploaded to wizard)
   //
-  // The upload-based flags are derived from facts.evidence.files[] in
-  // eviction-wizard-mapper.ts using the canonical EvidenceCategory enum.
+  // The *_uploaded flags are kept for pack-strength scoring but are NOT the
+  // primary driver for attachment checkbox ticks.
   // =========================================================================
 
-  // Deposit certificate (marked E) - only if certificate was ACTUALLY UPLOADED
-  if (data.deposit_certificate_uploaded === true) {
+  // Deposit certificate (marked E) - deposit protection cert
+  // Tick if: available OR (deposit exists AND protection date exists)
+  const hasDepositCert =
+    data.deposit_certificate_available === true ||
+    (data.deposit_amount && data.deposit_amount > 0 && data.deposit_protection_date) ||
+    data.deposit_certificate_uploaded === true;
+  if (hasDepositCert) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_DEPOSIT_CERT, true, ctx);
   }
 
-  // EPC (marked F) - only if EPC was ACTUALLY UPLOADED
-  if (data.epc_uploaded === true) {
+  // EPC (marked F) - Energy Performance Certificate
+  // Tick if: available OR provided (implying landlord has copy to attach)
+  const hasEpcToAttach =
+    data.epc_available === true ||
+    data.epc_provided === true ||
+    data.epc_uploaded === true;
+  if (hasEpcToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_EPC, true, ctx);
   }
 
-  // Gas safety records (marked G) - only if gas cert was ACTUALLY UPLOADED
-  if (data.gas_safety_uploaded === true) {
+  // Gas safety records (marked G) - Gas Safety Certificate (CP12)
+  // Tick if: available OR provided (implying landlord has copy to attach)
+  // Skip if property has no gas
+  const hasGasToAttach =
+    data.has_gas_at_property !== false && (
+      data.gas_safety_available === true ||
+      data.gas_safety_provided === true ||
+      data.gas_safety_uploaded === true
+    );
+  if (hasGasToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
   }
 
-  // How to Rent document (marked H) - only if How to Rent was ACTUALLY UPLOADED
-  // P0 FIX: This checkbox was previously missing from the attachments section
-  if (data.how_to_rent_uploaded === true) {
+  // How to Rent document (marked H) - How to Rent guide
+  // Tick if: available OR provided (implying landlord has copy to attach)
+  const hasHowToRentToAttach =
+    data.how_to_rent_available === true ||
+    data.how_to_rent_provided === true ||
+    data.how_to_rent_uploaded === true;
+  if (hasHowToRentToAttach) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_HOW_TO_RENT, true, ctx);
   }
 
