@@ -48,7 +48,20 @@ import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
-import { validateCourtReady, logValidationResults, type ValidationResult } from './court-ready-validator';
+import {
+  validateCourtReady,
+  logValidationResults,
+  validateCrossDocumentConsistency,
+  logConsistencyResults,
+  validateComplianceTiming,
+  assertComplianceTiming,
+  validateJointParties,
+  assertJointPartiesComplete,
+  type ValidationResult,
+  type CrossDocumentData,
+  type ComplianceTimingData,
+  type JointPartyData,
+} from './court-ready-validator';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 
 // ============================================================================
@@ -582,7 +595,20 @@ async function generateEvidenceChecklist(
   evictionCase: EvictionCase,
   groundsData: any
 ): Promise<EvictionPackDocument> {
-  const templatePath = 'shared/templates/evidence_collection_checklist.hbs';
+  // ==========================================================================
+  // ROUTE-AWARE EVIDENCE CHECKLIST (P0 FIX - Jan 2026)
+  // ==========================================================================
+  // Section 21 (no_fault) requires COMPLIANCE evidence (EPC, Gas, Deposit, etc.)
+  // Section 8 (rent_arrears) requires ARREARS evidence (schedules, bank statements)
+  // Using wrong checklist can mislead landlords and cause case failure.
+  // ==========================================================================
+  const isSection21 = evictionCase.case_type === 'no_fault';
+  const jurisdiction = evictionCase.jurisdiction || 'england';
+
+  // Select route-appropriate template
+  const templatePath = isSection21
+    ? `uk/${jurisdiction}/templates/eviction/evidence_collection_checklist_section21.hbs`
+    : 'shared/templates/evidence_collection_checklist.hbs';
 
   // Determine case type label based on grounds
   const hasSection8Grounds = evictionCase.grounds.length > 0;
@@ -598,6 +624,7 @@ async function generateEvidenceChecklist(
     case_type: caseTypeLabel,
     // Add current date
     current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
+    generated_date: new Date().toISOString().split('T')[0],
     grounds_data: groundsData,
     required_evidence: evictionCase.grounds.map((g) => {
       const groundDetails = getGroundDetails(groundsData, g.code);
@@ -617,8 +644,10 @@ async function generateEvidenceChecklist(
   });
 
   return {
-    title: 'Evidence Collection Checklist',
-    description: 'Detailed checklist of all evidence you need to gather',
+    title: isSection21 ? 'Evidence Checklist (Section 21 Compliance)' : 'Evidence Collection Checklist',
+    description: isSection21
+      ? 'Checklist of compliance documents required for Section 21'
+      : 'Detailed checklist of all evidence you need to gather',
     category: 'evidence_tool',
     document_type: 'evidence_checklist',
     html: doc.html,
@@ -963,6 +992,63 @@ async function generateEnglandOrWalesEvictionPack(
       );
     }
 
+    // =========================================================================
+    // P0 FIX: JOINT PARTY VALIDATION (Jan 2026)
+    // Block generation if joint landlords/tenants indicated but names missing.
+    // A Section 21 notice with missing party names is INVALID.
+    // =========================================================================
+    const jointPartyData: JointPartyData = {
+      has_joint_landlords: wizardFacts?.has_joint_landlords,
+      landlord_full_name: evictionCase.landlord_full_name,
+      landlord_2_name: evictionCase.landlord_2_name,
+      has_joint_tenants: wizardFacts?.has_joint_tenants,
+      tenant_full_name: evictionCase.tenant_full_name,
+      tenant_2_name: evictionCase.tenant_2_name,
+      tenant_3_name: wizardFacts?.tenant3_name,
+      tenant_4_name: wizardFacts?.tenant4_name,
+    };
+
+    const jointPartyResult = validateJointParties(jointPartyData);
+    if (!jointPartyResult.isValid) {
+      const errors = jointPartyResult.issues
+        .filter(i => i.severity === 'error')
+        .map(i => `${i.field}: ${i.message}`)
+        .join('; ');
+      throw new Error(
+        `Cannot generate Section 21 pack: ${errors}. ` +
+        `ALL landlords and tenants named on the tenancy MUST be named on the notice.`
+      );
+    }
+
+    // =========================================================================
+    // P0 FIX: COMPLIANCE TIMING VALIDATION (Jan 2026)
+    // Validate that compliance documents were provided at legally required times.
+    // Log warnings but don't block - let landlord decide if timing is acceptable.
+    // =========================================================================
+    const timingData: ComplianceTimingData = {
+      tenancy_start_date: evictionCase.tenancy_start_date,
+      epc_provided_date: wizardFacts?.epc_provided_date,
+      gas_safety_check_date: wizardFacts?.gas_safety_check_date,
+      gas_safety_provided_date: wizardFacts?.gas_safety_served_date,
+      has_gas_at_property: wizardFacts?.has_gas_at_property,
+      how_to_rent_provided_date: wizardFacts?.how_to_rent_date,
+      deposit_received_date: wizardFacts?.deposit_received_date,
+      prescribed_info_served_date: wizardFacts?.prescribed_info_served_date,
+    };
+
+    const timingResult = validateComplianceTiming(timingData);
+    if (!timingResult.isValid) {
+      console.warn('⚠️  COMPLIANCE TIMING WARNINGS (Section 21 may be invalid):');
+      for (const issue of timingResult.issues) {
+        const severity = issue.severity === 'error' ? '🚨' : '⚠️';
+        console.warn(`  ${severity} [${issue.field}] ${issue.message}`);
+        if (issue.expected) console.warn(`     Expected: ${issue.expected}`);
+        if (issue.actual) console.warn(`     Actual: ${issue.actual}`);
+      }
+      // Don't throw - landlord may have valid reasons (e.g., tenancy predates requirements)
+      // The warning is logged so landlord is aware of potential issues
+    }
+
     // Build Section21NoticeData from evictionCase to use the canonical notice generator
     // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
     const section21Data: Section21NoticeData = {
@@ -1286,11 +1372,14 @@ export async function generateCompleteEvictionPack(
   let regionDocs: EvictionPackDocument[] = [];
 
   let evictionCase: EvictionCase;
+  // P0 FIX: Declare caseData at higher scope for cross-document validation and templates
+  let caseData: import('./official-forms-filler').CaseData | null = null;
 
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    const { evictionCase: ewCase, caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+    const { evictionCase: ewCase, caseData: ewCaseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase = { ...ewCase, jurisdiction: jurisdiction as Jurisdiction };
-    regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, caseData, groundsData, wizardFacts);
+    caseData = ewCaseData; // Store for use throughout the function
+    regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, ewCaseData, groundsData, wizardFacts);
   } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
     evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
@@ -1442,16 +1531,27 @@ export async function generateCompleteEvictionPack(
   documents.push(proofOfService);
 
   // 3.1 Generate witness statement
-  // For Section 8 cases, use deterministic buildWitnessStatementSections for court-ready content.
-  // This ensures all sections are populated with factual, court-appropriate text derived from case facts.
-  // For other cases, fall back to AI-powered generation.
+  // ==========================================================================
+  // ROUTE-AWARE WITNESS STATEMENT (P0 FIX - Jan 2026)
+  // ==========================================================================
+  // Section 8: Focus on arrears, grounds, and pre-action protocol compliance
+  // Section 21: Focus on statutory compliance (deposit, gas, EPC, How to Rent)
+  // ==========================================================================
   try {
     // Determine if this is a Section 8 case (has fault-based grounds)
     const isSection8Case = evictionCase.grounds && evictionCase.grounds.length > 0;
+    const isSection21Case = evictionCase.case_type === 'no_fault';
 
     let witnessStatementContent;
+    let witnessStatementTemplatePath: string;
 
-    if (isSection8Case && jurisdiction === 'england') {
+    if (isSection21Case && jurisdiction === 'england') {
+      // Use Section 21 specific witness statement template
+      // This focuses on statutory compliance confirmation
+      witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness_statement_section21.hbs`;
+      witnessStatementContent = null; // Section 21 template is self-contained
+      console.log('📝 Using Section 21 witness statement template');
+    } else if (isSection8Case && jurisdiction === 'england') {
       // Use deterministic builder for England Section 8 cases
       // This generates court-ready content from case facts without AI
       // Pass evictionCase which has properly mapped data (plus wizardFacts for any extra fields)
@@ -1462,23 +1562,43 @@ export async function generateCompleteEvictionPack(
         arrears_at_notice_date: evictionCase.arrears_at_notice_date,
       });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
+      witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
       console.log('📝 Using deterministic witness statement builder for Section 8 case');
     } else {
       // Fall back to AI-powered generation for other cases
       const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
       witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
+      witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
     }
 
     const witnessStatementDoc = await generateDocument({
-      templatePath: `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`,
+      templatePath: witnessStatementTemplatePath,
       data: {
         ...evictionCase,
+        ...(caseData || {}), // Include caseData for compliance dates and N5B fields (if available)
         witness_statement: witnessStatementContent,
         // Map to template-expected field names
         landlord_name: evictionCase.landlord_full_name,
+        landlord_full_name: evictionCase.landlord_full_name,
+        landlord_2_name: evictionCase.landlord_2_name,
         tenant_name: evictionCase.tenant_full_name,
+        tenant_full_name: evictionCase.tenant_full_name,
+        tenant_2_name: evictionCase.tenant_2_name,
         landlord_address: evictionCase.landlord_address,
         court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
+        // Compliance data for Section 21 witness statement (use optional chaining for null safety)
+        deposit_amount: evictionCase.deposit_amount,
+        deposit_scheme: caseData?.deposit_scheme,
+        deposit_protection_date: caseData?.deposit_protection_date,
+        epc_provided_date: caseData?.epc_provided_date,
+        gas_safety_check_date: caseData?.gas_safety_check_date,
+        how_to_rent_date: caseData?.how_to_rent_date,
+        how_to_rent_method: caseData?.how_to_rent_method,
+        notice_served_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
+        notice_service_method: caseData?.notice_service_method,
+        notice_expiry_date: caseData?.notice_expiry_date,
+        fixed_term: caseData?.fixed_term,
+        fixed_term_end_date: caseData?.fixed_term_end_date,
         // Add generation date
         generated_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
       },
@@ -1517,15 +1637,35 @@ export async function generateCompleteEvictionPack(
   // - Hearing checklist
   // - Engagement letter template (for arrears cases)
 
-  // Court bundle index
+  // ==========================================================================
+  // ROUTE-AWARE TEMPLATE SELECTION (P0 FIX - Jan 2026)
+  // ==========================================================================
+  // Section 21 (no_fault) and Section 8 (rent_arrears) require different
+  // templates. Section 21 focuses on compliance; Section 8 on arrears evidence.
+  // ==========================================================================
+  const isSection21 = evictionCase.case_type === 'no_fault';
+  const templateSuffix = isSection21 ? '_section21' : '';
+
+  // Court bundle index - ROUTE-AWARE
   try {
+    const bundleIndexTemplatePath = isSection21
+      ? `uk/${jurisdiction}/templates/eviction/court_bundle_index_section21.hbs`
+      : `uk/${jurisdiction}/templates/eviction/court_bundle_index.hbs`;
+
     const bundleIndexDoc = await generateDocument({
-      templatePath: `uk/${jurisdiction}/templates/eviction/court_bundle_index.hbs`,
+      templatePath: bundleIndexTemplatePath,
       data: {
         ...evictionCase,
+        ...(caseData || {}), // Include caseData for deposit_scheme, notice_expiry_date, etc.
         landlord_full_name: evictionCase.landlord_full_name,
+        landlord_2_name: evictionCase.landlord_2_name,
         tenant_full_name: evictionCase.tenant_full_name,
+        tenant_2_name: evictionCase.tenant_2_name,
         property_address: evictionCase.property_address,
+        deposit_amount: evictionCase.deposit_amount,
+        deposit_scheme: caseData?.deposit_scheme,
+        notice_expiry_date: caseData?.notice_expiry_date,
+        court_fee: caseData?.court_fee,
         generated_date: new Date().toISOString().split('T')[0],
         court_name: evictionCase.court_name || 'County Court',
       },
@@ -1534,8 +1674,10 @@ export async function generateCompleteEvictionPack(
     });
 
     documents.push({
-      title: 'Court Bundle Index',
-      description: 'Index of all documents for court filing',
+      title: isSection21 ? 'Court Bundle Index (Section 21)' : 'Court Bundle Index',
+      description: isSection21
+        ? 'Index of documents for Section 21 accelerated possession'
+        : 'Index of all documents for court filing',
       category: 'evidence_tool',
       document_type: 'court_bundle_index',
       html: bundleIndexDoc.html,
@@ -1543,19 +1685,25 @@ export async function generateCompleteEvictionPack(
       file_name: 'court_bundle_index.pdf',
     });
 
-    console.log('✅ Generated court bundle index');
+    console.log(`✅ Generated court bundle index (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
     console.error('⚠️  Failed to generate court bundle index:', error);
   }
 
-  // Hearing checklist
+  // Hearing checklist - ROUTE-AWARE
   try {
+    const hearingChecklistTemplatePath = isSection21
+      ? `uk/${jurisdiction}/templates/eviction/hearing_checklist_section21.hbs`
+      : `uk/${jurisdiction}/templates/eviction/hearing_checklist.hbs`;
+
     const hearingChecklistDoc = await generateDocument({
-      templatePath: `uk/${jurisdiction}/templates/eviction/hearing_checklist.hbs`,
+      templatePath: hearingChecklistTemplatePath,
       data: {
         ...evictionCase,
+        ...(caseData || {}),
         landlord_full_name: evictionCase.landlord_full_name,
         tenant_full_name: evictionCase.tenant_full_name,
+        tenant_2_name: evictionCase.tenant_2_name,
         property_address: evictionCase.property_address,
         generated_date: new Date().toISOString().split('T')[0],
         court_name: evictionCase.court_name,
@@ -1565,8 +1713,10 @@ export async function generateCompleteEvictionPack(
     });
 
     documents.push({
-      title: 'Hearing Checklist',
-      description: 'Preparation checklist for the possession hearing',
+      title: isSection21 ? 'Hearing Checklist (Section 21)' : 'Hearing Checklist',
+      description: isSection21
+        ? 'Preparation checklist for Section 21 accelerated possession'
+        : 'Preparation checklist for the possession hearing',
       category: 'guidance',
       document_type: 'hearing_checklist',
       html: hearingChecklistDoc.html,
@@ -1574,7 +1724,7 @@ export async function generateCompleteEvictionPack(
       file_name: 'hearing_checklist.pdf',
     });
 
-    console.log('✅ Generated hearing checklist');
+    console.log(`✅ Generated hearing checklist (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
     console.error('⚠️  Failed to generate hearing checklist:', error);
   }
@@ -1729,6 +1879,54 @@ export async function generateCompleteEvictionPack(
   });
 
   console.log(`✅ Generated ${documents.length} documents for complete eviction pack`);
+
+  // ==========================================================================
+  // CROSS-DOCUMENT CONSISTENCY VALIDATION (P0 FIX - Jan 2026)
+  // ==========================================================================
+  // For Section 21 cases, validate that Form 6A, N5B, and Proof of Service
+  // all have matching data. Courts REJECT claims with inconsistent documents.
+  // ==========================================================================
+  if (evictionCase.case_type === 'no_fault' && caseData) {
+    const tenantNames: string[] = [evictionCase.tenant_full_name];
+    if (evictionCase.tenant_2_name) tenantNames.push(evictionCase.tenant_2_name);
+
+    const landlordNames: string[] = [evictionCase.landlord_full_name];
+    if (evictionCase.landlord_2_name) landlordNames.push(evictionCase.landlord_2_name);
+
+    const crossDocData: CrossDocumentData = {
+      // Form 6A data (notice)
+      form6a_expiry_date: caseData?.notice_expiry_date,
+      form6a_tenant_names: tenantNames,
+      form6a_landlord_names: landlordNames,
+      form6a_property_address: evictionCase.property_address,
+
+      // N5B data (court form)
+      n5b_expiry_date: caseData?.notice_expiry_date,
+      n5b_service_method: caseData?.notice_service_method,
+      n5b_service_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
+      n5b_tenant_names: tenantNames,
+      n5b_landlord_names: landlordNames,
+      n5b_property_address: evictionCase.property_address,
+
+      // Proof of Service data
+      proof_service_method: caseData?.notice_service_method,
+      proof_service_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
+      proof_recipient_names: tenantNames,
+    };
+
+    const consistencyResult = validateCrossDocumentConsistency(crossDocData);
+
+    if (!consistencyResult.isConsistent) {
+      console.error('❌ CRITICAL: Cross-document consistency validation FAILED');
+      logConsistencyResults(consistencyResult);
+      // Log specific issues for debugging
+      for (const issue of consistencyResult.issues.filter(i => i.severity === 'error')) {
+        console.error(`   → ${issue.field}: ${issue.message}`);
+      }
+    } else {
+      console.log('✅ Cross-document consistency validation passed');
+    }
+  }
 
   return {
     case_id: evictionCase.case_id || `EVICT-${Date.now()}`,

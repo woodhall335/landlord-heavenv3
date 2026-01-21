@@ -273,6 +273,27 @@ const N5B_FIELDS = {
   EMAIL: 'If applicable, email',
   DX: 'If applicable, DX number',
   REFERENCE: 'If applicable, reference number',
+  // Compliance dates - Q15-Q18
+  // Q15: EPC provided date
+  EPC_PROVIDED_DATE_DAY: '15. On what date was the EPC provided to the Defendant? Day',
+  EPC_PROVIDED_DATE_MONTH: '15. On what date was the EPC provided to the Defendant? Month',
+  EPC_PROVIDED_DATE_YEAR: '15. On what date was the EPC provided to the Defendant? Year',
+  // Q16: Gas safety before occupation
+  GAS_SAFETY_BEFORE_OCCUPATION_DATE_DAY: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Day',
+  GAS_SAFETY_BEFORE_OCCUPATION_DATE_MONTH: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Month',
+  GAS_SAFETY_BEFORE_OCCUPATION_DATE_YEAR: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Year',
+  // Q17a: Date of current gas safety check
+  GAS_SAFETY_CHECK_DATE_DAY: '17a. On what date was the current gas safety check carried out? Day',
+  GAS_SAFETY_CHECK_DATE_MONTH: '17a. On what date was the current gas safety check carried out? Month',
+  GAS_SAFETY_CHECK_DATE_YEAR: '17a. On what date was the current gas safety check carried out? Year',
+  // Q17b: Date gas safety record served
+  GAS_SAFETY_SERVED_DATE_DAY: '17b. On what date was the current gas safety record served on the Defendant? Day',
+  GAS_SAFETY_SERVED_DATE_MONTH: '17b. On what date was the current gas safety record served on the Defendant? Month',
+  GAS_SAFETY_SERVED_DATE_YEAR: '17b. On what date was the current gas safety record served on the Defendant? Year',
+  // Q18c: Date How to Rent provided
+  HOW_TO_RENT_DATE_DAY: '18c. On what date was the current version of the document provided? Day',
+  HOW_TO_RENT_DATE_MONTH: '18c. On what date was the current version of the document provided? Month',
+  HOW_TO_RENT_DATE_YEAR: '18c. On what date was the current version of the document provided? Year',
 } as const;
 
 /**
@@ -315,6 +336,47 @@ const N5B_CHECKBOXES = {
   ATTACHMENT_DEPOSIT_CERT: 'Copy of the Tenancy Deposit Certificate marked E',
   ATTACHMENT_EPC: 'Copy of the Energy Performance Certificate marked F',
   ATTACHMENT_GAS: 'Copy of the Gas Safety Records marked G G1 G2 etc',
+  ATTACHMENT_HOW_TO_RENT: 'Copy of the How to Rent document marked H',
+  // Q9a-Q9g - AST Verification (Statement of Truth - MANDATORY)
+  Q9A_AFTER_FEB_1997_YES: '9a. Was the tenancy created on or after 28 February 1997? Yes',
+  Q9A_AFTER_FEB_1997_NO: '9a. Was the tenancy created on or after 28 February 1997? No',
+  Q9B_NO_NOTICE_NOT_AST_YES: '9b. Has notice been given to the Defendant that the tenancy is not an assured shorthold tenancy? Yes',
+  Q9B_NO_NOTICE_NOT_AST_NO: '9b. Has notice been given to the Defendant that the tenancy is not an assured shorthold tenancy? No',
+  Q9C_NO_EXCLUSION_CLAUSE_YES: '9c. Does the tenancy agreement contain a provision to the effect that the tenancy is not an assured shorthold tenancy? Yes',
+  Q9C_NO_EXCLUSION_CLAUSE_NO: '9c. Does the tenancy agreement contain a provision to the effect that the tenancy is not an assured shorthold tenancy? No',
+  Q9D_NOT_AGRICULTURAL_YES: '9d. Is the Defendant an agricultural worker who occupies the premises as part of his employment? Yes',
+  Q9D_NOT_AGRICULTURAL_NO: '9d. Is the Defendant an agricultural worker who occupies the premises as part of his employment? No',
+  Q9E_NOT_SUCCESSION_YES: '9e. Did the tenancy arise on the death of a tenant under a Rent Act protected tenancy? Yes',
+  Q9E_NOT_SUCCESSION_NO: '9e. Did the tenancy arise on the death of a tenant under a Rent Act protected tenancy? No',
+  Q9F_NOT_FORMER_SECURE_YES: '9f. Was the tenancy formerly a secure tenancy? Yes',
+  Q9F_NOT_FORMER_SECURE_NO: '9f. Was the tenancy formerly a secure tenancy? No',
+  Q9G_NOT_SCHEDULE_10_YES: '9g. Was the tenancy granted under Schedule 10 to the Local Government and Housing Act 1989? Yes',
+  Q9G_NOT_SCHEDULE_10_NO: '9g. Was the tenancy granted under Schedule 10 to the Local Government and Housing Act 1989? No',
+  // Q15 - EPC provided
+  Q15_EPC_PROVIDED_YES: '15. Has the Claimant given a copy of the Energy Performance Certificate to the Defendant? Yes',
+  Q15_EPC_PROVIDED_NO: '15. Has the Claimant given a copy of the Energy Performance Certificate to the Defendant? No',
+  // Q16 - Gas safety before occupation (only if gas in property)
+  Q16_GAS_BEFORE_OCCUPATION_YES: '16. Was a current gas safety record made available to the Defendant before they occupied the property? Yes',
+  Q16_GAS_BEFORE_OCCUPATION_NO: '16. Was a current gas safety record made available to the Defendant before they occupied the property? No',
+  Q16_NO_GAS: '16. There is no gas at the property',
+  // Q17 - Gas safety record served
+  Q17_GAS_SERVED_YES: '17. Is the Defendant in possession of a copy of the current gas safety record? Yes',
+  Q17_GAS_SERVED_NO: '17. Is the Defendant in possession of a copy of the current gas safety record? No',
+  // Q18a-d - How to Rent guide
+  Q18A_HOW_TO_RENT_PROVIDED_YES: '18a. Was the Defendant given a copy of the Department for Communities and Local Government document entitled How to rent: the checklist for renting in England? Yes',
+  Q18A_HOW_TO_RENT_PROVIDED_NO: '18a. Was the Defendant given a copy of the Department for Communities and Local Government document entitled How to rent: the checklist for renting in England? No',
+  Q18B_TENANCY_BEFORE_OCT_2015_YES: '18b. Did the tenancy begin before 1 October 2015? Yes',
+  Q18B_TENANCY_BEFORE_OCT_2015_NO: '18b. Did the tenancy begin before 1 October 2015? No',
+  Q18D_HOW_TO_RENT_HARDCOPY: '18d. Was the How to Rent document provided by way of hard copy? Yes',
+  Q18D_HOW_TO_RENT_EMAIL: '18d. Was the How to Rent document provided by email? Yes',
+  // Q19 - Tenant Fees Act 2019
+  Q19_PROHIBITED_PAYMENT_YES: '19. Has any payment that is prohibited by section 1 of the Tenant Fees Act 2019 been required of, or received from, the Defendant, that has not been repaid? Yes',
+  Q19_PROHIBITED_PAYMENT_NO: '19. Has any payment that is prohibited by section 1 of the Tenant Fees Act 2019 been required of, or received from, the Defendant, that has not been repaid? No',
+  Q19B_HOLDING_DEPOSIT_YES: '19b. Was a holding deposit paid in connection with the grant of the tenancy on or after 1 June 2019? Yes',
+  Q19B_HOLDING_DEPOSIT_NO: '19b. Was a holding deposit paid in connection with the grant of the tenancy on or after 1 June 2019? No',
+  // Q20 - Paper determination consent
+  Q20_PAPER_DETERMINATION_YES: '20. If the Defendant responds and seeks a postponement of possession, do you agree to the matter being dealt with without a hearing? Yes',
+  Q20_PAPER_DETERMINATION_NO: '20. If the Defendant responds and seeks a postponement of possession, do you agree to the matter being dealt with without a hearing? No',
 } as const;
 
 /**
@@ -498,6 +560,52 @@ export interface CaseData {
   deposit_certificate_uploaded?: boolean;  // Checkbox E - deposit protection cert uploaded
   epc_uploaded?: boolean;                   // Checkbox F - EPC uploaded
   gas_safety_uploaded?: boolean;            // Checkbox G - gas safety cert uploaded
+  how_to_rent_uploaded?: boolean;           // Checkbox H - how to rent doc uploaded
+
+  // =========================================================================
+  // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
+  // =========================================================================
+  n5b_q9a_after_feb_1997?: boolean;      // Q9a: Tenancy created after 28 Feb 1997
+  n5b_q9b_no_notice_not_ast?: boolean;   // Q9b: No notice given that NOT an AST
+  n5b_q9c_no_exclusion_clause?: boolean; // Q9c: No exclusion clause in agreement
+  n5b_q9d_not_agricultural_worker?: boolean; // Q9d: Not agricultural worker
+  n5b_q9e_not_succession_tenancy?: boolean;  // Q9e: Not succession tenancy
+  n5b_q9f_not_former_secure?: boolean;   // Q9f: Not former secure tenancy
+  n5b_q9g_not_schedule_10?: boolean;     // Q9g: Not Schedule 10 LGHA 1989
+
+  // =========================================================================
+  // N5B QUESTIONS 15-18: COMPLIANCE DATES
+  // =========================================================================
+  // Q15: EPC
+  epc_provided_date?: string;            // Q15: Date EPC was provided
+  // Q16-17: Gas safety
+  has_gas_at_property?: boolean;         // Q16: Property has gas (if false, Q16-17 skip)
+  gas_safety_before_occupation?: boolean; // Q16: Gas safety record available before occupation
+  gas_safety_before_occupation_date?: string; // Q16: Date gas record made available before occupation
+  gas_safety_check_date?: string;        // Q17a: Date gas safety check carried out
+  gas_safety_served_date?: string;       // Q17b: Date gas safety record served
+  // Q18: How to Rent
+  how_to_rent_date?: string;             // Q18c: Date How to Rent provided
+  how_to_rent_method?: 'hardcopy' | 'email'; // Q18d: Method of provision
+
+  // =========================================================================
+  // N5B QUESTIONS 19: TENANT FEES ACT 2019
+  // =========================================================================
+  n5b_q19_prohibited_payment?: boolean;  // Q19: Prohibited payment taken and not refunded
+  n5b_q19b_holding_deposit?: 'no' | 'yes_compliant' | 'yes_breach'; // Q19b: Holding deposit
+
+  // =========================================================================
+  // N5B QUESTION 20: PAPER DETERMINATION CONSENT
+  // =========================================================================
+  n5b_q20_paper_determination?: boolean; // Q20: Consent to paper determination
+
+  // =========================================================================
+  // N5B DEFENDANT SERVICE ADDRESS (Page 5)
+  // =========================================================================
+  defendant_service_address_same_as_property?: boolean;
+  defendant_service_address_line1?: string;
+  defendant_service_address_town?: string;
+  defendant_service_address_postcode?: string;
 
   // Known occupants (for N119 Q2 - persons in possession)
   // Only include if landlord has confirmed these occupants exist
@@ -1183,6 +1291,67 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, !data.subsequent_tenancy, ctx);
   }
 
+  // =========================================================================
+  // Q9a-Q9g: AST VERIFICATION (MANDATORY - Statement of Truth)
+  // =========================================================================
+  // CRITICAL: These answers form part of the Statement of Truth.
+  // Courts WILL reject claims with missing answers.
+  // =========================================================================
+
+  // Q9a: Tenancy created on or after 28 February 1997
+  if (data.n5b_q9a_after_feb_1997 !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES, data.n5b_q9a_after_feb_1997, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_NO, !data.n5b_q9a_after_feb_1997, ctx);
+  }
+
+  // Q9b: Notice given that tenancy is NOT an AST (answer should be NO for valid S21)
+  if (data.n5b_q9b_no_notice_not_ast !== undefined) {
+    // NOTE: The wizard asks "Confirm NO notice was given saying NOT AST" (YES = correct)
+    // The form asks "Has notice been given...?" so we INVERT the answer
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_YES, !data.n5b_q9b_no_notice_not_ast, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_NO, data.n5b_q9b_no_notice_not_ast, ctx);
+  }
+
+  // Q9c: Exclusion clause in tenancy agreement (answer should be NO for valid S21)
+  if (data.n5b_q9c_no_exclusion_clause !== undefined) {
+    // Wizard asks "Confirm NO exclusion clause" (YES = correct)
+    // Form asks "Does agreement contain provision...?" so we INVERT
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_YES, !data.n5b_q9c_no_exclusion_clause, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_NO, data.n5b_q9c_no_exclusion_clause, ctx);
+  }
+
+  // Q9d: Agricultural worker (answer should be NO for valid S21)
+  if (data.n5b_q9d_not_agricultural_worker !== undefined) {
+    // Wizard asks "Confirm NOT agricultural worker" (YES = correct)
+    // Form asks "Is defendant agricultural worker...?" so we INVERT
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_YES, !data.n5b_q9d_not_agricultural_worker, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_NO, data.n5b_q9d_not_agricultural_worker, ctx);
+  }
+
+  // Q9e: Succession tenancy from Rent Act (answer should be NO for valid S21)
+  if (data.n5b_q9e_not_succession_tenancy !== undefined) {
+    // Wizard asks "Confirm NOT succession tenancy" (YES = correct)
+    // Form asks "Did tenancy arise on death...?" so we INVERT
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_YES, !data.n5b_q9e_not_succession_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_NO, data.n5b_q9e_not_succession_tenancy, ctx);
+  }
+
+  // Q9f: Former secure tenancy (answer should be NO for valid S21)
+  if (data.n5b_q9f_not_former_secure !== undefined) {
+    // Wizard asks "Confirm NOT former secure tenancy" (YES = correct)
+    // Form asks "Was tenancy formerly secure...?" so we INVERT
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_YES, !data.n5b_q9f_not_former_secure, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_NO, data.n5b_q9f_not_former_secure, ctx);
+  }
+
+  // Q9g: Schedule 10 LGHA 1989 tenancy (answer should be NO for valid S21)
+  if (data.n5b_q9g_not_schedule_10 !== undefined) {
+    // Wizard asks "Confirm NOT Schedule 10 tenancy" (YES = correct)
+    // Form asks "Was tenancy granted under Schedule 10...?" so we INVERT
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_YES, !data.n5b_q9g_not_schedule_10, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_NO, data.n5b_q9g_not_schedule_10, ctx);
+  }
+
   // === Q10: NOTICE SERVICE (REQUIRED) ===
   setTextRequired(form, N5B_FIELDS.NOTICE_SERVICE_METHOD, data.notice_service_method, ctx);
 
@@ -1234,6 +1403,134 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   } else if (data.deposit_amount === 0 || data.deposit_amount === undefined) {
     // Explicitly no deposit
     setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_PAID_NO, true, ctx);
+  }
+
+  // =========================================================================
+  // Q15: EPC PROVIDED
+  // =========================================================================
+  if (data.epc_provided !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q15_EPC_PROVIDED_YES, data.epc_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q15_EPC_PROVIDED_NO, !data.epc_provided, ctx);
+  }
+
+  // Q15 date: When EPC was provided to defendant
+  if (data.epc_provided_date) {
+    const epcDate = splitDate(data.epc_provided_date);
+    if (epcDate) {
+      setTextOptional(form, N5B_FIELDS.EPC_PROVIDED_DATE_DAY, epcDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.EPC_PROVIDED_DATE_MONTH, epcDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.EPC_PROVIDED_DATE_YEAR, epcDate.year, ctx);
+    }
+  }
+
+  // =========================================================================
+  // Q16-17: GAS SAFETY
+  // =========================================================================
+  // Q16: Gas safety before occupation (or "no gas at property")
+  if (data.has_gas_at_property === false) {
+    // No gas at property - tick that box
+    setCheckbox(form, N5B_CHECKBOXES.Q16_NO_GAS, true, ctx);
+  } else if (data.gas_safety_before_occupation !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q16_GAS_BEFORE_OCCUPATION_YES, data.gas_safety_before_occupation, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q16_GAS_BEFORE_OCCUPATION_NO, !data.gas_safety_before_occupation, ctx);
+
+    // Q16 date: When gas safety record made available before occupation
+    if (data.gas_safety_before_occupation_date) {
+      const gasBeforeDate = splitDate(data.gas_safety_before_occupation_date);
+      if (gasBeforeDate) {
+        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_DAY, gasBeforeDate.day, ctx);
+        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_MONTH, gasBeforeDate.month, ctx);
+        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_YEAR, gasBeforeDate.year, ctx);
+      }
+    }
+  }
+
+  // Q17: Gas safety record served (tenant has copy)
+  if (data.gas_safety_provided !== undefined && data.has_gas_at_property !== false) {
+    setCheckbox(form, N5B_CHECKBOXES.Q17_GAS_SERVED_YES, data.gas_safety_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q17_GAS_SERVED_NO, !data.gas_safety_provided, ctx);
+  }
+
+  // Q17a: Date gas safety check was carried out
+  if (data.gas_safety_check_date) {
+    const gasCheckDate = splitDate(data.gas_safety_check_date);
+    if (gasCheckDate) {
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_DAY, gasCheckDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_MONTH, gasCheckDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_YEAR, gasCheckDate.year, ctx);
+    }
+  }
+
+  // Q17b: Date gas safety record served on defendant
+  if (data.gas_safety_served_date) {
+    const gasServedDate = splitDate(data.gas_safety_served_date);
+    if (gasServedDate) {
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_DAY, gasServedDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_MONTH, gasServedDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_YEAR, gasServedDate.year, ctx);
+    }
+  }
+
+  // =========================================================================
+  // Q18: HOW TO RENT GUIDE
+  // =========================================================================
+  // Q18a: Was How to Rent guide provided
+  if (data.how_to_rent_provided !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q18A_HOW_TO_RENT_PROVIDED_YES, data.how_to_rent_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q18A_HOW_TO_RENT_PROVIDED_NO, !data.how_to_rent_provided, ctx);
+  }
+
+  // Q18b: Tenancy began before 1 October 2015 (exemption)
+  // Derive from tenancy_start_date
+  if (data.tenancy_start_date) {
+    const tenancyStartDate = new Date(data.tenancy_start_date);
+    const oct2015 = new Date('2015-10-01');
+    const beforeOct2015 = tenancyStartDate < oct2015;
+    setCheckbox(form, N5B_CHECKBOXES.Q18B_TENANCY_BEFORE_OCT_2015_YES, beforeOct2015, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q18B_TENANCY_BEFORE_OCT_2015_NO, !beforeOct2015, ctx);
+  }
+
+  // Q18c: Date How to Rent was provided
+  if (data.how_to_rent_date) {
+    const htrDate = splitDate(data.how_to_rent_date);
+    if (htrDate) {
+      setTextOptional(form, N5B_FIELDS.HOW_TO_RENT_DATE_DAY, htrDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.HOW_TO_RENT_DATE_MONTH, htrDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.HOW_TO_RENT_DATE_YEAR, htrDate.year, ctx);
+    }
+  }
+
+  // Q18d: Method of provision (hardcopy or email)
+  if (data.how_to_rent_method === 'hardcopy') {
+    setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_HARDCOPY, true, ctx);
+  } else if (data.how_to_rent_method === 'email') {
+    setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_EMAIL, true, ctx);
+  }
+
+  // =========================================================================
+  // Q19: TENANT FEES ACT 2019 COMPLIANCE
+  // =========================================================================
+  // Q19: Prohibited payment taken and not refunded (answer should be NO for valid S21)
+  if (data.n5b_q19_prohibited_payment !== undefined) {
+    // Wizard asks "Has prohibited payment been taken that hasn't been refunded?"
+    // Answer NO for valid S21 (no prohibited payment, or all refunded)
+    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_YES, data.n5b_q19_prohibited_payment, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_NO, !data.n5b_q19_prohibited_payment, ctx);
+  }
+
+  // Q19b: Holding deposit (on/after 1 June 2019)
+  if (data.n5b_q19b_holding_deposit !== undefined) {
+    const holdingDeposit = data.n5b_q19b_holding_deposit;
+    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_YES, holdingDeposit !== 'no', ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, holdingDeposit === 'no', ctx);
+  }
+
+  // =========================================================================
+  // Q20: PAPER DETERMINATION CONSENT
+  // =========================================================================
+  if (data.n5b_q20_paper_determination !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, data.n5b_q20_paper_determination, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_NO, !data.n5b_q20_paper_determination, ctx);
   }
 
   // === Q21: ORDERS REQUESTED ===
@@ -1323,6 +1620,12 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // Gas safety records (marked G) - only if gas cert was ACTUALLY UPLOADED
   if (data.gas_safety_uploaded === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
+  }
+
+  // How to Rent document (marked H) - only if How to Rent was ACTUALLY UPLOADED
+  // P0 FIX: This checkbox was previously missing from the attachments section
+  if (data.how_to_rent_uploaded === true) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_HOW_TO_RENT, true, ctx);
   }
 
   // === SERVICE ADDRESS ===

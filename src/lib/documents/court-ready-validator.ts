@@ -472,3 +472,669 @@ export function scanFinalOutputForPlaceholders(
     documentType,
   };
 }
+
+// =============================================================================
+// CROSS-DOCUMENT CONSISTENCY VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Cross-document consistency data for validation
+ *
+ * CRITICAL: The following MUST match exactly across Form 6A, N5B, and Proof of Service:
+ * - Notice expiry date
+ * - Service method
+ * - Service date
+ * - Party names (all landlords and tenants)
+ */
+export interface CrossDocumentData {
+  // From Form 6A
+  form6a_expiry_date?: string;
+  form6a_tenant_names?: string[];
+  form6a_landlord_names?: string[];
+  form6a_property_address?: string;
+
+  // From N5B
+  n5b_expiry_date?: string;
+  n5b_service_method?: string;
+  n5b_service_date?: string;
+  n5b_tenant_names?: string[];
+  n5b_landlord_names?: string[];
+  n5b_property_address?: string;
+
+  // From Proof of Service
+  proof_service_method?: string;
+  proof_service_date?: string;
+  proof_recipient_names?: string[];
+}
+
+export interface ConsistencyIssue {
+  severity: 'error' | 'warning';
+  field: string;
+  message: string;
+  form6a_value?: string;
+  n5b_value?: string;
+  proof_value?: string;
+}
+
+export interface ConsistencyResult {
+  isConsistent: boolean;
+  issues: ConsistencyIssue[];
+}
+
+/**
+ * Normalize a date string to YYYY-MM-DD for comparison
+ */
+function normalizeDateForComparison(dateStr: string | undefined): string | null {
+  if (!dateStr) return null;
+
+  // Try to parse and normalize the date
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) {
+    // If standard parsing fails, try UK date format (DD/MM/YYYY)
+    const ukMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (ukMatch) {
+      const [, day, month, year] = ukMatch;
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+    return dateStr.toLowerCase().trim();
+  }
+
+  return date.toISOString().split('T')[0];
+}
+
+/**
+ * Normalize names for comparison (case-insensitive, trim whitespace)
+ */
+function normalizeNameForComparison(name: string | undefined): string {
+  if (!name) return '';
+  return name.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Normalize service method for comparison
+ */
+function normalizeServiceMethodForComparison(method: string | undefined): string {
+  if (!method) return '';
+  return method
+    .toLowerCase()
+    .replace(/[\s_-]+/g, '_')
+    .replace(/first_class_post|first_class|post|postal/, 'post')
+    .replace(/recorded_delivery|recorded|signed_for/, 'recorded')
+    .replace(/by_hand|hand_delivery|in_person/, 'hand')
+    .trim();
+}
+
+/**
+ * Validate cross-document consistency for Section 21 accelerated possession.
+ *
+ * CRITICAL: This validation ensures that Form 6A, N5B, and Proof of Service
+ * all contain matching information. Mismatches WILL cause court rejection.
+ *
+ * @param data - Cross-document data extracted from generated documents
+ * @returns ConsistencyResult with any mismatches found
+ */
+export function validateCrossDocumentConsistency(data: CrossDocumentData): ConsistencyResult {
+  const issues: ConsistencyIssue[] = [];
+
+  // ==========================================================================
+  // NOTICE EXPIRY DATE - MUST match between Form 6A and N5B Q10e
+  // ==========================================================================
+  if (data.form6a_expiry_date || data.n5b_expiry_date) {
+    const form6aDate = normalizeDateForComparison(data.form6a_expiry_date);
+    const n5bDate = normalizeDateForComparison(data.n5b_expiry_date);
+
+    if (form6aDate && n5bDate && form6aDate !== n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'Notice expiry date mismatch between Form 6A and N5B Q10(e). These MUST be identical.',
+        form6a_value: data.form6a_expiry_date,
+        n5b_value: data.n5b_expiry_date,
+      });
+    }
+
+    if (!form6aDate && n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'Form 6A is missing expiry date but N5B has one. Both must be present and match.',
+        n5b_value: data.n5b_expiry_date,
+      });
+    }
+
+    if (form6aDate && !n5bDate) {
+      issues.push({
+        severity: 'error',
+        field: 'notice_expiry_date',
+        message: 'N5B Q10(e) is missing expiry date but Form 6A has one. Both must be present and match.',
+        form6a_value: data.form6a_expiry_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // SERVICE METHOD - MUST match between N5B Q10a and Proof of Service
+  // ==========================================================================
+  if (data.n5b_service_method || data.proof_service_method) {
+    const n5bMethod = normalizeServiceMethodForComparison(data.n5b_service_method);
+    const proofMethod = normalizeServiceMethodForComparison(data.proof_service_method);
+
+    if (n5bMethod && proofMethod && n5bMethod !== proofMethod) {
+      issues.push({
+        severity: 'error',
+        field: 'service_method',
+        message: 'Service method mismatch between N5B Q10(a) and Proof of Service. These MUST be identical.',
+        n5b_value: data.n5b_service_method,
+        proof_value: data.proof_service_method,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // SERVICE DATE - MUST match between N5B Q10b and Proof of Service
+  // ==========================================================================
+  if (data.n5b_service_date || data.proof_service_date) {
+    const n5bDate = normalizeDateForComparison(data.n5b_service_date);
+    const proofDate = normalizeDateForComparison(data.proof_service_date);
+
+    if (n5bDate && proofDate && n5bDate !== proofDate) {
+      issues.push({
+        severity: 'error',
+        field: 'service_date',
+        message: 'Service date mismatch between N5B Q10(b) and Proof of Service. These MUST be identical.',
+        n5b_value: data.n5b_service_date,
+        proof_value: data.proof_service_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // TENANT NAMES - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_tenant_names && data.n5b_tenant_names) {
+    const form6aTenants = data.form6a_tenant_names.map(normalizeNameForComparison).sort();
+    const n5bTenants = data.n5b_tenant_names.map(normalizeNameForComparison).sort();
+
+    // Check count mismatch
+    if (form6aTenants.length !== n5bTenants.length) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_names',
+        message: `Tenant count mismatch: Form 6A has ${form6aTenants.length} tenant(s), N5B has ${n5bTenants.length}. ALL tenants must be named on ALL documents.`,
+        form6a_value: data.form6a_tenant_names.join(', '),
+        n5b_value: data.n5b_tenant_names.join(', '),
+      });
+    } else {
+      // Check for name mismatches
+      for (let i = 0; i < form6aTenants.length; i++) {
+        if (form6aTenants[i] !== n5bTenants[i]) {
+          issues.push({
+            severity: 'error',
+            field: 'tenant_names',
+            message: 'Tenant name mismatch between Form 6A and N5B. Names must be identical.',
+            form6a_value: data.form6a_tenant_names.join(', '),
+            n5b_value: data.n5b_tenant_names.join(', '),
+          });
+          break;
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // LANDLORD NAMES - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_landlord_names && data.n5b_landlord_names) {
+    const form6aLandlords = data.form6a_landlord_names.map(normalizeNameForComparison).sort();
+    const n5bLandlords = data.n5b_landlord_names.map(normalizeNameForComparison).sort();
+
+    if (form6aLandlords.length !== n5bLandlords.length) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_names',
+        message: `Landlord count mismatch: Form 6A has ${form6aLandlords.length} landlord(s), N5B has ${n5bLandlords.length}. ALL landlords must be named on ALL documents.`,
+        form6a_value: data.form6a_landlord_names.join(', '),
+        n5b_value: data.n5b_landlord_names.join(', '),
+      });
+    } else {
+      for (let i = 0; i < form6aLandlords.length; i++) {
+        if (form6aLandlords[i] !== n5bLandlords[i]) {
+          issues.push({
+            severity: 'error',
+            field: 'landlord_names',
+            message: 'Landlord name mismatch between Form 6A and N5B. Names must be identical.',
+            form6a_value: data.form6a_landlord_names.join(', '),
+            n5b_value: data.n5b_landlord_names.join(', '),
+          });
+          break;
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // PROPERTY ADDRESS - MUST match across all documents
+  // ==========================================================================
+  if (data.form6a_property_address && data.n5b_property_address) {
+    const form6aAddress = normalizeNameForComparison(data.form6a_property_address);
+    const n5bAddress = normalizeNameForComparison(data.n5b_property_address);
+
+    if (form6aAddress !== n5bAddress) {
+      issues.push({
+        severity: 'warning', // Warning because minor formatting differences may be acceptable
+        field: 'property_address',
+        message: 'Property address differs between Form 6A and N5B. Verify these refer to the same property.',
+        form6a_value: data.form6a_property_address,
+        n5b_value: data.n5b_property_address,
+      });
+    }
+  }
+
+  return {
+    isConsistent: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert cross-document consistency, throwing if critical mismatches found.
+ *
+ * CRITICAL: Use this before generating final court bundle to ensure consistency.
+ */
+export function assertCrossDocumentConsistency(data: CrossDocumentData): void {
+  const result = validateCrossDocumentConsistency(data);
+
+  if (!result.isConsistent) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => {
+        let msg = `${i.field}: ${i.message}`;
+        if (i.form6a_value) msg += ` Form 6A: "${i.form6a_value}"`;
+        if (i.n5b_value) msg += ` N5B: "${i.n5b_value}"`;
+        if (i.proof_value) msg += ` Proof: "${i.proof_value}"`;
+        return msg;
+      })
+      .join('; ');
+
+    throw new Error(
+      `Cross-document consistency validation failed: ${errorMessages}. ` +
+      `Courts will reject Section 21 claims with mismatched documents.`
+    );
+  }
+
+  // Log warnings even if validation passes
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`⚠️  Cross-document warning (${issue.field}): ${issue.message}`);
+  }
+}
+
+/**
+ * Log cross-document consistency issues with appropriate formatting
+ */
+export function logConsistencyResults(result: ConsistencyResult): void {
+  if (!result.isConsistent) {
+    console.error('❌ Cross-document consistency validation FAILED:');
+    for (const issue of result.issues.filter(i => i.severity === 'error')) {
+      console.error(`  🚨 [${issue.field}] ${issue.message}`);
+      if (issue.form6a_value) console.error(`     Form 6A: "${issue.form6a_value}"`);
+      if (issue.n5b_value) console.error(`     N5B: "${issue.n5b_value}"`);
+      if (issue.proof_value) console.error(`     Proof: "${issue.proof_value}"`);
+    }
+  }
+
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`  ⚠️  [${issue.field}] ${issue.message}`);
+    if (issue.form6a_value) console.warn(`     Form 6A: "${issue.form6a_value}"`);
+    if (issue.n5b_value) console.warn(`     N5B: "${issue.n5b_value}"`);
+    if (issue.proof_value) console.warn(`     Proof: "${issue.proof_value}"`);
+  }
+
+  if (result.isConsistent && result.issues.length === 0) {
+    console.log('✅ Cross-document consistency validation passed');
+  }
+}
+
+// =============================================================================
+// SECTION 21 COMPLIANCE TIMING VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Compliance timing data for Section 21 validation
+ *
+ * CRITICAL: Section 21 notices are INVALID if compliance documents were not
+ * provided at the correct times:
+ * - EPC: Must be provided before tenancy start (for tenancies after Oct 2015)
+ * - Gas Safety: Must be provided within 28 days of gas check AND before occupation
+ * - How to Rent: Must be provided before tenancy start (for tenancies after Oct 2015)
+ * - Deposit Info: Must be provided within 30 days of deposit receipt
+ */
+export interface ComplianceTimingData {
+  tenancy_start_date?: string;
+  occupation_date?: string; // When tenant moved in (may differ from tenancy start)
+
+  // EPC timing
+  epc_provided_date?: string;
+  epc_valid_until?: string;
+
+  // Gas Safety timing
+  gas_safety_check_date?: string;
+  gas_safety_provided_date?: string;
+  has_gas_at_property?: boolean;
+
+  // How to Rent timing
+  how_to_rent_provided_date?: string;
+
+  // Deposit timing
+  deposit_received_date?: string;
+  prescribed_info_served_date?: string;
+}
+
+export interface TimingValidationIssue {
+  severity: 'error' | 'warning';
+  field: string;
+  message: string;
+  expected?: string;
+  actual?: string;
+}
+
+export interface TimingValidationResult {
+  isValid: boolean;
+  issues: TimingValidationIssue[];
+}
+
+/**
+ * Parse a date string safely, handling various formats
+ */
+function parseDate(dateStr: string | undefined): Date | null {
+  if (!dateStr) return null;
+
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) return date;
+
+  // Try UK format DD/MM/YYYY
+  const ukMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (ukMatch) {
+    const [, day, month, year] = ukMatch;
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
+  return null;
+}
+
+/**
+ * Validate compliance document timing for Section 21 evictions.
+ *
+ * CRITICAL: These validations ensure documents were provided at legally required times.
+ * Failure to meet these timings makes Section 21 notices INVALID.
+ *
+ * @param data - Compliance timing data
+ * @returns TimingValidationResult with any timing violations
+ */
+export function validateComplianceTiming(data: ComplianceTimingData): TimingValidationResult {
+  const issues: TimingValidationIssue[] = [];
+
+  const tenancyStart = parseDate(data.tenancy_start_date);
+  const occupation = parseDate(data.occupation_date) || tenancyStart;
+
+  // ==========================================================================
+  // EPC TIMING - Must be provided BEFORE tenancy start
+  // ==========================================================================
+  if (data.epc_provided_date && tenancyStart) {
+    const epcDate = parseDate(data.epc_provided_date);
+    if (epcDate && epcDate > tenancyStart) {
+      issues.push({
+        severity: 'error',
+        field: 'epc_timing',
+        message: 'EPC was provided AFTER tenancy start date. For Section 21 validity, EPC must be provided BEFORE the tenancy begins.',
+        expected: `Before ${data.tenancy_start_date}`,
+        actual: data.epc_provided_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // GAS SAFETY TIMING - Must be provided BEFORE occupation
+  // ==========================================================================
+  if (data.has_gas_at_property !== false && data.gas_safety_provided_date && occupation) {
+    const gasProvidedDate = parseDate(data.gas_safety_provided_date);
+    if (gasProvidedDate && gasProvidedDate > occupation) {
+      issues.push({
+        severity: 'error',
+        field: 'gas_safety_timing',
+        message: 'Gas safety certificate was provided AFTER tenant occupation. For Section 21 validity, gas safety record must be provided BEFORE occupation.',
+        expected: `Before ${data.occupation_date || data.tenancy_start_date}`,
+        actual: data.gas_safety_provided_date,
+      });
+    }
+
+    // Also check gas safety check date - must be within 12 months
+    if (data.gas_safety_check_date) {
+      const checkDate = parseDate(data.gas_safety_check_date);
+      const now = new Date();
+      if (checkDate) {
+        const monthsSinceCheck = (now.getTime() - checkDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+        if (monthsSinceCheck > 12) {
+          issues.push({
+            severity: 'error',
+            field: 'gas_safety_expiry',
+            message: 'Gas safety certificate is more than 12 months old. A valid Section 21 requires a current gas safety record.',
+            expected: 'Within last 12 months',
+            actual: data.gas_safety_check_date,
+          });
+        }
+      }
+    }
+  }
+
+  // ==========================================================================
+  // HOW TO RENT TIMING - Must be provided BEFORE tenancy start (post Oct 2015)
+  // ==========================================================================
+  if (data.how_to_rent_provided_date && tenancyStart) {
+    const htrDate = parseDate(data.how_to_rent_provided_date);
+    if (htrDate && htrDate > tenancyStart) {
+      issues.push({
+        severity: 'warning', // Warning as courts sometimes allow slight delays
+        field: 'how_to_rent_timing',
+        message: 'How to Rent guide was provided AFTER tenancy start. Best practice is to provide BEFORE the tenancy begins.',
+        expected: `Before ${data.tenancy_start_date}`,
+        actual: data.how_to_rent_provided_date,
+      });
+    }
+  }
+
+  // ==========================================================================
+  // DEPOSIT PRESCRIBED INFO TIMING - Must be within 30 days of receipt
+  // ==========================================================================
+  if (data.deposit_received_date && data.prescribed_info_served_date) {
+    const depositDate = parseDate(data.deposit_received_date);
+    const prescribedDate = parseDate(data.prescribed_info_served_date);
+
+    if (depositDate && prescribedDate) {
+      const daysDiff = (prescribedDate.getTime() - depositDate.getTime()) / (1000 * 60 * 60 * 24);
+      if (daysDiff > 30) {
+        issues.push({
+          severity: 'error',
+          field: 'prescribed_info_timing',
+          message: `Prescribed information was served ${Math.round(daysDiff)} days after deposit receipt. Must be within 30 days for valid Section 21.`,
+          expected: `Within 30 days of ${data.deposit_received_date}`,
+          actual: data.prescribed_info_served_date,
+        });
+      }
+    }
+  }
+
+  return {
+    isValid: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert compliance timing is valid, throwing if critical violations found.
+ */
+export function assertComplianceTiming(data: ComplianceTimingData): void {
+  const result = validateComplianceTiming(data);
+
+  if (!result.isValid) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => `${i.field}: ${i.message}`)
+      .join('; ');
+
+    throw new Error(
+      `Compliance timing validation failed: ${errorMessages}. ` +
+      `Section 21 notice may be INVALID.`
+    );
+  }
+
+  // Log warnings
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`⚠️  Timing warning (${issue.field}): ${issue.message}`);
+  }
+}
+
+// =============================================================================
+// JOINT PARTY VALIDATION (P0 FIX - Jan 2026)
+// =============================================================================
+
+/**
+ * Joint party data for validation
+ */
+export interface JointPartyData {
+  has_joint_landlords?: boolean;
+  landlord_full_name?: string;
+  landlord_2_name?: string;
+
+  has_joint_tenants?: boolean;
+  tenant_full_name?: string;
+  tenant_2_name?: string;
+  tenant_3_name?: string;
+  tenant_4_name?: string;
+}
+
+export interface JointPartyValidationResult {
+  isValid: boolean;
+  issues: Array<{
+    severity: 'error' | 'warning';
+    field: string;
+    message: string;
+  }>;
+}
+
+/**
+ * Validate joint party completeness.
+ *
+ * CRITICAL: If user indicates joint landlords/tenants exist but doesn't provide names,
+ * the resulting documents will be INVALID - notices must name ALL parties.
+ *
+ * @param data - Joint party data from wizard
+ * @returns JointPartyValidationResult with any missing party issues
+ */
+export function validateJointParties(data: JointPartyData): JointPartyValidationResult {
+  const issues: Array<{ severity: 'error' | 'warning'; field: string; message: string }> = [];
+
+  // ==========================================================================
+  // JOINT LANDLORD VALIDATION
+  // ==========================================================================
+  if (data.has_joint_landlords === true) {
+    if (!data.landlord_full_name) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_full_name',
+        message: 'Joint landlords indicated but primary landlord name is missing.',
+      });
+    }
+    if (!data.landlord_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'landlord_2_name',
+        message: 'Joint landlords indicated but second landlord name is missing. ALL landlords must be named on court forms.',
+      });
+    }
+  }
+
+  // ==========================================================================
+  // JOINT TENANT VALIDATION
+  // ==========================================================================
+  if (data.has_joint_tenants === true) {
+    if (!data.tenant_full_name) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_full_name',
+        message: 'Joint tenants indicated but primary tenant name is missing.',
+      });
+    }
+    if (!data.tenant_2_name) {
+      issues.push({
+        severity: 'error',
+        field: 'tenant_2_name',
+        message: 'Joint tenants indicated but second tenant name is missing. ALL tenants named on the tenancy MUST be named on the notice.',
+      });
+    }
+  }
+
+  // ==========================================================================
+  // PRIMARY PARTY VALIDATION (always required)
+  // ==========================================================================
+  if (!data.landlord_full_name) {
+    issues.push({
+      severity: 'error',
+      field: 'landlord_full_name',
+      message: 'Landlord name is required for all court documents.',
+    });
+  }
+
+  if (!data.tenant_full_name) {
+    issues.push({
+      severity: 'error',
+      field: 'tenant_full_name',
+      message: 'Tenant name is required for all notices and court documents.',
+    });
+  }
+
+  return {
+    isValid: issues.filter(i => i.severity === 'error').length === 0,
+    issues,
+  };
+}
+
+/**
+ * Assert joint parties are complete, throwing if validation fails.
+ *
+ * Use this BEFORE generating Section 21 documents to ensure all parties are named.
+ */
+export function assertJointPartiesComplete(data: JointPartyData): void {
+  const result = validateJointParties(data);
+
+  if (!result.isValid) {
+    const errorMessages = result.issues
+      .filter(i => i.severity === 'error')
+      .map(i => `${i.field}: ${i.message}`)
+      .join('; ');
+
+    throw new Error(
+      `Joint party validation failed: ${errorMessages}. ` +
+      `Notices and court forms with missing party names are INVALID.`
+    );
+  }
+}
+
+/**
+ * Log joint party validation results
+ */
+export function logJointPartyResults(result: JointPartyValidationResult): void {
+  if (!result.isValid) {
+    console.error('❌ Joint party validation FAILED:');
+    for (const issue of result.issues.filter(i => i.severity === 'error')) {
+      console.error(`  🚨 [${issue.field}] ${issue.message}`);
+    }
+  }
+
+  for (const issue of result.issues.filter(i => i.severity === 'warning')) {
+    console.warn(`  ⚠️  [${issue.field}] ${issue.message}`);
+  }
+
+  if (result.isValid && result.issues.length === 0) {
+    console.log('✅ Joint party validation passed');
+  }
+}

@@ -803,6 +803,206 @@ questions:
     maps_to:
       - tenancy_agreement_date
 
+  # ============================================================
+  # N5B QUESTIONS 9a-9g: AST VERIFICATION (STATEMENT OF TRUTH)
+  # ============================================================
+  # CRITICAL: These questions are mandatory for Form N5B.
+  # Courts WILL reject claims with missing answers.
+  # These are Statement of Truth declarations - user MUST confirm.
+  # ============================================================
+  - id: n5b_ast_verification
+    section: N5B AST Verification
+    question: "Assured Shorthold Tenancy verification (N5B Questions 9a-9g)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "IMPORTANT: These questions are required for Form N5B. Your answers form part of the Statement of Truth. Courts will reject claims with missing answers."
+    fields:
+      # Q9a - Tenancy created after 28 February 1997
+      - id: n5b_q9a_after_feb_1997
+        label: "Q9a: Was this tenancy created on or after 28 February 1997?"
+        inputType: yes_no
+        helperText: "Most modern tenancies are. Answer YES unless you know the original tenancy started before this date."
+        validation:
+          required: true
+        width: full
+      # Q9b - No notice that tenancy is NOT an AST
+      - id: n5b_q9b_no_notice_not_ast
+        label: "Q9b: Confirm that NO notice was served stating the tenancy is NOT an assured shorthold tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES if you never gave the tenant a notice saying this would NOT be an AST. (Most landlords should answer YES)"
+        validation:
+          required: true
+        width: full
+      # Q9c - No exclusion clause in tenancy agreement
+      - id: n5b_q9c_no_exclusion_clause
+        label: "Q9c: Confirm the tenancy agreement does NOT contain a clause stating it is NOT an AST?"
+        inputType: yes_no
+        helperText: "Check your tenancy agreement. Answer YES if there is no such clause. (Standard AST agreements should answer YES)"
+        validation:
+          required: true
+        width: full
+      # Q9d - Tenant not agricultural worker
+      - id: n5b_q9d_not_agricultural_worker
+        label: "Q9d: Confirm the tenant is NOT an agricultural worker occupying the property as part of their employment?"
+        inputType: yes_no
+        helperText: "Answer YES for standard residential tenancies. Agricultural workers have special protections."
+        validation:
+          required: true
+        width: full
+      # Q9e - Not succession tenancy
+      - id: n5b_q9e_not_succession_tenancy
+        label: "Q9e: Confirm this is NOT a tenancy that arose by succession from a Rent Act protected tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES for standard modern tenancies. Succession from Rent Act tenancies (pre-1989) have different rules."
+        validation:
+          required: true
+        width: full
+      # Q9f - Not former secure tenancy
+      - id: n5b_q9f_not_former_secure
+        label: "Q9f: Confirm this is NOT a tenancy that was previously a secure tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES for private tenancies. Secure tenancies are typically with councils or housing associations."
+        validation:
+          required: true
+        width: full
+      # Q9g - Not Schedule 10 LGHA 1989 tenancy
+      - id: n5b_q9g_not_schedule_10
+        label: "Q9g: Confirm this is NOT a long leasehold tenancy granted under Schedule 10 of the Local Government and Housing Act 1989?"
+        inputType: yes_no
+        helperText: "Answer YES for standard AST rentals. Schedule 10 applies to specific long leasehold situations."
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - n5b_q9a_after_feb_1997
+      - n5b_q9b_no_notice_not_ast
+      - n5b_q9c_no_exclusion_clause
+      - n5b_q9d_not_agricultural_worker
+      - n5b_q9e_not_succession_tenancy
+      - n5b_q9f_not_former_secure
+      - n5b_q9g_not_schedule_10
+
+  # ============================================================
+  # N5B QUESTION 19: TENANT FEES ACT 2019 COMPLIANCE
+  # ============================================================
+  # Section 21 may be invalid if prohibited payments were taken
+  # and not refunded, or if holding deposit rules were breached.
+  # ============================================================
+  - id: n5b_tenant_fees_act
+    section: N5B Tenant Fees Act
+    question: "Tenant Fees Act 2019 compliance (N5B Question 19)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "IMPORTANT: The Tenant Fees Act 2019 restricts what payments landlords can require. Section 21 may be invalid if these rules were breached."
+    fields:
+      # Q19a - Prohibited payment taken and not refunded
+      - id: n5b_q19_prohibited_payment
+        label: "Q19: Has any prohibited payment been required or taken from the tenant that has not been refunded?"
+        inputType: yes_no
+        helperText: "Prohibited payments include admin fees, check-out fees, and excessive deposits. Answer NO if no prohibited fees were charged, or all have been refunded."
+        validation:
+          required: true
+        width: full
+      # Q19b - Holding deposit (on/after 1 June 2019)
+      - id: n5b_q19b_holding_deposit
+        label: "Q19b: Was a holding deposit paid on or after 1 June 2019?"
+        inputType: select
+        options:
+          - value: "no"
+            label: "No holding deposit was paid"
+          - value: "yes_compliant"
+            label: "Yes, and it was handled in compliance with the Act"
+          - value: "yes_breach"
+            label: "Yes, but the holding deposit rules may have been breached"
+        helperText: "Holding deposits are limited to 1 week's rent and must be returned within 15 days if tenancy doesn't proceed (unless tenant defaults)."
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - n5b_q19_prohibited_payment
+      - n5b_q19b_holding_deposit
+
+  # ============================================================
+  # N5B QUESTION 20: CONSENT TO PAPER DETERMINATION
+  # ============================================================
+  # The court can decide the case without a hearing if the tenant
+  # doesn't respond. This question asks for consent to paper
+  # determination if the tenant seeks postponement.
+  # ============================================================
+  - id: n5b_q20_paper_determination
+    section: N5B Court Preference
+    question: "Do you consent to a paper determination if the tenant seeks postponement? (N5B Question 20)"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Q20: If the tenant responds seeking postponement of possession, do you agree to the matter being dealt with on paper without a hearing? Answering YES can speed up the process."
+    validation:
+      required: true
+    maps_to:
+      - n5b_q20_paper_determination
+
+  # ============================================================
+  # N5B DEFENDANT ADDRESS FOR SERVICE (Page 5)
+  # ============================================================
+  # The defendant's address for service, usually the property
+  # address but can be different if known.
+  # ============================================================
+  - id: n5b_defendant_service_address
+    section: N5B Court Details
+    question: "Defendant's address for service"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Where court documents should be sent to the defendant. Usually the property address unless you know they have a different address."
+    fields:
+      - id: defendant_service_address_same_as_property
+        label: "Is the defendant's address for service the same as the property address?"
+        inputType: yes_no
+        helperText: "Select YES if documents should be sent to the rental property."
+        validation:
+          required: true
+        width: full
+      - id: defendant_service_address_line1
+        label: "Building and street"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: full
+      - id: defendant_service_address_town
+        label: "Town/City"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: half
+      - id: defendant_service_address_postcode
+        label: "Postcode"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: half
+    maps_to:
+      - defendant_service_address_same_as_property
+      - defendant_service_address_line1
+      - defendant_service_address_town
+      - defendant_service_address_postcode
+
   # -----------------------------------------------------------
   # DEPOSIT SCHEME DETAILS (Required for N5B)
   # -----------------------------------------------------------

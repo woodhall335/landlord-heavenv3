@@ -16,6 +16,52 @@ function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
 }
 
+/**
+ * Converts internal service method enum values to human-readable format for court forms.
+ * N5B form field 10a requires proper court-ready text, not internal identifiers.
+ *
+ * @param method - The internal service method value (e.g., 'first_class_post')
+ * @returns Human-readable format (e.g., 'First class post') or null if no mapping
+ */
+function formatServiceMethodForCourt(method: string | null | undefined): string | null {
+  if (!method) return null;
+
+  const methodMapping: Record<string, string> = {
+    // Post methods
+    'first_class_post': 'First class post',
+    'recorded_delivery': 'Recorded delivery',
+    'special_delivery': 'Special delivery',
+    'registered_post': 'Registered post',
+    // Hand delivery
+    'hand_delivery': 'By hand',
+    'hand_delivered': 'By hand',
+    'by_hand': 'By hand',
+    'in_person': 'By hand',
+    'personal_service': 'Personal service',
+    // Email (only valid if agreed in tenancy)
+    'email': 'Email',
+    // Other
+    'other': 'Other method',
+  };
+
+  // Normalize the input and look up
+  const normalized = method.toLowerCase().replace(/[\s-]+/g, '_').trim();
+
+  if (methodMapping[normalized]) {
+    return methodMapping[normalized];
+  }
+
+  // If already human-readable (e.g., "First class post"), return as-is
+  if (method.includes(' ') || /^[A-Z]/.test(method)) {
+    return method;
+  }
+
+  // Fallback: capitalize first letter and replace underscores with spaces
+  return method
+    .replace(/_/g, ' ')
+    .replace(/^(\w)/, (match) => match.toUpperCase());
+}
+
 // =============================================================================
 // P0-2: N5B ATTACHMENT CHECKBOX TRUTHFULNESS HELPER
 // =============================================================================
@@ -306,6 +352,7 @@ function buildCaseData(
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
     // ✅ FIX: Map notice_service_method for N5B form field 10a ("How was the notice served")
     // Uses centralized resolveNoticeServiceMethod() for single source of truth
+    // CRITICAL: Must output human-readable format (e.g., "First class post") not internal enum
     notice_service_method: (() => {
       const method = resolveNoticeServiceMethod(wizardFacts);
       if (method === 'other') {
@@ -313,7 +360,9 @@ function buildCaseData(
         const detail = resolveNoticeServiceMethodDetail(wizardFacts);
         return detail ? `Other: ${detail}` : 'Other method';
       }
-      return method || facts.notice.service_method || undefined;
+      // Convert internal enum to human-readable format for N5B form
+      const humanReadableMethod = formatServiceMethodForCourt(method || facts.notice.service_method);
+      return humanReadableMethod || undefined;
     })(),
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
@@ -453,6 +502,13 @@ function buildCaseData(
         (wizardFacts as any)?.evidence?.files,
         EvidenceCategory.GAS_SAFETY_CERTIFICATE
       ),
+    // P0 FIX: How to Rent attachment checkbox (H) was missing
+    how_to_rent_uploaded:
+      wizardFacts.has_how_to_rent_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.HOW_TO_RENT_PROOF
+      ),
 
     // =========================================================================
     // COMPLIANCE FLAGS (kept for other N5B questions, NOT for attachment boxes)
@@ -461,6 +517,67 @@ function buildCaseData(
     // (e.g., "Was EPC provided to tenant?") - NOT for attachment checkboxes
     epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
     gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
+    how_to_rent_provided: wizardFacts.how_to_rent_provided || undefined,
+
+    // =========================================================================
+    // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
+    // =========================================================================
+    n5b_q9a_after_feb_1997: wizardFacts.n5b_q9a_after_feb_1997 ?? undefined,
+    n5b_q9b_no_notice_not_ast: wizardFacts.n5b_q9b_no_notice_not_ast ?? undefined,
+    n5b_q9c_no_exclusion_clause: wizardFacts.n5b_q9c_no_exclusion_clause ?? undefined,
+    n5b_q9d_not_agricultural_worker: wizardFacts.n5b_q9d_not_agricultural_worker ?? undefined,
+    n5b_q9e_not_succession_tenancy: wizardFacts.n5b_q9e_not_succession_tenancy ?? undefined,
+    n5b_q9f_not_former_secure: wizardFacts.n5b_q9f_not_former_secure ?? undefined,
+    n5b_q9g_not_schedule_10: wizardFacts.n5b_q9g_not_schedule_10 ?? undefined,
+
+    // =========================================================================
+    // N5B QUESTIONS 15-18: COMPLIANCE DATES
+    // =========================================================================
+    // Note: These fields come from wizard facts. CaseFacts schema doesn't have
+    // these new N5B-specific fields yet. Use wizardFacts only.
+    // Q15: EPC date
+    epc_provided_date: wizardFacts.epc_provided_date || undefined,
+    // Q16-17: Gas safety
+    has_gas_at_property: wizardFacts.has_gas_at_property ?? true, // Default true for most properties
+    gas_safety_before_occupation: wizardFacts.gas_safety_before_occupation || undefined,
+    gas_safety_before_occupation_date: wizardFacts.gas_safety_before_occupation_date || undefined,
+    gas_safety_check_date:
+      wizardFacts.gas_safety_check_date ||
+      facts.compliance.gas_safety_cert_date || // Use existing cert_date as fallback
+      undefined,
+    gas_safety_served_date: wizardFacts.gas_safety_served_date || undefined,
+    // Q18: How to Rent
+    how_to_rent_date: wizardFacts.how_to_rent_date || undefined,
+    how_to_rent_method: wizardFacts.how_to_rent_method || undefined,
+
+    // =========================================================================
+    // N5B QUESTION 19: TENANT FEES ACT 2019
+    // =========================================================================
+    n5b_q19_prohibited_payment: wizardFacts.n5b_q19_prohibited_payment ?? false,
+    n5b_q19b_holding_deposit: wizardFacts.n5b_q19b_holding_deposit ?? 'no',
+
+    // =========================================================================
+    // N5B QUESTION 20: PAPER DETERMINATION CONSENT
+    // =========================================================================
+    n5b_q20_paper_determination: wizardFacts.n5b_q20_paper_determination ?? undefined,
+
+    // =========================================================================
+    // N5B DEFENDANT SERVICE ADDRESS
+    // =========================================================================
+    defendant_service_address_same_as_property:
+      wizardFacts.defendant_service_address_same_as_property ?? true,
+    defendant_service_address_line1:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_line1
+        : facts.property.address_line1,
+    defendant_service_address_town:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_town
+        : facts.property.city,
+    defendant_service_address_postcode:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_postcode
+        : facts.property.postcode,
 
     // =========================================================================
     // N5 CHECKBOX FLAG DERIVATION

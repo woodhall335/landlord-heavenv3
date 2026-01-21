@@ -95,7 +95,8 @@ describe('England Eviction Wizard Redesign', () => {
       expect(caseData.rent_amount).toBe(1200);
       expect(caseData.rent_frequency).toBe('monthly');
       expect(caseData.claim_type).toBe('section_21');
-      expect(caseData.notice_service_method).toBe('first_class_post');
+      // NOTE: Service method is now converted to human-readable format for N5B form
+      expect(caseData.notice_service_method).toBe('First class post');
       expect(caseData.court_name).toBe('Manchester County Court');
       expect(caseData.deposit_amount).toBe(1200);
       expect(caseData.deposit_scheme).toBe('DPS');
@@ -185,7 +186,8 @@ describe('England Eviction Wizard Redesign', () => {
       expect(caseData.property_address).toBeTruthy();
       expect(caseData.claim_type).toBe('section_8');
       expect(caseData.ground_numbers).toBeTruthy();
-      expect(caseData.notice_service_method).toBe('hand_delivered');
+      // NOTE: Service method is now converted to human-readable format for N5B form
+      expect(caseData.notice_service_method).toBe('By hand');
       expect(caseData.court_name).toBe('Birmingham County Court');
     });
 
@@ -662,8 +664,9 @@ describe('England Eviction Wizard Redesign', () => {
       );
 
       // CRITICAL: Notice fields populated from inline subflow must appear in caseData
+      // NOTE: Service method is now converted to human-readable format for N5B form
       expect(caseData.notice_served_date).toBe('2024-12-26');
-      expect(caseData.notice_service_method).toBe('first_class_post');
+      expect(caseData.notice_service_method).toBe('First class post');
       expect(caseData.notice_expiry_date).toBe('2025-02-24');
 
       // Verify Section 21 case type
@@ -735,8 +738,9 @@ describe('England Eviction Wizard Redesign', () => {
       );
 
       // CRITICAL: Notice fields from inline subflow must appear in caseData
+      // NOTE: Service method is now converted to human-readable format for N5B form
       expect(caseData.notice_served_date).toBe('2024-12-26');
-      expect(caseData.notice_service_method).toBe('hand_delivered');
+      expect(caseData.notice_service_method).toBe('By hand');
 
       // Verify Section 8 case type and grounds
       expect(caseData.claim_type).toBe('section_8');
@@ -782,8 +786,9 @@ describe('England Eviction Wizard Redesign', () => {
       const { caseData } = wizardFactsToEnglandWalesEviction('test', factsWithServiceDate);
 
       // The mapper should use notice_served_date
+      // NOTE: Service method is now converted to human-readable format for N5B form
       expect(caseData.notice_served_date).toBe('2024-12-26');
-      expect(caseData.notice_service_method).toBe('recorded_delivery');
+      expect(caseData.notice_service_method).toBe('Recorded delivery');
     });
   });
 });
