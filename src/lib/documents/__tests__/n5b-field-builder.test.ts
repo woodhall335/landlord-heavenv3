@@ -209,6 +209,133 @@ describe('buildN5BFields', () => {
       expect(fields.n5b_q9a_after_feb_1997).toBe(true);
       expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
     });
+
+    // =========================================================================
+    // NEGATIVE→POSITIVE INVERSION TESTS
+    // These test the actual wizard MQS field IDs which use NEGATIVE framing
+    // =========================================================================
+
+    test('INVERTS n5b_q9b_no_notice_not_ast (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NO notice was served?" → YES
+      // Means: NO notice was served → has_notice_not_ast = false
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: true,  // User confirmed NO notice
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9b_no_notice_not_ast (wizard NO → CaseData true)', () => {
+      // Wizard: "Confirm NO notice was served?" → NO
+      // Means: notice WAS served → has_notice_not_ast = true
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: false,  // User said NO (notice was served)
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(true);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9c_no_exclusion_clause (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm agreement does NOT contain exclusion clause?" → YES
+      // Means: NO exclusion clause → has_exclusion_clause = false
+      const wizardFacts = {
+        n5b_q9c_no_exclusion_clause: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9d_not_agricultural_worker (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm tenant is NOT agricultural worker?" → YES
+      // Means: tenant is NOT agricultural worker → is_agricultural_worker = false
+      const wizardFacts = {
+        n5b_q9d_not_agricultural_worker: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9e_not_succession_tenancy (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT succession tenancy?" → YES
+      // Means: NOT succession tenancy → is_succession_tenancy = false
+      const wizardFacts = {
+        n5b_q9e_not_succession_tenancy: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9f_not_former_secure (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT formerly secure tenancy?" → YES
+      // Means: NOT formerly secure → was_secure_tenancy = false
+      const wizardFacts = {
+        n5b_q9f_not_former_secure: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9g_not_schedule_10 (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT Schedule 10 tenancy?" → YES
+      // Means: NOT Schedule 10 → is_schedule_10 = false
+      const wizardFacts = {
+        n5b_q9g_not_schedule_10: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9g_is_schedule_10).toBe(false);  // INVERTED
+    });
+
+    test('handles all Q9 negative-framed MQS fields together', () => {
+      // This mimics what the actual wizard sends for a compliant landlord
+      const wizardFacts = {
+        n5b_q9a_after_feb_1997: true,  // Positive framing (direct)
+        n5b_q9b_no_notice_not_ast: true,  // Negative framing (invert)
+        n5b_q9c_no_exclusion_clause: true,  // Negative framing (invert)
+        n5b_q9d_not_agricultural_worker: true,  // Negative framing (invert)
+        n5b_q9e_not_succession_tenancy: true,  // Negative framing (invert)
+        n5b_q9f_not_former_secure: true,  // Negative framing (invert)
+        n5b_q9g_not_schedule_10: true,  // Negative framing (invert)
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      // Q9a is positive framing - remains true
+      expect(fields.n5b_q9a_after_feb_1997).toBe(true);
+
+      // Q9b-Q9g are negative framing - should all be inverted to false
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+      expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+      expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+      expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+      expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+    });
+
+    test('handles string boolean values for negative-framed fields', () => {
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: 'yes',  // String true
+        n5b_q9c_no_exclusion_clause: 'true',  // String true
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);  // INVERTED from 'yes'
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);  // INVERTED from 'true'
+    });
   });
 
   describe('Q10a: Notice Service Method', () => {
@@ -305,6 +432,30 @@ describe('buildN5BFields', () => {
 
       expect(fields.epc_provided_date).toBe('2024-02-20');
     });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps epc_provided from wizard MQS field "epc_served"', () => {
+      const wizardFacts = {
+        epc_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.epc_provided).toBe(true);
+    });
+
+    test('maps epc_provided_date from wizard MQS field "epc_certificate_date"', () => {
+      const wizardFacts = {
+        epc_certificate_date: '2024-05-15',
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.epc_provided_date).toBe('2024-05-15');
+    });
   });
 
   describe('Q16-Q17: Gas Safety', () => {
@@ -367,6 +518,40 @@ describe('buildN5BFields', () => {
 
       expect(fields.gas_safety_service_dates).toEqual(['2024-01-01', '2024-06-01']);
     });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps has_gas_at_property from wizard MQS field "has_gas_appliances"', () => {
+      const wizardFacts = {
+        has_gas_appliances: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.has_gas_at_property).toBe(true);
+    });
+
+    test('maps gas_safety_provided from wizard MQS field "gas_cert_served"', () => {
+      const wizardFacts = {
+        gas_cert_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.gas_safety_provided).toBe(true);
+    });
+
+    test('maps gas_safety_check_date from wizard MQS field "gas_cert_date"', () => {
+      const wizardFacts = {
+        gas_cert_date: '2024-06-20',
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.gas_safety_check_date).toBe('2024-06-20');
+    });
   });
 
   describe('Q18: How to Rent', () => {
@@ -418,6 +603,20 @@ describe('buildN5BFields', () => {
       const fields = buildN5BFields(wizardFacts);
 
       expect(fields.how_to_rent_method).toBe('email');
+    });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps how_to_rent_provided from wizard MQS field "how_to_rent_served"', () => {
+      const wizardFacts = {
+        how_to_rent_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.how_to_rent_provided).toBe(true);
     });
   });
 
