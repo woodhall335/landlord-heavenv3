@@ -5,14 +5,17 @@
  * to N5B-specific CaseData fields. It handles:
  * - Alias resolution (multiple wizard keys → single CaseData field)
  * - Robust boolean parsing ("true/false", "yes/no", 1/0, undefined)
- * - Validation of mandatory fields for court acceptance
+ * - Unwrapping common wizard answer shapes (e.g. { value: "yes" })
+ * - Validation of mandatory fields for court acceptance (where required)
  *
- * N5B Questions covered:
+ * N5B Questions covered (expanded to match newer N5B layouts):
  * - Q9a-Q9g: AST verification (Statement of Truth - MANDATORY)
  * - Q10a: Notice service method (MANDATORY)
- * - Q15-Q18: Compliance dates (EPC, Gas Safety, How to Rent)
- * - Q19: Tenant Fees Act 2019 compliance
- * - Q20: Paper determination consent
+ * - Licensing: HMO/Selective, valid licence, pending decision/TEN (if asked in wizard)
+ * - Property condition / retaliation notices: Q15a–k (if asked in wizard)
+ * - Compliance dates (EPC, Gas Safety, How to Rent)
+ * - Tenant Fees Act 2019 compliance
+ * - Paper determination consent
  */
 
 import type { CaseData } from './official-forms-filler';
@@ -23,9 +26,19 @@ import type { CaseData } from './official-forms-filler';
 
 /**
  * N5B-specific fields extracted from wizard facts
+ *
+ * NOTE: We keep this interface focused on fields that are either:
+ * - Directly mapped into N5B PDF answers, OR
+ * - Required by court acceptance rules (depending on the form version)
+ *
+ * If the official PDF changes, update BOTH:
+ * - this builder (facts → CaseData keys)
+ * - official-forms-filler.ts (CaseData keys → PDF field names)
  */
 export interface N5BFields {
+  // ---------------------------------------------------------------------------
   // Q9a-Q9g: AST Verification (MANDATORY)
+  // ---------------------------------------------------------------------------
   n5b_q9a_after_feb_1997?: boolean;
   n5b_q9b_has_notice_not_ast?: boolean;
   n5b_q9c_has_exclusion_clause?: boolean;
@@ -34,14 +47,43 @@ export interface N5BFields {
   n5b_q9f_was_secure_tenancy?: boolean;
   n5b_q9g_is_schedule_10?: boolean;
 
+  // ---------------------------------------------------------------------------
   // Q10a: Notice service method (MANDATORY)
+  // ---------------------------------------------------------------------------
   notice_service_method?: string;
 
-  // Q15: EPC
+  // ---------------------------------------------------------------------------
+  // Licensing (newer N5B versions: often around Q11)
+  // ---------------------------------------------------------------------------
+  n5b_property_requires_licence?: boolean; // Is property required to be licensed?
+  n5b_has_valid_licence?: boolean;         // If yes, is there a valid licence?
+  n5b_licensing_decision_outstanding?: boolean; // Is a decision outstanding / TEN?
+
+  // ---------------------------------------------------------------------------
+  // Property condition / retaliatory eviction section (often Q15a–k in newer PDFs)
+  // "Has claimant been served with a relevant notice...?"
+  // ---------------------------------------------------------------------------
+  n5b_property_condition_notice_served?: boolean;
+  n5b_property_condition_notice_date?: string; // date notice served (YYYY-MM-DD)
+  n5b_property_condition_notice_suspended?: boolean;
+  n5b_property_condition_suspension_ended?: boolean;
+  n5b_property_condition_suspension_end_date?: string;
+  n5b_property_condition_notice_revoked?: boolean;
+  n5b_property_condition_notice_quashed?: boolean;
+  n5b_property_condition_non_revoke_reversed?: boolean;
+  n5b_property_condition_action_reversed?: boolean;
+  n5b_property_condition_defendant_complained_before_notice?: boolean;
+  n5b_property_condition_due_to_defendant_breach?: boolean;
+  n5b_property_condition_on_market_for_sale?: boolean;
+  n5b_claimant_is_social_housing_provider?: boolean;
+  n5b_claimant_is_mortgagee_pre_tenancy?: boolean;
+
+  // ---------------------------------------------------------------------------
+  // Compliance (EPC / Gas / HTR) - your existing mapping
+  // ---------------------------------------------------------------------------
   epc_provided?: boolean;
   epc_provided_date?: string;
 
-  // Q16-Q17: Gas Safety
   has_gas_at_property?: boolean;
   gas_safety_before_occupation?: boolean;
   gas_safety_before_occupation_date?: string;
@@ -50,16 +92,19 @@ export interface N5BFields {
   gas_safety_service_dates?: string[];
   gas_safety_provided?: boolean;
 
-  // Q18: How to Rent
   how_to_rent_provided?: boolean;
   how_to_rent_date?: string;
   how_to_rent_method?: 'hardcopy' | 'email';
 
-  // Q19: Tenant Fees Act 2019
+  // ---------------------------------------------------------------------------
+  // Tenant Fees Act 2019
+  // ---------------------------------------------------------------------------
   n5b_q19_has_unreturned_prohibited_payment?: boolean;
   n5b_q19b_holding_deposit?: boolean;
 
-  // Q20: Paper Determination
+  // ---------------------------------------------------------------------------
+  // Paper Determination
+  // ---------------------------------------------------------------------------
   n5b_q20_paper_determination?: boolean;
 }
 
@@ -84,11 +129,15 @@ export class N5BMissingFieldError extends Error {
 // =============================================================================
 
 /**
- * Mapping of wizard field aliases to canonical CaseData field names.
+ * Mapping of wizard field aliases to canonical N5BFields keys.
  * Each canonical field may have multiple wizard aliases.
+ *
+ * Notes:
+ * - Include both flat keys and dotted paths for nested wizard structures
+ * - Keep the canonical key FIRST if the wizard already uses it
  */
 const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
-  // Q9a: Was tenancy created on or after 28 February 1997?
+  // Q9a
   n5b_q9a_after_feb_1997: [
     'n5b_q9a_after_feb_1997',
     'ast_q9a_after_feb_1997',
@@ -100,7 +149,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9a_after_feb_1997',
   ],
 
-  // Q9b: Has notice been given that this is NOT an AST?
+  // Q9b
   n5b_q9b_has_notice_not_ast: [
     'n5b_q9b_has_notice_not_ast',
     'ast_q9b_notice_not_ast',
@@ -111,7 +160,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9b_notice_not_ast',
   ],
 
-  // Q9c: Does the tenancy agreement contain an exclusion clause?
+  // Q9c
   n5b_q9c_has_exclusion_clause: [
     'n5b_q9c_has_exclusion_clause',
     'ast_q9c_exclusion_clause',
@@ -122,7 +171,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9c_exclusion_clause',
   ],
 
-  // Q9d: Is the defendant an agricultural worker?
+  // Q9d
   n5b_q9d_is_agricultural_worker: [
     'n5b_q9d_is_agricultural_worker',
     'ast_q9d_agricultural_worker',
@@ -133,7 +182,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9d_agricultural_worker',
   ],
 
-  // Q9e: Did the tenancy arise on the death of a tenant under a Rent Act protected tenancy?
+  // Q9e
   n5b_q9e_is_succession_tenancy: [
     'n5b_q9e_is_succession_tenancy',
     'ast_q9e_succession_tenancy',
@@ -144,7 +193,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9e_succession_tenancy',
   ],
 
-  // Q9f: Was the tenancy formerly a secure tenancy?
+  // Q9f
   n5b_q9f_was_secure_tenancy: [
     'n5b_q9f_was_secure_tenancy',
     'ast_q9f_secure_tenancy',
@@ -155,7 +204,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q9f_secure_tenancy',
   ],
 
-  // Q9g: Was the tenancy granted under Schedule 10 of the LGHA 1989?
+  // Q9g
   n5b_q9g_is_schedule_10: [
     'n5b_q9g_is_schedule_10',
     'ast_q9g_schedule_10',
@@ -179,7 +228,114 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'method_of_service',
   ],
 
-  // Q15: EPC provided
+  // Licensing
+  n5b_property_requires_licence: [
+    'n5b_property_requires_licence',
+    'property_requires_licence',
+    'requires_licence',
+    'licensing.required',
+    'licensing.is_required',
+    'section21.licensing_required',
+    'hmo.requires_licence',
+    'selective_licensing.requires_licence',
+  ],
+  n5b_has_valid_licence: [
+    'n5b_has_valid_licence',
+    'has_valid_licence',
+    'valid_licence',
+    'licensing.has_valid_licence',
+    'licensing.valid_licence',
+    'section21.has_valid_licence',
+  ],
+  n5b_licensing_decision_outstanding: [
+    'n5b_licensing_decision_outstanding',
+    'licensing_decision_outstanding',
+    'licensing.pending_decision',
+    'licensing.ten_outstanding',
+    'temporary_exemption_notice_outstanding',
+    'section21.licensing_decision_outstanding',
+  ],
+
+  // Property condition / retaliation section (Q15a-k style)
+  n5b_property_condition_notice_served: [
+    'n5b_property_condition_notice_served',
+    'property_condition.notice_served',
+    'retaliation.notice_served',
+    'housing_act_2004.notice_served',
+    'section21.property_condition_notice_served',
+  ],
+  n5b_property_condition_notice_date: [
+    'n5b_property_condition_notice_date',
+    'property_condition.notice_date',
+    'retaliation.notice_date',
+    'housing_act_2004.notice_date',
+    'section21.property_condition_notice_date',
+  ],
+  n5b_property_condition_notice_suspended: [
+    'n5b_property_condition_notice_suspended',
+    'property_condition.notice_suspended',
+    'retaliation.notice_suspended',
+    'housing_act_2004.notice_suspended',
+  ],
+  n5b_property_condition_suspension_ended: [
+    'n5b_property_condition_suspension_ended',
+    'property_condition.suspension_ended',
+    'retaliation.suspension_ended',
+  ],
+  n5b_property_condition_suspension_end_date: [
+    'n5b_property_condition_suspension_end_date',
+    'property_condition.suspension_end_date',
+    'retaliation.suspension_end_date',
+  ],
+  n5b_property_condition_notice_revoked: [
+    'n5b_property_condition_notice_revoked',
+    'property_condition.notice_revoked',
+    'retaliation.notice_revoked',
+  ],
+  n5b_property_condition_notice_quashed: [
+    'n5b_property_condition_notice_quashed',
+    'property_condition.notice_quashed',
+    'retaliation.notice_quashed',
+  ],
+  n5b_property_condition_non_revoke_reversed: [
+    'n5b_property_condition_non_revoke_reversed',
+    'property_condition.non_revoke_reversed',
+    'retaliation.non_revoke_reversed',
+  ],
+  n5b_property_condition_action_reversed: [
+    'n5b_property_condition_action_reversed',
+    'property_condition.action_reversed',
+    'retaliation.action_reversed',
+  ],
+  n5b_property_condition_defendant_complained_before_notice: [
+    'n5b_property_condition_defendant_complained_before_notice',
+    'property_condition.defendant_complained_before_notice',
+    'retaliation.defendant_complained_before_notice',
+  ],
+  n5b_property_condition_due_to_defendant_breach: [
+    'n5b_property_condition_due_to_defendant_breach',
+    'property_condition.due_to_defendant_breach',
+    'retaliation.due_to_defendant_breach',
+  ],
+  n5b_property_condition_on_market_for_sale: [
+    'n5b_property_condition_on_market_for_sale',
+    'property_condition.on_market_for_sale',
+    'retaliation.on_market_for_sale',
+  ],
+  n5b_claimant_is_social_housing_provider: [
+    'n5b_claimant_is_social_housing_provider',
+    'claimant_is_social_housing_provider',
+    'social_housing.is_provider',
+    'claimant.social_housing_provider',
+  ],
+  n5b_claimant_is_mortgagee_pre_tenancy: [
+    'n5b_claimant_is_mortgagee_pre_tenancy',
+    'claimant_is_mortgagee_pre_tenancy',
+    'mortgagee.pre_tenancy',
+    'claimant.mortgagee_pre_tenancy',
+  ],
+
+  // EPC
   epc_provided: [
     'epc_provided',
     'has_epc_provided',
@@ -187,7 +343,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.epc_provided',
     'section21.epc_provided',
   ],
-
   epc_provided_date: [
     'epc_provided_date',
     'epc_date',
@@ -197,7 +352,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.epc_date',
   ],
 
-  // Q16-Q17: Gas Safety
+  // Gas
   has_gas_at_property: [
     'has_gas_at_property',
     'property_has_gas',
@@ -205,8 +360,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'gas_supply',
     'compliance.has_gas',
     'section21.has_gas',
+    'has_gas_appliances',
   ],
-
   gas_safety_before_occupation: [
     'gas_safety_before_occupation',
     'gas_record_before_occupation',
@@ -214,7 +369,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.gas_before_occupation',
     'section21.gas_before_occupation',
   ],
-
   gas_safety_before_occupation_date: [
     'gas_safety_before_occupation_date',
     'gas_record_before_occupation_date',
@@ -222,7 +376,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.gas_before_occupation_date',
     'section21.gas_before_occupation_date',
   ],
-
   gas_safety_check_date: [
     'gas_safety_check_date',
     'gas_check_date',
@@ -231,8 +384,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.gas_check_date',
     'compliance.gas_safety_cert_date',
     'section21.gas_check_date',
+    'most_recent_gas_safety_check_date',
   ],
-
   gas_safety_served_date: [
     'gas_safety_served_date',
     'gas_cert_served_date',
@@ -240,8 +393,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'date_gas_cert_served',
     'compliance.gas_served_date',
     'section21.gas_served_date',
+    'gas_safety_provided_date',
   ],
-
   gas_safety_service_dates: [
     'gas_safety_service_dates',
     'gas_cert_service_dates',
@@ -249,7 +402,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.gas_service_dates',
     'section21.gas_service_dates',
   ],
-
   gas_safety_provided: [
     'gas_safety_provided',
     'gas_certificate_provided',
@@ -259,7 +411,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.gas_provided',
   ],
 
-  // Q18: How to Rent
+  // HTR
   how_to_rent_provided: [
     'how_to_rent_provided',
     'htr_provided',
@@ -267,7 +419,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.how_to_rent_provided',
     'section21.how_to_rent_provided',
   ],
-
   how_to_rent_date: [
     'how_to_rent_date',
     'htr_date',
@@ -276,7 +427,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.how_to_rent_date',
     'section21.how_to_rent_date',
   ],
-
   how_to_rent_method: [
     'how_to_rent_method',
     'htr_method',
@@ -285,7 +435,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.how_to_rent_method',
   ],
 
-  // Q19: Tenant Fees Act 2019
+  // Tenant Fees Act
   n5b_q19_has_unreturned_prohibited_payment: [
     'n5b_q19_has_unreturned_prohibited_payment',
     'q19_prohibited_payment',
@@ -294,7 +444,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'tenant_fees_act.unreturned_payment',
     'section21.q19_prohibited_payment',
   ],
-
   n5b_q19b_holding_deposit: [
     'n5b_q19b_holding_deposit',
     'q19b_holding_deposit',
@@ -304,7 +453,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.q19b_holding_deposit',
   ],
 
-  // Q20: Paper Determination
+  // Paper determination
   n5b_q20_paper_determination: [
     'n5b_q20_paper_determination',
     'q20_paper_determination',
@@ -323,6 +472,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
  * Human-readable labels for N5B fields, suitable for error messages
  */
 export const N5B_FIELD_LABELS: Record<string, string> = {
+  // Mandatory block (classic)
   n5b_q9a_after_feb_1997: 'Q9a: Was tenancy created on or after 28 February 1997?',
   n5b_q9b_has_notice_not_ast: 'Q9b: Has notice been given that this is not an AST?',
   n5b_q9c_has_exclusion_clause: 'Q9c: Does the agreement contain an AST exclusion clause?',
@@ -333,53 +483,89 @@ export const N5B_FIELD_LABELS: Record<string, string> = {
   notice_service_method: 'Q10a: How was the Section 21 notice served?',
   n5b_q19_has_unreturned_prohibited_payment: 'Q19: Has any unreturned prohibited payment been taken?',
   n5b_q20_paper_determination: 'Q20: Do you consent to paper determination?',
+
+  // Newer-form sections (shown in your paste)
+  n5b_property_requires_licence: 'Licensing: Is the property required to be licensed?',
+  n5b_has_valid_licence: 'Licensing: Is there a valid licence?',
+  n5b_licensing_decision_outstanding: 'Licensing: Is a decision outstanding / TEN?',
+
+  n5b_property_condition_notice_served: 'Property condition: Has a relevant notice been served?',
+  n5b_property_condition_notice_date: 'Property condition: On what date was the notice served?',
 };
 
 // =============================================================================
-// BOOLEAN PARSING
+// BOOLEAN + VALUE UNWRAPPING
 // =============================================================================
 
 /**
+ * If a wizard answer is stored as { value: ... } (or similar),
+ * unwrap it. If not an object, returns the input unchanged.
+ */
+function unwrapWizardAnswer(value: unknown): unknown {
+  if (!value || typeof value !== 'object') return value;
+
+  const rec = value as Record<string, unknown>;
+
+  // Common patterns
+  if ('value' in rec) return rec.value;
+  if ('answer' in rec) return rec.answer;
+  if ('selected' in rec) return rec.selected;
+
+  return value;
+}
+
+/**
  * Parses a value to boolean, handling multiple formats.
- * Returns undefined if the value cannot be parsed or is genuinely undefined/null.
- *
- * Supported formats:
- * - Boolean: true/false
- * - String: "true"/"false", "yes"/"no", "y"/"n", "1"/"0"
- * - Number: 1/0
- *
- * @param value - The value to parse
- * @returns Parsed boolean or undefined
+ * Returns undefined if the value cannot be parsed or is genuinely undefined/null/empty-string.
  */
 export function parseN5BBoolean(value: unknown): boolean | undefined {
-  if (value === undefined || value === null) {
+  if (value === undefined || value === null) return undefined;
+
+  const unwrapped = unwrapWizardAnswer(value);
+
+  if (unwrapped === undefined || unwrapped === null) return undefined;
+
+  if (typeof unwrapped === 'boolean') return unwrapped;
+
+  if (typeof unwrapped === 'number') {
+    if (unwrapped === 1) return true;
+    if (unwrapped === 0) return false;
     return undefined;
   }
 
-  if (typeof value === 'boolean') {
-    return value;
+  if (typeof unwrapped === 'string') {
+    const normalized = unwrapped.toLowerCase().trim();
+    if (normalized === '') return undefined;
+
+    if (['true', 'yes', 'y', '1'].includes(normalized)) return true;
+    if (['false', 'no', 'n', '0'].includes(normalized)) return false;
   }
 
-  if (typeof value === 'number') {
-    if (value === 1) return true;
-    if (value === 0) return false;
-    return undefined;
-  }
-
-  if (typeof value === 'string') {
-    const normalized = value.toLowerCase().trim();
-
-    if (['true', 'yes', 'y', '1'].includes(normalized)) {
-      return true;
-    }
-
-    if (['false', 'no', 'n', '0'].includes(normalized)) {
-      return false;
-    }
-  }
-
-  // Return undefined for unparseable values (preserves "not answered" state)
   return undefined;
+}
+
+/**
+ * Normalizes a date-ish string. We keep this intentionally conservative:
+ * - If it's a string and non-empty, return trimmed string.
+ * - No parsing/formatting here; the PDF filler should format/split as needed.
+ */
+function parseDateString(value: unknown): string | undefined {
+  const unwrapped = unwrapWizardAnswer(value);
+
+  if (typeof unwrapped !== 'string') return undefined;
+  const trimmed = unwrapped.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+/**
+ * Normalizes a non-empty string (for service method etc).
+ */
+function parseNonEmptyString(value: unknown): string | undefined {
+  const unwrapped = unwrapWizardAnswer(value);
+
+  if (typeof unwrapped !== 'string') return undefined;
+  const trimmed = unwrapped.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
 }
 
 // =============================================================================
@@ -388,20 +574,18 @@ export function parseN5BBoolean(value: unknown): boolean | undefined {
 
 /**
  * Gets a value from wizard facts, checking multiple possible paths.
- *
- * @param wizard - The wizard facts object
- * @param paths - Array of possible paths to check
- * @returns The first non-null/undefined value found, or undefined
+ * Returns the first non-null/undefined value found (empty strings are treated as missing).
  */
 function getWizardValueFromPaths(wizard: Record<string, unknown>, paths: string[]): unknown {
   for (const path of paths) {
-    // Try direct key lookup
+    // Direct
     const directValue = wizard[path];
     if (directValue !== undefined && directValue !== null) {
-      return directValue;
+      const unwrapped = unwrapWizardAnswer(directValue);
+      if (unwrapped !== '' && unwrapped !== undefined && unwrapped !== null) return directValue;
     }
 
-    // Try nested path navigation (e.g., "notice_service.method")
+    // Nested "a.b.c"
     const parts = path.split('.');
     if (parts.length > 1) {
       let current: unknown = wizard;
@@ -414,7 +598,8 @@ function getWizardValueFromPaths(wizard: Record<string, unknown>, paths: string[
         }
       }
       if (current !== undefined && current !== null) {
-        return current;
+        const unwrapped = unwrapWizardAnswer(current);
+        if (unwrapped !== '' && unwrapped !== undefined && unwrapped !== null) return current;
       }
     }
   }
@@ -428,135 +613,154 @@ function getWizardValueFromPaths(wizard: Record<string, unknown>, paths: string[
 
 /**
  * Builds N5B-specific fields from wizard facts by resolving aliases.
- *
- * This is the canonical mapping layer - all N5B field resolution should
- * go through this function to ensure consistent handling of aliases
- * and boolean parsing.
- *
- * @param wizardFacts - Raw wizard facts object
- * @returns N5B-specific fields with resolved values
  */
 export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields {
   const fields: N5BFields = {};
 
-  // Q9a-Q9g: AST Verification (booleans)
+  // Q9a-Q9g
   fields.n5b_q9a_after_feb_1997 = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9a_after_feb_1997)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9a_after_feb_1997),
   );
   fields.n5b_q9b_has_notice_not_ast = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9b_has_notice_not_ast)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9b_has_notice_not_ast),
   );
   fields.n5b_q9c_has_exclusion_clause = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9c_has_exclusion_clause)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9c_has_exclusion_clause),
   );
   fields.n5b_q9d_is_agricultural_worker = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9d_is_agricultural_worker)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9d_is_agricultural_worker),
   );
   fields.n5b_q9e_is_succession_tenancy = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9e_is_succession_tenancy)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9e_is_succession_tenancy),
   );
   fields.n5b_q9f_was_secure_tenancy = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9f_was_secure_tenancy)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9f_was_secure_tenancy),
   );
   fields.n5b_q9g_is_schedule_10 = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9g_is_schedule_10)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9g_is_schedule_10),
   );
 
-  // Q10a: Notice service method (string)
-  const serviceMethod = getWizardValueFromPaths(
-    wizardFacts,
-    N5B_WIZARD_ALIASES.notice_service_method
+  // Q10a
+  fields.notice_service_method = parseNonEmptyString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.notice_service_method),
   );
-  if (typeof serviceMethod === 'string' && serviceMethod.trim()) {
-    fields.notice_service_method = serviceMethod.trim();
-  }
 
-  // Q15: EPC
+  // Licensing
+  fields.n5b_property_requires_licence = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_requires_licence),
+  );
+  fields.n5b_has_valid_licence = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_has_valid_licence),
+  );
+  fields.n5b_licensing_decision_outstanding = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_licensing_decision_outstanding),
+  );
+
+  // Property condition / retaliation
+  fields.n5b_property_condition_notice_served = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_served),
+  );
+  fields.n5b_property_condition_notice_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_date),
+  );
+  fields.n5b_property_condition_notice_suspended = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_suspended),
+  );
+  fields.n5b_property_condition_suspension_ended = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_suspension_ended),
+  );
+  fields.n5b_property_condition_suspension_end_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_suspension_end_date),
+  );
+  fields.n5b_property_condition_notice_revoked = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_revoked),
+  );
+  fields.n5b_property_condition_notice_quashed = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_quashed),
+  );
+  fields.n5b_property_condition_non_revoke_reversed = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_non_revoke_reversed),
+  );
+  fields.n5b_property_condition_action_reversed = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_action_reversed),
+  );
+  fields.n5b_property_condition_defendant_complained_before_notice = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_defendant_complained_before_notice),
+  );
+  fields.n5b_property_condition_due_to_defendant_breach = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_due_to_defendant_breach),
+  );
+  fields.n5b_property_condition_on_market_for_sale = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_on_market_for_sale),
+  );
+  fields.n5b_claimant_is_social_housing_provider = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_claimant_is_social_housing_provider),
+  );
+  fields.n5b_claimant_is_mortgagee_pre_tenancy = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_claimant_is_mortgagee_pre_tenancy),
+  );
+
+  // Q15-18 Compliance (as already used by your filler)
   fields.epc_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided),
   );
-  const epcDate = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided_date);
-  if (typeof epcDate === 'string' && epcDate.trim()) {
-    fields.epc_provided_date = epcDate.trim();
-  }
+  fields.epc_provided_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided_date),
+  );
 
-  // Q16-Q17: Gas Safety
   fields.has_gas_at_property = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.has_gas_at_property)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.has_gas_at_property),
   );
   fields.gas_safety_before_occupation = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_before_occupation)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_before_occupation),
+  );
+  fields.gas_safety_before_occupation_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_before_occupation_date),
+  );
+  fields.gas_safety_check_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_check_date),
+  );
+  fields.gas_safety_served_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_served_date),
   );
 
-  const gasBeforeDate = getWizardValueFromPaths(
-    wizardFacts,
-    N5B_WIZARD_ALIASES.gas_safety_before_occupation_date
-  );
-  if (typeof gasBeforeDate === 'string' && gasBeforeDate.trim()) {
-    fields.gas_safety_before_occupation_date = gasBeforeDate.trim();
-  }
-
-  const gasCheckDate = getWizardValueFromPaths(
-    wizardFacts,
-    N5B_WIZARD_ALIASES.gas_safety_check_date
-  );
-  if (typeof gasCheckDate === 'string' && gasCheckDate.trim()) {
-    fields.gas_safety_check_date = gasCheckDate.trim();
-  }
-
-  const gasServedDate = getWizardValueFromPaths(
-    wizardFacts,
-    N5B_WIZARD_ALIASES.gas_safety_served_date
-  );
-  if (typeof gasServedDate === 'string' && gasServedDate.trim()) {
-    fields.gas_safety_served_date = gasServedDate.trim();
-  }
-
-  const gasServiceDates = getWizardValueFromPaths(
-    wizardFacts,
-    N5B_WIZARD_ALIASES.gas_safety_service_dates
-  );
+  const gasServiceDates = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_service_dates);
   if (Array.isArray(gasServiceDates)) {
-    fields.gas_safety_service_dates = gasServiceDates.filter(
-      (d): d is string => typeof d === 'string' && d.trim().length > 0
-    );
+    fields.gas_safety_service_dates = gasServiceDates
+      .map(unwrapWizardAnswer)
+      .filter((d): d is string => typeof d === 'string' && d.trim().length > 0)
+      .map(d => d.trim());
   }
 
   fields.gas_safety_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_provided)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_provided),
   );
 
-  // Q18: How to Rent
   fields.how_to_rent_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_provided)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_provided),
+  );
+  fields.how_to_rent_date = parseDateString(
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_date),
   );
 
-  const htrDate = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_date);
-  if (typeof htrDate === 'string' && htrDate.trim()) {
-    fields.how_to_rent_date = htrDate.trim();
+  const htrMethodRaw = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_method);
+  if (typeof unwrapWizardAnswer(htrMethodRaw) === 'string') {
+    const normalized = String(unwrapWizardAnswer(htrMethodRaw)).toLowerCase().trim();
+    if (['hardcopy', 'hard copy', 'hard_copy'].includes(normalized)) fields.how_to_rent_method = 'hardcopy';
+    if (['email', 'e-mail'].includes(normalized)) fields.how_to_rent_method = 'email';
   }
 
-  const htrMethod = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_method);
-  if (typeof htrMethod === 'string') {
-    const normalizedMethod = htrMethod.toLowerCase().trim();
-    if (normalizedMethod === 'hardcopy' || normalizedMethod === 'hard copy' || normalizedMethod === 'hard_copy') {
-      fields.how_to_rent_method = 'hardcopy';
-    } else if (normalizedMethod === 'email' || normalizedMethod === 'e-mail') {
-      fields.how_to_rent_method = 'email';
-    }
-  }
-
-  // Q19: Tenant Fees Act 2019
+  // Q19
   fields.n5b_q19_has_unreturned_prohibited_payment = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19_has_unreturned_prohibited_payment)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19_has_unreturned_prohibited_payment),
   );
   fields.n5b_q19b_holding_deposit = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19b_holding_deposit)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19b_holding_deposit),
   );
 
-  // Q20: Paper Determination
+  // Q20
   fields.n5b_q20_paper_determination = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q20_paper_determination)
+    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q20_paper_determination),
   );
 
   return fields;
@@ -567,8 +771,12 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
 // =============================================================================
 
 /**
- * Mandatory fields for N5B generation.
- * Courts WILL reject N5B claims with missing Q9a-Q9g, Q10a, Q19, Q20 answers.
+ * Mandatory fields for N5B generation (classic set).
+ *
+ * NOTE:
+ * - This reflects the “courts reject missing answers” rule for Q9/Q10/Q19/Q20.
+ * - Newer N5B PDFs may also require licensing/retaliation sections depending on answers.
+ *   Those rules should live in the PDF-filler validator (contextual validation).
  */
 const N5B_MANDATORY_FIELDS: (keyof N5BFields)[] = [
   'n5b_q9a_after_feb_1997',
@@ -583,13 +791,6 @@ const N5B_MANDATORY_FIELDS: (keyof N5BFields)[] = [
   'n5b_q20_paper_determination',
 ];
 
-/**
- * Validates that all mandatory N5B fields are present.
- * Throws N5BMissingFieldError if any mandatory fields are missing.
- *
- * @param fields - The N5B fields to validate
- * @throws N5BMissingFieldError if mandatory fields are missing
- */
 export function validateN5BMandatoryFields(fields: N5BFields): void {
   const missing: string[] = [];
 
@@ -605,12 +806,6 @@ export function validateN5BMandatoryFields(fields: N5BFields): void {
   }
 }
 
-/**
- * Checks if all mandatory N5B fields are present without throwing.
- *
- * @param fields - The N5B fields to check
- * @returns Object with isValid flag and list of missing fields
- */
 export function checkN5BMandatoryFields(fields: N5BFields): {
   isValid: boolean;
   missingFields: string[];
@@ -638,21 +833,12 @@ export function checkN5BMandatoryFields(fields: N5BFields): {
 // MERGE INTO CASE DATA
 // =============================================================================
 
-/**
- * Merges N5B fields into CaseData, only setting fields that have values.
- * Does not overwrite existing CaseData values with undefined.
- *
- * @param caseData - Existing CaseData object
- * @param n5bFields - N5B fields to merge
- * @returns CaseData with N5B fields merged
- */
 export function mergeN5BFieldsIntoCaseData(
   caseData: Partial<CaseData>,
-  n5bFields: N5BFields
+  n5bFields: N5BFields,
 ): Partial<CaseData> {
   const merged = { ...caseData };
 
-  // Only merge fields that have defined values
   for (const [key, value] of Object.entries(n5bFields)) {
     if (value !== undefined) {
       (merged as Record<string, unknown>)[key] = value;
@@ -663,22 +849,12 @@ export function mergeN5BFieldsIntoCaseData(
 }
 
 // =============================================================================
-// CONVENIENCE FUNCTION
+// CONVENIENCE
 // =============================================================================
 
-/**
- * Builds and validates N5B fields from wizard facts in one call.
- * This is the recommended entry point for N5B field building.
- *
- * @param wizardFacts - Raw wizard facts object
- * @param options - Options for validation
- * @param options.skipValidation - If true, skip mandatory field validation
- * @returns Built N5B fields
- * @throws N5BMissingFieldError if validation fails and skipValidation is false
- */
 export function buildAndValidateN5BFields(
   wizardFacts: Record<string, unknown>,
-  options: { skipValidation?: boolean } = {}
+  options: { skipValidation?: boolean } = {},
 ): N5BFields {
   const fields = buildN5BFields(wizardFacts);
 
@@ -693,17 +869,8 @@ export function buildAndValidateN5BFields(
 // DEV INSTRUMENTATION
 // =============================================================================
 
-/**
- * Logs which N5B fields are defined vs undefined for debugging.
- * Only logs in development mode.
- *
- * @param fields - The N5B fields to log
- * @param context - Optional context string for the log
- */
 export function logN5BFieldStatus(fields: N5BFields, context?: string): void {
-  if (process.env.NODE_ENV !== 'development') {
-    return;
-  }
+  if (process.env.NODE_ENV !== 'development') return;
 
   const defined: string[] = [];
   const undefinedFields: string[] = [];
