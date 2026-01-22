@@ -1018,4 +1018,95 @@ describe('Complete wizard facts integration', () => {
 
     expect(validation.isValid).toBe(true);
   });
+
+  // =============================================================================
+  // REACT COMPONENT WIZARD SIMULATION
+  // =============================================================================
+  // This test simulates the exact field names used by the React wizard components:
+  // - Section21ComplianceSection.tsx (Q9a-Q9g, Q15-Q18, Q19-Q20)
+  // - EvictionSectionFlow.tsx and NoticeOnlySectionFlow.tsx (compliance fields)
+
+  test('maps all fields from actual React wizard component field names', () => {
+    // This is the exact payload a user would generate by filling out the wizard
+    const reactWizardFacts = {
+      // Q9a-Q9g: AST Verification (from Section21ComplianceSection.tsx)
+      // NOTE: React component stores Q9a as positive, Q9b-Q9g as positive with inversion in onChange
+      n5b_q9a_after_feb_1997: true,         // User clicked Yes
+      n5b_q9b_has_notice_not_ast: false,    // User clicked Yes to "was NO notice served?" -> stored as !true = false
+      n5b_q9c_has_exclusion_clause: false,  // User clicked Yes to "does NOT state" -> stored as !true = false
+      n5b_q9d_is_agricultural_worker: false, // User clicked Yes to "is NOT agricultural" -> stored as !true = false
+      n5b_q9e_is_succession_tenancy: false,  // User clicked Yes to "did NOT arise by succession" -> stored as !true = false
+      n5b_q9f_was_secure_tenancy: false,    // User clicked Yes to "was NOT secure" -> stored as !true = false
+      n5b_q9g_is_schedule_10: false,        // User clicked Yes to "was NOT Schedule 10" -> stored as !true = false
+
+      // Q10a: Notice service method
+      notice_service_method: 'First class post',
+
+      // Q15: EPC (from Section21ComplianceSection.tsx)
+      epc_served: true,                     // User clicked Yes
+      epc_provided_date: '2024-01-15',
+
+      // Q16-Q17: Gas Safety (from Section21ComplianceSection.tsx)
+      has_gas_appliances: true,             // User clicked Yes
+      gas_safety_cert_served: true,         // User clicked Yes
+      gas_safety_before_occupation: true,
+      gas_safety_before_occupation_date: '2024-01-01',
+      gas_safety_check_date: '2024-01-01',
+      gas_safety_served_date: '2024-01-05',
+
+      // Q18: How to Rent (from Section21ComplianceSection.tsx)
+      how_to_rent_served: true,             // User clicked Yes
+      how_to_rent_date: '2024-01-15',
+      how_to_rent_method: 'email',
+
+      // Q19: Tenant Fees Act (from Section21ComplianceSection.tsx)
+      n5b_q19_has_unreturned_prohibited_payment: false, // User clicked Yes to "all repaid" -> stored as !true = false
+      n5b_q19b_holding_deposit: false,
+
+      // Q20: Paper Determination (from Section21ComplianceSection.tsx)
+      n5b_q20_paper_determination: true,
+    };
+
+    const fields = buildN5BFields(reactWizardFacts);
+
+    // Verify Q9a-Q9g
+    expect(fields.n5b_q9a_after_feb_1997).toBe(true);
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+    expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+    expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+    expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+    expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+    expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+
+    // Verify Q10a
+    expect(fields.notice_service_method).toBe('First class post');
+
+    // Verify Q15: EPC
+    expect(fields.epc_provided).toBe(true);
+    expect(fields.epc_provided_date).toBe('2024-01-15');
+
+    // Verify Q16-Q17: Gas Safety
+    expect(fields.has_gas_at_property).toBe(true);
+    expect(fields.gas_safety_provided).toBe(true);
+    expect(fields.gas_safety_before_occupation).toBe(true);
+    expect(fields.gas_safety_before_occupation_date).toBe('2024-01-01');
+    expect(fields.gas_safety_check_date).toBe('2024-01-01');
+    expect(fields.gas_safety_served_date).toBe('2024-01-05');
+
+    // Verify Q18: How to Rent
+    expect(fields.how_to_rent_provided).toBe(true);
+    expect(fields.how_to_rent_date).toBe('2024-01-15');
+    expect(fields.how_to_rent_method).toBe('email');
+
+    // Verify Q19: Tenant Fees Act
+    expect(fields.n5b_q19_has_unreturned_prohibited_payment).toBe(false);
+    expect(fields.n5b_q19b_holding_deposit).toBe(false);
+
+    // Verify Q20: Paper Determination
+    expect(fields.n5b_q20_paper_determination).toBe(true);
+
+    // Verify validation passes
+    const validation = checkN5BMandatoryFields(fields);
+    expect(validation.isValid).toBe(true);
+  });
 });

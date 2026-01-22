@@ -207,7 +207,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'has_gas_cert_provided',
     'compliance.gas_safety_cert_provided',
     'section21.gas_provided',
-    'gas_cert_served',                   // Actual wizard MQS field ID
+    'gas_cert_served',                   // MQS YAML field ID
+    'gas_safety_cert_served',            // React component field ID
     'section21.gas_safety_cert_served',  // Wizard maps_to alias
   ],
 
