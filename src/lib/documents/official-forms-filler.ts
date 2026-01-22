@@ -1193,6 +1193,44 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   const formFile = getFormFilename('n5b', data.jurisdiction);
   console.log(`📄 Filling N5B form (Accelerated possession - Section 21) - using ${formFile}...`);
 
+  // ==========================================================================
+  // DEBUG LOGGING - Log N5B-relevant CaseData fields
+  // ==========================================================================
+  console.log('🔍 [N5B-FILLER] fillN5BForm received CaseData with N5B fields:', JSON.stringify({
+    // Q9a-Q9g
+    n5b_q9a_after_feb_1997: data.n5b_q9a_after_feb_1997,
+    n5b_q9b_has_notice_not_ast: data.n5b_q9b_has_notice_not_ast,
+    n5b_q9c_has_exclusion_clause: data.n5b_q9c_has_exclusion_clause,
+    n5b_q9d_is_agricultural_worker: data.n5b_q9d_is_agricultural_worker,
+    n5b_q9e_is_succession_tenancy: data.n5b_q9e_is_succession_tenancy,
+    n5b_q9f_was_secure_tenancy: data.n5b_q9f_was_secure_tenancy,
+    n5b_q9g_is_schedule_10: data.n5b_q9g_is_schedule_10,
+    // Q10a
+    notice_service_method: data.notice_service_method,
+    // Q11-14 Deposit
+    deposit_amount: data.deposit_amount,
+    deposit_returned: data.deposit_returned,
+    deposit_prescribed_info_given: data.deposit_prescribed_info_given,
+    // Q15 EPC
+    epc_provided: data.epc_provided,
+    epc_provided_date: data.epc_provided_date,
+    // Q16-17 Gas Safety
+    has_gas_at_property: data.has_gas_at_property,
+    gas_safety_provided: data.gas_safety_provided,
+    gas_safety_before_occupation: data.gas_safety_before_occupation,
+    gas_safety_check_date: data.gas_safety_check_date,
+    gas_safety_served_date: data.gas_safety_served_date,
+    // Q18 How to Rent
+    how_to_rent_provided: data.how_to_rent_provided,
+    how_to_rent_date: data.how_to_rent_date,
+    how_to_rent_method: data.how_to_rent_method,
+    // Q19
+    n5b_q19_has_unreturned_prohibited_payment: data.n5b_q19_has_unreturned_prohibited_payment,
+    n5b_q19b_holding_deposit: data.n5b_q19b_holding_deposit,
+    // Q20
+    n5b_q20_paper_determination: data.n5b_q20_paper_determination,
+  }, null, 2));
+
   // === VALIDATION ===
   if (!data.court_name) {
     throw new Error(`[${ctx}] court_name is required. Please provide court details before generating court forms.`);
