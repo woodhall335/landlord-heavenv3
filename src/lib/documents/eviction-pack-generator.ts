@@ -1354,10 +1354,22 @@ async function generateEnglandOrWalesEvictionPack(
       notice_copy_available: true, // Pack always includes Form 6A
       service_proof_available: true, // Pack always includes Proof of Service template
       deposit_certificate_available: evictionCase.deposit_protected === true,
-      epc_provided: wizardFacts?.epc_provided === true,
-      gas_safety_provided: wizardFacts?.gas_safety_provided === true && wizardFacts?.has_gas_at_property !== false,
-      has_gas_at_property: wizardFacts?.has_gas_at_property,
-      how_to_rent_provided: wizardFacts?.how_to_rent_provided === true,
+      // FIX (Jan 2026): Use caseData values (which are properly mapped through n5b-field-builder)
+      // rather than direct wizardFacts checks which use wrong field names.
+      // caseData already has epc_provided, gas_safety_provided, how_to_rent_provided mapped
+      // from wizard aliases (epc_served, gas_safety_cert_served, how_to_rent_served).
+      // Only override if caseData doesn't have the value (fallback).
+      epc_provided: caseData.epc_provided ?? (
+        wizardFacts?.epc_provided === true || wizardFacts?.epc_served === true
+      ),
+      gas_safety_provided: caseData.gas_safety_provided ?? (
+        (wizardFacts?.gas_safety_provided === true || wizardFacts?.gas_safety_cert_served === true || wizardFacts?.gas_cert_served === true) &&
+        wizardFacts?.has_gas_at_property !== false && wizardFacts?.has_gas_appliances !== false
+      ),
+      has_gas_at_property: caseData.has_gas_at_property ?? wizardFacts?.has_gas_at_property ?? wizardFacts?.has_gas_appliances,
+      how_to_rent_provided: caseData.how_to_rent_provided ?? (
+        wizardFacts?.how_to_rent_provided === true || wizardFacts?.how_to_rent_served === true
+      ),
     });
 
     documents.push({
