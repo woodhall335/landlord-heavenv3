@@ -3,8 +3,8 @@
  *
  * Step 6 (Section 21 only): Collects compliance requirements for no-fault eviction.
  *
- * CRITICAL: All of these are BLOCKERS for Section 21. If any are not met,
- * Section 21 cannot be used.
+ * CRITICAL: Many of these are BLOCKERS for Section 21. If any are not met,
+ * Section 21 may be invalid or unavailable.
  *
  * IMPORTANT SEPARATION:
  * - "Compliance truth" = Was the requirement met? (e.g., "Was deposit protected?")
@@ -18,12 +18,26 @@
  * - deposit_protection_date: When was it protected?
  * - deposit_reference: Scheme reference number
  * - prescribed_info_served: Was prescribed info given within 30 days?
- * - gas_safety_cert_served: Was gas safety cert provided? (if gas appliances)
  * - has_gas_appliances: Does property have gas?
+ * - gas_safety_cert_served: Was gas safety cert provided? (if gas appliances)
+ * - gas_safety_before_occupation: Was gas safety record provided before occupation?
+ * - gas_safety_before_occupation_date: Date of pre-occupation gas safety check (if applicable)
+ * - gas_safety_check_date: Date of most recent CP12 check
+ * - gas_safety_served_date: Date CP12 was served on tenant
  * - epc_served: Was EPC provided?
+ * - epc_provided_date: Date EPC was provided (if epc served)
  * - how_to_rent_served: Was How to Rent guide provided?
+ * - how_to_rent_date: Date How to Rent guide was provided (if served)
+ * - how_to_rent_method: How provided (email/hard copy)
  * - licensing_required: Does property need licensing?
  * - has_valid_licence: Is it licensed (if required)?
+ * - no_retaliatory_notice: Is notice being served more than 6 months after repair complaint?
+ *
+ * N5B-specific (accelerated possession eligibility):
+ * - n5b_q9a_after_feb_1997 ... n5b_q9g_not_schedule_10
+ * - n5b_q19_prohibited_payment
+ * - n5b_q19b_holding_deposit
+ * - n5b_q20_paper_determination
  */
 
 'use client';
@@ -78,16 +92,15 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           Section 21 Validity Requirements
         </h4>
         <p className="text-sm text-amber-800">
-          Section 21 notices can only be served if ALL compliance requirements are met.
-          Failure to comply with any requirement makes the notice INVALID.
+          Section 21 notices can only be served if key compliance requirements are met. Failure
+          to comply with requirements like deposit protection, gas safety, EPC and the How to Rent
+          guide can make the notice INVALID.
         </p>
       </div>
 
       {/* Deposit Questions */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Deposit Protection
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Deposit Protection</h3>
 
         <ValidatedYesNoToggle
           id="deposit_taken"
@@ -100,7 +113,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
         {depositTaken && (
           <div className="pl-4 border-l-2 border-purple-200 space-y-4">
-            {/* Deposit amount */}
             <ValidatedCurrencyInput
               id="deposit_amount"
               label="Deposit amount"
@@ -119,7 +131,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               onChange={(v) => onUpdate({ deposit_protected: v })}
               required
               helperText="Must be protected within 30 days of receipt."
-              blockingMessage="Section 21 cannot be used if deposit is not protected."
+              blockingMessage="Section 21 cannot be used if the deposit is not protected."
               sectionId={SECTION_ID}
             />
 
@@ -171,7 +183,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               sectionId={SECTION_ID}
             />
 
-            {/* N5B Q13: Deposit Returned */}
+            {/* Deposit Returned */}
             <ValidatedYesNoToggle
               id="deposit_returned"
               label="Has the deposit been returned to the tenant?"
@@ -186,9 +198,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* Gas Safety */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Gas Safety
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Gas Safety</h3>
 
         <ValidatedYesNoToggle
           id="has_gas_appliances"
@@ -209,7 +219,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               onChange={(v) => onUpdate({ gas_safety_cert_served: v })}
               required
               helperText="A copy of the current CP12 must be provided annually."
-              blockingMessage="Section 21 cannot be used if gas safety certificate was not provided."
+              blockingMessage="Section 21 cannot be used if the gas safety certificate was not provided."
               sectionId={SECTION_ID}
             />
 
@@ -217,10 +227,10 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               <div className="space-y-4">
                 <ValidatedYesNoToggle
                   id="gas_safety_before_occupation"
-                  label="Was the gas safety check done before the tenant moved in?"
+                  label="Was a gas safety record provided before the tenant moved in?"
                   value={facts.gas_safety_before_occupation}
                   onChange={(v) => onUpdate({ gas_safety_before_occupation: v })}
-                  helperText="N5B Q16(a): Select 'Yes' if the check was done before occupation began."
+                  helperText="Answer based on whether the tenant received a valid gas safety record before occupation began."
                   sectionId={SECTION_ID}
                 />
 
@@ -231,7 +241,9 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                     type="date"
                     value={facts.gas_safety_before_occupation_date as string}
                     onChange={(v) => onUpdate({ gas_safety_before_occupation_date: v })}
-                    helperText="N5B Q16(a): Date the gas safety check was carried out before tenant moved in."
+                    validation={{ required: true }}
+                    required
+                    helperText="Date the pre-occupation CP12 check was carried out."
                     sectionId={SECTION_ID}
                     className="max-w-xs"
                   />
@@ -246,7 +258,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                     onChange={(v) => onUpdate({ gas_safety_check_date: v })}
                     validation={{ required: true }}
                     required
-                    helperText="N5B Q17(a): Date on the CP12 certificate."
+                    helperText="Date on the current CP12 certificate."
                     sectionId={SECTION_ID}
                   />
 
@@ -258,7 +270,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                     onChange={(v) => onUpdate({ gas_safety_served_date: v })}
                     validation={{ required: true }}
                     required
-                    helperText="N5B Q17(b): Date you provided the certificate to the tenant."
+                    helperText="Date you provided the CP12 to the tenant."
                     sectionId={SECTION_ID}
                   />
                 </div>
@@ -281,7 +293,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           onChange={(v) => onUpdate({ epc_served: v })}
           required
           helperText="The property must have a valid EPC with a rating of E or above."
-          blockingMessage="Section 21 cannot be used if EPC was not provided."
+          blockingMessage="Section 21 cannot be used if the EPC was not provided."
           sectionId={SECTION_ID}
         />
 
@@ -295,7 +307,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               onChange={(v) => onUpdate({ epc_provided_date: v })}
               validation={{ required: true }}
               required
-              helperText="The date you gave the tenant a copy of the EPC (N5B Q15)."
+              helperText="The date you gave the tenant a copy of the EPC."
               sectionId={SECTION_ID}
               className="max-w-xs"
             />
@@ -305,9 +317,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* How to Rent */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          How to Rent Guide
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">How to Rent Guide</h3>
 
         <ValidatedYesNoToggle
           id="how_to_rent_served"
@@ -316,7 +326,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           onChange={(v) => onUpdate({ how_to_rent_served: v })}
           required
           helperText="Required for tenancies starting on or after 1 October 2015."
-          blockingMessage="Section 21 cannot be used if 'How to Rent' guide was not provided."
+          blockingMessage="Section 21 cannot be used if the 'How to Rent' guide was not provided."
           sectionId={SECTION_ID}
         />
 
@@ -331,7 +341,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                 onChange={(v) => onUpdate({ how_to_rent_date: v })}
                 validation={{ required: true }}
                 required
-                helperText="N5B Q18(c): The date you provided the guide to the tenant."
+                helperText="The date you provided the guide to the tenant."
                 sectionId={SECTION_ID}
               />
 
@@ -343,7 +353,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                 options={HOW_TO_RENT_METHOD_OPTIONS}
                 validation={{ required: true }}
                 required
-                helperText="N5B Q18(d): Method used to provide the guide."
+                helperText="Email only if the tenant agreed to receive documents by email (keep proof)."
                 sectionId={SECTION_ID}
               />
             </div>
@@ -353,9 +363,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* Licensing */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Property Licensing
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Property Licensing</h3>
 
         <ValidatedSelect
           id="licensing_required"
@@ -386,9 +394,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* Retaliatory eviction */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Retaliatory Eviction
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Retaliatory Eviction</h3>
 
         <ValidatedYesNoToggle
           id="no_retaliatory_notice"
@@ -396,7 +402,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           value={facts.no_retaliatory_notice}
           onChange={(v) => onUpdate({ no_retaliatory_notice: v })}
           required
-          helperText="Section 21 notices served within 6 months of a repair complaint may be deemed retaliatory and invalid."
+          helperText="Section 21 notices served within 6 months of certain repair complaints may be deemed retaliatory and invalid."
           blockingMessage="This may be considered a retaliatory eviction. Consider waiting or using Section 8."
           sectionId={SECTION_ID}
         />
@@ -405,10 +411,12 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
       {/* N5B Accelerated Possession - AST Verification (Q9a-Q9g) */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          N5B Accelerated Possession - AST Verification
+          N5B Accelerated Possession - AST Eligibility
         </h3>
         <p className="text-sm text-gray-600 mb-4">
-          These questions verify the tenancy qualifies as an Assured Shorthold Tenancy (AST) for accelerated possession proceedings. All must be answered &apos;Yes&apos; for the N5B form.
+          These questions help determine whether accelerated possession (N5B) is available. Answer based
+          on the tenancy. If any answer indicates the tenancy is not an AST, accelerated possession may
+          not be appropriate.
         </p>
 
         <div className="space-y-3">
@@ -418,7 +426,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             value={facts.n5b_q9a_after_feb_1997}
             onChange={(v) => onUpdate({ n5b_q9a_after_feb_1997: v })}
             required
-            helperText="Tenancies created on or after this date are automatically ASTs unless notice was given that they were not."
             sectionId={SECTION_ID}
           />
 
@@ -428,7 +435,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             value={facts.n5b_q9b_no_notice_not_ast}
             onChange={(v) => onUpdate({ n5b_q9b_no_notice_not_ast: v })}
             required
-            helperText="If the landlord gave notice before the tenancy that it would not be an AST, answer 'No'."
             sectionId={SECTION_ID}
           />
 
@@ -438,47 +444,43 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             value={facts.n5b_q9c_no_exclusion_clause}
             onChange={(v) => onUpdate({ n5b_q9c_no_exclusion_clause: v })}
             required
-            helperText="Answer 'Yes' if the agreement does not contain a clause excluding the shorthold provisions."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
             id="n5b_q9d_not_agricultural_worker"
-            label="Q9(d): Is the tenant NOT an agricultural worker?"
+            label="Q9(d): Is the agricultural worker condition NOT fulfilled?"
             value={facts.n5b_q9d_not_agricultural_worker}
             onChange={(v) => onUpdate({ n5b_q9d_not_agricultural_worker: v })}
             required
-            helperText="Agricultural workers have special protections and their tenancies may not be ASTs."
+            helperText="Only answer 'No' if this is an agricultural worker tenancy (e.g., tied farm worker accommodation)."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
             id="n5b_q9e_not_succession_tenancy"
-            label="Q9(e): Is this NOT a succession tenancy?"
+            label="Q9(e): Did the tenancy NOT arise by succession under the Housing Act 1988?"
             value={facts.n5b_q9e_not_succession_tenancy}
             onChange={(v) => onUpdate({ n5b_q9e_not_succession_tenancy: v })}
             required
-            helperText="Succession tenancies (inherited from a deceased tenant) may have different status."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
             id="n5b_q9f_not_former_secure"
-            label="Q9(f): Is this NOT a former secure tenancy transferred from a local authority?"
+            label="Q9(f): Was this NOT previously a secure tenancy under the Housing Act 1985?"
             value={facts.n5b_q9f_not_former_secure}
             onChange={(v) => onUpdate({ n5b_q9f_not_former_secure: v })}
             required
-            helperText="Tenancies transferred from social housing may retain their secure status."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
             id="n5b_q9g_not_schedule_10"
-            label="Q9(g): Does Schedule 10 of the Local Government and Housing Act 1989 NOT apply?"
+            label="Q9(g): Did the tenancy NOT arise under Schedule 10 of the Local Government and Housing Act 1989?"
             value={facts.n5b_q9g_not_schedule_10}
             onChange={(v) => onUpdate({ n5b_q9g_not_schedule_10: v })}
             required
-            helperText="Schedule 10 relates to certain long residential tenancies. Answer 'Yes' for standard ASTs."
             sectionId={SECTION_ID}
           />
         </div>
@@ -486,9 +488,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* Tenant Fees Act 2019 (Q19) */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Tenant Fees Act 2019
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Tenant Fees Act 2019</h3>
         <p className="text-sm text-gray-600 mb-4">
           The Tenant Fees Act 2019 prohibits landlords from charging certain fees or requiring prohibited payments.
         </p>
@@ -499,17 +499,18 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           value={facts.n5b_q19_prohibited_payment}
           onChange={(v) => onUpdate({ n5b_q19_prohibited_payment: v })}
           required
-          helperText="Prohibited payments include admin fees, viewing fees, checkout fees, etc. collected on or after 1 June 2019."
-          blockingMessage="Section 21 cannot be used if a prohibited payment has been taken and not returned."
+          helperText="Prohibited payments include admin fees, viewing fees, checkout fees, etc. If taken, they may need to be returned before Section 21."
+          blockingMessage="Section 21 may be invalid if a prohibited payment has been taken and not returned."
           sectionId={SECTION_ID}
         />
 
         <ValidatedYesNoToggle
           id="n5b_q19b_holding_deposit"
           label="Q19(b): Was a holding deposit taken?"
-          value={facts.n5b_q19b_holding_deposit === 'yes' || facts.n5b_q19b_holding_deposit === true}
-          onChange={(v) => onUpdate({ n5b_q19b_holding_deposit: v ? 'yes' : 'no' })}
-          helperText="A holding deposit (max one week's rent) to reserve the property. Must be returned or applied to rent/deposit within 15 days."
+          // Store as boolean consistently (no 'yes'/'no' strings in UI)
+          value={facts.n5b_q19b_holding_deposit as boolean}
+          onChange={(v) => onUpdate({ n5b_q19b_holding_deposit: v })}
+          helperText="A holding deposit (max one week's rent) to reserve the property."
           sectionId={SECTION_ID}
         />
       </div>
@@ -526,7 +527,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           value={facts.n5b_q20_paper_determination}
           onChange={(v) => onUpdate({ n5b_q20_paper_determination: v })}
           required
-          helperText="If you select 'Yes', the court may decide the case on the papers without requiring you to attend a hearing. This can speed up the process if the case is straightforward."
+          helperText="If you select 'Yes', the court may decide the case on the papers without requiring you to attend a hearing (this can be faster)."
           sectionId={SECTION_ID}
         />
       </div>
