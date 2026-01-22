@@ -432,6 +432,30 @@ describe('buildN5BFields', () => {
 
       expect(fields.epc_provided_date).toBe('2024-02-20');
     });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps epc_provided from wizard MQS field "epc_served"', () => {
+      const wizardFacts = {
+        epc_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.epc_provided).toBe(true);
+    });
+
+    test('maps epc_provided_date from wizard MQS field "epc_certificate_date"', () => {
+      const wizardFacts = {
+        epc_certificate_date: '2024-05-15',
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.epc_provided_date).toBe('2024-05-15');
+    });
   });
 
   describe('Q16-Q17: Gas Safety', () => {
@@ -494,6 +518,40 @@ describe('buildN5BFields', () => {
 
       expect(fields.gas_safety_service_dates).toEqual(['2024-01-01', '2024-06-01']);
     });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps has_gas_at_property from wizard MQS field "has_gas_appliances"', () => {
+      const wizardFacts = {
+        has_gas_appliances: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.has_gas_at_property).toBe(true);
+    });
+
+    test('maps gas_safety_provided from wizard MQS field "gas_cert_served"', () => {
+      const wizardFacts = {
+        gas_cert_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.gas_safety_provided).toBe(true);
+    });
+
+    test('maps gas_safety_check_date from wizard MQS field "gas_cert_date"', () => {
+      const wizardFacts = {
+        gas_cert_date: '2024-06-20',
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.gas_safety_check_date).toBe('2024-06-20');
+    });
   });
 
   describe('Q18: How to Rent', () => {
@@ -545,6 +603,20 @@ describe('buildN5BFields', () => {
       const fields = buildN5BFields(wizardFacts);
 
       expect(fields.how_to_rent_method).toBe('email');
+    });
+
+    // =========================================================================
+    // WIZARD MQS FIELD ALIASES (actual field IDs from england.yaml)
+    // =========================================================================
+
+    test('maps how_to_rent_provided from wizard MQS field "how_to_rent_served"', () => {
+      const wizardFacts = {
+        how_to_rent_served: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.how_to_rent_provided).toBe(true);
     });
   });
 

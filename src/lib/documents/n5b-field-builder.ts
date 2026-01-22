@@ -129,6 +129,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'epc_given_to_tenant',
     'compliance.epc_provided',
     'section21.epc_provided',
+    'epc_served',                // Actual wizard MQS field ID
+    'section21.epc_served',      // Wizard maps_to alias
   ],
 
   epc_provided_date: [
@@ -138,6 +140,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'date_epc_provided',
     'compliance.epc_date',
     'section21.epc_date',
+    'epc_certificate_date',           // Actual wizard MQS field ID
+    'section21.epc_certificate_date', // Wizard maps_to alias
   ],
 
   // Q16-Q17: Gas Safety
@@ -148,6 +152,7 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'gas_supply',
     'compliance.has_gas',
     'section21.has_gas',
+    'has_gas_appliances',        // Actual wizard MQS field ID
   ],
 
   gas_safety_before_occupation: [
@@ -174,6 +179,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'compliance.gas_check_date',
     'compliance.gas_safety_cert_date',
     'section21.gas_check_date',
+    'gas_cert_date',              // Actual wizard MQS field ID
+    'section21.gas_cert_date',    // Wizard maps_to alias
   ],
 
   gas_safety_served_date: [
@@ -200,6 +207,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'has_gas_cert_provided',
     'compliance.gas_safety_cert_provided',
     'section21.gas_provided',
+    'gas_cert_served',                   // Actual wizard MQS field ID
+    'section21.gas_safety_cert_served',  // Wizard maps_to alias
   ],
 
   // Q18: How to Rent
@@ -209,6 +218,8 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'has_how_to_rent_provided',
     'compliance.how_to_rent_provided',
     'section21.how_to_rent_provided',
+    'how_to_rent_served',             // Actual wizard MQS field ID
+    'section21.how_to_rent_served',   // Wizard maps_to alias
   ],
 
   how_to_rent_date: [
