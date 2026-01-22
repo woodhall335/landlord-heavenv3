@@ -67,14 +67,14 @@ describe('Section21ComplianceSection', () => {
       // Check for Q9 section header
       expect(screen.getByText('N5B Accelerated Possession - AST Verification')).toBeInTheDocument();
 
-      // Check for all Q9 questions
+      // Check for all Q9 questions (now with positive framing)
       expect(screen.getByText(/Q9\(a\): Was the tenancy created on or after 28 February 1997\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(b\): Was there NO notice stating it was not an AST\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(c\): Does the tenancy agreement NOT exclude the AST provisions\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(d\): Is the tenant NOT an agricultural worker\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(e\): Is this NOT a succession tenancy\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(f\): Is this NOT a former secure tenancy transferred from a local authority\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(g\): Does Schedule 10 of the Local Government and Housing Act 1989 NOT apply\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(b\): Has the landlord served notice that the tenancy is not an AST\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(c\): Does the tenancy agreement state that it is not an AST\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(d\): Is the tenant an agricultural worker\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(e\): Did the tenancy arise by succession \(on death of previous tenant\)\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(f\): Was the tenancy previously a secure tenancy\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(g\): Was the tenancy granted under Schedule 10 LGHA 1989\?/)).toBeInTheDocument();
     });
 
     it('should call onUpdate with correct field keys when Q9 toggles are clicked', () => {
@@ -272,7 +272,7 @@ describe('Section21ComplianceSection', () => {
       );
 
       expect(screen.getByText('Tenant Fees Act 2019')).toBeInTheDocument();
-      expect(screen.getByText(/Q19: Has the tenant paid any prohibited payment/)).toBeInTheDocument();
+      expect(screen.getByText(/Q19: Has the landlord taken any prohibited payment under the Tenant Fees Act 2019 that has NOT been repaid\?/)).toBeInTheDocument();
       expect(screen.getByText(/Q19\(b\): Was a holding deposit taken\?/)).toBeInTheDocument();
     });
 
@@ -349,14 +349,14 @@ describe('Section21ComplianceSection', () => {
         how_to_rent_served: true,
         how_to_rent_date: '2024-01-02',
         how_to_rent_method: 'email',
-        // Q9
+        // Q9 (new positive field names - compliant answers: a=true, b-g=false)
         n5b_q9a_after_feb_1997: true,
-        n5b_q9b_no_notice_not_ast: true,
-        n5b_q9c_no_exclusion_clause: true,
-        n5b_q9d_not_agricultural_worker: true,
-        n5b_q9e_not_succession_tenancy: true,
-        n5b_q9f_not_former_secure: true,
-        n5b_q9g_not_schedule_10: true,
+        n5b_q9b_notice_not_ast: false, // No notice given = compliant
+        n5b_q9c_excludes_ast: false, // Agreement doesn't exclude = compliant
+        n5b_q9d_is_agricultural_worker: false, // Not agricultural worker = compliant
+        n5b_q9e_is_succession: false, // Not a succession = compliant
+        n5b_q9f_was_secure: false, // Not previously secure = compliant
+        n5b_q9g_schedule_10_applies: false, // Schedule 10 doesn't apply = compliant
         // Q19
         n5b_q19_prohibited_payment: false,
         n5b_q19b_holding_deposit: 'no',

@@ -525,13 +525,22 @@ function buildCaseData(
     // =========================================================================
     // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
     // =========================================================================
+    // These map directly to N5B checkboxes:
+    // - Q9(a): Was tenancy created on/after 28 Feb 1997? YES = compliant
+    // - Q9(b-g): Disqualifying conditions - NO = compliant (Yes = problem)
     n5b_q9a_after_feb_1997: wizardFacts.n5b_q9a_after_feb_1997 ?? undefined,
-    n5b_q9b_no_notice_not_ast: wizardFacts.n5b_q9b_no_notice_not_ast ?? undefined,
-    n5b_q9c_no_exclusion_clause: wizardFacts.n5b_q9c_no_exclusion_clause ?? undefined,
-    n5b_q9d_not_agricultural_worker: wizardFacts.n5b_q9d_not_agricultural_worker ?? undefined,
-    n5b_q9e_not_succession_tenancy: wizardFacts.n5b_q9e_not_succession_tenancy ?? undefined,
-    n5b_q9f_not_former_secure: wizardFacts.n5b_q9f_not_former_secure ?? undefined,
-    n5b_q9g_not_schedule_10: wizardFacts.n5b_q9g_not_schedule_10 ?? undefined,
+    // Q9(b): Has landlord served notice that tenancy is not an AST? (No = good)
+    n5b_q9b_notice_not_ast: wizardFacts.n5b_q9b_notice_not_ast ?? undefined,
+    // Q9(c): Does tenancy agreement state it is not an AST? (No = good)
+    n5b_q9c_excludes_ast: wizardFacts.n5b_q9c_excludes_ast ?? undefined,
+    // Q9(d): Is the tenant an agricultural worker? (No = good)
+    n5b_q9d_is_agricultural_worker: wizardFacts.n5b_q9d_is_agricultural_worker ?? undefined,
+    // Q9(e): Did tenancy arise by succession? (No = good)
+    n5b_q9e_is_succession: wizardFacts.n5b_q9e_is_succession ?? undefined,
+    // Q9(f): Was tenancy previously a secure tenancy? (No = good)
+    n5b_q9f_was_secure: wizardFacts.n5b_q9f_was_secure ?? undefined,
+    // Q9(g): Was tenancy granted under Schedule 10 LGHA 1989? (No = good)
+    n5b_q9g_schedule_10_applies: wizardFacts.n5b_q9g_schedule_10_applies ?? undefined,
 
     // =========================================================================
     // N5B QUESTIONS 15-18: COMPLIANCE DATES

@@ -574,8 +574,13 @@ interface ValidatedYesNoToggleProps {
   onChange: (value: boolean) => void;
   required?: boolean;
   helperText?: string;
-  /** Error message to show when value is false (for Section 21 blockers) */
+  /** Error message to show when blocking condition is met */
   blockingMessage?: string;
+  /**
+   * When true, show blockingMessage when value is true (Yes = problem).
+   * When false/undefined (default), show blockingMessage when value is false (No = problem).
+   */
+  blockOnTrue?: boolean;
   disabled?: boolean;
   className?: string;
   /** Section ID for context error registration (enables hasErrors gating) */
@@ -590,13 +595,19 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
   required = false,
   helperText,
   blockingMessage,
+  blockOnTrue = false,
   disabled = false,
   className = '',
   sectionId,
 }) => {
   const [touched, setTouched] = useState(false);
   const ctx = useValidationContextSafe();
-  const showBlockingMessage = touched && value === false && blockingMessage;
+  // Show blocking message based on blockOnTrue flag:
+  // - blockOnTrue=true: show when value is true (Yes is the problem)
+  // - blockOnTrue=false: show when value is false (No is the problem)
+  const showBlockingMessage = touched && blockingMessage && (
+    blockOnTrue ? value === true : value === false
+  );
 
   // Register/clear error with context for hasErrors gating
   useEffect(() => {
@@ -628,7 +639,9 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
         <label
           className={`
             flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-            ${value === true ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'}
+            ${value === true
+              ? (blockOnTrue && blockingMessage ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50')
+              : 'border-gray-200 hover:border-gray-300'}
             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           `}
         >
@@ -649,7 +662,9 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
         <label
           className={`
             flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-            ${value === false ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
+            ${value === false
+              ? (!blockOnTrue && blockingMessage ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50')
+              : 'border-gray-200 hover:border-gray-300'}
             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           `}
         >
