@@ -33,104 +33,104 @@ const FIELD_ALIASES: Record<keyof ComplianceTimingData, string[]> = {
   // Tenancy start date
   // May appear as: tenancy_start_date, tenancy_start, tenancy_starting_date, start_date
   tenancy_start_date: [
-    'tenancy_start_date',      // preferred
-    'tenancy_start',           // legacy short form
-    'tenancy_starting_date',   // legacy verbose form
-    'start_date',              // ambiguous legacy
-    'tenancy.start_date',      // nested form from CaseFacts
+    'tenancy_start_date', // preferred
+    'tenancy_start', // legacy short form
+    'tenancy_starting_date', // legacy verbose form
+    'start_date', // ambiguous legacy
+    'tenancy.start_date', // nested form from CaseFacts
   ],
 
   // Occupation date (when tenant actually moved in, may differ from tenancy start)
   // May appear as: occupation_date, move_in_date
   occupation_date: [
-    'occupation_date',         // preferred
-    'move_in_date',            // legacy alias
-    'tenant_move_in_date',     // verbose legacy
+    'occupation_date', // preferred
+    'move_in_date', // legacy alias
+    'tenant_move_in_date', // verbose legacy
   ],
 
   // EPC provided date
   // Usually consistent, but check for typos
   epc_provided_date: [
-    'epc_provided_date',       // preferred
-    'epc_served_date',         // legacy alias
-    'epc_date',                // short legacy
+    'epc_provided_date', // preferred
+    'epc_served_date', // legacy alias
+    'epc_date', // short legacy
   ],
 
   // EPC valid until (expiry)
   epc_valid_until: [
-    'epc_valid_until',         // preferred
-    'epc_expiry_date',         // legacy alias
-    'epc_expires',             // short legacy
+    'epc_valid_until', // preferred
+    'epc_expiry_date', // legacy alias
+    'epc_expires', // short legacy
   ],
 
   // Gas safety check date (date the CP12 inspection was carried out)
   // CRITICAL: This is the CHECK date, not the served date
   gas_safety_check_date: [
-    'gas_safety_check_date',            // preferred
+    'gas_safety_check_date', // preferred
     'most_recent_gas_safety_check_date', // verbose legacy
-    'cp12_check_date',                   // technical alias
-    'gas_check_date',                    // short legacy
+    'cp12_check_date', // technical alias
+    'gas_check_date', // short legacy
   ],
 
   // Gas safety provided/served date (date CP12 was given to tenant)
   // CRITICAL: This is often confused with check date. This is when SERVED.
   // Major inconsistency source: wizard uses gas_safety_served_date, validator uses gas_safety_provided_date
   gas_safety_provided_date: [
-    'gas_safety_provided_date',          // preferred (validator canonical key)
-    'gas_safety_served_date',            // wizard uses this
+    'gas_safety_provided_date', // preferred (validator canonical key)
+    'gas_safety_served_date', // wizard uses this
     'gas_safety_certificate_given_date', // verbose legacy
-    'cp12_served_date',                  // technical alias
-    'gas_cert_served_date',              // short legacy
+    'cp12_served_date', // technical alias
+    'gas_cert_served_date', // short legacy
   ],
 
   // Has gas at property (boolean)
   // CRITICAL: Wizard uses has_gas_appliances, validator interface uses has_gas_at_property
   has_gas_at_property: [
-    'has_gas_at_property',     // preferred (validator canonical key)
-    'has_gas_appliances',      // wizard uses this
-    'property_has_gas',        // legacy alternative
+    'has_gas_at_property', // preferred (validator canonical key)
+    'has_gas_appliances', // wizard uses this
+    'property_has_gas', // legacy alternative
   ],
 
   // Pre-occupation gas safety confirmation (boolean)
   gas_safety_before_occupation: [
-    'gas_safety_before_occupation',      // preferred
-    'gas_cert_before_move_in',           // legacy alias
+    'gas_safety_before_occupation', // preferred
+    'gas_cert_before_move_in', // legacy alias
   ],
 
   // Pre-occupation gas safety check date
   gas_safety_before_occupation_date: [
     'gas_safety_before_occupation_date', // preferred
-    'pre_occupation_gas_check_date',     // legacy alias
+    'pre_occupation_gas_check_date', // legacy alias
   ],
 
   // Pre-occupation gas safety record served date (CRITICAL for Section 21)
   // This is the date the pre-occupation CP12 was PROVIDED to tenant, not checked
   gas_safety_record_served_pre_occupation_date: [
     'gas_safety_record_served_pre_occupation_date', // preferred
-    'pre_occupation_gas_served_date',               // legacy alias
+    'pre_occupation_gas_served_date', // legacy alias
   ],
 
   // How to Rent provided date
   // CRITICAL: Wizard uses how_to_rent_date, validator uses how_to_rent_provided_date
   how_to_rent_provided_date: [
-    'how_to_rent_provided_date',   // preferred (validator canonical key)
-    'how_to_rent_date',            // wizard uses this
-    'how_to_rent_served_date',     // legacy alias
-    'htr_provided_date',           // short legacy
+    'how_to_rent_provided_date', // preferred (validator canonical key)
+    'how_to_rent_date', // wizard uses this
+    'how_to_rent_served_date', // legacy alias
+    'htr_provided_date', // short legacy
   ],
 
   // Deposit received date
   deposit_received_date: [
-    'deposit_received_date',       // preferred
-    'deposit_date',                // short legacy
+    'deposit_received_date', // preferred
+    'deposit_date', // short legacy
     'tenancy.deposit_received_date', // nested form
   ],
 
   // Prescribed info served date
   prescribed_info_served_date: [
     'prescribed_info_served_date', // preferred
-    'prescribed_info_date',        // short legacy
-    'pi_served_date',              // abbreviation legacy
+    'prescribed_info_date', // short legacy
+    'pi_served_date', // abbreviation legacy
   ],
 };
 
@@ -157,6 +157,46 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
 }
 
 /**
+ * Convert a Date to YYYY-MM-DD using LOCAL date components.
+ * This avoids off-by-one day issues that can happen with toISOString() in some timezones.
+ */
+function formatDateLocal(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Attempt to convert an epoch (seconds or milliseconds) into YYYY-MM-DD (local).
+ * Returns undefined if the number doesn't look like a plausible epoch timestamp.
+ */
+function tryFormatEpochToLocalYmd(epoch: number): string | undefined {
+  if (!Number.isFinite(epoch)) return undefined;
+
+  // Heuristics:
+  // - seconds epoch is typically 10 digits (~1e9..1e10)
+  // - ms epoch is typically 13 digits (~1e12..1e13)
+  // Accept a reasonable range: years 1990..2100
+  const toDateIfValid = (ms: number): string | undefined => {
+    const d = new Date(ms);
+    const year = d.getFullYear();
+    if (year < 1990 || year > 2100 || Number.isNaN(d.getTime())) return undefined;
+    return formatDateLocal(d);
+  };
+
+  // If it's likely seconds, convert to ms
+  const asSeconds = toDateIfValid(epoch * 1000);
+  if (asSeconds) return asSeconds;
+
+  // If it's likely ms, use as-is
+  const asMs = toDateIfValid(epoch);
+  if (asMs) return asMs;
+
+  return undefined;
+}
+
+/**
  * Resolve a string field from facts using alias list.
  * Returns the first non-undefined, non-null, non-empty-string value.
  */
@@ -177,10 +217,15 @@ function resolveStringField(
       return value;
     }
 
-    // If it's a number or Date, convert to string (for date fields)
+    // If it's a Date, convert to YYYY-MM-DD using local date parts (timezone safe)
     if (value instanceof Date) {
-      // Convert to YYYY-MM-DD format to avoid timezone issues
-      return value.toISOString().split('T')[0];
+      return formatDateLocal(value);
+    }
+
+    // If it's a number, try to interpret as epoch seconds/ms; otherwise stringify
+    if (typeof value === 'number') {
+      const epoch = tryFormatEpochToLocalYmd(value);
+      return epoch ?? String(value);
     }
   }
 
@@ -246,15 +291,6 @@ function resolveBooleanField(
  *
  * @param facts - The collected_facts object from a case (or wizard facts)
  * @returns ComplianceTimingData with all fields resolved from aliases
- *
- * @example
- * ```typescript
- * const timingData = buildComplianceTimingDataFromFacts(caseData.collected_facts);
- * const result = validateComplianceTiming(timingData);
- * if (!result.isValid) {
- *   // Handle compliance block
- * }
- * ```
  */
 export function buildComplianceTimingDataFromFacts(
   facts: Record<string, unknown> | null | undefined
@@ -273,16 +309,30 @@ export function buildComplianceTimingDataFromFacts(
     gas_safety_check_date: resolveStringField(facts, FIELD_ALIASES.gas_safety_check_date),
     gas_safety_provided_date: resolveStringField(facts, FIELD_ALIASES.gas_safety_provided_date),
     has_gas_at_property: resolveBooleanField(facts, FIELD_ALIASES.has_gas_at_property),
-    gas_safety_before_occupation: resolveBooleanField(facts, FIELD_ALIASES.gas_safety_before_occupation),
-    gas_safety_before_occupation_date: resolveStringField(facts, FIELD_ALIASES.gas_safety_before_occupation_date),
-    gas_safety_record_served_pre_occupation_date: resolveStringField(facts, FIELD_ALIASES.gas_safety_record_served_pre_occupation_date),
-    how_to_rent_provided_date: resolveStringField(facts, FIELD_ALIASES.how_to_rent_provided_date),
+    gas_safety_before_occupation: resolveBooleanField(
+      facts,
+      FIELD_ALIASES.gas_safety_before_occupation
+    ),
+    gas_safety_before_occupation_date: resolveStringField(
+      facts,
+      FIELD_ALIASES.gas_safety_before_occupation_date
+    ),
+    gas_safety_record_served_pre_occupation_date: resolveStringField(
+      facts,
+      FIELD_ALIASES.gas_safety_record_served_pre_occupation_date
+    ),
+    how_to_rent_provided_date: resolveStringField(
+      facts,
+      FIELD_ALIASES.how_to_rent_provided_date
+    ),
     deposit_received_date: resolveStringField(facts, FIELD_ALIASES.deposit_received_date),
-    prescribed_info_served_date: resolveStringField(facts, FIELD_ALIASES.prescribed_info_served_date),
+    prescribed_info_served_date: resolveStringField(
+      facts,
+      FIELD_ALIASES.prescribed_info_served_date
+    ),
   };
 
   // Remove undefined fields to keep the object clean
-  // (though the validator handles undefined gracefully)
   for (const key of Object.keys(timingData) as Array<keyof ComplianceTimingData>) {
     if (timingData[key] === undefined) {
       delete timingData[key];
