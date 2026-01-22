@@ -723,6 +723,39 @@ function getWizardValueFromPaths(wizard: Record<string, unknown>, paths: string[
 export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields {
   const fields: N5BFields = {};
 
+  // ==========================================================================
+  // DEBUG LOGGING - Log input wizard facts for N5B field resolution
+  // ==========================================================================
+  console.log('🔍 [N5B-BUILDER] buildN5BFields called with wizardFacts keys:', Object.keys(wizardFacts || {}));
+
+  // Log specific N5B-relevant fields to help debug
+  const n5bRelevantKeys = [
+    'n5b_q9a_after_feb_1997', 'n5b_q9b_has_notice_not_ast', 'n5b_q9b_no_notice_not_ast',
+    'n5b_q9c_has_exclusion_clause', 'n5b_q9c_no_exclusion_clause',
+    'n5b_q9d_is_agricultural_worker', 'n5b_q9d_not_agricultural_worker',
+    'n5b_q9e_is_succession_tenancy', 'n5b_q9e_not_succession_tenancy',
+    'n5b_q9f_was_secure_tenancy', 'n5b_q9f_not_former_secure',
+    'n5b_q9g_is_schedule_10', 'n5b_q9g_not_schedule_10',
+    'epc_served', 'epc_provided', 'epc_provided_date', 'epc_certificate_date',
+    'has_gas_appliances', 'has_gas_at_property', 'gas_safety_cert_served', 'gas_cert_served', 'gas_safety_provided',
+    'how_to_rent_served', 'how_to_rent_provided', 'how_to_rent_date',
+    'n5b_q19_has_unreturned_prohibited_payment', 'n5b_q19_prohibited_payment',
+    'n5b_q19b_holding_deposit', 'n5b_q20_paper_determination',
+    'notice_service_method',
+  ];
+
+  const foundN5BFields: Record<string, unknown> = {};
+  for (const key of n5bRelevantKeys) {
+    if (wizardFacts && wizardFacts[key] !== undefined) {
+      foundN5BFields[key] = wizardFacts[key];
+    }
+  }
+  // Also check section21.* nested paths
+  if (wizardFacts && typeof wizardFacts.section21 === 'object' && wizardFacts.section21 !== null) {
+    foundN5BFields['section21'] = wizardFacts.section21;
+  }
+  console.log('🔍 [N5B-BUILDER] Found N5B-relevant fields:', JSON.stringify(foundN5BFields, null, 2));
+
   // =========================================================================
   // Q9a: Tenancy after 28 Feb 1997 (POSITIVE framing - direct mapping)
   // =========================================================================
@@ -946,6 +979,30 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
   fields.n5b_q20_paper_determination = parseN5BBoolean(
     getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_q20_paper_determination)
   );
+
+  // ==========================================================================
+  // DEBUG LOGGING - Log output N5B fields
+  // ==========================================================================
+  console.log('🔍 [N5B-BUILDER] buildN5BFields output:', JSON.stringify({
+    n5b_q9a_after_feb_1997: fields.n5b_q9a_after_feb_1997,
+    n5b_q9b_has_notice_not_ast: fields.n5b_q9b_has_notice_not_ast,
+    n5b_q9c_has_exclusion_clause: fields.n5b_q9c_has_exclusion_clause,
+    n5b_q9d_is_agricultural_worker: fields.n5b_q9d_is_agricultural_worker,
+    n5b_q9e_is_succession_tenancy: fields.n5b_q9e_is_succession_tenancy,
+    n5b_q9f_was_secure_tenancy: fields.n5b_q9f_was_secure_tenancy,
+    n5b_q9g_is_schedule_10: fields.n5b_q9g_is_schedule_10,
+    notice_service_method: fields.notice_service_method,
+    epc_provided: fields.epc_provided,
+    epc_provided_date: fields.epc_provided_date,
+    has_gas_at_property: fields.has_gas_at_property,
+    gas_safety_provided: fields.gas_safety_provided,
+    gas_safety_check_date: fields.gas_safety_check_date,
+    how_to_rent_provided: fields.how_to_rent_provided,
+    how_to_rent_date: fields.how_to_rent_date,
+    n5b_q19_has_unreturned_prohibited_payment: fields.n5b_q19_has_unreturned_prohibited_payment,
+    n5b_q19b_holding_deposit: fields.n5b_q19b_holding_deposit,
+    n5b_q20_paper_determination: fields.n5b_q20_paper_determination,
+  }, null, 2));
 
   return fields;
 }

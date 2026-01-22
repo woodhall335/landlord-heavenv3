@@ -23,11 +23,18 @@ function normalizeField(field: any): WizardField {
         }
       : undefined);
 
+  // Normalize maps_to to array format
+  let maps_to: string[] | undefined;
+  if (field.maps_to) {
+    maps_to = Array.isArray(field.maps_to) ? field.maps_to : [field.maps_to];
+  }
+
   return {
     ...field,
     inputType: field.inputType ?? field.input_type ?? mapInputType(field.type),
     validation,
     dependsOn: field.dependsOn ?? field.depends_on,
+    maps_to,
   } as WizardField;
 }
 
@@ -101,12 +108,35 @@ export function normalizeQuestion(
     fields = fields?.length ? fields.map(normalizeField) : buildAddressFields(jurisdiction);
   }
 
+  // Aggregate field-level maps_to into question maps_to for group questions
+  // This ensures the MQS system can track which paths are answered
+  let maps_to = rawQuestion.maps_to;
+  if ((!maps_to || maps_to.length === 0) && fields && fields.length > 0) {
+    const fieldMapsTo: string[] = [];
+    for (const field of fields) {
+      if (field.maps_to) {
+        if (Array.isArray(field.maps_to)) {
+          fieldMapsTo.push(...field.maps_to);
+        } else if (typeof field.maps_to === 'string') {
+          fieldMapsTo.push(field.maps_to);
+        }
+      } else {
+        // Default to field ID if no maps_to specified
+        fieldMapsTo.push(field.id);
+      }
+    }
+    if (fieldMapsTo.length > 0) {
+      maps_to = fieldMapsTo;
+    }
+  }
+
   const normalizedQuestion: ExtendedWizardQuestion = {
     ...rawQuestion,
     inputType: normalizedType === 'address' ? 'group' : normalizedType,
     validation,
     dependsOn: rawQuestion.dependsOn ?? rawQuestion.depends_on,
     fields,
+    maps_to,
   };
 
   // Ensure group fields have consistent validation for required flags
