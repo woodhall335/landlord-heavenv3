@@ -899,10 +899,31 @@ export async function POST(request: Request) {
     // This ensures values are accessible whether looked up by maps_to path or field ID
     // Critical for: deposit_protected_scheme, gas_safety_certificate, recent_repair_complaints_s21, etc.
     if (normalizedAnswer && typeof normalizedAnswer === 'object' && !Array.isArray(normalizedAnswer)) {
-      // Group question - save each field under its field ID
+      // Group question - save each field under its field ID AND its maps_to path
+      // Build a map of field ID -> maps_to for this question's fields
+      const fieldMapsTo: Record<string, string[]> = {};
+      if (question.fields && Array.isArray(question.fields)) {
+        for (const field of question.fields) {
+          if (field.id && field.maps_to) {
+            // Handle both string and array formats for maps_to
+            const mapsToArray = Array.isArray(field.maps_to) ? field.maps_to : [field.maps_to];
+            fieldMapsTo[field.id] = mapsToArray.filter(Boolean);
+          }
+        }
+      }
+
       for (const [fieldId, fieldValue] of Object.entries(normalizedAnswer as Record<string, unknown>)) {
         if (fieldValue !== undefined && fieldValue !== null && typeof fieldValue !== 'object') {
+          // Save under field ID
           mergedFacts = setFactPath(mergedFacts, fieldId, fieldValue);
+
+          // Also save under field-level maps_to paths (if different from field ID)
+          const mapsToForField = fieldMapsTo[fieldId] || [];
+          for (const mapsToPath of mapsToForField) {
+            if (mapsToPath && mapsToPath !== fieldId) {
+              mergedFacts = setFactPath(mergedFacts, mapsToPath, fieldValue);
+            }
+          }
         }
       }
     } else if (normalizedAnswer !== undefined && normalizedAnswer !== null) {
