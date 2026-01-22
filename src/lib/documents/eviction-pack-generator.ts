@@ -1142,14 +1142,18 @@ async function generateEnglandOrWalesEvictionPack(
     // =========================================================================
     // P0 FIX: COMPLIANCE TIMING VALIDATION (Jan 2026)
     // Validate that compliance documents were provided at legally required times.
-    // Log warnings but don't block - let landlord decide if timing is acceptable.
+    // HARD BLOCK: No bypass allowed - compliance timing is a statutory requirement.
     // =========================================================================
     const timingData: ComplianceTimingData = {
       tenancy_start_date: evictionCase.tenancy_start_date,
       epc_provided_date: wizardFacts?.epc_provided_date,
       gas_safety_check_date: wizardFacts?.gas_safety_check_date,
       gas_safety_provided_date: wizardFacts?.gas_safety_served_date,
-      has_gas_at_property: wizardFacts?.has_gas_at_property,
+      has_gas_at_property: wizardFacts?.has_gas_appliances,
+      // NEW (Jan 2026): Pre-occupation gas safety compliance fields
+      gas_safety_before_occupation: wizardFacts?.gas_safety_before_occupation,
+      gas_safety_before_occupation_date: wizardFacts?.gas_safety_before_occupation_date,
+      gas_safety_record_served_pre_occupation_date: wizardFacts?.gas_safety_record_served_pre_occupation_date,
       how_to_rent_provided_date: wizardFacts?.how_to_rent_date,
       deposit_received_date: wizardFacts?.deposit_received_date,
       prescribed_info_served_date: wizardFacts?.prescribed_info_served_date,
@@ -1169,12 +1173,9 @@ async function generateEnglandOrWalesEvictionPack(
       //   for tenancies starting on/after 1 October 2015)
       // - Prescribed Info: Must be within 30 days (Housing Act 2004, s.213)
       //
-      // BYPASS: If landlord believes they have valid reasons (e.g., tenancy predates
-      // requirements), they must set `bypass_compliance_timing_validation: true` in
-      // wizard facts. This is logged for audit purposes.
+      // NO BYPASS: Compliance timing is a statutory requirement. Users must fix
+      // their compliance data in the wizard before pack generation can proceed.
       // =========================================================================
-      const bypassValidation = wizardFacts?.bypass_compliance_timing_validation === true;
-
       console.error('🚨 COMPLIANCE TIMING VIOLATIONS DETECTED (Section 21 may be INVALID):');
       for (const issue of timingResult.issues) {
         const severity = issue.severity === 'error' ? '🚨 BLOCK:' : '⚠️ WARN:';
@@ -1183,21 +1184,14 @@ async function generateEnglandOrWalesEvictionPack(
         if (issue.actual) console.error(`     Actual: ${issue.actual}`);
       }
 
-      if (bypassValidation) {
-        console.warn('⚠️  COMPLIANCE BYPASS ENABLED - Proceeding despite timing violations.');
-        console.warn('    Landlord has confirmed valid reasons (e.g., tenancy predates requirements).');
-        console.warn('    This bypass is logged for audit purposes.');
-      } else {
-        const errors = timingResult.issues
-          .filter(i => i.severity === 'error')
-          .map(i => `${i.field}: ${i.message}`)
-          .join('; ');
-        throw new Error(
-          `Cannot generate Section 21 pack - compliance timing violations: ${errors}. ` +
-          `Fix the timing issues or set bypass_compliance_timing_validation=true if you have valid reasons ` +
-          `(e.g., tenancy predates the legal requirement).`
-        );
-      }
+      // Build structured error for user-friendly display
+      const blockingIssues = timingResult.issues.filter(i => i.severity === 'error');
+      const error = new Error('COMPLIANCE_TIMING_BLOCK');
+      (error as any).code = 'COMPLIANCE_TIMING_BLOCK';
+      (error as any).issues = blockingIssues;
+      (error as any).tenancy_start_date = evictionCase.tenancy_start_date;
+      (error as any).statusCode = 422;
+      throw error;
     }
 
     // =========================================================================

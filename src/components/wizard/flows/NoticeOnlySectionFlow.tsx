@@ -863,6 +863,29 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       setGenerating(true);
       setError(null);
 
+      // Flush any pending debounced saves BEFORE navigating to review
+      // This ensures all user edits are persisted to the database
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+      }
+
+      // If there are pending facts to save, save them now and wait for completion
+      if (pendingFactsRef.current) {
+        try {
+          await saveCaseFacts(caseId, pendingFactsRef.current, {
+            jurisdiction,
+            caseType: 'eviction',
+            product: 'notice_only',
+          });
+          pendingFactsRef.current = null;
+          console.log('[Wizard] Pending facts flushed successfully before navigation to review');
+        } catch (err) {
+          console.error('[Wizard] Failed to flush pending facts before navigation:', err);
+          // Continue with navigation even if save fails - user can retry from review page
+        }
+      }
+
       // Navigate to review page for compliance analysis
       router.push(`/wizard/review?case_id=${caseId}&product=notice_only`);
     } catch (err) {
@@ -871,7 +894,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     } finally {
       setGenerating(false);
     }
-  }, [caseId, router]);
+  }, [caseId, jurisdiction, router]);
 
   // Calculate progress
   const completedCount = visibleSections.filter((s) => s.isComplete(facts, jurisdiction)).length;

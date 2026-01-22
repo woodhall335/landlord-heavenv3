@@ -818,8 +818,12 @@ export interface ComplianceTimingData {
 
   // Gas Safety timing
   gas_safety_check_date?: string;
-  gas_safety_provided_date?: string;
+  gas_safety_provided_date?: string; // Date most recent CP12 was given (may be annual renewal)
   has_gas_at_property?: boolean;
+  // NEW: Pre-occupation gas safety compliance (Jan 2026 fix)
+  gas_safety_before_occupation?: boolean; // User confirmed a record was provided before move-in
+  gas_safety_before_occupation_date?: string; // Date of the pre-occupation CP12 check
+  gas_safety_record_served_pre_occupation_date?: string; // Date pre-occupation CP12 was given to tenant (CRITICAL)
 
   // How to Rent timing
   how_to_rent_provided_date?: string;
@@ -895,19 +899,60 @@ export function validateComplianceTiming(data: ComplianceTimingData): TimingVali
   // ==========================================================================
   // GAS SAFETY TIMING - Must be provided BEFORE occupation
   // ==========================================================================
-  if (data.has_gas_at_property !== false && data.gas_safety_provided_date && occupation) {
-    const gasProvidedDate = parseDate(data.gas_safety_provided_date);
-    if (gasProvidedDate && gasProvidedDate > occupation) {
+  // CRITICAL FIX (Jan 2026): The pre-occupation timing check MUST use the date
+  // the pre-occupation gas safety record was served to the tenant, NOT the
+  // most recent CP12 served date (which may be an annual renewal).
+  //
+  // For Section 21 validity:
+  // 1. A gas safety record must have been provided BEFORE the tenant moved in
+  // 2. The CURRENT certificate must be valid (within 12 months)
+  //
+  // The system now uses gas_safety_record_served_pre_occupation_date for #1.
+  // Backward compatibility: If the new field is missing but the user confirmed
+  // pre-occupation compliance and the check was before occupation, treat the
+  // check date as the served date (legacy assumption).
+  // ==========================================================================
+  if (data.has_gas_at_property !== false && occupation) {
+    // Determine the pre-occupation served date using priority:
+    // 1. Explicit pre-occupation served date (new field)
+    // 2. Legacy fallback: if user confirmed pre-occupation compliance and check was before occupation
+    // 3. Fall back to gas_safety_provided_date only if no pre-occupation context
+    let preOccupationServedDate: Date | null = null;
+    let preOccupationServedDateStr: string | undefined = undefined;
+
+    if (data.gas_safety_record_served_pre_occupation_date) {
+      // Use the explicit pre-occupation served date (new field)
+      preOccupationServedDate = parseDate(data.gas_safety_record_served_pre_occupation_date);
+      preOccupationServedDateStr = data.gas_safety_record_served_pre_occupation_date;
+    } else if (data.gas_safety_before_occupation === true && data.gas_safety_before_occupation_date) {
+      // Legacy fallback: user confirmed pre-occupation compliance
+      // Use the check date as served date (old assumption)
+      const checkDate = parseDate(data.gas_safety_before_occupation_date);
+      if (checkDate && checkDate <= occupation) {
+        preOccupationServedDate = checkDate;
+        preOccupationServedDateStr = data.gas_safety_before_occupation_date;
+      }
+    } else if (data.gas_safety_provided_date) {
+      // No pre-occupation context - use the general provided date
+      // This maintains backward compatibility for older cases
+      preOccupationServedDate = parseDate(data.gas_safety_provided_date);
+      preOccupationServedDateStr = data.gas_safety_provided_date;
+    }
+
+    // Validate pre-occupation timing
+    if (preOccupationServedDate && preOccupationServedDate > occupation) {
       issues.push({
         severity: 'error',
         field: 'gas_safety_timing',
-        message: 'Gas safety certificate was provided AFTER tenant occupation. For Section 21 validity, gas safety record must be provided BEFORE occupation.',
+        message: 'Gas safety certificate was provided AFTER tenant occupation. For Section 21 validity, a gas safety record must be provided BEFORE occupation.',
         expected: `Before ${data.occupation_date || data.tenancy_start_date}`,
-        actual: data.gas_safety_provided_date,
+        actual: preOccupationServedDateStr,
       });
     }
 
-    // Also check gas safety check date - must be within 12 months
+    // Also check gas safety check date - must be within 12 months for current compliance
+    // NOTE: This is separate from pre-occupation compliance. Even if pre-occupation
+    // was compliant, the current certificate must still be valid.
     if (data.gas_safety_check_date) {
       const checkDate = parseDate(data.gas_safety_check_date);
       const now = new Date();

@@ -22,8 +22,9 @@
  * - gas_safety_cert_served: Was gas safety cert provided? (if gas appliances)
  * - gas_safety_before_occupation: Was gas safety record provided before occupation?
  * - gas_safety_before_occupation_date: Date of pre-occupation gas safety check (if applicable)
+ * - gas_safety_record_served_pre_occupation_date: Date the pre-occupation CP12 was given to tenant (CRITICAL for Section 21 compliance)
  * - gas_safety_check_date: Date of most recent CP12 check
- * - gas_safety_served_date: Date CP12 was served on tenant
+ * - gas_safety_served_date: Date most recent CP12 was served on tenant (may be annual renewal)
  * - epc_served: Was EPC provided?
  * - epc_provided_date: Date EPC was provided (if epc served)
  * - how_to_rent_served: Was How to Rent guide provided?
@@ -248,18 +249,33 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                 />
 
                 {facts.gas_safety_before_occupation === true && (
-                  <ValidatedInput
-                    id="gas_safety_before_occupation_date"
-                    label="Date of gas safety check before occupation"
-                    type="date"
-                    value={facts.gas_safety_before_occupation_date as string}
-                    onChange={(v) => onUpdate({ gas_safety_before_occupation_date: v })}
-                    validation={{ required: true }}
-                    required
-                    helperText="Date the pre-occupation CP12 check was carried out."
-                    sectionId={SECTION_ID}
-                    className="max-w-xs"
-                  />
+                  <div className="space-y-4">
+                    <ValidatedInput
+                      id="gas_safety_before_occupation_date"
+                      label="Date of gas safety check before occupation"
+                      type="date"
+                      value={facts.gas_safety_before_occupation_date as string}
+                      onChange={(v) => onUpdate({ gas_safety_before_occupation_date: v })}
+                      validation={{ required: true }}
+                      required
+                      helperText="Date the pre-occupation CP12 check was carried out."
+                      sectionId={SECTION_ID}
+                      className="max-w-xs"
+                    />
+
+                    <ValidatedInput
+                      id="gas_safety_record_served_pre_occupation_date"
+                      label="Date the pre-occupation gas safety record was given to the tenant"
+                      type="date"
+                      value={facts.gas_safety_record_served_pre_occupation_date as string}
+                      onChange={(v) => onUpdate({ gas_safety_record_served_pre_occupation_date: v })}
+                      validation={{ required: true }}
+                      required
+                      helperText="The date you provided the CP12 to the tenant before they moved in. This is the critical date for Section 21 compliance."
+                      sectionId={SECTION_ID}
+                      className="max-w-xs"
+                    />
+                  </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
