@@ -113,6 +113,114 @@ describe('P0 Blocking Validation - Compliance Timing', () => {
     });
   });
 
+  describe('Gas Safety Pre-Occupation Date (Jan 2026 Fix)', () => {
+    /**
+     * CRITICAL: The pre-occupation timing check MUST use the date the pre-occupation
+     * gas safety record was served to the tenant, NOT the most recent CP12 served date
+     * (which may be an annual renewal after tenancy start).
+     */
+
+    it('PASSES when pre-occupation served date is BEFORE tenancy start (new field)', () => {
+      const data: ComplianceTimingData = {
+        tenancy_start_date: '2024-01-15',
+        has_gas_at_property: true,
+        // User confirmed pre-occupation compliance
+        gas_safety_before_occupation: true,
+        gas_safety_before_occupation_date: '2024-01-10', // Check date
+        gas_safety_record_served_pre_occupation_date: '2024-01-12', // Served BEFORE occupation
+        // Latest CP12 is annual renewal (would fail if used for timing)
+        gas_safety_provided_date: '2025-01-20',
+        gas_safety_check_date: '2025-01-18', // Current within 12 months
+      };
+
+      const result = validateComplianceTiming(data);
+
+      // Should NOT have gas_safety_timing error - pre-occupation was compliant
+      expect(result.issues.filter(i => i.field === 'gas_safety_timing')).toHaveLength(0);
+    });
+
+    it('BLOCKS when pre-occupation served date is AFTER tenancy start (new field)', () => {
+      const data: ComplianceTimingData = {
+        tenancy_start_date: '2024-01-15',
+        has_gas_at_property: true,
+        gas_safety_before_occupation: true,
+        gas_safety_before_occupation_date: '2024-01-10', // Check was before
+        gas_safety_record_served_pre_occupation_date: '2024-01-20', // But served AFTER occupation!
+      };
+
+      const result = validateComplianceTiming(data);
+
+      expect(result.isValid).toBe(false);
+      expect(result.issues.some(i => i.field === 'gas_safety_timing' && i.severity === 'error')).toBe(true);
+    });
+
+    it('PASSES when annual renewal is after tenancy start BUT pre-occupation record was compliant', () => {
+      // This is the KEY FIX scenario:
+      // - Pre-occupation CP12 was given before move-in (compliant)
+      // - Annual renewal CP12 was served after tenancy started (expected behavior)
+      // - System should NOT fail because pre-occupation compliance was met
+
+      // Use dynamic dates to ensure current check is within 12 months
+      const now = new Date();
+      const sixMonthsAgo = new Date(now);
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+      const tenancyStart = new Date(sixMonthsAgo);
+      tenancyStart.setMonth(tenancyStart.getMonth() - 6); // Tenancy started 12 months ago
+
+      const data: ComplianceTimingData = {
+        tenancy_start_date: tenancyStart.toISOString().split('T')[0],
+        has_gas_at_property: true,
+        // Pre-occupation compliance confirmed
+        gas_safety_before_occupation: true,
+        gas_safety_before_occupation_date: new Date(tenancyStart.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days before move-in
+        gas_safety_record_served_pre_occupation_date: new Date(tenancyStart.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 3 days before move-in
+        // Annual renewal in recent past (after tenancy started - normal behavior)
+        gas_safety_provided_date: sixMonthsAgo.toISOString().split('T')[0],
+        gas_safety_check_date: new Date(sixMonthsAgo.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Current check within 12 months
+      };
+
+      const result = validateComplianceTiming(data);
+
+      // Should NOT block - pre-occupation was compliant
+      expect(result.issues.filter(i => i.field === 'gas_safety_timing')).toHaveLength(0);
+      // Current cert is within 12 months, so no expiry issue either
+      expect(result.issues.filter(i => i.field === 'gas_safety_expiry')).toHaveLength(0);
+    });
+
+    it('Uses legacy fallback when new field is missing but pre-occupation confirmed', () => {
+      // Backward compatibility: old cases without the new field
+      const data: ComplianceTimingData = {
+        tenancy_start_date: '2024-01-15',
+        has_gas_at_property: true,
+        // User confirmed pre-occupation compliance (legacy flow)
+        gas_safety_before_occupation: true,
+        gas_safety_before_occupation_date: '2024-01-10', // Check date BEFORE occupation
+        // NEW FIELD IS MISSING - should fall back to using check date
+        gas_safety_record_served_pre_occupation_date: undefined,
+      };
+
+      const result = validateComplianceTiming(data);
+
+      // Legacy fallback should treat check date as served date -> PASSES
+      expect(result.issues.filter(i => i.field === 'gas_safety_timing')).toHaveLength(0);
+    });
+
+    it('BLOCKS using general provided_date when no pre-occupation context', () => {
+      // No pre-occupation fields set, only general provided_date which is after start
+      const data: ComplianceTimingData = {
+        tenancy_start_date: '2024-01-15',
+        has_gas_at_property: true,
+        gas_safety_provided_date: '2024-01-20', // After occupation
+        // No pre-occupation fields - system must use gas_safety_provided_date
+      };
+
+      const result = validateComplianceTiming(data);
+
+      expect(result.isValid).toBe(false);
+      expect(result.issues.some(i => i.field === 'gas_safety_timing' && i.severity === 'error')).toBe(true);
+    });
+  });
+
   describe('Prescribed Information Timing', () => {
     it('BLOCKS when prescribed info served >30 days after deposit', () => {
       const data: ComplianceTimingData = {

@@ -214,8 +214,6 @@ export async function POST(request: Request) {
       );
     } catch (fulfillmentError: any) {
       // Mark order as failed
-      const errorMessage = fulfillmentError?.message || 'Document regeneration failed';
-
       await adminClient
         .from('orders')
         .update({
@@ -223,6 +221,23 @@ export async function POST(request: Request) {
         })
         .eq('id', order.id);
 
+      // Handle compliance timing block errors with structured response
+      if (fulfillmentError?.code === 'COMPLIANCE_TIMING_BLOCK') {
+        console.error('Regeneration blocked - compliance timing violations:', fulfillmentError.issues);
+        return NextResponse.json(
+          {
+            ok: false,
+            error: 'compliance_timing_block',
+            code: 'COMPLIANCE_TIMING_BLOCK',
+            issues: fulfillmentError.issues || [],
+            tenancy_start_date: fulfillmentError.tenancy_start_date,
+            message: "We can't generate your Section 21 pack yet because some compliance documents weren't provided at the required times.",
+          },
+          { status: 422 }
+        );
+      }
+
+      const errorMessage = fulfillmentError?.message || 'Document regeneration failed';
       console.error('Regeneration failed:', errorMessage, fulfillmentError);
 
       return NextResponse.json(

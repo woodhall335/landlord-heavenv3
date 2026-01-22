@@ -45,6 +45,12 @@ import { saveCaseFacts } from '@/lib/wizard/facts-client';
 // Section 21 precondition validation
 import { validateSection21Preconditions } from '@/lib/validators/section21-preconditions';
 
+// Compliance timing error display
+import {
+  ComplianceTimingBlocker,
+  type ComplianceTimingIssue,
+} from '@/components/ui/ComplianceTimingBlocker';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -61,6 +67,12 @@ function ReviewPageInner() {
   const [editWindowOpen, setEditWindowOpen] = useState(false);
   const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(true); // Start true to prevent UI flash
   const [regenerationError, setRegenerationError] = useState<string | null>(null);
+
+  // Compliance timing block error state (structured error from API)
+  const [complianceTimingError, setComplianceTimingError] = useState<{
+    issues: ComplianceTimingIssue[];
+    tenancyStartDate?: string;
+  } | null>(null);
 
   // Compute derived values BEFORE any conditional returns (null-safe)
   // This ensures hooks are called in the same order on every render
@@ -255,9 +267,25 @@ function ReviewPageInner() {
         const responseData = await response.json().catch(() => ({}));
 
         if (!response.ok || responseData.ok === false) {
+          // Check for compliance timing block error (structured error)
+          if (responseData.code === 'COMPLIANCE_TIMING_BLOCK') {
+            setComplianceTimingError({
+              issues: responseData.issues || [],
+              tenancyStartDate: responseData.tenancy_start_date,
+            });
+            setRegenerationError(null); // Clear generic error
+            setIsRegenerating(false);
+            // Scroll to compliance timing blocker
+            setTimeout(() => {
+              document.getElementById('compliance-timing-blocker')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+            return;
+          }
+
           // Extract the user-friendly error message from server response
           const errorMessage = responseData.message || responseData.error || 'Failed to regenerate documents';
           setRegenerationError(errorMessage);
+          setComplianceTimingError(null); // Clear structured error
           setIsRegenerating(false);
           // Scroll to error banner
           setTimeout(() => {
@@ -395,6 +423,17 @@ function ReviewPageInner() {
     isLoadingPaymentStatus={isLoadingPaymentStatus}
     regenerationError={regenerationError}
     onFixSignatureDate={handleFixSignatureDate}
+    complianceTimingError={complianceTimingError}
+    onEditCompliance={() => {
+      // Navigate to compliance section of the wizard
+      const params = new URLSearchParams({
+        case_id: caseId || '',
+        step: 'section21_compliance',
+      });
+      if (product) params.set('product', product);
+      if (jurisdiction) params.set('jurisdiction', jurisdiction);
+      router.push(`/wizard/flow?${params.toString()}`);
+    }}
   />;
 }
 
@@ -930,6 +969,12 @@ interface EvictionReviewContentProps {
   isLoadingPaymentStatus?: boolean;
   regenerationError?: string | null;
   onFixSignatureDate?: () => void;
+  // Compliance timing block error (structured)
+  complianceTimingError?: {
+    issues: ComplianceTimingIssue[];
+    tenancyStartDate?: string;
+  } | null;
+  onEditCompliance?: () => void;
 }
 
 function EvictionReviewContent({
@@ -954,6 +999,8 @@ function EvictionReviewContent({
   isLoadingPaymentStatus,
   regenerationError,
   onFixSignatureDate,
+  complianceTimingError,
+  onEditCompliance,
 }: EvictionReviewContentProps) {
   const recommendedRouteLabel: string =
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
@@ -1005,6 +1052,15 @@ function EvictionReviewContent({
           )}
         </div>
       </div>
+
+      {/* Compliance Timing Block Error - structured user-friendly error panel */}
+      {complianceTimingError && complianceTimingError.issues.length > 0 && onEditCompliance && (
+        <ComplianceTimingBlocker
+          issues={complianceTimingError.issues}
+          tenancyStartDate={complianceTimingError.tenancyStartDate}
+          onEditCompliance={onEditCompliance}
+        />
+      )}
 
       {/* Regeneration Error Banner - shows server error with Fix CTA */}
       {regenerationError && (
