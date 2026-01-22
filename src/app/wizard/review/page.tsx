@@ -50,6 +50,7 @@ import {
   ComplianceTimingBlocker,
   type ComplianceTimingIssue,
 } from '@/components/ui/ComplianceTimingBlocker';
+import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -268,7 +269,8 @@ function ReviewPageInner() {
 
         if (!response.ok || responseData.ok === false) {
           // Check for compliance timing block error (structured error)
-          if (responseData.code === 'COMPLIANCE_TIMING_BLOCK') {
+          if (isComplianceTimingBlock(responseData)) {
+            // Type-safe access to compliance timing block response
             setComplianceTimingError({
               issues: responseData.issues || [],
               tenancyStartDate: responseData.tenancy_start_date,
