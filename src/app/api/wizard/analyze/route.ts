@@ -1058,20 +1058,31 @@ export async function POST(request: Request) {
         );
 
         if (!isNoticeOnly) {
-          previewDocuments.push(
-            {
-              id: 'n5',
+          // Section 21 uses accelerated possession (N5B only)
+          // Section 8 uses standard possession (N5 + N119)
+          if (isSection21Route) {
+            previewDocuments.push({
+              id: 'n5b',
               document_type: 'court_form',
-              document_title: 'N5 claim form',
+              document_title: 'N5B accelerated possession claim',
               requiredToFile: true,
-            },
-            {
-              id: 'n119',
-              document_type: 'court_form',
-              document_title: 'N119 particulars of claim',
-              requiredToFile: true,
-            },
-          );
+            });
+          } else {
+            previewDocuments.push(
+              {
+                id: 'n5',
+                document_type: 'court_form',
+                document_title: 'N5 claim form',
+                requiredToFile: true,
+              },
+              {
+                id: 'n119',
+                document_type: 'court_form',
+                document_title: 'N119 particulars of claim',
+                requiredToFile: true,
+              },
+            );
+          }
         }
       }
     }
