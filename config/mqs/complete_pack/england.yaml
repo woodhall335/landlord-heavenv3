@@ -829,6 +829,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9a_after_feb_1997
       # Q9b - No notice that tenancy is NOT an AST
       - id: n5b_q9b_no_notice_not_ast
         label: "Q9b: Confirm that NO notice was served stating the tenancy is NOT an assured shorthold tenancy?"
@@ -837,6 +838,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9b_no_notice_not_ast
       # Q9c - No exclusion clause in tenancy agreement
       - id: n5b_q9c_no_exclusion_clause
         label: "Q9c: Confirm the tenancy agreement does NOT contain a clause stating it is NOT an AST?"
@@ -845,6 +847,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9c_no_exclusion_clause
       # Q9d - Tenant not agricultural worker
       - id: n5b_q9d_not_agricultural_worker
         label: "Q9d: Confirm the tenant is NOT an agricultural worker occupying the property as part of their employment?"
@@ -853,6 +856,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9d_not_agricultural_worker
       # Q9e - Not succession tenancy
       - id: n5b_q9e_not_succession_tenancy
         label: "Q9e: Confirm this is NOT a tenancy that arose by succession from a Rent Act protected tenancy?"
@@ -861,6 +865,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9e_not_succession_tenancy
       # Q9f - Not former secure tenancy
       - id: n5b_q9f_not_former_secure
         label: "Q9f: Confirm this is NOT a tenancy that was previously a secure tenancy?"
@@ -869,6 +874,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q9f_not_former_secure
       # Q9g - Not Schedule 10 LGHA 1989 tenancy
       - id: n5b_q9g_not_schedule_10
         label: "Q9g: Confirm this is NOT a long leasehold tenancy granted under Schedule 10 of the Local Government and Housing Act 1989?"
@@ -877,14 +883,7 @@ questions:
         validation:
           required: true
         width: full
-    maps_to:
-      - n5b_q9a_after_feb_1997
-      - n5b_q9b_no_notice_not_ast
-      - n5b_q9c_no_exclusion_clause
-      - n5b_q9d_not_agricultural_worker
-      - n5b_q9e_not_succession_tenancy
-      - n5b_q9f_not_former_secure
-      - n5b_q9g_not_schedule_10
+        maps_to: n5b_q9g_not_schedule_10
 
   # ============================================================
   # N5B QUESTION 19: TENANT FEES ACT 2019 COMPLIANCE
@@ -911,6 +910,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: n5b_q19_prohibited_payment
       # Q19b - Holding deposit (on/after 1 June 2019)
       - id: n5b_q19b_holding_deposit
         label: "Q19b: Was a holding deposit paid on or after 1 June 2019?"
@@ -926,9 +926,7 @@ questions:
         validation:
           required: true
         width: full
-    maps_to:
-      - n5b_q19_prohibited_payment
-      - n5b_q19b_holding_deposit
+        maps_to: n5b_q19b_holding_deposit
 
   # ============================================================
   # N5B QUESTION 20: CONSENT TO PAPER DETERMINATION

@@ -341,6 +341,131 @@ describe('N5B Validation Integration', () => {
 // FIELD MAPPING DOCUMENTATION TESTS
 // =============================================================================
 
+// =============================================================================
+// MQS YAML FIELD ID TESTS - Verify England Complete Pack Q9 Fields
+// =============================================================================
+
+describe('MQS YAML Field IDs (england.yaml)', () => {
+  /**
+   * Tests that the NEGATIVE-framed field IDs from england.yaml are correctly
+   * inverted to POSITIVE CaseData fields.
+   *
+   * MQS YAML uses negative framing for user-friendly questions:
+   * - "Confirm NO notice was served..." (YES = no notice)
+   *
+   * N5B PDF uses positive framing:
+   * - "Has notice been given?" (YES = notice given)
+   *
+   * The n5b-field-builder.ts handles this inversion.
+   */
+  test('inverts MQS negative-framed Q9b-Q9g field IDs to positive CaseData', () => {
+    // These are the EXACT field IDs from config/mqs/complete_pack/england.yaml
+    // User answers YES to all (confirming negation) = compliant landlord
+    const mqsWizardFacts = {
+      n5b_q9a_after_feb_1997: true,           // Positive framing (direct)
+      n5b_q9b_no_notice_not_ast: true,        // Negative: confirmed NO notice → has_notice = false
+      n5b_q9c_no_exclusion_clause: true,      // Negative: confirmed NO clause → has_clause = false
+      n5b_q9d_not_agricultural_worker: true,  // Negative: confirmed NOT agricultural → is_agricultural = false
+      n5b_q9e_not_succession_tenancy: true,   // Negative: confirmed NOT succession → is_succession = false
+      n5b_q9f_not_former_secure: true,        // Negative: confirmed NOT secure → was_secure = false
+      n5b_q9g_not_schedule_10: true,          // Negative: confirmed NOT Schedule 10 → is_schedule_10 = false
+    };
+
+    const fields = buildN5BFields(mqsWizardFacts);
+
+    // Q9a remains positive (no inversion needed)
+    expect(fields.n5b_q9a_after_feb_1997).toBe(true);
+
+    // Q9b-Q9g are INVERTED: wizard YES (confirmed negative) → CaseData false (no disqualifier)
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+    expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+    expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+    expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+    expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+    expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+  });
+
+  test('MQS Q9 fields with non-compliant answers (disqualified landlord)', () => {
+    // Non-compliant landlord: notice WAS served stating not an AST
+    const mqsWizardFacts = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: false,  // User says NO (notice WAS served) → disqualified
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+    };
+
+    const fields = buildN5BFields(mqsWizardFacts);
+
+    // Q9b is INVERTED: wizard NO (notice was served) → CaseData true (has notice)
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(true);  // Disqualified!
+  });
+
+  test('MQS Q19 field IDs map correctly', () => {
+    // These are the EXACT field IDs from config/mqs/complete_pack/england.yaml
+    const mqsWizardFacts = {
+      n5b_q19_prohibited_payment: false,     // NO prohibited payments (compliant)
+      n5b_q19b_holding_deposit: 'no',        // No holding deposit taken
+    };
+
+    const fields = buildN5BFields(mqsWizardFacts);
+
+    // Q19 prohibited_payment maps to has_unreturned_prohibited_payment
+    expect(fields.n5b_q19_has_unreturned_prohibited_payment).toBe(false);
+    // Q19b holding_deposit maps directly
+    expect(fields.n5b_q19b_holding_deposit).toBe(false);
+  });
+
+  test('missing MQS Q9 fields causes validation failure', () => {
+    // Simulate wizard facts WITHOUT Q9 answers (the bug scenario)
+    const incompleteWizardFacts = {
+      notice_service_method: 'First class post',
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      n5b_q20_paper_determination: true,
+      // Q9a-Q9g are MISSING!
+    };
+
+    const fields = buildN5BFields(incompleteWizardFacts);
+    const validation = checkN5BMandatoryFields(fields);
+
+    // Should fail validation
+    expect(validation.isValid).toBe(false);
+
+    // Should list ALL missing Q9 fields
+    expect(validation.missingFields).toContain('n5b_q9a_after_feb_1997');
+    expect(validation.missingFields).toContain('n5b_q9b_has_notice_not_ast');
+    expect(validation.missingFields).toContain('n5b_q9c_has_exclusion_clause');
+    expect(validation.missingFields).toContain('n5b_q9d_is_agricultural_worker');
+    expect(validation.missingFields).toContain('n5b_q9e_is_succession_tenancy');
+    expect(validation.missingFields).toContain('n5b_q9f_was_secure_tenancy');
+    expect(validation.missingFields).toContain('n5b_q9g_is_schedule_10');
+  });
+
+  test('complete MQS Q9 facts with negative framing pass validation', () => {
+    // Complete wizard facts using MQS field IDs (negative framing)
+    const completeWizardFacts = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: true,
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+      notice_service_method: 'First class post',
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      n5b_q20_paper_determination: true,
+    };
+
+    const fields = buildN5BFields(completeWizardFacts);
+    const validation = checkN5BMandatoryFields(fields);
+
+    expect(validation.isValid).toBe(true);
+    expect(validation.missingFields).toEqual([]);
+  });
+});
+
 describe('Field Mapping Documentation', () => {
   /**
    * This test documents the complete mapping from wizard keys to CaseData keys
