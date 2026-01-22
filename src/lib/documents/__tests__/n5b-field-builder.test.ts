@@ -1109,4 +1109,49 @@ describe('Complete wizard facts integration', () => {
     const validation = checkN5BMandatoryFields(fields);
     expect(validation.isValid).toBe(true);
   });
+
+  test('maps all fields from MQS nested section21.* paths', () => {
+    // This simulates how MQS YAML stores data under section21.* nested paths
+    // via the maps_to directive
+    const mqsNestedFacts = {
+      section21: {
+        epc_served: true,
+        epc_certificate_date: '2024-01-15',
+        how_to_rent_served: true,
+        how_to_rent_date: '2024-01-10',
+        gas_safety_cert_served: true,
+        gas_cert_date: '2024-01-01',
+      },
+      has_gas_appliances: true,
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_has_notice_not_ast: false,
+      n5b_q9c_has_exclusion_clause: false,
+      n5b_q9d_is_agricultural_worker: false,
+      n5b_q9e_is_succession_tenancy: false,
+      n5b_q9f_was_secure_tenancy: false,
+      n5b_q9g_is_schedule_10: false,
+      notice_service_method: 'First class post',
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      n5b_q20_paper_determination: true,
+    };
+
+    const fields = buildN5BFields(mqsNestedFacts);
+
+    // Verify nested paths are resolved correctly
+    expect(fields.epc_provided).toBe(true);
+    expect(fields.epc_provided_date).toBe('2024-01-15');
+    expect(fields.how_to_rent_provided).toBe(true);
+    expect(fields.how_to_rent_date).toBe('2024-01-10');
+    expect(fields.gas_safety_provided).toBe(true);
+    expect(fields.gas_safety_check_date).toBe('2024-01-01');
+    expect(fields.has_gas_at_property).toBe(true);
+
+    // Verify Q9 fields still work
+    expect(fields.n5b_q9a_after_feb_1997).toBe(true);
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+
+    // Verify validation passes
+    const validation = checkN5BMandatoryFields(fields);
+    expect(validation.isValid).toBe(true);
+  });
 });
