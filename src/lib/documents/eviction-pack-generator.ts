@@ -24,6 +24,11 @@ import {
   wizardFactsToScotlandEviction,
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
+import {
+  checkN5BMandatoryFields,
+  buildN5BFields,
+  N5BMissingFieldError,
+} from './n5b-field-builder';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import {
   buildWitnessStatementSections,
@@ -1302,6 +1307,24 @@ async function generateEnglandOrWalesEvictionPack(
     // Accelerated possession claim (N5B)
     // CRITICAL: Pass jurisdiction to select correct Wales/England form
     // FIX 2 (Jan 2026): Ensure notice_expiry_date is ALWAYS populated for Q10(e)
+
+    // =========================================================================
+    // N5B MANDATORY FIELD VALIDATION
+    // =========================================================================
+    // Courts WILL reject N5B claims with missing Q9a-Q9g, Q10a, Q19, Q20 answers.
+    // Validate before generation to provide clear error messages to users.
+    // =========================================================================
+    const n5bFields = buildN5BFields(wizardFacts || {});
+    const n5bValidation = checkN5BMandatoryFields(n5bFields);
+    if (!n5bValidation.isValid) {
+      throw new N5BMissingFieldError(
+        n5bValidation.missingFields,
+        Object.fromEntries(
+          n5bValidation.missingFields.map((f, i) => [f, n5bValidation.missingLabels[i]])
+        )
+      );
+    }
+
     const n5bPdf = await fillN5BForm({
       ...caseData,
       jurisdiction, // Ensures Wales uses N5B_WALES_0323.pdf, England uses n5b-eng.pdf

@@ -11,6 +11,12 @@ import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
 import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
+import {
+  buildN5BFields,
+  mergeN5BFieldsIntoCaseData,
+  logN5BFieldStatus,
+  type N5BFields,
+} from './n5b-field-builder';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
@@ -310,6 +316,76 @@ function buildEvictionCaseFromFacts(
   return { evictionCase, caseType };
 }
 
+/**
+ * Builds N5B-specific fields for CaseData using the canonical N5B field builder.
+ *
+ * This function:
+ * 1. Uses buildN5BFields() to resolve wizard aliases and parse booleans
+ * 2. Applies fallbacks from CaseFacts compliance data
+ * 3. Returns fields suitable for spreading into CaseData
+ *
+ * @param wizardFacts - Raw wizard facts object
+ * @param facts - Normalized CaseFacts object for fallback values
+ * @returns Object with N5B fields to spread into CaseData
+ */
+function buildN5BFieldsForCaseData(
+  wizardFacts: Record<string, unknown>,
+  facts: CaseFacts
+): Partial<CaseData> {
+  // Build N5B fields using canonical builder (handles aliases and boolean parsing)
+  const n5bFields = buildN5BFields(wizardFacts);
+
+  // Log field status in dev mode for debugging
+  logN5BFieldStatus(n5bFields, 'buildCaseData');
+
+  // Return fields with fallbacks from CaseFacts where appropriate
+  return {
+    // Q9a-Q9g: AST Verification (no fallbacks - must come from wizard)
+    n5b_q9a_after_feb_1997: n5bFields.n5b_q9a_after_feb_1997,
+    n5b_q9b_has_notice_not_ast: n5bFields.n5b_q9b_has_notice_not_ast,
+    n5b_q9c_has_exclusion_clause: n5bFields.n5b_q9c_has_exclusion_clause,
+    n5b_q9d_is_agricultural_worker: n5bFields.n5b_q9d_is_agricultural_worker,
+    n5b_q9e_is_succession_tenancy: n5bFields.n5b_q9e_is_succession_tenancy,
+    n5b_q9f_was_secure_tenancy: n5bFields.n5b_q9f_was_secure_tenancy,
+    n5b_q9g_is_schedule_10: n5bFields.n5b_q9g_is_schedule_10,
+
+    // Q10a: Notice service method (handled separately in main buildCaseData)
+    // Don't include here to avoid overwriting the existing logic
+
+    // Q15: EPC - with fallback from CaseFacts compliance
+    epc_provided: n5bFields.epc_provided ?? facts.compliance.epc_provided ?? undefined,
+    epc_provided_date: n5bFields.epc_provided_date || undefined,
+
+    // Q16-Q17: Gas Safety - with fallbacks
+    has_gas_at_property: n5bFields.has_gas_at_property ?? true, // Default true for most properties
+    gas_safety_before_occupation: n5bFields.gas_safety_before_occupation,
+    gas_safety_before_occupation_date: n5bFields.gas_safety_before_occupation_date,
+    gas_safety_check_date:
+      n5bFields.gas_safety_check_date ||
+      facts.compliance.gas_safety_cert_date || // Fallback to existing cert_date
+      undefined,
+    gas_safety_served_date: n5bFields.gas_safety_served_date,
+    gas_safety_service_dates: n5bFields.gas_safety_service_dates,
+    gas_safety_provided:
+      n5bFields.gas_safety_provided ??
+      facts.compliance.gas_safety_cert_provided ??
+      undefined,
+
+    // Q18: How to Rent
+    how_to_rent_provided: n5bFields.how_to_rent_provided,
+    how_to_rent_date: n5bFields.how_to_rent_date,
+    how_to_rent_method: n5bFields.how_to_rent_method,
+
+    // Q19: Tenant Fees Act 2019 - default to false (compliant) if not answered
+    n5b_q19_has_unreturned_prohibited_payment:
+      n5bFields.n5b_q19_has_unreturned_prohibited_payment ?? false,
+    n5b_q19b_holding_deposit: n5bFields.n5b_q19b_holding_deposit ?? false,
+
+    // Q20: Paper Determination
+    n5b_q20_paper_determination: n5bFields.n5b_q20_paper_determination,
+  };
+}
+
 function buildCaseData(
   facts: CaseFacts,
   evictionCase: EvictionCase,
@@ -514,61 +590,13 @@ function buildCaseData(
       ),
 
     // =========================================================================
-    // COMPLIANCE FLAGS (kept for other N5B questions, NOT for attachment boxes)
+    // N5B FIELDS - Built using canonical N5B field builder
     // =========================================================================
-    // These are used for N5B questions about whether documents were PROVIDED to tenant
-    // (e.g., "Was EPC provided to tenant?") - NOT for attachment checkboxes
-    epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
-    gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
-    how_to_rent_provided: wizardFacts.how_to_rent_provided || undefined,
-
+    // Uses buildN5BFields() to resolve wizard aliases and parse booleans
+    // This ensures consistent handling across all N5B fields
+    // See n5b-field-builder.ts for the complete alias mapping
     // =========================================================================
-    // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
-    // All questions now use POSITIVE framing matching the N5B form directly:
-    // - Q9a: Yes = tenancy after 28 Feb 1997 (good for AST)
-    // - Q9b-Q9g: Yes = disqualifying condition exists (bad for AST)
-    // =========================================================================
-    n5b_q9a_after_feb_1997: wizardFacts.n5b_q9a_after_feb_1997 ?? undefined,
-    n5b_q9b_has_notice_not_ast: wizardFacts.n5b_q9b_has_notice_not_ast ?? undefined,
-    n5b_q9c_has_exclusion_clause: wizardFacts.n5b_q9c_has_exclusion_clause ?? undefined,
-    n5b_q9d_is_agricultural_worker: wizardFacts.n5b_q9d_is_agricultural_worker ?? undefined,
-    n5b_q9e_is_succession_tenancy: wizardFacts.n5b_q9e_is_succession_tenancy ?? undefined,
-    n5b_q9f_was_secure_tenancy: wizardFacts.n5b_q9f_was_secure_tenancy ?? undefined,
-    n5b_q9g_is_schedule_10: wizardFacts.n5b_q9g_is_schedule_10 ?? undefined,
-
-    // =========================================================================
-    // N5B QUESTIONS 15-18: COMPLIANCE DATES
-    // =========================================================================
-    // Note: These fields come from wizard facts. CaseFacts schema doesn't have
-    // these new N5B-specific fields yet. Use wizardFacts only.
-    // Q15: EPC date
-    epc_provided_date: wizardFacts.epc_provided_date || undefined,
-    // Q16-17: Gas safety
-    has_gas_at_property: wizardFacts.has_gas_at_property ?? true, // Default true for most properties
-    gas_safety_before_occupation: wizardFacts.gas_safety_before_occupation || undefined,
-    gas_safety_before_occupation_date: wizardFacts.gas_safety_before_occupation_date || undefined,
-    gas_safety_check_date:
-      wizardFacts.gas_safety_check_date ||
-      facts.compliance.gas_safety_cert_date || // Use existing cert_date as fallback
-      undefined,
-    gas_safety_served_date: wizardFacts.gas_safety_served_date || undefined,
-    // Q18: How to Rent
-    how_to_rent_date: wizardFacts.how_to_rent_date || undefined,
-    how_to_rent_method: wizardFacts.how_to_rent_method || undefined,
-
-    // =========================================================================
-    // N5B QUESTION 19: TENANT FEES ACT 2019
-    // Q19 uses POSITIVE framing: "Has unreturned prohibited payment been taken?"
-    // Yes = problem (blocks S21), No = compliant
-    // Q19b (holding deposit) is informational only - no red flag for either answer
-    // =========================================================================
-    n5b_q19_has_unreturned_prohibited_payment: wizardFacts.n5b_q19_has_unreturned_prohibited_payment ?? false,
-    n5b_q19b_holding_deposit: wizardFacts.n5b_q19b_holding_deposit ?? false,
-
-    // =========================================================================
-    // N5B QUESTION 20: PAPER DETERMINATION CONSENT
-    // =========================================================================
-    n5b_q20_paper_determination: wizardFacts.n5b_q20_paper_determination ?? undefined,
+    ...buildN5BFieldsForCaseData(wizardFacts, facts),
 
     // =========================================================================
     // N5B DEFENDANT SERVICE ADDRESS
