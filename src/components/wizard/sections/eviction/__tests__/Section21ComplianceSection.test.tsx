@@ -55,7 +55,7 @@ describe('Section21ComplianceSection', () => {
   });
 
   describe('N5B AST Verification Questions (Q9a-Q9g)', () => {
-    it('should render all Q9 AST verification toggles', () => {
+    it('should render all Q9 AST verification toggles with positive framing', () => {
       render(
         <Section21ComplianceSection
           facts={baseFacts}
@@ -65,16 +65,16 @@ describe('Section21ComplianceSection', () => {
       );
 
       // Check for Q9 section header
-      expect(screen.getByText('N5B Accelerated Possession - AST Verification')).toBeInTheDocument();
+      expect(screen.getByText('N5B Accelerated Possession - AST Eligibility')).toBeInTheDocument();
 
-      // Check for all Q9 questions
+      // Check for all Q9 questions - now using POSITIVE framing matching N5B form
       expect(screen.getByText(/Q9\(a\): Was the tenancy created on or after 28 February 1997\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(b\): Was there NO notice stating it was not an AST\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(c\): Does the tenancy agreement NOT exclude the AST provisions\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(d\): Is the tenant NOT an agricultural worker\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(e\): Is this NOT a succession tenancy\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(f\): Is this NOT a former secure tenancy transferred from a local authority\?/)).toBeInTheDocument();
-      expect(screen.getByText(/Q9\(g\): Does Schedule 10 of the Local Government and Housing Act 1989 NOT apply\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(b\): Has the landlord served notice that the tenancy is not an AST\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(c\): Does the tenancy agreement state that it is not an AST\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(d\): Is the tenant an agricultural worker\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(e\): Did the tenancy arise by succession \(on death of the previous tenant\)\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(f\): Was the tenancy previously a secure tenancy\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Q9\(g\): Was the tenancy granted under Schedule 10 of the LGHA 1989\?/)).toBeInTheDocument();
     });
 
     it('should call onUpdate with correct field keys when Q9 toggles are clicked', () => {
@@ -169,7 +169,7 @@ describe('Section21ComplianceSection', () => {
         />
       );
 
-      expect(screen.getByText(/Was the gas safety check done before the tenant moved in\?/)).toBeInTheDocument();
+      expect(screen.getByText(/Was a gas safety record provided before the tenant moved in\?/)).toBeInTheDocument();
       expect(screen.getByLabelText(/Date of most recent gas safety check/)).toBeInTheDocument();
       expect(screen.getByLabelText(/Date certificate was given to tenant/)).toBeInTheDocument();
     });
@@ -262,7 +262,7 @@ describe('Section21ComplianceSection', () => {
   });
 
   describe('Q19 - Tenant Fees Act', () => {
-    it('should render Tenant Fees Act section', () => {
+    it('should render Tenant Fees Act section with correct wording', () => {
       render(
         <Section21ComplianceSection
           facts={baseFacts}
@@ -272,11 +272,12 @@ describe('Section21ComplianceSection', () => {
       );
 
       expect(screen.getByText('Tenant Fees Act 2019')).toBeInTheDocument();
-      expect(screen.getByText(/Q19: Has the tenant paid any prohibited payment/)).toBeInTheDocument();
+      // Q19 now asks about UNRETURNED prohibited payments (positive framing)
+      expect(screen.getByText(/Q19: Has the landlord taken any prohibited payment under the Tenant Fees Act 2019 that has NOT been repaid\?/)).toBeInTheDocument();
       expect(screen.getByText(/Q19\(b\): Was a holding deposit taken\?/)).toBeInTheDocument();
     });
 
-    it('should call onUpdate with n5b_q19_prohibited_payment when toggle is clicked', () => {
+    it('should call onUpdate with n5b_q19_has_unreturned_prohibited_payment when toggle is clicked', () => {
       render(
         <Section21ComplianceSection
           facts={baseFacts}
@@ -285,15 +286,32 @@ describe('Section21ComplianceSection', () => {
         />
       );
 
-      // Find the Q19 prohibited payment radio by looking for the radio input with the specific name
+      // Find the Q19 prohibited payment radio by looking for the radio input with the new field name
       const q19NoRadios = screen.getAllByRole('radio', { name: 'No' });
-      // Find the one for n5b_q19_prohibited_payment
+      // Find the one for n5b_q19_has_unreturned_prohibited_payment
       const q19NoRadio = q19NoRadios.find(
-        (r) => r.getAttribute('name') === 'n5b_q19_prohibited_payment'
+        (r) => r.getAttribute('name') === 'n5b_q19_has_unreturned_prohibited_payment'
       );
       fireEvent.click(q19NoRadio!);
 
-      expect(mockOnUpdate).toHaveBeenCalledWith({ n5b_q19_prohibited_payment: false });
+      expect(mockOnUpdate).toHaveBeenCalledWith({ n5b_q19_has_unreturned_prohibited_payment: false });
+    });
+
+    it('should NOT show red flag for holding deposit question (informational only)', () => {
+      render(
+        <Section21ComplianceSection
+          facts={baseFacts}
+          jurisdiction="england"
+          onUpdate={mockOnUpdate}
+        />
+      );
+
+      // The Q19b holding deposit question should not have a blockingMessage
+      // We verify this by checking the helper text is informational
+      expect(screen.getByText(/maximum one week's rent/)).toBeInTheDocument();
+      // blockingMessage would include "Section 21" - verify it's not present for Q19b
+      const holdingDepositSection = screen.getByText(/Q19\(b\): Was a holding deposit taken\?/).closest('div');
+      expect(holdingDepositSection).not.toHaveTextContent(/Section 21 cannot be used/);
     });
   });
 
@@ -333,7 +351,7 @@ describe('Section21ComplianceSection', () => {
   });
 
   describe('Integration - All N5B fields persist to facts', () => {
-    it('should render component with all N5B fields populated from facts', () => {
+    it('should render component with all N5B fields populated from facts using new positive field names', () => {
       const populatedFacts: WizardFacts = {
         ...baseFacts,
         // EPC
@@ -349,17 +367,17 @@ describe('Section21ComplianceSection', () => {
         how_to_rent_served: true,
         how_to_rent_date: '2024-01-02',
         how_to_rent_method: 'email',
-        // Q9
-        n5b_q9a_after_feb_1997: true,
-        n5b_q9b_no_notice_not_ast: true,
-        n5b_q9c_no_exclusion_clause: true,
-        n5b_q9d_not_agricultural_worker: true,
-        n5b_q9e_not_succession_tenancy: true,
-        n5b_q9f_not_former_secure: true,
-        n5b_q9g_not_schedule_10: true,
-        // Q19
-        n5b_q19_prohibited_payment: false,
-        n5b_q19b_holding_deposit: 'no',
+        // Q9 - now using POSITIVE field names matching N5B form directly
+        n5b_q9a_after_feb_1997: true,           // Yes = tenancy after Feb 1997 (good)
+        n5b_q9b_has_notice_not_ast: false,      // No = no notice served saying NOT AST (good)
+        n5b_q9c_has_exclusion_clause: false,    // No = no exclusion clause (good)
+        n5b_q9d_is_agricultural_worker: false,  // No = not agricultural worker (good)
+        n5b_q9e_is_succession_tenancy: false,   // No = not succession tenancy (good)
+        n5b_q9f_was_secure_tenancy: false,      // No = not former secure tenancy (good)
+        n5b_q9g_is_schedule_10: false,          // No = not Schedule 10 tenancy (good)
+        // Q19 - now using positive field name
+        n5b_q19_has_unreturned_prohibited_payment: false, // No = compliant (good)
+        n5b_q19b_holding_deposit: false,        // Boolean: false = no holding deposit taken
         // Q20
         n5b_q20_paper_determination: true,
       };

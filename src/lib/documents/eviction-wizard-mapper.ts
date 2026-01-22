@@ -524,14 +524,17 @@ function buildCaseData(
 
     // =========================================================================
     // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
+    // All questions now use POSITIVE framing matching the N5B form directly:
+    // - Q9a: Yes = tenancy after 28 Feb 1997 (good for AST)
+    // - Q9b-Q9g: Yes = disqualifying condition exists (bad for AST)
     // =========================================================================
     n5b_q9a_after_feb_1997: wizardFacts.n5b_q9a_after_feb_1997 ?? undefined,
-    n5b_q9b_no_notice_not_ast: wizardFacts.n5b_q9b_no_notice_not_ast ?? undefined,
-    n5b_q9c_no_exclusion_clause: wizardFacts.n5b_q9c_no_exclusion_clause ?? undefined,
-    n5b_q9d_not_agricultural_worker: wizardFacts.n5b_q9d_not_agricultural_worker ?? undefined,
-    n5b_q9e_not_succession_tenancy: wizardFacts.n5b_q9e_not_succession_tenancy ?? undefined,
-    n5b_q9f_not_former_secure: wizardFacts.n5b_q9f_not_former_secure ?? undefined,
-    n5b_q9g_not_schedule_10: wizardFacts.n5b_q9g_not_schedule_10 ?? undefined,
+    n5b_q9b_has_notice_not_ast: wizardFacts.n5b_q9b_has_notice_not_ast ?? undefined,
+    n5b_q9c_has_exclusion_clause: wizardFacts.n5b_q9c_has_exclusion_clause ?? undefined,
+    n5b_q9d_is_agricultural_worker: wizardFacts.n5b_q9d_is_agricultural_worker ?? undefined,
+    n5b_q9e_is_succession_tenancy: wizardFacts.n5b_q9e_is_succession_tenancy ?? undefined,
+    n5b_q9f_was_secure_tenancy: wizardFacts.n5b_q9f_was_secure_tenancy ?? undefined,
+    n5b_q9g_is_schedule_10: wizardFacts.n5b_q9g_is_schedule_10 ?? undefined,
 
     // =========================================================================
     // N5B QUESTIONS 15-18: COMPLIANCE DATES
@@ -555,9 +558,12 @@ function buildCaseData(
 
     // =========================================================================
     // N5B QUESTION 19: TENANT FEES ACT 2019
+    // Q19 uses POSITIVE framing: "Has unreturned prohibited payment been taken?"
+    // Yes = problem (blocks S21), No = compliant
+    // Q19b (holding deposit) is informational only - no red flag for either answer
     // =========================================================================
-    n5b_q19_prohibited_payment: wizardFacts.n5b_q19_prohibited_payment ?? false,
-    n5b_q19b_holding_deposit: wizardFacts.n5b_q19b_holding_deposit ?? 'no',
+    n5b_q19_has_unreturned_prohibited_payment: wizardFacts.n5b_q19_has_unreturned_prohibited_payment ?? false,
+    n5b_q19b_holding_deposit: wizardFacts.n5b_q19b_holding_deposit ?? false,
 
     // =========================================================================
     // N5B QUESTION 20: PAPER DETERMINATION CONSENT
