@@ -11,6 +11,9 @@ import { describe, test, expect } from 'vitest';
 import {
   buildN5BFields,
   checkN5BMandatoryFields,
+  validateN5BMandatoryFields,
+  N5BMissingFieldError,
+  N5B_FIELD_LABELS,
 } from '@/lib/documents/n5b-field-builder';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
@@ -557,5 +560,211 @@ describe('Field Mapping Documentation', () => {
         `Expected string ${wizardKey} → ${caseDataKey} to map correctly`
       ).toBe(value);
     }
+  });
+});
+
+// =============================================================================
+// GENERATION GATE TESTS - Verify N5BMissingFieldError is thrown correctly
+// =============================================================================
+
+describe('N5B Generation Gate (validateN5BMandatoryFields)', () => {
+  test('throws N5BMissingFieldError with all missing Q9a-Q9g fields listed', () => {
+    // Simulate wizard facts WITHOUT any Q9 answers
+    const incompleteWizardFacts = {
+      notice_service_method: 'First class post',
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      n5b_q20_paper_determination: true,
+      // Q9a-Q9g are MISSING!
+    };
+
+    const fields = buildN5BFields(incompleteWizardFacts);
+
+    try {
+      validateN5BMandatoryFields(fields);
+      expect.fail('Should have thrown N5BMissingFieldError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(N5BMissingFieldError);
+      const err = error as N5BMissingFieldError;
+
+      // All Q9a-Q9g should be listed as missing
+      expect(err.missingFields).toContain('n5b_q9a_after_feb_1997');
+      expect(err.missingFields).toContain('n5b_q9b_has_notice_not_ast');
+      expect(err.missingFields).toContain('n5b_q9c_has_exclusion_clause');
+      expect(err.missingFields).toContain('n5b_q9d_is_agricultural_worker');
+      expect(err.missingFields).toContain('n5b_q9e_is_succession_tenancy');
+      expect(err.missingFields).toContain('n5b_q9f_was_secure_tenancy');
+      expect(err.missingFields).toContain('n5b_q9g_is_schedule_10');
+
+      // Error message should include user-friendly labels
+      expect(err.message).toContain('N5B generation blocked');
+      expect(err.fieldLabels['n5b_q9a_after_feb_1997']).toBe(N5B_FIELD_LABELS['n5b_q9a_after_feb_1997']);
+    }
+  });
+
+  test('throws N5BMissingFieldError when Q19 is missing', () => {
+    const wizardFactsWithoutQ19 = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: true,
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+      notice_service_method: 'First class post',
+      n5b_q20_paper_determination: true,
+      // Q19 is MISSING!
+    };
+
+    const fields = buildN5BFields(wizardFactsWithoutQ19);
+
+    try {
+      validateN5BMandatoryFields(fields);
+      expect.fail('Should have thrown N5BMissingFieldError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(N5BMissingFieldError);
+      const err = error as N5BMissingFieldError;
+
+      expect(err.missingFields).toContain('n5b_q19_has_unreturned_prohibited_payment');
+    }
+  });
+
+  test('throws N5BMissingFieldError when Q20 is missing', () => {
+    const wizardFactsWithoutQ20 = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: true,
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+      notice_service_method: 'First class post',
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      // Q20 is MISSING!
+    };
+
+    const fields = buildN5BFields(wizardFactsWithoutQ20);
+
+    try {
+      validateN5BMandatoryFields(fields);
+      expect.fail('Should have thrown N5BMissingFieldError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(N5BMissingFieldError);
+      const err = error as N5BMissingFieldError;
+
+      expect(err.missingFields).toContain('n5b_q20_paper_determination');
+    }
+  });
+
+  test('throws N5BMissingFieldError when notice_service_method (Q10a) is missing', () => {
+    const wizardFactsWithoutServiceMethod = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: true,
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+      n5b_q19_has_unreturned_prohibited_payment: false,
+      n5b_q20_paper_determination: true,
+      // notice_service_method is MISSING!
+    };
+
+    const fields = buildN5BFields(wizardFactsWithoutServiceMethod);
+
+    try {
+      validateN5BMandatoryFields(fields);
+      expect.fail('Should have thrown N5BMissingFieldError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(N5BMissingFieldError);
+      const err = error as N5BMissingFieldError;
+
+      expect(err.missingFields).toContain('notice_service_method');
+    }
+  });
+
+  test('does NOT throw when all mandatory fields are provided (MQS negative framing)', () => {
+    // Complete wizard facts using exact MQS YAML field IDs
+    const completeWizardFacts = {
+      n5b_q9a_after_feb_1997: true,
+      n5b_q9b_no_notice_not_ast: true,       // Negative framing from MQS
+      n5b_q9c_no_exclusion_clause: true,     // Negative framing from MQS
+      n5b_q9d_not_agricultural_worker: true, // Negative framing from MQS
+      n5b_q9e_not_succession_tenancy: true,  // Negative framing from MQS
+      n5b_q9f_not_former_secure: true,       // Negative framing from MQS
+      n5b_q9g_not_schedule_10: true,         // Negative framing from MQS
+      notice_service_method: 'First class post',
+      n5b_q19_prohibited_payment: false,     // MQS uses this naming
+      n5b_q20_paper_determination: true,
+    };
+
+    const fields = buildN5BFields(completeWizardFacts);
+
+    // Should NOT throw
+    expect(() => validateN5BMandatoryFields(fields)).not.toThrow();
+  });
+});
+
+// =============================================================================
+// END-TO-END INVERSION TESTS - Verify NEGATIVE→POSITIVE framing works
+// =============================================================================
+
+describe('NEGATIVE→POSITIVE Framing Inversion (End-to-End)', () => {
+  test('compliant landlord: MQS YES (confirmed negation) → CaseData false (no disqualifier)', () => {
+    // Landlord answers YES to all Q9b-Q9g (confirming they DON'T have disqualifying conditions)
+    const compliantLandlordFacts = {
+      n5b_q9b_no_notice_not_ast: true,       // "Confirm NO notice..." → YES
+      n5b_q9c_no_exclusion_clause: true,     // "Confirm NO clause..." → YES
+      n5b_q9d_not_agricultural_worker: true, // "Confirm NOT agricultural..." → YES
+      n5b_q9e_not_succession_tenancy: true,  // "Confirm NOT succession..." → YES
+      n5b_q9f_not_former_secure: true,       // "Confirm NOT secure..." → YES
+      n5b_q9g_not_schedule_10: true,         // "Confirm NOT Schedule 10..." → YES
+    };
+
+    const fields = buildN5BFields(compliantLandlordFacts);
+
+    // All should be FALSE in CaseData (no disqualifying conditions)
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+    expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+    expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+    expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+    expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+    expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+  });
+
+  test('non-compliant landlord: MQS NO (has disqualifier) → CaseData true (disqualified)', () => {
+    // Landlord answers NO to Q9b (notice WAS served stating not AST)
+    const nonCompliantLandlordFacts = {
+      n5b_q9b_no_notice_not_ast: false,      // "Confirm NO notice..." → NO (notice WAS served)
+      n5b_q9c_no_exclusion_clause: true,
+      n5b_q9d_not_agricultural_worker: true,
+      n5b_q9e_not_succession_tenancy: true,
+      n5b_q9f_not_former_secure: true,
+      n5b_q9g_not_schedule_10: true,
+    };
+
+    const fields = buildN5BFields(nonCompliantLandlordFacts);
+
+    // Q9b should be TRUE in CaseData (disqualifying condition EXISTS)
+    expect(fields.n5b_q9b_has_notice_not_ast).toBe(true);
+
+    // Others should still be FALSE
+    expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+    expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+    expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+    expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+    expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+  });
+
+  test('Q9a does NOT invert (positive framing matches PDF)', () => {
+    // Q9a is already positive framing - no inversion needed
+    const factsWithQ9aTrue = { n5b_q9a_after_feb_1997: true };
+    const factsWithQ9aFalse = { n5b_q9a_after_feb_1997: false };
+
+    const fieldsTrue = buildN5BFields(factsWithQ9aTrue);
+    const fieldsFalse = buildN5BFields(factsWithQ9aFalse);
+
+    // Q9a should pass through unchanged (no inversion)
+    expect(fieldsTrue.n5b_q9a_after_feb_1997).toBe(true);
+    expect(fieldsFalse.n5b_q9a_after_feb_1997).toBe(false);
   });
 });
