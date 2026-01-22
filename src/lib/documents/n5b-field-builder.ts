@@ -5,17 +5,23 @@
  * to N5B-specific CaseData fields. It handles:
  * - Alias resolution (multiple wizard keys → single CaseData field)
  * - Robust boolean parsing ("true/false", "yes/no", 1/0, undefined)
- * - Unwrapping common wizard answer shapes (e.g. { value: "yes" })
- * - Validation of mandatory fields for court acceptance (where required)
+ * - NEGATIVE→POSITIVE framing inversion for Q9b-Q9g
+ * - Validation of mandatory fields for court acceptance
  *
  * N5B Questions covered (expanded to match newer N5B layouts):
  * - Q9a-Q9g: AST verification (Statement of Truth - MANDATORY)
  * - Q10a: Notice service method (MANDATORY)
- * - Licensing: HMO/Selective, valid licence, pending decision/TEN (if asked in wizard)
- * - Property condition / retaliation notices: Q15a–k (if asked in wizard)
- * - Compliance dates (EPC, Gas Safety, How to Rent)
- * - Tenant Fees Act 2019 compliance
- * - Paper determination consent
+ * - Q15-Q18: Compliance dates (EPC, Gas Safety, How to Rent)
+ * - Q19: Tenant Fees Act 2019 compliance
+ * - Q20: Paper determination consent
+ *
+ * CRITICAL FRAMING NOTE:
+ * The wizard asks Q9b-Q9g in NEGATIVE framing ("Confirm NO notice was served...")
+ * to make it easy for landlords (they answer YES to confirm compliance).
+ * But the PDF form uses POSITIVE framing ("HAS notice been given?").
+ *
+ * So when wizard has n5b_q9b_no_notice_not_ast = true (YES, confirmed NO notice),
+ * we need n5b_q9b_has_notice_not_ast = false (NO, notice was NOT given).
  */
 
 import type { CaseData } from './official-forms-filler';
@@ -125,19 +131,15 @@ export class N5BMissingFieldError extends Error {
 }
 
 // =============================================================================
-// WIZARD FIELD ALIASES
+// WIZARD FIELD ALIASES - POSITIVE FRAMING (direct mapping)
 // =============================================================================
 
 /**
- * Mapping of wizard field aliases to canonical N5BFields keys.
- * Each canonical field may have multiple wizard aliases.
- *
- * Notes:
- * - Include both flat keys and dotted paths for nested wizard structures
- * - Keep the canonical key FIRST if the wizard already uses it
+ * Fields that use POSITIVE framing in both wizard and CaseData.
+ * These map directly without inversion.
  */
-const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
-  // Q9a
+const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
+  // Q9a: Was tenancy created on or after 28 February 1997? (POSITIVE - YES is good)
   n5b_q9a_after_feb_1997: [
     'n5b_q9a_after_feb_1997',
     'ast_q9a_after_feb_1997',
@@ -147,72 +149,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'is_post_feb_1997_tenancy',
     'ast_verification.after_feb_1997',
     'section21.q9a_after_feb_1997',
-  ],
-
-  // Q9b
-  n5b_q9b_has_notice_not_ast: [
-    'n5b_q9b_has_notice_not_ast',
-    'ast_q9b_notice_not_ast',
-    'q9b_has_notice_not_ast',
-    'notice_not_ast_given',
-    'has_notice_not_ast',
-    'ast_verification.notice_not_ast',
-    'section21.q9b_notice_not_ast',
-  ],
-
-  // Q9c
-  n5b_q9c_has_exclusion_clause: [
-    'n5b_q9c_has_exclusion_clause',
-    'ast_q9c_exclusion_clause',
-    'q9c_has_exclusion_clause',
-    'has_exclusion_clause',
-    'tenancy_exclusion_clause',
-    'ast_verification.exclusion_clause',
-    'section21.q9c_exclusion_clause',
-  ],
-
-  // Q9d
-  n5b_q9d_is_agricultural_worker: [
-    'n5b_q9d_is_agricultural_worker',
-    'ast_q9d_agricultural_worker',
-    'q9d_is_agricultural_worker',
-    'is_agricultural_worker',
-    'tenant_is_agricultural_worker',
-    'ast_verification.agricultural_worker',
-    'section21.q9d_agricultural_worker',
-  ],
-
-  // Q9e
-  n5b_q9e_is_succession_tenancy: [
-    'n5b_q9e_is_succession_tenancy',
-    'ast_q9e_succession_tenancy',
-    'q9e_is_succession_tenancy',
-    'is_succession_tenancy',
-    'tenancy_by_succession',
-    'ast_verification.succession_tenancy',
-    'section21.q9e_succession_tenancy',
-  ],
-
-  // Q9f
-  n5b_q9f_was_secure_tenancy: [
-    'n5b_q9f_was_secure_tenancy',
-    'ast_q9f_secure_tenancy',
-    'q9f_was_secure_tenancy',
-    'was_secure_tenancy',
-    'former_secure_tenancy',
-    'ast_verification.secure_tenancy',
-    'section21.q9f_secure_tenancy',
-  ],
-
-  // Q9g
-  n5b_q9g_is_schedule_10: [
-    'n5b_q9g_is_schedule_10',
-    'ast_q9g_schedule_10',
-    'q9g_is_schedule_10',
-    'is_schedule_10',
-    'schedule_10_tenancy',
-    'ast_verification.schedule_10',
-    'section21.q9g_schedule_10',
   ],
 
   // Q10a: Notice service method
@@ -342,6 +278,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'epc_given_to_tenant',
     'compliance.epc_provided',
     'section21.epc_provided',
+    'epc_served',                // Actual wizard MQS field ID
+    'section21.epc_served',      // Wizard maps_to alias
   ],
   epc_provided_date: [
     'epc_provided_date',
@@ -350,6 +288,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'date_epc_provided',
     'compliance.epc_date',
     'section21.epc_date',
+    'epc_certificate_date',           // Actual wizard MQS field ID
+    'section21.epc_certificate_date', // Wizard maps_to alias
   ],
 
   // Gas
@@ -360,7 +300,7 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'gas_supply',
     'compliance.has_gas',
     'section21.has_gas',
-    'has_gas_appliances',
+    'has_gas_appliances',        // Actual wizard MQS field ID
   ],
   gas_safety_before_occupation: [
     'gas_safety_before_occupation',
@@ -384,7 +324,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'compliance.gas_check_date',
     'compliance.gas_safety_cert_date',
     'section21.gas_check_date',
-    'most_recent_gas_safety_check_date',
+    'gas_cert_date',              // Actual wizard MQS field ID
+    'section21.gas_cert_date',    // Wizard maps_to alias
   ],
   gas_safety_served_date: [
     'gas_safety_served_date',
@@ -409,6 +350,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'has_gas_cert_provided',
     'compliance.gas_safety_cert_provided',
     'section21.gas_provided',
+    'gas_cert_served',                   // Actual wizard MQS field ID
+    'section21.gas_safety_cert_served',  // Wizard maps_to alias
   ],
 
   // HTR
@@ -418,6 +361,8 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'has_how_to_rent_provided',
     'compliance.how_to_rent_provided',
     'section21.how_to_rent_provided',
+    'how_to_rent_served',             // Actual wizard MQS field ID
+    'section21.how_to_rent_served',   // Wizard maps_to alias
   ],
   how_to_rent_date: [
     'how_to_rent_date',
@@ -435,9 +380,179 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'section21.how_to_rent_method',
   ],
 
-  // Tenant Fees Act
+  // Q20: Paper Determination (POSITIVE - direct mapping)
+  n5b_q20_paper_determination: [
+    'n5b_q20_paper_determination',
+    'q20_paper_determination',
+    'paper_determination_consent',
+    'consent_to_paper_determination',
+    'agree_paper_determination',
+    'section21.q20_paper_determination',
+  ],
+};
+
+// =============================================================================
+// WIZARD FIELD ALIASES - NEGATIVE FRAMING (requires inversion)
+// =============================================================================
+
+/**
+ * Fields where the wizard uses NEGATIVE framing but CaseData uses POSITIVE framing.
+ *
+ * Wizard asks: "Confirm NO notice was served stating this is NOT an AST?"
+ * - User answers YES → they're confirming NO notice was served → has_notice_not_ast = false
+ * - User answers NO → notice WAS served → has_notice_not_ast = true
+ *
+ * So we INVERT the wizard value: CaseData = !wizardValue
+ */
+const NEGATIVE_TO_POSITIVE_MAPPINGS: Record<string, {
+  caseDataField: keyof N5BFields;
+  wizardAliases: string[];
+}> = {
+  // Q9b: Wizard asks "Confirm NO notice was served..." → CaseData "HAS notice been given?"
+  n5b_q9b: {
+    caseDataField: 'n5b_q9b_has_notice_not_ast',
+    wizardAliases: [
+      'n5b_q9b_no_notice_not_ast',  // Actual wizard field ID from MQS
+      'ast_q9b_no_notice_not_ast',
+      'q9b_no_notice_not_ast',
+      'no_notice_not_ast',
+      'confirmed_no_notice_not_ast',
+    ],
+  },
+
+  // Q9c: Wizard asks "Confirm agreement does NOT contain clause..." → CaseData "DOES contain clause?"
+  n5b_q9c: {
+    caseDataField: 'n5b_q9c_has_exclusion_clause',
+    wizardAliases: [
+      'n5b_q9c_no_exclusion_clause',  // Actual wizard field ID from MQS
+      'ast_q9c_no_exclusion_clause',
+      'q9c_no_exclusion_clause',
+      'no_exclusion_clause',
+      'confirmed_no_exclusion_clause',
+    ],
+  },
+
+  // Q9d: Wizard asks "Confirm tenant is NOT agricultural worker..." → CaseData "IS agricultural worker?"
+  n5b_q9d: {
+    caseDataField: 'n5b_q9d_is_agricultural_worker',
+    wizardAliases: [
+      'n5b_q9d_not_agricultural_worker',  // Actual wizard field ID from MQS
+      'ast_q9d_not_agricultural_worker',
+      'q9d_not_agricultural_worker',
+      'not_agricultural_worker',
+      'confirmed_not_agricultural_worker',
+    ],
+  },
+
+  // Q9e: Wizard asks "Confirm NOT succession tenancy..." → CaseData "IS succession tenancy?"
+  n5b_q9e: {
+    caseDataField: 'n5b_q9e_is_succession_tenancy',
+    wizardAliases: [
+      'n5b_q9e_not_succession_tenancy',  // Actual wizard field ID from MQS
+      'ast_q9e_not_succession_tenancy',
+      'q9e_not_succession_tenancy',
+      'not_succession_tenancy',
+      'confirmed_not_succession_tenancy',
+    ],
+  },
+
+  // Q9f: Wizard asks "Confirm NOT formerly secure tenancy..." → CaseData "WAS secure tenancy?"
+  n5b_q9f: {
+    caseDataField: 'n5b_q9f_was_secure_tenancy',
+    wizardAliases: [
+      'n5b_q9f_not_former_secure',  // Actual wizard field ID from MQS
+      'ast_q9f_not_former_secure',
+      'q9f_not_former_secure',
+      'not_former_secure',
+      'confirmed_not_former_secure',
+      'n5b_q9f_not_secure_tenancy',
+    ],
+  },
+
+  // Q9g: Wizard asks "Confirm NOT Schedule 10 tenancy..." → CaseData "IS Schedule 10?"
+  n5b_q9g: {
+    caseDataField: 'n5b_q9g_is_schedule_10',
+    wizardAliases: [
+      'n5b_q9g_not_schedule_10',  // Actual wizard field ID from MQS
+      'ast_q9g_not_schedule_10',
+      'q9g_not_schedule_10',
+      'not_schedule_10',
+      'confirmed_not_schedule_10',
+    ],
+  },
+};
+
+/**
+ * POSITIVE framing aliases for Q9b-Q9g (for cases where someone uses positive framing directly)
+ */
+const POSITIVE_Q9_ALIASES: Record<string, string[]> = {
+  n5b_q9b_has_notice_not_ast: [
+    'n5b_q9b_has_notice_not_ast',
+    'ast_q9b_notice_not_ast',
+    'q9b_has_notice_not_ast',
+    'notice_not_ast_given',
+    'has_notice_not_ast',
+    'ast_verification.notice_not_ast',  // Nested path alias
+    'section21.q9b_notice_not_ast',     // Nested path alias
+  ],
+
+  n5b_q9c_has_exclusion_clause: [
+    'n5b_q9c_has_exclusion_clause',
+    'ast_q9c_exclusion_clause',
+    'q9c_has_exclusion_clause',
+    'has_exclusion_clause',
+    'ast_verification.exclusion_clause',  // Nested path alias
+    'section21.q9c_exclusion_clause',     // Nested path alias
+  ],
+
+  n5b_q9d_is_agricultural_worker: [
+    'n5b_q9d_is_agricultural_worker',
+    'ast_q9d_agricultural_worker',
+    'q9d_is_agricultural_worker',
+    'is_agricultural_worker',
+    'ast_verification.agricultural_worker',  // Nested path alias
+    'section21.q9d_agricultural_worker',     // Nested path alias
+  ],
+
+  n5b_q9e_is_succession_tenancy: [
+    'n5b_q9e_is_succession_tenancy',
+    'ast_q9e_succession_tenancy',
+    'q9e_is_succession_tenancy',
+    'is_succession_tenancy',
+    'ast_verification.succession_tenancy',  // Nested path alias
+    'section21.q9e_succession_tenancy',     // Nested path alias
+  ],
+
+  n5b_q9f_was_secure_tenancy: [
+    'n5b_q9f_was_secure_tenancy',
+    'ast_q9f_secure_tenancy',
+    'q9f_was_secure_tenancy',
+    'was_secure_tenancy',
+    'ast_verification.secure_tenancy',  // Nested path alias
+    'section21.q9f_secure_tenancy',     // Nested path alias
+  ],
+
+  n5b_q9g_is_schedule_10: [
+    'n5b_q9g_is_schedule_10',
+    'ast_q9g_schedule_10',
+    'q9g_is_schedule_10',
+    'is_schedule_10',
+    'ast_verification.schedule_10',  // Nested path alias
+    'section21.q9g_schedule_10',     // Nested path alias
+  ],
+};
+
+// =============================================================================
+// Q19 SPECIAL HANDLING
+// =============================================================================
+
+/**
+ * Q19 field aliases - note the wizard uses "prohibited_payment" not "unreturned_prohibited_payment"
+ */
+const Q19_ALIASES = {
   n5b_q19_has_unreturned_prohibited_payment: [
     'n5b_q19_has_unreturned_prohibited_payment',
+    'n5b_q19_prohibited_payment',  // Actual wizard field ID from MQS
     'q19_prohibited_payment',
     'has_unreturned_prohibited_payment',
     'prohibited_payment_unreturned',
@@ -451,16 +566,6 @@ const N5B_WIZARD_ALIASES: Record<keyof N5BFields, string[]> = {
     'has_holding_deposit',
     'tenant_fees_act.holding_deposit',
     'section21.q19b_holding_deposit',
-  ],
-
-  // Paper determination
-  n5b_q20_paper_determination: [
-    'n5b_q20_paper_determination',
-    'q20_paper_determination',
-    'paper_determination_consent',
-    'consent_to_paper_determination',
-    'agree_paper_determination',
-    'section21.q20_paper_determination',
   ],
 };
 
@@ -617,114 +722,169 @@ function getWizardValueFromPaths(wizard: Record<string, unknown>, paths: string[
 export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields {
   const fields: N5BFields = {};
 
-  // Q9a-Q9g
+  // =========================================================================
+  // Q9a: Tenancy after 28 Feb 1997 (POSITIVE framing - direct mapping)
+  // =========================================================================
   fields.n5b_q9a_after_feb_1997 = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9a_after_feb_1997),
-  );
-  fields.n5b_q9b_has_notice_not_ast = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9b_has_notice_not_ast),
-  );
-  fields.n5b_q9c_has_exclusion_clause = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9c_has_exclusion_clause),
-  );
-  fields.n5b_q9d_is_agricultural_worker = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9d_is_agricultural_worker),
-  );
-  fields.n5b_q9e_is_succession_tenancy = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9e_is_succession_tenancy),
-  );
-  fields.n5b_q9f_was_secure_tenancy = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9f_was_secure_tenancy),
-  );
-  fields.n5b_q9g_is_schedule_10 = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q9g_is_schedule_10),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_q9a_after_feb_1997)
   );
 
-  // Q10a
-  fields.notice_service_method = parseNonEmptyString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.notice_service_method),
-  );
+  // =========================================================================
+  // Q9b-Q9g: NEGATIVE→POSITIVE INVERSION
+  // =========================================================================
+  // The wizard asks these questions in NEGATIVE framing (easier for landlords).
+  // We need to INVERT the values to get POSITIVE framing for the PDF.
+  //
+  // Example for Q9b:
+  // - Wizard: "Confirm NO notice was served stating NOT an AST?" → YES
+  // - Means: No notice was served
+  // - CaseData: n5b_q9b_has_notice_not_ast = false (notice was NOT given)
+  //
+  // INVERSION LOGIC:
+  // 1. First check for NEGATIVE framed wizard fields (the actual MQS field IDs)
+  // 2. If found, INVERT the boolean value
+  // 3. If not found, check for POSITIVE framed aliases (direct mapping)
+  // =========================================================================
 
-  // Licensing
-  fields.n5b_property_requires_licence = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_requires_licence),
+  // Q9b: Has notice been given that this is NOT an AST?
+  const q9bNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9b.wizardAliases)
   );
-  fields.n5b_has_valid_licence = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_has_valid_licence),
-  );
-  fields.n5b_licensing_decision_outstanding = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_licensing_decision_outstanding),
-  );
+  if (q9bNegative !== undefined) {
+    // INVERT: wizard YES (confirmed no notice) → CaseData false (no notice given)
+    fields.n5b_q9b_has_notice_not_ast = !q9bNegative;
+  } else {
+    // Try positive framing aliases (direct mapping)
+    fields.n5b_q9b_has_notice_not_ast = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9b_has_notice_not_ast)
+    );
+  }
 
-  // Property condition / retaliation
-  fields.n5b_property_condition_notice_served = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_served),
+  // Q9c: Does tenancy agreement contain an exclusion clause?
+  const q9cNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9c.wizardAliases)
   );
-  fields.n5b_property_condition_notice_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_date),
-  );
-  fields.n5b_property_condition_notice_suspended = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_suspended),
-  );
-  fields.n5b_property_condition_suspension_ended = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_suspension_ended),
-  );
-  fields.n5b_property_condition_suspension_end_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_suspension_end_date),
-  );
-  fields.n5b_property_condition_notice_revoked = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_revoked),
-  );
-  fields.n5b_property_condition_notice_quashed = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_notice_quashed),
-  );
-  fields.n5b_property_condition_non_revoke_reversed = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_non_revoke_reversed),
-  );
-  fields.n5b_property_condition_action_reversed = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_action_reversed),
-  );
-  fields.n5b_property_condition_defendant_complained_before_notice = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_defendant_complained_before_notice),
-  );
-  fields.n5b_property_condition_due_to_defendant_breach = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_due_to_defendant_breach),
-  );
-  fields.n5b_property_condition_on_market_for_sale = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_property_condition_on_market_for_sale),
-  );
-  fields.n5b_claimant_is_social_housing_provider = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_claimant_is_social_housing_provider),
-  );
-  fields.n5b_claimant_is_mortgagee_pre_tenancy = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_claimant_is_mortgagee_pre_tenancy),
-  );
+  if (q9cNegative !== undefined) {
+    // INVERT: wizard YES (confirmed no clause) → CaseData false (no clause exists)
+    fields.n5b_q9c_has_exclusion_clause = !q9cNegative;
+  } else {
+    fields.n5b_q9c_has_exclusion_clause = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9c_has_exclusion_clause)
+    );
+  }
 
-  // Q15-18 Compliance (as already used by your filler)
+  // Q9d: Is the defendant an agricultural worker?
+  const q9dNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9d.wizardAliases)
+  );
+  if (q9dNegative !== undefined) {
+    // INVERT: wizard YES (confirmed NOT agricultural) → CaseData false (is NOT agricultural)
+    fields.n5b_q9d_is_agricultural_worker = !q9dNegative;
+  } else {
+    fields.n5b_q9d_is_agricultural_worker = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9d_is_agricultural_worker)
+    );
+  }
+
+  // Q9e: Did tenancy arise by succession?
+  const q9eNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9e.wizardAliases)
+  );
+  if (q9eNegative !== undefined) {
+    // INVERT: wizard YES (confirmed NOT succession) → CaseData false (is NOT succession)
+    fields.n5b_q9e_is_succession_tenancy = !q9eNegative;
+  } else {
+    fields.n5b_q9e_is_succession_tenancy = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9e_is_succession_tenancy)
+    );
+  }
+
+  // Q9f: Was the tenancy formerly a secure tenancy?
+  const q9fNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9f.wizardAliases)
+  );
+  if (q9fNegative !== undefined) {
+    // INVERT: wizard YES (confirmed NOT former secure) → CaseData false (was NOT secure)
+    fields.n5b_q9f_was_secure_tenancy = !q9fNegative;
+  } else {
+    fields.n5b_q9f_was_secure_tenancy = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9f_was_secure_tenancy)
+    );
+  }
+
+  // Q9g: Was tenancy granted under Schedule 10 of LGHA 1989?
+  const q9gNegative = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, NEGATIVE_TO_POSITIVE_MAPPINGS.n5b_q9g.wizardAliases)
+  );
+  if (q9gNegative !== undefined) {
+    // INVERT: wizard YES (confirmed NOT schedule 10) → CaseData false (is NOT schedule 10)
+    fields.n5b_q9g_is_schedule_10 = !q9gNegative;
+  } else {
+    fields.n5b_q9g_is_schedule_10 = parseN5BBoolean(
+      getWizardValueFromPaths(wizardFacts, POSITIVE_Q9_ALIASES.n5b_q9g_is_schedule_10)
+    );
+  }
+
+  // =========================================================================
+  // Q10a: Notice service method (string - direct mapping)
+  // =========================================================================
+  const serviceMethod = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.notice_service_method
+  );
+  if (typeof serviceMethod === 'string' && serviceMethod.trim()) {
+    fields.notice_service_method = serviceMethod.trim();
+  }
+
+  // =========================================================================
+  // Q15: EPC (direct mapping)
+  // =========================================================================
   fields.epc_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.epc_provided)
   );
-  fields.epc_provided_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.epc_provided_date),
-  );
+  const epcDate = getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.epc_provided_date);
+  if (typeof epcDate === 'string' && epcDate.trim()) {
+    fields.epc_provided_date = epcDate.trim();
+  }
 
+  // =========================================================================
+  // Q16-Q17: Gas Safety (direct mapping)
+  // =========================================================================
   fields.has_gas_at_property = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.has_gas_at_property),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.has_gas_at_property)
   );
   fields.gas_safety_before_occupation = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_before_occupation),
-  );
-  fields.gas_safety_before_occupation_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_before_occupation_date),
-  );
-  fields.gas_safety_check_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_check_date),
-  );
-  fields.gas_safety_served_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_served_date),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.gas_safety_before_occupation)
   );
 
-  const gasServiceDates = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_service_dates);
+  const gasBeforeDate = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.gas_safety_before_occupation_date
+  );
+  if (typeof gasBeforeDate === 'string' && gasBeforeDate.trim()) {
+    fields.gas_safety_before_occupation_date = gasBeforeDate.trim();
+  }
+
+  const gasCheckDate = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.gas_safety_check_date
+  );
+  if (typeof gasCheckDate === 'string' && gasCheckDate.trim()) {
+    fields.gas_safety_check_date = gasCheckDate.trim();
+  }
+
+  const gasServedDate = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.gas_safety_served_date
+  );
+  if (typeof gasServedDate === 'string' && gasServedDate.trim()) {
+    fields.gas_safety_served_date = gasServedDate.trim();
+  }
+
+  const gasServiceDates = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.gas_safety_service_dates
+  );
   if (Array.isArray(gasServiceDates)) {
     fields.gas_safety_service_dates = gasServiceDates
       .map(unwrapWizardAnswer)
@@ -733,34 +893,57 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
   }
 
   fields.gas_safety_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.gas_safety_provided),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.gas_safety_provided)
   );
 
+  // =========================================================================
+  // Q18: How to Rent (direct mapping)
+  // =========================================================================
   fields.how_to_rent_provided = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_provided),
-  );
-  fields.how_to_rent_date = parseDateString(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_date),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.how_to_rent_provided)
   );
 
-  const htrMethodRaw = getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.how_to_rent_method);
-  if (typeof unwrapWizardAnswer(htrMethodRaw) === 'string') {
-    const normalized = String(unwrapWizardAnswer(htrMethodRaw)).toLowerCase().trim();
-    if (['hardcopy', 'hard copy', 'hard_copy'].includes(normalized)) fields.how_to_rent_method = 'hardcopy';
-    if (['email', 'e-mail'].includes(normalized)) fields.how_to_rent_method = 'email';
+  const htrDate = getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.how_to_rent_date);
+  if (typeof htrDate === 'string' && htrDate.trim()) {
+    fields.how_to_rent_date = htrDate.trim();
   }
 
-  // Q19
+  const htrMethod = getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.how_to_rent_method);
+  if (typeof htrMethod === 'string') {
+    const normalizedMethod = htrMethod.toLowerCase().trim();
+    if (normalizedMethod === 'hardcopy' || normalizedMethod === 'hard copy' || normalizedMethod === 'hard_copy') {
+      fields.how_to_rent_method = 'hardcopy';
+    } else if (normalizedMethod === 'email' || normalizedMethod === 'e-mail') {
+      fields.how_to_rent_method = 'email';
+    }
+  }
+
+  // =========================================================================
+  // Q19: Tenant Fees Act 2019 (direct mapping with special field name)
+  // =========================================================================
   fields.n5b_q19_has_unreturned_prohibited_payment = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19_has_unreturned_prohibited_payment),
-  );
-  fields.n5b_q19b_holding_deposit = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q19b_holding_deposit),
+    getWizardValueFromPaths(wizardFacts, Q19_ALIASES.n5b_q19_has_unreturned_prohibited_payment)
   );
 
-  // Q20
+  // Q19b: Holding deposit - handle select values
+  const q19bValue = getWizardValueFromPaths(wizardFacts, Q19_ALIASES.n5b_q19b_holding_deposit);
+  if (typeof q19bValue === 'string') {
+    // Handle select options: "no", "yes_compliant", "yes_breach"
+    const normalized = q19bValue.toLowerCase().trim();
+    if (normalized === 'no') {
+      fields.n5b_q19b_holding_deposit = false;
+    } else if (normalized === 'yes_compliant' || normalized === 'yes_breach' || normalized === 'yes') {
+      fields.n5b_q19b_holding_deposit = true;
+    }
+  } else {
+    fields.n5b_q19b_holding_deposit = parseN5BBoolean(q19bValue);
+  }
+
+  // =========================================================================
+  // Q20: Paper Determination (direct mapping)
+  // =========================================================================
   fields.n5b_q20_paper_determination = parseN5BBoolean(
-    getWizardValueFromPaths(wizardFacts, N5B_WIZARD_ALIASES.n5b_q20_paper_determination),
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_q20_paper_determination)
   );
 
   return fields;
