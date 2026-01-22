@@ -197,6 +197,63 @@ function tryFormatEpochToLocalYmd(epoch: number): string | undefined {
 }
 
 /**
+ * Try to interpret “date-ish” objects commonly returned by form libs / APIs:
+ * - { year, month, day } (month is 1-12)
+ * - { yyyy, mm, dd }
+ * - { date: "YYYY-MM-DD" }
+ */
+function tryFormatDateObjectToLocalYmd(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+
+  const obj = value as Record<string, unknown>;
+
+  // { date: "YYYY-MM-DD" }
+  if (typeof obj.date === 'string' && obj.date.trim() !== '') {
+    return obj.date;
+  }
+
+  // { year, month, day }
+  const year = obj.year;
+  const month = obj.month;
+  const day = obj.day;
+
+  if (
+    typeof year === 'number' &&
+    typeof month === 'number' &&
+    typeof day === 'number' &&
+    Number.isFinite(year) &&
+    Number.isFinite(month) &&
+    Number.isFinite(day)
+  ) {
+    const y = year;
+    const m = String(month).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  // { yyyy, mm, dd }
+  const yyyy = obj.yyyy;
+  const mm = obj.mm;
+  const dd = obj.dd;
+
+  if (
+    typeof yyyy === 'number' &&
+    typeof mm === 'number' &&
+    typeof dd === 'number' &&
+    Number.isFinite(yyyy) &&
+    Number.isFinite(mm) &&
+    Number.isFinite(dd)
+  ) {
+    const y = yyyy;
+    const m = String(mm).padStart(2, '0');
+    const d = String(dd).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  return undefined;
+}
+
+/**
  * Resolve a string field from facts using alias list.
  * Returns the first non-undefined, non-null, non-empty-string value.
  */
@@ -212,9 +269,20 @@ function resolveStringField(
       continue;
     }
 
-    // If it's a string, return it
+    // If it's a string, return it (but also support numeric-epoch strings safely)
     if (typeof value === 'string') {
-      return value;
+      const trimmed = value.trim();
+      if (trimmed === '') continue;
+
+      // If the string is an integer-like epoch, try converting it.
+      // (e.g. "1706745600" or "1706745600000")
+      if (/^\d{9,14}$/.test(trimmed)) {
+        const asNum = Number(trimmed);
+        const epoch = tryFormatEpochToLocalYmd(asNum);
+        if (epoch) return epoch;
+      }
+
+      return trimmed;
     }
 
     // If it's a Date, convert to YYYY-MM-DD using local date parts (timezone safe)
@@ -227,6 +295,10 @@ function resolveStringField(
       const epoch = tryFormatEpochToLocalYmd(value);
       return epoch ?? String(value);
     }
+
+    // If it's a date-like object, try to normalize
+    const objDate = tryFormatDateObjectToLocalYmd(value);
+    if (objDate) return objDate;
   }
 
   return undefined;
