@@ -137,6 +137,7 @@ describe('Compliance Timing Types and Sanitization', () => {
   describe('Field to label mappings', () => {
     it('has mappings for all expected fields', () => {
       const expectedFields = [
+        'tenancy_start_date',
         'epc_timing',
         'gas_safety_timing',
         'gas_safety_expiry',
@@ -152,6 +153,7 @@ describe('Compliance Timing Types and Sanitization', () => {
 
     it('has category mappings for all expected fields', () => {
       const expectedFields = [
+        'tenancy_start_date',
         'epc_timing',
         'gas_safety_timing',
         'gas_safety_expiry',
@@ -473,6 +475,55 @@ describe('Fulfill Endpoint Compliance Block Response', () => {
  * These tests verify that there are no bypass/override mechanisms
  * for compliance timing validation.
  */
+describe('Missing Required Dates Blocking', () => {
+  it('blocks when tenancy_start_date is missing', () => {
+    // Regression test: Previously validation would silently pass when dates were missing
+    const result = validateComplianceTiming({
+      epc_provided_date: '2024-01-10',
+      // Missing tenancy_start_date
+    });
+
+    expect(result.isValid).toBe(false);
+    expect(result.issues.some((i: any) => i.field === 'tenancy_start_date')).toBe(true);
+    const startDateIssue = result.issues.find((i: any) => i.field === 'tenancy_start_date');
+    expect(startDateIssue?.message).toContain('required');
+  });
+
+  it('blocks when tenancy_start_date is empty string', () => {
+    const result = validateComplianceTiming({
+      tenancy_start_date: '',
+      epc_provided_date: '2024-01-10',
+    });
+
+    expect(result.isValid).toBe(false);
+    expect(result.issues.some((i: any) => i.field === 'tenancy_start_date')).toBe(true);
+  });
+
+  it('blocks when tenancy_start_date is unparseable', () => {
+    const result = validateComplianceTiming({
+      tenancy_start_date: 'not-a-date',
+      epc_provided_date: '2024-01-10',
+    });
+
+    expect(result.isValid).toBe(false);
+    expect(result.issues.some((i: any) => i.field === 'tenancy_start_date')).toBe(true);
+    const startDateIssue = result.issues.find((i: any) => i.field === 'tenancy_start_date');
+    expect(startDateIssue?.message).toContain('could not be parsed');
+  });
+
+  it('returns early on missing tenancy_start_date without checking other timings', () => {
+    const result = validateComplianceTiming({
+      // Missing tenancy_start_date
+      epc_provided_date: '2024-01-20',
+      how_to_rent_provided_date: '2024-01-18',
+    });
+
+    // Should only have the tenancy_start_date issue, not EPC or HTR timing issues
+    expect(result.issues).toHaveLength(1);
+    expect(result.issues[0].field).toBe('tenancy_start_date');
+  });
+});
+
 describe('No Bypass Paths for Compliance Timing', () => {
   it('validateComplianceTiming does not accept bypass flags', () => {
     // Using imported validateComplianceTiming

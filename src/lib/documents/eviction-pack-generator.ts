@@ -59,9 +59,9 @@ import {
   assertJointPartiesComplete,
   type ValidationResult,
   type CrossDocumentData,
-  type ComplianceTimingData,
   type JointPartyData,
 } from './court-ready-validator';
+import { buildComplianceTimingDataWithFallback } from './compliance-timing-facts';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 import { calculateSection21ExpiryDate, type Section21DateParams, type ServiceMethod } from './notice-date-calculator';
 
@@ -1143,21 +1143,17 @@ async function generateEnglandOrWalesEvictionPack(
     // P0 FIX: COMPLIANCE TIMING VALIDATION (Jan 2026)
     // Validate that compliance documents were provided at legally required times.
     // HARD BLOCK: No bypass allowed - compliance timing is a statutory requirement.
+    //
+    // CANONICAL BUILDER (Jan 2026 consistency fix):
+    // Uses buildComplianceTimingDataWithFallback() to ensure all endpoints use
+    // the same field alias resolution. This prevents inconsistent behavior
+    // between wizard generate, fulfill, and regenerate flows.
+    // The evictionCase provides fallback values for key fields like tenancy_start_date.
     // =========================================================================
-    const timingData: ComplianceTimingData = {
-      tenancy_start_date: evictionCase.tenancy_start_date,
-      epc_provided_date: wizardFacts?.epc_provided_date,
-      gas_safety_check_date: wizardFacts?.gas_safety_check_date,
-      gas_safety_provided_date: wizardFacts?.gas_safety_served_date,
-      has_gas_at_property: wizardFacts?.has_gas_appliances,
-      // NEW (Jan 2026): Pre-occupation gas safety compliance fields
-      gas_safety_before_occupation: wizardFacts?.gas_safety_before_occupation,
-      gas_safety_before_occupation_date: wizardFacts?.gas_safety_before_occupation_date,
-      gas_safety_record_served_pre_occupation_date: wizardFacts?.gas_safety_record_served_pre_occupation_date,
-      how_to_rent_provided_date: wizardFacts?.how_to_rent_date,
-      deposit_received_date: wizardFacts?.deposit_received_date,
-      prescribed_info_served_date: wizardFacts?.prescribed_info_served_date,
-    };
+    const timingData = buildComplianceTimingDataWithFallback(
+      wizardFacts as Record<string, unknown> | null,
+      evictionCase
+    );
 
     const timingResult = validateComplianceTiming(timingData);
     if (!timingResult.isValid) {

@@ -20,10 +20,8 @@ import {
   type ComplianceTimingBlockResponse,
   type RegenerateOrderResponse,
 } from '@/lib/documents/compliance-timing-types';
-import {
-  validateComplianceTiming,
-  type ComplianceTimingData,
-} from '@/lib/documents/court-ready-validator';
+import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
+import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
 
 export interface RegenerateOrderRequest {
   case_id: string;
@@ -132,22 +130,14 @@ export async function POST(request: Request) {
     // P0 FIX: PREFLIGHT COMPLIANCE TIMING VALIDATION (Jan 2026)
     // CRITICAL: Validate compliance timing BEFORE deleting any documents.
     // This prevents data loss if compliance validation would fail during regeneration.
+    //
+    // CANONICAL BUILDER (Jan 2026 consistency fix):
+    // Uses buildComplianceTimingDataFromFacts() to ensure all endpoints use the
+    // same field alias resolution. This prevents inconsistent behavior between
+    // wizard generate, fulfill, and regenerate flows.
     // =========================================================================
     const wizardFacts = caseData.collected_facts as Record<string, unknown> | null;
-    const timingData: ComplianceTimingData = {
-      tenancy_start_date: (caseData as any).tenancy_start_date || wizardFacts?.tenancy_start_date as string,
-      occupation_date: wizardFacts?.occupation_date as string,
-      epc_provided_date: wizardFacts?.epc_provided_date as string,
-      gas_safety_check_date: wizardFacts?.gas_safety_check_date as string,
-      gas_safety_provided_date: wizardFacts?.gas_safety_served_date as string,
-      has_gas_at_property: wizardFacts?.has_gas_appliances as boolean,
-      gas_safety_before_occupation: wizardFacts?.gas_safety_before_occupation as boolean,
-      gas_safety_before_occupation_date: wizardFacts?.gas_safety_before_occupation_date as string,
-      gas_safety_record_served_pre_occupation_date: wizardFacts?.gas_safety_record_served_pre_occupation_date as string,
-      how_to_rent_provided_date: wizardFacts?.how_to_rent_date as string,
-      deposit_received_date: wizardFacts?.deposit_received_date as string,
-      prescribed_info_served_date: wizardFacts?.prescribed_info_served_date as string,
-    };
+    const timingData = buildComplianceTimingDataFromFacts(wizardFacts);
 
     const preflightTimingResult = validateComplianceTiming(timingData);
     if (!preflightTimingResult.isValid) {
