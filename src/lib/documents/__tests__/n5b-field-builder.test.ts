@@ -209,6 +209,133 @@ describe('buildN5BFields', () => {
       expect(fields.n5b_q9a_after_feb_1997).toBe(true);
       expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
     });
+
+    // =========================================================================
+    // NEGATIVE→POSITIVE INVERSION TESTS
+    // These test the actual wizard MQS field IDs which use NEGATIVE framing
+    // =========================================================================
+
+    test('INVERTS n5b_q9b_no_notice_not_ast (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NO notice was served?" → YES
+      // Means: NO notice was served → has_notice_not_ast = false
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: true,  // User confirmed NO notice
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9b_no_notice_not_ast (wizard NO → CaseData true)', () => {
+      // Wizard: "Confirm NO notice was served?" → NO
+      // Means: notice WAS served → has_notice_not_ast = true
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: false,  // User said NO (notice was served)
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(true);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9c_no_exclusion_clause (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm agreement does NOT contain exclusion clause?" → YES
+      // Means: NO exclusion clause → has_exclusion_clause = false
+      const wizardFacts = {
+        n5b_q9c_no_exclusion_clause: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9d_not_agricultural_worker (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm tenant is NOT agricultural worker?" → YES
+      // Means: tenant is NOT agricultural worker → is_agricultural_worker = false
+      const wizardFacts = {
+        n5b_q9d_not_agricultural_worker: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9e_not_succession_tenancy (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT succession tenancy?" → YES
+      // Means: NOT succession tenancy → is_succession_tenancy = false
+      const wizardFacts = {
+        n5b_q9e_not_succession_tenancy: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9f_not_former_secure (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT formerly secure tenancy?" → YES
+      // Means: NOT formerly secure → was_secure_tenancy = false
+      const wizardFacts = {
+        n5b_q9f_not_former_secure: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);  // INVERTED
+    });
+
+    test('INVERTS n5b_q9g_not_schedule_10 (wizard YES → CaseData false)', () => {
+      // Wizard: "Confirm NOT Schedule 10 tenancy?" → YES
+      // Means: NOT Schedule 10 → is_schedule_10 = false
+      const wizardFacts = {
+        n5b_q9g_not_schedule_10: true,
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9g_is_schedule_10).toBe(false);  // INVERTED
+    });
+
+    test('handles all Q9 negative-framed MQS fields together', () => {
+      // This mimics what the actual wizard sends for a compliant landlord
+      const wizardFacts = {
+        n5b_q9a_after_feb_1997: true,  // Positive framing (direct)
+        n5b_q9b_no_notice_not_ast: true,  // Negative framing (invert)
+        n5b_q9c_no_exclusion_clause: true,  // Negative framing (invert)
+        n5b_q9d_not_agricultural_worker: true,  // Negative framing (invert)
+        n5b_q9e_not_succession_tenancy: true,  // Negative framing (invert)
+        n5b_q9f_not_former_secure: true,  // Negative framing (invert)
+        n5b_q9g_not_schedule_10: true,  // Negative framing (invert)
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      // Q9a is positive framing - remains true
+      expect(fields.n5b_q9a_after_feb_1997).toBe(true);
+
+      // Q9b-Q9g are negative framing - should all be inverted to false
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);
+      expect(fields.n5b_q9d_is_agricultural_worker).toBe(false);
+      expect(fields.n5b_q9e_is_succession_tenancy).toBe(false);
+      expect(fields.n5b_q9f_was_secure_tenancy).toBe(false);
+      expect(fields.n5b_q9g_is_schedule_10).toBe(false);
+    });
+
+    test('handles string boolean values for negative-framed fields', () => {
+      const wizardFacts = {
+        n5b_q9b_no_notice_not_ast: 'yes',  // String true
+        n5b_q9c_no_exclusion_clause: 'true',  // String true
+      };
+
+      const fields = buildN5BFields(wizardFacts);
+
+      expect(fields.n5b_q9b_has_notice_not_ast).toBe(false);  // INVERTED from 'yes'
+      expect(fields.n5b_q9c_has_exclusion_clause).toBe(false);  // INVERTED from 'true'
+    });
   });
 
   describe('Q10a: Notice Service Method', () => {
