@@ -85,13 +85,41 @@ export type RegenerateOrderResponse =
   | RegenerateErrorResponse;
 
 /**
- * Type guard to check if response is a compliance timing block
+ * Standard success response from fulfill endpoint
+ */
+export interface FulfillSuccessResponse {
+  success: true;
+  status: 'fulfilled' | 'already_fulfilled' | 'processing';
+  documents?: number;
+  message?: string;
+}
+
+/**
+ * Standard error response from fulfill endpoint
+ */
+export interface FulfillErrorResponse {
+  success: false;
+  error: string;
+  message?: string;
+}
+
+/**
+ * Union type for all possible fulfill endpoint responses
+ */
+export type FulfillOrderResponse =
+  | FulfillSuccessResponse
+  | ComplianceTimingBlockResponse
+  | FulfillErrorResponse;
+
+/**
+ * Type guard to check if response is a compliance timing block.
+ * Works with both RegenerateOrderResponse and FulfillOrderResponse.
  */
 export function isComplianceTimingBlock(
-  response: RegenerateOrderResponse
+  response: RegenerateOrderResponse | FulfillOrderResponse | { ok?: boolean; success?: boolean; code?: string }
 ): response is ComplianceTimingBlockResponse {
   return (
-    response.ok === false &&
+    ('ok' in response && response.ok === false || 'success' in response && response.success === false) &&
     'code' in response &&
     response.code === 'COMPLIANCE_TIMING_BLOCK'
   );

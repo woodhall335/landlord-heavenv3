@@ -18,19 +18,16 @@ import { fulfillOrder } from '@/lib/payments/fulfillment';
 import {
   sanitizeComplianceIssues,
   type ComplianceTimingBlockResponse,
+  type RegenerateOrderResponse,
 } from '@/lib/documents/compliance-timing-types';
+import {
+  validateComplianceTiming,
+  type ComplianceTimingData,
+} from '@/lib/documents/court-ready-validator';
 
 export interface RegenerateOrderRequest {
   case_id: string;
   product?: string; // Optional product type for validation
-}
-
-export interface RegenerateOrderResponse {
-  ok: boolean;
-  regenerated_count?: number;
-  document_ids?: string[];
-  error?: string;
-  message?: string;
 }
 
 export async function POST(request: Request) {
@@ -129,6 +126,48 @@ export async function POST(request: Request) {
         },
         { status: 422 }
       );
+    }
+
+    // =========================================================================
+    // P0 FIX: PREFLIGHT COMPLIANCE TIMING VALIDATION (Jan 2026)
+    // CRITICAL: Validate compliance timing BEFORE deleting any documents.
+    // This prevents data loss if compliance validation would fail during regeneration.
+    // =========================================================================
+    const wizardFacts = caseData.collected_facts as Record<string, unknown> | null;
+    const timingData: ComplianceTimingData = {
+      tenancy_start_date: (caseData as any).tenancy_start_date || wizardFacts?.tenancy_start_date as string,
+      occupation_date: wizardFacts?.occupation_date as string,
+      epc_provided_date: wizardFacts?.epc_provided_date as string,
+      gas_safety_check_date: wizardFacts?.gas_safety_check_date as string,
+      gas_safety_provided_date: wizardFacts?.gas_safety_served_date as string,
+      has_gas_at_property: wizardFacts?.has_gas_appliances as boolean,
+      gas_safety_before_occupation: wizardFacts?.gas_safety_before_occupation as boolean,
+      gas_safety_before_occupation_date: wizardFacts?.gas_safety_before_occupation_date as string,
+      gas_safety_record_served_pre_occupation_date: wizardFacts?.gas_safety_record_served_pre_occupation_date as string,
+      how_to_rent_provided_date: wizardFacts?.how_to_rent_date as string,
+      deposit_received_date: wizardFacts?.deposit_received_date as string,
+      prescribed_info_served_date: wizardFacts?.prescribed_info_served_date as string,
+    };
+
+    const preflightTimingResult = validateComplianceTiming(timingData);
+    if (!preflightTimingResult.isValid) {
+      // BLOCK REGENERATION: Compliance timing violations detected
+      // Return structured 422 response WITHOUT deleting any documents
+      console.error('🚨 PREFLIGHT: Regeneration blocked - compliance timing violations:', preflightTimingResult.issues);
+
+      const blockingIssues = preflightTimingResult.issues.filter(i => i.severity === 'error');
+      const sanitizedIssues = sanitizeComplianceIssues(blockingIssues);
+
+      const response: ComplianceTimingBlockResponse = {
+        ok: false,
+        error: 'compliance_timing_block',
+        code: 'COMPLIANCE_TIMING_BLOCK',
+        issues: sanitizedIssues,
+        tenancy_start_date: timingData.tenancy_start_date,
+        message: "We can't regenerate your Section 21 pack because some compliance requirements haven't been met. Please update your case details and try again.",
+      };
+
+      return NextResponse.json(response, { status: 422 });
     }
 
     // Get existing FINAL documents to delete (NOT previews)
