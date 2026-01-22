@@ -15,6 +15,10 @@ import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import {
+  sanitizeComplianceIssues,
+  type ComplianceTimingBlockResponse,
+} from '@/lib/documents/compliance-timing-types';
 
 export interface RegenerateOrderRequest {
   case_id: string;
@@ -223,18 +227,22 @@ export async function POST(request: Request) {
 
       // Handle compliance timing block errors with structured response
       if (fulfillmentError?.code === 'COMPLIANCE_TIMING_BLOCK') {
+        // Log raw issues server-side (includes internal field codes)
         console.error('Regeneration blocked - compliance timing violations:', fulfillmentError.issues);
-        return NextResponse.json(
-          {
-            ok: false,
-            error: 'compliance_timing_block',
-            code: 'COMPLIANCE_TIMING_BLOCK',
-            issues: fulfillmentError.issues || [],
-            tenancy_start_date: fulfillmentError.tenancy_start_date,
-            message: "We can't generate your Section 21 pack yet because some compliance documents weren't provided at the required times.",
-          },
-          { status: 422 }
-        );
+
+        // Sanitize issues for UI - adds documentLabel and category, keeps field for internal use
+        const sanitizedIssues = sanitizeComplianceIssues(fulfillmentError.issues || []);
+
+        const response: ComplianceTimingBlockResponse = {
+          ok: false,
+          error: 'compliance_timing_block',
+          code: 'COMPLIANCE_TIMING_BLOCK',
+          issues: sanitizedIssues,
+          tenancy_start_date: fulfillmentError.tenancy_start_date,
+          message: "We can't generate your Section 21 pack yet because some compliance requirements haven't been met.",
+        };
+
+        return NextResponse.json(response, { status: 422 });
       }
 
       const errorMessage = fulfillmentError?.message || 'Document regeneration failed';
