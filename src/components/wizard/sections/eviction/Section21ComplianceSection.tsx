@@ -33,17 +33,14 @@
  * - has_valid_licence: Is it licensed (if required)?
  * - no_retaliatory_notice: Is notice being served more than 6 months after repair complaint?
  *
- * N5B-specific (accelerated possession eligibility) - positive framing:
- * - n5b_q9a_after_feb_1997: Was tenancy created on or after 28 Feb 1997? (Yes = good)
- * - n5b_q9b_has_notice_not_ast: Has notice been served saying NOT an AST? (Yes = bad)
- * - n5b_q9c_has_exclusion_clause: Does agreement state NOT an AST? (Yes = bad)
- * - n5b_q9d_is_agricultural_worker: Is tenant an agricultural worker? (Yes = bad)
- * - n5b_q9e_is_succession_tenancy: Did tenancy arise by succession? (Yes = bad)
- * - n5b_q9f_was_secure_tenancy: Was this previously a secure tenancy? (Yes = bad)
- * - n5b_q9g_is_schedule_10: Was tenancy granted under Schedule 10 LGHA 1989? (Yes = bad)
- * - n5b_q19_has_unreturned_prohibited_payment: Has unreturned prohibited payment been taken? (Yes = bad)
- * - n5b_q19b_holding_deposit: Was a holding deposit taken? (informational only)
- * - n5b_q20_paper_determination: Consent to paper determination? (informational only)
+ * N5B-specific notes:
+ * Some stored facts are "disqualifier flags" where TRUE means "bad / disqualifying".
+ * To match existing Yes/No toggle behaviour (Yes=green, No=red + blocking),
+ * we present the UI as a positive/compliance statement and INVERT the stored boolean:
+ *   UI value   = !facts.disqualifierFlag
+ *   onChange(v) => set disqualifierFlag = !v
+ *
+ * This keeps UI consistent: good answer shows green, bad answer shows red + message.
  */
 
 'use client';
@@ -91,14 +88,27 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
   const hasGasAppliances = facts.has_gas_appliances === true;
   const licensingRequired = facts.licensing_required && facts.licensing_required !== 'not_required';
 
+  // N5B disqualifier flags (TRUE = disqualifying/bad) are inverted for UI display:
+  const q9b_ok_no_notice_not_ast = facts.n5b_q9b_has_notice_not_ast === undefined ? undefined : !facts.n5b_q9b_has_notice_not_ast;
+  const q9c_ok_no_exclusion_clause = facts.n5b_q9c_has_exclusion_clause === undefined ? undefined : !facts.n5b_q9c_has_exclusion_clause;
+  const q9d_ok_not_agricultural_worker = facts.n5b_q9d_is_agricultural_worker === undefined ? undefined : !facts.n5b_q9d_is_agricultural_worker;
+  const q9e_ok_not_succession = facts.n5b_q9e_is_succession_tenancy === undefined ? undefined : !facts.n5b_q9e_is_succession_tenancy;
+  const q9f_ok_not_former_secure = facts.n5b_q9f_was_secure_tenancy === undefined ? undefined : !facts.n5b_q9f_was_secure_tenancy;
+  const q9g_ok_not_schedule_10 = facts.n5b_q9g_is_schedule_10 === undefined ? undefined : !facts.n5b_q9g_is_schedule_10;
+
+  const q19_ok_no_unreturned_prohibited_payment =
+    facts.n5b_q19_has_unreturned_prohibited_payment === undefined
+      ? undefined
+      : !facts.n5b_q19_has_unreturned_prohibited_payment;
+
   return (
     <div className="space-y-8">
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
         <h4 className="text-sm font-medium text-amber-900 mb-1">Section 21 Validity Requirements</h4>
         <p className="text-sm text-amber-800">
-          Section 21 notices can only be served if key compliance requirements are met. Failure
-          to comply with requirements like deposit protection, gas safety, EPC and the How to Rent
-          guide can make the notice INVALID.
+          Section 21 notices can only be served if key compliance requirements are met. Failure to
+          comply with requirements like deposit protection, gas safety, EPC and the How to Rent guide
+          can make the notice INVALID.
         </p>
       </div>
 
@@ -137,7 +147,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="Must be protected within 30 days of receipt."
               blockingMessage="Section 21 cannot be used if the deposit is not protected."
               sectionId={SECTION_ID}
-              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
             {facts.deposit_protected === true && (
@@ -186,10 +195,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="You must provide the tenant with prescribed information about the deposit protection."
               blockingMessage="Section 21 cannot be used if prescribed information was not served."
               sectionId={SECTION_ID}
-              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
-            {/* Deposit Returned */}
             <ValidatedYesNoToggle
               id="deposit_returned"
               label="Has the deposit been returned to the tenant?"
@@ -227,7 +234,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="A copy of the current CP12 must be provided annually."
               blockingMessage="Section 21 cannot be used if the gas safety certificate was not provided."
               sectionId={SECTION_ID}
-              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
             {facts.gas_safety_cert_served === true && (
@@ -300,7 +306,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="The property must have a valid EPC with a rating of E or above."
           blockingMessage="Section 21 cannot be used if the EPC was not provided."
           sectionId={SECTION_ID}
-          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
 
         {facts.epc_served === true && (
@@ -334,7 +339,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="Required for tenancies starting on or after 1 October 2015."
           blockingMessage="Section 21 cannot be used if the 'How to Rent' guide was not provided."
           sectionId={SECTION_ID}
-          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
 
         {facts.how_to_rent_served === true && (
@@ -394,7 +398,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               required
               blockingMessage="Section 21 cannot be used if the property requires a licence but does not have one."
               sectionId={SECTION_ID}
-              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
           </div>
         )}
@@ -413,13 +416,14 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="Section 21 notices served within 6 months of certain repair complaints may be deemed retaliatory and invalid."
           blockingMessage="This may be considered a retaliatory eviction. Consider waiting or using Section 8."
           sectionId={SECTION_ID}
-          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
       </div>
 
       {/* N5B Accelerated Possession - AST Verification (Q9a-Q9g) */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">N5B Accelerated Possession - AST Eligibility</h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+          N5B Accelerated Possession - AST Eligibility
+        </h3>
         <p className="text-sm text-gray-600 mb-4">
           These questions determine eligibility for accelerated possession (N5B). Answer each question
           truthfully. If any answer disqualifies the tenancy as an AST, accelerated possession may not
@@ -427,6 +431,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
         </p>
 
         <div className="space-y-3">
+          {/* Q9(a) - stored as "good" boolean already (Yes = good) */}
           <ValidatedYesNoToggle
             id="n5b_q9a_after_feb_1997"
             label="Q9(a): Was the tenancy created on or after 28 February 1997?"
@@ -434,80 +439,79 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             onChange={(v) => onUpdate({ n5b_q9a_after_feb_1997: v })}
             required
             helperText="Most ASTs are created after this date. Answer 'No' only if the tenancy predates 28 February 1997."
-            sectionId={SECTION_ID}
-            // Here "No" is disqualifying => default blockWhen=false is correct
             blockingMessage="If the tenancy predates 28 February 1997, accelerated possession may not be available."
+            sectionId={SECTION_ID}
           />
 
+          {/* Q9(b) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9b_has_notice_not_ast"
-            label="Q9(b): Has the landlord served notice that the tenancy is not an AST?"
-            value={facts.n5b_q9b_has_notice_not_ast}
-            onChange={(v) => onUpdate({ n5b_q9b_has_notice_not_ast: v })}
+            label="Q9(b): Was NO notice served stating the tenancy is not an AST?"
+            value={q9b_ok_no_notice_not_ast}
+            onChange={(v) => onUpdate({ n5b_q9b_has_notice_not_ast: !v })}
             required
-            helperText="Answer 'Yes' only if a notice was served stating the tenancy is not an assured shorthold tenancy. Most landlords answer 'No'."
+            helperText="Most landlords answer 'Yes'. Answer 'No' only if you served a notice saying it is not an AST."
             blockingMessage="If notice was served stating this is not an AST, accelerated possession may not be available."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
+          {/* Q9(c) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9c_has_exclusion_clause"
-            label="Q9(c): Does the tenancy agreement state that it is not an AST?"
-            value={facts.n5b_q9c_has_exclusion_clause}
-            onChange={(v) => onUpdate({ n5b_q9c_has_exclusion_clause: v })}
+            label="Q9(c): Does the tenancy agreement NOT state that it is not an AST?"
+            value={q9c_ok_no_exclusion_clause}
+            onChange={(v) => onUpdate({ n5b_q9c_has_exclusion_clause: !v })}
             required
-            helperText="Answer 'Yes' only if the written agreement contains a clause excluding AST status. Most standard AST agreements do not have this."
+            helperText="Most AST agreements answer 'Yes'. Answer 'No' only if the agreement says it is not an AST."
             blockingMessage="If the agreement excludes AST status, accelerated possession may not be available."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
+          {/* Q9(d) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9d_is_agricultural_worker"
-            label="Q9(d): Is the tenant an agricultural worker?"
-            value={facts.n5b_q9d_is_agricultural_worker}
-            onChange={(v) => onUpdate({ n5b_q9d_is_agricultural_worker: v })}
+            label="Q9(d): Is the tenant NOT an agricultural worker?"
+            value={q9d_ok_not_agricultural_worker}
+            onChange={(v) => onUpdate({ n5b_q9d_is_agricultural_worker: !v })}
             required
-            helperText="Answer 'Yes' only if the tenant is an agricultural worker occupying the property as part of their employment (e.g., tied farm worker accommodation)."
+            helperText="Answer 'No' only if this is an agricultural worker tenancy (e.g., tied farm worker accommodation)."
             blockingMessage="Agricultural worker tenancies are not ASTs. Consider the standard possession route."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
+          {/* Q9(e) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9e_is_succession_tenancy"
-            label="Q9(e): Did the tenancy arise by succession (on death of the previous tenant)?"
-            value={facts.n5b_q9e_is_succession_tenancy}
-            onChange={(v) => onUpdate({ n5b_q9e_is_succession_tenancy: v })}
+            label="Q9(e): Did the tenancy NOT arise by succession (on death of a previous tenant)?"
+            value={q9e_ok_not_succession}
+            onChange={(v) => onUpdate({ n5b_q9e_is_succession_tenancy: !v })}
             required
-            helperText="Answer 'Yes' only if this tenancy was passed on when a Rent Act protected tenant died. This is rare for modern tenancies."
+            helperText="Most landlords answer 'Yes'. Answer 'No' only if the tenancy arose by succession."
             blockingMessage="Succession tenancies are not eligible for accelerated possession."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
+          {/* Q9(f) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9f_was_secure_tenancy"
-            label="Q9(f): Was the tenancy previously a secure tenancy?"
-            value={facts.n5b_q9f_was_secure_tenancy}
-            onChange={(v) => onUpdate({ n5b_q9f_was_secure_tenancy: v })}
+            label="Q9(f): Was this NOT previously a secure tenancy?"
+            value={q9f_ok_not_former_secure}
+            onChange={(v) => onUpdate({ n5b_q9f_was_secure_tenancy: !v })}
             required
-            helperText="Answer 'Yes' only if this tenancy was transferred from a local authority or housing association as a secure tenancy."
+            helperText="Most landlords answer 'Yes'. Answer 'No' only if it was previously a secure tenancy."
             blockingMessage="Former secure tenancies are not eligible for accelerated possession."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
+          {/* Q9(g) - disqualifier stored as TRUE=bad -> invert for UI */}
           <ValidatedYesNoToggle
             id="n5b_q9g_is_schedule_10"
-            label="Q9(g): Was the tenancy granted under Schedule 10 of the LGHA 1989?"
-            value={facts.n5b_q9g_is_schedule_10}
-            onChange={(v) => onUpdate({ n5b_q9g_is_schedule_10: v })}
+            label="Q9(g): Was the tenancy NOT granted under Schedule 10 of the LGHA 1989?"
+            value={q9g_ok_not_schedule_10}
+            onChange={(v) => onUpdate({ n5b_q9g_is_schedule_10: !v })}
             required
-            helperText="Answer 'Yes' only if this relates to long leasehold enfranchisement under the Local Government and Housing Act 1989. This is very rare."
+            helperText="Most landlords answer 'Yes'. Answer 'No' only if it was granted under Schedule 10."
             blockingMessage="Schedule 10 tenancies are not eligible for accelerated possession."
-            blockWhen={true}
             sectionId={SECTION_ID}
           />
         </div>
@@ -521,18 +525,19 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           used if prohibited payments have been taken and not repaid.
         </p>
 
+        {/* Q19 - disqualifier stored as TRUE=bad -> invert for UI */}
         <ValidatedYesNoToggle
           id="n5b_q19_has_unreturned_prohibited_payment"
-          label="Q19: Has the landlord taken any prohibited payment under the Tenant Fees Act 2019 that has NOT been repaid?"
-          value={facts.n5b_q19_has_unreturned_prohibited_payment}
-          onChange={(v) => onUpdate({ n5b_q19_has_unreturned_prohibited_payment: v })}
+          label="Q19: Have all prohibited payments (if any) been repaid to the tenant?"
+          value={q19_ok_no_unreturned_prohibited_payment}
+          onChange={(v) => onUpdate({ n5b_q19_has_unreturned_prohibited_payment: !v })}
           required
-          helperText="Prohibited payments include admin fees, viewing fees, checkout fees, reference fees, etc. Answer 'Yes' only if such a payment was taken AND has not been returned to the tenant."
+          helperText="Answer 'Yes' if no prohibited payments were taken, or if any were taken and have been fully repaid."
           blockingMessage="Section 21 cannot be used while an unreturned prohibited payment remains outstanding. The payment must be repaid before serving notice."
-          blockWhen={true}
           sectionId={SECTION_ID}
         />
 
+        {/* Q19(b) informational only - no blockingMessage */}
         <ValidatedYesNoToggle
           id="n5b_q19b_holding_deposit"
           label="Q19(b): Was a holding deposit taken?"
@@ -555,7 +560,6 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           required
           helperText="If you select 'Yes', the court may decide the case on the papers without requiring you to attend a hearing (this can be faster)."
           sectionId={SECTION_ID}
-          // informational; no blockingMessage
         />
       </div>
     </div>
