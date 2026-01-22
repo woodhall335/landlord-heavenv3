@@ -603,14 +603,17 @@ export interface CaseData {
 
   // =========================================================================
   // N5B QUESTIONS 9a-9g: AST VERIFICATION (Statement of Truth - MANDATORY)
+  // All use POSITIVE framing matching the N5B form directly:
+  // - Q9a: Yes = tenancy after 28 Feb 1997 (good for AST eligibility)
+  // - Q9b-Q9g: Yes = disqualifying condition exists (bad for AST eligibility)
   // =========================================================================
-  n5b_q9a_after_feb_1997?: boolean;      // Q9a: Tenancy created after 28 Feb 1997
-  n5b_q9b_no_notice_not_ast?: boolean;   // Q9b: No notice given that NOT an AST
-  n5b_q9c_no_exclusion_clause?: boolean; // Q9c: No exclusion clause in agreement
-  n5b_q9d_not_agricultural_worker?: boolean; // Q9d: Not agricultural worker
-  n5b_q9e_not_succession_tenancy?: boolean;  // Q9e: Not succession tenancy
-  n5b_q9f_not_former_secure?: boolean;   // Q9f: Not former secure tenancy
-  n5b_q9g_not_schedule_10?: boolean;     // Q9g: Not Schedule 10 LGHA 1989
+  n5b_q9a_after_feb_1997?: boolean;        // Q9a: Was tenancy created after 28 Feb 1997? (Yes = good)
+  n5b_q9b_has_notice_not_ast?: boolean;    // Q9b: Has notice been served that NOT an AST? (Yes = bad)
+  n5b_q9c_has_exclusion_clause?: boolean;  // Q9c: Does agreement state NOT an AST? (Yes = bad)
+  n5b_q9d_is_agricultural_worker?: boolean; // Q9d: Is tenant an agricultural worker? (Yes = bad)
+  n5b_q9e_is_succession_tenancy?: boolean;  // Q9e: Did tenancy arise by succession? (Yes = bad)
+  n5b_q9f_was_secure_tenancy?: boolean;    // Q9f: Was this previously a secure tenancy? (Yes = bad)
+  n5b_q9g_is_schedule_10?: boolean;        // Q9g: Was tenancy granted under Schedule 10? (Yes = bad)
 
   // =========================================================================
   // N5B QUESTIONS 15-18: COMPLIANCE DATES
@@ -631,9 +634,12 @@ export interface CaseData {
 
   // =========================================================================
   // N5B QUESTIONS 19: TENANT FEES ACT 2019
+  // Q19 uses POSITIVE framing: "Has unreturned prohibited payment been taken?"
+  // Yes = problem (blocks S21), No = compliant
+  // Q19b (holding deposit) is informational only - no blocking for either answer
   // =========================================================================
-  n5b_q19_prohibited_payment?: boolean;  // Q19: Prohibited payment taken and not refunded
-  n5b_q19b_holding_deposit?: 'no' | 'yes_compliant' | 'yes_breach'; // Q19b: Holding deposit
+  n5b_q19_has_unreturned_prohibited_payment?: boolean; // Q19: Has unreturned prohibited payment? (Yes = bad)
+  n5b_q19b_holding_deposit?: boolean; // Q19b: Was holding deposit taken? (informational)
 
   // =========================================================================
   // N5B QUESTION 20: PAPER DETERMINATION CONSENT
@@ -1363,60 +1369,59 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // =========================================================================
   // CRITICAL: These answers form part of the Statement of Truth.
   // Courts WILL reject claims with missing answers.
+  //
+  // IMPORTANT: Wizard questions now use POSITIVE framing matching N5B directly.
+  // NO INVERSION NEEDED - wizard values map directly to PDF checkboxes.
+  // - Q9a: Yes = tenancy after 28 Feb 1997 (eligible for accelerated)
+  // - Q9b-Q9g: Yes = disqualifying condition exists (NOT eligible)
   // =========================================================================
 
-  // Q9a: Tenancy created on or after 28 February 1997
+  // Q9a: Was tenancy created on or after 28 February 1997?
   if (data.n5b_q9a_after_feb_1997 !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES, data.n5b_q9a_after_feb_1997, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_NO, !data.n5b_q9a_after_feb_1997, ctx);
   }
 
-  // Q9b: Notice given that tenancy is NOT an AST (answer should be NO for valid S21)
-  if (data.n5b_q9b_no_notice_not_ast !== undefined) {
-    // NOTE: The wizard asks "Confirm NO notice was given saying NOT AST" (YES = correct)
-    // The form asks "Has notice been given...?" so we INVERT the answer
-    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_YES, !data.n5b_q9b_no_notice_not_ast, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_NO, data.n5b_q9b_no_notice_not_ast, ctx);
+  // Q9b: Has notice been given that the tenancy is NOT an AST?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9b_has_notice_not_ast !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_YES, data.n5b_q9b_has_notice_not_ast, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_NO, !data.n5b_q9b_has_notice_not_ast, ctx);
   }
 
-  // Q9c: Exclusion clause in tenancy agreement (answer should be NO for valid S21)
-  if (data.n5b_q9c_no_exclusion_clause !== undefined) {
-    // Wizard asks "Confirm NO exclusion clause" (YES = correct)
-    // Form asks "Does agreement contain provision...?" so we INVERT
-    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_YES, !data.n5b_q9c_no_exclusion_clause, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_NO, data.n5b_q9c_no_exclusion_clause, ctx);
+  // Q9c: Does the tenancy agreement state that it is NOT an AST?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9c_has_exclusion_clause !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_YES, data.n5b_q9c_has_exclusion_clause, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_NO, !data.n5b_q9c_has_exclusion_clause, ctx);
   }
 
-  // Q9d: Agricultural worker (answer should be NO for valid S21)
-  if (data.n5b_q9d_not_agricultural_worker !== undefined) {
-    // Wizard asks "Confirm NOT agricultural worker" (YES = correct)
-    // Form asks "Is defendant agricultural worker...?" so we INVERT
-    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_YES, !data.n5b_q9d_not_agricultural_worker, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_NO, data.n5b_q9d_not_agricultural_worker, ctx);
+  // Q9d: Is the tenant an agricultural worker?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9d_is_agricultural_worker !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_YES, data.n5b_q9d_is_agricultural_worker, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_NO, !data.n5b_q9d_is_agricultural_worker, ctx);
   }
 
-  // Q9e: Succession tenancy from Rent Act (answer should be NO for valid S21)
-  if (data.n5b_q9e_not_succession_tenancy !== undefined) {
-    // Wizard asks "Confirm NOT succession tenancy" (YES = correct)
-    // Form asks "Did tenancy arise on death...?" so we INVERT
-    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_YES, !data.n5b_q9e_not_succession_tenancy, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_NO, data.n5b_q9e_not_succession_tenancy, ctx);
+  // Q9e: Did the tenancy arise by succession (on death of previous tenant)?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9e_is_succession_tenancy !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_YES, data.n5b_q9e_is_succession_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_NO, !data.n5b_q9e_is_succession_tenancy, ctx);
   }
 
-  // Q9f: Former secure tenancy (answer should be NO for valid S21)
-  if (data.n5b_q9f_not_former_secure !== undefined) {
-    // Wizard asks "Confirm NOT former secure tenancy" (YES = correct)
-    // Form asks "Was tenancy formerly secure...?" so we INVERT
-    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_YES, !data.n5b_q9f_not_former_secure, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_NO, data.n5b_q9f_not_former_secure, ctx);
+  // Q9f: Was the tenancy previously a secure tenancy?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9f_was_secure_tenancy !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_YES, data.n5b_q9f_was_secure_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_NO, !data.n5b_q9f_was_secure_tenancy, ctx);
   }
 
-  // Q9g: Schedule 10 LGHA 1989 tenancy (answer should be NO for valid S21)
-  if (data.n5b_q9g_not_schedule_10 !== undefined) {
-    // Wizard asks "Confirm NOT Schedule 10 tenancy" (YES = correct)
-    // Form asks "Was tenancy granted under Schedule 10...?" so we INVERT
-    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_YES, !data.n5b_q9g_not_schedule_10, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_NO, data.n5b_q9g_not_schedule_10, ctx);
+  // Q9g: Was the tenancy granted under Schedule 10 of the LGHA 1989?
+  // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
+  if (data.n5b_q9g_is_schedule_10 !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_YES, data.n5b_q9g_is_schedule_10, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_NO, !data.n5b_q9g_is_schedule_10, ctx);
   }
 
   // === Q10: NOTICE SERVICE (REQUIRED) ===
@@ -1614,19 +1619,18 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // =========================================================================
   // Q19: TENANT FEES ACT 2019 COMPLIANCE
   // =========================================================================
-  // Q19: Prohibited payment taken and not refunded (answer should be NO for valid S21)
-  if (data.n5b_q19_prohibited_payment !== undefined) {
-    // Wizard asks "Has prohibited payment been taken that hasn't been refunded?"
-    // Answer NO for valid S21 (no prohibited payment, or all refunded)
-    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_YES, data.n5b_q19_prohibited_payment, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_NO, !data.n5b_q19_prohibited_payment, ctx);
+  // Q19: "Has landlord taken any prohibited payment that has NOT been repaid?"
+  // Direct mapping: Yes = problem (blocks S21), No = compliant
+  if (data.n5b_q19_has_unreturned_prohibited_payment !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_YES, data.n5b_q19_has_unreturned_prohibited_payment, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_NO, !data.n5b_q19_has_unreturned_prohibited_payment, ctx);
   }
 
-  // Q19b: Holding deposit (on/after 1 June 2019)
+  // Q19b: Was a holding deposit taken? (informational only - no blocking)
+  // Direct boolean mapping: Yes = holding deposit taken, No = no holding deposit
   if (data.n5b_q19b_holding_deposit !== undefined) {
-    const holdingDeposit = data.n5b_q19b_holding_deposit;
-    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_YES, holdingDeposit !== 'no', ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, holdingDeposit === 'no', ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_YES, data.n5b_q19b_holding_deposit === true, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, data.n5b_q19b_holding_deposit === false, ctx);
   }
 
   // =========================================================================

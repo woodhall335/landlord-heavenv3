@@ -33,11 +33,17 @@
  * - has_valid_licence: Is it licensed (if required)?
  * - no_retaliatory_notice: Is notice being served more than 6 months after repair complaint?
  *
- * N5B-specific (accelerated possession eligibility):
- * - n5b_q9a_after_feb_1997 ... n5b_q9g_not_schedule_10
- * - n5b_q19_prohibited_payment
- * - n5b_q19b_holding_deposit
- * - n5b_q20_paper_determination
+ * N5B-specific (accelerated possession eligibility) - all use POSITIVE framing to match N5B form:
+ * - n5b_q9a_after_feb_1997: Was tenancy created on or after 28 Feb 1997? (Yes = good)
+ * - n5b_q9b_has_notice_not_ast: Has notice been served saying NOT an AST? (Yes = bad)
+ * - n5b_q9c_has_exclusion_clause: Does agreement state NOT an AST? (Yes = bad)
+ * - n5b_q9d_is_agricultural_worker: Is tenant an agricultural worker? (Yes = bad)
+ * - n5b_q9e_is_succession_tenancy: Did tenancy arise by succession? (Yes = bad)
+ * - n5b_q9f_was_secure_tenancy: Was this previously a secure tenancy? (Yes = bad)
+ * - n5b_q9g_is_schedule_10: Was tenancy granted under Schedule 10 LGHA 1989? (Yes = bad)
+ * - n5b_q19_has_unreturned_prohibited_payment: Has unreturned prohibited payment been taken? (Yes = bad)
+ * - n5b_q19b_holding_deposit: Was a holding deposit taken? (informational only)
+ * - n5b_q20_paper_determination: Consent to paper determination? (informational only)
  */
 
 'use client';
@@ -414,9 +420,9 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           N5B Accelerated Possession - AST Eligibility
         </h3>
         <p className="text-sm text-gray-600 mb-4">
-          These questions help determine whether accelerated possession (N5B) is available. Answer based
-          on the tenancy. If any answer indicates the tenancy is not an AST, accelerated possession may
-          not be appropriate.
+          These questions determine eligibility for accelerated possession (N5B). Answer each question
+          truthfully. If any answer disqualifies the tenancy as an AST, accelerated possession may not
+          be available.
         </p>
 
         <div className="space-y-3">
@@ -426,61 +432,73 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             value={facts.n5b_q9a_after_feb_1997}
             onChange={(v) => onUpdate({ n5b_q9a_after_feb_1997: v })}
             required
+            helperText="Most ASTs are created after this date. Answer 'No' only if the tenancy predates 28 February 1997."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9b_no_notice_not_ast"
-            label="Q9(b): Was there NO notice stating it was not an AST?"
-            value={facts.n5b_q9b_no_notice_not_ast}
-            onChange={(v) => onUpdate({ n5b_q9b_no_notice_not_ast: v })}
+            id="n5b_q9b_has_notice_not_ast"
+            label="Q9(b): Has the landlord served notice that the tenancy is not an AST?"
+            value={facts.n5b_q9b_has_notice_not_ast}
+            onChange={(v) => onUpdate({ n5b_q9b_has_notice_not_ast: v })}
             required
+            helperText="Answer 'Yes' only if a notice was served stating the tenancy is not an assured shorthold tenancy. Most landlords answer 'No'."
+            blockingMessage="If notice was served stating this is not an AST, accelerated possession may not be available."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9c_no_exclusion_clause"
-            label="Q9(c): Does the tenancy agreement NOT exclude the AST provisions?"
-            value={facts.n5b_q9c_no_exclusion_clause}
-            onChange={(v) => onUpdate({ n5b_q9c_no_exclusion_clause: v })}
+            id="n5b_q9c_has_exclusion_clause"
+            label="Q9(c): Does the tenancy agreement state that it is not an AST?"
+            value={facts.n5b_q9c_has_exclusion_clause}
+            onChange={(v) => onUpdate({ n5b_q9c_has_exclusion_clause: v })}
             required
+            helperText="Answer 'Yes' only if the written agreement contains a clause excluding AST status. Most standard AST agreements do not have this."
+            blockingMessage="If the agreement excludes AST status, accelerated possession may not be available."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9d_not_agricultural_worker"
-            label="Q9(d): Is the agricultural worker condition NOT fulfilled?"
-            value={facts.n5b_q9d_not_agricultural_worker}
-            onChange={(v) => onUpdate({ n5b_q9d_not_agricultural_worker: v })}
+            id="n5b_q9d_is_agricultural_worker"
+            label="Q9(d): Is the tenant an agricultural worker?"
+            value={facts.n5b_q9d_is_agricultural_worker}
+            onChange={(v) => onUpdate({ n5b_q9d_is_agricultural_worker: v })}
             required
-            helperText="Only answer 'No' if this is an agricultural worker tenancy (e.g., tied farm worker accommodation)."
+            helperText="Answer 'Yes' only if the tenant is an agricultural worker occupying the property as part of their employment (e.g., tied farm worker accommodation)."
+            blockingMessage="Agricultural worker tenancies are not ASTs. Consider the standard possession route."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9e_not_succession_tenancy"
-            label="Q9(e): Did the tenancy NOT arise by succession under the Housing Act 1988?"
-            value={facts.n5b_q9e_not_succession_tenancy}
-            onChange={(v) => onUpdate({ n5b_q9e_not_succession_tenancy: v })}
+            id="n5b_q9e_is_succession_tenancy"
+            label="Q9(e): Did the tenancy arise by succession (on death of the previous tenant)?"
+            value={facts.n5b_q9e_is_succession_tenancy}
+            onChange={(v) => onUpdate({ n5b_q9e_is_succession_tenancy: v })}
             required
+            helperText="Answer 'Yes' only if this tenancy was passed on when a Rent Act protected tenant died. This is rare for modern tenancies."
+            blockingMessage="Succession tenancies under the Rent Act are not eligible for accelerated possession."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9f_not_former_secure"
-            label="Q9(f): Was this NOT previously a secure tenancy under the Housing Act 1985?"
-            value={facts.n5b_q9f_not_former_secure}
-            onChange={(v) => onUpdate({ n5b_q9f_not_former_secure: v })}
+            id="n5b_q9f_was_secure_tenancy"
+            label="Q9(f): Was the tenancy previously a secure tenancy?"
+            value={facts.n5b_q9f_was_secure_tenancy}
+            onChange={(v) => onUpdate({ n5b_q9f_was_secure_tenancy: v })}
             required
+            helperText="Answer 'Yes' only if this tenancy was transferred from a local authority or housing association as a secure tenancy."
+            blockingMessage="Former secure tenancies are not eligible for accelerated possession."
             sectionId={SECTION_ID}
           />
 
           <ValidatedYesNoToggle
-            id="n5b_q9g_not_schedule_10"
-            label="Q9(g): Did the tenancy NOT arise under Schedule 10 of the Local Government and Housing Act 1989?"
-            value={facts.n5b_q9g_not_schedule_10}
-            onChange={(v) => onUpdate({ n5b_q9g_not_schedule_10: v })}
+            id="n5b_q9g_is_schedule_10"
+            label="Q9(g): Was the tenancy granted under Schedule 10 of the LGHA 1989?"
+            value={facts.n5b_q9g_is_schedule_10}
+            onChange={(v) => onUpdate({ n5b_q9g_is_schedule_10: v })}
             required
+            helperText="Answer 'Yes' only if this relates to long leasehold enfranchisement under the Local Government and Housing Act 1989. This is very rare."
+            blockingMessage="Schedule 10 tenancies are not eligible for accelerated possession."
             sectionId={SECTION_ID}
           />
         </div>
@@ -490,27 +508,27 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Tenant Fees Act 2019</h3>
         <p className="text-sm text-gray-600 mb-4">
-          The Tenant Fees Act 2019 prohibits landlords from charging certain fees or requiring prohibited payments.
+          The Tenant Fees Act 2019 prohibits landlords from charging certain fees. Section 21 cannot be
+          used if prohibited payments have been taken and not repaid.
         </p>
 
         <ValidatedYesNoToggle
-          id="n5b_q19_prohibited_payment"
-          label="Q19: Has the tenant paid any prohibited payment under the Tenant Fees Act 2019?"
-          value={facts.n5b_q19_prohibited_payment}
-          onChange={(v) => onUpdate({ n5b_q19_prohibited_payment: v })}
+          id="n5b_q19_has_unreturned_prohibited_payment"
+          label="Q19: Has the landlord taken any prohibited payment under the Tenant Fees Act 2019 that has NOT been repaid?"
+          value={facts.n5b_q19_has_unreturned_prohibited_payment}
+          onChange={(v) => onUpdate({ n5b_q19_has_unreturned_prohibited_payment: v })}
           required
-          helperText="Prohibited payments include admin fees, viewing fees, checkout fees, etc. If taken, they may need to be returned before Section 21."
-          blockingMessage="Section 21 may be invalid if a prohibited payment has been taken and not returned."
+          helperText="Prohibited payments include admin fees, viewing fees, checkout fees, reference fees, etc. Answer 'Yes' only if such a payment was taken AND has not been returned to the tenant."
+          blockingMessage="Section 21 cannot be used while an unreturned prohibited payment remains outstanding. The payment must be repaid before serving notice."
           sectionId={SECTION_ID}
         />
 
         <ValidatedYesNoToggle
           id="n5b_q19b_holding_deposit"
           label="Q19(b): Was a holding deposit taken?"
-          // Store as boolean consistently (no 'yes'/'no' strings in UI)
-          value={facts.n5b_q19b_holding_deposit as boolean}
+          value={facts.n5b_q19b_holding_deposit}
           onChange={(v) => onUpdate({ n5b_q19b_holding_deposit: v })}
-          helperText="A holding deposit (max one week's rent) to reserve the property."
+          helperText="A holding deposit (maximum one week's rent) to reserve the property before the tenancy starts. Either answer is acceptable - this is for record-keeping only."
           sectionId={SECTION_ID}
         />
       </div>
