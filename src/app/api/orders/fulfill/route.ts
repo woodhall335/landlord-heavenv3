@@ -14,17 +14,15 @@ import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/se
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import {
+  sanitizeComplianceIssues,
+  type ComplianceTimingBlockResponse,
+  type FulfillOrderResponse,
+} from '@/lib/documents/compliance-timing-types';
 
 export interface FulfillOrderRequest {
   case_id: string;
   product?: string;
-}
-
-export interface FulfillOrderResponse {
-  success: boolean;
-  status: 'fulfilled' | 'already_fulfilled' | 'processing';
-  documents?: number;
-  message?: string;
 }
 
 export async function POST(request: Request) {
@@ -188,8 +186,6 @@ export async function POST(request: Request) {
       );
     } catch (fulfillmentError: any) {
       // Mark order as failed
-      const errorMessage = fulfillmentError?.message || 'Document generation failed';
-
       await adminClient
         .from('orders')
         .update({
@@ -197,6 +193,27 @@ export async function POST(request: Request) {
         })
         .eq('id', order.id);
 
+      // Handle compliance timing block errors with structured response
+      if (fulfillmentError?.code === 'COMPLIANCE_TIMING_BLOCK') {
+        // Log raw issues server-side (includes internal field codes)
+        console.error('Fulfillment blocked - compliance timing violations:', fulfillmentError.issues);
+
+        // Sanitize issues for UI - adds documentLabel and category, keeps field for internal use
+        const sanitizedIssues = sanitizeComplianceIssues(fulfillmentError.issues || []);
+
+        const response: ComplianceTimingBlockResponse = {
+          ok: false,
+          error: 'compliance_timing_block',
+          code: 'COMPLIANCE_TIMING_BLOCK',
+          issues: sanitizedIssues,
+          tenancy_start_date: fulfillmentError.tenancy_start_date,
+          message: "We can't generate your Section 21 pack yet because some compliance requirements haven't been met.",
+        };
+
+        return NextResponse.json(response, { status: 422 });
+      }
+
+      const errorMessage = fulfillmentError?.message || 'Document generation failed';
       console.error('Fulfillment retry failed:', errorMessage, fulfillmentError);
 
       return NextResponse.json(
