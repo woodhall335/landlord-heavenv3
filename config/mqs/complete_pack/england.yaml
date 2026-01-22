@@ -79,6 +79,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: notice_served_date
       - id: notice_expiry_date
         label: "Notice expiry date (if known)"
         inputType: date
@@ -93,6 +94,7 @@ questions:
         # ===================================================================
         helperText: "Leave blank to auto-calculate based on notice type and grounds. For Section 8, the minimum notice period varies by ground (14-60 days)."
         width: half
+        maps_to: notice_expiry_date
         validation:
           # Custom validation rule for Section 8 expiry date
           # UI should call validateSection8ExpiryDate() if eviction_route is section_8
@@ -103,9 +105,6 @@ questions:
               - notice_served_date
               - section8_grounds
               - tenancy_start_date
-    maps_to:
-      - notice_served_date
-      - notice_expiry_date
 
   # ============================================================
   # NOTICE SERVICE METHOD (Required for N5B field 10a)
@@ -167,6 +166,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: rent_amount
       - id: rent_frequency
         label: "Payment frequency"
         inputType: select
@@ -177,6 +177,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: rent_frequency
       # ===================================================================
       # RENT DUE DAY (Phase 3.3 - Critical for Section 8 notices)
       # Section 8 notice requires the specific day rent is due to properly
@@ -191,10 +192,7 @@ questions:
           min: 1
           max: 31
         width: half
-    maps_to:
-      - rent_amount
-      - rent_frequency
-      - rent_due_day
+        maps_to: rent_due_day
 
   # ============================================================
   # SECTION 8 QUESTIONS
@@ -262,14 +260,13 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: total_arrears
       - id: arrears_at_notice_date
         label: "Arrears at date of notice (£)"
         inputType: number
         helperText: "Amount outstanding when notice was served"
         width: half
-    maps_to:
-      - total_arrears
-      - arrears_at_notice_date
+        maps_to: arrears_at_notice_date
 
   # ============================================================
   # ARREARS SCHEDULE (Required for Ground 8 court proceedings)
@@ -358,6 +355,7 @@ questions:
           required: true
           min: 0
         width: half
+        maps_to: deposit_amount
       - id: deposit_protected
         label: "Is the deposit protected in a government-approved scheme?"
         inputType: yes_no
@@ -367,6 +365,7 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be used if deposit is not protected. Protect the deposit first or use Section 8."
         width: half
+        maps_to: deposit_protected
       - id: deposit_protected_within_30_days
         label: "Was the deposit protected within 30 days of receipt?"
         inputType: yes_no
@@ -376,6 +375,7 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be used if deposit was protected late. The deposit must be protected within 30 days of receipt."
         width: half
+        maps_to: deposit_protected_within_30_days
       - id: deposit_protection_date
         label: "Date deposit was protected"
         inputType: date
@@ -383,6 +383,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: deposit_protection_date
       - id: prescribed_info_served
         label: "Was the prescribed information served on the tenant?"
         inputType: yes_no
@@ -392,6 +393,7 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be used if prescribed information was not served within 30 days of deposit protection."
         width: half
+        maps_to: prescribed_info_served
       - id: prescribed_info_date
         label: "Date prescribed info was served"
         inputType: date
@@ -399,13 +401,7 @@ questions:
         validation:
           required: true
         width: half
-    maps_to:
-      - deposit_amount
-      - deposit_protected
-      - deposit_protected_within_30_days
-      - deposit_protection_date
-      - section21.prescribed_info_served
-      - section21.prescribed_info_date
+        maps_to: prescribed_info_date
 
   - id: deposit_returned
     section: Section 21 Compliance
@@ -485,14 +481,13 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be used if the How to Rent guide was not provided. Provide it now (but note this may not cure the defect for existing tenancies)."
         width: full
+        maps_to: how_to_rent_served
       - id: how_to_rent_date
         label: "Date How to Rent was provided"
         inputType: date
         helperText: "Must be the version current at the date provided"
         width: half
-    maps_to:
-      - section21.how_to_rent_served
-      - section21.how_to_rent_date
+        maps_to: how_to_rent_date
 
   - id: epc_compliance
     section: Section 21 Compliance
@@ -513,11 +508,13 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be used if EPC was not provided. Obtain and provide an EPC first."
         width: full
+        maps_to: epc_served
       - id: epc_certificate_date
         label: "EPC certificate date"
         inputType: date
         helperText: "Date on the EPC - must be valid (within 10 years)"
         width: half
+        maps_to: epc_certificate_date
       - id: epc_rating
         label: "EPC rating (A-G)"
         inputType: select
@@ -538,10 +535,7 @@ questions:
             label: "G (may need improvement)"
         helperText: "Minimum EPC rating E required for letting (unless exempt)"
         width: half
-    maps_to:
-      - section21.epc_served
-      - section21.epc_certificate_date
-      - section21.epc_rating
+        maps_to: epc_rating
 
   # ============================================================
   # GAS APPLIANCES (Phase 3.3: Conditional gas cert requirement)
@@ -579,20 +573,19 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: gas_cert_served
       - id: gas_cert_date
         label: "Gas certificate date (optional)"
         inputType: date
         helperText: "Date of the gas safety check on the certificate"
         width: half
+        maps_to: gas_cert_date
       - id: gas_cert_expiry
         label: "Gas certificate expiry date (optional)"
         inputType: date
         helperText: "Usually 12 months from check date"
         width: half
-    maps_to:
-      - section21.gas_safety_cert_served
-      - section21.gas_cert_date
-      - section21.gas_cert_expiry
+        maps_to: gas_cert_expiry
 
   # ============================================================
   # ELECTRICAL SAFETY (EICR - Required since June 2020)
@@ -614,20 +607,19 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: eicr_provided
       - id: eicr_date
         label: "EICR certificate date (optional)"
         inputType: date
         helperText: "Date of the electrical inspection - must be within 5 years"
         width: half
+        maps_to: eicr_date
       - id: eicr_expiry
         label: "EICR expiry date (optional)"
         inputType: date
         helperText: "Usually 5 years from inspection date, or earlier if stated on report"
         width: half
-    maps_to:
-      - section21.eicr_provided
-      - section21.eicr_date
-      - section21.eicr_expiry
+        maps_to: eicr_expiry
 
   # ============================================================
   # LICENSING (Phase 3.3: S21 can be blocked if unlicensed)
@@ -763,8 +755,7 @@ questions:
           assertValue: true
           assertMessage: "Section 21 cannot be served in the first 4 months of a tenancy. Wait until 4 months have passed from the tenancy start date."
         width: full
-    maps_to:
-      - tenancy_over_4_months
+        maps_to: tenancy_over_4_months
 
   # -----------------------------------------------------------
   # SUBSEQUENT TENANCY (N5B Question 8)
@@ -974,6 +965,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: defendant_service_address_same_as_property
       - id: defendant_service_address_line1
         label: "Building and street"
         inputType: text
@@ -981,6 +973,7 @@ questions:
           fieldId: defendant_service_address_same_as_property
           value: false
         width: full
+        maps_to: defendant_service_address_line1
       - id: defendant_service_address_town
         label: "Town/City"
         inputType: text
@@ -988,6 +981,7 @@ questions:
           fieldId: defendant_service_address_same_as_property
           value: false
         width: half
+        maps_to: defendant_service_address_town
       - id: defendant_service_address_postcode
         label: "Postcode"
         inputType: text
@@ -995,11 +989,7 @@ questions:
           fieldId: defendant_service_address_same_as_property
           value: false
         width: half
-    maps_to:
-      - defendant_service_address_same_as_property
-      - defendant_service_address_line1
-      - defendant_service_address_town
-      - defendant_service_address_postcode
+        maps_to: defendant_service_address_postcode
 
   # -----------------------------------------------------------
   # DEPOSIT SCHEME DETAILS (Required for N5B)
@@ -1028,6 +1018,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: deposit_scheme_name
       - id: deposit_reference
         label: "Deposit reference number"
         inputType: text
@@ -1035,9 +1026,7 @@ questions:
         validation:
           required: true
         width: half
-    maps_to:
-      - deposit_scheme_name
-      - deposit_reference
+        maps_to: deposit_reference
 
   # ============================================================
   # COMMON EVICTION PACK QUESTIONS
@@ -1055,22 +1044,21 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: property_address_line1
       - id: property_address_town
         label: "Town/City"
         inputType: text
         validation:
           required: true
         width: half
+        maps_to: property_address_town
       - id: property_address_postcode
         label: "Postcode"
         inputType: text
         validation:
           required: true
         width: half
-    maps_to:
-      - property_address_line1
-      - property_address_town
-      - property_address_postcode
+        maps_to: property_address_postcode
 
   - id: tenancy_start_date
     section: Tenancy
@@ -1129,18 +1117,17 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: tenant_full_name
       - id: tenant_email
         label: "Email"
         inputType: email
         width: half
+        maps_to: tenant_email
       - id: tenant_phone
         label: "Phone"
         inputType: tel
         width: half
-    maps_to:
-      - tenant_full_name
-      - tenant_email
-      - tenant_phone
+        maps_to: tenant_phone
 
   # ============================================================
   # JOINT TENANTS (Critical for valid notices)
@@ -1172,18 +1159,17 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: tenant2_name
       - id: tenant3_name
         label: "Third tenant full name (if applicable)"
         inputType: text
         width: full
+        maps_to: tenant3_name
       - id: tenant4_name
         label: "Fourth tenant full name (if applicable)"
         inputType: text
         width: full
-    maps_to:
-      - tenant2_name
-      - tenant3_name
-      - tenant4_name
+        maps_to: tenant4_name
 
   - id: landlord_details
     section: Landlord
@@ -1196,29 +1182,28 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: landlord_full_name
       - id: landlord_address_line1
         label: "Address line 1"
         inputType: text
         validation:
           required: true
         width: full
+        maps_to: landlord_address_line1
       - id: landlord_address_town
         label: "Town/City"
         inputType: text
         validation:
           required: true
         width: half
+        maps_to: landlord_address_town
       - id: landlord_address_postcode
         label: "Postcode"
         inputType: text
         validation:
           required: true
         width: half
-    maps_to:
-      - landlord_full_name
-      - landlord_address_line1
-      - landlord_address_town
-      - landlord_address_postcode
+        maps_to: landlord_address_postcode
 
   # ============================================================
   # JOINT LANDLORDS (Critical for valid court forms)
@@ -1249,8 +1234,7 @@ questions:
         validation:
           required: true
         width: full
-    maps_to:
-      - landlord2_name
+        maps_to: landlord2_name
 
   # ============================================================
   # COURT DETAILS (Required for N5, N5B, N119 court forms)
@@ -1283,6 +1267,7 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: signatory_name
       - id: signatory_capacity
         label: "Capacity"
         inputType: select
@@ -1296,6 +1281,7 @@ questions:
         validation:
           required: true
         width: half
+        maps_to: signatory_capacity
       - id: signature_date
         label: "Date of signature"
         inputType: date
@@ -1303,10 +1289,7 @@ questions:
         validation:
           required: true
         width: half
-    maps_to:
-      - signatory_name
-      - signatory_capacity
-      - signature_date
+        maps_to: signature_date
 
   # ============================================================
   # SOLICITOR DETAILS (Required when signatory is solicitor)
@@ -1327,20 +1310,19 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: solicitor_firm
       - id: solicitor_reference
         label: "Your reference"
         inputType: text
         helperText: "Optional - your case reference number"
         width: half
+        maps_to: claimant_reference
       - id: solicitor_dx
         label: "DX number"
         inputType: text
         helperText: "Optional - Document Exchange number"
         width: half
-    maps_to:
-      - solicitor_firm
-      - claimant_reference
-      - dx_number
+        maps_to: dx_number
 
   # ============================================================
   # DOCUMENT AVAILABILITY CONFIRMATIONS (Trust-Based)
