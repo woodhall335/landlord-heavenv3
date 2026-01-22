@@ -33,7 +33,7 @@
  * - has_valid_licence: Is it licensed (if required)?
  * - no_retaliatory_notice: Is notice being served more than 6 months after repair complaint?
  *
- * N5B-specific (accelerated possession eligibility) - all use POSITIVE framing to match N5B form:
+ * N5B-specific (accelerated possession eligibility) - positive framing:
  * - n5b_q9a_after_feb_1997: Was tenancy created on or after 28 Feb 1997? (Yes = good)
  * - n5b_q9b_has_notice_not_ast: Has notice been served saying NOT an AST? (Yes = bad)
  * - n5b_q9c_has_exclusion_clause: Does agreement state NOT an AST? (Yes = bad)
@@ -94,9 +94,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
   return (
     <div className="space-y-8">
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-        <h4 className="text-sm font-medium text-amber-900 mb-1">
-          Section 21 Validity Requirements
-        </h4>
+        <h4 className="text-sm font-medium text-amber-900 mb-1">Section 21 Validity Requirements</h4>
         <p className="text-sm text-amber-800">
           Section 21 notices can only be served if key compliance requirements are met. Failure
           to comply with requirements like deposit protection, gas safety, EPC and the How to Rent
@@ -139,6 +137,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="Must be protected within 30 days of receipt."
               blockingMessage="Section 21 cannot be used if the deposit is not protected."
               sectionId={SECTION_ID}
+              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
             {facts.deposit_protected === true && (
@@ -187,6 +186,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="You must provide the tenant with prescribed information about the deposit protection."
               blockingMessage="Section 21 cannot be used if prescribed information was not served."
               sectionId={SECTION_ID}
+              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
             {/* Deposit Returned */}
@@ -227,6 +227,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               helperText="A copy of the current CP12 must be provided annually."
               blockingMessage="Section 21 cannot be used if the gas safety certificate was not provided."
               sectionId={SECTION_ID}
+              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
 
             {facts.gas_safety_cert_served === true && (
@@ -288,9 +289,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* EPC */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Energy Performance Certificate
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Energy Performance Certificate</h3>
 
         <ValidatedYesNoToggle
           id="epc_served"
@@ -301,6 +300,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="The property must have a valid EPC with a rating of E or above."
           blockingMessage="Section 21 cannot be used if the EPC was not provided."
           sectionId={SECTION_ID}
+          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
 
         {facts.epc_served === true && (
@@ -334,6 +334,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="Required for tenancies starting on or after 1 October 2015."
           blockingMessage="Section 21 cannot be used if the 'How to Rent' guide was not provided."
           sectionId={SECTION_ID}
+          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
 
         {facts.how_to_rent_served === true && (
@@ -393,6 +394,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               required
               blockingMessage="Section 21 cannot be used if the property requires a licence but does not have one."
               sectionId={SECTION_ID}
+              // Default blockWhen=false => "No" triggers blocking (correct here)
             />
           </div>
         )}
@@ -411,14 +413,13 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           helperText="Section 21 notices served within 6 months of certain repair complaints may be deemed retaliatory and invalid."
           blockingMessage="This may be considered a retaliatory eviction. Consider waiting or using Section 8."
           sectionId={SECTION_ID}
+          // Default blockWhen=false => "No" triggers blocking (correct here)
         />
       </div>
 
       {/* N5B Accelerated Possession - AST Verification (Q9a-Q9g) */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          N5B Accelerated Possession - AST Eligibility
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">N5B Accelerated Possession - AST Eligibility</h3>
         <p className="text-sm text-gray-600 mb-4">
           These questions determine eligibility for accelerated possession (N5B). Answer each question
           truthfully. If any answer disqualifies the tenancy as an AST, accelerated possession may not
@@ -434,6 +435,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Most ASTs are created after this date. Answer 'No' only if the tenancy predates 28 February 1997."
             sectionId={SECTION_ID}
+            // Here "No" is disqualifying => default blockWhen=false is correct
+            blockingMessage="If the tenancy predates 28 February 1997, accelerated possession may not be available."
           />
 
           <ValidatedYesNoToggle
@@ -444,6 +447,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Answer 'Yes' only if a notice was served stating the tenancy is not an assured shorthold tenancy. Most landlords answer 'No'."
             blockingMessage="If notice was served stating this is not an AST, accelerated possession may not be available."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
@@ -455,6 +459,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Answer 'Yes' only if the written agreement contains a clause excluding AST status. Most standard AST agreements do not have this."
             blockingMessage="If the agreement excludes AST status, accelerated possession may not be available."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
@@ -466,6 +471,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Answer 'Yes' only if the tenant is an agricultural worker occupying the property as part of their employment (e.g., tied farm worker accommodation)."
             blockingMessage="Agricultural worker tenancies are not ASTs. Consider the standard possession route."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
@@ -476,7 +482,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             onChange={(v) => onUpdate({ n5b_q9e_is_succession_tenancy: v })}
             required
             helperText="Answer 'Yes' only if this tenancy was passed on when a Rent Act protected tenant died. This is rare for modern tenancies."
-            blockingMessage="Succession tenancies under the Rent Act are not eligible for accelerated possession."
+            blockingMessage="Succession tenancies are not eligible for accelerated possession."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
@@ -488,6 +495,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Answer 'Yes' only if this tenancy was transferred from a local authority or housing association as a secure tenancy."
             blockingMessage="Former secure tenancies are not eligible for accelerated possession."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
 
@@ -499,6 +507,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
             required
             helperText="Answer 'Yes' only if this relates to long leasehold enfranchisement under the Local Government and Housing Act 1989. This is very rare."
             blockingMessage="Schedule 10 tenancies are not eligible for accelerated possession."
+            blockWhen={true}
             sectionId={SECTION_ID}
           />
         </div>
@@ -520,6 +529,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           required
           helperText="Prohibited payments include admin fees, viewing fees, checkout fees, reference fees, etc. Answer 'Yes' only if such a payment was taken AND has not been returned to the tenant."
           blockingMessage="Section 21 cannot be used while an unreturned prohibited payment remains outstanding. The payment must be repaid before serving notice."
+          blockWhen={true}
           sectionId={SECTION_ID}
         />
 
@@ -535,9 +545,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
 
       {/* Paper Determination Consent (Q20) */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Paper Determination Consent
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Paper Determination Consent</h3>
 
         <ValidatedYesNoToggle
           id="n5b_q20_paper_determination"
@@ -547,6 +555,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           required
           helperText="If you select 'Yes', the court may decide the case on the papers without requiring you to attend a hearing (this can be faster)."
           sectionId={SECTION_ID}
+          // informational; no blockingMessage
         />
       </div>
     </div>

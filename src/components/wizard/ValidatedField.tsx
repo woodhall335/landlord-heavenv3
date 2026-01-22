@@ -160,10 +160,7 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -193,7 +190,11 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
       {error && (
         <p id={`${id}-error`} className="text-sm text-red-600 flex items-start gap-1">
           <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
           </svg>
           {error}
         </p>
@@ -271,10 +272,7 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -305,7 +303,11 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
       {error && (
         <p id={`${id}-error`} className="text-sm text-red-600 flex items-start gap-1">
           <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
           </svg>
           {error}
         </p>
@@ -387,10 +389,7 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -416,7 +415,11 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
       {error && (
         <p id={`${id}-error`} className="text-sm text-red-600 flex items-start gap-1">
           <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
           </svg>
           {error}
         </p>
@@ -503,25 +506,21 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
 
   const handleBlur = useCallback(() => {
     setTouched(true);
-    const numValue = value === '' || value === undefined ? undefined : typeof value === 'number' ? value : parseFloat(String(value));
+    const numValue =
+      value === '' || value === undefined ? undefined : typeof value === 'number' ? value : parseFloat(String(value));
     const errors = validateField(id, numValue, validation, label, 'currency');
     setInternalError(errors[0]?.message);
   }, [id, value, validation, label]);
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
 
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
-          £
-        </span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">£</span>
         <input
           id={id}
           name={id}
@@ -548,7 +547,11 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
       {error && (
         <p id={`${id}-error`} className="text-sm text-red-600 flex items-start gap-1">
           <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
           </svg>
           {error}
         </p>
@@ -574,8 +577,20 @@ interface ValidatedYesNoToggleProps {
   onChange: (value: boolean) => void;
   required?: boolean;
   helperText?: string;
-  /** Error message to show when value is false (for Section 21 blockers) */
+
+  /**
+   * Message to show when the selected answer makes the route invalid / not recommended.
+   * (Only shown when `value === blockWhen` and field has been touched.)
+   */
   blockingMessage?: string;
+
+  /**
+   * Which answer triggers the blocking state:
+   * - Default (false): "No" is the blocker (common for Section 21 compliance truth questions)
+   * - true: "Yes" is the blocker (common for AST disqualifiers and prohibited payments)
+   */
+  blockWhen?: boolean;
+
   disabled?: boolean;
   className?: string;
   /** Section ID for context error registration (enables hasErrors gating) */
@@ -590,23 +605,39 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
   required = false,
   helperText,
   blockingMessage,
+  blockWhen = false,
   disabled = false,
   className = '',
   sectionId,
 }) => {
   const [touched, setTouched] = useState(false);
   const ctx = useValidationContextSafe();
-  const showBlockingMessage = touched && value === false && blockingMessage;
+
+  const isUnanswered = value === undefined;
+  const showRequiredError = touched && required && isUnanswered;
+
+  const showBlockingMessage =
+    touched &&
+    !!blockingMessage &&
+    !isUnanswered &&
+    value === blockWhen;
 
   // Register/clear error with context for hasErrors gating
   useEffect(() => {
     if (!ctx || !sectionId) return;
+
+    if (showRequiredError) {
+      ctx.setFieldError(id, { field: id, message: 'This field is required.', severity: 'error', section: sectionId });
+      return;
+    }
+
     if (showBlockingMessage) {
       ctx.setFieldError(id, { field: id, message: blockingMessage!, severity: 'error', section: sectionId });
-    } else {
-      ctx.clearFieldError(id);
+      return;
     }
-  }, [ctx, id, showBlockingMessage, blockingMessage, sectionId]);
+
+    ctx.clearFieldError(id);
+  }, [ctx, id, showBlockingMessage, blockingMessage, sectionId, showRequiredError]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -616,6 +647,25 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
       }
     };
   }, [ctx, id, sectionId]);
+
+  const getChoiceStyles = (choiceValue: boolean) => {
+    const isSelected = value === choiceValue;
+
+    // Only apply "red selected" styling when the selected value is the blocking value.
+    const isBlockingSelected = showBlockingMessage && isSelected;
+
+    if (!isSelected) {
+      return 'border-gray-200 hover:border-gray-300';
+    }
+
+    if (isBlockingSelected) {
+      return 'border-red-500 bg-red-50';
+    }
+
+    // Non-blocking selection: "Yes" green, "No" neutral
+    if (choiceValue === true) return 'border-green-500 bg-green-50';
+    return 'border-gray-300 bg-gray-50';
+  };
 
   return (
     <div className={`space-y-2 ${className}`}>
@@ -628,7 +678,7 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
         <label
           className={`
             flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-            ${value === true ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'}
+            ${getChoiceStyles(true)}
             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           `}
         >
@@ -649,7 +699,7 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
         <label
           className={`
             flex items-center px-4 py-2 border rounded-md cursor-pointer transition-all
-            ${value === false ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
+            ${getChoiceStyles(false)}
             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           `}
         >
@@ -668,14 +718,31 @@ export const ValidatedYesNoToggle: React.FC<ValidatedYesNoToggleProps> = ({
         </label>
       </div>
 
-      {helperText && !showBlockingMessage && (
+      {helperText && !showRequiredError && !showBlockingMessage && (
         <p className="text-xs text-gray-500">{helperText}</p>
+      )}
+
+      {showRequiredError && (
+        <p className="text-sm text-red-600 font-medium flex items-start gap-1">
+          <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+          This field is required.
+        </p>
       )}
 
       {showBlockingMessage && (
         <p className="text-sm text-red-600 font-medium flex items-start gap-1">
           <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
           </svg>
           {blockingMessage}
         </p>
@@ -699,7 +766,11 @@ export const InlineError: React.FC<InlineErrorProps> = ({ error, className = '' 
   return (
     <p className={`text-sm text-red-600 flex items-start gap-1 ${className}`}>
       <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+        <path
+          fillRule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clipRule="evenodd"
+        />
       </svg>
       {error}
     </p>
