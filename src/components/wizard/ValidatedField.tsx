@@ -19,7 +19,7 @@
 
 'use client';
 
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import { validateField, type ValidationRule } from '@/lib/validation/mqs-field-validator';
 import { useValidationContextSafe } from './ValidationContext';
 
@@ -103,12 +103,18 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
   step,
   sectionId,
 }) => {
-  const [internalError, setInternalError] = useState<string | undefined>();
   const [touched, setTouched] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const ctx = useValidationContextSafe();
 
-  const error = externalError || (touched ? internalError : undefined);
+  // Compute validation error during render (not in effect) to avoid cascading renders
+  const internalError = useMemo(() => {
+    if (!touched) return undefined;
+    const errors = validateField(id, value, validation, label, type);
+    return errors[0]?.message;
+  }, [touched, id, value, validation, label, type]);
+
+  const error = externalError || internalError;
   const isRequired = required || validation?.required;
 
   // Register/clear error with context for hasErrors gating
@@ -130,33 +136,19 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
     };
   }, [ctx, id, sectionId]);
 
-  // Validate on change
+  // Handle value change
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = type === 'number' ? parseFloat(e.target.value) || '' : e.target.value;
       onChange(newValue as string | number);
-
-      if (!validateOnBlur) {
-        const errors = validateField(id, newValue, validation, label, type);
-        setInternalError(errors[0]?.message);
-      }
     },
-    [id, onChange, validation, label, type, validateOnBlur]
+    [type, onChange]
   );
 
-  // Validate on blur
+  // Mark field as touched on blur
   const handleBlur = useCallback(() => {
     setTouched(true);
-    const errors = validateField(id, value, validation, label, type);
-    setInternalError(errors[0]?.message);
-  }, [id, value, validation, label, type]);
-
-  // Clear error when value becomes valid
-  useEffect(() => {
-    if (!touched) return;
-    const errors = validateField(id, value, validation, label, type);
-    setInternalError(errors[0]?.message);
-  }, [value, id, validation, label, type, touched]);
+  }, []);
 
   return (
     <div className={`space-y-1 ${className}`}>
