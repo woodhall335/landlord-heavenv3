@@ -877,8 +877,58 @@ function parseDate(dateStr: string | undefined): Date | null {
 export function validateComplianceTiming(data: ComplianceTimingData): TimingValidationResult {
   const issues: TimingValidationIssue[] = [];
 
+  // ==========================================================================
+  // REQUIRED DATES VALIDATION (Jan 2026 fix)
+  // Block generation when essential context is missing to prevent "silent pass"
+  // when dates are simply absent from the collected_facts.
+  //
+  // IMPORTANT: We only require tenancy_start_date if it's actually needed for
+  // the timing checks that WILL run based on the data provided:
+  // - EPC timing check needs tenancy_start_date (if epc_provided_date present)
+  // - Gas safety timing needs occupation_date OR tenancy_start_date
+  //   (if gas dates are present and has_gas_at_property is explicitly true)
+  // - How to Rent timing needs tenancy_start_date (if how_to_rent_provided_date present)
+  //
+  // The deposit prescribed info check is INDEPENDENT and doesn't need
+  // tenancy_start_date - it only compares deposit_received_date vs prescribed_info_served_date.
+  // ==========================================================================
+  const hasGasDates = !!(data.gas_safety_provided_date || data.gas_safety_record_served_pre_occupation_date);
+  const gasCheckWillRun = data.has_gas_at_property === true && hasGasDates && !data.occupation_date;
+
+  const needsTenancyStartDate = !!(
+    data.epc_provided_date ||
+    data.how_to_rent_provided_date ||
+    gasCheckWillRun
+  );
+
+  if (needsTenancyStartDate && !data.tenancy_start_date) {
+    issues.push({
+      severity: 'error',
+      field: 'tenancy_start_date',
+      message: 'Tenancy start date is required to generate a Section 21 pack. Please provide the tenancy start date in the wizard.',
+    });
+    // Return early - we can't validate timing without the reference date
+    return {
+      isValid: false,
+      issues,
+    };
+  }
+
   const tenancyStart = parseDate(data.tenancy_start_date);
   const occupation = parseDate(data.occupation_date) || tenancyStart;
+
+  // Additional validation: ensure the tenancy_start_date is parseable (if provided)
+  if (data.tenancy_start_date && !tenancyStart) {
+    issues.push({
+      severity: 'error',
+      field: 'tenancy_start_date',
+      message: `Tenancy start date "${data.tenancy_start_date}" could not be parsed. Please use format YYYY-MM-DD.`,
+    });
+    return {
+      isValid: false,
+      issues,
+    };
+  }
 
   // ==========================================================================
   // EPC TIMING - Must be provided BEFORE tenancy start

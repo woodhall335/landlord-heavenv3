@@ -130,6 +130,7 @@ export function isComplianceTimingBlock(
  * Used by the API to sanitize issues before returning to client.
  */
 export const FIELD_TO_DOCUMENT_LABEL: Record<string, string> = {
+  'tenancy_start_date': 'Tenancy Start Date',
   'epc_timing': 'Energy Performance Certificate (EPC)',
   'gas_safety_timing': 'Gas Safety Certificate (CP12)',
   'gas_safety_expiry': 'Gas Safety Certificate (CP12)',
@@ -141,6 +142,7 @@ export const FIELD_TO_DOCUMENT_LABEL: Record<string, string> = {
  * Maps internal field codes to issue categories.
  */
 export const FIELD_TO_CATEGORY: Record<string, ComplianceIssueCategory> = {
+  'tenancy_start_date': 'other',
   'epc_timing': 'timing',
   'gas_safety_timing': 'timing',
   'gas_safety_expiry': 'expiry',
