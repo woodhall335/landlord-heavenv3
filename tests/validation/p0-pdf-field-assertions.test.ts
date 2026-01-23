@@ -287,4 +287,125 @@ describe('P0 PDF Field Assertions - N5B Form', () => {
       expect(depositChecked).toBe(false);
     });
   });
+
+  describe('Q9a-Q9g AST Verification Checkboxes', () => {
+    it('sets Q9a YES when n5b_q9a_after_feb_1997 is true', async () => {
+      const dataWithQ9a: CaseData = {
+        ...baseCaseData,
+        n5b_q9a_after_feb_1997: true,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ9a, { flatten: false });
+
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? Yes'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+
+    it('sets Q9a NO when n5b_q9a_after_feb_1997 is false', async () => {
+      const dataWithQ9a: CaseData = {
+        ...baseCaseData,
+        n5b_q9a_after_feb_1997: false,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ9a, { flatten: false });
+
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? No'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+
+    it('sets Q9b NO when n5b_q9b_has_notice_not_ast is false (standard AST)', async () => {
+      const dataWithQ9b: CaseData = {
+        ...baseCaseData,
+        n5b_q9b_has_notice_not_ast: false,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ9b, { flatten: false });
+
+      // For standard ASTs, this should be NO (no notice saying it's not AST)
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? No'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+  });
+
+  describe('Q19 Tenant Fees Act Checkboxes', () => {
+    it('sets Q19 NO when n5b_q19_has_unreturned_prohibited_payment is false', async () => {
+      const dataWithQ19: CaseData = {
+        ...baseCaseData,
+        n5b_q19_has_unreturned_prohibited_payment: false,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ19, { flatten: false });
+
+      // Note: Field name uses curly quotes (\u2018 = ' and \u2019 = ')
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        `19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a \u2018prohibited payment\u2019 (as defined by section 3 of the Tenant Fees Act 2019 (\u2018the 2019 Act\u2019)) contrary to s.1 of the 2019 Act? No`
+      );
+
+      expect(isChecked).toBe(true);
+    });
+  });
+
+  describe('Q20 Paper Determination Checkbox', () => {
+    it('sets Q20 YES when n5b_q20_paper_determination is true', async () => {
+      const dataWithQ20: CaseData = {
+        ...baseCaseData,
+        n5b_q20_paper_determination: true,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ20, { flatten: false });
+
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '20. If the Defendant seeks postponement of possession for up to 6 weeks on the grounds of exceptional hardship, is the Claimant content that the request be considered without a hearing? Yes'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+
+    it('sets Q20 NO when n5b_q20_paper_determination is false', async () => {
+      const dataWithQ20: CaseData = {
+        ...baseCaseData,
+        n5b_q20_paper_determination: false,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithQ20, { flatten: false });
+
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '20. If the Defendant seeks postponement of possession for up to 6 weeks on the grounds of exceptional hardship, is the Claimant content that the request be considered without a hearing? No'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+
+    it('defaults to Q20 YES when n5b_q20_paper_determination is undefined', async () => {
+      const dataWithoutQ20: CaseData = {
+        ...baseCaseData,
+        n5b_q20_paper_determination: undefined,
+      };
+
+      const pdfBytes = await fillN5BForm(dataWithoutQ20, { flatten: false });
+
+      // Should default to YES
+      const isChecked = await isCheckboxChecked(
+        pdfBytes,
+        '20. If the Defendant seeks postponement of possession for up to 6 weeks on the grounds of exceptional hardship, is the Claimant content that the request be considered without a hearing? Yes'
+      );
+
+      expect(isChecked).toBe(true);
+    });
+  });
 });
