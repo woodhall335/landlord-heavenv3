@@ -136,7 +136,9 @@ describe('NextBestActionCard - Arrears Topic', () => {
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
   });
 
-  it('renders Simple Procedure reference for Scotland', () => {
+  it('renders Notice to Leave for Scotland arrears (money claim not available)', () => {
+    // Money claim is England-only as of January 2026
+    // Scotland arrears should recommend Notice to Leave instead
     render(
       <NextBestActionCard
         {...defaultProps}
@@ -146,7 +148,9 @@ describe('NextBestActionCard - Arrears Topic', () => {
       />
     );
 
-    expect(screen.getByText(/Simple Procedure/i)).toBeInTheDocument();
+    // Should show Notice to Leave, not money claim
+    expect(screen.getByText('Notice to Leave')).toBeInTheDocument();
+    expect(screen.getByText(/rent arrears under PRT/i)).toBeInTheDocument();
   });
 
   it('shows Northern Ireland info notice for arrears', () => {

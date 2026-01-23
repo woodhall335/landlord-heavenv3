@@ -189,6 +189,30 @@ function isJurisdictionEnabled(
   return true;
 }
 
+// Check if a product is available for a jurisdiction (inverse of isJurisdictionEnabled)
+// Used to filter products when jurisdiction is already selected
+function isProductAvailableForJurisdiction(
+  documentType: DocumentOption['type'],
+  jurisdiction: string | null
+): boolean {
+  if (!jurisdiction) {
+    return true; // Show all products if no jurisdiction selected
+  }
+
+  return isJurisdictionEnabled(jurisdiction, documentType);
+}
+
+// Get available document options for a given jurisdiction
+function getAvailableDocumentOptions(jurisdiction: string | null): DocumentOption[] {
+  if (!jurisdiction) {
+    return documentOptions; // Return all if no jurisdiction selected
+  }
+
+  return documentOptions.filter((doc) =>
+    isProductAvailableForJurisdiction(doc.type, jurisdiction)
+  );
+}
+
 // Get disabled reason for a jurisdiction
 function getDisabledReason(
   jurisdiction: string,
@@ -537,8 +561,9 @@ function WizardPageInner() {
               What do you need help with?
             </h2>
 
+            {/* Filter products based on pre-selected jurisdiction (from URL param) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {documentOptions.map((doc) => (
+              {getAvailableDocumentOptions(selectedJurisdiction?.value ?? null).map((doc) => (
                 <button
                   key={doc.type}
                   onClick={() => handleDocumentSelect(doc)}
