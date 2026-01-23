@@ -381,8 +381,8 @@ const N5B_CHECKBOXES = {
   Q9B_NOTICE_NOT_AST_NO: '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? No',
   Q9C_EXCLUSION_CLAUSE_YES: '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? Yes',
   Q9C_EXCLUSION_CLAUSE_NO: '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? No',
-  Q9D_AGRICULTURAL_YES: '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? Yes',
-  Q9D_AGRICULTURAL_NO: '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? No',
+  Q9D_AGRICULTURAL_YES: `9d Is the ‘agricultural worker condition’ defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? Yes`,
+  Q9D_AGRICULTURAL_NO: `9d Is the ‘agricultural worker condition’ defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? No`,
   Q9E_SUCCESSION_YES: '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? Yes',
   Q9E_SUCCESSION_NO: '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? No',
   Q9F_FORMER_SECURE_YES: '9f Was any tenancy previously a secure tenancy under s.79 of the Housing Act 1985? Yes',
@@ -463,16 +463,16 @@ const N5B_CHECKBOXES = {
   Q18_SOCIAL_HOUSING_PROVIDER_NO: '18. Is the Claimant a private registered provider of social housing? No',
   Q18A_PRE_ACTION_PROTOCOL_YES: '18a. Has the Claimant complied with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords? Yes',
   Q18A_PRE_ACTION_PROTOCOL_NO: '18a. Has the Claimant complied with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords? No',
-  Q18B_HOW_TO_RENT_PROVIDED_YES: '18b. Has the Defendant been given a copy of the then current document \'How to Rent: the checklist for renting in England\'? Yes',
-  Q18B_HOW_TO_RENT_PROVIDED_NO: '18b. Has the Defendant been given a copy of the then current document \'How to Rent: the checklist for renting in England\'? No',
+  Q18B_HOW_TO_RENT_PROVIDED_YES: `18b. Has the Defendant been given a copy of the then current document ‘How to Rent: the checklist for renting in England’? Yes`,
+  Q18B_HOW_TO_RENT_PROVIDED_NO: `18b. Has the Defendant been given a copy of the then current document ‘How to Rent: the checklist for renting in England’? No`,
   Q18D_HOW_TO_RENT_HARDCOPY: '18d. How was the document provided? Hard copy',
   Q18D_HOW_TO_RENT_EMAIL: '18d. How was the document provided? Email',
 
   // ==========================================================================
   // Q19 - Tenant Fees Act 2019 / Prohibited Payments
   // ==========================================================================
-  Q19_PROHIBITED_PAYMENT_YES: '19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a \'prohibited payment\' (as defined by section 3 of the Tenant Fees Act 2019 (\'the 2019 Act\')) contrary to s.1 of the 2019 Act? Yes',
-  Q19_PROHIBITED_PAYMENT_NO: '19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a \'prohibited payment\' (as defined by section 3 of the Tenant Fees Act 2019 (\'the 2019 Act\')) contrary to s.1 of the 2019 Act? No',
+  Q19_PROHIBITED_PAYMENT_YES: `19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a ‘prohibited payment’ (as defined by section 3 of the Tenant Fees Act 2019 (‘the 2019 Act’)) contrary to s.1 of the 2019 Act? Yes`,
+  Q19_PROHIBITED_PAYMENT_NO: `19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a ‘prohibited payment’ (as defined by section 3 of the Tenant Fees Act 2019 (‘the 2019 Act’)) contrary to s.1 of the 2019 Act? No`,
   Q19A_PAYMENT_MADE_YES: '19a. Did the Defendant (or any guarantor or person acting on behalf of the Defendant) make such a payment to the Claimant as a result of that requirement? Yes',
   Q19A_PAYMENT_MADE_NO: '19a. Did the Defendant (or any guarantor or person acting on behalf of the Defendant) make such a payment to the Claimant as a result of that requirement? No',
   Q19B_HOLDING_DEPOSIT_YES: '19b. Was a holding deposit (as defined by paragraph 3(2) of Schedule 1 to the 2019 Act) paid to the Claimant on or after 1 June 2019 in relation to the tenancy? Yes',
@@ -480,10 +480,10 @@ const N5B_CHECKBOXES = {
   Q19C_REPAID_FULL: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? Yes - in full',
   Q19C_REPAID_PART: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? Yes - in part',
   Q19C_REPAID_NO: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? No',
-  Q19D_APPLIED_TO_RENT_YES: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? Yes',
-  Q19D_APPLIED_TO_RENT_NO: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? No',
-  Q19D_APPLIED_TO_DEPOSIT_YES: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? Yes',
-  Q19D_APPLIED_TO_DEPOSIT_NO: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? No',
+  Q19D_APPLIED_TO_RENT_YES: `19d. If you answered ‘Yes’ to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? Yes`,
+  Q19D_APPLIED_TO_RENT_NO: `19d. If you answered ‘Yes’ to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? No`,
+  Q19D_APPLIED_TO_DEPOSIT_YES: `19d. If you answered ‘Yes’ to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? Yes`,
+  Q19D_APPLIED_TO_DEPOSIT_NO: `19d. If you answered ‘Yes’ to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? No`,
 
   // ==========================================================================
   // Q20 - Paper Determination
@@ -1536,6 +1536,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.subsequent_tenancy !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_YES, data.subsequent_tenancy, ctx);
     setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, !data.subsequent_tenancy, ctx);
+  } else {
+    // Default: Most tenancies don't have subsequent written agreements
+    setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, true, ctx);
   }
 
   // =========================================================================
@@ -1860,6 +1863,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.how_to_rent_method === 'hardcopy') {
     setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_HARDCOPY, true, ctx);
   } else if (data.how_to_rent_method === 'email') {
+    setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_EMAIL, true, ctx);
+  } else {
+    // Default: Email is most common method for providing How to Rent guide
     setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_EMAIL, true, ctx);
   }
 

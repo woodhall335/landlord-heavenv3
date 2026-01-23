@@ -419,41 +419,70 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     // Gas safety certificate (if property has gas appliances)
-    const hasGasAppliances = resolveFactValue(facts, 'has_gas_appliances');
+    // Check multiple possible field names from wizard and legacy systems
+    const hasGasAppliances = resolveFactValue(facts, 'has_gas_appliances') ??
+                            resolveFactValue(facts, 'has_gas_at_property') ??
+                            resolveFactValue(facts, 'property_has_gas');
     const gasCertProvided = resolveFactValue(facts, 'gas_certificate_provided') ??
-                           resolveFactValue(facts, 'gas_safety_cert_provided');
+                           resolveFactValue(facts, 'gas_safety_cert_provided') ??
+                           resolveFactValue(facts, 'gas_safety_cert_served') ??  // Wizard MQS field
+                           resolveFactValue(facts, 'gas_safety_provided');
 
     if (hasGasAppliances === true && gasCertProvided === false) {
       blocking.push({
         code: 'SECTION_21_GAS_CERT_MISSING',
         message: 'Section 21 notice is invalid if gas safety certificate was not provided',
-        fields: ['gas_certificate_provided', 'selected_notice_route'],
+        fields: ['gas_safety_cert_served', 'gas_certificate_provided', 'selected_notice_route'],
         legal_basis: 'Gas Safety (Installation and Use) Regulations 1998 and Deregulation Act 2015',
         user_fix_hint: 'Provide valid gas safety certificate to tenant before serving Section 21, OR use Section 8 instead',
       });
     }
 
-    // EPC
-    const epcProvided = resolveFactValue(facts, 'epc_provided');
+    // EPC - check multiple possible field names
+    const epcProvided = resolveFactValue(facts, 'epc_provided') ??
+                       resolveFactValue(facts, 'epc_served');  // Wizard MQS field
     if (epcProvided === false) {
       blocking.push({
         code: 'SECTION_21_EPC_MISSING',
         message: 'Section 21 notice is invalid if Energy Performance Certificate was not provided',
-        fields: ['epc_provided', 'selected_notice_route'],
+        fields: ['epc_served', 'epc_provided', 'selected_notice_route'],
         legal_basis: 'Energy Performance of Buildings Regulations 2012 and Deregulation Act 2015',
         user_fix_hint: 'Provide EPC to tenant before serving Section 21, OR use Section 8 instead',
       });
     }
 
-    // Property licensing
+    // Property licensing - check wizard field names
+    // Wizard uses: licensing_required (select: none/mandatory_hmo/additional_hmo/selective)
+    //              has_valid_licence (boolean, shown if licensing_required != none)
+    const licensingRequired = resolveFactValue(facts, 'licensing_required');
+    const hasValidLicence = resolveFactValue(facts, 'has_valid_licence');
     const propertyLicensingStatus = resolveFactValue(facts, 'property_licensing_status');
-    if (propertyLicensingStatus === 'unlicensed') {
+
+    // Block if: licensing is required AND no valid licence
+    const needsLicence = licensingRequired && licensingRequired !== 'none' && licensingRequired !== 'no_licensing_required';
+    const isUnlicensed = propertyLicensingStatus === 'unlicensed' || (needsLicence && hasValidLicence === false);
+
+    if (isUnlicensed) {
       blocking.push({
         code: 'SECTION_21_UNLICENSED_PROPERTY',
         message: 'Section 21 notice cannot be served for unlicensed HMO or selectively licensed property',
-        fields: ['property_licensing_status', 'selected_notice_route'],
+        fields: ['licensing_required', 'has_valid_licence', 'property_licensing_status', 'selected_notice_route'],
         legal_basis: 'Housing Act 2004, Section 75 and Housing and Planning Act 2016, Section 41',
         user_fix_hint: 'Obtain required property license before serving Section 21, OR use Section 8 instead',
+      });
+    }
+
+    // How to Rent guide - required for Section 21 in England
+    // Wizard uses: how_to_rent_served (boolean)
+    const howToRentProvided = resolveFactValue(facts, 'how_to_rent_served') ??
+                              resolveFactValue(facts, 'how_to_rent_provided');
+    if (howToRentProvided === false) {
+      blocking.push({
+        code: 'SECTION_21_HOW_TO_RENT_MISSING',
+        message: 'Section 21 notice is invalid if the "How to Rent" guide was not provided to the tenant',
+        fields: ['how_to_rent_served', 'how_to_rent_provided', 'selected_notice_route'],
+        legal_basis: 'Deregulation Act 2015, Section 21A(1) and Assured Shorthold Tenancy Notices and Prescribed Requirements (England) Regulations 2015',
+        user_fix_hint: 'Provide the current "How to Rent: the checklist for renting in England" guide to the tenant before serving Section 21',
       });
     }
   }
