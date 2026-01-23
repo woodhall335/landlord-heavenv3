@@ -107,10 +107,18 @@ export async function GET(request: Request) {
     const enhancedCases = (cases || []).map((c: any) => {
       const orderInfo = orderMap.get(c.id);
       const hasFinalDocuments = (docCountMap.get(c.id) || 0) > 0;
+      const isPaid = orderInfo?.payment_status === 'paid';
+
+      // Calculate effective wizard progress:
+      // - 100% if wizard is complete (wizard_completed_at is set)
+      // - 100% if case is paid (payment implies wizard was completed)
+      // - Otherwise use the stored wizard_progress
+      const isWizardComplete = c.wizard_completed_at != null && c.wizard_completed_at !== '';
+      const effectiveWizardProgress = (isWizardComplete || isPaid) ? 100 : (c.wizard_progress || 0);
 
       const displayStatusInfo = deriveDisplayStatus({
         caseStatus: c.status,
-        wizardProgress: c.wizard_progress,
+        wizardProgress: effectiveWizardProgress,
         wizardCompletedAt: c.wizard_completed_at,
         paymentStatus: orderInfo?.payment_status || null,
         fulfillmentStatus: orderInfo?.fulfillment_status || null,
@@ -119,8 +127,10 @@ export async function GET(request: Request) {
 
       return {
         ...c,
+        // Override wizard_progress with effective value
+        wizard_progress: effectiveWizardProgress,
         // Order status flags for UI
-        has_paid_order: orderInfo?.payment_status === 'paid',
+        has_paid_order: isPaid,
         has_fulfilled_order: orderInfo?.fulfillment_status === 'fulfilled',
         payment_status: orderInfo?.payment_status || null,
         fulfillment_status: orderInfo?.fulfillment_status || null,
@@ -140,7 +150,9 @@ export async function GET(request: Request) {
     const stats = {
       total: activeCases.length,
       in_progress: activeCases.filter((c: any) =>
-        c.display_status === 'in_progress' || c.display_status === 'ready_to_purchase'
+        c.display_status === 'in_progress' ||
+        c.display_status === 'paid_in_progress' ||
+        c.display_status === 'ready_to_purchase'
       ).length,
       completed: activeCases.filter((c: any) =>
         c.display_status === 'documents_ready' || c.display_status === 'completed'

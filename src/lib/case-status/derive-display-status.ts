@@ -10,6 +10,7 @@ export type DisplayStatus =
   | 'in_progress'
   | 'ready_to_purchase'
   | 'generating_documents'
+  | 'paid_in_progress'
   | 'documents_ready'
   | 'completed'
   | 'archived';
@@ -35,7 +36,7 @@ export interface DeriveStatusInput {
  *
  * Priority order:
  * 1. paid + fulfilled (has final docs) => "Documents ready"
- * 2. paid + processing/pending => "Generating documents"
+ * 2. paid + processing/pending => "In progress" (paid_in_progress)
  * 3. wizard complete but unpaid => "Ready to purchase"
  * 4. archived => "Archived"
  * 5. in_progress => "In progress"
@@ -70,11 +71,11 @@ export function deriveDisplayStatus(input: DeriveStatusInput): DisplayStatusInfo
     };
   }
 
-  // If paid but documents are still being generated
+  // If paid but documents are still being generated - show "In progress" (not "Generating documents")
   if (paymentStatus === 'paid' && fulfillmentStatus !== 'fulfilled') {
     return {
-      status: 'generating_documents',
-      label: 'Generating documents',
+      status: 'paid_in_progress',
+      label: 'In progress',
       badgeVariant: 'warning',
       description: 'Your documents are being generated',
     };
@@ -83,8 +84,8 @@ export function deriveDisplayStatus(input: DeriveStatusInput): DisplayStatusInfo
   // If paid and fulfilled but no final docs yet (edge case - poll state)
   if (paymentStatus === 'paid' && fulfillmentStatus === 'fulfilled' && !hasFinalDocuments) {
     return {
-      status: 'generating_documents',
-      label: 'Generating documents',
+      status: 'paid_in_progress',
+      label: 'In progress',
       badgeVariant: 'warning',
       description: 'Finalizing your documents',
     };
@@ -139,6 +140,7 @@ export function getDisplayStatusBadgeVariant(
     case 'completed':
       return 'success';
     case 'generating_documents':
+    case 'paid_in_progress':
     case 'in_progress':
     case 'ready_to_purchase':
       return 'warning';
@@ -158,6 +160,8 @@ export function getDisplayStatusLabel(status: DisplayStatus): string {
       return 'Documents ready';
     case 'generating_documents':
       return 'Generating documents';
+    case 'paid_in_progress':
+      return 'In progress';
     case 'ready_to_purchase':
       return 'Ready to purchase';
     case 'completed':
