@@ -35,10 +35,10 @@ export interface DeriveStatusInput {
  * Derive the display status and label for a case based on case and order data.
  *
  * Priority order:
- * 1. paid + fulfilled (has final docs) => "Documents ready"
- * 2. paid + processing/pending => "In progress" (paid_in_progress)
- * 3. wizard complete but unpaid => "Ready to purchase"
- * 4. archived => "Archived"
+ * 1. archived => "Archived"
+ * 2. paid + has final documents => "Documents ready"
+ * 3. paid + no documents yet => "In progress" (paid_in_progress)
+ * 4. wizard complete but unpaid => "Ready to purchase"
  * 5. in_progress => "In progress"
  * 6. draft => "Draft"
  */
@@ -48,7 +48,6 @@ export function deriveDisplayStatus(input: DeriveStatusInput): DisplayStatusInfo
     wizardProgress,
     wizardCompletedAt,
     paymentStatus,
-    fulfillmentStatus,
     hasFinalDocuments,
   } = input;
 
@@ -61,8 +60,9 @@ export function deriveDisplayStatus(input: DeriveStatusInput): DisplayStatusInfo
     };
   }
 
-  // If paid and fulfilled with final documents, show "Documents ready"
-  if (paymentStatus === 'paid' && fulfillmentStatus === 'fulfilled' && hasFinalDocuments) {
+  // If paid AND has final documents => "Documents ready"
+  // hasFinalDocuments is the authoritative indicator that documents are ready
+  if (paymentStatus === 'paid' && hasFinalDocuments) {
     return {
       status: 'documents_ready',
       label: 'Documents ready',
@@ -71,23 +71,13 @@ export function deriveDisplayStatus(input: DeriveStatusInput): DisplayStatusInfo
     };
   }
 
-  // If paid but documents are still being generated - show "In progress" (not "Generating documents")
-  if (paymentStatus === 'paid' && fulfillmentStatus !== 'fulfilled') {
+  // If paid but no documents yet => "In progress"
+  if (paymentStatus === 'paid' && !hasFinalDocuments) {
     return {
       status: 'paid_in_progress',
       label: 'In progress',
       badgeVariant: 'warning',
       description: 'Your documents are being generated',
-    };
-  }
-
-  // If paid and fulfilled but no final docs yet (edge case - poll state)
-  if (paymentStatus === 'paid' && fulfillmentStatus === 'fulfilled' && !hasFinalDocuments) {
-    return {
-      status: 'paid_in_progress',
-      label: 'In progress',
-      badgeVariant: 'warning',
-      description: 'Finalizing your documents',
     };
   }
 
