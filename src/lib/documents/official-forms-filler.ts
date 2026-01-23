@@ -772,6 +772,10 @@ export interface CaseData {
   // =========================================================================
   n5b_q19_has_unreturned_prohibited_payment?: boolean; // Q19: Has unreturned prohibited payment? (Yes = bad)
   n5b_q19b_holding_deposit?: boolean; // Q19b: Was holding deposit taken? (informational)
+  n5b_q19b_holding_deposit_status?: 'no' | 'yes_compliant' | 'yes_breach'; // Raw status from wizard
+  n5b_q19c_repayment_status?: 'full' | 'part' | 'no'; // Q19c: repaid in full/part/no
+  n5b_q19d_applied_to_rent?: boolean;  // Q19d(i): applied to rent
+  n5b_q19d_applied_to_deposit?: boolean; // Q19d(ii): applied to deposit
 
   // =========================================================================
   // N5B QUESTION 20: PAPER DETERMINATION CONSENT
@@ -1616,6 +1620,14 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     if (data.n5b_licensing_decision_outstanding !== undefined) {
       setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_YES, data.n5b_licensing_decision_outstanding, ctx);
       setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_NO, !data.n5b_licensing_decision_outstanding, ctx);
+    } else {
+      // Default Q11b based on licensing status:
+      // - If no licensing required: No decision can be outstanding
+      // - If licensing required and valid licence: Decision is complete
+      // - If licensing required but no valid licence: Leave blank (user must specify)
+      if (!data.n5b_property_requires_licence || data.n5b_has_valid_licence === true) {
+        setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_NO, true, ctx);
+      }
     }
   }
 
@@ -1725,6 +1737,13 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
       setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_YES, data.gas_safety_provided, ctx);
       setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_NO, !data.gas_safety_provided, ctx);
     }
+
+    // Q17c: Gas display requirement - only applies if there's NO gas appliance in tenant's room
+    // This is a rare edge case (e.g., gas supply but no appliances in living areas).
+    // For standard cases with gas appliances in the property, we assume the record was
+    // provided directly (Q17a/Q17b), so Q17c display requirement doesn't apply.
+    // We'll default to N/A by not checking either box, unless explicitly provided.
+    // Most landlords with gas appliances won't need this checkbox.
   }
 
   // =========================================================================
@@ -1810,6 +1829,36 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q19b_holding_deposit !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_YES, data.n5b_q19b_holding_deposit === true, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, data.n5b_q19b_holding_deposit === false, ctx);
+  }
+
+  // Q19c: Was the prohibited payment/holding deposit repaid?
+  // Only required if Q19 or Q19b is Yes
+  const needsQ19cQ19d = data.n5b_q19_has_unreturned_prohibited_payment === true || data.n5b_q19b_holding_deposit === true;
+  if (needsQ19cQ19d) {
+    if (data.n5b_q19c_repayment_status !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.Q19C_REPAID_FULL, data.n5b_q19c_repayment_status === 'full', ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q19C_REPAID_PART, data.n5b_q19c_repayment_status === 'part', ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q19C_REPAID_NO, data.n5b_q19c_repayment_status === 'no', ctx);
+    } else if (data.n5b_q19b_holding_deposit_status === 'yes_compliant') {
+      // If holding deposit was handled compliantly, mark as repaid in full
+      setCheckbox(form, N5B_CHECKBOXES.Q19C_REPAID_FULL, true, ctx);
+    }
+
+    // Q19d: Was the payment applied to rent or deposit?
+    // Only relevant if Q19c is NOT "Yes - in full"
+    const notFullyRepaid = data.n5b_q19c_repayment_status === 'part' || data.n5b_q19c_repayment_status === 'no';
+    if (notFullyRepaid) {
+      // Q19d(i): Applied to rent?
+      if (data.n5b_q19d_applied_to_rent !== undefined) {
+        setCheckbox(form, N5B_CHECKBOXES.Q19D_APPLIED_TO_RENT_YES, data.n5b_q19d_applied_to_rent, ctx);
+        setCheckbox(form, N5B_CHECKBOXES.Q19D_APPLIED_TO_RENT_NO, !data.n5b_q19d_applied_to_rent, ctx);
+      }
+      // Q19d(ii): Applied to deposit?
+      if (data.n5b_q19d_applied_to_deposit !== undefined) {
+        setCheckbox(form, N5B_CHECKBOXES.Q19D_APPLIED_TO_DEPOSIT_YES, data.n5b_q19d_applied_to_deposit, ctx);
+        setCheckbox(form, N5B_CHECKBOXES.Q19D_APPLIED_TO_DEPOSIT_NO, !data.n5b_q19d_applied_to_deposit, ctx);
+      }
+    }
   }
 
   // =========================================================================

@@ -107,6 +107,10 @@ export interface N5BFields {
   // ---------------------------------------------------------------------------
   n5b_q19_has_unreturned_prohibited_payment?: boolean;
   n5b_q19b_holding_deposit?: boolean;
+  n5b_q19b_holding_deposit_status?: 'no' | 'yes_compliant' | 'yes_breach'; // Raw status from wizard
+  n5b_q19c_repayment_status?: 'full' | 'part' | 'no'; // Q19c: repaid in full/part/no
+  n5b_q19d_applied_to_rent?: boolean;  // Q19d(i): applied to rent
+  n5b_q19d_applied_to_deposit?: boolean; // Q19d(ii): applied to deposit
 
   // ---------------------------------------------------------------------------
   // Paper Determination
@@ -736,6 +740,7 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
 
   // Log specific N5B-relevant fields to help debug
   const n5bRelevantKeys = [
+    // Q9 - AST Verification (both positive and negative framing aliases)
     'n5b_q9a_after_feb_1997', 'n5b_q9b_has_notice_not_ast', 'n5b_q9b_no_notice_not_ast',
     'n5b_q9c_has_exclusion_clause', 'n5b_q9c_no_exclusion_clause',
     'n5b_q9d_is_agricultural_worker', 'n5b_q9d_not_agricultural_worker',
@@ -744,6 +749,7 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     'n5b_q9g_is_schedule_10', 'n5b_q9g_not_schedule_10',
     // Q11 - Licensing
     'licensing_required', 'has_valid_licence', 'n5b_property_requires_licence', 'n5b_has_valid_licence',
+    'n5b_licensing_decision_outstanding',
     // Q15 - Property condition / retaliatory eviction
     'improvement_notice_served', 'emergency_remedial_action', 'no_retaliatory_notice',
     'n5b_property_condition_notice_served',
@@ -753,9 +759,13 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     'has_gas_appliances', 'has_gas_at_property', 'gas_safety_cert_served', 'gas_cert_served', 'gas_safety_provided',
     // Q18b - How to Rent
     'how_to_rent_served', 'how_to_rent_provided', 'how_to_rent_date', 'how_to_rent_method',
-    // Q19 - Prohibited Payments
+    // Q19 - Prohibited Payments (including new status fields)
     'n5b_q19_has_unreturned_prohibited_payment', 'n5b_q19_prohibited_payment',
-    'n5b_q19b_holding_deposit', 'n5b_q20_paper_determination',
+    'n5b_q19b_holding_deposit', 'n5b_q19b_holding_deposit_status',
+    'n5b_q19c_repayment_status', 'n5b_q19d_applied_to_rent', 'n5b_q19d_applied_to_deposit',
+    // Q20 - Paper Determination
+    'n5b_q20_paper_determination',
+    // Q10a - Notice service method
     'notice_service_method',
   ];
 
@@ -1033,12 +1043,35 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     const normalized = q19bValue.toLowerCase().trim();
     if (normalized === 'no') {
       fields.n5b_q19b_holding_deposit = false;
-    } else if (normalized === 'yes_compliant' || normalized === 'yes_breach' || normalized === 'yes') {
+      fields.n5b_q19b_holding_deposit_status = 'no';
+    } else if (normalized === 'yes_compliant') {
       fields.n5b_q19b_holding_deposit = true;
+      fields.n5b_q19b_holding_deposit_status = 'yes_compliant';
+      // If compliant, the holding deposit was handled correctly (repaid in full or applied appropriately)
+      fields.n5b_q19c_repayment_status = 'full';
+    } else if (normalized === 'yes_breach') {
+      fields.n5b_q19b_holding_deposit = true;
+      fields.n5b_q19b_holding_deposit_status = 'yes_breach';
+      // If breach, the deposit was NOT properly returned
+      fields.n5b_q19c_repayment_status = 'no';
+    } else if (normalized === 'yes') {
+      fields.n5b_q19b_holding_deposit = true;
+      fields.n5b_q19b_holding_deposit_status = 'yes_compliant'; // Default to compliant
+      fields.n5b_q19c_repayment_status = 'full';
     }
   } else {
     fields.n5b_q19b_holding_deposit = parseN5BBoolean(q19bValue);
+    if (fields.n5b_q19b_holding_deposit === true) {
+      fields.n5b_q19b_holding_deposit_status = 'yes_compliant';
+      fields.n5b_q19c_repayment_status = 'full';
+    } else if (fields.n5b_q19b_holding_deposit === false) {
+      fields.n5b_q19b_holding_deposit_status = 'no';
+    }
   }
+
+  // If Q19 (prohibited payment) is explicitly No, Q19c/Q19d only apply to holding deposit
+  // If Q19 is Yes, there's an unreturned prohibited payment - this is a serious issue
+  // The wizard Q19 asks "Has any prohibited payment NOT been refunded?" - Yes = problem
 
   // =========================================================================
   // Q20: Paper Determination (direct mapping)
@@ -1081,6 +1114,10 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     // Q19 - Prohibited Payments
     n5b_q19_has_unreturned_prohibited_payment: fields.n5b_q19_has_unreturned_prohibited_payment,
     n5b_q19b_holding_deposit: fields.n5b_q19b_holding_deposit,
+    n5b_q19b_holding_deposit_status: fields.n5b_q19b_holding_deposit_status,
+    n5b_q19c_repayment_status: fields.n5b_q19c_repayment_status,
+    n5b_q19d_applied_to_rent: fields.n5b_q19d_applied_to_rent,
+    n5b_q19d_applied_to_deposit: fields.n5b_q19d_applied_to_deposit,
     // Q20 - Paper Determination
     n5b_q20_paper_determination: fields.n5b_q20_paper_determination,
   }, null, 2));
