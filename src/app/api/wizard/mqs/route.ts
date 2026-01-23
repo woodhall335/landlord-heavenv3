@@ -21,6 +21,34 @@ export async function POST(request: Request) {
       );
     }
 
+    // Regional product restrictions validation
+    // Wales and Scotland: complete_pack and money_claim are not available
+    if (
+      (jurisdiction === 'wales' || jurisdiction === 'scotland') &&
+      (product === 'complete_pack' || product === 'money_claim')
+    ) {
+      return NextResponse.json(
+        {
+          error: 'Product not available in your region; use Notice Only instead.',
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          redirect_to: `/wizard?product=notice_only&jurisdiction=${jurisdiction}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Northern Ireland: only tenancy_agreement is available
+    if (jurisdiction === 'northern-ireland' && product !== 'tenancy_agreement') {
+      return NextResponse.json(
+        {
+          error: 'Only tenancy agreements are available for Northern Ireland.',
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          redirect_to: `/wizard?product=tenancy_agreement&jurisdiction=northern-ireland`,
+        },
+        { status: 400 }
+      );
+    }
+
     // Determine MQS file from canonical jurisdiction
     const mqsFile = `${jurisdiction}.yaml`;
 

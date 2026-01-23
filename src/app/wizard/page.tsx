@@ -106,6 +106,7 @@ interface DocumentOption {
   description: string;
   icon: string;
   price: string;
+  regionBadge?: string;
 }
 
 interface JurisdictionOption {
@@ -115,6 +116,11 @@ interface JurisdictionOption {
 }
 
 // Jurisdiction-neutral document descriptions
+// Regional availability (January 2026):
+// - notice_only: England, Wales, Scotland
+// - complete_pack: England only
+// - money_claim: England only
+// - tenancy_agreement: All UK regions
 const documentOptions: DocumentOption[] = [
   {
     type: 'notice_only',
@@ -126,16 +132,18 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
-    description: 'Full bundle from notice to possession order with court/tribunal forms and guidance',
+    description: 'Full bundle from notice to possession order with court forms and guidance',
     icon: '⚖️',
-    price: '£199.99',
+    price: '£149.99',
+    regionBadge: 'England only',
   },
   {
     type: 'money_claim',
     title: 'Money Claims',
     description: 'Rent arrears claims with evidence checklists and court form templates',
     icon: '💰',
-    price: '£199.99',
+    price: '£99.99',
+    regionBadge: 'England only',
   },
   {
     type: 'tenancy_agreement',
@@ -155,6 +163,10 @@ const allJurisdictions: JurisdictionOption[] = [
 ];
 
 // Check if a jurisdiction is enabled for a document type
+// Regional product restrictions (January 2026):
+// - complete_pack and money_claim: England only
+// - notice_only: England, Wales, Scotland (not NI)
+// - tenancy_agreement: All UK regions
 function isJurisdictionEnabled(
   jurisdiction: string,
   documentType: DocumentOption['type'] | null
@@ -166,6 +178,12 @@ function isJurisdictionEnabled(
   // Northern Ireland is only supported for tenancy agreements
   if (jurisdiction === 'northern-ireland') {
     return documentType === 'tenancy_agreement';
+  }
+
+  // Wales and Scotland only support notice_only and tenancy_agreement
+  // complete_pack and money_claim are England-only
+  if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
+    return documentType === 'notice_only' || documentType === 'tenancy_agreement';
   }
 
   return true;
@@ -182,6 +200,13 @@ function getDisabledReason(
 
   if (jurisdiction === 'northern-ireland' && documentType !== 'tenancy_agreement') {
     return 'Eviction and money claim flows are not yet available for Northern Ireland. Tenancy agreements only.';
+  }
+
+  // Wales and Scotland restrictions for complete_pack and money_claim
+  if ((jurisdiction === 'wales' || jurisdiction === 'scotland') &&
+      (documentType === 'complete_pack' || documentType === 'money_claim')) {
+    const productName = documentType === 'complete_pack' ? 'Complete Eviction Pack' : 'Money Claim';
+    return `${productName} is only available for England. Use Notice Only (£39.99) for ${jurisdiction === 'wales' ? 'Wales' : 'Scotland'}.`;
   }
 
   return null;
@@ -530,7 +555,14 @@ function WizardPageInner() {
                   </div>
                   <h3 className="text-xl font-semibold text-charcoal mb-2">{doc.title}</h3>
                   <p className="text-sm text-gray-600 mb-4 min-h-12">{doc.description}</p>
-                  <div className="text-primary font-semibold">{doc.price}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-primary font-semibold">{doc.price}</span>
+                    {doc.regionBadge && (
+                      <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                        {doc.regionBadge}
+                      </span>
+                    )}
+                  </div>
                 </button>
               ))}
             </div>

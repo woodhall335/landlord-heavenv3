@@ -74,7 +74,7 @@ const faqs = [
   },
   {
     question: 'How much does it cost to evict a tenant through court?',
-    answer: 'Court fees are approximately £355 for possession claims, plus £130 for a bailiff warrant if needed. Using our Complete Pack (£199.99) can save hundreds compared to solicitor fees (typically £1,000-2,000).',
+    answer: 'Court fees are approximately £355 for possession claims, plus £130 for a bailiff warrant if needed. Using our Complete Pack (£149.99) can save hundreds compared to solicitor fees (typically £1,000-2,000).',
   },
   {
     question: 'Can the tenant stop the eviction?',

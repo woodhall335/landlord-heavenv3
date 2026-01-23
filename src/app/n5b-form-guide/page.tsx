@@ -116,7 +116,7 @@ export default function N5BFormGuidePage() {
           badgeIcon={<FileText className="w-4 h-4" />}
           title="N5B Form Guide — Accelerated Possession"
           subtitle={<>Form N5B is the <strong>fastest way to get a possession order</strong> after serving Section 21. No court hearing needed in most cases.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £199.99', href: wizardLinkCompletePack }}
+          primaryCTA={{ label: 'Get Complete Pack — £149.99', href: wizardLinkCompletePack }}
           secondaryCTA={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
           variant="pastel"
         >

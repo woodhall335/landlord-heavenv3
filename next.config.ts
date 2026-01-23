@@ -52,6 +52,81 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: false, // temporary redirect since feature may return
       },
+
+      // ===========================================
+      // Regional Product Restrictions (January 2026)
+      // Wales/Scotland complete_pack and money_claim are no longer available
+      // Redirect to notice_only for these regions
+      // ===========================================
+
+      // Wales eviction/money claim wizard redirects
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'complete_pack' },
+          { type: 'query', key: 'jurisdiction', value: 'wales' },
+        ],
+        destination: '/wizard?product=notice_only&jurisdiction=wales',
+        permanent: true,
+      },
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'money_claim' },
+          { type: 'query', key: 'jurisdiction', value: 'wales' },
+        ],
+        destination: '/wizard?product=notice_only&jurisdiction=wales',
+        permanent: true,
+      },
+
+      // Scotland eviction/money claim wizard redirects
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'complete_pack' },
+          { type: 'query', key: 'jurisdiction', value: 'scotland' },
+        ],
+        destination: '/wizard?product=notice_only&jurisdiction=scotland',
+        permanent: true,
+      },
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'money_claim' },
+          { type: 'query', key: 'jurisdiction', value: 'scotland' },
+        ],
+        destination: '/wizard?product=notice_only&jurisdiction=scotland',
+        permanent: true,
+      },
+
+      // Northern Ireland: redirect all eviction/money claim to tenancy agreement
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'complete_pack' },
+          { type: 'query', key: 'jurisdiction', value: 'northern-ireland' },
+        ],
+        destination: '/wizard?product=tenancy_agreement&jurisdiction=northern-ireland',
+        permanent: true,
+      },
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'money_claim' },
+          { type: 'query', key: 'jurisdiction', value: 'northern-ireland' },
+        ],
+        destination: '/wizard?product=tenancy_agreement&jurisdiction=northern-ireland',
+        permanent: true,
+      },
+      {
+        source: '/wizard',
+        has: [
+          { type: 'query', key: 'product', value: 'notice_only' },
+          { type: 'query', key: 'jurisdiction', value: 'northern-ireland' },
+        ],
+        destination: '/wizard?product=tenancy_agreement&jurisdiction=northern-ireland',
+        permanent: true,
+      },
     ];
   },
   devIndicators: false,

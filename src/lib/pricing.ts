@@ -5,14 +5,89 @@
  * Based on LANDLORD_HEAVEN_BLUEPRINT_v6.0.md
  *
  * DO NOT modify these without updating the blueprint
+ *
+ * Regional Pricing (January 2026):
+ * - Notice Only: £39.99 (England, Wales, Scotland)
+ * - Eviction Pack: £149.99 (England only)
+ * - Money Claim: £99.99 (England only)
+ * - Tenancy Agreement: £9.99 (all UK regions)
+ * - Premium TA (HMO): £14.99 (all UK regions)
  */
+
+export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland';
+
+/**
+ * Regional pricing matrix
+ * Products are only priced for regions where they are available
+ */
+export const REGIONAL_PRICING = {
+  notice_only: {
+    england: 39.99,
+    wales: 39.99,
+    scotland: 39.99,
+    // Not available in Northern Ireland
+  },
+  complete_pack: {
+    england: 149.99,
+    // Wales, Scotland, NI not available
+  },
+  money_claim: {
+    england: 99.99,
+    // Wales, Scotland, NI not available
+  },
+  tenancy_agreement: {
+    england: 9.99,
+    wales: 9.99,
+    scotland: 9.99,
+    northern_ireland: 9.99,
+  },
+  tenancy_agreement_premium: {
+    england: 14.99,
+    wales: 14.99,
+    scotland: 14.99,
+    northern_ireland: 14.99,
+  },
+} as const;
+
+/**
+ * Product availability by region
+ */
+export const PRODUCT_AVAILABILITY = {
+  notice_only: ['england', 'wales', 'scotland'],
+  complete_pack: ['england'],
+  money_claim: ['england'],
+  tenancy_agreement: ['england', 'wales', 'scotland', 'northern_ireland'],
+  tenancy_agreement_premium: ['england', 'wales', 'scotland', 'northern_ireland'],
+} as const;
+
+/**
+ * Check if a product is available in a given jurisdiction
+ */
+export function isProductAvailable(product: keyof typeof PRODUCT_AVAILABILITY, jurisdiction: string): boolean {
+  const normalizedJurisdiction = jurisdiction.replace('-', '_');
+  return PRODUCT_AVAILABILITY[product]?.includes(normalizedJurisdiction as any) ?? false;
+}
+
+/**
+ * Get price for a product in a given jurisdiction
+ * Returns null if product not available in that region
+ */
+export function getRegionalPrice(
+  product: keyof typeof REGIONAL_PRICING,
+  jurisdiction: string
+): number | null {
+  const normalizedJurisdiction = jurisdiction.replace('-', '_') as keyof typeof REGIONAL_PRICING[typeof product];
+  const productPricing = REGIONAL_PRICING[product];
+  if (!productPricing) return null;
+  return (productPricing as Record<string, number>)[normalizedJurisdiction] ?? null;
+}
 
 export const PRICING = {
   // Eviction Products (One-Time)
   // NOTE: These prices must match src/lib/pricing/products.ts (source of truth for UI)
   NOTICE_ONLY: 39.99,
-  COMPLETE_EVICTION_PACK: 199.99,
-  MONEY_CLAIM_PACK: 199.99,
+  COMPLETE_EVICTION_PACK: 149.99,
+  MONEY_CLAIM_PACK: 99.99,
 
   // Tenancy Products (One-Time)
   STANDARD_AST: 9.99,

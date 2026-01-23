@@ -265,7 +265,7 @@ export default function TenantNotPayingRentPage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim — £199.99
+                    Start Money Claim — £99.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -496,7 +496,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack — £199.99
+                        Get Money Claim Pack — £99.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"

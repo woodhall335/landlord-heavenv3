@@ -97,18 +97,34 @@ interface TopicCTAConfig {
 }
 
 const CTA_CONFIGS: TopicCTAConfig[] = [
+  // Notice Only - available for England, Wales, Scotland (not NI)
   {
     topics: ['eviction'],
     ctas: [
       { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'eviction', type: 'wizard' },
-      { label: 'Complete Pack', href: '/products/complete-pack', price: 199.99, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
+  // Complete Pack - England only
+  {
+    topics: ['eviction'],
+    ctas: [
+      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: 149.99, topic: 'eviction', type: 'wizard' },
+    ],
+    excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
+  },
+  // Money Claim - England only
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Money Claim Pack', href: '/products/money-claim', price: 199.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 99.99, topic: 'arrears', type: 'wizard' },
+    ],
+    excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
+  },
+  // Notice Only for arrears - available for England, Wales, Scotland (not NI)
+  {
+    topics: ['arrears'],
+    ctas: [
       { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
@@ -226,14 +242,19 @@ export function isComplianceTopic(topic: Topic): boolean {
 /**
  * Get the recommended product for a topic and jurisdiction.
  * Returns null if the product is not supported in the jurisdiction.
+ *
+ * Regional Product Restrictions (January 2026):
+ * - complete_pack: England only
+ * - money_claim: England only
+ * - notice_only: England, Wales, Scotland (not NI)
+ * - tenancy_agreement: All UK regions
  */
 export function getRecommendedProduct(
   topic: Topic,
   jurisdiction?: WizardJurisdiction
 ): { product: WizardProduct; label: string; description: string } | null {
-  // Northern Ireland constraints
+  // Northern Ireland constraints: only tenancy agreements
   if (jurisdiction === 'northern-ireland') {
-    // NI only supports tenancy agreements
     if (topic === 'tenancy' || topic === 'deposit') {
       return {
         product: 'tenancy_agreement',
@@ -247,6 +268,21 @@ export function getRecommendedProduct(
     }
   }
 
+  // Wales and Scotland constraints: only notice_only and tenancy_agreement
+  // complete_pack and money_claim are England-only
+  if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
+    if (topic === 'arrears') {
+      // Money claim not available - recommend notice_only for arrears-based eviction
+      return {
+        product: 'notice_only',
+        label: jurisdiction === 'wales' ? 'Section 173 Notice' : 'Notice to Leave',
+        description: jurisdiction === 'wales'
+          ? 'Generate a Renting Homes Act compliant notice for rent arrears (£39.99)'
+          : 'Create a Notice to Leave for rent arrears under PRT (£39.99)',
+      };
+    }
+  }
+
   // Standard product recommendations
   switch (topic) {
     case 'eviction':
@@ -254,28 +290,27 @@ export function getRecommendedProduct(
         product: 'notice_only',
         label: jurisdiction === 'wales' ? 'Section 173 Notice' : jurisdiction === 'scotland' ? 'Notice to Leave' : 'Eviction Notice',
         description: jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act compliant notice'
+          ? 'Generate a Renting Homes Act compliant notice (£39.99)'
           : jurisdiction === 'scotland'
-          ? 'Create a Notice to Leave for PRT tenancies'
-          : 'Create a compliant Section 21 or Section 8 notice',
+          ? 'Create a Notice to Leave for PRT tenancies (£39.99)'
+          : 'Create a compliant Section 21 or Section 8 notice (£39.99)',
       };
     case 'arrears':
+      // Money claim is England-only
       return {
         product: 'money_claim',
         label: 'Money Claim Pack',
-        description: jurisdiction === 'scotland'
-          ? 'Recover rent arrears through Simple Procedure'
-          : 'Recover rent arrears through the courts',
+        description: 'Recover rent arrears through the courts (£99.99, England only)',
       };
     case 'tenancy':
       return {
         product: 'ast_standard',
         label: jurisdiction === 'scotland' ? 'PRT Agreement' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Tenancy Agreement',
         description: jurisdiction === 'scotland'
-          ? 'Create a compliant Private Residential Tenancy'
+          ? 'Create a compliant Private Residential Tenancy (£9.99)'
           : jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act occupation contract'
-          : 'Create an Assured Shorthold Tenancy agreement',
+          ? 'Generate a Renting Homes Act occupation contract (£9.99)'
+          : 'Create an Assured Shorthold Tenancy agreement (£9.99)',
       };
     default:
       return null;

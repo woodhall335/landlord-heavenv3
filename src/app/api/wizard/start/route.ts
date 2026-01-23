@@ -163,13 +163,43 @@ export async function POST(request: Request) {
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'tenancy_agreement'],
+            scotland: ['notice_only', 'tenancy_agreement'],
           },
           blocking_issues: [],
           warnings: [],
         },
         { status: 422 },
+      );
+    }
+
+    // Wales and Scotland gating: complete_pack and money_claim not available
+    // Due to different legal frameworks, eviction packs and money claims are England-only
+    // Wales/Scotland users should use notice_only or tenancy_agreement
+    if (
+      (effectiveJurisdiction === 'wales' || effectiveJurisdiction === 'scotland') &&
+      (normalizedProduct === 'complete_pack' || normalizedProduct === 'money_claim')
+    ) {
+      return NextResponse.json(
+        {
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          user_message:
+            'Product not available in your region; use Notice Only instead. ' +
+            `The ${normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'} is only available for England. ` +
+            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£39.99) ` +
+            'and Tenancy Agreements.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'tenancy_agreement'],
+            scotland: ['notice_only', 'tenancy_agreement'],
+          },
+          redirect_to: `/wizard?product=notice_only&jurisdiction=${effectiveJurisdiction}`,
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 400 },
       );
     }
 

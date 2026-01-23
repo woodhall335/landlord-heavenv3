@@ -182,7 +182,8 @@ export default function HomeContent() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£199.99"
+              price="£149.99"
+              badge="England only"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular={true}
             />
@@ -190,8 +191,9 @@ export default function HomeContent() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£199.99"
+              price="£99.99"
               solicitorPrice="£400-600"
+              badge="England only"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard
@@ -505,6 +507,7 @@ function ProductCard({
   solicitorPrice,
   icon,
   popular = false,
+  badge,
 }: {
   href: string;
   title: string;
@@ -513,6 +516,7 @@ function ProductCard({
   solicitorPrice?: string;
   icon: React.ReactNode;
   popular?: boolean;
+  badge?: string;
 }) {
   return (
     <Link href={href} className="product-card-wrapper group relative cursor-pointer">
@@ -534,7 +538,14 @@ function ProductCard({
         <p className="text-gray-600 mb-4 text-sm">{description}</p>
 
         <div className="flex items-center justify-between">
-          <span className="text-primary font-bold">{price}</span>
+          <div>
+            <span className="text-primary font-bold">{price}</span>
+            {badge && (
+              <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                {badge}
+              </span>
+            )}
+          </div>
           <span className="text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
             Learn more
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
