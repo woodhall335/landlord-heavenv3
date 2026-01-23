@@ -17,46 +17,58 @@ describe('Wizard selection UI Northern Ireland gating', () => {
     pushMock.mockReset();
   });
 
-  it('disables Northern Ireland and Scotland/Wales for eviction flows (England only)', () => {
+  it('hides Northern Ireland and Scotland/Wales for eviction flows (England only)', () => {
     render(<WizardPage />);
 
     fireEvent.click(screen.getByRole('button', { name: /Eviction Pack/i }));
 
-    const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
-    const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
-    const walesOption = screen.getByRole('button', { name: /Wales/i });
+    // England should be the only jurisdiction shown for Complete Eviction Pack
+    expect(screen.getByRole('button', { name: /England/i })).toBeTruthy();
 
-    // All non-England jurisdictions should be disabled for eviction packs
-    expect((niOption as HTMLButtonElement).disabled).toBe(true);
-    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
-    expect((walesOption as HTMLButtonElement).disabled).toBe(true);
-
-    // UI shows multiple messages for Wales and Scotland:
-    // "Complete Eviction Pack is only available for England. Use Notice Only (£39.99) for Wales/Scotland."
-    // And for NI: "Eviction and money claim flows are not yet available for Northern Ireland. Tenancy agreements only."
-    const evictionMessages = screen.getAllByText(/Complete Eviction Pack is only available for England/i);
-    expect(evictionMessages.length).toBeGreaterThanOrEqual(1);
+    // Non-England jurisdictions should be hidden, not shown
+    expect(screen.queryByRole('button', { name: /Northern Ireland/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Scotland/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Wales/i })).toBeNull();
   });
 
-  it('disables Northern Ireland and Scotland/Wales for money claim flows (England only)', () => {
+  it('hides Northern Ireland and Scotland/Wales for money claim flows (England only)', () => {
     render(<WizardPage />);
 
     fireEvent.click(screen.getByRole('button', { name: /Money Claim/i }));
 
-    const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
-    const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
-    const walesOption = screen.getByRole('button', { name: /Wales/i });
+    // England should be the only jurisdiction shown for Money Claims
+    expect(screen.getByRole('button', { name: /England/i })).toBeTruthy();
 
-    // All non-England jurisdictions should be disabled for money claims
-    expect((niOption as HTMLButtonElement).disabled).toBe(true);
-    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
-    expect((walesOption as HTMLButtonElement).disabled).toBe(true);
+    // Non-England jurisdictions should be hidden, not shown
+    expect(screen.queryByRole('button', { name: /Northern Ireland/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Scotland/i })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Wales/i })).toBeNull();
+  });
 
-    // Check for messaging about England-only availability
-    // UI shows: "Money Claim is only available for England. Use Notice Only (£39.99) for Scotland/Wales."
-    // Note: Multiple messages exist (one for Wales, one for Scotland)
-    const moneyClaimMessages = screen.getAllByText(/Money Claim is only available for England/i);
-    expect(moneyClaimMessages.length).toBeGreaterThanOrEqual(1);
+  it('shows England, Wales, and Scotland for notice_only (hides Northern Ireland)', () => {
+    render(<WizardPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Eviction Notices/i }));
+
+    // England, Wales, and Scotland should be shown
+    expect(screen.getByRole('button', { name: /England/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Wales/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Scotland/i })).toBeTruthy();
+
+    // Northern Ireland should be hidden for notice_only
+    expect(screen.queryByRole('button', { name: /Northern Ireland/i })).toBeNull();
+  });
+
+  it('shows all jurisdictions for tenancy agreements', () => {
+    render(<WizardPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Tenancy Agreement/i }));
+
+    // All jurisdictions should be shown for tenancy agreements
+    expect(screen.getByRole('button', { name: /England/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Wales/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Scotland/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Northern Ireland/i })).toBeTruthy();
   });
 
   it('allows Northern Ireland tenancy agreements and routes to the flow', () => {

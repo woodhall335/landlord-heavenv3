@@ -213,29 +213,6 @@ function getAvailableDocumentOptions(jurisdiction: string | null): DocumentOptio
   );
 }
 
-// Get disabled reason for a jurisdiction
-function getDisabledReason(
-  jurisdiction: string,
-  documentType: DocumentOption['type'] | null
-): string | null {
-  if (!documentType) {
-    return null;
-  }
-
-  if (jurisdiction === 'northern-ireland' && documentType !== 'tenancy_agreement') {
-    return 'Eviction and money claim flows are not yet available for Northern Ireland. Tenancy agreements only.';
-  }
-
-  // Wales and Scotland restrictions for complete_pack and money_claim
-  if ((jurisdiction === 'wales' || jurisdiction === 'scotland') &&
-      (documentType === 'complete_pack' || documentType === 'money_claim')) {
-    const productName = documentType === 'complete_pack' ? 'Complete Eviction Pack' : 'Money Claim';
-    return `${productName} is only available for England. Use Notice Only (£39.99) for ${jurisdiction === 'wales' ? 'Wales' : 'Scotland'}.`;
-  }
-
-  return null;
-}
-
 // Map product parameter to document type
 function mapProductToDocumentType(
   product: string
@@ -398,8 +375,15 @@ function WizardPageInner() {
   // Get product-specific hero content
   const heroContent = getHeroContent(productParam, jurisdictionParam);
 
-  // All jurisdictions are shown, but some may be disabled
-  const availableJurisdictions = allJurisdictions;
+  // Filter jurisdictions to only show those available for the selected document type
+  const availableJurisdictions = useMemo(() => {
+    if (!selectedDocument) {
+      return allJurisdictions;
+    }
+    return allJurisdictions.filter((jur) =>
+      isJurisdictionEnabled(jur.value, selectedDocument.type)
+    );
+  }, [selectedDocument]);
 
   // Handle Start Now button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
@@ -613,50 +597,37 @@ function WizardPageInner() {
             </p>
 
             <div className="space-y-4">
-              {availableJurisdictions.map((jur) => {
-                const enabled = isJurisdictionEnabled(jur.value, selectedDocument?.type ?? null);
-                const disabledReason = getDisabledReason(jur.value, selectedDocument?.type ?? null);
-
-                return (
-                  <div key={jur.value}>
-                    <button
-                      onClick={() => enabled && handleJurisdictionSelect(jur)}
-                      disabled={!enabled}
-                      className={clsx(
-                        'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
-                        'flex items-center gap-4',
-                        !enabled && 'opacity-50 cursor-not-allowed',
-                        enabled && selectedJurisdiction?.value === jur.value
-                          ? 'border-primary bg-primary-subtle shadow-md'
-                          : enabled
-                            ? 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
-                            : 'border-gray-300 bg-gray-50'
-                      )}
-                    >
-                      <div>
-                        <Image
-                          src={jur.flag}
-                          alt={jur.label}
-                          width={48}
-                          height={32}
-                          className="w-12 h-8 border border-gray-200 rounded-sm"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
-                      </div>
-                      {enabled && selectedJurisdiction?.value === jur.value && (
-                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <RiCheckLine className="w-4 h-4 text-white" />
-                        </div>
-                      )}
-                    </button>
-                    {!enabled && disabledReason && (
-                      <p className="text-sm text-gray-600 mt-2 ml-4">{disabledReason}</p>
-                    )}
+              {availableJurisdictions.map((jur) => (
+                <button
+                  key={jur.value}
+                  onClick={() => handleJurisdictionSelect(jur)}
+                  className={clsx(
+                    'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
+                    'flex items-center gap-4',
+                    selectedJurisdiction?.value === jur.value
+                      ? 'border-primary bg-primary-subtle shadow-md'
+                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
+                  )}
+                >
+                  <div>
+                    <Image
+                      src={jur.flag}
+                      alt={jur.label}
+                      width={48}
+                      height={32}
+                      className="w-12 h-8 border border-gray-200 rounded-sm"
+                    />
                   </div>
-                );
-              })}
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
+                  </div>
+                  {selectedJurisdiction?.value === jur.value && (
+                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                      <RiCheckLine className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </button>
+              ))}
             </div>
 
             {/* Start Button */}
