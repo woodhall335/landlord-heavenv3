@@ -77,9 +77,27 @@ export default function CasesListPage() {
   const applyFiltersAndSort = () => {
     let filtered = [...cases];
 
-    // Apply status filter
+    // Apply status filter using derived display_status
     if (filterStatus !== 'all') {
-      filtered = filtered.filter((c) => c.status === filterStatus);
+      filtered = filtered.filter((c) => {
+        const displayStatus = c.display_status || c.status;
+        switch (filterStatus) {
+          case 'draft':
+            return displayStatus === 'draft';
+          case 'in_progress':
+            // Include all in-progress states
+            return displayStatus === 'in_progress' ||
+                   displayStatus === 'paid_in_progress' ||
+                   displayStatus === 'ready_to_purchase' ||
+                   displayStatus === 'generating_documents';
+          case 'completed':
+            // Include all completed states (paid with documents ready)
+            return displayStatus === 'documents_ready' ||
+                   displayStatus === 'completed';
+          default:
+            return c.status === filterStatus;
+        }
+      });
     }
 
     // Apply sorting
