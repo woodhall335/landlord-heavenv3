@@ -1,13 +1,12 @@
 {{!--
   ============================================================================
   SCHEDULE OF RENT ARREARS (Court-Ready)
-  Section 8 Notice - Ground 8
+  Money Claim Pack - England & Wales
   ============================================================================
   Court-credible arrears ledger with:
   - Running balance column
   - FIFO payment allocation
-  - Arrears snapshots (notice date / schedule date)
-  - Ground 8 threshold validation
+  - Clear period-by-period breakdown
 --}}
 
 <!DOCTYPE html>
@@ -18,7 +17,7 @@
   <style>
     {{{print_css}}}
 
-    /* ===== @PAGE OVERRIDE - MATCH FORM 3 MARGINS ===== */
+    /* ===== @PAGE OVERRIDE ===== */
     @page {
       size: A4;
       margin: 10mm;
@@ -84,69 +83,42 @@
       color: #1a1a1a;
     }
 
-    /* Ground 8 Summary Box */
-    .ground8-summary {
+    /* Summary Box */
+    .summary-box {
       border: 2px solid #1a1a1a;
       padding: 1em;
       margin: 1.5em 0;
       background: #f0f9ff;
     }
 
-    .ground8-summary h3 {
+    .summary-box h3 {
       margin: 0 0 0.8em 0;
       font-size: 11pt;
       font-weight: 600;
     }
 
-    .ground8-grid {
+    .summary-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.8em 2em;
     }
 
-    .ground8-item {
+    .summary-item {
       padding: 0.6em;
       background: white;
       border: 1px solid #ddd;
     }
 
-    .ground8-item dt {
+    .summary-item dt {
       font-size: 9pt;
       color: #666;
       margin-bottom: 0.2em;
     }
 
-    .ground8-item dd {
+    .summary-item dd {
       margin: 0;
       font-size: 11pt;
       font-weight: 600;
-    }
-
-    .ground8-item.pass {
-      border-left: 4px solid #22c55e;
-    }
-
-    .ground8-item.fail {
-      border-left: 4px solid #ef4444;
-    }
-
-    .threshold-badge {
-      display: inline-block;
-      padding: 0.2em 0.5em;
-      font-size: 9pt;
-      font-weight: 600;
-      border-radius: 3px;
-      margin-left: 0.5em;
-    }
-
-    .threshold-badge.pass {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .threshold-badge.fail {
-      background: #fee2e2;
-      color: #991b1b;
     }
 
     /* Arrears Table */
@@ -215,11 +187,6 @@
       font-size: 10pt;
     }
 
-    .info-box.warning {
-      border-left-color: #f59e0b;
-      background: #fffbeb;
-    }
-
     /* Document Footer */
     .doc-footer {
       margin-top: 2em;
@@ -245,7 +212,7 @@
 <!-- Document Header -->
 <div class="doc-header">
   <h1>Schedule of Rent Arrears</h1>
-  <span class="doc-badge">Section 8 Notice – Ground 8</span>
+  <span class="doc-badge">Money Claim – County Court</span>
 </div>
 
 <!-- Case Details -->
@@ -253,50 +220,38 @@
   <dl class="case-details-grid">
     <dt>Property:</dt>
     <dd>{{property_address}}</dd>
-    <dt>Tenant:</dt>
+    <dt>Defendant:</dt>
     <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
-    <dt>Landlord:</dt>
+    <dt>Claimant:</dt>
     <dd>{{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
     {{#if claimant_reference}}
     <dt>Claim Reference:</dt>
     <dd>{{claimant_reference}}</dd>
     {{/if}}
     <dt>Schedule Date:</dt>
-    <dd>{{format_date schedule_date "long"}}</dd>
+    <dd>{{format_date generation_date "long"}}</dd>
   </dl>
 </div>
 
-<!-- Ground 8 Summary -->
-<div class="ground8-summary">
-  <h3>Ground 8 Arrears Summary</h3>
-  <div class="ground8-grid">
-    {{#if arrears_at_notice_date}}
-    <div class="ground8-item {{#if meets_threshold_at_notice}}pass{{else}}fail{{/if}}">
-      <dt>Arrears at Notice Service Date{{#if notice_date}} ({{format_date notice_date "short"}}){{/if}}</dt>
-      <dd>
-        {{currency arrears_at_notice_date}}
-        <span class="threshold-badge {{#if meets_threshold_at_notice}}pass{{else}}fail{{/if}}">
-          {{#if meets_threshold_at_notice}}✓ Meets Threshold{{else}}✗ Below Threshold{{/if}}
-        </span>
-      </dd>
+<!-- Arrears Summary -->
+<div class="summary-box">
+  <h3>Arrears Summary</h3>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <dt>Monthly Rent</dt>
+      <dd>{{currency rent_amount}}</dd>
     </div>
-    {{/if}}
-    <div class="ground8-item {{#if meets_threshold_at_schedule}}pass{{else}}fail{{/if}}">
-      <dt>Arrears at Schedule Date ({{format_date schedule_date "short"}})</dt>
-      <dd>
-        {{currency arrears_at_schedule_date}}
-        <span class="threshold-badge {{#if meets_threshold_at_schedule}}pass{{else}}fail{{/if}}">
-          {{#if meets_threshold_at_schedule}}✓ Meets Threshold{{else}}✗ Below Threshold{{/if}}
-        </span>
-      </dd>
+    <div class="summary-item">
+      <dt>Payment Frequency</dt>
+      <dd>{{rent_frequency}}</dd>
     </div>
-    <div class="ground8-item">
-      <dt>Ground 8 Threshold ({{rent_frequency}} rent)</dt>
-      <dd>≥ {{currency ground8_threshold}} ({{ground8_threshold_description}})</dd>
+    <div class="summary-item">
+      <dt>Tenancy Start Date</dt>
+      <dd>{{tenancy_start_date}}</dd>
     </div>
-    <div class="ground8-item">
-      <dt>Arrears at Hearing Date</dt>
-      <dd><em>To be confirmed at hearing</em></dd>
+    <div class="summary-item">
+      <dt>Total Arrears Claimed</dt>
+      <dd><strong>{{currency arrears_total}}</strong></dd>
     </div>
   </div>
 </div>
@@ -345,17 +300,11 @@
   <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
 </div>
 
-{{#unless meets_threshold_at_notice}}
-<div class="info-box warning">
-  <strong>⚠️ Warning:</strong> Based on the data provided, the arrears at the notice service date may not meet the Ground 8 threshold. Ground 8 requires at least {{ground8_threshold_description}} of arrears both at the notice date and at the hearing date. Consider reviewing the arrears data or relying on additional grounds.
-</div>
-{{/unless}}
-
 <!-- Footer -->
 <div class="doc-footer">
-  <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
-  <p><strong>Landlord Heaven Court Pack</strong> | England</p>
-  <p><em>This schedule will be updated before the hearing to reflect the current arrears position.</em></p>
+  <p><strong>Generated:</strong> {{format_date generation_date "long"}}</p>
+  <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
+  <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
 </div>
 
 </body>

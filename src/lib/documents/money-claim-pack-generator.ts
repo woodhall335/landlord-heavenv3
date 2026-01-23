@@ -24,6 +24,7 @@ import { generateDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
+import { assertValidMoneyClaimData } from './money-claim-validator';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -354,6 +355,14 @@ async function generateEnglandWalesMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
+  // =========================================================================
+  // PRE-GENERATION VALIDATION
+  // Validate all required data and cross-document consistency BEFORE generating
+  // =========================================================================
+  const validationResult = assertValidMoneyClaimData(claim);
+  console.log('[money-claim-pack] Pre-generation validation passed');
+  console.log('[money-claim-pack] Computed totals:', validationResult.computedTotals);
+
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];

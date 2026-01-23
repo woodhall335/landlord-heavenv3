@@ -102,6 +102,60 @@ describe('Money claim pack generator', () => {
     ).rejects.toThrow('England & Wales');
   });
 
+  describe('pre-generation validation', () => {
+    it('fails loudly when landlord name is missing', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        landlord_full_name: '',
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('fails loudly when tenant name is missing', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        tenant_full_name: '',
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('fails loudly when no claim amount exists', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        arrears_total: 0,
+        arrears_schedule: [],
+        damage_items: [],
+        other_charges: [],
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('error message includes human-readable field labels', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        landlord_full_name: '',
+        property_address: '',
+      };
+
+      try {
+        await generateMoneyClaimPack(invalidCase);
+        expect.fail('Should have thrown');
+      } catch (err: any) {
+        expect(err.message).toContain('Claimant');
+        expect(err.message).toContain('Property address');
+      }
+    });
+  });
+
   describe('conditional interest document generation', () => {
     it('excludes interest calculation document when claim_interest is undefined', async () => {
       const caseWithoutInterest = {
