@@ -164,11 +164,12 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
     'method_of_service',
   ],
 
-  // Licensing
+  // Licensing - Q11 in newer N5B forms
   n5b_property_requires_licence: [
     'n5b_property_requires_licence',
     'property_requires_licence',
     'requires_licence',
+    'licensing_required',            // Actual wizard MQS field ID
     'licensing.required',
     'licensing.is_required',
     'section21.licensing_required',
@@ -177,7 +178,7 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
   ],
   n5b_has_valid_licence: [
     'n5b_has_valid_licence',
-    'has_valid_licence',
+    'has_valid_licence',             // Actual wizard MQS field ID
     'valid_licence',
     'licensing.has_valid_licence',
     'licensing.valid_licence',
@@ -193,12 +194,17 @@ const POSITIVE_FRAMING_ALIASES: Record<string, string[]> = {
   ],
 
   // Property condition / retaliation section (Q15a-k style)
+  // The wizard asks about improvement_notice_served and emergency_remedial_action
+  // which together indicate whether a property condition notice has been served
   n5b_property_condition_notice_served: [
     'n5b_property_condition_notice_served',
     'property_condition.notice_served',
     'retaliation.notice_served',
     'housing_act_2004.notice_served',
     'section21.property_condition_notice_served',
+    'improvement_notice_served',      // Actual wizard MQS field ID (Housing Act 2004 s.11)
+    'emergency_remedial_action',      // Actual wizard MQS field ID (Housing Act 2004 s.40)
+    'no_retaliatory_notice',          // Sometimes stored as inverse boolean
   ],
   n5b_property_condition_notice_date: [
     'n5b_property_condition_notice_date',
@@ -736,9 +742,18 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     'n5b_q9e_is_succession_tenancy', 'n5b_q9e_not_succession_tenancy',
     'n5b_q9f_was_secure_tenancy', 'n5b_q9f_not_former_secure',
     'n5b_q9g_is_schedule_10', 'n5b_q9g_not_schedule_10',
+    // Q11 - Licensing
+    'licensing_required', 'has_valid_licence', 'n5b_property_requires_licence', 'n5b_has_valid_licence',
+    // Q15 - Property condition / retaliatory eviction
+    'improvement_notice_served', 'emergency_remedial_action', 'no_retaliatory_notice',
+    'n5b_property_condition_notice_served',
+    // Q16 - EPC
     'epc_served', 'epc_provided', 'epc_provided_date', 'epc_certificate_date',
+    // Q17 - Gas Safety
     'has_gas_appliances', 'has_gas_at_property', 'gas_safety_cert_served', 'gas_cert_served', 'gas_safety_provided',
-    'how_to_rent_served', 'how_to_rent_provided', 'how_to_rent_date',
+    // Q18b - How to Rent
+    'how_to_rent_served', 'how_to_rent_provided', 'how_to_rent_date', 'how_to_rent_method',
+    // Q19 - Prohibited Payments
     'n5b_q19_has_unreturned_prohibited_payment', 'n5b_q19_prohibited_payment',
     'n5b_q19b_holding_deposit', 'n5b_q20_paper_determination',
     'notice_service_method',
@@ -953,6 +968,58 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
   }
 
   // =========================================================================
+  // Q11: Licensing (HMO / Selective)
+  // The wizard uses licensing_required as a select with values:
+  // "not_required", "hmo_mandatory", "hmo_additional", "selective"
+  // We need to convert this to a boolean for the N5B form.
+  // =========================================================================
+  const licensingRequired = getWizardValueFromPaths(
+    wizardFacts,
+    POSITIVE_FRAMING_ALIASES.n5b_property_requires_licence
+  );
+  if (typeof licensingRequired === 'string') {
+    // Convert select value to boolean
+    const normalized = licensingRequired.toLowerCase().trim();
+    fields.n5b_property_requires_licence = normalized !== 'not_required' && normalized !== 'no';
+  } else {
+    fields.n5b_property_requires_licence = parseN5BBoolean(licensingRequired);
+  }
+
+  fields.n5b_has_valid_licence = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_has_valid_licence)
+  );
+
+  fields.n5b_licensing_decision_outstanding = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_licensing_decision_outstanding)
+  );
+
+  // =========================================================================
+  // Q15: Property Condition / Retaliatory Eviction (Housing Act 2004)
+  // The wizard asks: improvement_notice_served, emergency_remedial_action
+  // If EITHER is true, a property condition notice has been served.
+  // For valid Section 21, both must be false (NO notice served).
+  // =========================================================================
+  const improvementNotice = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, POSITIVE_FRAMING_ALIASES.n5b_property_condition_notice_served)
+  );
+  const emergencyRemedial = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, ['emergency_remedial_action', 'section21.emergency_remedial_action'])
+  );
+  // Also check for no_retaliatory_notice (inverse boolean - true means NO notice)
+  const noRetaliatoryNotice = parseN5BBoolean(
+    getWizardValueFromPaths(wizardFacts, ['no_retaliatory_notice', 'section21.no_retaliatory_notice'])
+  );
+
+  // Determine if a property condition notice was served
+  if (improvementNotice !== undefined || emergencyRemedial !== undefined) {
+    // If either is explicitly true, a notice was served
+    fields.n5b_property_condition_notice_served = improvementNotice === true || emergencyRemedial === true;
+  } else if (noRetaliatoryNotice !== undefined) {
+    // Inverse: if no_retaliatory_notice is true, then no notice was served
+    fields.n5b_property_condition_notice_served = !noRetaliatoryNotice;
+  }
+
+  // =========================================================================
   // Q19: Tenant Fees Act 2019 (direct mapping with special field name)
   // =========================================================================
   fields.n5b_q19_has_unreturned_prohibited_payment = parseN5BBoolean(
@@ -984,6 +1051,7 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
   // DEBUG LOGGING - Log output N5B fields
   // ==========================================================================
   console.log('🔍 [N5B-BUILDER] buildN5BFields output:', JSON.stringify({
+    // Q9a-Q9g
     n5b_q9a_after_feb_1997: fields.n5b_q9a_after_feb_1997,
     n5b_q9b_has_notice_not_ast: fields.n5b_q9b_has_notice_not_ast,
     n5b_q9c_has_exclusion_clause: fields.n5b_q9c_has_exclusion_clause,
@@ -991,16 +1059,29 @@ export function buildN5BFields(wizardFacts: Record<string, unknown>): N5BFields 
     n5b_q9e_is_succession_tenancy: fields.n5b_q9e_is_succession_tenancy,
     n5b_q9f_was_secure_tenancy: fields.n5b_q9f_was_secure_tenancy,
     n5b_q9g_is_schedule_10: fields.n5b_q9g_is_schedule_10,
+    // Q10a
     notice_service_method: fields.notice_service_method,
+    // Q11 - Licensing
+    n5b_property_requires_licence: fields.n5b_property_requires_licence,
+    n5b_has_valid_licence: fields.n5b_has_valid_licence,
+    n5b_licensing_decision_outstanding: fields.n5b_licensing_decision_outstanding,
+    // Q15 - Property condition
+    n5b_property_condition_notice_served: fields.n5b_property_condition_notice_served,
+    // Q16 - EPC
     epc_provided: fields.epc_provided,
     epc_provided_date: fields.epc_provided_date,
+    // Q17 - Gas Safety
     has_gas_at_property: fields.has_gas_at_property,
     gas_safety_provided: fields.gas_safety_provided,
     gas_safety_check_date: fields.gas_safety_check_date,
+    // Q18b - How to Rent
     how_to_rent_provided: fields.how_to_rent_provided,
     how_to_rent_date: fields.how_to_rent_date,
+    how_to_rent_method: fields.how_to_rent_method,
+    // Q19 - Prohibited Payments
     n5b_q19_has_unreturned_prohibited_payment: fields.n5b_q19_has_unreturned_prohibited_payment,
     n5b_q19b_holding_deposit: fields.n5b_q19b_holding_deposit,
+    // Q20 - Paper Determination
     n5b_q20_paper_determination: fields.n5b_q20_paper_determination,
   }, null, 2));
 
