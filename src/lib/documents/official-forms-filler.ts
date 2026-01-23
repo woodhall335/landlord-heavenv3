@@ -1536,6 +1536,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.subsequent_tenancy !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_YES, data.subsequent_tenancy, ctx);
     setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, !data.subsequent_tenancy, ctx);
+  } else {
+    // Default: Most tenancies don't have subsequent written agreements
+    setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, true, ctx);
   }
 
   // =========================================================================
@@ -1860,6 +1863,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.how_to_rent_method === 'hardcopy') {
     setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_HARDCOPY, true, ctx);
   } else if (data.how_to_rent_method === 'email') {
+    setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_EMAIL, true, ctx);
+  } else {
+    // Default: Email is most common method for providing How to Rent guide
     setCheckbox(form, N5B_CHECKBOXES.Q18D_HOW_TO_RENT_EMAIL, true, ctx);
   }
 
