@@ -204,6 +204,10 @@ const N5_CHECKBOXES = {
  * The previous mapping was INCORRECT and caused names to display reversed.
  * Now using correct direct mapping: FIRST_NAMES -> first names, LAST_NAME -> last name
  */
+/**
+ * N5B form text field names - UPDATED January 2026
+ * Field names extracted from actual n5b-eng.pdf form
+ */
 const N5B_FIELDS = {
   // Header
   CLAIMANTS_NAMES: 'Enter the full names of the Claimants',
@@ -214,33 +218,55 @@ const N5B_FIELDS = {
   COURT_FEE: 'Court fee',
   LEGAL_COSTS: 'Legal representatives costs',
   TOTAL_AMOUNT: 'Total amount',
-  // First Claimant - PDF field names are SWAPPED relative to visual labels!
-  // The PDF field "First Claimant's last name" visually renders as "First name(s)"
-  // The PDF field "First Claimant's first names" visually renders as "Last name"
-  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's last name",    // Visual "First name(s)" field
-  FIRST_CLAIMANT_LAST_NAME: "First Claimant's first names",    // Visual "Last name" field
+  // First Claimant - CORRECTED: Direct mapping to actual PDF field names
+  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's first names",
+  FIRST_CLAIMANT_LAST_NAME: "First Claimant's last name",
   FIRST_CLAIMANT_ADDRESS_STREET: "First Claimant's address: building and street",
   FIRST_CLAIMANT_ADDRESS_LINE2: "First Claimant's address: second line of address",
   FIRST_CLAIMANT_ADDRESS_TOWN: "First Claimant's address: town or city",
+  FIRST_CLAIMANT_ADDRESS_COUNTY: "First Claimant's address: county (optional)",
   FIRST_CLAIMANT_ADDRESS_POSTCODE: "First Claimant's address: postcode",
-  // Second Claimant - CORRECTED: Direct mapping
-  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's first names", // Visual "First name(s)" field
-  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's last name",     // Visual "Last name" field
-  // First Defendant - CORRECTED: Direct mapping
-  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's first name(s)", // Visual "First name(s)" field
-  FIRST_DEFENDANT_LAST_NAME: "First Defendant's last name",       // Visual "Last name" field
+  // Second Claimant
+  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's first names",
+  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's last name",
+  SECOND_CLAIMANT_ADDRESS_STREET: "Second Claimant's address: building and street",
+  SECOND_CLAIMANT_ADDRESS_LINE2: "Second Claimant's address: second line of address",
+  SECOND_CLAIMANT_ADDRESS_TOWN: "Second Claimant's address: town or city",
+  SECOND_CLAIMANT_ADDRESS_COUNTY: "Second Claimant's address: county (optional)",
+  SECOND_CLAIMANT_ADDRESS_POSTCODE: "Second Claimant's address: postcode",
+  // Third Claimant
+  THIRD_CLAIMANT_FIRST_NAMES: "Third Claimant's first names",
+  THIRD_CLAIMANT_LAST_NAME: "Third Claimant's last name",
+  THIRD_CLAIMANT_ADDRESS_STREET: "Third Claimant's address: building and street",
+  THIRD_CLAIMANT_ADDRESS_LINE2: "Third Claimant's address: second line of address",
+  THIRD_CLAIMANT_ADDRESS_TOWN: "Third Claimant's address: town or city",
+  THIRD_CLAIMANT_ADDRESS_COUNTY: "Third Claimant's address: county (optional)",
+  THIRD_CLAIMANT_ADDRESS_POSTCODE: "Third Claimant's address: postcode",
+  // First Defendant
+  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's first name(s)",
+  FIRST_DEFENDANT_LAST_NAME: "First Defendant's last name",
   FIRST_DEFENDANT_ADDRESS_STREET: "First Defendant's address: building and street",
   FIRST_DEFENDANT_ADDRESS_LINE2: "First Defendant's address: second line of address",
   FIRST_DEFENDANT_ADDRESS_TOWN: "First Defendant's address: town or city",
+  FIRST_DEFENDANT_ADDRESS_COUNTY: "First Defendant's address: county (optional)",
   FIRST_DEFENDANT_ADDRESS_POSTCODE: "First Defendant's address: postcode",
-  // Second Defendant - CORRECTED: Direct mapping
-  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's first names", // Visual "First name(s)" field
-  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's last name",     // Visual "Last name" field
+  // Second Defendant
+  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's first names",
+  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's last name",
   SECOND_DEFENDANT_ADDRESS_STREET: "Second Defendant's address: building and street",
   SECOND_DEFENDANT_ADDRESS_LINE2: "Second Defendant's address: second line of address",
   SECOND_DEFENDANT_ADDRESS_TOWN: "Second Defendant's address: town or city",
+  SECOND_DEFENDANT_ADDRESS_COUNTY: "Second Defendant's address: county (optional)",
   SECOND_DEFENDANT_ADDRESS_POSTCODE: "Second Defendant's address: postcode",
-  // FIX 2: Defendant's address for service (N5B Page 5)
+  // Third Defendant
+  THIRD_DEFENDANT_FIRST_NAMES: "Third Defendant's first names",
+  THIRD_DEFENDANT_LAST_NAME: "Third Defendant's last name",
+  THIRD_DEFENDANT_ADDRESS_STREET: "Third Defendant's address: building and street",
+  THIRD_DEFENDANT_ADDRESS_LINE2: "Third Defendant's address: second line of address",
+  THIRD_DEFENDANT_ADDRESS_TOWN: "Third Defendant's address: town or city",
+  THIRD_DEFENDANT_ADDRESS_COUNTY: "Third Defendant's address: county (optional)",
+  THIRD_DEFENDANT_ADDRESS_POSTCODE: "Third Defendant's address: postcode",
+  // Defendant's address for service (N5B Page 5)
   DEFENDANT_SERVICE_ADDRESS_STREET: "Defendant's address for service: building and street",
   DEFENDANT_SERVICE_ADDRESS_LINE2: "Defendant's address for service: second line of address",
   DEFENDANT_SERVICE_ADDRESS_TOWN: "Defendant's address for service: town or city",
@@ -250,15 +276,17 @@ const N5B_FIELDS = {
   POSSESSION_STREET: 'Claimant seeks an order that the Defendant gives possession of: building and street',
   POSSESSION_LINE2: 'Claimant seeks an order that the Defendant gives possession of: second line of address',
   POSSESSION_TOWN: 'Claimant seeks an order that the Defendant gives possession of: town or city',
+  POSSESSION_COUNTY: 'Claimant seeks an order that the Defendant gives possession of: county (optional)',
   POSSESSION_POSTCODE: 'Claimant seeks an order that the Defendant gives possession of: postcode',
-  // Tenancy dates
+  // Tenancy dates (Q6, Q7)
   TENANCY_LET_DATE_DAY: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Day',
   TENANCY_LET_DATE_MONTH: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Month',
   TENANCY_LET_DATE_YEAR: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Year',
   TENANCY_AGREEMENT_DATE_DAY: '7. The tenancy agreement is dated. Day',
   TENANCY_AGREEMENT_DATE_MONTH: '7. The tenancy agreement is dated. Month',
   TENANCY_AGREEMENT_DATE_YEAR: '7. The tenancy agreement is dated. Year',
-  // Notice service
+  FURTHER_TENANCY_DATES: 'Date(s) the further tenancy or tenancies were granted',
+  // Notice service (Q10)
   NOTICE_SERVICE_METHOD: '10a How was the notice served',
   NOTICE_SERVED_DATE_DAY: '10b. On what date was the notice served? Day',
   NOTICE_SERVED_DATE_MONTH: '10b. On what date was the notice served? Month',
@@ -268,10 +296,42 @@ const N5B_FIELDS = {
   NOTICE_EXPIRY_DATE_DAY: '10e. After what date did the notice require the Defendant to leave the property? Day',
   NOTICE_EXPIRY_DATE_MONTH: '10e. After what date did the notice require the Defendant to leave the property? Month',
   NOTICE_EXPIRY_DATE_YEAR: '10e. After what date did the notice require the Defendant to leave the property? Year',
-  // Deposit
+  // Deposit (Q14b)
   DEPOSIT_INFO_DATE_DAY: '14b. On what date was the prescribed information given? Day',
   DEPOSIT_INFO_DATE_MONTH: '14b. On what date was the prescribed information given? Month',
   DEPOSIT_INFO_DATE_YEAR: '14b. On what date was the prescribed information given? Year',
+  DEPOSIT_RETURNED_DATE_DAY: 'Date the deposit was returned - Day',
+  DEPOSIT_RETURNED_DATE_MONTH: 'Date the deposit was returned - Month',
+  DEPOSIT_RETURNED_DATE_YEAR: 'Date the deposit was returned - Year',
+  // Q15a - Property condition notice date
+  PROPERTY_CONDITION_NOTICE_DATE_DAY: '15a Date the notice was served - Day',
+  PROPERTY_CONDITION_NOTICE_DATE_MONTH: '15a Date the notice was served - Month',
+  PROPERTY_CONDITION_NOTICE_DATE_YEAR: '15a Date the notice was served - Year',
+  SUSPENSION_END_DATE_DAY: 'If the operation of the relevant notice has been suspended, (ii) on what date did the suspension end? Day',
+  SUSPENSION_END_DATE_MONTH: 'If the operation of the relevant notice has been suspended, (ii) on what date did the suspension end? Month',
+  SUSPENSION_END_DATE_YEAR: 'If the operation of the relevant notice has been suspended, (ii) on what date did the suspension end? Year',
+  // Q16 - EPC date (NEW location in current PDF)
+  EPC_PROVIDED_DATE_DAY: 'Date the Defendant was given the EPC - Day',
+  EPC_PROVIDED_DATE_MONTH: 'Date the Defendant was given the EPC - Month',
+  EPC_PROVIDED_DATE_YEAR: 'Date the Defendant was given the EPC - Year',
+  // Gas safety dates table
+  GAS_SAFETY_ISSUE_DATE_1: 'Date of issue of gas safety record - 1',
+  GAS_SAFETY_ISSUE_DATE_2: 'Date of issue of gas safety record - 2',
+  GAS_SAFETY_ISSUE_DATE_3: 'Date of issue of gas safety record - 3',
+  GAS_SAFETY_SERVICE_DATE_1: 'Date of service of gas safety record - 1',
+  GAS_SAFETY_SERVICE_DATE_2: 'Date of service of gas safety record - 2',
+  GAS_SAFETY_SERVICE_DATE_3: 'Date of service of gas safety record - 3',
+  // Q18c - How to Rent date
+  HOW_TO_RENT_DATE_DAY: '18c. When was the document provided? - Day',
+  HOW_TO_RENT_DATE_MONTH: '18c. When was the document provided? - Month',
+  HOW_TO_RENT_DATE_YEAR: '18c. When was the document provided? - Year',
+  // Q19 - Prohibited payment repayment dates
+  REPAYMENT_FULL_DATE_DAY: 'Date repayment in full was made - Day',
+  REPAYMENT_FULL_DATE_MONTH: 'Date repayment in full was made - Month',
+  REPAYMENT_FULL_DATE_YEAR: 'Date repayment in full was made - Year',
+  REPAYMENT_PART_DATE_DAY: 'Date repayment in part was made - Day',
+  REPAYMENT_PART_DATE_MONTH: 'Date repayment in part was made - Month',
+  REPAYMENT_PART_DATE_YEAR: 'Date repayment in part was made - Year',
   // Statement of Truth
   STATEMENT_SIGNATURE: 'Statement of Truth signature',
   STATEMENT_SIGNATORY_NAME: 'Full name of the person signing the Statement of Truth',
@@ -279,46 +339,26 @@ const N5B_FIELDS = {
   STATEMENT_DATE_MONTH: 'Date the Statement of Truth is signed - Month',
   STATEMENT_DATE_YEAR: 'Date the Statement of Truth is signed - Year',
   SOLICITOR_FIRM: 'Name of Claimants legal representatives firm',
-  // Service address
+  POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
+  // Service address (for legal representative)
   SERVICE_ADDRESS_STREET: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Building and street",
   SERVICE_ADDRESS_LINE2: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Second line of address",
   SERVICE_ADDRESS_TOWN: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Town or city",
+  SERVICE_ADDRESS_COUNTY: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. County (optional)",
   SERVICE_ADDRESS_POSTCODE: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Postcode",
   // Contact
   PHONE: 'If applicable, phone number',
   EMAIL: 'If applicable, email',
   DX: 'If applicable, DX number',
   REFERENCE: 'If applicable, reference number',
-  // Compliance dates - Q15-Q18
-  // Q15: EPC provided date
-  EPC_PROVIDED_DATE_DAY: '15. On what date was the EPC provided to the Defendant? Day',
-  EPC_PROVIDED_DATE_MONTH: '15. On what date was the EPC provided to the Defendant? Month',
-  EPC_PROVIDED_DATE_YEAR: '15. On what date was the EPC provided to the Defendant? Year',
-  // Q16: Gas safety before occupation
-  GAS_SAFETY_BEFORE_OCCUPATION_DATE_DAY: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Day',
-  GAS_SAFETY_BEFORE_OCCUPATION_DATE_MONTH: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Month',
-  GAS_SAFETY_BEFORE_OCCUPATION_DATE_YEAR: '16. On what date was the current gas safety record made available to the Defendant before they occupied the property? Year',
-  // Q17a: Date of current gas safety check
-  GAS_SAFETY_CHECK_DATE_DAY: '17a. On what date was the current gas safety check carried out? Day',
-  GAS_SAFETY_CHECK_DATE_MONTH: '17a. On what date was the current gas safety check carried out? Month',
-  GAS_SAFETY_CHECK_DATE_YEAR: '17a. On what date was the current gas safety check carried out? Year',
-  // Q17b: Date gas safety record served
-  GAS_SAFETY_SERVED_DATE_DAY: '17b. On what date was the current gas safety record served on the Defendant? Day',
-  GAS_SAFETY_SERVED_DATE_MONTH: '17b. On what date was the current gas safety record served on the Defendant? Month',
-  GAS_SAFETY_SERVED_DATE_YEAR: '17b. On what date was the current gas safety record served on the Defendant? Year',
-  // FIX 7: Gas safety dates table (N5B Page 13)
-  // These are the table rows for multiple gas safety record service dates
-  GAS_SAFETY_SERVICE_DATE_1: 'Date of service of gas safety record - 1',
-  GAS_SAFETY_SERVICE_DATE_2: 'Date of service of gas safety record - 2',
-  GAS_SAFETY_SERVICE_DATE_3: 'Date of service of gas safety record - 3',
-  // Q18c: Date How to Rent provided
-  HOW_TO_RENT_DATE_DAY: '18c. On what date was the current version of the document provided? Day',
-  HOW_TO_RENT_DATE_MONTH: '18c. On what date was the current version of the document provided? Month',
-  HOW_TO_RENT_DATE_YEAR: '18c. On what date was the current version of the document provided? Year',
 } as const;
 
 /**
- * N5B checkbox field names (key fields only)
+ * N5B checkbox field names - UPDATED January 2026
+ * Field names extracted from actual n5b-eng.pdf form
+ *
+ * IMPORTANT: These field names MUST match the exact PDF field names.
+ * Use scripts/inspect-pdf-forms.ts to verify field names if issues occur.
  */
 const N5B_CHECKBOXES = {
   // Q3 - Costs
@@ -330,6 +370,36 @@ const N5B_CHECKBOXES = {
   // Q8 - Subsequent tenancy
   SUBSEQUENT_TENANCY_YES: '8. Has any subsequent written tenancy agreement been entered into? Yes',
   SUBSEQUENT_TENANCY_NO: '8. Has any subsequent written tenancy agreement been entered into? No',
+
+  // ==========================================================================
+  // Q9a-Q9g - AST Verification (Statement of Truth - MANDATORY)
+  // Field names CORRECTED to match actual n5b-eng.pdf
+  // ==========================================================================
+  Q9A_AFTER_FEB_1997_YES: '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? Yes',
+  Q9A_AFTER_FEB_1997_NO: '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? No',
+  Q9B_NOTICE_NOT_AST_YES: '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? Yes',
+  Q9B_NOTICE_NOT_AST_NO: '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? No',
+  Q9C_EXCLUSION_CLAUSE_YES: '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? Yes',
+  Q9C_EXCLUSION_CLAUSE_NO: '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? No',
+  Q9D_AGRICULTURAL_YES: '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? Yes',
+  Q9D_AGRICULTURAL_NO: '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? No',
+  Q9E_SUCCESSION_YES: '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? Yes',
+  Q9E_SUCCESSION_NO: '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? No',
+  Q9F_FORMER_SECURE_YES: '9f Was any tenancy previously a secure tenancy under s.79 of the Housing Act 1985? Yes',
+  Q9F_FORMER_SECURE_NO: '9f Was any tenancy previously a secure tenancy under s.79 of the Housing Act 1985? No',
+  Q9G_SCHEDULE_10_YES: '9g Did any tenancy arise under Schedule 10 to the Local Government and Housing Act 1989 (at the end of a long residential tenancy)? Yes',
+  Q9G_SCHEDULE_10_NO: '9g Did any tenancy arise under Schedule 10 to the Local Government and Housing Act 1989 (at the end of a long residential tenancy)? No',
+
+  // ==========================================================================
+  // Q11 - Licensing (HMO/Selective)
+  // ==========================================================================
+  Q11A_LICENSING_REQUIRED_YES: '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? Yes',
+  Q11A_LICENSING_REQUIRED_NO: '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? No',
+  Q11A_HAS_VALID_LICENCE_YES: 'If yes, is there a valid licence? Yes',
+  Q11A_HAS_VALID_LICENCE_NO: 'If yes, is there a valid licence? No',
+  Q11B_DECISION_OUTSTANDING_YES: '11b. Is a decision outstanding as to licensing, or as to a temporary exemption notice? Yes',
+  Q11B_DECISION_OUTSTANDING_NO: '11b. Is a decision outstanding as to licensing, or as to a temporary exemption notice? No',
+
   // Q12 - Deposit
   DEPOSIT_PAID_YES: '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? Yes',
   DEPOSIT_PAID_NO: '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? No',
@@ -339,65 +409,114 @@ const N5B_CHECKBOXES = {
   // Q14a - Prescribed info
   PRESCRIBED_INFO_YES: '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? Yes',
   PRESCRIBED_INFO_NO: '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? No',
+
+  // ==========================================================================
+  // Q15 - Property Condition / Retaliatory Eviction (Housing Act 2004)
+  // ==========================================================================
+  Q15_PROPERTY_CONDITION_NOTICE_YES: '15. Has the Claimant been served with a relevant notice in relation to the condition of the property or relevant common parts under s.11, s.12 or s.40(7) of the Housing Act 2004? Yes',
+  Q15_PROPERTY_CONDITION_NOTICE_NO: '15. Has the Claimant been served with a relevant notice in relation to the condition of the property or relevant common parts under s.11, s.12 or s.40(7) of the Housing Act 2004? No',
+  Q15B_SUSPENDED_YES: '15b. Has the operation of the relevant notice been suspended? Yes',
+  Q15B_SUSPENDED_NO: '15b. Has the operation of the relevant notice been suspended? No',
+  Q15B_SUSPENSION_ENDED_YES: 'If the operation of the relevant notice has been suspended, (i) has the period of suspension ended? Yes',
+  Q15B_SUSPENSION_ENDED_NO: 'If the operation of the relevant notice has been suspended, (i) has the period of suspension ended? No',
+  Q15C_REVOKED_YES: '15c. Has the relevant notice been revoked under s.16 of the Housing Act 2004? Yes',
+  Q15C_REVOKED_NO: '15c. Has the relevant notice been revoked under s.16 of the Housing Act 2004? No',
+  Q15D_QUASHED_YES: '15d. Has the relevant notice been quashed under paragraph 15 of Schedule 1 of the Housing Act 2004? Yes',
+  Q15D_QUASHED_NO: '15d. Has the relevant notice been quashed under paragraph 15 of Schedule 1 of the Housing Act 2004? No',
+  Q15E_NON_REVOKE_REVERSED_YES: '15e. Has a decision of the local housing authority not to revoke the relevant notice been reversed under paragraph 18 of Schedule 1 of the Housing Act 2004? Yes',
+  Q15E_NON_REVOKE_REVERSED_NO: '15e. Has a decision of the local housing authority not to revoke the relevant notice been reversed under paragraph 18 of Schedule 1 of the Housing Act 2004? No',
+  Q15F_ACTION_REVERSED_YES: '15f. Has a decision of the housing authority to take the action to which the relevant notice relates been reversed under section 45 of the Housing Act 2004? Yes',
+  Q15F_ACTION_REVERSED_NO: '15f. Has a decision of the housing authority to take the action to which the relevant notice relates been reversed under section 45 of the Housing Act 2004? No',
+  Q15G_DEFENDANT_COMPLAINED_YES: '15g. Did the Defendant complain or try to complain about the relevant condition of the property or the common parts to the Claimant before the notice was given? Yes',
+  Q15G_DEFENDANT_COMPLAINED_NO: '15g. Did the Defendant complain or try to complain about the relevant condition of the property or the common parts to the Claimant before the notice was given? No',
+  Q15H_DUE_TO_DEFENDANT_BREACH_YES: '15h. Is the relevant condition of the property or common parts due to a breach of duty or contract on the part of the Defendant? Yes',
+  Q15H_DUE_TO_DEFENDANT_BREACH_NO: '15h. Is the relevant condition of the property or common parts due to a breach of duty or contract on the part of the Defendant? No',
+  Q15I_ON_MARKET_FOR_SALE_YES: '15i. Is the property genuinely on the market for sale with intent to sell to an independent person not associated with the Claimant? Yes',
+  Q15I_ON_MARKET_FOR_SALE_NO: '15i. Is the property genuinely on the market for sale with intent to sell to an independent person not associated with the Claimant? No',
+  Q15J_SOCIAL_HOUSING_PROVIDER_YES: '15j. Is the Claimant a private registered provider of social housing? Yes',
+  Q15J_SOCIAL_HOUSING_PROVIDER_NO: '15j. Is the Claimant a private registered provider of social housing? No',
+  Q15K_MORTGAGEE_YES: '15k. Is the Claimant a mortgagee whose mortgage predated the tenancy and who requires vacant possession to sell the property under an existing power of sale? Yes',
+  Q15K_MORTGAGEE_NO: '15k. Is the Claimant a mortgagee whose mortgage predated the tenancy and who requires vacant possession to sell the property under an existing power of sale? No',
+
+  // ==========================================================================
+  // Q16 - EPC (Energy Performance Certificate)
+  // ==========================================================================
+  Q16_EPC_PROVIDED_YES: '16. Was a valid energy performance certificate given, free of charge, to the Defendant? Yes',
+  Q16_EPC_PROVIDED_NO: '16. Was a valid energy performance certificate given, free of charge, to the Defendant? No',
+
+  // ==========================================================================
+  // Q17 - Gas Safety
+  // ==========================================================================
+  Q17_HAS_GAS_YES: '17. Is there any relevant gas fitting (including any gas appliance or installation pipework) installed in or serving the property? Yes',
+  Q17_HAS_GAS_NO: '17. Is there any relevant gas fitting (including any gas appliance or installation pipework) installed in or serving the property? No',
+  Q17A_GAS_BEFORE_OCCUPATION_YES: '17a. Was a copy of a valid gas safety record provided to the Defendant before they went into occupation of the property? Yes',
+  Q17A_GAS_BEFORE_OCCUPATION_NO: '17a. Was a copy of a valid gas safety record provided to the Defendant before they went into occupation of the property? No',
+  Q17B_GAS_RECORDS_PROVIDED_YES: '17b. Have gas safety records been provided to the Defendant covering all further gas safety inspections carried out during the period of the tenancy? Yes',
+  Q17B_GAS_RECORDS_PROVIDED_NO: '17b. Have gas safety records been provided to the Defendant covering all further gas safety inspections carried out during the period of the tenancy? No',
+  Q17C_GAS_DISPLAYED_YES: '17c. If there is no relevant gas appliance in any room occupied by the Defendant, has the Claimant displayed in a prominent position in the premises throughout the tenancy a copy of the gas safety record with a statement endorsed on it that the Defendant is entitled to have their own copy of the gas safety record on request to the Claimant at an address specified in the statement? Yes',
+  Q17C_GAS_DISPLAYED_NO: '17c. If there is no relevant gas appliance in any room occupied by the Defendant, has the Claimant displayed in a prominent position in the premises throughout the tenancy a copy of the gas safety record with a statement endorsed on it that the Defendant is entitled to have their own copy of the gas safety record on request to the Claimant at an address specified in the statement? No',
+
+  // ==========================================================================
+  // Q18 - Social Housing and How to Rent
+  // ==========================================================================
+  Q18_SOCIAL_HOUSING_PROVIDER_YES: '18. Is the Claimant a private registered provider of social housing? Yes',
+  Q18_SOCIAL_HOUSING_PROVIDER_NO: '18. Is the Claimant a private registered provider of social housing? No',
+  Q18A_PRE_ACTION_PROTOCOL_YES: '18a. Has the Claimant complied with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords? Yes',
+  Q18A_PRE_ACTION_PROTOCOL_NO: '18a. Has the Claimant complied with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords? No',
+  Q18B_HOW_TO_RENT_PROVIDED_YES: '18b. Has the Defendant been given a copy of the then current document \'How to Rent: the checklist for renting in England\'? Yes',
+  Q18B_HOW_TO_RENT_PROVIDED_NO: '18b. Has the Defendant been given a copy of the then current document \'How to Rent: the checklist for renting in England\'? No',
+  Q18D_HOW_TO_RENT_HARDCOPY: '18d. How was the document provided? Hard copy',
+  Q18D_HOW_TO_RENT_EMAIL: '18d. How was the document provided? Email',
+
+  // ==========================================================================
+  // Q19 - Tenant Fees Act 2019 / Prohibited Payments
+  // ==========================================================================
+  Q19_PROHIBITED_PAYMENT_YES: '19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a \'prohibited payment\' (as defined by section 3 of the Tenant Fees Act 2019 (\'the 2019 Act\')) contrary to s.1 of the 2019 Act? Yes',
+  Q19_PROHIBITED_PAYMENT_NO: '19. Has the Claimant required the Defendant (or any guarantor or person acting on behalf of the Defendant) to make a \'prohibited payment\' (as defined by section 3 of the Tenant Fees Act 2019 (\'the 2019 Act\')) contrary to s.1 of the 2019 Act? No',
+  Q19A_PAYMENT_MADE_YES: '19a. Did the Defendant (or any guarantor or person acting on behalf of the Defendant) make such a payment to the Claimant as a result of that requirement? Yes',
+  Q19A_PAYMENT_MADE_NO: '19a. Did the Defendant (or any guarantor or person acting on behalf of the Defendant) make such a payment to the Claimant as a result of that requirement? No',
+  Q19B_HOLDING_DEPOSIT_YES: '19b. Was a holding deposit (as defined by paragraph 3(2) of Schedule 1 to the 2019 Act) paid to the Claimant on or after 1 June 2019 in relation to the tenancy? Yes',
+  Q19B_HOLDING_DEPOSIT_NO: '19b. Was a holding deposit (as defined by paragraph 3(2) of Schedule 1 to the 2019 Act) paid to the Claimant on or after 1 June 2019 in relation to the tenancy? No',
+  Q19C_REPAID_FULL: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? Yes - in full',
+  Q19C_REPAID_PART: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? Yes - in part',
+  Q19C_REPAID_NO: '19c. If the answer to 19a or 19b is Yes, has the prohibited payment and/or holding deposit been repaid in full to the Defendant (or other person from whom the payment was received)? No',
+  Q19D_APPLIED_TO_RENT_YES: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? Yes',
+  Q19D_APPLIED_TO_RENT_NO: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: i. payment of rent under the tenancy? No',
+  Q19D_APPLIED_TO_DEPOSIT_YES: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? Yes',
+  Q19D_APPLIED_TO_DEPOSIT_NO: '19d. If you answered \'Yes\' to either 19a or 19b but the prohibited payment and/or holding deposit has not been repaid in full to the Defendant (or other person from whom the payment was received), has the prohibited payment and/or holding deposit (or, where part repayment has been made, the remainder thereof) been applied, with the consent of the Defendant (or other person from whom the payment was received) towards: ii. the payment of the tenancy deposit? No',
+
+  // ==========================================================================
+  // Q20 - Paper Determination
+  // ==========================================================================
+  Q20_PAPER_DETERMINATION_YES: '20. If the Defendant seeks postponement of possession for up to 6 weeks on the grounds of exceptional hardship, is the Claimant content that the request be considered without a hearing? Yes',
+  Q20_PAPER_DETERMINATION_NO: '20. If the Defendant seeks postponement of possession for up to 6 weeks on the grounds of exceptional hardship, is the Claimant content that the request be considered without a hearing? No',
+
   // Q21 - Orders
   ORDER_POSSESSION: '21. The Claimant asks the court to order that the Defendant delivers up possession of the property',
   ORDER_COSTS: '21. The Claimant asks the court to order that the Defendant pays the costs of this claim',
+
   // Statement of Truth
   SOT_CLAIMANT: 'Statement of Truth is signed by: Claimant',
   SOT_LEGAL_REP: "Statement of Truth is signed by: Claimant's legal representative (as defined by CPR 2.3(1))",
+  SOT_LITIGATION_FRIEND: 'Statement of Truth is signed by: Litigation friend (where Claimant is a child or a protected party)',
   SOT_BELIEVES: 'I believe that the facts stated in this claim form and any attached sheets are true',
   SOT_AUTHORISED: "The Claimant(s) believe(s) that the facts stated in this claim form and any attached sheets are true. I am authorised by the Claimant(s) to sign this statement",
+
   // England location
   ENGLAND_YES: 'Is the property you are claiming possession of located wholly or partly in England? Yes',
   ENGLAND_NO: 'Is the property you are claiming possession of located wholly or partly in England? No',
+
   // Attachments
   ATTACHMENT_TENANCY: 'Copy of the first written tenancy agreement marked A',
+  ATTACHMENT_SUBSEQUENT_TENANCIES: 'Where one or more tenancy agreements have been entered into a copy of each such tenancy agreement marked (\'A1\' \'A2\', \'A3\', etc.)',
   ATTACHMENT_NOTICE: 'Copy of the notice saying that possession was required marked B',
   ATTACHMENT_SERVICE_PROOF: 'Proof of service of the notice requiring possession marked B1',
+  ATTACHMENT_LICENCE: 'Copy of the licence issued under Part 2 or Part 3 of the Housing Act 2004 marked \'C\'',
+  ATTACHMENT_LICENCE_EVIDENCE: 'Evidence of any outstanding licence application, notification or appeal under parts 2 or 3 of the Housing Act 2004 marked \'D\'',
   ATTACHMENT_DEPOSIT_CERT: 'Copy of the Tenancy Deposit Certificate marked E',
   ATTACHMENT_EPC: 'Copy of the Energy Performance Certificate marked F',
   ATTACHMENT_GAS: 'Copy of the Gas Safety Records marked G G1 G2 etc',
-  ATTACHMENT_HOW_TO_RENT: 'Copy of the How to Rent document marked H',
-  // Q9a-Q9g - AST Verification (Statement of Truth - MANDATORY)
-  Q9A_AFTER_FEB_1997_YES: '9a. Was the tenancy created on or after 28 February 1997? Yes',
-  Q9A_AFTER_FEB_1997_NO: '9a. Was the tenancy created on or after 28 February 1997? No',
-  Q9B_NO_NOTICE_NOT_AST_YES: '9b. Has notice been given to the Defendant that the tenancy is not an assured shorthold tenancy? Yes',
-  Q9B_NO_NOTICE_NOT_AST_NO: '9b. Has notice been given to the Defendant that the tenancy is not an assured shorthold tenancy? No',
-  Q9C_NO_EXCLUSION_CLAUSE_YES: '9c. Does the tenancy agreement contain a provision to the effect that the tenancy is not an assured shorthold tenancy? Yes',
-  Q9C_NO_EXCLUSION_CLAUSE_NO: '9c. Does the tenancy agreement contain a provision to the effect that the tenancy is not an assured shorthold tenancy? No',
-  Q9D_NOT_AGRICULTURAL_YES: '9d. Is the Defendant an agricultural worker who occupies the premises as part of his employment? Yes',
-  Q9D_NOT_AGRICULTURAL_NO: '9d. Is the Defendant an agricultural worker who occupies the premises as part of his employment? No',
-  Q9E_NOT_SUCCESSION_YES: '9e. Did the tenancy arise on the death of a tenant under a Rent Act protected tenancy? Yes',
-  Q9E_NOT_SUCCESSION_NO: '9e. Did the tenancy arise on the death of a tenant under a Rent Act protected tenancy? No',
-  Q9F_NOT_FORMER_SECURE_YES: '9f. Was the tenancy formerly a secure tenancy? Yes',
-  Q9F_NOT_FORMER_SECURE_NO: '9f. Was the tenancy formerly a secure tenancy? No',
-  Q9G_NOT_SCHEDULE_10_YES: '9g. Was the tenancy granted under Schedule 10 to the Local Government and Housing Act 1989? Yes',
-  Q9G_NOT_SCHEDULE_10_NO: '9g. Was the tenancy granted under Schedule 10 to the Local Government and Housing Act 1989? No',
-  // Q15 - EPC provided
-  Q15_EPC_PROVIDED_YES: '15. Has the Claimant given a copy of the Energy Performance Certificate to the Defendant? Yes',
-  Q15_EPC_PROVIDED_NO: '15. Has the Claimant given a copy of the Energy Performance Certificate to the Defendant? No',
-  // Q16 - Gas safety before occupation (only if gas in property)
-  Q16_GAS_BEFORE_OCCUPATION_YES: '16. Was a current gas safety record made available to the Defendant before they occupied the property? Yes',
-  Q16_GAS_BEFORE_OCCUPATION_NO: '16. Was a current gas safety record made available to the Defendant before they occupied the property? No',
-  Q16_NO_GAS: '16. There is no gas at the property',
-  // Q17 - Gas safety record served
-  Q17_GAS_SERVED_YES: '17. Is the Defendant in possession of a copy of the current gas safety record? Yes',
-  Q17_GAS_SERVED_NO: '17. Is the Defendant in possession of a copy of the current gas safety record? No',
-  // Q18a-d - How to Rent guide
-  Q18A_HOW_TO_RENT_PROVIDED_YES: '18a. Was the Defendant given a copy of the Department for Communities and Local Government document entitled How to rent: the checklist for renting in England? Yes',
-  Q18A_HOW_TO_RENT_PROVIDED_NO: '18a. Was the Defendant given a copy of the Department for Communities and Local Government document entitled How to rent: the checklist for renting in England? No',
-  Q18B_TENANCY_BEFORE_OCT_2015_YES: '18b. Did the tenancy begin before 1 October 2015? Yes',
-  Q18B_TENANCY_BEFORE_OCT_2015_NO: '18b. Did the tenancy begin before 1 October 2015? No',
-  Q18D_HOW_TO_RENT_HARDCOPY: '18d. Was the How to Rent document provided by way of hard copy? Yes',
-  Q18D_HOW_TO_RENT_EMAIL: '18d. Was the How to Rent document provided by email? Yes',
-  // Q19 - Tenant Fees Act 2019
-  Q19_PROHIBITED_PAYMENT_YES: '19. Has any payment that is prohibited by section 1 of the Tenant Fees Act 2019 been required of, or received from, the Defendant, that has not been repaid? Yes',
-  Q19_PROHIBITED_PAYMENT_NO: '19. Has any payment that is prohibited by section 1 of the Tenant Fees Act 2019 been required of, or received from, the Defendant, that has not been repaid? No',
-  Q19B_HOLDING_DEPOSIT_YES: '19b. Was a holding deposit paid in connection with the grant of the tenancy on or after 1 June 2019? Yes',
-  Q19B_HOLDING_DEPOSIT_NO: '19b. Was a holding deposit paid in connection with the grant of the tenancy on or after 1 June 2019? No',
-  // Q20 - Paper determination consent
-  Q20_PAPER_DETERMINATION_YES: '20. If the Defendant responds and seeks a postponement of possession, do you agree to the matter being dealt with without a hearing? Yes',
-  Q20_PAPER_DETERMINATION_NO: '20. If the Defendant responds and seeks a postponement of possession, do you agree to the matter being dealt with without a hearing? No',
+  ATTACHMENT_HOW_TO_RENT: 'Copy of the documents relating to compliance by a registered provider of social housing with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords OR a copy of the document \'How to Rent: the checklist for renting in England\' marked \'H\'',
 } as const;
 
 /**
@@ -1414,52 +1533,57 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // - Q9b-Q9g: Yes = disqualifying condition exists (NOT eligible)
   // =========================================================================
 
+  // ==========================================================================
+  // Q9a-Q9g: AST VERIFICATION (Statement of Truth - MANDATORY)
+  // Updated January 2026 to match actual n5b-eng.pdf field names
+  // ==========================================================================
+
   // Q9a: Was tenancy created on or after 28 February 1997?
   if (data.n5b_q9a_after_feb_1997 !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES, data.n5b_q9a_after_feb_1997, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_NO, !data.n5b_q9a_after_feb_1997, ctx);
   }
 
-  // Q9b: Has notice been given that the tenancy is NOT an AST?
+  // Q9b: Was a notice served stating tenancy is NOT an AST?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9b_has_notice_not_ast !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_YES, data.n5b_q9b_has_notice_not_ast, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9B_NO_NOTICE_NOT_AST_NO, !data.n5b_q9b_has_notice_not_ast, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NOTICE_NOT_AST_YES, data.n5b_q9b_has_notice_not_ast, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NOTICE_NOT_AST_NO, !data.n5b_q9b_has_notice_not_ast, ctx);
   }
 
-  // Q9c: Does the tenancy agreement state that it is NOT an AST?
+  // Q9c: Is there any provision stating tenancy is NOT an AST?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9c_has_exclusion_clause !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_YES, data.n5b_q9c_has_exclusion_clause, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9C_NO_EXCLUSION_CLAUSE_NO, !data.n5b_q9c_has_exclusion_clause, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_EXCLUSION_CLAUSE_YES, data.n5b_q9c_has_exclusion_clause, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_EXCLUSION_CLAUSE_NO, !data.n5b_q9c_has_exclusion_clause, ctx);
   }
 
-  // Q9d: Is the tenant an agricultural worker?
+  // Q9d: Is the 'agricultural worker condition' fulfilled?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9d_is_agricultural_worker !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_YES, data.n5b_q9d_is_agricultural_worker, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9D_NOT_AGRICULTURAL_NO, !data.n5b_q9d_is_agricultural_worker, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_AGRICULTURAL_YES, data.n5b_q9d_is_agricultural_worker, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_AGRICULTURAL_NO, !data.n5b_q9d_is_agricultural_worker, ctx);
   }
 
-  // Q9e: Did the tenancy arise by succession (on death of previous tenant)?
+  // Q9e: Did any tenancy arise by way of succession?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9e_is_succession_tenancy !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_YES, data.n5b_q9e_is_succession_tenancy, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9E_NOT_SUCCESSION_NO, !data.n5b_q9e_is_succession_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_SUCCESSION_YES, data.n5b_q9e_is_succession_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_SUCCESSION_NO, !data.n5b_q9e_is_succession_tenancy, ctx);
   }
 
-  // Q9f: Was the tenancy previously a secure tenancy?
+  // Q9f: Was any tenancy previously a secure tenancy?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9f_was_secure_tenancy !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_YES, data.n5b_q9f_was_secure_tenancy, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9F_NOT_FORMER_SECURE_NO, !data.n5b_q9f_was_secure_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_FORMER_SECURE_YES, data.n5b_q9f_was_secure_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_FORMER_SECURE_NO, !data.n5b_q9f_was_secure_tenancy, ctx);
   }
 
-  // Q9g: Was the tenancy granted under Schedule 10 of the LGHA 1989?
+  // Q9g: Did any tenancy arise under Schedule 10 to the LGHA 1989?
   // Direct mapping: wizard Yes = PDF Yes (disqualifying), No = PDF No (eligible)
   if (data.n5b_q9g_is_schedule_10 !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_YES, data.n5b_q9g_is_schedule_10, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q9G_NOT_SCHEDULE_10_NO, !data.n5b_q9g_is_schedule_10, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_YES, data.n5b_q9g_is_schedule_10, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_NO, !data.n5b_q9g_is_schedule_10, ctx);
   }
 
   // === Q10: NOTICE SERVICE (REQUIRED) ===
@@ -1516,14 +1640,24 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   }
 
   // =========================================================================
-  // Q15: EPC PROVIDED
+  // Q15: PROPERTY CONDITION / RETALIATORY EVICTION (Housing Act 2004)
+  // In the new N5B form, Q15 is about property condition notices,
+  // NOT about EPC (which is now Q16).
+  // For most standard Section 21 claims, we answer "No" to Q15
+  // (no relevant Housing Act 2004 notice has been served on claimant).
+  // =========================================================================
+  // Default: No property condition notice served (standard case)
+  setCheckbox(form, N5B_CHECKBOXES.Q15_PROPERTY_CONDITION_NOTICE_NO, true, ctx);
+
+  // =========================================================================
+  // Q16: EPC PROVIDED (was Q15 in older forms)
   // =========================================================================
   if (data.epc_provided !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q15_EPC_PROVIDED_YES, data.epc_provided, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q15_EPC_PROVIDED_NO, !data.epc_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q16_EPC_PROVIDED_YES, data.epc_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q16_EPC_PROVIDED_NO, !data.epc_provided, ctx);
   }
 
-  // Q15 date: When EPC was provided to defendant
+  // Q16 date: When EPC was provided to defendant
   if (data.epc_provided_date) {
     const epcDate = splitDate(data.epc_provided_date);
     if (epcDate) {
@@ -1534,50 +1668,25 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   }
 
   // =========================================================================
-  // Q16-17: GAS SAFETY
+  // Q17: GAS SAFETY (was Q16/Q17 in older forms)
   // =========================================================================
-  // Q16: Gas safety before occupation (or "no gas at property")
+  // Q17: Is there any relevant gas fitting at the property?
   if (data.has_gas_at_property === false) {
-    // No gas at property - tick that box
-    setCheckbox(form, N5B_CHECKBOXES.Q16_NO_GAS, true, ctx);
-  } else if (data.gas_safety_before_occupation !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q16_GAS_BEFORE_OCCUPATION_YES, data.gas_safety_before_occupation, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q16_GAS_BEFORE_OCCUPATION_NO, !data.gas_safety_before_occupation, ctx);
+    // No gas at property
+    setCheckbox(form, N5B_CHECKBOXES.Q17_HAS_GAS_NO, true, ctx);
+  } else if (data.has_gas_at_property === true) {
+    setCheckbox(form, N5B_CHECKBOXES.Q17_HAS_GAS_YES, true, ctx);
 
-    // Q16 date: When gas safety record made available before occupation
-    if (data.gas_safety_before_occupation_date) {
-      const gasBeforeDate = splitDate(data.gas_safety_before_occupation_date);
-      if (gasBeforeDate) {
-        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_DAY, gasBeforeDate.day, ctx);
-        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_MONTH, gasBeforeDate.month, ctx);
-        setTextOptional(form, N5B_FIELDS.GAS_SAFETY_BEFORE_OCCUPATION_DATE_YEAR, gasBeforeDate.year, ctx);
-      }
+    // Q17a: Was gas safety record provided before occupation?
+    if (data.gas_safety_before_occupation !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_YES, data.gas_safety_before_occupation, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_NO, !data.gas_safety_before_occupation, ctx);
     }
-  }
 
-  // Q17: Gas safety record served (tenant has copy)
-  if (data.gas_safety_provided !== undefined && data.has_gas_at_property !== false) {
-    setCheckbox(form, N5B_CHECKBOXES.Q17_GAS_SERVED_YES, data.gas_safety_provided, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q17_GAS_SERVED_NO, !data.gas_safety_provided, ctx);
-  }
-
-  // Q17a: Date gas safety check was carried out
-  if (data.gas_safety_check_date) {
-    const gasCheckDate = splitDate(data.gas_safety_check_date);
-    if (gasCheckDate) {
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_DAY, gasCheckDate.day, ctx);
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_MONTH, gasCheckDate.month, ctx);
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_CHECK_DATE_YEAR, gasCheckDate.year, ctx);
-    }
-  }
-
-  // Q17b: Date gas safety record served on defendant
-  if (data.gas_safety_served_date) {
-    const gasServedDate = splitDate(data.gas_safety_served_date);
-    if (gasServedDate) {
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_DAY, gasServedDate.day, ctx);
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_MONTH, gasServedDate.month, ctx);
-      setTextOptional(form, N5B_FIELDS.GAS_SAFETY_SERVED_DATE_YEAR, gasServedDate.year, ctx);
+    // Q17b: Have gas safety records been provided during tenancy?
+    if (data.gas_safety_provided !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_YES, data.gas_safety_provided, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_NO, !data.gas_safety_provided, ctx);
     }
   }
 
@@ -1619,22 +1728,17 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   }
 
   // =========================================================================
-  // Q18: HOW TO RENT GUIDE
+  // Q18: SOCIAL HOUSING PROVIDER & HOW TO RENT GUIDE
+  // In the new N5B form, Q18 first asks if claimant is social housing provider
   // =========================================================================
-  // Q18a: Was How to Rent guide provided
-  if (data.how_to_rent_provided !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q18A_HOW_TO_RENT_PROVIDED_YES, data.how_to_rent_provided, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q18A_HOW_TO_RENT_PROVIDED_NO, !data.how_to_rent_provided, ctx);
-  }
+  // Q18: Is the Claimant a private registered provider of social housing?
+  // For standard private landlords, answer is "No"
+  setCheckbox(form, N5B_CHECKBOXES.Q18_SOCIAL_HOUSING_PROVIDER_NO, true, ctx);
 
-  // Q18b: Tenancy began before 1 October 2015 (exemption)
-  // Derive from tenancy_start_date
-  if (data.tenancy_start_date) {
-    const tenancyStartDate = new Date(data.tenancy_start_date);
-    const oct2015 = new Date('2015-10-01');
-    const beforeOct2015 = tenancyStartDate < oct2015;
-    setCheckbox(form, N5B_CHECKBOXES.Q18B_TENANCY_BEFORE_OCT_2015_YES, beforeOct2015, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q18B_TENANCY_BEFORE_OCT_2015_NO, !beforeOct2015, ctx);
+  // Q18b: Was How to Rent guide provided
+  if (data.how_to_rent_provided !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q18B_HOW_TO_RENT_PROVIDED_YES, data.how_to_rent_provided, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q18B_HOW_TO_RENT_PROVIDED_NO, !data.how_to_rent_provided, ctx);
   }
 
   // Q18c: Date How to Rent was provided
