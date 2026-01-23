@@ -71,11 +71,30 @@ export async function GET(
       .select('*', { count: 'exact', head: true })
       .eq('case_id', id);
 
+    // Fetch order status to check if paid
+    const { data: orderData } = await adminSupabase
+      .from('orders')
+      .select('payment_status')
+      .eq('case_id', id)
+      .eq('payment_status', 'paid')
+      .limit(1);
+
+    const isPaid = (orderData && orderData.length > 0);
+
+    // Calculate effective wizard progress:
+    // - 100% if wizard is complete (wizard_completed_at is set)
+    // - 100% if case is paid (payment implies wizard was completed)
+    // - Otherwise use the stored wizard_progress
+    const wizardCompletedAt = (caseData as any).wizard_completed_at;
+    const isWizardComplete = wizardCompletedAt != null && wizardCompletedAt !== '';
+    const effectiveWizardProgress = (isWizardComplete || isPaid) ? 100 : ((caseData as any).wizard_progress || 0);
+
     return NextResponse.json(
       {
         success: true,
         case: {
           ...caseData,
+          wizard_progress: effectiveWizardProgress,
           document_count: documentCount || 0,
         },
       },

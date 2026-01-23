@@ -54,8 +54,8 @@ describe('deriveDisplayStatus', () => {
     });
   });
 
-  describe('generating_documents status', () => {
-    it('returns generating_documents when paid but not fulfilled', () => {
+  describe('paid_in_progress status', () => {
+    it('returns paid_in_progress when paid but not fulfilled', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
@@ -63,12 +63,12 @@ describe('deriveDisplayStatus', () => {
         hasFinalDocuments: false,
       });
 
-      expect(result.status).toBe('generating_documents');
-      expect(result.label).toBe('Generating documents');
+      expect(result.status).toBe('paid_in_progress');
+      expect(result.label).toBe('In progress');
       expect(result.badgeVariant).toBe('warning');
     });
 
-    it('returns generating_documents when paid + fulfilled but no docs yet (edge case)', () => {
+    it('returns paid_in_progress when paid + fulfilled but no docs yet (edge case)', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
@@ -76,11 +76,11 @@ describe('deriveDisplayStatus', () => {
         hasFinalDocuments: false,
       });
 
-      expect(result.status).toBe('generating_documents');
-      expect(result.label).toBe('Generating documents');
+      expect(result.status).toBe('paid_in_progress');
+      expect(result.label).toBe('In progress');
     });
 
-    it('returns generating_documents when fulfillment pending', () => {
+    it('returns paid_in_progress when fulfillment pending', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
@@ -88,7 +88,7 @@ describe('deriveDisplayStatus', () => {
         hasFinalDocuments: false,
       });
 
-      expect(result.status).toBe('generating_documents');
+      expect(result.status).toBe('paid_in_progress');
     });
   });
 
@@ -129,7 +129,7 @@ describe('deriveDisplayStatus', () => {
         hasFinalDocuments: false,
       });
 
-      expect(result.status).toBe('generating_documents');
+      expect(result.status).toBe('paid_in_progress');
     });
   });
 
@@ -220,6 +220,10 @@ describe('getDisplayStatusBadgeVariant', () => {
     expect(getDisplayStatusBadgeVariant('generating_documents')).toBe('warning');
   });
 
+  it('returns warning for paid_in_progress', () => {
+    expect(getDisplayStatusBadgeVariant('paid_in_progress')).toBe('warning');
+  });
+
   it('returns warning for in_progress', () => {
     expect(getDisplayStatusBadgeVariant('in_progress')).toBe('warning');
   });
@@ -241,6 +245,7 @@ describe('getDisplayStatusLabel', () => {
   it('returns correct labels for all status types', () => {
     expect(getDisplayStatusLabel('documents_ready')).toBe('Documents ready');
     expect(getDisplayStatusLabel('generating_documents')).toBe('Generating documents');
+    expect(getDisplayStatusLabel('paid_in_progress')).toBe('In progress');
     expect(getDisplayStatusLabel('ready_to_purchase')).toBe('Ready to purchase');
     expect(getDisplayStatusLabel('completed')).toBe('Completed');
     expect(getDisplayStatusLabel('in_progress')).toBe('In progress');
@@ -277,7 +282,7 @@ describe('status priority order', () => {
     expect(result.status).toBe('archived');
   });
 
-  it('generating_documents shown during payment processing', () => {
+  it('paid_in_progress shown during payment processing', () => {
     const result = deriveDisplayStatus({
       caseStatus: 'in_progress',
       wizardProgress: 100,
@@ -287,6 +292,7 @@ describe('status priority order', () => {
       hasFinalDocuments: false,
     });
 
-    expect(result.status).toBe('generating_documents');
+    expect(result.status).toBe('paid_in_progress');
+    expect(result.label).toBe('In progress');
   });
 });

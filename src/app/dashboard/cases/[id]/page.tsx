@@ -23,6 +23,7 @@ import type { OrderStatusResponse } from '@/app/api/orders/status/route';
 import { getPackContents, getNextSteps } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
+import { deriveDisplayStatus } from '@/lib/case-status';
 
 interface CaseDetails {
   id: string;
@@ -591,6 +592,25 @@ export default function CaseDetailPage() {
     }
   };
 
+  // Get derived display status for the badge
+  const getDerivedDisplayStatus = () => {
+    if (!caseDetails) return { label: 'Loading...', badgeVariant: 'neutral' as const };
+
+    // Get final documents status from orderStatus
+    const hasFinalDocs = orderStatus?.has_final_documents || false;
+
+    const displayInfo = deriveDisplayStatus({
+      caseStatus: caseDetails.status,
+      wizardProgress: caseDetails.wizard_progress,
+      wizardCompletedAt: null, // We use wizard_progress from API which is already corrected
+      paymentStatus: orderStatus?.paid ? 'paid' : null,
+      fulfillmentStatus: orderStatus?.fulfillment_status || null,
+      hasFinalDocuments: hasFinalDocs,
+    });
+
+    return displayInfo;
+  };
+
   // Derive product and case parameters from case details
   const getProductAndParams = () => {
     if (!caseDetails) return null;
@@ -831,9 +851,14 @@ export default function CaseDetailPage() {
                 );
               })()}
             </div>
-            <Badge variant={getStatusColor(caseDetails.status)} size="large">
-              {caseDetails.status.replace('_', ' ')}
-            </Badge>
+            {(() => {
+              const displayInfo = getDerivedDisplayStatus();
+              return (
+                <Badge variant={displayInfo.badgeVariant} size="large">
+                  {displayInfo.label}
+                </Badge>
+              );
+            })()}
           </div>
 
           {/* Progress Bar */}
@@ -1489,9 +1514,14 @@ export default function CaseDetailPage() {
                 <div>
                   <div className="text-gray-600">Status</div>
                   <div className="mt-1">
-                    <Badge variant={getStatusColor(caseDetails.status)}>
-                      {caseDetails.status.replace('_', ' ')}
-                    </Badge>
+                    {(() => {
+                      const displayInfo = getDerivedDisplayStatus();
+                      return (
+                        <Badge variant={displayInfo.badgeVariant}>
+                          {displayInfo.label}
+                        </Badge>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
