@@ -41,13 +41,24 @@ describe("capability matrix", () => {
   it("links to real MQS files and template paths", () => {
     const matrix = getCapabilityMatrix();
 
+    // Products that are England-only (not supported in Wales/Scotland)
+    const englandOnlyProducts = ["eviction_pack", "money_claim"];
+
     for (const jurisdiction of requiredJurisdictions) {
       const products = matrix[jurisdiction];
       for (const [product, capability] of Object.entries(products)) {
+        // Northern Ireland only supports tenancy_agreement
         if (jurisdiction === "northern-ireland" && product !== "tenancy_agreement") {
           expect(capability.status).toBe("unsupported");
           continue;
         }
+
+        // Wales and Scotland don't support eviction_pack or money_claim (England only)
+        if ((jurisdiction === "wales" || jurisdiction === "scotland") && englandOnlyProducts.includes(product)) {
+          expect(capability.status).toBe("unsupported");
+          continue;
+        }
+
         if (!capability) continue;
 
         expect(capability.status).toBe("supported");
@@ -121,13 +132,13 @@ describe("product alias normalization (complete_pack => eviction_pack)", () => {
     expect(isFlowSupported("england", "eviction_pack")).toBe(true);
     expect(isFlowSupported("england", "complete_pack")).toBe(true);
 
-    // Wales should support both eviction_pack and complete_pack
-    expect(isFlowSupported("wales", "eviction_pack")).toBe(true);
-    expect(isFlowSupported("wales", "complete_pack")).toBe(true);
+    // Wales should NOT support eviction_pack or complete_pack (England only)
+    expect(isFlowSupported("wales", "eviction_pack")).toBe(false);
+    expect(isFlowSupported("wales", "complete_pack")).toBe(false);
 
-    // Scotland should support both eviction_pack and complete_pack
-    expect(isFlowSupported("scotland", "eviction_pack")).toBe(true);
-    expect(isFlowSupported("scotland", "complete_pack")).toBe(true);
+    // Scotland should NOT support eviction_pack or complete_pack (England only)
+    expect(isFlowSupported("scotland", "eviction_pack")).toBe(false);
+    expect(isFlowSupported("scotland", "complete_pack")).toBe(false);
 
     // Northern Ireland should NOT support eviction_pack or complete_pack
     expect(isFlowSupported("northern-ireland", "eviction_pack")).toBe(false);

@@ -88,12 +88,18 @@ Additional instructions for CHAT MODE:
 
 PRODUCT RECOMMENDATIONS:
 When the landlord's question indicates they need a specific document or service, suggest the appropriate product code:
-- notice_only - For eviction/serving notice questions
-- complete_pack - For court/tribunal/possession proceedings
-- money_claim - For rent arrears/money claims/debt recovery
-- tenancy_agreement - For tenancy agreement/AST questions
+- notice_only - For eviction/serving notice questions (England, Wales, Scotland only - NOT Northern Ireland)
+- complete_pack - For court/tribunal/possession proceedings (England ONLY)
+- money_claim - For rent arrears/money claims/debt recovery (England ONLY)
+- tenancy_agreement - For tenancy agreement/AST questions (ALL UK regions)
 
-Only suggest ONE product per response if clearly relevant. Use null if the question is general.
+REGIONAL PRODUCT AVAILABILITY (CRITICAL):
+- England: All products available
+- Wales: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Wales, consider using Notice Only (£39.99) for eviction notices."
+- Scotland: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Scotland, consider using Notice to Leave (£39.99) for eviction notices."
+- Northern Ireland: Only tenancy_agreement available. If user asks about eviction or money claim products, say "Eviction notices and money claim packs are not currently available for Northern Ireland. You can create a Tenancy Agreement."
+
+Only suggest ONE product per response if clearly relevant. Use null if the question is general or the relevant product is not available in the user's jurisdiction.
 
 NEXT STEP RECOMMENDATIONS:
 Analyse the user's intent and suggest the best next step:
@@ -234,15 +240,42 @@ Field requirements:
       });
     }
 
-    // Jurisdiction-aware product filtering for Northern Ireland
-    // NI does not support eviction packs or money claim packs
-    if (jurisdiction === 'northern-ireland' && suggestedProduct) {
-      const niUnsupportedProducts = ['notice_only', 'complete_pack', 'money_claim'];
-      if (niUnsupportedProducts.includes(suggestedProduct)) {
-        // For NI, only recommend tenancy agreements - or null if not relevant
-        suggestedProduct = suggestedProduct === 'money_claim' ? null : 'tenancy_agreement';
-        logger.info('Filtered unsupported product for NI', {
-          originalProduct: result.json?.suggested_product,
+    // Jurisdiction-aware product filtering
+    // Regional restrictions: complete_pack and money_claim are England-only
+    // notice_only is not available in NI
+    if (suggestedProduct) {
+      const originalProduct = suggestedProduct;
+
+      // Northern Ireland: only tenancy_agreement
+      if (jurisdiction === 'northern-ireland') {
+        const niUnsupportedProducts = ['notice_only', 'complete_pack', 'money_claim'];
+        if (niUnsupportedProducts.includes(originalProduct)) {
+          suggestedProduct = 'tenancy_agreement';
+        }
+      }
+
+      // Wales: no complete_pack or money_claim
+      if (jurisdiction === 'wales') {
+        if (originalProduct === 'complete_pack') {
+          suggestedProduct = 'notice_only';
+        } else if (originalProduct === 'money_claim') {
+          suggestedProduct = null;
+        }
+      }
+
+      // Scotland: no complete_pack or money_claim
+      if (jurisdiction === 'scotland') {
+        if (originalProduct === 'complete_pack') {
+          suggestedProduct = 'notice_only';
+        } else if (originalProduct === 'money_claim') {
+          suggestedProduct = null;
+        }
+      }
+
+      if (originalProduct !== suggestedProduct) {
+        logger.info('Filtered unsupported product for jurisdiction', {
+          jurisdiction,
+          originalProduct,
           filteredProduct: suggestedProduct,
         });
       }

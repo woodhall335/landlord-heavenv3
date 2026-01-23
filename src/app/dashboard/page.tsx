@@ -32,20 +32,11 @@ interface Case {
   has_paid_order?: boolean;
 }
 
-interface Document {
-  id: string;
-  document_title: string;
-  document_type: string;
-  is_preview: boolean;
-  created_at: string;
-}
-
 export default function DashboardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading: authLoading, isAuthenticated, user } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
-  const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const statsSectionRef = useRef<HTMLDivElement>(null);
@@ -84,20 +75,14 @@ export default function DashboardPage() {
 
     setIsLoadingData(true);
     try {
-      const [casesRes, docsRes, statsRes] = await Promise.all([
+      const [casesRes, statsRes] = await Promise.all([
         fetch('/api/cases'),
-        fetch('/api/documents'),
         fetch('/api/cases/stats'),
       ]);
 
       if (casesRes.ok) {
         const casesData = await casesRes.json();
         setCases(casesData.cases || []);
-      }
-
-      if (docsRes.ok) {
-        const docsData = await docsRes.json();
-        setDocuments(docsData.documents || []);
       }
 
       if (statsRes.ok) {
@@ -246,7 +231,7 @@ export default function DashboardPage() {
 
         {/* Stats Overview */}
         {stats && (
-          <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">
+          <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 scroll-mt-8">
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Total Cases</div>
               <div className="text-3xl font-bold text-charcoal">{stats.overview.total}</div>
@@ -258,10 +243,6 @@ export default function DashboardPage() {
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Completed</div>
               <div className="text-3xl font-bold text-green-600">{stats.overview.completed}</div>
-            </Card>
-            <Card padding="medium">
-              <div className="text-sm text-gray-600 mb-1">Documents</div>
-              <div className="text-3xl font-bold text-charcoal">{documents.length}</div>
             </Card>
           </div>
         )}
@@ -320,43 +301,7 @@ export default function DashboardPage() {
               )}
             </Card>
 
-            {/* Documents */}
-            <Card padding="large">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-charcoal">Documents</h2>
-                <Link href="/dashboard/documents" className="text-sm text-primary hover:text-primary-dark font-medium">
-                  View all →
-                </Link>
-              </div>
-
-              {documents.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">No documents generated yet</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {documents.slice(0, 5).map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
-                          <RiFileTextLine className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-charcoal truncate">{doc.document_title}</div>
-                          <div className="text-xs text-gray-500">{formatDate(doc.created_at)}</div>
-                        </div>
-                      </div>
-                      {doc.is_preview && (
-                        <Badge variant="warning" size="small">Preview</Badge>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
+            {/* Note: Documents section removed - documents are available within each case */}
           </div>
 
           {/* Right Column: Quick Actions & Info (1/3) */}

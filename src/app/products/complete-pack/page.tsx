@@ -68,7 +68,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England (Section 21/Section 8 + N5/N119), Wales (Section 173 + N5/N119), and Scotland (Notice to Leave + Form E tribunal). Northern Ireland is NOT supported for eviction - only tenancy agreements."
+    answer: "England only (Section 21/Section 8 + N5/N119). For Wales and Scotland, we recommend using Notice Only (£39.99) for eviction notices. Northern Ireland is NOT supported for eviction - only tenancy agreements."
   },
   {
     question: "Are these genuine official court forms?",
