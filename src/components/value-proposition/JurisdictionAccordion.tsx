@@ -13,13 +13,15 @@
  * - Northern Ireland: Not available for eviction
  *
  * COMPLETE PACK:
- * - England/Wales: N5 + N119 (+ N5B for accelerated)
- * - Scotland: Form E tribunal application
+ * - England: N5 + N119 (+ N5B for accelerated) - ENGLAND ONLY
+ * - Wales: Not available (use Notice Only)
+ * - Scotland: Not available (use Notice Only)
  * - Northern Ireland: Not available
  *
  * MONEY CLAIM:
- * - England/Wales: N1 + PAP-DEBT documents
- * - Scotland: Simple Procedure claim form + pre-action docs
+ * - England: N1 + PAP-DEBT documents - ENGLAND ONLY
+ * - Wales: Not available (use Notice Only for arrears eviction)
+ * - Scotland: Not available (use Notice Only for arrears eviction)
  * - Northern Ireland: Not available
  *
  * AST:
@@ -207,39 +209,23 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
         {
           name: 'Wales',
           flag: '/gb-wls.svg',
-          available: true,
-          documents: [
-            'All Notice Only documents (3)',
-            'Form N5 (Wales) — Claim for Possession',
-            'Form N119 (Wales) — Particulars of Claim',
-            'Form N5B (Wales) — Accelerated Possession (Section 173 only)',
-            'AI Witness Statement',
-            'Court Filing Guide',
-            'Evidence Collection Checklist',
-            'Proof of Service Certificate',
-          ],
-          notes: '7-9 documents total depending on route',
+          available: false,
+          documents: [],
+          notes: 'Complete Pack not available for Wales. Use Notice Only (£39.99) for Section 173 notices.',
         },
         {
           name: 'Scotland',
           flag: '/gb-sct.svg',
-          available: true,
-          documents: [
-            'All Notice Only documents (3)',
-            'Form E — First-tier Tribunal Application',
-            'AI Witness Statement',
-            'Tribunal Lodging Guide',
-            'Evidence Collection Checklist',
-            'Proof of Service Certificate',
-          ],
-          notes: '8 documents total',
+          available: false,
+          documents: [],
+          notes: 'Complete Pack not available for Scotland. Use Notice Only (£39.99) for Notice to Leave.',
         },
         {
           name: 'Northern Ireland',
           flag: '/gb-nir.svg',
           available: false,
           documents: [],
-          notes: 'Complete eviction packs not available. Tenancy agreements only.',
+          notes: 'Eviction not available. Tenancy agreements only.',
         },
       ];
 
@@ -266,45 +252,23 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
         {
           name: 'Wales',
           flag: '/gb-wls.svg',
-          available: true,
-          documents: [
-            'Form N1 — Money Claim Form (official PDF)',
-            'Particulars of Claim',
-            'Schedule of Arrears',
-            'Interest Calculation',
-            'Letter Before Claim (PAP-DEBT)',
-            'Defendant Information Sheet',
-            'Reply Form',
-            'Financial Statement Form',
-            'Court Filing Guide',
-            'Enforcement Guide',
-          ],
-          notes: '11 documents total',
+          available: false,
+          documents: [],
+          notes: 'Money Claim not available for Wales. Use Notice Only (£39.99) to evict for rent arrears.',
         },
         {
           name: 'Scotland',
           flag: '/gb-sct.svg',
-          available: true,
-          documents: [
-            'Form 3A — Simple Procedure Claim',
-            'Particulars of Claim',
-            'Schedule of Arrears',
-            'Interest Calculation',
-            'Pre-Action Letter',
-            'Defendant Information Sheet',
-            'Reply Form',
-            'Financial Statement Form',
-            'Sheriff Court Filing Guide',
-            'Enforcement Guide',
-          ],
-          notes: '11 documents total (Simple Procedure)',
+          available: false,
+          documents: [],
+          notes: 'Money Claim not available for Scotland. Use Notice Only (£39.99) to evict for rent arrears.',
         },
         {
           name: 'Northern Ireland',
           flag: '/gb-nir.svg',
           available: false,
           documents: [],
-          notes: 'Money claims not available. Tenancy agreements only.',
+          notes: 'Money Claim not available. Tenancy agreements only.',
         },
       ];
 

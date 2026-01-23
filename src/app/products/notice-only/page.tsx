@@ -33,12 +33,12 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Notice Pack 2026 - ${price}`,
+  title: `Eviction Notice Pack 2026 | England, Wales & Scotland | ${price}`,
   description:
-    `Court-ready eviction notices for England, Wales and Scotland 2026. Section 21 (ends May 2026), Section 8, Section 173, Notice to Leave. Preview before you buy. ${price} one-time.`,
+    `Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Official forms, service instructions, and validity checklist. ${price} one-time.`,
   openGraph: {
-    title: `Eviction Notice 2026 - Court-Ready from ${price}`,
-    description: "Court-ready eviction notices for England, Wales and Scotland. Section 21, Section 8, Wales RHW, Scotland Notice to Leave. Preview before you buy.",
+    title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
+    description: "Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Preview before you buy.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {
@@ -106,9 +106,14 @@ export default function NoticeOnlyPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
               Eviction Notice Only
             </h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Generate Legally Valid Eviction Notices for England, Wales & Scotland
+            <p className="text-xl md:text-2xl mb-4 text-gray-600">
+              Legally Valid Eviction Notices for England, Wales &amp; Scotland
             </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: Section 21 / Section 8</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales: Section 173</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: Notice to Leave</span>
+            </div>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
               <span className="text-gray-500 text-lg">one-time</span>

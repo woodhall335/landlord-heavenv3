@@ -39,12 +39,12 @@ const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Pack 2026 for Landlords | Complete Court Forms ${price}`,
+  title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
   description:
-    `For landlords who need the full eviction process fast, this eviction pack covers notice to possession order with compliant court forms. Save time, reduce mistakes, and get your complete pack.`,
+    `Full eviction bundle for England landlords: Section 21/Section 8 notice, N5 + N119 court forms, AI witness statement, and filing guide. England only - ${price} one-time.`,
   openGraph: {
-    title: `Eviction Pack 2026 for Landlords | Complete Court Forms ${price}`,
-    description: "Complete eviction pack for landlords with notice, court forms, and guidance. Built to reduce delays, costs, and compliance risk.",
+    title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
+    description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
   alternates: {
@@ -68,7 +68,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England only (Section 21/Section 8 + N5/N119). For Wales and Scotland, we recommend using Notice Only (£39.99) for eviction notices. Northern Ireland is NOT supported for eviction - only tenancy agreements."
+    answer: "England only. This pack includes Section 21/Section 8 notices plus N5, N119, N5B court forms for English courts. For Wales or Scotland properties, use our Notice Only pack (£39.99) for eviction notices. Northern Ireland is not supported for eviction."
   },
   {
     question: "Are these genuine official court forms?",
@@ -113,7 +113,10 @@ export default function CompleteEvictionPackPage() {
               Complete Eviction Pack
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              7-9 court-ready documents for England, Wales or Scotland
+              7-9 court-ready documents for England
+            </p>
+            <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
+              England only — Wales &amp; Scotland: use <a href="/products/notice-only" className="underline hover:text-amber-900">Notice Only</a>
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>

@@ -33,12 +33,12 @@ const product = PRODUCTS.money_claim;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Money Claim Pack 2026 for Landlords | ${price}`,
+  title: `Money Claim Pack 2026 for England Landlords | ${price}`,
   description:
-    `For landlords reclaiming unpaid rent fast, this money claim pack keeps you compliant with court rules, saves time, and reduces costly mistakes. Start your pack.`,
+    `Recover unpaid rent through English courts with our Money Claim Pack. N1 form, PAP-DEBT Letter Before Claim, interest calculator, and enforcement guidance. England only - ${price} one-time.`,
   openGraph: {
-    title: `Money Claim Pack 2026 for Landlords | ${price}`,
-    description: "Money claim pack for landlords to recover rent arrears with compliant forms, letters, and court-ready guidance.",
+    title: `Money Claim Pack 2026 for England Landlords | ${price}`,
+    description: "Money claim pack for England landlords to recover rent arrears. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England only (N1 + PAP-DEBT). For Wales and Scotland, we recommend using Notice Only (£39.99) for rent arrears eviction notices. Northern Ireland is NOT supported for money claims - only tenancy agreements."
+    answer: "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts. For Wales, Scotland, or Northern Ireland properties, use our Notice Only pack (£39.99) to serve eviction notices for rent arrears instead."
   },
   {
     question: "How long are documents stored?",
@@ -107,7 +107,10 @@ export default function MoneyClaimPage() {
               Money Claim Pack
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              11 court-ready documents for England, Wales or Scotland
+              11 court-ready documents for England
+            </p>
+            <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
+              England only — Wales &amp; Scotland: use <a href="/products/notice-only" className="underline hover:text-amber-900">Notice Only</a> for arrears eviction
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>

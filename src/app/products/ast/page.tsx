@@ -31,13 +31,13 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreement Pack 2026 for Landlords | From ${standardPrice}`,
+  title: `Tenancy Agreement Pack 2026 | All UK Regions | From ${standardPrice}`,
   description:
-    `For landlords who need compliant tenancy agreements without legal delays. AST (England), Occupation Contract (Wales), PRT (Scotland), NI tenancy templates in one pack.`,
+    `Compliant tenancy agreements for all UK: AST (England), Standard Occupation Contract (Wales), PRT (Scotland), and Private Tenancy (NI). Standard ${standardPrice} or Premium ${premiumPrice}.`,
   openGraph: {
-    title: `Tenancy Agreement Pack 2026 for Landlords | From ${standardPrice}`,
+    title: `Tenancy Agreement Pack 2026 | England, Wales, Scotland & NI | From ${standardPrice}`,
     description:
-      "Landlord-ready tenancy agreements for 2026: AST, occupation contracts, PRT, and NI templates. Built for compliance and speed.",
+      "Landlord-ready tenancy agreements for all UK regions: AST, Occupation Contracts, PRT, and NI templates. Preview before you buy.",
     type: 'website',
     url: getCanonicalUrl('/products/ast'),
   },
@@ -104,9 +104,15 @@ export default function ASTPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Tenancy Agreements</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Legally compliant for England, Wales, Scotland & NI
+            <p className="text-xl md:text-2xl mb-4 text-gray-600">
+              Legally Compliant for All UK Regions
             </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: AST</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales: Occupation Contract</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: PRT</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🇬🇧 Northern Ireland</span>
+            </div>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{standardPrice}</span>
               <span className="text-gray-500 text-lg">standard</span>
