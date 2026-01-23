@@ -735,10 +735,23 @@ export interface CaseData {
   n5b_q9g_is_schedule_10?: boolean;        // Q9g: Was tenancy granted under Schedule 10? (Yes = bad)
 
   // =========================================================================
-  // N5B QUESTIONS 15-18: COMPLIANCE DATES
+  // N5B QUESTION 11: LICENSING (HMO / Selective)
   // =========================================================================
-  // Q15: EPC
-  epc_provided_date?: string;            // Q15: Date EPC was provided
+  n5b_property_requires_licence?: boolean; // Q11a: Is property required to be licensed?
+  n5b_has_valid_licence?: boolean;         // Q11a follow-up: Is there a valid licence?
+  n5b_licensing_decision_outstanding?: boolean; // Q11b: Is a decision outstanding / TEN?
+
+  // =========================================================================
+  // N5B QUESTION 15: PROPERTY CONDITION / RETALIATORY EVICTION
+  // Has a relevant notice been served under Housing Act 2004?
+  // =========================================================================
+  n5b_property_condition_notice_served?: boolean; // Q15: Has notice been served?
+
+  // =========================================================================
+  // N5B QUESTIONS 16-18: COMPLIANCE DATES
+  // =========================================================================
+  // Q16: EPC (was Q15 in older forms)
+  epc_provided_date?: string;            // Q16: Date EPC was provided
   // Q16-17: Gas safety
   has_gas_at_property?: boolean;         // Q16: Property has gas (if false, Q16-17 skip)
   gas_safety_before_occupation?: boolean; // Q16: Gas safety record available before occupation
@@ -1586,6 +1599,26 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_NO, !data.n5b_q9g_is_schedule_10, ctx);
   }
 
+  // ==========================================================================
+  // Q11: LICENSING (HMO / Selective)
+  // ==========================================================================
+  if (data.n5b_property_requires_licence !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q11A_LICENSING_REQUIRED_YES, data.n5b_property_requires_licence, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q11A_LICENSING_REQUIRED_NO, !data.n5b_property_requires_licence, ctx);
+
+    // Q11a follow-up: If licensing is required, is there a valid licence?
+    if (data.n5b_property_requires_licence && data.n5b_has_valid_licence !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.Q11A_HAS_VALID_LICENCE_YES, data.n5b_has_valid_licence, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q11A_HAS_VALID_LICENCE_NO, !data.n5b_has_valid_licence, ctx);
+    }
+
+    // Q11b: Is a decision outstanding as to licensing or TEN?
+    if (data.n5b_licensing_decision_outstanding !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_YES, data.n5b_licensing_decision_outstanding, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_NO, !data.n5b_licensing_decision_outstanding, ctx);
+    }
+  }
+
   // === Q10: NOTICE SERVICE (REQUIRED) ===
   setTextRequired(form, N5B_FIELDS.NOTICE_SERVICE_METHOD, data.notice_service_method, ctx);
 
@@ -1641,13 +1674,17 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
 
   // =========================================================================
   // Q15: PROPERTY CONDITION / RETALIATORY EVICTION (Housing Act 2004)
-  // In the new N5B form, Q15 is about property condition notices,
-  // NOT about EPC (which is now Q16).
-  // For most standard Section 21 claims, we answer "No" to Q15
-  // (no relevant Housing Act 2004 notice has been served on claimant).
+  // The wizard asks about improvement_notice_served and emergency_remedial_action.
+  // If EITHER is true, a relevant notice has been served and Section 21 may be blocked.
+  // For valid Section 21, we typically answer "No" (no notice served).
   // =========================================================================
-  // Default: No property condition notice served (standard case)
-  setCheckbox(form, N5B_CHECKBOXES.Q15_PROPERTY_CONDITION_NOTICE_NO, true, ctx);
+  if (data.n5b_property_condition_notice_served !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.Q15_PROPERTY_CONDITION_NOTICE_YES, data.n5b_property_condition_notice_served, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q15_PROPERTY_CONDITION_NOTICE_NO, !data.n5b_property_condition_notice_served, ctx);
+  } else {
+    // Default: No property condition notice served (standard case)
+    setCheckbox(form, N5B_CHECKBOXES.Q15_PROPERTY_CONDITION_NOTICE_NO, true, ctx);
+  }
 
   // =========================================================================
   // Q16: EPC PROVIDED (was Q15 in older forms)
