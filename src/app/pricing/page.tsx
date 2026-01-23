@@ -8,7 +8,7 @@ import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notices £39.99, Complete Eviction Pack £199.99, Money Claims £199.99, Tenancy Agreements £9.99-£14.99. All one-time payments.",
+  description: "Compare Landlord Heaven pricing. Notices £39.99, Complete Eviction Pack £149.99 (England only), Money Claims £99.99 (England only), Tenancy Agreements £9.99-£14.99. All one-time payments.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -75,12 +75,14 @@ export default function PricingPage() {
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£199.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£149.99</div>
+                  <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£199.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£99.99</div>
+                  <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
@@ -312,7 +314,8 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£199.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£149.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
               <li>✅ Court Possession Claim</li>
@@ -331,7 +334,8 @@ export default function PricingPage() {
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£199.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£99.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>
               <li>✅ Arrears Schedule</li>

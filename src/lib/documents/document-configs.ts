@@ -599,9 +599,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£199.99',
+      price: '£149.99',
       originalPrice: '£2,500+',
-      savings: 'Save £2,300+ vs solicitors',
+      savings: 'Save £2,350+ vs solicitors',
       features: [
         'Everything in Notice Only',
         'Court forms (N5, N119, N5B)',
@@ -613,9 +613,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£199.99',
+      price: '£99.99',
       originalPrice: '£3,000+',
-      savings: 'Save £2,800+ vs solicitors',
+      savings: 'Save £2,900+ vs solicitors',
       features: [
         'Form N1 money claim',
         'Particulars of claim',
@@ -629,9 +629,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£199.99',
+      price: '£99.99',
       originalPrice: '£3,000+',
-      savings: 'Save £2,800+ vs solicitors',
+      savings: 'Save £2,900+ vs solicitors',
       features: [
         'Form 3A simple procedure claim',
         'Particulars of claim',

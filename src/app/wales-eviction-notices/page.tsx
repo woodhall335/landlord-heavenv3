@@ -554,7 +554,7 @@ export default function WalesEvictionNoticesPage() {
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £199.99
+                  Complete Pack — £149.99
                 </Link>
               </div>
             </div>
@@ -589,7 +589,7 @@ export default function WalesEvictionNoticesPage() {
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £199.99',
+                  label: 'Complete eviction pack — £149.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

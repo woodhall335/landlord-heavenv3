@@ -44,8 +44,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Complete Eviction Pack',
     shortLabel: 'Complete Pack',
     description: 'Full bundle with notice, court forms, and guidance',
-    price: 199.99,
-    displayPrice: '£199.99',
+    price: 149.99,
+    displayPrice: '£149.99',
+    priceNote: 'England only',
     wizardHref: '/wizard?product=complete_pack',
     productPageHref: '/complete-pack',
   },
@@ -54,8 +55,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Money Claim Pack',
     shortLabel: 'Money Claim',
     description: 'Recover rent arrears through the courts',
-    price: 199.99,
-    displayPrice: '£199.99',
+    price: 99.99,
+    displayPrice: '£99.99',
+    priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
     productPageHref: '/money-claim-pack',
   },
@@ -64,10 +66,11 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Scotland Money Claim Pack',
     shortLabel: 'Scotland Money Claim',
     description: 'Recover rent arrears through Simple Procedure',
-    price: 199.99,
-    displayPrice: '£199.99',
-    wizardHref: '/wizard?product=sc_money_claim',
-    productPageHref: '/money-claim-pack',
+    price: 99.99,
+    displayPrice: '£99.99',
+    priceNote: 'Service discontinued - use Notice Only',
+    wizardHref: '/wizard?product=notice_only&jurisdiction=scotland',
+    productPageHref: '/notice-only',
   },
   ast_standard: {
     sku: 'ast_standard',
@@ -117,14 +120,16 @@ export const ASK_HEAVEN_RECOMMENDATION_MAP: Record<
     primarySku: 'complete_pack',
     label: 'Get Complete Eviction Pack',
     description: 'Full bundle with notice, court forms, and guidance',
-    displayPrice: '£199.99',
+    displayPrice: '£149.99',
+    priceNote: 'England only',
     wizardHref: '/wizard?product=complete_pack',
   },
   money_claim: {
     primarySku: 'money_claim',
     label: 'Start Money Claim',
     description: 'Recover rent arrears through the courts',
-    displayPrice: '£199.99',
+    displayPrice: '£99.99',
+    priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
   },
   tenancy_agreement: {
@@ -165,4 +170,64 @@ export function isValidAskHeavenRecommendation(
   value: string
 ): value is AskHeavenRecommendation {
   return value in ASK_HEAVEN_RECOMMENDATION_MAP;
+}
+
+/**
+ * Regional product availability matrix
+ * Defines which products are available in which jurisdictions
+ */
+export const REGIONAL_PRODUCT_AVAILABILITY: Record<
+  ProductSku,
+  { available: string[]; badge?: string }
+> = {
+  notice_only: {
+    available: ['england', 'wales', 'scotland'],
+    // Not available in Northern Ireland
+  },
+  complete_pack: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  money_claim: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  sc_money_claim: {
+    available: [], // Discontinued
+    badge: 'Service discontinued',
+  },
+  ast_standard: {
+    available: ['england', 'wales', 'scotland', 'northern-ireland'],
+  },
+  ast_premium: {
+    available: ['england', 'wales', 'scotland', 'northern-ireland'],
+  },
+};
+
+/**
+ * Check if a product is available in a given jurisdiction
+ */
+export function isProductAvailableInRegion(
+  sku: ProductSku,
+  jurisdiction: string
+): boolean {
+  const availability = REGIONAL_PRODUCT_AVAILABILITY[sku];
+  if (!availability) return false;
+  return availability.available.includes(jurisdiction);
+}
+
+/**
+ * Get all products available in a given jurisdiction
+ */
+export function getProductsForRegion(jurisdiction: string): ProductConfig[] {
+  return Object.values(PRODUCTS).filter((product) =>
+    isProductAvailableInRegion(product.sku, jurisdiction)
+  );
+}
+
+/**
+ * Get the regional badge for a product (e.g., "England only")
+ */
+export function getRegionalBadge(sku: ProductSku): string | undefined {
+  return REGIONAL_PRODUCT_AVAILABILITY[sku]?.badge;
 }

@@ -526,7 +526,7 @@ export const blogPosts: BlogPost[] = [
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £199.99
+              Complete Eviction Pack — £149.99
             </Link>
           </div>
         </div>
@@ -610,7 +610,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
             Generate Court-Ready Section 21 Notice — £39.99</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
-            Complete Eviction Pack (notices + court forms) — £199.99</Link></li>
+            Complete Eviction Pack (notices + court forms) — £149.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
@@ -7784,7 +7784,7 @@ export const blogPosts: BlogPost[] = [
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £199.99
+              Complete Eviction Pack — £149.99
             </Link>
           </div>
         </div>
@@ -8193,7 +8193,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £199.99
+            Get Complete Eviction Pack — £149.99
           </Link>
         </div>
       </>
@@ -8581,7 +8581,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £199.99
+            Get Complete Eviction Pack — £149.99
           </Link>
         </div>
       </>
@@ -9011,7 +9011,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £199.99
+            Get Complete Eviction Pack — £149.99
           </Link>
         </div>
       </>

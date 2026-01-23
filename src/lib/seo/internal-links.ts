@@ -15,14 +15,14 @@ export const productLinks = {
   completePack: {
     href: '/products/complete-pack',
     title: 'Complete Eviction Pack',
-    description: 'Full eviction package with court forms — £199.99',
+    description: 'Full eviction package with court forms — £149.99',
     icon: 'legal' as const,
     type: 'product' as const,
   },
   moneyClaim: {
     href: '/products/money-claim',
     title: 'Money Claim Pack',
-    description: 'Recover unpaid rent through court — £199.99',
+    description: 'Recover unpaid rent through court — £99.99',
     icon: 'document' as const,
     type: 'product' as const,
   },

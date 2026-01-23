@@ -168,7 +168,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} rent arrears`,
       scenarioLabel: 'recovering unpaid rent',
       primaryCTA: {
-        label: 'Start money claim pack — £199.99',
+        label: 'Start money claim pack — £99.99',
         href: productLinks.moneyClaim.href,
       },
       secondaryCTA: {
@@ -300,7 +300,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         href: productLinks.noticeOnly.href,
       },
       secondaryCTA: {
-        label: 'Complete eviction pack — £199.99',
+        label: 'Complete eviction pack — £149.99',
         href: productLinks.completePack.href,
       },
       relatedLinks: [primaryRelated, secondaryRelated],

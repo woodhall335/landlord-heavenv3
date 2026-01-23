@@ -84,7 +84,7 @@ const faqs = [
   {
     question: 'What is the cheapest way to evict a tenant?',
     answer:
-      'The cheapest legal route is DIY eviction using proper notices and court forms. Our Notice Only pack (£39.99) includes court-ready notices. For the full process including court forms, the Complete Eviction Pack (£199.99) covers everything from notice to possession order.',
+      'The cheapest legal route is DIY eviction using proper notices and court forms. Our Notice Only pack (£39.99) includes court-ready notices. For the full process including court forms, the Complete Eviction Pack (£149.99) covers everything from notice to possession order.',
   },
   {
     question: 'Do I need a solicitor to evict a tenant?',
@@ -187,7 +187,7 @@ export default function HowToEvictTenantPage() {
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/20"
                 >
-                  Complete Eviction Pack — £199.99
+                  Complete Eviction Pack — £149.99
                 </Link>
               </div>
             </div>
@@ -474,7 +474,7 @@ export default function HowToEvictTenantPage() {
                     className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800"
                   >
                     <FileText className="w-4 h-4" />
-                    Complete Pack — £199.99
+                    Complete Pack — £149.99
                   </Link>
                 </div>
               </div>
@@ -779,7 +779,7 @@ export default function HowToEvictTenantPage() {
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £199.99
+                  Complete Pack — £149.99
                 </Link>
               </div>
             </div>
@@ -797,7 +797,7 @@ export default function HowToEvictTenantPage() {
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £199.99',
+                  label: 'Complete eviction pack — £149.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

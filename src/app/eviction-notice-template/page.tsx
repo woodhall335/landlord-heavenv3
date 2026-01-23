@@ -68,7 +68,7 @@ export default function EvictionNoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '199.99',
+        highPrice: '149.99',
         priceCurrency: 'GBP',
         offerCount: '3',
       },
