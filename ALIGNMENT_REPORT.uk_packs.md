@@ -6,12 +6,8 @@
 - england / money_claim (money_claim)
 - england / tenancy_agreement (tenancy_agreement)
 - wales / notice_only (wales_section_173, wales_fault_based)
-- wales / eviction_pack (wales_section_173, wales_fault_based)
-- wales / money_claim (money_claim)
 - wales / tenancy_agreement (tenancy_agreement)
 - scotland / notice_only (notice_to_leave)
-- scotland / eviction_pack (notice_to_leave)
-- scotland / money_claim (money_claim)
 - scotland / tenancy_agreement (tenancy_agreement)
 - northern-ireland / tenancy_agreement (tenancy_agreement)
 ## Misconfigured Flows
@@ -21,7 +17,6 @@ None
 None
 
 ## Route Question Issues
-- scotland / eviction_pack () — Missing selected_notice_route options; defaulted route | MQS: config/mqs/complete_pack/scotland.yaml
 - scotland / notice_only () — Missing selected_notice_route options; defaulted route | MQS: config/mqs/notice_only/scotland.yaml
 
 ## Missing Facts Schema Coverage
