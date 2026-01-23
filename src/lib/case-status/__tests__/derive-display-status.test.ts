@@ -27,11 +27,10 @@ describe('deriveDisplayStatus', () => {
   });
 
   describe('documents_ready status', () => {
-    it('returns documents_ready when paid + fulfilled + has documents', () => {
+    it('returns documents_ready when paid + has documents', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
-        fulfillmentStatus: 'fulfilled',
         hasFinalDocuments: true,
       });
 
@@ -45,7 +44,18 @@ describe('deriveDisplayStatus', () => {
         caseStatus: 'in_progress', // Stale status
         wizardProgress: 50,
         paymentStatus: 'paid',
-        fulfillmentStatus: 'fulfilled',
+        hasFinalDocuments: true,
+      });
+
+      expect(result.status).toBe('documents_ready');
+      expect(result.label).toBe('Documents ready');
+    });
+
+    it('returns documents_ready regardless of fulfillment_status when has documents', () => {
+      const result = deriveDisplayStatus({
+        caseStatus: 'in_progress',
+        paymentStatus: 'paid',
+        fulfillmentStatus: 'processing', // Not fulfilled, but has documents
         hasFinalDocuments: true,
       });
 
@@ -55,11 +65,10 @@ describe('deriveDisplayStatus', () => {
   });
 
   describe('paid_in_progress status', () => {
-    it('returns paid_in_progress when paid but not fulfilled', () => {
+    it('returns paid_in_progress when paid but no documents yet', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
-        fulfillmentStatus: 'processing',
         hasFinalDocuments: false,
       });
 
@@ -68,7 +77,7 @@ describe('deriveDisplayStatus', () => {
       expect(result.badgeVariant).toBe('warning');
     });
 
-    it('returns paid_in_progress when paid + fulfilled but no docs yet (edge case)', () => {
+    it('returns paid_in_progress when paid + fulfilled but no docs yet', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
@@ -80,11 +89,11 @@ describe('deriveDisplayStatus', () => {
       expect(result.label).toBe('In progress');
     });
 
-    it('returns paid_in_progress when fulfillment pending', () => {
+    it('returns paid_in_progress when paid + processing', () => {
       const result = deriveDisplayStatus({
         caseStatus: 'in_progress',
         paymentStatus: 'paid',
-        fulfillmentStatus: 'pending',
+        fulfillmentStatus: 'processing',
         hasFinalDocuments: false,
       });
 
@@ -255,14 +264,13 @@ describe('getDisplayStatusLabel', () => {
 });
 
 describe('status priority order', () => {
-  it('documents_ready takes priority when all conditions met', () => {
-    // Even with in_progress case status, paid+fulfilled should show documents_ready
+  it('documents_ready takes priority when paid and has documents', () => {
+    // Even with in_progress case status, paid+has_documents should show documents_ready
     const result = deriveDisplayStatus({
       caseStatus: 'in_progress',
       wizardProgress: 100,
       wizardCompletedAt: '2024-01-15T12:00:00Z',
       paymentStatus: 'paid',
-      fulfillmentStatus: 'fulfilled',
       hasFinalDocuments: true,
     });
 
@@ -275,20 +283,18 @@ describe('status priority order', () => {
       wizardProgress: 100,
       wizardCompletedAt: '2024-01-15T12:00:00Z',
       paymentStatus: 'paid',
-      fulfillmentStatus: 'fulfilled',
       hasFinalDocuments: true,
     });
 
     expect(result.status).toBe('archived');
   });
 
-  it('paid_in_progress shown during payment processing', () => {
+  it('paid_in_progress shown when paid but no documents yet', () => {
     const result = deriveDisplayStatus({
       caseStatus: 'in_progress',
       wizardProgress: 100,
       wizardCompletedAt: '2024-01-15T12:00:00Z',
       paymentStatus: 'paid',
-      fulfillmentStatus: 'processing',
       hasFinalDocuments: false,
     });
 
