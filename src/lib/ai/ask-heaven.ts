@@ -376,7 +376,59 @@ JURISDICTION-SPECIFIC CONTEXT (Northern Ireland):
 - NI eviction workflows are not yet fully supported in this system.
 - General guidance: NI uses Notice to Quit procedures similar to pre-2015 England & Wales.
 - Consult a local NI solicitor for specific eviction advice.
+- AVAILABLE PRODUCTS: Only Tenancy Agreement is available for Northern Ireland. Eviction Pack, Complete Pack, and Money Claim Pack are NOT available for this jurisdiction.
 `.trim();
+
+    default:
+      return '';
+  }
+}
+
+/**
+ * Returns region-aware product availability guidance.
+ * Used to inform AI responses about what products are available in each jurisdiction.
+ *
+ * Regional Product Availability (January 2026):
+ * - England: All products (notice_only, complete_pack, money_claim, tenancy_agreement)
+ * - Wales: notice_only, tenancy_agreement only
+ * - Scotland: notice_only, tenancy_agreement only
+ * - Northern Ireland: tenancy_agreement only
+ */
+export function getRegionalProductGuidance(jurisdiction: string, product?: string): string {
+  const normalizedJurisdiction = jurisdiction.toLowerCase();
+
+  // If product is specified, check if it's available
+  if (product) {
+    const englandOnlyProducts = ['complete_pack', 'eviction_pack', 'money_claim'];
+    const notAvailableInNI = ['notice_only', ...englandOnlyProducts];
+
+    if (normalizedJurisdiction === 'northern-ireland' && notAvailableInNI.includes(product)) {
+      return `⚠️ ${product} is not available in Northern Ireland. Only Tenancy Agreement is available for this jurisdiction.`;
+    }
+
+    if ((normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') && englandOnlyProducts.includes(product)) {
+      const regionName = normalizedJurisdiction === 'wales' ? 'Wales' : 'Scotland';
+      const alternative = product === 'money_claim'
+        ? 'Consider using Notice Only (£39.99) for rent arrears eviction notices instead.'
+        : 'Consider using Notice Only (£39.99) for eviction notices instead.';
+      return `⚠️ ${product} is only available in England, not ${regionName}. ${alternative}`;
+    }
+  }
+
+  // General guidance by jurisdiction
+  switch (normalizedJurisdiction) {
+    case 'england':
+      return 'All products are available in England: Notice Only, Complete Pack, Money Claim Pack, and Tenancy Agreement.';
+
+    case 'wales':
+      return 'In Wales, only Notice Only (£39.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
+
+    case 'scotland':
+      return 'In Scotland, only Notice Only (£39.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
+
+    case 'northern-ireland':
+    case 'northern ireland':
+      return 'In Northern Ireland, only Tenancy Agreement is available. Eviction notices and Money Claim Pack are not currently supported.';
 
     default:
       return '';

@@ -18,7 +18,11 @@ export type FunnelEvent =
   | 'case_archived'
   | 'free_tool_viewed'
   | 'validator_completed'
-  | 'upsell_clicked';
+  | 'upsell_clicked'
+  // New product conversion tracking events
+  | 'product_selected'
+  | 'purchase_completed'
+  | 'product_region_blocked';
 
 export type ToolType = 'validator' | 'generator' | 'calculator' | 'checker';
 
@@ -69,6 +73,58 @@ export interface UpsellClickedProps {
   product: string;
   destination: string;
   jurisdiction?: string;
+}
+
+// =============================================================================
+// Product Conversion Tracking Event Props
+// =============================================================================
+
+/**
+ * Props for product selection event
+ * Fired when user selects a product in the wizard
+ */
+export interface ProductSelectedProps {
+  productId: string;
+  price: number;
+  region: string;
+  wizardStep: string;
+  source?: string; // 'wizard' | 'upsell' | 'direct'
+}
+
+/**
+ * Enhanced props for checkout started event
+ * Includes region and cart value for conversion analysis
+ */
+export interface CheckoutStartedEnhancedProps {
+  productId: string;
+  price: number;
+  region: string;
+  cartValue: number;
+  route?: string;
+}
+
+/**
+ * Props for purchase completed event
+ * Fired when payment is confirmed
+ */
+export interface PurchaseCompletedProps {
+  productId: string;
+  price: number;
+  region: string;
+  revenue: number;
+  orderId?: string;
+  route?: string;
+}
+
+/**
+ * Props for product region blocked event
+ * Fired when user tries to access a region-restricted product
+ */
+export interface ProductRegionBlockedProps {
+  productId: string;
+  region: string;
+  blockedReason: string;
+  suggestedAlternative?: string;
 }
 
 /**
@@ -231,5 +287,89 @@ export function trackEvent(
     vercelTrack(event, properties || {});
   } catch (error) {
     console.warn(`[analytics] Failed to track ${event}:`, error);
+  }
+}
+
+// =============================================================================
+// Product Conversion Tracking Functions
+// =============================================================================
+
+/**
+ * Track when a product is selected in the wizard
+ * Fired when user chooses a product (Notice Only, Eviction Pack, etc.)
+ */
+export function trackProductSelected(props: ProductSelectedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('product_selected', {
+      product_id: props.productId,
+      price: props.price,
+      region: props.region,
+      wizard_step: props.wizardStep,
+      source: props.source || 'wizard',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track product_selected:', error);
+  }
+}
+
+/**
+ * Track when checkout starts with enhanced product/region data
+ * Includes price and region for conversion funnel analysis
+ */
+export function trackCheckoutStartedEnhanced(props: CheckoutStartedEnhancedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('checkout_started', {
+      product_id: props.productId,
+      price: props.price,
+      region: props.region,
+      cart_value: props.cartValue,
+      route: props.route || 'unknown',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track checkout_started:', error);
+  }
+}
+
+/**
+ * Track when a purchase is completed
+ * Fired after successful payment confirmation
+ */
+export function trackPurchaseCompleted(props: PurchaseCompletedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('purchase_completed', {
+      product_id: props.productId,
+      price: props.price,
+      region: props.region,
+      revenue: props.revenue,
+      order_id: props.orderId || 'unknown',
+      route: props.route || 'unknown',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track purchase_completed:', error);
+  }
+}
+
+/**
+ * Track when a product is blocked due to regional restrictions
+ * Helps measure demand for unavailable products by region
+ */
+export function trackProductRegionBlocked(props: ProductRegionBlockedProps): void {
+  if (!isBrowser()) return;
+
+  try {
+    vercelTrack('product_region_blocked', {
+      product_id: props.productId,
+      region: props.region,
+      blocked_reason: props.blockedReason,
+      suggested_alternative: props.suggestedAlternative || 'none',
+    });
+  } catch (error) {
+    console.warn('[analytics] Failed to track product_region_blocked:', error);
   }
 }

@@ -17,36 +17,46 @@ describe('Wizard selection UI Northern Ireland gating', () => {
     pushMock.mockReset();
   });
 
-  it('disables Northern Ireland selection for eviction flows and shows messaging', () => {
+  it('disables Northern Ireland and Scotland/Wales for eviction flows (England only)', () => {
     render(<WizardPage />);
 
     fireEvent.click(screen.getByRole('button', { name: /Eviction Pack/i }));
 
     const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
+    const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
+    const walesOption = screen.getByRole('button', { name: /Wales/i });
+
+    // All non-England jurisdictions should be disabled for eviction packs
     expect((niOption as HTMLButtonElement).disabled).toBe(true);
-    expect(
-      screen.getByText(
-        'Eviction and money claim flows are unavailable here. Tenancy agreements only.'
-      )
-    ).toBeTruthy();
+    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
+    expect((walesOption as HTMLButtonElement).disabled).toBe(true);
+
+    // UI shows multiple messages for Wales and Scotland:
+    // "Complete Eviction Pack is only available for England. Use Notice Only (£39.99) for Wales/Scotland."
+    // And for NI: "Eviction and money claim flows are not yet available for Northern Ireland. Tenancy agreements only."
+    const evictionMessages = screen.getAllByText(/Complete Eviction Pack is only available for England/i);
+    expect(evictionMessages.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('disables Northern Ireland selection for money claim flows (Scotland is now enabled)', () => {
+  it('disables Northern Ireland and Scotland/Wales for money claim flows (England only)', () => {
     render(<WizardPage />);
 
     fireEvent.click(screen.getByRole('button', { name: /Money Claim/i }));
 
     const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
     const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
+    const walesOption = screen.getByRole('button', { name: /Wales/i });
 
-    // Only Northern Ireland should be disabled - Scotland is now enabled for money claims
+    // All non-England jurisdictions should be disabled for money claims
     expect((niOption as HTMLButtonElement).disabled).toBe(true);
-    expect((scotlandOption as HTMLButtonElement).disabled).toBe(false);
+    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
+    expect((walesOption as HTMLButtonElement).disabled).toBe(true);
 
-    // Check for Northern Ireland specific message
-    expect(
-      screen.getByText(/Eviction and money claim flows are unavailable here/i)
-    ).toBeTruthy();
+    // Check for messaging about England-only availability
+    // UI shows: "Money Claim is only available for England. Use Notice Only (£39.99) for Scotland/Wales."
+    // Note: Multiple messages exist (one for Wales, one for Scotland)
+    const moneyClaimMessages = screen.getAllByText(/Money Claim is only available for England/i);
+    expect(moneyClaimMessages.length).toBeGreaterThanOrEqual(1);
   });
 
   it('allows Northern Ireland tenancy agreements and routes to the flow', () => {

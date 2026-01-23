@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England & Wales (N1 + PAP-DEBT) and Scotland (Simple Procedure). Northern Ireland is NOT supported for money claims - only tenancy agreements."
+    answer: "England only (N1 + PAP-DEBT). For Wales and Scotland, we recommend using Notice Only (£39.99) for rent arrears eviction notices. Northern Ireland is NOT supported for money claims - only tenancy agreements."
   },
   {
     question: "How long are documents stored?",

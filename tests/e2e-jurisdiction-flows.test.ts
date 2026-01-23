@@ -4,23 +4,27 @@
  * Comprehensive tests validating all product flows across all UK jurisdictions.
  * Tests document generation, field validation, and blocking logic.
  *
- * Test Matrix:
- * | Flow / Region       | Expected Behavior |
- * |---------------------|-------------------|
- * | Section 8 / England | ✅ Supported      |
- * | Section 8 / Wales   | ✅ Fault-based    |
- * | Section 8 / Scotland| ❌ Blocked (use notice_to_leave) |
- * | Section 8 / NI      | ❌ Blocked (NI tenancy only) |
- * | Section 21 / England| ✅ Supported      |
- * | Section 21 / Wales  | ❌ Blocked (use section_173) |
- * | Section 21 / Scotland| ❌ Blocked (use notice_to_leave) |
- * | Section 21 / NI     | ❌ Blocked        |
- * | Notice Only / All   | Per jurisdiction rules |
- * | Money Claim / E/W/S | ✅ Supported      |
- * | Money Claim / NI    | ❌ Blocked        |
+ * Test Matrix (Updated for Regional Product Restrictions):
+ * | Flow / Region           | Expected Behavior |
+ * |-------------------------|-------------------|
+ * | Section 8 / England     | ✅ Supported      |
+ * | Section 8 / Wales       | ✅ Fault-based (notice_only route) |
+ * | Section 8 / Scotland    | ✅ notice_to_leave route |
+ * | Section 8 / NI          | ❌ Blocked (NI tenancy only) |
+ * | Section 21 / England    | ✅ Supported      |
+ * | Section 21 / Wales      | ❌ Blocked (use section_173) |
+ * | Section 21 / Scotland   | ❌ Blocked (use notice_to_leave) |
+ * | Section 21 / NI         | ❌ Blocked        |
+ * | Notice Only / All       | ✅ Supported (England, Wales, Scotland) |
+ * | Money Claim / England   | ✅ Supported      |
+ * | Money Claim / Wales     | ❌ Blocked (England only) |
+ * | Money Claim / Scotland  | ❌ Blocked (England only) |
+ * | Money Claim / NI        | ❌ Blocked        |
  * | Tenancy Agreement / All | ✅ Supported (including NI) |
- * | Court Bundle / E/W/S| ✅ Supported      |
- * | Court Bundle / NI   | ❌ Blocked        |
+ * | Court Bundle / England  | ✅ Supported      |
+ * | Court Bundle / Wales    | ❌ Blocked (England only) |
+ * | Court Bundle / Scotland | ❌ Blocked (England only) |
+ * | Court Bundle / NI       | ❌ Blocked        |
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
@@ -600,41 +604,41 @@ describe('E2E Jurisdiction Flow Tests', () => {
       });
     });
 
-    describe('Wales - Money Claim', () => {
+    describe('Wales - Money Claim BLOCKED', () => {
       const jurisdiction: Jurisdiction = 'wales';
 
-      it('should support money claims', () => {
+      it('should NOT support money claims (England only)', () => {
         const supported = isFlowSupported(jurisdiction, product);
 
         testResults.push({
           flow: 'Money Claim',
           region: 'Wales',
-          documentGenerated: supported ? '✅' : '❌',
-          fieldsValidated: supported ? '✅' : 'N/A',
-          blockedWhereNeeded: 'N/A',
-          errors: supported ? '-' : 'Flow not configured',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Money Claim is England only',
         });
 
-        expect(supported).toBe(true);
+        expect(supported).toBe(false);
       });
     });
 
-    describe('Scotland - Money Claim', () => {
+    describe('Scotland - Money Claim BLOCKED', () => {
       const jurisdiction: Jurisdiction = 'scotland';
 
-      it('should support money claims', () => {
+      it('should NOT support money claims (England only)', () => {
         const supported = isFlowSupported(jurisdiction, product);
 
         testResults.push({
           flow: 'Money Claim',
           region: 'Scotland',
-          documentGenerated: supported ? '✅' : '❌',
-          fieldsValidated: supported ? '✅' : 'N/A',
-          blockedWhereNeeded: 'N/A',
-          errors: supported ? '-' : 'Flow not configured',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Money Claim is England only',
         });
 
-        expect(supported).toBe(true);
+        expect(supported).toBe(false);
       });
     });
 
@@ -696,41 +700,41 @@ describe('E2E Jurisdiction Flow Tests', () => {
       });
     });
 
-    describe('Wales - Eviction Pack', () => {
+    describe('Wales - Eviction Pack BLOCKED', () => {
       const jurisdiction: Jurisdiction = 'wales';
 
-      it('should support eviction packs', () => {
+      it('should NOT support eviction packs (England only)', () => {
         const supported = isFlowSupported(jurisdiction, product);
 
         testResults.push({
           flow: 'Court Bundle',
           region: 'Wales',
-          documentGenerated: supported ? '✅' : '❌',
-          fieldsValidated: supported ? '✅' : 'N/A',
-          blockedWhereNeeded: 'N/A',
-          errors: supported ? '-' : 'Flow not configured',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Eviction Pack is England only',
         });
 
-        expect(supported).toBe(true);
+        expect(supported).toBe(false);
       });
     });
 
-    describe('Scotland - Eviction Pack', () => {
+    describe('Scotland - Eviction Pack BLOCKED', () => {
       const jurisdiction: Jurisdiction = 'scotland';
 
-      it('should support eviction packs', () => {
+      it('should NOT support eviction packs (England only)', () => {
         const supported = isFlowSupported(jurisdiction, product);
 
         testResults.push({
           flow: 'Court Bundle',
           region: 'Scotland',
-          documentGenerated: supported ? '✅' : '❌',
-          fieldsValidated: supported ? '✅' : 'N/A',
-          blockedWhereNeeded: 'N/A',
-          errors: supported ? '-' : 'Flow not configured',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Eviction Pack is England only',
         });
 
-        expect(supported).toBe(true);
+        expect(supported).toBe(false);
       });
     });
 
@@ -760,27 +764,67 @@ describe('E2E Jurisdiction Flow Tests', () => {
   describe('Rent Demand Letter', () => {
     // Rent Demand Letter is typically part of the money claim flow or pre-action protocol
     // Testing as part of the money_claim product
+    // Note: Money Claim is now England only
 
-    for (const jurisdiction of ['england', 'wales', 'scotland'] as Jurisdiction[]) {
-      describe(`${jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1)}`, () => {
-        const product: Product = 'money_claim';
+    describe('England', () => {
+      const product: Product = 'money_claim';
+      const jurisdiction: Jurisdiction = 'england';
 
-        it('should include rent demand as part of money claim flow', () => {
-          const supported = isFlowSupported(jurisdiction, product);
+      it('should include rent demand as part of money claim flow', () => {
+        const supported = isFlowSupported(jurisdiction, product);
 
-          testResults.push({
-            flow: 'Rent Demand Letter',
-            region: jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1),
-            documentGenerated: supported ? '✅' : '❌',
-            fieldsValidated: supported ? '✅' : 'N/A',
-            blockedWhereNeeded: 'N/A',
-            errors: supported ? '-' : 'Part of money claim flow',
-          });
-
-          expect(supported).toBe(true);
+        testResults.push({
+          flow: 'Rent Demand Letter',
+          region: 'England',
+          documentGenerated: supported ? '✅' : '❌',
+          fieldsValidated: supported ? '✅' : 'N/A',
+          blockedWhereNeeded: 'N/A',
+          errors: supported ? '-' : 'Part of money claim flow',
         });
+
+        expect(supported).toBe(true);
       });
-    }
+    });
+
+    describe('Wales - BLOCKED (Money Claim is England only)', () => {
+      const product: Product = 'money_claim';
+      const jurisdiction: Jurisdiction = 'wales';
+
+      it('should NOT include rent demand as money claim is blocked', () => {
+        const supported = isFlowSupported(jurisdiction, product);
+
+        testResults.push({
+          flow: 'Rent Demand Letter',
+          region: 'Wales',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Money Claim is England only',
+        });
+
+        expect(supported).toBe(false);
+      });
+    });
+
+    describe('Scotland - BLOCKED (Money Claim is England only)', () => {
+      const product: Product = 'money_claim';
+      const jurisdiction: Jurisdiction = 'scotland';
+
+      it('should NOT include rent demand as money claim is blocked', () => {
+        const supported = isFlowSupported(jurisdiction, product);
+
+        testResults.push({
+          flow: 'Rent Demand Letter',
+          region: 'Scotland',
+          documentGenerated: '❌ (Blocked)',
+          fieldsValidated: 'N/A',
+          blockedWhereNeeded: supported ? '❌' : '✅',
+          errors: 'Money Claim is England only',
+        });
+
+        expect(supported).toBe(false);
+      });
+    });
 
     describe('Northern Ireland - Rent Demand Letter BLOCKED', () => {
       it('should NOT support rent demand letters', () => {
