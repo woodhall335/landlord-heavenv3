@@ -65,11 +65,16 @@ describe('FIX 1 REGRESSION: N5B Claimant Name Field Mapping', () => {
     const header = new TextDecoder().decode(pdfBytes.slice(0, 5));
     expect(header).toBe('%PDF-');
 
-    // NOTE: After flattening, we cannot read back field values.
+    // Form is now editable (not flattened) - we can verify field values
     // The actual fix is in official-forms-filler.ts N5B_FIELDS constants:
     // FIRST_CLAIMANT_FIRST_NAMES = "First Claimant's last name" (visual "First name(s)")
     // FIRST_CLAIMANT_LAST_NAME = "First Claimant's first names" (visual "Last name")
     // This swapped mapping accounts for the PDF's internal field name quirk.
+
+    // Verify the PDF has editable form fields (not flattened)
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const form = pdfDoc.getForm();
+    expect(form.getFields().length).toBeGreaterThan(0);
   });
 });
 
@@ -80,8 +85,7 @@ describe('FIX 1: N5B Claimant Name Mapping', () => {
    * BEFORE FIX: "Tariq Mohammed" -> First name(s): Mohammed, Last name: Tariq (WRONG)
    * AFTER FIX:  "Tariq Mohammed" -> First name(s): Tariq, Last name: Mohammed (CORRECT)
    *
-   * NOTE: The PDF form is flattened after filling, so we cannot read back field values.
-   * Instead, we verify the form completes successfully and the PDF is valid.
+   * NOTE: Forms are now editable (not flattened) so we can verify field values directly.
    */
 
   const baseCaseData: CaseData = {
@@ -371,16 +375,12 @@ describe('FIX 3: Proof of Service Expiry Date and Service Method', () => {
 // ============================================================================
 // FIX 2: N5B Q10(e) EXPIRY DATE POPULATION TESTS
 // ============================================================================
-// NOTE: The fillN5BForm function flattens the form after filling, which converts
-// form fields to plain PDF content. Therefore we cannot read back field values.
-// Instead, we test that:
-// 1. The function completes without error when notice_expiry_date is provided
-// 2. The resulting PDF has reasonable size (indicating fields were filled)
+// NOTE: Forms are now editable (not flattened) so we can verify field values directly.
 
 describe('FIX 2: N5B Q10(e) Notice Expiry Date', () => {
   /**
    * Test that N5B Q10(e) is properly filled when notice_expiry_date is provided.
-   * Since the form is flattened, we verify the function completes successfully.
+   * Forms remain editable so we can verify fields are populated correctly.
    */
 
   const baseCaseData: CaseData = {
@@ -437,15 +437,13 @@ describe('FIX 2: N5B Q10(e) Notice Expiry Date', () => {
 // ============================================================================
 // FIX 4: N5B ATTACHMENT CHECKBOX DETERMINISTIC TESTS
 // ============================================================================
-// NOTE: The fillN5BForm function flattens the form after filling, so we cannot
-// read back checkbox states. Instead, we verify the function completes with
-// different attachment flag combinations.
+// NOTE: Forms are now editable (not flattened) so we can verify checkbox states directly.
 
 describe('FIX 4: N5B Attachment Checkboxes Deterministic', () => {
   /**
    * Test that N5B form filling completes successfully with various
-   * attachment flag combinations, indicating the checkboxes are being
-   * set deterministically.
+   * attachment flag combinations. Since forms remain editable, we can
+   * verify checkbox states directly.
    */
 
   const baseDataForAttachments: CaseData = {
