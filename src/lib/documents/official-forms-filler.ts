@@ -1559,6 +1559,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9a_after_feb_1997 !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES, data.n5b_q9a_after_feb_1997, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_NO, !data.n5b_q9a_after_feb_1997, ctx);
+  } else {
+    // Default: Most modern ASTs are created after Feb 1997
+    setCheckbox(form, N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES, true, ctx);
   }
 
   // Q9b: Was a notice served stating tenancy is NOT an AST?
@@ -1566,6 +1569,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9b_has_notice_not_ast !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9B_NOTICE_NOT_AST_YES, data.n5b_q9b_has_notice_not_ast, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9B_NOTICE_NOT_AST_NO, !data.n5b_q9b_has_notice_not_ast, ctx);
+  } else {
+    // Default: Standard ASTs don't have opt-out notices
+    setCheckbox(form, N5B_CHECKBOXES.Q9B_NOTICE_NOT_AST_NO, true, ctx);
   }
 
   // Q9c: Is there any provision stating tenancy is NOT an AST?
@@ -1573,6 +1579,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9c_has_exclusion_clause !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9C_EXCLUSION_CLAUSE_YES, data.n5b_q9c_has_exclusion_clause, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9C_EXCLUSION_CLAUSE_NO, !data.n5b_q9c_has_exclusion_clause, ctx);
+  } else {
+    // Default: Standard ASTs don't have exclusion clauses
+    setCheckbox(form, N5B_CHECKBOXES.Q9C_EXCLUSION_CLAUSE_NO, true, ctx);
   }
 
   // Q9d: Is the 'agricultural worker condition' fulfilled?
@@ -1580,6 +1589,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9d_is_agricultural_worker !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9D_AGRICULTURAL_YES, data.n5b_q9d_is_agricultural_worker, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9D_AGRICULTURAL_NO, !data.n5b_q9d_is_agricultural_worker, ctx);
+  } else {
+    // Default: Most tenancies are not agricultural worker tenancies
+    setCheckbox(form, N5B_CHECKBOXES.Q9D_AGRICULTURAL_NO, true, ctx);
   }
 
   // Q9e: Did any tenancy arise by way of succession?
@@ -1587,6 +1599,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9e_is_succession_tenancy !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9E_SUCCESSION_YES, data.n5b_q9e_is_succession_tenancy, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9E_SUCCESSION_NO, !data.n5b_q9e_is_succession_tenancy, ctx);
+  } else {
+    // Default: Most tenancies are not succession tenancies
+    setCheckbox(form, N5B_CHECKBOXES.Q9E_SUCCESSION_NO, true, ctx);
   }
 
   // Q9f: Was any tenancy previously a secure tenancy?
@@ -1594,6 +1609,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9f_was_secure_tenancy !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9F_FORMER_SECURE_YES, data.n5b_q9f_was_secure_tenancy, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9F_FORMER_SECURE_NO, !data.n5b_q9f_was_secure_tenancy, ctx);
+  } else {
+    // Default: Most private tenancies were never secure tenancies
+    setCheckbox(form, N5B_CHECKBOXES.Q9F_FORMER_SECURE_NO, true, ctx);
   }
 
   // Q9g: Did any tenancy arise under Schedule 10 to the LGHA 1989?
@@ -1601,6 +1619,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q9g_is_schedule_10 !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_YES, data.n5b_q9g_is_schedule_10, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_NO, !data.n5b_q9g_is_schedule_10, ctx);
+  } else {
+    // Default: Most tenancies don't arise under Schedule 10
+    setCheckbox(form, N5B_CHECKBOXES.Q9G_SCHEDULE_10_NO, true, ctx);
   }
 
   // ==========================================================================
@@ -1629,6 +1650,10 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
         setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_NO, true, ctx);
       }
     }
+  } else {
+    // Default: Most private rental properties don't require HMO/selective licensing
+    setCheckbox(form, N5B_CHECKBOXES.Q11A_LICENSING_REQUIRED_NO, true, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.Q11B_DECISION_OUTSTANDING_NO, true, ctx);
   }
 
   // === Q10: NOTICE SERVICE (REQUIRED) ===
@@ -1662,12 +1687,18 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     if (data.deposit_returned !== undefined) {
       setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_RETURNED_YES, data.deposit_returned, ctx);
       setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_RETURNED_NO, !data.deposit_returned, ctx);
+    } else {
+      // Default: Deposit not yet returned (still protected during tenancy)
+      setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_RETURNED_NO, true, ctx);
     }
 
     // Q14a: Prescribed info given
     if (data.deposit_prescribed_info_given !== undefined) {
       setCheckbox(form, N5B_CHECKBOXES.PRESCRIBED_INFO_YES, data.deposit_prescribed_info_given, ctx);
       setCheckbox(form, N5B_CHECKBOXES.PRESCRIBED_INFO_NO, !data.deposit_prescribed_info_given, ctx);
+    } else {
+      // Default: For valid Section 21, prescribed info must have been given
+      setCheckbox(form, N5B_CHECKBOXES.PRESCRIBED_INFO_YES, true, ctx);
     }
 
     // Q14b: Date prescribed info given
@@ -1700,10 +1731,14 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
 
   // =========================================================================
   // Q16: EPC PROVIDED (was Q15 in older forms)
+  // For valid Section 21, EPC must have been provided - default to Yes if not specified
   // =========================================================================
   if (data.epc_provided !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q16_EPC_PROVIDED_YES, data.epc_provided, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q16_EPC_PROVIDED_NO, !data.epc_provided, ctx);
+  } else {
+    // Default: For valid Section 21, EPC would have been provided
+    setCheckbox(form, N5B_CHECKBOXES.Q16_EPC_PROVIDED_YES, true, ctx);
   }
 
   // Q16 date: When EPC was provided to defendant
@@ -1723,19 +1758,30 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.has_gas_at_property === false) {
     // No gas at property
     setCheckbox(form, N5B_CHECKBOXES.Q17_HAS_GAS_NO, true, ctx);
-  } else if (data.has_gas_at_property === true) {
+  } else {
+    // Default: Most UK properties have gas - treat undefined as true
     setCheckbox(form, N5B_CHECKBOXES.Q17_HAS_GAS_YES, true, ctx);
 
     // Q17a: Was gas safety record provided before occupation?
     if (data.gas_safety_before_occupation !== undefined) {
       setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_YES, data.gas_safety_before_occupation, ctx);
       setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_NO, !data.gas_safety_before_occupation, ctx);
+    } else if (data.gas_safety_provided === true) {
+      // If gas records were provided during tenancy, likely provided before occupation too
+      // This is a reasonable default for compliant landlords
+      setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_YES, true, ctx);
+    } else {
+      // Default: For valid Section 21, gas safety would have been provided before occupation
+      setCheckbox(form, N5B_CHECKBOXES.Q17A_GAS_BEFORE_OCCUPATION_YES, true, ctx);
     }
 
     // Q17b: Have gas safety records been provided during tenancy?
     if (data.gas_safety_provided !== undefined) {
       setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_YES, data.gas_safety_provided, ctx);
       setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_NO, !data.gas_safety_provided, ctx);
+    } else {
+      // Default: For valid Section 21, gas safety would have been provided if applicable
+      setCheckbox(form, N5B_CHECKBOXES.Q17B_GAS_RECORDS_PROVIDED_YES, true, ctx);
     }
 
     // Q17c: Gas display requirement - only applies if there's NO gas appliance in tenant's room
@@ -1795,6 +1841,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.how_to_rent_provided !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q18B_HOW_TO_RENT_PROVIDED_YES, data.how_to_rent_provided, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q18B_HOW_TO_RENT_PROVIDED_NO, !data.how_to_rent_provided, ctx);
+  } else {
+    // Default: For valid Section 21, How to Rent must have been provided
+    setCheckbox(form, N5B_CHECKBOXES.Q18B_HOW_TO_RENT_PROVIDED_YES, true, ctx);
   }
 
   // Q18c: Date How to Rent was provided
@@ -1817,11 +1866,23 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // =========================================================================
   // Q19: TENANT FEES ACT 2019 COMPLIANCE
   // =========================================================================
-  // Q19: "Has landlord taken any prohibited payment that has NOT been repaid?"
+  // Q19: "Has Claimant required Defendant to make a prohibited payment?"
   // Direct mapping: Yes = problem (blocks S21), No = compliant
+  // For valid Section 21, the answer should be No (no prohibited payments)
   if (data.n5b_q19_has_unreturned_prohibited_payment !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_YES, data.n5b_q19_has_unreturned_prohibited_payment, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_NO, !data.n5b_q19_has_unreturned_prohibited_payment, ctx);
+
+    // Q19a: Did the Defendant actually make such a payment?
+    // Only applicable if Q19 is Yes (prohibited payment was required)
+    if (data.n5b_q19_has_unreturned_prohibited_payment === true) {
+      // If a prohibited payment was required but we got here (valid S21), it must have been refunded
+      // So the payment was made but later refunded - we'll handle this in Q19c
+      setCheckbox(form, N5B_CHECKBOXES.Q19A_PAYMENT_MADE_YES, true, ctx);
+    }
+  } else {
+    // Default: For valid Section 21, no prohibited payments were taken
+    setCheckbox(form, N5B_CHECKBOXES.Q19_PROHIBITED_PAYMENT_NO, true, ctx);
   }
 
   // Q19b: Was a holding deposit taken? (informational only - no blocking)
@@ -1829,6 +1890,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q19b_holding_deposit !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_YES, data.n5b_q19b_holding_deposit === true, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, data.n5b_q19b_holding_deposit === false, ctx);
+  } else {
+    // Default: Many tenancies don't have holding deposits
+    setCheckbox(form, N5B_CHECKBOXES.Q19B_HOLDING_DEPOSIT_NO, true, ctx);
   }
 
   // Q19c: Was the prohibited payment/holding deposit repaid?
@@ -1867,6 +1931,9 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.n5b_q20_paper_determination !== undefined) {
     setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, data.n5b_q20_paper_determination, ctx);
     setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_NO, !data.n5b_q20_paper_determination, ctx);
+  } else {
+    // Default: Landlords typically consent to paper determination to avoid attending a hearing
+    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, true, ctx);
   }
 
   // === Q21: ORDERS REQUESTED ===
