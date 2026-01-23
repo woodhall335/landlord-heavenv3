@@ -21,11 +21,12 @@
  * - N119: 17 text fields, 0 checkboxes
  */
 
-import { PDFDocument, PDFForm, PDFTextField } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
-import { flattenPdf } from './pdf-utils';
+// Note: flattenPdf import removed - official forms should NEVER be flattened
+// to preserve user editability for final adjustments before court submission
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 export const OFFICIAL_FORM_OUTPUT_ROOT = path.join(process.cwd(), '.tmp', 'official-form-output');
@@ -519,6 +520,35 @@ const N5B_CHECKBOXES = {
   ATTACHMENT_HOW_TO_RENT: 'Copy of the documents relating to compliance by a registered provider of social housing with Part 3 of the Pre-Action Protocol For Possession Claims by Social Landlords OR a copy of the document \'How to Rent: the checklist for renting in England\' marked \'H\'',
 } as const;
 
+// =============================================================================
+// REQUIRED FIELD VALIDATION LISTS
+// =============================================================================
+
+/**
+ * Required PDF fields that MUST exist in the N5B template.
+ * If any of these are missing, form generation will fail with TemplateFieldMissingError.
+ *
+ * This prevents "silent" generation failures where we think we filled a field
+ * but it actually doesn't exist in the template (e.g., due to template version changes).
+ */
+const N5B_REQUIRED_PDF_FIELDS = [
+  // Defendant service address (Page 5) - postcode is critical
+  N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_POSTCODE,
+  // Q20 checkboxes - one MUST be ticked
+  N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES,
+  N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_NO,
+  // Q9a-Q9g AST verification - mandatory checkboxes
+  N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_YES,
+  N5B_CHECKBOXES.Q9A_AFTER_FEB_1997_NO,
+  // Core claimant/defendant name fields
+  N5B_FIELDS.FIRST_CLAIMANT_FIRST_NAMES,
+  N5B_FIELDS.FIRST_CLAIMANT_LAST_NAME,
+  N5B_FIELDS.FIRST_DEFENDANT_FIRST_NAMES,
+  N5B_FIELDS.FIRST_DEFENDANT_LAST_NAME,
+  // Notice service method (Q10a)
+  N5B_FIELDS.NOTICE_SERVICE_METHOD,
+];
+
 /**
  * N119 form field names (38 text fields, 16 checkboxes)
  * Source: public/official-forms/n119-eng.pdf (official HMCTS form, 84.5KB)
@@ -841,12 +871,67 @@ export interface CaseData {
 export interface FormFillerOptions {
   /**
    * Whether to flatten the PDF after filling.
-   * Flattened PDFs have form fields converted to static content.
    *
-   * - true (default): Flatten for court submission - ensures fields visible in all viewers
-   * - false: Keep form fields editable - useful for testing or preview
+   * IMPORTANT: For official HMCTS court forms (N5, N5B, N119, N1), this defaults to FALSE
+   * to preserve user editability. Users need to make final adjustments before court submission.
+   *
+   * - false (default for official forms): Keep form fields editable
+   * - true: Flatten for final output - NOT recommended for official forms
+   *
+   * @deprecated DO NOT flatten official court forms. This option is kept for backwards
+   * compatibility but will log a warning if used to flatten official forms.
    */
   flatten?: boolean;
+}
+
+// =============================================================================
+// CUSTOM ERROR TYPES
+// =============================================================================
+
+/**
+ * Error thrown when a required PDF template field is missing.
+ * This prevents silent generation failures where a field doesn't exist
+ * in the PDF template but we attempted to fill it.
+ */
+export class TemplateFieldMissingError extends Error {
+  public readonly templateName: string;
+  public readonly missingFields: string[];
+  public readonly availableFields: string[];
+
+  constructor(templateName: string, missingFields: string[], availableFields: string[]) {
+    const fieldList = missingFields.map(f => `  - ${f}`).join('\n');
+    super(
+      `Template "${templateName}" is missing required fields:\n${fieldList}\n\n` +
+      `This may indicate:\n` +
+      `1. The PDF template version has changed and field names differ\n` +
+      `2. The field name constants need updating\n` +
+      `3. The PDF needs to be replaced with a version containing these fields\n\n` +
+      `First 20 available fields: ${availableFields.slice(0, 20).join(', ')}...`
+    );
+    this.name = 'TemplateFieldMissingError';
+    this.templateName = templateName;
+    this.missingFields = missingFields;
+    this.availableFields = availableFields;
+  }
+}
+
+/**
+ * Validate that required fields exist in the PDF form template.
+ * Call this BEFORE filling to catch template mismatches early.
+ *
+ * @param form - The PDF form to validate
+ * @param requiredFields - List of field names that MUST exist
+ * @param templateName - Name of the template (for error messages)
+ * @throws TemplateFieldMissingError if any required fields are missing
+ */
+export function assertPdfHasFields(form: PDFForm, requiredFields: string[], templateName: string): void {
+  const availableFields = listFormFieldNames(form);
+  const availableSet = new Set(availableFields);
+  const missingFields = requiredFields.filter(f => !availableSet.has(f));
+
+  if (missingFields.length > 0) {
+    throw new TemplateFieldMissingError(templateName, missingFields, availableFields);
+  }
 }
 
 // =============================================================================
@@ -956,6 +1041,27 @@ function setCheckbox(form: PDFForm, fieldName: string, checked: boolean, context
   }
 }
 
+/**
+ * Set a required checkbox - throws error if field missing.
+ * Use this for mandatory checkboxes like Q20 that MUST be ticked.
+ */
+function setCheckboxRequired(form: PDFForm, fieldName: string, context: string): void {
+  try {
+    const field = form.getCheckBox(fieldName);
+    field.check();
+  } catch (error) {
+    const available = listFormFieldNames(form)
+      .filter(n => n.toLowerCase().includes('checkbox') || n.includes('Yes') || n.includes('No'))
+      .slice(0, 20)
+      .join(', ');
+    throw new TemplateFieldMissingError(
+      context,
+      [fieldName],
+      listFormFieldNames(form)
+    );
+  }
+}
+
 // =============================================================================
 // UTILITY FUNCTIONS
 // =============================================================================
@@ -1027,6 +1133,32 @@ function splitDate(dateString: string | undefined): { day: string; month: string
  */
 function splitAddress(address: string): string[] {
   return address.split('\n').filter(line => line.trim());
+}
+
+/**
+ * Extract UK postcode from an address string.
+ * UK postcodes follow patterns like: SW1A 1AA, M1 1AE, DN55 1PT, etc.
+ * This is used as a fallback when postcode is not explicitly provided.
+ */
+function extractPostcodeFromAddress(address: string | undefined): string | undefined {
+  if (!address) return undefined;
+
+  // UK postcode regex: covers standard formats
+  // Format: 1-2 letters, 1-2 digits, optionally space, digit, 2 letters
+  // Examples: SW1A 1AA, M1 1AE, DN55 1PT, EC1A 1BB
+  const postcodeRegex = /\b([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})\b/i;
+  const match = address.match(postcodeRegex);
+
+  if (match) {
+    // Normalize format: ensure single space before last 3 chars
+    const postcode = match[1].toUpperCase().replace(/\s+/g, '');
+    if (postcode.length >= 5) {
+      return postcode.slice(0, -3) + ' ' + postcode.slice(-3);
+    }
+    return postcode;
+  }
+
+  return undefined;
 }
 
 /**
@@ -1147,7 +1279,11 @@ function getStepsToRecoverArrears(caseData: CaseData): string {
  * Field inventory updated: December 2025
  */
 export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
-  const { flatten = true } = options;
+  // Official forms default to NOT flattening - users need editable fields for final adjustments
+  const { flatten = false } = options;
+  if (flatten) {
+    console.warn('⚠️ [N5] Flattening official court forms is deprecated. Users need editable outputs.');
+  }
   const ctx = 'N5';
   const formFile = getFormFilename('n5', data.jurisdiction);
   console.log(`📄 Filling N5 form (Claim for possession) - using ${formFile}...`);
@@ -1295,13 +1431,7 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N5 form filled successfully (${listFormFieldNames(form).length} fields available, key fields set)`);
-
-  // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  if (flatten) {
-    const flattenedBytes = await flattenPdf(pdfBytes);
-    console.log(`📄 N5 form flattened for court submission`);
-    return flattenedBytes;
-  }
+  console.log('📄 N5 form preserved as editable (AcroForm fields retained)');
 
   return pdfBytes;
 }
@@ -1324,7 +1454,11 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
  * We only fill fields where we have actual data - no hardcoding of answers.
  */
 export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
-  const { flatten = true } = options;
+  // Official forms default to NOT flattening - users need editable fields for final adjustments
+  const { flatten = false } = options;
+  if (flatten) {
+    console.warn('⚠️ [N5B] Flattening official court forms is deprecated. Users need editable outputs.');
+  }
   const ctx = 'N5B';
   const formFile = getFormFilename('n5b', data.jurisdiction);
   console.log(`📄 Filling N5B form (Accelerated possession - Section 21) - using ${formFile}...`);
@@ -1365,6 +1499,12 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     n5b_q19b_holding_deposit: data.n5b_q19b_holding_deposit,
     // Q20
     n5b_q20_paper_determination: data.n5b_q20_paper_determination,
+    // Defendant service address (Page 5)
+    defendant_service_address_same_as_property: data.defendant_service_address_same_as_property,
+    defendant_service_address_line1: data.defendant_service_address_line1,
+    defendant_service_address_postcode: data.defendant_service_address_postcode,
+    // Property postcode (fallback for defendant service)
+    property_postcode: data.property_postcode,
   }, null, 2));
 
   // === VALIDATION ===
@@ -1395,6 +1535,14 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
 
   const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
+
+  // ==========================================================================
+  // TEMPLATE FIELD VALIDATION
+  // ==========================================================================
+  // Validate that required fields exist in the PDF template BEFORE filling.
+  // This catches template version mismatches early with clear error messages.
+  assertPdfHasFields(form, N5B_REQUIRED_PDF_FIELDS, formFile);
+  console.log(`✅ [N5B] Template validation passed - all ${N5B_REQUIRED_PDF_FIELDS.length} required fields present`);
 
   // === HEADER SECTION ===
   const courtNameAndAddress = data.court_address
@@ -1499,7 +1647,19 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (data.defendant_service_address_county) {
     setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_COUNTY, data.defendant_service_address_county, ctx);
   }
-  setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_POSTCODE, data.defendant_service_address_postcode || data.property_postcode, ctx);
+
+  // FIX: Defendant service postcode - use multiple fallbacks to ensure it's always populated
+  // Priority: 1) explicit defendant_service_address_postcode, 2) property_postcode, 3) extract from address
+  const defServicePostcode =
+    data.defendant_service_address_postcode ||
+    data.property_postcode ||
+    extractPostcodeFromAddress(data.property_address);
+  if (defServicePostcode) {
+    setTextOptional(form, N5B_FIELDS.DEFENDANT_SERVICE_ADDRESS_POSTCODE, defServicePostcode, ctx);
+    console.log(`📮 [N5B] Defendant service postcode set: ${defServicePostcode}`);
+  } else {
+    console.warn(`⚠️ [N5B] WARNING: Defendant service postcode is blank - this may cause issues`);
+  }
 
   // === POSSESSION ADDRESS ===
   setTextOptional(form, N5B_FIELDS.POSSESSION_STREET, propertyAddressLines[0], ctx);
@@ -1509,7 +1669,14 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   if (propertyAddressLines.length > 2) {
     setTextOptional(form, N5B_FIELDS.POSSESSION_TOWN, propertyAddressLines[2], ctx);
   }
-  setTextOptional(form, N5B_FIELDS.POSSESSION_POSTCODE, data.property_postcode, ctx);
+
+  // FIX: Possession postcode - use same fallback logic
+  const possessionPostcode =
+    data.property_postcode ||
+    extractPostcodeFromAddress(data.property_address);
+  if (possessionPostcode) {
+    setTextOptional(form, N5B_FIELDS.POSSESSION_POSTCODE, possessionPostcode, ctx);
+  }
 
   // === Q5: DWELLING HOUSE (always yes for residential) ===
   setCheckbox(form, N5B_CHECKBOXES.DWELLING_YES, true, ctx);
@@ -1934,12 +2101,21 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   // =========================================================================
   // Q20: PAPER DETERMINATION CONSENT
   // =========================================================================
-  if (data.n5b_q20_paper_determination !== undefined) {
-    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, data.n5b_q20_paper_determination, ctx);
-    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_NO, !data.n5b_q20_paper_determination, ctx);
+  // FIX: Enhanced Q20 handling with explicit logging and verification
+  // Q20 asks if the claimant consents to paper determination if defendant seeks hardship postponement
+  // Landlords typically want "Yes" to avoid unnecessary hearings
+  const q20Value = data.n5b_q20_paper_determination;
+  const q20IsYes = q20Value === true || q20Value === undefined; // Default to Yes if not specified
+
+  console.log(`📝 [N5B] Q20 Paper Determination: value=${q20Value}, setting=${q20IsYes ? 'YES' : 'NO'}`);
+
+  // Use setCheckboxRequired to ensure the field exists and is checked
+  if (q20IsYes) {
+    setCheckboxRequired(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, ctx);
+    console.log(`✅ [N5B] Q20 YES checkbox set`);
   } else {
-    // Default: Landlords typically consent to paper determination to avoid attending a hearing
-    setCheckbox(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_YES, true, ctx);
+    setCheckboxRequired(form, N5B_CHECKBOXES.Q20_PAPER_DETERMINATION_NO, ctx);
+    console.log(`✅ [N5B] Q20 NO checkbox set`);
   }
 
   // === Q21: ORDERS REQUESTED ===
@@ -2070,13 +2246,7 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N5B form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
-
-  // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  if (flatten) {
-    const flattenedBytes = await flattenPdf(pdfBytes);
-    console.log(`📄 N5B form flattened for court submission`);
-    return flattenedBytes;
-  }
+  console.log('📄 N5B form preserved as editable (AcroForm fields retained)');
 
   return pdfBytes;
 }
@@ -2186,7 +2356,11 @@ function generateParticularsOfClaim(data: CaseData): string {
  * Field inventory updated: December 2025
  */
 export async function fillN119Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
-  const { flatten = true } = options;
+  // Official forms default to NOT flattening - users need editable fields for final adjustments
+  const { flatten = false } = options;
+  if (flatten) {
+    console.warn('⚠️ [N119] Flattening official court forms is deprecated. Users need editable outputs.');
+  }
   const ctx = 'N119';
   const formFile = getFormFilename('n119', data.jurisdiction);
   console.log(`📄 Filling N119 form (Particulars of claim) - using ${formFile}...`);
@@ -2406,13 +2580,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N119 form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
-
-  // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  if (flatten) {
-    const flattenedBytes = await flattenPdf(pdfBytes);
-    console.log(`📄 N119 form flattened for court submission`);
-    return flattenedBytes;
-  }
+  console.log('📄 N119 form preserved as editable (AcroForm fields retained)');
 
   return pdfBytes;
 }
@@ -2428,7 +2596,11 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
  * Source: https://assets.publishing.service.gov.uk/media/674d7ea12e91c6fb83fb5162/N1_1224.pdf
  */
 export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}): Promise<Uint8Array> {
-  const { flatten = true } = options;
+  // Official forms default to NOT flattening - users need editable fields for final adjustments
+  const { flatten = false } = options;
+  if (flatten) {
+    console.warn('⚠️ [N1] Flattening official court forms is deprecated. Users need editable outputs.');
+  }
   const ctx = 'N1';
   console.log('📄 Filling N1 form (Money claim)...');
 
@@ -2540,13 +2712,7 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N1 form filled successfully`);
-
-  // Flatten PDF to ensure filled fields are visible in all viewers/prints
-  if (flatten) {
-    const flattenedBytes = await flattenPdf(pdfBytes);
-    console.log(`📄 N1 form flattened for court submission`);
-    return flattenedBytes;
-  }
+  console.log('📄 N1 form preserved as editable (AcroForm fields retained)');
 
   return pdfBytes;
 }
