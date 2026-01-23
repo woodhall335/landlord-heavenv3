@@ -551,6 +551,35 @@ const N5B_REQUIRED_PDF_FIELDS = [
 ];
 
 /**
+ * Required PDF fields that MUST exist in the N1 template (Money Claims).
+ * If any of these are missing, form generation will fail with TemplateFieldMissingError.
+ *
+ * This prevents "silent" generation failures where we think we filled a field
+ * but it actually doesn't exist in the template (e.g., due to template version changes).
+ *
+ * N1 form version: December 2024 (N1_1224.pdf)
+ * Source: https://assets.publishing.service.gov.uk/media/674d7ea12e91c6fb83fb5162/N1_1224.pdf
+ */
+const N1_REQUIRED_PDF_FIELDS = [
+  // Core claimant/defendant details - CRITICAL for claim identification
+  'Text21', // Claimant details box
+  'Text22', // Defendant details box
+  // Brief details of claim - CRITICAL for claim validity
+  'Text23', // Brief details of claim
+  // Value/Amount - CRITICAL for money claim
+  'Text24', // Value box
+  'Text25', // Claim amount
+  // Financial totals
+  'Text26', // Court fee
+  'Text28', // Total amount
+  // Statement of Truth signature
+  'Text Field 47', // Signatory name
+  // Service address fields
+  'Text Field 10', // Address line 1
+  'Text34', // Postcode
+];
+
+/**
  * N119 form field names (38 text fields, 16 checkboxes)
  * Source: public/official-forms/n119-eng.pdf (official HMCTS form, 84.5KB)
  * Field inventory updated: December 2025
@@ -2608,49 +2637,77 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   const pdfDoc = await loadOfficialForm('N1_1224.pdf');
   const form = pdfDoc.getForm();
 
+  // =========================================================================
+  // STRICT TEMPLATE VALIDATION
+  // Fail fast if required PDF fields are missing from the template
+  // =========================================================================
+  assertPdfHasFields(form, N1_REQUIRED_PDF_FIELDS, 'N1_1224.pdf');
+  console.log(`✅ [N1] Template validation passed (${N1_REQUIRED_PDF_FIELDS.length} required fields verified)`);
+
+  // =========================================================================
+  // DATA VALIDATION
+  // Fail fast if required case data is missing
+  // =========================================================================
+  if (!data.landlord_full_name || data.landlord_full_name.trim() === '') {
+    throw new Error('[N1] Missing required field: landlord_full_name (claimant name)');
+  }
+  if (!data.tenant_full_name || data.tenant_full_name.trim() === '') {
+    throw new Error('[N1] Missing required field: tenant_full_name (defendant name)');
+  }
+  if (!data.landlord_address || data.landlord_address.trim() === '') {
+    throw new Error('[N1] Missing required field: landlord_address (claimant address)');
+  }
+  if (!data.property_address || data.property_address.trim() === '') {
+    throw new Error('[N1] Missing required field: property_address (defendant address)');
+  }
+  if (data.total_claim_amount === undefined || data.total_claim_amount === null || data.total_claim_amount <= 0) {
+    throw new Error('[N1] Missing or invalid required field: total_claim_amount (must be > 0)');
+  }
+  if (!data.signatory_name || data.signatory_name.trim() === '') {
+    throw new Error('[N1] Missing required field: signatory_name (for Statement of Truth)');
+  }
+  console.log(`✅ [N1] Data validation passed`);
+
   // === PAGE 1 - Main Claim Form ===
 
   // Court and fees header
   setTextOptional(form, 'Text35', data.court_name, ctx);
   setTextOptional(form, 'Text36', data.claimant_reference, ctx);
 
-  // Claimant details (large text box)
+  // Claimant details (large text box) - REQUIRED
   const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
-  setTextOptional(form, 'Text21', claimantDetails, ctx);
+  setTextRequired(form, 'Text21', claimantDetails, ctx);
 
-  // Defendant details (large text box)
+  // Defendant details (large text box) - REQUIRED
   const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
-  setTextOptional(form, 'Text22', defendantDetails, ctx);
+  setTextRequired(form, 'Text22', defendantDetails, ctx);
 
-  // Brief details of claim
+  // Brief details of claim - REQUIRED
   const briefDetails = data.particulars_of_claim
     ? data.particulars_of_claim.substring(0, 200) + (data.particulars_of_claim.length > 200 ? '...' : '')
-    : 'Claim for unpaid rent and possession of property';
-  setTextOptional(form, 'Text23', briefDetails, ctx);
+    : 'Claim for unpaid rent arrears and/or damages';
+  setTextRequired(form, 'Text23', briefDetails, ctx);
 
-  // Value
-  if (data.total_claim_amount) {
-    setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
-  }
+  // Value - REQUIRED
+  setTextRequired(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
 
   // Defendant's address for service
   setTextOptional(form, 'Text Field 48', data.property_address, ctx);
 
-  // Financial details
-  if (data.total_claim_amount) {
-    setTextOptional(form, 'Text25', data.total_claim_amount.toFixed(2), ctx);
-  }
-  if (data.court_fee) {
-    setTextOptional(form, 'Text26', data.court_fee.toFixed(2), ctx);
-  }
+  // Financial details - REQUIRED
+  setTextRequired(form, 'Text25', data.total_claim_amount.toFixed(2), ctx);
+
+  // Court fee - defaults to 0 if not specified
+  const courtFee = data.court_fee || 0;
+  setTextRequired(form, 'Text26', courtFee.toFixed(2), ctx);
+
   if (data.solicitor_costs) {
     setTextOptional(form, 'Text27', data.solicitor_costs.toFixed(2), ctx);
   }
 
-  const totalAmount = (data.total_claim_amount || 0) + (data.court_fee || 0) + (data.solicitor_costs || 0);
-  if (totalAmount > 0) {
-    setTextOptional(form, 'Text28', totalAmount.toFixed(2), ctx);
-  }
+  // Total amount - REQUIRED
+  const totalAmount = data.total_claim_amount + courtFee + (data.solicitor_costs || 0);
+  setTextRequired(form, 'Text28', totalAmount.toFixed(2), ctx);
 
   // === PAGE 2 ===
   setCheckbox(form, 'Check Box40', true, ctx); // Vulnerability: No
@@ -2671,8 +2728,9 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
     setCheckbox(form, 'Check Box47', true, ctx);
   }
 
-  setTextOptional(form, 'Text Field 47', data.signatory_name, ctx);
-  setTextOptional(form, 'Text Field 46', data.signatory_name, ctx);
+  // Signatory name - REQUIRED for Statement of Truth
+  setTextRequired(form, 'Text Field 47', data.signatory_name, ctx);
+  setTextOptional(form, 'Text Field 46', data.signatory_name, ctx); // Second signature box
 
   if (data.signature_date) {
     const dateparts = splitDate(data.signature_date);
@@ -2700,8 +2758,12 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
     setTextOptional(form, 'Text Field 7', serviceAddressLines[3], ctx);
   }
 
+  // Postcode for service - REQUIRED
   const postcode = (data.service_postcode || data.landlord_postcode || '').substring(0, 7);
-  setTextOptional(form, 'Text34', postcode, ctx);
+  if (!postcode || postcode.trim() === '') {
+    throw new Error('[N1] Missing required field: postcode for service address (service_postcode or landlord_postcode)');
+  }
+  setTextRequired(form, 'Text34', postcode, ctx);
 
   const servicePhone = data.service_phone || data.solicitor_phone || data.landlord_phone;
   const serviceEmail = data.service_email || data.solicitor_email || data.landlord_email;
