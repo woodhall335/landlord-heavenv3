@@ -1,21 +1,85 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-
-type Jurisdiction = 'england' | 'wales' | 'scotland';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface SectionProps {
-  // We don't currently use facts in this section, so make it optional
   facts?: any;
   caseId: string;
-  jurisdiction: Jurisdiction;
+  jurisdiction?: string; // Always England for money claims
+}
+
+/**
+ * Get selected claim types from facts
+ */
+function getSelectedClaimTypes(facts: any): { id: string; label: string }[] {
+  const types: { id: string; label: string }[] = [];
+
+  if (facts?.claiming_rent_arrears === true) {
+    types.push({ id: 'rent_arrears', label: 'Rent arrears' });
+  }
+
+  const otherTypes: string[] = facts?.money_claim?.other_amounts_types || [];
+
+  if (otherTypes.includes('property_damage') || facts?.claiming_damages === true) {
+    types.push({ id: 'property_damage', label: 'Property damage' });
+  }
+  if (otherTypes.includes('cleaning')) {
+    types.push({ id: 'cleaning', label: 'Cleaning costs' });
+  }
+  if (otherTypes.includes('unpaid_utilities')) {
+    types.push({ id: 'unpaid_utilities', label: 'Unpaid utilities' });
+  }
+  if (otherTypes.includes('unpaid_council_tax')) {
+    types.push({ id: 'unpaid_council_tax', label: 'Unpaid council tax' });
+  }
+  if (facts?.claiming_other === true || otherTypes.includes('other_charges')) {
+    types.push({ id: 'other_tenant_debt', label: 'Other debt' });
+  }
+
+  return types;
+}
+
+/**
+ * Calculate total arrears from items
+ */
+function calculateTotalArrears(facts: any): number {
+  const items = facts?.arrears_items || facts?.issues?.rent_arrears?.arrears_items || [];
+
+  if (items.length === 0) {
+    return facts?.total_arrears || facts?.issues?.rent_arrears?.total_arrears || 0;
+  }
+
+  return items.reduce((total: number, item: any) => {
+    const due = item.rent_due || 0;
+    const paid = item.rent_paid || 0;
+    return total + (due - paid);
+  }, 0);
+}
+
+/**
+ * Calculate total damages from items
+ */
+function calculateTotalDamages(facts: any): number {
+  const items = facts?.money_claim?.damage_items || [];
+  return items.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+}
+
+/**
+ * Format currency for display
+ */
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    minimumFractionDigits: 2,
+  }).format(amount);
 }
 
 export const ReviewSection: React.FC<SectionProps> = ({
   facts,
   caseId,
-  jurisdiction,
 }) => {
   // Get interest status from facts
   const moneyClaim = facts?.money_claim || {};
@@ -23,6 +87,15 @@ export const ReviewSection: React.FC<SectionProps> = ({
   const interestRate = moneyClaim.interest_rate || 8;
   const router = useRouter();
   const [previewing, setPreviewing] = useState(false);
+
+  // Calculate claim types and totals
+  const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
+  const totalArrears = useMemo(() =>
+    facts?.claiming_rent_arrears ? calculateTotalArrears(facts) : 0,
+    [facts]
+  );
+  const totalDamages = useMemo(() => calculateTotalDamages(facts), [facts]);
+  const grandTotal = totalArrears + totalDamages;
 
   const handlePreview = async () => {
     try {
@@ -50,28 +123,69 @@ export const ReviewSection: React.FC<SectionProps> = ({
         and show you any issues that need attention.
       </p>
 
-      <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
-        <p>
-          <span className="font-semibold">Case ID:</span> {caseId}
-        </p>
-        <p>
-          <span className="font-semibold">Jurisdiction:</span>{' '}
-          {jurisdiction === 'scotland'
-            ? 'Scotland (Simple Procedure)'
-            : jurisdiction === 'wales'
-            ? 'Wales'
-            : 'England'}
-        </p>
-        <p>
-          <span className="font-semibold">Interest:</span>{' '}
-          {chargeInterest ? (
-            <span className="text-green-700">
-              Claimed at {interestRate}% statutory rate
-            </span>
-          ) : (
-            <span className="text-gray-500">Not claimed</span>
+      {/* Claim Summary Card */}
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
+        {/* Claim types */}
+        {claimTypes.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              Claiming for
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {claimTypes.map((type) => (
+                <span
+                  key={type.id}
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full"
+                >
+                  <RiCheckboxCircleLine className="w-3 h-3" />
+                  {type.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Claim totals */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {totalArrears > 0 && (
+            <div className="bg-white rounded-md p-3 border border-gray-200">
+              <p className="text-xs text-gray-500">Rent arrears</p>
+              <p className="text-lg font-semibold text-charcoal">{formatCurrency(totalArrears)}</p>
+            </div>
           )}
-        </p>
+          {totalDamages > 0 && (
+            <div className="bg-white rounded-md p-3 border border-gray-200">
+              <p className="text-xs text-gray-500">Other amounts</p>
+              <p className="text-lg font-semibold text-charcoal">{formatCurrency(totalDamages)}</p>
+            </div>
+          )}
+          {grandTotal > 0 && (
+            <div className="bg-purple-50 rounded-md p-3 border border-purple-200">
+              <p className="text-xs text-purple-700 font-medium">Total claim</p>
+              <p className="text-lg font-bold text-purple-900">{formatCurrency(grandTotal)}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Meta info */}
+        <div className="flex flex-wrap gap-4 text-sm pt-2 border-t border-gray-200">
+          <p>
+            <span className="font-medium text-gray-600">Case ID:</span>{' '}
+            <span className="text-charcoal">{caseId}</span>
+          </p>
+          <p>
+            <span className="font-medium text-gray-600">Jurisdiction:</span>{' '}
+            <span className="text-charcoal">England</span>
+          </p>
+          <p>
+            <span className="font-medium text-gray-600">Interest:</span>{' '}
+            {chargeInterest ? (
+              <span className="text-green-700">{interestRate}% statutory</span>
+            ) : (
+              <span className="text-gray-500">Not claimed</span>
+            )}
+          </p>
+        </div>
       </div>
 
       {/* Ask Heaven Features Banner */}
@@ -94,28 +208,15 @@ export const ReviewSection: React.FC<SectionProps> = ({
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
         <h4 className="font-semibold text-gray-900 mb-2">Your pack will include:</h4>
         <ul className="text-sm text-gray-600 space-y-1">
-          {jurisdiction === 'scotland' ? (
-            <>
-              <li>• Form 3A - Simple Procedure Claim Form</li>
-              <li>• Particulars of Claim (AI-drafted)</li>
-              <li>• Schedule of Arrears</li>
-              {chargeInterest && <li>• Interest Calculation</li>}
-              <li>• Pre-Action Letter</li>
-              <li>• Filing Guide</li>
-            </>
-          ) : (
-            <>
-              <li>• Form N1 - Money Claim Form (official PDF)</li>
-              <li>• Particulars of Claim (AI-drafted)</li>
-              <li>• Schedule of Arrears</li>
-              {chargeInterest && <li>• Interest Calculation</li>}
-              <li>• Letter Before Claim (PAP-DEBT compliant)</li>
-              <li>• Information Sheet for Defendants</li>
-              <li>• Reply Form & Financial Statement Form</li>
-              <li>• Court Filing Guide</li>
-              <li>• Enforcement Guide</li>
-            </>
-          )}
+          <li>• Form N1 - Money Claim Form (official PDF)</li>
+          <li>• Particulars of Claim (AI-drafted)</li>
+          <li>• Schedule of Arrears / Debt</li>
+          {chargeInterest && <li>• Interest Calculation</li>}
+          <li>• Letter Before Claim (PAP-DEBT compliant)</li>
+          <li>• Information Sheet for Defendants</li>
+          <li>• Reply Form & Financial Statement Form</li>
+          <li>• Court Filing Guide</li>
+          <li>• Enforcement Guide</li>
         </ul>
         {!chargeInterest && (
           <p className="text-xs text-gray-500 mt-2 italic">

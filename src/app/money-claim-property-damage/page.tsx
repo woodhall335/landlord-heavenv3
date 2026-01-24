@@ -154,6 +154,9 @@ export default function MoneyClaimPropertyDamagePage() {
                   View Money Claim Pack
                 </Link>
               </div>
+              <p className="mt-4 text-sm text-orange-200">
+                Money Claim Pack available for England only
+              </p>
             </div>
           </div>
         </section>
@@ -502,7 +505,7 @@ export default function MoneyClaimPropertyDamagePage() {
                 Ready to Claim for Property Damage?
               </h2>
               <p className="text-xl text-orange-100 mb-8">
-                Our Money Claim Pack walks you through documenting damage, calculating
+                Our Money Claim Pack (England only) walks you through documenting damage, calculating
                 costs, sending the letter before action, and making your court claim.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -521,6 +524,9 @@ export default function MoneyClaimPropertyDamagePage() {
                   View Full Pack Details
                 </Link>
               </div>
+              <p className="mt-4 text-sm text-orange-200">
+                Pack available for England only
+              </p>
             </div>
           </div>
         </section>

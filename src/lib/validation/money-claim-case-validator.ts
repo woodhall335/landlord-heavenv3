@@ -50,7 +50,7 @@ export interface MoneyClaimFacts {
   tenancy_start_date?: string;
   tenancy_end_date?: string;
   rent_amount?: number;
-  rent_frequency?: string;
+  rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
 
   // Claim flags
   claiming_rent_arrears?: boolean;
