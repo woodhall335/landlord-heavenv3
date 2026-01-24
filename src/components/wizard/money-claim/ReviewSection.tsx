@@ -8,6 +8,8 @@ import {
   RiAlertLine,
   RiLightbulbLine,
   RiArrowRightLine,
+  RiArrowUpLine,
+  RiFileListLine,
 } from 'react-icons/ri';
 import {
   validateMoneyClaimClient,
@@ -66,14 +68,46 @@ function formatCurrency(amount: number): string {
 }
 
 /**
- * Validation Issue Item Component
+ * Map field path to wizard section for navigation
+ */
+function getWizardSectionForField(field: string | null | undefined, section: string): string | null {
+  if (!field) return null;
+
+  // Map field paths to wizard section identifiers
+  const fieldToSection: Record<string, string> = {
+    'landlord_full_name': 'parties',
+    'landlord_address_line1': 'parties',
+    'landlord_address_postcode': 'parties',
+    'tenant_full_name': 'parties',
+    'defendant_address_line1': 'parties',
+    'tenancy_start_date': 'tenancy',
+    'tenancy_end_date': 'tenancy',
+    'rent_amount': 'tenancy',
+    'rent_frequency': 'tenancy',
+    'arrears_items': 'arrears',
+    'money_claim.damage_items': 'damages',
+    'money_claim.other_amounts_types': 'claim_details',
+    'money_claim.basis_of_claim': 'claim_details',
+    'money_claim.charge_interest': 'claim_details',
+    'money_claim.interest_start_date': 'claim_details',
+    'letter_before_claim_sent': 'preaction',
+    'pap_letter_date': 'preaction',
+  };
+
+  return fieldToSection[field] || null;
+}
+
+/**
+ * Validation Issue Item Component with "Fix now" links
  */
 function ValidationItem({
   issue,
   severity,
+  onNavigate,
 }: {
   issue: ValidationIssue;
   severity: 'blocker' | 'warning' | 'suggestion';
+  onNavigate?: (section: string) => void;
 }) {
   const config = {
     blocker: {
@@ -82,6 +116,7 @@ function ValidationItem({
       border: 'border-red-200',
       iconColor: 'text-red-600',
       textColor: 'text-red-800',
+      buttonColor: 'text-red-700 hover:text-red-900',
     },
     warning: {
       icon: RiAlertLine,
@@ -89,6 +124,7 @@ function ValidationItem({
       border: 'border-amber-200',
       iconColor: 'text-amber-600',
       textColor: 'text-amber-800',
+      buttonColor: 'text-amber-700 hover:text-amber-900',
     },
     suggestion: {
       icon: RiLightbulbLine,
@@ -96,10 +132,12 @@ function ValidationItem({
       border: 'border-blue-200',
       iconColor: 'text-blue-600',
       textColor: 'text-blue-800',
+      buttonColor: 'text-blue-700 hover:text-blue-900',
     },
   }[severity];
 
   const Icon = config.icon;
+  const targetSection = getWizardSectionForField(issue.field, issue.section);
 
   return (
     <div className={`flex items-start gap-2 p-2 rounded-md ${config.bg} ${config.border} border`}>
@@ -109,7 +147,131 @@ function ValidationItem({
         {issue.evidenceHint && (
           <p className="text-xs text-gray-500 mt-1 italic">{issue.evidenceHint}</p>
         )}
+        {targetSection && onNavigate && severity === 'blocker' && (
+          <button
+            type="button"
+            onClick={() => onNavigate(targetSection)}
+            className={`mt-1 text-xs font-medium flex items-center gap-1 ${config.buttonColor}`}
+          >
+            <RiArrowUpLine className="w-3 h-3" />
+            Fix now
+          </button>
+        )}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Calculate totals breakdown from facts
+ */
+function calculateTotalsBreakdown(facts: any): {
+  arrearsTotal: number;
+  damagesTotal: number;
+  otherChargesTotal: number;
+  grandTotal: number;
+} {
+  const arrearsItems = facts?.arrears_items || facts?.issues?.rent_arrears?.arrears_items || [];
+  const damageItems = facts?.money_claim?.damage_items || [];
+  const otherCharges = facts?.money_claim?.other_charges || [];
+
+  const arrearsTotal = arrearsItems.length > 0
+    ? arrearsItems.reduce((sum: number, item: any) => sum + ((item.rent_due || 0) - (item.rent_paid || 0)), 0)
+    : (facts?.total_arrears || facts?.issues?.rent_arrears?.total_arrears || 0);
+
+  const damagesTotal = damageItems.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
+  const otherChargesTotal = otherCharges.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
+
+  return {
+    arrearsTotal,
+    damagesTotal,
+    otherChargesTotal,
+    grandTotal: arrearsTotal + damagesTotal + otherChargesTotal,
+  };
+}
+
+/**
+ * Smart Validation Summary - Shows totals breakdown and validation overview
+ */
+function SmartValidationSummary({
+  validation,
+  facts,
+  claimTypes,
+}: {
+  validation: ClientValidationResult;
+  facts: any;
+  claimTypes: { id: string; label: string }[];
+}) {
+  const totals = useMemo(() => calculateTotalsBreakdown(facts), [facts]);
+  const hasArrears = claimTypes.some((t) => t.id === 'rent_arrears');
+  const hasDamages = claimTypes.some(
+    (t) => ['property_damage', 'cleaning', 'unpaid_utilities', 'unpaid_council_tax', 'other_tenant_debt'].includes(t.id)
+  );
+
+  return (
+    <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4 space-y-4">
+      <div className="flex items-center gap-2">
+        <RiFileListLine className="w-5 h-5 text-purple-600" />
+        <h3 className="font-semibold text-purple-900">Smart Validation Summary</h3>
+      </div>
+
+      {/* Totals Breakdown */}
+      <div className="grid gap-2 md:grid-cols-3">
+        {hasArrears && (
+          <div className="bg-white rounded-md p-3 border border-purple-100">
+            <p className="text-xs text-gray-600 font-medium">Rent Arrears</p>
+            <p className="text-lg font-bold text-purple-900">{formatCurrency(totals.arrearsTotal)}</p>
+          </div>
+        )}
+        {hasDamages && (
+          <div className="bg-white rounded-md p-3 border border-purple-100">
+            <p className="text-xs text-gray-600 font-medium">Damages / Other Costs</p>
+            <p className="text-lg font-bold text-purple-900">{formatCurrency(totals.damagesTotal + totals.otherChargesTotal)}</p>
+          </div>
+        )}
+        <div className="bg-purple-100 rounded-md p-3 border border-purple-200">
+          <p className="text-xs text-purple-700 font-medium">Total Claim</p>
+          <p className="text-lg font-bold text-purple-900">{formatCurrency(totals.grandTotal)}</p>
+        </div>
+      </div>
+
+      {/* Validation Status Overview */}
+      <div className="flex flex-wrap gap-2 pt-2 border-t border-purple-200">
+        {validation.isValid ? (
+          <div className="flex items-center gap-1 text-green-700">
+            <RiCheckboxCircleLine className="w-4 h-4" />
+            <span className="text-sm font-medium">Ready for document generation</span>
+          </div>
+        ) : (
+          <>
+            {validation.blockers.length > 0 && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium">
+                <RiErrorWarningLine className="w-3 h-3" />
+                {validation.blockers.length} {validation.blockers.length === 1 ? 'issue' : 'issues'} to fix
+              </span>
+            )}
+            {validation.warnings.length > 0 && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs font-medium">
+                <RiAlertLine className="w-3 h-3" />
+                {validation.warnings.length} {validation.warnings.length === 1 ? 'warning' : 'warnings'}
+              </span>
+            )}
+            {validation.suggestions.length > 0 && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                {validation.suggestions.length} {validation.suggestions.length === 1 ? 'tip' : 'tips'}
+              </span>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Missing for selected claim types */}
+      {claimTypes.length > 0 && validation.blockers.length > 0 && (
+        <div className="text-xs text-purple-700 pt-2 border-t border-purple-200">
+          <span className="font-medium">Selected claim types: </span>
+          {claimTypes.map((t) => t.label).join(', ')}
+        </div>
+      )}
     </div>
   );
 }
@@ -117,7 +279,13 @@ function ValidationItem({
 /**
  * Validation Panel Component
  */
-function ValidationPanel({ validation }: { validation: ClientValidationResult }) {
+function ValidationPanel({
+  validation,
+  onNavigate,
+}: {
+  validation: ClientValidationResult;
+  onNavigate?: (section: string) => void;
+}) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const sections = useMemo(() => groupBySection(validation), [validation]);
 
@@ -191,14 +359,14 @@ function ValidationPanel({ validation }: { validation: ClientValidationResult })
           </div>
           <div className="p-3 space-y-2">
             {sectionIssues.blockers.map((issue) => (
-              <ValidationItem key={issue.id} issue={issue} severity="blocker" />
+              <ValidationItem key={issue.id} issue={issue} severity="blocker" onNavigate={onNavigate} />
             ))}
             {sectionIssues.warnings.map((issue) => (
-              <ValidationItem key={issue.id} issue={issue} severity="warning" />
+              <ValidationItem key={issue.id} issue={issue} severity="warning" onNavigate={onNavigate} />
             ))}
             {showSuggestions &&
               sectionIssues.suggestions.map((issue) => (
-                <ValidationItem key={issue.id} issue={issue} severity="suggestion" />
+                <ValidationItem key={issue.id} issue={issue} severity="suggestion" onNavigate={onNavigate} />
               ))}
           </div>
         </div>
@@ -223,6 +391,15 @@ export const ReviewSection: React.FC<SectionProps> = ({
 
   // Calculate claim types for display
   const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
+
+  // Handle navigation to a wizard section (scroll to top and trigger section change)
+  const handleNavigateToSection = (section: string) => {
+    // Dispatch a custom event that the parent wizard can listen to
+    const event = new CustomEvent('wizard:navigate', { detail: { section } });
+    window.dispatchEvent(event);
+    // Also scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handlePreview = async () => {
     try {
@@ -300,10 +477,17 @@ export const ReviewSection: React.FC<SectionProps> = ({
         </div>
       </div>
 
+      {/* Smart Validation Summary */}
+      <SmartValidationSummary
+        validation={validation}
+        facts={facts}
+        claimTypes={claimTypes}
+      />
+
       {/* Validation Panel */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">Case Validation</h3>
-        <ValidationPanel validation={validation} />
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Validation Details</h3>
+        <ValidationPanel validation={validation} onNavigate={handleNavigateToSection} />
       </div>
 
       {/* Ask Heaven Features Banner */}

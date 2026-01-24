@@ -147,6 +147,11 @@ function calculateDamagesTotal(facts: MoneyClaimFacts): number {
   return items.reduce((total, item) => total + (item.amount || 0), 0);
 }
 
+function calculateOtherChargesTotal(facts: MoneyClaimFacts): number {
+  const items = (facts.money_claim as any)?.other_charges || [];
+  return items.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+}
+
 /**
  * Run client-side validation
  */
@@ -158,7 +163,9 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   const claimTypes = getClaimTypesFromFacts(facts);
   const arrearsTotal = claimTypes.includes('rent_arrears') ? calculateArrearsTotal(facts) : 0;
   const damagesTotal = calculateDamagesTotal(facts);
-  const grandTotal = arrearsTotal + damagesTotal;
+  const otherChargesTotal = calculateOtherChargesTotal(facts);
+  // BUG FIX: grand_total now includes ALL claimable components
+  const grandTotal = arrearsTotal + damagesTotal + otherChargesTotal;
 
   const arrears_items = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
   const damage_items = facts.money_claim?.damage_items || [];
@@ -244,6 +251,21 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
     });
   }
 
+  // Interest start date in future
+  if (
+    facts.money_claim?.charge_interest === true &&
+    facts.money_claim?.interest_start_date &&
+    new Date(facts.money_claim.interest_start_date) > new Date()
+  ) {
+    blockers.push({
+      id: 'interest_start_date_future',
+      severity: 'blocker',
+      message: 'Interest start date cannot be in the future. Interest accrues from when the debt became due.',
+      section: 'claim_details',
+      field: 'money_claim.interest_start_date',
+    });
+  }
+
   // Principal total
   if (grandTotal <= 0 && claimTypes.length > 0) {
     blockers.push({
@@ -263,6 +285,17 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
       section: 'preaction',
       field: 'letter_before_claim_sent',
       evidenceHint: 'Keep a copy of the letter and proof of posting/delivery.',
+    });
+  }
+
+  // PAP letter date in future
+  if (facts.pap_letter_date && new Date(facts.pap_letter_date) > new Date()) {
+    blockers.push({
+      id: 'pap_letter_date_future',
+      severity: 'blocker',
+      message: 'Your Letter Before Claim date is in the future. Please enter the actual date you sent the letter.',
+      section: 'preaction',
+      field: 'pap_letter_date',
     });
   }
 
@@ -466,6 +499,44 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
     }
   }
 
+  // Interest start date before tenancy warning
+  if (
+    facts.money_claim?.charge_interest === true &&
+    facts.money_claim?.interest_start_date &&
+    facts.tenancy_start_date &&
+    new Date(facts.money_claim.interest_start_date) < new Date(facts.tenancy_start_date)
+  ) {
+    warnings.push({
+      id: 'interest_start_before_tenancy',
+      severity: 'warning',
+      message: 'Your interest start date is before the tenancy started. Interest typically starts when rent first became due.',
+      section: 'claim_details',
+      field: 'money_claim.interest_start_date',
+    });
+  }
+
+  // Property damage evidence warning
+  if (claimTypes.includes('property_damage') && !hasDocuments && !facts.evidence_reviewed) {
+    warnings.push({
+      id: 'property_damage_evidence_warning',
+      severity: 'warning',
+      message: 'Property damage claims are difficult to prove without photographic evidence. Upload dated photos showing the damage, a check-in/check-out inventory, and repair quotes or invoices.',
+      section: 'damages',
+      evidenceHint: 'Required: Before/after photos, check-in inventory comparing condition, repair quotes or invoices.',
+    });
+  }
+
+  // Cleaning evidence warning
+  if (claimTypes.includes('cleaning') && !hasDocuments && !facts.evidence_reviewed) {
+    warnings.push({
+      id: 'cleaning_evidence_warning',
+      severity: 'warning',
+      message: 'Cleaning cost claims should be supported by evidence. Upload photos showing the property condition and a copy of the professional cleaning invoice.',
+      section: 'damages',
+      evidenceHint: 'Required: Check-out photos showing condition, cleaning company invoice with itemised costs.',
+    });
+  }
+
   // Council tax warning
   if (claimTypes.includes('unpaid_council_tax')) {
     warnings.push({
@@ -474,6 +545,17 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
       message: "Council tax liability depends on occupancy and your tenancy agreement terms. Ensure you have evidence that the tenant was contractually liable for council tax during the claim period.",
       section: 'council_tax',
       evidenceHint: 'Tenancy agreement clause, council tax bills, occupancy evidence.',
+    });
+  }
+
+  // Council tax evidence warning
+  if (claimTypes.includes('unpaid_council_tax') && !hasDocuments) {
+    warnings.push({
+      id: 'council_tax_evidence_required',
+      severity: 'warning',
+      message: 'For council tax claims, upload the tenancy agreement (showing tenant liability clause) and council tax statements.',
+      section: 'council_tax',
+      evidenceHint: 'Tenancy agreement, council tax bills addressed to tenant.',
     });
   }
 
