@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England (Section 21/Section 8), Wales (Section 173/fault-based notices), and Scotland (Notice to Leave). Northern Ireland is NOT supported for eviction notices - only tenancy agreements."
+    answer: "England (Section 21/Section 8), Wales (Section 173/fault-based notices), and Scotland (Notice to Leave)."
   },
   {
     question: "Are these the official government forms?",
