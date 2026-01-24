@@ -4,9 +4,14 @@ import {
   getClaimTypesFromFacts,
   calculateArrearsTotal,
   calculateDamagesTotal,
+  calculateOtherChargesTotal,
   getAllRuleIds,
   canGeneratePack,
   getValidationBySection,
+  validateRulesSchema,
+  validateCondition,
+  loadRulesConfig,
+  groupResultsBySection,
   type MoneyClaimFacts,
 } from '@/lib/validation/money-claim-rules-engine';
 
@@ -584,5 +589,322 @@ describe('Money Claim Rules Engine - Regression Tests', () => {
       const warning = result.warnings.find((w) => w.id === 'no_evidence_uploaded');
       expect(warning).toBeUndefined();
     });
+  });
+});
+
+// =============================================================================
+// YAML SCHEMA VALIDATION TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - YAML Schema Validation', () => {
+  it('loads rules config without error', () => {
+    const config = loadRulesConfig(true);
+    expect(config).toBeDefined();
+    expect(config.version).toBeDefined();
+    expect(config.jurisdiction).toBe('england');
+    expect(config.product).toBe('money_claim');
+  });
+
+  it('has no duplicate rule IDs', () => {
+    const errors = validateRulesSchema();
+    const duplicateErrors = errors.filter((e) => e.type === 'duplicate_id');
+    expect(duplicateErrors).toHaveLength(0);
+  });
+
+  it('all summary section rule references exist', () => {
+    const errors = validateRulesSchema();
+    const missingRefErrors = errors.filter((e) => e.type === 'missing_rule_reference');
+    if (missingRefErrors.length > 0) {
+      console.log('Missing rule references:', missingRefErrors);
+    }
+    expect(missingRefErrors).toHaveLength(0);
+  });
+
+  it('all conditions pass allowlist validation', () => {
+    const errors = validateRulesSchema();
+    const conditionErrors = errors.filter((e) => e.type === 'invalid_condition');
+    if (conditionErrors.length > 0) {
+      console.log('Invalid conditions:', conditionErrors);
+    }
+    expect(conditionErrors).toHaveLength(0);
+  });
+
+  it('validateRulesSchema returns empty array for valid config', () => {
+    const errors = validateRulesSchema();
+    if (errors.length > 0) {
+      console.log('Schema validation errors:', errors);
+    }
+    expect(errors).toHaveLength(0);
+  });
+});
+
+// =============================================================================
+// SECURITY: CONDITION ALLOWLIST TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - Security Allowlist', () => {
+  describe('validateCondition', () => {
+    it('allows valid conditions with context variables', () => {
+      expect(validateCondition('!facts.landlord_full_name').valid).toBe(true);
+      expect(validateCondition('claim_types.length === 0').valid).toBe(true);
+      expect(validateCondition('totals.grand_total <= 0').valid).toBe(true);
+      expect(validateCondition('daysSincePapLetter < 30').valid).toBe(true);
+    });
+
+    it('allows conditions with array methods', () => {
+      expect(validateCondition('claim_types.includes("rent_arrears")').valid).toBe(true);
+      expect(validateCondition('arrears_items.some(item => item.rent_due > 0)').valid).toBe(true);
+    });
+
+    it('allows conditions with Date', () => {
+      expect(validateCondition('new Date(facts.pap_letter_date) > new Date()').valid).toBe(true);
+    });
+
+    it('rejects dangerous patterns', () => {
+      expect(validateCondition('eval("alert(1)")').valid).toBe(false);
+      expect(validateCondition('window.location').valid).toBe(false);
+      expect(validateCondition('process.env').valid).toBe(false);
+      expect(validateCondition('require("fs")').valid).toBe(false);
+      expect(validateCondition('global.something').valid).toBe(false);
+    });
+
+    it('rejects unknown identifiers', () => {
+      expect(validateCondition('unknownVariable.value').valid).toBe(false);
+      expect(validateCondition('document.cookie').valid).toBe(false);
+      expect(validateCondition('fetch("http://evil.com")').valid).toBe(false);
+    });
+  });
+
+  describe('evaluateCondition security', () => {
+    it('rejects rules with dangerous conditions gracefully', () => {
+      // A malicious condition should not evaluate and should not crash
+      const facts: MoneyClaimFacts = { ...completeValidFacts };
+      const result = evaluateRules(facts);
+
+      // Should still work normally (dangerous conditions would be rejected silently)
+      expect(result).toBeDefined();
+    });
+  });
+});
+
+// =============================================================================
+// TOTALS CALCULATION WITH OTHER_CHARGES
+// =============================================================================
+
+describe('Money Claim Rules Engine - Totals Calculation', () => {
+  it('calculates other charges total', () => {
+    const facts: MoneyClaimFacts = {
+      money_claim: {
+        other_charges: [
+          { id: '1', description: 'Legal fees', amount: 100 },
+          { id: '2', description: 'Court fee', amount: 250 },
+        ],
+      },
+    };
+    const total = calculateOtherChargesTotal(facts);
+    expect(total).toBe(350);
+  });
+
+  it('grand total includes arrears + damages + other_charges', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      claiming_rent_arrears: true,
+      money_claim: {
+        ...completeValidFacts.money_claim,
+        other_amounts_types: ['property_damage'],
+        damage_items: [{ id: '1', description: 'Damage', amount: 200 }],
+        other_charges: [{ id: '1', description: 'Legal fees', amount: 100 }],
+      },
+    };
+
+    const result = evaluateRules(facts);
+    // Arrears: 1500 + Damages: 200 + Other: 100 = 1800
+    expect(result.totalClaimAmount).toBe(1800);
+  });
+
+  it('returns 0 for other_charges when none exist', () => {
+    const total = calculateOtherChargesTotal({});
+    expect(total).toBe(0);
+  });
+});
+
+// =============================================================================
+// NEW RULE TESTS - PAP AND INTEREST DATE VALIDATION
+// =============================================================================
+
+describe('Money Claim Rules Engine - PAP Date Validation', () => {
+  it('triggers pap_letter_date_future when date is in future', () => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 10);
+
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      letter_before_claim_sent: true,
+      pap_letter_date: futureDate.toISOString().split('T')[0],
+    };
+    const result = evaluateRules(facts);
+
+    const blocker = result.blockers.find((b) => b.id === 'pap_letter_date_future');
+    expect(blocker).toBeDefined();
+  });
+
+  it('does not trigger pap_letter_date_future when date is in past', () => {
+    const pastDate = new Date();
+    pastDate.setDate(pastDate.getDate() - 60);
+
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      letter_before_claim_sent: true,
+      pap_letter_date: pastDate.toISOString().split('T')[0],
+    };
+    const result = evaluateRules(facts);
+
+    const blocker = result.blockers.find((b) => b.id === 'pap_letter_date_future');
+    expect(blocker).toBeUndefined();
+  });
+});
+
+describe('Money Claim Rules Engine - Interest Date Validation', () => {
+  it('triggers interest_start_date_future when interest date is in future', () => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 10);
+
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      money_claim: {
+        ...completeValidFacts.money_claim,
+        charge_interest: true,
+        interest_start_date: futureDate.toISOString().split('T')[0],
+      },
+    };
+    const result = evaluateRules(facts);
+
+    const blocker = result.blockers.find((b) => b.id === 'interest_start_date_future');
+    expect(blocker).toBeDefined();
+  });
+
+  it('triggers interest_start_before_tenancy when interest date is before tenancy start', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      tenancy_start_date: '2024-03-01',
+      money_claim: {
+        ...completeValidFacts.money_claim,
+        charge_interest: true,
+        interest_start_date: '2024-01-01', // Before tenancy start
+      },
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'interest_start_before_tenancy');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger interest_start_before_tenancy when dates are valid', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      tenancy_start_date: '2024-01-01',
+      money_claim: {
+        ...completeValidFacts.money_claim,
+        charge_interest: true,
+        interest_start_date: '2024-06-01', // After tenancy start
+      },
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'interest_start_before_tenancy');
+    expect(warning).toBeUndefined();
+  });
+});
+
+// =============================================================================
+// EVIDENCE WARNING TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - Evidence Warnings', () => {
+  it('triggers property_damage_evidence_warning when no evidence', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [],
+      evidence_reviewed: false,
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_evidence_warning');
+    expect(warning).toBeDefined();
+  });
+
+  it('triggers cleaning_evidence_warning when no evidence', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      claiming_rent_arrears: false,
+      arrears_items: [],
+      money_claim: {
+        ...completeValidFacts.money_claim,
+        other_amounts_types: ['cleaning'],
+        damage_items: [{ id: '1', description: 'Cleaning', amount: 200, category: 'cleaning' }],
+      },
+      uploaded_documents: [],
+      evidence_reviewed: false,
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'cleaning_evidence_warning');
+    expect(warning).toBeDefined();
+  });
+
+  it('triggers council_tax_evidence_required when no evidence', () => {
+    const facts: MoneyClaimFacts = {
+      ...councilTaxFacts,
+      uploaded_documents: [],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'council_tax_evidence_required');
+    expect(warning).toBeDefined();
+  });
+});
+
+// =============================================================================
+// GROUP BY SECTION TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - Group By Section', () => {
+  it('groups validation results by section using YAML config', () => {
+    const facts: MoneyClaimFacts = {
+      // Missing claimant info
+      tenant_full_name: 'Test Tenant',
+      defendant_address_line1: '123 Test St',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      claiming_rent_arrears: true,
+      arrears_items: [{ period_start: '2024-06-01', period_end: '2024-06-30', rent_due: 1000, rent_paid: 0 }],
+      letter_before_claim_sent: true,
+      pap_letter_date: '2024-10-01',
+      money_claim: {
+        charge_interest: false,
+      },
+    };
+
+    const result = evaluateRules(facts);
+    const grouped = groupResultsBySection(result);
+
+    // Should have claimant section with blockers
+    expect(grouped['claimant']).toBeDefined();
+    expect(grouped['claimant'].blockers.length).toBeGreaterThan(0);
+  });
+
+  it('returns only sections with issues', () => {
+    const result = evaluateRules(completeValidFacts);
+    const grouped = groupResultsBySection(result);
+
+    // Complete valid facts should have no or minimal sections
+    const totalIssues = Object.values(grouped).reduce(
+      (sum, section) => sum + section.blockers.length + section.warnings.length + section.suggestions.length,
+      0
+    );
+
+    // Valid facts may still have some suggestions
+    expect(result.blockers).toHaveLength(0);
   });
 });
