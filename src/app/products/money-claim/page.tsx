@@ -35,10 +35,10 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Money Claim Pack 2026 for England Landlords | ${price}`,
   description:
-    `Recover unpaid rent through English courts with our Money Claim Pack. N1 form, PAP-DEBT Letter Before Claim, interest calculator, and enforcement guidance. England only - ${price} one-time.`,
+    `Recover unpaid rent, property damage, cleaning costs and other tenant debts through English courts. N1 form, PAP-DEBT Letter Before Claim, interest calculator, and enforcement guidance. England only - ${price} one-time.`,
   openGraph: {
     title: `Money Claim Pack 2026 for England Landlords | ${price}`,
-    description: "Money claim pack for England landlords to recover rent arrears. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
+    description: "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs and other tenant debts. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -50,15 +50,23 @@ export const metadata: Metadata = {
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive 11 documents: Court Claim Form (N1 or Simple Procedure 3A), Particulars of Claim, Schedule of Arrears, Interest Calculation, Letter Before Claim, Defendant Information Sheet, Reply Form, Financial Statement Form, Court Filing Guide, and Enforcement Guide."
+    answer: "You receive 11 documents: Court Claim Form (N1 or Simple Procedure 3A), Particulars of Claim, Schedule of Debt, Interest Calculation, Letter Before Claim, Defendant Information Sheet, Reply Form, Financial Statement Form, Court Filing Guide, and Enforcement Guide."
+  },
+  {
+    question: "Can I claim for damage or cleaning after the tenant leaves?",
+    answer: "Yes! You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You'll need evidence such as photos, invoices, and quotes. Select the relevant reasons in the wizard and itemise each cost in the Damages section."
   },
   {
     question: "Can I claim arrears if the tenant has already left?",
     answer: "Yes! You have 6 years from the date arrears became due to make a claim. You'll need the tenant's current address for court service."
   },
   {
-    question: "Can I claim interest on the arrears?",
-    answer: "Yes! You can claim 8% statutory interest per year on rent arrears. Our interest calculator works this out automatically."
+    question: "Can I combine rent arrears with damage claims?",
+    answer: "Yes! Our wizard lets you select multiple claim reasons. You can claim rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts all in one claim."
+  },
+  {
+    question: "Can I claim interest on the debt?",
+    answer: "Yes! You can claim 8% statutory interest per year on debts. Our interest calculator works this out automatically for rent arrears. For damage claims, interest runs from when you notified the tenant of the amount owed."
   },
   {
     question: "What happens if the tenant defends the claim?",
@@ -131,7 +139,7 @@ export default function MoneyClaimPage() {
             </div>
 
             <Link
-              href="/wizard?product=money_claim&src=product_page&topic=arrears"
+              href="/wizard?product=money_claim&src=product_page"
               className="hero-btn-primary"
             >
               Start Money Claim →
@@ -388,7 +396,7 @@ export default function MoneyClaimPage() {
 
             <div className="mt-8 text-center">
               <Link
-                href="/wizard?product=money_claim&src=product_page&topic=arrears"
+                href="/wizard?product=money_claim&src=product_page"
                 className="hero-btn-primary"
               >
                 Start Money Claim - {price} →
@@ -420,9 +428,10 @@ export default function MoneyClaimPage() {
               <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Use Money Claim If:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant has left but owes rent arrears</li>
-                  <li>• Tenancy has ended, you just want money back</li>
-                  <li>• You&apos;ve already got possession but need arrears</li>
+                  <li>• Tenant owes rent arrears (current or former tenant)</li>
+                  <li>• Tenant caused property damage needing repair</li>
+                  <li>• You paid for professional cleaning or rubbish removal</li>
+                  <li>• Tenant left unpaid utilities in your name</li>
                   <li>• Claim is under £10,000</li>
                   <li>• You know where tenant lives/works</li>
                 </ul>
@@ -557,8 +566,8 @@ export default function MoneyClaimPage() {
               source="product_page"
               topic="money_claim"
               product="money_claim"
-              title="Have questions about recovering rent arrears?"
-              description="Ask Heaven can help you understand PAP-DEBT requirements, court procedures, and enforcement options."
+              title="Have questions about recovering money from tenants?"
+              description="Ask Heaven can help you understand what you can claim, PAP-DEBT requirements, court procedures, and enforcement options."
             />
           </div>
         </Container>
@@ -587,12 +596,12 @@ export default function MoneyClaimPage() {
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Claim Your Arrears?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Recover What You&apos;re Owed?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Preview before you pay. Edit and regenerate instantly. Stored in your portal.
+              Claim rent arrears, damage, cleaning costs and more. Preview before you pay.
             </p>
             <Link
-              href="/wizard?product=money_claim&src=product_page&topic=arrears"
+              href="/wizard?product=money_claim&src=product_page"
               className="hero-btn-primary"
             >
               Start Money Claim - {price} →
