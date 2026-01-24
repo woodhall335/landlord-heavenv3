@@ -1,0 +1,450 @@
+# Money Claim Validation Rules - England Only
+# Tiered validation: blocker (cannot proceed) | warning (risk displayed) | suggestion (optional improvement)
+# All rules are deterministic and testable
+
+version: "1.0"
+jurisdiction: england
+product: money_claim
+last_updated: "2026-01-24"
+
+metadata:
+  effective_from: "2026-01-01"
+  source:
+    - "Civil Procedure Rules (CPR)"
+    - "Pre-Action Protocol for Debt Claims (PAP-DEBT)"
+    - "County Courts Act 1984"
+  notes: "Money claims are England-only. PAP-DEBT compliance is mandatory before court proceedings."
+
+# Claim type identifiers used throughout
+claim_types:
+  - rent_arrears
+  - property_damage
+  - cleaning
+  - unpaid_utilities
+  - unpaid_council_tax
+  - other_tenant_debt
+
+# =============================================================================
+# COMMON RULES (Apply to ALL money claim types)
+# =============================================================================
+
+common_rules:
+
+  # --- BLOCKERS (Cannot proceed without these) ---
+
+  - id: claimant_name_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.landlord_full_name && !facts.company_name"
+    message: "Claimant name is required. Enter your full legal name or company name."
+    rationale: "Court forms require the claimant to be clearly identified."
+    evidence_hint: null
+    field: landlord_full_name
+
+  - id: claimant_address_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.landlord_address_line1"
+    message: "Claimant address is required for the court forms."
+    rationale: "N1 form requires claimant's address for service."
+    evidence_hint: null
+    field: landlord_address_line1
+
+  - id: claimant_postcode_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.landlord_address_postcode"
+    message: "Claimant postcode is required."
+    rationale: "Postcode determines which County Court has jurisdiction."
+    evidence_hint: null
+    field: landlord_address_postcode
+
+  - id: defendant_name_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.tenant_full_name"
+    message: "Defendant (tenant) full name is required."
+    rationale: "Court forms require the defendant to be clearly identified."
+    evidence_hint: null
+    field: tenant_full_name
+
+  - id: defendant_address_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.defendant_address_line1 && !facts.property_address_line1"
+    message: "Defendant address or property address is required for service."
+    rationale: "Court papers must be served at a valid address."
+    evidence_hint: null
+    field: defendant_address_line1
+
+  - id: claim_type_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "claim_types.length === 0"
+    message: "Please select at least one type of claim (e.g., rent arrears, property damage)."
+    rationale: "The claim must specify what is being claimed."
+    evidence_hint: null
+    field: money_claim.other_amounts_types
+
+  - id: principal_total_positive
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "totals.grand_total <= 0"
+    message: "Total claim amount must be greater than zero."
+    rationale: "A money claim requires a positive sum to be claimed."
+    evidence_hint: null
+    field: null
+
+  - id: interest_decision_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.charge_interest !== true && facts.money_claim?.charge_interest !== false"
+    message: "Please indicate whether you want to claim statutory interest."
+    rationale: "Court form requires explicit statement about interest."
+    evidence_hint: null
+    field: money_claim.charge_interest
+
+  - id: pap_letter_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.letter_before_claim_sent && !facts.pap_letter_date"
+    message: "You must send a Letter Before Claim to comply with the Pre-Action Protocol for Debt Claims (PAP-DEBT)."
+    rationale: "PAP-DEBT requires a formal letter giving the debtor 30 days to respond before court action."
+    evidence_hint: "Keep a copy of the letter and proof of posting/delivery."
+    field: letter_before_claim_sent
+
+  # --- DATE SANITY CHECKS ---
+
+  - id: tenancy_start_required
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.tenancy_start_date"
+    message: "Tenancy start date is required."
+    rationale: "Establishes when the contractual relationship began."
+    evidence_hint: "Check your tenancy agreement."
+    field: tenancy_start_date
+
+  - id: tenancy_dates_logical
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.tenancy_start_date && facts.tenancy_end_date && new Date(facts.tenancy_start_date) > new Date(facts.tenancy_end_date)"
+    message: "Tenancy start date cannot be after the end date."
+    rationale: "Dates must be chronologically consistent."
+    evidence_hint: null
+    field: tenancy_start_date
+
+  - id: tenancy_not_future
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.tenancy_start_date && new Date(facts.tenancy_start_date) > new Date()"
+    message: "Tenancy start date cannot be in the future."
+    rationale: "Cannot claim for a tenancy that hasn't started."
+    evidence_hint: null
+    field: tenancy_start_date
+
+  # --- WARNINGS (Can proceed, but risk highlighted) ---
+
+  - id: basis_of_claim_missing
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.money_claim?.basis_of_claim"
+    message: "Provide a brief explanation of what this claim is about. This helps the court understand your case."
+    rationale: "Particulars of claim should explain the basis clearly."
+    evidence_hint: null
+    field: money_claim.basis_of_claim
+
+  - id: basis_of_claim_short
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.basis_of_claim && facts.money_claim.basis_of_claim.length < 50"
+    message: "Your claim explanation is quite brief. Consider adding more detail about the circumstances."
+    rationale: "Courts prefer clear, detailed particulars."
+    evidence_hint: null
+    field: money_claim.basis_of_claim
+
+  - id: pap_30_day_wait
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.pap_letter_date && daysSincePapLetter < 30 && !facts.pap_response_received"
+    message: "Only {daysSincePapLetter} days since your Letter Before Claim. PAP-DEBT requires waiting 30 days for a response before issuing court proceedings."
+    rationale: "Premature court action may result in cost penalties."
+    evidence_hint: null
+    field: pap_letter_date
+
+  - id: no_evidence_uploaded
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "(!facts.uploaded_documents || facts.uploaded_documents.length === 0) && !facts.evidence_reviewed"
+    message: "Consider uploading supporting evidence (tenancy agreement, payment records, photos). Strong evidence improves your chances of success."
+    rationale: "Documentary evidence strengthens any court claim."
+    evidence_hint: "Upload tenancy agreement, bank statements, photos, quotes, etc."
+    field: null
+
+  - id: tenancy_end_suggested
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.tenant_still_in_property === false && !facts.tenancy_end_date"
+    message: "Since the tenant has left, consider adding the tenancy end date for completeness."
+    rationale: "End date may affect interest calculations and context."
+    evidence_hint: null
+    field: tenancy_end_date
+
+  # --- SUGGESTIONS (Optional improvements) ---
+
+  - id: interest_start_date_suggested
+    severity: suggestion
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.charge_interest === true && !facts.money_claim?.interest_start_date"
+    message: "Add an interest start date for accurate calculations. Typically, this is when the debt became due."
+    rationale: "Precise interest calculations require a start date."
+    evidence_hint: null
+    field: money_claim.interest_start_date
+
+  - id: enforcement_review_suggested
+    severity: suggestion
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.enforcement_reviewed && !facts.enforcement_preference"
+    message: "Consider your enforcement options in case the defendant doesn't pay voluntarily after judgment."
+    rationale: "Planning enforcement early helps if payment isn't received."
+    evidence_hint: null
+    field: null
+
+  - id: timeline_review_suggested
+    severity: suggestion
+    applies_to: [all]
+    applies_when:
+      - condition: "!facts.timeline_reviewed"
+    message: "Review the case timeline to ensure all dates and events are accurate."
+    rationale: "Accurate chronology supports your claim narrative."
+    evidence_hint: null
+    field: null
+
+# =============================================================================
+# RENT ARREARS RULES
+# =============================================================================
+
+rent_arrears_rules:
+
+  - id: arrears_items_required
+    severity: blocker
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && (!arrears_items || arrears_items.length === 0)"
+    message: "Please add at least one arrears entry to the rent schedule."
+    rationale: "Court requires itemized schedule of rent arrears."
+    evidence_hint: "List each missed or partial payment with dates and amounts."
+    field: arrears_items
+
+  - id: rent_amount_required
+    severity: blocker
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && !facts.rent_amount"
+    message: "Monthly rent amount is required for arrears calculations."
+    rationale: "Needed to verify arrears schedule totals."
+    evidence_hint: "Check your tenancy agreement for the rent amount."
+    field: rent_amount
+
+  - id: rent_frequency_required
+    severity: blocker
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && !facts.rent_frequency"
+    message: "Rent payment frequency is required (e.g., monthly, weekly)."
+    rationale: "Determines how arrears periods are calculated."
+    evidence_hint: null
+    field: rent_frequency
+
+  - id: arrears_items_incomplete
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "arrears_items_incomplete_count > 0"
+    message: "{arrears_items_incomplete_count} arrears {arrears_items_incomplete_count === 1 ? 'entry has' : 'entries have'} incomplete information (missing dates or amounts)."
+    rationale: "Incomplete entries may be challenged by the defendant."
+    evidence_hint: null
+    field: arrears_items
+
+  - id: arrears_total_zero
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && totals.arrears_total <= 0"
+    message: "Your arrears schedule shows no outstanding balance. Check the amounts entered."
+    rationale: "No arrears means no claim for rent arrears."
+    evidence_hint: null
+    field: arrears_items
+
+  - id: arrears_evidence_suggested
+    severity: suggestion
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
+    message: "Upload rent statements or bank records showing missed payments to support your arrears claim."
+    rationale: "Documentary evidence of non-payment strengthens the claim."
+    evidence_hint: "Bank statements, rent ledger, or accounting records."
+    field: null
+
+# =============================================================================
+# PROPERTY DAMAGE / CLEANING / OTHER AMOUNTS RULES
+# =============================================================================
+
+damages_rules:
+
+  - id: damage_items_required
+    severity: blocker
+    applies_to: [property_damage, cleaning, unpaid_utilities, other_tenant_debt]
+    applies_when:
+      - condition: "has_damages_claim_type && (!damage_items || damage_items.length === 0)"
+    message: "Please add at least one item to your damages/costs schedule."
+    rationale: "Court requires itemized list of claimed amounts."
+    evidence_hint: "List each cost with description and amount."
+    field: money_claim.damage_items
+
+  - id: damage_items_no_amount
+    severity: warning
+    applies_to: [property_damage, cleaning, unpaid_utilities, other_tenant_debt]
+    applies_when:
+      - condition: "damage_items_without_amount > 0"
+    message: "{damage_items_without_amount} {damage_items_without_amount === 1 ? 'item has' : 'items have'} no amount specified."
+    rationale: "Each claimed item needs a monetary value."
+    evidence_hint: "Get quotes or invoices for each item."
+    field: money_claim.damage_items
+
+  - id: damage_items_no_description
+    severity: warning
+    applies_to: [property_damage, cleaning, unpaid_utilities, other_tenant_debt]
+    applies_when:
+      - condition: "damage_items_without_description > 0"
+    message: "{damage_items_without_description} {damage_items_without_description === 1 ? 'item needs' : 'items need'} a description."
+    rationale: "Clear descriptions help the court understand what is claimed."
+    evidence_hint: null
+    field: money_claim.damage_items
+
+  - id: property_damage_evidence_suggested
+    severity: suggestion
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
+    message: "Upload dated photos showing the damage and repair quotes to support your property damage claim."
+    rationale: "Visual evidence and cost documentation are persuasive."
+    evidence_hint: "Before/after photos, check-in inventory, repair invoices."
+    field: null
+
+  - id: cleaning_evidence_suggested
+    severity: suggestion
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
+    message: "Upload photos of the condition and cleaning invoices to support your cleaning costs claim."
+    rationale: "Shows the property condition justified professional cleaning."
+    evidence_hint: "Check-out photos, cleaning company invoice."
+    field: null
+
+# =============================================================================
+# COUNCIL TAX RULES (Special considerations)
+# =============================================================================
+
+council_tax_rules:
+
+  - id: council_tax_liability_warning
+    severity: warning
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax')"
+    message: "Council tax liability depends on occupancy and your tenancy agreement terms. Ensure you have evidence that the tenant was contractually liable for council tax during the claim period."
+    rationale: "Council tax liability is complex and tenant may dispute responsibility."
+    evidence_hint: "Tenancy agreement clause, council tax bills, occupancy evidence."
+    field: null
+
+  - id: council_tax_evidence_required
+    severity: warning
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
+    message: "For council tax claims, upload the tenancy agreement (showing tenant liability clause) and council tax statements."
+    rationale: "Must prove contractual liability and the amount owed."
+    evidence_hint: "Tenancy agreement, council tax bills addressed to tenant."
+    field: null
+
+# =============================================================================
+# UTILITIES RULES
+# =============================================================================
+
+utilities_rules:
+
+  - id: utilities_evidence_suggested
+    severity: suggestion
+    applies_to: [unpaid_utilities]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_utilities') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
+    message: "Upload utility bills and the tenancy agreement clause showing tenant responsibility for utilities."
+    rationale: "Proves what was owed and who was liable."
+    evidence_hint: "Utility bills, meter readings, tenancy agreement."
+    field: null
+
+# =============================================================================
+# VALIDATION SUMMARY CONFIG
+# =============================================================================
+
+summary:
+  blocker_prevents_generation: true
+  warning_shown_in_review: true
+  suggestion_shown_as_tips: true
+  group_by_section: true
+  sections:
+    - id: claimant
+      label: "Claimant Details"
+      rules: [claimant_name_required, claimant_address_required, claimant_postcode_required]
+    - id: defendant
+      label: "Defendant Details"
+      rules: [defendant_name_required, defendant_address_required]
+    - id: tenancy
+      label: "Tenancy Information"
+      rules: [tenancy_start_required, tenancy_dates_logical, tenancy_not_future, rent_amount_required, rent_frequency_required, tenancy_end_suggested]
+    - id: claim_details
+      label: "Claim Details"
+      rules: [claim_type_required, interest_decision_required, basis_of_claim_missing, basis_of_claim_short, interest_start_date_suggested]
+    - id: arrears
+      label: "Rent Arrears Schedule"
+      rules: [arrears_items_required, arrears_items_incomplete, arrears_total_zero, arrears_evidence_suggested]
+    - id: damages
+      label: "Other Amounts Schedule"
+      rules: [damage_items_required, damage_items_no_amount, damage_items_no_description, property_damage_evidence_suggested, cleaning_evidence_suggested]
+    - id: council_tax
+      label: "Council Tax"
+      rules: [council_tax_liability_warning, council_tax_evidence_required]
+    - id: utilities
+      label: "Utilities"
+      rules: [utilities_evidence_suggested]
+    - id: preaction
+      label: "Pre-Action Protocol"
+      rules: [pap_letter_required, pap_30_day_wait]
+    - id: evidence
+      label: "Evidence"
+      rules: [no_evidence_uploaded]
+    - id: amounts
+      label: "Claim Amount"
+      rules: [principal_total_positive]
+    - id: next_steps
+      label: "Next Steps"
+      rules: [enforcement_review_suggested, timeline_review_suggested]
