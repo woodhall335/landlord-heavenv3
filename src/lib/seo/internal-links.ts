@@ -22,7 +22,7 @@ export const productLinks = {
   moneyClaim: {
     href: '/products/money-claim',
     title: 'Money Claim Pack',
-    description: 'Recover unpaid rent through court — £99.99',
+    description: 'Recover rent, damage, and other tenant debts — £99.99',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -251,6 +251,260 @@ export const guideLinks = {
   },
 };
 
+// Money Claim SEO Landing Pages (Q1 2026 Expansion)
+export const moneyClaimGuides = {
+  // Core hub pages (4 existing)
+  unpaidRent: {
+    href: '/money-claim-unpaid-rent',
+    title: 'Claim Unpaid Rent Guide',
+    description: 'MCOL process for rent arrears',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  propertyDamage: {
+    href: '/money-claim-property-damage',
+    title: 'Property Damage Claims',
+    description: 'Recover tenant damage costs',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  cleaningCosts: {
+    href: '/money-claim-cleaning-costs',
+    title: 'Cleaning Cost Claims',
+    description: 'End-of-tenancy cleaning recovery',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  unpaidUtilities: {
+    href: '/money-claim-unpaid-utilities',
+    title: 'Unpaid Utilities Claims',
+    description: 'Recover utility bills from tenant',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  // Damage-focused pages (6)
+  gardenDamage: {
+    href: '/money-claim-garden-damage',
+    title: 'Garden Damage Claims',
+    description: 'Claim for garden neglect & damage',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  carpetDamage: {
+    href: '/money-claim-carpet-damage',
+    title: 'Carpet Damage Claims',
+    description: 'Stains, burns & carpet replacement',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  applianceDamage: {
+    href: '/money-claim-appliance-damage',
+    title: 'Appliance Damage Claims',
+    description: 'Damaged kitchen appliances',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  wallDamage: {
+    href: '/money-claim-wall-damage',
+    title: 'Wall & Door Damage Claims',
+    description: 'Holes, dents & fixture damage',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  bathroomDamage: {
+    href: '/money-claim-bathroom-damage',
+    title: 'Bathroom Damage Claims',
+    description: 'Limescale, mould & fitting damage',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  abandonedGoods: {
+    href: '/money-claim-abandoned-goods',
+    title: 'Abandoned Goods Removal',
+    description: 'Dispose of tenant belongings legally',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  // Debt-focused pages (6)
+  councilTax: {
+    href: '/money-claim-council-tax',
+    title: 'Council Tax Claims',
+    description: 'Recover unpaid council tax',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  breakClause: {
+    href: '/money-claim-early-termination',
+    title: 'Early Termination Claims',
+    description: 'Tenant left before end of term',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  unpaidBills: {
+    href: '/money-claim-unpaid-bills',
+    title: 'Unpaid Bills Recovery',
+    description: 'Gas, electric & water arrears',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  guarantorClaims: {
+    href: '/money-claim-guarantor',
+    title: 'Claims Against Guarantor',
+    description: 'Sue guarantor for tenant debt',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  formerTenant: {
+    href: '/money-claim-former-tenant',
+    title: 'Claims Against Former Tenant',
+    description: 'Trace & claim from ex-tenant',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  depositShortfall: {
+    href: '/money-claim-deposit-shortfall',
+    title: 'Deposit Shortfall Claims',
+    description: 'When deposit doesn\'t cover damage',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  // Process pages (4)
+  mcolProcess: {
+    href: '/money-claim-online-mcol',
+    title: 'MCOL Step-by-Step Guide',
+    description: 'Money Claim Online walkthrough',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  ccjEnforcement: {
+    href: '/money-claim-ccj-enforcement',
+    title: 'CCJ Enforcement Options',
+    description: 'Bailiffs, wages & charging orders',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  smallClaimsCourt: {
+    href: '/small-claims-landlord',
+    title: 'Small Claims for Landlords',
+    description: 'Claims under £10,000 explained',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  defendedClaims: {
+    href: '/money-claim-tenant-defends',
+    title: 'When Tenant Defends Claim',
+    description: 'Prepare for disputed claims',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// Money Claim Free Form/Template Pages
+export const moneyClaimForms = {
+  n1Form: {
+    href: '/forms/n1-claim-form',
+    title: 'N1 Claim Form Template',
+    description: 'Blank court claim form (England)',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  letterBeforeAction: {
+    href: '/forms/letter-before-action',
+    title: 'Letter Before Action Template',
+    description: 'Pre-action protocol letter',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  scheduleOfDebt: {
+    href: '/forms/schedule-of-debt',
+    title: 'Schedule of Debt Template',
+    description: 'Itemised rent arrears schedule',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  financialStatement: {
+    href: '/forms/pap-financial-statement',
+    title: 'PAP Financial Statement',
+    description: 'Pre-action protocol reply form',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+};
+
+// Money Claim Blog Posts (Informational)
+export const moneyClaimBlogs = {
+  evidenceGuide: {
+    href: '/blog/money-claim-evidence-guide',
+    title: 'What Evidence You Need for a Money Claim',
+    description: 'Essential documents & photos',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  fairWearAndTear: {
+    href: '/blog/fair-wear-and-tear-explained',
+    title: 'Fair Wear and Tear Explained',
+    description: 'What you can and cannot claim',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  letterBeforeActionGuide: {
+    href: '/blog/letter-before-action-guide',
+    title: 'Letter Before Action Guide',
+    description: 'How to write a proper LBA',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  mcolVsSolicitor: {
+    href: '/blog/mcol-vs-solicitor-comparison',
+    title: 'MCOL vs Solicitor: Which is Better?',
+    description: 'Cost & time comparison',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  ccjConsequences: {
+    href: '/blog/ccj-tenant-consequences',
+    title: 'What Happens When Tenant Gets CCJ',
+    description: 'Credit impact & enforcement',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  interestCalculation: {
+    href: '/blog/calculating-interest-rent-arrears',
+    title: 'Calculating Interest on Rent Arrears',
+    description: 'Statutory 8% interest explained',
+    icon: 'calculator' as const,
+    type: 'guide' as const,
+  },
+  depositVsCourt: {
+    href: '/blog/deposit-dispute-vs-court-claim',
+    title: 'Deposit Dispute vs Court Claim',
+    description: 'Which route to take',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  enforcingJudgment: {
+    href: '/blog/enforcing-money-judgment',
+    title: 'Enforcing a Money Judgment',
+    description: 'Post-CCJ collection options',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  tenantTracingGuide: {
+    href: '/blog/tracing-former-tenant',
+    title: 'How to Trace a Former Tenant',
+    description: 'Find tenants who left owing money',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  courtHearingPrep: {
+    href: '/blog/small-claims-hearing-preparation',
+    title: 'Preparing for Small Claims Hearing',
+    description: 'What to expect on the day',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
 // Pre-built link groups for common use cases
 export const evictionRelatedLinks = [
   guideLinks.howToEvictTenant,
@@ -419,4 +673,110 @@ export const warrantOfPossessionRelatedLinks = [
   guideLinks.n5bFormGuide,
   guideLinks.evictionCostUk,
   guideLinks.howToEvictTenant,
+];
+
+// ============================================
+// MONEY CLAIM SEO LINK GROUPS (Q1 2026)
+// ============================================
+
+// General money claim links (for hub pages)
+export const moneyClaimHubLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.unpaidRent,
+  moneyClaimGuides.propertyDamage,
+  moneyClaimGuides.cleaningCosts,
+  moneyClaimGuides.unpaidUtilities,
+  moneyClaimGuides.mcolProcess,
+  toolLinks.rentArrearsCalculator,
+  toolLinks.rentDemandLetter,
+];
+
+// Property damage focused links
+export const moneyClaimDamageLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.propertyDamage,
+  moneyClaimGuides.carpetDamage,
+  moneyClaimGuides.wallDamage,
+  moneyClaimGuides.bathroomDamage,
+  moneyClaimGuides.applianceDamage,
+  moneyClaimGuides.gardenDamage,
+  moneyClaimGuides.depositShortfall,
+  moneyClaimBlogs.fairWearAndTear,
+];
+
+// Cleaning focused links
+export const moneyClaimCleaningLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.cleaningCosts,
+  moneyClaimGuides.abandonedGoods,
+  moneyClaimGuides.gardenDamage,
+  moneyClaimGuides.depositShortfall,
+  moneyClaimBlogs.fairWearAndTear,
+  moneyClaimBlogs.evidenceGuide,
+];
+
+// Utilities and bills focused links
+export const moneyClaimUtilitiesLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.unpaidUtilities,
+  moneyClaimGuides.unpaidBills,
+  moneyClaimGuides.councilTax,
+  moneyClaimGuides.formerTenant,
+  moneyClaimBlogs.evidenceGuide,
+];
+
+// Rent arrears focused links
+export const moneyClaimRentLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.unpaidRent,
+  moneyClaimGuides.formerTenant,
+  moneyClaimGuides.guarantorClaims,
+  moneyClaimGuides.breakClause,
+  toolLinks.rentArrearsCalculator,
+  toolLinks.rentDemandLetter,
+  moneyClaimBlogs.interestCalculation,
+];
+
+// Court process focused links
+export const moneyClaimProcessLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.mcolProcess,
+  moneyClaimGuides.smallClaimsCourt,
+  moneyClaimGuides.defendedClaims,
+  moneyClaimGuides.ccjEnforcement,
+  moneyClaimForms.n1Form,
+  moneyClaimForms.letterBeforeAction,
+  moneyClaimBlogs.courtHearingPrep,
+];
+
+// Enforcement focused links
+export const moneyClaimEnforcementLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.ccjEnforcement,
+  moneyClaimGuides.formerTenant,
+  moneyClaimBlogs.enforcingJudgment,
+  moneyClaimBlogs.ccjConsequences,
+  moneyClaimBlogs.tenantTracingGuide,
+];
+
+// Form page focused links
+export const moneyClaimFormLinks = [
+  productLinks.moneyClaim,
+  moneyClaimForms.n1Form,
+  moneyClaimForms.letterBeforeAction,
+  moneyClaimForms.scheduleOfDebt,
+  moneyClaimForms.financialStatement,
+  moneyClaimGuides.mcolProcess,
+  moneyClaimBlogs.letterBeforeActionGuide,
+];
+
+// Blog post sidebar links
+export const moneyClaimBlogSidebarLinks = [
+  productLinks.moneyClaim,
+  moneyClaimGuides.unpaidRent,
+  moneyClaimGuides.propertyDamage,
+  moneyClaimGuides.cleaningCosts,
+  moneyClaimGuides.mcolProcess,
+  toolLinks.rentArrearsCalculator,
+  moneyClaimForms.letterBeforeAction,
 ];
