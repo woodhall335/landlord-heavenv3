@@ -228,12 +228,11 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       <p className="text-sm text-gray-600">
         This section gives the court a clear overview of what your money claim is about
         and why the tenant owes you money. We&apos;ll use this to draft the legal
-        summary and particulars of claim for{' '}
-        {jurisdiction === 'scotland' ? 'Scotland' : jurisdiction === 'wales' ? 'Wales' : 'England'}.
+        summary and particulars of claim for England.
       </p>
 
-      {/* Court Finder Link - Jurisdiction-specific */}
-      <CourtFinderLink jurisdiction={jurisdiction} context="money_claim" />
+      {/* Court Finder Link */}
+      <CourtFinderLink jurisdiction="england" context="money_claim" />
 
       {/* MAIN CHANGE: Checkbox-based claim reasons selector */}
       <div className="space-y-3">
@@ -497,9 +496,8 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         </div>
       </div>
 
-      {/* Interest Opt-In - Explicit Confirmation Required (England/Wales only) */}
-      {(jurisdiction === 'england' || jurisdiction === 'wales') && (
-        <div className="space-y-4 rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
+      {/* Interest Opt-In - Explicit Confirmation Required (England only) */}
+      <div className="space-y-4 rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
           <div className="flex items-start gap-3">
             <div className="text-2xl">💷</div>
             <div>
@@ -639,7 +637,6 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
             </div>
           )}
         </div>
-      )}
     </div>
   );
 };

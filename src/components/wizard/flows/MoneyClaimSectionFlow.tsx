@@ -585,17 +585,8 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     return validateMoneyClaimCase(facts, jurisdiction);
   }, [facts, jurisdiction]);
 
-  // Jurisdiction label
-  const jurisdictionLabel = useMemo(() => {
-    switch (jurisdiction) {
-      case 'scotland':
-        return 'Scotland Simple Procedure';
-      case 'wales':
-        return 'Wales Money Claim';
-      default:
-        return 'England Money Claim';
-    }
-  }, [jurisdiction]);
+  // Jurisdiction label - Money Claim is England only
+  const jurisdictionLabel = 'England Money Claim';
 
   // Render section content
   const renderSection = () => {

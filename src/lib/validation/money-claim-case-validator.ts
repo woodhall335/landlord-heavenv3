@@ -233,10 +233,11 @@ export function validateTenancySection(
 
 /**
  * Validate claim details section
+ * Note: Money Claim is England-only
  */
 export function validateClaimDetailsSection(
   facts: MoneyClaimFacts,
-  jurisdiction: Jurisdiction
+  _jurisdiction: Jurisdiction
 ): { blockers: string[]; warnings: string[] } {
   const blockers: string[] = [];
   const warnings: string[] = [];
@@ -248,20 +249,18 @@ export function validateClaimDetailsSection(
     blockers.push('Please select at least one type of claim');
   }
 
-  // For England/Wales, must explicitly opt in/out of interest
-  if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    if (
-      facts.money_claim?.charge_interest !== true &&
-      facts.money_claim?.charge_interest !== false
-    ) {
-      blockers.push('Please indicate whether you want to claim statutory interest');
-    }
+  // England: must explicitly opt in/out of statutory interest
+  if (
+    facts.money_claim?.charge_interest !== true &&
+    facts.money_claim?.charge_interest !== false
+  ) {
+    blockers.push('Please indicate whether you want to claim statutory interest');
+  }
 
-    // If interest is selected, need start date
-    if (facts.money_claim?.charge_interest === true) {
-      if (!facts.money_claim?.interest_start_date) {
-        warnings.push('Consider adding an interest start date for accurate calculations');
-      }
+  // If interest is selected, need start date
+  if (facts.money_claim?.charge_interest === true) {
+    if (!facts.money_claim?.interest_start_date) {
+      warnings.push('Consider adding an interest start date for accurate calculations');
     }
   }
 
@@ -378,25 +377,16 @@ export function validateDamagesSection(
 
 /**
  * Validate pre-action section (PAP compliance)
+ * Note: Money Claim is England-only, PAP-DEBT compliance required
  */
 export function validatePreActionSection(
   facts: MoneyClaimFacts,
-  jurisdiction: Jurisdiction
+  _jurisdiction: Jurisdiction
 ): { blockers: string[]; warnings: string[] } {
   const blockers: string[] = [];
   const warnings: string[] = [];
 
-  // Scotland uses Simple Procedure - different rules
-  if (jurisdiction === 'scotland') {
-    if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
-      warnings.push(
-        'Consider sending a demand letter before proceeding to Simple Procedure'
-      );
-    }
-    return { blockers, warnings };
-  }
-
-  // England/Wales - PAP-DEBT compliance required
+  // England - PAP-DEBT compliance required
   if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
     blockers.push(
       'You must send a Letter Before Claim to comply with the Pre-Action Protocol for Debt Claims'
