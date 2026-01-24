@@ -470,6 +470,36 @@ export function ValidationReport({
         )}
       </div>
 
+      {/* Money Claim Cross-Sell for Arrears Cases */}
+      {extractedFields?.grounds_cited && (
+        extractedFields.grounds_cited.some(g =>
+          ['8', '10', '11', 'ground 8', 'ground 10', 'ground 11'].includes(g.toLowerCase())
+        ) && (
+          <div className="border-t bg-blue-50 p-4">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <RiFileTextLine className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-900">
+                  Claiming for rent arrears?
+                </p>
+                <p className="text-xs text-blue-700 mt-1">
+                  Eviction gives you possession. A money claim recovers what you&apos;re owed.
+                  Many landlords pursue both.
+                </p>
+                <a
+                  href="/wizard?product=money_claim&src=validator_arrears"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:text-blue-900 mt-2"
+                >
+                  Get Money Claim Pack — £99.99 <RiArrowRightLine className="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+          </div>
+        )
+      )}
+
       {/* Footer CTA */}
       <div className="border-t bg-gray-50 p-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
