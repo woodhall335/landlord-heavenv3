@@ -2,24 +2,191 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef, useCallback } from 'react';
 import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { trackMoneyClaimReasonsSelected } from '@/lib/analytics';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
+
+/**
+ * Claim reason types for the checkbox selector.
+ * Maps to facts structure for the money claim wizard.
+ */
+export type ClaimReasonType =
+  | 'rent_arrears'
+  | 'property_damage'
+  | 'cleaning'
+  | 'unpaid_utilities'
+  | 'unpaid_council_tax'
+  | 'other_tenant_debt';
 
 interface SectionProps {
   facts: any;
   jurisdiction: Jurisdiction;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /**
+   * Optional: Pre-select claim reasons on mount (e.g. from topic=arrears URL param)
+   * Only applied once on mount if no claim reasons are already selected.
+   */
+  initialClaimReasons?: ClaimReasonType[];
+}
+
+// Claim reason checkbox options
+const CLAIM_REASONS: { value: ClaimReasonType; label: string; description?: string }[] = [
+  { value: 'rent_arrears', label: 'Rent arrears', description: 'Unpaid rent during or after the tenancy' },
+  { value: 'property_damage', label: 'Property damage', description: 'Repairs or replacements needed due to tenant damage' },
+  { value: 'cleaning', label: 'Cleaning / rubbish removal', description: 'Professional cleaning or waste removal costs' },
+  { value: 'unpaid_utilities', label: 'Unpaid utilities', description: 'Utilities in your name left unpaid by tenant' },
+  { value: 'unpaid_council_tax', label: 'Unpaid council tax', description: 'Council tax in your name unpaid by tenant' },
+  { value: 'other_tenant_debt', label: 'Other tenant debt', description: 'Any other money owed by the tenant' },
+];
+
+/**
+ * Derives selected claim reasons from the current facts state.
+ * Used to populate checkboxes from existing data.
+ */
+function getSelectedReasonsFromFacts(facts: any): Set<ClaimReasonType> {
+  const selected = new Set<ClaimReasonType>();
+
+  // Check rent arrears flag
+  if (facts.claiming_rent_arrears === true) {
+    selected.add('rent_arrears');
+  }
+
+  // Check other_amounts_types array for specific categories
+  const otherTypes: string[] = Array.isArray(facts.money_claim?.other_amounts_types)
+    ? facts.money_claim.other_amounts_types
+    : [];
+
+  if (otherTypes.includes('property_damage')) selected.add('property_damage');
+  if (otherTypes.includes('cleaning')) selected.add('cleaning');
+  if (otherTypes.includes('unpaid_utilities')) selected.add('unpaid_utilities');
+  if (otherTypes.includes('unpaid_council_tax')) selected.add('unpaid_council_tax');
+
+  // Check claiming_other flag for "other tenant debt"
+  if (facts.claiming_other === true) {
+    selected.add('other_tenant_debt');
+  }
+
+  // Also check for other_charges in other_amounts_types (legacy mapping)
+  if (otherTypes.includes('other_charges') || otherTypes.includes('legal_costs')) {
+    selected.add('other_tenant_debt');
+  }
+
+  return selected;
+}
+
+/**
+ * Derives the primary_issue value from selected claim reasons.
+ * Maintains backwards compatibility with existing flows.
+ */
+function derivePrimaryIssue(selectedReasons: Set<ClaimReasonType>): string {
+  const hasRentArrears = selectedReasons.has('rent_arrears');
+  const hasNonRent = selectedReasons.has('property_damage') ||
+    selectedReasons.has('cleaning') ||
+    selectedReasons.has('unpaid_utilities') ||
+    selectedReasons.has('unpaid_council_tax') ||
+    selectedReasons.has('other_tenant_debt');
+
+  if (hasRentArrears && hasNonRent) return 'unpaid_rent_and_damage';
+  if (hasRentArrears && !hasNonRent) return 'unpaid_rent_only';
+  if (!hasRentArrears && hasNonRent) return 'damage_only';
+  return '';
 }
 
 export const ClaimDetailsSection: React.FC<SectionProps> = ({
   facts,
   jurisdiction,
   onUpdate,
+  initialClaimReasons,
 }) => {
   const moneyClaim = facts.money_claim || {};
+  const hasInitializedRef = useRef(false);
+
+  // Derive currently selected reasons from facts
+  const selectedReasons = useMemo(() => getSelectedReasonsFromFacts(facts), [facts]);
+
+  /**
+   * Updates all claim-related facts based on selected reasons.
+   * Defined before useEffect to avoid hoisting issues.
+   */
+  const applyClaimReasons = useCallback((reasons: Set<ClaimReasonType>, trackEvent: boolean = true) => {
+    const hasRentArrears = reasons.has('rent_arrears');
+    const hasPropertyDamage = reasons.has('property_damage');
+    const hasCleaning = reasons.has('cleaning');
+    const hasUnpaidUtilities = reasons.has('unpaid_utilities');
+    const hasUnpaidCouncilTax = reasons.has('unpaid_council_tax');
+    const hasOtherDebt = reasons.has('other_tenant_debt');
+
+    // Build other_amounts_types array (for DamagesSection categories)
+    const otherAmountsTypes: string[] = [];
+    if (hasPropertyDamage) otherAmountsTypes.push('property_damage');
+    if (hasCleaning) otherAmountsTypes.push('cleaning');
+    if (hasUnpaidUtilities) otherAmountsTypes.push('unpaid_utilities');
+    if (hasUnpaidCouncilTax) otherAmountsTypes.push('unpaid_council_tax');
+    if (hasOtherDebt) otherAmountsTypes.push('other_charges');
+
+    // Determine claiming flags
+    const claiming_rent_arrears = hasRentArrears;
+    const claiming_damages = hasPropertyDamage || hasCleaning || hasUnpaidUtilities || hasUnpaidCouncilTax;
+    const claiming_other = hasOtherDebt;
+
+    // Derive primary_issue for backwards compatibility
+    const primary_issue = derivePrimaryIssue(reasons);
+
+    // Track analytics event when user changes selections
+    if (trackEvent && reasons.size > 0) {
+      trackMoneyClaimReasonsSelected({
+        reasons: Array.from(reasons),
+        jurisdiction,
+        source: 'wizard',
+      });
+    }
+
+    onUpdate({
+      claiming_rent_arrears,
+      claiming_damages,
+      claiming_other,
+      money_claim: {
+        ...moneyClaim,
+        primary_issue: primary_issue || null,
+        other_amounts_types: otherAmountsTypes,
+      },
+    });
+  }, [jurisdiction, moneyClaim, onUpdate]);
+
+  // Apply initial claim reasons on mount (only once, and only if no reasons already selected)
+  useEffect(() => {
+    if (hasInitializedRef.current) return;
+    if (!initialClaimReasons || initialClaimReasons.length === 0) return;
+
+    // Only apply if no claim reasons are currently selected
+    const currentReasons = getSelectedReasonsFromFacts(facts);
+    if (currentReasons.size > 0) {
+      hasInitializedRef.current = true;
+      return;
+    }
+
+    // Apply initial selections (don't track - this is URL param initialization)
+    hasInitializedRef.current = true;
+
+    const newReasons = new Set<ClaimReasonType>(initialClaimReasons);
+    applyClaimReasons(newReasons, false);
+  }, [initialClaimReasons, applyClaimReasons, facts]);
+
+  /**
+   * Toggle a claim reason checkbox.
+   */
+  const toggleClaimReason = (reason: ClaimReasonType) => {
+    const newReasons = new Set(selectedReasons);
+    if (newReasons.has(reason)) {
+      newReasons.delete(reason);
+    } else {
+      newReasons.add(reason);
+    }
+    applyClaimReasons(newReasons);
+  };
 
   const updateMoneyClaim = (field: string, value: any) => {
     onUpdate({
@@ -30,63 +197,18 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
     });
   };
 
-  // Derive claiming flags from primary_issue and update them in facts root
-  const updatePrimaryIssue = (value: string) => {
-    // Set claiming_rent_arrears, claiming_damages, claiming_other based on primary_issue
-    const claiming_rent_arrears = value === 'unpaid_rent_only' || value === 'unpaid_rent_and_damage';
-    const claiming_damages = value === 'unpaid_rent_and_damage' || value === 'damage_only';
-    const claiming_other = value === 'other_debt';
-
-    // Update both money_claim.primary_issue AND root-level claiming flags
-    onUpdate({
-      claiming_rent_arrears,
-      claiming_damages,
-      claiming_other,
-      money_claim: {
-        ...moneyClaim,
-        primary_issue: value || null,
-      },
-    });
-  };
-
-  // Toggle damage type and update claiming_damages flag
-  const toggleOtherAmountTypeWithFlag = (value: string) => {
-    const set = new Set(otherAmountsTypes);
-    if (set.has(value)) {
-      set.delete(value);
-    } else {
-      set.add(value);
-    }
-    const newTypes = Array.from(set);
-
-    // If any damage-related checkbox is checked, set claiming_damages = true
-    const hasDamageTypes = newTypes.length > 0;
-
-    onUpdate({
-      claiming_damages: hasDamageTypes || primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only',
-      money_claim: {
-        ...moneyClaim,
-        other_amounts_types: newTypes,
-      },
-    });
-  };
-
-  const primaryIssue = moneyClaim.primary_issue || '';
   const basisOfClaim = moneyClaim.basis_of_claim || '';
   const tenantStillInProperty =
     typeof moneyClaim.tenant_still_in_property === 'boolean'
       ? moneyClaim.tenant_still_in_property
       : null;
-  const otherAmountsTypes: string[] = Array.isArray(moneyClaim.other_amounts_types)
-    ? moneyClaim.other_amounts_types
-    : [];
 
   // Build context for Ask Heaven enhancement
   const enhanceContext = useMemo(() => ({
     jurisdiction,
     product: 'money_claim',
-    primary_issue: primaryIssue,
-  }), [jurisdiction, primaryIssue]);
+    selected_claim_reasons: Array.from(selectedReasons),
+  }), [jurisdiction, selectedReasons]);
 
   return (
     <div className="space-y-6">
@@ -100,29 +222,110 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       {/* Court Finder Link - Jurisdiction-specific */}
       <CourtFinderLink jurisdiction={jurisdiction} context="money_claim" />
 
-      {/* Primary issue */}
-      <div className="space-y-2">
+      {/* MAIN CHANGE: Checkbox-based claim reasons selector */}
+      <div className="space-y-3">
         <label className="text-sm font-medium text-charcoal">
-          What is this claim mainly about?
+          What are you claiming for?
+          <span className="text-red-500 ml-1">*</span>
         </label>
         <p className="text-xs text-gray-500">
-          This helps us frame your claim correctly on the court forms and in the
-          particulars of claim.
+          Select all that apply. We&apos;ll guide you through the relevant sections based on your selection.
         </p>
-        <select
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          value={primaryIssue}
-          onChange={(e) => updatePrimaryIssue(e.target.value)}
-        >
-          <option value="">Select one option</option>
-          <option value="unpaid_rent_only">Unpaid rent only</option>
-          <option value="unpaid_rent_and_damage">
-            Unpaid rent and damage / other costs
-          </option>
-          <option value="damage_only">Damage / other costs only (no rent arrears)</option>
-          <option value="other_debt">Other debt owed by the tenant</option>
-        </select>
+
+        <div className="grid gap-2">
+          {CLAIM_REASONS.map((reason) => {
+            const isSelected = selectedReasons.has(reason.value);
+            return (
+              <label
+                key={reason.value}
+                className={`
+                  flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-all
+                  ${isSelected
+                    ? 'border-[#7C3AED] bg-purple-50 ring-1 ring-[#7C3AED]'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'}
+                `}
+              >
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-5 w-5 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED]"
+                  checked={isSelected}
+                  onChange={() => toggleClaimReason(reason.value)}
+                />
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900">{reason.label}</span>
+                  {reason.description && (
+                    <p className="text-xs text-gray-500 mt-0.5">{reason.description}</p>
+                  )}
+                </div>
+              </label>
+            );
+          })}
+        </div>
+
+        {selectedReasons.size === 0 && (
+          <p className="text-xs text-amber-600 italic">
+            Please select at least one reason for your claim
+          </p>
+        )}
       </div>
+
+      {/* UX Guardrail: Unpaid council tax note */}
+      {selectedReasons.has('unpaid_council_tax') && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <div className="flex items-start gap-3">
+            <span className="text-lg">⚠️</span>
+            <div>
+              <p className="text-sm font-medium text-amber-800">Council Tax Claims</p>
+              <p className="text-xs text-amber-700 mt-1">
+                Only claim council tax if your tenancy agreement makes the tenant liable and you have
+                evidence (e.g. a clause in the agreement and council tax bills in your name showing
+                arrears during the tenant&apos;s occupation).
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UX Guardrail: Other tenant debt note */}
+      {selectedReasons.has('other_tenant_debt') && (
+        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <div className="flex items-start gap-3">
+            <span className="text-lg">📝</span>
+            <div>
+              <p className="text-sm font-medium text-blue-800">Other Tenant Debt</p>
+              <p className="text-xs text-blue-700 mt-1">
+                You&apos;ll need to itemise each amount with a description and provide supporting
+                evidence. The court requires a clear breakdown of what is owed and why.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Info about Arrears section - shown when rent arrears is selected */}
+      {selectedReasons.has('rent_arrears') && (
+        <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+          <p className="text-sm text-purple-800">
+            <strong>Next:</strong> You&apos;ll complete a detailed rent arrears schedule in the{' '}
+            <strong>Arrears</strong> section, showing each period with rent due and amounts paid.
+          </p>
+        </div>
+      )}
+
+      {/* Info about Damages section - shown when any non-rent reason is selected */}
+      {(selectedReasons.has('property_damage') ||
+        selectedReasons.has('cleaning') ||
+        selectedReasons.has('unpaid_utilities') ||
+        selectedReasons.has('unpaid_council_tax') ||
+        selectedReasons.has('other_tenant_debt')) && (
+        <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+          <p className="text-sm text-purple-800">
+            <strong>Next:</strong> You&apos;ll itemise these costs in the{' '}
+            <strong>Damages</strong> section with specific amounts and descriptions.
+            The court needs a structured schedule showing each item you are claiming.
+          </p>
+        </div>
+      )}
 
       {/* Basis of claim (core field used elsewhere) */}
       <div className="space-y-2">
@@ -190,52 +393,6 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           </button>
         </div>
       </div>
-
-      {/* Other amounts claimed */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
-          Are you also claiming for any of the following?
-        </label>
-        <p className="text-xs text-gray-500">
-          Tick all that apply. We&apos;ll use this to build a detailed schedule of
-          damages and costs.
-        </p>
-
-        <div className="grid gap-2 md:grid-cols-2">
-          {[
-            { value: 'property_damage', label: 'Property damage (repairs / replacements)' },
-            { value: 'cleaning', label: 'Cleaning or rubbish removal' },
-            { value: 'unpaid_utilities', label: 'Unpaid utilities in your name' },
-            { value: 'unpaid_council_tax', label: 'Unpaid council tax in your name' },
-            { value: 'legal_costs', label: 'Legal or tracing costs' },
-            { value: 'other_charges', label: 'Other charges or losses' },
-          ].map((item) => (
-            <label
-              key={item.value}
-              className="flex cursor-pointer items-center gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm"
-            >
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300"
-                checked={otherAmountsTypes.includes(item.value)}
-                onChange={() => toggleOtherAmountTypeWithFlag(item.value)}
-              />
-              <span className="text-gray-800">{item.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Info about Damages section */}
-      {otherAmountsTypes.length > 0 && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <p className="text-sm text-blue-800">
-            <strong>Next step:</strong> You&apos;ll itemise these costs in the{' '}
-            <strong>Damages</strong> section with specific amounts and descriptions.
-            The court needs a structured schedule showing each item you are claiming.
-          </p>
-        </div>
-      )}
 
       {/* Interest Opt-In - Explicit Confirmation Required (England/Wales only) */}
       {(jurisdiction === 'england' || jurisdiction === 'wales') && (

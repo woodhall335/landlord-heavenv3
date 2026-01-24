@@ -1011,3 +1011,109 @@ export function trackAskHeavenEmailGateShown(params: AskHeavenTrackingParams): v
     reason: params.reason || 'threshold_gate',
   });
 }
+
+// =============================================================================
+// MONEY CLAIM TRACKING
+// =============================================================================
+
+/**
+ * Claim reason type for analytics (mirrors ClaimReasonType)
+ */
+export type MoneyClaimReason =
+  | 'rent_arrears'
+  | 'property_damage'
+  | 'cleaning'
+  | 'unpaid_utilities'
+  | 'unpaid_council_tax'
+  | 'other_tenant_debt';
+
+/**
+ * Track when user selects/changes claim reasons in Money Claim wizard
+ * Fired when checkboxes are toggled in ClaimDetailsSection
+ */
+export function trackMoneyClaimReasonsSelected(params: {
+  reasons: MoneyClaimReason[];
+  jurisdiction: string;
+  source?: string;
+}): void {
+  trackEvent('money_claim_reasons_selected', {
+    event_category: 'money_claim',
+    reasons: params.reasons.join(','),
+    reason_count: params.reasons.length,
+    has_rent_arrears: params.reasons.includes('rent_arrears'),
+    has_property_damage: params.reasons.includes('property_damage'),
+    has_cleaning: params.reasons.includes('cleaning'),
+    has_utilities: params.reasons.includes('unpaid_utilities'),
+    has_council_tax: params.reasons.includes('unpaid_council_tax'),
+    has_other_debt: params.reasons.includes('other_tenant_debt'),
+    jurisdiction: params.jurisdiction,
+    source: params.source || 'wizard',
+  });
+}
+
+/**
+ * Track when a wizard section is skipped due to claim reasons
+ * e.g., arrears section skipped when user only claims damage
+ */
+export function trackMoneyClaimSectionSkipped(params: {
+  section: 'arrears' | 'damages';
+  reasons: MoneyClaimReason[];
+  jurisdiction: string;
+}): void {
+  trackEvent('money_claim_section_skipped', {
+    event_category: 'money_claim',
+    section: params.section,
+    reasons: params.reasons.join(','),
+    jurisdiction: params.jurisdiction,
+  });
+}
+
+/**
+ * Track when user adds a line item in the Damages section
+ */
+export function trackMoneyClaimLineItemAdded(params: {
+  category: string;
+  reasons: MoneyClaimReason[];
+  jurisdiction: string;
+  item_count: number;
+}): void {
+  trackEvent('money_claim_line_item_added', {
+    event_category: 'money_claim',
+    category: params.category,
+    reasons: params.reasons.join(','),
+    jurisdiction: params.jurisdiction,
+    item_count: params.item_count,
+  });
+}
+
+/**
+ * Track money claim purchase completion with claim reasons
+ * Call alongside the standard purchase tracking
+ */
+export function trackMoneyClaimPurchaseCompleted(params: {
+  reasons: MoneyClaimReason[];
+  jurisdiction: string;
+  order_id?: string;
+  revenue: number;
+  arrears_amount?: number;
+  damages_amount?: number;
+  total_claim_amount?: number;
+}): void {
+  trackEvent('money_claim_purchase_completed', {
+    event_category: 'money_claim',
+    reasons: params.reasons.join(','),
+    reason_count: params.reasons.length,
+    has_rent_arrears: params.reasons.includes('rent_arrears'),
+    has_property_damage: params.reasons.includes('property_damage'),
+    has_cleaning: params.reasons.includes('cleaning'),
+    has_utilities: params.reasons.includes('unpaid_utilities'),
+    has_council_tax: params.reasons.includes('unpaid_council_tax'),
+    has_other_debt: params.reasons.includes('other_tenant_debt'),
+    jurisdiction: params.jurisdiction,
+    order_id: params.order_id || 'unknown',
+    revenue: params.revenue,
+    arrears_amount: params.arrears_amount ?? 0,
+    damages_amount: params.damages_amount ?? 0,
+    total_claim_amount: params.total_claim_amount ?? 0,
+  });
+}

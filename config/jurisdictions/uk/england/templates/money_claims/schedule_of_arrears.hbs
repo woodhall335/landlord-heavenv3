@@ -1,19 +1,20 @@
 {{!--
   ============================================================================
-  SCHEDULE OF RENT ARREARS (Court-Ready)
+  SCHEDULE OF DEBT (Court-Ready)
   Money Claim Pack - England & Wales
   ============================================================================
-  Court-credible arrears ledger with:
-  - Running balance column
+  Court-credible schedule with:
+  - Running balance column (for arrears)
   - FIFO payment allocation
   - Clear period-by-period breakdown
+  - Dynamic title based on claim type
 --}}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Schedule of Rent Arrears</title>
+  <title>{{#if arrears_schedule}}Schedule of Rent Arrears{{else}}Schedule of Debt{{/if}}</title>
   <style>
     {{{print_css}}}
 
@@ -211,7 +212,7 @@
 
 <!-- Document Header -->
 <div class="doc-header">
-  <h1>Schedule of Rent Arrears</h1>
+  <h1>{{#if arrears_schedule}}Schedule of Rent Arrears{{else}}Schedule of Debt{{/if}}</h1>
   <span class="doc-badge">Money Claim – County Court</span>
 </div>
 

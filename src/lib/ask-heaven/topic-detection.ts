@@ -10,6 +10,7 @@ import { buildWizardLink, type WizardJurisdiction, type WizardProduct } from '@/
 export type Topic =
   | 'eviction'
   | 'arrears'
+  | 'damage_claim'
   | 'tenancy'
   | 'deposit'
   | 'compliance'
@@ -34,7 +35,8 @@ export interface SuggestedCTA {
  */
 const TOPIC_PATTERNS: Record<Topic, RegExp> = {
   eviction: /evict|possession|section 21|s21|section 8|s8|notice to leave|remove tenant|end.+tenancy|terminate.+tenant|section 173|s173/i,
-  arrears: /arrears|rent owed|unpaid|debt|money claim|recover money|lba|letter before action|outstanding rent|didn't pay|hasn't paid|not paying rent/i,
+  arrears: /arrears|rent owed|unpaid rent|debt|money claim|recover money|lba|letter before action|outstanding rent|didn't pay|hasn't paid|not paying rent/i,
+  damage_claim: /property damage|tenant damage|damage.+claim|cleaning cost|professional clean|rubbish removal|end of tenancy.+clean|unpaid utilities|utility bill|council tax.+tenant|recover.+damage|claim.+damage|left.+mess|damaged.+property|repair cost|dilapidation|end of tenancy claim/i,
   tenancy: /tenancy agreement|ast|prt|occupation contract|new tenant|lease|rental agreement|assured shorthold|draft.+agreement|create.+tenancy/i,
   deposit: /deposit|protection|tds|dps|mydeposits|prescribed information|deposit scheme|tenant.+deposit|security deposit|tenancy deposit/i,
   compliance: /complian|legal requirements|landlord obligations|what do i need|checklist|requirements/i,
@@ -70,6 +72,8 @@ export function mapTopicToWizardTopic(topic: Topic): 'eviction' | 'arrears' | 't
     case 'eviction':
       return 'eviction';
     case 'arrears':
+    case 'damage_claim':
+      // Both arrears and damage claims route to money claim wizard
       return 'arrears';
     case 'tenancy':
       return 'tenancy';
@@ -113,9 +117,9 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
-  // Money Claim - England only
+  // Money Claim - England only (covers arrears, damage, cleaning, utilities claims)
   {
-    topics: ['arrears'],
+    topics: ['arrears', 'damage_claim'],
     ctas: [
       { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 99.99, topic: 'arrears', type: 'wizard' },
     ],
@@ -301,6 +305,13 @@ export function getRecommendedProduct(
         product: 'money_claim',
         label: 'Money Claim Pack',
         description: 'Recover rent arrears through the courts (£99.99, England only)',
+      };
+    case 'damage_claim':
+      // Money claim for damage/cleaning/utilities - England only
+      return {
+        product: 'money_claim',
+        label: 'Money Claim Pack',
+        description: 'Recover property damage, cleaning costs and other tenant debts (£99.99, England only)',
       };
     case 'tenancy':
       return {

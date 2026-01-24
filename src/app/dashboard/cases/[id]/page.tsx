@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine, RiAlertLine } from 'react-icons/ri';
 import { Section21ActionRequired } from '@/components/dashboard/Section21ActionRequired';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
-import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, type PurchaseAttribution } from '@/lib/analytics';
+import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, trackMoneyClaimPurchaseCompleted, type PurchaseAttribution, type MoneyClaimReason } from '@/lib/analytics';
 import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
 import { downloadDocument } from '@/lib/documents/download';
 import type { OrderStatusResponse } from '@/app/api/orders/status/route';
@@ -485,6 +485,42 @@ export default function CaseDetailPage() {
           quantity: 1,
         },
       ], attribution);
+
+      // Additional tracking for money claims with claim reasons
+      if (caseDetails.case_type === 'money_claim' && caseDetails.collected_facts) {
+        const facts = caseDetails.collected_facts;
+        const reasons: MoneyClaimReason[] = [];
+
+        // Extract claim reasons from collected_facts
+        if (facts.claiming_rent_arrears === true) reasons.push('rent_arrears');
+        const otherTypes: string[] = facts.money_claim?.other_amounts_types || [];
+        if (otherTypes.includes('property_damage')) reasons.push('property_damage');
+        if (otherTypes.includes('cleaning')) reasons.push('cleaning');
+        if (otherTypes.includes('unpaid_utilities')) reasons.push('unpaid_utilities');
+        if (otherTypes.includes('unpaid_council_tax')) reasons.push('unpaid_council_tax');
+        if (facts.claiming_other === true || otherTypes.includes('other_charges')) reasons.push('other_tenant_debt');
+
+        // Calculate totals if available
+        const arrearsItems = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
+        const arrearsAmount = Array.isArray(arrearsItems)
+          ? arrearsItems.reduce((sum: number, item: any) => sum + (item.arrears || 0), 0)
+          : 0;
+
+        const damageItems = facts.money_claim?.damage_items || facts.damage_items || [];
+        const damagesAmount = Array.isArray(damageItems)
+          ? damageItems.reduce((sum: number, item: any) => sum + (item.amount || 0), 0)
+          : 0;
+
+        trackMoneyClaimPurchaseCompleted({
+          reasons,
+          jurisdiction: caseDetails.jurisdiction,
+          order_id: caseId,
+          revenue: amount,
+          arrears_amount: arrearsAmount,
+          damages_amount: damagesAmount,
+          total_claim_amount: arrearsAmount + damagesAmount,
+        });
+      }
 
       sessionStorage.setItem(purchaseKey, 'true');
     }
