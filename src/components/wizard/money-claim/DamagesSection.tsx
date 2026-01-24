@@ -190,6 +190,21 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisd
               </div>
             </div>
           ))}
+
+          {/* Total summary */}
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-charcoal">
+                Total damages & costs
+              </span>
+              <span className="text-lg font-semibold text-charcoal">
+                £{items.reduce((sum, item) => sum + (item.amount || 0), 0).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              This is the sum of all itemised amounts above.
+            </p>
+          </div>
         </div>
       )}
 
