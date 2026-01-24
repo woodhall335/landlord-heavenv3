@@ -10,6 +10,7 @@ import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
+import { evaluateRules, type MoneyClaimFacts } from '@/lib/validation/money-claim-rules-engine';
 import JSZip from 'jszip';
 import { assertPaidEntitlement } from '@/lib/payments/entitlement';
 
@@ -134,6 +135,52 @@ export async function GET(
         case_id: caseId,
       });
       return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
+    // ============================================================================
+    // MONEY CLAIM RULES ENGINE VALIDATION (England only)
+    // ============================================================================
+    if (jurisdiction === 'england') {
+      console.log('[MONEY-CLAIM-PACK] Running rules engine validation');
+      const rulesResult = evaluateRules(wizardFacts as MoneyClaimFacts);
+
+      if (!rulesResult.isValid) {
+        console.warn('[MONEY-CLAIM-PACK] Rules engine blocked pack generation:', {
+          case_id: caseId,
+          blockers: rulesResult.blockers.length,
+        });
+
+        return NextResponse.json(
+          {
+            code: 'MONEY_CLAIM_VALIDATION_FAILED',
+            error: 'Case validation failed',
+            user_message: 'Please complete all required fields before generating your pack.',
+            blocking_issues: rulesResult.blockers.map((b) => ({
+              code: b.id,
+              severity: 'blocker',
+              fields: b.field ? [b.field] : [],
+              user_fix_hint: b.message,
+              internal_reason: b.rationale,
+            })),
+            warnings: rulesResult.warnings.map((w) => ({
+              code: w.id,
+              severity: 'warning',
+              fields: w.field ? [w.field] : [],
+              user_fix_hint: w.message,
+              internal_reason: w.rationale,
+            })),
+          },
+          { status: 422 }
+        );
+      }
+
+      // Log warnings but don't block
+      if (rulesResult.warnings.length > 0) {
+        console.log('[MONEY-CLAIM-PACK] Rules engine warnings:', {
+          case_id: caseId,
+          warnings: rulesResult.warnings.length,
+        });
+      }
     }
 
     caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
