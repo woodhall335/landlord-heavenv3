@@ -122,6 +122,16 @@ common_rules:
     evidence_hint: "Keep a copy of the letter and proof of posting/delivery."
     field: letter_before_claim_sent
 
+  - id: pap_letter_date_future
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.pap_letter_date && new Date(facts.pap_letter_date) > new Date()"
+    message: "Your Letter Before Claim date is in the future. Please enter the actual date you sent the letter."
+    rationale: "You cannot have sent a letter before claim on a future date."
+    evidence_hint: null
+    field: pap_letter_date
+
   # --- DATE SANITY CHECKS ---
 
   - id: tenancy_start_required
@@ -205,6 +215,28 @@ common_rules:
     rationale: "End date may affect interest calculations and context."
     evidence_hint: null
     field: tenancy_end_date
+
+  # --- INTEREST VALIDATION ---
+
+  - id: interest_start_date_future
+    severity: blocker
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.charge_interest === true && facts.money_claim?.interest_start_date && new Date(facts.money_claim.interest_start_date) > new Date()"
+    message: "Interest start date cannot be in the future. Interest accrues from when the debt became due."
+    rationale: "Courts will not allow interest claims from future dates."
+    evidence_hint: null
+    field: money_claim.interest_start_date
+
+  - id: interest_start_before_tenancy
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.money_claim?.charge_interest === true && facts.money_claim?.interest_start_date && facts.tenancy_start_date && new Date(facts.money_claim.interest_start_date) < new Date(facts.tenancy_start_date)"
+    message: "Your interest start date is before the tenancy started. Interest typically starts when rent first became due."
+    rationale: "Interest should start from when the debt arose, which cannot be before the tenancy began."
+    evidence_hint: null
+    field: money_claim.interest_start_date
 
   # --- SUGGESTIONS (Optional improvements) ---
 
@@ -340,22 +372,42 @@ damages_rules:
     evidence_hint: null
     field: money_claim.damage_items
 
+  - id: property_damage_evidence_warning
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0) && !facts.evidence_reviewed"
+    message: "Property damage claims are difficult to prove without photographic evidence. Upload dated photos showing the damage, a check-in/check-out inventory, and repair quotes or invoices."
+    rationale: "Without visual evidence and cost documentation, the court may reduce or reject your damage claim."
+    evidence_hint: "Required: Before/after photos, check-in inventory comparing condition, repair quotes or invoices."
+    field: null
+
   - id: property_damage_evidence_suggested
     severity: suggestion
     applies_to: [property_damage]
     applies_when:
-      - condition: "claim_types.includes('property_damage') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
-    message: "Upload dated photos showing the damage and repair quotes to support your property damage claim."
+      - condition: "claim_types.includes('property_damage') && facts.uploaded_documents && facts.uploaded_documents.length > 0"
+    message: "Ensure your evidence includes: (1) dated photos showing the damage, (2) check-in/check-out inventory, and (3) repair quotes or invoices."
     rationale: "Visual evidence and cost documentation are persuasive."
     evidence_hint: "Before/after photos, check-in inventory, repair invoices."
+    field: null
+
+  - id: cleaning_evidence_warning
+    severity: warning
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0) && !facts.evidence_reviewed"
+    message: "Cleaning cost claims should be supported by evidence. Upload photos showing the property condition and a copy of the professional cleaning invoice."
+    rationale: "Courts expect evidence that professional cleaning was genuinely required and proof of actual costs."
+    evidence_hint: "Required: Check-out photos showing condition, cleaning company invoice with itemised costs."
     field: null
 
   - id: cleaning_evidence_suggested
     severity: suggestion
     applies_to: [cleaning]
     applies_when:
-      - condition: "claim_types.includes('cleaning') && (!facts.uploaded_documents || facts.uploaded_documents.length === 0)"
-    message: "Upload photos of the condition and cleaning invoices to support your cleaning costs claim."
+      - condition: "claim_types.includes('cleaning') && facts.uploaded_documents && facts.uploaded_documents.length > 0"
+    message: "Ensure your evidence includes photos of the property condition and the cleaning invoice."
     rationale: "Shows the property condition justified professional cleaning."
     evidence_hint: "Check-out photos, cleaning company invoice."
     field: null
@@ -384,6 +436,16 @@ council_tax_rules:
     message: "For council tax claims, upload the tenancy agreement (showing tenant liability clause) and council tax statements."
     rationale: "Must prove contractual liability and the amount owed."
     evidence_hint: "Tenancy agreement, council tax bills addressed to tenant."
+    field: null
+
+  - id: council_tax_complexity_note
+    severity: suggestion
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax')"
+    message: "Council tax claims require clear evidence: (1) a tenancy agreement clause making tenant liable, (2) council tax bills showing the period and amount, (3) proof of tenant occupancy during that period. The council may pursue the tenant directly if they were a 'sole occupier'."
+    rationale: "Council tax liability rules are complex; the tenant may have defences."
+    evidence_hint: "Check if the council should pursue the tenant directly - this may be simpler than including it in your money claim."
     field: null
 
 # =============================================================================
@@ -423,22 +485,22 @@ summary:
       rules: [tenancy_start_required, tenancy_dates_logical, tenancy_not_future, rent_amount_required, rent_frequency_required, tenancy_end_suggested]
     - id: claim_details
       label: "Claim Details"
-      rules: [claim_type_required, interest_decision_required, basis_of_claim_missing, basis_of_claim_short, interest_start_date_suggested]
+      rules: [claim_type_required, interest_decision_required, interest_start_date_future, interest_start_before_tenancy, basis_of_claim_missing, basis_of_claim_short, interest_start_date_suggested]
     - id: arrears
       label: "Rent Arrears Schedule"
       rules: [arrears_items_required, arrears_items_incomplete, arrears_total_zero, arrears_evidence_suggested]
     - id: damages
       label: "Other Amounts Schedule"
-      rules: [damage_items_required, damage_items_no_amount, damage_items_no_description, property_damage_evidence_suggested, cleaning_evidence_suggested]
+      rules: [damage_items_required, damage_items_no_amount, damage_items_no_description, property_damage_evidence_warning, property_damage_evidence_suggested, cleaning_evidence_warning, cleaning_evidence_suggested]
     - id: council_tax
       label: "Council Tax"
-      rules: [council_tax_liability_warning, council_tax_evidence_required]
+      rules: [council_tax_liability_warning, council_tax_evidence_required, council_tax_complexity_note]
     - id: utilities
       label: "Utilities"
       rules: [utilities_evidence_suggested]
     - id: preaction
       label: "Pre-Action Protocol"
-      rules: [pap_letter_required, pap_30_day_wait]
+      rules: [pap_letter_required, pap_letter_date_future, pap_30_day_wait]
     - id: evidence
       label: "Evidence"
       rules: [no_evidence_uploaded]
