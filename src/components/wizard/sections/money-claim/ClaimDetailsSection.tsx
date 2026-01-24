@@ -2,9 +2,10 @@
 
 'use client';
 
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef, useCallback } from 'react';
 import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { trackMoneyClaimReasonsSelected } from '@/lib/analytics';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -106,29 +107,11 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
   // Derive currently selected reasons from facts
   const selectedReasons = useMemo(() => getSelectedReasonsFromFacts(facts), [facts]);
 
-  // Apply initial claim reasons on mount (only once, and only if no reasons already selected)
-  useEffect(() => {
-    if (hasInitializedRef.current) return;
-    if (!initialClaimReasons || initialClaimReasons.length === 0) return;
-
-    // Only apply if no claim reasons are currently selected
-    const currentReasons = getSelectedReasonsFromFacts(facts);
-    if (currentReasons.size > 0) {
-      hasInitializedRef.current = true;
-      return;
-    }
-
-    // Apply initial selections
-    hasInitializedRef.current = true;
-
-    const newReasons = new Set<ClaimReasonType>(initialClaimReasons);
-    applyClaimReasons(newReasons);
-  }, [initialClaimReasons]); // eslint-disable-line react-hooks/exhaustive-deps
-
   /**
    * Updates all claim-related facts based on selected reasons.
+   * Defined before useEffect to avoid hoisting issues.
    */
-  const applyClaimReasons = (reasons: Set<ClaimReasonType>) => {
+  const applyClaimReasons = useCallback((reasons: Set<ClaimReasonType>, trackEvent: boolean = true) => {
     const hasRentArrears = reasons.has('rent_arrears');
     const hasPropertyDamage = reasons.has('property_damage');
     const hasCleaning = reasons.has('cleaning');
@@ -152,6 +135,15 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
     // Derive primary_issue for backwards compatibility
     const primary_issue = derivePrimaryIssue(reasons);
 
+    // Track analytics event when user changes selections
+    if (trackEvent && reasons.size > 0) {
+      trackMoneyClaimReasonsSelected({
+        reasons: Array.from(reasons),
+        jurisdiction,
+        source: 'wizard',
+      });
+    }
+
     onUpdate({
       claiming_rent_arrears,
       claiming_damages,
@@ -162,7 +154,26 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         other_amounts_types: otherAmountsTypes,
       },
     });
-  };
+  }, [jurisdiction, moneyClaim, onUpdate]);
+
+  // Apply initial claim reasons on mount (only once, and only if no reasons already selected)
+  useEffect(() => {
+    if (hasInitializedRef.current) return;
+    if (!initialClaimReasons || initialClaimReasons.length === 0) return;
+
+    // Only apply if no claim reasons are currently selected
+    const currentReasons = getSelectedReasonsFromFacts(facts);
+    if (currentReasons.size > 0) {
+      hasInitializedRef.current = true;
+      return;
+    }
+
+    // Apply initial selections (don't track - this is URL param initialization)
+    hasInitializedRef.current = true;
+
+    const newReasons = new Set<ClaimReasonType>(initialClaimReasons);
+    applyClaimReasons(newReasons, false);
+  }, [initialClaimReasons, applyClaimReasons, facts]);
 
   /**
    * Toggle a claim reason checkbox.

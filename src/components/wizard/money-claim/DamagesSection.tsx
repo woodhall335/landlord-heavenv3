@@ -2,12 +2,15 @@
 
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { trackMoneyClaimLineItemAdded, type MoneyClaimReason } from '@/lib/analytics';
 
 interface SectionProps {
   facts: any;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Optional: jurisdiction for analytics tracking */
+  jurisdiction?: string;
 }
 
 type DamageItem = {
@@ -17,13 +20,26 @@ type DamageItem = {
   amount?: number | null;
 };
 
-export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const moneyClaim = facts.money_claim || {};
   const items: DamageItem[] = Array.isArray(moneyClaim.damage_items)
     ? moneyClaim.damage_items
     : [];
 
   const otherCostsNotes = moneyClaim.other_costs_notes || '';
+
+  // Helper to get current claim reasons for analytics
+  const getClaimReasons = useCallback((): MoneyClaimReason[] => {
+    const reasons: MoneyClaimReason[] = [];
+    if (facts.claiming_rent_arrears === true) reasons.push('rent_arrears');
+    const otherTypes: string[] = facts.money_claim?.other_amounts_types || [];
+    if (otherTypes.includes('property_damage')) reasons.push('property_damage');
+    if (otherTypes.includes('cleaning')) reasons.push('cleaning');
+    if (otherTypes.includes('unpaid_utilities')) reasons.push('unpaid_utilities');
+    if (otherTypes.includes('unpaid_council_tax')) reasons.push('unpaid_council_tax');
+    if (facts.claiming_other === true || otherTypes.includes('other_charges')) reasons.push('other_tenant_debt');
+    return reasons;
+  }, [facts]);
 
   const persist = (nextItems: DamageItem[]) => {
     onUpdate({
@@ -41,7 +57,16 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       description: '',
       amount: null,
     };
-    persist([...items, newItem]);
+    const nextItems = [...items, newItem];
+    persist(nextItems);
+
+    // Track line item added (category will be set later when user selects)
+    trackMoneyClaimLineItemAdded({
+      category: 'new_item',
+      reasons: getClaimReasons(),
+      jurisdiction: jurisdiction || facts.__meta?.jurisdiction || 'unknown',
+      item_count: nextItems.length,
+    });
   };
 
   const updateItem = (id: string, patch: Partial<DamageItem>) => {

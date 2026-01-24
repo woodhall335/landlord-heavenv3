@@ -30,7 +30,7 @@ import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
 // Analytics and attribution
-import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { trackWizardStepCompleteWithAttribution, trackMoneyClaimSectionSkipped } from '@/lib/analytics';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
@@ -332,6 +332,19 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     [facts, saveFactsToServer]
   );
 
+  // Helper to get current claim reasons from facts
+  const getClaimReasons = useCallback((): ClaimReasonType[] => {
+    const reasons: ClaimReasonType[] = [];
+    if (facts.claiming_rent_arrears === true) reasons.push('rent_arrears');
+    const otherTypes: string[] = facts.money_claim?.other_amounts_types || [];
+    if (otherTypes.includes('property_damage')) reasons.push('property_damage');
+    if (otherTypes.includes('cleaning')) reasons.push('cleaning');
+    if (otherTypes.includes('unpaid_utilities')) reasons.push('unpaid_utilities');
+    if (otherTypes.includes('unpaid_council_tax')) reasons.push('unpaid_council_tax');
+    if (facts.claiming_other === true || otherTypes.includes('other_charges')) reasons.push('other_tenant_debt');
+    return reasons;
+  }, [facts]);
+
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < SECTIONS.length - 1) {
@@ -356,12 +369,29 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             landing_url: attribution.landing_url,
             first_seen_at: attribution.first_seen_at,
           });
+
+          // Track section skips (arrears skipped when not claiming rent, damages skipped when not claiming damages)
+          const reasons = getClaimReasons();
+          if (current.id === 'arrears' && facts.claiming_rent_arrears === false) {
+            trackMoneyClaimSectionSkipped({
+              section: 'arrears',
+              reasons,
+              jurisdiction,
+            });
+          }
+          if (current.id === 'damages' && facts.claiming_damages === false && facts.claiming_other === false) {
+            trackMoneyClaimSectionSkipped({
+              section: 'damages',
+              reasons,
+              jurisdiction,
+            });
+          }
         }
       }
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, facts, jurisdiction]);
+  }, [currentSectionIndex, facts, jurisdiction, getClaimReasons]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -432,7 +462,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       case 'arrears':
         return <ArrearsSection facts={facts} onUpdate={handleUpdate} />;
       case 'damages':
-        return <DamagesSection facts={facts} onUpdate={handleUpdate} />;
+        return <DamagesSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'preaction':
         return (
           <PreActionSection
