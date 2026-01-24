@@ -79,6 +79,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Q2 2026 SEO pages
     { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Money Claim SEO Expansion (Q1 2026) - Damage focused
+    { path: '/money-claim-cleaning-costs', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-property-damage', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-unpaid-utilities', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-garden-damage', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-carpet-damage', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-appliance-damage', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-wall-damage', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-bathroom-damage', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-abandoned-goods', priority: 0.75, changeFrequency: 'weekly' as const },
+    // Money Claim SEO Expansion (Q1 2026) - Debt focused
+    { path: '/money-claim-council-tax', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-early-termination', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-unpaid-bills', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-guarantor', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-former-tenant', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-deposit-shortfall', priority: 0.75, changeFrequency: 'weekly' as const },
+    // Money Claim SEO Expansion (Q1 2026) - Process focused
+    { path: '/money-claim-online-mcol', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-ccj-enforcement', priority: 0.75, changeFrequency: 'weekly' as const },
+    { path: '/small-claims-landlord', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-tenant-defends', priority: 0.75, changeFrequency: 'weekly' as const },
+    // Money Claim Free Form Pages
+    { path: '/forms/n1-claim-form', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/forms/letter-before-action', priority: 0.75, changeFrequency: 'monthly' as const },
+    { path: '/forms/schedule-of-debt', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/forms/pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic

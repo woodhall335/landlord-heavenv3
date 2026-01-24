@@ -37567,6 +37567,2208 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // ============================================
+  // MONEY CLAIM BLOG POSTS (10 posts)
+  // ============================================
+
+  // POST: Letter Before Action Guide
+  {
+    slug: 'how-to-write-letter-before-action-unpaid-rent',
+    title: 'How to Write a Letter Before Action for Unpaid Rent (2026 Template)',
+    description: 'Step-by-step guide to writing a Pre-Action Protocol compliant Letter Before Action for tenant debt. Free template and examples for landlords.',
+    metaDescription: 'Write a compliant Letter Before Action for unpaid rent. Free template, examples, and step-by-step guide for UK landlords pursuing tenant debt through court.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '8 min read',
+    wordCount: 1450,
+    category: 'Money Claims',
+    tags: ['Letter Before Action', 'Unpaid Rent', 'Pre-Action Protocol', 'Tenant Debt', 'Money Claim'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/letter-before-action.svg',
+    heroImageAlt: 'Letter Before Action Template for Landlords',
+    targetKeyword: 'letter before action unpaid rent',
+    secondaryKeywords: ['LBA template', 'pre-action protocol letter', 'debt recovery letter', 'tenant arrears letter'],
+    tableOfContents: [
+      { id: 'what-is-lba', title: 'What is a Letter Before Action?', level: 2 },
+      { id: 'why-required', title: 'Why is it Required?', level: 2 },
+      { id: 'what-to-include', title: 'What to Include', level: 2 },
+      { id: 'template', title: 'Letter Template', level: 2 },
+      { id: 'sending-lba', title: 'How to Send Your LBA', level: 2 },
+      { id: 'after-sending', title: 'What Happens Next', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['what-is-section-21-notice', 'section-21-vs-section-8'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          Before you can take a tenant to court for unpaid rent or other debts, you must send a
+          <strong> Letter Before Action (LBA)</strong>. This isn&apos;t just good practice—it&apos;s a legal
+          requirement under the Pre-Action Protocol for Debt Claims. Get it wrong, and the court may
+          penalise you on costs even if you win.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Need court-ready documents?</strong> Our{' '}
+            <Link href="/products/money-claim" className="text-primary font-semibold hover:underline">
+              Money Claim Pack
+            </Link>{' '}
+            generates a compliant Letter Before Action tailored to your specific claim.
+          </p>
+        </div>
+
+        <h2 id="what-is-lba" className="scroll-mt-24">What is a Letter Before Action?</h2>
+
+        <p>
+          A Letter Before Action (sometimes called an LBA or &quot;letter of claim&quot;) is a formal letter
+          you send to a debtor before starting court proceedings. It gives them one final chance to pay
+          or propose a payment plan before you issue a claim.
+        </p>
+
+        <p>
+          For landlords, you&apos;ll typically send an LBA when a tenant owes you:
+        </p>
+
+        <ul>
+          <li>Unpaid rent arrears</li>
+          <li>Property damage costs exceeding the deposit</li>
+          <li>Cleaning costs not covered by the deposit</li>
+          <li>Unpaid utility bills they were responsible for</li>
+          <li>Early termination fees</li>
+          <li>Any other contractual debt</li>
+        </ul>
+
+        <h2 id="why-required" className="scroll-mt-24">Why is the LBA Required?</h2>
+
+        <p>
+          The <strong>Pre-Action Protocol for Debt Claims</strong> requires creditors to send a compliant
+          letter before starting court proceedings. The protocol aims to:
+        </p>
+
+        <ul>
+          <li>Give debtors a chance to pay without court action</li>
+          <li>Encourage early settlement and payment plans</li>
+          <li>Ensure debtors understand the claim against them</li>
+          <li>Reduce unnecessary court cases</li>
+        </ul>
+
+        <p>
+          If you don&apos;t follow the protocol, the court may:
+        </p>
+
+        <ul>
+          <li>Stay (pause) your claim until you comply</li>
+          <li>Refuse to award you costs even if you win</li>
+          <li>Order you to pay the defendant&apos;s costs</li>
+        </ul>
+
+        <h2 id="what-to-include" className="scroll-mt-24">What Your LBA Must Include</h2>
+
+        <p>
+          A compliant Letter Before Action must contain specific information:
+        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Essential Elements:</h3>
+          <ul className="space-y-2 text-gray-700">
+            <li>✓ Your full name and address (the creditor)</li>
+            <li>✓ The debtor&apos;s full name and address</li>
+            <li>✓ The amount owed (itemised breakdown)</li>
+            <li>✓ How the debt arose (e.g., tenancy agreement)</li>
+            <li>✓ Interest claimed (if any)</li>
+            <li>✓ A deadline to respond (minimum 30 days)</li>
+            <li>✓ What happens if they don&apos;t respond</li>
+            <li>✓ Information about debt advice services</li>
+            <li>✓ A reply form or financial statement</li>
+          </ul>
+        </div>
+
+        <h2 id="template" className="scroll-mt-24">Letter Before Action Template</h2>
+
+        <p>
+          Here&apos;s the structure your letter should follow:
+        </p>
+
+        <div className="bg-white border border-gray-300 rounded-lg p-6 my-6 font-mono text-sm">
+          <p className="mb-4">[Your name and address]</p>
+          <p className="mb-4">[Date]</p>
+          <p className="mb-4">[Tenant&apos;s name and current address]</p>
+          <p className="mb-4"><strong>LETTER BEFORE ACTION</strong></p>
+          <p className="mb-4">Dear [Tenant&apos;s name],</p>
+          <p className="mb-4">
+            I am writing regarding money you owe me in connection with your tenancy at
+            [property address] under the assured shorthold tenancy agreement dated [date].
+          </p>
+          <p className="mb-4"><strong>Amount Owed:</strong></p>
+          <p className="mb-2">Unpaid rent ([dates]): £[amount]</p>
+          <p className="mb-2">Damage to property: £[amount]</p>
+          <p className="mb-2">Interest at 8% per annum: £[amount]</p>
+          <p className="mb-4"><strong>Total: £[total]</strong></p>
+          <p className="mb-4">
+            [Explanation of how debt arose and evidence you hold]
+          </p>
+          <p className="mb-4">
+            Please pay this amount within 30 days of the date of this letter. If you do not pay
+            or contact me to arrange payment, I will start court proceedings without further notice.
+          </p>
+          <p className="mb-4">
+            If you are experiencing financial difficulties, free debt advice is available from
+            StepChange (0800 138 1111), Citizens Advice, or National Debtline (0808 808 4000).
+          </p>
+          <p className="mb-4">Yours sincerely,</p>
+          <p>[Your signature and name]</p>
+        </div>
+
+        <h2 id="sending-lba" className="scroll-mt-24">How to Send Your Letter Before Action</h2>
+
+        <p>
+          How you send the letter matters for evidence purposes:
+        </p>
+
+        <ul>
+          <li><strong>First class post</strong> - Standard method, keep proof of posting</li>
+          <li><strong>Recorded delivery</strong> - Provides tracking but tenant may refuse</li>
+          <li><strong>Email</strong> - Acceptable if you have their email address, keep sent copy</li>
+          <li><strong>Hand delivery</strong> - Have a witness and note date/time</li>
+        </ul>
+
+        <p>
+          The 30-day response period starts from when they receive the letter (or when it&apos;s deemed
+          delivered—typically 2 business days after posting).
+        </p>
+
+        <h2 id="after-sending" className="scroll-mt-24">What Happens After Sending the LBA</h2>
+
+        <p>
+          After sending your Letter Before Action, several things might happen:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6 my-6">
+          <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+            <h4 className="font-semibold text-green-900 mb-2">Best Case: They Pay</h4>
+            <p className="text-green-800 text-sm">
+              The tenant pays in full. Matter resolved—no court needed.
+            </p>
+          </div>
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">They Propose Payment Plan</h4>
+            <p className="text-blue-800 text-sm">
+              Consider if it&apos;s reasonable. You can negotiate or reject and proceed to court.
+            </p>
+          </div>
+          <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+            <h4 className="font-semibold text-amber-900 mb-2">They Dispute the Debt</h4>
+            <p className="text-amber-800 text-sm">
+              Review their reasons. If you still have a valid claim, proceed to court.
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 className="font-semibold text-gray-900 mb-2">No Response</h4>
+            <p className="text-gray-700 text-sm">
+              After 30 days, you can issue your court claim via MCOL or N1 form.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Ready to Start Your Claim?</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack includes a professionally drafted Letter Before Action,
+            Particulars of Claim, and step-by-step guidance.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_lba"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Money Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long must I wait after sending the LBA?</h3>
+            <p className="text-gray-600">
+              You must give the debtor at least 30 days to respond from the date they receive
+              the letter. If they ask for more time to get debt advice, consider allowing up to
+              30 additional days.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim interest in my LBA?</h3>
+            <p className="text-gray-600">
+              Yes. You can claim statutory interest at 8% per year on debts. Calculate from when
+              the debt was due until your claim date. Include the calculation in your letter.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant has moved and I don&apos;t have their address?</h3>
+            <p className="text-gray-600">
+              Try to find their current address through forwarding mail, references, guarantors,
+              or tracing services. If unsuccessful, you may still be able to proceed with court
+              action using their last known address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor to send an LBA?</h3>
+            <p className="text-gray-600">
+              No. Landlords can send Letters Before Action themselves. The letter doesn&apos;t need
+              to be from a solicitor to be valid—it just needs to contain the required information.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: What is a CCJ?
+  {
+    slug: 'what-is-county-court-judgment-landlords',
+    title: 'What is a County Court Judgment (CCJ)? Guide for Landlords 2026',
+    description: 'Understanding CCJs for landlords: what they are, how to get one against a tenant, and how to enforce payment. Complete UK guide.',
+    metaDescription: 'Learn what a County Court Judgment means for landlords. How to obtain a CCJ against tenants who owe money, enforcement options, and what happens next.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '7 min read',
+    wordCount: 1280,
+    category: 'Money Claims',
+    tags: ['CCJ', 'County Court Judgment', 'Tenant Debt', 'Enforcement', 'Money Claim'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/ccj-guide.svg',
+    heroImageAlt: 'County Court Judgment Guide for Landlords',
+    targetKeyword: 'county court judgment landlord',
+    secondaryKeywords: ['CCJ tenant', 'enforce CCJ', 'money judgment', 'court judgment debt'],
+    tableOfContents: [
+      { id: 'what-is-ccj', title: 'What is a CCJ?', level: 2 },
+      { id: 'how-to-get', title: 'How to Get a CCJ', level: 2 },
+      { id: 'default-judgment', title: 'Default Judgment', level: 2 },
+      { id: 'enforcement', title: 'Enforcing Your CCJ', level: 2 },
+      { id: 'ccj-register', title: 'The CCJ Register', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['how-to-write-letter-before-action-unpaid-rent'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          A <strong>County Court Judgment (CCJ)</strong> is a court order confirming that someone owes you
+          money. For landlords, getting a CCJ against a tenant is the first step in legally recovering
+          unpaid rent, damage costs, or other debts. But a CCJ alone doesn&apos;t put money in your pocket—
+          you may need to take enforcement action too.
+        </p>
+
+        <h2 id="what-is-ccj" className="scroll-mt-24">What is a CCJ?</h2>
+
+        <p>
+          A County Court Judgment is a formal court decision that states:
+        </p>
+
+        <ul>
+          <li>The defendant (your tenant) owes you a specific amount of money</li>
+          <li>When and how they must pay (immediately or in instalments)</li>
+          <li>The legal basis for the debt</li>
+        </ul>
+
+        <p>
+          Once you have a CCJ, the debt is legally established. The tenant can no longer simply deny
+          they owe you money. However, having a judgment and actually receiving payment are two
+          different things.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Important:</strong> A CCJ stays on the debtor&apos;s credit file for 6 years, affecting
+            their ability to get mortgages, credit cards, and sometimes jobs. This alone motivates
+            many debtors to pay.
+          </p>
+        </div>
+
+        <h2 id="how-to-get" className="scroll-mt-24">How to Get a CCJ Against a Tenant</h2>
+
+        <p>
+          The process to obtain a CCJ involves several steps:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-3">
+          <li>
+            <strong>Send a Letter Before Action</strong> - Give the tenant 30 days to pay or respond
+          </li>
+          <li>
+            <strong>Issue your claim</strong> - Use Money Claim Online (MCOL) or paper form N1
+          </li>
+          <li>
+            <strong>Wait for response</strong> - Tenant has 14-33 days to respond
+          </li>
+          <li>
+            <strong>Obtain judgment</strong> - Either by default (no response) or at hearing
+          </li>
+        </ol>
+
+        <p>
+          The easiest route is when the tenant doesn&apos;t respond to your claim at all—you can then
+          request &quot;default judgment&quot; without a hearing.
+        </p>
+
+        <h2 id="default-judgment" className="scroll-mt-24">Default Judgment Explained</h2>
+
+        <p>
+          If the tenant doesn&apos;t respond to your court claim within the time limit (usually 14 days,
+          extendable to 33), you can request default judgment. This means:
+        </p>
+
+        <ul>
+          <li>No court hearing needed</li>
+          <li>Judgment entered automatically</li>
+          <li>You get the amount claimed plus court fees</li>
+          <li>The CCJ appears on their credit file</li>
+        </ul>
+
+        <p>
+          Most uncontested landlord claims end this way. The tenant either can&apos;t be bothered to
+          respond or knows they have no defence.
+        </p>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcing Your CCJ</h2>
+
+        <p>
+          Having a CCJ doesn&apos;t guarantee payment. If the tenant still won&apos;t pay, you have several
+          enforcement options:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-6">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Warrant of Control</h4>
+            <p className="text-gray-600 text-sm">
+              Bailiffs seize and sell the debtor&apos;s goods. Fee: £77
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Attachment of Earnings</h4>
+            <p className="text-gray-600 text-sm">
+              Money deducted from wages. Fee: £110
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Third Party Debt Order</h4>
+            <p className="text-gray-600 text-sm">
+              Freeze and seize bank accounts. Fee: £110
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Charging Order</h4>
+            <p className="text-gray-600 text-sm">
+              Secure debt against their property. Fee: £119
+            </p>
+          </div>
+        </div>
+
+        <p>
+          For debts over £600, you can also transfer to High Court and use High Court Enforcement
+          Officers (HCEOs), who are often more effective than county court bailiffs.
+        </p>
+
+        <p>
+          Learn more in our{' '}
+          <Link href="/money-claim-ccj-enforcement" className="text-primary font-semibold hover:underline">
+            CCJ enforcement guide
+          </Link>.
+        </p>
+
+        <h2 id="ccj-register" className="scroll-mt-24">The CCJ Register</h2>
+
+        <p>
+          CCJs are recorded on the Register of Judgments, Orders and Fines for 6 years. This register
+          is checked by:
+        </p>
+
+        <ul>
+          <li>Credit reference agencies (affecting credit scores)</li>
+          <li>Mortgage lenders</li>
+          <li>Landlords doing tenant reference checks</li>
+          <li>Some employers</li>
+        </ul>
+
+        <p>
+          If the tenant pays in full within 30 days of the judgment, they can apply to have it removed
+          from the register. After 30 days, it stays for the full 6 years (though it can be marked as
+          &quot;satisfied&quot; when paid).
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Start Your Money Claim</h3>
+          <p className="text-gray-700 mb-4">
+            Get professionally drafted court documents to claim what your tenant owes you.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_ccj"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does it take to get a CCJ?</h3>
+            <p className="text-gray-600">
+              If the tenant doesn&apos;t defend, you can get default judgment in about 4-6 weeks from
+              issuing your claim. If they defend, it could take 3-6 months to reach a hearing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant has no money?</h3>
+            <p className="text-gray-600">
+              You still get the CCJ, which lasts 6 years. You can attempt enforcement when their
+              circumstances change. The CCJ also damages their credit, which may motivate payment.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant appeal a CCJ?</h3>
+            <p className="text-gray-600">
+              They can apply to &quot;set aside&quot; a default judgment if they have a good reason for
+              not responding and a real defence to your claim. They can&apos;t set it aside just
+              because they don&apos;t want to pay.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: Calculating Interest on Tenant Debt
+  {
+    slug: 'calculating-interest-tenant-debt',
+    title: 'Calculating Interest on Tenant Debt: Landlord Guide 2026',
+    description: 'How to calculate and claim statutory interest on money tenants owe you. 8% interest rate, calculation examples, and court claim guidance.',
+    metaDescription: 'Learn how to calculate interest on tenant debt for court claims. Statutory 8% rate, calculation method, examples, and how to include in your money claim.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '6 min read',
+    wordCount: 1150,
+    category: 'Money Claims',
+    tags: ['Interest Calculation', 'Tenant Debt', 'Statutory Interest', 'Money Claim', 'Court Fees'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/interest-calculation.svg',
+    heroImageAlt: 'Calculating Interest on Tenant Debt',
+    targetKeyword: 'interest on tenant debt',
+    secondaryKeywords: ['statutory interest rate', 'calculate debt interest', '8% interest claim', 'money claim interest'],
+    tableOfContents: [
+      { id: 'can-you-claim', title: 'Can You Claim Interest?', level: 2 },
+      { id: 'statutory-rate', title: 'The Statutory Interest Rate', level: 2 },
+      { id: 'how-to-calculate', title: 'How to Calculate Interest', level: 2 },
+      { id: 'examples', title: 'Calculation Examples', level: 2 },
+      { id: 'including-in-claim', title: 'Including Interest in Your Claim', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['how-to-write-letter-before-action-unpaid-rent', 'what-is-county-court-judgment-landlords'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          When a tenant owes you money, you&apos;re not just entitled to the original debt—you can also
+          claim <strong>interest</strong> on top. This compensates you for being kept out of your money
+          and adds a meaningful amount to your claim, especially for older debts.
+        </p>
+
+        <h2 id="can-you-claim" className="scroll-mt-24">Can You Claim Interest on Tenant Debt?</h2>
+
+        <p>
+          Yes. When making a court claim for money owed, you can claim interest in two ways:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Contractual interest</strong> - If your tenancy agreement specifies an interest
+            rate for late payments, you can claim that rate
+          </li>
+          <li>
+            <strong>Statutory interest</strong> - If no contractual rate exists, you can claim the
+            statutory rate of 8% per year
+          </li>
+        </ul>
+
+        <p>
+          Most tenancy agreements don&apos;t specify interest rates, so landlords typically claim the
+          statutory 8% rate.
+        </p>
+
+        <h2 id="statutory-rate" className="scroll-mt-24">The Statutory Interest Rate</h2>
+
+        <p>
+          Under the County Courts Act 1984 (section 69), you can claim interest at <strong>8% per
+          annum</strong> on debts. This rate applies from:
+        </p>
+
+        <ul>
+          <li>The date the debt became due (e.g., when rent was due but not paid)</li>
+          <li>Until the date of judgment or settlement</li>
+        </ul>
+
+        <p>
+          The 8% rate is simple interest, not compound. You calculate it on the principal debt only,
+          not on accumulated interest.
+        </p>
+
+        <h2 id="how-to-calculate" className="scroll-mt-24">How to Calculate Interest</h2>
+
+        <p>
+          The formula for calculating statutory interest is:
+        </p>
+
+        <div className="bg-gray-100 rounded-lg p-6 my-6 font-mono">
+          <p className="text-center text-lg">
+            Interest = (Debt × 0.08 × Days) ÷ 365
+          </p>
+        </div>
+
+        <p>
+          Or broken down:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Take the debt amount</li>
+          <li>Multiply by 0.08 (8%)</li>
+          <li>Multiply by the number of days since the debt was due</li>
+          <li>Divide by 365</li>
+        </ol>
+
+        <h2 id="examples" className="scroll-mt-24">Calculation Examples</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Example 1: Simple Rent Arrears</h3>
+          <p className="text-gray-700 mb-2">
+            Tenant owes £2,000 rent. Debt became due 180 days ago.
+          </p>
+          <p className="font-mono text-gray-600">
+            Interest = (£2,000 × 0.08 × 180) ÷ 365 = <strong>£78.90</strong>
+          </p>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Example 2: Multiple Debts</h3>
+          <p className="text-gray-700 mb-2">
+            Tenant owes £1,500 rent (due 120 days ago) + £800 damage (due 90 days ago).
+          </p>
+          <p className="font-mono text-gray-600 mb-2">
+            Rent interest = (£1,500 × 0.08 × 120) ÷ 365 = £39.45
+          </p>
+          <p className="font-mono text-gray-600 mb-2">
+            Damage interest = (£800 × 0.08 × 90) ÷ 365 = £15.78
+          </p>
+          <p className="font-mono text-gray-600">
+            Total interest = <strong>£55.23</strong>
+          </p>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Example 3: Older Debt</h3>
+          <p className="text-gray-700 mb-2">
+            Tenant owes £3,500. Debt became due 2 years (730 days) ago.
+          </p>
+          <p className="font-mono text-gray-600">
+            Interest = (£3,500 × 0.08 × 730) ÷ 365 = <strong>£560.00</strong>
+          </p>
+        </div>
+
+        <p>
+          As you can see, interest adds up significantly on older debts. A 2-year-old £3,500 debt
+          attracts £560 in interest alone.
+        </p>
+
+        <h2 id="including-in-claim" className="scroll-mt-24">Including Interest in Your Claim</h2>
+
+        <p>
+          When making a court claim, you need to:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>State you&apos;re claiming interest under the County Courts Act 1984 s.69</li>
+          <li>Show the calculation (debt amount, rate, period)</li>
+          <li>State the daily rate for ongoing interest</li>
+          <li>Include interest in your total claim amount</li>
+        </ol>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Note:</strong> Interest continues to accrue until judgment. You can claim
+            additional interest that builds up between issuing your claim and getting judgment.
+          </p>
+        </div>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Let Us Calculate For You</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack automatically calculates interest and includes it in your
+            court documents.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_interest"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim more than 8% interest?</h3>
+            <p className="text-gray-600">
+              Only if your tenancy agreement specifies a higher rate. Otherwise, 8% is the maximum
+              for court claims. Note: excessive contractual rates might be challenged as unfair terms.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I have to claim interest?</h3>
+            <p className="text-gray-600">
+              No, it&apos;s optional. But there&apos;s no reason not to—it&apos;s money you&apos;re legally entitled
+              to and adds to the pressure on the debtor to pay.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does interest affect court fees?</h3>
+            <p className="text-gray-600">
+              Court fees are based on the total claim amount including interest. Higher claims
+              mean higher fees, but you can recover the court fee from the defendant if you win.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: How Long Does MCOL Take?
+  {
+    slug: 'how-long-does-money-claim-online-take',
+    title: 'How Long Does Money Claim Online Take? MCOL Timeline 2026',
+    description: 'Realistic timelines for Money Claim Online from start to CCJ. How long each stage takes and what affects the speed of your claim.',
+    metaDescription: 'How long does MCOL take? Realistic timelines for Money Claim Online from submission to CCJ. Undefended vs defended claims, enforcement timeframes.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '6 min read',
+    wordCount: 1100,
+    category: 'Money Claims',
+    tags: ['MCOL', 'Money Claim Online', 'Court Timeline', 'CCJ', 'Debt Recovery'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/mcol-timeline.svg',
+    heroImageAlt: 'Money Claim Online Timeline',
+    targetKeyword: 'how long does money claim online take',
+    secondaryKeywords: ['MCOL timeline', 'money claim duration', 'CCJ how long', 'court claim timeframe'],
+    tableOfContents: [
+      { id: 'overview', title: 'Timeline Overview', level: 2 },
+      { id: 'undefended', title: 'Undefended Claims', level: 2 },
+      { id: 'defended', title: 'Defended Claims', level: 2 },
+      { id: 'enforcement', title: 'Enforcement Timeline', level: 2 },
+      { id: 'speeding-up', title: 'Speeding Up the Process', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['what-is-county-court-judgment-landlords', 'how-to-write-letter-before-action-unpaid-rent'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          One of the most common questions landlords ask is: &quot;How long will this take?&quot; The answer
+          depends on whether the tenant defends your claim. Here&apos;s a realistic timeline for
+          <strong> Money Claim Online (MCOL)</strong> proceedings.
+        </p>
+
+        <h2 id="overview" className="scroll-mt-24">Timeline Overview</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-green-700 mb-2">Undefended Claim</h3>
+              <p className="text-3xl font-bold text-gray-900">4-6 weeks</p>
+              <p className="text-gray-600 text-sm">From issuing to CCJ</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-amber-700 mb-2">Defended Claim</h3>
+              <p className="text-3xl font-bold text-gray-900">3-6 months</p>
+              <p className="text-gray-600 text-sm">From issuing to hearing</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Most landlord claims are undefended. Tenants who owe money often don&apos;t respond to court
+          claims—either because they have no defence or can&apos;t be bothered. This makes the process
+          relatively quick.
+        </p>
+
+        <h2 id="undefended" className="scroll-mt-24">Undefended Claims: Stage by Stage</h2>
+
+        <div className="space-y-4 my-6">
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">1</div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Pre-Action Protocol</h4>
+              <p className="text-gray-600">Send LBA and wait 30 days for response</p>
+              <p className="text-sm text-gray-500">Duration: 30+ days</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">2</div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Issue Claim on MCOL</h4>
+              <p className="text-gray-600">Submit claim online, pay court fee</p>
+              <p className="text-sm text-gray-500">Duration: Same day</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">3</div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Claim Served on Defendant</h4>
+              <p className="text-gray-600">Court sends claim to tenant</p>
+              <p className="text-sm text-gray-500">Duration: 5-7 days</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">4</div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Response Period</h4>
+              <p className="text-gray-600">Tenant has 14 days to respond (can extend to 33)</p>
+              <p className="text-sm text-gray-500">Duration: 14-33 days</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">5</div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Request Default Judgment</h4>
+              <p className="text-gray-600">If no response, request judgment online</p>
+              <p className="text-sm text-gray-500">Duration: 7-14 days to process</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          <strong>Total for undefended: approximately 6-10 weeks</strong> (including the 30-day
+          pre-action period).
+        </p>
+
+        <h2 id="defended" className="scroll-mt-24">Defended Claims: What to Expect</h2>
+
+        <p>
+          If the tenant files a defence, the timeline extends significantly:
+        </p>
+
+        <ul>
+          <li><strong>Defence filed:</strong> Claim transferred to local court</li>
+          <li><strong>Directions questionnaire:</strong> Both parties complete (14 days)</li>
+          <li><strong>Allocation:</strong> Court decides track (small claims under £10k)</li>
+          <li><strong>Hearing date:</strong> Set 4-12 weeks in future</li>
+          <li><strong>Hearing:</strong> Both parties attend, judge decides</li>
+        </ul>
+
+        <p>
+          Defended claims typically take <strong>3-6 months</strong> from issue to final judgment.
+          Complex cases or court backlogs can extend this further.
+        </p>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcement Timeline</h2>
+
+        <p>
+          Getting a CCJ doesn&apos;t mean instant payment. If the tenant won&apos;t pay voluntarily,
+          enforcement adds more time:
+        </p>
+
+        <ul>
+          <li><strong>Warrant of Control:</strong> 4-8 weeks for bailiff visit</li>
+          <li><strong>Attachment of Earnings:</strong> 6-8 weeks to set up</li>
+          <li><strong>High Court Enforcement:</strong> 2-4 weeks (often faster)</li>
+          <li><strong>Charging Order:</strong> 6-10 weeks for hearing</li>
+        </ul>
+
+        <h2 id="speeding-up" className="scroll-mt-24">Tips for Speeding Up the Process</h2>
+
+        <ul>
+          <li>Send your LBA promptly—don&apos;t wait months after the debt arises</li>
+          <li>Use MCOL rather than paper forms (faster processing)</li>
+          <li>Ensure all details are correct to avoid delays</li>
+          <li>Monitor your claim and respond quickly to any court requests</li>
+          <li>Request default judgment as soon as the response deadline passes</li>
+        </ul>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Get Court-Ready Documents Fast</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack generates your Letter Before Action and Particulars of Claim
+            in minutes—no waiting for solicitors.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_mcol_timeline"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I speed up the 30-day LBA period?</h3>
+            <p className="text-gray-600">
+              No. The Pre-Action Protocol requires giving the debtor 30 days. Issuing proceedings
+              earlier could result in cost penalties even if you win.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I need the money urgently?</h3>
+            <p className="text-gray-600">
+              Unfortunately, court processes take time. The only shortcuts are if the tenant pays
+              voluntarily in response to your LBA, or admits the claim immediately.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is High Court enforcement faster?</h3>
+            <p className="text-gray-600">
+              Often yes. High Court Enforcement Officers work on commission and typically act faster
+              than county court bailiffs. Available for debts over £600.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: When to Use a Guarantor Clause
+  {
+    slug: 'when-to-use-guarantor-clause-tenancy',
+    title: 'When to Use a Guarantor Clause in Your Tenancy Agreement 2026',
+    description: 'Should you require a guarantor? When guarantor clauses protect landlords, how to enforce them, and claiming from guarantors when tenants default.',
+    metaDescription: 'When should landlords require a guarantor? Guide to guarantor clauses, enforcement, and claiming from guarantors when tenants don\'t pay rent.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '7 min read',
+    wordCount: 1200,
+    category: 'Money Claims',
+    tags: ['Guarantor', 'Tenancy Agreement', 'Rent Guarantee', 'Tenant Default', 'Landlord Protection'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/guarantor-clause.svg',
+    heroImageAlt: 'Guarantor Clause in Tenancy Agreements',
+    targetKeyword: 'guarantor clause tenancy',
+    secondaryKeywords: ['rent guarantor', 'guarantor agreement', 'claim from guarantor', 'tenant guarantor'],
+    tableOfContents: [
+      { id: 'what-is-guarantor', title: 'What is a Guarantor?', level: 2 },
+      { id: 'when-to-require', title: 'When to Require a Guarantor', level: 2 },
+      { id: 'guarantor-agreement', title: 'The Guarantor Agreement', level: 2 },
+      { id: 'claiming-from-guarantor', title: 'Claiming from a Guarantor', level: 2 },
+      { id: 'common-issues', title: 'Common Issues', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['how-to-write-letter-before-action-unpaid-rent', 'what-is-county-court-judgment-landlords'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          A <strong>guarantor</strong> is someone who agrees to pay the tenant&apos;s rent and other
+          obligations if the tenant can&apos;t. For landlords, having a guarantor provides crucial
+          backup—especially for tenants with limited credit history or lower incomes. But when should
+          you require one, and how do you enforce the guarantee if needed?
+        </p>
+
+        <h2 id="what-is-guarantor" className="scroll-mt-24">What is a Guarantor?</h2>
+
+        <p>
+          A guarantor is a third party (usually a parent, relative, or friend) who signs a legal
+          agreement promising to:
+        </p>
+
+        <ul>
+          <li>Pay the rent if the tenant doesn&apos;t</li>
+          <li>Cover damage costs the tenant is liable for</li>
+          <li>Meet any other financial obligations under the tenancy</li>
+        </ul>
+
+        <p>
+          The guarantor becomes <strong>jointly and severally liable</strong> with the tenant. This
+          means you can pursue either the tenant or the guarantor (or both) for unpaid amounts.
+        </p>
+
+        <h2 id="when-to-require" className="scroll-mt-24">When to Require a Guarantor</h2>
+
+        <p>
+          Consider requiring a guarantor when the tenant:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-6">
+          <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+            <h4 className="font-semibold text-amber-900 mb-2">Financial Risk Indicators</h4>
+            <ul className="text-amber-800 text-sm space-y-1">
+              <li>• First-time renter with no history</li>
+              <li>• Student or young professional</li>
+              <li>• Low or irregular income</li>
+              <li>• Failed credit checks</li>
+              <li>• Self-employed with variable earnings</li>
+            </ul>
+          </div>
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">Situational Factors</h4>
+            <ul className="text-blue-800 text-sm space-y-1">
+              <li>• New to the country</li>
+              <li>• Recently changed jobs</li>
+              <li>• Rent is high relative to income</li>
+              <li>• Previous CCJs (but otherwise acceptable)</li>
+              <li>• Benefits recipient</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>
+          A guarantor doesn&apos;t make a bad tenant good—but it does give you someone to claim from if
+          things go wrong.
+        </p>
+
+        <h2 id="guarantor-agreement" className="scroll-mt-24">The Guarantor Agreement</h2>
+
+        <p>
+          The guarantee must be properly documented to be enforceable. Essential elements include:
+        </p>
+
+        <ul>
+          <li>Guarantor&apos;s full name and address</li>
+          <li>Clear statement of what they&apos;re guaranteeing</li>
+          <li>Reference to the specific tenancy agreement</li>
+          <li>Statement that the guarantee survives tenancy variations</li>
+          <li>Guarantor&apos;s signature (witnessed is better)</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 my-6 rounded-r-lg">
+          <p className="text-red-900 text-sm">
+            <strong>Warning:</strong> A guarantee that doesn&apos;t properly identify the tenancy or
+            clearly state the guarantor&apos;s obligations may be unenforceable. Always use a properly
+            drafted guarantee agreement.
+          </p>
+        </div>
+
+        <h2 id="claiming-from-guarantor" className="scroll-mt-24">Claiming from a Guarantor</h2>
+
+        <p>
+          If your tenant doesn&apos;t pay, you can pursue the guarantor through the same process as
+          claiming from a tenant:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Send a Letter Before Action to the guarantor</li>
+          <li>Give them 30 days to pay</li>
+          <li>If no payment, issue a court claim naming the guarantor as defendant</li>
+          <li>Obtain CCJ against the guarantor</li>
+          <li>Enforce as needed</li>
+        </ol>
+
+        <p>
+          You can claim from the guarantor at the same time as the tenant, or wait until you&apos;ve
+          exhausted attempts to recover from the tenant first. Tactically, claiming from both
+          simultaneously often produces faster results.
+        </p>
+
+        <p>
+          Learn more about{' '}
+          <Link href="/money-claim-guarantor" className="text-primary font-semibold hover:underline">
+            claiming from a guarantor
+          </Link>{' '}
+          in our dedicated guide.
+        </p>
+
+        <h2 id="common-issues" className="scroll-mt-24">Common Issues with Guarantor Claims</h2>
+
+        <div className="space-y-4 my-6">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">&quot;The tenancy was varied without my consent&quot;</h4>
+            <p className="text-gray-600 text-sm">
+              Guarantors sometimes argue they&apos;re released because rent increased or the tenancy
+              was extended. A well-drafted guarantee covers this by stating it survives variations.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">&quot;I didn&apos;t understand what I was signing&quot;</h4>
+            <p className="text-gray-600 text-sm">
+              Courts expect guarantors to read what they sign. Unless there was actual fraud or
+              misrepresentation, this defence rarely succeeds.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">&quot;The guarantee has expired&quot;</h4>
+            <p className="text-gray-600 text-sm">
+              Some guarantees are limited to an initial fixed term. Check your guarantee wording—
+              ideally, it should cover &quot;the tenancy and any statutory periodic continuation.&quot;
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Need to Claim from a Guarantor?</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack includes documents for claiming from both tenants and guarantors.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&reason=guarantor&src=blog_guarantor"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Guarantor Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I require a UK-based guarantor only?</h3>
+            <p className="text-gray-600">
+              Yes. It&apos;s reasonable to require a UK guarantor because enforcing against overseas
+              guarantors is extremely difficult and expensive.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I credit check guarantors?</h3>
+            <p className="text-gray-600">
+              Absolutely. A guarantor with poor credit or no assets doesn&apos;t provide meaningful
+              security. Check they can actually pay if needed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the guarantor end their guarantee?</h3>
+            <p className="text-gray-600">
+              Generally no—not unilaterally. The guarantee lasts for the period specified (or the
+              whole tenancy if not specified). They can&apos;t simply withdraw.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: Recovering Cleaning Costs
+  {
+    slug: 'recovering-cleaning-costs-from-tenants',
+    title: 'Recovering Cleaning Costs from Tenants: Landlord Guide 2026',
+    description: 'How to recover cleaning costs when the deposit doesn\'t cover it. Evidence requirements, reasonable charges, and court claims for cleaning.',
+    metaDescription: 'Recover cleaning costs from tenants when deposit falls short. What\'s reasonable, evidence needed, and how to make a court claim for cleaning costs.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '7 min read',
+    wordCount: 1250,
+    category: 'Money Claims',
+    tags: ['Cleaning Costs', 'Deposit Deductions', 'Tenant Debt', 'End of Tenancy', 'Money Claim'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/cleaning-costs.svg',
+    heroImageAlt: 'Recovering Cleaning Costs from Tenants',
+    targetKeyword: 'recover cleaning costs tenant',
+    secondaryKeywords: ['cleaning deduction deposit', 'tenant cleaning charges', 'end of tenancy cleaning', 'landlord cleaning claim'],
+    tableOfContents: [
+      { id: 'when-can-you-claim', title: 'When Can You Claim Cleaning?', level: 2 },
+      { id: 'reasonable-costs', title: 'What\'s Reasonable?', level: 2 },
+      { id: 'evidence-needed', title: 'Evidence You Need', level: 2 },
+      { id: 'beyond-deposit', title: 'When Deposit Doesn\'t Cover It', level: 2 },
+      { id: 'court-claim', title: 'Making a Court Claim', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['fair-wear-tear-vs-tenant-damage', 'how-to-write-letter-before-action-unpaid-rent'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          Tenants should return the property in a similar condition to when they moved in, allowing
+          for <strong>fair wear and tear</strong>. But what happens when they leave it filthy and the
+          deposit doesn&apos;t cover professional cleaning? You may be able to recover the excess through
+          a court claim.
+        </p>
+
+        <h2 id="when-can-you-claim" className="scroll-mt-24">When Can You Claim Cleaning Costs?</h2>
+
+        <p>
+          You can claim cleaning costs when:
+        </p>
+
+        <ul>
+          <li>The property was handed over in a clean condition (documented)</li>
+          <li>The tenant left it dirtier than fair wear and tear would explain</li>
+          <li>You had to pay for cleaning to restore it to lettable condition</li>
+          <li>The costs are reasonable for the work required</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Key point:</strong> If the property was already dirty when they moved in,
+            or if you didn&apos;t provide a clean property/inventory, your claim is weakened.
+            Documentation at check-in is essential.
+          </p>
+        </div>
+
+        <h2 id="reasonable-costs" className="scroll-mt-24">What Cleaning Costs Are Reasonable?</h2>
+
+        <p>
+          Courts and deposit schemes assess whether cleaning costs are reasonable. Factors include:
+        </p>
+
+        <ul>
+          <li>Property size and number of rooms</li>
+          <li>Actual condition vs expected condition</li>
+          <li>Local market rates for professional cleaning</li>
+          <li>Whether professional cleaning was genuinely necessary</li>
+        </ul>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Typical Professional Cleaning Costs (2026)</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="font-medium text-gray-700">End of tenancy clean:</p>
+              <ul className="text-gray-600">
+                <li>• 1-bed flat: £150-250</li>
+                <li>• 2-bed flat/house: £200-350</li>
+                <li>• 3-bed house: £300-450</li>
+                <li>• 4+ bed house: £400-600+</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-medium text-gray-700">Additional items:</p>
+              <ul className="text-gray-600">
+                <li>• Oven deep clean: £40-80</li>
+                <li>• Carpet cleaning: £25-40 per room</li>
+                <li>• Window cleaning: £30-60</li>
+                <li>• Garden clearance: Variable</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="evidence-needed" className="scroll-mt-24">Evidence You Need</h2>
+
+        <p>
+          Strong evidence is crucial for cleaning claims:
+        </p>
+
+        <div className="space-y-3 my-6">
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+            <p className="text-gray-700"><strong>Check-in inventory</strong> showing property was clean at start</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+            <p className="text-gray-700"><strong>Check-out report</strong> documenting the dirty condition</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+            <p className="text-gray-700"><strong>Photographs</strong> with dates/timestamps</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+            <p className="text-gray-700"><strong>Cleaning invoice</strong> showing work done and cost</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+            <p className="text-gray-700"><strong>Proof of payment</strong> for the cleaning</p>
+          </div>
+        </div>
+
+        <h2 id="beyond-deposit" className="scroll-mt-24">When the Deposit Doesn&apos;t Cover It</h2>
+
+        <p>
+          If cleaning costs exceed the deposit, you have two options:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-3">
+          <li>
+            <strong>Claim the full deposit for cleaning</strong> via your deposit scheme, then pursue
+            the tenant separately for the excess
+          </li>
+          <li>
+            <strong>Make a combined court claim</strong> for all costs (cleaning + any other debts)
+            exceeding the deposit
+          </li>
+        </ol>
+
+        <p>
+          Most landlords use the first approach—resolve the deposit dispute first, then claim the
+          balance through court.
+        </p>
+
+        <h2 id="court-claim" className="scroll-mt-24">Making a Court Claim for Cleaning</h2>
+
+        <p>
+          To claim cleaning costs through the court:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Calculate the amount: Total cleaning cost minus any deposit retained</li>
+          <li>Send a Letter Before Action giving 30 days to pay</li>
+          <li>If no payment, issue claim via MCOL or form N1</li>
+          <li>Include evidence of the condition and costs</li>
+        </ol>
+
+        <p>
+          Read our{' '}
+          <Link href="/money-claim-cleaning-costs" className="text-primary font-semibold hover:underline">
+            complete guide to claiming cleaning costs
+          </Link>.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Claim Cleaning Costs</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack covers cleaning cost claims with professionally drafted documents.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&reason=cleaning&src=blog_cleaning"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim for cleaning if there was no inventory?</h3>
+            <p className="text-gray-600">
+              It&apos;s harder but not impossible. You&apos;ll need other evidence of the property&apos;s
+              condition at the start (photos, agent reports, previous cleaning receipts).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">The tenant says they cleaned it themselves - now what?</h3>
+            <p className="text-gray-600">
+              The standard is whether the property was returned in the condition it was let.
+              Amateur cleaning that doesn&apos;t meet that standard isn&apos;t good enough.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I charge for my time doing the cleaning?</h3>
+            <p className="text-gray-600">
+              Courts prefer professional cleaning invoices. Your own time is harder to prove
+              and value. Get professional cleaners and claim that cost.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: Fair Wear and Tear
+  {
+    slug: 'fair-wear-tear-vs-tenant-damage',
+    title: 'Fair Wear and Tear vs Tenant Damage: Landlord Guide 2026',
+    description: 'Understanding the difference between fair wear and tear and tenant damage. What you can and cannot claim for, with examples.',
+    metaDescription: 'What\'s fair wear and tear vs damage? Guide for landlords on what you can claim from tenants and deposits, with real examples and evidence tips.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '8 min read',
+    wordCount: 1350,
+    category: 'Money Claims',
+    tags: ['Fair Wear and Tear', 'Tenant Damage', 'Deposit Disputes', 'Property Damage', 'Money Claim'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/wear-tear-damage.svg',
+    heroImageAlt: 'Fair Wear and Tear vs Tenant Damage',
+    targetKeyword: 'fair wear and tear tenant damage',
+    secondaryKeywords: ['wear and tear definition', 'tenant damage claim', 'deposit deduction damage', 'landlord damage evidence'],
+    tableOfContents: [
+      { id: 'definition', title: 'What is Fair Wear and Tear?', level: 2 },
+      { id: 'examples', title: 'Examples: Wear vs Damage', level: 2 },
+      { id: 'factors', title: 'Factors That Affect Assessment', level: 2 },
+      { id: 'calculating-claims', title: 'Calculating Damage Claims', level: 2 },
+      { id: 'evidence', title: 'Evidence Requirements', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['recovering-cleaning-costs-from-tenants', 'how-to-write-letter-before-action-unpaid-rent'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          One of the most common disputes between landlords and tenants is the difference between
+          <strong> fair wear and tear</strong> and <strong>damage</strong>. Getting this wrong can mean
+          losing deposit disputes or having court claims rejected. This guide clarifies the distinction
+          with practical examples.
+        </p>
+
+        <h2 id="definition" className="scroll-mt-24">What is Fair Wear and Tear?</h2>
+
+        <p>
+          <strong>Fair wear and tear</strong> is the natural deterioration that occurs through normal,
+          everyday use of a property. It&apos;s what happens when people simply live in a home—things
+          gradually age and show signs of use.
+        </p>
+
+        <p>
+          The legal position is clear: tenants are not liable for fair wear and tear. This means you
+          cannot deduct from deposits or claim costs for normal deterioration.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6 rounded-r-lg">
+          <p className="text-blue-900 text-sm">
+            <strong>Key principle:</strong> Wear and tear is <em>gradual</em> deterioration from
+            ordinary use. Damage is <em>sudden</em> or caused by misuse, abuse, or negligence.
+          </p>
+        </div>
+
+        <h2 id="examples" className="scroll-mt-24">Examples: Wear and Tear vs Damage</h2>
+
+        <div className="overflow-x-auto my-6">
+          <table className="min-w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="text-left p-3 font-semibold">Item</th>
+                <th className="text-left p-3 font-semibold text-green-700">Fair Wear &amp; Tear</th>
+                <th className="text-left p-3 font-semibold text-red-700">Damage (Claimable)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Walls</td>
+                <td className="p-3 text-green-700">Minor scuffs, faded paint, small nail holes</td>
+                <td className="p-3 text-red-700">Large holes, crayon marks, unauthorised painting</td>
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Carpets</td>
+                <td className="p-3 text-green-700">Slight flattening, fading in sunny areas</td>
+                <td className="p-3 text-red-700">Burns, stains, pet damage, rips</td>
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Kitchen</td>
+                <td className="p-3 text-green-700">Minor worktop scratches, worn cabinet handles</td>
+                <td className="p-3 text-red-700">Burn marks, broken cabinet doors, missing handles</td>
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Bathroom</td>
+                <td className="p-3 text-green-700">Worn sealant, minor grout discolouration</td>
+                <td className="p-3 text-red-700">Cracked tiles, broken toilet seat, mould from poor ventilation</td>
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Doors</td>
+                <td className="p-3 text-green-700">Stiff hinges, minor scratches</td>
+                <td className="p-3 text-red-700">Broken locks, holes, kicked-in panels</td>
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Appliances</td>
+                <td className="p-3 text-green-700">Reduced efficiency over time</td>
+                <td className="p-3 text-red-700">Broken parts, misuse damage, missing components</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="factors" className="scroll-mt-24">Factors That Affect the Assessment</h2>
+
+        <p>
+          Whether something counts as wear and tear depends on several factors:
+        </p>
+
+        <ul>
+          <li><strong>Length of tenancy</strong> - Longer tenancies mean more expected wear</li>
+          <li><strong>Number of occupants</strong> - Family of 5 causes more wear than single person</li>
+          <li><strong>Quality of original items</strong> - Cheap carpet wears faster than quality</li>
+          <li><strong>Age at start</strong> - 10-year-old item vs brand new</li>
+          <li><strong>Type of property</strong> - Student let vs professional let</li>
+        </ul>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-3">The &quot;Expected Lifespan&quot; Approach</h3>
+          <p className="text-gray-700 mb-3">
+            Many deposit schemes use expected lifespans to assess claims. For example:
+          </p>
+          <ul className="text-gray-600 text-sm space-y-1">
+            <li>• Carpet: 8-10 years</li>
+            <li>• Interior paint: 3-5 years</li>
+            <li>• Appliances: 5-10 years depending on type</li>
+            <li>• Wooden flooring: 15-20 years</li>
+          </ul>
+          <p className="text-gray-700 mt-3">
+            If the item was already 80% through its lifespan, you can only claim 20% of replacement
+            cost for damage.
+          </p>
+        </div>
+
+        <h2 id="calculating-claims" className="scroll-mt-24">Calculating Damage Claims</h2>
+
+        <p>
+          When claiming for damage, you should use a <strong>betterment</strong> calculation. You can&apos;t
+          claim for new-for-old—only the remaining value that was lost.
+        </p>
+
+        <div className="bg-white border border-gray-200 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Example Calculation</h4>
+          <p className="text-gray-600 mb-3">
+            Carpet damaged after 4 years of tenancy. Original cost: £800. Expected lifespan: 10 years.
+          </p>
+          <div className="font-mono text-sm bg-gray-50 p-4 rounded">
+            <p>Remaining lifespan: 6 years out of 10 = 60%</p>
+            <p>Claimable amount: £800 × 60% = <strong>£480</strong></p>
+          </div>
+          <p className="text-gray-500 text-sm mt-3">
+            You cannot claim the full £800 because the carpet had already been used for 4 years.
+          </p>
+        </div>
+
+        <h2 id="evidence" className="scroll-mt-24">Evidence Requirements</h2>
+
+        <p>
+          To succeed with damage claims, you need:
+        </p>
+
+        <ul>
+          <li><strong>Check-in report</strong> showing condition at start</li>
+          <li><strong>Check-out report</strong> showing damage at end</li>
+          <li><strong>Photographs</strong> with dates (both start and end)</li>
+          <li><strong>Receipts</strong> for original items (age and cost)</li>
+          <li><strong>Repair/replacement invoices</strong></li>
+          <li><strong>Quotes</strong> if work not yet done</li>
+        </ul>
+
+        <p>
+          Learn more in our guides on{' '}
+          <Link href="/money-claim-property-damage" className="text-primary font-semibold hover:underline">
+            claiming for property damage
+          </Link>{' '}
+          and{' '}
+          <Link href="/money-claim-carpet-damage" className="text-primary font-semibold hover:underline">
+            carpet damage claims
+          </Link>.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Claim for Tenant Damage</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack helps you calculate and claim damage costs properly.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&reason=damage&src=blog_wear_tear"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Tenant says it&apos;s just wear and tear - how do I prove it&apos;s damage?</h3>
+            <p className="text-gray-600">
+              Focus on whether the deterioration is beyond what&apos;s normal for the tenancy length
+              and use. Photos, professional reports, and comparable examples help prove your case.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim full replacement cost for damaged items?</h3>
+            <p className="text-gray-600">
+              Only if the item was new at the start of the tenancy. Otherwise, you must account for
+              its age and remaining useful life (betterment deduction).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who decides what&apos;s wear and tear vs damage?</h3>
+            <p className="text-gray-600">
+              In deposit disputes, the deposit scheme adjudicator decides. In court claims, the judge
+              decides. Both apply similar principles based on the evidence.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: Should You Accept a Payment Plan?
+  {
+    slug: 'should-you-accept-payment-plan-from-tenant',
+    title: 'Should You Accept a Payment Plan from a Tenant? 2026 Guide',
+    description: 'When to accept a tenant\'s payment plan offer vs pursuing court action. Pros, cons, and what makes a payment plan worth accepting.',
+    metaDescription: 'Should landlords accept tenant payment plans? When to accept, when to reject, and how to assess if an offer is reasonable. Practical guidance.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '6 min read',
+    wordCount: 1100,
+    category: 'Money Claims',
+    tags: ['Payment Plan', 'Tenant Debt', 'Debt Recovery', 'Money Claim', 'Negotiation'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/payment-plan.svg',
+    heroImageAlt: 'Accepting Payment Plans from Tenants',
+    targetKeyword: 'tenant payment plan',
+    secondaryKeywords: ['accept payment plan', 'debt instalment', 'tenant debt repayment', 'negotiate tenant debt'],
+    tableOfContents: [
+      { id: 'overview', title: 'Payment Plans Overview', level: 2 },
+      { id: 'when-to-accept', title: 'When to Accept', level: 2 },
+      { id: 'when-to-reject', title: 'When to Reject', level: 2 },
+      { id: 'protecting-yourself', title: 'Protecting Yourself', level: 2 },
+      { id: 'if-they-stop-paying', title: 'If They Stop Paying', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['how-to-write-letter-before-action-unpaid-rent', 'what-is-county-court-judgment-landlords'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          When you send a Letter Before Action, the tenant might respond with an offer to pay in
+          instalments. Should you accept? It depends on the offer, their circumstances, and whether
+          you believe they&apos;ll actually follow through.
+        </p>
+
+        <h2 id="overview" className="scroll-mt-24">Understanding Payment Plan Offers</h2>
+
+        <p>
+          A payment plan is an agreement where the tenant pays off their debt in instalments rather
+          than one lump sum. The Pre-Action Protocol expects you to consider reasonable offers before
+          going to court.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Protocol requirement:</strong> If you reject a reasonable payment plan and later
+            go to court, the judge may penalise you on costs—even if you win the case.
+          </p>
+        </div>
+
+        <h2 id="when-to-accept" className="scroll-mt-24">When to Accept a Payment Plan</h2>
+
+        <p>Consider accepting when:</p>
+
+        <ul>
+          <li><strong>The offer is realistic</strong> - Debt cleared in 1-3 years</li>
+          <li><strong>Financial statement supports it</strong> - Their income/expenses show they can afford it</li>
+          <li><strong>They have no assets</strong> - Even with a CCJ, you couldn&apos;t enforce quickly</li>
+          <li><strong>Regular payments are better than nothing</strong> - Some money vs legal costs</li>
+          <li><strong>The amount is relatively small</strong> - Court fees might exceed the debt</li>
+        </ul>
+
+        <div className="bg-green-50 rounded-lg p-6 my-6 border border-green-200">
+          <h3 className="font-semibold text-green-900 mb-2">Example: Reasonable Offer</h3>
+          <p className="text-green-800">
+            Debt: £2,000<br />
+            Offer: £150/month<br />
+            Cleared in: 13-14 months<br />
+            <strong>Verdict: Consider accepting</strong> - reasonable timeframe
+          </p>
+        </div>
+
+        <h2 id="when-to-reject" className="scroll-mt-24">When to Reject a Payment Plan</h2>
+
+        <p>Consider rejecting when:</p>
+
+        <ul>
+          <li><strong>The offer is derisory</strong> - £10/month for a £5,000 debt</li>
+          <li><strong>It would take too long</strong> - 5+ years to clear</li>
+          <li><strong>They have ability to pay more</strong> - You know their financial position</li>
+          <li><strong>They&apos;ve broken promises before</strong> - Previous failed payment plans</li>
+          <li><strong>The financial statement is incomplete</strong> - They&apos;re hiding something</li>
+        </ul>
+
+        <div className="bg-red-50 rounded-lg p-6 my-6 border border-red-200">
+          <h3 className="font-semibold text-red-900 mb-2">Example: Unreasonable Offer</h3>
+          <p className="text-red-800">
+            Debt: £4,000<br />
+            Offer: £25/month<br />
+            Cleared in: 13+ years<br />
+            <strong>Verdict: Reject</strong> - unreasonable timeframe
+          </p>
+        </div>
+
+        <h2 id="protecting-yourself" className="scroll-mt-24">Protecting Yourself with Payment Plans</h2>
+
+        <p>If you accept a payment plan:</p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li><strong>Get it in writing</strong> - Email confirmation at minimum</li>
+          <li><strong>Set clear terms</strong> - Amount, frequency, start date</li>
+          <li><strong>Include a default clause</strong> - What happens if they miss payments</li>
+          <li><strong>Keep records</strong> - Track every payment received</li>
+          <li><strong>Don&apos;t wait too long</strong> - If they miss payments, act quickly</li>
+        </ol>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-3">Sample Payment Plan Terms</h3>
+          <p className="text-gray-600 text-sm">
+            &quot;I agree to pay £[amount] on the [date] of each month starting [date], until the
+            total debt of £[total] plus interest is cleared. If I miss any payment, the full
+            balance becomes due immediately and you may proceed with court action without
+            further notice.&quot;
+          </p>
+        </div>
+
+        <h2 id="if-they-stop-paying" className="scroll-mt-24">What If They Stop Paying?</h2>
+
+        <p>
+          If the tenant defaults on the payment plan:
+        </p>
+
+        <ul>
+          <li>Send a reminder giving 7 days to catch up</li>
+          <li>If no response, treat the agreement as broken</li>
+          <li>You can then proceed with court action for the remaining balance</li>
+          <li>The fact they broke a voluntary agreement strengthens your case</li>
+        </ul>
+
+        <p>
+          You don&apos;t need to send another full Letter Before Action—you can proceed straight
+          to court if they&apos;ve already acknowledged the debt and then defaulted.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Payment Plan Failed?</h3>
+          <p className="text-gray-700 mb-4">
+            If the tenant has stopped paying, our Money Claim Pack helps you take the next step.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_payment_plan"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Court Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I still get a CCJ while they&apos;re paying?</h3>
+            <p className="text-gray-600">
+              Not usually. If you&apos;ve agreed a payment plan, you should honour it while they&apos;re
+              paying. You can pursue a CCJ if they default on the plan.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I charge interest on the payment plan?</h3>
+            <p className="text-gray-600">
+              You can include accrued interest in the total owed. Whether to add ongoing interest
+              is up to you—it may complicate the arrangement but compensates for delayed payment.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if they offer a partial settlement?</h3>
+            <p className="text-gray-600">
+              A lump sum for less than owed? Consider the alternative—court costs, enforcement
+              costs, and risk of recovering nothing. Sometimes 70% now beats 100% never.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: Small Claims Court Tips
+  {
+    slug: 'small-claims-court-tips-landlords',
+    title: 'Small Claims Court Tips for Landlords: How to Win 2026',
+    description: 'Practical tips for landlords attending small claims court hearings. How to prepare, what to expect, and how to present your case effectively.',
+    metaDescription: 'Small claims court tips for landlords. How to prepare for a hearing, present evidence, and win your case against a tenant. Practical UK guide.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '8 min read',
+    wordCount: 1400,
+    category: 'Money Claims',
+    tags: ['Small Claims', 'Court Hearing', 'Landlord Tips', 'Money Claim', 'Court Preparation'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/small-claims-tips.svg',
+    heroImageAlt: 'Small Claims Court Tips for Landlords',
+    targetKeyword: 'small claims court landlord',
+    secondaryKeywords: ['landlord court tips', 'small claims hearing', 'present case court', 'win small claims'],
+    tableOfContents: [
+      { id: 'overview', title: 'Small Claims Track Overview', level: 2 },
+      { id: 'preparation', title: 'Preparing Your Case', level: 2 },
+      { id: 'evidence', title: 'Organising Evidence', level: 2 },
+      { id: 'hearing-day', title: 'The Hearing Day', level: 2 },
+      { id: 'presenting', title: 'Presenting Your Case', level: 2 },
+      { id: 'common-mistakes', title: 'Common Mistakes', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['what-is-county-court-judgment-landlords', 'how-long-does-money-claim-online-take'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          If your tenant defends your money claim, you may end up at a small claims hearing. Don&apos;t
+          worry—small claims court is designed for ordinary people without lawyers. With good preparation,
+          you can present your case effectively and win.
+        </p>
+
+        <h2 id="overview" className="scroll-mt-24">Understanding the Small Claims Track</h2>
+
+        <p>
+          Claims up to £10,000 are usually allocated to the <strong>small claims track</strong>. This
+          means:
+        </p>
+
+        <ul>
+          <li>Informal hearing—no wigs, gowns, or legal jargon</li>
+          <li>You can represent yourself (most people do)</li>
+          <li>Limited costs recovery—even if you win</li>
+          <li>Judge actively helps both sides present their case</li>
+          <li>Usually decided on the day</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6 rounded-r-lg">
+          <p className="text-blue-900 text-sm">
+            <strong>Good news:</strong> Small claims hearings are designed to be accessible. The
+            judge will ask questions and guide the process. You don&apos;t need to be a lawyer.
+          </p>
+        </div>
+
+        <h2 id="preparation" className="scroll-mt-24">Preparing Your Case</h2>
+
+        <p>Good preparation is 90% of winning. Before the hearing:</p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li><strong>Read the defence carefully</strong> - Understand exactly what they dispute</li>
+          <li><strong>Gather all evidence</strong> - Documents that prove your case</li>
+          <li><strong>Prepare a chronology</strong> - Timeline of key events</li>
+          <li><strong>Calculate figures clearly</strong> - Show how you arrived at the amount claimed</li>
+          <li><strong>Anticipate their arguments</strong> - Prepare responses</li>
+          <li><strong>Practice explaining your case</strong> - Can you summarise it in 5 minutes?</li>
+        </ol>
+
+        <h2 id="evidence" className="scroll-mt-24">Organising Your Evidence</h2>
+
+        <p>Create a <strong>bundle</strong> of documents, organised and page-numbered:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-3">Evidence Bundle Contents</h3>
+          <ol className="list-decimal pl-6 space-y-1 text-gray-700">
+            <li>Index/contents page</li>
+            <li>Your claim form and particulars</li>
+            <li>The tenant&apos;s defence</li>
+            <li>Tenancy agreement</li>
+            <li>Inventory/check-in report</li>
+            <li>Check-out report</li>
+            <li>Photographs (dated)</li>
+            <li>Invoices/receipts</li>
+            <li>Correspondence (LBA, emails, texts)</li>
+            <li>Bank statements showing payments/non-payments</li>
+            <li>Any other relevant documents</li>
+          </ol>
+        </div>
+
+        <p>
+          Bring <strong>3 copies</strong>: one for you, one for the judge, one for the defendant.
+          If they&apos;ve already seen the documents, you only need copies for yourself and the judge.
+        </p>
+
+        <h2 id="hearing-day" className="scroll-mt-24">What to Expect on Hearing Day</h2>
+
+        <ul>
+          <li><strong>Arrive early</strong> - 30 minutes before your slot</li>
+          <li><strong>Check the board</strong> - Find your courtroom</li>
+          <li><strong>Wait to be called</strong> - Usually in a waiting area</li>
+          <li><strong>The usher will guide you</strong> - They&apos;ll tell you when to enter</li>
+        </ul>
+
+        <p>
+          Small claims hearings are usually in a small room or office, not a traditional courtroom.
+          You may sit at a table across from the judge. The atmosphere is relatively informal.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Dress code:</strong> Smart casual is fine. No need for a suit, but avoid
+            jeans and trainers. First impressions matter.
+          </p>
+        </div>
+
+        <h2 id="presenting" className="scroll-mt-24">Presenting Your Case</h2>
+
+        <p>The hearing typically follows this structure:</p>
+
+        <ol className="list-decimal pl-6 space-y-3">
+          <li>
+            <strong>Judge&apos;s introduction</strong> - They&apos;ll explain the process and confirm
+            they&apos;ve read the papers
+          </li>
+          <li>
+            <strong>You present your case</strong> - As claimant, you go first. Explain clearly
+            what happened and what you&apos;re claiming
+          </li>
+          <li>
+            <strong>Defendant responds</strong> - They explain their defence
+          </li>
+          <li>
+            <strong>Judge asks questions</strong> - To clarify points from both sides
+          </li>
+          <li>
+            <strong>Summing up</strong> - Each side may briefly summarise
+          </li>
+          <li>
+            <strong>Judgment</strong> - Often given immediately
+          </li>
+        </ol>
+
+        <div className="bg-green-50 rounded-lg p-6 my-6 border border-green-200">
+          <h3 className="font-semibold text-green-900 mb-2">Tips for Speaking</h3>
+          <ul className="text-green-800 text-sm space-y-1">
+            <li>• Speak slowly and clearly</li>
+            <li>• Address the judge as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Judge&quot;)</li>
+            <li>• Stick to facts, not emotions</li>
+            <li>• Refer to page numbers in your bundle</li>
+            <li>• If you don&apos;t understand something, ask</li>
+            <li>• Stay calm even if the tenant says untrue things</li>
+          </ul>
+        </div>
+
+        <h2 id="common-mistakes" className="scroll-mt-24">Common Mistakes to Avoid</h2>
+
+        <ul>
+          <li><strong>Being disorganised</strong> - Fumbling through papers loses credibility</li>
+          <li><strong>Getting emotional</strong> - Stick to facts, not how unfair it feels</li>
+          <li><strong>Interrupting</strong> - Let the other side finish, then respond</li>
+          <li><strong>Lying or exaggerating</strong> - Judges spot this quickly</li>
+          <li><strong>Forgetting key documents</strong> - If it&apos;s not in the bundle, it may not help you</li>
+          <li><strong>Being aggressive</strong> - Confident and firm, not hostile</li>
+        </ul>
+
+        <p>
+          For more detailed guidance, see our{' '}
+          <Link href="/money-claim-small-claims-landlord" className="text-primary font-semibold hover:underline">
+            small claims court guide for landlords
+          </Link>.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Need Court Documents?</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack generates professional Particulars of Claim that clearly set
+            out your case—essential for court.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_small_claims"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor for small claims?</h3>
+            <p className="text-gray-600">
+              No, and even if you use one, you usually can&apos;t recover their fees. Most people
+              represent themselves successfully in small claims.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t attend the hearing?</h3>
+            <p className="text-gray-600">
+              Contact the court immediately to request an adjournment. Without good reason, your
+              claim may be struck out if you don&apos;t attend.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I bring a witness?</h3>
+            <p className="text-gray-600">
+              Yes, but you need to tell the court in advance. Witness statements should be submitted
+              before the hearing. The judge may allow oral evidence.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // POST: What to Do When Tenant Won't Pay
+  {
+    slug: 'what-to-do-when-tenant-wont-pay',
+    title: 'What to Do When a Tenant Won\'t Pay: Complete Action Plan 2026',
+    description: 'Step-by-step guide for landlords when tenants refuse to pay rent or other debts. From first contact to court action and enforcement.',
+    metaDescription: 'Tenant won\'t pay rent? Complete action plan for UK landlords covering communication, legal letters, court claims, and enforcement options.',
+    date: '2026-01-15',
+    updatedDate: '2026-01-15',
+    readTime: '9 min read',
+    wordCount: 1500,
+    category: 'Money Claims',
+    tags: ['Tenant Debt', 'Unpaid Rent', 'Debt Recovery', 'Money Claim', 'Landlord Action'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/tenant-wont-pay.svg',
+    heroImageAlt: 'What to Do When Tenant Won\'t Pay',
+    targetKeyword: 'tenant wont pay',
+    secondaryKeywords: ['tenant not paying rent', 'recover money from tenant', 'tenant debt action', 'landlord debt recovery'],
+    tableOfContents: [
+      { id: 'assess', title: 'Step 1: Assess the Situation', level: 2 },
+      { id: 'communicate', title: 'Step 2: Communicate', level: 2 },
+      { id: 'formal-demand', title: 'Step 3: Formal Demand', level: 2 },
+      { id: 'letter-before-action', title: 'Step 4: Letter Before Action', level: 2 },
+      { id: 'court-claim', title: 'Step 5: Court Claim', level: 2 },
+      { id: 'enforcement', title: 'Step 6: Enforcement', level: 2 },
+      { id: 'faqs', title: 'FAQs', level: 2 },
+    ],
+    relatedPosts: ['how-to-write-letter-before-action-unpaid-rent', 'what-is-county-court-judgment-landlords'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          When a tenant owes you money and won&apos;t pay, it&apos;s frustrating—but there&apos;s a clear
+          legal path to recover what you&apos;re owed. This guide walks you through every step, from
+          initial contact to enforcing a court judgment.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-6">
+          <h3 className="font-semibold text-gray-900 mb-2">Quick Overview</h3>
+          <ol className="text-gray-700 space-y-1">
+            <li>1. Assess what&apos;s owed and your evidence</li>
+            <li>2. Communicate and try to resolve informally</li>
+            <li>3. Send formal demand for payment</li>
+            <li>4. Send Letter Before Action (wait 30 days)</li>
+            <li>5. Issue court claim (MCOL or N1)</li>
+            <li>6. Enforce CCJ if they still don&apos;t pay</li>
+          </ol>
+        </div>
+
+        <h2 id="assess" className="scroll-mt-24">Step 1: Assess the Situation</h2>
+
+        <p>Before taking action, get clarity on:</p>
+
+        <ul>
+          <li><strong>What&apos;s owed?</strong> Calculate exact amounts with dates</li>
+          <li><strong>Is the tenancy ongoing or ended?</strong> This affects your options</li>
+          <li><strong>What evidence do you have?</strong> Tenancy agreement, bank statements, photos</li>
+          <li><strong>Is there a guarantor?</strong> You can claim from them too</li>
+          <li><strong>What&apos;s their financial situation?</strong> Are they worth pursuing?</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
+          <p className="text-amber-900 text-sm">
+            <strong>Reality check:</strong> If the tenant has no job, no assets, and no guarantor,
+            even a CCJ won&apos;t produce immediate payment. Consider whether it&apos;s worth the court
+            fees—though a CCJ does last 6 years and damages their credit.
+          </p>
+        </div>
+
+        <h2 id="communicate" className="scroll-mt-24">Step 2: Communicate</h2>
+
+        <p>
+          Start with direct contact. Many payment issues result from temporary problems or
+          miscommunication:
+        </p>
+
+        <ul>
+          <li>Call or text to discuss the arrears</li>
+          <li>Ask what&apos;s preventing payment</li>
+          <li>Propose a payment plan if appropriate</li>
+          <li>Keep records of all conversations</li>
+        </ul>
+
+        <p>
+          If they&apos;re responsive and willing to pay, you might resolve it without legal action.
+          If they ignore you or refuse to engage, move to the next step.
+        </p>
+
+        <h2 id="formal-demand" className="scroll-mt-24">Step 3: Formal Demand</h2>
+
+        <p>
+          Send a clear written demand for payment:
+        </p>
+
+        <ul>
+          <li>State exactly what&apos;s owed and why</li>
+          <li>Give a deadline (7-14 days)</li>
+          <li>State consequences of non-payment</li>
+          <li>Send by email and post</li>
+        </ul>
+
+        <p>
+          This isn&apos;t the formal Letter Before Action yet—it&apos;s a last chance before you start
+          the legal process.
+        </p>
+
+        <h2 id="letter-before-action" className="scroll-mt-24">Step 4: Letter Before Action</h2>
+
+        <p>
+          If informal approaches fail, send a <strong>Pre-Action Protocol compliant Letter Before
+          Action</strong>. This is a legal requirement before court action.
+        </p>
+
+        <p>Your LBA must include:</p>
+
+        <ul>
+          <li>Full details of the debt</li>
+          <li>How it arose</li>
+          <li>Interest claimed</li>
+          <li>30 days to respond</li>
+          <li>Warning of court action</li>
+          <li>Information about debt advice</li>
+        </ul>
+
+        <p>
+          Read our{' '}
+          <Link href="/money-claim-letter-before-action" className="text-primary font-semibold hover:underline">
+            complete LBA guide
+          </Link>{' '}
+          for templates and detailed instructions.
+        </p>
+
+        <h2 id="court-claim" className="scroll-mt-24">Step 5: Issue Court Claim</h2>
+
+        <p>
+          If no payment or acceptable offer after 30 days, issue your court claim:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-6">
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">Money Claim Online (MCOL)</h4>
+            <ul className="text-blue-800 text-sm space-y-1">
+              <li>• Faster processing</li>
+              <li>• Slightly lower fees</li>
+              <li>• Online tracking</li>
+              <li>• Best for straightforward claims</li>
+            </ul>
+          </div>
+          <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+            <h4 className="font-semibold text-purple-900 mb-2">Paper Form N1</h4>
+            <ul className="text-purple-800 text-sm space-y-1">
+              <li>• No character limits</li>
+              <li>• Attach documents</li>
+              <li>• Complex claims</li>
+              <li>• Prefer paper processes</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>
+          If the tenant doesn&apos;t respond within 14-33 days, request <strong>default judgment</strong>.
+          If they defend, prepare for a hearing.
+        </p>
+
+        <h2 id="enforcement" className="scroll-mt-24">Step 6: Enforcement</h2>
+
+        <p>
+          If you get a CCJ but they still don&apos;t pay, use enforcement:
+        </p>
+
+        <ul>
+          <li><strong>Warrant of Control</strong> - Bailiffs seize goods (£77)</li>
+          <li><strong>Attachment of Earnings</strong> - Deductions from wages (£110)</li>
+          <li><strong>Third Party Debt Order</strong> - Freeze bank account (£110)</li>
+          <li><strong>Charging Order</strong> - Secure against property (£119)</li>
+          <li><strong>High Court Enforcement</strong> - For debts over £600</li>
+        </ul>
+
+        <p>
+          See our{' '}
+          <Link href="/money-claim-ccj-enforcement" className="text-primary font-semibold hover:underline">
+            CCJ enforcement guide
+          </Link>{' '}
+          for detailed options.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-2">Ready to Take Action?</h3>
+          <p className="text-gray-700 mb-4">
+            Our Money Claim Pack gives you everything needed to recover tenant debt:
+            Letter Before Action, Particulars of Claim, and step-by-step guidance.
+          </p>
+          <Link
+            href="/wizard?product=money_claim&src=blog_wont_pay"
+            className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your Claim — £99.99
+          </Link>
+        </div>
+
+        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does the whole process take?</h3>
+            <p className="text-gray-600">
+              Minimum 6-10 weeks if undefended (including 30-day LBA period). If defended,
+              add 3-6 months for a hearing. Enforcement adds more time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant has left the country?</h3>
+            <p className="text-gray-600">
+              You can still get a CCJ, but enforcement abroad is difficult and expensive.
+              Consider whether it&apos;s worth pursuing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim for my time spent on this?</h3>
+            <p className="text-gray-600">
+              Generally no. You can claim the debt, interest, and court fees—but not
+              compensation for your time unless there&apos;s a contractual basis.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use a debt collection agency?</h3>
+            <p className="text-gray-600">
+              Some landlords try this first. Agencies typically take 10-25% of recovered amounts.
+              They can be effective for persuading payment but have no special legal powers.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
