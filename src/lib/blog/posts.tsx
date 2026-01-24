@@ -37590,6 +37590,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/letter-before-action.svg',
     heroImageAlt: 'Letter Before Action Template for Landlords',
+    showUrgencyBanner: true,
     targetKeyword: 'letter before action unpaid rent',
     secondaryKeywords: ['LBA template', 'pre-action protocol letter', 'debt recovery letter', 'tenant arrears letter'],
     tableOfContents: [
@@ -37849,6 +37850,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/ccj-guide.svg',
     heroImageAlt: 'County Court Judgment Guide for Landlords',
+    showUrgencyBanner: true,
     targetKeyword: 'county court judgment landlord',
     secondaryKeywords: ['CCJ tenant', 'enforce CCJ', 'money judgment', 'court judgment debt'],
     tableOfContents: [
@@ -38071,6 +38073,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/interest-calculation.svg',
     heroImageAlt: 'Calculating Interest on Tenant Debt',
+    showUrgencyBanner: true,
     targetKeyword: 'interest on tenant debt',
     secondaryKeywords: ['statutory interest rate', 'calculate debt interest', '8% interest claim', 'money claim interest'],
     tableOfContents: [
@@ -38280,6 +38283,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/mcol-timeline.svg',
     heroImageAlt: 'Money Claim Online Timeline',
+    showUrgencyBanner: true,
     targetKeyword: 'how long does money claim online take',
     secondaryKeywords: ['MCOL timeline', 'money claim duration', 'CCJ how long', 'court claim timeframe'],
     tableOfContents: [
@@ -38484,6 +38488,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/guarantor-clause.svg',
     heroImageAlt: 'Guarantor Clause in Tenancy Agreements',
+    showUrgencyBanner: true,
     targetKeyword: 'guarantor clause tenancy',
     secondaryKeywords: ['rent guarantor', 'guarantor agreement', 'claim from guarantor', 'tenant guarantor'],
     tableOfContents: [
@@ -38699,6 +38704,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/cleaning-costs.svg',
     heroImageAlt: 'Recovering Cleaning Costs from Tenants',
+    showUrgencyBanner: true,
     targetKeyword: 'recover cleaning costs tenant',
     secondaryKeywords: ['cleaning deduction deposit', 'tenant cleaning charges', 'end of tenancy cleaning', 'landlord cleaning claim'],
     tableOfContents: [
@@ -38912,6 +38918,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/wear-tear-damage.svg',
     heroImageAlt: 'Fair Wear and Tear vs Tenant Damage',
+    showUrgencyBanner: true,
     targetKeyword: 'fair wear and tear tenant damage',
     secondaryKeywords: ['wear and tear definition', 'tenant damage claim', 'deposit deduction damage', 'landlord damage evidence'],
     tableOfContents: [
@@ -39140,6 +39147,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/payment-plan.svg',
     heroImageAlt: 'Accepting Payment Plans from Tenants',
+    showUrgencyBanner: true,
     targetKeyword: 'tenant payment plan',
     secondaryKeywords: ['accept payment plan', 'debt instalment', 'tenant debt repayment', 'negotiate tenant debt'],
     tableOfContents: [
@@ -39322,6 +39330,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/small-claims-tips.svg',
     heroImageAlt: 'Small Claims Court Tips for Landlords',
+    showUrgencyBanner: true,
     targetKeyword: 'small claims court landlord',
     secondaryKeywords: ['landlord court tips', 'small claims hearing', 'present case court', 'win small claims'],
     tableOfContents: [
@@ -39546,6 +39555,7 @@ export const blogPosts: BlogPost[] = [
     },
     heroImage: '/images/blog/tenant-wont-pay.svg',
     heroImageAlt: 'What to Do When Tenant Won\'t Pay',
+    showUrgencyBanner: true,
     targetKeyword: 'tenant wont pay',
     secondaryKeywords: ['tenant not paying rent', 'recover money from tenant', 'tenant debt action', 'landlord debt recovery'],
     tableOfContents: [
