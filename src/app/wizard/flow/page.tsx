@@ -304,11 +304,15 @@ function WizardFlowContent() {
 
   // 🟦 NEW: For money_claim, use the section-based premium flow
   if (type === 'money_claim') {
+    // Get topic param to pass to flow for pre-selecting claim reasons
+    const topicParam = searchParams.get('topic') || undefined;
+
     // We support money claims for England, Wales, and Scotland
     return (
       <MoneyClaimSectionFlow
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        topic={topicParam}
       />
     );
   }

@@ -37,6 +37,7 @@ import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
 import { TenancySection } from '@/components/wizard/money-claim/TenancySection';
 import { ClaimDetailsSection } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
+import type { ClaimReasonType } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 import { ArrearsSection } from '@/components/wizard/money-claim/ArrearsSection';
 import { DamagesSection } from '@/components/wizard/money-claim/DamagesSection';
 import { PreActionSection } from '@/components/wizard/money-claim/PreActionSection';
@@ -50,6 +51,11 @@ type Jurisdiction = 'england' | 'wales' | 'scotland';
 interface MoneyClaimSectionFlowProps {
   caseId: string;
   jurisdiction: Jurisdiction;
+  /**
+   * Optional: Topic from URL param (e.g. 'arrears').
+   * Used to pre-select claim reasons when starting a new wizard.
+   */
+  topic?: string;
 }
 
 // Section definition type
@@ -152,7 +158,21 @@ const SECTIONS: WizardSection[] = [
       // OR if they ARE claiming and have provided damage items
       if (facts.claiming_damages === false && facts.claiming_other === false) return true;
       if (facts.claiming_damages !== true && facts.claiming_other !== true) return false; // not yet answered
-      return Boolean(facts.damage_items?.length > 0 || facts.other_charges?.length > 0);
+
+      // Check for damage items in money_claim object (where DamagesSection stores them)
+      const damageItems = facts.money_claim?.damage_items || facts.damage_items || [];
+      return Array.isArray(damageItems) && damageItems.length > 0;
+    },
+    hasBlockers: (facts) => {
+      const blockers: string[] = [];
+      // If claiming damages or other costs, require at least one damage item
+      if (facts.claiming_damages === true || facts.claiming_other === true) {
+        const damageItems = facts.money_claim?.damage_items || facts.damage_items || [];
+        if (!Array.isArray(damageItems) || damageItems.length === 0) {
+          blockers.push('Please add at least one damage or cost item');
+        }
+      }
+      return blockers;
     },
   },
   {
@@ -192,10 +212,31 @@ const SECTIONS: WizardSection[] = [
   },
 ];
 
+/**
+ * Maps URL topic param to initial claim reasons.
+ * Supports topic=arrears for backwards compatibility with existing links.
+ */
+function getInitialClaimReasons(topic?: string): ClaimReasonType[] {
+  switch (topic) {
+    case 'arrears':
+      return ['rent_arrears'];
+    case 'damage':
+    case 'damages':
+      return ['property_damage'];
+    // If no topic, default to rent_arrears pre-selected as lowest-risk option
+    // This maintains backwards compatibility - most users expect rent arrears flow
+    default:
+      return [];
+  }
+}
+
 export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   caseId,
   jurisdiction,
+  topic,
 }) => {
+  // Derive initial claim reasons from topic param
+  const initialClaimReasons = useMemo(() => getInitialClaimReasons(topic), [topic]);
   const router = useRouter();
 
   // State
@@ -385,6 +426,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             facts={facts}
             onUpdate={handleUpdate}
             jurisdiction={jurisdiction}
+            initialClaimReasons={initialClaimReasons}
           />
         );
       case 'arrears':
