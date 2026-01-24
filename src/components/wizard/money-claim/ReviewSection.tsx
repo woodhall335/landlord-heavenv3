@@ -2,7 +2,20 @@
 
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { RiCheckboxCircleLine } from 'react-icons/ri';
+import {
+  RiCheckboxCircleLine,
+  RiErrorWarningLine,
+  RiAlertLine,
+  RiLightbulbLine,
+  RiArrowRightLine,
+} from 'react-icons/ri';
+import {
+  validateMoneyClaimClient,
+  groupBySection,
+  getSectionLabel,
+  type ValidationIssue,
+  type ClientValidationResult,
+} from '@/lib/validation/money-claim-client-validator';
 
 interface SectionProps {
   facts?: any;
@@ -42,31 +55,6 @@ function getSelectedClaimTypes(facts: any): { id: string; label: string }[] {
 }
 
 /**
- * Calculate total arrears from items
- */
-function calculateTotalArrears(facts: any): number {
-  const items = facts?.arrears_items || facts?.issues?.rent_arrears?.arrears_items || [];
-
-  if (items.length === 0) {
-    return facts?.total_arrears || facts?.issues?.rent_arrears?.total_arrears || 0;
-  }
-
-  return items.reduce((total: number, item: any) => {
-    const due = item.rent_due || 0;
-    const paid = item.rent_paid || 0;
-    return total + (due - paid);
-  }, 0);
-}
-
-/**
- * Calculate total damages from items
- */
-function calculateTotalDamages(facts: any): number {
-  const items = facts?.money_claim?.damage_items || [];
-  return items.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-}
-
-/**
  * Format currency for display
  */
 function formatCurrency(amount: number): string {
@@ -75,6 +63,148 @@ function formatCurrency(amount: number): string {
     currency: 'GBP',
     minimumFractionDigits: 2,
   }).format(amount);
+}
+
+/**
+ * Validation Issue Item Component
+ */
+function ValidationItem({
+  issue,
+  severity,
+}: {
+  issue: ValidationIssue;
+  severity: 'blocker' | 'warning' | 'suggestion';
+}) {
+  const config = {
+    blocker: {
+      icon: RiErrorWarningLine,
+      bg: 'bg-red-50',
+      border: 'border-red-200',
+      iconColor: 'text-red-600',
+      textColor: 'text-red-800',
+    },
+    warning: {
+      icon: RiAlertLine,
+      bg: 'bg-amber-50',
+      border: 'border-amber-200',
+      iconColor: 'text-amber-600',
+      textColor: 'text-amber-800',
+    },
+    suggestion: {
+      icon: RiLightbulbLine,
+      bg: 'bg-blue-50',
+      border: 'border-blue-200',
+      iconColor: 'text-blue-600',
+      textColor: 'text-blue-800',
+    },
+  }[severity];
+
+  const Icon = config.icon;
+
+  return (
+    <div className={`flex items-start gap-2 p-2 rounded-md ${config.bg} ${config.border} border`}>
+      <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${config.iconColor}`} />
+      <div className="flex-1 min-w-0">
+        <p className={`text-sm ${config.textColor}`}>{issue.message}</p>
+        {issue.evidenceHint && (
+          <p className="text-xs text-gray-500 mt-1 italic">{issue.evidenceHint}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Validation Panel Component
+ */
+function ValidationPanel({ validation }: { validation: ClientValidationResult }) {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const sections = useMemo(() => groupBySection(validation), [validation]);
+
+  const hasBlockers = validation.blockers.length > 0;
+  const hasWarnings = validation.warnings.length > 0;
+  const hasSuggestions = validation.suggestions.length > 0;
+
+  // Get sections with issues
+  const sectionsWithIssues = Object.entries(sections).filter(
+    ([, s]) => s.blockers.length > 0 || s.warnings.length > 0 || (showSuggestions && s.suggestions.length > 0)
+  );
+
+  if (!hasBlockers && !hasWarnings && !hasSuggestions) {
+    return (
+      <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+        <div className="flex items-center gap-2">
+          <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
+          <p className="font-medium text-green-800">All validation checks passed</p>
+        </div>
+        <p className="text-sm text-green-700 mt-1">Your case is ready for document generation.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Summary bar */}
+      <div className="flex flex-wrap gap-3 text-sm">
+        {hasBlockers && (
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-800 rounded-full font-medium">
+            <RiErrorWarningLine className="w-3.5 h-3.5" />
+            {validation.blockers.length} {validation.blockers.length === 1 ? 'blocker' : 'blockers'}
+          </span>
+        )}
+        {hasWarnings && (
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-800 rounded-full font-medium">
+            <RiAlertLine className="w-3.5 h-3.5" />
+            {validation.warnings.length} {validation.warnings.length === 1 ? 'warning' : 'warnings'}
+          </span>
+        )}
+        {hasSuggestions && (
+          <button
+            onClick={() => setShowSuggestions(!showSuggestions)}
+            className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium hover:bg-blue-200 transition-colors"
+          >
+            <RiLightbulbLine className="w-3.5 h-3.5" />
+            {validation.suggestions.length} {validation.suggestions.length === 1 ? 'tip' : 'tips'}
+            <span className="text-xs ml-1">({showSuggestions ? 'hide' : 'show'})</span>
+          </button>
+        )}
+      </div>
+
+      {/* Blockers alert */}
+      {hasBlockers && (
+        <div className="rounded-lg border-2 border-red-300 bg-red-50 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <RiErrorWarningLine className="w-5 h-5 text-red-600" />
+            <p className="font-semibold text-red-800">Required information missing</p>
+          </div>
+          <p className="text-sm text-red-700">
+            Please complete the following before you can generate your pack:
+          </p>
+        </div>
+      )}
+
+      {/* Issues grouped by section */}
+      {sectionsWithIssues.map(([sectionId, sectionIssues]) => (
+        <div key={sectionId} className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
+            <h4 className="font-medium text-gray-900 text-sm">{getSectionLabel(sectionId)}</h4>
+          </div>
+          <div className="p-3 space-y-2">
+            {sectionIssues.blockers.map((issue) => (
+              <ValidationItem key={issue.id} issue={issue} severity="blocker" />
+            ))}
+            {sectionIssues.warnings.map((issue) => (
+              <ValidationItem key={issue.id} issue={issue} severity="warning" />
+            ))}
+            {showSuggestions &&
+              sectionIssues.suggestions.map((issue) => (
+                <ValidationItem key={issue.id} issue={issue} severity="suggestion" />
+              ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export const ReviewSection: React.FC<SectionProps> = ({
@@ -88,14 +218,11 @@ export const ReviewSection: React.FC<SectionProps> = ({
   const router = useRouter();
   const [previewing, setPreviewing] = useState(false);
 
-  // Calculate claim types and totals
+  // Run validation
+  const validation = useMemo(() => validateMoneyClaimClient(facts || {}), [facts]);
+
+  // Calculate claim types for display
   const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
-  const totalArrears = useMemo(() =>
-    facts?.claiming_rent_arrears ? calculateTotalArrears(facts) : 0,
-    [facts]
-  );
-  const totalDamages = useMemo(() => calculateTotalDamages(facts), [facts]);
-  const grandTotal = totalArrears + totalDamages;
 
   const handlePreview = async () => {
     try {
@@ -118,9 +245,8 @@ export const ReviewSection: React.FC<SectionProps> = ({
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        You've completed all the required sections. Before you purchase your pack,
-        we'll analyse your case against the Pre-Action Protocol for Debt Claims
-        and show you any issues that need attention.
+        Review your case information below. We&apos;ve checked your data against the Pre-Action
+        Protocol for Debt Claims (PAP-DEBT) requirements.
       </p>
 
       {/* Claim Summary Card */}
@@ -146,26 +272,12 @@ export const ReviewSection: React.FC<SectionProps> = ({
         )}
 
         {/* Claim totals */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {totalArrears > 0 && (
-            <div className="bg-white rounded-md p-3 border border-gray-200">
-              <p className="text-xs text-gray-500">Rent arrears</p>
-              <p className="text-lg font-semibold text-charcoal">{formatCurrency(totalArrears)}</p>
-            </div>
-          )}
-          {totalDamages > 0 && (
-            <div className="bg-white rounded-md p-3 border border-gray-200">
-              <p className="text-xs text-gray-500">Other amounts</p>
-              <p className="text-lg font-semibold text-charcoal">{formatCurrency(totalDamages)}</p>
-            </div>
-          )}
-          {grandTotal > 0 && (
-            <div className="bg-purple-50 rounded-md p-3 border border-purple-200">
-              <p className="text-xs text-purple-700 font-medium">Total claim</p>
-              <p className="text-lg font-bold text-purple-900">{formatCurrency(grandTotal)}</p>
-            </div>
-          )}
-        </div>
+        {validation.totalClaimAmount > 0 && (
+          <div className="bg-purple-50 rounded-md p-3 border border-purple-200">
+            <p className="text-xs text-purple-700 font-medium">Total claim amount</p>
+            <p className="text-xl font-bold text-purple-900">{formatCurrency(validation.totalClaimAmount)}</p>
+          </div>
+        )}
 
         {/* Meta info */}
         <div className="flex flex-wrap gap-4 text-sm pt-2 border-t border-gray-200">
@@ -186,6 +298,12 @@ export const ReviewSection: React.FC<SectionProps> = ({
             )}
           </p>
         </div>
+      </div>
+
+      {/* Validation Panel */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Case Validation</h3>
+        <ValidationPanel validation={validation} />
       </div>
 
       {/* Ask Heaven Features Banner */}
@@ -238,16 +356,27 @@ export const ReviewSection: React.FC<SectionProps> = ({
         <button
           type="button"
           onClick={handleProceedToReview}
-          className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+          disabled={validation.blockers.length > 0}
+          className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           Continue to Full Analysis
+          <RiArrowRightLine className="w-4 h-4" />
         </button>
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">
-        The full analysis will check your case against PAP-DEBT requirements and
-        highlight any issues before you proceed to payment.
-      </p>
+      {validation.blockers.length > 0 ? (
+        <p className="text-xs text-red-600 mt-2">
+          Please resolve the blockers above before proceeding to the full analysis.
+        </p>
+      ) : validation.warnings.length > 0 ? (
+        <p className="text-xs text-amber-600 mt-2">
+          You can proceed with warnings, but addressing them will strengthen your case.
+        </p>
+      ) : (
+        <p className="text-xs text-gray-500 mt-2">
+          The full analysis will provide AI-powered review and final checks before payment.
+        </p>
+      )}
     </div>
   );
 };
