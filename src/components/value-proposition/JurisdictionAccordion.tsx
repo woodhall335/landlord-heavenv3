@@ -10,17 +10,14 @@
  * - England: Section 21 (Form 6A) OR Section 8 (Form 3)
  * - Wales: Section 173 Notice + fault-based notice (RHW23)
  * - Scotland: Notice to Leave (PRT)
- * - Northern Ireland: Not available for eviction
  *
  * COMPLETE PACK:
  * - England: N5 + N119 (+ N5B for accelerated) - ENGLAND ONLY
- * - Wales: Not available (use Notice Only)
  * - Scotland: Not available (use Notice Only)
  * - Northern Ireland: Not available
  *
  * MONEY CLAIM:
  * - England: N1 + PAP-DEBT documents - ENGLAND ONLY
- * - Wales: Not available (use Notice Only for arrears eviction)
  * - Scotland: Not available (use Notice Only for arrears eviction)
  * - Northern Ireland: Not available
  *
@@ -121,7 +118,7 @@ export function JurisdictionAccordion({
           ))}
 
           {/* NI Warning for eviction products */}
-          {(product === 'notice_only' || product === 'complete_pack' || product === 'money_claim') && (
+          {(product === 'complete_pack' || product === 'money_claim') && (
             <div className="px-6 py-4 bg-amber-50 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <p className="text-sm text-amber-800">
@@ -179,13 +176,6 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
           ],
           notes: 'Private Housing (Tenancies) (Scotland) Act 2016 framework',
         },
-        {
-          name: 'Northern Ireland',
-          flag: '/gb-nir.svg',
-          available: false,
-          documents: [],
-          notes: 'Eviction notices not available. Tenancy agreements only.',
-        },
       ];
 
     case 'complete_pack':
@@ -205,13 +195,6 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
             'Proof of Service Certificate',
           ],
           notes: '7-9 documents total depending on route',
-        },
-        {
-          name: 'Wales',
-          flag: '/gb-wls.svg',
-          available: false,
-          documents: [],
-          notes: 'Complete Pack not available for Wales. Use Notice Only (£39.99) for Section 173 notices.',
         },
         {
           name: 'Scotland',
@@ -248,13 +231,6 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
             'Enforcement Guide',
           ],
           notes: '11 documents total',
-        },
-        {
-          name: 'Wales',
-          flag: '/gb-wls.svg',
-          available: false,
-          documents: [],
-          notes: 'Money Claim not available for Wales. Use Notice Only (£39.99) to evict for rent arrears.',
         },
         {
           name: 'Scotland',
