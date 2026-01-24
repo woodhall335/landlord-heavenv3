@@ -455,8 +455,8 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  moneyClaimGuides.onlineMcol,
-                  moneyClaimGuides.tenantDefends,
+                  moneyClaimGuides.mcolProcess,
+                  moneyClaimGuides.defendedClaims,
                   moneyClaimGuides.ccjEnforcement,
                   productLinks.moneyClaim,
                 ]}

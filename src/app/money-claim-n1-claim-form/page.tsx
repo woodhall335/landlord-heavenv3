@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'N1 Claim Form for Landlords 2026 | How to Complete Guide',
@@ -458,9 +458,9 @@ export default function MoneyClaimN1ClaimFormPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  moneyClaimGuides.letterBeforeAction,
-                  moneyClaimGuides.onlineMcol,
-                  moneyClaimGuides.smallClaimsLandlord,
+                  moneyClaimForms.letterBeforeAction,
+                  moneyClaimGuides.mcolProcess,
+                  moneyClaimGuides.smallClaimsCourt,
                   productLinks.moneyClaim,
                 ]}
               />

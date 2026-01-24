@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Letter Before Action Template for Landlords 2026 | Pre-Action Protocol',
@@ -411,9 +411,9 @@ export default function MoneyClaimLetterBeforeActionPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  moneyClaimGuides.n1ClaimForm,
-                  moneyClaimGuides.onlineMcol,
-                  moneyClaimGuides.scheduleOfDebt,
+                  moneyClaimForms.n1Form,
+                  moneyClaimGuides.mcolProcess,
+                  moneyClaimForms.scheduleOfDebt,
                   productLinks.moneyClaim,
                 ]}
               />

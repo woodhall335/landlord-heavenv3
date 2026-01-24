@@ -464,8 +464,8 @@ export default function MoneyClaimOnlineMCOLPage() {
               <RelatedLinks
                 links={[
                   moneyClaimGuides.ccjEnforcement,
-                  moneyClaimGuides.smallClaimsLandlord,
-                  moneyClaimGuides.tenantDefends,
+                  moneyClaimGuides.smallClaimsCourt,
+                  moneyClaimGuides.defendedClaims,
                   productLinks.moneyClaim,
                 ]}
               />

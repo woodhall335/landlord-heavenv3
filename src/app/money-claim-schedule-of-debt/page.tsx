@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Schedule of Debt Template for Landlords 2026 | Rent Arrears Breakdown',
@@ -442,8 +442,8 @@ export default function MoneyClaimScheduleOfDebtPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  moneyClaimGuides.letterBeforeAction,
-                  moneyClaimGuides.n1ClaimForm,
+                  moneyClaimForms.letterBeforeAction,
+                  moneyClaimForms.n1Form,
                   moneyClaimGuides.unpaidRent,
                   productLinks.moneyClaim,
                 ]}
