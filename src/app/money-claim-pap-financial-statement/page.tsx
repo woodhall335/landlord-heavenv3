@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'PAP Reply Form & Financial Statement 2026 | Landlord Guide',
@@ -446,9 +446,9 @@ export default function MoneyClaimPAPFinancialStatementPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  moneyClaimGuides.letterBeforeAction,
-                  moneyClaimGuides.tenantDefends,
-                  moneyClaimGuides.scheduleOfDebt,
+                  moneyClaimForms.letterBeforeAction,
+                  moneyClaimGuides.defendedClaims,
+                  moneyClaimForms.scheduleOfDebt,
                   productLinks.moneyClaim,
                 ]}
               />
