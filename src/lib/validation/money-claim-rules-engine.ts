@@ -9,11 +9,193 @@
  * - Rule definitions live in /config for easy maintenance
  * - Engine is pure TypeScript with no side effects
  * - Supports claim-type-specific rule filtering
+ * - SECURITY: Condition strings are validated against an allowlist before evaluation
  */
 
 import yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
+
+// ============================================================================
+// SECURITY: CONDITION ALLOWLIST
+// ============================================================================
+
+/**
+ * Allowed tokens that may appear in condition strings.
+ * This provides defense-in-depth against injection attacks via YAML configs.
+ *
+ * Categories:
+ * - Context variables: facts, claim_types, arrears_items, etc.
+ * - Property access: . (dot)
+ * - Comparison operators: ===, !==, <, >, <=, >=, ==, !=
+ * - Logical operators: &&, ||, !
+ * - Literals: true, false, null, undefined, numbers, strings
+ * - Array/object methods: includes, length, filter, some, every
+ * - Date handling: new, Date
+ * - Safe built-ins: Math.floor, String, Number, Array.isArray
+ */
+const ALLOWED_IDENTIFIERS = new Set([
+  // Context variables from buildEvaluationContext
+  'facts',
+  'claim_types',
+  'arrears_items',
+  'damage_items',
+  'other_charges',
+  'totals',
+  'arrears_items_incomplete_count',
+  'damage_items_without_amount',
+  'damage_items_without_description',
+  'has_damages_claim_type',
+  'daysSincePapLetter',
+  // Computed totals
+  'arrears_total',
+  'damages_total',
+  'other_charges_total',
+  'grand_total',
+  // Boolean literals
+  'true',
+  'false',
+  'null',
+  'undefined',
+  // Safe constructors for date comparison
+  'new',
+  'Date',
+  // Safe array/object methods
+  'includes',
+  'length',
+  'filter',
+  'some',
+  'every',
+  'map',
+  'reduce',
+  // Safe built-ins
+  'Math',
+  'floor',
+  'ceil',
+  'round',
+  'String',
+  'Number',
+  'Array',
+  'isArray',
+  'Object',
+  'keys',
+  // Arrow function parameter names (commonly used)
+  'item',
+  'i',
+  'x',
+  'el',
+  'e',
+  'entry',
+  // Common property paths from facts
+  'money_claim',
+  'issues',
+  'rent_arrears',
+  'primary_issue',
+  'other_amounts_types',
+  'tenant_still_in_property',
+  'basis_of_claim',
+  'charge_interest',
+  'interest_rate',
+  'interest_start_date',
+  'landlord_full_name',
+  'company_name',
+  'landlord_address_line1',
+  'landlord_address_postcode',
+  'tenant_full_name',
+  'defendant_address_line1',
+  'property_address_line1',
+  'tenancy_start_date',
+  'tenancy_end_date',
+  'rent_amount',
+  'rent_frequency',
+  'letter_before_claim_sent',
+  'pap_letter_date',
+  'pap_response_received',
+  'evidence_reviewed',
+  'uploaded_documents',
+  'timeline_reviewed',
+  'enforcement_reviewed',
+  'enforcement_preference',
+  'total_arrears',
+  'period_start',
+  'period_end',
+  'rent_due',
+  'rent_paid',
+  'description',
+  'amount',
+  'category',
+  'id',
+  'name',
+  'type',
+  // Operators and syntax (handled via pattern matching)
+]);
+
+/**
+ * Validates a condition string against the allowlist.
+ * Returns true if the condition is safe to evaluate, false otherwise.
+ */
+export function validateCondition(condition: string): { valid: boolean; reason?: string } {
+  // Remove string literals before checking identifiers
+  // This allows any string values in quotes (single or double)
+  const conditionWithoutStrings = condition
+    .replace(/'[^']*'/g, '')  // Remove single-quoted strings
+    .replace(/"[^"]*"/g, ''); // Remove double-quoted strings
+
+  // Extract all identifiers from the condition (after removing string literals)
+  // This regex matches word characters that could be identifiers
+  const identifierPattern = /[a-zA-Z_$][a-zA-Z0-9_$]*/g;
+  const identifiers = conditionWithoutStrings.match(identifierPattern) || [];
+
+  // Check each identifier against the allowlist
+  for (const identifier of identifiers) {
+    if (!ALLOWED_IDENTIFIERS.has(identifier)) {
+      // Check if it's a number (which is allowed)
+      if (/^\d+$/.test(identifier)) {
+        continue;
+      }
+      return {
+        valid: false,
+        reason: `Disallowed identifier in condition: "${identifier}"`,
+      };
+    }
+  }
+
+  // Check for dangerous patterns
+  const dangerousPatterns = [
+    /\beval\b/,
+    /\bFunction\b/,
+    /\bwindow\b/,
+    /\bglobal\b/,
+    /\bprocess\b/,
+    /\brequire\b/,
+    /\bimport\b/,
+    /\bexport\b/,
+    /\b__proto__\b/,
+    /\bconstructor\b(?!\s*[=!<>])/,  // Allow "constructor" in comparisons but not as property access
+    /\bprototype\b/,
+    /\bthis\b/,
+    /\bself\b/,
+    /\bfetch\b/,
+    /\bXMLHttpRequest\b/,
+    /\bsetTimeout\b/,
+    /\bsetInterval\b/,
+    /\bsetImmediate\b/,
+    /\bdocument\b/,
+    /\blocalStorage\b/,
+    /\bsessionStorage\b/,
+  ];
+
+  for (const pattern of dangerousPatterns) {
+    if (pattern.test(condition)) {
+      return {
+        valid: false,
+        reason: `Potentially dangerous pattern detected in condition`,
+      };
+    }
+  }
+
+  return { valid: true };
+}
 
 // ============================================================================
 // TYPES
@@ -40,6 +222,20 @@ export interface ValidationRule {
   field?: string | null;
 }
 
+export interface SummarySection {
+  id: string;
+  label: string;
+  rules: string[];
+}
+
+export interface SummaryConfig {
+  blocker_prevents_generation: boolean;
+  warning_shown_in_review: boolean;
+  suggestion_shown_as_tips: boolean;
+  group_by_section: boolean;
+  sections: SummarySection[];
+}
+
 export interface RulesConfig {
   version: string;
   jurisdiction: string;
@@ -49,6 +245,7 @@ export interface RulesConfig {
   damages_rules: ValidationRule[];
   council_tax_rules: ValidationRule[];
   utilities_rules: ValidationRule[];
+  summary?: SummaryConfig;
 }
 
 export interface RuleEvaluationResult {
@@ -129,6 +326,11 @@ export interface MoneyClaimFacts {
       description?: string;
       amount?: number;
       category?: string;
+    }>;
+    other_charges?: Array<{
+      id?: string;
+      description?: string;
+      amount?: number;
     }>;
     tenant_still_in_property?: boolean;
     basis_of_claim?: string;
@@ -212,16 +414,27 @@ export function calculateDamagesTotal(facts: MoneyClaimFacts): number {
 }
 
 /**
+ * Calculate total other charges (legal costs, other fees, etc.)
+ */
+export function calculateOtherChargesTotal(facts: MoneyClaimFacts): number {
+  const items = facts.money_claim?.other_charges || [];
+  return items.reduce((total, item) => total + (item.amount || 0), 0);
+}
+
+/**
  * Build evaluation context with computed values
  */
 function buildEvaluationContext(facts: MoneyClaimFacts) {
   const claim_types = getClaimTypesFromFacts(facts);
   const arrears_items = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
   const damage_items = facts.money_claim?.damage_items || [];
+  const other_charges = facts.money_claim?.other_charges || [];
 
   const arrears_total = calculateArrearsTotal(facts);
   const damages_total = calculateDamagesTotal(facts);
-  const grand_total = arrears_total + damages_total;
+  const other_charges_total = calculateOtherChargesTotal(facts);
+  // BUG FIX: grand_total now includes ALL claimable components
+  const grand_total = arrears_total + damages_total + other_charges_total;
 
   // Count incomplete arrears items
   const arrears_items_incomplete_count = arrears_items.filter(
@@ -262,9 +475,11 @@ function buildEvaluationContext(facts: MoneyClaimFacts) {
     claim_types,
     arrears_items,
     damage_items,
+    other_charges,
     totals: {
       arrears_total,
       damages_total,
+      other_charges_total,
       grand_total,
     },
     arrears_items_incomplete_count,
@@ -278,8 +493,16 @@ function buildEvaluationContext(facts: MoneyClaimFacts) {
 /**
  * Evaluate a single condition against the context
  * Uses safe evaluation with explicit context variables
+ * SECURITY: Conditions are validated against an allowlist before evaluation
  */
 function evaluateCondition(condition: string, context: ReturnType<typeof buildEvaluationContext>): boolean {
+  // SECURITY: Validate condition against allowlist before evaluation
+  const validation = validateCondition(condition);
+  if (!validation.valid) {
+    console.error(`[SECURITY] Condition rejected: ${validation.reason}. Condition: "${condition}"`);
+    return false;
+  }
+
   try {
     // Create a function that evaluates the condition with the context
     const {
@@ -287,6 +510,7 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
       claim_types,
       arrears_items,
       damage_items,
+      other_charges,
       totals,
       arrears_items_incomplete_count,
       damage_items_without_amount,
@@ -297,11 +521,13 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
 
     // Use Function constructor for safe(r) evaluation
     // This is deterministic and only uses provided context
+    // SECURITY: Combined with allowlist validation, this provides defense-in-depth
     const evalFn = new Function(
       'facts',
       'claim_types',
       'arrears_items',
       'damage_items',
+      'other_charges',
       'totals',
       'arrears_items_incomplete_count',
       'damage_items_without_amount',
@@ -316,6 +542,7 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
       claim_types,
       arrears_items,
       damage_items,
+      other_charges,
       totals,
       arrears_items_incomplete_count,
       damage_items_without_amount,
@@ -553,4 +780,169 @@ export function getValidationBySection(
 export function getAllRuleIds(): string[] {
   const rules = getAllRules();
   return rules.map((r) => r.id);
+}
+
+// ============================================================================
+// YAML SCHEMA VALIDATION
+// ============================================================================
+
+export interface SchemaValidationError {
+  type: 'duplicate_id' | 'missing_rule_reference' | 'invalid_condition' | 'missing_field';
+  message: string;
+  ruleId?: string;
+  section?: string;
+}
+
+/**
+ * Validates the YAML rules config for schema correctness.
+ * Returns array of validation errors (empty if valid).
+ */
+export function validateRulesSchema(config?: RulesConfig): SchemaValidationError[] {
+  const rulesConfig = config || loadRulesConfig();
+  const errors: SchemaValidationError[] = [];
+  const allRules = getAllRules(rulesConfig);
+  const ruleIds = new Set<string>();
+
+  // 1. Check for duplicate rule IDs
+  for (const rule of allRules) {
+    if (ruleIds.has(rule.id)) {
+      errors.push({
+        type: 'duplicate_id',
+        message: `Duplicate rule ID: "${rule.id}"`,
+        ruleId: rule.id,
+      });
+    }
+    ruleIds.add(rule.id);
+  }
+
+  // 2. Validate summary.sections rule references
+  if (rulesConfig.summary?.sections) {
+    for (const section of rulesConfig.summary.sections) {
+      for (const ruleRef of section.rules) {
+        if (!ruleIds.has(ruleRef)) {
+          errors.push({
+            type: 'missing_rule_reference',
+            message: `Summary section "${section.id}" references non-existent rule: "${ruleRef}"`,
+            ruleId: ruleRef,
+            section: section.id,
+          });
+        }
+      }
+    }
+  }
+
+  // 3. Validate all condition strings against allowlist
+  for (const rule of allRules) {
+    for (const conditionObj of rule.applies_when) {
+      const validation = validateCondition(conditionObj.condition);
+      if (!validation.valid) {
+        errors.push({
+          type: 'invalid_condition',
+          message: `Rule "${rule.id}" has invalid condition: ${validation.reason}`,
+          ruleId: rule.id,
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+/**
+ * Get section config from summary for a given section ID
+ */
+export function getSectionConfig(sectionId: string): SummarySection | undefined {
+  const config = loadRulesConfig();
+  return config.summary?.sections?.find((s) => s.id === sectionId);
+}
+
+/**
+ * Get all section configs
+ */
+export function getAllSectionConfigs(): SummarySection[] {
+  const config = loadRulesConfig();
+  return config.summary?.sections || [];
+}
+
+/**
+ * Group validation results by section using YAML summary config
+ */
+export function groupResultsBySection(result: ValidationEngineResult): Record<
+  string,
+  {
+    label: string;
+    blockers: RuleEvaluationResult[];
+    warnings: RuleEvaluationResult[];
+    suggestions: RuleEvaluationResult[];
+  }
+> {
+  const config = loadRulesConfig();
+  const sections = config.summary?.sections || [];
+
+  // Initialize sections from config
+  const grouped: Record<
+    string,
+    {
+      label: string;
+      blockers: RuleEvaluationResult[];
+      warnings: RuleEvaluationResult[];
+      suggestions: RuleEvaluationResult[];
+    }
+  > = {};
+
+  for (const section of sections) {
+    grouped[section.id] = {
+      label: section.label,
+      blockers: [],
+      warnings: [],
+      suggestions: [],
+    };
+  }
+
+  // Add "general" for unmatched rules
+  grouped['general'] = {
+    label: 'General',
+    blockers: [],
+    warnings: [],
+    suggestions: [],
+  };
+
+  // Helper to find section for a rule
+  const findSectionForRule = (ruleId: string): string => {
+    for (const section of sections) {
+      if (section.rules.includes(ruleId)) {
+        return section.id;
+      }
+    }
+    return 'general';
+  };
+
+  // Group results
+  for (const blocker of result.blockers) {
+    const sectionId = findSectionForRule(blocker.id);
+    if (grouped[sectionId]) {
+      grouped[sectionId].blockers.push(blocker);
+    }
+  }
+
+  for (const warning of result.warnings) {
+    const sectionId = findSectionForRule(warning.id);
+    if (grouped[sectionId]) {
+      grouped[sectionId].warnings.push(warning);
+    }
+  }
+
+  for (const suggestion of result.suggestions) {
+    const sectionId = findSectionForRule(suggestion.id);
+    if (grouped[sectionId]) {
+      grouped[sectionId].suggestions.push(suggestion);
+    }
+  }
+
+  // Filter out empty sections
+  return Object.fromEntries(
+    Object.entries(grouped).filter(
+      ([, s]) => s.blockers.length > 0 || s.warnings.length > 0 || s.suggestions.length > 0
+    )
+  );
 }
