@@ -56,6 +56,12 @@ interface MoneyClaimSectionFlowProps {
    * Used to pre-select claim reasons when starting a new wizard.
    */
   topic?: string;
+  /**
+   * Optional: Reason(s) from URL param for SEO landing pages.
+   * Comma-separated list of claim reasons (e.g. 'property_damage,cleaning').
+   * Takes precedence over topic param.
+   */
+  reason?: string;
 }
 
 // Section definition type
@@ -213,18 +219,51 @@ const SECTIONS: WizardSection[] = [
 ];
 
 /**
- * Maps URL topic param to initial claim reasons.
- * Supports topic=arrears for backwards compatibility with existing links.
+ * Valid reason param values that map to ClaimReasonType.
+ * Used for SEO landing page pre-selection.
  */
-function getInitialClaimReasons(topic?: string): ClaimReasonType[] {
+const REASON_TO_CLAIM_TYPE: Record<string, ClaimReasonType> = {
+  rent_arrears: 'rent_arrears',
+  arrears: 'rent_arrears',
+  property_damage: 'property_damage',
+  damage: 'property_damage',
+  cleaning: 'cleaning',
+  unpaid_utilities: 'unpaid_utilities',
+  utilities: 'unpaid_utilities',
+  unpaid_council_tax: 'unpaid_council_tax',
+  council_tax: 'unpaid_council_tax',
+  other_tenant_debt: 'other_tenant_debt',
+  other: 'other_tenant_debt',
+};
+
+/**
+ * Maps URL params to initial claim reasons.
+ * - reason param: comma-separated list of claim reasons (takes precedence)
+ * - topic param: legacy support for topic=arrears
+ */
+function getInitialClaimReasons(reason?: string, topic?: string): ClaimReasonType[] {
+  // Reason param takes precedence (from SEO landing pages)
+  if (reason) {
+    const reasonList = reason.split(',').map(r => r.trim().toLowerCase());
+    const claimTypes: ClaimReasonType[] = [];
+    for (const r of reasonList) {
+      const claimType = REASON_TO_CLAIM_TYPE[r];
+      if (claimType && !claimTypes.includes(claimType)) {
+        claimTypes.push(claimType);
+      }
+    }
+    if (claimTypes.length > 0) {
+      return claimTypes;
+    }
+  }
+
+  // Fall back to topic param (legacy support)
   switch (topic) {
     case 'arrears':
       return ['rent_arrears'];
     case 'damage':
     case 'damages':
       return ['property_damage'];
-    // If no topic, default to rent_arrears pre-selected as lowest-risk option
-    // This maintains backwards compatibility - most users expect rent arrears flow
     default:
       return [];
   }
@@ -234,9 +273,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   caseId,
   jurisdiction,
   topic,
+  reason,
 }) => {
-  // Derive initial claim reasons from topic param
-  const initialClaimReasons = useMemo(() => getInitialClaimReasons(topic), [topic]);
+  // Derive initial claim reasons from reason or topic param
+  const initialClaimReasons = useMemo(() => getInitialClaimReasons(reason, topic), [reason, topic]);
   const router = useRouter();
 
   // State
