@@ -559,13 +559,47 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   }, [currentSectionIndex]);
 
   // Jump to specific section (by ID, finding in visible sections)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleJumpToSection = useCallback((sectionId: string) => {
     const index = visibleSections.findIndex((s) => s.id === sectionId);
     if (index >= 0) {
       setCurrentSectionIndex(index);
+      // Scroll to top after navigation
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [visibleSections]);
+
+  // Map validation field/section to wizard section ID
+  const mapToWizardSection = useCallback((section: string): string => {
+    // Direct mappings
+    const sectionMap: Record<string, string> = {
+      parties: 'claimant', // "parties" from validation maps to claimant section
+      claimant: 'claimant',
+      defendant: 'defendant',
+      tenancy: 'tenancy',
+      claim_details: 'claim_details',
+      arrears: 'arrears',
+      damages: 'damages',
+      preaction: 'preaction',
+      timeline: 'timeline',
+      evidence: 'evidence',
+      enforcement: 'enforcement',
+      review: 'review',
+    };
+    return sectionMap[section] || section;
+  }, []);
+
+  // Listen for wizard:navigate custom events from ReviewSection
+  useEffect(() => {
+    const handleWizardNavigate = (event: CustomEvent<{ section: string }>) => {
+      const targetSection = mapToWizardSection(event.detail.section);
+      handleJumpToSection(targetSection);
+    };
+
+    window.addEventListener('wizard:navigate', handleWizardNavigate as EventListener);
+    return () => {
+      window.removeEventListener('wizard:navigate', handleWizardNavigate as EventListener);
+    };
+  }, [handleJumpToSection, mapToWizardSection]);
 
   // Handle wizard completion - redirect to review page (same as eviction flow)
   const handleComplete = useCallback(async () => {

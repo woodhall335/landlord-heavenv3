@@ -465,6 +465,122 @@ utilities_rules:
     field: null
 
 # =============================================================================
+# EVIDENCE INTELLIGENCE RULES (Claim-type-specific evidence warnings)
+# =============================================================================
+
+evidence_intelligence_rules:
+
+  # --- PROPERTY DAMAGE EVIDENCE REQUIREMENTS ---
+
+  - id: property_damage_missing_photo_evidence
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && !has_photo_evidence"
+    message: "Property damage claims benefit strongly from photographic evidence. Upload dated photos showing the damage."
+    rationale: "Visual evidence is essential for demonstrating the extent and nature of property damage to the court."
+    evidence_hint: "Upload photos of each damaged item/area. Before and after photos are ideal."
+    field: null
+
+  - id: property_damage_missing_inventory_evidence
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && !has_any_inventory_evidence"
+    message: "Without a check-in or check-out inventory, it may be difficult to prove the property condition changed during the tenancy."
+    rationale: "Inventory reports establish the baseline condition and show what changed during tenancy."
+    evidence_hint: "Upload check-in and/or check-out inventory reports if available."
+    field: null
+
+  - id: property_damage_missing_quote_invoice
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && !has_invoice_quote_receipt_evidence"
+    message: "Upload repair quotes or invoices to substantiate the cost of damages. Courts require evidence of actual costs."
+    rationale: "You need documentary evidence of repair costs to claim them."
+    evidence_hint: "Get at least one quote from a tradesperson for each repair item."
+    field: null
+
+  # --- CLEANING COSTS EVIDENCE REQUIREMENTS ---
+
+  - id: cleaning_missing_checkout_photos
+    severity: warning
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning') && !has_photo_evidence && !has_inventory_checkout_evidence"
+    message: "Upload check-out photos or inventory showing the property condition that required professional cleaning."
+    rationale: "You need evidence that the property was left in a condition requiring professional cleaning."
+    evidence_hint: "Photos of dirty areas, rubbish left behind, or check-out inventory with condition notes."
+    field: null
+
+  - id: cleaning_missing_invoice
+    severity: warning
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning') && !has_invoice_quote_receipt_evidence"
+    message: "Upload the professional cleaning invoice to prove the cost. Without this, the court may reduce your claim."
+    rationale: "Courts require actual invoices to award cleaning costs, not estimates."
+    evidence_hint: "Get an itemised invoice from a professional cleaning company."
+    field: null
+
+  # --- RENT ARREARS EVIDENCE REQUIREMENTS ---
+
+  - id: rent_arrears_missing_rent_ledger
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && !has_rent_ledger_bank_statement_evidence && totals.arrears_total > 0"
+    message: "Upload a rent ledger or bank statements showing missed payments. This strengthens your arrears claim."
+    rationale: "Documentary evidence of payment history helps prove the arrears schedule is accurate."
+    evidence_hint: "Bank statements showing expected rent dates with no incoming payment, or a rent ledger."
+    field: null
+
+  # --- UNPAID UTILITIES EVIDENCE REQUIREMENTS ---
+
+  - id: utilities_missing_bill_evidence
+    severity: warning
+    applies_to: [unpaid_utilities]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_utilities') && !has_utility_bill_evidence"
+    message: "Upload utility bills showing the amounts owed during the tenancy period."
+    rationale: "You need bills to prove the utility charges you are claiming."
+    evidence_hint: "Upload gas, electricity, water, or other utility bills for the relevant period."
+    field: null
+
+  - id: utilities_missing_tenancy_clause
+    severity: warning
+    applies_to: [unpaid_utilities]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_utilities') && !has_tenancy_agreement_evidence"
+    message: "Upload the tenancy agreement showing the clause making the tenant responsible for utility payments."
+    rationale: "You need to prove the tenant was contractually liable for utilities."
+    evidence_hint: "The tenancy agreement should specify tenant responsibility for utility bills."
+    field: null
+
+  # --- COUNCIL TAX EVIDENCE REQUIREMENTS ---
+
+  - id: council_tax_missing_tenancy_agreement
+    severity: warning
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax') && !has_tenancy_agreement_evidence"
+    message: "Upload the tenancy agreement containing the clause making the tenant liable for council tax."
+    rationale: "Council tax liability must be established through the tenancy agreement."
+    evidence_hint: "Look for a clause in the tenancy agreement about council tax responsibility."
+    field: null
+
+  - id: council_tax_missing_statement
+    severity: warning
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax') && !has_council_tax_statement_evidence"
+    message: "Upload council tax bills or statements showing the amount and period claimed."
+    rationale: "You need official council tax documents to prove the amount owed."
+    evidence_hint: "Request a statement from your local council showing the outstanding amount."
+    field: null
+
+# =============================================================================
 # VALIDATION SUMMARY CONFIG
 # =============================================================================
 
@@ -503,7 +619,7 @@ summary:
       rules: [pap_letter_required, pap_letter_date_future, pap_30_day_wait]
     - id: evidence
       label: "Evidence"
-      rules: [no_evidence_uploaded]
+      rules: [no_evidence_uploaded, property_damage_missing_photo_evidence, property_damage_missing_inventory_evidence, property_damage_missing_quote_invoice, cleaning_missing_checkout_photos, cleaning_missing_invoice, rent_arrears_missing_rent_ledger, utilities_missing_bill_evidence, utilities_missing_tenancy_clause, council_tax_missing_tenancy_agreement, council_tax_missing_statement]
     - id: amounts
       label: "Claim Amount"
       rules: [principal_total_positive]

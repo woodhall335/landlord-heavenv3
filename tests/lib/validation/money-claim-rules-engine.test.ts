@@ -865,6 +865,172 @@ describe('Money Claim Rules Engine - Evidence Warnings', () => {
 });
 
 // =============================================================================
+// EVIDENCE INTELLIGENCE RULES TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - Evidence Intelligence Rules', () => {
+  it('triggers property_damage_missing_photo_evidence when no photo evidence', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_photo_evidence');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger property_damage_missing_photo_evidence when photo evidence present', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'damage-photo.jpg', type: 'image/jpeg' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_photo_evidence');
+    expect(warning).toBeUndefined();
+  });
+
+  it('triggers property_damage_missing_inventory_evidence when no inventory', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'damage-photo.jpg', type: 'image/jpeg' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_inventory_evidence');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger property_damage_missing_inventory_evidence when check-in inventory present', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'check-in-inventory.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_inventory_evidence');
+    expect(warning).toBeUndefined();
+  });
+
+  it('triggers property_damage_missing_quote_invoice when no invoice', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'damage-photo.jpg', type: 'image/jpeg' },
+        { id: '2', name: 'check-in-inventory.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_quote_invoice');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger property_damage_missing_quote_invoice when invoice present', () => {
+    const facts: MoneyClaimFacts = {
+      ...propertyDamageOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'repair-invoice.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'property_damage_missing_quote_invoice');
+    expect(warning).toBeUndefined();
+  });
+
+  it('triggers rent_arrears_missing_rent_ledger when no rent ledger', () => {
+    const facts: MoneyClaimFacts = {
+      ...rentArrearsOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'rent_arrears_missing_rent_ledger');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger rent_arrears_missing_rent_ledger when rent ledger present', () => {
+    const facts: MoneyClaimFacts = {
+      ...rentArrearsOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'rent-ledger-2024.xlsx', type: 'application/vnd.ms-excel' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'rent_arrears_missing_rent_ledger');
+    expect(warning).toBeUndefined();
+  });
+
+  it('does not trigger rent_arrears_missing_rent_ledger when bank statement present', () => {
+    const facts: MoneyClaimFacts = {
+      ...rentArrearsOnlyFacts,
+      uploaded_documents: [
+        { id: '1', name: 'bank-statement-jan.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'rent_arrears_missing_rent_ledger');
+    expect(warning).toBeUndefined();
+  });
+
+  it('triggers council_tax_missing_tenancy_agreement when no tenancy agreement', () => {
+    const facts: MoneyClaimFacts = {
+      ...councilTaxFacts,
+      uploaded_documents: [
+        { id: '1', name: 'council-tax-bill.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'council_tax_missing_tenancy_agreement');
+    expect(warning).toBeDefined();
+  });
+
+  it('triggers council_tax_missing_statement when no council tax statement', () => {
+    const facts: MoneyClaimFacts = {
+      ...councilTaxFacts,
+      uploaded_documents: [
+        { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const warning = result.warnings.find((w) => w.id === 'council_tax_missing_statement');
+    expect(warning).toBeDefined();
+  });
+
+  it('does not trigger council_tax warnings when all evidence present', () => {
+    const facts: MoneyClaimFacts = {
+      ...councilTaxFacts,
+      uploaded_documents: [
+        { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+        { id: '2', name: 'council-tax-statement.pdf', type: 'application/pdf' },
+      ],
+    };
+    const result = evaluateRules(facts);
+
+    const taWarning = result.warnings.find((w) => w.id === 'council_tax_missing_tenancy_agreement');
+    const ctWarning = result.warnings.find((w) => w.id === 'council_tax_missing_statement');
+    expect(taWarning).toBeUndefined();
+    expect(ctWarning).toBeUndefined();
+  });
+});
+
+// =============================================================================
 // GROUP BY SECTION TESTS
 // =============================================================================
 

@@ -15,6 +15,7 @@
 import yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
+import { buildEvidenceContext } from '@/lib/evidence/money-claim-evidence-classifier';
 
 // ============================================================================
 // SECURITY: CONDITION ALLOWLIST
@@ -117,6 +118,18 @@ const ALLOWED_IDENTIFIERS = new Set([
   'enforcement_reviewed',
   'enforcement_preference',
   'total_arrears',
+  // Evidence context variables
+  'evidence_summary',
+  'has_photo_evidence',
+  'has_tenancy_agreement_evidence',
+  'has_inventory_checkin_evidence',
+  'has_inventory_checkout_evidence',
+  'has_invoice_quote_receipt_evidence',
+  'has_rent_ledger_bank_statement_evidence',
+  'has_correspondence_evidence',
+  'has_council_tax_statement_evidence',
+  'has_utility_bill_evidence',
+  'has_any_inventory_evidence',
   'period_start',
   'period_end',
   'rent_due',
@@ -245,6 +258,7 @@ export interface RulesConfig {
   damages_rules: ValidationRule[];
   council_tax_rules: ValidationRule[];
   utilities_rules: ValidationRule[];
+  evidence_intelligence_rules?: ValidationRule[];
   summary?: SummaryConfig;
 }
 
@@ -470,6 +484,9 @@ function buildEvaluationContext(facts: MoneyClaimFacts) {
     );
   }
 
+  // Evidence classification context
+  const evidenceContext = buildEvidenceContext(facts.uploaded_documents);
+
   return {
     facts,
     claim_types,
@@ -487,6 +504,8 @@ function buildEvaluationContext(facts: MoneyClaimFacts) {
     damage_items_without_description,
     has_damages_claim_type,
     daysSincePapLetter,
+    // Evidence context
+    ...evidenceContext,
   };
 }
 
@@ -517,6 +536,18 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
       damage_items_without_description,
       has_damages_claim_type,
       daysSincePapLetter,
+      // Evidence context
+      evidence_summary,
+      has_photo_evidence,
+      has_tenancy_agreement_evidence,
+      has_inventory_checkin_evidence,
+      has_inventory_checkout_evidence,
+      has_invoice_quote_receipt_evidence,
+      has_rent_ledger_bank_statement_evidence,
+      has_correspondence_evidence,
+      has_council_tax_statement_evidence,
+      has_utility_bill_evidence,
+      has_any_inventory_evidence,
     } = context;
 
     // Use Function constructor for safe(r) evaluation
@@ -534,6 +565,17 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
       'damage_items_without_description',
       'has_damages_claim_type',
       'daysSincePapLetter',
+      'evidence_summary',
+      'has_photo_evidence',
+      'has_tenancy_agreement_evidence',
+      'has_inventory_checkin_evidence',
+      'has_inventory_checkout_evidence',
+      'has_invoice_quote_receipt_evidence',
+      'has_rent_ledger_bank_statement_evidence',
+      'has_correspondence_evidence',
+      'has_council_tax_statement_evidence',
+      'has_utility_bill_evidence',
+      'has_any_inventory_evidence',
       `return (${condition});`
     );
 
@@ -548,7 +590,18 @@ function evaluateCondition(condition: string, context: ReturnType<typeof buildEv
       damage_items_without_amount,
       damage_items_without_description,
       has_damages_claim_type,
-      daysSincePapLetter
+      daysSincePapLetter,
+      evidence_summary,
+      has_photo_evidence,
+      has_tenancy_agreement_evidence,
+      has_inventory_checkin_evidence,
+      has_inventory_checkout_evidence,
+      has_invoice_quote_receipt_evidence,
+      has_rent_ledger_bank_statement_evidence,
+      has_correspondence_evidence,
+      has_council_tax_statement_evidence,
+      has_utility_bill_evidence,
+      has_any_inventory_evidence
     );
   } catch (error) {
     // If condition evaluation fails, don't trigger the rule
@@ -672,6 +725,7 @@ export function getAllRules(config?: RulesConfig): ValidationRule[] {
     ...(rulesConfig.damages_rules || []),
     ...(rulesConfig.council_tax_rules || []),
     ...(rulesConfig.utilities_rules || []),
+    ...(rulesConfig.evidence_intelligence_rules || []),
   ];
 }
 
