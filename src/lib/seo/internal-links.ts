@@ -384,7 +384,7 @@ export const moneyClaimGuides = {
     type: 'guide' as const,
   },
   smallClaimsCourt: {
-    href: '/small-claims-landlord',
+    href: '/money-claim-small-claims-landlord',
     title: 'Small Claims for Landlords',
     description: 'Claims under £10,000 explained',
     icon: 'legal' as const,
@@ -399,31 +399,31 @@ export const moneyClaimGuides = {
   },
 };
 
-// Money Claim Free Form/Template Pages
+// Money Claim Form/Template Pages
 export const moneyClaimForms = {
   n1Form: {
-    href: '/forms/n1-claim-form',
+    href: '/money-claim-n1-claim-form',
     title: 'N1 Claim Form Template',
     description: 'Blank court claim form (England)',
     icon: 'document' as const,
     type: 'page' as const,
   },
   letterBeforeAction: {
-    href: '/forms/letter-before-action',
+    href: '/money-claim-letter-before-action',
     title: 'Letter Before Action Template',
     description: 'Pre-action protocol letter',
     icon: 'document' as const,
     type: 'page' as const,
   },
   scheduleOfDebt: {
-    href: '/forms/schedule-of-debt',
+    href: '/money-claim-schedule-of-debt',
     title: 'Schedule of Debt Template',
     description: 'Itemised rent arrears schedule',
     icon: 'document' as const,
     type: 'page' as const,
   },
   financialStatement: {
-    href: '/forms/pap-financial-statement',
+    href: '/money-claim-pap-financial-statement',
     title: 'PAP Financial Statement',
     description: 'Pre-action protocol reply form',
     icon: 'document' as const,
