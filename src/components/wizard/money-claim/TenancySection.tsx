@@ -156,46 +156,24 @@ export const TenancySection: React.FC<SectionProps> = ({
         </div>
       </div>
 
-      {/* Rent due day / weekday */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            On which day is rent due each period?
-          </label>
-          <input
-            type="number"
-            min={1}
-            max={31}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_due_day ?? ''}
-            onChange={(e) =>
-              updateTenancy(
-                'rent_due_day',
-                e.target.value === '' ? null : Number(e.target.value),
-              )
-            }
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Usual rent payment day of the week
-          </label>
-          <select
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.usual_payment_weekday || ''}
-            onChange={(e) => updateTenancy('usual_payment_weekday', e.target.value)}
-          >
-            <option value="">Select day</option>
-            <option value="monday">Monday</option>
-            <option value="tuesday">Tuesday</option>
-            <option value="wednesday">Wednesday</option>
-            <option value="thursday">Thursday</option>
-            <option value="friday">Friday</option>
-            <option value="saturday">Saturday</option>
-            <option value="sunday">Sunday</option>
-          </select>
-        </div>
+      {/* Rent due day */}
+      <div className="space-y-1">
+        <label className="text-sm font-medium text-charcoal">
+          On which day is rent due each period?
+        </label>
+        <input
+          type="number"
+          min={1}
+          max={31}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          value={tenancy.rent_due_day ?? ''}
+          onChange={(e) =>
+            updateTenancy(
+              'rent_due_day',
+              e.target.value === '' ? null : Number(e.target.value),
+            )
+          }
+        />
       </div>
     </div>
   );
