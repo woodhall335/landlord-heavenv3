@@ -20,9 +20,9 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
+import { RiCheckLine, RiErrorWarningLine, RiAlertLine } from 'react-icons/ri';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
@@ -32,6 +32,9 @@ import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wi
 // Analytics and attribution
 import { trackWizardStepCompleteWithAttribution, trackMoneyClaimSectionSkipped } from '@/lib/analytics';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
+// Validation
+import { getSectionValidation, validateMoneyClaimCase } from '@/lib/validation/money-claim-case-validator';
 
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
@@ -72,9 +75,11 @@ interface WizardSection {
   // Validation function to check if section is complete
   isComplete: (facts: any) => boolean;
   // Check if section has blockers
-  hasBlockers?: (facts: any) => string[];
+  hasBlockers?: (facts: any, jurisdiction?: Jurisdiction) => string[];
   // Check if section has warnings
-  hasWarnings?: (facts: any) => string[];
+  hasWarnings?: (facts: any, jurisdiction?: Jurisdiction) => string[];
+  // Whether section should be visible based on claim types
+  isVisible?: (facts: any) => boolean;
 }
 
 // Define all sections with their validation rules
@@ -84,9 +89,17 @@ const SECTIONS: WizardSection[] = [
     label: 'Claimant',
     description: 'Your contact details as the landlord or company',
     isComplete: (facts) =>
-      Boolean(facts.landlord_full_name) &&
+      Boolean(facts.landlord_full_name || (facts.landlord_is_company && facts.company_name)) &&
       Boolean(facts.landlord_address_line1) &&
       Boolean(facts.landlord_address_postcode),
+    hasBlockers: (facts) => {
+      const result = getSectionValidation('claimant', facts, facts.__meta?.jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('claimant', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'defendant',
@@ -95,6 +108,14 @@ const SECTIONS: WizardSection[] = [
     isComplete: (facts) =>
       Boolean(facts.tenant_full_name) &&
       Boolean(facts.defendant_address_line1 || facts.property_address_line1),
+    hasBlockers: (facts) => {
+      const result = getSectionValidation('defendant', facts, facts.__meta?.jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('defendant', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'tenancy',
@@ -104,6 +125,14 @@ const SECTIONS: WizardSection[] = [
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&
       Boolean(facts.rent_frequency),
+    hasBlockers: (facts) => {
+      const result = getSectionValidation('tenancy', facts, facts.__meta?.jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('tenancy', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'claim_details',
@@ -131,6 +160,14 @@ const SECTIONS: WizardSection[] = [
 
       return hasClaimType;
     },
+    hasBlockers: (facts, jurisdiction) => {
+      const result = getSectionValidation('claim_details', facts, jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts, jurisdiction) => {
+      const result = getSectionValidation('claim_details', facts, jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'arrears',
@@ -145,14 +182,21 @@ const SECTIONS: WizardSection[] = [
       return Array.isArray(arrearsItems) && arrearsItems.length > 0;
     },
     hasBlockers: (facts) => {
-      const blockers: string[] = [];
-      if (facts.claiming_rent_arrears === true) {
-        const arrearsItems = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
-        if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
-          blockers.push('Please add at least one arrears entry');
-        }
-      }
-      return blockers;
+      const result = getSectionValidation('arrears', facts, facts.__meta?.jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('arrears', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
+    // Only show if claiming rent arrears
+    isVisible: (facts) => {
+      // Show if claiming rent arrears OR if not yet selected any claim type (so user sees all options)
+      const hasSelectedAnyClaimType =
+        facts.claiming_rent_arrears !== undefined ||
+        facts.claiming_damages !== undefined ||
+        facts.claiming_other !== undefined;
+      return !hasSelectedAnyClaimType || facts.claiming_rent_arrears === true;
     },
   },
   {
@@ -170,15 +214,20 @@ const SECTIONS: WizardSection[] = [
       return Array.isArray(damageItems) && damageItems.length > 0;
     },
     hasBlockers: (facts) => {
-      const blockers: string[] = [];
-      // If claiming damages or other costs, require at least one damage item
-      if (facts.claiming_damages === true || facts.claiming_other === true) {
-        const damageItems = facts.money_claim?.damage_items || facts.damage_items || [];
-        if (!Array.isArray(damageItems) || damageItems.length === 0) {
-          blockers.push('Please add at least one damage or cost item');
-        }
-      }
-      return blockers;
+      const result = getSectionValidation('damages', facts, facts.__meta?.jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('damages', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
+    // Only show if claiming damages or other costs
+    isVisible: (facts) => {
+      const hasSelectedAnyClaimType =
+        facts.claiming_rent_arrears !== undefined ||
+        facts.claiming_damages !== undefined ||
+        facts.claiming_other !== undefined;
+      return !hasSelectedAnyClaimType || facts.claiming_damages === true || facts.claiming_other === true;
     },
   },
   {
@@ -188,6 +237,14 @@ const SECTIONS: WizardSection[] = [
     isComplete: (facts) =>
       Boolean(facts.letter_before_claim_sent) ||
       Boolean(facts.pap_letter_date),
+    hasBlockers: (facts, jurisdiction) => {
+      const result = getSectionValidation('preaction', facts, jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts, jurisdiction) => {
+      const result = getSectionValidation('preaction', facts, jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'timeline',
@@ -195,6 +252,10 @@ const SECTIONS: WizardSection[] = [
     description: 'Pre-action protocol timeline',
     // Optional section - only complete when user has visited and reviewed
     isComplete: (facts) => Boolean(facts.timeline_reviewed),
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('timeline', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'evidence',
@@ -202,6 +263,10 @@ const SECTIONS: WizardSection[] = [
     description: 'Supporting documents',
     // Optional section - only complete when user has uploaded evidence or confirmed none needed
     isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('evidence', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'enforcement',
@@ -209,6 +274,10 @@ const SECTIONS: WizardSection[] = [
     description: 'Preferred enforcement methods',
     // Optional section - only complete when user has made enforcement preferences
     isComplete: (facts) => Boolean(facts.enforcement_reviewed || facts.enforcement_preference),
+    hasWarnings: (facts) => {
+      const result = getSectionValidation('enforcement', facts, facts.__meta?.jurisdiction || 'england');
+      return result.warnings;
+    },
   },
   {
     id: 'review',
@@ -290,6 +359,13 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
   const [smartReviewSummary, setSmartReviewSummary] = useState<SmartReviewSummary | null>(null);
 
+  // Ask Heaven contextual question tracking
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | undefined>(undefined);
+
+  // Debounced save refs
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<any>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -325,9 +401,17 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     void loadFacts();
   }, [caseId, jurisdiction]);
 
-  const currentSection = SECTIONS[currentSectionIndex];
+  // Get visible sections based on claim type selections
+  const visibleSections = useMemo(() => {
+    return SECTIONS.filter((section) => {
+      if (!section.isVisible) return true;
+      return section.isVisible(facts);
+    });
+  }, [facts]);
 
-  // Save facts to backend
+  const currentSection = visibleSections[currentSectionIndex];
+
+  // Save facts to backend (actual save)
   const saveFactsToServer = useCallback(
     async (updatedFacts: any) => {
       try {
@@ -349,9 +433,43 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     [caseId, jurisdiction]
   );
 
-  // Update facts and save
+  // Debounced save - waits 500ms before saving to reduce API calls
+  const debouncedSave = useCallback(
+    (updatedFacts: any) => {
+      pendingFactsRef.current = updatedFacts;
+
+      // Clear existing timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Set new timeout
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
+    },
+    [saveFactsToServer]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        // Save any pending changes before unmount
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+        }
+      }
+    };
+  }, [saveFactsToServer]);
+
+  // Update facts and save (with debouncing)
   const handleUpdate = useCallback(
-    async (updates: Record<string, any>) => {
+    (updates: Record<string, any>) => {
       // Deep merge to preserve existing nested fields
       const next = { ...facts };
 
@@ -367,9 +485,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       }
 
       setFacts(next);
-      await saveFactsToServer(next);
+      debouncedSave(next);
     },
-    [facts, saveFactsToServer]
+    [facts, debouncedSave]
   );
 
   // Helper to get current claim reasons from facts
@@ -387,9 +505,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
-    if (currentSectionIndex < SECTIONS.length - 1) {
+    if (currentSectionIndex < visibleSections.length - 1) {
       // Track step completion if the current section is complete
-      const current = SECTIONS[currentSectionIndex];
+      const current = visibleSections[currentSectionIndex];
       if (current && current.isComplete(facts)) {
         // Only fire if not already tracked for this step
         const shouldTrack = markStepCompleted(current.id);
@@ -400,7 +518,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             jurisdiction: jurisdiction,
             step: current.id,
             stepIndex: currentSectionIndex,
-            totalSteps: SECTIONS.length,
+            totalSteps: visibleSections.length,
             src: attribution.src,
             topic: attribution.topic,
             utm_source: attribution.utm_source,
@@ -431,7 +549,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, facts, jurisdiction, getClaimReasons]);
+  }, [currentSectionIndex, visibleSections, facts, jurisdiction, getClaimReasons]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -440,38 +558,35 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     }
   }, [currentSectionIndex]);
 
-  // Jump to specific section
+  // Jump to specific section (by ID, finding in visible sections)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleJumpToSection = useCallback((sectionId: string) => {
-    const index = SECTIONS.findIndex((s) => s.id === sectionId);
+    const index = visibleSections.findIndex((s) => s.id === sectionId);
     if (index >= 0) {
       setCurrentSectionIndex(index);
     }
-  }, []);
+  }, [visibleSections]);
 
   // Handle wizard completion - redirect to review page (same as eviction flow)
   const handleComplete = useCallback(async () => {
     router.push(`/wizard/review?case_id=${caseId}&product=money_claim`);
   }, [caseId, router]);
 
-  // Calculate progress
-  const completedCount = SECTIONS.filter((s) => s.isComplete(facts)).length;
-  const progress = Math.round((completedCount / SECTIONS.length) * 100);
+  // Calculate progress based on visible sections
+  const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
+  const progress = Math.round((completedCount / visibleSections.length) * 100);
 
-  // Get blockers and warnings for current section
-  const currentBlockers = currentSection?.hasBlockers?.(facts) || [];
-  const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
+  // Get blockers and warnings for current section (with jurisdiction)
+  const currentBlockers = currentSection?.hasBlockers?.(facts, jurisdiction) || [];
+  const currentWarnings = currentSection?.hasWarnings?.(facts, jurisdiction) || [];
 
-  // Jurisdiction label
-  const jurisdictionLabel = useMemo(() => {
-    switch (jurisdiction) {
-      case 'scotland':
-        return 'Scotland Simple Procedure';
-      case 'wales':
-        return 'Wales Money Claim';
-      default:
-        return 'England Money Claim';
-    }
-  }, [jurisdiction]);
+  // Get overall case validation for review section
+  const caseValidation = useMemo(() => {
+    return validateMoneyClaimCase(facts, jurisdiction);
+  }, [facts, jurisdiction]);
+
+  // Jurisdiction label - Money Claim is England only
+  const jurisdictionLabel = 'England Money Claim';
 
   // Render section content
   const renderSection = () => {
@@ -497,6 +612,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             onUpdate={handleUpdate}
             jurisdiction={jurisdiction}
             initialClaimReasons={initialClaimReasons}
+            onSetCurrentQuestionId={setCurrentQuestionId}
           />
         );
       case 'arrears':
@@ -570,7 +686,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               {jurisdictionLabel} Pack
             </h1>
             <span className="text-sm text-gray-500">
-              {completedCount} of {SECTIONS.length} sections complete
+              {completedCount} of {visibleSections.length} sections complete
             </span>
           </div>
 
@@ -584,10 +700,11 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
           {/* Section tabs */}
           <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
-            {SECTIONS.map((section, index) => {
+            {visibleSections.map((section, index) => {
               const isComplete = section.isComplete(facts);
               const isCurrent = index === currentSectionIndex;
-              const hasBlocker = (section.hasBlockers?.(facts) || []).length > 0;
+              const hasBlocker = (section.hasBlockers?.(facts, jurisdiction) || []).length > 0;
+              const hasWarning = (section.hasWarnings?.(facts, jurisdiction) || []).length > 0;
 
               return (
                 <button
@@ -597,6 +714,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-colors
                     ${isCurrent ? 'bg-[#7C3AED] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
                     ${hasBlocker && !isCurrent ? 'ring-2 ring-red-300' : ''}
+                    ${hasWarning && !hasBlocker && !isCurrent ? 'ring-2 ring-amber-300' : ''}
                   `}
                 >
                   <span className="flex items-center gap-1.5">
@@ -605,6 +723,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     )}
                     {hasBlocker && (
                       <RiErrorWarningLine className="w-4 h-4 text-red-500" />
+                    )}
+                    {hasWarning && !hasBlocker && !isComplete && (
+                      <RiAlertLine className="w-4 h-4 text-amber-500" />
                     )}
                     {section.label}
                   </span>
@@ -703,10 +824,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               {currentSection?.id === 'review' ? (
                 <button
                   onClick={handleComplete}
-                  disabled={currentBlockers.length > 0}
+                  disabled={!caseValidation.valid}
                   className={`
                     px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${currentBlockers.length > 0
+                    ${!caseValidation.valid
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       : 'bg-green-600 text-white hover:bg-green-700'}
                   `}
@@ -716,10 +837,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               ) : (
                 <button
                   onClick={handleNext}
-                  disabled={currentSectionIndex === SECTIONS.length - 1}
+                  disabled={currentSectionIndex === visibleSections.length - 1}
                   className={`
                     px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${currentSectionIndex === SECTIONS.length - 1
+                    ${currentSectionIndex === visibleSections.length - 1
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                       : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
                   `}
@@ -739,7 +860,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
               caseType="money_claim"
               jurisdiction={jurisdiction}
               product="money_claim"
-              currentQuestionId={undefined}
+              currentQuestionId={currentQuestionId}
             />
           </div>
         </aside>

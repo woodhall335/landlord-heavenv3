@@ -165,6 +165,9 @@ export default function MoneyClaimUnpaidRentPage() {
                   Calculate Arrears + Interest
                 </Link>
               </div>
+              <p className="mt-4 text-sm text-green-200">
+                Money Claim Pack available for England only
+              </p>
             </div>
           </div>
         </section>
@@ -788,9 +791,8 @@ export default function MoneyClaimUnpaidRentPage() {
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold mb-6">Ready to Claim Your Unpaid Rent?</h2>
               <p className="text-xl text-green-100 mb-8">
-                Our Money Claim Pack includes everything you need: letter before action, N1
-                claim form (or Form 3A for Scotland), rent schedule, and step-by-step
-                guidance.
+                Our Money Claim Pack (England only) includes everything you need: letter before action, N1
+                claim form, rent schedule, and step-by-step guidance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -807,6 +809,9 @@ export default function MoneyClaimUnpaidRentPage() {
                   Calculate What You&apos;re Owed
                 </Link>
               </div>
+              <p className="mt-4 text-sm text-green-200">
+                Pack available for England only. See sections above for Scotland and Northern Ireland court processes.
+              </p>
             </div>
           </div>
         </section>
