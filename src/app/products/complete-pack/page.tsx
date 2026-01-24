@@ -68,7 +68,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England only. This pack includes Section 21/Section 8 notices plus N5, N119, N5B court forms for English courts. For Scotland properties, use our Notice Only pack (£39.99) for eviction notices. Northern Ireland is not supported for eviction."
+    answer: "England only. This pack includes Section 21/Section 8 notices plus N5, N119, N5B court forms for English courts."
   },
   {
     question: "Are these genuine official court forms?",
@@ -116,7 +116,7 @@ export default function CompleteEvictionPackPage() {
               7-9 court-ready documents for England
             </p>
             <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
-              England only — Scotland: use <a href="/products/notice-only" className="underline hover:text-amber-900">Notice Only</a>
+              England only
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>

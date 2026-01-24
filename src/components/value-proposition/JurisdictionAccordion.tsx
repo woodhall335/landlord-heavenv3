@@ -13,13 +13,9 @@
  *
  * COMPLETE PACK:
  * - England: N5 + N119 (+ N5B for accelerated) - ENGLAND ONLY
- * - Scotland: Not available (use Notice Only)
- * - Northern Ireland: Not available
  *
  * MONEY CLAIM:
  * - England: N1 + PAP-DEBT documents - ENGLAND ONLY
- * - Scotland: Not available (use Notice Only for arrears eviction)
- * - Northern Ireland: Not available
  *
  * AST:
  * - England: AST
@@ -32,7 +28,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { RiCheckboxCircleLine, RiCloseLine } from 'react-icons/ri';
 
 export type ProductType = 'notice_only' | 'complete_pack' | 'money_claim' | 'ast';
@@ -117,20 +113,6 @@ export function JurisdictionAccordion({
             </div>
           ))}
 
-          {/* NI Warning for eviction products */}
-          {(product === 'complete_pack' || product === 'money_claim') && (
-            <div className="px-6 py-4 bg-amber-50 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <p className="text-sm text-amber-800">
-                <strong>Northern Ireland:</strong> Eviction notices and money claims are not currently
-                supported. We support{' '}
-                <a href="/products/ast" className="text-primary hover:underline">
-                  tenancy agreements
-                </a>{' '}
-                for Northern Ireland properties.
-              </p>
-            </div>
-          )}
         </div>
       )}
     </div>
@@ -196,20 +178,6 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
           ],
           notes: '7-9 documents total depending on route',
         },
-        {
-          name: 'Scotland',
-          flag: '/gb-sct.svg',
-          available: false,
-          documents: [],
-          notes: 'Complete Pack not available for Scotland. Use Notice Only (£39.99) for Notice to Leave.',
-        },
-        {
-          name: 'Northern Ireland',
-          flag: '/gb-nir.svg',
-          available: false,
-          documents: [],
-          notes: 'Eviction not available. Tenancy agreements only.',
-        },
       ];
 
     case 'money_claim':
@@ -231,20 +199,6 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
             'Enforcement Guide',
           ],
           notes: '11 documents total',
-        },
-        {
-          name: 'Scotland',
-          flag: '/gb-sct.svg',
-          available: false,
-          documents: [],
-          notes: 'Money Claim not available for Scotland. Use Notice Only (£39.99) to evict for rent arrears.',
-        },
-        {
-          name: 'Northern Ireland',
-          flag: '/gb-nir.svg',
-          available: false,
-          documents: [],
-          notes: 'Money Claim not available. Tenancy agreements only.',
         },
       ];
 

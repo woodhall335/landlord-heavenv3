@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts. For Scotland properties, use our Notice Only pack (£39.99) to serve eviction notices for rent arrears instead. Northern Ireland is not supported."
+    answer: "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts."
   },
   {
     question: "How long are documents stored?",
@@ -110,7 +110,7 @@ export default function MoneyClaimPage() {
               11 court-ready documents for England
             </p>
             <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
-              England only — Scotland: use <a href="/products/notice-only" className="underline hover:text-amber-900">Notice Only</a> for arrears eviction
+              England only
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-6">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
