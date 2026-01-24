@@ -532,6 +532,50 @@ export default function MoneyClaimPage() {
         </Container>
       </section>
 
+      {/* Cross-sell: Eviction for Tenant Still in Property */}
+      <section className="py-12 md:py-16 bg-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl border-2 border-purple-200 p-6 md:p-8 shadow-sm">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <FileText className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-charcoal mb-2">
+                    Need to evict the tenant too?
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    A money claim recovers what you&apos;re owed — but if you also need the tenant OUT of the
+                    property, you&apos;ll need an eviction notice. You can pursue both simultaneously: eviction
+                    for possession and money claim for the debt.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/wizard?product=notice_only&src=money_claim_crosssell"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+                    >
+                      Get Notice Only — {PRODUCTS.notice_only.displayPrice}
+                    </Link>
+                    <Link
+                      href="/wizard?product=complete_pack&src=money_claim_crosssell"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-purple-300 text-primary font-medium rounded-lg hover:bg-purple-50 transition-colors"
+                    >
+                      Get Complete Pack — {PRODUCTS.complete_pack.displayPrice}
+                    </Link>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-3">
+                    <Link href="/how-to-evict-tenant" className="text-primary hover:underline">
+                      Learn about the eviction process →
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* FAQ */}
       <FAQSection
         title="Frequently Asked Questions"

@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine, RiAlertLine } from 'react-icons/ri';
 import { Section21ActionRequired } from '@/components/dashboard/Section21ActionRequired';
+import { PostPurchaseCrossSell } from '@/components/dashboard/PostPurchaseCrossSell';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, trackMoneyClaimPurchaseCompleted, type PurchaseAttribution, type MoneyClaimReason } from '@/lib/analytics';
 import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
@@ -1587,6 +1588,14 @@ export default function CaseDetailPage() {
                 </Link>
               </div>
             </Card>
+
+            {/* Post-Purchase Cross-Sell */}
+            {orderStatus?.paid && (
+              <PostPurchaseCrossSell
+                purchasedProduct={getEffectiveProduct()}
+                caseId={caseId}
+              />
+            )}
           </div>
         </div>
       </Container>

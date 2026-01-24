@@ -536,6 +536,45 @@ export default function CompleteEvictionPackPage() {
         </Container>
       </section>
 
+      {/* Cross-sell: Money Claim for Rent Arrears Recovery */}
+      <section className="py-12 md:py-16 bg-blue-50">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl border-2 border-blue-200 p-6 md:p-8 shadow-sm">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                  <BadgePoundSterling className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-charcoal mb-2">
+                    Also need to recover unpaid rent?
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Eviction gets you possession — but if your tenant owes rent arrears, you may also want to
+                    pursue a money claim. Many landlords do both: eviction for possession AND a money claim to
+                    recover what they&apos;re owed.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/wizard?product=money_claim&src=complete_pack_crosssell"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
+                    </Link>
+                    <Link
+                      href="/money-claim-unpaid-rent"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-blue-300 text-blue-700 font-medium rounded-lg hover:bg-blue-50 transition-colors"
+                    >
+                      Learn about money claims →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* FAQ */}
       <FAQSection
         title="Frequently Asked Questions"
