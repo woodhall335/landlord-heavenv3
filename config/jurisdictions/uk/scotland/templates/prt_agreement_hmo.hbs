@@ -1,0 +1,773 @@
+{{! HMO Private Residential Tenancy Agreement - Scotland }}
+{{! Private Housing (Tenancies) (Scotland) Act 2016 }}
+{{!
+  HMO CLAUSES INCLUDED:
+  - Multiple tenants / joint liability clauses
+  - Shared facilities obligations
+  - Fire safety responsibilities
+  - HMO licensing acknowledgement (Civic Government (Scotland) Act 1982)
+  - House rules and enforcement
+  - Occupancy limits
+
+  LEGAL NOTE: Scotland PRT is open-ended (no fixed end date).
+  First-tier Tribunal for Scotland (not County Court).
+  Rent Pressure Zone compatibility included.
+}}
+
+# HMO PRIVATE RESIDENTIAL TENANCY AGREEMENT
+
+**SCOTLAND**
+
+**Includes HMO-specific clauses for multi-occupancy properties**
+
+This Agreement is dated: **{{agreement_date}}**
+
+---
+
+## PARTIES
+
+**LANDLORD:**
+Name: {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
+Address: {{landlord_address}}
+Email: {{landlord_email}}
+Phone: {{landlord_phone}}
+
+{{#if landlord_reg_number}}
+**Landlord Registration Number:** {{landlord_reg_number}}
+*(As required by the Antisocial Behaviour etc. (Scotland) Act 2004)*
+{{else}}
+**⚠️ IMPORTANT:** The Landlord must be registered with the local council. Registration number will be provided.
+{{/if}}
+
+{{#if agent_name}}
+**LANDLORD'S LETTING AGENT:**
+Name: {{agent_name}}
+Address: {{agent_address}}
+Email: {{agent_email}}
+Phone: {{agent_phone}}
+{{#if agent_reg_number}}
+Registration Number: {{agent_reg_number}}
+{{/if}}
+{{/if}}
+
+**TENANT(S):**
+{{#each tenants}}
+{{this.number}}. Name: {{this.full_name}}
+   Date of Birth: {{this.dob}}
+   Email: {{this.email}}
+   Phone: {{this.phone}}
+{{/each}}
+
+---
+
+## THE PROPERTY
+
+The property which is let is:
+
+**{{property_address}}**
+
+{{#if property_description}}
+Description: {{property_description}}
+{{/if}}
+
+{{#if included_areas}}
+**Including:** {{included_areas}}
+{{/if}}
+
+{{#if excluded_areas}}
+**Excluding:** {{excluded_areas}}
+{{/if}}
+
+{{#if parking}}
+**Parking:** {{parking_details}}
+{{/if}}
+
+{{#if furnished_status}}
+**Furnished Status:** {{furnished_status}}
+{{/if}}
+
+{{#if council_tax_band}}
+**Council Tax Band:** {{council_tax_band}}
+{{/if}}
+
+---
+
+## TYPE OF TENANCY
+
+This is a **PRIVATE RESIDENTIAL TENANCY (PRT)** under the Private Housing (Tenancies) (Scotland) Act 2016.
+
+**Important characteristics of a PRT:**
+- There is **no fixed end date** - the tenancy continues until either party ends it properly
+- The Tenant has security of tenure and can only be evicted on specified grounds
+- The Landlord must follow the correct legal procedures and obtain a Tribunal order to evict
+- Both parties have specific rights and obligations under the Act
+
+{{#if uses_model_tenancy_terms}}
+**Scottish Government Model Terms:** This agreement is based on the Scottish Government's model PRT terms, which provide a standardised framework designed to reduce disputes.
+{{else}}
+**Agreement Structure:** This agreement does not use the Scottish Government's model PRT terms. Bespoke or custom terms have been applied to meet the specific requirements of this tenancy.
+{{/if}}
+
+---
+
+## THE TERM
+
+**Start Date:** {{tenancy_start_date}}
+
+This tenancy has **no fixed end date**. It will continue until it is ended by either:
+- The Tenant giving proper notice (at least 28 days)
+- The Landlord obtaining an eviction order from the First-tier Tribunal for Scotland (Housing and Property Chamber)
+
+The tenancy cannot be converted to any other type of tenancy.
+
+---
+
+## THE RENT
+
+**Rent Amount:** £{{rent_amount}} per {{rent_period}}
+
+**Payment Due:** {{rent_due_day}} of each {{rent_period}}
+
+**Payment Method:** {{payment_method}}
+
+**Payment Details:** {{payment_details}}
+
+**First Payment:** £{{first_payment}} due on {{first_payment_date}}
+
+{{#if rent_includes}}
+**The rent includes:** {{rent_includes}}
+{{/if}}
+
+{{#if rent_excludes}}
+**The rent excludes:** {{rent_excludes}}
+(Tenant responsible for these costs)
+{{/if}}
+
+### Rent Increases
+
+The Landlord may increase the rent, but must:
+- Give the Tenant at least **3 months' written notice** using the prescribed Rent Increase Notice (Form 4)
+- Not increase the rent more than once in any 12-month period
+- Set a rent that is no more than the open market rent for a comparable property
+
+{{#if in_rent_pressure_zone}}
+**Rent Pressure Zone:** This property is located in a designated Rent Pressure Zone (RPZ). Rent increases are subject to additional restrictions and caps as set by the local authority. The Landlord must comply with RPZ regulations when proposing any rent increase.
+{{else}}
+{{#unless in_rent_pressure_zone}}
+**Rent Pressure Zone:** This property is not currently in a designated Rent Pressure Zone.
+{{/unless}}
+{{/if}}
+
+The Tenant has the right to refer the rent increase to a Rent Officer if they believe it is too high. The Rent Officer will determine the open market rent.
+
+---
+
+## THE DEPOSIT
+
+**Deposit Amount:** £{{deposit_amount}}
+
+The deposit must be paid on or before the start of the tenancy.
+
+**Deposit Protection:** Within **30 working days** of receiving the deposit, the Landlord will:
+1. Protect it in an approved tenancy deposit scheme
+2. Provide the Tenant with the required information about the protection
+
+**Deposit Scheme:** {{deposit_scheme_name}}
+
+**Approved Scottish Schemes:**
+- SafeDeposits Scotland
+- MyDeposits Scotland
+- Letting Protection Service Scotland
+
+**Purpose:** The deposit is held as security for:
+- Damage to the property, fixtures, fittings or contents (beyond reasonable wear and tear)
+- Unpaid rent
+- Unpaid bills where Tenant is responsible
+- Other breaches of this agreement
+
+**Failure to protect:** If the Landlord fails to protect the deposit or provide the required information, the Tenant may apply to the First-tier Tribunal for an order requiring the Landlord to pay the Tenant up to three times the deposit amount.
+
+---
+
+## INVENTORY AND CONDITION
+
+{{#if inventory_attached}}
+An inventory and condition report describing the property's contents and condition is attached as Schedule 1.
+
+The Tenant should check the inventory carefully and notify the Landlord in writing within **7 days** of any inaccuracies.
+{{else}}
+An inventory and condition report will be prepared and provided to the Tenant within 7 days of the start date.
+{{/if}}
+
+The inventory will be used at the end of the tenancy to determine if there is any damage beyond reasonable wear and tear.
+
+---
+
+## TENANT'S OBLIGATIONS
+
+The Tenant agrees to:
+
+### 1. Rent Payment
+Pay the rent on time without deduction or set-off (unless legally entitled).
+
+### 2. Utilities and Council Tax
+Pay all charges for:
+- Gas, electricity, water and sewerage
+- Telephone and internet
+- Council tax (unless included in rent or exempt)
+- TV licence
+
+during the tenancy.
+
+### 3. Use of Property
+- Use the property as the Tenant's only or principal home
+- Not run any business from the property without the Landlord's written consent
+- Not use the property for any illegal or immoral purpose
+
+### 4. Care of Property
+- Take reasonable care of the property
+- Keep the property in a reasonable state of cleanliness and tidiness
+- Keep the property adequately heated and ventilated to prevent condensation, dampness and mould
+- Report any defects or damage to the Landlord without unreasonable delay
+- Not cause damage to the property (fair wear and tear excepted)
+- Make good any damage caused by the Tenant, members of the Tenant's household, or visitors
+
+### 5. Alterations and Improvements
+Not make any alterations, additions or improvements to the property without the Landlord's written consent.
+
+If consent is given, the Tenant may be entitled to compensation for improvements at the end of the tenancy.
+
+### 6. Decorations
+Not remove or alter any of the Landlord's decorations, fixtures, fittings or furnishings without consent.
+
+### 7. Pets
+{{#if pets_allowed}}
+Keep pets only with the Landlord's prior written consent.
+
+Current approved pets: {{approved_pets}}
+
+The Landlord's consent must not be unreasonably withheld. If the Tenant requests permission to keep a pet, the Landlord must respond within 28 days. Failure to respond will be treated as consent.
+{{else}}
+Not keep any pets, birds or animals at the property without the Landlord's prior written consent.
+
+The Landlord's consent must not be unreasonably withheld. If the Tenant requests permission to keep a pet, the Landlord must respond within 28 days. Failure to respond will be treated as consent.
+{{/if}}
+
+### 8. Smoking
+{{#if smoking_allowed}}
+Smoking is permitted but the Tenant must ensure the property is not damaged and odours are minimised.
+{{else}}
+Not smoke or permit smoking inside the property.
+{{/if}}
+
+### 9. Subletting and Assignment
+- Not sublet the whole property
+- Not sublet part of the property without the Landlord's written consent
+- Not take in lodgers without the Landlord's written consent
+- The Landlord's consent must not be unreasonably withheld
+
+### 10. Access for Landlord
+Allow the Landlord or their agent reasonable access to the property for:
+- Viewing the state and condition of the property
+- Carrying out necessary repairs or inspections
+- Viewing the property for sale or re-letting (if the tenancy is ending)
+
+**Notice required:** The Landlord must give **at least 24 hours' notice** (except in emergencies).
+
+**Frequency:** Inspections normally no more than once every 3 months.
+
+### 11. Gardens and External Areas
+{{#if has_garden}}
+- Keep gardens, patios and external areas in a reasonable condition
+- Cut lawns regularly during growing season
+- Not remove or severely prune trees, shrubs or plants without consent
+- Keep paths clear and safe
+{{/if}}
+
+### 12. Waste and Recycling
+- Dispose of all waste and rubbish appropriately
+- Follow the local council's recycling and waste collection requirements
+- Keep wheelie bins in designated storage areas
+- Not allow rubbish to accumulate
+
+### 13. Behaviour and Noise
+- Not behave in an antisocial manner
+- Not cause nuisance, annoyance or disturbance to neighbours or others in the locality
+- Keep noise to a reasonable level, especially between 11pm and 7am
+- Ensure that members of the household and visitors do not behave antisocially
+
+### 14. Insurance
+The Tenant is responsible for insuring their own belongings. The Landlord's insurance does not cover the Tenant's possessions.
+
+### 15. Notification Requirements
+Notify the Landlord promptly of:
+- Any damage to the property
+- Any defects requiring repair
+- Any change in the number of people living in the property
+- Any absence from the property exceeding {{absence_notification_days}} days
+
+### 16. End of Tenancy
+When the tenancy ends:
+- Give proper notice (at least 28 days in writing)
+- Leave the property clean and in the same condition as at the start (fair wear and tear excepted)
+- Return all keys, access devices and security fobs
+- Remove all belongings
+- Provide a forwarding address for return of deposit and correspondence
+
+---
+
+## LANDLORD'S OBLIGATIONS
+
+The Landlord agrees to:
+
+### 1. Quiet Enjoyment
+Allow the Tenant to occupy and use the property without interference from the Landlord (except as permitted by this agreement or by law).
+
+### 2. Repairing Standard
+Ensure the property meets the **Repairing Standard** at all times, including:
+- The property is wind and watertight and in all other respects reasonably fit for human habitation
+- The structure and exterior are in reasonable repair and in proper working order
+- Installations for supply of water, gas, electricity, sanitation, space heating and water heating are in reasonable repair and proper working order
+- Fixtures and fittings and furnishings are in reasonable repair and proper working order
+- Common areas are maintained in reasonable repair, safe and in proper working order
+- The property has satisfactory provision for detecting fires and for giving warning in the event of fire or suspected fire
+- The property has satisfactory provision for giving warning if carbon monoxide is present
+
+If the Tenant believes the property does not meet the Repairing Standard, they can apply to the local authority or to the First-tier Tribunal.
+
+### 3. Safety Compliance
+
+**Gas Safety:**
+- Ensure all gas appliances are safe
+- Provide an annual Gas Safety Certificate (CP12)
+- Arrange annual safety check by Gas Safe registered engineer
+
+**Electrical Safety:**
+- Ensure electrical installations are safe
+- Provide Electrical Installation Condition Report (EICR) every 5 years (or at change of tenancy)
+- Ensure electrical appliances provided are safe
+
+**Fire Safety:**
+- Install interlinked smoke alarms on each floor where there is a room used as living accommodation
+- Install interlinked heat alarm in every kitchen
+- Install carbon monoxide detector in any room with a fixed combustion appliance (except gas cooker)
+- Ensure alarms are in working order at start of tenancy
+
+**Furniture and Furnishings:**
+- Ensure furniture and furnishings meet fire safety regulations
+
+**Legionella:**
+- Conduct legionella risk assessment where appropriate
+
+### 4. Energy Efficiency
+Since 1 April 2020, the property must have a minimum Energy Performance Certificate (EPC) rating of E (unless exempt).
+
+**Current EPC Rating:** {{epc_rating}}
+**EPC Valid Until:** {{epc_expiry}}
+
+### 5. Landlord Registration
+The Landlord must be registered with the local authority. It is a criminal offence to operate as a landlord in Scotland without registration.
+
+{{#if landlord_reg_number}}
+**Registration Number:** {{landlord_reg_number}}
+**Registered with:** {{registration_authority}}
+**Registration valid until:** {{registration_expiry}}
+{{/if}}
+
+### 6. Deposit Protection
+Protect the deposit in an approved scheme within 30 working days and provide the prescribed information.
+
+### 7. Information to be Provided
+Provide the Tenant with:
+- A copy of this tenancy agreement
+- The Easy Read Notes (Scottish Government guidance)
+- Gas Safety Certificate
+- Energy Performance Certificate (EPC)
+- Electrical Installation Condition Report (if available)
+- Deposit protection information
+- Landlord registration details
+
+### 8. Repairs
+Carry out repairs within a reasonable time after being notified by the Tenant.
+
+The Landlord is not responsible for repairs needed due to the Tenant's fault.
+
+### 9. Insurance
+Insure the property and the Landlord's contents.
+
+---
+
+## INSURANCE
+
+**Landlord's Insurance:** The Landlord will maintain insurance for the property and any contents belonging to the Landlord.
+
+**Tenant's Insurance:** The Tenant is strongly advised to obtain contents insurance for their own belongings. The Landlord is not liable for loss or damage to the Tenant's possessions.
+
+---
+
+## ENDING THE TENANCY
+
+### By the Tenant:
+
+The Tenant can end the tenancy by giving **at least 28 days' notice in writing** to the Landlord.
+
+The notice period begins on the day the Landlord receives the notice.
+
+The Tenant does not need to give a reason for ending the tenancy.
+
+### By the Landlord:
+
+The Landlord can only end the tenancy by:
+
+1. **Serving a Notice to Leave** stating the eviction ground(s)
+2. **Waiting for the notice period to expire** (28 days or 84 days depending on ground)
+3. **Applying to the First-tier Tribunal** for an eviction order
+4. **Obtaining an eviction order** from the Tribunal
+5. **Having the eviction order enforced** by sheriff officers (if necessary)
+
+**The Landlord cannot evict the Tenant without a Tribunal eviction order.**
+
+The 18 grounds for eviction are set out in Schedule 3 of the Private Housing (Tenancies) (Scotland) Act 2016.
+
+### Abandonment:
+
+If the Landlord believes the Tenant has abandoned the property, the Landlord must follow the correct procedures before re-entering.
+
+---
+
+## CHANGES TO TENANCY TERMS
+
+The Landlord may change the terms of this tenancy agreement, but must:
+- Give the Tenant at least **3 months' notice** of the proposed change
+- Use the prescribed form (Notification of Change to Tenancy Terms)
+- Only make changes that are reasonable
+
+The Tenant can challenge unreasonable changes at the First-tier Tribunal.
+
+---
+
+## ASSIGNATION AND SUCCESSION
+
+**Assignation:** The Tenant may request to assign (transfer) the tenancy to another person. The Landlord's consent is required and must not be unreasonably withheld.
+
+**Succession:** If the Tenant dies, the tenancy may pass to:
+- The Tenant's spouse or civil partner (if residing in the property)
+- A member of the Tenant's family (if residing in the property for 12 months before death and meeting certain conditions)
+
+---
+
+## RELEVANT TENANT INFORMATION
+
+The Private Housing (Tenancies) (Scotland) Act 2016 allows landlords to request "relevant tenant information" such as:
+- Information about the Tenant's entitlement to reside in the UK
+- Information about the Tenant's entitlement to enter into the tenancy
+
+The Tenant must provide this information when reasonably requested.
+
+---
+
+## JOINT TENANTS
+
+{{#if multiple_tenants}}
+Where there is more than one Tenant:
+- All Tenants are jointly and severally liable for rent and other obligations
+- Any notice served on one Tenant is treated as served on all
+- If one Tenant gives notice to leave, it normally ends the tenancy for all Tenants (unless using the statutory procedure for joint tenants)
+- Joint Tenants can use the statutory procedure to end the tenancy for one Tenant only in certain circumstances
+{{/if}}
+
+---
+
+## DATA PROTECTION
+
+Personal data will be processed in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+
+**The Landlord will use the Tenant's data for:**
+- Managing the tenancy
+- Rent collection and accounting
+- Property maintenance and repairs
+- Legal obligations (deposit protection, landlord registration, right to rent)
+- Communication regarding the tenancy
+- Providing references to future landlords (with consent)
+
+**How long data is kept:** Personal data will be retained for 6 years after the tenancy ends (for legal and tax purposes).
+
+**Tenant rights:** The Tenant has the right to request access to their personal data, request corrections, request deletion (in certain circumstances), and lodge a complaint with the Information Commissioner's Office.
+
+---
+
+## DISPUTE RESOLUTION
+
+**First-tier Tribunal:** Disputes between Landlord and Tenant can be referred to the First-tier Tribunal for Scotland (Housing and Property Chamber).
+
+The Tribunal can deal with:
+- Eviction applications
+- Rent increase disputes
+- Repairing Standard disputes
+- Deposit return disputes
+- Landlord registration enforcement
+- Other private residential tenancy matters
+
+**Website:** www.housingandpropertychamber.scot
+
+**Free Advice:**
+- Shelter Scotland: 0808 800 4444 | scotland.shelter.org.uk
+- Citizens Advice Scotland: www.citizensadvice.org.scot
+
+---
+
+## JURISDICTION
+
+This agreement is governed by **Scots law** and the jurisdiction of the **Scottish courts**.
+
+---
+
+## ADDITIONAL TERMS
+
+{{#if additional_terms}}
+{{additional_terms}}
+
+**Note:** Additional terms cannot override or contradict the statutory terms of a PRT. Any term that is inconsistent with the Private Housing (Tenancies) (Scotland) Act 2016 will be unenforceable.
+{{/if}}
+
+---
+
+## UNFAIR TERMS
+
+Under the Consumer Rights Act 2015, any term that is unfair will not be binding on the Tenant.
+
+**Examples of potentially unfair terms:**
+- Terms that require the Tenant to pay the Landlord's legal costs in all circumstances
+- Terms that allow the Landlord to change the agreement unilaterally (except as permitted by the Act)
+- Terms that exclude or limit the Landlord's liability for breach of the Repairing Standard
+
+---
+
+## SCHEDULES
+
+{{#if inventory_attached}}
+**Schedule 1:** Inventory and Condition Report (attached)
+{{/if}}
+
+{{#if additional_schedules}}
+{{additional_schedules}}
+{{/if}}
+
+---
+
+## HMO & SHARED FACILITIES CLAUSES
+
+This property is a House in Multiple Occupation (HMO) licensed under the Civic Government (Scotland) Act 1982.
+
+### Joint and Several Liability
+
+Where there are multiple Tenants, each Tenant is jointly and severally liable for:
+- The full rent amount (not just their share)
+- Any damage to shared areas
+- Compliance with all terms of this agreement
+
+### Shared Facilities
+
+The Tenant has shared access to:
+{{#if communal_areas}}
+- {{communal_areas}}
+{{else}}
+- Kitchen (cooking facilities, appliances, food storage)
+- Bathrooms/WC (shared with other Tenants)
+- Common hallways, stairs, and entrance
+- Living room / common room (if applicable)
+- Garden / outdoor space (if applicable)
+- Laundry facilities (if applicable)
+{{/if}}
+
+**Exclusive Use of Bedroom:** The Tenant has exclusive use of their designated bedroom(s).
+
+### Communal Area Responsibilities
+
+The Tenant must:
+- Keep shared areas clean and tidy after use
+- Wash dishes immediately, clean surfaces, store food properly
+- Clean bathroom after use, remove hair from drains
+- Use shared facilities considerately
+- Keep noise to minimum, especially after 10:00 PM
+
+### Fire Safety (HMO)
+
+The Tenant must:
+- Keep fire doors closed at all times
+- Keep escape routes clear of obstructions
+- Not store items in communal hallways
+- Test smoke alarms monthly and report faults
+- Familiarize themselves with fire escape routes
+- Not tamper with fire safety equipment
+
+### HMO License
+
+{{#if hmo_licence_number}}
+This property is licensed as an HMO. License number: {{hmo_licence_number}}
+{{else}}
+The Landlord holds a valid HMO license for this property.
+{{/if}}
+
+The property complies with:
+- Minimum room sizes as required by licensing conditions
+- Adequate kitchen and bathroom facilities
+- Fire safety measures
+- Gas and electrical safety requirements
+
+### Occupancy Limit
+
+Maximum {{#if number_of_sharers}}{{number_of_sharers}}{{else}}occupants as stated on the HMO license{{/if}} may reside at the property.
+
+### Guest Policy
+
+The Tenant may have visitors subject to:
+- No overnight guests for more than 2 consecutive nights without agreement
+- Guests must not cause nuisance to other Tenants
+- The Tenant is responsible for guest behavior
+
+### Serious Breaches
+
+The following may result in eviction grounds being sought:
+- Persistent failure to keep communal areas clean
+- Blocking fire exits or tampering with fire safety equipment
+- Causing serious nuisance to other Tenants
+- Unauthorized occupants or subletting
+- Damage to communal facilities
+
+---
+
+## SIGNATURES
+
+By signing this agreement, both parties confirm they have read and understood the terms and agree to be bound by them.
+
+### Landlord:
+
+Signed: _________________________
+
+Name: {{landlord_full_name}}
+
+Date: _________________________
+
+{{#if landlord_2_name}}
+Signed: _________________________
+
+Name: {{landlord_2_name}}
+
+Date: _________________________
+{{/if}}
+
+{{#if agent_signs}}
+Signed on behalf of Landlord by Letting Agent:
+
+Signed: _________________________
+
+Name: {{agent_name}}
+
+Date: _________________________
+{{/if}}
+
+### Tenant(s):
+
+{{#each tenants}}
+Signed: _________________________
+
+Name: {{this.full_name}}
+
+Date: _________________________
+
+{{/each}}
+
+---
+
+## INFORMATION PROVIDED TO TENANT
+
+The Landlord confirms the following information has been provided to the Tenant:
+
+☐ Copy of this Private Residential Tenancy Agreement
+☐ Easy Read Notes (Scottish Government guidance on PRTs)
+☐ Gas Safety Certificate (CP12)
+☐ Energy Performance Certificate (EPC)
+☐ Electrical Installation Condition Report (EICR) if available
+☐ Deposit protection scheme information
+☐ Landlord registration details
+☐ Inventory and condition report
+☐ How to rent guide (if applicable)
+
+---
+
+## IMPORTANT NOTES FOR TENANTS
+
+**Your Rights:**
+1. You have security of tenure - the Landlord can only evict you on specific grounds and with a Tribunal order
+2. You can stay in the property as long as you want (subject to proper notice)
+3. You can challenge unfair rent increases
+4. You can apply to the Tribunal if the property doesn't meet the Repairing Standard
+5. Your deposit must be protected in an approved scheme
+6. You can request improvements and may be compensated for them
+7. The Landlord cannot unreasonably refuse permission for pets
+
+**Your Responsibilities:**
+1. Pay rent on time
+2. Look after the property
+3. Report repairs promptly
+4. Respect neighbours
+5. Give proper notice when leaving (28 days minimum)
+6. Don't sublet without permission
+
+**Get Advice:**
+- Shelter Scotland: 0808 800 4444
+- Citizens Advice Bureau: www.cas.org.uk/bureaux
+- First-tier Tribunal: www.housingandpropertychamber.scot
+
+**Keep this agreement safe** - you will need it throughout your tenancy and when the tenancy ends.
+
+---
+
+## IMPORTANT NOTES FOR LANDLORDS
+
+**Your Obligations:**
+1. Register as a landlord with the local authority
+2. Protect the deposit within 30 working days
+3. Ensure property meets the Repairing Standard
+4. Carry out annual gas safety checks
+5. Install and maintain smoke and heat alarms
+6. Provide all required certificates and information
+7. Give proper notice for rent increases (3 months minimum)
+8. Only evict through proper legal procedures
+
+**Your Rights:**
+1. Receive rent on time
+2. Have the property cared for
+3. Increase rent (with proper notice and procedure)
+4. Access the property (with 24 hours' notice)
+5. Recover possession (through Tribunal on valid grounds)
+
+**Penalties for Non-Compliance:**
+- Operating without landlord registration: Up to £50,000 fine
+- Failing to protect deposit: Up to 3x deposit amount payable to tenant
+- Illegal eviction: Criminal offence, unlimited fine and/or imprisonment
+- Breach of Repairing Standard: Tribunal can order repairs and award compensation
+
+---
+
+**This Private Residential Tenancy Agreement was generated by Landlord Heaven**
+**Website:** {{site_domain}}
+
+**Document Reference:** {{document_id}}
+**Generated:** {{generation_timestamp}}
+
+---
+
+**LEGAL REFERENCES:**
+- Private Housing (Tenancies) (Scotland) Act 2016
+- Housing (Scotland) Act 2006 (Repairing Standard)
+- Antisocial Behaviour etc. (Scotland) Act 2004 (Landlord Registration)
+- The Tenancy Deposit Schemes (Scotland) Regulations 2011
+- The Private Residential Tenancies (Prescribed Notices and Forms) (Scotland) Regulations 2017
+- Consumer Rights Act 2015
+- UK GDPR and Data Protection Act 2018
+
+---
+
+**DISCLAIMER:** This agreement has been prepared based on the information provided and Scottish legislation in force at the date of generation. While every effort has been made to ensure accuracy and compliance, this does not constitute legal advice. Both parties should seek independent legal advice if they have any concerns about their rights or obligations. Landlord Heaven accepts no liability for any loss arising from the use of this agreement.

@@ -473,102 +473,92 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
 // AST DOCUMENTS
 // ============================================
 
+/**
+ * TENANCY AGREEMENT DOCUMENTS
+ *
+ * Product tiers:
+ * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
+ * - 'premium': HMO-specific tenancy agreement with multi-occupancy clauses
+ *
+ * IMPORTANT: The base product includes the tenancy agreement only.
+ * No guides, no notices, no annexes, no explanatory PDFs.
+ *
+ * Jurisdiction handling:
+ * - England: Assured Shorthold Tenancy (Housing Act 1988)
+ * - Wales: Standard Occupation Contract (Renting Homes (Wales) Act 2016)
+ * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
+ * - NI: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
+ */
 export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premium'): DocumentInfo[] {
-  const documents: DocumentInfo[] = [];
-
   // Agreement name based on jurisdiction
-  const agreementNames: Record<string, { title: string; description: string }> = {
+  const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
     'england': {
-      title: 'Assured Shorthold Tenancy Agreement',
-      description: 'Comprehensive AST compliant with Housing Act 1988'
+      standard: {
+        title: 'Assured Shorthold Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.'
+      },
+      hmo: {
+        title: 'HMO Tenancy Agreement',
+        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with Housing Act 1988 & 2004.'
+      }
     },
     'wales': {
-      title: 'Standard Occupation Contract',
-      description: 'Compliant with Renting Homes (Wales) Act 2016'
+      standard: {
+        title: 'Standard Occupation Contract',
+        description: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.'
+      },
+      hmo: {
+        title: 'HMO Occupation Contract',
+        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with RH(W)A 2016 & Housing Act 2004.'
+      }
     },
     'scotland': {
-      title: 'Private Residential Tenancy Agreement',
-      description: 'PRT compliant with Private Housing (Tenancies) (Scotland) Act 2016'
+      standard: {
+        title: 'Private Residential Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.'
+      },
+      hmo: {
+        title: 'HMO Private Residential Tenancy Agreement',
+        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with PH(T)(S)A 2016.'
+      }
     },
     'northern-ireland': {
-      title: 'Private Tenancy Agreement',
-      description: 'Compliant with Private Tenancies (Northern Ireland) Order 2006'
+      standard: {
+        title: 'Private Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Private Tenancies Act (NI) 2022.'
+      },
+      hmo: {
+        title: 'HMO Private Tenancy Agreement',
+        description: 'Includes HMO-specific clauses for multi-occupancy properties where legally permitted in NI.'
+      }
     },
   };
 
-  const agreement = agreementNames[jurisdiction] || agreementNames['england'];
+  const agreementConfig = agreementNames[jurisdiction] || agreementNames['england'];
 
-  documents.push({
-    id: 'tenancy-agreement',
-    title: agreement.title,
-    description: agreement.description,
-    icon: 'agreement',
-    pages: '15-25 pages',
-    category: 'Agreement',
-  });
-
-  // Standard Tier Documents
-  // Note: certificate-of-curation, legal-validity-summary, and deposit-protection-cert
-  // removed as of Jan 2026 pack restructure
-  documents.push(
-    {
-      id: 'terms-and-conditions',
-      title: 'Terms & Conditions Schedule',
-      description: 'Detailed tenancy terms, obligations, and conditions',
-      icon: 'checklist',
-      pages: '6-8 pages',
-      category: 'Schedules',
-    },
-    {
-      id: 'government-model-clauses',
-      title: 'Government Model Clauses',
-      description: 'Recommended clauses from official government guidance',
-      icon: 'guidance',
-      pages: '3-4 pages',
-      category: 'Schedules',
-    },
-    {
-      id: 'inventory-template',
-      title: 'Inventory Template',
-      description: 'Comprehensive property contents and condition record',
-      icon: 'checklist',
-      pages: '4-6 pages',
-      category: 'Schedules',
-    }
-  );
-
-  // Premium Tier Additional Documents
-  // Note: welcome-pack and condition-report removed as of Jan 2026 pack restructure
-  if (tier === 'premium') {
-    documents.push(
-      {
-        id: 'key-schedule',
-        title: 'Key Schedule',
-        description: 'Detailed record of all keys provided to tenant',
-        icon: 'checklist',
-        pages: '1 page',
-        category: 'Premium Extras',
-      },
-      {
-        id: 'maintenance-guide',
-        title: 'Property Maintenance Guide',
-        description: 'Clear breakdown of tenant and landlord responsibilities',
-        icon: 'guidance',
-        pages: '3-4 pages',
-        category: 'Premium Extras',
-      },
-      {
-        id: 'checkout-procedure',
-        title: 'Checkout Procedure',
-        description: 'End of tenancy process and expectations guide',
-        icon: 'guidance',
-        pages: '2-3 pages',
-        category: 'Premium Extras',
-      }
-    );
+  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
+  if (tier === 'standard') {
+    return [{
+      id: 'tenancy-agreement',
+      title: agreementConfig.standard.title,
+      description: agreementConfig.standard.description,
+      icon: 'agreement',
+      pages: '15-20 pages',
+      category: 'Agreement',
+    }];
   }
 
-  return documents;
+  // PREMIUM PRODUCT (HMO): Only the HMO-specific tenancy agreement
+  // HMO clauses cover: multiple occupants, joint liability, shared facilities,
+  // fire safety, licensing acknowledgement, house rules, occupancy limits
+  return [{
+    id: 'tenancy-agreement-hmo',
+    title: agreementConfig.hmo.title,
+    description: agreementConfig.hmo.description,
+    icon: 'agreement',
+    pages: '20-25 pages',
+    category: 'Agreement',
+  }];
 }
 
 // ============================================
@@ -642,40 +632,43 @@ export function getProductMeta(product: string): ProductMeta {
         'Enforcement guide',
       ],
     },
+    // STANDARD TENANCY AGREEMENT - Base product (agreement only)
     'ast_standard': {
-      name: 'Tenancy Agreement - Standard',
+      name: 'Tenancy Agreement',
       price: '£9.99',
       originalPrice: '£100+',
       savings: 'Save £90+ vs solicitors',
       features: [
-        'Legally compliant agreement',
-        'Terms & conditions',
-        'Inventory template',
-        'Government model clauses',
+        'Includes the tenancy agreement only',
+        'Jurisdiction-compliant (England/Wales/Scotland/NI)',
+        'Legally valid and court-ready',
+        'Instant PDF download',
       ],
     },
     'tenancy_agreement': {
-      name: 'Tenancy Agreement - Standard',
+      name: 'Tenancy Agreement',
       price: '£9.99',
       originalPrice: '£100+',
       savings: 'Save £90+ vs solicitors',
       features: [
-        'Legally compliant agreement',
-        'Terms & conditions',
-        'Inventory template',
-        'Government model clauses',
+        'Includes the tenancy agreement only',
+        'Jurisdiction-compliant (England/Wales/Scotland/NI)',
+        'Legally valid and court-ready',
+        'Instant PDF download',
       ],
     },
+    // PREMIUM HMO TENANCY AGREEMENT - HMO-specific clauses
     'ast_premium': {
-      name: 'Tenancy Agreement - Premium',
+      name: 'HMO Tenancy Agreement',
       price: '£14.99',
       originalPrice: '£200+',
       savings: 'Save £185+ vs solicitors',
       features: [
-        'Everything in Standard',
-        'Property maintenance guide',
-        'Key schedule',
-        'Checkout procedure',
+        'Includes HMO-specific clauses for multi-occupancy properties',
+        'Multiple occupants & joint liability clauses',
+        'Shared facilities obligations',
+        'Fire safety & licensing acknowledgement',
+        'House rules and occupancy limits',
       ],
     },
   };

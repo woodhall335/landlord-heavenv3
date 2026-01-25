@@ -248,63 +248,44 @@ function getEnglandMoneyClaimContents(): PackItem[] {
   ];
 }
 
+/**
+ * ENGLAND TENANCY AGREEMENT CONTENTS
+ *
+ * Product tiers:
+ * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
+ * - 'premium': HMO-specific tenancy agreement with multi-occupancy clauses
+ *
+ * Legal Framework: Housing Act 1988, Deregulation Act 2015, Housing Act 2004 (HMO)
+ *
+ * IMPORTANT: The base product must include ONLY the tenancy agreement.
+ * Supporting documents (guides, checklists, annexes, notices) are NOT included.
+ */
 function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
-  const items: PackItem[] = [
+  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
+  // This ensures legal clarity and simplicity for standard residential lettings
+  if (tier === 'standard') {
+    return [
+      {
+        key: 'ast_agreement',
+        title: 'Assured Shorthold Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.',
+        category: 'Tenancy agreement',
+        required: true,
+      },
+    ];
+  }
+
+  // PREMIUM PRODUCT: HMO-specific tenancy agreement with additional clauses
+  // Aligned with Housing Act 2004 HMO licensing requirements
+  return [
     {
-      key: 'ast_agreement',
-      title: 'Assured Shorthold Tenancy Agreement',
-      description: 'Government-compliant tenancy contract',
+      key: 'ast_agreement_hmo',
+      title: 'HMO Tenancy Agreement',
+      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with Housing Act 1988 & 2004.',
       category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'terms_schedule',
-      title: 'Terms & Conditions Schedule',
-      description: 'Detailed tenancy terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'model_clauses',
-      title: 'Government Model Clauses',
-      description: 'Prescribed statutory clauses',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'inventory_template',
-      title: 'Inventory Template',
-      description: 'Property contents checklist',
-      category: 'Checklists',
       required: true,
     },
   ];
-
-  if (tier === 'premium') {
-    items.push({
-      key: 'key_schedule',
-      title: 'Key Schedule',
-      description: 'Record of keys provided',
-      category: 'Checklists',
-      required: true,
-    });
-    items.push({
-      key: 'maintenance_guide',
-      title: 'Property Maintenance Guide',
-      description: 'Maintenance responsibilities and procedures',
-      category: 'Guidance',
-      required: true,
-    });
-    items.push({
-      key: 'checkout_procedure',
-      title: 'Checkout Procedure',
-      description: 'End of tenancy process guide',
-      category: 'Guidance',
-      required: true,
-    });
-  }
-
-  return items;
 }
 
 // =============================================================================
@@ -443,63 +424,45 @@ function getWalesCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   return items;
 }
 
+/**
+ * WALES OCCUPATION CONTRACT CONTENTS
+ *
+ * Product tiers:
+ * - 'standard': Base product - ONLY the occupation contract, no supporting documents
+ * - 'premium': HMO-specific occupation contract with multi-occupancy clauses
+ *
+ * Legal Framework: Renting Homes (Wales) Act 2016, Housing Act 2004 (HMO)
+ *
+ * Terminology: Wales uses "Contract Holder" (not Tenant), "Occupation Contract" (not Tenancy)
+ *
+ * IMPORTANT: The base product must include ONLY the occupation contract.
+ * Supporting documents (guides, checklists, annexes) are NOT included.
+ */
 function getWalesSOCContents(tier: 'standard' | 'premium'): PackItem[] {
-  const items: PackItem[] = [
+  // BASE PRODUCT (standard): Only the occupation contract - NO supporting documents
+  if (tier === 'standard') {
+    return [
+      {
+        key: 'soc_agreement',
+        title: 'Standard Occupation Contract',
+        description: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.',
+        category: 'Tenancy agreement',
+        required: true,
+      },
+    ];
+  }
+
+  // PREMIUM PRODUCT: HMO-specific occupation contract with additional clauses
+  // Aligned with Housing Act 2004 HMO licensing requirements
+  return [
     {
-      key: 'soc_agreement',
-      title: 'Standard Occupation Contract',
-      description: 'Renting Homes (Wales) Act compliant contract',
+      key: 'soc_agreement_hmo',
+      title: 'HMO Occupation Contract',
+      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with RH(W)A 2016 & Housing Act 2004.',
       category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'terms_schedule',
-      title: 'Terms & Conditions Schedule',
-      description: 'Detailed occupation terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'model_clauses',
-      title: 'Government Model Clauses',
-      description: 'Prescribed statutory clauses (Wales)',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'inventory_template',
-      title: 'Inventory Template',
-      description: 'Property contents checklist',
-      category: 'Checklists',
       required: true,
     },
   ];
-
-  if (tier === 'premium') {
-    items.push({
-      key: 'key_schedule',
-      title: 'Key Schedule',
-      description: 'Record of keys provided',
-      category: 'Checklists',
-      required: true,
-    });
-    items.push({
-      key: 'maintenance_guide',
-      title: 'Property Maintenance Guide',
-      description: 'Maintenance responsibilities and procedures',
-      category: 'Guidance',
-      required: true,
-    });
-    items.push({
-      key: 'checkout_procedure',
-      title: 'Checkout Procedure',
-      description: 'End of tenancy process guide',
-      category: 'Guidance',
-      required: true,
-    });
-  }
-
-  return items;
 }
 
 // =============================================================================
@@ -639,126 +602,97 @@ function getScotlandMoneyClaimContents(): PackItem[] {
   ];
 }
 
+/**
+ * SCOTLAND PRIVATE RESIDENTIAL TENANCY CONTENTS
+ *
+ * Product tiers:
+ * - 'standard': Base product - ONLY the PRT agreement, no supporting documents
+ * - 'premium': HMO-specific PRT with multi-occupancy clauses
+ *
+ * Legal Framework: Private Housing (Tenancies) (Scotland) Act 2016
+ *
+ * Key differences from England:
+ * - Open-ended tenancy (no fixed end date)
+ * - Rent Pressure Zone compatibility required
+ * - First-tier Tribunal for Scotland (not County Court)
+ *
+ * IMPORTANT: The base product must include ONLY the PRT agreement.
+ * Supporting documents (guides, checklists, annexes) are NOT included.
+ */
 function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
-  const items: PackItem[] = [
+  // BASE PRODUCT (standard): Only the PRT agreement - NO supporting documents
+  if (tier === 'standard') {
+    return [
+      {
+        key: 'prt_agreement',
+        title: 'Private Residential Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
+        category: 'Tenancy agreement',
+        required: true,
+      },
+    ];
+  }
+
+  // PREMIUM PRODUCT: HMO-specific PRT with additional clauses
+  // Adapted to PRT framework for multi-occupancy properties
+  return [
     {
-      key: 'prt_agreement',
-      title: 'Private Residential Tenancy Agreement',
-      description: 'PRT compliant under Scottish law',
+      key: 'prt_agreement_hmo',
+      title: 'HMO Private Residential Tenancy Agreement',
+      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with PH(T)(S)A 2016.',
       category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'terms_schedule',
-      title: 'Terms & Conditions Schedule',
-      description: 'Detailed tenancy terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'model_clauses',
-      title: 'Model Clauses (Scotland)',
-      description: 'Scottish Government prescribed terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'inventory_template',
-      title: 'Inventory Template',
-      description: 'Property contents checklist',
-      category: 'Checklists',
       required: true,
     },
   ];
-
-  if (tier === 'premium') {
-    items.push({
-      key: 'key_schedule',
-      title: 'Key Schedule',
-      description: 'Record of keys provided',
-      category: 'Checklists',
-      required: true,
-    });
-    items.push({
-      key: 'maintenance_guide',
-      title: 'Property Maintenance Guide',
-      description: 'Maintenance responsibilities and procedures',
-      category: 'Guidance',
-      required: true,
-    });
-    items.push({
-      key: 'checkout_procedure',
-      title: 'Checkout Procedure',
-      description: 'End of tenancy process guide',
-      category: 'Guidance',
-      required: true,
-    });
-  }
-
-  return items;
 }
 
 // =============================================================================
 // NORTHERN IRELAND PACK CONTENTS
 // =============================================================================
 
+/**
+ * NORTHERN IRELAND PRIVATE TENANCY CONTENTS
+ *
+ * Product tiers:
+ * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
+ * - 'premium': HMO-specific tenancy agreement (where legally permitted)
+ *
+ * Legal Framework: Private Tenancies Act (Northern Ireland) 2022
+ * (Updates the Private Tenancies (Northern Ireland) Order 2006)
+ *
+ * Key NI-specific requirements:
+ * - Electrical safety mandatory from 1 April 2025
+ * - Rent increase restrictions: 12-month gap, 3-month notice
+ * - County Court Northern Ireland jurisdiction
+ *
+ * IMPORTANT: The base product must include ONLY the tenancy agreement.
+ * Supporting documents (guides, checklists, annexes) are NOT included.
+ */
 function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium'): PackItem[] {
-  const items: PackItem[] = [
+  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
+  if (tier === 'standard') {
+    return [
+      {
+        key: 'private_tenancy_agreement',
+        title: 'Private Tenancy Agreement',
+        description: 'Includes the tenancy agreement only. Compliant with Private Tenancies Act (NI) 2022.',
+        category: 'Tenancy agreement',
+        required: true,
+      },
+    ];
+  }
+
+  // PREMIUM PRODUCT: HMO-specific tenancy agreement (where legally permitted in NI)
+  // Note: NI HMO regulations differ from England - only include where applicable
+  return [
     {
-      key: 'private_tenancy_agreement',
-      title: 'Private Tenancy Agreement',
-      description: 'Private Tenancies (NI) Order 2006 compliant',
+      key: 'private_tenancy_agreement_hmo',
+      title: 'HMO Private Tenancy Agreement',
+      description: 'Includes HMO-specific clauses for multi-occupancy properties where legally permitted in NI.',
       category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'terms_schedule',
-      title: 'Terms & Conditions Schedule',
-      description: 'Detailed tenancy terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'model_clauses',
-      title: 'Model Clauses (Northern Ireland)',
-      description: 'NI prescribed statutory terms',
-      category: 'Tenancy agreement',
-      required: true,
-    },
-    {
-      key: 'inventory_template',
-      title: 'Inventory Template',
-      description: 'Property contents checklist',
-      category: 'Checklists',
       required: true,
     },
   ];
-
-  if (tier === 'premium') {
-    items.push({
-      key: 'key_schedule',
-      title: 'Key Schedule',
-      description: 'Record of keys provided',
-      category: 'Checklists',
-      required: true,
-    });
-    items.push({
-      key: 'maintenance_guide',
-      title: 'Property Maintenance Guide',
-      description: 'Maintenance responsibilities and procedures',
-      category: 'Guidance',
-      required: true,
-    });
-    items.push({
-      key: 'checkout_procedure',
-      title: 'Checkout Procedure',
-      description: 'End of tenancy process guide',
-      category: 'Guidance',
-      required: true,
-    });
-  }
-
-  return items;
 }
 
 // =============================================================================
