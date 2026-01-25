@@ -248,17 +248,441 @@ export function validateSuggestionsSchema(suggestions: unknown): {
   return { valid: errors.length === 0, errors };
 }
 
+// =============================================================================
+// REGEX PATTERNS FOR UK DOCUMENT EXTRACTION
+// =============================================================================
+
+/** UK Postcode pattern - matches standard UK postcodes */
+const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2})\b/gi;
+
+/**
+ * Date patterns for UK formats and ISO
+ * Supports: DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY, YYYY-MM-DD
+ */
+const DATE_PATTERNS = [
+  // DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+  /\b(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})\b/g,
+  // YYYY-MM-DD (ISO)
+  /\b(\d{4})-(\d{2})-(\d{2})\b/g,
+  // Written dates like "1st January 2024", "15 March 2023"
+  /\b(\d{1,2})(?:st|nd|rd|th)?\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b/gi,
+];
+
+/** Monetary amount pattern - matches £ amounts */
+const AMOUNT_REGEX = /£\s?([\d,]+(?:\.\d{2})?)/gi;
+
+/** Invoice/reference number patterns - require explicit separator and ID format */
+const INVOICE_PATTERNS = [
+  // "Invoice No: INV-001" or "Invoice #123"
+  /invoice\s*(?:no\.?|number|#)?\s*[:\s]\s*([A-Z0-9][A-Z0-9\-\/]{2,})/gi,
+  // "Ref: REF-12345" or "Reference: ABC123"
+  /ref(?:erence)?\s*(?:no\.?|#)?\s*[:\s]\s*([A-Z0-9][A-Z0-9\-\/]{2,})/gi,
+  // "Order No: ORD-001"
+  /order\s*(?:no\.?|number|#)?\s*[:\s]\s*([A-Z0-9][A-Z0-9\-\/]{2,})/gi,
+  // "Quote No: Q-001"
+  /quote\s*(?:no\.?|number|#)?\s*[:\s]\s*([A-Z0-9][A-Z0-9\-\/]{2,})/gi,
+];
+
+/** Rent frequency patterns */
+const RENT_FREQUENCY_PATTERNS: { pattern: RegExp; frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly' }[] = [
+  { pattern: /\bper\s+week\b|\bweekly\b|\bp\.?w\.?\b/i, frequency: 'weekly' },
+  { pattern: /\bfortnightly\b|\bevery\s+(?:two|2)\s+weeks?\b/i, frequency: 'fortnightly' },
+  { pattern: /\bper\s+month\b|\bmonthly\b|\bp\.?c\.?m\.?\b|\bpcm\b/i, frequency: 'monthly' },
+  { pattern: /\bquarterly\b|\bper\s+quarter\b/i, frequency: 'quarterly' },
+  { pattern: /\bper\s+(?:year|annum)\b|\byearly\b|\bannually\b|\bp\.?a\.?\b/i, frequency: 'yearly' },
+];
+
+/** Document type patterns for classification */
+const DOCUMENT_TYPE_PATTERNS = {
+  tenancyAgreement: /tenancy\s*agreement|assured\s*shorthold|ast\b|lease\s*agreement/i,
+  rentLedger: /rent\s*(?:ledger|statement|account|schedule)|statement\s*of\s*(?:rent|account)/i,
+  invoice: /invoice|bill|statement\s*of\s*charges/i,
+  quote: /quote|quotation|estimate/i,
+  receipt: /receipt|payment\s*confirmation|proof\s*of\s*payment/i,
+  letterBeforeAction: /letter\s*before\s*(?:action|claim)|lba\b|pre[\-\s]?action/i,
+};
+
+// =============================================================================
+// EXTRACTION HELPER FUNCTIONS
+// =============================================================================
+
+interface ExtractedData {
+  postcodes: Array<{ value: string; context: string; source: string }>;
+  dates: Array<{ value: string; isoDate: string; context: string; source: string }>;
+  amounts: Array<{ value: number; context: string; source: string }>;
+  invoiceNumbers: Array<{ value: string; type: string; source: string }>;
+  frequencies: Array<{ frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly'; source: string }>;
+  documentTypes: Array<{ type: string; source: string }>;
+}
+
+/**
+ * Month name to number mapping
+ */
+const MONTH_MAP: Record<string, string> = {
+  january: '01', february: '02', march: '03', april: '04',
+  may: '05', june: '06', july: '07', august: '08',
+  september: '09', october: '10', november: '11', december: '12',
+};
+
+/**
+ * Parses a date string to ISO format
+ */
+function parseToIsoDate(day: string, month: string, year: string): string | null {
+  const d = day.padStart(2, '0');
+  let m = month;
+
+  // Check if month is a name
+  if (isNaN(parseInt(month))) {
+    m = MONTH_MAP[month.toLowerCase()] || '01';
+  } else {
+    m = month.padStart(2, '0');
+  }
+
+  const y = year;
+
+  // Validate date
+  const dateObj = new Date(`${y}-${m}-${d}`);
+  if (isNaN(dateObj.getTime())) return null;
+
+  // Check for reasonable date range (1990-2100)
+  const yearNum = parseInt(y);
+  if (yearNum < 1990 || yearNum > 2100) return null;
+
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Extracts data from text using regex patterns
+ */
+function extractFromText(text: string, source: string): ExtractedData {
+  const data: ExtractedData = {
+    postcodes: [],
+    dates: [],
+    amounts: [],
+    invoiceNumbers: [],
+    frequencies: [],
+    documentTypes: [],
+  };
+
+  if (!text) return data;
+
+  // Extract postcodes
+  let match;
+  const postcodeRegex = new RegExp(UK_POSTCODE_REGEX.source, 'gi');
+  while ((match = postcodeRegex.exec(text)) !== null) {
+    const postcode = match[1].toUpperCase().replace(/\s+/g, ' ');
+    // Get surrounding context (100 chars before and after for better address detection)
+    const start = Math.max(0, match.index - 100);
+    const end = Math.min(text.length, match.index + match[0].length + 50);
+    const context = text.slice(start, end).replace(/\s+/g, ' ').trim();
+
+    if (!data.postcodes.some(p => p.value === postcode)) {
+      data.postcodes.push({ value: postcode, context, source });
+    }
+  }
+
+  // Extract dates - DD/MM/YYYY format
+  const datePattern1 = /\b(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})\b/g;
+  while ((match = datePattern1.exec(text)) !== null) {
+    // Assume DD/MM/YYYY for UK format
+    const isoDate = parseToIsoDate(match[1], match[2], match[3]);
+    if (isoDate) {
+      const start = Math.max(0, match.index - 30);
+      const end = Math.min(text.length, match.index + match[0].length + 30);
+      const context = text.slice(start, end).replace(/\s+/g, ' ').trim();
+      data.dates.push({ value: match[0], isoDate, context, source });
+    }
+  }
+
+  // Extract dates - YYYY-MM-DD (ISO) format
+  const datePattern2 = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+  while ((match = datePattern2.exec(text)) !== null) {
+    const isoDate = parseToIsoDate(match[3], match[2], match[1]);
+    if (isoDate) {
+      const start = Math.max(0, match.index - 30);
+      const end = Math.min(text.length, match.index + match[0].length + 30);
+      const context = text.slice(start, end).replace(/\s+/g, ' ').trim();
+      data.dates.push({ value: match[0], isoDate, context, source });
+    }
+  }
+
+  // Extract dates - Written format (1st January 2024)
+  const datePattern3 = /\b(\d{1,2})(?:st|nd|rd|th)?\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b/gi;
+  while ((match = datePattern3.exec(text)) !== null) {
+    const isoDate = parseToIsoDate(match[1], match[2], match[3]);
+    if (isoDate) {
+      const start = Math.max(0, match.index - 30);
+      const end = Math.min(text.length, match.index + match[0].length + 30);
+      const context = text.slice(start, end).replace(/\s+/g, ' ').trim();
+      data.dates.push({ value: match[0], isoDate, context, source });
+    }
+  }
+
+  // Extract monetary amounts
+  const amountRegex = new RegExp(AMOUNT_REGEX.source, 'gi');
+  while ((match = amountRegex.exec(text)) !== null) {
+    const amountStr = match[1].replace(/,/g, '');
+    const amount = parseFloat(amountStr);
+    if (!isNaN(amount) && amount > 0 && amount < 10000000) {
+      const start = Math.max(0, match.index - 40);
+      const end = Math.min(text.length, match.index + match[0].length + 40);
+      const context = text.slice(start, end).replace(/\s+/g, ' ').trim();
+      data.amounts.push({ value: amount, context, source });
+    }
+  }
+
+  // Extract invoice/reference numbers
+  for (const pattern of INVOICE_PATTERNS) {
+    const regex = new RegExp(pattern.source, 'gi');
+    while ((match = regex.exec(text)) !== null) {
+      if (match[1] && match[1].length >= 3 && match[1].length <= 30) {
+        const type = pattern.source.includes('invoice') || pattern.source.includes('inv')
+          ? 'invoice'
+          : pattern.source.includes('quote')
+          ? 'quote'
+          : 'reference';
+        if (!data.invoiceNumbers.some(n => n.value === match[1])) {
+          data.invoiceNumbers.push({ value: match[1], type, source });
+        }
+      }
+    }
+  }
+
+  // Detect rent frequency
+  for (const { pattern, frequency } of RENT_FREQUENCY_PATTERNS) {
+    if (pattern.test(text)) {
+      data.frequencies.push({ frequency, source });
+      break; // Take first match
+    }
+  }
+
+  // Detect document types
+  for (const [type, pattern] of Object.entries(DOCUMENT_TYPE_PATTERNS)) {
+    if (pattern.test(text)) {
+      data.documentTypes.push({ type, source });
+    }
+  }
+
+  return data;
+}
+
+/**
+ * Determines confidence based on context keywords
+ */
+function determineConfidence(context: string, fieldType: string): ConfidenceLevel {
+  const contextLower = context.toLowerCase();
+
+  // High confidence indicators
+  const highConfidence: Record<string, RegExp[]> = {
+    postcode: [/property\s*address/i, /tenant\s*address/i, /landlord\s*address/i, /premises/i],
+    date: [/tenancy\s*(?:start|commencement|begins?)/i, /tenancy\s*(?:end|terminat|expir)/i, /from\s*(?:date)?/i, /to\s*(?:date)?/i],
+    amount: [/rent\s*(?:amount|payable|due)/i, /monthly\s*rent/i, /total\s*(?:amount|due)/i],
+  };
+
+  // Medium confidence indicators
+  const mediumConfidence: Record<string, RegExp[]> = {
+    postcode: [/address/i, /located\s*at/i, /property/i],
+    date: [/date/i, /signed/i, /dated/i],
+    amount: [/amount/i, /total/i, /sum/i, /£/],
+  };
+
+  const highPatterns = highConfidence[fieldType] || [];
+  const mediumPatterns = mediumConfidence[fieldType] || [];
+
+  for (const pattern of highPatterns) {
+    if (pattern.test(contextLower)) return 'high';
+  }
+
+  for (const pattern of mediumPatterns) {
+    if (pattern.test(contextLower)) return 'medium';
+  }
+
+  return 'low';
+}
+
+/**
+ * Maps extracted data to Money Claim suggestions
+ */
+function mapToSuggestions(
+  extracted: ExtractedData,
+  suggestions: ExtractionSuggestions
+): void {
+  // Map postcodes to addresses
+  for (const pc of extracted.postcodes) {
+    const confidence = determineConfidence(pc.context, 'postcode');
+    const contextLower = pc.context.toLowerCase();
+
+    // Try to determine which address this belongs to
+    if (/property|premises|let\s+property/i.test(contextLower)) {
+      if (!suggestions.propertyAddress || confidence === 'high') {
+        suggestions.propertyAddress = {
+          postcode: pc.value,
+          confidence,
+          source: pc.source,
+        };
+      }
+    } else if (/landlord|claimant|owner/i.test(contextLower)) {
+      if (!suggestions.claimantAddress || confidence === 'high') {
+        suggestions.claimantAddress = {
+          postcode: pc.value,
+          confidence,
+          source: pc.source,
+        };
+      }
+    } else if (/tenant|defendant|occupier/i.test(contextLower)) {
+      if (!suggestions.defendantAddress || confidence === 'high') {
+        suggestions.defendantAddress = {
+          postcode: pc.value,
+          confidence,
+          source: pc.source,
+        };
+      }
+    } else if (!suggestions.propertyAddress) {
+      // Default to property address if no context
+      suggestions.propertyAddress = {
+        postcode: pc.value,
+        confidence: 'low',
+        source: pc.source,
+      };
+    }
+  }
+
+  // Map dates
+  for (const date of extracted.dates) {
+    const confidence = determineConfidence(date.context, 'date');
+    const contextLower = date.context.toLowerCase();
+
+    if (/(?:tenancy\s*)?(?:start|commence|begin|from)/i.test(contextLower)) {
+      if (!suggestions.tenancyStartDate || confidence === 'high') {
+        suggestions.tenancyStartDate = {
+          date: date.isoDate,
+          confidence,
+          source: date.source,
+        };
+      }
+    } else if (/(?:tenancy\s*)?(?:end|terminat|expir|until|to\s*date)/i.test(contextLower)) {
+      if (!suggestions.tenancyEndDate || confidence === 'high') {
+        suggestions.tenancyEndDate = {
+          date: date.isoDate,
+          confidence,
+          source: date.source,
+        };
+      }
+    }
+  }
+
+  // Map rent amount - look for the most likely rent value
+  const rentIndicators = /rent|monthly\s*payment|pcm|per\s*month/i;
+  const rentAmounts = extracted.amounts.filter(a => rentIndicators.test(a.context));
+  if (rentAmounts.length > 0) {
+    // Take the most common or highest confidence amount
+    const sorted = rentAmounts.sort((a, b) => {
+      const confA = determineConfidence(a.context, 'amount');
+      const confB = determineConfidence(b.context, 'amount');
+      const confOrder = { high: 3, medium: 2, low: 1 };
+      return confOrder[confB] - confOrder[confA];
+    });
+
+    const best = sorted[0];
+    suggestions.rentAmount = {
+      amount: best.value,
+      currency: 'GBP',
+      confidence: determineConfidence(best.context, 'amount'),
+      source: best.source,
+    };
+  }
+
+  // Map rent frequency
+  if (extracted.frequencies.length > 0) {
+    suggestions.rentFrequency = {
+      frequency: extracted.frequencies[0].frequency,
+      confidence: 'medium',
+      source: extracted.frequencies[0].source,
+    };
+  }
+}
+
+/**
+ * Creates invoice/quote suggestions from extracted data
+ */
+function createInvoiceSuggestions(
+  extracted: ExtractedData,
+  docName: string,
+  docId: string
+): DetectedInvoiceQuote[] {
+  const invoices: DetectedInvoiceQuote[] = [];
+
+  // Check document types
+  const isInvoice = extracted.documentTypes.some(d => d.type === 'invoice');
+  const isQuote = extracted.documentTypes.some(d => d.type === 'quote');
+  const isReceipt = extracted.documentTypes.some(d => d.type === 'receipt');
+
+  // If we detected invoice numbers
+  for (const inv of extracted.invoiceNumbers) {
+    const type: 'invoice' | 'quote' | 'receipt' =
+      inv.type === 'quote' ? 'quote' :
+      isReceipt ? 'receipt' :
+      'invoice';
+
+    // Find associated amount (prefer the largest in context)
+    const totalAmount = extracted.amounts.length > 0
+      ? Math.max(...extracted.amounts.map(a => a.value))
+      : undefined;
+
+    // Find associated date
+    const dateEntry = extracted.dates[0];
+
+    invoices.push({
+      id: `detected-${docId}-${inv.value}`,
+      description: `${type.charAt(0).toUpperCase() + type.slice(1)} ${inv.value}`,
+      total: totalAmount,
+      date: dateEntry?.isoDate,
+      type,
+      confidence: 'medium',
+      source: docName,
+    });
+  }
+
+  // If no invoice numbers but document is classified as invoice/quote/receipt
+  if (invoices.length === 0 && (isInvoice || isQuote || isReceipt)) {
+    const type: 'invoice' | 'quote' | 'receipt' =
+      isQuote ? 'quote' :
+      isReceipt ? 'receipt' :
+      'invoice';
+
+    const totalAmount = extracted.amounts.length > 0
+      ? Math.max(...extracted.amounts.map(a => a.value))
+      : undefined;
+
+    invoices.push({
+      id: `detected-${docId}`,
+      description: `Detected ${type} from: ${docName}`,
+      total: totalAmount,
+      date: extracted.dates[0]?.isoDate,
+      type,
+      confidence: 'low',
+      source: docName,
+    });
+  }
+
+  return invoices;
+}
+
+/**
+ * Safely gets document name, handling undefined/null
+ */
+function safeGetName(doc: DocumentExtractionInput): string {
+  return doc.name || doc.id || 'unknown';
+}
+
 /**
  * Extract suggestions from documents
  *
- * TODO: Wire this into the wizard evidence upload flow.
- *
- * Current implementation is a stub that returns empty suggestions.
- * Full implementation will:
- * 1. Parse PDF/image content
- * 2. Run regex patterns for addresses, dates, amounts
- * 3. Optionally use LLM for complex extraction
- * 4. Return suggestions with confidence scores
+ * Performs deterministic regex extraction for:
+ * - UK postcodes
+ * - Dates (UK formats + ISO)
+ * - Monetary amounts (£)
+ * - Invoice/reference numbers
  *
  * @param documents - Array of documents to analyze
  * @returns ExtractionSuggestions object with found data
@@ -274,17 +698,6 @@ export async function extractDocumentSuggestions(
   }
 
   try {
-    // TODO: Implement actual extraction logic
-    // This is a scaffold - the actual implementation will:
-    // 1. For each document, check if extractedText is available
-    // 2. If not, fetch content from contentUrl and extract text
-    // 3. Run pattern matching for:
-    //    - UK postcodes: /[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}/gi
-    //    - Dates: various UK formats
-    //    - Monetary amounts: /£\s?[\d,]+\.?\d*/gi
-    //    - Invoice numbers: /invoice\s*(no\.?|number|#)?\s*:?\s*([A-Z0-9-]+)/gi
-    // 4. Return extracted suggestions with confidence scores
-
     const suggestions: ExtractionSuggestions = {
       schemaVersion: '1.0',
       extractedAt: new Date().toISOString(),
@@ -292,24 +705,70 @@ export async function extractDocumentSuggestions(
       detectedInvoicesQuotes: [],
       metadata: {
         documentsAnalyzed: documents.length,
-        processingTimeMs: Date.now() - startTime,
-        extractionMethods: ['stub'], // Will be: ['regex', 'llm'] when implemented
+        processingTimeMs: 0,
+        extractionMethods: ['regex', 'filename'],
       },
     };
 
-    // Basic extraction from document names (placeholder logic)
-    for (const doc of documents) {
-      const name = doc.name.toLowerCase();
+    const allExtracted: ExtractedData[] = [];
 
-      // Detect invoice/quote from filename
-      if (name.includes('invoice') || name.includes('quote') || name.includes('receipt')) {
-        suggestions.detectedInvoicesQuotes.push({
-          id: `detected-${doc.id}`,
-          description: `Detected from filename: ${doc.name}`,
-          type: name.includes('invoice') ? 'invoice' : name.includes('quote') ? 'quote' : 'receipt',
-          confidence: 'low',
-          source: doc.name,
-        });
+    for (const doc of documents) {
+      const docName = safeGetName(doc);
+      const nameLower = docName.toLowerCase();
+
+      // Extract from document text if available
+      if (doc.extractedText) {
+        const extracted = extractFromText(doc.extractedText, docName);
+        allExtracted.push(extracted);
+
+        // Create invoice suggestions from this document
+        const docInvoices = createInvoiceSuggestions(extracted, docName, doc.id);
+        suggestions.detectedInvoicesQuotes.push(...docInvoices);
+
+        // Map to suggestions
+        mapToSuggestions(extracted, suggestions);
+      }
+
+      // Also check filename for type hints
+      if (nameLower.includes('invoice') || nameLower.includes('quote') || nameLower.includes('receipt')) {
+        const type: 'invoice' | 'quote' | 'receipt' =
+          nameLower.includes('invoice') ? 'invoice' :
+          nameLower.includes('quote') ? 'quote' :
+          'receipt';
+
+        // Only add if not already detected from content
+        const alreadyDetected = suggestions.detectedInvoicesQuotes.some(
+          inv => inv.source === docName
+        );
+
+        if (!alreadyDetected) {
+          suggestions.detectedInvoicesQuotes.push({
+            id: `detected-${doc.id}`,
+            description: `Detected from filename: ${docName}`,
+            type,
+            confidence: 'low',
+            source: docName,
+          });
+        }
+      }
+
+      // Check for rent ledger from filename
+      if (nameLower.includes('ledger') || nameLower.includes('rent') && nameLower.includes('statement')) {
+        // This is likely a rent ledger - boost confidence of any amounts found
+        if (suggestions.rentAmount) {
+          suggestions.rentAmount.confidence = 'high';
+        }
+      }
+
+      // Check for tenancy agreement from filename
+      if (nameLower.includes('tenancy') || nameLower.includes('agreement') || nameLower.includes('ast')) {
+        // Boost confidence of dates found
+        if (suggestions.tenancyStartDate) {
+          suggestions.tenancyStartDate.confidence = 'high';
+        }
+        if (suggestions.tenancyEndDate) {
+          suggestions.tenancyEndDate.confidence = 'high';
+        }
       }
     }
 
