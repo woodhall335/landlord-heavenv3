@@ -263,7 +263,7 @@ export default function DashboardPage() {
               {cases.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-gray-600 mb-4">No cases yet</p>
-                  <Link href="/wizard">
+                  <Link href="/wizard?src=dashboard">
                     <Button variant="primary">Start Your First Case</Button>
                   </Link>
                 </div>
@@ -310,7 +310,7 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <Link href="/wizard">
+                <Link href="/wizard?src=dashboard">
                   <button className="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-left font-medium">
                     📝 Create New Document
                   </button>

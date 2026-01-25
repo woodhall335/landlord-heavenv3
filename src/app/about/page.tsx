@@ -420,7 +420,7 @@ export default function AboutPage() {
                 View Pricing →
               </Link>
               <Link
-                href="/wizard"
+                href="/wizard?src=about"
                 className="hero-btn-secondary"
               >
                 Start Wizard →

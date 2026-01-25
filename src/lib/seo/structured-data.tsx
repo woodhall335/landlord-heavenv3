@@ -437,6 +437,144 @@ export function softwareApplicationSchema() {
 }
 
 /**
+ * HowTo structured data interface
+ */
+export interface HowToStep {
+  name: string;
+  text: string;
+  url?: string;
+  image?: string;
+}
+
+export interface HowToSchemaInput {
+  name: string;
+  description: string;
+  url: string;
+  totalTime?: string; // ISO 8601 duration, e.g., "PT15M" for 15 minutes
+  estimatedCost?: {
+    currency: string;
+    value: string;
+  };
+  steps: HowToStep[];
+  image?: string;
+}
+
+/**
+ * HowTo structured data
+ *
+ * Use this for:
+ * - Process pages (MCOL steps, eviction process, etc.)
+ * - Tool pages (generators, validators)
+ * - Guides with step-by-step instructions
+ *
+ * IMPORTANT: Keep it conservative:
+ * - No fake or estimated times unless you have data
+ * - Steps should be genuinely helpful, not marketing
+ * - Do not add HowTo to pages that aren't actually step-by-step guides
+ */
+export function howToSchema(input: HowToSchemaInput) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": input.name,
+    "description": input.description,
+    "url": input.url,
+    "image": input.image || `${SITE_URL}/og-image.png`,
+    "step": input.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.name,
+      "text": step.text,
+      ...(step.url && { "url": step.url }),
+      ...(step.image && { "image": step.image }),
+    })),
+  };
+
+  if (input.totalTime) {
+    schema.totalTime = input.totalTime;
+  }
+
+  if (input.estimatedCost) {
+    schema.estimatedCost = {
+      "@type": "MonetaryAmount",
+      "currency": input.estimatedCost.currency,
+      "value": input.estimatedCost.value,
+    };
+  }
+
+  return schema;
+}
+
+/**
+ * Pre-built HowTo schemas for common processes
+ */
+export const HOWTO_SCHEMAS = {
+  /** Section 21 eviction process (England) */
+  section21Process: howToSchema({
+    name: 'How to Serve a Section 21 Notice in England',
+    description: 'Complete step-by-step guide to serving a valid Section 21 no-fault eviction notice.',
+    url: `${SITE_URL}/section-21-notice-template`,
+    totalTime: 'PT15M',
+    steps: [
+      { name: 'Check eligibility requirements', text: 'Verify deposit protection, EPC, gas safety certificate, and How to Rent guide were provided.' },
+      { name: 'Generate Form 6A notice', text: 'Create a valid Section 21 notice using the official Form 6A template with correct details.' },
+      { name: 'Serve the notice correctly', text: 'Deliver the notice to the tenant by hand, first-class post, or leave at the property.' },
+      { name: 'Wait the notice period', text: 'Allow at least 2 months from service (or end of fixed term if later).' },
+      { name: 'Apply for possession if needed', text: 'If tenant hasn\'t left, apply to court using accelerated possession procedure (Form N5B).' },
+    ],
+  }),
+
+  /** MCOL claim process */
+  mcolProcess: howToSchema({
+    name: 'How to File a Money Claim Online (MCOL)',
+    description: 'Step-by-step guide to filing a county court money claim for unpaid rent or damages.',
+    url: `${SITE_URL}/money-claim-online-mcol`,
+    totalTime: 'PT30M',
+    estimatedCost: { currency: 'GBP', value: '35-455' },
+    steps: [
+      { name: 'Register for MCOL', text: 'Create an account on the government Money Claim Online website.' },
+      { name: 'Gather evidence', text: 'Compile tenancy agreement, rent statements, photos of damage, and calculate total owed.' },
+      { name: 'Enter defendant details', text: 'Fill in the tenant\'s full name and last known address.' },
+      { name: 'Write particulars of claim', text: 'Describe what the claim is for, when the debt arose, and the breakdown.' },
+      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (£35 for up to £300, up to £455 for up to £10,000).' },
+      { name: 'Submit and wait for response', text: 'Defendant has 14 days to respond. Request default judgment if they don\'t.' },
+    ],
+  }),
+
+  /** Rent demand letter process */
+  rentDemandProcess: howToSchema({
+    name: 'How to Write a Rent Demand Letter',
+    description: 'Step-by-step guide to writing an effective rent demand letter for arrears.',
+    url: `${SITE_URL}/tools/free-rent-demand-letter`,
+    totalTime: 'PT10M',
+    steps: [
+      { name: 'Gather arrears information', text: 'Calculate total rent owed and list missed payment dates.' },
+      { name: 'Use formal letter format', text: 'Include your address, tenant\'s address, date, and clear subject line.' },
+      { name: 'State the arrears clearly', text: 'List each missed payment with dates and amounts. State the total owed.' },
+      { name: 'Set a clear deadline', text: 'Give a reasonable deadline (typically 14 days) for payment.' },
+      { name: 'Explain consequences', text: 'State that you may take further action including eviction or court claim.' },
+      { name: 'Send and keep proof', text: 'Send by recorded delivery and keep a copy for evidence.' },
+    ],
+  }),
+
+  /** Section 8 notice process */
+  section8Process: howToSchema({
+    name: 'How to Serve a Section 8 Notice',
+    description: 'Step-by-step guide to serving a grounds-based Section 8 eviction notice.',
+    url: `${SITE_URL}/section-8-notice-template`,
+    totalTime: 'PT20M',
+    steps: [
+      { name: 'Identify valid grounds', text: 'Review the 18 Section 8 grounds and identify which apply to your situation.' },
+      { name: 'Gather evidence', text: 'Collect rent statements, warning letters, photos, or other supporting evidence.' },
+      { name: 'Complete Form 3 notice', text: 'Fill in the official Form 3 with property details and selected grounds.' },
+      { name: 'Serve the notice', text: 'Deliver to tenant by hand, post, or leave at property. Note the service date.' },
+      { name: 'Wait the notice period', text: 'Notice periods vary: 2 weeks for rent arrears (Ground 8), 2 months for most others.' },
+      { name: 'Apply for possession order', text: 'If tenant hasn\'t left, apply to court using Form N5 (not N5B for Section 8).' },
+    ],
+  }),
+};
+
+/**
  * Utility function to render JSON-LD script tag
  */
 export function StructuredData({ data }: { data: object }) {

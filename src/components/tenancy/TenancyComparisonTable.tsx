@@ -369,14 +369,14 @@ export const TenancyComparisonTable: React.FC<TenancyComparisonTableProps> = ({
             );
           })}
           <tr className="bg-gray-50 font-semibold">
-            <td className="px-4 py-3 text-sm text-gray-900">Number of documents</td>
-            <td className="px-4 py-3 text-center text-sm text-gray-900">4</td>
+            <td className="px-4 py-3 text-sm text-gray-900">Best for</td>
+            <td className="px-4 py-3 text-center text-sm text-gray-900">Single households</td>
             <td
               className={`px-4 py-3 text-center text-sm ${
                 highlightPremium ? 'text-primary bg-purple-50' : 'text-gray-900'
               }`}
             >
-              7
+              HMOs &amp; multi-tenant
             </td>
           </tr>
         </tbody>

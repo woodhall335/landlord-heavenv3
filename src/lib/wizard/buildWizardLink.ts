@@ -26,7 +26,12 @@ export type WizardSource =
   | 'footer'
   | 'pricing'
   | 'guide'
-  | 'homepage';
+  | 'homepage'
+  | 'dashboard'
+  | 'about'
+  | 'seo_eviction'
+  | 'seo_money_claim'
+  | 'seo_tenancy';
 
 export type WizardTopic =
   | 'eviction'
