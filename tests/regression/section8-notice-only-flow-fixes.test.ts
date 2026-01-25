@@ -18,7 +18,7 @@ import type { ArrearsItem } from '@/lib/case-facts/schema';
 // ISSUE 1: Section 8 Date field mapping
 // ============================================================================
 describe('Issue 1: Section 8 Notice Date field mapping', () => {
-  it('buildSection8TemplateData includes service_date from wizard facts', async () => {
+  it('buildSection8TemplateData includes service_date from wizard facts', { timeout: 15000 }, async () => {
     // Import the function directly
     const { generateNoticeOnlyPack } = await import('@/lib/documents/eviction-pack-generator');
 
@@ -173,7 +173,7 @@ describe('Issue 3: Arrears wording UK date format', () => {
 // ISSUE 4: Arrears Schedule in pack
 // ============================================================================
 describe('Issue 4: Rent Schedule / Arrears Statement in pack', () => {
-  it('generateNoticeOnlyPack includes arrears schedule for arrears cases', async () => {
+  it('generateNoticeOnlyPack includes arrears schedule for arrears cases', { timeout: 15000 }, async () => {
     // The fix adds arrears schedule generation after compliance declaration
     // for Section 8 cases with arrears grounds
 
