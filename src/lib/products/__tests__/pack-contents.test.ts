@@ -243,83 +243,159 @@ describe('getPackContents', () => {
     });
   });
 
-  describe('ast_standard product', () => {
-    it('returns AST items for England', () => {
+  // ===========================================================================
+  // TENANCY AGREEMENT PRODUCTS - Jan 2026 Update
+  // Base product: ONLY the tenancy agreement (no supporting docs)
+  // Premium (HMO): ONLY the HMO tenancy agreement
+  // ===========================================================================
+
+  describe('ast_standard product (base - agreement only)', () => {
+    it('returns ONLY the AST agreement for England (no supporting docs)', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      expect(items.find(i => i.key === 'ast_agreement')).toBeDefined();
-      expect(items.find(i => i.title.includes('Assured Shorthold'))).toBeDefined();
+      // MUST have exactly 1 document - the agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('ast_agreement');
+      expect(items[0].title).toContain('Assured Shorthold');
+      expect(items[0].description).toContain('agreement only');
+
+      // MUST NOT have supporting documents
+      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
+      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
+      expect(items.find(i => i.key === 'inventory_template')).toBeUndefined();
     });
 
-    it('returns SOC items for Wales (Renting Homes Act terminology)', () => {
+    it('returns ONLY the SOC agreement for Wales (no supporting docs)', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'wales',
       };
       const items = getPackContents(args);
 
-      expect(items.find(i => i.key === 'soc_agreement')).toBeDefined();
-      expect(items.find(i => i.title.includes('Standard Occupation Contract'))).toBeDefined();
+      // MUST have exactly 1 document - the agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('soc_agreement');
+      expect(items[0].title).toContain('Standard Occupation Contract');
+      expect(items[0].description).toContain('occupation contract only');
+
+      // MUST NOT have supporting documents
+      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
+      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
     });
 
-    it('returns PRT items for Scotland', () => {
+    it('returns ONLY the PRT agreement for Scotland (no supporting docs)', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'scotland',
       };
       const items = getPackContents(args);
 
-      expect(items.find(i => i.key === 'prt_agreement')).toBeDefined();
-      expect(items.find(i => i.title.includes('Private Residential Tenancy'))).toBeDefined();
+      // MUST have exactly 1 document - the agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('prt_agreement');
+      expect(items[0].title).toContain('Private Residential Tenancy');
+      expect(items[0].description).toContain('agreement only');
+
+      // MUST NOT have supporting documents
+      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
+      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
     });
 
-    it('returns Private Tenancy items for Northern Ireland', () => {
+    it('returns ONLY the Private Tenancy agreement for Northern Ireland (no supporting docs)', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'northern-ireland',
       };
       const items = getPackContents(args);
 
-      expect(items.find(i => i.key === 'private_tenancy_agreement')).toBeDefined();
-      expect(items.find(i => i.title.includes('Private Tenancy'))).toBeDefined();
+      // MUST have exactly 1 document - the agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('private_tenancy_agreement');
+      expect(items[0].title).toContain('Private Tenancy');
+      expect(items[0].description).toContain('agreement only');
+
+      // MUST NOT have supporting documents
+      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
+      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
     });
   });
 
-  describe('ast_premium product', () => {
-    it('includes additional items over standard tier', () => {
-      const standard: GetPackContentsArgs = {
-        product: 'ast_standard',
-        jurisdiction: 'england',
-      };
-      const premium: GetPackContentsArgs = {
+  describe('ast_premium product (HMO - HMO agreement only)', () => {
+    it('returns ONLY the HMO AST agreement for England (no supporting docs)', () => {
+      const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'england',
       };
+      const items = getPackContents(args);
 
-      const standardItems = getPackContents(standard);
-      const premiumItems = getPackContents(premium);
+      // MUST have exactly 1 document - the HMO agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('ast_agreement_hmo');
+      expect(items[0].title).toContain('HMO');
+      expect(items[0].description).toContain('HMO-specific');
 
-      expect(premiumItems.length).toBeGreaterThan(standardItems.length);
-      expect(premiumItems.find(i => i.key === 'key_schedule')).toBeDefined();
-      expect(premiumItems.find(i => i.key === 'maintenance_guide')).toBeDefined();
-      expect(premiumItems.find(i => i.key === 'checkout_procedure')).toBeDefined();
+      // MUST NOT have supporting documents
+      expect(items.find(i => i.key === 'key_schedule')).toBeUndefined();
+      expect(items.find(i => i.key === 'maintenance_guide')).toBeUndefined();
+      expect(items.find(i => i.key === 'checkout_procedure')).toBeUndefined();
     });
 
-    it('includes premium items for all jurisdictions', () => {
+    it('returns ONLY the HMO SOC agreement for Wales (no supporting docs)', () => {
+      const args: GetPackContentsArgs = {
+        product: 'ast_premium',
+        jurisdiction: 'wales',
+      };
+      const items = getPackContents(args);
+
+      // MUST have exactly 1 document - the HMO agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('soc_agreement_hmo');
+      expect(items[0].title).toContain('HMO');
+    });
+
+    it('returns ONLY the HMO PRT agreement for Scotland (no supporting docs)', () => {
+      const args: GetPackContentsArgs = {
+        product: 'ast_premium',
+        jurisdiction: 'scotland',
+      };
+      const items = getPackContents(args);
+
+      // MUST have exactly 1 document - the HMO agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('prt_agreement_hmo');
+      expect(items[0].title).toContain('HMO');
+    });
+
+    it('returns ONLY the HMO Private Tenancy agreement for Northern Ireland (no supporting docs)', () => {
+      const args: GetPackContentsArgs = {
+        product: 'ast_premium',
+        jurisdiction: 'northern-ireland',
+      };
+      const items = getPackContents(args);
+
+      // MUST have exactly 1 document - the HMO agreement only
+      expect(items.length).toBe(1);
+      expect(items[0].key).toBe('private_tenancy_agreement_hmo');
+      expect(items[0].title).toContain('HMO');
+    });
+
+    it('both standard and premium have exactly 1 document (no supporting docs for either)', () => {
       const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
 
       for (const jur of jurisdictions) {
-        const items = getPackContents({
-          product: 'ast_premium',
-          jurisdiction: jur,
-        });
+        const standardItems = getPackContents({ product: 'ast_standard', jurisdiction: jur });
+        const premiumItems = getPackContents({ product: 'ast_premium', jurisdiction: jur });
 
-        expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
-        expect(items.find(i => i.key === 'maintenance_guide')).toBeDefined();
+        // Both tiers now have exactly 1 document each (agreement only)
+        expect(standardItems.length).toBe(1);
+        expect(premiumItems.length).toBe(1);
+
+        // But different document types
+        expect(standardItems[0].key).not.toBe(premiumItems[0].key);
       }
     });
   });

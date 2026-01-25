@@ -1,13 +1,26 @@
-{{! Private Tenancy Agreement - Northern Ireland }}
+{{! HMO Private Tenancy Agreement - Northern Ireland }}
 {{! For use in Northern Ireland }}
 {{! Legal Framework: Private Tenancies Act (Northern Ireland) 2022 }}
 {{! (Amending Private Tenancies (Northern Ireland) Order 2006) }}
+{{!
+  HMO CLAUSES INCLUDED (where legally permitted in NI):
+  - Multiple tenants / joint liability clauses
+  - Shared facilities obligations
+  - Fire safety responsibilities
+  - House rules and enforcement
+  - Occupancy limits
 
-# PRIVATE TENANCY AGREEMENT
+  Note: NI HMO regulations differ from England - only include where applicable.
+  County Court Northern Ireland jurisdiction.
+}}
+
+# HMO PRIVATE TENANCY AGREEMENT
 
 **NORTHERN IRELAND**
 
 **Compliant with Private Tenancies Act (Northern Ireland) 2022**
+
+**Includes HMO-specific clauses for multi-occupancy properties where legally permitted**
 
 This Agreement is dated: **{{agreement_date}}**
 
@@ -371,6 +384,73 @@ The Tenant has the right to occupy the property during the tenancy. The Landlord
 {{#if additional_schedules}}
 {{additional_schedules}}
 {{/if}}
+
+---
+
+## HMO & SHARED FACILITIES CLAUSES
+
+This property is occupied by multiple tenants sharing facilities. The following additional terms apply.
+
+### Joint and Several Liability
+
+Where there are multiple Tenants, each Tenant is jointly and severally liable for:
+- The full rent amount (not just their share)
+- Any damage to shared areas
+- Compliance with all terms of this agreement
+
+### Shared Facilities
+
+The Tenant has shared access to:
+{{#if communal_areas}}
+- {{communal_areas}}
+{{else}}
+- Kitchen (cooking facilities, appliances, food storage)
+- Bathrooms/WC (shared with other Tenants)
+- Common hallways, stairs, and entrance
+- Living room / common room (if applicable)
+- Garden / outdoor space (if applicable)
+{{/if}}
+
+**Exclusive Use of Bedroom:** The Tenant has exclusive use of their designated bedroom(s).
+
+### Communal Area Responsibilities
+
+The Tenant must:
+- Keep shared areas clean and tidy after use
+- Wash dishes immediately, clean surfaces, store food properly
+- Clean bathroom after use
+- Use shared facilities considerately
+- Keep noise to minimum, especially after 11:00 PM
+
+### Fire Safety
+
+The Tenant must:
+- Keep fire doors closed at all times
+- Keep escape routes clear of obstructions
+- Not store items in communal hallways
+- Test smoke alarms monthly and report faults
+- Familiarize themselves with fire escape routes
+- Not tamper with fire safety equipment
+
+### Occupancy Limit
+
+Maximum {{#if number_of_sharers}}{{number_of_sharers}}{{else}}occupants as specified{{/if}} may reside at the property.
+
+### Guest Policy
+
+The Tenant may have visitors subject to:
+- No overnight guests for more than 2 consecutive nights without agreement
+- Guests must not cause nuisance to other Tenants
+- The Tenant is responsible for guest behavior
+
+### Serious Breaches
+
+The following may result in eviction proceedings:
+- Persistent failure to keep communal areas clean
+- Blocking fire exits or tampering with fire safety equipment
+- Causing serious nuisance to other Tenants
+- Unauthorized occupants or subletting
+- Damage to communal facilities
 
 ---
 

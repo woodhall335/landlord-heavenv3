@@ -1,12 +1,19 @@
 {{!--
-  Standard Assured Shorthold Tenancy Agreement
+  HMO Assured Shorthold Tenancy Agreement
   England Only - Professional Edition
 
   LEGAL NOTE: This Assured Shorthold Tenancy (AST) agreement applies to England ONLY.
   AST does not apply to Wales (which uses Occupation Contracts under the Renting Homes (Wales) Act 2016).
 
-  This template generates a beautifully formatted, legally comprehensive
-  tenancy agreement with proper styling and signature blocks.
+  HMO CLAUSES INCLUDED:
+  - Multiple occupants / joint liability clauses
+  - Shared facilities obligations
+  - Fire safety responsibilities (Housing Act 2004)
+  - HMO licensing acknowledgement
+  - House rules and enforcement
+  - Occupancy limits
+
+  This template is for Houses in Multiple Occupation (HMOs) under Housing Act 2004.
 --}}
 
 <!DOCTYPE html>
@@ -14,7 +21,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Standard Assured Shorthold Tenancy Agreement</title>
+  <title>HMO Assured Shorthold Tenancy Agreement</title>
   <style>
     @page {
       size: A4;
@@ -423,7 +430,7 @@
   <!-- DOCUMENT HEADER -->
   <div class="document-header">
     <div class="document-title">
-      Standard Assured Shorthold<br/>Tenancy Agreement
+      HMO Assured Shorthold<br/>Tenancy Agreement
     </div>
     <div class="document-subtitle">
       England &mdash; Professional Edition
@@ -1354,9 +1361,9 @@
     </div>
   </div>
 
-  {{#if has_shared_facilities}}
+  {{!-- HMO CLAUSES: Always included for HMO tenancy agreements --}}
   <div class="subsection">
-    <div class="subsection-title">🏘️ HMO & Shared Facilities (Premium)</div>
+    <div class="subsection-title">🏘️ HMO & Shared Facilities</div>
 
     <div class="legal-notice">
       <div class="legal-notice-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
@@ -1503,7 +1510,7 @@
       </p>
     </div>
   </div>
-  {{/if}}
+  {{!-- End of HMO section --}}
 
   <!-- PAGE BREAK -->
   <div class="page-break"></div>

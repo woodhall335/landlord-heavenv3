@@ -1,0 +1,1468 @@
+{{!--
+  HMO Occupation Contract
+  Wales - Renting Homes (Wales) Act 2016 Edition
+
+  This template generates a legally comprehensive occupation contract
+  compliant with the Renting Homes (Wales) Act 2016.
+
+  HMO CLAUSES INCLUDED:
+  - Multiple contract-holders / joint liability clauses
+  - Shared facilities obligations
+  - Fire safety responsibilities (Housing Act 2004)
+  - HMO licensing acknowledgement
+  - House rules and enforcement
+  - Occupancy limits
+
+  LEGAL NOTE: Uses correct Wales terminology:
+  - "Contract Holder" (not Tenant)
+  - "Landlord"
+  - "Dwelling" (not Premises)
+  - "Written Statement" requirements apply
+--}}
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HMO Occupation Contract</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+
+    .document-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px 0;
+      border-bottom: 3px solid #c8102e;
+    }
+
+    .document-title {
+      font-size: 28pt;
+      font-weight: bold;
+      color: #c8102e;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .document-subtitle {
+      font-size: 14pt;
+      color: #4a5568;
+      margin: 5px 0;
+    }
+
+    .wales-notice {
+      background: linear-gradient(135deg, #c8102e 0%, #00a651 100%);
+      color: white;
+      padding: 10px 20px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 12pt;
+      text-align: center;
+    }
+
+    .agreement-date {
+      font-size: 12pt;
+      color: #718096;
+      margin-top: 15px;
+      font-style: italic;
+    }
+
+    .section-header {
+      background: linear-gradient(135deg, #c8102e 0%, #8b0000 100%);
+      color: white;
+      padding: 15px 20px;
+      margin: 40px 0 20px 0;
+      font-size: 16pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      page-break-after: avoid;
+    }
+
+    .section-number {
+      background: white;
+      color: #c8102e;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 16pt;
+      font-weight: bold;
+    }
+
+    .subsection {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .subsection-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #c8102e;
+      margin-bottom: 10px;
+      border-left: 4px solid #c8102e;
+      padding-left: 15px;
+    }
+
+    .clause {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+
+    .clause-number {
+      font-weight: bold;
+      color: #c8102e;
+      display: inline-block;
+      min-width: 40px;
+    }
+
+    .explainer-box {
+      background: #f7fafc;
+      border-left: 4px solid #00a651;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #4a5568;
+      page-break-inside: avoid;
+    }
+
+    .explainer-title {
+      font-weight: bold;
+      color: #00a651;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .explainer-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 14pt;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #f56565;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #742a2a;
+      page-break-inside: avoid;
+    }
+
+    .warning-title {
+      font-weight: bold;
+      color: #c53030;
+      margin-bottom: 8px;
+    }
+
+    .important-box {
+      background: #fffaf0;
+      border: 2px solid #ed8936;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .important-title {
+      font-weight: bold;
+      color: #c05621;
+      margin-bottom: 8px;
+      font-size: 11pt;
+    }
+
+    .party-details {
+      background: #f7fafc;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #cbd5e0;
+    }
+
+    .party-label {
+      font-weight: bold;
+      color: #c8102e;
+      font-size: 12pt;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .party-info {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    .property-highlight {
+      background: linear-gradient(135deg, #c8102e 0%, #8b0000 100%);
+      color: white;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 8px;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .property-address {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .property-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .property-detail-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .property-detail-label {
+      font-size: 9pt;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+
+    .property-detail-value {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    .financial-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .financial-table th {
+      background: #c8102e;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      letter-spacing: 1px;
+    }
+
+    .financial-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .financial-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .financial-table .label {
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .financial-table .value {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #c8102e;
+    }
+
+    .signature-section {
+      margin-top: 60px;
+      page-break-before: always;
+      padding-top: 40px;
+    }
+
+    .signature-title {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #c8102e;
+      text-align: center;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .signature-blocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .signature-block {
+      border: 2px solid #c8102e;
+      padding: 30px;
+      border-radius: 8px;
+      background: #f7fafc;
+    }
+
+    .signature-party {
+      font-weight: bold;
+      color: #c8102e;
+      font-size: 12pt;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .signature-line {
+      border-bottom: 2px solid #c8102e;
+      margin: 30px 0 10px 0;
+      height: 50px;
+    }
+
+    .signature-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-top: 5px;
+    }
+
+    .signature-date {
+      margin-top: 20px;
+    }
+
+    .signature-date-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-bottom: 5px;
+    }
+
+    .signature-date-line {
+      border-bottom: 2px solid #c8102e;
+      width: 150px;
+      height: 30px;
+    }
+
+    .witness-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: #fffaf0;
+      border: 1px solid #ed8936;
+      border-radius: 8px;
+    }
+
+    .witness-title {
+      font-weight: bold;
+      color: #c05621;
+      margin-bottom: 15px;
+    }
+
+    .legal-notice {
+      background: #f7fafc;
+      border: 2px solid #c8102e;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+      page-break-inside: avoid;
+    }
+
+    .legal-notice-title {
+      font-weight: bold;
+      color: #c8102e;
+      font-size: 12pt;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 30px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li:before {
+      content: "✓ ";
+      color: #00a651;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .footer-info {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #cbd5e0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+
+    @media print {
+      .page-break {
+        page-break-before: always;
+      }
+
+      .section-header,
+      .subsection,
+      .explainer-box,
+      .warning-box,
+      .party-details {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOCUMENT HEADER -->
+  <div class="document-header">
+    <div class="document-title">
+      HMO Occupation<br/>Contract
+    </div>
+    <div class="document-subtitle">
+      Wales &mdash; Renting Homes (Wales) Act 2016 | HMO Edition
+    </div>
+    <div class="wales-notice">
+      This contract is governed by the Renting Homes (Wales) Act 2016 and Housing Act 2004 (HMO)
+    </div>
+    <div class="agreement-date">
+      This Contract is dated: <strong>{{agreement_date}}</strong>
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      About This Contract
+    </div>
+    <p>
+      This is a legally binding HMO Occupation Contract between the Landlord and Contract Holder(s) for the
+      rental of a room in a House in Multiple Occupation (HMO) in Wales. It is governed by the
+      <strong>Renting Homes (Wales) Act 2016</strong> and includes HMO-specific clauses required under the
+      <strong>Housing Act 2004</strong>. This contract includes provisions for shared facilities, joint liability,
+      and multi-occupancy arrangements.
+    </p>
+  </div>
+
+  <div class="important-box">
+    <div class="important-title">📜 Written Statement Requirement</div>
+    <p>
+      Under the Renting Homes (Wales) Act 2016, the landlord must provide a written statement of the occupation
+      contract within 14 days of the occupation date. This document serves as that written statement. Failure to
+      provide a written statement within 14 days may result in a rent repayment order.
+    </p>
+  </div>
+
+  <!-- SECTION 1: THE PARTIES -->
+  <div class="section-header">
+    <span class="section-number">1</span>
+    The Parties
+  </div>
+
+  <div class="party-details">
+    <div class="party-label">🏠 Landlord</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{landlord_full_name}}<br/>
+      <strong>Address:</strong> {{landlord_address}}<br/>
+      <strong>Email:</strong> {{landlord_email}}<br/>
+      <strong>Phone:</strong> {{landlord_phone}}
+    </div>
+  </div>
+
+  <!-- RENT SMART WALES REGISTRATION -->
+  <div class="legal-notice">
+    <div class="legal-notice-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Rent Smart Wales Registration</div>
+    <p>
+      Under the Housing (Wales) Act 2014, all landlords letting property in Wales must be registered with
+      <strong>Rent Smart Wales</strong>. Landlords who manage their own properties must also be licensed.
+    </p>
+    <div class="party-info" style="margin-top: 15px;">
+      <strong>Rent Smart Wales Registration Number:</strong> {{rent_smart_wales_number}}<br/>
+      {{#if rent_smart_wales_license_number}}
+      <strong>Rent Smart Wales License Number:</strong> {{rent_smart_wales_license_number}}<br/>
+      {{/if}}
+      <strong>Registration Status:</strong> Active and Valid
+    </div>
+  </div>
+
+  {{#if agent_name}}
+  <div class="party-details">
+    <div class="party-label">🏢 Landlord's Agent</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{agent_name}}<br/>
+      <strong>Address:</strong> {{agent_address}}<br/>
+      <strong>Email:</strong> {{agent_email}}<br/>
+      <strong>Phone:</strong> {{agent_phone}}<br/>
+      {{#if agent_rent_smart_wales_license}}
+      <strong>Rent Smart Wales License:</strong> {{agent_rent_smart_wales_license}}
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      About the Agent
+    </div>
+    <p>
+      The Landlord has appointed {{agent_name}} to act on their behalf. All communications regarding this
+      occupation contract should be directed to the Agent unless otherwise specified. The agent must hold
+      a valid Rent Smart Wales license to manage property in Wales.
+    </p>
+  </div>
+  {{/if}}
+
+  <div class="party-details">
+    <div class="party-label">👤 Contract Holder(s)</div>
+    <div class="party-info">
+      {{#each tenants}}
+      <div style="margin-bottom: 15px;">
+        <strong>Contract Holder {{add @index 1}}:</strong> {{this.full_name}}<br/>
+        <strong>Date of Birth:</strong> {{this.dob}}<br/>
+        <strong>Email:</strong> {{this.email}}<br/>
+        <strong>Phone:</strong> {{this.phone}}
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      Terminology Under Renting Homes (Wales) Act 2016
+    </div>
+    <p>
+      In Wales, tenants are now referred to as <strong>"Contract Holders"</strong> and tenancy agreements are
+      <strong>"Occupation Contracts"</strong>. This Standard Occupation Contract replaces the Assured Shorthold
+      Tenancy (AST) used in England.
+    </p>
+  </div>
+
+  {{#if joint_and_several_liability}}
+  <div class="important-box">
+    <div class="important-title">⚠️ Joint Contract</div>
+    <p>
+      Where there are multiple Contract Holders, this is a <strong>Joint Contract</strong>. Each Contract Holder
+      is jointly and severally liable for all obligations under this Contract. This means each Contract Holder
+      is individually responsible for the full rent and all other obligations, not just their share.
+    </p>
+  </div>
+  {{/if}}
+
+  {{#if guarantor_name}}
+  <div class="party-details">
+    <div class="party-label">🛡️ Guarantor</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{guarantor_name}}<br/>
+      <strong>Address:</strong> {{guarantor_address}}<br/>
+      <strong>Email:</strong> {{guarantor_email}}<br/>
+      <strong>Phone:</strong> {{guarantor_phone}}<br/>
+      <strong>Date of Birth:</strong> {{guarantor_dob}}<br/>
+      <strong>Relationship to Contract Holder:</strong> {{guarantor_relationship}}
+    </div>
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">🛡️ Guarantor Agreement</div>
+    <p style="margin-bottom: 15px;">
+      <strong>The Guarantor hereby agrees to act as guarantor for the Contract Holder(s) named above and undertakes the following:</strong>
+    </p>
+
+    <div style="margin: 20px 0;">
+      <p style="margin: 10px 0;"><strong>1. Joint and Several Liability</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor agrees to be jointly and severally liable with the Contract Holder for all obligations under this Contract.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>2. Rent Payment Guarantee</strong></p>
+      <p style="margin-left: 20px;">
+        If the Contract Holder fails to pay rent when due, the Guarantor must pay the outstanding rent within 14 days of
+        receiving written demand from the Landlord.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>3. Damage and Dilapidation</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor is liable for any damage to the Property beyond fair wear and tear.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>4. Continuing Guarantee</strong></p>
+      <p style="margin-left: 20px;">
+        This guarantee continues throughout the occupation contract including any periodic standard contract that arises
+        after the fixed term expires.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>5. Maximum Liability</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor's liability is capped at: <strong>£{{multiply rent_amount 12}}</strong> (12 months' rent)
+        plus reasonable costs of enforcement.
+      </p>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Important Notice to Guarantor</div>
+    <p>
+      By signing this Contract as Guarantor, you are making a serious financial commitment. You will be responsible
+      for paying the Contract Holder's rent and other obligations if they fail to do so.
+      <strong>You should seek independent legal advice before signing.</strong>
+    </p>
+  </div>
+  {{/if}}
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 2: THE PROPERTY -->
+  <div class="section-header">
+    <span class="section-number">2</span>
+    The Dwelling
+  </div>
+
+  <div class="property-highlight">
+    <div class="property-address">
+      📍 {{property_address}}
+    </div>
+    <div class="property-details">
+      <div class="property-detail-item">
+        <div class="property-detail-label">Property Type</div>
+        <div class="property-detail-value">{{property_type}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Bedrooms</div>
+        <div class="property-detail-value">{{number_of_bedrooms}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Furnished Status</div>
+        <div class="property-detail-value">{{furnished_status}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Council Tax Band</div>
+        <div class="property-detail-value">{{council_tax_band}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">EPC Rating</div>
+        <div class="property-detail-value">{{epc_rating}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Parking</div>
+        <div class="property-detail-value">{{#if parking_available}}Yes{{else}}No{{/if}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      Terminology
+    </div>
+    <p>
+      Under the Renting Homes (Wales) Act 2016, the property is referred to as the <strong>"Dwelling"</strong>.
+      This includes the property and any associated land, outbuildings, or parking included in this contract.
+    </p>
+  </div>
+
+  {{#if parking_available}}
+  <div class="subsection">
+    <div class="subsection-title">🚗 Parking</div>
+    <div class="clause">
+      <span class="clause-number">2.1</span>
+      Parking is included: {{parking_details}}
+    </div>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 3: THE TERM -->
+  <div class="section-header">
+    <span class="section-number">3</span>
+    The Contract Period
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📅 Occupation Period</div>
+
+    <div class="clause">
+      <span class="clause-number">3.1</span>
+      <strong>Occupation Date:</strong> {{tenancy_start_date}}
+    </div>
+
+    {{#if is_fixed_term}}
+    <div class="clause">
+      <span class="clause-number">3.2</span>
+      <strong>Contract End Date:</strong> {{tenancy_end_date}} at 12:00 noon
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">3.3</span>
+      <strong>Fixed Term Length:</strong> {{term_length}}
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">3.4</span>
+      Upon expiry of the fixed term, unless either party serves notice to end the contract, this agreement will
+      automatically continue as a <strong>Periodic Standard Contract</strong> on the same terms.
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">3.2</span>
+      This is a <strong>Periodic Standard Contract</strong> which will continue indefinitely until
+      terminated by either party serving the required notice.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      How Notice Periods Work Under RH(W)A 2016
+    </div>
+    <ul>
+      <li><strong>During Fixed Term:</strong> Neither party can end the contract early unless there's a break clause or the Contract Holder breaches the agreement.</li>
+      <li><strong>After Fixed Term (Periodic):</strong> Landlord must give at least <strong>6 months' notice</strong> using Section 173 notice (no-fault). Contract Holder must give at least 4 weeks' notice (or one rental period, whichever is longer).</li>
+      <li><strong>For Breach:</strong> Landlord may serve possession notice under Section 157 (serious breach) or other grounds with varying notice periods.</li>
+    </ul>
+  </div>
+
+  <div class="important-box">
+    <div class="important-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Key Difference from England</div>
+    <p>
+      In Wales, the minimum no-fault notice period is <strong>6 months</strong> (Section 173), compared to 2 months
+      in England. This provides greater security of tenure for Contract Holders in Wales.
+    </p>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 4: RENT -->
+  <div class="section-header">
+    <span class="section-number">4</span>
+    Rent & Payments
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Payment Item</th>
+      <th>Amount</th>
+      <th>Frequency</th>
+    </tr>
+    <tr>
+      <td class="label">Monthly Rent</td>
+      <td class="value">£{{rent_amount}}</td>
+      <td>Monthly</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Due Date</td>
+      <td class="value">{{rent_due_day}} of each month</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Method</td>
+      <td class="value">{{payment_method}}</td>
+      <td>-</td>
+    </tr>
+  </table>
+
+  <div class="subsection">
+    <div class="subsection-title">💳 Bank Account Details</div>
+
+    <div class="party-details">
+      <div class="party-info">
+        <strong>Account Name:</strong> {{bank_account_name}}<br/>
+        <strong>Sort Code:</strong> {{bank_sort_code}}<br/>
+        <strong>Account Number:</strong> {{bank_account_number}}
+      </div>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.1</span>
+      The Contract Holder must pay rent by {{payment_method}} to the bank account above.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.2</span>
+      Rent is due on the {{rent_due_day}} of each month in advance.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.3</span>
+      The first payment of £{{rent_amount}} is due on or before {{tenancy_start_date}}.
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Late Payment</div>
+    <p>
+      If rent is unpaid for 14 days or more after the due date, interest may accrue at 3% above the Bank of England
+      base rate per annum. Serious rent arrears (2 months or more) may result in possession proceedings under the
+      Renting Homes (Wales) Act 2016.
+    </p>
+  </div>
+
+  <!-- SECTION 5: DEPOSIT -->
+  <div class="section-header">
+    <span class="section-number">5</span>
+    Security Deposit
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Deposit Details</th>
+      <th>Information</th>
+    </tr>
+    <tr>
+      <td class="label">Deposit Amount</td>
+      <td class="value">£{{deposit_amount}}</td>
+    </tr>
+    <tr>
+      <td class="label">Protection Scheme</td>
+      <td class="value">{{deposit_scheme_name}}</td>
+    </tr>
+    <tr>
+      <td class="label">Maximum Permitted</td>
+      <td class="value">£{{max_legal_deposit}}</td>
+    </tr>
+  </table>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">✅ Deposit Protection Requirements (Wales)</div>
+    <ul class="checklist">
+      <li>Deposit will be protected within 30 days in an authorized scheme</li>
+      <li>Prescribed information will be provided within 30 days</li>
+      <li>The deposit will be returned within 10 days of agreement on deductions (or scheme determination)</li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🛡️ Deposit Protection</div>
+
+    <div class="clause">
+      <span class="clause-number">5.1</span>
+      The Landlord will protect the deposit in {{deposit_scheme_name}} within 30 calendar days of receipt.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">5.2</span>
+      The Landlord will provide the Contract Holder with the Prescribed Information within 30 calendar days, including:
+      <ul>
+        <li>Amount of deposit paid</li>
+        <li>Address of the dwelling</li>
+        <li>Name and contact details of the deposit scheme</li>
+        <li>How the deposit will be protected</li>
+        <li>How to apply for release of the deposit</li>
+        <li>What to do if there is a dispute</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Failure to Protect Deposit</div>
+    <p>
+      <strong>Landlord:</strong> If you fail to protect the deposit or provide the Prescribed Information within 30 days,
+      you may be ordered to pay the Contract Holder compensation of 1-3 times the deposit amount. You will also be unable
+      to serve a valid Section 173 notice until the deposit is protected and information provided.
+    </p>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 6: BILLS & UTILITIES -->
+  <div class="section-header">
+    <span class="section-number">6</span>
+    Bills & Utilities
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Utility/Bill</th>
+      <th>Responsibility</th>
+    </tr>
+    <tr>
+      <td class="label">Council Tax</td>
+      <td class="value">{{council_tax_responsibility}}</td>
+    </tr>
+    <tr>
+      <td class="label">Gas, Electric, Water</td>
+      <td class="value">{{utilities_responsibility}}</td>
+    </tr>
+    <tr>
+      <td class="label">Internet/Broadband</td>
+      <td class="value">{{internet_responsibility}}</td>
+    </tr>
+  </table>
+
+  <div class="subsection">
+    <div class="subsection-title">📊 Utility Obligations</div>
+
+    <div class="clause">
+      <span class="clause-number">6.1</span>
+      The Contract Holder is responsible for paying the following utilities and services:
+      {{council_tax_responsibility}}, {{utilities_responsibility}}, {{internet_responsibility}}.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6.2</span>
+      The Contract Holder must take meter readings at the start and end of the occupation.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6.3</span>
+      The Contract Holder must notify utility companies of their occupancy and ensure all bills are paid promptly.
+    </div>
+  </div>
+
+  <!-- SECTION 7: CONTRACT HOLDER OBLIGATIONS -->
+  <div class="section-header">
+    <span class="section-number">7</span>
+    Contract Holder Obligations
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🏠 Care of Dwelling</div>
+
+    <div class="clause">
+      <span class="clause-number">7.1</span>
+      <strong>Cleanliness & Maintenance:</strong> The Contract Holder must:
+      <ul>
+        <li>Keep the Dwelling clean, tidy, and in good decorative order</li>
+        <li>Keep the Dwelling adequately heated and ventilated to prevent condensation, dampness, and mould growth</li>
+        <li>Report any defects, damage, or disrepair to the Landlord promptly (within 48 hours of discovery)</li>
+        <li>Not cause or permit any damage to the Dwelling, fixtures, fittings, or furnishings</li>
+        <li>Make good any damage caused by the Contract Holder, their family, or visitors (fair wear and tear excepted)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.2</span>
+      <strong>Condensation Prevention:</strong> The Contract Holder must take reasonable steps to prevent condensation by:
+      <ul>
+        <li>Opening windows regularly to allow ventilation</li>
+        <li>Using extractor fans in bathrooms and kitchens during and after use</li>
+        <li>Keeping trickle vents open where fitted</li>
+        <li>Not blocking air vents or ventilation grilles</li>
+        <li>Reporting any signs of dampness or mould immediately</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔨 Alterations & Decorations</div>
+
+    <div class="clause">
+      <span class="clause-number">7.3</span>
+      <strong>Prohibition on Alterations:</strong> The Contract Holder must NOT:
+      <ul>
+        <li>Make any structural alterations, additions, or improvements to the Dwelling</li>
+        <li>Remove, alter, or damage any of the Landlord's fixtures, fittings, or furnishings</li>
+        <li>Change locks or add additional security devices without written consent</li>
+        <li>Install satellite dishes, aerials, or external signage</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🚫 Subletting & Assignment</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">⚠️ Subletting Restrictions</div>
+      <p>
+        Under the Renting Homes (Wales) Act 2016, the Contract Holder's right to sublet depends on the type of contract.
+        For this Standard Occupation Contract, subletting is <strong>prohibited without the Landlord's written consent</strong>.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.4</span>
+      <strong>Prohibition:</strong> The Contract Holder must NOT:
+      <ul>
+        <li>Sublet the whole or any part of the Dwelling without written consent</li>
+        <li>Assign or transfer the occupation contract to another person</li>
+        <li>Take in lodgers or paying guests without written consent</li>
+        <li>List the Dwelling on Airbnb, Booking.com, or any short-term letting platform</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔑 Access for Inspections & Repairs</div>
+
+    <div class="clause">
+      <span class="clause-number">7.5</span>
+      <strong>Landlord's Right of Access:</strong> The Contract Holder must allow the Landlord or their agents reasonable
+      access to the Dwelling upon at least <strong>24 hours' written notice</strong> for:
+      <ul>
+        <li>Routine property inspections (maximum once per quarter)</li>
+        <li>Carrying out repairs, maintenance, or improvements</li>
+        <li>Safety checks (gas, electrical, smoke alarms)</li>
+        <li>Viewings in the final 2 months of the contract (with consent)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.6</span>
+      <strong>Emergency Access:</strong> In case of emergency (fire, flood, gas leak), the Landlord may enter
+      immediately without prior notice.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🤝 Neighbourhood & Nuisance Prevention</div>
+
+    <div class="clause">
+      <span class="clause-number">7.7</span>
+      <strong>Nuisance Prohibition:</strong> The Contract Holder must NOT:
+      <ul>
+        <li>Cause nuisance, annoyance, or disturbance to neighbours</li>
+        <li>Play loud music or cause excessive noise between 11:00 PM and 7:00 AM</li>
+        <li>Use the Dwelling for illegal activities</li>
+        <li>Engage in antisocial behaviour</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🧹 End of Contract Obligations</div>
+
+    <div class="clause">
+      <span class="clause-number">7.8</span>
+      <strong>Notice to End Contract:</strong> The Contract Holder must give the Landlord proper written notice:
+      <ul>
+        <li><strong>During Fixed Term:</strong> Cannot end early unless break clause exists</li>
+        <li><strong>After Fixed Term (Periodic):</strong> At least 4 weeks' notice (or one rental period, whichever is longer)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.9</span>
+      <strong>Condition at End:</strong> At the end of the contract, the Contract Holder must:
+      <ul>
+        <li>Return the Dwelling clean, tidy, and in the same condition as at the start (fair wear and tear excepted)</li>
+        <li>Remove all personal belongings and rubbish</li>
+        <li>Return all keys and access devices</li>
+        <li>Provide final meter readings and forwarding address</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 8: PROPERTY RULES -->
+  <div class="section-header">
+    <span class="section-number">8</span>
+    Property Rules & Restrictions
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🐾 Pets</div>
+
+    {{#if pets_allowed}}
+    <div class="legal-notice">
+      <div class="legal-notice-title">✅ Pets Are Permitted</div>
+      <p>
+        The Landlord permits the Contract Holder to keep pet(s) at the Dwelling subject to conditions.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.1</span>
+      <strong>Approved Pets:</strong>
+      {{#if pet_type}}Type: {{pet_type}}{{/if}}
+      {{#if pet_breed}}, Breed: {{pet_breed}}{{/if}}
+      {{#if pet_name}}, Name: {{pet_name}}{{/if}}
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.2</span>
+      The Contract Holder accepts full liability for any damage caused by pets and must ensure pets do not
+      cause nuisance to neighbours.
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">8.1</span>
+      <strong>NO PETS:</strong> The Contract Holder must not keep any pets at the Dwelling without the
+      Landlord's prior written consent.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🚭 Smoking</div>
+
+    {{#if smoking_allowed}}
+    <div class="clause">
+      <span class="clause-number">8.2</span>
+      Smoking is <strong>PERMITTED</strong> inside the Dwelling.
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">8.2</span>
+      Smoking is <strong>STRICTLY PROHIBITED</strong> inside the Dwelling. The Contract Holder may smoke outside only.
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- SECTION 9: LANDLORD OBLIGATIONS -->
+  <div class="section-header">
+    <span class="section-number">9</span>
+    Landlord Obligations
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Fitness for Human Habitation (Wales)</div>
+    <p>
+      Under the Renting Homes (Wales) Act 2016, the Landlord must ensure the Dwelling is fit for human habitation
+      at the start of and throughout the occupation. This is a fundamental term that cannot be excluded.
+    </p>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔧 Repair & Maintenance</div>
+
+    <div class="clause">
+      <span class="clause-number">9.1</span>
+      <strong>Landlord's Repairing Obligations:</strong> The Landlord must:
+      <ul>
+        <li>Keep the structure and exterior of the Dwelling in repair</li>
+        <li>Keep installations for water, gas, electricity, sanitation, and heating in repair and working order</li>
+        <li>Ensure the Dwelling is fit for human habitation</li>
+        <li>Carry out repairs within a reasonable time after being notified</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">9.2</span>
+      <strong>Safety Compliance:</strong> The Landlord will ensure:
+      <ul>
+        <li>Valid Gas Safety Certificate (renewed annually)</li>
+        <li>Valid Electrical Installation Condition Report (renewed every 5 years)</li>
+        <li>Working smoke alarms on each floor</li>
+        <li>Carbon monoxide alarms where required</li>
+        <li>Energy Performance Certificate rating of E or above</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 10: LEGAL DOCUMENTS -->
+  <div class="section-header">
+    <span class="section-number">10</span>
+    Legal Compliance & Documents
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📋 Required Documents</div>
+
+    <div class="clause">
+      <span class="clause-number">10.1</span>
+      <strong>Documents Provided:</strong> The Landlord has provided or will provide:
+      <ul class="checklist">
+        <li>This Written Statement (Occupation Contract) within 14 days</li>
+        <li>Energy Performance Certificate (EPC) - Current rating: {{epc_rating}}</li>
+        <li>Gas Safety Certificate (valid for 12 months)</li>
+        <li>Electrical Installation Condition Report (EICR)</li>
+        <li>Deposit Protection Prescribed Information (within 30 days)</li>
+        {{#if inventory_provided}}<li>Property Inventory and Schedule of Condition</li>{{/if}}
+      </ul>
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      Wales-Specific Requirements
+    </div>
+    <p>
+      Unlike England, Wales does not require landlords to provide a "How to Rent" guide. However, the Landlord must
+      provide this Written Statement within 14 days of occupation. The Renting Homes (Wales) Act 2016 provides
+      comprehensive protections directly in law.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Landlord Compliance Notice</div>
+    <p>
+      <strong>Landlord:</strong> Failure to provide these documents may result in:
+    </p>
+    <ul>
+      <li>Rent repayment orders for failing to provide written statement</li>
+      <li>Inability to serve valid possession notices</li>
+      <li>Civil penalties for missing safety certificates</li>
+      <li>Criminal prosecution for gas safety failures</li>
+    </ul>
+  </div>
+
+  <!-- HMO CLAUSES SECTION -->
+  <div class="page-break"></div>
+
+  <div class="section-header">
+    <span class="section-number">11</span>
+    HMO & Shared Facilities Clauses
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
+    <p>
+      This Dwelling is a House in Multiple Occupation (HMO) under the Housing Act 2004. Additional terms apply
+      to ensure all Contract Holders can enjoy the property peacefully and safely.
+    </p>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🤝 Joint and Several Liability</div>
+
+    <div class="clause">
+      <span class="clause-number">11.1</span>
+      <strong>Joint Liability:</strong> Where there are multiple Contract Holders, each Contract Holder is jointly and
+      severally liable for all obligations under this contract. This means each Contract Holder is responsible for:
+      <ul>
+        <li>The full rent amount (not just their share)</li>
+        <li>Any damage to shared areas</li>
+        <li>Compliance with all terms of this contract</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🏘️ Shared Facilities</div>
+
+    <div class="clause">
+      <span class="clause-number">11.2</span>
+      <strong>Shared Access:</strong> The Contract Holder has shared access to the following communal areas:
+      <ul>
+        {{#if communal_areas}}
+        <li>{{communal_areas}}</li>
+        {{else}}
+        <li>Kitchen (cooking facilities, appliances, food storage)</li>
+        <li>Bathrooms/WC (shared with other Contract Holders)</li>
+        <li>Common hallways, stairs, and entrance</li>
+        <li>Living room / common room (if applicable)</li>
+        <li>Garden / outdoor space (if applicable)</li>
+        <li>Laundry facilities (washing machine, dryer)</li>
+        {{/if}}
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">11.3</span>
+      <strong>Exclusive Use of Bedroom:</strong> The Contract Holder has exclusive use of their designated bedroom(s).
+      No other Contract Holder may enter without permission.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">11.4</span>
+      <strong>Communal Area Responsibilities:</strong> The Contract Holder must:
+      <ul>
+        <li>Keep shared areas clean and tidy after use</li>
+        <li>Wash dishes immediately, clean surfaces, store food properly</li>
+        <li>Clean bathroom after use, remove hair from drains</li>
+        <li>Use shared facilities considerately, allowing fair access to all</li>
+        <li>Keep noise to minimum in communal areas, especially after 10:00 PM</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔥 Fire Safety (HMO)</div>
+
+    <div class="clause">
+      <span class="clause-number">11.5</span>
+      <strong>Fire Safety Obligations:</strong> The Contract Holder must:
+      <ul>
+        <li>Keep fire doors closed at all times (never prop open or obstruct)</li>
+        <li>Keep escape routes, hallways, and stairs clear of obstructions</li>
+        <li>Not store items in communal hallways or landings</li>
+        <li>Test smoke alarms monthly and report any faults immediately</li>
+        <li>Familiarize themselves with fire escape routes and assembly points</li>
+        <li>Not tamper with fire extinguishers, smoke alarms, or fire safety equipment</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📋 HMO Licensing</div>
+
+    <div class="clause">
+      <span class="clause-number">11.6</span>
+      <strong>HMO License:</strong> This property is licensed as a House in Multiple Occupation under the Housing Act 2004.
+      {{#if hmo_licence_number}}
+      The Landlord holds HMO license number: {{hmo_licence_number}}
+      {{/if}}
+      The property complies with HMO standards including:
+      <ul>
+        <li>Minimum room sizes (6.51m² for single, 10.22m² for double occupancy)</li>
+        <li>Adequate kitchen and bathroom facilities</li>
+        <li>Fire safety measures (fire doors, smoke alarms, fire extinguishers)</li>
+        <li>Gas and electrical safety certificates</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📜 House Rules</div>
+
+    <div class="clause">
+      <span class="clause-number">11.7</span>
+      <strong>Occupancy Limit:</strong> Maximum {{#if number_of_sharers}}{{number_of_sharers}}{{else}}occupants as stated on the HMO license{{/if}}
+      may reside at the property. Exceeding this limit is a criminal offense under the Housing Act 2004.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">11.8</span>
+      <strong>Guest Policy:</strong> The Contract Holder may have visitors subject to:
+      <ul>
+        <li>No overnight guests for more than 2 consecutive nights without prior agreement</li>
+        <li>Guests must not cause nuisance to other Contract Holders</li>
+        <li>The Contract Holder remains responsible for guest behavior</li>
+        <li>No guests permitted to use the property as their primary residence</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ HMO Rules - Serious Breaches</div>
+    <p><strong>Serious breaches that may result in termination of this contract:</strong></p>
+    <ul>
+      <li>Persistent failure to keep communal areas clean</li>
+      <li>Blocking fire exits or tampering with fire safety equipment</li>
+      <li>Causing serious nuisance to other Contract Holders</li>
+      <li>Unauthorized occupants or subletting your room</li>
+      <li>Damage to communal facilities</li>
+    </ul>
+  </div>
+
+  <!-- SIGNATURE SECTION -->
+  <div class="signature-section">
+    <div class="signature-title">
+      Signatures
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">✍️</span>
+        Signing This Contract
+      </div>
+      <p>
+        By signing below, all parties confirm they have read, understood, and agree to be bound by all terms of
+        this HMO Occupation Contract. Each party should retain a signed copy for their records.
+      </p>
+    </div>
+
+    <div class="signature-blocks">
+      <!-- LANDLORD SIGNATURE -->
+      <div class="signature-block">
+        <div class="signature-party">Landlord</div>
+        <div style="margin-bottom: 20px;">
+          <strong>Name:</strong> {{landlord_full_name}}
+        </div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date:</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+
+      {{#if agent_name}}
+      <div class="signature-block">
+        <div class="signature-party">Landlord's Agent</div>
+        <div style="margin-bottom: 20px;">
+          <strong>Name:</strong> {{agent_name}}
+        </div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date:</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- CONTRACT HOLDER SIGNATURES -->
+    {{#each tenants}}
+    <div class="signature-block" style="margin-top: 30px;">
+      <div class="signature-party">Contract Holder {{add @index 1}}</div>
+      <div style="margin-bottom: 20px;">
+        <strong>Name:</strong> {{this.full_name}}
+      </div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-date">
+        <div class="signature-date-label">Date:</div>
+        <div class="signature-date-line"></div>
+      </div>
+    </div>
+    {{/each}}
+
+    {{#if guarantor_name}}
+    <div class="signature-block" style="margin-top: 30px;">
+      <div class="signature-party">Guarantor</div>
+      <div style="margin-bottom: 20px;">
+        <strong>Name:</strong> {{guarantor_name}}
+      </div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-date">
+        <div class="signature-date-label">Date:</div>
+        <div class="signature-date-line"></div>
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="witness-section">
+      <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
+      <p style="margin-bottom: 20px; font-size: 10pt;">
+        While not legally required, having signatures witnessed adds authenticity and can be useful if the
+        contract is ever disputed.
+      </p>
+
+      <div class="party-info">
+        <strong>Witness Name:</strong> _________________________________<br/><br/>
+        <strong>Witness Address:</strong> _________________________________<br/><br/>
+        <strong>Witness Signature:</strong> _________________________________<br/><br/>
+        <strong>Date:</strong> _________________________________
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-info">
+    <p>
+      <strong>Document Reference:</strong> SOC-STANDARD-{{case_id}}<br/>
+      <strong>Generated by:</strong> Landlord Heaven Professional Services<br/>
+      <strong>Date Generated:</strong> {{current_date}}<br/>
+      <br/>
+      This contract complies with the Renting Homes (Wales) Act 2016 and all applicable Welsh
+      residential letting legislation current as of {{current_date}}.
+    </p>
+  </div>
+
+</body>
+</html>
