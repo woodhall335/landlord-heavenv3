@@ -61,6 +61,7 @@ const ALLOWED_IDENTIFIERS = new Set([
   // Safe constructors for date comparison
   'new',
   'Date',
+  'getTime', // Date method for time comparison
   // Safe array/object methods
   'includes',
   'length',
@@ -118,6 +119,8 @@ const ALLOWED_IDENTIFIERS = new Set([
   'enforcement_reviewed',
   'enforcement_preference',
   'total_arrears',
+  // Deposit deduction tracking
+  'deposit_deductions_confirmed',
   // Evidence context variables
   'evidence_summary',
   'has_photo_evidence',
@@ -259,6 +262,7 @@ export interface RulesConfig {
   council_tax_rules: ValidationRule[];
   utilities_rules: ValidationRule[];
   evidence_intelligence_rules?: ValidationRule[];
+  legal_compliance_rules?: ValidationRule[];
   preemptive_defence_rules?: ValidationRule[];
   summary?: SummaryConfig;
 }
@@ -352,6 +356,8 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    // Deposit deduction tracking - prevents double recovery
+    deposit_deductions_confirmed?: boolean;
   };
 
   // Issues nested (legacy)
@@ -728,6 +734,7 @@ export function getAllRules(config?: RulesConfig): ValidationRule[] {
     ...(rulesConfig.council_tax_rules || []),
     ...(rulesConfig.utilities_rules || []),
     ...(rulesConfig.evidence_intelligence_rules || []),
+    ...(rulesConfig.legal_compliance_rules || []),
     ...(rulesConfig.preemptive_defence_rules || []),
   ];
 }

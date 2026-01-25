@@ -1074,3 +1074,158 @@ describe('Money Claim Rules Engine - Group By Section', () => {
     expect(result.blockers).toHaveLength(0);
   });
 });
+
+// =============================================================================
+// LEGAL P0 RULES TESTS - Limitation Period, Betterment, Deposit Overlap
+// =============================================================================
+
+describe('Money Claim Rules Engine - Legal P0 Rules', () => {
+  describe('Limitation Period Warning', () => {
+    it('triggers limitation_period_warning when tenancy started over 5.5 years ago', () => {
+      const oldDate = new Date();
+      oldDate.setFullYear(oldDate.getFullYear() - 6); // 6 years ago
+
+      const facts: MoneyClaimFacts = {
+        ...completeValidFacts,
+        tenancy_start_date: oldDate.toISOString().split('T')[0],
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'limitation_period_warning');
+      expect(warning).toBeDefined();
+      expect(warning?.message).toContain('Limitation Act 1980');
+    });
+
+    it('does not trigger limitation_period_warning for recent tenancy', () => {
+      const recentDate = new Date();
+      recentDate.setFullYear(recentDate.getFullYear() - 2); // 2 years ago
+
+      const facts: MoneyClaimFacts = {
+        ...completeValidFacts,
+        tenancy_start_date: recentDate.toISOString().split('T')[0],
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'limitation_period_warning');
+      expect(warning).toBeUndefined();
+    });
+
+    it('triggers limitation_period_arrears_warning for old arrears entries', () => {
+      const oldDate = new Date();
+      oldDate.setFullYear(oldDate.getFullYear() - 6);
+
+      const facts: MoneyClaimFacts = {
+        ...completeValidFacts,
+        claiming_rent_arrears: true,
+        arrears_items: [
+          { period_start: oldDate.toISOString().split('T')[0], period_end: '2020-01-31', rent_due: 1000, rent_paid: 0 },
+          { period_start: '2024-06-01', period_end: '2024-06-30', rent_due: 1000, rent_paid: 0 },
+        ],
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'limitation_period_arrears_warning');
+      expect(warning).toBeDefined();
+    });
+  });
+
+  describe('Property Damage Betterment Warning', () => {
+    it('triggers property_damage_betterment_warning when claiming property damage', () => {
+      const facts: MoneyClaimFacts = {
+        ...propertyDamageOnlyFacts,
+        money_claim: {
+          ...propertyDamageOnlyFacts.money_claim,
+          damage_items: [
+            { id: '1', description: 'Replace carpet', amount: 500, category: 'property_damage' },
+          ],
+        },
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'property_damage_betterment_warning');
+      expect(warning).toBeDefined();
+      expect(warning?.message).toContain('depreciated value');
+    });
+
+    it('does not trigger property_damage_betterment_warning when no damage items', () => {
+      const facts: MoneyClaimFacts = {
+        ...rentArrearsOnlyFacts,
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'property_damage_betterment_warning');
+      expect(warning).toBeUndefined();
+    });
+  });
+
+  describe('Deposit Deduction Overlap Warning', () => {
+    it('triggers deposit_deduction_overlap_warning when deposit deductions confirmed', () => {
+      const facts: MoneyClaimFacts = {
+        ...propertyDamageOnlyFacts,
+        money_claim: {
+          ...propertyDamageOnlyFacts.money_claim,
+          deposit_deductions_confirmed: true,
+        },
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'deposit_deduction_overlap_warning');
+      expect(warning).toBeDefined();
+      expect(warning?.message).toContain('Double recovery');
+    });
+
+    it('does not trigger deposit_deduction_overlap_warning when deposit deductions not confirmed', () => {
+      const facts: MoneyClaimFacts = {
+        ...propertyDamageOnlyFacts,
+        money_claim: {
+          ...propertyDamageOnlyFacts.money_claim,
+          deposit_deductions_confirmed: false,
+        },
+      };
+      const result = evaluateRules(facts);
+
+      const warning = result.warnings.find((w) => w.id === 'deposit_deduction_overlap_warning');
+      expect(warning).toBeUndefined();
+    });
+
+    it('triggers deposit_deduction_check_required suggestion when undefined', () => {
+      const facts: MoneyClaimFacts = {
+        ...propertyDamageOnlyFacts,
+        money_claim: {
+          ...propertyDamageOnlyFacts.money_claim,
+          deposit_deductions_confirmed: undefined,
+        },
+      };
+      const result = evaluateRules(facts);
+
+      const suggestion = result.suggestions.find((s) => s.id === 'deposit_deduction_check_required');
+      expect(suggestion).toBeDefined();
+    });
+  });
+});
+
+// =============================================================================
+// JOINT DEFENDANT VALIDATION TESTS
+// =============================================================================
+
+describe('Money Claim Rules Engine - Joint Defendant Support', () => {
+  it('allows valid claim with single defendant', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+    };
+    const result = evaluateRules(facts);
+    expect(result.isValid).toBe(true);
+  });
+
+  it('allows valid claim with joint defendants', () => {
+    const facts: MoneyClaimFacts = {
+      ...completeValidFacts,
+      has_joint_defendants: true,
+      tenant_2_name: 'Jane Tenant',
+      tenant_2_address_line1: '2 High Street',
+      tenant_2_postcode: 'E1 2BB',
+    };
+    const result = evaluateRules(facts);
+    expect(result.isValid).toBe(true);
+  });
+});

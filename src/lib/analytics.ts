@@ -1117,3 +1117,62 @@ export function trackMoneyClaimPurchaseCompleted(params: {
     total_claim_amount: params.total_claim_amount ?? 0,
   });
 }
+
+// =============================================================================
+// MONEY CLAIM INTELLIGENCE TRACKING
+// =============================================================================
+
+/**
+ * Track when outcome confidence indicator is shown to user
+ * Note: We do NOT track the confidence level or score to avoid any legal liability
+ */
+export function trackOutcomeConfidenceShown(params: {
+  claimTypes: string[];
+}): void {
+  trackEvent('outcome_confidence_shown', {
+    event_category: 'money_claim_intelligence',
+    claim_type_count: params.claimTypes.length,
+    // Only track count, not PII or specific claim details that could identify the user
+  });
+}
+
+/**
+ * Track when court fee estimator is viewed
+ */
+export function trackCourtFeeEstimatorViewed(params: {
+  amountBand: string;
+}): void {
+  trackEvent('court_fee_estimator_viewed', {
+    event_category: 'money_claim_intelligence',
+    amount_band: params.amountBand,
+    // Band is anonymized (e.g., 'under_300', '300_500') - no exact amounts
+  });
+}
+
+/**
+ * Track when evidence gallery is viewed
+ */
+export function trackEvidenceGalleryViewed(params: {
+  claimTypes: string[];
+}): void {
+  trackEvent('evidence_gallery_viewed', {
+    event_category: 'money_claim_intelligence',
+    claim_type_count: params.claimTypes.length,
+    // Only track count for analytics, not specific claim types to avoid PII
+  });
+}
+
+/**
+ * Track when a specific evidence warning is resolved by the user
+ * This helps us understand which warnings are most actionable
+ */
+export function trackEvidenceWarningResolved(params: {
+  ruleId: string;
+}): void {
+  trackEvent('evidence_warning_resolved', {
+    event_category: 'money_claim_intelligence',
+    rule_id: params.ruleId,
+    // Rule ID is a generic identifier (e.g., 'property_damage_missing_photo_evidence')
+    // and contains no PII
+  });
+}

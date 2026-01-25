@@ -411,17 +411,23 @@ export default function WalesOccupationContractPage() {
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
             <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/occupation-contract-template-wales" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Occupation Contract Template Wales
+              </Link>
+              <Link href="/renting-homes-wales-written-statement" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Written Statement Guide
+              </Link>
+              <Link href="/standard-occupation-contract-wales" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Standard Occupation Contract
+              </Link>
+              <Link href="/wales-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Wales Tenancy Template Guide
+              </Link>
               <Link href="/wales-eviction-notices" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Wales eviction guide
               </Link>
-              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Landlord tools hub
-              </Link>
               <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Ask Heaven (free landlord Q&amp;A)
-              </Link>
-              <Link href="/blog/wales" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Wales landlord guides (blog)
               </Link>
             </div>
           </div>

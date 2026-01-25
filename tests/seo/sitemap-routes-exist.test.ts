@@ -133,4 +133,60 @@ describe('Sitemap Route Existence', () => {
       `Money Claim sitemap routes without pages: ${missingRoutes.join(', ')}`
     ).toEqual([]);
   });
+
+  it('should include core Tenancy Agreement SEO pages for all UK jurisdictions', () => {
+    // Verify critical tenancy agreement pages are in sitemap
+    const tenancyPages = [
+      // England
+      '/assured-shorthold-tenancy-agreement-template',
+      '/ast-template-england',
+      '/tenancy-agreement-template-free',
+      '/joint-tenancy-agreement-template',
+      // Wales
+      '/occupation-contract-template-wales',
+      '/renting-homes-wales-written-statement',
+      '/standard-occupation-contract-wales',
+      '/wales-tenancy-agreement-template',
+      // Scotland
+      '/private-residential-tenancy-agreement-template',
+      '/prt-template-scotland',
+      '/scottish-tenancy-agreement-template',
+      '/scotland-prt-model-agreement-guide',
+      // Northern Ireland
+      '/northern-ireland-tenancy-agreement-template',
+      '/ni-private-tenancy-agreement',
+      '/notice-to-quit-northern-ireland-guide',
+      '/ni-tenancy-agreement-template-free',
+    ];
+
+    for (const page of tenancyPages) {
+      expect(sitemapPaths, `Missing Tenancy Agreement SEO page: ${page}`).toContain(page);
+    }
+  });
+
+  it('all Tenancy Agreement SEO pages should have corresponding routes', () => {
+    const tenancyAgreementPaths = sitemapPaths.filter((p) =>
+      p.includes('tenancy') ||
+      p.includes('ast-') ||
+      p.includes('prt-') ||
+      p.includes('occupation-contract') ||
+      p.includes('renting-homes') ||
+      p.includes('ni-') ||
+      p.includes('northern-ireland') ||
+      p.includes('scottish') ||
+      p.includes('scotland-prt')
+    );
+    const missingRoutes: string[] = [];
+
+    for (const routePath of tenancyAgreementPaths) {
+      if (!routeExistsForPath(routePath)) {
+        missingRoutes.push(routePath);
+      }
+    }
+
+    expect(
+      missingRoutes,
+      `Tenancy Agreement sitemap routes without pages: ${missingRoutes.join(', ')}`
+    ).toEqual([]);
+  });
 });

@@ -1084,17 +1084,23 @@ export default function ScotlandPRTPage() {
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
             <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/private-residential-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                PRT Agreement Template 2026
+              </Link>
+              <Link href="/prt-template-scotland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scotland PRT Template
+              </Link>
+              <Link href="/scottish-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scottish Tenancy Template Guide
+              </Link>
+              <Link href="/scotland-prt-model-agreement-guide" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Model PRT Agreement Guide
+              </Link>
               <Link href="/scotland-eviction-notices" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Scotland eviction guide
               </Link>
-              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Landlord tools hub
-              </Link>
               <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Ask Heaven (free landlord Q&amp;A)
-              </Link>
-              <Link href="/blog/scotland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Scotland landlord guides (blog)
               </Link>
             </div>
           </div>

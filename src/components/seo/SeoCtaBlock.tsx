@@ -19,7 +19,7 @@ import { PRODUCTS } from '@/lib/pricing/products';
 import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 
-export type SeoPageType = 'problem' | 'court' | 'money' | 'general';
+export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy';
 
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
 
@@ -89,6 +89,15 @@ const ctaConfig: Record<SeoPageType, {
     faqTitle: 'Need Help With Your Eviction?',
     faqDescription: 'Our documents are designed for court acceptance and include serving instructions.',
     icon: Shield,
+  },
+  tenancy: {
+    primary: { label: 'Create Your Agreement', product: 'notice_only' },
+    secondary: { label: 'View AST Products', href: '/products/ast' },
+    sectionTitle: 'Ready to Create Your Tenancy Agreement?',
+    sectionDescription: 'Generate a legally compliant tenancy agreement in minutes. All UK jurisdictions supported.',
+    faqTitle: 'Need a Professional Tenancy Agreement?',
+    faqDescription: 'Our tenancy agreements include all required clauses and comply with current legislation.',
+    icon: FileText,
   },
 };
 

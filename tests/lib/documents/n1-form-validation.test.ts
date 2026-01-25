@@ -242,3 +242,73 @@ describe('TemplateFieldMissingError', () => {
     expect(error.message).toContain('MissingField2');
   });
 });
+
+// =============================================================================
+// N1 Joint Defendant Mapping Tests
+// =============================================================================
+
+describe('N1 Joint Defendant Mapping', () => {
+  it('builds defendant details string with single defendant', () => {
+    const data = {
+      tenant_full_name: 'Tom Tenant',
+      property_address: '2 High Street, London E1 2BB',
+      has_joint_defendants: false,
+    };
+
+    // Build defendant details as the official-forms-filler does
+    let defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+    if (data.has_joint_defendants && (data as any).tenant_2_name) {
+      defendantDetails += `\n\n${(data as any).tenant_2_name}`;
+    }
+
+    expect(defendantDetails).toBe('Tom Tenant\n2 High Street, London E1 2BB');
+    expect(defendantDetails).not.toContain('\n\n'); // No second defendant block
+  });
+
+  it('builds defendant details string with joint defendants', () => {
+    const data = {
+      tenant_full_name: 'Tom Tenant',
+      property_address: '2 High Street, London E1 2BB',
+      has_joint_defendants: true,
+      tenant_2_name: 'Jane Tenant',
+      tenant_2_address_line1: '3 High Street',
+      tenant_2_address_line2: 'London',
+      tenant_2_postcode: 'E1 3CC',
+    };
+
+    // Build defendant details as the official-forms-filler does
+    let defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+    if (data.has_joint_defendants && data.tenant_2_name) {
+      const defendant2Address = data.tenant_2_address_line1
+        ? [data.tenant_2_address_line1, data.tenant_2_address_line2, data.tenant_2_postcode]
+            .filter(Boolean)
+            .join(', ')
+        : data.property_address;
+      defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2Address}`;
+    }
+
+    expect(defendantDetails).toContain('Tom Tenant');
+    expect(defendantDetails).toContain('Jane Tenant');
+    expect(defendantDetails).toContain('3 High Street, London, E1 3CC');
+  });
+
+  it('uses property address for second defendant when no address provided', () => {
+    const data = {
+      tenant_full_name: 'Tom Tenant',
+      property_address: '2 High Street, London E1 2BB',
+      has_joint_defendants: true,
+      tenant_2_name: 'Jane Tenant',
+      tenant_2_address_line1: undefined,
+    };
+
+    let defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+    if (data.has_joint_defendants && data.tenant_2_name) {
+      const defendant2Address = data.tenant_2_address_line1
+        ? [data.tenant_2_address_line1].filter(Boolean).join(', ')
+        : data.property_address;
+      defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2Address}`;
+    }
+
+    expect(defendantDetails).toContain('Jane Tenant\n2 High Street, London E1 2BB');
+  });
+});

@@ -3077,6 +3077,32 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'tenant_2_name',
       'tenant2_name',
       'tenant_secondary_name',
+      'parties.tenants.1.name', // From DefendantSection joint defendant
+    ])
+  );
+
+  // Joint defendant flag and address fields
+  templateData.has_joint_defendants = (wizard as any).has_joint_defendants === true ||
+    Boolean(templateData.tenant_2_name);
+
+  templateData.tenant_2_address_line1 = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_address_line1',
+      'parties.tenants.1.address_line1',
+    ])
+  );
+
+  templateData.tenant_2_address_line2 = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_address_line2',
+      'parties.tenants.1.address_line2',
+    ])
+  );
+
+  templateData.tenant_2_postcode = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_postcode',
+      'parties.tenants.1.postcode',
     ])
   );
 
