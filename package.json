@@ -27,7 +27,8 @@
     "audit:legal-v2": "npx tsx scripts/legal-validity-audit-v2.1.ts",
     "audit:cta-jurisdiction": "npx tsx scripts/jurisdiction-cta-audit.ts",
     "audit:tenancy-variants": "npx tsx scripts/audit-tenancy-variants.ts",
-    "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants"
+    "audit:tenancy-clauses": "npx tsx scripts/audit-tenancy-clauses.ts",
+    "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants && npm run audit:tenancy-clauses"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

@@ -14,7 +14,22 @@
   - Occupancy limits
 
   This template is for Houses in Multiple Occupation (HMOs) under Housing Act 2004.
+
+  CLAUSE MARKERS (for verification):
+  - CORE_TENANCY: Core tenancy terms
+  - TENANT_OBLIGATIONS: Tenant responsibilities
+  - PETS_CLAUSE: Pets permission
+  - BREAK_CLAUSE: Early termination
+  - JOINT_LIABILITY: Joint and several liability
+  - SHARED_FACILITIES: HMO shared areas
+  - TENANT_REPLACEMENT: Occupant replacement
+  - HMO_LICENSING: HMO licence compliance
+  - GUARANTOR: Guarantor agreement
+  - RENT_REVIEW: Rent increase provisions
+  - ANTI_SUBLET: Subletting prohibition
+  - PROFESSIONAL_CLEANING: End of tenancy cleaning
 --}}
+<!-- CLAUSE:CORE_TENANCY -->
 
 <!DOCTYPE html>
 <html lang="en-GB">
@@ -507,6 +522,7 @@
 
   {{#if joint_and_several_liability}}
   <div class="important-box">
+    <!-- CLAUSE:JOINT_LIABILITY -->
     <div class="important-title">⚠️ Joint and Several Liability</div>
     <p>
       Where there are multiple Tenants, each Tenant is jointly and severally liable for all obligations under this Agreement.
@@ -516,6 +532,7 @@
   {{/if}}
 
   {{#if guarantor_name}}
+  <!-- CLAUSE:GUARANTOR -->
   <div class="party-details">
     <div class="party-label">🛡️ Guarantor</div>
     <div class="party-info">
@@ -761,6 +778,7 @@
     {{/if}}
   </div>
 
+  <!-- CLAUSE:BREAK_CLAUSE -->
   <div class="explainer-box">
     <div class="explainer-title">
       <span class="explainer-icon">ℹ️</span>
@@ -842,6 +860,7 @@
   </div>
 
   {{#if rent_increase_clause}}
+  <!-- CLAUSE:RENT_REVIEW -->
   <div class="subsection">
     <div class="subsection-title">📈 Rent Increase Provisions (Premium)</div>
 
@@ -1043,6 +1062,7 @@
   <div class="page-break"></div>
 
   <!-- SECTION 6A: TENANT OBLIGATIONS -->
+  <!-- CLAUSE:TENANT_OBLIGATIONS -->
   <div class="section-header">
     <span class="section-number">6A</span>
     Tenant Obligations
@@ -1109,6 +1129,7 @@
     </div>
   </div>
 
+  <!-- CLAUSE:ANTI_SUBLET -->
   <div class="subsection">
     <div class="subsection-title">🚫 Subletting & Assignment (Premium Enhanced)</div>
 
@@ -1343,6 +1364,7 @@
       </ul>
     </div>
 
+    <!-- CLAUSE:PROFESSIONAL_CLEANING -->
     <div class="clause">
       <span class="clause-number">6A.19</span>
       <strong>Professional Cleaning:</strong> {{#if professional_cleaning_required}}The Tenant MUST arrange professional
@@ -1362,6 +1384,8 @@
   </div>
 
   {{!-- HMO CLAUSES: Always included for HMO tenancy agreements --}}
+  <!-- CLAUSE:SHARED_FACILITIES -->
+  <!-- CLAUSE:HMO_LICENSING -->
   <div class="subsection">
     <div class="subsection-title">🏘️ HMO & Shared Facilities</div>
 
@@ -1471,6 +1495,7 @@
     </div>
     {{/if}}
 
+    <!-- CLAUSE:TENANT_REPLACEMENT -->
     <div class="clause">
       <span class="clause-number">6A.28</span>
       <strong>Replacement Occupants:</strong> If a fellow occupant leaves and a new occupant moves in:
@@ -1521,6 +1546,7 @@
     Property Rules & Restrictions
   </div>
 
+  <!-- CLAUSE:PETS_CLAUSE -->
   <div class="subsection">
     <div class="subsection-title">🐾 Pet Agreement</div>
 

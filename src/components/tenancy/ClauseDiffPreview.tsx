@@ -6,6 +6,10 @@
  * - Greys out missing clauses in Standard
  * - Adds "Why this matters" hover explanations
  * - Jurisdiction-specific terminology and legislation
+ *
+ * IMPORTANT: Clause IDs here must match the canonical ClauseId type in clause-verifier.ts.
+ * The clause-verifier ensures UI claims match actual HBS template content.
+ * Run `npm run audit:tenancy-clauses` to verify UI/template alignment.
  */
 
 'use client';
@@ -25,9 +29,22 @@ import {
   trackClauseDiffUpgradeClicked,
   trackClauseHoverExplanation,
 } from '@/lib/analytics';
+import {
+  type ClauseId,
+  CLAUSE_DEFINITIONS as CANONICAL_CLAUSE_DEFINITIONS,
+  JURISDICTION_TERMINOLOGY,
+  getClauseDefinition,
+  isClauseInTier,
+} from '@/lib/tenancy/clause-verifier';
 
+/**
+ * UI Clause Definition - extends canonical clause with display content
+ * The `canonicalId` links to the verified HBS template markers.
+ */
 interface ClauseDefinition {
-  /** Unique clause ID */
+  /** Canonical clause ID from clause-verifier.ts - MUST match HBS markers */
+  canonicalId: ClauseId;
+  /** Legacy ID for analytics compatibility */
   id: string;
   /** Clause title */
   title: string;
@@ -101,7 +118,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
 
   return [
     // JOINT AND SEVERAL LIABILITY
+    // Maps to: <!-- CLAUSE:JOINT_LIABILITY --> in HBS templates
     {
+      canonicalId: 'JOINT_LIABILITY',
       id: 'joint_liability',
       title: 'Joint and Several Liability',
       standardPreview: `The ${terms.tenant} shall pay the Rent...`,
@@ -113,7 +132,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // HMO SHARED FACILITIES
+    // Maps to: <!-- CLAUSE:SHARED_FACILITIES --> in HBS templates
     {
+      canonicalId: 'SHARED_FACILITIES',
       id: 'shared_facilities',
       title: 'Shared Facilities and Communal Areas',
       standardPreview: `The ${terms.tenant} shall keep the Property clean...`,
@@ -125,7 +146,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // TENANT REPLACEMENT
+    // Maps to: <!-- CLAUSE:TENANT_REPLACEMENT --> in HBS templates
     {
+      canonicalId: 'TENANT_REPLACEMENT',
       id: 'tenant_replacement',
       title: '${terms.tenant} Replacement Procedure',
       standardPreview: `Assignment of this ${terms.tenancy} is not permitted...`,
@@ -137,7 +160,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // GUARANTOR
+    // Maps to: <!-- CLAUSE:GUARANTOR --> in HBS templates
     {
+      canonicalId: 'GUARANTOR',
       id: 'guarantor',
       title: 'Guarantor Agreement',
       standardPreview: '[Not included in Standard agreement]',
@@ -149,7 +174,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // RENT INCREASE
+    // Maps to: <!-- CLAUSE:RENT_REVIEW --> in HBS templates
     {
+      canonicalId: 'RENT_REVIEW',
       id: 'rent_review',
       title: 'Rent Review Provisions',
       standardPreview: '[Rent increase requires Section 13 notice]',
@@ -163,7 +190,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // ANTI-SUBLETTING
+    // Maps to: <!-- CLAUSE:ANTI_SUBLET --> in HBS templates
     {
+      canonicalId: 'ANTI_SUBLET',
       id: 'anti_sublet',
       title: 'Anti-Subletting and Short-Let Prohibition',
       standardPreview: `The ${terms.tenant} shall not sublet the Property...`,
@@ -175,7 +204,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // PROFESSIONAL CLEANING
+    // Maps to: <!-- CLAUSE:PROFESSIONAL_CLEANING --> in HBS templates
     {
+      canonicalId: 'PROFESSIONAL_CLEANING',
       id: 'professional_cleaning',
       title: 'Professional Cleaning Requirement',
       standardPreview: `The ${terms.tenant} shall return the Property in good condition...`,
@@ -187,7 +218,9 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     },
 
     // HMO LICENSING ALIGNMENT
+    // Maps to: <!-- CLAUSE:HMO_LICENSING --> in HBS templates
     {
+      canonicalId: 'HMO_LICENSING',
       id: 'licensing_alignment',
       title: 'HMO Licensing Compliance',
       standardPreview: '[Not included in Standard agreement]',
