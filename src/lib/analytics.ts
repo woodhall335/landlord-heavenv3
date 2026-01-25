@@ -1176,3 +1176,127 @@ export function trackEvidenceWarningResolved(params: {
     // and contains no PII
   });
 }
+
+// =============================================================================
+// TENANCY PREMIUM UPSELL TRACKING
+// =============================================================================
+
+/**
+ * Premium recommendation reason flags (no PII)
+ * These flags indicate WHY Premium was recommended without identifying the user
+ */
+export type TenancyPremiumRecommendationReason =
+  | 'multiple_tenants'
+  | 'unrelated_tenants'
+  | 'separate_rent_payments'
+  | 'room_by_room_let'
+  | 'shared_facilities'
+  | 'hmo_property'
+  | 'hmo_licensed'
+  | 'student_let'
+  | 'guarantor_needed'
+  | 'rent_review_needed'
+  | 'high_value_property';
+
+/**
+ * Track when Premium tier is recommended to the user in the tenancy wizard
+ *
+ * IMPORTANT: Only tracks reason flags, no PII or free text
+ *
+ * @param params.reasons - Array of reason flags explaining why Premium was recommended
+ * @param params.strength - Recommendation strength ('strong' | 'moderate')
+ * @param params.jurisdiction - Jurisdiction (england | wales | scotland | northern-ireland)
+ */
+export function trackTenancyPremiumRecommended(params: {
+  reasons: TenancyPremiumRecommendationReason[];
+  strength: 'strong' | 'moderate';
+  jurisdiction: string;
+}): void {
+  trackEvent('tenancy_premium_recommended', {
+    event_category: 'tenancy_upsell',
+    // Reason flags only - no PII
+    reason_flags: params.reasons.join(','),
+    reason_count: params.reasons.length,
+    strength: params.strength,
+    jurisdiction: params.jurisdiction,
+    // Boolean flags for easier analysis
+    has_hmo_indicator: params.reasons.some(r =>
+      ['hmo_property', 'hmo_licensed', 'multiple_tenants', 'unrelated_tenants', 'room_by_room_let'].includes(r)
+    ),
+    has_student_let: params.reasons.includes('student_let'),
+    has_guarantor_need: params.reasons.includes('guarantor_needed'),
+  });
+
+  // Track as Facebook ViewContent for retargeting
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: 'tenancy_premium_recommendation',
+      content_category: 'tenancy_upsell',
+      content_type: 'recommendation',
+    });
+  }
+}
+
+/**
+ * Track when user selects Premium AFTER seeing a recommendation
+ *
+ * This indicates the recommendation was effective
+ */
+export function trackTenancyPremiumSelectedAfterRecommendation(params: {
+  reasons: TenancyPremiumRecommendationReason[];
+  strength: 'strong' | 'moderate';
+  jurisdiction: string;
+}): void {
+  trackEvent('tenancy_premium_selected_after_recommendation', {
+    event_category: 'tenancy_upsell',
+    reason_flags: params.reasons.join(','),
+    reason_count: params.reasons.length,
+    strength: params.strength,
+    jurisdiction: params.jurisdiction,
+  });
+
+  // Track as AddToCart for conversion tracking
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: 'ast_premium',
+      content_category: 'tenancy_agreement',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when user selects Standard DESPITE seeing a Premium recommendation
+ *
+ * This helps understand when recommendations are not compelling enough
+ */
+export function trackTenancyStandardSelectedDespiteRecommendation(params: {
+  reasons: TenancyPremiumRecommendationReason[];
+  strength: 'strong' | 'moderate';
+  jurisdiction: string;
+}): void {
+  trackEvent('tenancy_standard_selected_despite_recommendation', {
+    event_category: 'tenancy_upsell',
+    reason_flags: params.reasons.join(','),
+    reason_count: params.reasons.length,
+    strength: params.strength,
+    jurisdiction: params.jurisdiction,
+    // This event indicates the recommendation was shown but rejected
+    recommendation_rejected: true,
+  });
+}
+
+/**
+ * Track when the comparison table rationale is expanded
+ * Helps understand which legal explanations users find valuable
+ */
+export function trackTenancyRationaleExpanded(params: {
+  feature: string;
+  jurisdiction: string;
+}): void {
+  trackEvent('tenancy_rationale_expanded', {
+    event_category: 'tenancy_upsell',
+    feature: params.feature,
+    jurisdiction: params.jurisdiction,
+  });
+}
