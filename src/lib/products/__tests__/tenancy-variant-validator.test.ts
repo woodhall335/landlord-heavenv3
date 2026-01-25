@@ -29,6 +29,11 @@ import {
   HMO_FORBIDDEN_IN_STANDARD,
   getVariantConfig,
   getSupportedJurisdictions,
+  assertTenancyVariantsInvariant,
+  validatePackContentsAlignment,
+  EXPECTED_PACK_CONTENTS,
+  formatAuditTable,
+  _resetRuntimeCheck,
 } from '../tenancy-variant-validator';
 
 import { getPackContents } from '../pack-contents';
@@ -378,5 +383,241 @@ describe('F. Helper Function Tests', () => {
       expect(jurisdictions).toContain('scotland');
       expect(jurisdictions).toContain('northern-ireland');
     });
+  });
+});
+
+// ============================================================================
+// TEST SUITE G: INVARIANT ASSERTION
+// ============================================================================
+
+describe('G. Invariant Assertion (assertTenancyVariantsInvariant)', () => {
+  it('passes when all invariants are satisfied', () => {
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: readTemplate,
+      getPackContents: (args) => getPackContents(args as any),
+      throwOnFailure: false,
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+    expect(result.auditTable).toHaveLength(4);
+  });
+
+  it('audit table has correct structure', () => {
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: readTemplate,
+      throwOnFailure: false,
+    });
+
+    expect(result.auditTable).toHaveLength(4);
+
+    for (const row of result.auditTable) {
+      expect(row.jurisdiction).toBeDefined();
+      expect(row.standardTemplate).toBeDefined();
+      expect(row.premiumTemplate).toBeDefined();
+      expect(row.standardDocKey).toBeDefined();
+      expect(row.premiumDocKey).toBeDefined();
+      expect(typeof row.standardHMOMarkers).toBe('number');
+      expect(typeof row.premiumHMOMarkers).toBe('number');
+      expect(['PASS', 'FAIL']).toContain(row.status);
+    }
+  });
+
+  it('all jurisdictions should PASS in audit table', () => {
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: readTemplate,
+      throwOnFailure: false,
+    });
+
+    for (const row of result.auditTable) {
+      expect(row.status).toBe('PASS');
+    }
+  });
+
+  it('detects missing template file', () => {
+    const badTemplateGetter = (templatePath: string) => {
+      if (templatePath.includes('england')) return null;
+      return readTemplate(templatePath);
+    };
+
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: badTemplateGetter,
+      throwOnFailure: false,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.some(e => e.includes('Template not found'))).toBe(true);
+  });
+
+  it('detects HMO markers in standard template', () => {
+    const badTemplateGetter = (templatePath: string) => {
+      const content = readTemplate(templatePath);
+      if (content && templatePath.includes('standard')) {
+        // Inject forbidden HMO content into standard template
+        return content + '\n## HMO CLAUSES\nThis should not be here';
+      }
+      return content;
+    };
+
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: badTemplateGetter,
+      throwOnFailure: false,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.some(e => e.includes('Standard template contains HMO markers'))).toBe(true);
+  });
+
+  it('throws when throwOnFailure is true and validation fails', () => {
+    const badTemplateGetter = () => null; // All templates missing
+
+    expect(() => {
+      assertTenancyVariantsInvariant({
+        getTemplateContent: badTemplateGetter,
+        throwOnFailure: true,
+      });
+    }).toThrow('Tenancy Variant Invariants FAILED');
+  });
+});
+
+// ============================================================================
+// TEST SUITE H: PACK-CONTENTS ALIGNMENT
+// ============================================================================
+
+describe('H. Pack-Contents Alignment', () => {
+  it('validatePackContentsAlignment passes with correct pack-contents', () => {
+    const result = validatePackContentsAlignment(
+      (args) => getPackContents(args as any)
+    );
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it('EXPECTED_PACK_CONTENTS matches TENANCY_VARIANT_CONFIGS', () => {
+    const jurisdictions = getSupportedJurisdictions();
+
+    for (const jurisdiction of jurisdictions) {
+      const expected = EXPECTED_PACK_CONTENTS[jurisdiction];
+      const config = TENANCY_VARIANT_CONFIGS[jurisdiction];
+
+      expect(expected.standard.key).toBe(config.standard.documentKey);
+      expect(expected.premium.key).toBe(config.premium.documentKey);
+    }
+  });
+
+  it('detects pack-contents returning wrong document count', () => {
+    const badPackContents = (args: { product: string; jurisdiction: string }) => {
+      if (args.jurisdiction === 'england') {
+        // Return 2 documents instead of 1
+        return [
+          { key: 'ast_agreement', title: 'Agreement' },
+          { key: 'extra_doc', title: 'Extra Document' },
+        ];
+      }
+      return getPackContents(args as any);
+    };
+
+    const result = validatePackContentsAlignment(badPackContents);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.some(e => e.includes('returns 2 documents, expected exactly 1'))).toBe(true);
+  });
+
+  it('detects pack-contents returning wrong document key', () => {
+    const badPackContents = (args: { product: string; jurisdiction: string }) => {
+      if (args.jurisdiction === 'wales' && args.product === 'ast_standard') {
+        return [{ key: 'wrong_key', title: 'Wrong Document' }];
+      }
+      return getPackContents(args as any);
+    };
+
+    const result = validatePackContentsAlignment(badPackContents);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.some(e => e.includes('key mismatch'))).toBe(true);
+  });
+});
+
+// ============================================================================
+// TEST SUITE I: REGRESSION PREVENTION (3rd variant detection)
+// ============================================================================
+
+describe('I. Regression Prevention', () => {
+  it('TENANCY_VARIANT_CONFIGS has exactly 4 jurisdictions', () => {
+    const keys = Object.keys(TENANCY_VARIANT_CONFIGS);
+    expect(keys).toHaveLength(4);
+  });
+
+  it('each jurisdiction has exactly 2 variants (no 3rd variant possible)', () => {
+    const jurisdictions = getSupportedJurisdictions();
+
+    for (const jurisdiction of jurisdictions) {
+      const config = TENANCY_VARIANT_CONFIGS[jurisdiction];
+
+      // Should only have 'standard' and 'premium' keys
+      const variantKeys = Object.keys(config).filter(k => k !== 'jurisdiction');
+      expect(variantKeys).toHaveLength(2);
+      expect(variantKeys).toContain('standard');
+      expect(variantKeys).toContain('premium');
+
+      // No other tier should exist
+      expect((config as any).basic).toBeUndefined();
+      expect((config as any).enterprise).toBeUndefined();
+      expect((config as any).professional).toBeUndefined();
+    }
+  });
+
+  it('standard templates have ZERO forbidden HMO markers (strict check)', () => {
+    const jurisdictions = getSupportedJurisdictions();
+
+    for (const jurisdiction of jurisdictions) {
+      const config = getVariantConfig(jurisdiction, 'standard');
+      const content = readTemplate(config!.templatePath);
+      expect(content).not.toBeNull();
+
+      const result = templateContainsForbiddenHMO(content!);
+
+      // This must be ZERO - any HMO markers in standard is a bug
+      expect(result.markers.length).toBe(0);
+    }
+  });
+
+  it('premium templates have AT LEAST 3 HMO markers (minimum threshold)', () => {
+    const jurisdictions = getSupportedJurisdictions();
+    const MINIMUM_HMO_MARKERS = 3;
+
+    for (const jurisdiction of jurisdictions) {
+      const config = getVariantConfig(jurisdiction, 'premium');
+      const content = readTemplate(config!.templatePath);
+      expect(content).not.toBeNull();
+
+      const result = templateContainsHMOMarkers(content!);
+
+      expect(result.markers.length).toBeGreaterThanOrEqual(MINIMUM_HMO_MARKERS);
+    }
+  });
+});
+
+// ============================================================================
+// TEST SUITE J: AUDIT TABLE FORMATTING
+// ============================================================================
+
+describe('J. Audit Table Formatting', () => {
+  it('formatAuditTable produces readable output', () => {
+    const result = assertTenancyVariantsInvariant({
+      getTemplateContent: readTemplate,
+      throwOnFailure: false,
+    });
+
+    const table = formatAuditTable(result.auditTable);
+
+    expect(table).toContain('TENANCY AGREEMENT VARIANTS AUDIT TABLE');
+    expect(table).toContain('england');
+    expect(table).toContain('wales');
+    expect(table).toContain('scotland');
+    expect(table).toContain('northern-ireland');
+    expect(table).toContain('PASS');
+    expect(table).toContain('Document Keys:');
   });
 });

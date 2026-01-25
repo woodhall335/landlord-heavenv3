@@ -391,3 +391,386 @@ export function validateFromFileSystem(configDir: string): ValidationResult {
   const getContent = createFileSystemTemplateGetter(configDir);
   return validateAllJurisdictions(getContent);
 }
+
+// ============================================================================
+// PACK-CONTENTS ALIGNMENT CHECK
+// ============================================================================
+
+/**
+ * Expected pack-contents document keys per jurisdiction and tier
+ * This MUST match pack-contents.ts getXxxContents() functions
+ */
+export const EXPECTED_PACK_CONTENTS: Record<TenancyJurisdiction, Record<TenancyTier, { key: string; title: string }>> = {
+  england: {
+    standard: { key: 'ast_agreement', title: 'Assured Shorthold Tenancy Agreement' },
+    premium: { key: 'ast_agreement_hmo', title: 'HMO Tenancy Agreement' },
+  },
+  wales: {
+    standard: { key: 'soc_agreement', title: 'Standard Occupation Contract' },
+    premium: { key: 'soc_agreement_hmo', title: 'HMO Occupation Contract' },
+  },
+  scotland: {
+    standard: { key: 'prt_agreement', title: 'Private Residential Tenancy Agreement' },
+    premium: { key: 'prt_agreement_hmo', title: 'HMO Private Residential Tenancy Agreement' },
+  },
+  'northern-ireland': {
+    standard: { key: 'private_tenancy_agreement', title: 'Private Tenancy Agreement' },
+    premium: { key: 'private_tenancy_agreement_hmo', title: 'HMO Private Tenancy Agreement' },
+  },
+};
+
+/**
+ * Validate pack-contents alignment
+ * Checks that getPackContents returns exactly 1 document per tier per jurisdiction
+ * and that the document keys match TENANCY_VARIANT_CONFIGS
+ */
+export function validatePackContentsAlignment(
+  getPackContents: (args: { product: string; jurisdiction: string }) => Array<{ key: string; title: string }>
+): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const jurisdictions = getSupportedJurisdictions();
+
+  for (const jurisdiction of jurisdictions) {
+    for (const tier of ['standard', 'premium'] as const) {
+      const product = tier === 'standard' ? 'ast_standard' : 'ast_premium';
+      const items = getPackContents({ product, jurisdiction });
+
+      // Must return exactly 1 document
+      if (items.length !== 1) {
+        errors.push(
+          `[${jurisdiction}/${tier}] pack-contents returns ${items.length} documents, expected exactly 1. ` +
+          `2-variants rule: each tier must have exactly 1 tenancy agreement document.`
+        );
+        continue;
+      }
+
+      // Document key must match config
+      const expected = EXPECTED_PACK_CONTENTS[jurisdiction][tier];
+      const config = getVariantConfig(jurisdiction, tier);
+
+      if (items[0].key !== expected.key) {
+        errors.push(
+          `[${jurisdiction}/${tier}] pack-contents key mismatch: got "${items[0].key}", expected "${expected.key}"`
+        );
+      }
+
+      if (config && items[0].key !== config.documentKey) {
+        errors.push(
+          `[${jurisdiction}/${tier}] pack-contents/validator mismatch: ` +
+          `pack-contents returns "${items[0].key}", validator expects "${config.documentKey}"`
+        );
+      }
+    }
+  }
+
+  return { valid: errors.length === 0, errors, warnings };
+}
+
+// ============================================================================
+// COMPREHENSIVE INVARIANT ASSERTION
+// ============================================================================
+
+export interface InvariantCheckResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  auditTable: AuditTableRow[];
+}
+
+export interface AuditTableRow {
+  jurisdiction: TenancyJurisdiction;
+  standardTemplate: string;
+  premiumTemplate: string;
+  standardDocKey: string;
+  premiumDocKey: string;
+  standardHMOMarkers: number;
+  premiumHMOMarkers: number;
+  status: 'PASS' | 'FAIL';
+}
+
+/**
+ * COMPREHENSIVE INVARIANT ASSERTION
+ *
+ * This is the SINGLE FUNCTION that validates ALL tenancy variant rules:
+ * 1) Exactly 4 jurisdictions (england, wales, scotland, northern-ireland)
+ * 2) Exactly 2 variants per jurisdiction (standard + premium)
+ * 3) Standard templates contain NO forbidden HMO markers
+ * 4) Premium templates contain ALL required HMO markers (minimum threshold)
+ * 5) Pack-contents returns exactly 1 document per tier per jurisdiction
+ * 6) Document keys are consistent across config, pack-contents, and generator
+ *
+ * @throws Error with detailed message if any invariant fails
+ */
+export function assertTenancyVariantsInvariant(options: {
+  getTemplateContent: (templatePath: string) => string | null;
+  getPackContents?: (args: { product: string; jurisdiction: string }) => Array<{ key: string; title: string }>;
+  throwOnFailure?: boolean;
+}): InvariantCheckResult {
+  const { getTemplateContent, getPackContents, throwOnFailure = true } = options;
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const auditTable: AuditTableRow[] = [];
+
+  const jurisdictions = getSupportedJurisdictions();
+
+  // INVARIANT 1: Exactly 4 jurisdictions
+  if (jurisdictions.length !== 4) {
+    errors.push(
+      `INVARIANT VIOLATION: Expected exactly 4 jurisdictions, found ${jurisdictions.length}. ` +
+      `Jurisdictions: ${jurisdictions.join(', ')}`
+    );
+  }
+
+  const requiredJurisdictions: TenancyJurisdiction[] = ['england', 'wales', 'scotland', 'northern-ireland'];
+  for (const required of requiredJurisdictions) {
+    if (!jurisdictions.includes(required)) {
+      errors.push(`INVARIANT VIOLATION: Missing required jurisdiction: ${required}`);
+    }
+  }
+
+  // Validate each jurisdiction
+  for (const jurisdiction of jurisdictions) {
+    const variants = TENANCY_VARIANT_CONFIGS[jurisdiction];
+    let rowStatus: 'PASS' | 'FAIL' = 'PASS';
+
+    // INVARIANT 2: Exactly 2 variants
+    const variantCount = [variants.standard, variants.premium].filter(Boolean).length;
+    if (variantCount !== 2) {
+      errors.push(
+        `[${jurisdiction}] INVARIANT VIOLATION: Must have exactly 2 variants, found ${variantCount}. ` +
+        `Only "standard" and "premium" tiers are allowed.`
+      );
+      rowStatus = 'FAIL';
+    }
+
+    // Check each tier
+    let standardHMOCount = 0;
+    let premiumHMOCount = 0;
+
+    for (const tier of ['standard', 'premium'] as const) {
+      const config = variants[tier];
+      if (!config) {
+        errors.push(`[${jurisdiction}] INVARIANT VIOLATION: Missing ${tier} variant`);
+        rowStatus = 'FAIL';
+        continue;
+      }
+
+      // Template must exist
+      const templateContent = getTemplateContent(config.templatePath);
+      if (templateContent === null) {
+        errors.push(
+          `[${jurisdiction}/${tier}] INVARIANT VIOLATION: Template not found: ${config.templatePath}`
+        );
+        rowStatus = 'FAIL';
+        continue;
+      }
+
+      // INVARIANT 3: Standard templates NO HMO
+      if (tier === 'standard') {
+        const forbiddenCheck = templateContainsForbiddenHMO(templateContent);
+        if (forbiddenCheck.found) {
+          errors.push(
+            `[${jurisdiction}/standard] INVARIANT VIOLATION: Standard template contains HMO markers: ` +
+            `${forbiddenCheck.markers.join(', ')}. Standard tier must NOT have HMO clauses.`
+          );
+          rowStatus = 'FAIL';
+        }
+        standardHMOCount = forbiddenCheck.markers.length;
+      }
+
+      // INVARIANT 4: Premium templates MUST have HMO
+      if (tier === 'premium') {
+        const hmoCheck = templateContainsHMOMarkers(templateContent);
+        premiumHMOCount = hmoCheck.markers.length;
+
+        if (!hmoCheck.found) {
+          errors.push(
+            `[${jurisdiction}/premium] INVARIANT VIOLATION: Premium template missing HMO markers. ` +
+            `Premium tier MUST include HMO clauses (Joint and Several Liability, shared facilities, etc.)`
+          );
+          rowStatus = 'FAIL';
+        } else if (hmoCheck.markers.length < 3) {
+          warnings.push(
+            `[${jurisdiction}/premium] WARNING: Premium template has only ${hmoCheck.markers.length} HMO markers. ` +
+            `Consider adding more for comprehensive HMO coverage.`
+          );
+        }
+
+        // Must have "Joint and Several Liability"
+        if (!templateContent.toLowerCase().includes('joint and several liability')) {
+          warnings.push(
+            `[${jurisdiction}/premium] WARNING: Premium template missing "Joint and Several Liability" clause. ` +
+            `This is standard for HMO agreements.`
+          );
+        }
+      }
+    }
+
+    // Build audit table row
+    auditTable.push({
+      jurisdiction,
+      standardTemplate: variants.standard?.templatePath || 'MISSING',
+      premiumTemplate: variants.premium?.templatePath || 'MISSING',
+      standardDocKey: variants.standard?.documentKey || 'MISSING',
+      premiumDocKey: variants.premium?.documentKey || 'MISSING',
+      standardHMOMarkers: standardHMOCount,
+      premiumHMOMarkers: premiumHMOCount,
+      status: rowStatus,
+    });
+  }
+
+  // INVARIANT 5: Pack-contents alignment (if provided)
+  if (getPackContents) {
+    const packResult = validatePackContentsAlignment(getPackContents);
+    errors.push(...packResult.errors);
+    warnings.push(...packResult.warnings);
+  }
+
+  const result: InvariantCheckResult = {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    auditTable,
+  };
+
+  // Throw if requested and validation failed
+  if (throwOnFailure && !result.valid) {
+    throw new Error(
+      `Tenancy Variant Invariants FAILED!\n\n` +
+      `ERRORS:\n${errors.map(e => `  - ${e}`).join('\n')}\n\n` +
+      `The 2-variants rule requires:\n` +
+      `  1. Exactly 4 jurisdictions (england, wales, scotland, northern-ireland)\n` +
+      `  2. Exactly 2 variants per jurisdiction (standard + premium)\n` +
+      `  3. Standard templates: NO HMO markers\n` +
+      `  4. Premium templates: MUST have HMO markers\n` +
+      `  5. Pack-contents: exactly 1 document per tier per jurisdiction\n`
+    );
+  }
+
+  return result;
+}
+
+// ============================================================================
+// RUNTIME SELF-CHECK (for server startup)
+// ============================================================================
+
+let _runtimeCheckCompleted = false;
+let _runtimeCheckResult: InvariantCheckResult | null = null;
+
+/**
+ * Runtime self-check for production environments
+ *
+ * Call this on server startup or first tenancy generation.
+ * - Logs a warning if invariants fail in production
+ * - Caches result to avoid repeated checks
+ * - Returns result without throwing (use assertTenancyVariantsInvariant for strict checks)
+ */
+export function runtimeTenancyVariantsSelfCheck(configDir: string): InvariantCheckResult {
+  // Return cached result if already checked
+  if (_runtimeCheckCompleted && _runtimeCheckResult) {
+    return _runtimeCheckResult;
+  }
+
+  const getContent = createFileSystemTemplateGetter(configDir);
+
+  try {
+    _runtimeCheckResult = assertTenancyVariantsInvariant({
+      getTemplateContent: getContent,
+      throwOnFailure: false, // Don't throw in production, just log
+    });
+
+    if (!_runtimeCheckResult.valid) {
+      console.warn(
+        '[TENANCY VARIANTS] Runtime self-check FAILED!\n' +
+        'Errors:\n' +
+        _runtimeCheckResult.errors.map(e => `  - ${e}`).join('\n') +
+        '\n\nThis may cause issues with tenancy agreement generation.'
+      );
+    } else {
+      console.log('[TENANCY VARIANTS] Runtime self-check passed. 4 jurisdictions, 2 variants each.');
+    }
+
+    _runtimeCheckCompleted = true;
+    return _runtimeCheckResult;
+  } catch (err) {
+    console.error('[TENANCY VARIANTS] Runtime self-check error:', err);
+    _runtimeCheckCompleted = true;
+    _runtimeCheckResult = {
+      valid: false,
+      errors: [`Runtime check error: ${err}`],
+      warnings: [],
+      auditTable: [],
+    };
+    return _runtimeCheckResult;
+  }
+}
+
+/**
+ * Reset runtime check cache (for testing)
+ */
+export function _resetRuntimeCheck(): void {
+  _runtimeCheckCompleted = false;
+  _runtimeCheckResult = null;
+}
+
+// ============================================================================
+// PRINT AUDIT TABLE (for CLI output)
+// ============================================================================
+
+/**
+ * Format audit table for console output
+ */
+export function formatAuditTable(rows: AuditTableRow[]): string {
+  const lines: string[] = [];
+
+  lines.push('');
+  lines.push('='.repeat(120));
+  lines.push('TENANCY AGREEMENT VARIANTS AUDIT TABLE');
+  lines.push('='.repeat(120));
+  lines.push('');
+
+  // Header
+  lines.push(
+    'Jurisdiction'.padEnd(18) +
+    'Standard Template'.padEnd(50) +
+    'Premium Template'.padEnd(40) +
+    'Std HMO'.padEnd(10) +
+    'Prem HMO'.padEnd(10) +
+    'Status'
+  );
+  lines.push('-'.repeat(120));
+
+  // Rows
+  for (const row of rows) {
+    const stdTemplate = row.standardTemplate.split('/').pop() || row.standardTemplate;
+    const premTemplate = row.premiumTemplate.split('/').pop() || row.premiumTemplate;
+
+    lines.push(
+      row.jurisdiction.padEnd(18) +
+      stdTemplate.padEnd(50) +
+      premTemplate.padEnd(40) +
+      String(row.standardHMOMarkers).padEnd(10) +
+      String(row.premiumHMOMarkers).padEnd(10) +
+      row.status
+    );
+  }
+
+  lines.push('-'.repeat(120));
+  lines.push('');
+
+  // Summary
+  const passCount = rows.filter(r => r.status === 'PASS').length;
+  const failCount = rows.filter(r => r.status === 'FAIL').length;
+  lines.push(`Summary: ${passCount} PASS, ${failCount} FAIL`);
+  lines.push('');
+
+  // Document Keys
+  lines.push('Document Keys:');
+  for (const row of rows) {
+    lines.push(`  ${row.jurisdiction}: standard="${row.standardDocKey}", premium="${row.premiumDocKey}"`);
+  }
+  lines.push('');
+
+  return lines.join('\n');
+}

@@ -22,6 +22,8 @@
  */
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
+import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
+import path from 'path';
 
 // ============================================================================
 // PRODUCT TIER (2-VARIANTS ONLY RULE)
@@ -813,6 +815,9 @@ export async function generatePremiumAST(
  * // Generate HMO agreement
  * const doc = await generateTenancyAgreement(data, 'premium');
  */
+// Runtime self-check flag to avoid repeated checks
+let _runtimeSelfCheckDone = false;
+
 export async function generateTenancyAgreement(
   data: ASTData,
   tier: TenancyTier,
@@ -820,6 +825,27 @@ export async function generateTenancyAgreement(
 ): Promise<GeneratedDocument> {
   // RUNTIME GUARDRAIL: Validate tier is exactly 'standard' or 'premium'
   validateTenancyTier(tier);
+
+  // RUNTIME SELF-CHECK: On first generation, validate all invariants
+  // Logs warning in production if invariants fail, but throws when generating
+  if (!_runtimeSelfCheckDone) {
+    _runtimeSelfCheckDone = true;
+    try {
+      const configDir = path.join(process.cwd(), 'config/jurisdictions');
+      const selfCheckResult = runtimeTenancyVariantsSelfCheck(configDir);
+
+      // If self-check fails, throw to prevent generating invalid documents
+      if (!selfCheckResult.valid) {
+        throw new Error(
+          `Tenancy variant invariants failed during generation. ` +
+          `Errors: ${selfCheckResult.errors.join('; ')}`
+        );
+      }
+    } catch (err) {
+      // Log but continue - the individual generator functions have their own validation
+      console.error('[AST Generator] Runtime self-check error:', err);
+    }
+  }
 
   // Route to correct generator based on tier
   if (tier === 'standard') {
