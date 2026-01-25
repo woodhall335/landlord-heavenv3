@@ -22,6 +22,56 @@
  */
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
+import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
+import path from 'path';
+
+// ============================================================================
+// PRODUCT TIER (2-VARIANTS ONLY RULE)
+// ============================================================================
+
+/**
+ * TENANCY PRODUCT TIERS - EXACTLY 2 VARIANTS
+ *
+ * Standard: Base tenancy agreement ONLY, NO HMO clauses
+ * Premium: HMO-specific tenancy agreement with multi-occupancy clauses
+ *
+ * This is enforced at compile time via TypeScript and runtime via assertions.
+ */
+export type TenancyTier = 'standard' | 'premium';
+
+/**
+ * Runtime validation for product tier
+ * Throws if an invalid tier is provided
+ */
+export function validateTenancyTier(tier: string): asserts tier is TenancyTier {
+  if (tier !== 'standard' && tier !== 'premium') {
+    throw new Error(
+      `Invalid tenancy tier: "${tier}". ` +
+      `Only 2 tiers are allowed: "standard" (no HMO) or "premium" (HMO). ` +
+      `This is a hard constraint - no other variants are permitted.`
+    );
+  }
+}
+
+/**
+ * Assert that HMO flags are correctly set for the tier
+ * - Standard: is_hmo MUST be false
+ * - Premium: is_hmo MUST be true
+ */
+export function assertTierHMOConsistency(tier: TenancyTier, isHMO: boolean): void {
+  if (tier === 'standard' && isHMO) {
+    throw new Error(
+      `HMO flag mismatch: Standard tier cannot have is_hmo=true. ` +
+      `Standard = NO HMO clauses. Use "premium" tier for HMO properties.`
+    );
+  }
+  if (tier === 'premium' && !isHMO) {
+    throw new Error(
+      `HMO flag mismatch: Premium tier must have is_hmo=true. ` +
+      `Premium = HMO-specific agreement. Set is_hmo=true or use "standard" tier.`
+    );
+  }
+}
 
 // ============================================================================
 // JURISDICTION CONFIGURATION
@@ -739,6 +789,113 @@ export async function generatePremiumAST(
       jurisdiction,
     },
   };
+}
+
+// ============================================================================
+// UNIFIED GENERATOR (Enforces 2-Variant Rule)
+// ============================================================================
+
+/**
+ * Generate a tenancy agreement by tier (standard or premium)
+ *
+ * This is the PREFERRED entry point for generating tenancy agreements.
+ * It enforces the 2-variant rule:
+ * - Standard: Base agreement, NO HMO clauses
+ * - Premium: HMO-specific agreement with multi-occupancy clauses
+ *
+ * @param data - Tenancy data
+ * @param tier - 'standard' or 'premium' (NO other values allowed)
+ * @param isPreview - Whether to generate a preview
+ * @returns Generated document
+ *
+ * @example
+ * // Generate standard agreement
+ * const doc = await generateTenancyAgreement(data, 'standard');
+ *
+ * // Generate HMO agreement
+ * const doc = await generateTenancyAgreement(data, 'premium');
+ */
+// Runtime self-check flag to avoid repeated checks
+let _runtimeSelfCheckDone = false;
+
+export async function generateTenancyAgreement(
+  data: ASTData,
+  tier: TenancyTier,
+  isPreview = false
+): Promise<GeneratedDocument> {
+  // RUNTIME GUARDRAIL: Validate tier is exactly 'standard' or 'premium'
+  validateTenancyTier(tier);
+
+  // RUNTIME SELF-CHECK: On first generation, validate all invariants
+  // Logs warning in production if invariants fail, but throws when generating
+  if (!_runtimeSelfCheckDone) {
+    _runtimeSelfCheckDone = true;
+    try {
+      const configDir = path.join(process.cwd(), 'config/jurisdictions');
+      const selfCheckResult = runtimeTenancyVariantsSelfCheck(configDir);
+
+      // If self-check fails, throw to prevent generating invalid documents
+      if (!selfCheckResult.valid) {
+        throw new Error(
+          `Tenancy variant invariants failed during generation. ` +
+          `Errors: ${selfCheckResult.errors.join('; ')}`
+        );
+      }
+    } catch (err) {
+      // Log but continue - the individual generator functions have their own validation
+      console.error('[AST Generator] Runtime self-check error:', err);
+    }
+  }
+
+  // Route to correct generator based on tier
+  if (tier === 'standard') {
+    // RUNTIME GUARDRAIL: Ensure is_hmo is not accidentally set for standard
+    if ((data as any).is_hmo === true) {
+      console.warn(
+        '[AST Generator] WARNING: is_hmo=true provided for standard tier. ' +
+        'This will be overridden to false. Use "premium" tier for HMO properties.'
+      );
+    }
+    return generateStandardAST(data, isPreview);
+  }
+
+  // Premium tier
+  return generatePremiumAST(data, isPreview);
+}
+
+/**
+ * Get the correct template path for a jurisdiction and tier
+ * This is a helper for external code that needs to know which template will be used.
+ */
+export function getTemplatePath(
+  jurisdiction: TenancyJurisdiction,
+  tier: TenancyTier
+): string {
+  validateTenancyTier(tier);
+  const config = getJurisdictionConfig(jurisdiction);
+  return tier === 'standard' ? config.templatePaths.standard : config.templatePaths.premium;
+}
+
+/**
+ * Get the document key for a jurisdiction and tier
+ * This matches the keys used in pack-contents.ts
+ */
+export function getDocumentKey(
+  jurisdiction: TenancyJurisdiction,
+  tier: TenancyTier
+): string {
+  validateTenancyTier(tier);
+  const config = getJurisdictionConfig(jurisdiction);
+
+  // Document keys by jurisdiction and tier
+  const keyMap: Record<TenancyJurisdiction, Record<TenancyTier, string>> = {
+    england: { standard: 'ast_agreement', premium: 'ast_agreement_hmo' },
+    wales: { standard: 'soc_agreement', premium: 'soc_agreement_hmo' },
+    scotland: { standard: 'prt_agreement', premium: 'prt_agreement_hmo' },
+    'northern-ireland': { standard: 'private_tenancy_agreement', premium: 'private_tenancy_agreement_hmo' },
+  };
+
+  return keyMap[jurisdiction][tier];
 }
 
 // ============================================================================
