@@ -25,6 +25,8 @@ import {
   JurisdictionAccordion,
   VsSolicitorComparison,
 } from "@/components/value-proposition";
+import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
+import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
 
 // Get prices from single source of truth
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
@@ -319,97 +321,44 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* Premium Features */}
+      {/* Premium Features - Jurisdiction-Aware Comparison Table */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Standard vs Premium Clauses
+              Standard vs Premium: What&apos;s Included
             </h2>
-            <p className="text-center text-gray-600 mb-12">
-              Both are legally valid. Premium adds extra protection.
+            <p className="text-center text-gray-600 mb-4">
+              Both are legally valid tenancy agreements. Premium includes clauses commonly required under the Housing Act 2004 for HMOs and multi-tenant properties.
+            </p>
+            <p className="text-center text-sm text-gray-500 mb-12">
+              Click &quot;Why does this matter?&quot; to see the legal rationale for each feature.
             </p>
 
-            <div className="overflow-x-auto">
-              <table className="w-full bg-white rounded-lg border border-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-charcoal border-b border-gray-200">
-                      Feature
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-charcoal border-b border-gray-200">
-                      Standard<br />{standardPrice}
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-primary border-b border-gray-200">
-                      Premium<br />{premiumPrice}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Core clauses (rent, deposit, duration)</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Tenant responsibilities</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Pets clause</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Break clause (optional)</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">HMO-ready clauses</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Joint &amp; several liability</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Guarantor clauses</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Rent increase provisions (CPI/RPI)</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Subletting prohibition</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Professional cleaning clause</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100"><RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle"><RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-semibold text-charcoal">Number of documents</td>
-                    <td className="px-6 py-4 text-center text-sm font-semibold text-charcoal">4</td>
-                    <td className="px-6 py-4 text-center text-sm font-semibold text-primary bg-primary-subtle">7</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <TenancyComparisonTable
+              jurisdiction="england"
+              highlightPremium={true}
+              showRationale={true}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Clause Diff Preview - Visual comparison of actual clauses */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <ClauseDiffPreview
+              jurisdiction="england"
+              showUpgradeCTA={true}
+              variant="full"
+            />
           </div>
         </Container>
       </section>
 
       {/* Comparison vs Solicitor */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
@@ -420,22 +369,28 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* When to Choose Premium */}
+      {/* When to Choose Premium - Enhanced with legal context */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              When to Choose Premium
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              When Premium is Recommended
             </h2>
+            <p className="text-center text-gray-600 mb-12">
+              Based on common landlord requirements and UK housing legislation
+            </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
                 <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                   <Home className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs &amp; Multi-Tenant</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs &amp; Multi-Tenant Properties</h3>
                 <p className="text-gray-700 mb-3">
-                  Letting to multiple unrelated tenants? Premium includes joint &amp; several liability, shared facilities rules, and tenant replacement provisions.
+                  Letting to 3+ unrelated tenants sharing facilities? Premium includes HMO clauses commonly required under the Housing Act 2004: joint &amp; several liability, shared facilities rules, and tenant replacement provisions.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Properties with 5+ people from 2+ households require mandatory HMO licensing in England.
                 </p>
               </div>
 
@@ -445,7 +400,10 @@ export default function ASTPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Student Lettings</h3>
                 <p className="text-gray-700 mb-3">
-                  Premium includes guarantor clauses, anti-subletting provisions, and professional cleaning requirements common for student lets.
+                  Premium includes guarantor clauses (with clear liability terms), anti-subletting provisions to prevent Airbnb-style lets, and professional cleaning requirements commonly used for student accommodation.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Student lets with 3+ unrelated individuals may also require HMO licensing.
                 </p>
               </div>
 
@@ -455,7 +413,10 @@ export default function ASTPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Landlords</h3>
                 <p className="text-gray-700 mb-3">
-                  Managing multiple properties? Premium offers rent increase mechanisms, stronger termination clauses, and detailed inventory schedules.
+                  Managing multiple properties? Premium offers contractual rent increase provisions (CPI/RPI-linked), enhanced maintenance schedules, and tenant replacement procedures.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Rent review clauses allow predictable increases without requiring Section 13 notices.
                 </p>
               </div>
 
@@ -465,14 +426,17 @@ export default function ASTPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">High-Value Properties</h3>
                 <p className="text-gray-700 mb-3">
-                  For properties with higher rent or value, Premium provides comprehensive insurance requirements and detailed maintenance obligations.
+                  For properties with higher rent or value, Premium provides comprehensive contents insurance requirements, detailed inventory schedules, and enhanced maintenance obligations.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Premium clauses are drafted to be enforceable under unfair terms regulations.
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 text-center">
+            <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
               <p className="text-gray-700">
-                <strong>Not sure?</strong> Our wizard will recommend Standard or Premium based on your property and tenancy details.
+                <strong>Not sure which to choose?</strong> Our wizard will recommend Standard or Premium based on your property and tenancy details. The recommendation is non-blocking &mdash; you can always choose either tier.
               </p>
             </div>
           </div>

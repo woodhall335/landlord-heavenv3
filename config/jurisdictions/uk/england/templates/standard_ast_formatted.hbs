@@ -7,7 +7,16 @@
 
   This template generates a beautifully formatted, legally comprehensive
   tenancy agreement with proper styling and signature blocks.
+
+  CLAUSE MARKERS (for verification - Standard tier has core clauses only):
+  - CORE_TENANCY: Core tenancy terms (included)
+  - TENANT_OBLIGATIONS: Tenant responsibilities (included)
+  - PETS_CLAUSE: Pets permission (included)
+  - BREAK_CLAUSE: Early termination (included)
+
+  NOTE: Premium-only clauses (JOINT_LIABILITY, SHARED_FACILITIES, etc.) are NOT in this template.
 --}}
+<!-- CLAUSE:CORE_TENANCY -->
 
 <!DOCTYPE html>
 <html lang="en-GB">
@@ -754,6 +763,7 @@
     {{/if}}
   </div>
 
+  <!-- CLAUSE:BREAK_CLAUSE -->
   <div class="explainer-box">
     <div class="explainer-title">
       <span class="explainer-icon">ℹ️</span>
@@ -1036,6 +1046,7 @@
   <div class="page-break"></div>
 
   <!-- SECTION 6A: TENANT OBLIGATIONS -->
+  <!-- CLAUSE:TENANT_OBLIGATIONS -->
   <div class="section-header">
     <span class="section-number">6A</span>
     Tenant Obligations
@@ -1366,6 +1377,7 @@
     Property Rules & Restrictions
   </div>
 
+  <!-- CLAUSE:PETS_CLAUSE -->
   <div class="subsection">
     <div class="subsection-title">🐾 Pet Agreement</div>
 

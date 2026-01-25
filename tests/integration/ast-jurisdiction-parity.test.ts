@@ -96,10 +96,10 @@ describe('AST Jurisdiction Configuration', () => {
       expect(config.legalFramework).toContain('2016');
     });
 
-    it('Northern Ireland references Private Tenancies (Northern Ireland) Order 2006', () => {
+    it('Northern Ireland references Private Tenancies Act (Northern Ireland) 2022', () => {
       const config = getJurisdictionConfig('northern-ireland');
       expect(config.legalFramework).toContain('Northern Ireland');
-      expect(config.legalFramework).toContain('2006');
+      expect(config.legalFramework).toContain('2022');
     });
   });
 
@@ -180,7 +180,7 @@ describe('AST Jurisdiction Configuration', () => {
 
 describe('Pack-Contents AST Document Keys', () => {
   describe('Each jurisdiction has correct agreement key', () => {
-    const jurisdictions: Array<{
+    const standardJurisdictions: Array<{
       jurisdiction: string;
       expectedAgreementKey: string;
     }> = [
@@ -190,7 +190,17 @@ describe('Pack-Contents AST Document Keys', () => {
       { jurisdiction: 'northern-ireland', expectedAgreementKey: 'private_tenancy_agreement' },
     ];
 
-    for (const { jurisdiction, expectedAgreementKey } of jurisdictions) {
+    const premiumJurisdictions: Array<{
+      jurisdiction: string;
+      expectedAgreementKey: string;
+    }> = [
+      { jurisdiction: 'england', expectedAgreementKey: 'ast_agreement_hmo' },
+      { jurisdiction: 'wales', expectedAgreementKey: 'soc_agreement_hmo' },
+      { jurisdiction: 'scotland', expectedAgreementKey: 'prt_agreement_hmo' },
+      { jurisdiction: 'northern-ireland', expectedAgreementKey: 'private_tenancy_agreement_hmo' },
+    ];
+
+    for (const { jurisdiction, expectedAgreementKey } of standardJurisdictions) {
       it(`${jurisdiction} ast_standard contains ${expectedAgreementKey}`, () => {
         const packContents = getPackContents({
           product: 'ast_standard',
@@ -201,8 +211,10 @@ describe('Pack-Contents AST Document Keys', () => {
         expect(agreementDoc).toBeDefined();
         expect(agreementDoc?.category).toBe('Tenancy agreement');
       });
+    }
 
-      it(`${jurisdiction} ast_premium contains ${expectedAgreementKey}`, () => {
+    for (const { jurisdiction, expectedAgreementKey } of premiumJurisdictions) {
+      it(`${jurisdiction} ast_premium contains HMO agreement ${expectedAgreementKey}`, () => {
         const packContents = getPackContents({
           product: 'ast_premium',
           jurisdiction,
@@ -214,39 +226,47 @@ describe('Pack-Contents AST Document Keys', () => {
     }
   });
 
-  describe('Common documents exist across jurisdictions', () => {
+  describe('Agreement-only design: packs contain ONLY the agreement document', () => {
+    // Tenancy packs are agreement-only: no supporting documents like terms_schedule,
+    // model_clauses, or inventory_template. This keeps the product simple and focused.
     const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
-    const commonKeys = ['terms_schedule', 'model_clauses', 'inventory_template'];
 
     for (const jurisdiction of jurisdictions) {
-      for (const key of commonKeys) {
-        it(`${jurisdiction} ast_standard contains ${key}`, () => {
-          const packContents = getPackContents({
-            product: 'ast_standard',
-            jurisdiction,
-          });
-
-          expect(packContents.find(p => p.key === key)).toBeDefined();
+      it(`${jurisdiction} ast_standard contains exactly 1 document (agreement only)`, () => {
+        const packContents = getPackContents({
+          product: 'ast_standard',
+          jurisdiction,
         });
-      }
+
+        expect(packContents.length).toBe(1);
+        expect(packContents[0].category).toBe('Tenancy agreement');
+      });
     }
   });
 
-  describe('Premium documents exist across jurisdictions', () => {
+  describe('Premium documents are agreement-only (single document)', () => {
     const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
-    const premiumKeys = ['key_schedule', 'maintenance_guide', 'checkout_procedure'];
+    // Premium tenancy agreements contain ONLY the HMO agreement document
+    // No supporting docs (key_schedule, maintenance_guide, etc.) per agreement-only design
+    const premiumHMOKeys = {
+      'england': 'ast_agreement_hmo',
+      'wales': 'soc_agreement_hmo',
+      'scotland': 'prt_agreement_hmo',
+      'northern-ireland': 'private_tenancy_agreement_hmo',
+    };
 
     for (const jurisdiction of jurisdictions) {
-      for (const key of premiumKeys) {
-        it(`${jurisdiction} ast_premium contains ${key}`, () => {
-          const packContents = getPackContents({
-            product: 'ast_premium',
-            jurisdiction,
-          });
-
-          expect(packContents.find(p => p.key === key)).toBeDefined();
+      it(`${jurisdiction} ast_premium contains exactly 1 document (HMO agreement)`, () => {
+        const packContents = getPackContents({
+          product: 'ast_premium',
+          jurisdiction,
         });
-      }
+
+        // Should have exactly 1 document
+        expect(packContents.length).toBe(1);
+        // Should be the HMO agreement
+        expect(packContents[0].key).toBe(premiumHMOKeys[jurisdiction as keyof typeof premiumHMOKeys]);
+      });
     }
   });
 });

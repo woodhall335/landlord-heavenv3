@@ -36,8 +36,18 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 // Analytics and attribution
-import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import {
+  trackWizardStepCompleteWithAttribution,
+  trackTenancyPremiumSelectedAfterRecommendation,
+  trackTenancyStandardSelectedDespiteRecommendation,
+  TenancyPremiumRecommendationReason,
+} from '@/lib/analytics';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+
+// Premium recommendation
+import { detectPremiumRecommendation, type PremiumRecommendationResult } from '@/lib/utils/premium-recommendation';
+import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecommendationBanner';
+import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
 
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
@@ -669,12 +679,51 @@ interface SectionProps {
   caseId?: string;
 }
 
-// Product Section - jurisdiction-aware terminology
+// Product Section - jurisdiction-aware terminology with Premium recommendation
 const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
   const terms = getJurisdictionTerminology(jurisdiction);
 
+  // Detect if Premium should be recommended based on collected facts
+  const recommendation = useMemo(() => {
+    return detectPremiumRecommendation(facts, jurisdiction);
+  }, [facts, jurisdiction]);
+
+  // Track tier selection with recommendation context
+  const handleTierSelect = useCallback(async (tier: string) => {
+    const isPremium = tier === terms.premiumTier;
+
+    // Track if user selected tier after seeing a recommendation
+    if (recommendation.isRecommended) {
+      if (isPremium) {
+        trackTenancyPremiumSelectedAfterRecommendation({
+          reasons: recommendation.reasons as TenancyPremiumRecommendationReason[],
+          strength: recommendation.strength as 'strong' | 'moderate',
+          jurisdiction,
+        });
+      } else {
+        trackTenancyStandardSelectedDespiteRecommendation({
+          reasons: recommendation.reasons as TenancyPremiumRecommendationReason[],
+          strength: recommendation.strength as 'strong' | 'moderate',
+          jurisdiction,
+        });
+      }
+    }
+
+    await onUpdate({ product_tier: tier });
+  }, [onUpdate, terms.premiumTier, recommendation, jurisdiction]);
+
   return (
     <div className="space-y-6">
+      {/* Premium Recommendation Banner - Non-blocking */}
+      {recommendation.isRecommended && (
+        <PremiumRecommendationBanner
+          recommendation={recommendation}
+          jurisdiction={jurisdiction}
+          variant="compact"
+          dismissible={true}
+        />
+      )}
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <span className="text-red-500">*</span>
@@ -684,7 +733,7 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
-            onClick={() => onUpdate({ product_tier: terms.standardTier })}
+            onClick={() => handleTierSelect(terms.standardTier)}
             className={`p-4 rounded-lg border-2 text-left transition-colors ${
               facts.product_tier === terms.standardTier
                 ? 'border-[#7C3AED] bg-purple-50'
@@ -697,13 +746,20 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             </p>
           </button>
           <button
-            onClick={() => onUpdate({ product_tier: terms.premiumTier })}
-            className={`p-4 rounded-lg border-2 text-left transition-colors ${
+            onClick={() => handleTierSelect(terms.premiumTier)}
+            className={`p-4 rounded-lg border-2 text-left transition-colors relative ${
               facts.product_tier === terms.premiumTier
                 ? 'border-[#7C3AED] bg-purple-50'
+                : recommendation.isRecommended
+                ? 'border-purple-300 hover:border-purple-400 bg-purple-50/30'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
+            {recommendation.isRecommended && facts.product_tier !== terms.premiumTier && (
+              <span className="absolute -top-2 -right-2 px-2 py-0.5 text-xs font-semibold bg-primary text-white rounded-full">
+                Recommended
+              </span>
+            )}
             <h3 className="font-semibold text-gray-900">{terms.premiumTier}</h3>
             <p className="text-sm text-gray-600 mt-1">
               {terms.premiumDescription}
@@ -711,6 +767,19 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           </button>
         </div>
       </div>
+
+      {/* Clause Diff Preview - Compact version for wizard */}
+      {facts.product_tier !== terms.premiumTier && (
+        <div className="border-t border-gray-200 pt-6">
+          <ClauseDiffPreview
+            jurisdiction={jurisdiction}
+            variant="compact"
+            showUpgradeCTA={true}
+            onUpgradeClick={() => handleTierSelect(terms.premiumTier)}
+            maxClauses={3}
+          />
+        </div>
+      )}
 
       {/* Suitability Check - jurisdiction-aware */}
       <div className="border-t border-gray-200 pt-6">
@@ -999,7 +1068,7 @@ const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   );
 };
 
-// Tenants Section
+// Tenants Section - with HMO signal detection
 const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   const numTenants = parseInt(facts.number_of_tenants || '1', 10);
   const tenants = facts.tenants || [];
@@ -1013,6 +1082,9 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
     onUpdate({ tenants: newTenants });
   };
 
+  // Show HMO signal questions when 2+ tenants
+  const showHMOSignalQuestions = numTenants >= 2;
+
   return (
     <div className="space-y-6">
       <div>
@@ -1020,12 +1092,68 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           label="How many tenants are on the agreement?"
           value={facts.number_of_tenants}
           onChange={(v) => onUpdate({ number_of_tenants: v })}
-          options={['1', '2', '3', '4', '5']}
+          options={['1', '2', '3', '4', '5', '6+']}
           required
         />
       </div>
 
-      {Array.from({ length: numTenants }, (_, i) => (
+      {/* HMO Signal Detection Questions - shown when 2+ tenants */}
+      {showHMOSignalQuestions && (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-4">
+          <p className="text-sm text-blue-800 font-medium">
+            A few questions to help us recommend the right agreement:
+          </p>
+
+          <YesNoField
+            label="Are the tenants related to each other (e.g., family, partners)?"
+            value={facts.tenants_related}
+            onChange={(v) => {
+              // If not related, set unrelated_tenants flag
+              onUpdate({
+                tenants_related: v,
+                unrelated_tenants: v === false,
+              });
+            }}
+            helperText="Unrelated tenants may indicate an HMO arrangement"
+            required
+          />
+
+          {numTenants >= 3 && (
+            <YesNoField
+              label="Will tenants share kitchen, bathroom or living space?"
+              value={facts.shared_facilities}
+              onChange={(v) => onUpdate({ shared_facilities: v })}
+              helperText="Shared facilities with 3+ unrelated tenants commonly requires HMO licensing"
+              required
+            />
+          )}
+
+          <YesNoField
+            label="Will each tenant pay rent separately (rather than one joint payment)?"
+            value={facts.separate_rent_payments}
+            onChange={(v) => onUpdate({ separate_rent_payments: v })}
+            helperText="Separate payments may indicate room-by-room letting"
+            required
+          />
+
+          <YesNoField
+            label="Is this a room-by-room let (each tenant has exclusive use of specific room)?"
+            value={facts.room_by_room_let}
+            onChange={(v) => onUpdate({ room_by_room_let: v })}
+            helperText="Room-by-room lets may require different clauses"
+            required
+          />
+
+          <SelectField
+            label="What type of tenants?"
+            value={facts.tenant_type}
+            onChange={(v) => onUpdate({ tenant_type: v })}
+            options={['Working professionals', 'Students', 'Mixed', 'Family', 'Other']}
+          />
+        </div>
+      )}
+
+      {Array.from({ length: Math.min(numTenants, 6) }, (_, i) => (
         <div key={i} className="border-t border-gray-200 pt-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             {i === 0 ? 'Lead Tenant' : `Tenant ${i + 1}`}

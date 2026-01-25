@@ -99,8 +99,8 @@ describe('Jurisdiction-Specific Terminology', () => {
     const config = getJurisdictionConfig('northern-ireland');
     const template = await loadTemplate(config.templatePaths.modelClauses);
 
-    // Northern Ireland uses Private Tenancies (NI) Order 2006 terminology
-    expect(template).toContain('Private Tenancies (Northern Ireland) Order 2006');
+    // Northern Ireland uses Private Tenancies Act (NI) 2022 terminology
+    expect(template).toContain('Private Tenancies Act (Northern Ireland) 2022');
     expect(template).toContain('Northern Ireland');
 
     // Should NOT use English AST terminology
@@ -179,7 +179,7 @@ describe('Northern Ireland Premium Templates Use NI Terminology', () => {
     const config = getJurisdictionConfig('northern-ireland');
     const template = await loadTemplate(config.templatePaths.checkoutProcedure);
 
-    expect(template).toContain('Private Tenancies (Northern Ireland) Order 2006');
+    expect(template).toContain('Private Tenancies Act (Northern Ireland) 2022');
     // Should reference NI-specific bodies
     expect(template).toContain('Land & Property Services');
   });
@@ -207,7 +207,7 @@ describe('Jurisdiction Config Metadata', () => {
 
     expect(config.agreementTitle).toBe('Private Tenancy Agreement');
     expect(config.agreementDocumentType).toBe('private_tenancy_agreement');
-    expect(config.legalFramework).toContain('Private Tenancies (Northern Ireland) Order 2006');
+    expect(config.legalFramework).toContain('Private Tenancies Act (Northern Ireland) 2022');
   });
 
   test('England config has correct agreement title and type', () => {
