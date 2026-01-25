@@ -432,72 +432,73 @@ export const moneyClaimForms = {
 };
 
 // Money Claim Blog Posts (Informational)
+// Note: Some blog posts are planned but not yet created - commented out to prevent 404s
 export const moneyClaimBlogs = {
-  evidenceGuide: {
-    href: '/blog/money-claim-evidence-guide',
-    title: 'What Evidence You Need for a Money Claim',
-    description: 'Essential documents & photos',
-    icon: 'legal' as const,
-    type: 'guide' as const,
-  },
+  // evidenceGuide: {
+  //   href: '/blog/money-claim-evidence-guide',
+  //   title: 'What Evidence You Need for a Money Claim',
+  //   description: 'Essential documents & photos',
+  //   icon: 'legal' as const,
+  //   type: 'guide' as const,
+  // },
   fairWearAndTear: {
-    href: '/blog/fair-wear-and-tear-explained',
+    href: '/blog/fair-wear-tear-vs-tenant-damage',
     title: 'Fair Wear and Tear Explained',
     description: 'What you can and cannot claim',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   letterBeforeActionGuide: {
-    href: '/blog/letter-before-action-guide',
+    href: '/blog/how-to-write-letter-before-action-unpaid-rent',
     title: 'Letter Before Action Guide',
     description: 'How to write a proper LBA',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
-  mcolVsSolicitor: {
-    href: '/blog/mcol-vs-solicitor-comparison',
-    title: 'MCOL vs Solicitor: Which is Better?',
-    description: 'Cost & time comparison',
-    icon: 'legal' as const,
-    type: 'guide' as const,
-  },
+  // mcolVsSolicitor: {
+  //   href: '/blog/mcol-vs-solicitor-comparison',
+  //   title: 'MCOL vs Solicitor: Which is Better?',
+  //   description: 'Cost & time comparison',
+  //   icon: 'legal' as const,
+  //   type: 'guide' as const,
+  // },
   ccjConsequences: {
-    href: '/blog/ccj-tenant-consequences',
+    href: '/blog/what-is-county-court-judgment-landlords',
     title: 'What Happens When Tenant Gets CCJ',
     description: 'Credit impact & enforcement',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   interestCalculation: {
-    href: '/blog/calculating-interest-rent-arrears',
+    href: '/blog/calculating-interest-tenant-debt',
     title: 'Calculating Interest on Rent Arrears',
     description: 'Statutory 8% interest explained',
     icon: 'calculator' as const,
     type: 'guide' as const,
   },
-  depositVsCourt: {
-    href: '/blog/deposit-dispute-vs-court-claim',
-    title: 'Deposit Dispute vs Court Claim',
-    description: 'Which route to take',
-    icon: 'legal' as const,
-    type: 'guide' as const,
-  },
-  enforcingJudgment: {
-    href: '/blog/enforcing-money-judgment',
-    title: 'Enforcing a Money Judgment',
-    description: 'Post-CCJ collection options',
-    icon: 'legal' as const,
-    type: 'guide' as const,
-  },
-  tenantTracingGuide: {
-    href: '/blog/tracing-former-tenant',
-    title: 'How to Trace a Former Tenant',
-    description: 'Find tenants who left owing money',
-    icon: 'legal' as const,
-    type: 'guide' as const,
-  },
+  // depositVsCourt: {
+  //   href: '/blog/deposit-dispute-vs-court-claim',
+  //   title: 'Deposit Dispute vs Court Claim',
+  //   description: 'Which route to take',
+  //   icon: 'legal' as const,
+  //   type: 'guide' as const,
+  // },
+  // enforcingJudgment: {
+  //   href: '/blog/enforcing-money-judgment',
+  //   title: 'Enforcing a Money Judgment',
+  //   description: 'Post-CCJ collection options',
+  //   icon: 'legal' as const,
+  //   type: 'guide' as const,
+  // },
+  // tenantTracingGuide: {
+  //   href: '/blog/tracing-former-tenant',
+  //   title: 'How to Trace a Former Tenant',
+  //   description: 'Find tenants who left owing money',
+  //   icon: 'legal' as const,
+  //   type: 'guide' as const,
+  // },
   courtHearingPrep: {
-    href: '/blog/small-claims-hearing-preparation',
+    href: '/blog/small-claims-court-tips-landlords',
     title: 'Preparing for Small Claims Hearing',
     description: 'What to expect on the day',
     icon: 'legal' as const,
@@ -712,7 +713,7 @@ export const moneyClaimCleaningLinks = [
   moneyClaimGuides.gardenDamage,
   moneyClaimGuides.depositShortfall,
   moneyClaimBlogs.fairWearAndTear,
-  moneyClaimBlogs.evidenceGuide,
+  // moneyClaimBlogs.evidenceGuide, // Blog post not yet published
 ];
 
 // Utilities and bills focused links
@@ -722,7 +723,7 @@ export const moneyClaimUtilitiesLinks = [
   moneyClaimGuides.unpaidBills,
   moneyClaimGuides.councilTax,
   moneyClaimGuides.formerTenant,
-  moneyClaimBlogs.evidenceGuide,
+  // moneyClaimBlogs.evidenceGuide, // Blog post not yet published
 ];
 
 // Rent arrears focused links
@@ -754,9 +755,9 @@ export const moneyClaimEnforcementLinks = [
   productLinks.moneyClaim,
   moneyClaimGuides.ccjEnforcement,
   moneyClaimGuides.formerTenant,
-  moneyClaimBlogs.enforcingJudgment,
+  // moneyClaimBlogs.enforcingJudgment, // Blog post not yet published
   moneyClaimBlogs.ccjConsequences,
-  moneyClaimBlogs.tenantTracingGuide,
+  // moneyClaimBlogs.tenantTracingGuide, // Blog post not yet published
 ];
 
 // Form page focused links

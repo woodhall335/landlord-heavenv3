@@ -101,6 +101,7 @@ function getWizardSectionForField(field: string | null | undefined, section: str
     'money_claim.basis_of_claim': 'claim_details',
     'money_claim.charge_interest': 'claim_details',
     'money_claim.interest_start_date': 'claim_details',
+    'money_claim.deposit_deductions_confirmed': 'claim_details',
     'letter_before_claim_sent': 'preaction',
     'pap_letter_date': 'preaction',
   };

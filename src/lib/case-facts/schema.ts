@@ -277,6 +277,12 @@ export interface MoneyClaimFacts {
   other_charges_notes?: string | null; // from ArrearsSection
   other_costs_notes?: string | null; // from DamagesSection
   other_amounts_summary?: string | null; // from ClaimDetailsSection
+  // Claim type selection - used by wizard and rules engine
+  other_amounts_types?: string[] | null; // e.g., ['property_damage', 'cleaning', 'unpaid_utilities']
+  // Deposit deduction tracking - prevents double recovery
+  deposit_deductions_confirmed?: boolean | null;
+  // Tenant still in property flag
+  tenant_still_in_property?: boolean | null;
 }
 
 export interface MetaFacts {
@@ -771,6 +777,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     help_with_fees_needed: null,
     enforcement_preferences: null,
     enforcement_notes: null,
+    other_amounts_types: null,
+    deposit_deductions_confirmed: null,
+    tenant_still_in_property: null,
   },
   meta: {
     product: null,

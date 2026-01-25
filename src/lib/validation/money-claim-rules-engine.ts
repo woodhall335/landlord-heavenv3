@@ -356,6 +356,8 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    // Deposit deduction tracking - prevents double recovery
+    deposit_deductions_confirmed?: boolean;
   };
 
   // Issues nested (legacy)
