@@ -259,6 +259,7 @@ export interface RulesConfig {
   council_tax_rules: ValidationRule[];
   utilities_rules: ValidationRule[];
   evidence_intelligence_rules?: ValidationRule[];
+  preemptive_defence_rules?: ValidationRule[];
   summary?: SummaryConfig;
 }
 
@@ -663,6 +664,7 @@ function getRuleSection(ruleId: string): string {
   if (ruleId.startsWith('council_tax_')) return 'council_tax';
   if (ruleId.startsWith('utilities_')) return 'utilities';
   if (ruleId.startsWith('pap_')) return 'preaction';
+  if (ruleId.startsWith('defence_')) return 'defences';
   if (ruleId.includes('evidence')) return 'evidence';
   if (ruleId.includes('interest') || ruleId.includes('basis_of_claim') || ruleId.includes('claim_type')) return 'claim_details';
   if (ruleId.includes('enforcement') || ruleId.includes('timeline')) return 'next_steps';
@@ -726,6 +728,7 @@ export function getAllRules(config?: RulesConfig): ValidationRule[] {
     ...(rulesConfig.council_tax_rules || []),
     ...(rulesConfig.utilities_rules || []),
     ...(rulesConfig.evidence_intelligence_rules || []),
+    ...(rulesConfig.preemptive_defence_rules || []),
   ];
 }
 

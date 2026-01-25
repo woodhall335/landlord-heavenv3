@@ -581,6 +581,123 @@ evidence_intelligence_rules:
     field: null
 
 # =============================================================================
+# PRE-EMPTIVE DEFENCE WARNINGS (Educational - not blocking)
+# These help landlords understand what tenants commonly argue in court
+# =============================================================================
+
+preemptive_defence_rules:
+
+  # --- PROPERTY DAMAGE DEFENCES ---
+
+  - id: defence_wear_and_tear
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage')"
+    message: "Common defence: Wear & Tear. The tenant may argue the damage is normal wear from everyday living (e.g., carpet thinning, minor scuffs). Courts distinguish between damage (claimable) and fair wear (not claimable). Tip: Document the age and condition of items at check-in."
+    rationale: "Landlord and Tenant Act 1985 implies tenants only need to return property in a condition reflecting reasonable use."
+    evidence_hint: "Check-in inventory showing original condition is essential to counter this defence."
+    field: null
+
+  - id: defence_betterment
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage')"
+    message: "Common defence: Betterment. The tenant may argue you're seeking 'new for old'. Courts only award the item's depreciated value, not full replacement cost. Example: A 5-year-old carpet with 10-year lifespan = you can claim 50% of replacement cost."
+    rationale: "Courts apply betterment deductions to prevent landlords profiting from repairs."
+    evidence_hint: "Note the age and original purchase date of damaged items if possible."
+    field: null
+
+  - id: defence_pre_existing_damage
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && !has_inventory_checkin_evidence"
+    message: "Common defence: Pre-existing Damage. Without a check-in inventory, the tenant may claim the damage existed before they moved in. A signed, dated check-in report is your best protection against this."
+    rationale: "Burden of proof is on landlord to show damage occurred during tenancy."
+    evidence_hint: "Upload your check-in inventory if available. Without it, this defence is harder to counter."
+    field: null
+
+  # --- CLEANING COSTS DEFENCES ---
+
+  - id: defence_cleaning_standard
+    severity: warning
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning')"
+    message: "Common defence: Professional cleaning not required. Unless your tenancy agreement specifically requires professional cleaning on vacating, tenants only need to leave the property 'reasonably clean'. Courts may reduce claims for excessive cleaning standards."
+    rationale: "Case law establishes tenants need not return property in 'better than received' condition."
+    evidence_hint: "Check your tenancy agreement for cleaning clauses. Photos showing poor condition strengthen your claim."
+    field: null
+
+  - id: defence_cleaning_already_dirty
+    severity: warning
+    applies_to: [cleaning]
+    applies_when:
+      - condition: "claim_types.includes('cleaning') && !has_inventory_checkin_evidence"
+    message: "Common defence: Property wasn't clean at check-in. Without a check-in inventory showing cleanliness standards, tenants may argue they left it in similar or better condition than received."
+    rationale: "Tenants only need to return property in comparable condition to how they received it."
+    evidence_hint: "Check-in photos showing clean condition are valuable evidence."
+    field: null
+
+  # --- UNPAID UTILITIES DEFENCES ---
+
+  - id: defence_utilities_no_contractual_liability
+    severity: warning
+    applies_to: [unpaid_utilities]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_utilities')"
+    message: "Common defence: No contractual liability. The tenant may argue there's no clause in the tenancy agreement making them responsible for utilities, or that the utilities were in the landlord's name. Ensure you have clear contractual evidence."
+    rationale: "Utility liability depends on contract terms and account holder status."
+    evidence_hint: "Upload the tenancy agreement showing the utilities clause."
+    field: null
+
+  - id: defence_utilities_disputed_amounts
+    severity: warning
+    applies_to: [unpaid_utilities]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_utilities')"
+    message: "Common defence: Disputed meter readings or amounts. Tenants may dispute final meter readings or claim the bills include periods they weren't in occupation. Keep dated meter reading records."
+    rationale: "Accurate meter readings at check-in/out prevent disputes."
+    evidence_hint: "Photos of meter readings at check-in and check-out are strong evidence."
+    field: null
+
+  # --- RENT ARREARS DEFENCES ---
+
+  - id: defence_rent_payments_made
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears')"
+    message: "Common defence: Payments were made. The tenant may produce bank records showing payments you haven't credited. Ensure your rent ledger is accurate and reconciled with your bank statements before proceeding."
+    rationale: "Courts will compare both parties' payment records."
+    evidence_hint: "Cross-check your arrears schedule against your bank statements."
+    field: null
+
+  - id: defence_rent_disrepair_counterclaim
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears')"
+    message: "Common defence: Set-off for disrepair. Tenants often counterclaim for breach of repair obligations, seeking to reduce or eliminate arrears. If there were outstanding repair issues, the tenant may argue rent was withheld legitimately."
+    rationale: "Tenants can counterclaim for damages from landlord breaches under s.11 Landlord & Tenant Act 1985."
+    evidence_hint: "Document any repair requests and your responses. A good repair record weakens this defence."
+    field: null
+
+  # --- COUNCIL TAX DEFENCES ---
+
+  - id: defence_council_tax_liability_unclear
+    severity: warning
+    applies_to: [unpaid_council_tax]
+    applies_when:
+      - condition: "claim_types.includes('unpaid_council_tax')"
+    message: "Common defence: Tenant was not liable. Council tax liability depends on who was the 'resident' and whether the tenancy agreement clearly assigns liability. In some cases (e.g., HMOs), the landlord is liable by law regardless of contract terms."
+    rationale: "Council tax liability rules in Local Government Finance Act 1992 can override contract terms."
+    evidence_hint: "Ensure your property type and tenancy terms support tenant liability."
+    field: null
+
+# =============================================================================
 # VALIDATION SUMMARY CONFIG
 # =============================================================================
 
@@ -626,3 +743,6 @@ summary:
     - id: next_steps
       label: "Next Steps"
       rules: [enforcement_review_suggested, timeline_review_suggested]
+    - id: defences
+      label: "Likely Tenant Defences"
+      rules: [defence_wear_and_tear, defence_betterment, defence_pre_existing_damage, defence_cleaning_standard, defence_cleaning_already_dirty, defence_utilities_no_contractual_liability, defence_utilities_disputed_amounts, defence_rent_payments_made, defence_rent_disrepair_counterclaim, defence_council_tax_liability_unclear]
