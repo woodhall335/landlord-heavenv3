@@ -59,11 +59,17 @@ export interface MoneyClaimCase {
   landlord_phone?: string;
   claimant_reference?: string;
 
-  // Defendant / tenant
+  // Defendant / tenant (Defendant 1)
   tenant_full_name: string;
-  tenant_2_name?: string;
   property_address: string;
   property_postcode?: string;
+
+  // Second Defendant (if joint tenancy)
+  has_joint_defendants?: boolean;
+  tenant_2_name?: string;
+  tenant_2_address_line1?: string;
+  tenant_2_address_line2?: string;
+  tenant_2_postcode?: string;
 
   // Tenancy / rent
   rent_amount: number;
@@ -311,9 +317,15 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
 
     // Defendant
     tenant_full_name: claim.tenant_full_name,
-    tenant_2_name: claim.tenant_2_name,
     property_address: claim.property_address,
     property_postcode: claim.property_postcode,
+
+    // Joint Defendant (Defendant 2)
+    has_joint_defendants: claim.has_joint_defendants,
+    tenant_2_name: claim.tenant_2_name,
+    tenant_2_address_line1: claim.tenant_2_address_line1,
+    tenant_2_address_line2: claim.tenant_2_address_line2,
+    tenant_2_postcode: claim.tenant_2_postcode,
 
     // Tenancy / rent
     tenancy_start_date: claim.tenancy_start_date || '',

@@ -581,6 +581,69 @@ evidence_intelligence_rules:
     field: null
 
 # =============================================================================
+# LEGAL P0 WARNINGS (Critical legal compliance issues)
+# These are high-priority warnings that could affect case validity
+# =============================================================================
+
+legal_compliance_rules:
+
+  # --- LIMITATION PERIOD (6 YEARS UNDER LIMITATION ACT 1980) ---
+
+  - id: limitation_period_warning
+    severity: warning
+    applies_to: [all]
+    applies_when:
+      - condition: "facts.tenancy_start_date && (new Date().getTime() - new Date(facts.tenancy_start_date).getTime()) > (5.5 * 365 * 24 * 60 * 60 * 1000)"
+    message: "Limitation period risk: Your tenancy started over 5.5 years ago. Under the Limitation Act 1980, you have 6 years from when a debt became due to bring a claim. Any rent arrears or other debts older than 6 years may be time-barred. Consider filing your claim promptly."
+    rationale: "Section 5 of the Limitation Act 1980 imposes a 6-year limitation period for actions founded on simple contract (including rent arrears). Each unpaid rent payment has its own limitation period starting from when it became due."
+    evidence_hint: "Review your arrears schedule to ensure no individual arrears entries are older than 6 years. Oldest debts should be listed first in your schedule."
+    field: tenancy_start_date
+
+  - id: limitation_period_arrears_warning
+    severity: warning
+    applies_to: [rent_arrears]
+    applies_when:
+      - condition: "claim_types.includes('rent_arrears') && arrears_items && arrears_items.length > 0 && arrears_items.some(item => item.period_start && (new Date().getTime() - new Date(item.period_start).getTime()) > (5.5 * 365 * 24 * 60 * 60 * 1000))"
+    message: "Limitation period risk: Some of your arrears entries date back over 5.5 years. Debts older than 6 years from when they became due are likely time-barred under the Limitation Act 1980. The court may strike out those entries."
+    rationale: "Each rent payment has its own 6-year limitation period. The clock starts when each payment became due, not when the tenancy started."
+    evidence_hint: "Remove any arrears entries older than 6 years from your schedule before filing, or seek legal advice about whether acknowledgment or part-payment has restarted the limitation period."
+    field: arrears_items
+
+  # --- PROPERTY DAMAGE BETTERMENT (Depreciation guidance) ---
+
+  - id: property_damage_betterment_warning
+    severity: warning
+    applies_to: [property_damage]
+    applies_when:
+      - condition: "claim_types.includes('property_damage') && damage_items && damage_items.length > 0"
+    message: "Betterment deduction required: Courts will only award the depreciated value of damaged items, not full replacement cost. For example, a 5-year-old carpet with a 10-year lifespan is worth approximately 50% of a new carpet. Consider whether your claim amounts reflect fair depreciated values to avoid the court reducing your award."
+    rationale: "The legal principle of 'betterment' prevents landlords from profiting from repairs by receiving brand new items when old ones were damaged. Courts routinely apply depreciation to damage claims."
+    evidence_hint: "Document the age, condition, and original purchase date of each damaged item. Consider applying a depreciation percentage (e.g., 10% per year for carpets, 15% for appliances) to your claimed amounts."
+    field: money_claim.damage_items
+
+  # --- DEPOSIT DEDUCTION OVERLAP ---
+
+  - id: deposit_deduction_overlap_warning
+    severity: warning
+    applies_to: [property_damage, cleaning, unpaid_utilities, unpaid_council_tax]
+    applies_when:
+      - condition: "facts.money_claim?.deposit_deductions_confirmed === true && (claim_types.includes('property_damage') || claim_types.includes('cleaning') || claim_types.includes('unpaid_utilities') || claim_types.includes('unpaid_council_tax'))"
+    message: "Double recovery risk: You indicated that deposit deductions have been made for some of these amounts. You cannot claim through the court for amounts you have already recovered from the deposit. Ensure the amounts claimed exclude any deposit deductions already received, or the court may reduce your award and you may face adverse costs."
+    rationale: "The principle against double recovery means you cannot be compensated twice for the same loss. If £500 damage was deducted from the deposit, you can only claim any excess (e.g., if total damage was £800, you can claim £300)."
+    evidence_hint: "Provide a clear breakdown showing: (1) total damage/costs, (2) amount deducted from deposit, (3) net amount being claimed. Include deposit scheme correspondence as evidence."
+    field: money_claim.deposit_deductions_confirmed
+
+  - id: deposit_deduction_check_required
+    severity: suggestion
+    applies_to: [property_damage, cleaning, unpaid_utilities, unpaid_council_tax]
+    applies_when:
+      - condition: "facts.money_claim?.deposit_deductions_confirmed === undefined && (claim_types.includes('property_damage') || claim_types.includes('cleaning') || claim_types.includes('unpaid_utilities') || claim_types.includes('unpaid_council_tax'))"
+    message: "Have you made deposit deductions? If you have already deducted amounts from the tenant's deposit for any of these costs, you should only claim the difference through the court. Please confirm whether deposit deductions have been made."
+    rationale: "Ensures users consider deposit deductions before filing to avoid double recovery issues."
+    evidence_hint: "Check your deposit scheme records or adjudication outcome."
+    field: money_claim.deposit_deductions_confirmed
+
+# =============================================================================
 # PRE-EMPTIVE DEFENCE WARNINGS (Educational - not blocking)
 # These help landlords understand what tenants commonly argue in court
 # =============================================================================
@@ -743,6 +806,9 @@ summary:
     - id: next_steps
       label: "Next Steps"
       rules: [enforcement_review_suggested, timeline_review_suggested]
+    - id: legal_compliance
+      label: "Legal Compliance"
+      rules: [limitation_period_warning, limitation_period_arrears_warning, property_damage_betterment_warning, deposit_deduction_overlap_warning, deposit_deduction_check_required]
     - id: defences
       label: "Likely Tenant Defences"
       rules: [defence_wear_and_tear, defence_betterment, defence_pre_existing_damage, defence_cleaning_standard, defence_cleaning_already_dirty, defence_utilities_no_contractual_liability, defence_utilities_disputed_amounts, defence_rent_payments_made, defence_rent_disrepair_counterclaim, defence_council_tax_liability_unclear]

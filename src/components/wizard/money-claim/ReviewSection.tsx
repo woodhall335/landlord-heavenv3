@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   RiCheckboxCircleLine,
@@ -10,6 +10,7 @@ import {
   RiArrowRightLine,
   RiArrowUpLine,
   RiFileListLine,
+  RiImageLine,
 } from 'react-icons/ri';
 import {
   validateMoneyClaimClient,
@@ -18,6 +19,16 @@ import {
   type ValidationIssue,
   type ClientValidationResult,
 } from '@/lib/validation/money-claim-client-validator';
+import { OutcomeConfidenceIndicator } from './OutcomeConfidenceIndicator';
+import { CourtFeeEstimator } from './CourtFeeEstimator';
+import { EvidenceGallery, getRelevantEvidenceCategories } from './EvidenceGallery';
+import { buildEvidenceContext, type EvidenceContext } from '@/lib/evidence/money-claim-evidence-classifier';
+import {
+  trackOutcomeConfidenceShown,
+  trackCourtFeeEstimatorViewed,
+  trackEvidenceGalleryViewed,
+  trackEvidenceWarningResolved,
+} from '@/lib/analytics';
 
 interface SectionProps {
   facts?: any;
@@ -385,12 +396,78 @@ export const ReviewSection: React.FC<SectionProps> = ({
   const interestRate = moneyClaim.interest_rate || 8;
   const router = useRouter();
   const [previewing, setPreviewing] = useState(false);
+  const [showEvidenceGallery, setShowEvidenceGallery] = useState(false);
 
   // Run validation
   const validation = useMemo(() => validateMoneyClaimClient(facts || {}), [facts]);
 
   // Calculate claim types for display
   const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
+
+  // Build evidence context for the intelligence components
+  const evidenceContext = useMemo(() => {
+    const files = facts?.evidence?.files || [];
+    return buildEvidenceContext(files);
+  }, [facts?.evidence?.files]);
+
+  // Calculate totals for court fee estimator
+  const totals = useMemo(() => calculateTotalsBreakdown(facts), [facts]);
+
+  // Determine claim type IDs for evidence gallery filtering
+  const claimTypeIds = useMemo(() => claimTypes.map((t) => t.id), [claimTypes]);
+
+  // Get relevant evidence categories based on claim types
+  const relevantEvidenceCategories = useMemo(
+    () => getRelevantEvidenceCategories(claimTypeIds),
+    [claimTypeIds]
+  );
+
+  // Check if there are evidence-related warnings
+  const hasEvidenceWarnings = useMemo(() => {
+    const evidenceRuleIds = [
+      'property_damage_missing_photo_evidence',
+      'property_damage_missing_inventory_evidence',
+      'property_damage_missing_quote_invoice',
+      'cleaning_missing_checkout_photos',
+      'cleaning_missing_invoice',
+      'rent_arrears_missing_rent_ledger',
+      'utilities_missing_bill_evidence',
+      'council_tax_missing_statement',
+      'no_evidence_uploaded',
+    ];
+    return validation.warnings.some((w) => evidenceRuleIds.includes(w.id));
+  }, [validation.warnings]);
+
+  // Track analytics when intelligence components are shown
+  useEffect(() => {
+    if (validation.totalClaimAmount > 0) {
+      // Track outcome confidence shown
+      trackOutcomeConfidenceShown({
+        claimTypes: claimTypeIds,
+      });
+
+      // Track court fee estimator viewed
+      const feeBand = totals.grandTotal <= 300 ? 'under_300' :
+        totals.grandTotal <= 500 ? '300_500' :
+        totals.grandTotal <= 1000 ? '500_1000' :
+        totals.grandTotal <= 5000 ? '1000_5000' :
+        totals.grandTotal <= 10000 ? '5000_10000' :
+        totals.grandTotal <= 100000 ? '10000_100000' : 'over_100000';
+      trackCourtFeeEstimatorViewed({
+        amountBand: feeBand,
+      });
+    }
+  }, [validation.totalClaimAmount, claimTypeIds, totals.grandTotal]);
+
+  // Track evidence gallery viewed
+  const handleEvidenceGalleryToggle = () => {
+    if (!showEvidenceGallery) {
+      trackEvidenceGalleryViewed({
+        claimTypes: claimTypeIds,
+      });
+    }
+    setShowEvidenceGallery(!showEvidenceGallery);
+  };
 
   // Handle navigation to a wizard section (scroll to top and trigger section change)
   const handleNavigateToSection = (section: string) => {
@@ -483,6 +560,62 @@ export const ReviewSection: React.FC<SectionProps> = ({
         facts={facts}
         claimTypes={claimTypes}
       />
+
+      {/* Outcome Confidence Indicator */}
+      {claimTypes.length > 0 && (
+        <OutcomeConfidenceIndicator
+          facts={facts || {}}
+          showDetails={true}
+          onViewImprovements={() => handleNavigateToSection('evidence')}
+        />
+      )}
+
+      {/* Court Fee Estimator */}
+      {totals.grandTotal > 0 && (
+        <CourtFeeEstimator
+          claimAmount={totals.grandTotal}
+          showDetails={true}
+        />
+      )}
+
+      {/* Evidence Gallery - Show when evidence-related warnings exist */}
+      {hasEvidenceWarnings && relevantEvidenceCategories.length > 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <RiImageLine className="w-5 h-5 text-amber-600" />
+              <h3 className="font-semibold text-amber-900">Strengthen Your Evidence</h3>
+            </div>
+            <button
+              type="button"
+              onClick={handleEvidenceGalleryToggle}
+              className="text-sm text-amber-700 hover:text-amber-900 font-medium"
+            >
+              {showEvidenceGallery ? 'Hide examples' : 'View evidence examples'}
+            </button>
+          </div>
+          <p className="text-sm text-amber-800">
+            Your case has evidence-related warnings. Good evidence significantly improves your chances of success.
+          </p>
+          {showEvidenceGallery && (
+            <div className="mt-3">
+              <EvidenceGallery
+                filterCategories={relevantEvidenceCategories}
+                defaultExpanded={false}
+                compact={true}
+              />
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => handleNavigateToSection('evidence')}
+            className="text-sm text-amber-700 hover:text-amber-900 font-medium flex items-center gap-1"
+          >
+            <RiArrowUpLine className="w-4 h-4" />
+            Go to Evidence section
+          </button>
+        </div>
+      )}
 
       {/* Validation Panel */}
       <div>

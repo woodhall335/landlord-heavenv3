@@ -2679,7 +2679,19 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextRequired(form, 'Text21', claimantDetails, ctx);
 
   // Defendant details (large text box) - REQUIRED
-  const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+  // Include second defendant if joint tenancy
+  let defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+  if (data.has_joint_defendants && data.tenant_2_name) {
+    // Build second defendant address - use their own address if provided, otherwise use property address
+    const defendant2Address = data.tenant_2_address_line1
+      ? [
+          data.tenant_2_address_line1,
+          data.tenant_2_address_line2,
+          data.tenant_2_postcode
+        ].filter(Boolean).join(', ')
+      : data.property_address;
+    defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2Address}`;
+  }
   setTextRequired(form, 'Text22', defendantDetails, ctx);
 
   // Brief details of claim - REQUIRED

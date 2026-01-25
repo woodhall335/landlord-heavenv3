@@ -1,8 +1,20 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { RiCheckboxCircleLine, RiInformationLine } from 'react-icons/ri';
+import {
+  RiCheckboxCircleLine,
+  RiInformationLine,
+  RiFileSearchLine,
+  RiLightbulbLine,
+  RiAlertLine,
+} from 'react-icons/ri';
 import { UploadField, EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
+import {
+  buildEvidenceContext,
+  classifyAllEvidence,
+  type EvidenceClassificationSummary,
+  type MoneyClaimEvidenceType,
+} from '@/lib/evidence/money-claim-evidence-classifier';
 
 interface SectionProps {
   facts: any;
@@ -251,6 +263,111 @@ export const EvidenceSection: React.FC<SectionProps> = ({
     (c) => getFilesForCategory(c.id).length > 0
   ).length;
 
+  // Classify uploaded evidence for "What we've detected"
+  const evidenceClassification = useMemo(() => {
+    if (existingFiles.length === 0) return null;
+    // Map files to the format expected by the classifier
+    // EvidenceFileSummary has fileName (not name), and no type property
+    const filesForClassification = existingFiles.map((f) => ({
+      id: f.id,
+      name: f.fileName,
+      type: undefined, // Type is inferred from filename by the classifier
+      category: f.category,
+    }));
+    return classifyAllEvidence(filesForClassification);
+  }, [existingFiles]);
+
+  // Build evidence context for "What we still recommend"
+  const evidenceContext = useMemo(() => {
+    const filesForContext = existingFiles.map((f) => ({
+      id: f.id,
+      name: f.fileName,
+      type: undefined, // Type is inferred from filename by the classifier
+      category: f.category,
+    }));
+    return buildEvidenceContext(filesForContext);
+  }, [existingFiles]);
+
+  // Get missing recommended evidence based on claim types
+  const missingRecommendations = useMemo(() => {
+    const recommendations: { id: string; message: string; priority: 'high' | 'medium' }[] = [];
+
+    if (selectedClaimTypes.has('rent_arrears') && !evidenceContext.has_rent_ledger_bank_statement_evidence) {
+      recommendations.push({
+        id: 'rent_ledger',
+        message: 'Upload rent ledger or bank statements showing missed payments',
+        priority: 'high',
+      });
+    }
+
+    if ((selectedClaimTypes.has('property_damage') || selectedClaimTypes.has('cleaning'))) {
+      if (!evidenceContext.has_photo_evidence) {
+        recommendations.push({
+          id: 'photos',
+          message: 'Add photos showing the damage or property condition',
+          priority: 'high',
+        });
+      }
+      if (!evidenceContext.has_any_inventory_evidence) {
+        recommendations.push({
+          id: 'inventory',
+          message: 'Upload check-in/check-out inventory for before/after comparison',
+          priority: 'high',
+        });
+      }
+      if (!evidenceContext.has_invoice_quote_receipt_evidence) {
+        recommendations.push({
+          id: 'invoices',
+          message: 'Add repair quotes or cleaning invoices to substantiate costs',
+          priority: 'medium',
+        });
+      }
+    }
+
+    if (selectedClaimTypes.has('unpaid_utilities') && !evidenceContext.has_utility_bill_evidence) {
+      recommendations.push({
+        id: 'utility_bills',
+        message: 'Upload utility bills for the tenancy period',
+        priority: 'high',
+      });
+    }
+
+    if (selectedClaimTypes.has('unpaid_council_tax') && !evidenceContext.has_council_tax_statement_evidence) {
+      recommendations.push({
+        id: 'council_tax',
+        message: 'Upload council tax statements or bills',
+        priority: 'high',
+      });
+    }
+
+    if (!evidenceContext.has_tenancy_agreement_evidence) {
+      recommendations.push({
+        id: 'tenancy_agreement',
+        message: 'Upload your tenancy agreement (important for all claim types)',
+        priority: 'medium',
+      });
+    }
+
+    return recommendations;
+  }, [selectedClaimTypes, evidenceContext]);
+
+  // Map evidence type to display label
+  const getEvidenceTypeLabel = (type: MoneyClaimEvidenceType): string => {
+    const labels: Record<MoneyClaimEvidenceType, string> = {
+      photo: 'Photos',
+      tenancy_agreement: 'Tenancy Agreement',
+      inventory_checkin: 'Check-in Inventory',
+      inventory_checkout: 'Check-out Inventory',
+      invoice_quote_receipt: 'Invoices/Quotes',
+      rent_ledger_bank_statement: 'Rent Records',
+      correspondence: 'Correspondence',
+      council_tax_statement: 'Council Tax',
+      utility_bill: 'Utility Bills',
+      other: 'Other Documents',
+    };
+    return labels[type] || type;
+  };
+
   return (
     <div className="space-y-6">
       <p className="text-sm text-gray-600">
@@ -280,6 +397,65 @@ export const EvidenceSection: React.FC<SectionProps> = ({
           )}
         </div>
       </div>
+
+      {/* What we've detected - Evidence Intelligence */}
+      {evidenceClassification && evidenceClassification.items.length > 0 && (
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <RiFileSearchLine className="w-5 h-5 text-green-600" />
+            <h3 className="font-semibold text-green-900">What we&apos;ve detected</h3>
+          </div>
+          <p className="text-sm text-green-800">
+            Based on your uploads, we&apos;ve identified the following evidence types:
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {Array.from(evidenceClassification.typesPresent).map((type) => (
+              <span
+                key={type}
+                className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"
+              >
+                <RiCheckboxCircleLine className="w-3 h-3" />
+                {getEvidenceTypeLabel(type)}
+              </span>
+            ))}
+          </div>
+          {evidenceClassification.items.length > 3 && (
+            <p className="text-xs text-green-700 italic">
+              {evidenceClassification.items.length} documents analyzed
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* What we still recommend - Missing Evidence */}
+      {missingRecommendations.length > 0 && selectedClaimTypes.size > 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <RiLightbulbLine className="w-5 h-5 text-amber-600" />
+            <h3 className="font-semibold text-amber-900">What we still recommend</h3>
+          </div>
+          <p className="text-sm text-amber-800">
+            To strengthen your case, consider adding:
+          </p>
+          <ul className="space-y-2">
+            {missingRecommendations.map((rec) => (
+              <li key={rec.id} className="flex items-start gap-2">
+                <RiAlertLine
+                  className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                    rec.priority === 'high' ? 'text-amber-600' : 'text-amber-500'
+                  }`}
+                />
+                <span className="text-sm text-amber-900">
+                  {rec.message}
+                  {rec.priority === 'high' && (
+                    <span className="ml-1 text-xs text-amber-700 font-medium">(recommended)</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Claim-specific context */}
       {selectedClaimTypes.size > 0 && (

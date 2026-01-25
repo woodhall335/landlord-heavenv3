@@ -217,6 +217,75 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         </div>
       )}
 
+      {/* Deposit Deductions Question */}
+      <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <div className="flex items-start gap-3">
+          <div className="text-xl">💰</div>
+          <div>
+            <h3 className="text-sm font-semibold text-charcoal">
+              Have you already made deposit deductions for any of these amounts?
+            </h3>
+            <p className="text-xs text-gray-600 mt-1">
+              If you&apos;ve deducted amounts from the tenant&apos;s deposit (e.g., for cleaning
+              or damage), you can only claim the difference through the court. This avoids
+              &quot;double recovery&quot; which courts will penalise.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-2 ml-9">
+          <label
+            className={`
+              flex items-center p-3 border rounded-lg cursor-pointer transition-all
+              ${moneyClaim.deposit_deductions_confirmed === true
+                ? 'border-amber-500 bg-white ring-2 ring-amber-200'
+                : 'border-gray-200 bg-white hover:border-gray-300'}
+            `}
+          >
+            <input
+              type="radio"
+              name="deposit_deductions"
+              checked={moneyClaim.deposit_deductions_confirmed === true}
+              onChange={() => updateMoneyClaim('deposit_deductions_confirmed', true)}
+              className="mr-3"
+            />
+            <div>
+              <span className="font-medium text-gray-900">
+                Yes, I&apos;ve made deposit deductions
+              </span>
+              <p className="text-xs text-gray-500 mt-0.5">
+                The amounts I&apos;m claiming are only for costs NOT covered by the deposit
+              </p>
+            </div>
+          </label>
+
+          <label
+            className={`
+              flex items-center p-3 border rounded-lg cursor-pointer transition-all
+              ${moneyClaim.deposit_deductions_confirmed === false
+                ? 'border-amber-500 bg-white ring-2 ring-amber-200'
+                : 'border-gray-200 bg-white hover:border-gray-300'}
+            `}
+          >
+            <input
+              type="radio"
+              name="deposit_deductions"
+              checked={moneyClaim.deposit_deductions_confirmed === false}
+              onChange={() => updateMoneyClaim('deposit_deductions_confirmed', false)}
+              className="mr-3"
+            />
+            <div>
+              <span className="font-medium text-gray-900">
+                No deposit deductions have been made
+              </span>
+              <p className="text-xs text-gray-500 mt-0.5">
+                I&apos;m claiming the full amounts (or there was no deposit)
+              </p>
+            </div>
+          </label>
+        </div>
+      </div>
+
       {/* Other amounts and narrative */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-charcoal">
