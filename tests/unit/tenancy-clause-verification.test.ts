@@ -23,6 +23,8 @@ import {
   getPremiumOnlyClauseIds,
   getBothTiersClauseIds,
   getHMOClauseIds,
+  getRequiredHMOClauseIdsForJurisdiction,
+  getExpectedClausesForJurisdictionTier,
   readTemplateFile,
   generateDiffReport,
   type ClauseJurisdiction,
@@ -79,7 +81,7 @@ describe('Premium-Only Clause Verification', () => {
     'northern-ireland',
   ];
 
-  describe('Premium templates MUST contain premium-only clause markers', () => {
+  describe('Premium templates MUST contain required premium-only clause markers', () => {
     for (const jurisdiction of jurisdictions) {
       describe(`${jurisdiction}`, () => {
         const templatePath = TEMPLATE_PATHS[jurisdiction].premium;
@@ -93,10 +95,11 @@ describe('Premium-Only Clause Verification', () => {
           expect(templateContent).not.toBeNull();
         });
 
-        // Test each HMO clause specifically
-        const hmoClauseIds = getHMOClauseIds();
-        for (const clauseId of hmoClauseIds) {
-          it(`should contain HMO clause marker: ${clauseId}`, () => {
+        // Test each REQUIRED HMO clause specifically for this jurisdiction
+        // Uses getRequiredHMOClauseIdsForJurisdiction which respects optional/excluded clauses
+        const requiredHmoClauseIds = getRequiredHMOClauseIdsForJurisdiction(jurisdiction);
+        for (const clauseId of requiredHmoClauseIds) {
+          it(`should contain required HMO clause marker: ${clauseId}`, () => {
             expect(templateContent).not.toBeNull();
             expect(hasClauseMarker(templateContent!, clauseId)).toBe(true);
           });

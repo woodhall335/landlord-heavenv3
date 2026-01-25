@@ -120,7 +120,7 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
     // JOINT AND SEVERAL LIABILITY
     // Maps to: <!-- CLAUSE:JOINT_LIABILITY --> in HBS templates
     {
-      canonicalId: 'JOINT_LIABILITY',
+      canonicalId: 'JOINT_LIABILITY' as ClauseId,
       id: 'joint_liability',
       title: 'Joint and Several Liability',
       standardPreview: `The ${terms.tenant} shall pay the Rent...`,
@@ -128,13 +128,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `If one ${terms.tenant.toLowerCase()} stops paying or leaves, you can pursue any other ${terms.tenant.toLowerCase()} for the full rent amount. Without this clause, you may only be able to claim each ${terms.tenant.toLowerCase()}'s individual share.`,
       legalBasis: 'Common law principle of joint and several liability',
       isHMO: true,
-      category: 'liability',
+      category: 'liability' as const,
     },
 
     // HMO SHARED FACILITIES
     // Maps to: <!-- CLAUSE:SHARED_FACILITIES --> in HBS templates
     {
-      canonicalId: 'SHARED_FACILITIES',
+      canonicalId: 'SHARED_FACILITIES' as ClauseId,
       id: 'shared_facilities',
       title: 'Shared Facilities and Communal Areas',
       standardPreview: `The ${terms.tenant} shall keep the Property clean...`,
@@ -142,13 +142,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Clearly defines responsibilities for shared spaces. Without this, disputes between ${terms.tenant.toLowerCase()}s about cleaning and maintenance become your problem. Essential for HMO licensing compliance.`,
       legalBasis: `${terms.hmoAct} - HMO management regulations`,
       isHMO: true,
-      category: 'hmo',
+      category: 'hmo' as const,
     },
 
     // TENANT REPLACEMENT
     // Maps to: <!-- CLAUSE:TENANT_REPLACEMENT --> in HBS templates
     {
-      canonicalId: 'TENANT_REPLACEMENT',
+      canonicalId: 'TENANT_REPLACEMENT' as ClauseId,
       id: 'tenant_replacement',
       title: '${terms.tenant} Replacement Procedure',
       standardPreview: `Assignment of this ${terms.tenancy} is not permitted...`,
@@ -156,13 +156,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Gives you control over who lives in your property and ensures ${terms.tenant.toLowerCase()}s can't simply walk away. The remaining ${terms.tenant.toLowerCase()}s stay liable until you approve a replacement.`,
       legalBasis: 'Contractual assignment provisions',
       isHMO: true,
-      category: 'hmo',
+      category: 'hmo' as const,
     },
 
     // GUARANTOR
     // Maps to: <!-- CLAUSE:GUARANTOR --> in HBS templates
     {
-      canonicalId: 'GUARANTOR',
+      canonicalId: 'GUARANTOR' as ClauseId,
       id: 'guarantor',
       title: 'Guarantor Agreement',
       standardPreview: '[Not included in Standard agreement]',
@@ -170,13 +170,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Provides a financial safety net when ${terms.tenant.toLowerCase()}s have limited credit history (students, young professionals). The guarantor becomes liable if the ${terms.tenant.toLowerCase()} defaults.`,
       legalBasis: 'Contract law - guarantee agreements',
       isHMO: false,
-      category: 'financial',
+      category: 'financial' as const,
     },
 
     // RENT INCREASE
     // Maps to: <!-- CLAUSE:RENT_REVIEW --> in HBS templates
     {
-      canonicalId: 'RENT_REVIEW',
+      canonicalId: 'RENT_REVIEW' as ClauseId,
       id: 'rent_review',
       title: 'Rent Review Provisions',
       standardPreview: '[Rent increase requires Section 13 notice]',
@@ -186,13 +186,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
         ? 'Note: Subject to PRT rent increase controls'
         : 'Housing Act 1988 - contractual rent review',
       isHMO: false,
-      category: 'financial',
+      category: 'financial' as const,
     },
 
     // ANTI-SUBLETTING
     // Maps to: <!-- CLAUSE:ANTI_SUBLET --> in HBS templates
     {
-      canonicalId: 'ANTI_SUBLET',
+      canonicalId: 'ANTI_SUBLET' as ClauseId,
       id: 'anti_sublet',
       title: 'Anti-Subletting and Short-Let Prohibition',
       standardPreview: `The ${terms.tenant} shall not sublet the Property...`,
@@ -200,13 +200,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Explicitly prevents ${terms.tenant.toLowerCase()}s from running unlicensed Airbnb operations from your property. Gives clear grounds for possession if breached.`,
       legalBasis: 'Contractual prohibition - supported by Housing Act grounds for possession',
       isHMO: false,
-      category: 'control',
+      category: 'control' as const,
     },
 
     // PROFESSIONAL CLEANING
     // Maps to: <!-- CLAUSE:PROFESSIONAL_CLEANING --> in HBS templates
     {
-      canonicalId: 'PROFESSIONAL_CLEANING',
+      canonicalId: 'PROFESSIONAL_CLEANING' as ClauseId,
       id: 'professional_cleaning',
       title: 'Professional Cleaning Requirement',
       standardPreview: `The ${terms.tenant} shall return the Property in good condition...`,
@@ -214,13 +214,13 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Creates a clear, enforceable standard for end-of-${terms.tenancy.toLowerCase()} cleaning. Reduces disputes and makes deposit deductions more defensible.`,
       legalBasis: 'Deposit protection scheme guidance - deductions must be proportionate',
       isHMO: false,
-      category: 'compliance',
+      category: 'compliance' as const,
     },
 
     // HMO LICENSING ALIGNMENT
     // Maps to: <!-- CLAUSE:HMO_LICENSING --> in HBS templates
     {
-      canonicalId: 'HMO_LICENSING',
+      canonicalId: 'HMO_LICENSING' as ClauseId,
       id: 'licensing_alignment',
       title: 'HMO Licensing Compliance',
       standardPreview: '[Not included in Standard agreement]',
@@ -228,7 +228,7 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       whyItMatters: `Ensures your ${terms.tenancy.toLowerCase()} terms don't conflict with your HMO licence conditions. Non-compliance can result in fines up to £30,000 and rent repayment orders.`,
       legalBasis: `${terms.hmoAct} - mandatory licensing conditions`,
       isHMO: true,
-      category: 'compliance',
+      category: 'compliance' as const,
     },
   ].map(clause => ({
     ...clause,

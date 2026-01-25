@@ -54,6 +54,16 @@ export interface ClauseDefinition {
   isHMO: boolean;
   /** Category for grouping */
   category: 'core' | 'liability' | 'hmo' | 'financial' | 'control' | 'compliance';
+  /**
+   * Jurisdictions where this clause is NOT applicable
+   * (e.g., Scotland PRTs don't have break clauses - they're open-ended)
+   */
+  excludedJurisdictions?: ClauseJurisdiction[];
+  /**
+   * If true, this clause is optional and won't cause a failure if missing
+   * (used for clauses that are commonly but not always present)
+   */
+  optional?: boolean;
 }
 
 /**
@@ -147,9 +157,13 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
     expectedIn: ['standard', 'premium'],
     isHMO: false,
     category: 'core',
+    // Scotland PRTs are open-ended (no fixed term), so no break clause
+    // Wales has 6-month notice under RH(W)A 2016 - different mechanism
+    // Northern Ireland also has different notice mechanisms
+    excludedJurisdictions: ['scotland', 'wales', 'northern-ireland'],
   },
 
-  // Premium-only clauses - HMO related
+  // Premium-only clauses - HMO related (REQUIRED in premium)
   {
     id: 'JOINT_LIABILITY',
     name: 'Joint and several liability',
@@ -170,6 +184,8 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
     expectedIn: ['premium'],
     isHMO: true,
     category: 'hmo',
+    // Not all jurisdictions have explicit tenant replacement procedures
+    optional: true,
   },
   {
     id: 'HMO_LICENSING',
@@ -177,15 +193,19 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
     expectedIn: ['premium'],
     isHMO: true,
     category: 'compliance',
+    // England has explicit HMO licensing; other jurisdictions vary
+    excludedJurisdictions: ['northern-ireland'],
   },
 
-  // Premium-only clauses - Financial/Control
+  // Premium-only clauses - Financial/Control (OPTIONAL - commonly but not always present)
   {
     id: 'GUARANTOR',
     name: 'Guarantor agreement',
     expectedIn: ['premium'],
     isHMO: false,
     category: 'financial',
+    // Guarantor sections are conditional based on wizard answers
+    optional: true,
   },
   {
     id: 'RENT_REVIEW',
@@ -193,6 +213,8 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
     expectedIn: ['premium'],
     isHMO: false,
     category: 'financial',
+    // Rent review is optional and jurisdiction-specific (Scotland has PRT caps)
+    optional: true,
   },
   {
     id: 'ANTI_SUBLET',
@@ -207,6 +229,8 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
     expectedIn: ['premium'],
     isHMO: false,
     category: 'compliance',
+    // Professional cleaning is optional
+    optional: true,
   },
 ];
 
@@ -215,6 +239,18 @@ export const CLAUSE_DEFINITIONS: ClauseDefinition[] = [
  */
 export function getHMOClauseIds(): ClauseId[] {
   return CLAUSE_DEFINITIONS.filter(c => c.isHMO).map(c => c.id);
+}
+
+/**
+ * Get required HMO clause IDs for a specific jurisdiction
+ * Excludes optional clauses and jurisdiction-excluded clauses
+ */
+export function getRequiredHMOClauseIdsForJurisdiction(jurisdiction: ClauseJurisdiction): ClauseId[] {
+  return CLAUSE_DEFINITIONS
+    .filter(c => c.isHMO)
+    .filter(c => !c.optional)
+    .filter(c => !c.excludedJurisdictions?.includes(jurisdiction))
+    .map(c => c.id);
 }
 
 /**
@@ -431,6 +467,34 @@ export function verifyLegalReferences(
 // ============================================================================
 
 /**
+ * Get expected clause IDs for a given jurisdiction and tier
+ * Respects excludedJurisdictions field
+ */
+export function getExpectedClausesForJurisdictionTier(
+  jurisdiction: ClauseJurisdiction,
+  tier: ClauseTier
+): { required: ClauseId[]; optional: ClauseId[] } {
+  const required: ClauseId[] = [];
+  const optional: ClauseId[] = [];
+
+  for (const clause of CLAUSE_DEFINITIONS) {
+    // Skip if clause is not expected in this tier
+    if (!clause.expectedIn.includes(tier)) continue;
+
+    // Skip if clause is excluded for this jurisdiction
+    if (clause.excludedJurisdictions?.includes(jurisdiction)) continue;
+
+    if (clause.optional) {
+      optional.push(clause.id);
+    } else {
+      required.push(clause.id);
+    }
+  }
+
+  return { required, optional };
+}
+
+/**
  * Verify a single template against clause expectations
  */
 export function verifyTemplate(
@@ -445,18 +509,21 @@ export function verifyTemplate(
   // 1. Extract clause IDs from template
   const foundClauses = extractClauseIds(templateContent);
 
-  // 2. Determine expected clauses for this tier
-  const expectedClauses = CLAUSE_DEFINITIONS
-    .filter(c => c.expectedIn.includes(tier))
-    .map(c => c.id);
+  // 2. Determine expected clauses for this jurisdiction+tier
+  const { required: requiredClauses, optional: optionalClauses } =
+    getExpectedClausesForJurisdictionTier(jurisdiction, tier);
+  const allExpectedClauses = [...requiredClauses, ...optionalClauses];
 
-  // 3. Find missing clauses (expected but not found)
-  const missingClauses = expectedClauses.filter(id => !foundClauses.includes(id));
+  // 3. Find missing REQUIRED clauses (expected but not found) - these are errors
+  const missingRequiredClauses = requiredClauses.filter(id => !foundClauses.includes(id));
 
-  // 4. Find unexpected clauses (found but not expected)
-  const unexpectedClauses = foundClauses.filter(id => !expectedClauses.includes(id));
+  // 4. Find missing OPTIONAL clauses - these are warnings, not errors
+  const missingOptionalClauses = optionalClauses.filter(id => !foundClauses.includes(id));
 
-  // 5. Check for HMO clauses in standard (should NOT be there)
+  // 5. Find unexpected clauses (found but not expected in either list)
+  const unexpectedClauses = foundClauses.filter(id => !allExpectedClauses.includes(id));
+
+  // 6. Check for HMO clauses in standard (should NOT be there)
   if (tier === 'standard') {
     const hmoClauseIds = getHMOClauseIds();
     const foundHMOInStandard = foundClauses.filter(id => hmoClauseIds.includes(id));
@@ -468,34 +535,50 @@ export function verifyTemplate(
     }
   }
 
-  // 6. Check that premium has minimum HMO clauses
+  // 7. Check that premium has minimum HMO clauses (required ones, not optional)
   if (tier === 'premium') {
-    const hmoClauseIds = getHMOClauseIds();
-    const foundHMOInPremium = foundClauses.filter(id => hmoClauseIds.includes(id));
-    if (foundHMOInPremium.length < 3) {
+    // Only count non-optional HMO clauses as required
+    const requiredHMOClauses = CLAUSE_DEFINITIONS
+      .filter(c => c.isHMO && !c.optional && !c.excludedJurisdictions?.includes(jurisdiction))
+      .map(c => c.id);
+    const foundRequiredHMO = foundClauses.filter(id => requiredHMOClauses.includes(id));
+
+    // Premium should have at least 2 core HMO markers (JOINT_LIABILITY, SHARED_FACILITIES are always required)
+    if (foundRequiredHMO.length < 2) {
       errors.push(
-        `Premium template must have at least 3 HMO clause markers. ` +
-        `Found ${foundHMOInPremium.length}: ${foundHMOInPremium.join(', ')}`
+        `Premium template must have at least 2 required HMO clause markers. ` +
+        `Found ${foundRequiredHMO.length}: ${foundRequiredHMO.join(', ')}`
       );
     }
   }
 
-  // 7. Verify terminology
+  // 8. Verify terminology
   const termCheck = verifyTerminology(templateContent, jurisdiction);
   const terminologyErrors = termCheck.errors;
 
-  // 8. Verify legal references
+  // 9. Verify legal references
   const legalCheck = verifyLegalReferences(templateContent);
   const legalReferenceErrors = legalCheck.errors;
   warnings.push(...legalCheck.warnings);
 
-  // Build result
+  // 10. Add warnings for missing optional clauses
+  if (missingOptionalClauses.length > 0) {
+    warnings.push(
+      `Missing optional clause markers: ${missingOptionalClauses.join(', ')}. ` +
+      `These are commonly present but not required.`
+    );
+  }
+
+  // Build result - only required missing clauses are errors
   const allErrors = [
     ...errors,
-    ...missingClauses.map(id => `Missing expected clause marker: <!-- CLAUSE:${id} -->`),
+    ...missingRequiredClauses.map(id => `Missing expected clause marker: <!-- CLAUSE:${id} -->`),
     ...terminologyErrors,
     ...legalReferenceErrors,
   ];
+
+  // Combine all missing clauses for the missingClauses field (both required and optional)
+  const missingClauses = [...missingRequiredClauses, ...missingOptionalClauses];
 
   if (unexpectedClauses.length > 0) {
     warnings.push(

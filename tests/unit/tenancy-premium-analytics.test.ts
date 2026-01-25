@@ -8,6 +8,7 @@
  * 4. No PII is included in any events
  */
 
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import {
   trackTenancyPremiumRecommended,
   trackTenancyPremiumSelectedAfterRecommendation,
@@ -17,11 +18,11 @@ import {
 } from '@/lib/analytics';
 
 // Mock gtag and fbq
-const mockGtag = jest.fn();
-const mockFbq = jest.fn();
+const mockGtag = vi.fn();
+const mockFbq = vi.fn();
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   (global as any).window = {
     gtag: mockGtag,
     fbq: mockFbq,
