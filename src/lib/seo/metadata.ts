@@ -257,10 +257,17 @@ export interface SEOAuditResult {
 export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
   const metadata = generateMetadata(config);
 
+  // Type-safe check for twitter card - it could be various shapes
+  const hasTwitterCard = !!(
+    metadata.twitter &&
+    (typeof metadata.twitter === 'object') &&
+    ('card' in metadata.twitter)
+  );
+
   return {
     path: config.path,
     hasCanonical: !!(metadata.alternates?.canonical),
-    hasTwitterCard: !!(metadata.twitter?.card),
+    hasTwitterCard,
     hasKeywords: !!(metadata.keywords && (Array.isArray(metadata.keywords) ? metadata.keywords.length > 0 : true)),
     hasOgImage: !!(metadata.openGraph?.images && (metadata.openGraph.images as any[]).length > 0),
     issues: validateMetadataConfig(config).filter(i => !i.includes('will use defaults')),
