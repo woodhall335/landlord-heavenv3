@@ -360,17 +360,23 @@ export default function EnglandASTPage() {
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
             <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/assured-shorthold-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                AST Template Guide 2026
+              </Link>
+              <Link href="/ast-template-england" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                England AST Template
+              </Link>
+              <Link href="/joint-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Joint Tenancy Agreement Template
+              </Link>
+              <Link href="/tenancy-agreement-template-free" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Free vs Paid Templates Comparison
+              </Link>
               <Link href="/how-to-evict-tenant#england" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 England eviction guide
               </Link>
-              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Landlord tools hub
-              </Link>
               <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Ask Heaven (free landlord Q&amp;A)
-              </Link>
-              <Link href="/blog/england" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                England landlord guides (blog)
               </Link>
             </div>
           </div>

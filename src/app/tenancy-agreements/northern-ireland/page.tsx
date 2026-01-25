@@ -1032,17 +1032,23 @@ export default function NorthernIrelandTenancyPage() {
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
             <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/northern-ireland-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                NI Tenancy Agreement Template 2026
+              </Link>
+              <Link href="/ni-private-tenancy-agreement" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Private Tenancy Agreement Guide
+              </Link>
+              <Link href="/notice-to-quit-northern-ireland-guide" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Notice to Quit NI Guide
+              </Link>
+              <Link href="/ni-tenancy-agreement-template-free" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Free NI Templates Comparison
+              </Link>
               <Link href="/how-to-evict-tenant#northern-ireland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Northern Ireland eviction guide
               </Link>
-              <Link href="/tools" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Landlord tools hub
-              </Link>
               <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 Ask Heaven (free landlord Q&amp;A)
-              </Link>
-              <Link href="/blog/northern-ireland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Northern Ireland landlord guides (blog)
               </Link>
             </div>
           </div>
