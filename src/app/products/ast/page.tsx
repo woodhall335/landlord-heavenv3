@@ -26,6 +26,7 @@ import {
   VsSolicitorComparison,
 } from "@/components/value-proposition";
 import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
+import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
 
 // Get prices from single source of truth
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
@@ -343,8 +344,21 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* Comparison vs Solicitor */}
+      {/* Clause Diff Preview - Visual comparison of actual clauses */}
       <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <ClauseDiffPreview
+              jurisdiction="england"
+              showUpgradeCTA={true}
+              variant="full"
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Comparison vs Solicitor */}
+      <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">

@@ -47,6 +47,7 @@ import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttr
 // Premium recommendation
 import { detectPremiumRecommendation, type PremiumRecommendationResult } from '@/lib/utils/premium-recommendation';
 import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecommendationBanner';
+import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
 
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
@@ -766,6 +767,19 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           </button>
         </div>
       </div>
+
+      {/* Clause Diff Preview - Compact version for wizard */}
+      {facts.product_tier !== terms.premiumTier && (
+        <div className="border-t border-gray-200 pt-6">
+          <ClauseDiffPreview
+            jurisdiction={jurisdiction}
+            variant="compact"
+            showUpgradeCTA={true}
+            onUpgradeClick={() => handleTierSelect(terms.premiumTier)}
+            maxClauses={3}
+          />
+        </div>
+      )}
 
       {/* Suitability Check - jurisdiction-aware */}
       <div className="border-t border-gray-200 pt-6">

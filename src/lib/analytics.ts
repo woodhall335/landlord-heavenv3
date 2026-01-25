@@ -1300,3 +1300,70 @@ export function trackTenancyRationaleExpanded(params: {
     jurisdiction: params.jurisdiction,
   });
 }
+
+// =============================================================================
+// CLAUSE DIFF PREVIEW TRACKING
+// =============================================================================
+
+/**
+ * Track when clause diff preview is viewed
+ */
+export function trackClauseDiffViewed(params: {
+  jurisdiction: string;
+  variant: 'full' | 'compact';
+  clauseCount: number;
+}): void {
+  trackEvent('clause_diff_viewed', {
+    event_category: 'tenancy_upsell',
+    jurisdiction: params.jurisdiction,
+    variant: params.variant,
+    clause_count: params.clauseCount,
+  });
+
+  // Track as ViewContent for retargeting
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: 'clause_diff_preview',
+      content_category: 'tenancy_upsell',
+      content_type: 'comparison',
+    });
+  }
+}
+
+/**
+ * Track when user clicks upgrade from clause diff preview
+ */
+export function trackClauseDiffUpgradeClicked(params: {
+  jurisdiction: string;
+  source: 'wizard' | 'product_page';
+}): void {
+  trackEvent('clause_diff_upgrade_clicked', {
+    event_category: 'tenancy_upsell',
+    jurisdiction: params.jurisdiction,
+    source: params.source,
+  });
+
+  // Track as AddToCart for conversion
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: 'ast_premium',
+      content_category: 'tenancy_agreement',
+      content_type: 'product',
+    });
+  }
+}
+
+/**
+ * Track when user hovers over "Why this matters" explanation
+ * Helps understand which clauses users care about most
+ */
+export function trackClauseHoverExplanation(params: {
+  clauseId: string;
+  jurisdiction: string;
+}): void {
+  trackEvent('clause_hover_explanation', {
+    event_category: 'tenancy_upsell',
+    clause_id: params.clauseId,
+    jurisdiction: params.jurisdiction,
+  });
+}

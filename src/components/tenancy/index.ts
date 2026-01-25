@@ -13,3 +13,5 @@ export {
   PremiumRecommendationBanner,
   PremiumRecommendationHint,
 } from './PremiumRecommendationBanner';
+
+export { ClauseDiffPreview } from './ClauseDiffPreview';
