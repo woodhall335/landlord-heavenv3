@@ -3,6 +3,8 @@
  *
  * Tests that clicking "Fix now" on validation issues correctly navigates
  * to the appropriate wizard section.
+ *
+ * @vitest-environment jsdom
  */
 
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';

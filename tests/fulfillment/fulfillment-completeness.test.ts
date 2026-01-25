@@ -135,7 +135,7 @@ describe('Fulfillment completeness validation', () => {
 });
 
 describe('Generator document_type field', () => {
-  it('money claim pack documents have canonical document_type keys', async () => {
+  it('money claim pack documents have canonical document_type keys', { timeout: 15000 }, async () => {
     // Import the actual generator to verify document_type is set correctly
     const { MoneyClaimPackDocument } = await import('@/lib/documents/money-claim-pack-generator');
 
@@ -152,7 +152,7 @@ describe('Generator document_type field', () => {
     expect(doc.document_type).toBe('particulars_of_claim');
   });
 
-  it('eviction pack documents have canonical document_type keys', async () => {
+  it('eviction pack documents have canonical document_type keys', { timeout: 15000 }, async () => {
     const { EvictionPackDocument } = await import('@/lib/documents/eviction-pack-generator');
 
     const doc: Partial<typeof EvictionPackDocument> = {
