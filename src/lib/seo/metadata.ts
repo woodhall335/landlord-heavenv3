@@ -9,6 +9,11 @@ import { SITE_ORIGIN, getCanonicalUrl } from "./urls";
  * - Twitter Cards
  * - Canonical URLs
  *
+ * GUARANTEES:
+ * - Canonical URL is ALWAYS present on public pages
+ * - Twitter Card metadata is ALWAYS present on content pages
+ * - Keywords are ALWAYS present (defaults to core keywords if not provided)
+ *
  * For JSON-LD structured data, use the jsonLd helper functions.
  */
 
@@ -22,6 +27,60 @@ export interface SEOMetadataConfig {
   noindex?: boolean;
   keywords?: string[];
 }
+
+/**
+ * Core keywords that apply to most pages.
+ * Used as fallback when page-specific keywords aren't provided.
+ */
+export const CORE_KEYWORDS = [
+  'UK landlord',
+  'eviction notice',
+  'section 21',
+  'section 8',
+  'tenancy agreement',
+  'court-ready documents',
+  'landlord legal documents',
+];
+
+/**
+ * Product-specific keywords for targeted pages
+ */
+export const PRODUCT_KEYWORDS = {
+  eviction: [
+    'eviction notice UK',
+    'section 21 notice',
+    'section 8 notice',
+    'evict tenant',
+    'notice to leave',
+    'possession order',
+    'court-ready notice',
+  ],
+  money_claim: [
+    'money claim online',
+    'MCOL',
+    'rent arrears claim',
+    'tenant debt recovery',
+    'CCJ tenant',
+    'small claims court',
+    'unpaid rent claim',
+  ],
+  tenancy: [
+    'tenancy agreement template',
+    'AST template',
+    'assured shorthold tenancy',
+    'PRT Scotland',
+    'occupation contract Wales',
+    'landlord tenancy agreement',
+    'rental agreement UK',
+  ],
+  tool: [
+    'free landlord tool',
+    'section 21 generator',
+    'eviction notice generator',
+    'rent calculator',
+    'landlord calculator',
+  ],
+};
 
 const SITE_NAME = "Landlord Heaven";
 const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
@@ -89,6 +148,122 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
       canonical: url,
     },
     // Note: metadataBase is set globally in RootLayout
+  };
+}
+
+/**
+ * Page types for keyword selection
+ */
+export type SEOPageType = 'product' | 'tool' | 'blog' | 'guide' | 'seo_landing' | 'general';
+
+/**
+ * Generate metadata for a specific page type with guaranteed keywords
+ */
+export function generateMetadataForPageType(
+  config: SEOMetadataConfig & { pageType?: SEOPageType }
+): Metadata {
+  // Determine keywords based on page type and content
+  let keywords = config.keywords;
+
+  if (!keywords || keywords.length === 0) {
+    const { path, pageType } = config;
+
+    // Auto-detect page type from path if not provided
+    const detectedType = pageType || detectPageType(path);
+
+    // Select keywords based on page type
+    switch (detectedType) {
+      case 'product':
+        if (path.includes('money-claim')) {
+          keywords = PRODUCT_KEYWORDS.money_claim;
+        } else if (path.includes('ast') || path.includes('tenancy')) {
+          keywords = PRODUCT_KEYWORDS.tenancy;
+        } else {
+          keywords = PRODUCT_KEYWORDS.eviction;
+        }
+        break;
+      case 'tool':
+        keywords = [...PRODUCT_KEYWORDS.tool, ...CORE_KEYWORDS.slice(0, 3)];
+        break;
+      case 'blog':
+      case 'guide':
+        // Determine topic from path
+        if (path.includes('money-claim') || path.includes('rent-arrears')) {
+          keywords = PRODUCT_KEYWORDS.money_claim;
+        } else if (path.includes('tenancy') || path.includes('ast')) {
+          keywords = PRODUCT_KEYWORDS.tenancy;
+        } else {
+          keywords = PRODUCT_KEYWORDS.eviction;
+        }
+        break;
+      default:
+        keywords = CORE_KEYWORDS;
+    }
+  }
+
+  return generateMetadata({ ...config, keywords });
+}
+
+/**
+ * Detect page type from path
+ */
+function detectPageType(path: string): SEOPageType {
+  if (path.startsWith('/products/')) return 'product';
+  if (path.startsWith('/tools/')) return 'tool';
+  if (path.startsWith('/blog/')) return 'blog';
+  if (path.includes('-guide') || path.includes('how-to-')) return 'guide';
+  // SEO landing pages are top-level paths with keywords
+  if (!path.includes('/') || path.split('/').length <= 2) return 'seo_landing';
+  return 'general';
+}
+
+/**
+ * Validate metadata config has all required fields.
+ * Returns list of missing/empty fields.
+ */
+export function validateMetadataConfig(config: SEOMetadataConfig): string[] {
+  const issues: string[] = [];
+
+  if (!config.title || config.title.trim() === '') {
+    issues.push('title is missing');
+  }
+  if (!config.description || config.description.trim() === '') {
+    issues.push('description is missing');
+  }
+  if (!config.path || config.path.trim() === '') {
+    issues.push('path is missing (required for canonical URL)');
+  }
+  // Keywords are now auto-populated, but warn if empty and not noindex
+  if (!config.noindex && (!config.keywords || config.keywords.length === 0)) {
+    issues.push('keywords not provided (will use defaults)');
+  }
+
+  return issues;
+}
+
+/**
+ * Check if a page has all required SEO elements.
+ * Used by audit scripts.
+ */
+export interface SEOAuditResult {
+  path: string;
+  hasCanonical: boolean;
+  hasTwitterCard: boolean;
+  hasKeywords: boolean;
+  hasOgImage: boolean;
+  issues: string[];
+}
+
+export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
+  const metadata = generateMetadata(config);
+
+  return {
+    path: config.path,
+    hasCanonical: !!(metadata.alternates?.canonical),
+    hasTwitterCard: !!(metadata.twitter?.card),
+    hasKeywords: !!(metadata.keywords && (Array.isArray(metadata.keywords) ? metadata.keywords.length > 0 : true)),
+    hasOgImage: !!(metadata.openGraph?.images && (metadata.openGraph.images as any[]).length > 0),
+    issues: validateMetadataConfig(config).filter(i => !i.includes('will use defaults')),
   };
 }
 

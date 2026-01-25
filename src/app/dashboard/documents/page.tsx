@@ -179,7 +179,7 @@ export default function DocumentsPage() {
                 {filteredDocuments.length} {filteredDocuments.length === 1 ? 'document' : 'documents'} found
               </p>
             </div>
-            <Link href="/wizard">
+            <Link href="/wizard?src=dashboard">
               <Button variant="primary" size="large">
                 + New Document
               </Button>
@@ -284,7 +284,7 @@ export default function DocumentsPage() {
                   ? 'No documents match your current filters.'
                   : "You haven't generated any documents yet."}
               </p>
-              <Link href="/wizard">
+              <Link href="/wizard?src=dashboard">
                 <Button variant="primary">Create Your First Document</Button>
               </Link>
             </div>

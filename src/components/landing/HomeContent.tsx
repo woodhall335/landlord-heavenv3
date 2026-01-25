@@ -60,7 +60,7 @@ export default function HomeContent() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
               <Link
-                href="/wizard"
+                href="/wizard?src=homepage"
                 className="hero-btn-primary"
               >
                 Generate Your Documents →
@@ -143,7 +143,7 @@ export default function HomeContent() {
 
             <div className="mt-14 text-center">
               <Link
-                href="/wizard"
+                href="/wizard?src=homepage"
                 className="hero-btn-primary"
               >
                 Start Your Documents Now →
@@ -420,7 +420,7 @@ export default function HomeContent() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
               <Link
-                href="/wizard"
+                href="/wizard?src=homepage"
                 className="hero-btn-primary"
               >
                 Generate Your Documents →

@@ -230,7 +230,7 @@ export default function CasesListPage() {
                 {filteredCases.length} {filteredCases.length === 1 ? 'case' : 'cases'} found
               </p>
             </div>
-            <Link href="/wizard">
+            <Link href="/wizard?src=dashboard">
               <Button variant="primary" size="large">
                 + New Case
               </Button>
@@ -316,7 +316,7 @@ export default function CasesListPage() {
                   ? `You don't have any ${filterStatus.replace('_', ' ')} cases yet.`
                   : "You haven't created any cases yet."}
               </p>
-              <Link href="/wizard">
+              <Link href="/wizard?src=dashboard">
                 <Button variant="primary">Create Your First Case</Button>
               </Link>
             </div>
