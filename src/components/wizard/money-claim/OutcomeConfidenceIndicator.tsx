@@ -9,7 +9,7 @@ import {
   RiExpandUpDownLine,
   RiArrowRightLine,
   RiFileTextLine,
-  RiEvidenceLine,
+  RiFolderOpenLine,
   RiScalesLine,
 } from 'react-icons/ri';
 import {
@@ -172,7 +172,7 @@ export function OutcomeConfidenceIndicator({
               {/* Score bars */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
-                  <RiEvidenceLine className="w-4 h-4" />
+                  <RiFolderOpenLine className="w-4 h-4" />
                   <span className="font-medium">Evidence (40%)</span>
                 </div>
                 <ScoreBar
