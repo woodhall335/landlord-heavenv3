@@ -367,7 +367,7 @@ function extractFromText(text: string, source: string): ExtractedData {
   if (!text) return data;
 
   // Extract postcodes
-  let match;
+  let match: RegExpExecArray | null;
   const postcodeRegex = new RegExp(UK_POSTCODE_REGEX.source, 'gi');
   while ((match = postcodeRegex.exec(text)) !== null) {
     const postcode = match[1].toUpperCase().replace(/\s+/g, ' ');
@@ -435,14 +435,15 @@ function extractFromText(text: string, source: string): ExtractedData {
   for (const pattern of INVOICE_PATTERNS) {
     const regex = new RegExp(pattern.source, 'gi');
     while ((match = regex.exec(text)) !== null) {
-      if (match[1] && match[1].length >= 3 && match[1].length <= 30) {
+      const matchValue = match[1];
+      if (matchValue && matchValue.length >= 3 && matchValue.length <= 30) {
         const type = pattern.source.includes('invoice') || pattern.source.includes('inv')
           ? 'invoice'
           : pattern.source.includes('quote')
           ? 'quote'
           : 'reference';
-        if (!data.invoiceNumbers.some(n => n.value === match[1])) {
-          data.invoiceNumbers.push({ value: match[1], type, source });
+        if (!data.invoiceNumbers.some(n => n.value === matchValue)) {
+          data.invoiceNumbers.push({ value: matchValue, type, source });
         }
       }
     }
