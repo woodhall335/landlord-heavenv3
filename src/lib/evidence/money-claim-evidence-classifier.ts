@@ -53,6 +53,24 @@ export interface EvidenceClassificationSummary {
   hasUtilityBill: boolean;
 }
 
+/**
+ * Evidence context for rules engine evaluation
+ * This is the return type of buildEvidenceContext
+ */
+export interface EvidenceContext {
+  evidence_summary: EvidenceClassificationSummary | null;
+  has_photo_evidence: boolean;
+  has_tenancy_agreement_evidence: boolean;
+  has_inventory_checkin_evidence: boolean;
+  has_inventory_checkout_evidence: boolean;
+  has_invoice_quote_receipt_evidence: boolean;
+  has_rent_ledger_bank_statement_evidence: boolean;
+  has_correspondence_evidence: boolean;
+  has_council_tax_statement_evidence: boolean;
+  has_utility_bill_evidence: boolean;
+  has_any_inventory_evidence: boolean;
+}
+
 // Image MIME types
 const IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
@@ -342,19 +360,7 @@ export function classifyAllEvidence(
  */
 export function buildEvidenceContext(
   documents: Array<{ id: string; name: string; type?: string; category?: string }> | undefined
-): {
-  evidence_summary: EvidenceClassificationSummary | null;
-  has_photo_evidence: boolean;
-  has_tenancy_agreement_evidence: boolean;
-  has_inventory_checkin_evidence: boolean;
-  has_inventory_checkout_evidence: boolean;
-  has_invoice_quote_receipt_evidence: boolean;
-  has_rent_ledger_bank_statement_evidence: boolean;
-  has_correspondence_evidence: boolean;
-  has_council_tax_statement_evidence: boolean;
-  has_utility_bill_evidence: boolean;
-  has_any_inventory_evidence: boolean;
-} {
+): EvidenceContext {
   if (!documents || documents.length === 0) {
     return {
       evidence_summary: null,
