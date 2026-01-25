@@ -106,6 +106,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/money-claim-letter-before-action', priority: 0.75, changeFrequency: 'monthly' as const },
     { path: '/money-claim-schedule-of-debt', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/money-claim-pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
+    // Tenancy Agreement SEO Pages - England (Q1 2026)
+    { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/ast-template-england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Pages - Wales (Q1 2026)
+    { path: '/occupation-contract-template-wales', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/renting-homes-wales-written-statement', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/standard-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/wales-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Pages - Scotland (Q1 2026)
+    { path: '/private-residential-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/prt-template-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/scottish-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/scotland-prt-model-agreement-guide', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Pages - Northern Ireland (Q1 2026)
+    { path: '/northern-ireland-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/ni-private-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/notice-to-quit-northern-ireland-guide', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic

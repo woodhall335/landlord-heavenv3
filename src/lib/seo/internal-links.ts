@@ -781,3 +781,169 @@ export const moneyClaimBlogSidebarLinks = [
   toolLinks.rentArrearsCalculator,
   moneyClaimForms.letterBeforeAction,
 ];
+
+// ============================================
+// TENANCY AGREEMENT SEO LINK GROUPS (Q1 2026)
+// ============================================
+
+// Individual tenancy agreement page links
+export const tenancyAgreementPageLinks = {
+  // England
+  astTemplate: {
+    href: '/assured-shorthold-tenancy-agreement-template',
+    title: 'AST Template 2026',
+    description: 'Assured Shorthold Tenancy agreement',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  astTemplateEngland: {
+    href: '/ast-template-england',
+    title: 'England AST Template',
+    description: 'Housing Act 1988 compliant',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  tenancyAgreementFree: {
+    href: '/tenancy-agreement-template-free',
+    title: 'Free vs Paid Templates',
+    description: 'Template comparison guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  jointTenancy: {
+    href: '/joint-tenancy-agreement-template',
+    title: 'Joint Tenancy Template',
+    description: 'Multiple tenant agreements',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  // Wales
+  occupationContractWales: {
+    href: '/occupation-contract-template-wales',
+    title: 'Wales Occupation Contract',
+    description: 'Renting Homes Act 2016 compliant',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  rentingHomesWrittenStatement: {
+    href: '/renting-homes-wales-written-statement',
+    title: 'Written Statement Wales',
+    description: 'Required landlord documentation',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  standardOccupationContract: {
+    href: '/standard-occupation-contract-wales',
+    title: 'Standard Occupation Contract',
+    description: 'Wales SOC template',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  walesTenancyTemplate: {
+    href: '/wales-tenancy-agreement-template',
+    title: 'Wales Tenancy Template',
+    description: 'Occupation contract guide',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  // Scotland
+  prtTemplate: {
+    href: '/private-residential-tenancy-agreement-template',
+    title: 'PRT Template 2026',
+    description: 'Scotland Private Residential Tenancy',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  prtTemplateScotland: {
+    href: '/prt-template-scotland',
+    title: 'Scotland PRT Template',
+    description: 'Private Housing Act 2016 compliant',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  scottishTenancyTemplate: {
+    href: '/scottish-tenancy-agreement-template',
+    title: 'Scottish Tenancy Template',
+    description: 'PRT agreement guide',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  scotlandModelAgreement: {
+    href: '/scotland-prt-model-agreement-guide',
+    title: 'Model PRT Agreement Guide',
+    description: 'Scottish Government model vs custom',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  // Northern Ireland
+  niTenancyTemplate: {
+    href: '/northern-ireland-tenancy-agreement-template',
+    title: 'NI Tenancy Template',
+    description: 'Private Tenancies Act 2022 compliant',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  niPrivateTenancy: {
+    href: '/ni-private-tenancy-agreement',
+    title: 'Private Tenancy Agreement NI',
+    description: 'Complete NI tenancy guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  niNoticeToQuit: {
+    href: '/notice-to-quit-northern-ireland-guide',
+    title: 'Notice to Quit NI Guide',
+    description: 'NI eviction notice process',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  niTenancyFree: {
+    href: '/ni-tenancy-agreement-template-free',
+    title: 'Free NI Templates Comparison',
+    description: 'Risks of free templates',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// England tenancy agreement links
+export const tenancyAgreementEnglandLinks = [
+  productLinks.tenancyAgreement,
+  tenancyAgreementPageLinks.astTemplate,
+  tenancyAgreementPageLinks.astTemplateEngland,
+  tenancyAgreementPageLinks.jointTenancy,
+  tenancyAgreementPageLinks.tenancyAgreementFree,
+  askHeavenLink,
+];
+
+// Wales tenancy agreement links
+export const tenancyAgreementWalesLinks = [
+  productLinks.tenancyAgreement,
+  tenancyAgreementPageLinks.occupationContractWales,
+  tenancyAgreementPageLinks.rentingHomesWrittenStatement,
+  tenancyAgreementPageLinks.standardOccupationContract,
+  tenancyAgreementPageLinks.walesTenancyTemplate,
+  guideLinks.walesEviction,
+  askHeavenLink,
+];
+
+// Scotland tenancy agreement links
+export const tenancyAgreementScotlandLinks = [
+  productLinks.tenancyAgreement,
+  tenancyAgreementPageLinks.prtTemplate,
+  tenancyAgreementPageLinks.prtTemplateScotland,
+  tenancyAgreementPageLinks.scottishTenancyTemplate,
+  tenancyAgreementPageLinks.scotlandModelAgreement,
+  guideLinks.scotlandEviction,
+  askHeavenLink,
+];
+
+// Northern Ireland tenancy agreement links
+export const tenancyAgreementNILinks = [
+  productLinks.tenancyAgreement,
+  tenancyAgreementPageLinks.niTenancyTemplate,
+  tenancyAgreementPageLinks.niPrivateTenancy,
+  tenancyAgreementPageLinks.niNoticeToQuit,
+  tenancyAgreementPageLinks.niTenancyFree,
+  askHeavenLink,
+];
