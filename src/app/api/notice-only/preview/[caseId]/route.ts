@@ -43,7 +43,10 @@ import {
   runProductionShadowValidation,
   deriveJurisdictionFromFacts,
   isYamlPrimary,
+  isYamlOnlyMode,
   runYamlPrimaryNoticeValidation,
+  runYamlOnlyNoticeValidation,
+  trackYamlOnlyValidation,
 } from '@/lib/validation/shadow-mode-adapter';
 
 export const dynamic = 'force-dynamic';
@@ -408,14 +411,56 @@ export async function GET(
 
     // ========================================================================
     // FINAL COMPLIANCE CHECK BEFORE GENERATION
-    // Phase 8: YAML Primary Mode - Use YAML as authoritative when enabled
+    // Phase 10: YAML-Only Mode - TS validators completely bypassed
+    // Phase 8: YAML Primary Mode - YAML authoritative with TS fallback
+    // Default: TS authoritative with YAML shadow mode
     // ========================================================================
     let hardFailures: Array<{ code: string; affected_question_id?: string; legal_reason?: string; user_fix_hint?: string }> = [];
     let complianceWarnings: Array<{ code: string; affected_question_id?: string; legal_reason?: string; user_fix_hint?: string }> = [];
     let complianceComputed: any = null;
 
-    if (isYamlPrimary()) {
-      // Phase 8: YAML is authoritative
+    if (isYamlOnlyMode()) {
+      // Phase 10: YAML-only mode - NO TS fallback
+      console.log('[NOTICE-PREVIEW-API] Using YAML-only validation (Phase 10)');
+      try {
+        const yamlResult = await runYamlOnlyNoticeValidation({
+          jurisdiction: deriveJurisdictionFromFacts(wizardFacts) as 'england' | 'wales' | 'scotland',
+          route: selected_route,
+          facts: wizardFacts,
+        });
+
+        trackYamlOnlyValidation(true);
+
+        hardFailures = yamlResult.blockers.map((b) => ({
+          code: b.id,
+          legal_reason: b.message,
+          user_fix_hint: b.rationale,
+        }));
+        complianceWarnings = yamlResult.warnings.map((w) => ({
+          code: w.id,
+          legal_reason: w.message,
+          user_fix_hint: w.rationale,
+        }));
+
+        console.log('[NOTICE-PREVIEW-API] YAML-only validation complete', {
+          blockers: hardFailures.length,
+          warnings: complianceWarnings.length,
+          durationMs: yamlResult.durationMs,
+        });
+      } catch (error) {
+        // YAML-only mode error - no fallback available
+        trackYamlOnlyValidation(false);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('[NOTICE-PREVIEW-API] YAML-only validation error (CRITICAL):', {
+          error: errorMessage,
+          case_id: caseId,
+          jurisdiction,
+          route: selected_route,
+        });
+        throw error; // Re-throw to trigger 500 error
+      }
+    } else if (isYamlPrimary()) {
+      // Phase 8: YAML is authoritative with TS fallback
       console.log('[NOTICE-PREVIEW-API] Using YAML primary validation');
       const yamlResult = await runYamlPrimaryNoticeValidation({
         jurisdiction: deriveJurisdictionFromFacts(wizardFacts) as 'england' | 'wales' | 'scotland',
@@ -442,7 +487,7 @@ export async function GET(
         });
       }
     } else {
-      // Phase 7: TS is authoritative, YAML runs in shadow mode
+      // Default: TS is authoritative, YAML runs in shadow mode
       const compliance = evaluateNoticeCompliance({
         jurisdiction,
         product: 'notice_only',
@@ -487,6 +532,7 @@ export async function GET(
         route: selected_route,
         failure_count: hardFailures.length,
         warning_count: complianceWarnings.length,
+        yaml_only: isYamlOnlyMode(),
         yaml_primary: isYamlPrimary(),
       });
 

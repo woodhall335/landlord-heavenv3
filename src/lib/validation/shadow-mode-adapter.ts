@@ -514,10 +514,61 @@ export function isTsFallbackEnabled(): boolean {
 }
 
 /**
+ * Check if YAML-only mode is enabled (Phase 10).
+ * When true, TS validators are completely bypassed - no fallback.
+ */
+export function isYamlOnlyMode(): boolean {
+  return process.env.EVICTION_YAML_ONLY === 'true';
+}
+
+/**
  * Check if telemetry is enabled.
  */
 export function isTelemetryEnabled(): boolean {
   return process.env.EVICTION_TELEMETRY_ENABLED === 'true';
+}
+
+// =============================================================================
+// PHASE 10: YAML-ONLY MODE TRACKING
+// =============================================================================
+
+// Counters for YAML-only mode monitoring
+let yamlOnlyValidationCount = 0;
+let yamlOnlyErrorCount = 0;
+
+/**
+ * Get YAML-only mode statistics for monitoring.
+ */
+export function getYamlOnlyStats(): {
+  totalValidations: number;
+  errorCount: number;
+  errorRate: number;
+  isYamlOnlyActive: boolean;
+} {
+  return {
+    totalValidations: yamlOnlyValidationCount,
+    errorCount: yamlOnlyErrorCount,
+    errorRate: yamlOnlyValidationCount > 0 ? yamlOnlyErrorCount / yamlOnlyValidationCount : 0,
+    isYamlOnlyActive: isYamlOnlyMode(),
+  };
+}
+
+/**
+ * Reset YAML-only statistics (for testing).
+ */
+export function resetYamlOnlyStats(): void {
+  yamlOnlyValidationCount = 0;
+  yamlOnlyErrorCount = 0;
+}
+
+/**
+ * Increment YAML-only validation counter.
+ */
+export function trackYamlOnlyValidation(success: boolean): void {
+  yamlOnlyValidationCount++;
+  if (!success) {
+    yamlOnlyErrorCount++;
+  }
 }
 
 // =============================================================================

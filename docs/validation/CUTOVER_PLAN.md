@@ -110,17 +110,34 @@ unset EVICTION_YAML_PRIMARY
 export EVICTION_YAML_PRIMARY=false
 ```
 
-### Phase 4: YAML Only (Decommissioning)
+### Phase 4 / Phase 10: YAML Only (Production Enablement)
 
-**Status**: 🟡 Ready to Begin
+**Status**: 🟢 Ready to Enable
 
-**Description**: Remove TS validator, YAML engine is sole validation system.
+**Description**: YAML engine is sole validation authority. TS validators completely bypassed.
 
 **Environment Variables**:
 ```bash
 EVICTION_YAML_PRIMARY=true
-EVICTION_YAML_ONLY=true        # NEW: Bypass TS fallback entirely
-EVICTION_TS_FALLBACK=false     # Disable TS fallback
+EVICTION_YAML_ONLY=true        # Bypass TS fallback entirely
+EVICTION_TELEMETRY_ENABLED=true
+```
+
+**How to Enable** (Phase 10):
+```bash
+export EVICTION_YAML_ONLY=true
+export EVICTION_YAML_PRIMARY=true
+export EVICTION_TELEMETRY_ENABLED=true
+```
+
+**How to Rollback** (instant, no redeploy):
+```bash
+# Option 1: Disable YAML-only, keep YAML primary with TS fallback
+export EVICTION_YAML_ONLY=false
+
+# Option 2: Full rollback to TS
+export EVICTION_YAML_ONLY=false
+export EVICTION_YAML_PRIMARY=false
 ```
 
 **Behavior**:
@@ -150,21 +167,53 @@ EVICTION_TS_FALLBACK=false     # Disable TS fallback
 - [ ] All edge cases documented
 - [ ] Team sign-off on removal
 
+**Phase 10 Runtime Verification**:
+
+When YAML-only mode is enabled, verify:
+1. All validation requests use `runYamlOnlyNoticeValidation` or `runYamlOnlyCompletePackValidation`
+2. No `[TS-Fallback]` logs appear
+3. No `[DEPRECATED]` warnings appear
+4. YAML-only error rate remains < 0.1%
+
+```bash
+# Verify YAML-only mode is active
+grep "\[NOTICE-PREVIEW-API\] Using YAML-only" /var/log/app.log
+grep "\[API Generate\] Using YAML-only" /var/log/app.log
+
+# Check for any TS fallback (should be zero)
+grep "\[TS-Fallback\]" /var/log/app.log | wc -l
+
+# Check YAML-only error rate
+grep "\[YAML-only validation error\]" /var/log/app.log | wc -l
+```
+
+**Programmatic Monitoring**:
+```typescript
+import { getYamlOnlyStats, resetYamlOnlyStats } from '@/lib/validation/shadow-mode-adapter';
+
+// Check YAML-only statistics
+const stats = getYamlOnlyStats();
+console.log(`YAML-only active: ${stats.isYamlOnlyActive}`);
+console.log(`Total validations: ${stats.totalValidations}`);
+console.log(`Error count: ${stats.errorCount}`);
+console.log(`Error rate: ${(stats.errorRate * 100).toFixed(2)}%`);
+```
+
 **Decommissioning Steps**:
 
-1. **Monitor fallback rate** (current phase)
-   ```bash
-   grep "\[TS-Fallback\]" /var/log/app.log | wc -l
-   grep "\[Telemetry:TsFallback\]" /var/log/app.log | jq -s 'group_by(.route) | map({route: .[0].route, count: length})'
-   ```
-
-2. **Switch to YAML-only** (when fallback rate is ~0):
+1. **Enable YAML-only mode** (Phase 10):
    ```bash
    export EVICTION_YAML_ONLY=true
-   export EVICTION_TS_FALLBACK=false
+   export EVICTION_YAML_PRIMARY=true
+   export EVICTION_TELEMETRY_ENABLED=true
    ```
 
-3. **Remove TS code** (after 14 days stable):
+2. **Monitor for 14 days** (stability window):
+   - Error rate < 0.1%
+   - No user-reported issues
+   - Latency within acceptable range
+
+3. **Remove TS code** (Phase 5, after stability window):
    - Delete deprecated functions
    - Remove fallback logic
    - Update imports
