@@ -1428,6 +1428,146 @@ npm run validation:rule-lookup s21_deposit_not_protected -- --json
 
 ---
 
+### Phase 21: Adoption, Measurement & ROI Validation
+
+**Status**: ✅ Complete
+
+**Description**: Quantify validation platform impact, establish metrics framework, and provide executive visibility into ROI and adoption.
+
+**Objectives**:
+- Quantify the impact of validation improvements on support volume, failed submissions, and time-to-resolution
+- Validate enterprise feature usage and value
+- Create a clear narrative for leadership on platform ROI
+- Enable data-driven decisions on future investment
+
+**Deliverables**:
+
+- [x] **Metrics & ROI Framework** (`docs/validation/METRICS_AND_ROI.md`)
+  - Adoption metrics (A1-A6): Phase 13 blocker rate, self-resolution rate, time-to-fix, help link CTR, explainability tier usage, support tool adoption
+  - Support impact metrics (S1-S5): Validation tickets, AHT, escalation rate, emergency suppression frequency, false positive rate
+  - Enterprise feature metrics (E1-E5): Override usage, custom rule adoption, audit exports, API usage, retention correlation
+  - ROI calculation methodology: Support savings, engineering savings, user time savings
+  - Reporting cadence: Weekly (automated), Monthly (semi-automated), Quarterly (manual QBR)
+  - Data collection schemas: Telemetry, support tickets, tool usage
+
+- [x] **Automated ROI Report** (`scripts/validation-roi-report.ts`)
+  - CLI tool: `npm run validation:roi-report`
+  - Collects metrics from telemetry, suppression status, tenant context
+  - Calculates ROI with configurable cost assumptions
+  - Generates executive summary with recommendations
+  - Options: `--json`, `--period=week|month|quarter`, `--baseline=<file>`, `--executive`
+
+- [x] **Executive Summary Template** (`docs/validation/EXECUTIVE_SUMMARY_TEMPLATE.md`)
+  - 1-2 page format for quarterly business reviews
+  - Sections: Key Metrics, What Changed, What Improved, Risks Reduced, ROI Summary
+  - Enterprise feature adoption tracking
+  - Recommendations for future phases (Phase 22+)
+
+- [x] **Adoption Metrics Module** (`src/lib/validation/adoption-metrics.ts`)
+  - Resolution tracking: `recordBlockedValidation()`, `recordResolution()`
+  - Self-resolution rate calculation: `calculateSelfResolutionRate()`
+  - Time-to-fix analysis: `calculateAvgTimeToFix()`
+  - Tool usage tracking: `recordToolUsage()`, `getToolUsageStats()`
+  - Baseline comparison: `createBaseline()`, `compareToBaseline()`
+  - ROI helpers: `calculateSupportSavings()`, `calculateEngineeringSavings()`
+  - Data export: `exportMetricsData()`
+
+**Usage - ROI Report**:
+
+```bash
+# Human-readable report
+npm run validation:roi-report
+
+# JSON output for automation
+npm run validation:roi-report -- --json
+
+# Specific time period
+npm run validation:roi-report -- --period=quarter
+
+# Compare against baseline
+npm run validation:roi-report -- --baseline=baseline-2025-01.json
+
+# Executive summary only
+npm run validation:roi-report -- --executive
+```
+
+**Usage - Adoption Metrics**:
+
+```typescript
+import {
+  recordBlockedValidation,
+  recordResolution,
+  calculateSelfResolutionRate,
+  calculateAvgTimeToFix,
+  recordToolUsage,
+  getToolUsageStats,
+  createBaseline,
+  compareToBaseline,
+  calculateSupportSavings,
+  exportMetricsData,
+} from '@/lib/validation/adoption-metrics';
+
+// Track blocked validation
+recordBlockedValidation({
+  case_id: 'case-123',
+  jurisdiction: 'england',
+  product: 'notice_only',
+  route: 'section_21',
+  blocked_rule_ids: ['s21_deposit_not_protected'],
+});
+
+// Track resolution (self-resolved without support)
+recordResolution('case-123', 'self');
+
+// Calculate self-resolution rate
+const stats = calculateSelfResolutionRate();
+console.log(`Self-resolution rate: ${stats.self_resolution_rate}%`);
+
+// Track tool usage
+recordToolUsage({ tool: 'rule-lookup', rule_id_queried: 's21_deposit_not_protected' });
+
+// Create and compare baselines
+const baseline = createBaseline(30);
+const comparison = compareToBaseline(baseline, currentMetrics, targets);
+
+// Calculate ROI
+const savings = calculateSupportSavings(20, 15, 25, 18);
+console.log(`Annual support savings: £${savings.total_annual}`);
+```
+
+**Reporting Cadence**:
+
+| Report | Frequency | Audience | Delivery |
+|--------|-----------|----------|----------|
+| Weekly Validation Report | Automated, Monday | Validation team, Support leads | Slack/email |
+| Monthly Impact Report | Semi-automated, 1st week | Product, Engineering leads | Dashboard + PDF |
+| Quarterly Business Review | Manual, end of quarter | Leadership, Finance | Presentation |
+
+**Cost Assumptions** (configurable):
+
+| Assumption | Default Value | Notes |
+|------------|---------------|-------|
+| Cost per support ticket | £10 | Direct support cost |
+| Cost per minute (support) | £0.50 | Agent time cost |
+| Eng hours per escalation | 3 hours | Engineering involvement |
+| Engineering hourly rate | £85 | Fully loaded cost |
+| User hourly value | £35 | Opportunity cost |
+
+**Success Criteria**:
+- [x] Metrics framework defines all adoption, support, and enterprise metrics
+- [x] ROI report generates accurate calculations from telemetry data
+- [x] Executive summary template covers all required sections
+- [x] Adoption metrics module provides programmatic access to metrics
+- [x] Clear recommendations for Phase 22+ candidates
+
+**Phase 22+ Candidates** (documented in executive summary):
+
+1. **Legal Change Ingestion Pipeline**: Automate detection of legislative changes and flag impacted rules
+2. **New Domain Expansion**: Extend validation platform to additional product areas (e.g., money claims)
+3. **Advanced Analytics & ML**: Add predictive capabilities and anomaly detection
+
+---
+
 ## Future Correctness Phases Policy
 
 This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
@@ -1553,6 +1693,7 @@ unset EVICTION_YAML_PRIMARY
 | 18. Rule Authoring & Expansion | Complete | - | Linting CLI, explainability, multi-tenant |
 | 19. Governance & Change Management | Complete | - | CODEOWNERS, PR templates, emergency suppression |
 | 20. Productization & Visibility | Complete | - | Dashboard, rule lookup, enterprise features |
+| 21. Adoption, Measurement & ROI | Complete | - | Metrics framework, ROI report, executive summary |
 
 ## Risk Mitigation
 
