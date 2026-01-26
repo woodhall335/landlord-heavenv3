@@ -253,7 +253,7 @@ export async function GET(request: NextRequest) {
           name: s.name,
           jurisdictions: s.jurisdictions,
           topics: s.topics,
-          monitoringFrequency: s.monitoringFrequency,
+          updateFrequency: s.updateFrequency,
           trustLevel: s.trustLevel,
         })),
         byJurisdiction: Object.fromEntries(

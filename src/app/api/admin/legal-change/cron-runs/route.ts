@@ -45,14 +45,14 @@ export async function GET(request: NextRequest) {
     // Handle different view modes
     if (view === 'summary') {
       // Return job status summaries
-      const summaries = getAllJobStatuses();
+      const summaries = await getAllJobStatuses();
 
       return NextResponse.json({
         success: true,
         data: {
           jobs: summaries,
           totalJobs: summaries.length,
-          jobsNeedingAttention: summaries.filter((s) => s.needsChecking).length,
+          jobsNeedingAttention: summaries.filter((s: { needsChecking: boolean }) => s.needsChecking).length,
         },
         meta: {
           timestamp: new Date().toISOString(),
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
 
     if (view === 'attention') {
       // Return only jobs needing attention
-      const attention = getJobsNeedingAttention();
+      const attention = await getJobsNeedingAttention();
 
       return NextResponse.json({
         success: true,
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
     if (startedBefore) filter.startedBefore = startedBefore;
     if (triggeredBy) filter.triggeredBy = triggeredBy;
 
-    const runs = listCronRuns(filter);
+    const runs = await listCronRuns(filter);
 
     return NextResponse.json({
       success: true,

@@ -16,7 +16,8 @@ import {
   getEvent,
   listEvents,
 } from './legal-change-events';
-import { ImpactAssessment, analyzeAndAssess } from './legal-impact-analyzer';
+import { analyzeAndAssess } from './legal-impact-analyzer';
+import type { ImpactAssessment } from './legal-change-events';
 
 // ============================================================================
 // TYPES
@@ -270,7 +271,7 @@ export function runGovernanceChecks(
   }
 
   // Check 5: Actor authorization (simplified - would integrate with real auth)
-  const isAuthorizedActor = actor && actor.length > 0;
+  const isAuthorizedActor = Boolean(actor && actor.length > 0);
   checks.push({
     name: 'actor_authorized',
     passed: isAuthorizedActor,

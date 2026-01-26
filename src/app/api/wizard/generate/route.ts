@@ -88,12 +88,6 @@ export async function POST(request: Request) {
           description: w.message,
         }));
 
-        // Log YAML primary usage
-        if (yamlResult.usedFallback) {
-          console.warn('[API Generate] YAML primary fell back to TS:', {
-            reason: yamlResult.fallbackReason,
-          });
-        }
       } catch (error) {
         trackYamlOnlyValidation(false);
         const errorMessage = error instanceof Error ? error.message : String(error);
