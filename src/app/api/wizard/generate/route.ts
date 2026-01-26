@@ -94,33 +94,6 @@ export async function POST(request: Request) {
             reason: yamlResult.fallbackReason,
           });
         }
-      } else {
-        // Default: TS is authoritative, YAML runs in shadow mode
-        const preGenResult = await runPreGenerationCheck(caseFacts, product);
-        blockers = preGenResult.blockers;
-        warnings = preGenResult.warnings;
-        llmCheckRan = preGenResult.llm_check_ran;
-
-        // Shadow validation for parity monitoring
-        runProductionShadowValidation({
-          jurisdiction: deriveJurisdictionFromFacts(caseFacts),
-          product: 'complete_pack',
-          route: deriveRouteFromFacts(caseFacts),
-          facts: caseFacts,
-          tsBlockers: preGenResult.blockers.map((b) => ({
-            code: b.code,
-            severity: 'blocker',
-            message: b.message || b.code,
-          })),
-          tsWarnings: preGenResult.warnings.map((w) => ({
-            code: w.code,
-            severity: 'warning',
-            message: w.message || w.code,
-          })),
-        }).catch((err) => {
-          // Shadow validation should never block the response
-          console.error('[API Generate] Shadow validation error (non-fatal):', err);
-        });
       } catch (error) {
         trackYamlOnlyValidation(false);
         const errorMessage = error instanceof Error ? error.message : String(error);
