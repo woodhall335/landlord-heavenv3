@@ -494,3 +494,233 @@ export function formatShadowReport(report: ShadowModeReport): string {
 export function isShadowModeEnabled(): boolean {
   return process.env.EVICTION_SHADOW_MODE === 'true';
 }
+
+/**
+ * Check if YAML should be used as primary validator.
+ */
+export function isYamlPrimary(): boolean {
+  return process.env.EVICTION_YAML_PRIMARY === 'true';
+}
+
+/**
+ * Check if TS fallback is enabled (for YAML primary mode).
+ */
+export function isTsFallbackEnabled(): boolean {
+  return process.env.EVICTION_TS_FALLBACK !== 'false'; // Default true
+}
+
+/**
+ * Check if telemetry is enabled.
+ */
+export function isTelemetryEnabled(): boolean {
+  return process.env.EVICTION_TELEMETRY_ENABLED === 'true';
+}
+
+// =============================================================================
+// TELEMETRY TYPES
+// =============================================================================
+
+export interface ValidationTelemetryEvent {
+  timestamp: string;
+  jurisdiction: string;
+  product: string;
+  route: string;
+  parity: boolean;
+  parityPercent: number;
+  tsBlockers: number;
+  yamlBlockers: number;
+  tsWarnings: number;
+  yamlWarnings: number;
+  durationMs: number;
+  discrepancyCount: number;
+  discrepancies?: Array<{
+    type: 'missing_in_yaml' | 'missing_in_ts' | 'severity_mismatch';
+    ruleId: string;
+  }>;
+  blockerIds: {
+    ts: string[];
+    yaml: string[];
+  };
+}
+
+export interface TelemetryMetrics {
+  totalValidations: number;
+  parityMatches: number;
+  parityMismatches: number;
+  parityRate: number;
+  avgDurationMs: number;
+  blockerFrequency: Map<string, number>;
+  discrepancyFrequency: Map<string, number>;
+}
+
+// In-memory metrics store (for development/testing)
+const metricsStore: ValidationTelemetryEvent[] = [];
+const MAX_METRICS_STORE_SIZE = 1000;
+
+// =============================================================================
+// TELEMETRY FUNCTIONS
+// =============================================================================
+
+/**
+ * Record a validation telemetry event.
+ * In production, this would publish to a metrics system.
+ * For now, stores in memory and logs.
+ */
+export function recordValidationTelemetry(
+  report: ShadowValidationReport
+): ValidationTelemetryEvent {
+  const event: ValidationTelemetryEvent = {
+    timestamp: report.timestamp,
+    jurisdiction: report.jurisdiction,
+    product: report.product,
+    route: report.route,
+    parity: report.parity,
+    parityPercent: report.parityPercent,
+    tsBlockers: report.ts.blockers,
+    yamlBlockers: report.yaml.blockers,
+    tsWarnings: report.ts.warnings,
+    yamlWarnings: report.yaml.warnings,
+    durationMs: report.durationMs,
+    discrepancyCount: report.discrepancies.length,
+    discrepancies: report.discrepancies.map((d) => ({
+      type: d.type,
+      ruleId: d.ruleId,
+    })),
+    blockerIds: {
+      ts: report.ts.blockerIds,
+      yaml: report.yaml.blockerIds,
+    },
+  };
+
+  // Store in memory (with size limit)
+  if (metricsStore.length >= MAX_METRICS_STORE_SIZE) {
+    metricsStore.shift(); // Remove oldest
+  }
+  metricsStore.push(event);
+
+  // Log if telemetry enabled
+  if (isTelemetryEnabled()) {
+    console.log('[Telemetry]', JSON.stringify(event));
+  }
+
+  return event;
+}
+
+/**
+ * Get aggregated metrics from the in-memory store.
+ * Useful for dashboards and monitoring.
+ */
+export function getAggregatedMetrics(
+  filter?: {
+    jurisdiction?: string;
+    product?: string;
+    route?: string;
+    since?: Date;
+  }
+): TelemetryMetrics {
+  let events = [...metricsStore];
+
+  // Apply filters
+  if (filter?.jurisdiction) {
+    events = events.filter((e) => e.jurisdiction === filter.jurisdiction);
+  }
+  if (filter?.product) {
+    events = events.filter((e) => e.product === filter.product);
+  }
+  if (filter?.route) {
+    events = events.filter((e) => e.route === filter.route);
+  }
+  if (filter?.since) {
+    const sinceTs = filter.since.toISOString();
+    events = events.filter((e) => e.timestamp >= sinceTs);
+  }
+
+  // Calculate metrics
+  const totalValidations = events.length;
+  const parityMatches = events.filter((e) => e.parity).length;
+  const parityMismatches = totalValidations - parityMatches;
+  const parityRate = totalValidations > 0 ? parityMatches / totalValidations : 0;
+  const avgDurationMs =
+    totalValidations > 0
+      ? events.reduce((sum, e) => sum + e.durationMs, 0) / totalValidations
+      : 0;
+
+  // Count blocker frequency
+  const blockerFrequency = new Map<string, number>();
+  for (const event of events) {
+    for (const id of [...event.blockerIds.ts, ...event.blockerIds.yaml]) {
+      blockerFrequency.set(id, (blockerFrequency.get(id) || 0) + 1);
+    }
+  }
+
+  // Count discrepancy frequency
+  const discrepancyFrequency = new Map<string, number>();
+  for (const event of events) {
+    for (const d of event.discrepancies || []) {
+      const key = `${d.type}:${d.ruleId}`;
+      discrepancyFrequency.set(key, (discrepancyFrequency.get(key) || 0) + 1);
+    }
+  }
+
+  return {
+    totalValidations,
+    parityMatches,
+    parityMismatches,
+    parityRate,
+    avgDurationMs,
+    blockerFrequency,
+    discrepancyFrequency,
+  };
+}
+
+/**
+ * Get top N blockers by frequency.
+ */
+export function getTopBlockers(
+  n: number = 10,
+  filter?: {
+    jurisdiction?: string;
+    product?: string;
+    route?: string;
+  }
+): Array<{ ruleId: string; count: number }> {
+  const metrics = getAggregatedMetrics(filter);
+  return Array.from(metrics.blockerFrequency.entries())
+    .map(([ruleId, count]) => ({ ruleId, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, n);
+}
+
+/**
+ * Get top N discrepancies by frequency.
+ */
+export function getTopDiscrepancies(
+  n: number = 10,
+  filter?: {
+    jurisdiction?: string;
+    product?: string;
+    route?: string;
+  }
+): Array<{ key: string; count: number }> {
+  const metrics = getAggregatedMetrics(filter);
+  return Array.from(metrics.discrepancyFrequency.entries())
+    .map(([key, count]) => ({ key, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, n);
+}
+
+/**
+ * Clear the metrics store.
+ * Useful for testing.
+ */
+export function clearMetricsStore(): void {
+  metricsStore.length = 0;
+}
+
+/**
+ * Get the raw metrics store.
+ * Useful for debugging.
+ */
+export function getMetricsStore(): ValidationTelemetryEvent[] {
+  return [...metricsStore];
+}
