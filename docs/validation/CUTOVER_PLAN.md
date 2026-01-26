@@ -1027,6 +1027,171 @@ From automated tests:
 
 ---
 
+### Phase 18: Rule Authoring, Explainability & Platform Expansion
+
+**Status**: ✅ Complete
+
+**Description**: Enable rule authors and enterprise customers to understand, customize, and extend the validation engine. Prepare infrastructure for multi-product expansion.
+
+**Objectives**:
+- Provide developer tools for rule authoring and debugging
+- Enable enterprise customization through rule overrides and custom rules
+- Abstract engine interfaces for future product expansion
+- Document best practices for rule development
+
+**Deliverables**:
+
+- [x] **Rule Linting CLI** (`scripts/validation-lint-rules.ts`)
+  - Validates YAML schema and required fields
+  - Enforces Phase 17 safeguards (max rules, max conditions)
+  - Validates feature flag values
+  - Ensures Phase 16 message coverage
+  - Integrated into CI: `npm run validation:lint-rules`
+
+- [x] **Explainability Mode** (updated `eviction-rules-engine.ts`)
+  - `evaluateEvictionRulesExplained()` - Returns detailed evaluation info
+  - `getValidationSummary()` - Human-readable summary
+  - `explainRule()` - Per-rule explanation
+  - Includes condition-level results, timing, computed context
+
+- [x] **Rule Authoring Guide** (`docs/validation/RULE_AUTHORING_GUIDE.md`)
+  - Complete documentation for writing YAML rules
+  - Condition syntax reference
+  - Allowed identifiers list
+  - Testing and debugging guidance
+  - Performance best practices
+
+- [x] **Multi-Tenant Rule Targeting** (`src/lib/validation/rule-targeting.ts`)
+  - Tenant context management
+  - Tier-based feature gating (free/pro/enterprise)
+  - Rule override model (suppress/downgrade/upgrade/modify)
+  - Custom rule support for enterprise
+  - Audit logging for compliance
+
+- [x] **Custom Rules Documentation** (`docs/validation/CUSTOM_RULES.md`)
+  - Enterprise feature documentation
+  - Override configuration examples
+  - Custom rule structure
+  - Audit logging guide
+
+- [x] **Engine Interface Abstraction** (`src/lib/validation/engine-interface.ts`)
+  - Generic validation engine interface
+  - Product registry for multi-product support
+  - Result transformers and utilities
+  - Plugin interface for extensibility
+
+- [x] **Phase 18 Tests** (`tests/validation/phase18-authoring.test.ts`)
+  - 43 tests covering all Phase 18 features
+  - Explainability mode tests
+  - Multi-tenant targeting tests
+  - Rule override model tests
+  - Engine interface tests
+
+**Usage - Rule Linting**:
+
+```bash
+# Run rule linting
+npm run validation:lint-rules
+
+# Output shows:
+# - YAML schema validation
+# - Phase 17 safeguard checks
+# - Feature flag validation
+# - Phase 16 message coverage
+# - Condition allowlist validation
+```
+
+**Usage - Explainability Mode**:
+
+```typescript
+import {
+  evaluateEvictionRulesExplained,
+  getValidationSummary,
+  explainRule,
+} from '@/lib/validation/eviction-rules-engine';
+
+// Get detailed evaluation with explanations
+const result = evaluateEvictionRulesExplained(
+  facts, 'england', 'notice_only', 'section_21'
+);
+
+// Print human-readable summary
+console.log(getValidationSummary(result));
+
+// Explain specific rule
+const explanation = explainRule(result, 's21_deposit_not_protected');
+console.log(explanation.conditions);  // Per-condition results
+console.log(explanation.fired);       // Whether rule fired
+console.log(explanation.firingCondition);  // Which condition triggered
+```
+
+**Usage - Multi-Tenant Rule Targeting**:
+
+```typescript
+import {
+  setTenantContext,
+  processRuleOverrides,
+} from '@/lib/validation/rule-targeting';
+
+// Set tenant context at request start
+setTenantContext({
+  tenantId: 'acme-corp',
+  tier: 'enterprise',
+  ruleOverrides: [
+    {
+      ruleId: 's21_deposit_cap_exceeded',
+      action: 'downgrade',
+      newSeverity: 'warning',
+      reason: 'Client has separate compliance process',
+      approvedBy: 'compliance@acme.com',
+    },
+  ],
+});
+
+// Process results through override system
+const processedResults = processRuleOverrides(
+  validationResults.blockers,
+  'england', 'notice_only', 'section_21'
+);
+```
+
+**Tier-Based Feature Availability**:
+
+| Feature | Free | Pro | Enterprise |
+|---------|------|-----|------------|
+| Basic validation | ✅ | ✅ | ✅ |
+| Enhanced messages | ❌ | ✅ | ✅ |
+| Explainability | ❌ | ✅ | ✅ |
+| Custom rules | ❌ | ❌ | ✅ |
+| Rule overrides | ❌ | ❌ | ✅ |
+
+**Product Registry (for future expansion)**:
+
+```typescript
+import { productRegistry } from '@/lib/validation/engine-interface';
+
+// Currently registered
+productRegistry.has('eviction-notices');  // true
+
+// Future products can be registered
+// productRegistry.register({
+//   productId: 'money-claims',
+//   name: 'Money Claims',
+//   contexts: ['england_claim', 'scotland_claim'],
+//   rulesPath: 'config/money-claims',
+// });
+```
+
+**Success Criteria**:
+- [x] Rule linting CLI validates all existing YAML files
+- [x] Explainability mode provides detailed evaluation info
+- [x] Multi-tenant targeting supports override model
+- [x] Engine interfaces abstracted for product expansion
+- [x] 43 Phase 18 tests pass
+- [x] Documentation complete for rule authors
+
+---
+
 ## Future Correctness Phases Policy
 
 This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
@@ -1149,6 +1314,7 @@ unset EVICTION_YAML_PRIMARY
 | 15. Full Enablement | Available | 1-2 days | ENABLED=true, policy lock-in |
 | 16. UX Messaging | Complete | - | Message catalog, support guide, tests |
 | 17. Performance Hardening | Complete | - | Caching, safeguards, O(1) lookups |
+| 18. Rule Authoring & Expansion | Complete | - | Linting CLI, explainability, multi-tenant |
 
 ## Risk Mitigation
 
