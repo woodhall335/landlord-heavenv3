@@ -1348,3 +1348,191 @@ export async function runYamlPrimaryCompletePackValidation(params: {
     },
   });
 }
+
+// =============================================================================
+// PHASE 9: YAML-ONLY VALIDATION WRAPPERS
+// =============================================================================
+
+/**
+ * TS validator decommissioning status.
+ * Track which validators have been fully migrated to YAML-only.
+ */
+export const TS_DECOMMISSION_STATUS = {
+  // notice_only validators
+  'england/notice_only/section_21': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+  'england/notice_only/section_8': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+  'wales/notice_only/section_173': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+  'scotland/notice_only/ntl': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+  // complete_pack validators
+  'england/complete_pack/section_21': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+  'england/complete_pack/section_8': { deprecated: true, yamlParity: true, tsFallbackUsed: false },
+} as const;
+
+/**
+ * Log TS fallback usage for decommissioning metrics.
+ * Call this when TS fallback is triggered to track usage patterns.
+ */
+export function logTsFallbackUsage(params: {
+  jurisdiction: string;
+  product: string;
+  route: string;
+  reason: FallbackReason;
+}): void {
+  const key = `${params.jurisdiction}/${params.product}/${params.route}`;
+  console.warn(
+    `[TS-Fallback] TS validator used: ${key}`,
+    { reason: params.reason, timestamp: new Date().toISOString() }
+  );
+
+  // Track in metrics for monitoring
+  if (isTelemetryEnabled()) {
+    console.log('[Telemetry:TsFallback]', JSON.stringify({
+      event: 'ts_fallback_triggered',
+      ...params,
+      timestamp: new Date().toISOString(),
+    }));
+  }
+}
+
+/**
+ * YAML-only notice validation wrapper.
+ *
+ * Phase 9: This function bypasses TS validators entirely and uses YAML only.
+ * Use this when ready to fully decommission TS validators for a specific route.
+ *
+ * WARNING: This has no fallback. Use only after confirming 100% YAML parity
+ * and zero fallback rate in production for the target jurisdiction/route.
+ *
+ * @param params - Validation parameters
+ * @returns Validation result from YAML engine only
+ * @throws If YAML validation fails (no fallback)
+ */
+export async function runYamlOnlyNoticeValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, any>;
+}): Promise<{
+  blockers: Array<{ id: string; severity: 'blocker'; message: string; rationale?: string }>;
+  warnings: Array<{ id: string; severity: 'warning'; message: string; rationale?: string }>;
+  isValid: boolean;
+  durationMs: number;
+}> {
+  const startTime = Date.now();
+
+  // Import eviction rules engine
+  const { evaluateEvictionRules } = await import('./eviction-rules-engine');
+
+  // Run YAML validation (no TS fallback)
+  const yamlResult = evaluateEvictionRules(
+    params.facts,
+    params.jurisdiction as Jurisdiction,
+    'notice_only' as Product,
+    params.route as EvictionRoute
+  );
+
+  if (!yamlResult) {
+    throw new Error(`YAML validation returned no result for ${params.jurisdiction}/notice_only/${params.route}`);
+  }
+
+  return {
+    blockers: yamlResult.blockers.map((b) => ({
+      id: b.id,
+      severity: 'blocker' as const,
+      message: b.message,
+      rationale: b.rationale,
+    })),
+    warnings: yamlResult.warnings.map((w) => ({
+      id: w.id,
+      severity: 'warning' as const,
+      message: w.message,
+      rationale: w.rationale,
+    })),
+    isValid: yamlResult.blockers.length === 0,
+    durationMs: Date.now() - startTime,
+  };
+}
+
+/**
+ * YAML-only complete_pack validation wrapper.
+ *
+ * Phase 9: This function bypasses TS validators entirely and uses YAML only.
+ * Use this when ready to fully decommission TS validators for complete_pack.
+ *
+ * WARNING: This has no fallback. Use only after confirming 100% YAML parity
+ * and zero fallback rate in production for complete_pack.
+ *
+ * @param params - Validation parameters
+ * @returns Validation result from YAML engine only
+ * @throws If YAML validation fails (no fallback)
+ */
+export async function runYamlOnlyCompletePackValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, any>;
+}): Promise<{
+  blockers: Array<{ id: string; severity: 'blocker'; message: string; rationale?: string }>;
+  warnings: Array<{ id: string; severity: 'warning'; message: string; rationale?: string }>;
+  isValid: boolean;
+  durationMs: number;
+}> {
+  const startTime = Date.now();
+
+  // Import eviction rules engine
+  const { evaluateEvictionRules } = await import('./eviction-rules-engine');
+
+  // Run YAML validation (no TS fallback)
+  const yamlResult = evaluateEvictionRules(
+    params.facts,
+    params.jurisdiction as Jurisdiction,
+    'complete_pack' as Product,
+    params.route as EvictionRoute
+  );
+
+  if (!yamlResult) {
+    throw new Error(`YAML validation returned no result for ${params.jurisdiction}/complete_pack/${params.route}`);
+  }
+
+  return {
+    blockers: yamlResult.blockers.map((b) => ({
+      id: b.id,
+      severity: 'blocker' as const,
+      message: b.message,
+      rationale: b.rationale,
+    })),
+    warnings: yamlResult.warnings.map((w) => ({
+      id: w.id,
+      severity: 'warning' as const,
+      message: w.message,
+      rationale: w.rationale,
+    })),
+    isValid: yamlResult.blockers.length === 0,
+    durationMs: Date.now() - startTime,
+  };
+}
+
+/**
+ * Check if TS fallback is still needed for a given validation path.
+ * Returns false when safe to use YAML-only validation.
+ *
+ * Criteria for YAML-only readiness:
+ * 1. YAML parity achieved (100% rule coverage)
+ * 2. Fallback rate near zero in production
+ * 3. No critical discrepancies in telemetry
+ */
+export function isTsFallbackNeeded(params: {
+  jurisdiction: string;
+  product: string;
+  route: string;
+}): boolean {
+  // Phase 9: Check decommissioning status
+  const key = `${params.jurisdiction}/${params.product}/${params.route}`;
+
+  // For now, always allow fallback until we have production metrics
+  // showing zero fallback rate for 14+ days
+  if (process.env.EVICTION_YAML_ONLY === 'true') {
+    return false; // YAML-only mode forced
+  }
+
+  // Default: keep TS fallback enabled for safety
+  return isTsFallbackEnabled();
+}

@@ -91,8 +91,29 @@ function normalizeWalesRoute(route: string | undefined): string | undefined {
  * These always run before generation.
  *
  * Now supports jurisdiction-aware validation for England, Wales, Scotland.
+ *
+ * @deprecated Phase 9: This function is being replaced by the YAML rules engine.
+ * Use `runYamlPrimaryCompletePackValidation()` from `@/lib/validation/shadow-mode-adapter`
+ * for production validation flows. This TS implementation remains as a fallback
+ * when EVICTION_YAML_PRIMARY=false or when YAML validation fails.
+ *
+ * Migration status:
+ * - England complete_pack (S21 + S8): ✅ YAML parity achieved
+ * - Wales complete_pack: Not implemented (notice_only only)
+ * - Scotland complete_pack: Not implemented (notice_only only)
+ *
+ * This function will be removed once YAML-only mode is stable in production.
+ * Track removal progress in CUTOVER_PLAN.md.
  */
 export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): ConsistencyIssue[] {
+  // Phase 9: Log deprecation warning when called directly (not via YAML primary)
+  if (process.env.EVICTION_YAML_PRIMARY === 'true' && process.env.NODE_ENV !== 'test') {
+    console.warn(
+      '[DEPRECATED] runRuleBasedChecks called directly while YAML is primary.',
+      'This TS validator should only be used as fallback.',
+      { product, route: facts.selected_notice_route || facts.eviction_route }
+    );
+  }
   const issues: ConsistencyIssue[] = [];
 
   // Only run complete_pack specific checks for complete_pack/eviction_pack/notice_only
@@ -732,6 +753,16 @@ Identify any logical inconsistencies, contradictions, or critical missing data t
 /**
  * Run pre-generation consistency validation.
  *
+ * @deprecated Phase 9: This function is being replaced by the YAML rules engine.
+ * Use `runYamlPrimaryCompletePackValidation()` from `@/lib/validation/shadow-mode-adapter`
+ * for production validation flows. This TS implementation remains as a fallback
+ * when EVICTION_YAML_PRIMARY=false or when YAML validation fails.
+ *
+ * The LLM consistency check (if enabled) will continue to run as it provides
+ * additional semantic validation beyond rule-based checks.
+ *
+ * Migration status: See runRuleBasedChecks() for per-jurisdiction status.
+ *
  * @param facts - Flat wizard facts from getCaseFacts()
  * @param product - Product type (e.g., 'complete_pack', 'eviction_pack')
  * @returns PreGenerationCheckResult with blockers, warnings, and pass/fail status
@@ -740,6 +771,14 @@ export async function runPreGenerationCheck(
   facts: WizardFactsFlat,
   product: string
 ): Promise<PreGenerationCheckResult> {
+  // Phase 9: Log deprecation warning when called directly (not via YAML primary)
+  if (process.env.EVICTION_YAML_PRIMARY === 'true' && process.env.NODE_ENV !== 'test') {
+    console.warn(
+      '[DEPRECATED] runPreGenerationCheck called directly while YAML is primary.',
+      'This TS validator should only be used as fallback.',
+      { product }
+    );
+  }
   const route = facts.selected_notice_route || facts.eviction_route;
 
   // Always run rule-based checks

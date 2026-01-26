@@ -110,27 +110,86 @@ unset EVICTION_YAML_PRIMARY
 export EVICTION_YAML_PRIMARY=false
 ```
 
-### Phase 4: YAML Only
+### Phase 4: YAML Only (Decommissioning)
 
-**Status**: 📋 Planned
+**Status**: 🟡 Ready to Begin
 
 **Description**: Remove TS validator, YAML engine is sole validation system.
 
 **Environment Variables**:
 ```bash
 EVICTION_YAML_PRIMARY=true
-# TS_FALLBACK removed
+EVICTION_YAML_ONLY=true        # NEW: Bypass TS fallback entirely
+EVICTION_TS_FALLBACK=false     # Disable TS fallback
 ```
 
 **Behavior**:
 - Only YAML engine runs
-- TS validator code marked deprecated
-- Can be removed in future cleanup
+- TS validator code marked deprecated with `@deprecated` JSDoc
+- TS functions log warnings when called
+- YAML-only wrappers available for gradual migration
+
+**TS Validator Decommissioning Status**:
+
+| Validator | Jurisdiction | Product | Status | Fallback Rate |
+|-----------|--------------|---------|--------|---------------|
+| `evaluateNoticeCompliance` | England S21 | notice_only | ⚠️ Deprecated | Monitoring |
+| `evaluateNoticeCompliance` | England S8 | notice_only | ⚠️ Deprecated | Monitoring |
+| `evaluateNoticeCompliance` | Wales S173 | notice_only | ⚠️ Deprecated | Monitoring |
+| `evaluateNoticeCompliance` | Scotland NTL | notice_only | ⚠️ Deprecated | Monitoring |
+| `runRuleBasedChecks` | England | complete_pack | ⚠️ Deprecated | Monitoring |
+| `runPreGenerationCheck` | England | complete_pack | ⚠️ Deprecated | Monitoring |
+
+**YAML-Only Wrappers** (use when ready to remove TS):
+- `runYamlOnlyNoticeValidation()` - No TS fallback
+- `runYamlOnlyCompletePackValidation()` - No TS fallback
 
 **Success Criteria**:
 - [ ] 30 days stable in Phase 3
+- [ ] Fallback rate < 0.01% for all routes
 - [ ] All edge cases documented
 - [ ] Team sign-off on removal
+
+**Decommissioning Steps**:
+
+1. **Monitor fallback rate** (current phase)
+   ```bash
+   grep "\[TS-Fallback\]" /var/log/app.log | wc -l
+   grep "\[Telemetry:TsFallback\]" /var/log/app.log | jq -s 'group_by(.route) | map({route: .[0].route, count: length})'
+   ```
+
+2. **Switch to YAML-only** (when fallback rate is ~0):
+   ```bash
+   export EVICTION_YAML_ONLY=true
+   export EVICTION_TS_FALLBACK=false
+   ```
+
+3. **Remove TS code** (after 14 days stable):
+   - Delete deprecated functions
+   - Remove fallback logic
+   - Update imports
+
+### Phase 5: TS Code Removal
+
+**Status**: 📋 Planned
+
+**Description**: Complete removal of TS validation code.
+
+**Prerequisites**:
+- [ ] Phase 4 stable for 14+ days
+- [ ] Zero TS fallback events
+- [ ] All tests migrated to YAML-only paths
+- [ ] Code review approved
+
+**Files to Remove/Modify**:
+- `src/lib/notices/evaluate-notice-compliance.ts` - Remove or gut
+- `src/lib/validation/pre-generation-check.ts` - Remove runRuleBasedChecks
+- `src/lib/validation/shadow-mode-adapter.ts` - Remove TS fallback logic
+- Test files - Update to use YAML-only assertions
+
+**Rollback**:
+- Not possible after code removal
+- Must ensure Phase 4 is fully stable before proceeding
 
 ## Rollback Procedures
 
@@ -157,7 +216,9 @@ unset EVICTION_YAML_PRIMARY
 | `EVICTION_SHADOW_MODE` | `false` | Enable shadow validation |
 | `EVICTION_YAML_PRIMARY` | `false` | Use YAML as primary validator |
 | `EVICTION_TS_FALLBACK` | `true` | Fall back to TS on YAML errors |
+| `EVICTION_YAML_ONLY` | `false` | **Phase 4**: Bypass TS fallback entirely |
 | `EVICTION_TELEMETRY_ENABLED` | `false` | Publish validation metrics |
+| `VALIDATION_TELEMETRY_SAMPLE_RATE` | `1.0` | Sampling rate (0.0-1.0) |
 
 ## Timeline
 
