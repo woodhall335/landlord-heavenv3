@@ -5,9 +5,14 @@
  * Checks all enabled legal sources for changes and creates events
  *
  * Usage: Call from Vercel Cron or external cron service
- * Authorization: Requires CRON_SECRET token
+ * Authorization: Requires CRON_SECRET token (Bearer or Vercel header)
  *
  * Phase 23: Admin Portal Cron Summary + One-Click "Push PR" Workflow
+ *
+ * Environment Variables:
+ * - CRON_SECRET: Required for authorization
+ * - LEGAL_CHANGE_SIMULATION_ENABLED: Set to "true" to enable test event simulation
+ *   (defaults to false - no simulated events in production)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -32,24 +37,102 @@ import {
 import { analyzeAndAssess } from '@/lib/validation/legal-impact-analyzer';
 
 /**
+ * Check if simulation mode is enabled.
+ * Defaults to false for production safety.
+ */
+function isSimulationEnabled(): boolean {
+  return process.env.LEGAL_CHANGE_SIMULATION_ENABLED === 'true';
+}
+
+/**
+ * Verify cron authorization.
+ * Supports both Bearer token and Vercel cron header.
+ */
+function verifyCronAuth(request: NextRequest): { authorized: boolean; source: string } {
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (!cronSecret) {
+    return { authorized: false, source: 'no_secret_configured' };
+  }
+
+  // Check Bearer token (standard auth)
+  const authHeader = request.headers.get('authorization');
+  if (authHeader === `Bearer ${cronSecret}`) {
+    return { authorized: true, source: 'bearer' };
+  }
+
+  // Check Vercel cron header (for Vercel Cron jobs)
+  const vercelCronHeader = request.headers.get('x-vercel-cron');
+  if (vercelCronHeader === cronSecret) {
+    return { authorized: true, source: 'vercel_cron' };
+  }
+
+  return { authorized: false, source: 'invalid_credentials' };
+}
+
+/**
  * POST endpoint for cron execution
  */
 export async function POST(request: NextRequest) {
+  return executeCronJob(request, 'post');
+}
+
+/**
+ * GET endpoint for Vercel Cron compatibility
+ * Vercel Cron uses GET requests by default
+ */
+export async function GET(request: NextRequest) {
+  // Check if this is a health check (no auth header)
+  const authHeader = request.headers.get('authorization');
+  const vercelCronHeader = request.headers.get('x-vercel-cron');
+
+  // If no auth headers present, return status info only
+  if (!authHeader && !vercelCronHeader) {
+    try {
+      const sources = getEnabledSources();
+      const eventCounts = countEventsByState();
+
+      return NextResponse.json({
+        status: 'ok',
+        job: 'legal-change:check',
+        enabledSources: sources.length,
+        eventCounts,
+        simulationEnabled: isSimulationEnabled(),
+        nextScheduledRun: calculateNextRun(),
+      });
+    } catch (error: any) {
+      return NextResponse.json(
+        { status: 'error', error: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Otherwise, execute the cron job
+  return executeCronJob(request, 'get');
+}
+
+/**
+ * Execute the cron job (shared logic for GET and POST)
+ */
+async function executeCronJob(
+  request: NextRequest,
+  method: 'get' | 'post'
+): Promise<NextResponse> {
   const startTime = Date.now();
 
   try {
-    // Verify cron secret
-    const authHeader = request.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET;
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    // Verify authorization
+    const auth = verifyCronAuth(request);
+    if (!auth.authorized) {
+      console.warn(`[Legal Change Cron] Unauthorized attempt via ${method.toUpperCase()}: ${auth.source}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('[Legal Change Cron] Starting scheduled check...');
+    console.log(`[Legal Change Cron] Starting scheduled check (via ${method.toUpperCase()}, auth: ${auth.source})...`);
 
-    // Start the cron run
-    const run = startCronRun('legal-change:check', 'cron');
+    // Start the cron run (now async)
+    const run = await startCronRun('legal-change:check', 'cron');
 
     // Get all enabled sources
     const sources = getEnabledSources();
@@ -79,9 +162,9 @@ export async function POST(request: NextRequest) {
           warnings.push(result.warning);
         }
 
-        // Update progress periodically
+        // Update progress periodically (now async)
         if (sourcesChecked % 10 === 0) {
-          updateCronRun(run.id, {
+          await updateCronRun(run.id, {
             sourcesChecked,
             eventsCreated,
             eventsUpdated,
@@ -93,7 +176,7 @@ export async function POST(request: NextRequest) {
 
         errors.push({ sourceId: source.id, message: errorMessage });
 
-        addCronRunError(run.id, {
+        await addCronRunError(run.id, {
           sourceId: source.id,
           message: errorMessage,
           stack: sourceError instanceof Error ? sourceError.stack : undefined,
@@ -128,8 +211,8 @@ export async function POST(request: NextRequest) {
       eventCounts,
     });
 
-    // Complete the run
-    const completedRun = completeCronRun(run.id, status, summary, {
+    // Complete the run (now async)
+    const completedRun = await completeCronRun(run.id, status, summary, {
       sourcesChecked,
       eventsCreated,
       eventsUpdated,
@@ -206,6 +289,10 @@ export async function POST(request: NextRequest) {
 
 /**
  * Check a single source for changes
+ *
+ * PRODUCTION: Only creates events when real changes are detected.
+ * SIMULATION MODE (LEGAL_CHANGE_SIMULATION_ENABLED=true): Creates test events
+ * for development/testing purposes only.
  */
 async function checkSource(
   source: LegalSource,
@@ -220,9 +307,6 @@ async function checkSource(
   // 3. Extract changes using NLP/diff algorithms
   // 4. Create events for significant changes
 
-  // For this implementation, we simulate the check
-  // based on the source's monitoring frequency
-
   // Check last event for this source
   const existingEvents = listEvents({
     sourceIds: [source.id],
@@ -232,7 +316,7 @@ async function checkSource(
   const lastEventTime = lastEvent ? new Date(lastEvent.detectedAt).getTime() : 0;
   const now = Date.now();
 
-  // Calculate if we should expect a change based on frequency
+  // Calculate time since last event based on frequency
   const frequencyMs: Record<string, number> = {
     realtime: 60 * 60 * 1000, // 1 hour
     daily: 24 * 60 * 60 * 1000, // 1 day
@@ -243,17 +327,30 @@ async function checkSource(
   const expectedFrequency = frequencyMs[source.monitoringFrequency] || frequencyMs.daily;
   const timeSinceLastEvent = now - lastEventTime;
 
-  // Only simulate finding changes occasionally
-  // In production, this would be actual content checking
-  const shouldSimulateChange =
-    timeSinceLastEvent > expectedFrequency && Math.random() < 0.05; // 5% chance
+  // PRODUCTION: Real content checking would happen here
+  // TODO: Implement actual source content fetching and comparison
+  // For now, we only create events in simulation mode
 
-  if (!shouldSimulateChange) {
+  // Simulation mode: Create test events for development/testing
+  // This is explicitly opt-in and disabled by default
+  if (!isSimulationEnabled()) {
+    // Production mode: No simulated events
+    // Real implementation would check actual source content here
     return {};
   }
 
-  // Simulate a new event
-  // In production, this would have real content from the source
+  // SIMULATION MODE ONLY
+  // Only create simulated events if enough time has passed since last event
+  // This provides deterministic behavior for testing
+  const shouldCreateSimulatedEvent = timeSinceLastEvent > expectedFrequency;
+
+  if (!shouldCreateSimulatedEvent) {
+    return {};
+  }
+
+  console.log(`[Legal Change Cron] SIMULATION: Creating test event for source ${source.id}`);
+
+  // Create a simulated event for testing
   const event = createEvent({
     sourceId: source.id,
     sourceName: source.name,
@@ -263,11 +360,11 @@ async function checkSource(
     detectionMethod: 'scheduled',
     jurisdictions: source.jurisdictions,
     topics: source.topics,
-    title: `Update detected: ${source.name}`,
-    summary: `A scheduled check detected potential changes from ${source.name}. This requires manual review to confirm.`,
+    title: `[SIMULATED] Update detected: ${source.name}`,
+    summary: `[SIMULATION MODE] A test event was created for ${source.name}. This is not a real legal change - simulation is enabled for testing.`,
     trustLevel: source.trustLevel,
     confidenceLevel: 'unverified',
-    createdBy: 'cron',
+    createdBy: 'cron:simulation',
   });
 
   // Auto-analyze the event
@@ -282,6 +379,7 @@ async function checkSource(
 
   return {
     newEvent: event,
+    warning: 'Event created in simulation mode - not from real source content',
   };
 }
 
@@ -324,31 +422,6 @@ function buildSummary(data: {
   }
 
   return parts.join(', ');
-}
-
-/**
- * GET endpoint for health check / manual trigger info
- */
-export async function GET(request: NextRequest) {
-  try {
-    // For GET, we just return the current status without authorization
-    // This can be used for health checks
-    const sources = getEnabledSources();
-    const eventCounts = countEventsByState();
-
-    return NextResponse.json({
-      status: 'ok',
-      job: 'legal-change:check',
-      enabledSources: sources.length,
-      eventCounts,
-      nextScheduledRun: calculateNextRun(),
-    });
-  } catch (error: any) {
-    return NextResponse.json(
-      { status: 'error', error: error.message },
-      { status: 500 }
-    );
-  }
 }
 
 /**

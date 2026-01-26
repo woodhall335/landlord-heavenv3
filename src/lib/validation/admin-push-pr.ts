@@ -22,6 +22,7 @@ import {
 import {
   GovernanceCheckResult,
   ReviewerRole,
+  AuditAction,
   runGovernanceChecks,
   getRequiredReviewers,
   getReviewerHandles,
@@ -381,10 +382,9 @@ export async function executePushPR(request: PushPRRequest): Promise<PushPRResul
   // Step 12: Log audit entry
   logAuditEntry({
     eventId,
-    action: 'create' as any, // Using 'create' for PR creation
+    action: 'push_pr' as AuditAction,
     actor,
     details: {
-      type: 'push_pr',
       prUrl: prResult.prUrl,
       prNumber: prResult.prNumber,
       branchName,

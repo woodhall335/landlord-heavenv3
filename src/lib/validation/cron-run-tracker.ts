@@ -4,8 +4,12 @@
  * Phase 23: Admin Portal Cron Summary + One-Click "Push PR" Workflow
  *
  * Tracks cron job executions, their status, and determines when attention is needed.
- * Persists run results for display in the admin dashboard.
+ * Uses Supabase for persistent storage (serverless-safe).
+ *
+ * Production-hardened: All data persisted to database for reliability across deploys.
  */
+
+import { createAdminClient } from '@/lib/supabase/server';
 
 // ============================================================================
 // TYPES
@@ -123,24 +127,61 @@ export interface CronRunFilter {
   limit?: number;
 }
 
-// ============================================================================
-// IN-MEMORY STORE
-// ============================================================================
+/**
+ * Database row type for cron_runs table.
+ */
+interface CronRunRow {
+  id: string;
+  job_name: string;
+  started_at: string;
+  finished_at: string | null;
+  status: string;
+  duration_ms: number | null;
+  sources_checked: number;
+  events_created: number;
+  events_updated: number;
+  errors: CronRunError[];
+  warnings: string[];
+  summary: string | null;
+  raw_output: string | null;
+  triggered_by: string;
+  triggered_by_user_id: string | null;
+  created_at: string;
+}
 
-const cronRunStore: Map<string, CronRun> = new Map();
-let runIdCounter = 1;
-
-// Maximum runs to keep in memory per job
-const MAX_RUNS_PER_JOB = 100;
+// ============================================================================
+// DATABASE HELPERS
+// ============================================================================
 
 /**
- * Generate a unique run ID.
+ * Convert database row to CronRun object.
  */
-function generateRunId(): string {
-  const timestamp = Date.now().toString(36);
-  const counter = (runIdCounter++).toString(36).padStart(4, '0');
-  return `run_${timestamp}_${counter}`;
+function rowToCronRun(row: CronRunRow): CronRun {
+  return {
+    id: row.id,
+    jobName: row.job_name as CronJobName,
+    startedAt: row.started_at,
+    finishedAt: row.finished_at ?? undefined,
+    status: row.status as CronRunStatus,
+    durationMs: row.duration_ms ?? undefined,
+    sourcesChecked: row.sources_checked,
+    eventsCreated: row.events_created,
+    eventsUpdated: row.events_updated ?? 0,
+    errors: row.errors || [],
+    warnings: row.warnings || [],
+    summary: row.summary || '',
+    rawOutput: row.raw_output ?? undefined,
+    triggeredBy: row.triggered_by as 'cron' | 'manual' | 'webhook',
+    triggeredByUserId: row.triggered_by_user_id ?? undefined,
+  };
 }
+
+// ============================================================================
+// IN-MEMORY CACHE (short-lived for current request only)
+// ============================================================================
+
+// Cache for the current request's run (avoids extra DB calls during a single run)
+let currentRunCache: CronRun | null = null;
 
 // ============================================================================
 // CRON RUN OPERATIONS
@@ -148,17 +189,17 @@ function generateRunId(): string {
 
 /**
  * Start a new cron run.
+ * Persists to database immediately.
  */
-export function startCronRun(
+export async function startCronRun(
   jobName: CronJobName,
   triggeredBy: 'cron' | 'manual' | 'webhook',
   triggeredByUserId?: string
-): CronRun {
-  const id = generateRunId();
+): Promise<CronRun> {
   const now = new Date().toISOString();
 
   const run: CronRun = {
-    id,
+    id: '', // Will be set by database
     jobName,
     startedAt: now,
     status: 'running',
@@ -172,10 +213,40 @@ export function startCronRun(
     triggeredByUserId,
   };
 
-  cronRunStore.set(id, run);
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('cron_runs')
+      .insert({
+        job_name: run.jobName,
+        started_at: run.startedAt,
+        status: run.status,
+        sources_checked: run.sourcesChecked,
+        events_created: run.eventsCreated,
+        events_updated: run.eventsUpdated,
+        errors: run.errors,
+        warnings: run.warnings,
+        summary: run.summary,
+        triggered_by: run.triggeredBy,
+        triggered_by_user_id: run.triggeredByUserId,
+      })
+      .select()
+      .single();
 
-  // Cleanup old runs for this job
-  cleanupOldRuns(jobName);
+    if (error) {
+      console.error('[CronRunTracker] Failed to insert cron run:', error);
+      // Generate a fallback ID for in-memory only operation
+      run.id = `run_${Date.now().toString(36)}_fallback`;
+    } else {
+      run.id = data.id;
+    }
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on start:', err);
+    run.id = `run_${Date.now().toString(36)}_fallback`;
+  }
+
+  // Cache current run
+  currentRunCache = run;
 
   return run;
 }
@@ -183,51 +254,125 @@ export function startCronRun(
 /**
  * Update a running cron run with progress.
  */
-export function updateCronRun(
+export async function updateCronRun(
   runId: string,
   updates: Partial<Pick<CronRun, 'sourcesChecked' | 'eventsCreated' | 'eventsUpdated' | 'warnings' | 'rawOutput'>>
-): CronRun | undefined {
-  const run = cronRunStore.get(runId);
-  if (!run) return undefined;
+): Promise<CronRun | undefined> {
+  // Update cache if it's the current run
+  if (currentRunCache && currentRunCache.id === runId) {
+    currentRunCache = {
+      ...currentRunCache,
+      ...updates,
+      warnings: updates.warnings
+        ? [...currentRunCache.warnings, ...updates.warnings]
+        : currentRunCache.warnings,
+    };
+  }
 
-  const updated = {
-    ...run,
-    ...updates,
-    warnings: updates.warnings ? [...run.warnings, ...updates.warnings] : run.warnings,
-  };
+  try {
+    const supabase = createAdminClient();
 
-  cronRunStore.set(runId, updated);
-  return updated;
+    // Build update object
+    const updateData: Record<string, unknown> = {};
+    if (updates.sourcesChecked !== undefined) updateData.sources_checked = updates.sourcesChecked;
+    if (updates.eventsCreated !== undefined) updateData.events_created = updates.eventsCreated;
+    if (updates.eventsUpdated !== undefined) updateData.events_updated = updates.eventsUpdated;
+    if (updates.rawOutput !== undefined) updateData.raw_output = updates.rawOutput;
+
+    // For warnings, we need to append to existing
+    if (updates.warnings && updates.warnings.length > 0) {
+      // Fetch current warnings and append
+      const { data: current } = await supabase
+        .from('cron_runs')
+        .select('warnings')
+        .eq('id', runId)
+        .single();
+
+      const existingWarnings = (current?.warnings as string[]) || [];
+      updateData.warnings = [...existingWarnings, ...updates.warnings];
+    }
+
+    if (Object.keys(updateData).length > 0) {
+      const { data, error } = await supabase
+        .from('cron_runs')
+        .update(updateData)
+        .eq('id', runId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('[CronRunTracker] Failed to update cron run:', error);
+      } else if (data) {
+        const updated = rowToCronRun(data as CronRunRow);
+        currentRunCache = updated;
+        return updated;
+      }
+    }
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on update:', err);
+  }
+
+  return currentRunCache ?? undefined;
 }
 
 /**
  * Add an error to a running cron run.
  */
-export function addCronRunError(
+export async function addCronRunError(
   runId: string,
   error: Omit<CronRunError, 'timestamp'>
-): CronRun | undefined {
-  const run = cronRunStore.get(runId);
-  if (!run) return undefined;
-
+): Promise<CronRun | undefined> {
   const errorWithTimestamp: CronRunError = {
     ...error,
     timestamp: new Date().toISOString(),
   };
 
-  const updated = {
-    ...run,
-    errors: [...run.errors, errorWithTimestamp],
-  };
+  // Update cache if it's the current run
+  if (currentRunCache && currentRunCache.id === runId) {
+    currentRunCache = {
+      ...currentRunCache,
+      errors: [...currentRunCache.errors, errorWithTimestamp],
+    };
+  }
 
-  cronRunStore.set(runId, updated);
-  return updated;
+  try {
+    const supabase = createAdminClient();
+
+    // Fetch current errors and append
+    const { data: current } = await supabase
+      .from('cron_runs')
+      .select('errors')
+      .eq('id', runId)
+      .single();
+
+    const existingErrors = (current?.errors as CronRunError[]) || [];
+    const newErrors = [...existingErrors, errorWithTimestamp];
+
+    const { data, error: updateError } = await supabase
+      .from('cron_runs')
+      .update({ errors: newErrors })
+      .eq('id', runId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('[CronRunTracker] Failed to add error:', updateError);
+    } else if (data) {
+      const updated = rowToCronRun(data as CronRunRow);
+      currentRunCache = updated;
+      return updated;
+    }
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on addError:', err);
+  }
+
+  return currentRunCache ?? undefined;
 }
 
 /**
  * Complete a cron run.
  */
-export function completeCronRun(
+export async function completeCronRun(
   runId: string,
   status: 'success' | 'partial' | 'failed',
   summary: string,
@@ -236,98 +381,158 @@ export function completeCronRun(
     eventsCreated?: number;
     eventsUpdated?: number;
   }
-): CronRun | undefined {
-  const run = cronRunStore.get(runId);
-  if (!run) return undefined;
-
+): Promise<CronRun | undefined> {
   const finishedAt = new Date().toISOString();
-  const durationMs = new Date(finishedAt).getTime() - new Date(run.startedAt).getTime();
 
-  const updated: CronRun = {
-    ...run,
-    finishedAt,
-    status,
-    durationMs,
-    summary,
-    sourcesChecked: finalMetrics?.sourcesChecked ?? run.sourcesChecked,
-    eventsCreated: finalMetrics?.eventsCreated ?? run.eventsCreated,
-    eventsUpdated: finalMetrics?.eventsUpdated ?? run.eventsUpdated,
-  };
+  // Calculate duration from cache or estimate
+  let durationMs = 0;
+  if (currentRunCache && currentRunCache.id === runId) {
+    durationMs = new Date(finishedAt).getTime() - new Date(currentRunCache.startedAt).getTime();
+  }
 
-  cronRunStore.set(runId, updated);
-  return updated;
+  try {
+    const supabase = createAdminClient();
+
+    // If we don't have the start time from cache, fetch it
+    if (durationMs === 0) {
+      const { data: current } = await supabase
+        .from('cron_runs')
+        .select('started_at')
+        .eq('id', runId)
+        .single();
+
+      if (current?.started_at) {
+        durationMs = new Date(finishedAt).getTime() - new Date(current.started_at).getTime();
+      }
+    }
+
+    const updateData: Record<string, unknown> = {
+      finished_at: finishedAt,
+      status,
+      duration_ms: durationMs,
+      summary,
+    };
+
+    if (finalMetrics?.sourcesChecked !== undefined) {
+      updateData.sources_checked = finalMetrics.sourcesChecked;
+    }
+    if (finalMetrics?.eventsCreated !== undefined) {
+      updateData.events_created = finalMetrics.eventsCreated;
+    }
+    if (finalMetrics?.eventsUpdated !== undefined) {
+      updateData.events_updated = finalMetrics.eventsUpdated;
+    }
+
+    const { data, error } = await supabase
+      .from('cron_runs')
+      .update(updateData)
+      .eq('id', runId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('[CronRunTracker] Failed to complete cron run:', error);
+    } else if (data) {
+      const completed = rowToCronRun(data as CronRunRow);
+      currentRunCache = null; // Clear cache
+      return completed;
+    }
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on complete:', err);
+  }
+
+  // Clear cache regardless
+  currentRunCache = null;
+  return undefined;
 }
 
 /**
  * Get a cron run by ID.
  */
-export function getCronRun(runId: string): CronRun | undefined {
-  return cronRunStore.get(runId);
+export async function getCronRun(runId: string): Promise<CronRun | undefined> {
+  // Check cache first
+  if (currentRunCache && currentRunCache.id === runId) {
+    return currentRunCache;
+  }
+
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('cron_runs')
+      .select('*')
+      .eq('id', runId)
+      .single();
+
+    if (error || !data) {
+      return undefined;
+    }
+
+    return rowToCronRun(data as CronRunRow);
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on getCronRun:', err);
+    return undefined;
+  }
 }
 
 /**
  * List cron runs with filtering.
  */
-export function listCronRuns(filter?: CronRunFilter): CronRun[] {
-  let runs = Array.from(cronRunStore.values());
+export async function listCronRuns(filter?: CronRunFilter): Promise<CronRun[]> {
+  try {
+    const supabase = createAdminClient();
+    let query = supabase
+      .from('cron_runs')
+      .select('*')
+      .order('started_at', { ascending: false });
 
-  if (filter) {
-    if (filter.jobName) {
-      runs = runs.filter((r) => r.jobName === filter.jobName);
+    if (filter?.jobName) {
+      query = query.eq('job_name', filter.jobName);
     }
-    if (filter.status?.length) {
-      runs = runs.filter((r) => filter.status!.includes(r.status));
+    if (filter?.status?.length) {
+      query = query.in('status', filter.status);
     }
-    if (filter.startedAfter) {
-      runs = runs.filter((r) => r.startedAt >= filter.startedAfter!);
+    if (filter?.startedAfter) {
+      query = query.gte('started_at', filter.startedAfter);
     }
-    if (filter.startedBefore) {
-      runs = runs.filter((r) => r.startedAt <= filter.startedBefore!);
+    if (filter?.startedBefore) {
+      query = query.lte('started_at', filter.startedBefore);
     }
-    if (filter.triggeredBy) {
-      runs = runs.filter((r) => r.triggeredBy === filter.triggeredBy);
+    if (filter?.triggeredBy) {
+      query = query.eq('triggered_by', filter.triggeredBy);
     }
+    if (filter?.limit) {
+      query = query.limit(filter.limit);
+    } else {
+      query = query.limit(100); // Default limit
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('[CronRunTracker] Failed to list cron runs:', error);
+      return [];
+    }
+
+    return (data || []).map((row) => rowToCronRun(row as CronRunRow));
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on listCronRuns:', err);
+    return [];
   }
-
-  // Sort by started date, newest first
-  runs.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
-
-  // Apply limit
-  if (filter?.limit && filter.limit > 0) {
-    runs = runs.slice(0, filter.limit);
-  }
-
-  return runs;
 }
 
 /**
  * Get the last run for a job.
  */
-export function getLastRunForJob(jobName: CronJobName): CronRun | undefined {
-  const runs = listCronRuns({ jobName, limit: 1 });
+export async function getLastRunForJob(jobName: CronJobName): Promise<CronRun | undefined> {
+  const runs = await listCronRuns({ jobName, limit: 1 });
   return runs[0];
 }
 
 /**
  * Get recent runs for a job.
  */
-export function getRecentRunsForJob(jobName: CronJobName, count = 10): CronRun[] {
+export async function getRecentRunsForJob(jobName: CronJobName, count = 10): Promise<CronRun[]> {
   return listCronRuns({ jobName, limit: count });
-}
-
-/**
- * Cleanup old runs for a job.
- */
-function cleanupOldRuns(jobName: CronJobName): void {
-  const runs = listCronRuns({ jobName });
-
-  if (runs.length > MAX_RUNS_PER_JOB) {
-    // Keep only the most recent runs
-    const runsToDelete = runs.slice(MAX_RUNS_PER_JOB);
-    for (const run of runsToDelete) {
-      cronRunStore.delete(run.id);
-    }
-  }
 }
 
 // ============================================================================
@@ -337,14 +542,14 @@ function cleanupOldRuns(jobName: CronJobName): void {
 /**
  * Check if a job needs attention.
  */
-export function checkJobNeedsAttention(
+export async function checkJobNeedsAttention(
   jobName: CronJobName,
   config: NeedsCheckingConfig = DEFAULT_NEEDS_CHECKING_CONFIG,
   newEventsCount = 0,
   unverifiedImpactsRate = 0
-): NeedsCheckingReason[] {
+): Promise<NeedsCheckingReason[]> {
   const reasons: NeedsCheckingReason[] = [];
-  const recentRuns = getRecentRunsForJob(jobName, 10);
+  const recentRuns = await getRecentRunsForJob(jobName, 10);
   const lastRun = recentRuns[0];
 
   // Check 1: No runs found
@@ -383,7 +588,8 @@ export function checkJobNeedsAttention(
   // Check 4: Too long since last successful run
   const lastSuccessfulRun = recentRuns.find((r) => r.status === 'success');
   if (lastSuccessfulRun) {
-    const hoursSinceSuccess = (Date.now() - new Date(lastSuccessfulRun.startedAt).getTime()) / (1000 * 60 * 60);
+    const hoursSinceSuccess =
+      (Date.now() - new Date(lastSuccessfulRun.startedAt).getTime()) / (1000 * 60 * 60);
 
     if (hoursSinceSuccess > config.maxHoursSinceLastRun) {
       reasons.push({
@@ -484,15 +690,15 @@ function calculateSuccessRate(runs: CronRun[]): number {
 /**
  * Get full status summary for a job.
  */
-export function getJobStatusSummary(
+export async function getJobStatusSummary(
   jobName: CronJobName,
   config: NeedsCheckingConfig = DEFAULT_NEEDS_CHECKING_CONFIG,
   newEventsCount = 0,
   unverifiedImpactsRate = 0
-): JobStatusSummary {
-  const recentRuns = getRecentRunsForJob(jobName, 10);
+): Promise<JobStatusSummary> {
+  const recentRuns = await getRecentRunsForJob(jobName, 10);
   const lastRun = recentRuns[0];
-  const needsCheckingReasons = checkJobNeedsAttention(
+  const needsCheckingReasons = await checkJobNeedsAttention(
     jobName,
     config,
     newEventsCount,
@@ -544,9 +750,9 @@ function calculateNextScheduledTime(jobName: CronJobName, lastRun?: CronRun): st
 /**
  * Get all job statuses.
  */
-export function getAllJobStatuses(
+export async function getAllJobStatuses(
   config: NeedsCheckingConfig = DEFAULT_NEEDS_CHECKING_CONFIG
-): JobStatusSummary[] {
+): Promise<JobStatusSummary[]> {
   const jobNames: CronJobName[] = [
     'legal-change:check',
     'legal-change:ingest',
@@ -554,16 +760,17 @@ export function getAllJobStatuses(
     'validation:audit',
   ];
 
-  return jobNames.map((jobName) => getJobStatusSummary(jobName, config));
+  return Promise.all(jobNames.map((jobName) => getJobStatusSummary(jobName, config)));
 }
 
 /**
  * Get jobs that need attention.
  */
-export function getJobsNeedingAttention(
+export async function getJobsNeedingAttention(
   config: NeedsCheckingConfig = DEFAULT_NEEDS_CHECKING_CONFIG
-): JobStatusSummary[] {
-  return getAllJobStatuses(config).filter((s) => s.needsChecking);
+): Promise<JobStatusSummary[]> {
+  const allStatuses = await getAllJobStatuses(config);
+  return allStatuses.filter((s) => s.needsChecking);
 }
 
 // ============================================================================
@@ -573,11 +780,11 @@ export function getJobsNeedingAttention(
 /**
  * Get aggregated metrics for a job over a time period.
  */
-export function getJobMetrics(
+export async function getJobMetrics(
   jobName: CronJobName,
   startDate: string,
   endDate: string
-): {
+): Promise<{
   totalRuns: number;
   successfulRuns: number;
   failedRuns: number;
@@ -586,11 +793,12 @@ export function getJobMetrics(
   totalEventsUpdated: number;
   totalErrors: number;
   avgDurationMs: number;
-} {
-  const runs = listCronRuns({
+}> {
+  const runs = await listCronRuns({
     jobName,
     startedAfter: startDate,
     startedBefore: endDate,
+    limit: 1000, // Higher limit for metrics
   });
 
   const completedRuns = runs.filter((r) => r.status !== 'running');
@@ -614,57 +822,45 @@ export function getJobMetrics(
 }
 
 // ============================================================================
-// CLEAR / TESTING UTILITIES
+// TESTING UTILITIES
 // ============================================================================
 
 /**
- * Clear all cron runs (for testing).
+ * Clear all cron runs (for testing only - deletes from database).
+ * WARNING: This permanently deletes data.
  */
-export function clearCronRuns(): void {
-  cronRunStore.clear();
-  runIdCounter = 1;
+export async function clearCronRuns(): Promise<void> {
+  currentRunCache = null;
+
+  // Only clear in test environment
+  if (process.env.NODE_ENV === 'test') {
+    try {
+      const supabase = createAdminClient();
+      await supabase.from('cron_runs').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    } catch (err) {
+      console.error('[CronRunTracker] Failed to clear cron runs:', err);
+    }
+  }
 }
 
 /**
  * Get total run count (for testing/monitoring).
  */
-export function getTotalRunCount(): number {
-  return cronRunStore.size;
-}
+export async function getTotalRunCount(): Promise<number> {
+  try {
+    const supabase = createAdminClient();
+    const { count, error } = await supabase
+      .from('cron_runs')
+      .select('*', { count: 'exact', head: true });
 
-/**
- * Export all runs for backup.
- */
-export function exportCronRuns(): {
-  runs: CronRun[];
-  exportedAt: string;
-  totalCount: number;
-} {
-  return {
-    runs: Array.from(cronRunStore.values()),
-    exportedAt: new Date().toISOString(),
-    totalCount: cronRunStore.size,
-  };
-}
-
-/**
- * Import runs from backup.
- */
-export function importCronRuns(
-  runs: CronRun[],
-  overwrite = false
-): { imported: number; skipped: number } {
-  let imported = 0;
-  let skipped = 0;
-
-  for (const run of runs) {
-    if (cronRunStore.has(run.id) && !overwrite) {
-      skipped++;
-      continue;
+    if (error) {
+      console.error('[CronRunTracker] Failed to get count:', error);
+      return 0;
     }
-    cronRunStore.set(run.id, run);
-    imported++;
-  }
 
-  return { imported, skipped };
+    return count || 0;
+  } catch (err) {
+    console.error('[CronRunTracker] Database error on getTotalRunCount:', err);
+    return 0;
+  }
 }

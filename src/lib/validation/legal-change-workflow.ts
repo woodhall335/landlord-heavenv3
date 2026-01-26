@@ -39,6 +39,21 @@ export type WorkflowAction =
   | 'link_incident';
 
 /**
+ * Audit action types - explicit actions that can be logged.
+ * Extends WorkflowAction with additional event lifecycle actions.
+ */
+export type AuditAction =
+  | WorkflowAction
+  | 'create' // Event created
+  | 'update' // Event updated (metadata changes)
+  | 'assess' // Impact assessment performed
+  | 'push_pr' // PR created via Push PR workflow
+  | 'pr_merged' // PR was merged
+  | 'pr_closed' // PR was closed without merge
+  | 'rollout_started' // Rollout began
+  | 'rollout_completed'; // Rollout finished
+
+/**
  * Required reviewer role based on change type.
  */
 export type ReviewerRole =
@@ -97,7 +112,7 @@ export interface AuditLogEntry {
   id: string;
   timestamp: string;
   eventId: string;
-  action: WorkflowAction | 'create' | 'update' | 'assess';
+  action: AuditAction;
   actor: string;
   details: Record<string, unknown>;
   previousState?: EventState;
