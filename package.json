@@ -30,6 +30,7 @@
     "audit:tenancy-clauses": "npx tsx scripts/audit-tenancy-clauses.ts",
     "audit:seo-metadata": "npx tsx scripts/seo-metadata-audit.ts",
     "audit:eviction-rules": "npx tsx scripts/audit-eviction-rules.ts",
+    "validation:status": "npx tsx scripts/validation-status.ts",
     "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants && npm run audit:tenancy-clauses && npm run audit:seo-metadata && npm run audit:eviction-rules"
   },
   "dependencies": {

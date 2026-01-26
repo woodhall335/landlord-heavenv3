@@ -218,6 +218,93 @@ console.log(`Error rate: ${(stats.errorRate * 100).toFixed(2)}%`);
    - Remove fallback logic
    - Update imports
 
+### Phase 11A: 14-Day Stability Signoff + Dashboards/Alerts
+
+**Status**: 🟢 Active
+
+**Description**: Prove YAML-only mode is production-stable for 14 consecutive days with comprehensive monitoring.
+
+**Prerequisites**:
+- [x] Phase 10 (YAML-only mode) enabled
+- [x] All validation paths use YAML-only wrappers
+- [x] Telemetry enabled and recording
+
+**Environment Variables**:
+```bash
+EVICTION_YAML_ONLY=true
+EVICTION_YAML_PRIMARY=true
+EVICTION_TELEMETRY_ENABLED=true
+```
+
+#### Signoff Criteria
+
+All criteria must be met for 14 consecutive calendar days:
+
+| Criterion | Threshold | Measurement |
+|-----------|-----------|-------------|
+| **Error Rate (Daily)** | ≤ 0.05% | YAML-only validation errors / total validations per day |
+| **Error Rate (Rolling 7-day)** | ≤ 0.02% | Rolling 7-day window average |
+| **Latency Regression** | P95 increase ≤ 10% | Compared to Phase 8 baseline |
+| **Traffic Coverage** | ≥ 95% | Validation calls with telemetry/counters |
+| **TS Usage** | 0% | No TS validators invoked (must be zero) |
+| **Discrepancy Rate** | Per Parity Contract | Wales exceptions allowed; all others < 0.01% |
+
+#### Phase 8 Baseline Metrics (Reference)
+
+Capture these baseline values before Phase 11A begins:
+
+```typescript
+// Record during Phase 8 for comparison
+const phase8Baseline = {
+  p50LatencyMs: /* measured */,
+  p95LatencyMs: /* measured */,
+  p99LatencyMs: /* measured */,
+  avgDailyVolume: /* measured */,
+  capturedAt: new Date().toISOString(),
+};
+```
+
+#### Daily Verification Checklist
+
+Each day during the 14-day window:
+
+1. **Check error rate**: `npm run validation:status` → confirm error rate ≤ 0.05%
+2. **Check latency**: P95 within 10% of baseline
+3. **Check TS usage**: Confirm zero TS validator invocations
+4. **Check telemetry coverage**: ≥ 95% of requests have telemetry
+5. **Review top blockers**: No unexpected blockers in top 10
+6. **Review discrepancies**: All within Parity Contract tolerances
+7. **Log to tracker**: Update `STABILITY_TRACKER.md`
+
+#### Rollback Triggers
+
+Immediate rollback if any of:
+- YAML-only error rate > 0.5% over 15 minutes
+- YAML-only error rate > 0.1% sustained over 1 hour
+- P95 latency increase > 25% over 30 minutes
+- Any TS validator execution detected
+- User-reported validation failure confirmed
+
+**Rollback Command**:
+```bash
+# Instant rollback to YAML primary with TS fallback
+export EVICTION_YAML_ONLY=false
+# Full rollback to TS-only if needed
+export EVICTION_YAML_PRIMARY=false
+```
+
+#### Success Exit
+
+Phase 11A is complete when:
+- [ ] 14 consecutive days with all criteria met
+- [ ] Zero rollback events during the period
+- [ ] Sign-off from on-call engineer each day
+- [ ] Final review and approval from validation team lead
+
+**Next Phase**: After 14-day signoff, proceed to Phase 5 (TS Code Removal)
+
+---
+
 ### Phase 5: TS Code Removal
 
 **Status**: 📋 Planned
@@ -225,7 +312,7 @@ console.log(`Error rate: ${(stats.errorRate * 100).toFixed(2)}%`);
 **Description**: Complete removal of TS validation code.
 
 **Prerequisites**:
-- [ ] Phase 4 stable for 14+ days
+- [ ] Phase 11A complete (14-day signoff achieved)
 - [ ] Zero TS fallback events
 - [ ] All tests migrated to YAML-only paths
 - [ ] Code review approved
@@ -274,9 +361,11 @@ unset EVICTION_YAML_PRIMARY
 | Phase | Target Start | Duration | Exit Criteria |
 |-------|-------------|----------|---------------|
 | 1. Shadow | Complete | - | 100% test parity |
-| 2. Dual-Run | Week 1 | 2 weeks | 99% prod parity |
-| 3. YAML Primary | Week 3 | 2 weeks | No fallbacks |
-| 4. YAML Only | Week 5 | Ongoing | Team sign-off |
+| 2. Dual-Run | Complete | 2 weeks | 99% prod parity |
+| 3. YAML Primary | Complete | 2 weeks | No fallbacks |
+| 4/10. YAML Only | Complete | - | YAML-only enabled |
+| 11A. Stability Signoff | Active | 14 days | All metrics within thresholds |
+| 5. TS Code Removal | After 11A | 1 week | Code deleted, tests pass |
 
 ## Risk Mitigation
 
@@ -302,6 +391,132 @@ unset EVICTION_YAML_PRIMARY
 - Runtime falls back to empty config (safe default)
 
 ## Monitoring & Observability
+
+### Dashboard: Smart Validation — YAML-Only
+
+The YAML-Only dashboard provides a single view of validation health. Use this for daily monitoring during Phase 11A.
+
+#### Dashboard Panels
+
+| Panel | Description | Query/Source |
+|-------|-------------|--------------|
+| **Total Requests** | Validation requests by route/product/jurisdiction | `getAggregatedMetrics()` |
+| **Error Rate (Daily)** | YAML-only error rate per day | `getYamlOnlyStats().errorRate` |
+| **Error Rate (7-day Rolling)** | 7-day moving average error rate | Calculated from daily metrics |
+| **Latency P50/P95/P99** | Validation duration percentiles | `getAggregatedMetrics().avgDurationMs` + log analysis |
+| **Top Blockers** | Most frequent blocker IDs by route/product | `getTopBlockers(10)` |
+| **Top Discrepancies** | Discrepancies by type (if any) | `getTopDiscrepancies(10)` |
+| **TS Usage Rate** | Fallback/TS invocations (should be 0) | `getFallbackStats().fallbackRate` |
+
+#### Log Query Examples
+
+```bash
+# Count total validation requests (last hour)
+grep "\[NOTICE-PREVIEW-API\] Using YAML-only\|API Generate\] Using YAML-only" /var/log/app.log | \
+  awk -v start="$(date -d '1 hour ago' '+%Y-%m-%dT%H')" '$0 ~ start' | wc -l
+
+# Extract error rate from logs
+grep "\[YAML-only validation error\]" /var/log/app.log | wc -l
+
+# Get telemetry events as JSON (for jq analysis)
+grep "\[Telemetry\]" /var/log/app.log | sed 's/.*\[Telemetry\] //' | jq -s '
+  {
+    total: length,
+    parityMatches: [.[] | select(.parity == true)] | length,
+    avgDurationMs: ([.[].durationMs] | add / length),
+    byJurisdiction: group_by(.jurisdiction) | map({key: .[0].jurisdiction, count: length}) | from_entries
+  }
+'
+
+# Check for any TS fallback (must be 0)
+grep "\[TS-Fallback\]\|\[DEPRECATED\]" /var/log/app.log | wc -l
+
+# Top blockers from telemetry
+grep "\[Telemetry\]" /var/log/app.log | sed 's/.*\[Telemetry\] //' | jq -s '
+  [.[].blockerIds.yaml[]] | group_by(.) | map({id: .[0], count: length}) | sort_by(-.count) | .[0:10]
+'
+
+# Latency percentiles
+grep "\[Telemetry\]" /var/log/app.log | sed 's/.*\[Telemetry\] //' | jq -s '
+  [.[].durationMs] | sort | {
+    p50: .[length * 0.5 | floor],
+    p95: .[length * 0.95 | floor],
+    p99: .[length * 0.99 | floor]
+  }
+'
+```
+
+#### Programmatic Dashboard Queries
+
+```typescript
+import {
+  getYamlOnlyStats,
+  getAggregatedMetrics,
+  getTopBlockers,
+  getTopDiscrepancies,
+  getFallbackStats,
+  getMetricsStore,
+} from '@/lib/validation/shadow-mode-adapter';
+
+// Dashboard data retrieval function
+function getDashboardData() {
+  const yamlStats = getYamlOnlyStats();
+  const metrics = getAggregatedMetrics();
+  const fallbackStats = getFallbackStats();
+  const events = getMetricsStore();
+
+  // Calculate latency percentiles
+  const durations = events.map(e => e.durationMs).sort((a, b) => a - b);
+  const p50 = durations[Math.floor(durations.length * 0.5)] || 0;
+  const p95 = durations[Math.floor(durations.length * 0.95)] || 0;
+  const p99 = durations[Math.floor(durations.length * 0.99)] || 0;
+
+  return {
+    // YAML-only metrics
+    totalValidations: yamlStats.totalValidations,
+    errorCount: yamlStats.errorCount,
+    errorRate: yamlStats.errorRate,
+    isYamlOnlyActive: yamlStats.isYamlOnlyActive,
+
+    // Aggregated metrics
+    parityRate: metrics.parityRate,
+    avgDurationMs: metrics.avgDurationMs,
+
+    // Latency percentiles
+    latency: { p50, p95, p99 },
+
+    // Top items
+    topBlockers: getTopBlockers(10),
+    topDiscrepancies: getTopDiscrepancies(10),
+
+    // TS usage (should be 0)
+    tsUsageRate: fallbackStats.fallbackRate,
+    tsFallbackCount: fallbackStats.fallbackCount,
+
+    // By dimension
+    byJurisdiction: {
+      england: getAggregatedMetrics({ jurisdiction: 'england' }),
+      wales: getAggregatedMetrics({ jurisdiction: 'wales' }),
+      scotland: getAggregatedMetrics({ jurisdiction: 'scotland' }),
+    },
+    byProduct: {
+      notice_only: getAggregatedMetrics({ product: 'notice_only' }),
+      complete_pack: getAggregatedMetrics({ product: 'complete_pack' }),
+    },
+  };
+}
+
+// Print dashboard summary
+const data = getDashboardData();
+console.log('=== YAML-Only Validation Dashboard ===');
+console.log(`Total Validations: ${data.totalValidations}`);
+console.log(`Error Rate: ${(data.errorRate * 100).toFixed(3)}%`);
+console.log(`Latency P50/P95/P99: ${data.latency.p50}ms / ${data.latency.p95}ms / ${data.latency.p99}ms`);
+console.log(`TS Usage Rate: ${(data.tsUsageRate * 100).toFixed(3)}% (should be 0)`);
+console.log(`Top Blockers: ${data.topBlockers.map(b => b.ruleId).join(', ')}`);
+```
+
+---
 
 ### Environment Variables
 
