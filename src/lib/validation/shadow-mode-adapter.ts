@@ -168,15 +168,21 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   'wales_fault_no_grounds': 'wales_fault_no_grounds',
   'wales_fault_notice_period_short': 'wales_fault_notice_period_short',
 
-  // Scotland codes
-  'scotland_no_grounds': 'ntl_ground_required',
-  'scotland_landlord_not_registered': 'ntl_landlord_not_registered',
-  'scotland_pre_action_not_completed': 'ntl_pre_action_required',
-  'scotland_notice_period_short': 'ntl_notice_period_short',
+  // Scotland NTL codes - TS Codes: NTL-GROUND-REQUIRED, NTL-MIXED-GROUNDS, NTL-PRE-ACTION, NTL-NOTICE-PERIOD
+  // YAML now uses TS-compatible IDs for parity
   'ntl-ground-required': 'ntl_ground_required',
   'ntl_ground_required': 'ntl_ground_required',
-  'ntl-pre-action': 'ntl_pre_action_required',
-  'ntl-notice-period': 'ntl_notice_period_short',
+  'ntl-mixed-grounds': 'ntl_mixed_grounds',
+  'ntl_mixed_grounds': 'ntl_mixed_grounds',
+  'ntl-pre-action': 'ntl_pre_action',
+  'ntl_pre_action': 'ntl_pre_action',
+  'ntl-notice-period': 'ntl_notice_period',
+  'ntl_notice_period': 'ntl_notice_period',
+  // Legacy mappings (commented rules in YAML, kept for complete_pack)
+  'scotland_no_grounds': 'ntl_ground_required',
+  'scotland_landlord_not_registered': 'ntl_landlord_not_registered',
+  'scotland_pre_action_not_completed': 'ntl_pre_action',
+  'scotland_notice_period_short': 'ntl_notice_period',
 };
 
 function mapTsIdToYamlId(tsId: string): string {

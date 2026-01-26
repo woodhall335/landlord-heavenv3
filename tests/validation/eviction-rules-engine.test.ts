@@ -612,12 +612,16 @@ describe('Wales Section 173 Rule Evaluation', () => {
 // ============================================================================
 // SCOTLAND RULES TESTS
 // ============================================================================
+// NOTE: For notice_only parity, TS only checks:
+// - NTL-GROUND-REQUIRED, NTL-MIXED-GROUNDS, NTL-PRE-ACTION, NTL-NOTICE-PERIOD
+// Landlord registration, pre-action letter, deposit are NOT checked by TS for notice_only.
 
 describe('Scotland Notice to Leave Rule Evaluation', () => {
   beforeEach(() => {
     clearConfigCache();
   });
 
+  // Base facts for a valid Ground 1 NTL (with pre-action confirmed)
   const baseValidFacts: EvictionFacts = {
     landlord_full_name: 'John Landlord',
     tenant_full_name: 'Jane Tenant',
@@ -625,10 +629,12 @@ describe('Scotland Notice to Leave Rule Evaluation', () => {
     tenancy_start_date: '2024-01-01',
     notice_service_date: '2025-06-01',
     notice_expiry_date: '2025-06-29', // 28 days
-    scotland_ground_codes: ['ground_1'],
-    landlord_registration_number: 'SCL123456',
-    pre_action_contact: 'Yes',
-    pre_action_letter_sent: true, // Required for Ground 1
+    scotland_ground_codes: [1], // Numeric format (TS expects numbers)
+    issues: {
+      rent_arrears: {
+        pre_action_confirmed: true,
+      },
+    },
     deposit_taken: false,
   };
 
@@ -645,36 +651,33 @@ describe('Scotland Notice to Leave Rule Evaluation', () => {
     });
   });
 
-  describe('Landlord Registration Rule', () => {
-    it('should trigger ntl_landlord_not_registered when no registration number', () => {
-      const facts: EvictionFacts = {
-        ...baseValidFacts,
-        landlord_registration_number: undefined,
-        landlord_reg_number: undefined,
-      };
-
-      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
-
-      expect(result.blockers.some((b) => b.id === 'ntl_landlord_not_registered')).toBe(true);
-    });
-  });
-
   describe('Pre-Action Requirements Rule', () => {
-    it('should trigger ntl_pre_action_required for Ground 1 without pre-action', () => {
+    it('should trigger ntl_pre_action for Ground 1 without pre-action confirmed', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
-        scotland_ground_codes: ['ground_1'],
-        pre_action_contact: undefined,
+        scotland_ground_codes: [1], // Ground 1 - rent arrears
         issues: {
           rent_arrears: {
-            pre_action_confirmed: false,
+            pre_action_confirmed: false, // NOT confirmed
           },
         },
       };
 
       const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
 
-      expect(result.blockers.some((b) => b.id === 'ntl_pre_action_required')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 'ntl_pre_action')).toBe(true);
+    });
+
+    it('should NOT trigger ntl_pre_action for Ground 12 (non-arrears)', () => {
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        scotland_ground_codes: [12], // Ground 12 - landlord selling
+        // No pre-action needed for Ground 12
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+
+      expect(result.blockers.some((b) => b.id === 'ntl_pre_action')).toBe(false);
     });
   });
 
@@ -682,7 +685,7 @@ describe('Scotland Notice to Leave Rule Evaluation', () => {
     it('should return no blockers for valid Notice to Leave case', () => {
       const result = evaluateEvictionRules(baseValidFacts, 'scotland', 'notice_only', 'notice_to_leave');
 
-      // May have warnings but no blockers
+      // Should have no blockers for valid case
       expect(result.blockers).toHaveLength(0);
     });
   });

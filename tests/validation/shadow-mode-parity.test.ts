@@ -641,6 +641,13 @@ describe('Shadow Mode Parity - Wales Section 173', () => {
 // ============================================================================
 // GOLDEN TEST CASES - SCOTLAND NOTICE TO LEAVE
 // ============================================================================
+// NOTE: For notice_only, TS evaluateNoticeCompliance only checks:
+// - NTL-GROUND-REQUIRED: grounds must be selected
+// - NTL-MIXED-GROUNDS: mixed grounds when not allowed
+// - NTL-PRE-ACTION: Ground 1 requires pre-action confirmed
+// - NTL-NOTICE-PERIOD: notice period calculation/validation
+// TS does NOT check: landlord registration, pre-action letter sent, deposit protection.
+// IMPORTANT: TS expects numeric ground codes (e.g., [1] not ['ground_1'])
 
 describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
   beforeEach(() => {
@@ -653,38 +660,8 @@ describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
     route: 'notice_to_leave',
   };
 
-  describe('Landlord Registration Cases', () => {
-    it('should have parity for landlord_not_registered', async () => {
-      const facts: EvictionFacts = {
-        landlord_full_name: 'John Landlord',
-        tenant_full_name: 'Jane Tenant',
-        property_address_line1: '123 Test Street, Edinburgh',
-        tenancy_start_date: '2024-01-01',
-        notice_service_date: '2025-06-01',
-        notice_date: '2025-06-01',
-        notice_expiry_date: '2025-06-29',
-        notice_expiry: '2025-06-29',
-        scotland_ground_codes: ['ground_1'],
-        landlord_registration_number: undefined, // NOT REGISTERED - should block
-        landlord_reg_number: undefined,
-        pre_action_contact: 'Yes',
-        deposit_taken: false,
-        selected_notice_route: 'notice_to_leave',
-      };
-
-      const report = await runShadowValidation({ ...baseParams, facts });
-
-      // YAML should detect landlord not registered
-      expect(report.yaml.blockers).toBeGreaterThan(0);
-      expect(
-        report.yaml.blockerIds.some((id) => id.includes('landlord') || id.includes('register'))
-      ).toBe(true);
-      console.log(formatShadowReport(report));
-    });
-  });
-
-  describe('Grounds Cases', () => {
-    it('should have parity for no_grounds_selected', async () => {
+  describe('Grounds Selection Cases', () => {
+    it('should have parity for ntl_ground_required (no grounds)', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
         tenant_full_name: 'Jane Tenant',
@@ -695,24 +672,55 @@ describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
         notice_expiry_date: '2025-06-29',
         notice_expiry: '2025-06-29',
         scotland_ground_codes: [], // NO GROUNDS - should block
-        landlord_registration_number: 'SCL123456',
         deposit_taken: false,
         selected_notice_route: 'notice_to_leave',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect no grounds
+      // Both should detect no grounds via ntl_ground_required
       expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
       expect(
-        report.yaml.blockerIds.some((id) => id.includes('ground'))
+        report.yaml.blockerIds.some((id) => id.includes('ntl_ground_required'))
       ).toBe(true);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
 
-  describe('Valid NTL Case', () => {
-    it('should have parity for valid Notice to Leave case', async () => {
+  describe('Pre-Action Requirements Cases', () => {
+    it('should have parity for ntl_pre_action (Ground 1 without pre-action)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        // Use 84+ days notice period to avoid NTL-NOTICE-PERIOD blocker
+        // so we can isolate the ntl_pre_action test
+        notice_expiry_date: '2025-08-25',
+        notice_expiry: '2025-08-25',
+        scotland_ground_codes: [1], // Ground 1 - Rent arrears (numeric format)
+        // NO pre-action confirmation - should block with ntl_pre_action
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect pre-action not confirmed via ntl_pre_action
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('ntl_pre_action'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for Ground 1 with pre-action confirmed', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
         tenant_full_name: 'Jane Tenant',
@@ -722,14 +730,10 @@ describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
         notice_date: '2025-06-01',
         notice_expiry_date: '2025-06-29', // 28 days
         notice_expiry: '2025-06-29',
-        scotland_ground_codes: ['ground_1'],
-        landlord_registration_number: 'SCL123456',
-        pre_action_contact: 'Yes',
-        pre_action_letter_sent: true, // Required for Ground 1
+        scotland_ground_codes: [1], // Ground 1 (numeric)
         issues: {
           rent_arrears: {
-            pre_action_confirmed: true,
-            pre_action_letter_sent: true,
+            pre_action_confirmed: true, // Confirmed
           },
         },
         deposit_taken: false,
@@ -738,8 +742,67 @@ describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // Should have no blockers for valid case
+      // Both should have no blockers (pre-action satisfied)
+      expect(report.ts.blockers).toBe(0);
       expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Non-Ground-1 Cases', () => {
+    it('should have parity for Ground 12 (landlord intends to sell)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-08-29', // 84 days for Ground 12
+        notice_expiry: '2025-08-29',
+        scotland_ground_codes: [12], // Ground 12 - landlord selling (numeric)
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers (Ground 12 doesn't require pre-action)
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid NTL Cases', () => {
+    it('should have parity for valid Ground 1 with all requirements', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-06-29', // 28 days
+        notice_expiry: '2025-06-29',
+        scotland_ground_codes: [1], // Numeric format required by TS
+        issues: {
+          rent_arrears: {
+            pre_action_confirmed: true,
+          },
+        },
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
