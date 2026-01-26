@@ -22,11 +22,13 @@
 
 'use client';
 
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { validateGround8Eligibility, computeArrears } from '@/lib/arrears-engine';
 import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
+import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -79,6 +81,84 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       jurisdiction: 'england',
     });
   }, [hasGround8, arrearsItems, facts.rent_amount, facts.rent_frequency]);
+
+  // P0-4 FIX: Validate arrears date ranges
+  // Check for: start > end, negative durations, overlapping periods
+  const dateRangeErrors = useMemo(() => {
+    if (!arrearsItems || arrearsItems.length === 0) {
+      return [];
+    }
+
+    const errors: Array<{ index: number; message: string }> = [];
+
+    arrearsItems.forEach((item, index) => {
+      // Check start <= end
+      if (item.period_start && item.period_end && item.period_start > item.period_end) {
+        errors.push({
+          index,
+          message: `Period ${index + 1}: Start date (${item.period_start}) is after end date (${item.period_end})`,
+        });
+      }
+
+      // Check for negative rent due (shouldn't happen but validate)
+      if (item.rent_due < 0) {
+        errors.push({
+          index,
+          message: `Period ${index + 1}: Rent due cannot be negative`,
+        });
+      }
+
+      // Check rent_paid is not greater than rent_due
+      if (item.rent_paid > item.rent_due) {
+        errors.push({
+          index,
+          message: `Period ${index + 1}: Amount paid (£${item.rent_paid.toFixed(2)}) exceeds rent due (£${item.rent_due.toFixed(2)})`,
+        });
+      }
+    });
+
+    // Check for overlapping periods (only if multiple periods)
+    if (arrearsItems.length > 1) {
+      for (let i = 0; i < arrearsItems.length - 1; i++) {
+        const current = arrearsItems[i];
+        const next = arrearsItems[i + 1];
+        // Periods should not overlap - next period should start after current ends
+        if (current.period_end > next.period_start) {
+          errors.push({
+            index: i,
+            message: `Period ${i + 1} overlaps with period ${i + 2}`,
+          });
+        }
+      }
+    }
+
+    return errors;
+  }, [arrearsItems]);
+
+  // P0-4 FIX: Register date range errors with ValidationContext
+  const validationCtx = useValidationContextSafe();
+  const DATE_RANGE_FIELD_ID = 'section8_arrears_date_ranges';
+
+  useEffect(() => {
+    if (dateRangeErrors.length > 0) {
+      // Register error with ValidationContext so Next button is blocked
+      validationCtx?.setFieldError(DATE_RANGE_FIELD_ID, {
+        field: DATE_RANGE_FIELD_ID,
+        message: dateRangeErrors.map(e => e.message).join('; '),
+        severity: 'error',
+        section: 'section8_arrears',
+      });
+    } else {
+      validationCtx?.clearFieldError(DATE_RANGE_FIELD_ID);
+    }
+  }, [dateRangeErrors, validationCtx]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      validationCtx?.clearFieldError(DATE_RANGE_FIELD_ID);
+    };
+  }, [validationCtx]);
 
   // Convert facts to the format expected by ArrearsScheduleStep
   const scheduleStepFacts = useMemo(() => ({
@@ -191,6 +271,25 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
           </p>
         )}
       </div>
+
+      {/* P0-4 FIX: Date range validation errors */}
+      {dateRangeErrors.length > 0 && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-start gap-2">
+            <RiErrorWarningLine className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <h4 className="text-sm font-medium text-red-900 mb-2">
+                Arrears Schedule Errors - Must Fix to Continue
+              </h4>
+              <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+                {dateRangeErrors.map((error, i) => (
+                  <li key={i}>{error.message}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Arrears Schedule Component */}
       <ArrearsScheduleStep

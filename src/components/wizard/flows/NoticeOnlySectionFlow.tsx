@@ -783,6 +783,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [caseId, jurisdiction]
   );
 
+  // P0-2 FIX: Retry save handler - allows users to retry failed saves
+  const handleRetrySave = useCallback(() => {
+    // Retry with current facts state
+    saveFactsToServer(facts);
+  }, [facts, saveFactsToServer]);
+
   // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
     (updates: Record<string, any>) => {
@@ -1223,9 +1229,20 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
         {/* Main wizard column */}
         <main className="flex-1 lg:max-w-3xl">
+          {/* P0-2 FIX: Error banner with retry button */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-              {error}
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-red-700">{error}</span>
+                <button
+                  type="button"
+                  onClick={handleRetrySave}
+                  disabled={saving}
+                  className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Retrying...' : 'Retry'}
+                </button>
+              </div>
             </div>
           )}
 
