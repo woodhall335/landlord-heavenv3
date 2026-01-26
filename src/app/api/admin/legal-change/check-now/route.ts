@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
       // Empty body is OK
     }
 
-    // Start the cron run
-    const run = startCronRun('legal-change:check', 'manual', user.id);
+    // Start the cron run (now async)
+    const run = await startCronRun('legal-change:check', 'manual', user.id);
 
     try {
       // Get sources to check
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       }
 
       if (sources.length === 0) {
-        completeCronRun(
+        await completeCronRun(
           run.id,
           'success',
           'No sources matched the filter criteria',
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
         } catch (sourceError) {
           const errorMessage = sourceError instanceof Error ? sourceError.message : 'Unknown error';
           errors.push(`Error checking ${source.id}: ${errorMessage}`);
-          addCronRunError(run.id, {
+          await addCronRunError(run.id, {
             sourceId: source.id,
             message: errorMessage,
           });
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Update run progress
-      updateCronRun(run.id, {
+      await updateCronRun(run.id, {
         sourcesChecked: sources.length,
         eventsCreated,
         warnings,
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
       const status = errors.length > 0 ? (eventsCreated > 0 ? 'partial' : 'failed') : 'success';
       const summary = `Checked ${sources.length} sources, created ${eventsCreated} events${errors.length > 0 ? `, ${errors.length} errors` : ''}`;
 
-      completeCronRun(run.id, status, summary, {
+      await completeCronRun(run.id, status, summary, {
         sourcesChecked: sources.length,
         eventsCreated,
         eventsUpdated: 0,
@@ -190,11 +190,11 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
-      addCronRunError(run.id, {
+      await addCronRunError(run.id, {
         message: `Fatal error: ${errorMessage}`,
       });
 
-      completeCronRun(run.id, 'failed', `Fatal error: ${errorMessage}`);
+      await completeCronRun(run.id, 'failed', `Fatal error: ${errorMessage}`);
 
       throw error;
     }
