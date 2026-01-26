@@ -16,13 +16,27 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import {
-  runYamlOnlyNoticeValidation,
-  deriveJurisdictionFromFacts,
-  type YamlValidationResult,
-} from './shadow-mode-adapter';
 import type { ExtendedWizardQuestion, WizardField } from '../wizard/types';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
+
+// =============================================================================
+// LOCAL TYPE DEFINITION
+// =============================================================================
+// Note: YamlValidationResult is defined locally to avoid importing from
+// shadow-mode-adapter.ts, which uses fs and cannot be bundled for client-side.
+// YAML validation runs on the server at preview/generate time.
+
+interface YamlValidationBlocker {
+  id: string;
+  message: string;
+  rationale?: string;
+}
+
+interface YamlValidationResult {
+  blockers: YamlValidationBlocker[];
+  warnings: YamlValidationBlocker[];
+  durationMs?: number;
+}
 
 // ============================================================================
 // TYPES
@@ -939,17 +953,11 @@ export async function validateStepInline(
     };
   }
 
-  // 3. Run YAML validation (Phase 12: YAML-only)
-  let yamlResults: YamlValidationResult | null = null;
-  try {
-    yamlResults = await runYamlOnlyNoticeValidation({
-      jurisdiction: deriveJurisdictionFromFacts(allFacts ?? {}),
-      route,
-      facts: allFacts ?? {},
-    });
-  } catch (error) {
-    console.error('[noticeOnlyInlineValidator] YAML validation error:', error);
-  }
+  // 3. YAML validation is NOT run here (Phase 12)
+  // YAML validation requires fs (file system) to read YAML rules, which doesn't
+  // work in client-side code. YAML validation runs server-side at preview/generate.
+  // The decision engine provides sufficient validation for wizard inline guidance.
+  const yamlResults: YamlValidationResult | null = null;
 
   // 4. Generate legal guidance (non-blocking)
   // Per UX requirements: inline guidance is disabled by default

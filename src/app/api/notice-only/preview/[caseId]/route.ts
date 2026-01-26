@@ -42,6 +42,7 @@ import {
   deriveJurisdictionFromFacts,
   runYamlOnlyNoticeValidation,
   trackYamlOnlyValidation,
+  isYamlOnlyMode,
 } from '@/lib/validation/shadow-mode-adapter';
 
 export const dynamic = 'force-dynamic';
@@ -460,7 +461,6 @@ export async function GET(
         failure_count: hardFailures.length,
         warning_count: complianceWarnings.length,
         yaml_only: isYamlOnlyMode(),
-        yaml_primary: isYamlPrimary(),
       });
 
       return NextResponse.json(
@@ -485,7 +485,7 @@ export async function GET(
             severity: 'warning' as const,
           })),
           // Computed dates for display even when noncompliant
-          computed: complianceComputed ?? null,
+          computed: null,
           // Issue counts for quick UI checks
           issue_counts: {
             blocking: hardFailures.length,

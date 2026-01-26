@@ -19,13 +19,28 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import {
-  runYamlOnlyNoticeValidation,
-  deriveJurisdictionFromFacts,
-  type YamlValidationResult,
-} from './shadow-mode-adapter';
 import { normalizeFactKeys } from '../wizard/normalizeFacts';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
+
+// =============================================================================
+// LOCAL TYPE DEFINITION
+// =============================================================================
+// Note: YamlValidationResult is defined locally to avoid importing from
+// shadow-mode-adapter.ts, which uses fs and cannot be bundled for client-side.
+// YAML validation runs on the server at preview/generate time.
+// This file uses the decision engine for wizard UX issues.
+
+interface YamlValidationBlocker {
+  id: string;
+  message: string;
+  rationale?: string;
+}
+
+interface YamlValidationResult {
+  blockers: YamlValidationBlocker[];
+  warnings: YamlValidationBlocker[];
+  durationMs?: number;
+}
 
 // ====================================================================================
 // PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
@@ -501,7 +516,7 @@ function normalizeSection8Grounds(grounds: any): string[] {
  * 3. Separates route-invalidating issues from inline warnings
  * 4. Computes deposit cap values for inline display
  */
-export async function extractWizardUxIssues(input: WizardUxIssuesInput): Promise<WizardUxIssuesResult> {
+export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssuesResult {
   const { jurisdiction, route, savedFacts, lastSavedQuestionIds } = input;
 
   // Normalize facts to ensure consistent field names
@@ -553,19 +568,15 @@ export async function extractWizardUxIssues(input: WizardUxIssuesInput): Promise
   }
 
   // -------------------------------------------------------------------------
-  // 2. Run YAML Validation (Phase 12: YAML-only)
+  // 2. YAML Validation is NOT run here (Phase 12)
   // -------------------------------------------------------------------------
-  let yamlResult: YamlValidationResult;
-  try {
-    yamlResult = await runYamlOnlyNoticeValidation({
-      jurisdiction: deriveJurisdictionFromFacts(normalizedFacts),
-      route,
-      facts: normalizedFacts,
-    });
-  } catch (error) {
-    console.error('[extractWizardUxIssues] YAML validation error:', error);
-    return result;
-  }
+  // YAML validation requires fs (file system) to read YAML rules, which doesn't
+  // work in client-side code. YAML validation runs server-side at preview/generate.
+  // The decision engine provides sufficient validation for wizard UX issues.
+  const yamlResult: YamlValidationResult = {
+    blockers: [],
+    warnings: [],
+  };
 
   // -------------------------------------------------------------------------
   // 3. Collect all issues from both sources
