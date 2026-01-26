@@ -678,6 +678,170 @@ unset VALIDATION_PHASE13_ENABLED
 
 ---
 
+### Phase 15: Full Enablement + Policy Lock-In
+
+**Status**: 🟢 Available
+
+**Description**: Promote Phase 13 correctness improvements from percentage rollout to full enablement, lock in operating policy, and document the permanent configuration.
+
+**Objectives**:
+- Move from `VALIDATION_PHASE13_ROLLOUT_PERCENT` to full enablement (`VALIDATION_PHASE13_ENABLED=true`)
+- Ensure rollout controls, telemetry, and reporting remain correct after full enablement
+- Document the permanent policy for introducing future correctness phases
+
+**Preconditions**:
+- [ ] Phase 14 impact report shows `safe_to_proceed` at ≥50% rollout for sustained period
+- [ ] No spikes in validation error rate or latency
+- [ ] Top Phase 13 blockers reviewed and accepted by product/legal
+
+**Environment Variables (Steady State)**:
+```bash
+# Full enablement - recommended production configuration
+VALIDATION_PHASE13_ENABLED=true
+EVICTION_TELEMETRY_ENABLED=true
+
+# Optional: Rollout percent is ignored when ENABLED=true
+# unset VALIDATION_PHASE13_ROLLOUT_PERCENT
+```
+
+**Flag Precedence Rules**:
+
+| `VALIDATION_PHASE13_ENABLED` | `VALIDATION_PHASE13_ROLLOUT_PERCENT` | Behavior |
+|------------------------------|--------------------------------------|----------|
+| `true` | (any value) | Phase 13 always enabled (100%) |
+| unset/false | 0 or unset | Phase 13 disabled (0%) |
+| unset/false | 1-99 | Phase 13 enabled for N% of requests |
+| unset/false | 100 | Phase 13 always enabled (100%) |
+
+**CI Test Coverage**:
+
+Phase 15 adds CI tests to ensure flag behavior correctness:
+- `VALIDATION_PHASE13_ENABLED=true` overrides rollout percentage
+- Rollout percent = 0 disables Phase 13 completely
+- Rollout percent boundary conditions (negative, >100, invalid)
+- Session-level decision caching remains sticky per request
+- Phase 13 rules are correctly evaluated under full enablement
+- Telemetry correctly identifies and tracks Phase 13 rules
+
+**Telemetry Under Full Enablement**:
+
+With Phase 13 fully enabled, telemetry continues to track:
+```typescript
+{
+  phase13Enabled: true,        // Always true under full enablement
+  phase13BlockerIds: [...],    // Phase 13 blockers that fired
+  phase13WarningIds: [...],    // Phase 13 warnings that fired
+}
+```
+
+The `getPhase14ImpactMetrics()` function remains useful for monitoring:
+- `phase13EnabledPercent` should be 100%
+- `newlyBlockedPercent` shows ongoing impact
+- `topPhase13Blockers` identifies most common blockers
+
+**How to Enable Full Enablement**:
+
+1. **Verify Phase 14 criteria are met**:
+   ```bash
+   npm run validation:phase14-report
+   # Should show "safe_to_proceed" status
+   ```
+
+2. **Enable in staging first**:
+   ```bash
+   export VALIDATION_PHASE13_ENABLED=true
+   export EVICTION_TELEMETRY_ENABLED=true
+   ```
+
+3. **Monitor for 24-48 hours**, then enable in production
+
+4. **Remove rollout percent variable** (optional cleanup):
+   ```bash
+   unset VALIDATION_PHASE13_ROLLOUT_PERCENT
+   ```
+
+**Rollback from Full Enablement**:
+
+If issues arise after full enablement:
+
+```bash
+# Option 1: Reduce to percentage rollout
+unset VALIDATION_PHASE13_ENABLED
+export VALIDATION_PHASE13_ROLLOUT_PERCENT=10
+
+# Option 2: Disable completely
+unset VALIDATION_PHASE13_ENABLED
+unset VALIDATION_PHASE13_ROLLOUT_PERCENT
+# (or set VALIDATION_PHASE13_ROLLOUT_PERCENT=0)
+```
+
+**Success Criteria**:
+- [ ] Phase 13 runs for 100% of eligible traffic
+- [ ] No increase in validation errors or unacceptable latency
+- [ ] Phase 13 impact telemetry remains observable
+- [ ] Clear, documented rollback path exists
+- [ ] CI tests pass for flag precedence and behavior
+
+---
+
+## Future Correctness Phases Policy
+
+This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
+
+### Adding New Correctness Rules
+
+1. **Implement behind feature flag**:
+   - Add new rules with `requires_feature: phaseN` in YAML
+   - Add `VALIDATION_PHASEN_ENABLED` and `VALIDATION_PHASEN_ROLLOUT_PERCENT` env vars
+   - Follow the pattern established in Phase 13/14/15
+
+2. **Add to `PHASE_N_RULE_IDS` set** in `shadow-mode-adapter.ts` for telemetry tracking
+
+3. **Create golden tests** verifying rules are:
+   - NOT evaluated when feature flag is disabled
+   - Evaluated when feature flag is enabled
+   - Correct in their condition logic
+
+4. **Staged rollout**:
+   - Staging at 100% for 1 week
+   - Production at 10% → 50% → 100%
+   - Use impact report to monitor
+
+5. **Documentation**:
+   - Update CUTOVER_PLAN.md with new phase section
+   - Update feature flags table
+   - Update timeline
+
+### Feature Flag Lifecycle
+
+```
+Phase N Development:
+  VALIDATION_PHASEN_ENABLED=false (default)
+  VALIDATION_PHASEN_ROLLOUT_PERCENT=0
+
+Phase N Staging:
+  VALIDATION_PHASEN_ENABLED=true
+
+Phase N Production Rollout:
+  VALIDATION_PHASEN_ROLLOUT_PERCENT=10 → 50 → 100
+
+Phase N Full Enablement:
+  VALIDATION_PHASEN_ENABLED=true
+  (ROLLOUT_PERCENT becomes irrelevant)
+
+Phase N Deprecated (after next phase):
+  VALIDATION_PHASEN_ENABLED=true (permanent)
+  Remove ROLLOUT_PERCENT variable
+```
+
+### Rollback Policy
+
+- During percentage rollout: Reduce `ROLLOUT_PERCENT` or set to 0
+- After full enablement: Set `ENABLED=false` or reduce to percentage
+- After permanent lock-in: Emergency only - requires code changes
+
+---
+
 ## Rollback Procedures
 
 ### Phase 12 Complete: No Rollback Available
@@ -739,6 +903,7 @@ unset EVICTION_YAML_PRIMARY
 | 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
 | 13. Correctness Improvements | Available | Incremental | Feature-flagged enhancements |
 | 14. Controlled Rollout | Available | ~3 weeks | 10% → 50% → 100% with metrics |
+| 15. Full Enablement | Available | 1-2 days | ENABLED=true, policy lock-in |
 
 ## Risk Mitigation
 
