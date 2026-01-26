@@ -18,6 +18,16 @@ import yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
 import { validateEvictionCondition } from './eviction-rules-allowlist';
+import {
+  evaluateConditionOptimized,
+  validateRuleCount,
+  validateConditionCount,
+  startTiming,
+  endTiming,
+  getOptimizerConfig,
+  precompileConditions,
+  type TimingHook,
+} from './eviction-rules-optimizer';
 
 // ============================================================================
 // TYPES
@@ -42,6 +52,8 @@ export interface ValidationRule {
   message: string;
   rationale: string;
   field?: string | null;
+  /** Feature flag requirement - rule only evaluated when feature is enabled */
+  requires_feature?: string;
 }
 
 export interface SummarySection {
@@ -97,6 +109,46 @@ export interface ValidationEngineResult {
   jurisdiction: Jurisdiction;
   product: Product;
   route: EvictionRoute;
+}
+
+// ============================================================================
+// PHASE 18: EXPLAINABILITY MODE TYPES
+// ============================================================================
+
+export interface ConditionExplanation {
+  condition: string;
+  result: boolean;
+  /** Simplified explanation of what the condition checks */
+  explanation: string;
+}
+
+export interface RuleExplanation {
+  ruleId: string;
+  severity: RuleSeverity;
+  message: string;
+  /** Whether this rule was evaluated (might be skipped due to feature flags or route) */
+  evaluated: boolean;
+  /** Why the rule was skipped (if evaluated=false) */
+  skipReason?: 'feature_flag_disabled' | 'route_mismatch' | 'condition_count_exceeded';
+  /** Whether the rule fired (triggered an issue) */
+  fired: boolean;
+  /** Detailed condition evaluation results */
+  conditions: ConditionExplanation[];
+  /** The condition that caused the rule to fire (if any) */
+  firingCondition?: string;
+}
+
+export interface ExplainableResult extends ValidationEngineResult {
+  /** Detailed explanations of all rule evaluations */
+  explanations: RuleExplanation[];
+  /** Computed context values used in evaluation */
+  computedContext: Record<string, unknown>;
+  /** Timing information */
+  timing: {
+    totalMs: number;
+    rulesEvaluated: number;
+    conditionsEvaluated: number;
+  };
 }
 
 export interface EvictionFacts {
@@ -238,6 +290,107 @@ export interface EvictionFacts {
 
   // Allow additional properties
   [key: string]: any;
+}
+
+// ============================================================================
+// FEATURE FLAGS
+// ============================================================================
+
+/**
+ * Get Phase 13 rollout percentage from environment.
+ * Phase 14: Allows gradual rollout of Phase 13 rules.
+ *
+ * Values:
+ * - 0: Phase 13 disabled (default)
+ * - 1-99: Percentage of requests where Phase 13 is enabled
+ * - 100: Phase 13 fully enabled
+ *
+ * Set with: VALIDATION_PHASE13_ROLLOUT_PERCENT=N (0-100)
+ */
+export function getPhase13RolloutPercent(): number {
+  // First check if Phase 13 is explicitly enabled (takes precedence)
+  if (process.env.VALIDATION_PHASE13_ENABLED === 'true') {
+    return 100;
+  }
+
+  const percentStr = process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+  if (!percentStr) return 0;
+
+  const percent = parseInt(percentStr, 10);
+  if (isNaN(percent) || percent < 0) return 0;
+  if (percent > 100) return 100;
+  return percent;
+}
+
+// Session-level Phase 13 decision cache
+// Ensures consistent Phase 13 status within a single request
+let phase13SessionDecision: boolean | null = null;
+
+/**
+ * Reset the Phase 13 session decision.
+ * Call this at the start of each request for percentage-based rollout.
+ */
+export function resetPhase13SessionDecision(): void {
+  phase13SessionDecision = null;
+}
+
+/**
+ * Phase 13 feature flag for correctness improvements beyond legacy TS.
+ * When enabled, additional validation rules are evaluated that were
+ * intentionally excluded during the TS-to-YAML migration for parity.
+ *
+ * Enable with:
+ * - VALIDATION_PHASE13_ENABLED=true (100% enablement)
+ * - VALIDATION_PHASE13_ROLLOUT_PERCENT=N (percentage-based rollout)
+ *
+ * Phase 14: Supports percentage-based rollout for gradual rollout.
+ */
+export function isPhase13Enabled(): boolean {
+  // Return cached decision if available (ensures consistency within request)
+  if (phase13SessionDecision !== null) {
+    return phase13SessionDecision;
+  }
+
+  const rolloutPercent = getPhase13RolloutPercent();
+
+  // 0% = always disabled
+  if (rolloutPercent === 0) {
+    phase13SessionDecision = false;
+    return false;
+  }
+
+  // 100% = always enabled
+  if (rolloutPercent >= 100) {
+    phase13SessionDecision = true;
+    return true;
+  }
+
+  // Percentage-based rollout: random selection
+  const randomValue = Math.random() * 100;
+  phase13SessionDecision = randomValue < rolloutPercent;
+  return phase13SessionDecision;
+}
+
+/**
+ * Get list of enabled feature flags for rule filtering.
+ */
+export function getEnabledFeatures(): string[] {
+  const features: string[] = [];
+  if (isPhase13Enabled()) {
+    features.push('phase13');
+  }
+  return features;
+}
+
+/**
+ * Check if a rule should be evaluated based on its feature requirements.
+ */
+function ruleFeatureEnabled(rule: ValidationRule): boolean {
+  if (!rule.requires_feature) {
+    return true; // No feature requirement, always enabled
+  }
+  const enabledFeatures = getEnabledFeatures();
+  return enabledFeatures.includes(rule.requires_feature);
 }
 
 // ============================================================================
@@ -630,6 +783,7 @@ function getConfigPath(jurisdiction: Jurisdiction, product: Product): string {
 
 /**
  * Load rules from YAML config file.
+ * Phase 17: Precompiles conditions on load for cache warming.
  */
 export function loadRulesConfig(
   jurisdiction: Jurisdiction,
@@ -648,6 +802,11 @@ export function loadRulesConfig(
     const fileContents = fs.readFileSync(configPath, 'utf8');
     const config = yaml.load(fileContents) as RulesConfig;
     configCache.set(cacheKey, config);
+
+    // Phase 17: Precompile all conditions to warm the cache
+    const allRules = getAllRules(config);
+    precompileConditions(allRules);
+
     return config;
   } catch (error) {
     console.error(`Failed to load rules config from ${configPath}:`, error);
@@ -660,6 +819,42 @@ export function loadRulesConfig(
       common_rules: [],
     };
   }
+}
+
+/**
+ * Warm the condition cache for all known configs.
+ * Call at application startup for optimal performance.
+ *
+ * Phase 17: Pre-loads and compiles all rule conditions.
+ */
+export function warmConditionCache(): {
+  configsLoaded: number;
+  conditionsCompiled: number;
+  compilationFailures: number;
+} {
+  const jurisdictions: Jurisdiction[] = ['england', 'wales', 'scotland'];
+  const products: Product[] = ['notice_only', 'complete_pack'];
+
+  let configsLoaded = 0;
+  let conditionsCompiled = 0;
+  let compilationFailures = 0;
+
+  for (const jurisdiction of jurisdictions) {
+    for (const product of products) {
+      try {
+        const config = loadRulesConfig(jurisdiction, product, true);
+        const allRules = getAllRules(config);
+        const result = precompileConditions(allRules);
+        configsLoaded++;
+        conditionsCompiled += result.compiled;
+        compilationFailures += result.failed;
+      } catch {
+        // Config might not exist for all combinations
+      }
+    }
+  }
+
+  return { configsLoaded, conditionsCompiled, compilationFailures };
 }
 
 /**
@@ -716,6 +911,8 @@ export function getAllRules(config: RulesConfig): ValidationRule[] {
 /**
  * Evaluate all rules against the provided facts.
  *
+ * Phase 17: Uses optimized condition evaluation with caching and timing hooks.
+ *
  * @param facts - The eviction case facts
  * @param jurisdiction - The jurisdiction (england, wales, scotland)
  * @param product - The product (notice_only, complete_pack)
@@ -730,25 +927,57 @@ export function evaluateEvictionRules(
   route: EvictionRoute,
   rulesConfig?: RulesConfig
 ): ValidationEngineResult {
+  // Phase 17: Start timing if enabled
+  const optimizerConfig = getOptimizerConfig();
+  const timing = optimizerConfig.enableTimingHooks ? startTiming() : null;
+
   const config = rulesConfig || loadRulesConfig(jurisdiction, product);
   const allRules = getAllRulesForRoute(config, route);
   const computed = buildComputedContext(facts, route);
 
+  // Phase 17: Validate rule count against safeguard limit
+  validateRuleCount(allRules.length);
+
+  // Pre-allocate result arrays with estimated capacity to reduce allocations
   const blockers: RuleEvaluationResult[] = [];
   const warnings: RuleEvaluationResult[] = [];
   const suggestions: RuleEvaluationResult[] = [];
 
+  // Phase 17: Track condition evaluations for timing hooks
+  let conditionCount = 0;
+  let cacheHits = 0;
+
   for (const rule of allRules) {
+    // Check if rule's feature requirement is met
+    if (!ruleFeatureEnabled(rule)) {
+      continue;
+    }
+
     // Check if rule applies to current route
     if (!ruleAppliesToRoute(rule, route)) {
       continue;
     }
 
+    // Phase 17: Validate condition count against safeguard limit
+    validateConditionCount(rule.id, rule.applies_when.length);
+
     // Evaluate conditions (rule fires if ANY condition is true - OR logic)
-    // This matches Money Claim reference implementation semantics
-    const anyConditionMet = rule.applies_when.some((cond) =>
-      evaluateCondition(cond.condition, facts, computed, route)
-    );
+    // Phase 17: Use optimized condition evaluation with caching
+    let anyConditionMet = false;
+    for (const cond of rule.applies_when) {
+      conditionCount++;
+      // Use optimized evaluation with compiled function caching
+      const result = evaluateConditionOptimized(
+        cond.condition,
+        facts as Record<string, unknown>,
+        computed as unknown as Record<string, unknown>,
+        route
+      );
+      if (result) {
+        anyConditionMet = true;
+        break; // Early exit on first true condition (OR logic)
+      }
+    }
 
     if (anyConditionMet) {
       const result: RuleEvaluationResult = {
@@ -760,18 +989,27 @@ export function evaluateEvictionRules(
         section: getRuleSection(rule.id, config),
       };
 
-      switch (rule.severity) {
-        case 'blocker':
-          blockers.push(result);
-          break;
-        case 'warning':
-          warnings.push(result);
-          break;
-        case 'suggestion':
-          suggestions.push(result);
-          break;
+      // Direct assignment instead of switch for micro-optimization
+      if (rule.severity === 'blocker') {
+        blockers.push(result);
+      } else if (rule.severity === 'warning') {
+        warnings.push(result);
+      } else {
+        suggestions.push(result);
       }
     }
+  }
+
+  // Phase 17: Record timing data if hooks are enabled
+  if (timing && optimizerConfig.enableTimingHooks) {
+    endTiming(timing, {
+      ruleCount: allRules.length,
+      conditionCount,
+      blockerCount: blockers.length,
+      warningCount: warnings.length,
+      cacheHits,
+      cacheMisses: conditionCount - cacheHits,
+    });
   }
 
   return {
@@ -1008,4 +1246,262 @@ export function groupResultsBySection(
  */
 export function clearConfigCache(): void {
   configCache.clear();
+}
+
+// ============================================================================
+// PHASE 18: EXPLAINABILITY MODE
+// ============================================================================
+
+/**
+ * Generate a human-readable explanation for a condition.
+ */
+function explainCondition(condition: string): string {
+  // Common patterns and their explanations
+  const explanations: Array<{ pattern: RegExp; explanation: (match: RegExpMatchArray) => string }> = [
+    { pattern: /facts\.(\w+)\s*===?\s*true/, explanation: (m) => `${formatFieldName(m[1])} is true` },
+    { pattern: /facts\.(\w+)\s*===?\s*false/, explanation: (m) => `${formatFieldName(m[1])} is false` },
+    { pattern: /facts\.(\w+)\s*!==?\s*true/, explanation: (m) => `${formatFieldName(m[1])} is not true` },
+    { pattern: /facts\.(\w+)\s*!==?\s*false/, explanation: (m) => `${formatFieldName(m[1])} is not false` },
+    { pattern: /!facts\.(\w+)/, explanation: (m) => `${formatFieldName(m[1])} is not set/falsy` },
+    { pattern: /facts\.(\w+)\s*===?\s*null/, explanation: (m) => `${formatFieldName(m[1])} is null` },
+    { pattern: /facts\.(\w+)\s*!==?\s*null/, explanation: (m) => `${formatFieldName(m[1])} is not null` },
+    { pattern: /facts\.(\w+)\s*===?\s*undefined/, explanation: (m) => `${formatFieldName(m[1])} is undefined` },
+    { pattern: /computed\.(\w+)\s*===?\s*true/, explanation: (m) => `Computed: ${formatFieldName(m[1])} is true` },
+    { pattern: /computed\.(\w+)\s*===?\s*false/, explanation: (m) => `Computed: ${formatFieldName(m[1])} is false` },
+    { pattern: /computed\.(\w+)/, explanation: (m) => `Computed value: ${formatFieldName(m[1])}` },
+    { pattern: /facts\.(\w+)\s*>\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} > ${m[2]}` },
+    { pattern: /facts\.(\w+)\s*<\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} < ${m[2]}` },
+    { pattern: /facts\.(\w+)\s*>=\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} >= ${m[2]}` },
+    { pattern: /facts\.(\w+)\s*<=\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} <= ${m[2]}` },
+    { pattern: /facts\.(\w+)\.includes\(['"](\w+)['"]\)/, explanation: (m) => `${formatFieldName(m[1])} includes "${m[2]}"` },
+    { pattern: /facts\.(\w+)\.length\s*===?\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} has ${m[2]} items` },
+    { pattern: /facts\.(\w+)\.length\s*>\s*(\d+)/, explanation: (m) => `${formatFieldName(m[1])} has more than ${m[2]} items` },
+  ];
+
+  for (const { pattern, explanation } of explanations) {
+    const match = condition.match(pattern);
+    if (match) {
+      return explanation(match);
+    }
+  }
+
+  // Fallback: return sanitized condition
+  return condition.replace(/facts\./g, '').replace(/computed\./g, '[computed] ');
+}
+
+/**
+ * Format a field name for human readability.
+ */
+function formatFieldName(fieldName: string): string {
+  return fieldName
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase()
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
+/**
+ * Evaluate all rules with full explainability output.
+ *
+ * Phase 18: Returns detailed information about why each rule did or didn't fire,
+ * including per-condition evaluation results.
+ *
+ * @param facts - The eviction case facts
+ * @param jurisdiction - The jurisdiction (england, wales, scotland)
+ * @param product - The product (notice_only, complete_pack)
+ * @param route - The eviction route (section_21, section_8, etc.)
+ * @param rulesConfig - Optional rules config (will load from file if not provided)
+ * @returns Explainable validation results with full rule evaluation details
+ */
+export function evaluateEvictionRulesExplained(
+  facts: EvictionFacts,
+  jurisdiction: Jurisdiction,
+  product: Product,
+  route: EvictionRoute,
+  rulesConfig?: RulesConfig
+): ExplainableResult {
+  const startTime = performance.now();
+
+  const config = rulesConfig || loadRulesConfig(jurisdiction, product);
+  const allRules = getAllRulesForRoute(config, route);
+  const computed = buildComputedContext(facts, route);
+
+  // Pre-allocate result arrays
+  const blockers: RuleEvaluationResult[] = [];
+  const warnings: RuleEvaluationResult[] = [];
+  const suggestions: RuleEvaluationResult[] = [];
+  const explanations: RuleExplanation[] = [];
+
+  // Track metrics
+  let rulesEvaluated = 0;
+  let conditionsEvaluated = 0;
+
+  for (const rule of allRules) {
+    const ruleExplanation: RuleExplanation = {
+      ruleId: rule.id,
+      severity: rule.severity,
+      message: rule.message,
+      evaluated: false,
+      fired: false,
+      conditions: [],
+    };
+
+    // Check feature requirement
+    if (!ruleFeatureEnabled(rule)) {
+      ruleExplanation.skipReason = 'feature_flag_disabled';
+      explanations.push(ruleExplanation);
+      continue;
+    }
+
+    // Check route applicability
+    if (!ruleAppliesToRoute(rule, route)) {
+      ruleExplanation.skipReason = 'route_mismatch';
+      explanations.push(ruleExplanation);
+      continue;
+    }
+
+    // Check condition count safeguard
+    const optimizerConfig = getOptimizerConfig();
+    if (rule.applies_when.length > optimizerConfig.maxConditionsPerRule) {
+      ruleExplanation.skipReason = 'condition_count_exceeded';
+      explanations.push(ruleExplanation);
+      continue;
+    }
+
+    ruleExplanation.evaluated = true;
+    rulesEvaluated++;
+
+    // Evaluate all conditions and collect explanations
+    let anyConditionMet = false;
+    let firingCondition: string | undefined;
+
+    for (const cond of rule.applies_when) {
+      conditionsEvaluated++;
+
+      const result = evaluateConditionOptimized(
+        cond.condition,
+        facts as Record<string, unknown>,
+        computed as unknown as Record<string, unknown>,
+        route
+      );
+
+      ruleExplanation.conditions.push({
+        condition: cond.condition,
+        result,
+        explanation: explainCondition(cond.condition),
+      });
+
+      if (result && !anyConditionMet) {
+        anyConditionMet = true;
+        firingCondition = cond.condition;
+        // Note: We continue evaluating all conditions for explainability
+        // even though the rule has already fired
+      }
+    }
+
+    if (anyConditionMet) {
+      ruleExplanation.fired = true;
+      ruleExplanation.firingCondition = firingCondition;
+
+      const evalResult: RuleEvaluationResult = {
+        id: rule.id,
+        severity: rule.severity,
+        message: rule.message,
+        rationale: rule.rationale,
+        field: rule.field || null,
+        section: getRuleSection(rule.id, config),
+      };
+
+      if (rule.severity === 'blocker') {
+        blockers.push(evalResult);
+      } else if (rule.severity === 'warning') {
+        warnings.push(evalResult);
+      } else {
+        suggestions.push(evalResult);
+      }
+    }
+
+    explanations.push(ruleExplanation);
+  }
+
+  const totalMs = performance.now() - startTime;
+
+  return {
+    blockers,
+    warnings,
+    suggestions,
+    isValid: blockers.length === 0,
+    ruleCount: allRules.length,
+    jurisdiction,
+    product,
+    route,
+    explanations,
+    computedContext: computed as unknown as Record<string, unknown>,
+    timing: {
+      totalMs,
+      rulesEvaluated,
+      conditionsEvaluated,
+    },
+  };
+}
+
+/**
+ * Get a summary of why validation failed or passed.
+ *
+ * Phase 18: Provides a human-readable summary for debugging and support.
+ */
+export function getValidationSummary(result: ExplainableResult): string {
+  const lines: string[] = [];
+
+  lines.push(`=== Validation Summary ===`);
+  lines.push(`Jurisdiction: ${result.jurisdiction}`);
+  lines.push(`Product: ${result.product}`);
+  lines.push(`Route: ${result.route}`);
+  lines.push(`Status: ${result.isValid ? 'VALID' : 'INVALID'}`);
+  lines.push(``);
+  lines.push(`Rules: ${result.ruleCount} total, ${result.timing.rulesEvaluated} evaluated`);
+  lines.push(`Conditions: ${result.timing.conditionsEvaluated} evaluated`);
+  lines.push(`Time: ${result.timing.totalMs.toFixed(2)}ms`);
+  lines.push(``);
+
+  if (result.blockers.length > 0) {
+    lines.push(`BLOCKERS (${result.blockers.length}):`);
+    for (const b of result.blockers) {
+      lines.push(`  - [${b.id}] ${b.message}`);
+    }
+    lines.push(``);
+  }
+
+  if (result.warnings.length > 0) {
+    lines.push(`WARNINGS (${result.warnings.length}):`);
+    for (const w of result.warnings) {
+      lines.push(`  - [${w.id}] ${w.message}`);
+    }
+    lines.push(``);
+  }
+
+  // Show skipped rules summary
+  const skippedByFeature = result.explanations.filter(e => e.skipReason === 'feature_flag_disabled');
+  const skippedByRoute = result.explanations.filter(e => e.skipReason === 'route_mismatch');
+
+  if (skippedByFeature.length > 0 || skippedByRoute.length > 0) {
+    lines.push(`SKIPPED RULES:`);
+    if (skippedByFeature.length > 0) {
+      lines.push(`  - ${skippedByFeature.length} skipped (feature flag disabled)`);
+    }
+    if (skippedByRoute.length > 0) {
+      lines.push(`  - ${skippedByRoute.length} skipped (route mismatch)`);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Get detailed explanation for a specific rule.
+ *
+ * Phase 18: Returns why a specific rule did or didn't fire.
+ */
+export function explainRule(result: ExplainableResult, ruleId: string): RuleExplanation | null {
+  return result.explanations.find(e => e.ruleId === ruleId) || null;
 }

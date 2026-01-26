@@ -17,10 +17,17 @@
 
 import {
   evaluateEvictionRules,
+  isPhase13Enabled,
   type Jurisdiction,
   type Product,
   type EvictionRoute,
 } from './eviction-rules-engine';
+import {
+  getPhase13Message,
+  enhanceValidationIssue,
+  type EnhancedValidationMessage,
+  type ValidationIssueWithHelp,
+} from './phase13-messages';
 
 // ============================================================================
 // TYPES
@@ -37,6 +44,10 @@ export interface ValidationTelemetryEvent {
   warningIds: string[];
   durationMs: number;
   isValid: boolean;
+  // Phase 14: Track Phase 13 rules separately
+  phase13BlockerIds?: string[];
+  phase13WarningIds?: string[];
+  phase13Enabled?: boolean;
 }
 
 export interface TelemetryMetrics {
@@ -45,6 +56,10 @@ export interface TelemetryMetrics {
   invalidCount: number;
   avgDurationMs: number;
   blockerFrequency: Map<string, number>;
+  // Phase 14: Phase 13 specific metrics
+  phase13BlockerFrequency: Map<string, number>;
+  phase13EnabledCount: number;
+  phase13NewlyBlockedCount: number;
 }
 
 // In-memory metrics store
@@ -199,12 +214,40 @@ export function getAggregatedMetrics(
     }
   }
 
+  // Phase 14: Count Phase 13 specific blocker frequency
+  const phase13BlockerFrequency = new Map<string, number>();
+  let phase13EnabledCount = 0;
+  let phase13NewlyBlockedCount = 0;
+
+  for (const event of events) {
+    if (event.phase13Enabled) {
+      phase13EnabledCount++;
+      // Count Phase 13 specific blockers
+      if (event.phase13BlockerIds && event.phase13BlockerIds.length > 0) {
+        for (const id of event.phase13BlockerIds) {
+          phase13BlockerFrequency.set(id, (phase13BlockerFrequency.get(id) || 0) + 1);
+        }
+        // Case was newly blocked if it only has Phase 13 blockers
+        // (would have passed without Phase 13 rules)
+        const nonPhase13Blockers = event.blockerIds.filter(
+          (id) => !event.phase13BlockerIds?.includes(id)
+        );
+        if (nonPhase13Blockers.length === 0 && event.phase13BlockerIds.length > 0) {
+          phase13NewlyBlockedCount++;
+        }
+      }
+    }
+  }
+
   return {
     totalValidations,
     validCount,
     invalidCount,
     avgDurationMs,
     blockerFrequency,
+    phase13BlockerFrequency,
+    phase13EnabledCount,
+    phase13NewlyBlockedCount,
   };
 }
 
@@ -240,6 +283,72 @@ export function getTopDiscrepancies(
 ): Array<{ key: string; count: number }> {
   // Phase 12: No TS comparison = no discrepancies
   return [];
+}
+
+/**
+ * Get top N Phase 13 blockers by frequency.
+ * Phase 14: Specifically tracks blockers from Phase 13 correctness improvements.
+ */
+export function getTopPhase13Blockers(
+  n: number = 10,
+  filter?: {
+    jurisdiction?: string;
+    product?: string;
+    route?: string;
+  }
+): Array<{ ruleId: string; count: number }> {
+  const metrics = getAggregatedMetrics(filter);
+  return Array.from(metrics.phase13BlockerFrequency.entries())
+    .map(([ruleId, count]) => ({ ruleId, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, n);
+}
+
+/**
+ * Get Phase 14 rollout impact metrics.
+ * Provides key statistics for monitoring Phase 13 rule rollout.
+ */
+export function getPhase14ImpactMetrics(
+  filter?: {
+    jurisdiction?: string;
+    product?: string;
+    route?: string;
+  }
+): {
+  totalValidations: number;
+  phase13EnabledCount: number;
+  phase13EnabledPercent: number;
+  phase13NewlyBlockedCount: number;
+  newlyBlockedPercent: number;
+  topPhase13Blockers: Array<{ ruleId: string; count: number }>;
+  warningToBlockerRatio: number;
+} {
+  const metrics = getAggregatedMetrics(filter);
+  const events = getMetricsStore();
+
+  // Calculate warning to blocker ratio for Phase 13 rules
+  let phase13Warnings = 0;
+  let phase13Blockers = 0;
+  for (const event of events) {
+    if (event.phase13Enabled) {
+      phase13Blockers += event.phase13BlockerIds?.length || 0;
+      phase13Warnings += event.phase13WarningIds?.length || 0;
+    }
+  }
+
+  return {
+    totalValidations: metrics.totalValidations,
+    phase13EnabledCount: metrics.phase13EnabledCount,
+    phase13EnabledPercent: metrics.totalValidations > 0
+      ? (metrics.phase13EnabledCount / metrics.totalValidations) * 100
+      : 0,
+    phase13NewlyBlockedCount: metrics.phase13NewlyBlockedCount,
+    newlyBlockedPercent: metrics.phase13EnabledCount > 0
+      ? (metrics.phase13NewlyBlockedCount / metrics.phase13EnabledCount) * 100
+      : 0,
+    topPhase13Blockers: getTopPhase13Blockers(10, filter),
+    warningToBlockerRatio: phase13Blockers > 0 ? phase13Warnings / phase13Blockers : 0,
+  };
 }
 
 /**
@@ -307,6 +416,52 @@ export function deriveRouteFromFacts(facts: Record<string, unknown>): string {
 }
 
 // ============================================================================
+// PHASE 13 RULE IDENTIFICATION
+// ============================================================================
+
+/**
+ * List of rule IDs that require Phase 13 feature flag.
+ * These rules represent correctness improvements beyond legacy TS parity.
+ *
+ * Phase 14: Used for telemetry tracking to identify Phase 13 impacts.
+ */
+const PHASE_13_RULE_IDS: Set<string> = new Set([
+  // England S21
+  's21_deposit_cap_exceeded',
+  's21_four_month_bar',
+  's21_notice_period_short',
+  's21_licensing_required_not_licensed',
+  's21_retaliatory_improvement_notice',
+  's21_retaliatory_emergency_action',
+  // England S8
+  's8_notice_period_short',
+  // Wales S173
+  's173_notice_period_short',
+  's173_deposit_not_protected',
+  's173_written_statement_missing',
+  // Scotland NTL
+  'ntl_landlord_not_registered',
+  'ntl_pre_action_letter_not_sent',
+  'ntl_pre_action_signposting_missing',
+  'ntl_ground_1_arrears_threshold',
+  'ntl_deposit_not_protected',
+]);
+
+/**
+ * Check if a rule ID is a Phase 13 rule.
+ */
+export function isPhase13Rule(ruleId: string): boolean {
+  return PHASE_13_RULE_IDS.has(ruleId);
+}
+
+/**
+ * Filter rule IDs to only Phase 13 rules.
+ */
+function filterPhase13Rules(ruleIds: string[]): string[] {
+  return ruleIds.filter((id) => PHASE_13_RULE_IDS.has(id));
+}
+
+// ============================================================================
 // YAML-ONLY VALIDATION WRAPPERS
 // ============================================================================
 
@@ -348,6 +503,10 @@ export async function runYamlOnlyNoticeValidation(params: {
 
   const durationMs = Date.now() - startTime;
 
+  // Extract rule IDs for telemetry
+  const blockerIds = yamlResult.blockers.map((b) => b.id);
+  const warningIds = yamlResult.warnings.map((w) => w.id);
+
   // Record telemetry if sampling
   if (shouldSampleTelemetry()) {
     recordValidationTelemetry({
@@ -357,10 +516,14 @@ export async function runYamlOnlyNoticeValidation(params: {
       route: params.route,
       blockerCount: yamlResult.blockers.length,
       warningCount: yamlResult.warnings.length,
-      blockerIds: yamlResult.blockers.map((b) => b.id),
-      warningIds: yamlResult.warnings.map((w) => w.id),
+      blockerIds,
+      warningIds,
       durationMs,
       isValid: yamlResult.blockers.length === 0,
+      // Phase 14: Track Phase 13 specific rules
+      phase13Enabled: isPhase13Enabled(),
+      phase13BlockerIds: filterPhase13Rules(blockerIds),
+      phase13WarningIds: filterPhase13Rules(warningIds),
     });
   }
 
@@ -413,6 +576,10 @@ export async function runYamlOnlyCompletePackValidation(params: {
 
   const durationMs = Date.now() - startTime;
 
+  // Extract rule IDs for telemetry
+  const blockerIds = yamlResult.blockers.map((b) => b.id);
+  const warningIds = yamlResult.warnings.map((w) => w.id);
+
   // Record telemetry if sampling
   if (shouldSampleTelemetry()) {
     recordValidationTelemetry({
@@ -422,10 +589,14 @@ export async function runYamlOnlyCompletePackValidation(params: {
       route: params.route,
       blockerCount: yamlResult.blockers.length,
       warningCount: yamlResult.warnings.length,
-      blockerIds: yamlResult.blockers.map((b) => b.id),
-      warningIds: yamlResult.warnings.map((w) => w.id),
+      blockerIds,
+      warningIds,
       durationMs,
       isValid: yamlResult.blockers.length === 0,
+      // Phase 14: Track Phase 13 specific rules
+      phase13Enabled: isPhase13Enabled(),
+      phase13BlockerIds: filterPhase13Rules(blockerIds),
+      phase13WarningIds: filterPhase13Rules(warningIds),
     });
   }
 
@@ -446,3 +617,100 @@ export async function runYamlOnlyCompletePackValidation(params: {
     durationMs,
   };
 }
+
+// ============================================================================
+// PHASE 16: ENHANCED VALIDATION WITH HELP CONTENT
+// ============================================================================
+
+export interface EnhancedValidationIssue {
+  id: string;
+  severity: 'blocker' | 'warning';
+  message: string;
+  rationale?: string;
+  // Phase 16 enhanced fields
+  title?: string;
+  howToFix?: string[];
+  legalRef?: string;
+  helpUrl?: string;
+}
+
+export interface EnhancedYamlValidationResult {
+  blockers: EnhancedValidationIssue[];
+  warnings: EnhancedValidationIssue[];
+  isValid: boolean;
+  durationMs: number;
+}
+
+/**
+ * Enhance a validation issue with Phase 13 message catalog details.
+ * Adds title, howToFix steps, legal reference, and help URL.
+ */
+function enhanceIssue(issue: {
+  id: string;
+  severity: 'blocker' | 'warning';
+  message: string;
+  rationale?: string;
+}): EnhancedValidationIssue {
+  const phase13Message = getPhase13Message(issue.id);
+
+  if (!phase13Message) {
+    return issue;
+  }
+
+  return {
+    ...issue,
+    title: phase13Message.title,
+    howToFix: phase13Message.howToFix,
+    legalRef: phase13Message.legalRef,
+    helpUrl: phase13Message.helpUrl,
+  };
+}
+
+/**
+ * Run YAML validation with enhanced Phase 16 messaging.
+ * Returns validation results with help content for Phase 13 rules.
+ *
+ * Phase 16: UX Messaging + Help Content + Support Readiness
+ */
+export async function runEnhancedNoticeValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, unknown>;
+}): Promise<EnhancedYamlValidationResult> {
+  const baseResult = await runYamlOnlyNoticeValidation(params);
+
+  return {
+    blockers: baseResult.blockers.map(enhanceIssue),
+    warnings: baseResult.warnings.map(enhanceIssue),
+    isValid: baseResult.isValid,
+    durationMs: baseResult.durationMs,
+  };
+}
+
+/**
+ * Run YAML complete_pack validation with enhanced Phase 16 messaging.
+ * Returns validation results with help content for Phase 13 rules.
+ *
+ * Phase 16: UX Messaging + Help Content + Support Readiness
+ */
+export async function runEnhancedCompletePackValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, unknown>;
+}): Promise<EnhancedYamlValidationResult> {
+  const baseResult = await runYamlOnlyCompletePackValidation(params);
+
+  return {
+    blockers: baseResult.blockers.map(enhanceIssue),
+    warnings: baseResult.warnings.map(enhanceIssue),
+    isValid: baseResult.isValid,
+    durationMs: baseResult.durationMs,
+  };
+}
+
+// Re-export Phase 16 message types for consumers
+export {
+  getPhase13Message,
+  type EnhancedValidationMessage,
+  type ValidationIssueWithHelp,
+} from './phase13-messages';
