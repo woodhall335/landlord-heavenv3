@@ -15,14 +15,9 @@
 import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
 import { getCaseFacts } from './getCaseFacts';
-import { runPreGenerationCheck } from '@/lib/validation/pre-generation-check';
 import {
-  runProductionShadowValidation,
   deriveJurisdictionFromFacts,
   deriveRouteFromFacts,
-  isYamlPrimary,
-  isYamlOnlyMode,
-  runYamlPrimaryCompletePackValidation,
   runYamlOnlyCompletePackValidation,
   trackYamlOnlyValidation,
 } from '@/lib/validation/shadow-mode-adapter';
@@ -69,58 +64,20 @@ export async function POST(request: Request) {
 
     if (product === 'complete_pack' || product === 'eviction_pack') {
       // ========================================================================
-      // Phase 10: YAML-Only Mode - TS validators completely bypassed
-      // Phase 8: YAML Primary Mode - YAML authoritative with TS fallback
-      // Default: TS authoritative with YAML shadow mode
+      // Phase 12: YAML-only validation (TS validators removed)
       // ========================================================================
       let blockers: Array<{ code: string; description?: string }> = [];
       let warnings: Array<{ code: string; description?: string }> = [];
-      let llmCheckRan = false;
 
-      if (isYamlOnlyMode()) {
-        // Phase 10: YAML-only mode - NO TS fallback
-        console.log('[API Generate] Using YAML-only validation for complete_pack (Phase 10)');
-        try {
-          const yamlResult = await runYamlOnlyCompletePackValidation({
-            jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
-            route: deriveRouteFromFacts(caseFacts),
-            facts: caseFacts,
-          });
-
-          trackYamlOnlyValidation(true);
-
-          blockers = yamlResult.blockers.map((b) => ({
-            code: b.id,
-            description: b.message,
-          }));
-          warnings = yamlResult.warnings.map((w) => ({
-            code: w.id,
-            description: w.message,
-          }));
-
-          console.log('[API Generate] YAML-only validation complete', {
-            blockers: blockers.length,
-            warnings: warnings.length,
-            durationMs: yamlResult.durationMs,
-          });
-        } catch (error) {
-          // YAML-only mode error - no fallback available
-          trackYamlOnlyValidation(false);
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          console.error('[API Generate] YAML-only validation error (CRITICAL):', {
-            error: errorMessage,
-            product,
-          });
-          throw error; // Re-throw to trigger 500 error
-        }
-      } else if (isYamlPrimary()) {
-        // Phase 8: YAML is authoritative with TS fallback
-        console.log('[API Generate] Using YAML primary validation for complete_pack');
-        const yamlResult = await runYamlPrimaryCompletePackValidation({
+      console.log('[API Generate] Using YAML-only validation for complete_pack (Phase 12)');
+      try {
+        const yamlResult = await runYamlOnlyCompletePackValidation({
           jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
           route: deriveRouteFromFacts(caseFacts),
           facts: caseFacts,
         });
+
+        trackYamlOnlyValidation(true);
 
         blockers = yamlResult.blockers.map((b) => ({
           code: b.id,
@@ -131,39 +88,19 @@ export async function POST(request: Request) {
           description: w.message,
         }));
 
-        // Log YAML primary usage
-        if (yamlResult.usedFallback) {
-          console.warn('[API Generate] YAML primary fell back to TS:', {
-            reason: yamlResult.fallbackReason,
-          });
-        }
-      } else {
-        // Default: TS is authoritative, YAML runs in shadow mode
-        const preGenResult = await runPreGenerationCheck(caseFacts, product);
-        blockers = preGenResult.blockers;
-        warnings = preGenResult.warnings;
-        llmCheckRan = preGenResult.llm_check_ran;
-
-        // Shadow validation for parity monitoring
-        runProductionShadowValidation({
-          jurisdiction: deriveJurisdictionFromFacts(caseFacts),
-          product: 'complete_pack',
-          route: deriveRouteFromFacts(caseFacts),
-          facts: caseFacts,
-          tsBlockers: preGenResult.blockers.map((b) => ({
-            code: b.code,
-            severity: 'blocker',
-            message: b.description || b.code,
-          })),
-          tsWarnings: preGenResult.warnings.map((w) => ({
-            code: w.code,
-            severity: 'warning',
-            message: w.description || w.code,
-          })),
-        }).catch((err) => {
-          // Shadow validation should never block the response
-          console.error('[API Generate] Shadow validation error (non-fatal):', err);
+        console.log('[API Generate] YAML validation complete', {
+          blockers: blockers.length,
+          warnings: warnings.length,
+          durationMs: yamlResult.durationMs,
         });
+      } catch (error) {
+        trackYamlOnlyValidation(false);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('[API Generate] YAML validation error:', {
+          error: errorMessage,
+          product,
+        });
+        throw error; // Re-throw to trigger 500 error
       }
 
       // Log warnings but don't block
@@ -173,10 +110,7 @@ export async function POST(request: Request) {
 
       // Block on blocker issues
       if (blockers.length > 0) {
-        console.log(`[API Generate] Pre-generation blockers:`, blockers.map(b => b.code), {
-          yaml_only: isYamlOnlyMode(),
-          yaml_primary: isYamlPrimary(),
-        });
+        console.log(`[API Generate] Pre-generation blockers:`, blockers.map(b => b.code));
         return NextResponse.json(
           {
             error: 'PRE_GENERATION_VALIDATION_FAILED',
@@ -184,7 +118,6 @@ export async function POST(request: Request) {
             message: 'Document generation blocked due to data inconsistencies',
             blocking_issues: blockers,
             warnings: warnings,
-            llm_check_ran: llmCheckRan,
           },
           { status: 400 }
         );

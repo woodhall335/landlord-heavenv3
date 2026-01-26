@@ -16,9 +16,27 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import { evaluateNoticeCompliance, type ComplianceResult as NoticeComplianceResult } from '../notices/evaluate-notice-compliance';
 import type { ExtendedWizardQuestion, WizardField } from '../wizard/types';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
+
+// =============================================================================
+// LOCAL TYPE DEFINITION
+// =============================================================================
+// Note: YamlValidationResult is defined locally to avoid importing from
+// shadow-mode-adapter.ts, which uses fs and cannot be bundled for client-side.
+// YAML validation runs on the server at preview/generate time.
+
+interface YamlValidationBlocker {
+  id: string;
+  message: string;
+  rationale?: string;
+}
+
+interface YamlValidationResult {
+  blockers: YamlValidationBlocker[];
+  warnings: YamlValidationBlocker[];
+  durationMs?: number;
+}
 
 // ============================================================================
 // TYPES
@@ -273,7 +291,7 @@ function generateLegalGuidance(
   answers: Record<string, any>,
   allFacts: Record<string, any>,
   decisionResults: DecisionOutput,
-  complianceResults: NoticeComplianceResult | null
+  yamlResults: YamlValidationResult | null
 ): InlineGuidance[] {
   const guidance: InlineGuidance[] = [];
 
@@ -283,7 +301,7 @@ function generateLegalGuidance(
     answers,
     allFacts,
     decisionResults,
-    complianceResults
+    yamlResults
   );
 
   for (const issue of relevantIssues) {
@@ -356,7 +374,7 @@ function getRelevantIssuesForStep(
   answers: Record<string, any>,
   allFacts: Record<string, any>,
   decisionResults: DecisionOutput,
-  complianceResults: NoticeComplianceResult | null
+  yamlResults: YamlValidationResult | null
 ): RelevantIssue[] {
   const issues: RelevantIssue[] = [];
 
@@ -376,33 +394,33 @@ function getRelevantIssuesForStep(
     });
   }
 
-  // Check compliance results
-  if (complianceResults) {
-    for (const failure of complianceResults.hardFailures) {
-      if (!isComplianceIssueRelevantToStep(stepId, failure.code, answers, allFacts)) {
+  // Check YAML validation results (Phase 12: YAML-only)
+  if (yamlResults) {
+    for (const blocker of yamlResults.blockers) {
+      if (!isComplianceIssueRelevantToStep(stepId, blocker.id, answers, allFacts)) {
         continue;
       }
 
       issues.push({
-        code: failure.code,
+        code: blocker.id,
         severity: 'blocking',
-        legalBasis: failure.legal_reason,
-        affectedQuestionId: failure.affected_question_id,
-        description: failure.user_fix_hint,
+        legalBasis: blocker.message,
+        affectedQuestionId: getAffectedQuestionId(blocker.id),
+        description: blocker.rationale || blocker.message,
       });
     }
 
-    for (const warning of complianceResults.warnings) {
-      if (!isComplianceIssueRelevantToStep(stepId, warning.code, answers, allFacts)) {
+    for (const warning of yamlResults.warnings) {
+      if (!isComplianceIssueRelevantToStep(stepId, warning.id, answers, allFacts)) {
         continue;
       }
 
       issues.push({
-        code: warning.code,
+        code: warning.id,
         severity: 'warning',
-        legalBasis: warning.legal_reason,
-        affectedQuestionId: warning.affected_question_id,
-        description: warning.user_fix_hint,
+        legalBasis: warning.message,
+        affectedQuestionId: getAffectedQuestionId(warning.id),
+        description: warning.rationale || warning.message,
       });
     }
   }
@@ -935,19 +953,11 @@ export async function validateStepInline(
     };
   }
 
-  // 3. Run compliance evaluation
-  let complianceResults: NoticeComplianceResult | null = null;
-  try {
-    complianceResults = evaluateNoticeCompliance({
-      jurisdiction,
-      product: 'notice_only',
-      selected_route: route,
-      wizardFacts: allFacts ?? {},
-      stage: 'wizard',
-    });
-  } catch (error) {
-    console.error('[noticeOnlyInlineValidator] Compliance evaluation error:', error);
-  }
+  // 3. YAML validation is NOT run here (Phase 12)
+  // YAML validation requires fs (file system) to read YAML rules, which doesn't
+  // work in client-side code. YAML validation runs server-side at preview/generate.
+  // The decision engine provides sufficient validation for wizard inline guidance.
+  const yamlResults: YamlValidationResult | null = null;
 
   // 4. Generate legal guidance (non-blocking)
   // Per UX requirements: inline guidance is disabled by default
@@ -963,7 +973,7 @@ export async function validateStepInline(
       answers,
       allFacts,
       decisionResults,
-      complianceResults
+      yamlResults
     );
   }
 
