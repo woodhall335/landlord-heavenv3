@@ -6,8 +6,12 @@
 # PARITY STATUS (Phase 4):
 # - NTL rule IDs aligned with TS codes: ntl_ground_required, ntl_mixed_grounds, ntl_pre_action, ntl_notice_period
 # - 100% parity for grounds required, pre-action, valid cases
-# - INTENTIONAL DIVERGENCE: None - all rules match TS evaluateNoticeCompliance exactly
-# - Rules not checked by TS (landlord registration, deposit, signposting) are commented out
+#
+# PHASE 13 CORRECTNESS IMPROVEMENTS:
+# - Rules marked with `requires_feature: phase13` are correctness improvements beyond legacy TS
+# - Enable with VALIDATION_PHASE13_ENABLED=true
+# - Phase 13 rules: ntl_landlord_not_registered, ntl_pre_action_letter_not_sent,
+#   ntl_pre_action_signposting_missing, ntl_ground_1_arrears_threshold, deposit_not_protected
 
 version: "1.0"
 jurisdiction: scotland
@@ -101,49 +105,50 @@ notice_to_leave_rules:
     field: notice_expiry
 
   # ---------------------------------------------------------------------------
-  # FUTURE/COMPLETE_PACK RULES (not validated by TS evaluateNoticeCompliance)
-  # These are preserved for potential future use or complete_pack product.
+  # PHASE 13 CORRECTNESS IMPROVEMENTS
+  # These rules improve legal accuracy beyond the legacy TS parity baseline.
+  # Enable with VALIDATION_PHASE13_ENABLED=true
   # ---------------------------------------------------------------------------
 
-  # Landlord registration - currently TS doesn't validate for notice_only
-  # - id: ntl_landlord_not_registered
-  #   severity: blocker
-  #   applies_to: [notice_to_leave]
-  #   applies_when:
-  #     - condition: "!facts.landlord_registration_number && !facts.landlord_reg_number"
-  #   message: "Scotland requires landlord registration number."
-  #   rationale: "Antisocial Behaviour etc. (Scotland) Act 2004 requires all landlords to be registered."
-  #   field: landlord_registration_number
+  - id: ntl_landlord_not_registered
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "!facts.landlord_registration_number && !facts.landlord_reg_number"
+    message: "Scotland requires landlord registration number for Notice to Leave."
+    rationale: "Antisocial Behaviour etc. (Scotland) Act 2004 requires all landlords to be registered."
+    field: landlord_registration_number
 
-  # Pre-action letter requirement - currently TS only checks pre_action_confirmed
-  # - id: ntl_pre_action_letter_not_sent
-  #   severity: blocker
-  #   applies_to: [notice_to_leave]
-  #   applies_when:
-  #     - condition: "computed.has_ground_1 === true && facts.pre_action_letter_sent !== true && facts.issues?.rent_arrears?.pre_action_letter_sent !== true"
-  #   message: "Pre-action letter must be sent before Ground 1 Notice to Leave."
-  #   rationale: "Landlord must write to tenant giving 28 days notice before serving notice."
-  #   field: pre_action_letter_sent
+  - id: ntl_pre_action_letter_not_sent
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.pre_action_letter_sent !== true && facts.issues?.rent_arrears?.pre_action_letter_sent !== true"
+    message: "Pre-action letter must be sent before Ground 1 Notice to Leave."
+    rationale: "Pre-Action Requirements Regulations require landlord to write to tenant giving 28 days notice."
+    field: pre_action_letter_sent
 
-  # Pre-action signposting - currently TS doesn't validate for notice_only
-  # - id: ntl_pre_action_signposting_missing
-  #   severity: warning
-  #   applies_to: [notice_to_leave]
-  #   applies_when:
-  #     - condition: "computed.has_ground_1 === true && facts.pre_action_signposting !== true && facts.issues?.rent_arrears?.debt_advice_signposted !== true"
-  #   message: "Pre-action requirements include signposting tenant to debt advice services."
-  #   rationale: "Best practice and may be required for Housing Tribunal application."
-  #   field: pre_action_signposting
+  - id: ntl_pre_action_signposting_missing
+    severity: warning
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.pre_action_signposting !== true && facts.issues?.rent_arrears?.debt_advice_signposted !== true"
+    message: "Pre-action requirements include signposting tenant to debt advice services."
+    rationale: "Pre-Action Requirements Regulations require signposting; may be required for Tribunal application."
+    field: pre_action_signposting
 
-  # Ground 1 arrears threshold - currently TS doesn't validate for notice_only
-  # - id: ntl_ground_1_arrears_threshold
-  #   severity: warning
-  #   applies_to: [notice_to_leave]
-  #   applies_when:
-  #     - condition: "computed.has_ground_1 === true && facts.total_arrears && computed.arrears_months < 3"
-  #   message: "Ground 1 typically requires 3 or more months arrears for tribunal to grant possession."
-  #   rationale: "While technically valid with any arrears, tribunals generally expect substantial arrears."
-  #   field: total_arrears
+  - id: ntl_ground_1_arrears_threshold
+    severity: warning
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.total_arrears && computed.arrears_months < 3"
+    message: "Ground 1 typically requires 3 or more months arrears for tribunal to grant possession."
+    rationale: "While technically valid with any arrears, tribunals generally expect substantial arrears."
+    field: total_arrears
 
 # =============================================================================
 # COMMON RULES
@@ -239,17 +244,18 @@ common_rules:
     field: notice_expiry
 
   # ---------------------------------------------------------------------------
-  # DEPOSIT PROTECTION - currently TS doesn't validate for notice_only
+  # DEPOSIT PROTECTION (Phase 13)
   # ---------------------------------------------------------------------------
 
-  # - id: deposit_not_protected
-  #   severity: blocker
-  #   applies_to: [notice_to_leave]
-  #   applies_when:
-  #     - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
-  #   message: "Deposit must be protected before serving Notice to Leave."
-  #   rationale: "Tenancy Deposit Schemes (Scotland) Regulations require protection within 30 working days."
-  #   field: deposit_protected
+  - id: ntl_deposit_not_protected
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+    message: "Deposit must be protected before serving Notice to Leave."
+    rationale: "Tenancy Deposit Schemes (Scotland) Regulations require protection within 30 working days."
+    field: deposit_protected
 
 # =============================================================================
 # VALIDATION SUMMARY CONFIG
@@ -267,20 +273,31 @@ summary:
         - landlord_name_required
         - tenant_name_required
         - property_address_required
+    - id: registration
+      label: "Landlord Registration"
+      rules:
+        - ntl_landlord_not_registered
     - id: tenancy
       label: "Tenancy Information"
       rules:
         - tenancy_start_date_required
         - tenancy_start_date_future
+    - id: deposit
+      label: "Deposit Protection"
+      rules:
+        - ntl_deposit_not_protected
     - id: grounds
       label: "Grounds for Possession"
       rules:
         - ntl_ground_required
         - ntl_mixed_grounds
+        - ntl_ground_1_arrears_threshold
     - id: pre_action
       label: "Pre-Action Requirements"
       rules:
         - ntl_pre_action
+        - ntl_pre_action_letter_not_sent
+        - ntl_pre_action_signposting_missing
     - id: notice_service
       label: "Notice Service"
       rules:

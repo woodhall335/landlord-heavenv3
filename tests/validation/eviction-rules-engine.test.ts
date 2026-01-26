@@ -18,6 +18,7 @@ import {
   validateRulesSchema,
   clearConfigCache,
   groupResultsBySection,
+  resetPhase13SessionDecision,
   type EvictionFacts,
   type Jurisdiction,
   type Product,
@@ -753,5 +754,798 @@ describe('Rule Counts', () => {
     // The TS runRuleBasedChecks doesn't validate: licensing, four_month_bar, notice_period, deposit_cap
     const ruleIds = getAllRuleIds('england', 'complete_pack');
     expect(ruleIds.length).toBeGreaterThanOrEqual(20);
+  });
+});
+
+// ============================================================================
+// PHASE 13 CORRECTNESS IMPROVEMENTS TESTS
+// ============================================================================
+// These tests verify that Phase 13 rules are:
+// 1. NOT evaluated when VALIDATION_PHASE13_ENABLED is not set (default behavior)
+// 2. Evaluated when VALIDATION_PHASE13_ENABLED=true
+// 3. Have correct condition logic
+
+import { isPhase13Enabled, getEnabledFeatures, getPhase13RolloutPercent } from '@/lib/validation/eviction-rules-engine';
+
+describe('Phase 13 Feature Flag System', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    // Reset the session-level Phase 13 decision cache before each test
+    resetPhase13SessionDecision();
+  });
+
+  afterEach(() => {
+    // Restore original environment
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+  });
+
+  describe('isPhase13Enabled', () => {
+    it('should return false when env var is not set', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should return false when env var is set to anything other than "true"', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'false';
+      expect(isPhase13Enabled()).toBe(false);
+
+      process.env.VALIDATION_PHASE13_ENABLED = '1';
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should return true when env var is set to "true"', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      expect(isPhase13Enabled()).toBe(true);
+    });
+  });
+
+  describe('getEnabledFeatures', () => {
+    it('should return empty array when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      expect(getEnabledFeatures()).toEqual([]);
+    });
+
+    it('should include "phase13" when Phase 13 is enabled', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      expect(getEnabledFeatures()).toContain('phase13');
+    });
+  });
+});
+
+// ============================================================================
+// PHASE 15: FLAG PRECEDENCE AND ROLLOUT BEHAVIOR TESTS
+// ============================================================================
+// These tests verify the correctness of Phase 13 feature flag behavior
+// for CI validation during full enablement rollout.
+
+describe('Phase 15: Flag Precedence and Rollout Behavior', () => {
+  const originalEnabled = process.env.VALIDATION_PHASE13_ENABLED;
+  const originalRolloutPercent = process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+
+  beforeEach(() => {
+    resetPhase13SessionDecision();
+    delete process.env.VALIDATION_PHASE13_ENABLED;
+    delete process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+  });
+
+  afterEach(() => {
+    // Restore original environment
+    if (originalEnabled === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnabled;
+    }
+    if (originalRolloutPercent === undefined) {
+      delete process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+    } else {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = originalRolloutPercent;
+    }
+    resetPhase13SessionDecision();
+  });
+
+  describe('VALIDATION_PHASE13_ENABLED=true overrides rollout percent', () => {
+    it('should return 100% rollout when VALIDATION_PHASE13_ENABLED=true regardless of rollout percent', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '10';
+      expect(getPhase13RolloutPercent()).toBe(100);
+    });
+
+    it('should enable Phase 13 when VALIDATION_PHASE13_ENABLED=true even if rollout percent is 0', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '0';
+      expect(isPhase13Enabled()).toBe(true);
+    });
+
+    it('should enable Phase 13 when VALIDATION_PHASE13_ENABLED=true and no rollout percent set', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      expect(isPhase13Enabled()).toBe(true);
+    });
+  });
+
+  describe('Rollout percent = 0 disables Phase 13', () => {
+    it('should return 0% rollout when rollout percent is 0', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '0';
+      expect(getPhase13RolloutPercent()).toBe(0);
+    });
+
+    it('should disable Phase 13 when rollout percent is 0', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '0';
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should return 0% when no env vars are set', () => {
+      expect(getPhase13RolloutPercent()).toBe(0);
+    });
+
+    it('should disable Phase 13 when no env vars are set', () => {
+      expect(isPhase13Enabled()).toBe(false);
+    });
+  });
+
+  describe('Rollout percent boundary conditions', () => {
+    it('should clamp rollout percent to 100 when over 100', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '150';
+      expect(getPhase13RolloutPercent()).toBe(100);
+    });
+
+    it('should clamp rollout percent to 0 when negative', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '-10';
+      expect(getPhase13RolloutPercent()).toBe(0);
+    });
+
+    it('should return 0 for invalid rollout percent values', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = 'invalid';
+      expect(getPhase13RolloutPercent()).toBe(0);
+    });
+
+    it('should handle rollout percent of exactly 100', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '100';
+      expect(getPhase13RolloutPercent()).toBe(100);
+      expect(isPhase13Enabled()).toBe(true);
+    });
+  });
+
+  describe('Session-level decision caching (sticky per request)', () => {
+    it('should return consistent results within a session when rollout percent is partial', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '50';
+
+      // First call makes a decision
+      const firstResult = isPhase13Enabled();
+
+      // Subsequent calls should return the same result (sticky)
+      for (let i = 0; i < 10; i++) {
+        expect(isPhase13Enabled()).toBe(firstResult);
+      }
+    });
+
+    it('should allow resetting the session decision', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '100';
+
+      // Set to 100% so we get deterministic true
+      expect(isPhase13Enabled()).toBe(true);
+
+      // Reset and change env var
+      resetPhase13SessionDecision();
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '0';
+
+      // Should now be false after reset
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should cache decision even when env var changes mid-request', () => {
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '100';
+
+      // Make initial decision (should be true at 100%)
+      expect(isPhase13Enabled()).toBe(true);
+
+      // Change env var mid-request
+      process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT = '0';
+
+      // Decision should remain cached (still true)
+      expect(isPhase13Enabled()).toBe(true);
+
+      // Only reset clears the cache
+      resetPhase13SessionDecision();
+      expect(isPhase13Enabled()).toBe(false);
+    });
+  });
+
+  describe('Phase 13 rules are evaluated correctly under full enablement', () => {
+    it('should evaluate Phase 13 rules when VALIDATION_PHASE13_ENABLED=true', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2024-02-01', // Within 4-month bar
+        notice_expiry_date: '2024-04-01',
+        deposit_taken: false,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      // s21_four_month_bar is a Phase 13 rule that should fire
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(true);
+    });
+
+    it('should NOT evaluate Phase 13 rules when both flags are disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      delete process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2024-02-01', // Within 4-month bar
+        notice_expiry_date: '2024-04-01',
+        deposit_taken: false,
+        gas_certificate_provided: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      // s21_four_month_bar is a Phase 13 rule that should NOT fire
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(false);
+    });
+  });
+});
+
+describe('Phase 13 England Complete Pack Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    resetPhase13SessionDecision();
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street',
+    tenancy_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-08-01',
+    deposit_taken: true,
+    deposit_protected: true,
+    deposit_protected_scheme: true,
+    prescribed_info_served: true,
+    epc_provided: true,
+    how_to_rent_provided: true,
+    has_gas_appliances: false,
+  };
+
+  describe('s21_four_month_bar (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const today = new Date();
+      const recentStart = new Date(today);
+      recentStart.setMonth(today.getMonth() - 2);
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        tenancy_start_date: recentStart.toISOString().split('T')[0],
+        notice_service_date: today.toISOString().split('T')[0],
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 is enabled and notice served within 4 months', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const today = new Date();
+      const recentStart = new Date(today);
+      recentStart.setMonth(today.getMonth() - 2);
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        tenancy_start_date: recentStart.toISOString().split('T')[0],
+        notice_service_date: today.toISOString().split('T')[0],
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(true);
+    });
+  });
+
+  describe('s21_deposit_cap_exceeded (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 2000,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+        deposit_reduced_to_legal_cap_confirmed: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 is enabled and deposit exceeds cap', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      // £800/month = £9600/year, max deposit = 5 weeks = £923
+      // £2000 deposit exceeds cap
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 2000,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+        deposit_reduced_to_legal_cap_confirmed: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(true);
+    });
+
+    it('should NOT trigger when deposit is within cap', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      // £800/month = £9600/year, max deposit = 5 weeks = £923
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 900,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(false);
+    });
+  });
+
+  describe('s21_licensing_required_not_licensed (Phase 13)', () => {
+    it('should trigger when Phase 13 enabled and licensing required but no valid licence', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        licensing_required: 'hmo',
+        has_valid_licence: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_licensing_required_not_licensed')).toBe(true);
+    });
+
+    it('should NOT trigger when licensing is not required', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        licensing_required: 'not_required',
+        has_valid_licence: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_licensing_required_not_licensed')).toBe(false);
+    });
+  });
+});
+
+describe('Phase 13 Scotland Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    resetPhase13SessionDecision();
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street, Edinburgh',
+    tenancy_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-09-01',
+    scotland_ground_codes: ['1'],
+    issues: {
+      rent_arrears: {
+        pre_action_confirmed: true,
+      },
+    },
+    landlord_registration_number: 'REG123456',
+  };
+
+  describe('ntl_landlord_not_registered (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        landlord_registration_number: undefined,
+        landlord_reg_number: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_landlord_not_registered')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 enabled and no registration number', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        landlord_registration_number: undefined,
+        landlord_reg_number: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_landlord_not_registered')).toBe(true);
+    });
+  });
+
+  describe('ntl_deposit_not_protected (Phase 13)', () => {
+    it('should trigger when Phase 13 enabled and deposit not protected', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_deposit_not_protected')).toBe(true);
+    });
+  });
+});
+
+describe('Phase 13 Wales Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    resetPhase13SessionDecision();
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street, Cardiff',
+    contract_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-12-01',
+    rent_smart_wales_registered: true,
+  };
+
+  describe('s173_deposit_not_protected (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.blockers.some((b) => b.id === 's173_deposit_not_protected')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 enabled and deposit not protected', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.blockers.some((b) => b.id === 's173_deposit_not_protected')).toBe(true);
+    });
+  });
+
+  describe('s173_written_statement_missing (Phase 13)', () => {
+    it('should trigger warning when Phase 13 enabled and written statement not provided', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        written_statement_provided: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.warnings.some((w) => w.id === 's173_written_statement_missing')).toBe(true);
+    });
+  });
+});
+
+// ============================================================================
+// PHASE 15: TELEMETRY VERIFICATION TESTS
+// ============================================================================
+// Tests to verify telemetry functions correctly identify and track Phase 13 rules.
+
+import {
+  isPhase13Rule,
+  getAggregatedMetrics,
+  getPhase14ImpactMetrics,
+  recordValidationTelemetry,
+  clearMetricsStore,
+  type ValidationTelemetryEvent,
+} from '@/lib/validation/shadow-mode-adapter';
+
+describe('Phase 15: Telemetry Verification', () => {
+  const originalEnabled = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    resetPhase13SessionDecision();
+    clearMetricsStore();
+  });
+
+  afterEach(() => {
+    if (originalEnabled === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnabled;
+    }
+    resetPhase13SessionDecision();
+    clearMetricsStore();
+  });
+
+  describe('isPhase13Rule identification', () => {
+    it('should correctly identify Phase 13 England S21 rules', () => {
+      expect(isPhase13Rule('s21_deposit_cap_exceeded')).toBe(true);
+      expect(isPhase13Rule('s21_four_month_bar')).toBe(true);
+      expect(isPhase13Rule('s21_notice_period_short')).toBe(true);
+      expect(isPhase13Rule('s21_licensing_required_not_licensed')).toBe(true);
+      expect(isPhase13Rule('s21_retaliatory_improvement_notice')).toBe(true);
+      expect(isPhase13Rule('s21_retaliatory_emergency_action')).toBe(true);
+    });
+
+    it('should correctly identify Phase 13 England S8 rules', () => {
+      expect(isPhase13Rule('s8_notice_period_short')).toBe(true);
+    });
+
+    it('should correctly identify Phase 13 Wales S173 rules', () => {
+      expect(isPhase13Rule('s173_notice_period_short')).toBe(true);
+      expect(isPhase13Rule('s173_deposit_not_protected')).toBe(true);
+      expect(isPhase13Rule('s173_written_statement_missing')).toBe(true);
+    });
+
+    it('should correctly identify Phase 13 Scotland NTL rules', () => {
+      expect(isPhase13Rule('ntl_landlord_not_registered')).toBe(true);
+      expect(isPhase13Rule('ntl_pre_action_letter_not_sent')).toBe(true);
+      expect(isPhase13Rule('ntl_pre_action_signposting_missing')).toBe(true);
+      expect(isPhase13Rule('ntl_ground_1_arrears_threshold')).toBe(true);
+      expect(isPhase13Rule('ntl_deposit_not_protected')).toBe(true);
+    });
+
+    it('should return false for non-Phase 13 rules', () => {
+      expect(isPhase13Rule('s21_deposit_not_protected')).toBe(false);
+      expect(isPhase13Rule('s21_how_to_rent_missing')).toBe(false);
+      expect(isPhase13Rule('landlord_name_required')).toBe(false);
+      expect(isPhase13Rule('ntl_ground_required')).toBe(false);
+      expect(isPhase13Rule('s173_licensing')).toBe(false);
+    });
+  });
+
+  describe('Telemetry metrics aggregation with Phase 13 tracking', () => {
+    it('should track Phase 13 enabled events correctly', () => {
+      // Record a Phase 13 enabled event
+      const event: ValidationTelemetryEvent = {
+        timestamp: new Date().toISOString(),
+        jurisdiction: 'england',
+        product: 'complete_pack',
+        route: 'section_21',
+        blockerCount: 2,
+        warningCount: 0,
+        blockerIds: ['s21_deposit_not_protected', 's21_four_month_bar'],
+        warningIds: [],
+        durationMs: 10,
+        isValid: false,
+        phase13Enabled: true,
+        phase13BlockerIds: ['s21_four_month_bar'],
+        phase13WarningIds: [],
+      };
+
+      recordValidationTelemetry(event);
+
+      const metrics = getAggregatedMetrics();
+      expect(metrics.totalValidations).toBe(1);
+      expect(metrics.invalidCount).toBe(1);
+      expect(metrics.phase13EnabledCount).toBe(1);
+      expect(metrics.phase13BlockerFrequency.get('s21_four_month_bar')).toBe(1);
+    });
+
+    it('should track Phase 13 disabled events correctly', () => {
+      // Record a Phase 13 disabled event
+      const event: ValidationTelemetryEvent = {
+        timestamp: new Date().toISOString(),
+        jurisdiction: 'england',
+        product: 'notice_only',
+        route: 'section_21',
+        blockerCount: 1,
+        warningCount: 0,
+        blockerIds: ['s21_deposit_not_protected'],
+        warningIds: [],
+        durationMs: 10,
+        isValid: false,
+        phase13Enabled: false,
+        phase13BlockerIds: [],
+        phase13WarningIds: [],
+      };
+
+      recordValidationTelemetry(event);
+
+      const metrics = getAggregatedMetrics();
+      expect(metrics.totalValidations).toBe(1);
+      expect(metrics.phase13EnabledCount).toBe(0);
+      expect(metrics.phase13NewlyBlockedCount).toBe(0);
+    });
+
+    it('should correctly calculate newly blocked count', () => {
+      // Case 1: Would have passed without Phase 13 (newly blocked)
+      const newlyBlockedEvent: ValidationTelemetryEvent = {
+        timestamp: new Date().toISOString(),
+        jurisdiction: 'england',
+        product: 'complete_pack',
+        route: 'section_21',
+        blockerCount: 1,
+        warningCount: 0,
+        blockerIds: ['s21_four_month_bar'],
+        warningIds: [],
+        durationMs: 10,
+        isValid: false,
+        phase13Enabled: true,
+        phase13BlockerIds: ['s21_four_month_bar'],
+        phase13WarningIds: [],
+      };
+
+      // Case 2: Would have failed anyway (non-Phase 13 blocker)
+      const existingBlockerEvent: ValidationTelemetryEvent = {
+        timestamp: new Date().toISOString(),
+        jurisdiction: 'england',
+        product: 'complete_pack',
+        route: 'section_21',
+        blockerCount: 2,
+        warningCount: 0,
+        blockerIds: ['s21_deposit_not_protected', 's21_four_month_bar'],
+        warningIds: [],
+        durationMs: 10,
+        isValid: false,
+        phase13Enabled: true,
+        phase13BlockerIds: ['s21_four_month_bar'],
+        phase13WarningIds: [],
+      };
+
+      recordValidationTelemetry(newlyBlockedEvent);
+      recordValidationTelemetry(existingBlockerEvent);
+
+      const metrics = getAggregatedMetrics();
+      expect(metrics.phase13EnabledCount).toBe(2);
+      // Only 1 newly blocked (the one with only Phase 13 blockers)
+      expect(metrics.phase13NewlyBlockedCount).toBe(1);
+    });
+  });
+
+  describe('Phase 14 impact metrics under full enablement', () => {
+    it('should calculate correct impact metrics when Phase 13 is fully enabled', () => {
+      // Simulate Phase 13 at 100%
+      const events: ValidationTelemetryEvent[] = [
+        // Valid case - no blockers
+        {
+          timestamp: new Date().toISOString(),
+          jurisdiction: 'england',
+          product: 'complete_pack',
+          route: 'section_21',
+          blockerCount: 0,
+          warningCount: 0,
+          blockerIds: [],
+          warningIds: [],
+          durationMs: 10,
+          isValid: true,
+          phase13Enabled: true,
+          phase13BlockerIds: [],
+          phase13WarningIds: [],
+        },
+        // Newly blocked by Phase 13
+        {
+          timestamp: new Date().toISOString(),
+          jurisdiction: 'england',
+          product: 'complete_pack',
+          route: 'section_21',
+          blockerCount: 1,
+          warningCount: 0,
+          blockerIds: ['s21_four_month_bar'],
+          warningIds: [],
+          durationMs: 10,
+          isValid: false,
+          phase13Enabled: true,
+          phase13BlockerIds: ['s21_four_month_bar'],
+          phase13WarningIds: [],
+        },
+        // Warning only from Phase 13
+        {
+          timestamp: new Date().toISOString(),
+          jurisdiction: 'wales',
+          product: 'notice_only',
+          route: 'section_173',
+          blockerCount: 0,
+          warningCount: 1,
+          blockerIds: [],
+          warningIds: ['s173_written_statement_missing'],
+          durationMs: 10,
+          isValid: true,
+          phase13Enabled: true,
+          phase13BlockerIds: [],
+          phase13WarningIds: ['s173_written_statement_missing'],
+        },
+      ];
+
+      for (const event of events) {
+        recordValidationTelemetry(event);
+      }
+
+      const impact = getPhase14ImpactMetrics();
+      expect(impact.totalValidations).toBe(3);
+      expect(impact.phase13EnabledCount).toBe(3);
+      expect(impact.phase13EnabledPercent).toBe(100);
+      expect(impact.phase13NewlyBlockedCount).toBe(1);
+      expect(impact.newlyBlockedPercent).toBeCloseTo(33.33, 1);
+      expect(impact.warningToBlockerRatio).toBe(1); // 1 warning / 1 blocker
+    });
   });
 });

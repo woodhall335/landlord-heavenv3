@@ -19,9 +19,28 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import { evaluateNoticeCompliance, type ComplianceResult } from '../notices/evaluate-notice-compliance';
 import { normalizeFactKeys } from '../wizard/normalizeFacts';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
+
+// =============================================================================
+// LOCAL TYPE DEFINITION
+// =============================================================================
+// Note: YamlValidationResult is defined locally to avoid importing from
+// shadow-mode-adapter.ts, which uses fs and cannot be bundled for client-side.
+// YAML validation runs on the server at preview/generate time.
+// This file uses the decision engine for wizard UX issues.
+
+interface YamlValidationBlocker {
+  id: string;
+  message: string;
+  rationale?: string;
+}
+
+interface YamlValidationResult {
+  blockers: YamlValidationBlocker[];
+  warnings: YamlValidationBlocker[];
+  durationMs?: number;
+}
 
 // ====================================================================================
 // PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
@@ -549,21 +568,15 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
   }
 
   // -------------------------------------------------------------------------
-  // 2. Run Compliance Evaluator
+  // 2. YAML Validation is NOT run here (Phase 12)
   // -------------------------------------------------------------------------
-  let complianceResult: ComplianceResult;
-  try {
-    complianceResult = evaluateNoticeCompliance({
-      jurisdiction,
-      product: 'notice_only',
-      selected_route: route,
-      wizardFacts: normalizedFacts,
-      stage: 'wizard',
-    });
-  } catch (error) {
-    console.error('[extractWizardUxIssues] Compliance evaluator error:', error);
-    return result;
-  }
+  // YAML validation requires fs (file system) to read YAML rules, which doesn't
+  // work in client-side code. YAML validation runs server-side at preview/generate.
+  // The decision engine provides sufficient validation for wizard UX issues.
+  const yamlResult: YamlValidationResult = {
+    blockers: [],
+    warnings: [],
+  };
 
   // -------------------------------------------------------------------------
   // 3. Collect all issues from both sources
@@ -591,26 +604,26 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
     });
   }
 
-  // From compliance evaluator hardFailures
-  for (const failure of complianceResult.hardFailures) {
+  // From YAML validation blockers
+  for (const blocker of yamlResult.blockers) {
     allIssues.push({
-      code: failure.code,
-      description: failure.legal_reason,
-      legalBasis: failure.legal_reason,
-      affectedQuestionId: failure.affected_question_id,
-      userFixHint: failure.user_fix_hint,
+      code: blocker.id,
+      description: blocker.message,
+      legalBasis: blocker.message,
+      affectedQuestionId: ISSUE_CODE_TO_QUESTION_ID[blocker.id] || ISSUE_CODE_TO_QUESTION_ID[blocker.id.toUpperCase()],
+      userFixHint: blocker.rationale || blocker.message,
       source: 'compliance',
     });
   }
 
-  // From compliance evaluator warnings
-  for (const warning of complianceResult.warnings) {
+  // From YAML validation warnings
+  for (const warning of yamlResult.warnings) {
     allIssues.push({
-      code: warning.code,
-      description: warning.legal_reason,
-      legalBasis: warning.legal_reason,
-      affectedQuestionId: warning.affected_question_id,
-      userFixHint: warning.user_fix_hint,
+      code: warning.id,
+      description: warning.message,
+      legalBasis: warning.message,
+      affectedQuestionId: ISSUE_CODE_TO_QUESTION_ID[warning.id] || ISSUE_CODE_TO_QUESTION_ID[warning.id.toUpperCase()],
+      userFixHint: warning.rationale || warning.message,
       source: 'compliance',
     });
   }

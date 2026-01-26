@@ -10,6 +10,11 @@
 # - INTENTIONAL DIVERGENCE: YAML fires common rules (contract_start_date_required, notice_service_date_required)
 #   in addition to s173_notice_period_undetermined when dates are missing. This provides more granular UX
 #   feedback than TS which only fires the consolidated code.
+#
+# PHASE 13 CORRECTNESS IMPROVEMENTS:
+# - Rules marked with `requires_feature: phase13` are correctness improvements beyond legacy TS
+# - Enable with VALIDATION_PHASE13_ENABLED=true
+# - Phase 13 rules: s173_notice_period_short, s173_deposit_not_protected, s173_written_statement_missing
 
 version: "1.0"
 jurisdiction: wales
@@ -88,39 +93,40 @@ section_173_rules:
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
-  # FUTURE/COMPLETE_PACK RULES (not validated by TS evaluateNoticeCompliance)
-  # These are preserved for potential future use or complete_pack product.
+  # PHASE 13 CORRECTNESS IMPROVEMENTS
+  # These rules improve legal accuracy beyond the legacy TS parity baseline.
+  # Enable with VALIDATION_PHASE13_ENABLED=true
   # ---------------------------------------------------------------------------
 
-  # Notice period too short - currently TS doesn't validate for notice_only
-  # - id: s173_notice_period_short
-  #   severity: blocker
-  #   applies_to: [section_173]
-  #   applies_when:
-  #     - condition: "computed.s173_notice_period_too_short === true"
-  #   message: "Wales Section 173 requires minimum 6 months notice period."
-  #   rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
-  #   field: notice_expiry_date
+  - id: s173_notice_period_short
+    severity: blocker
+    applies_to: [section_173]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.s173_notice_period_too_short === true"
+    message: "Wales Section 173 requires minimum 6 months notice period."
+    rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
+    field: notice_expiry_date
 
-  # Deposit protection - currently TS doesn't validate for notice_only
-  # - id: s173_deposit_not_protected
-  #   severity: blocker
-  #   applies_to: [section_173]
-  #   applies_when:
-  #     - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
-  #   message: "Wales Section 173 notice is invalid without deposit protection."
-  #   rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
-  #   field: deposit_protected
+  - id: s173_deposit_not_protected
+    severity: blocker
+    applies_to: [section_173]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+    message: "Wales Section 173 notice is invalid without deposit protection."
+    rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
+    field: deposit_protected
 
-  # Written statement - currently TS doesn't validate for notice_only
-  # - id: s173_written_statement_missing
-  #   severity: warning
-  #   applies_to: [section_173]
-  #   applies_when:
-  #     - condition: "facts.written_statement_provided === false"
-  #   message: "Wales law requires a written statement of occupation contract to be provided."
-  #   rationale: "RH(W)A 2016 requires landlords to provide a written statement setting out the contract terms."
-  #   field: written_statement_provided
+  - id: s173_written_statement_missing
+    severity: warning
+    applies_to: [section_173]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.written_statement_provided === false"
+    message: "Wales law requires a written statement of occupation contract to be provided."
+    rationale: "RH(W)A 2016 requires landlords to provide a written statement setting out the contract terms."
+    field: written_statement_provided
 
 # =============================================================================
 # FAULT-BASED RULES (Sections 157, 159, 161, 162)
@@ -301,6 +307,11 @@ summary:
       label: "Deposit Protection"
       rules:
         - wales_fault_deposit_not_protected
+        - s173_deposit_not_protected
+    - id: written_statement
+      label: "Written Statement"
+      rules:
+        - s173_written_statement_missing
     - id: grounds
       label: "Grounds for Possession"
       rules:
@@ -313,4 +324,5 @@ summary:
         - expiry_before_service
         - s173_period_bar
         - s173_notice_period_undetermined
+        - s173_notice_period_short
         - wales_fault_notice_period_short
