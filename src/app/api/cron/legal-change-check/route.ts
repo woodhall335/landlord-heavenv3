@@ -324,7 +324,7 @@ async function checkSource(
     monthly: 30 * 24 * 60 * 60 * 1000, // 30 days
   };
 
-  const expectedFrequency = frequencyMs[source.monitoringFrequency] || frequencyMs.daily;
+  const expectedFrequency = frequencyMs[source.updateFrequency] || frequencyMs.daily;
   const timeSinceLastEvent = now - lastEventTime;
 
   // PRODUCTION: Real content checking would happen here

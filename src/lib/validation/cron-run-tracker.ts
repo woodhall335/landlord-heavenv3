@@ -237,8 +237,8 @@ export async function startCronRun(
       console.error('[CronRunTracker] Failed to insert cron run:', error);
       // Generate a fallback ID for in-memory only operation
       run.id = `run_${Date.now().toString(36)}_fallback`;
-    } else {
-      run.id = data.id;
+    } else if (data) {
+      run.id = (data as unknown as CronRunRow).id;
     }
   } catch (err) {
     console.error('[CronRunTracker] Database error on start:', err);
@@ -303,7 +303,7 @@ export async function updateCronRun(
       if (error) {
         console.error('[CronRunTracker] Failed to update cron run:', error);
       } else if (data) {
-        const updated = rowToCronRun(data as CronRunRow);
+        const updated = rowToCronRun(data as unknown as CronRunRow);
         currentRunCache = updated;
         return updated;
       }
@@ -358,7 +358,7 @@ export async function addCronRunError(
     if (updateError) {
       console.error('[CronRunTracker] Failed to add error:', updateError);
     } else if (data) {
-      const updated = rowToCronRun(data as CronRunRow);
+      const updated = rowToCronRun(data as unknown as CronRunRow);
       currentRunCache = updated;
       return updated;
     }
@@ -433,7 +433,7 @@ export async function completeCronRun(
     if (error) {
       console.error('[CronRunTracker] Failed to complete cron run:', error);
     } else if (data) {
-      const completed = rowToCronRun(data as CronRunRow);
+      const completed = rowToCronRun(data as unknown as CronRunRow);
       currentRunCache = null; // Clear cache
       return completed;
     }
@@ -467,7 +467,7 @@ export async function getCronRun(runId: string): Promise<CronRun | undefined> {
       return undefined;
     }
 
-    return rowToCronRun(data as CronRunRow);
+    return rowToCronRun(data as unknown as CronRunRow);
   } catch (err) {
     console.error('[CronRunTracker] Database error on getCronRun:', err);
     return undefined;
@@ -513,7 +513,7 @@ export async function listCronRuns(filter?: CronRunFilter): Promise<CronRun[]> {
       return [];
     }
 
-    return (data || []).map((row) => rowToCronRun(row as CronRunRow));
+    return (data || []).map((row) => rowToCronRun(row as unknown as CronRunRow));
   } catch (err) {
     console.error('[CronRunTracker] Database error on listCronRuns:', err);
     return [];
