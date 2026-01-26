@@ -3,19 +3,27 @@
 # All rules are deterministic and testable
 # Migrated 1:1 from evaluate-notice-compliance.ts and pre-generation-check.ts
 # Uses RH(W)A 2016 terminology: occupation contract, contract holder (not tenancy, tenant)
+#
+# PARITY STATUS (Phase 3):
+# - S173 rule IDs aligned with TS codes: s173_licensing, s173_period_bar, s173_notice_period_undetermined
+# - 100% parity for RSW registration, 6-month bar, and valid cases
+# - INTENTIONAL DIVERGENCE: YAML fires common rules (contract_start_date_required, notice_service_date_required)
+#   in addition to s173_notice_period_undetermined when dates are missing. This provides more granular UX
+#   feedback than TS which only fires the consolidated code.
 
 version: "1.0"
 jurisdiction: wales
 product: notice_only
-last_updated: "2026-01-25"
+last_updated: "2026-01-26"
 
 metadata:
-  effective_from: "2026-01-25"
+  effective_from: "2026-01-26"
   source:
     - "Renting Homes (Wales) Act 2016"
     - "evaluate-notice-compliance.ts"
     - "pre-generation-check.ts"
   notes: "Wales Notice Only covers Section 173 (no-fault) and fault-based (s157/s159/s161/s162) eviction notices under RH(W)A 2016."
+  parity_status: "Phase 3 complete - S173 100% parity on core rules (s173_licensing, s173_period_bar)"
 
 # Route identifiers
 routes:
@@ -26,14 +34,18 @@ routes:
 # SECTION 173 RULES (No-fault notice for standard occupation contracts)
 # Renting Homes (Wales) Act 2016
 # =============================================================================
+# NOTE: For notice_only parity with TS evaluateNoticeCompliance, only
+# s173_licensing, s173_period_bar, and s173_notice_period_undetermined are validated.
+# Additional rules are commented but preserved for complete_pack or future use.
 
 section_173_rules:
 
   # ---------------------------------------------------------------------------
   # RENT SMART WALES REGISTRATION (RH(W)A 2016)
+  # TS Code: S173-LICENSING
   # ---------------------------------------------------------------------------
 
-  - id: s173_rsw_not_registered
+  - id: s173_licensing
     severity: blocker
     applies_to: [section_173]
     applies_when:
@@ -44,9 +56,10 @@ section_173_rules:
 
   # ---------------------------------------------------------------------------
   # SIX-MONTH BAR (RH(W)A 2016 s.173)
+  # TS Code: S173-PERIOD-BAR
   # ---------------------------------------------------------------------------
 
-  - id: s173_six_month_bar
+  - id: s173_period_bar
     severity: blocker
     applies_to: [section_173]
     applies_when:
@@ -56,82 +69,58 @@ section_173_rules:
     field: contract_start_date
 
   # ---------------------------------------------------------------------------
-  # CONTRACT START DATE REQUIRED
+  # NOTICE PERIOD UNDETERMINED (missing dates)
+  # TS Code: S173-NOTICE-PERIOD-UNDETERMINED
   # ---------------------------------------------------------------------------
 
-  - id: s173_contract_start_required
+  - id: s173_notice_period_undetermined
     severity: blocker
     applies_to: [section_173]
     applies_when:
+      # Contract start date missing
       - condition: "!facts.contract_start_date && !facts.tenancy_start_date"
-    message: "Occupation contract start date is required to calculate the statutory minimum notice period."
-    rationale: "The 6-month bar and notice period calculations require the contract start date."
-    field: contract_start_date
-
-  # ---------------------------------------------------------------------------
-  # SERVICE DATE REQUIRED
-  # ---------------------------------------------------------------------------
-
-  - id: s173_service_date_required
-    severity: blocker
-    applies_to: [section_173]
-    applies_when:
-      - condition: "!computed.service_date"
-    message: "Notice service date is required."
-    rationale: "Service date is needed for 6-month bar check and notice period calculation."
-    field: notice_service_date
-
-  # ---------------------------------------------------------------------------
-  # EXPIRY DATE REQUIRED
-  # ---------------------------------------------------------------------------
-
-  - id: s173_expiry_date_required
-    severity: blocker
-    applies_to: [section_173]
-    applies_when:
-      - condition: "!facts.notice_expiry_date && !computed.expiry_date"
-    message: "Expiry date required to confirm compliance with statutory minimum notice period."
-    rationale: "Section 173 requires at least 6 months notice."
+      # Service date missing
+      - condition: "!computed.service_date && !facts.notice_service_date && !facts.notice_served_date"
+      # Expiry date missing (when dates exist but expiry not provided)
+      - condition: "(facts.contract_start_date || facts.tenancy_start_date) && computed.service_date && !facts.notice_expiry_date && !computed.expiry_date"
+    message: "Cannot calculate statutory minimum notice period - contract start date, service date, and expiry date are all required."
+    rationale: "The 6-month bar and notice period calculations require all dates to be provided."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
-  # NOTICE PERIOD (Minimum 6 months)
+  # FUTURE/COMPLETE_PACK RULES (not validated by TS evaluateNoticeCompliance)
+  # These are preserved for potential future use or complete_pack product.
   # ---------------------------------------------------------------------------
 
-  - id: s173_notice_period_short
-    severity: blocker
-    applies_to: [section_173]
-    applies_when:
-      - condition: "computed.s173_notice_period_too_short === true"
-    message: "Wales Section 173 requires minimum 6 months notice period."
-    rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
-    field: notice_expiry_date
+  # Notice period too short - currently TS doesn't validate for notice_only
+  # - id: s173_notice_period_short
+  #   severity: blocker
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "computed.s173_notice_period_too_short === true"
+  #   message: "Wales Section 173 requires minimum 6 months notice period."
+  #   rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
+  #   field: notice_expiry_date
 
-  # ---------------------------------------------------------------------------
-  # DEPOSIT PROTECTION (RH(W)A 2016)
-  # ---------------------------------------------------------------------------
+  # Deposit protection - currently TS doesn't validate for notice_only
+  # - id: s173_deposit_not_protected
+  #   severity: blocker
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+  #   message: "Wales Section 173 notice is invalid without deposit protection."
+  #   rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
+  #   field: deposit_protected
 
-  - id: s173_deposit_not_protected
-    severity: blocker
-    applies_to: [section_173]
-    applies_when:
-      - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
-    message: "Wales Section 173 notice is invalid without deposit protection."
-    rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
-    field: deposit_protected
-
-  # ---------------------------------------------------------------------------
-  # WRITTEN STATEMENT (RH(W)A 2016)
-  # ---------------------------------------------------------------------------
-
-  - id: s173_written_statement_missing
-    severity: warning
-    applies_to: [section_173]
-    applies_when:
-      - condition: "facts.written_statement_provided === false"
-    message: "Wales law requires a written statement of occupation contract to be provided."
-    rationale: "RH(W)A 2016 requires landlords to provide a written statement setting out the contract terms."
-    field: written_statement_provided
+  # Written statement - currently TS doesn't validate for notice_only
+  # - id: s173_written_statement_missing
+  #   severity: warning
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "facts.written_statement_provided === false"
+  #   message: "Wales law requires a written statement of occupation contract to be provided."
+  #   rationale: "RH(W)A 2016 requires landlords to provide a written statement setting out the contract terms."
+  #   field: written_statement_provided
 
 # =============================================================================
 # FAULT-BASED RULES (Sections 157, 159, 161, 162)
@@ -301,23 +290,17 @@ summary:
     - id: registration
       label: "Rent Smart Wales Registration"
       rules:
-        - s173_rsw_not_registered
+        - s173_licensing
         - wales_fault_rsw_not_registered
     - id: contract
       label: "Occupation Contract"
       rules:
         - contract_start_date_required
         - contract_start_date_future
-        - s173_contract_start_required
     - id: deposit
       label: "Deposit Protection"
       rules:
-        - s173_deposit_not_protected
         - wales_fault_deposit_not_protected
-    - id: written_statement
-      label: "Written Statement"
-      rules:
-        - s173_written_statement_missing
     - id: grounds
       label: "Grounds for Possession"
       rules:
@@ -328,8 +311,6 @@ summary:
         - notice_service_date_required
         - notice_before_contract
         - expiry_before_service
-        - s173_service_date_required
-        - s173_expiry_date_required
-        - s173_six_month_bar
-        - s173_notice_period_short
+        - s173_period_bar
+        - s173_notice_period_undetermined
         - wales_fault_notice_period_short

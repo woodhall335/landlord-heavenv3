@@ -150,16 +150,21 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   's8-particulars-incomplete': 's8_no_particulars',
   's8_particulars_incomplete': 's8_no_particulars',
 
-  // Wales codes
-  's173-period-bar': 's173_six_month_bar',
-  's173_period_bar': 's173_six_month_bar',
-  's173-licensing': 's173_rsw_not_registered',
-  's173_licensing': 's173_rsw_not_registered',
+  // Wales S173 codes - TS Codes: S173-LICENSING, S173-PERIOD-BAR, S173-NOTICE-PERIOD-UNDETERMINED
+  // YAML now uses TS-compatible IDs for parity
+  's173-licensing': 's173_licensing',
+  's173_licensing': 's173_licensing',
+  's173-period-bar': 's173_period_bar',
+  's173_period_bar': 's173_period_bar',
+  's173-notice-period-undetermined': 's173_notice_period_undetermined',
+  's173_notice_period_undetermined': 's173_notice_period_undetermined',
+  // Legacy mappings (commented rules in YAML, kept for complete_pack)
   's173-deposit': 's173_deposit_not_protected',
   's173-notice-period': 's173_notice_period_short',
   'wales_s173_notice_period_short': 's173_notice_period_short',
   'wales_deposit_not_protected': 's173_deposit_not_protected',
   'wales_written_statement_missing': 's173_written_statement_missing',
+  // Wales fault-based
   'wales_fault_no_grounds': 'wales_fault_no_grounds',
   'wales_fault_notice_period_short': 'wales_fault_notice_period_short',
 

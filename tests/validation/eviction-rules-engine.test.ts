@@ -569,7 +569,7 @@ describe('Wales Section 173 Rule Evaluation', () => {
   };
 
   describe('RSW Registration Rule', () => {
-    it('should trigger s173_rsw_not_registered when not registered', () => {
+    it('should trigger s173_licensing when not registered', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         rent_smart_wales_registered: false,
@@ -577,12 +577,12 @@ describe('Wales Section 173 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
 
-      expect(result.blockers.some((b) => b.id === 's173_rsw_not_registered')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's173_licensing')).toBe(true);
     });
   });
 
   describe('Six-Month Bar Rule', () => {
-    it('should trigger s173_six_month_bar when notice served within 6 months', () => {
+    it('should trigger s173_period_bar when notice served within 6 months', () => {
       const today = new Date();
       const recentStart = new Date(today);
       recentStart.setMonth(today.getMonth() - 3); // 3 months ago
@@ -595,7 +595,7 @@ describe('Wales Section 173 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
 
-      expect(result.blockers.some((b) => b.id === 's173_six_month_bar')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's173_period_bar')).toBe(true);
     });
   });
 

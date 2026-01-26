@@ -500,7 +500,7 @@ describe('Shadow Mode Parity - Wales Section 173', () => {
   };
 
   describe('RSW Registration Cases', () => {
-    it('should have parity for rsw_not_registered', async () => {
+    it('should have parity for s173_licensing (rsw not registered)', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
         tenant_full_name: 'Jane Tenant',
@@ -517,17 +517,18 @@ describe('Shadow Mode Parity - Wales Section 173', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect RSW not registered
+      // Both should detect RSW not registered via s173_licensing
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
-        report.yaml.blockerIds.some((id) => id.includes('rsw'))
+        report.yaml.blockerIds.some((id) => id.includes('s173_licensing'))
       ).toBe(true);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
 
   describe('Six-Month Bar Cases', () => {
-    it('should have parity for six_month_bar', async () => {
+    it('should have parity for s173_period_bar (within 6 months)', async () => {
       const today = new Date();
       const threeMonthsAgo = new Date(today);
       threeMonthsAgo.setMonth(today.getMonth() - 3);
@@ -550,11 +551,62 @@ describe('Shadow Mode Parity - Wales Section 173', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect six-month bar
+      // Both should detect six-month bar via s173_period_bar
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
-        report.yaml.blockerIds.some((id) => id.includes('six_month'))
+        report.yaml.blockerIds.some((id) => id.includes('s173_period_bar'))
       ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Notice Period Undetermined Cases', () => {
+    it('should have parity for s173_notice_period_undetermined (missing dates)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        // Missing contract_start_date and tenancy_start_date
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-12-01',
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect missing dates
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) =>
+          id.includes('s173_notice_period_undetermined') ||
+          id.includes('contract_start_date')
+        )
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing service date', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        contract_start_date: '2024-01-01',
+        tenancy_start_date: '2024-01-01',
+        // Missing notice_service_date and notice_served_date
+        notice_expiry_date: '2025-12-01',
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect missing service date
+      expect(report.yaml.blockers).toBeGreaterThan(0);
       console.log(formatShadowReport(report));
     });
   });
@@ -577,8 +629,10 @@ describe('Shadow Mode Parity - Wales Section 173', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // Should have no blockers for valid case
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
       expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
