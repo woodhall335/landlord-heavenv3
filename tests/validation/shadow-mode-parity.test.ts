@@ -280,6 +280,10 @@ describe('Shadow Mode Parity - England Section 21', () => {
 // ============================================================================
 // GOLDEN TEST CASES - ENGLAND SECTION 8
 // ============================================================================
+// NOTE: For notice_only, TS evaluateNoticeCompliance only checks:
+// - S8-GROUNDS-REQUIRED: grounds must be selected
+// - S8-NOTICE-PERIOD: notice period calculation/validation
+// Additional rules (Ground 8 threshold, particulars) are NOT checked for notice_only.
 
 describe('Shadow Mode Parity - England Section 8', () => {
   beforeEach(() => {
@@ -292,7 +296,7 @@ describe('Shadow Mode Parity - England Section 8', () => {
     route: 'section_8',
   };
 
-  describe('Grounds Cases', () => {
+  describe('Grounds Selection Cases', () => {
     it('should have parity for no_grounds_selected', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
@@ -309,15 +313,16 @@ describe('Shadow Mode Parity - England Section 8', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect no grounds
+      // Both should detect no grounds
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('grounds'))
       ).toBe(true);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
 
-    it('should have parity for ground_8_insufficient_arrears', async () => {
+    it('should have parity for ground_8_with_low_arrears (TS does NOT check threshold)', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
         tenant_full_name: 'Jane Tenant',
@@ -338,16 +343,67 @@ describe('Shadow Mode Parity - England Section 8', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect Ground 8 threshold not met
-      expect(report.yaml.blockers).toBeGreaterThan(0);
-      expect(
-        report.yaml.blockerIds.some((id) => id.includes('ground') || id.includes('threshold'))
-      ).toBe(true);
+      // For parity: TS does NOT check Ground 8 threshold for notice_only
+      // Both should return 0 blockers
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
 
-  describe('Valid S8 Case', () => {
+  describe('Mixed Grounds Cases', () => {
+    it('should have parity for multiple mandatory grounds', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15', // 2 weeks - OK for mandatory grounds
+        section8_grounds: ['ground_8', 'ground_10', 'ground_11'],
+        section8_details: 'Multiple arrears grounds.',
+        has_rent_arrears: true,
+        total_arrears: 3000,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBe(0);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for mandatory + discretionary grounds', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15', // 2 weeks
+        section8_grounds: ['ground_8', 'ground_12'], // 8=mandatory, 12=discretionary
+        section8_details: 'Arrears and breach of tenancy.',
+        has_rent_arrears: true,
+        total_arrears: 3000,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should allow this (notice period may vary based on grounds mix)
+      expect(report.yaml.blockers).toBe(report.ts.blockers);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid S8 Cases', () => {
     it('should have parity for valid S8 with Ground 8', async () => {
       const facts: EvictionFacts = {
         landlord_full_name: 'John Landlord',
@@ -369,8 +425,60 @@ describe('Shadow Mode Parity - England Section 8', () => {
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // Should have no blockers for valid case
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
       expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for valid S8 with Ground 14 (ASB)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_14'],
+        section8_details: 'Nuisance behavior documented.',
+        has_asb: true,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for valid S8 with Ground 12 (breach)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01', // 2 months for discretionary grounds
+        section8_grounds: ['ground_12'],
+        section8_details: 'Breach of tenancy agreement terms.',
+        has_breaches: true,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });

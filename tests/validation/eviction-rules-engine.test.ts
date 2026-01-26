@@ -520,44 +520,30 @@ describe('England Section 8 Rule Evaluation', () => {
     });
   });
 
-  describe('Ground 8 Threshold Rule', () => {
-    it('should trigger s8_ground8_threshold_not_met when arrears below 2 months', () => {
+  // Note: Ground 8 threshold and particulars rules are commented out in YAML
+  // for notice_only parity with TS evaluateNoticeCompliance. These rules
+  // are preserved for complete_pack product. Tests updated accordingly.
+
+  describe('Valid S8 Case', () => {
+    it('should return no blockers for valid Section 8 with grounds', () => {
+      const result = evaluateEvictionRules(baseValidFacts, 'england', 'notice_only', 'section_8');
+
+      expect(result.isValid).toBe(true);
+      expect(result.blockers).toHaveLength(0);
+    });
+
+    it('should allow Ground 8 even with low arrears (TS parity - not validated in notice_only)', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         section8_grounds: ['ground_8'],
-        total_arrears: 500, // Less than 2 months (rent is 1000/month)
+        total_arrears: 500, // Less than 2 months - but TS doesn't check this
         rent_amount: 1000,
       };
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_8');
 
-      expect(result.blockers.some((b) => b.id === 's8_ground8_threshold_not_met')).toBe(true);
-    });
-
-    it('should NOT trigger when arrears >= 2 months', () => {
-      const facts: EvictionFacts = {
-        ...baseValidFacts,
-        total_arrears: 2500, // More than 2 months
-        rent_amount: 1000,
-      };
-
-      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_8');
-
+      // For notice_only parity, ground 8 threshold is NOT validated
       expect(result.blockers.some((b) => b.id === 's8_ground8_threshold_not_met')).toBe(false);
-    });
-  });
-
-  describe('Particulars Rule', () => {
-    it('should trigger s8_no_particulars when no details provided', () => {
-      const facts: EvictionFacts = {
-        ...baseValidFacts,
-        section8_details: undefined,
-        ground_particulars: undefined,
-      };
-
-      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_8');
-
-      expect(result.blockers.some((b) => b.id === 's8_no_particulars')).toBe(true);
     });
   });
 });
@@ -742,9 +728,11 @@ describe('Rule Counts', () => {
     clearConfigCache();
   });
 
-  it('England notice_only should have 30+ rules', () => {
+  it('England notice_only should have 25+ rules', () => {
+    // Note: Rule count reduced from 40 to 28 after Phase 1-2 consolidation
+    // for parity with TS evaluateNoticeCompliance
     const ruleIds = getAllRuleIds('england', 'notice_only');
-    expect(ruleIds.length).toBeGreaterThanOrEqual(30);
+    expect(ruleIds.length).toBeGreaterThanOrEqual(25);
   });
 
   it('Wales notice_only should have 15+ rules', () => {

@@ -139,11 +139,12 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   's21-date-too-soon': 's21_notice_period_short',
   's21-prescribed-info-required': 's21_prescribed_info_unconfirmed',
 
-  // England S8
+  // England S8 - TS Codes: S8-GROUNDS-REQUIRED, S8-NOTICE-PERIOD
   's8-grounds-required': 's8_grounds_required',
   's8_grounds_required': 's8_grounds_required',
-  's8-notice-period': 's8_notice_period_short',
-  's8_notice_period': 's8_notice_period_short',
+  's8-notice-period': 's8_notice_period',
+  's8_notice_period': 's8_notice_period',
+  // Legacy mappings (commented rules in YAML, kept for complete_pack)
   's8-ground8-threshold': 's8_ground8_threshold_not_met',
   's8_ground8_threshold': 's8_ground8_threshold_not_met',
   's8-particulars-incomplete': 's8_no_particulars',

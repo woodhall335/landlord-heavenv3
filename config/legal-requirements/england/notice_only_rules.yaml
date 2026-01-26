@@ -257,11 +257,15 @@ section_21_rules:
 # =============================================================================
 # SECTION 8 RULES (Fault-based eviction)
 # =============================================================================
+# NOTE: For notice_only parity with TS evaluateNoticeCompliance, only
+# s8_grounds_required and s8_notice_period are validated.
+# Additional rules are commented but preserved for complete_pack or future use.
 
 section_8_rules:
 
   # ---------------------------------------------------------------------------
   # GROUNDS SELECTION (Housing Act 1988 Schedule 2)
+  # TS Code: S8-GROUNDS-REQUIRED
   # ---------------------------------------------------------------------------
 
   - id: s8_grounds_required
@@ -274,79 +278,76 @@ section_8_rules:
     field: section8_grounds
 
   # ---------------------------------------------------------------------------
-  # GROUND 8 ARREARS THRESHOLD (Housing Act 1988 Schedule 2 Ground 8)
-  # ---------------------------------------------------------------------------
-
-  - id: s8_ground8_threshold_not_met
-    severity: blocker
-    applies_to: [section_8]
-    applies_when:
-      - condition: "computed.has_ground_8 === true && computed.ground_8_eligible === false"
-    message: "Ground 8 requires at least 2 months' rent arrears at notice date AND hearing date."
-    rationale: "Housing Act 1988 Schedule 2 Ground 8 is a mandatory ground requiring 2+ months arrears."
-    field: total_arrears
-
-  - id: s8_arrears_ground_no_data
-    severity: blocker
-    applies_to: [section_8]
-    applies_when:
-      - condition: "computed.has_arrears_ground === true && !facts.has_rent_arrears && !facts.total_arrears && !facts.arrears_total"
-    message: "Arrears grounds selected but no arrears data provided."
-    rationale: "Arrears grounds (8, 10, 11) require evidence of rent arrears amount."
-    field: total_arrears
-
-  # ---------------------------------------------------------------------------
-  # GROUND PARTICULARS
-  # ---------------------------------------------------------------------------
-
-  - id: s8_no_particulars
-    severity: blocker
-    applies_to: [section_8]
-    applies_when:
-      - condition: "facts.section8_grounds && facts.section8_grounds.length > 0 && !facts.section8_details && !facts.ground_particulars"
-    message: "Section 8 requires particulars of each ground."
-    rationale: "The notice must include specific details supporting each ground for possession."
-    field: ground_particulars
-
-  - id: s8_asb_ground_no_data
-    severity: warning
-    applies_to: [section_8]
-    applies_when:
-      - condition: "computed.has_ground_14 === true && !facts.has_asb && !facts.section8_details && !facts.ground_particulars"
-    message: "Ground 14 (nuisance/ASB) selected but no ASB details provided."
-    rationale: "Ground 14 claims are stronger with documented ASB incidents."
-    field: section8_details
-
-  - id: s8_breach_ground_no_data
-    severity: warning
-    applies_to: [section_8]
-    applies_when:
-      - condition: "computed.has_ground_12 === true && !facts.has_breaches && !facts.section8_details && !facts.ground_particulars"
-    message: "Ground 12 (breach) selected but no breach details provided."
-    rationale: "Ground 12 claims require documentation of tenancy agreement breaches."
-    field: section8_details
-
-  # ---------------------------------------------------------------------------
   # NOTICE PERIOD (varies by ground)
+  # TS Code: S8-NOTICE-PERIOD
   # ---------------------------------------------------------------------------
 
-  - id: s8_notice_period_short
+  - id: s8_notice_period
     severity: blocker
     applies_to: [section_8]
     applies_when:
+      # Expiry date is earlier than statutory minimum
       - condition: "computed.s8_notice_period_too_short === true"
-    message: "Expiry date is earlier than the statutory minimum for the selected grounds."
+      # Unable to calculate notice period
+      - condition: "computed.s8_notice_period_calculation_error === true"
+    message: "Notice period issue - expiry date must meet statutory minimum for selected grounds."
     rationale: "Notice periods vary by ground: 2 weeks for most mandatory, 2 months for discretionary."
     field: notice_expiry_date
 
-  - id: s8_notice_period_calculation_failed
-    severity: blocker
-    applies_to: [section_8]
-    applies_when:
-      - condition: "computed.s8_notice_period_calculation_error === true"
-    message: "Unable to calculate notice period without valid grounds and service date."
-    rationale: "Both service date and grounds must be provided to calculate minimum notice period."
-    field: section8_grounds
+  # ---------------------------------------------------------------------------
+  # FUTURE/COMPLETE_PACK RULES (not validated by TS evaluateNoticeCompliance)
+  # These are preserved for potential future use or complete_pack product.
+  # ---------------------------------------------------------------------------
+
+  # Ground 8 arrears threshold - currently TS doesn't validate for notice_only
+  # - id: s8_ground8_threshold_not_met
+  #   severity: blocker
+  #   applies_to: [section_8]
+  #   applies_when:
+  #     - condition: "computed.has_ground_8 === true && computed.ground_8_eligible === false"
+  #   message: "Ground 8 requires at least 2 months' rent arrears at notice date AND hearing date."
+  #   rationale: "Housing Act 1988 Schedule 2 Ground 8 is a mandatory ground requiring 2+ months arrears."
+  #   field: total_arrears
+
+  # Arrears data requirement - currently TS doesn't validate for notice_only
+  # - id: s8_arrears_ground_no_data
+  #   severity: blocker
+  #   applies_to: [section_8]
+  #   applies_when:
+  #     - condition: "computed.has_arrears_ground === true && !facts.has_rent_arrears && !facts.total_arrears && !facts.arrears_total"
+  #   message: "Arrears grounds selected but no arrears data provided."
+  #   rationale: "Arrears grounds (8, 10, 11) require evidence of rent arrears amount."
+  #   field: total_arrears
+
+  # Ground particulars requirement - currently TS doesn't validate for notice_only
+  # - id: s8_no_particulars
+  #   severity: blocker
+  #   applies_to: [section_8]
+  #   applies_when:
+  #     - condition: "facts.section8_grounds && facts.section8_grounds.length > 0 && !facts.section8_details && !facts.ground_particulars"
+  #   message: "Section 8 requires particulars of each ground."
+  #   rationale: "The notice must include specific details supporting each ground for possession."
+  #   field: ground_particulars
+
+  # Ground 14 ASB details - currently TS doesn't validate for notice_only
+  # - id: s8_asb_ground_no_data
+  #   severity: warning
+  #   applies_to: [section_8]
+  #   applies_when:
+  #     - condition: "computed.has_ground_14 === true && !facts.has_asb && !facts.section8_details && !facts.ground_particulars"
+  #   message: "Ground 14 (nuisance/ASB) selected but no ASB details provided."
+  #   rationale: "Ground 14 claims are stronger with documented ASB incidents."
+  #   field: section8_details
+
+  # Ground 12 breach details - currently TS doesn't validate for notice_only
+  # - id: s8_breach_ground_no_data
+  #   severity: warning
+  #   applies_to: [section_8]
+  #   applies_when:
+  #     - condition: "computed.has_ground_12 === true && !facts.has_breaches && !facts.section8_details && !facts.ground_particulars"
+  #   message: "Ground 12 (breach) selected but no breach details provided."
+  #   rationale: "Ground 12 claims require documentation of tenancy agreement breaches."
+  #   field: section8_details
 
 # =============================================================================
 # COMMON RULES (Apply to both routes)
@@ -505,11 +506,6 @@ summary:
       label: "Grounds for Possession"
       rules:
         - s8_grounds_required
-        - s8_ground8_threshold_not_met
-        - s8_arrears_ground_no_data
-        - s8_no_particulars
-        - s8_asb_ground_no_data
-        - s8_breach_ground_no_data
     - id: notice_service
       label: "Notice Service"
       rules:
@@ -519,8 +515,7 @@ summary:
         - s21_four_month_bar
         - s21_notice_period_short
         - s21_notice_period_calculation_failed
-        - s8_notice_period_short
-        - s8_notice_period_calculation_failed
+        - s8_notice_period
     - id: jurisdiction
       label: "Jurisdiction"
       rules:
