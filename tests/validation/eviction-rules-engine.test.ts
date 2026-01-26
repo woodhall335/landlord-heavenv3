@@ -18,6 +18,7 @@ import {
   validateRulesSchema,
   clearConfigCache,
   groupResultsBySection,
+  resetPhase13SessionDecision,
   type EvictionFacts,
   type Jurisdiction,
   type Product,
@@ -769,6 +770,11 @@ import { isPhase13Enabled, getEnabledFeatures } from '@/lib/validation/eviction-
 describe('Phase 13 Feature Flag System', () => {
   const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
 
+  beforeEach(() => {
+    // Reset the session-level Phase 13 decision cache before each test
+    resetPhase13SessionDecision();
+  });
+
   afterEach(() => {
     // Restore original environment
     if (originalEnv === undefined) {
@@ -815,6 +821,7 @@ describe('Phase 13 England Complete Pack Rules', () => {
   const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
 
   beforeEach(() => {
+    resetPhase13SessionDecision();
     clearConfigCache();
   });
 
@@ -971,6 +978,7 @@ describe('Phase 13 Scotland Rules', () => {
   const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
 
   beforeEach(() => {
+    resetPhase13SessionDecision();
     clearConfigCache();
   });
 
@@ -1050,6 +1058,7 @@ describe('Phase 13 Wales Rules', () => {
   const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
 
   beforeEach(() => {
+    resetPhase13SessionDecision();
     clearConfigCache();
   });
 

@@ -247,14 +247,78 @@ export interface EvictionFacts {
 // ============================================================================
 
 /**
+ * Get Phase 13 rollout percentage from environment.
+ * Phase 14: Allows gradual rollout of Phase 13 rules.
+ *
+ * Values:
+ * - 0: Phase 13 disabled (default)
+ * - 1-99: Percentage of requests where Phase 13 is enabled
+ * - 100: Phase 13 fully enabled
+ *
+ * Set with: VALIDATION_PHASE13_ROLLOUT_PERCENT=N (0-100)
+ */
+export function getPhase13RolloutPercent(): number {
+  // First check if Phase 13 is explicitly enabled (takes precedence)
+  if (process.env.VALIDATION_PHASE13_ENABLED === 'true') {
+    return 100;
+  }
+
+  const percentStr = process.env.VALIDATION_PHASE13_ROLLOUT_PERCENT;
+  if (!percentStr) return 0;
+
+  const percent = parseInt(percentStr, 10);
+  if (isNaN(percent) || percent < 0) return 0;
+  if (percent > 100) return 100;
+  return percent;
+}
+
+// Session-level Phase 13 decision cache
+// Ensures consistent Phase 13 status within a single request
+let phase13SessionDecision: boolean | null = null;
+
+/**
+ * Reset the Phase 13 session decision.
+ * Call this at the start of each request for percentage-based rollout.
+ */
+export function resetPhase13SessionDecision(): void {
+  phase13SessionDecision = null;
+}
+
+/**
  * Phase 13 feature flag for correctness improvements beyond legacy TS.
  * When enabled, additional validation rules are evaluated that were
  * intentionally excluded during the TS-to-YAML migration for parity.
  *
- * Enable with: VALIDATION_PHASE13_ENABLED=true
+ * Enable with:
+ * - VALIDATION_PHASE13_ENABLED=true (100% enablement)
+ * - VALIDATION_PHASE13_ROLLOUT_PERCENT=N (percentage-based rollout)
+ *
+ * Phase 14: Supports percentage-based rollout for gradual rollout.
  */
 export function isPhase13Enabled(): boolean {
-  return process.env.VALIDATION_PHASE13_ENABLED === 'true';
+  // Return cached decision if available (ensures consistency within request)
+  if (phase13SessionDecision !== null) {
+    return phase13SessionDecision;
+  }
+
+  const rolloutPercent = getPhase13RolloutPercent();
+
+  // 0% = always disabled
+  if (rolloutPercent === 0) {
+    phase13SessionDecision = false;
+    return false;
+  }
+
+  // 100% = always enabled
+  if (rolloutPercent >= 100) {
+    phase13SessionDecision = true;
+    return true;
+  }
+
+  // Percentage-based rollout: random selection
+  const randomValue = Math.random() * 100;
+  phase13SessionDecision = randomValue < rolloutPercent;
+  return phase13SessionDecision;
 }
 
 /**

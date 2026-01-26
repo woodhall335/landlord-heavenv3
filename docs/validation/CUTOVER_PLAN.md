@@ -535,6 +535,149 @@ export VALIDATION_PHASE13_ENABLED=true
 - [ ] Positive user feedback on improved validation
 - [ ] Telemetry confirms rules are firing correctly
 
+---
+
+### Phase 14: Controlled Rollout & Impact Validation
+
+**Status**: 🟢 Available
+
+**Description**: Controlled rollout of Phase 13 correctness improvements with percentage-based enablement and impact tracking.
+
+**Objectives**:
+- Roll out Phase 13 rules gradually to measure impact
+- Track metrics to validate Phase 13 is improving correctness without blocking valid cases
+- Provide data for decision-making on full enablement
+
+**Environment Variables**:
+```bash
+# Option 1: Enable at specific percentage (0-100)
+VALIDATION_PHASE13_ROLLOUT_PERCENT=10   # 10% of requests
+
+# Option 2: Enable at 100%
+VALIDATION_PHASE13_ENABLED=true
+
+# Telemetry (required for impact tracking)
+EVICTION_TELEMETRY_ENABLED=true
+```
+
+**Rollout Stages**:
+
+| Stage | Percentage | Duration | Criteria for Advancement |
+|-------|------------|----------|-------------------------|
+| **Staging** | 100% | 1 week | All tests pass, no unexpected blockers |
+| **Production 10%** | 10% | 1 week | Newly blocked < 5%, no complaints |
+| **Production 50%** | 50% | 1 week | Newly blocked < 5%, stable |
+| **Production 100%** | 100% | Ongoing | Full enablement |
+
+**Phase 14 Metrics**:
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| `phase13EnabledPercent` | % of validations with Phase 13 enabled | Matches rollout % |
+| `newlyBlockedPercent` | % of Phase 13 validations blocked only by Phase 13 rules | < 5% |
+| `warningToBlockerRatio` | Ratio of Phase 13 warnings to blockers | > 0.5 (more warnings than blockers) |
+| `topPhase13Blockers` | Most frequent Phase 13 blockers | For review |
+
+**Phase 14 Impact Report**:
+
+Run the impact report to assess Phase 13 rollout:
+
+```bash
+# Human-readable report
+npm run validation:phase14-report
+
+# JSON output for automation
+npm run validation:phase14-report --json
+```
+
+**Report Sections**:
+- Environment status (rollout percentage, feature flags)
+- Telemetry summary (total validations, Phase 13 enabled count)
+- Phase 13 impact metrics (newly blocked %, warning/blocker ratio)
+- Top Phase 13 blockers with descriptions
+- Jurisdiction breakdown
+- Rollout recommendation (safe/monitor/investigate/rollback)
+
+**Recommendation Thresholds**:
+
+| Status | Newly Blocked % | Action |
+|--------|-----------------|--------|
+| `safe_to_proceed` | < 5% | Increase rollout or proceed to full enablement |
+| `monitor` | 5-10% | Continue monitoring before increasing |
+| `investigate` | 10-20% | Review top blockers and user feedback |
+| `rollback` | > 20% | Reduce rollout percentage or disable |
+
+**Telemetry Events**:
+
+Phase 14 adds the following fields to telemetry events:
+```typescript
+{
+  // Existing fields...
+  phase13Enabled: boolean;        // Whether Phase 13 was enabled for this validation
+  phase13BlockerIds: string[];    // IDs of Phase 13 blockers that fired
+  phase13WarningIds: string[];    // IDs of Phase 13 warnings that fired
+}
+```
+
+**How to Enable (Staging)**:
+```bash
+# Enable at 100% in staging for testing
+export VALIDATION_PHASE13_ENABLED=true
+export EVICTION_TELEMETRY_ENABLED=true
+```
+
+**How to Enable (Production - Gradual)**:
+```bash
+# Start at 10%
+export VALIDATION_PHASE13_ROLLOUT_PERCENT=10
+export EVICTION_TELEMETRY_ENABLED=true
+
+# After 1 week, if metrics are good:
+export VALIDATION_PHASE13_ROLLOUT_PERCENT=50
+
+# After 1 more week:
+export VALIDATION_PHASE13_ENABLED=true  # 100%
+```
+
+**How to Rollback**:
+```bash
+# Reduce rollout percentage
+export VALIDATION_PHASE13_ROLLOUT_PERCENT=5
+
+# Or disable completely
+unset VALIDATION_PHASE13_ROLLOUT_PERCENT
+unset VALIDATION_PHASE13_ENABLED
+```
+
+**Success Criteria**:
+- [ ] Staging at 100% for 1 week with no issues
+- [ ] Production at 10% for 1 week: newly blocked < 5%
+- [ ] Production at 50% for 1 week: newly blocked < 5%
+- [ ] Production at 100%: stable with positive user feedback
+- [ ] No increase in support tickets related to validation
+
+**Phase 13 Rule Descriptions** (for reference):
+
+| Rule ID | Description |
+|---------|-------------|
+| `s21_deposit_cap_exceeded` | Deposit exceeds Tenant Fees Act cap (5/6 weeks) |
+| `s21_four_month_bar` | Cannot serve S21 in first 4 months of tenancy |
+| `s21_notice_period_short` | S21 notice period less than 2 months |
+| `s21_licensing_required_not_licensed` | Selective licensing required but not held |
+| `s21_retaliatory_improvement_notice` | Council improvement notice served |
+| `s21_retaliatory_emergency_action` | Council emergency remedial action |
+| `s8_notice_period_short` | S8 notice period less than statutory minimum |
+| `s173_notice_period_short` | S173 notice period less than 6 months |
+| `s173_deposit_not_protected` | Deposit not protected (Wales) |
+| `s173_written_statement_missing` | Written statement not provided (Wales) |
+| `ntl_landlord_not_registered` | Landlord not registered with Scottish Landlord Register |
+| `ntl_pre_action_letter_not_sent` | Pre-action letter not sent for Ground 1 |
+| `ntl_pre_action_signposting_missing` | Tenant not signposted to debt advice |
+| `ntl_ground_1_arrears_threshold` | Arrears less than typical 3-month threshold |
+| `ntl_deposit_not_protected` | Deposit not protected (Scotland) |
+
+---
+
 ## Rollback Procedures
 
 ### Phase 12 Complete: No Rollback Available
@@ -580,7 +723,8 @@ unset EVICTION_YAML_PRIMARY
 | `EVICTION_YAML_ONLY` | `false` | **Phase 4**: Bypass TS fallback entirely (deprecated in Phase 12) |
 | `EVICTION_TELEMETRY_ENABLED` | `false` | Publish validation metrics |
 | `VALIDATION_TELEMETRY_SAMPLE_RATE` | `1.0` | Sampling rate (0.0-1.0) |
-| `VALIDATION_PHASE13_ENABLED` | `false` | **Phase 13**: Enable correctness improvements beyond legacy TS |
+| `VALIDATION_PHASE13_ENABLED` | `false` | **Phase 13**: Enable correctness improvements beyond legacy TS (100%) |
+| `VALIDATION_PHASE13_ROLLOUT_PERCENT` | `0` | **Phase 14**: Percentage-based rollout of Phase 13 rules (0-100) |
 
 ## Timeline
 
@@ -594,9 +738,7 @@ unset EVICTION_YAML_PRIMARY
 | 11B. Stability Execution | Complete | 14 days | All metrics within thresholds |
 | 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
 | 13. Correctness Improvements | Available | Incremental | Feature-flagged enhancements |
-| 11A. Stability Setup | Complete | - | Dashboards, alerts, tracker ready |
-| 11B. Stability Execution | Complete | 14 days | All metrics within thresholds |
-| 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
+| 14. Controlled Rollout | Available | ~3 weeks | 10% → 50% → 100% with metrics |
 
 ## Risk Mitigation
 
