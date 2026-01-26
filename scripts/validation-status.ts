@@ -3,14 +3,13 @@
  * Validation Status Script
  *
  * Outputs YAML-only validation statistics and key telemetry aggregates
- * for on-call engineers during Phase 11A stability monitoring.
+ * for on-call engineers.
  *
  * Run with: npm run validation:status
  * Or directly: npx tsx scripts/validation-status.ts
  *
- * This script is designed to be run from the command line during
- * production monitoring. It requires the application's validation
- * adapter to be importable.
+ * Phase 12: This script has been simplified following removal of TS validators.
+ * YAML is now the sole validation system.
  */
 
 import {
@@ -21,9 +20,7 @@ import {
   getFallbackStats,
   getMetricsStore,
   isYamlOnlyMode,
-  isYamlPrimary,
   isTelemetryEnabled,
-  isShadowModeEnabled,
 } from '../src/lib/validation/shadow-mode-adapter';
 
 // ============================================================================
@@ -34,9 +31,7 @@ interface StatusReport {
   timestamp: string;
   environment: {
     yamlOnlyMode: boolean;
-    yamlPrimary: boolean;
     telemetryEnabled: boolean;
-    shadowMode: boolean;
   };
   yamlOnlyStats: {
     totalValidations: number;
@@ -52,8 +47,8 @@ interface StatusReport {
   };
   telemetry: {
     totalEvents: number;
-    parityRate: number;
-    parityRatePercent: string;
+    validCount: number;
+    invalidCount: number;
     avgDurationMs: number;
   };
   latency: {
@@ -112,13 +107,6 @@ function checkAlerts(stats: StatusReport): { critical: string[]; warning: string
     );
   }
 
-  // Check for TS fallback (should be 0 in YAML-only mode)
-  if (stats.environment.yamlOnlyMode && stats.fallbackStats.fallbackCount > 0) {
-    critical.push(
-      `TSValidatorExecution: ${stats.fallbackStats.fallbackCount} TS validator calls detected!`
-    );
-  }
-
   // Check latency (if we have data)
   if (stats.latency.p95 > THRESHOLDS.baselineP95Ms * THRESHOLDS.criticalLatencyMultiplier) {
     critical.push(
@@ -162,9 +150,7 @@ function generateStatusReport(): StatusReport {
     timestamp: new Date().toISOString(),
     environment: {
       yamlOnlyMode: isYamlOnlyMode(),
-      yamlPrimary: isYamlPrimary(),
       telemetryEnabled: isTelemetryEnabled(),
-      shadowMode: isShadowModeEnabled(),
     },
     yamlOnlyStats: {
       totalValidations: yamlStats.totalValidations,
@@ -180,8 +166,8 @@ function generateStatusReport(): StatusReport {
     },
     telemetry: {
       totalEvents: metrics.totalValidations,
-      parityRate: metrics.parityRate,
-      parityRatePercent: (metrics.parityRate * 100).toFixed(2) + '%',
+      validCount: metrics.validCount,
+      invalidCount: metrics.invalidCount,
       avgDurationMs: Math.round(metrics.avgDurationMs * 100) / 100,
     },
     latency,
@@ -201,130 +187,99 @@ function generateStatusReport(): StatusReport {
 // ============================================================================
 
 function printReport(report: StatusReport): void {
-  const hr = '═'.repeat(70);
-  const hrThin = '─'.repeat(70);
+  const hr = '='.repeat(70);
+  const hrThin = '-'.repeat(70);
 
-  console.log('\n' + '╔' + hr + '╗');
-  console.log('║' + ' YAML-ONLY VALIDATION STATUS REPORT'.padEnd(70) + '║');
-  console.log('╚' + hr + '╝');
+  console.log('\n' + hr);
+  console.log(' YAML-ONLY VALIDATION STATUS REPORT (Phase 12)');
+  console.log(hr);
   console.log(`\nTimestamp: ${report.timestamp}\n`);
 
   // Environment Status
-  console.log('┌' + hrThin + '┐');
-  console.log('│ ENVIRONMENT STATUS'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log(
-    `│  YAML-Only Mode:     ${report.environment.yamlOnlyMode ? '✅ ENABLED' : '❌ DISABLED'}`.padEnd(
-      71
-    ) + '│'
-  );
-  console.log(
-    `│  YAML Primary:       ${report.environment.yamlPrimary ? '✅ ENABLED' : '❌ DISABLED'}`.padEnd(
-      71
-    ) + '│'
-  );
-  console.log(
-    `│  Telemetry:          ${report.environment.telemetryEnabled ? '✅ ENABLED' : '❌ DISABLED'}`.padEnd(
-      71
-    ) + '│'
-  );
-  console.log(
-    `│  Shadow Mode:        ${report.environment.shadowMode ? '✅ ENABLED' : '❌ DISABLED'}`.padEnd(
-      71
-    ) + '│'
-  );
-  console.log('└' + hrThin + '┘\n');
+  console.log(hrThin);
+  console.log(' ENVIRONMENT STATUS');
+  console.log(hrThin);
+  console.log(`  YAML-Only Mode:     ${report.environment.yamlOnlyMode ? 'ENABLED (permanent)' : 'DISABLED'}`);
+  console.log(`  Telemetry:          ${report.environment.telemetryEnabled ? 'ENABLED' : 'DISABLED'}`);
+  console.log('');
 
   // Alerts (if any)
   if (report.alerts.critical.length > 0 || report.alerts.warning.length > 0) {
-    console.log('┌' + hrThin + '┐');
-    console.log('│ ⚠️  ACTIVE ALERTS'.padEnd(70) + '│');
-    console.log('├' + hrThin + '┤');
+    console.log(hrThin);
+    console.log(' ACTIVE ALERTS');
+    console.log(hrThin);
     for (const alert of report.alerts.critical) {
-      console.log(`│  🔴 CRITICAL: ${alert}`.padEnd(71).substring(0, 71) + '│');
+      console.log(`  [CRITICAL] ${alert}`);
     }
     for (const alert of report.alerts.warning) {
-      console.log(`│  🟡 WARNING:  ${alert}`.padEnd(71).substring(0, 71) + '│');
+      console.log(`  [WARNING]  ${alert}`);
     }
-    console.log('└' + hrThin + '┘\n');
+    console.log('');
   } else {
-    console.log('✅ No active alerts\n');
+    console.log('No active alerts\n');
   }
 
   // YAML-Only Stats
-  console.log('┌' + hrThin + '┐');
-  console.log('│ YAML-ONLY VALIDATION METRICS'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log(`│  Total Validations:  ${report.yamlOnlyStats.totalValidations}`.padEnd(71) + '│');
-  console.log(`│  Error Count:        ${report.yamlOnlyStats.errorCount}`.padEnd(71) + '│');
-  console.log(`│  Error Rate:         ${report.yamlOnlyStats.errorRatePercent}`.padEnd(71) + '│');
-  console.log('└' + hrThin + '┘\n');
+  console.log(hrThin);
+  console.log(' YAML-ONLY VALIDATION METRICS');
+  console.log(hrThin);
+  console.log(`  Total Validations:  ${report.yamlOnlyStats.totalValidations}`);
+  console.log(`  Error Count:        ${report.yamlOnlyStats.errorCount}`);
+  console.log(`  Error Rate:         ${report.yamlOnlyStats.errorRatePercent}`);
+  console.log('');
 
-  // Fallback Stats (should be 0 in YAML-only)
-  console.log('┌' + hrThin + '┐');
-  console.log('│ TS FALLBACK METRICS (should be 0 in YAML-only mode)'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log(`│  Total Requests:     ${report.fallbackStats.totalRequests}`.padEnd(71) + '│');
-  console.log(`│  Fallback Count:     ${report.fallbackStats.fallbackCount}`.padEnd(71) + '│');
-  console.log(`│  Fallback Rate:      ${report.fallbackStats.fallbackRatePercent}`.padEnd(71) + '│');
-  console.log('└' + hrThin + '┘\n');
+  // Fallback Stats (Phase 12: should always be 0)
+  console.log(hrThin);
+  console.log(' TS FALLBACK METRICS (Phase 12: always 0)');
+  console.log(hrThin);
+  console.log(`  Total Requests:     ${report.fallbackStats.totalRequests}`);
+  console.log(`  Fallback Count:     ${report.fallbackStats.fallbackCount}`);
+  console.log(`  Fallback Rate:      ${report.fallbackStats.fallbackRatePercent}`);
+  console.log('');
 
   // Telemetry
-  console.log('┌' + hrThin + '┐');
-  console.log('│ TELEMETRY AGGREGATES'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log(`│  Events Recorded:    ${report.telemetry.totalEvents}`.padEnd(71) + '│');
-  console.log(`│  Parity Rate:        ${report.telemetry.parityRatePercent}`.padEnd(71) + '│');
-  console.log(`│  Avg Duration:       ${formatDuration(report.telemetry.avgDurationMs)}`.padEnd(71) + '│');
-  console.log('└' + hrThin + '┘\n');
+  console.log(hrThin);
+  console.log(' TELEMETRY AGGREGATES');
+  console.log(hrThin);
+  console.log(`  Events Recorded:    ${report.telemetry.totalEvents}`);
+  console.log(`  Valid Validations:  ${report.telemetry.validCount}`);
+  console.log(`  Invalid (blocked):  ${report.telemetry.invalidCount}`);
+  console.log(`  Avg Duration:       ${formatDuration(report.telemetry.avgDurationMs)}`);
+  console.log('');
 
   // Latency
-  console.log('┌' + hrThin + '┐');
-  console.log('│ LATENCY PERCENTILES'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log(`│  P50:                ${formatDuration(report.latency.p50)}`.padEnd(71) + '│');
-  console.log(`│  P95:                ${formatDuration(report.latency.p95)}`.padEnd(71) + '│');
-  console.log(`│  P99:                ${formatDuration(report.latency.p99)}`.padEnd(71) + '│');
-  console.log('└' + hrThin + '┘\n');
+  console.log(hrThin);
+  console.log(' LATENCY PERCENTILES');
+  console.log(hrThin);
+  console.log(`  P50:                ${formatDuration(report.latency.p50)}`);
+  console.log(`  P95:                ${formatDuration(report.latency.p95)}`);
+  console.log(`  P99:                ${formatDuration(report.latency.p99)}`);
+  console.log('');
 
   // Top Blockers
   if (report.topBlockers.length > 0) {
-    console.log('┌' + hrThin + '┐');
-    console.log('│ TOP BLOCKERS (by frequency)'.padEnd(70) + '│');
-    console.log('├' + hrThin + '┤');
+    console.log(hrThin);
+    console.log(' TOP BLOCKERS (by frequency)');
+    console.log(hrThin);
     for (const blocker of report.topBlockers.slice(0, 10)) {
-      console.log(`│  ${blocker.ruleId.padEnd(50)} ${String(blocker.count).padStart(5)}`.padEnd(71) + '│');
+      console.log(`  ${blocker.ruleId.padEnd(50)} ${String(blocker.count).padStart(5)}`);
     }
-    console.log('└' + hrThin + '┘\n');
-  }
-
-  // Top Discrepancies
-  if (report.topDiscrepancies.length > 0) {
-    console.log('┌' + hrThin + '┐');
-    console.log('│ TOP DISCREPANCIES (by frequency)'.padEnd(70) + '│');
-    console.log('├' + hrThin + '┤');
-    for (const disc of report.topDiscrepancies.slice(0, 10)) {
-      console.log(`│  ${disc.key.padEnd(50)} ${String(disc.count).padStart(5)}`.padEnd(71) + '│');
-    }
-    console.log('└' + hrThin + '┘\n');
+    console.log('');
   }
 
   // Thresholds Reference
-  console.log('┌' + hrThin + '┐');
-  console.log('│ SIGNOFF THRESHOLDS (Phase 11A)'.padEnd(70) + '│');
-  console.log('├' + hrThin + '┤');
-  console.log('│  Daily Error Rate:   ≤ 0.05%'.padEnd(71) + '│');
-  console.log('│  Rolling 7-Day Rate: ≤ 0.02%'.padEnd(71) + '│');
-  console.log('│  P95 Latency:        ≤ +10% vs baseline'.padEnd(71) + '│');
-  console.log('│  TS Usage:           0% (must be zero)'.padEnd(71) + '│');
-  console.log('│  Telemetry Coverage: ≥ 95%'.padEnd(71) + '│');
-  console.log('└' + hrThin + '┘\n');
-
-  // Rollback commands
-  console.log('ROLLBACK COMMANDS (if needed):');
-  console.log('  Partial: export EVICTION_YAML_ONLY=false');
-  console.log('  Full:    export EVICTION_YAML_ONLY=false && export EVICTION_YAML_PRIMARY=false');
+  console.log(hrThin);
+  console.log(' MONITORING THRESHOLDS');
+  console.log(hrThin);
+  console.log('  Daily Error Rate:   <= 0.05%');
+  console.log('  Rolling 7-Day Rate: <= 0.02%');
+  console.log('  P95 Latency:        <= +10% vs baseline');
   console.log('');
+
+  console.log(hr);
+  console.log(' Phase 12: YAML is the sole validation system.');
+  console.log(' TS validators have been permanently removed.');
+  console.log(hr + '\n');
 }
 
 function printJsonReport(report: StatusReport): void {
@@ -349,8 +304,8 @@ Options:
   --help, -h    Show this help message
 
 Description:
-  Outputs YAML-only validation statistics and telemetry aggregates
-  for on-call engineers during Phase 11A stability monitoring.
+  Outputs YAML-only validation statistics and telemetry aggregates.
+  Phase 12: YAML is the sole validation system (TS validators removed).
 
 Examples:
   npm run validation:status           # Human-readable output

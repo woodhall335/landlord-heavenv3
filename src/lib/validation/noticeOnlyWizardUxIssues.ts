@@ -19,7 +19,11 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import { evaluateNoticeCompliance, type ComplianceResult } from '../notices/evaluate-notice-compliance';
+import {
+  runYamlOnlyNoticeValidation,
+  deriveJurisdictionFromFacts,
+  type YamlValidationResult,
+} from './shadow-mode-adapter';
 import { normalizeFactKeys } from '../wizard/normalizeFacts';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
@@ -497,7 +501,7 @@ function normalizeSection8Grounds(grounds: any): string[] {
  * 3. Separates route-invalidating issues from inline warnings
  * 4. Computes deposit cap values for inline display
  */
-export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssuesResult {
+export async function extractWizardUxIssues(input: WizardUxIssuesInput): Promise<WizardUxIssuesResult> {
   const { jurisdiction, route, savedFacts, lastSavedQuestionIds } = input;
 
   // Normalize facts to ensure consistent field names
@@ -549,19 +553,17 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
   }
 
   // -------------------------------------------------------------------------
-  // 2. Run Compliance Evaluator
+  // 2. Run YAML Validation (Phase 12: YAML-only)
   // -------------------------------------------------------------------------
-  let complianceResult: ComplianceResult;
+  let yamlResult: YamlValidationResult;
   try {
-    complianceResult = evaluateNoticeCompliance({
-      jurisdiction,
-      product: 'notice_only',
-      selected_route: route,
-      wizardFacts: normalizedFacts,
-      stage: 'wizard',
+    yamlResult = await runYamlOnlyNoticeValidation({
+      jurisdiction: deriveJurisdictionFromFacts(normalizedFacts),
+      route,
+      facts: normalizedFacts,
     });
   } catch (error) {
-    console.error('[extractWizardUxIssues] Compliance evaluator error:', error);
+    console.error('[extractWizardUxIssues] YAML validation error:', error);
     return result;
   }
 
@@ -591,26 +593,26 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
     });
   }
 
-  // From compliance evaluator hardFailures
-  for (const failure of complianceResult.hardFailures) {
+  // From YAML validation blockers
+  for (const blocker of yamlResult.blockers) {
     allIssues.push({
-      code: failure.code,
-      description: failure.legal_reason,
-      legalBasis: failure.legal_reason,
-      affectedQuestionId: failure.affected_question_id,
-      userFixHint: failure.user_fix_hint,
+      code: blocker.id,
+      description: blocker.message,
+      legalBasis: blocker.message,
+      affectedQuestionId: ISSUE_CODE_TO_QUESTION_ID[blocker.id] || ISSUE_CODE_TO_QUESTION_ID[blocker.id.toUpperCase()],
+      userFixHint: blocker.rationale || blocker.message,
       source: 'compliance',
     });
   }
 
-  // From compliance evaluator warnings
-  for (const warning of complianceResult.warnings) {
+  // From YAML validation warnings
+  for (const warning of yamlResult.warnings) {
     allIssues.push({
-      code: warning.code,
-      description: warning.legal_reason,
-      legalBasis: warning.legal_reason,
-      affectedQuestionId: warning.affected_question_id,
-      userFixHint: warning.user_fix_hint,
+      code: warning.id,
+      description: warning.message,
+      legalBasis: warning.message,
+      affectedQuestionId: ISSUE_CODE_TO_QUESTION_ID[warning.id] || ISSUE_CODE_TO_QUESTION_ID[warning.id.toUpperCase()],
+      userFixHint: warning.rationale || warning.message,
       source: 'compliance',
     });
   }

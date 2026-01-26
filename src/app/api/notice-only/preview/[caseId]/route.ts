@@ -24,7 +24,6 @@ import {
   mapWizardToSection21Data,
 } from '@/lib/documents/section21-generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
-import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import {
@@ -40,11 +39,7 @@ import {
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, buildWalesPartDFromWizardFacts } from '@/lib/wales';
 import {
-  runProductionShadowValidation,
   deriveJurisdictionFromFacts,
-  isYamlPrimary,
-  isYamlOnlyMode,
-  runYamlPrimaryNoticeValidation,
   runYamlOnlyNoticeValidation,
   trackYamlOnlyValidation,
 } from '@/lib/validation/shadow-mode-adapter';
@@ -411,115 +406,47 @@ export async function GET(
 
     // ========================================================================
     // FINAL COMPLIANCE CHECK BEFORE GENERATION
-    // Phase 10: YAML-Only Mode - TS validators completely bypassed
-    // Phase 8: YAML Primary Mode - YAML authoritative with TS fallback
-    // Default: TS authoritative with YAML shadow mode
+    // Phase 12: YAML-only validation (TS validators removed)
     // ========================================================================
     let hardFailures: Array<{ code: string; affected_question_id?: string; legal_reason?: string; user_fix_hint?: string }> = [];
     let complianceWarnings: Array<{ code: string; affected_question_id?: string; legal_reason?: string; user_fix_hint?: string }> = [];
-    let complianceComputed: any = null;
 
-    if (isYamlOnlyMode()) {
-      // Phase 10: YAML-only mode - NO TS fallback
-      console.log('[NOTICE-PREVIEW-API] Using YAML-only validation (Phase 10)');
-      try {
-        const yamlResult = await runYamlOnlyNoticeValidation({
-          jurisdiction: deriveJurisdictionFromFacts(wizardFacts) as 'england' | 'wales' | 'scotland',
-          route: selected_route,
-          facts: wizardFacts,
-        });
-
-        trackYamlOnlyValidation(true);
-
-        hardFailures = yamlResult.blockers.map((b) => ({
-          code: b.id,
-          legal_reason: b.message,
-          user_fix_hint: b.rationale,
-        }));
-        complianceWarnings = yamlResult.warnings.map((w) => ({
-          code: w.id,
-          legal_reason: w.message,
-          user_fix_hint: w.rationale,
-        }));
-
-        console.log('[NOTICE-PREVIEW-API] YAML-only validation complete', {
-          blockers: hardFailures.length,
-          warnings: complianceWarnings.length,
-          durationMs: yamlResult.durationMs,
-        });
-      } catch (error) {
-        // YAML-only mode error - no fallback available
-        trackYamlOnlyValidation(false);
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error('[NOTICE-PREVIEW-API] YAML-only validation error (CRITICAL):', {
-          error: errorMessage,
-          case_id: caseId,
-          jurisdiction,
-          route: selected_route,
-        });
-        throw error; // Re-throw to trigger 500 error
-      }
-    } else if (isYamlPrimary()) {
-      // Phase 8: YAML is authoritative with TS fallback
-      console.log('[NOTICE-PREVIEW-API] Using YAML primary validation');
-      const yamlResult = await runYamlPrimaryNoticeValidation({
+    console.log('[NOTICE-PREVIEW-API] Using YAML-only validation (Phase 12)');
+    try {
+      const yamlResult = await runYamlOnlyNoticeValidation({
         jurisdiction: deriveJurisdictionFromFacts(wizardFacts) as 'england' | 'wales' | 'scotland',
         route: selected_route,
         facts: wizardFacts,
       });
 
+      trackYamlOnlyValidation(true);
+
       hardFailures = yamlResult.blockers.map((b) => ({
         code: b.id,
         legal_reason: b.message,
-        user_fix_hint: b.userFix,
+        user_fix_hint: b.rationale,
       }));
       complianceWarnings = yamlResult.warnings.map((w) => ({
         code: w.id,
         legal_reason: w.message,
-        user_fix_hint: w.userFix,
+        user_fix_hint: w.rationale,
       }));
 
-      // Log YAML primary usage
-      if (yamlResult.usedFallback) {
-        console.warn('[NOTICE-PREVIEW-API] YAML primary fell back to TS:', {
-          reason: yamlResult.fallbackReason,
-          case_id: caseId,
-        });
-      }
-    } else {
-      // Default: TS is authoritative, YAML runs in shadow mode
-      const compliance = evaluateNoticeCompliance({
+      console.log('[NOTICE-PREVIEW-API] YAML validation complete', {
+        blockers: hardFailures.length,
+        warnings: complianceWarnings.length,
+        durationMs: yamlResult.durationMs,
+      });
+    } catch (error) {
+      trackYamlOnlyValidation(false);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('[NOTICE-PREVIEW-API] YAML validation error:', {
+        error: errorMessage,
+        case_id: caseId,
         jurisdiction,
-        product: 'notice_only',
-        selected_route,
-        wizardFacts,
-        stage: 'preview',
-      });
-
-      hardFailures = compliance.hardFailures;
-      complianceWarnings = compliance.warnings;
-      complianceComputed = compliance.computed;
-
-      // Shadow validation for parity monitoring
-      runProductionShadowValidation({
-        jurisdiction: deriveJurisdictionFromFacts(wizardFacts),
-        product: 'notice_only',
         route: selected_route,
-        facts: wizardFacts,
-        tsBlockers: compliance.hardFailures.map((f) => ({
-          code: f.code,
-          severity: 'blocker',
-          message: f.legal_reason || f.code,
-        })),
-        tsWarnings: compliance.warnings.map((w) => ({
-          code: w.code,
-          severity: 'warning',
-          message: w.legal_reason || w.code,
-        })),
-      }).catch((err) => {
-        // Shadow validation should never block the response
-        console.error('[NOTICE-PREVIEW-API] Shadow validation error (non-fatal):', err);
       });
+      throw error; // Re-throw to trigger 500 error
     }
 
     if (hardFailures.length > 0) {

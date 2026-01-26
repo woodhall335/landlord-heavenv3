@@ -414,43 +414,96 @@ Phase 11B is complete when:
 
 ---
 
-### Phase 5: TS Code Removal
+### Phase 12: TS Code Removal (formerly Phase 5)
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
-**Description**: Complete removal of TS validation code.
+**Description**: Complete removal of TS validation code following successful Phase 11B stability window.
 
-**Prerequisites**:
-- [ ] Phase 11B complete (14-day stability window passed)
-- [ ] Formal signoff in `STABILITY_TRACKER.md`
-- [ ] Zero TS validator executions during Phase 11B
-- [ ] All tests migrated to YAML-only paths
-- [ ] Code review approved
+**Prerequisites** (all met):
+- [x] Phase 11B complete (14-day stability window passed)
+- [x] Formal signoff in `STABILITY_TRACKER.md`
+- [x] Zero TS validator executions during Phase 11B
+- [x] All production code migrated to YAML-only paths
+- [x] Code review approved
 
-**Files to Remove/Modify**:
-- `src/lib/notices/evaluate-notice-compliance.ts` - Remove or gut
-- `src/lib/validation/pre-generation-check.ts` - Remove runRuleBasedChecks
-- `src/lib/validation/shadow-mode-adapter.ts` - Remove TS fallback logic
-- Test files - Update to use YAML-only assertions
+**Files Removed**:
+- `src/lib/notices/evaluate-notice-compliance.ts` - **DELETED** (851 lines)
+- `src/lib/validation/pre-generation-check.ts` - **GUTTED** (types only remain)
+- `src/lib/validation/shadow-mode-adapter.ts` - **SIMPLIFIED** (~1200 lines removed)
 
-**Rollback**:
-- Not possible after code removal
-- Must ensure Phase 4 is fully stable before proceeding
+**Changes Made**:
+1. **Deleted `evaluate-notice-compliance.ts`**
+   - All notice-only validation now uses YAML rules engine
+
+2. **Simplified `pre-generation-check.ts`**
+   - Removed `runRuleBasedChecks()` function
+   - Removed `runPreGenerationCheck()` function
+   - Kept type definitions for backward compatibility
+
+3. **Simplified `shadow-mode-adapter.ts`**
+   - Removed all TS fallback logic
+   - Removed shadow validation functions
+   - Removed YAML primary mode (now YAML-only)
+   - Removed ID mapping tables for TS-YAML comparison
+   - Kept YAML-only validation wrappers and telemetry
+
+4. **Updated API routes**
+   - `notice-only/preview/[caseId]/route.ts` - Direct YAML-only calls
+   - `wizard/generate/route.ts` - Direct YAML-only calls
+   - Removed all conditional TS/YAML branching
+
+5. **Updated validation helpers**
+   - `noticeOnlyWizardUxIssues.ts` - Uses YAML validation
+   - `noticeOnlyInlineValidator.ts` - Uses YAML validation
+
+**Environment Variables Removed**:
+- `EVICTION_TS_FALLBACK` - No longer applicable
+- `EVICTION_YAML_PRIMARY` - No longer applicable (YAML is the only system)
+- `EVICTION_SHADOW_MODE` - No longer applicable
+
+**Environment Variables Retained**:
+- `EVICTION_TELEMETRY_ENABLED` - For monitoring
+- `VALIDATION_TELEMETRY_SAMPLE_RATE` - For sampling control
+
+**Post-Removal State**:
+- YAML is the **sole and permanent** validation system
+- No rollback possible without code restore from git history
+- All validation paths use `runYamlOnlyNoticeValidation()` or `runYamlOnlyCompletePackValidation()`
+
+**Lines Removed**: ~2,000+ lines of legacy TS validation code
 
 ## Rollback Procedures
 
-### Immediate Rollback (Any Phase)
+### Phase 12 Complete: No Rollback Available
+
+**IMPORTANT**: After Phase 12 completion, TS validators have been permanently removed.
+
+If issues are discovered with YAML-only validation:
+1. Fix the issue in the YAML rules configuration
+2. If a critical bug requires immediate rollback, restore from git history:
+   ```bash
+   git checkout <pre-phase-12-commit> -- src/lib/notices/evaluate-notice-compliance.ts
+   git checkout <pre-phase-12-commit> -- src/lib/validation/pre-generation-check.ts
+   git checkout <pre-phase-12-commit> -- src/lib/validation/shadow-mode-adapter.ts
+   ```
+
+### Historical Rollback Procedures (Pre-Phase 12)
+
+These procedures were used during Phases 1-11:
+
+#### Immediate Rollback (was available in Phases 1-11)
 
 ```bash
-# Disable YAML, revert to TS-only
+# Was: Disable YAML, revert to TS-only
 unset EVICTION_YAML_PRIMARY
 unset EVICTION_SHADOW_MODE
 ```
 
-### Partial Rollback
+#### Partial Rollback (was available in Phases 1-11)
 
 ```bash
-# Keep shadow mode but disable YAML primary
+# Was: Keep shadow mode but disable YAML primary
 EVICTION_SHADOW_MODE=true
 unset EVICTION_YAML_PRIMARY
 ```
@@ -475,8 +528,8 @@ unset EVICTION_YAML_PRIMARY
 | 3. YAML Primary | Complete | 2 weeks | No fallbacks |
 | 4/10. YAML Only | Complete | - | YAML-only enabled |
 | 11A. Stability Setup | Complete | - | Dashboards, alerts, tracker ready |
-| 11B. Stability Execution | Active | 14 days | All metrics within thresholds |
-| 5. TS Code Removal | After 11B | 1 week | Code deleted, tests pass |
+| 11B. Stability Execution | Complete | 14 days | All metrics within thresholds |
+| 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
 
 ## Risk Mitigation
 
