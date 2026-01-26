@@ -153,12 +153,12 @@ export async function POST(request: Request) {
           tsBlockers: preGenResult.blockers.map((b) => ({
             code: b.code,
             severity: 'blocker',
-            message: b.description || b.code,
+            message: b.message || b.code,
           })),
           tsWarnings: preGenResult.warnings.map((w) => ({
             code: w.code,
             severity: 'warning',
-            message: w.description || w.code,
+            message: w.message || w.code,
           })),
         }).catch((err) => {
           // Shadow validation should never block the response
