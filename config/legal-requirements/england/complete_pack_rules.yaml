@@ -7,8 +7,14 @@
 # - Rule IDs aligned with TS codes from pre-generation-check.ts
 # - Complete pack validates different rules than notice_only (evaluateNoticeCompliance)
 # - Main differences: explicit false checks, deposit detail warnings, contradiction checks
-# - Rules not in TS runRuleBasedChecks() are commented out (licensing, four_month_bar, etc.)
-# - INTENTIONAL DIVERGENCE: None - all active rules match TS runRuleBasedChecks exactly
+#
+# PHASE 13 CORRECTNESS IMPROVEMENTS:
+# - Rules marked with `requires_feature: phase13` are correctness improvements beyond legacy TS
+# - Enable with VALIDATION_PHASE13_ENABLED=true
+# - These rules improve legal accuracy but were excluded during migration for parity
+# - Phase 13 rules: s21_deposit_cap_exceeded, s21_four_month_bar, s21_notice_period_short,
+#   s21_licensing_required_not_licensed, s21_retaliatory_improvement_notice,
+#   s21_retaliatory_emergency_action, s8_notice_period_short
 
 version: "1.0"
 jurisdiction: england
@@ -115,18 +121,19 @@ section_21_rules:
     field: deposit_scheme_name
 
   # ---------------------------------------------------------------------------
-  # DEPOSIT CAP - NOT IN TS runRuleBasedChecks, commented out for parity
-  # (Deposit cap is only checked in notice_only via evaluateNoticeCompliance)
+  # DEPOSIT CAP (Tenant Fees Act 2019)
+  # Phase 13: Deposit cap enforcement for complete_pack
   # ---------------------------------------------------------------------------
 
-  # - id: s21_deposit_cap_exceeded
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "facts.deposit_taken === true && computed.deposit_exceeds_cap === true && facts.deposit_reduced_to_legal_cap_confirmed !== 'yes' && facts.deposit_reduced_to_legal_cap_confirmed !== true && facts.deposit_reduced_to_legal_cap_confirmed !== 'not_applicable'"
-  #   message: "Deposit exceeds the legal cap. Under the Tenant Fees Act 2019, excess deposits must be returned before Section 21 is valid."
-  #   rationale: "Tenant Fees Act 2019 s.3 caps deposits at 5 weeks rent (6 weeks if annual rent > 50000)."
-  #   field: deposit_reduced_to_legal_cap_confirmed
+  - id: s21_deposit_cap_exceeded
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.deposit_taken === true && computed.deposit_exceeds_cap === true && facts.deposit_reduced_to_legal_cap_confirmed !== 'yes' && facts.deposit_reduced_to_legal_cap_confirmed !== true && facts.deposit_reduced_to_legal_cap_confirmed !== 'not_applicable'"
+    message: "Deposit exceeds the legal cap. Under the Tenant Fees Act 2019, excess deposits must be returned before Section 21 is valid."
+    rationale: "Tenant Fees Act 2019 s.3 caps deposits at 5 weeks rent (6 weeks if annual rent > 50000)."
+    field: deposit_reduced_to_legal_cap_confirmed
 
   # ---------------------------------------------------------------------------
   # HOW TO RENT GUIDE (Deregulation Act 2015)
@@ -191,54 +198,60 @@ section_21_rules:
     field: recent_repair_complaints
 
   # ---------------------------------------------------------------------------
-  # RULES NOT IN TS runRuleBasedChecks - commented out for parity
-  # These rules are only validated by evaluateNoticeCompliance (notice_only product)
+  # PHASE 13 CORRECTNESS IMPROVEMENTS
+  # These rules improve legal accuracy beyond the legacy TS parity baseline.
+  # Enable with VALIDATION_PHASE13_ENABLED=true
   # ---------------------------------------------------------------------------
 
-  # - id: s21_retaliatory_improvement_notice
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "facts.improvement_notice_served === true || facts.local_authority_improvement_notice === true"
-  #   message: "Section 21 notice is INVALID while an improvement notice is in effect."
-  #   rationale: "Retaliatory eviction bar applies for 6 months after an improvement notice."
-  #   field: improvement_notice_served
+  - id: s21_retaliatory_improvement_notice
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.improvement_notice_served === true || facts.local_authority_improvement_notice === true"
+    message: "Section 21 notice is INVALID while an improvement notice is in effect."
+    rationale: "Deregulation Act 2015 s.33 creates a retaliatory eviction bar for 6 months after an improvement notice."
+    field: improvement_notice_served
 
-  # - id: s21_retaliatory_emergency_action
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "facts.emergency_remedial_action === true || facts.local_authority_emergency_action === true"
-  #   message: "Section 21 notice is INVALID while emergency remedial action notice is in effect."
-  #   rationale: "Retaliatory eviction bar applies for 6 months after emergency remedial action."
-  #   field: emergency_remedial_action
+  - id: s21_retaliatory_emergency_action
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.emergency_remedial_action === true || facts.local_authority_emergency_action === true"
+    message: "Section 21 notice is INVALID while emergency remedial action notice is in effect."
+    rationale: "Deregulation Act 2015 s.33 applies retaliatory eviction bar for 6 months after emergency remedial action."
+    field: emergency_remedial_action
 
-  # - id: s21_licensing_required_not_licensed
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && facts.has_valid_licence === false"
-  #   message: "Section 21 notices are INVALID for unlicensed properties requiring a licence."
-  #   rationale: "Housing Act 2004 s.75/s.98 prevents Section 21 on unlicensed properties."
-  #   field: has_valid_licence
+  - id: s21_licensing_required_not_licensed
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && facts.has_valid_licence === false"
+    message: "Section 21 notices are INVALID for unlicensed properties requiring a licence."
+    rationale: "Housing Act 2004 s.75 (HMO) and s.98 (selective) prevent Section 21 on unlicensed properties."
+    field: has_valid_licence
 
-  # - id: s21_four_month_bar
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "computed.within_four_month_bar === true"
-  #   message: "Section 21 cannot be served within the first four months of the tenancy."
-  #   rationale: "Housing Act 1988 s.21(4B) prohibits Section 21 in first 4 months."
-  #   field: tenancy_start_date
+  - id: s21_four_month_bar
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.within_four_month_bar === true"
+    message: "Section 21 cannot be served within the first four months of the tenancy."
+    rationale: "Housing Act 1988 s.21(4B) prohibits Section 21 in first 4 months."
+    field: tenancy_start_date
 
-  # - id: s21_notice_period_short
-  #   severity: blocker
-  #   applies_to: [section_21]
-  #   applies_when:
-  #     - condition: "computed.notice_period_too_short === true"
-  #   message: "Expiry date is earlier than the statutory two-month minimum."
-  #   rationale: "Section 21 requires at least 2 months notice."
-  #   field: notice_expiry_date
+  - id: s21_notice_period_short
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.notice_period_too_short === true"
+    message: "Expiry date is earlier than the statutory two-month minimum."
+    rationale: "Section 21 requires at least 2 months notice."
+    field: notice_expiry_date
 
 # =============================================================================
 # SECTION 8 RULES (Fault-based eviction with N5 court form)
@@ -343,18 +356,19 @@ section_8_rules:
     field: ground_particulars
 
   # ---------------------------------------------------------------------------
-  # NOTICE PERIOD - NOT IN TS runRuleBasedChecks, commented out for parity
-  # (Notice period is only checked in notice_only via evaluateNoticeCompliance)
+  # NOTICE PERIOD (Phase 13)
+  # Notice period enforcement for complete_pack
   # ---------------------------------------------------------------------------
 
-  # - id: s8_notice_period_short
-  #   severity: blocker
-  #   applies_to: [section_8]
-  #   applies_when:
-  #     - condition: "computed.s8_notice_period_too_short === true"
-  #   message: "Expiry date is earlier than the statutory minimum for the selected grounds."
-  #   rationale: "Notice periods vary by ground: 2 weeks for mandatory, 2 months for discretionary."
-  #   field: notice_expiry_date
+  - id: s8_notice_period_short
+    severity: blocker
+    applies_to: [section_8]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.s8_notice_period_too_short === true"
+    message: "Expiry date is earlier than the statutory minimum for the selected grounds."
+    rationale: "Notice periods vary by ground: 2 weeks for mandatory grounds (1, 2, 5-7, 7A, 7B, 8), 2 months for discretionary."
+    field: notice_expiry_date
 
 # =============================================================================
 # COMMON RULES (Apply to both routes)
@@ -508,6 +522,7 @@ summary:
       rules:
         - s21_deposit_not_protected
         - s21_prescribed_info_missing
+        - s21_deposit_cap_exceeded
         - s21_missing_deposit_amount
         - s21_missing_deposit_date
         - s21_missing_deposit_scheme
@@ -521,6 +536,12 @@ summary:
       label: "Retaliatory Eviction"
       rules:
         - s21_retaliatory_eviction_risk
+        - s21_retaliatory_improvement_notice
+        - s21_retaliatory_emergency_action
+    - id: licensing
+      label: "Property Licensing"
+      rules:
+        - s21_licensing_required_not_licensed
     - id: grounds
       label: "Grounds for Possession"
       rules:
@@ -536,6 +557,9 @@ summary:
         - missing_notice_service_date
         - notice_before_tenancy
         - expiry_before_service
+        - s21_four_month_bar
+        - s21_notice_period_short
+        - s8_notice_period_short
     - id: arrears
       label: "Arrears Data"
       rules:

@@ -42,6 +42,8 @@ export interface ValidationRule {
   message: string;
   rationale: string;
   field?: string | null;
+  /** Feature flag requirement - rule only evaluated when feature is enabled */
+  requires_feature?: string;
 }
 
 export interface SummarySection {
@@ -238,6 +240,43 @@ export interface EvictionFacts {
 
   // Allow additional properties
   [key: string]: any;
+}
+
+// ============================================================================
+// FEATURE FLAGS
+// ============================================================================
+
+/**
+ * Phase 13 feature flag for correctness improvements beyond legacy TS.
+ * When enabled, additional validation rules are evaluated that were
+ * intentionally excluded during the TS-to-YAML migration for parity.
+ *
+ * Enable with: VALIDATION_PHASE13_ENABLED=true
+ */
+export function isPhase13Enabled(): boolean {
+  return process.env.VALIDATION_PHASE13_ENABLED === 'true';
+}
+
+/**
+ * Get list of enabled feature flags for rule filtering.
+ */
+export function getEnabledFeatures(): string[] {
+  const features: string[] = [];
+  if (isPhase13Enabled()) {
+    features.push('phase13');
+  }
+  return features;
+}
+
+/**
+ * Check if a rule should be evaluated based on its feature requirements.
+ */
+function ruleFeatureEnabled(rule: ValidationRule): boolean {
+  if (!rule.requires_feature) {
+    return true; // No feature requirement, always enabled
+  }
+  const enabledFeatures = getEnabledFeatures();
+  return enabledFeatures.includes(rule.requires_feature);
 }
 
 // ============================================================================
@@ -739,6 +778,11 @@ export function evaluateEvictionRules(
   const suggestions: RuleEvaluationResult[] = [];
 
   for (const rule of allRules) {
+    // Check if rule's feature requirement is met
+    if (!ruleFeatureEnabled(rule)) {
+      continue;
+    }
+
     // Check if rule applies to current route
     if (!ruleAppliesToRoute(rule, route)) {
       continue;

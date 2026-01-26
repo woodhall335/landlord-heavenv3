@@ -755,3 +755,365 @@ describe('Rule Counts', () => {
     expect(ruleIds.length).toBeGreaterThanOrEqual(20);
   });
 });
+
+// ============================================================================
+// PHASE 13 CORRECTNESS IMPROVEMENTS TESTS
+// ============================================================================
+// These tests verify that Phase 13 rules are:
+// 1. NOT evaluated when VALIDATION_PHASE13_ENABLED is not set (default behavior)
+// 2. Evaluated when VALIDATION_PHASE13_ENABLED=true
+// 3. Have correct condition logic
+
+import { isPhase13Enabled, getEnabledFeatures } from '@/lib/validation/eviction-rules-engine';
+
+describe('Phase 13 Feature Flag System', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  afterEach(() => {
+    // Restore original environment
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+  });
+
+  describe('isPhase13Enabled', () => {
+    it('should return false when env var is not set', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should return false when env var is set to anything other than "true"', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'false';
+      expect(isPhase13Enabled()).toBe(false);
+
+      process.env.VALIDATION_PHASE13_ENABLED = '1';
+      expect(isPhase13Enabled()).toBe(false);
+    });
+
+    it('should return true when env var is set to "true"', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      expect(isPhase13Enabled()).toBe(true);
+    });
+  });
+
+  describe('getEnabledFeatures', () => {
+    it('should return empty array when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      expect(getEnabledFeatures()).toEqual([]);
+    });
+
+    it('should include "phase13" when Phase 13 is enabled', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      expect(getEnabledFeatures()).toContain('phase13');
+    });
+  });
+});
+
+describe('Phase 13 England Complete Pack Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street',
+    tenancy_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-08-01',
+    deposit_taken: true,
+    deposit_protected: true,
+    deposit_protected_scheme: true,
+    prescribed_info_served: true,
+    epc_provided: true,
+    how_to_rent_provided: true,
+    has_gas_appliances: false,
+  };
+
+  describe('s21_four_month_bar (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const today = new Date();
+      const recentStart = new Date(today);
+      recentStart.setMonth(today.getMonth() - 2);
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        tenancy_start_date: recentStart.toISOString().split('T')[0],
+        notice_service_date: today.toISOString().split('T')[0],
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 is enabled and notice served within 4 months', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const today = new Date();
+      const recentStart = new Date(today);
+      recentStart.setMonth(today.getMonth() - 2);
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        tenancy_start_date: recentStart.toISOString().split('T')[0],
+        notice_service_date: today.toISOString().split('T')[0],
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_four_month_bar')).toBe(true);
+    });
+  });
+
+  describe('s21_deposit_cap_exceeded (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 2000,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+        deposit_reduced_to_legal_cap_confirmed: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 is enabled and deposit exceeds cap', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      // £800/month = £9600/year, max deposit = 5 weeks = £923
+      // £2000 deposit exceeds cap
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 2000,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+        deposit_reduced_to_legal_cap_confirmed: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(true);
+    });
+
+    it('should NOT trigger when deposit is within cap', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      // £800/month = £9600/year, max deposit = 5 weeks = £923
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_amount: 900,
+        rent_amount: 800,
+        rent_frequency: 'monthly',
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_deposit_cap_exceeded')).toBe(false);
+    });
+  });
+
+  describe('s21_licensing_required_not_licensed (Phase 13)', () => {
+    it('should trigger when Phase 13 enabled and licensing required but no valid licence', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        licensing_required: 'hmo',
+        has_valid_licence: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_licensing_required_not_licensed')).toBe(true);
+    });
+
+    it('should NOT trigger when licensing is not required', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        licensing_required: 'not_required',
+        has_valid_licence: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'complete_pack', 'section_21');
+      expect(result.blockers.some((b) => b.id === 's21_licensing_required_not_licensed')).toBe(false);
+    });
+  });
+});
+
+describe('Phase 13 Scotland Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street, Edinburgh',
+    tenancy_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-09-01',
+    scotland_ground_codes: ['1'],
+    issues: {
+      rent_arrears: {
+        pre_action_confirmed: true,
+      },
+    },
+    landlord_registration_number: 'REG123456',
+  };
+
+  describe('ntl_landlord_not_registered (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        landlord_registration_number: undefined,
+        landlord_reg_number: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_landlord_not_registered')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 enabled and no registration number', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        landlord_registration_number: undefined,
+        landlord_reg_number: undefined,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_landlord_not_registered')).toBe(true);
+    });
+  });
+
+  describe('ntl_deposit_not_protected (Phase 13)', () => {
+    it('should trigger when Phase 13 enabled and deposit not protected', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'scotland', 'notice_only', 'notice_to_leave');
+      expect(result.blockers.some((b) => b.id === 'ntl_deposit_not_protected')).toBe(true);
+    });
+  });
+});
+
+describe('Phase 13 Wales Rules', () => {
+  const originalEnv = process.env.VALIDATION_PHASE13_ENABLED;
+
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+    } else {
+      process.env.VALIDATION_PHASE13_ENABLED = originalEnv;
+    }
+    clearConfigCache();
+  });
+
+  const baseValidFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street, Cardiff',
+    contract_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-12-01',
+    rent_smart_wales_registered: true,
+  };
+
+  describe('s173_deposit_not_protected (Phase 13)', () => {
+    it('should NOT trigger when Phase 13 is disabled', () => {
+      delete process.env.VALIDATION_PHASE13_ENABLED;
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.blockers.some((b) => b.id === 's173_deposit_not_protected')).toBe(false);
+    });
+
+    it('should trigger when Phase 13 enabled and deposit not protected', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        deposit_taken: true,
+        deposit_protected: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.blockers.some((b) => b.id === 's173_deposit_not_protected')).toBe(true);
+    });
+  });
+
+  describe('s173_written_statement_missing (Phase 13)', () => {
+    it('should trigger warning when Phase 13 enabled and written statement not provided', () => {
+      process.env.VALIDATION_PHASE13_ENABLED = 'true';
+      clearConfigCache();
+
+      const facts: EvictionFacts = {
+        ...baseValidFacts,
+        written_statement_provided: false,
+      };
+
+      const result = evaluateEvictionRules(facts, 'wales', 'notice_only', 'section_173');
+      expect(result.warnings.some((w) => w.id === 's173_written_statement_missing')).toBe(true);
+    });
+  });
+});

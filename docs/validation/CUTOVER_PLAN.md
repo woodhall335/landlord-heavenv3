@@ -473,6 +473,68 @@ Phase 11B is complete when:
 
 **Lines Removed**: ~2,000+ lines of legacy TS validation code
 
+---
+
+### Phase 13: Correctness Improvements Beyond Legacy TS
+
+**Status**: 🟢 Available (Feature-Flagged)
+
+**Description**: Enhance validation correctness using the YAML rules engine by enabling rules that were intentionally excluded during migration to preserve legacy TS parity.
+
+**Environment Variable**: `VALIDATION_PHASE13_ENABLED=true`
+
+**Objectives**:
+- Improve legal correctness and UX clarity beyond legacy TS behavior
+- Ship enhancements incrementally and safely via feature flag
+- Use YAML as the authoritative source for validation semantics
+
+**Phase 13 Rules (Enabled with Feature Flag)**:
+
+| Jurisdiction | Rule ID | Severity | Description |
+|--------------|---------|----------|-------------|
+| **England (complete_pack)** | | | |
+| | `s21_deposit_cap_exceeded` | blocker | Deposit exceeds Tenant Fees Act 2019 cap |
+| | `s21_four_month_bar` | blocker | Notice within first 4 months of tenancy |
+| | `s21_notice_period_short` | blocker | Expiry date before 2-month minimum |
+| | `s21_licensing_required_not_licensed` | blocker | Unlicensed property requiring licence |
+| | `s21_retaliatory_improvement_notice` | blocker | Improvement notice in effect |
+| | `s21_retaliatory_emergency_action` | blocker | Emergency remedial action in effect |
+| | `s8_notice_period_short` | blocker | Notice period too short for grounds |
+| **Scotland (notice_only)** | | | |
+| | `ntl_landlord_not_registered` | blocker | Missing landlord registration number |
+| | `ntl_pre_action_letter_not_sent` | blocker | Pre-action letter not sent for Ground 1 |
+| | `ntl_pre_action_signposting_missing` | warning | Missing debt advice signposting |
+| | `ntl_ground_1_arrears_threshold` | warning | Less than 3 months arrears |
+| | `ntl_deposit_not_protected` | blocker | Deposit not protected |
+| **Wales (notice_only)** | | | |
+| | `s173_notice_period_short` | blocker | Expiry before 6-month minimum |
+| | `s173_deposit_not_protected` | blocker | Deposit not protected |
+| | `s173_written_statement_missing` | warning | Written statement not provided |
+
+**How to Enable**:
+```bash
+# Enable Phase 13 correctness improvements
+export VALIDATION_PHASE13_ENABLED=true
+```
+
+**Rollout Strategy**:
+1. Enable in staging environment first
+2. Run golden test suite to verify rule behavior
+3. Enable in production with monitoring
+4. Monitor for increased blocker rate (expected as more issues are caught)
+
+**Expected Impact**:
+- Improved legal accuracy for validation
+- More comprehensive protection against invalid notices
+- Clearer user feedback for compliance issues
+- Potential increase in blocker rate as new rules catch previously undetected issues
+
+**Success Criteria**:
+- [ ] All Phase 13 tests passing
+- [ ] No regressions in existing valid cases
+- [ ] Positive user feedback on improved validation
+- [ ] Telemetry confirms rules are firing correctly
+
 ## Rollback Procedures
 
 ### Phase 12 Complete: No Rollback Available
@@ -512,12 +574,13 @@ unset EVICTION_YAML_PRIMARY
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `EVICTION_SHADOW_MODE` | `false` | Enable shadow validation |
-| `EVICTION_YAML_PRIMARY` | `false` | Use YAML as primary validator |
-| `EVICTION_TS_FALLBACK` | `true` | Fall back to TS on YAML errors |
-| `EVICTION_YAML_ONLY` | `false` | **Phase 4**: Bypass TS fallback entirely |
+| `EVICTION_SHADOW_MODE` | `false` | Enable shadow validation (deprecated in Phase 12) |
+| `EVICTION_YAML_PRIMARY` | `false` | Use YAML as primary validator (deprecated in Phase 12) |
+| `EVICTION_TS_FALLBACK` | `true` | Fall back to TS on YAML errors (deprecated in Phase 12) |
+| `EVICTION_YAML_ONLY` | `false` | **Phase 4**: Bypass TS fallback entirely (deprecated in Phase 12) |
 | `EVICTION_TELEMETRY_ENABLED` | `false` | Publish validation metrics |
 | `VALIDATION_TELEMETRY_SAMPLE_RATE` | `1.0` | Sampling rate (0.0-1.0) |
+| `VALIDATION_PHASE13_ENABLED` | `false` | **Phase 13**: Enable correctness improvements beyond legacy TS |
 
 ## Timeline
 
@@ -527,6 +590,10 @@ unset EVICTION_YAML_PRIMARY
 | 2. Dual-Run | Complete | 2 weeks | 99% prod parity |
 | 3. YAML Primary | Complete | 2 weeks | No fallbacks |
 | 4/10. YAML Only | Complete | - | YAML-only enabled |
+| 11A. Stability Setup | Complete | - | Dashboards, alerts, tracker ready |
+| 11B. Stability Execution | Complete | 14 days | All metrics within thresholds |
+| 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
+| 13. Correctness Improvements | Available | Incremental | Feature-flagged enhancements |
 | 11A. Stability Setup | Complete | - | Dashboards, alerts, tracker ready |
 | 11B. Stability Execution | Complete | 14 days | All metrics within thresholds |
 | 12. TS Code Removal | Complete | - | Code deleted, YAML-only active |
