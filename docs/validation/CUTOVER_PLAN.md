@@ -1560,11 +1560,173 @@ console.log(`Annual support savings: £${savings.total_annual}`);
 - [x] Adoption metrics module provides programmatic access to metrics
 - [x] Clear recommendations for Phase 22+ candidates
 
-**Phase 22+ Candidates** (documented in executive summary):
+**Phase 23+ Candidates** (documented in executive summary):
 
-1. **Legal Change Ingestion Pipeline**: Automate detection of legislative changes and flag impacted rules
-2. **New Domain Expansion**: Extend validation platform to additional product areas (e.g., money claims)
-3. **Advanced Analytics & ML**: Add predictive capabilities and anomaly detection
+1. **New Domain Expansion**: Extend validation platform to additional product areas (e.g., money claims)
+2. **Advanced Analytics & ML**: Add predictive capabilities and anomaly detection
+3. **Automated Source Scraping**: HTTP fetching for RSS/pages with content diffing
+
+---
+
+### Phase 22: Legal Change Ingestion + Review Workflow + Admin Portal Hooks
+
+**Status**: ✅ Complete
+
+**Description**: Build a legal change ingestion pipeline that detects relevant updates, maps them to impacted rule IDs, and supports an auditable review/approval workflow with admin portal integration.
+
+**Objectives**:
+- Ensure no legal changes can be missed silently
+- Every change is triaged with an audit trail
+- Impacted rules are identifiable through automated analysis
+- Admin portal can display and manage events via provided endpoints
+
+**Deliverables**:
+
+- [x] **Legal Source Registry** (`src/lib/validation/legal-source-registry.ts`)
+  - Defines monitored sources by jurisdiction/topic
+  - Configures update frequency and trust levels
+  - Sources: UK Legislation, GOV.UK, Welsh Government, Scottish Government, Deposit Schemes, etc.
+  - Functions: `getEnabledSources()`, `getSourcesByJurisdiction()`, `getSourcesForRule()`
+
+- [x] **Change Detection & Event System** (`src/lib/validation/legal-change-events.ts`)
+  - Legal Change Event model with full lifecycle tracking
+  - State machine: new → triaged → action_required/no_action → implemented → rolled_out → closed
+  - Event creation, updates, state transitions with validation
+  - Audit trail through `stateHistory` on each event
+  - Functions: `createEvent()`, `transitionEvent()`, `listEvents()`, `exportEvents()`
+
+- [x] **Impact Analysis** (`src/lib/validation/legal-impact-analyzer.ts`)
+  - Maps events to impacted rule IDs, products, routes
+  - Keyword matching, legal reference matching, topic matching
+  - Confidence scoring based on matches and trust level
+  - Severity determination: emergency, legal_critical, behavioral, clarification
+  - Functions: `analyzeImpact()`, `analyzeAndAssess()`, `getRuleMappings()`
+
+- [x] **Workflow & Governance** (`src/lib/validation/legal-change-workflow.ts`)
+  - Workflow actions: triage, mark_action_required, mark_no_action, mark_implemented, mark_rolled_out, close, reopen
+  - Required reviewers based on severity and jurisdiction (aligns with Phase 19)
+  - Governance checks before state transitions
+  - Audit logging for all actions
+  - Functions: `executeWorkflowAction()`, `runGovernanceChecks()`, `getRequiredReviewers()`
+
+- [x] **Admin Portal Integration** (`src/lib/validation/legal-change-api.ts`)
+  - API-style services for admin UI integration
+  - Event management: list, details, update status, link PRs/rollouts/incidents
+  - Dashboard data: summary stats, recent events, recent activity
+  - Audit log access
+  - Export/import functionality
+  - Functions: `apiListEvents()`, `apiGetEventDetails()`, `apiExecuteWorkflowAction()`, `apiGetDashboard()`
+
+- [x] **Ingestion CLI** (`scripts/legal-change-ingest.ts`)
+  - CLI: `npm run legal-change:ingest`
+  - Commands: status, check, manual, list, details, triage, action, analyze, export, sources
+  - JSON output option for automation
+
+- [x] **Tests** (`tests/validation/phase22-legal-changes.test.ts`)
+  - Source registry tests
+  - Event creation and state transition tests
+  - Impact analysis tests
+  - Workflow governance tests
+  - Admin API tests
+  - Full workflow integration tests
+
+- [x] **Documentation & Runbook** (`docs/validation/LEGAL_CHANGE_INGESTION.md`)
+  - Architecture overview
+  - Source registry documentation
+  - Workflow state machine
+  - Admin API reference
+  - CLI reference
+  - Operations runbook
+  - Scheduled tasks guidance
+
+**Usage - CLI**:
+
+```bash
+# Show system status
+npm run legal-change:ingest status
+
+# Create manual event
+npm run legal-change:ingest manual \
+  --title="Deposit Cap Amendment" \
+  --summary="Changes to Tenant Fees Act deposit limits" \
+  --jurisdictions=england \
+  --topics=deposit_protection
+
+# List new events
+npm run legal-change:ingest list --state=new
+
+# Triage an event
+npm run legal-change:ingest triage lce_abc123 --actor=legal-analyst
+
+# Mark implemented with PR link
+npm run legal-change:ingest action lce_abc123 \
+  --action=mark_implemented \
+  --pr-url=https://github.com/org/repo/pull/123
+
+# Export for backup
+npm run legal-change:ingest export --output=backup.json
+```
+
+**Usage - Admin API**:
+
+```typescript
+import {
+  apiListEvents,
+  apiGetEventDetails,
+  apiExecuteWorkflowAction,
+  apiGetDashboard,
+  apiAnalyzeImpact,
+} from '@/lib/validation/legal-change-api';
+
+// Get dashboard data
+const dashboard = apiGetDashboard();
+
+// List events requiring attention
+const events = apiListEvents({
+  filter: { states: ['new', 'action_required'] }
+});
+
+// Get event details
+const details = apiGetEventDetails(eventId);
+
+// Execute workflow action
+const result = apiExecuteWorkflowAction({
+  eventId,
+  action: 'triage',
+  actor: 'analyst@example.com',
+});
+```
+
+**Workflow States**:
+
+| State | Description | Next States |
+|-------|-------------|-------------|
+| `new` | Just detected | triaged |
+| `triaged` | Impact assessed | action_required, no_action |
+| `action_required` | Needs implementation | implemented |
+| `no_action` | No code changes needed | closed |
+| `implemented` | Code changes merged | rolled_out |
+| `rolled_out` | Deployed to production | closed |
+| `closed` | Complete | (reopenable via triaged) |
+
+**Required Reviewers by Severity**:
+
+| Severity | Required Reviewers |
+|----------|-------------------|
+| `emergency` | @on-call, @engineering, @product, @validation-team, @legal-{jurisdiction} |
+| `legal_critical` | @engineering, @product, @legal-{jurisdiction}, @validation-team |
+| `behavioral` | @product, @validation-team |
+| `clarification` | @validation-team |
+
+**Success Criteria**:
+- [x] Legal source registry with 15+ sources across jurisdictions
+- [x] Event model with full state machine and audit trail
+- [x] Impact analysis maps changes to rules with confidence scoring
+- [x] Workflow governance aligns with Phase 19
+- [x] Admin API provides full event management capabilities
+- [x] CLI supports all operations
+- [x] Tests cover all components
+- [x] Documentation includes runbook for operations
 
 ---
 
@@ -1694,6 +1856,7 @@ unset EVICTION_YAML_PRIMARY
 | 19. Governance & Change Management | Complete | - | CODEOWNERS, PR templates, emergency suppression |
 | 20. Productization & Visibility | Complete | - | Dashboard, rule lookup, enterprise features |
 | 21. Adoption, Measurement & ROI | Complete | - | Metrics framework, ROI report, executive summary |
+| 22. Legal Change Ingestion | Complete | - | Source registry, event system, impact analysis, admin API |
 
 ## Risk Mitigation
 
