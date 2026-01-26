@@ -71,6 +71,18 @@ export interface EnhancedValidationMessage {
 let cachedCatalog: MessageCatalog | null = null;
 
 /**
+ * Phase 17: Pre-built flat index for O(1) message lookup
+ * Maps ruleId directly to Phase13Message
+ */
+let flatMessageIndex: Map<string, Phase13Message> | null = null;
+
+/**
+ * Phase 17: Pre-built support category index for O(1) lookup
+ * Maps ruleId to category info
+ */
+let supportCategoryIndex: Map<string, { category: string; priority: 'low' | 'medium' | 'high'; typicalResolution: string }> | null = null;
+
+/**
  * Load the Phase 13 message catalog from YAML
  */
 function loadMessageCatalog(): MessageCatalog {
@@ -86,6 +98,10 @@ function loadMessageCatalog(): MessageCatalog {
   try {
     const content = fs.readFileSync(catalogPath, 'utf8');
     cachedCatalog = yaml.load(content) as MessageCatalog;
+
+    // Phase 17: Build flat indexes on load for O(1) lookup
+    buildFlatIndexes(cachedCatalog);
+
     return cachedCatalog;
   } catch (error) {
     // Return minimal default if catalog cannot be loaded
@@ -108,10 +124,50 @@ function loadMessageCatalog(): MessageCatalog {
 }
 
 /**
+ * Phase 17: Build flat indexes from catalog for O(1) lookups
+ */
+function buildFlatIndexes(catalog: MessageCatalog): void {
+  // Build message index
+  flatMessageIndex = new Map<string, Phase13Message>();
+
+  const sections = [
+    catalog.england_s21,
+    catalog.england_s8,
+    catalog.wales_s173,
+    catalog.scotland_ntl,
+  ];
+
+  for (const section of sections) {
+    if (section) {
+      for (const [ruleId, message] of Object.entries(section)) {
+        flatMessageIndex.set(ruleId, message);
+      }
+    }
+  }
+
+  // Build support category index
+  supportCategoryIndex = new Map();
+
+  if (catalog.support_categories) {
+    for (const [categoryName, category] of Object.entries(catalog.support_categories)) {
+      for (const ruleId of category.rules) {
+        supportCategoryIndex.set(ruleId, {
+          category: categoryName,
+          priority: category.escalation_priority,
+          typicalResolution: category.typical_resolution,
+        });
+      }
+    }
+  }
+}
+
+/**
  * Clear the cached catalog (for testing)
  */
 export function clearMessageCatalogCache(): void {
   cachedCatalog = null;
+  flatMessageIndex = null;
+  supportCategoryIndex = null;
 }
 
 // ============================================================================
@@ -120,6 +176,7 @@ export function clearMessageCatalogCache(): void {
 
 /**
  * Get the section for a rule ID based on its prefix
+ * @deprecated Phase 17: Use flatMessageIndex for O(1) lookup instead
  */
 function getSectionForRule(ruleId: string, catalog: MessageCatalog): MessageCatalogSection | null {
   if (ruleId.startsWith('s21_')) {
@@ -140,16 +197,23 @@ function getSectionForRule(ruleId: string, catalog: MessageCatalog): MessageCata
 /**
  * Get enhanced message for a Phase 13 rule
  * Returns null if the rule is not a Phase 13 rule or message not found
+ *
+ * Phase 17: Uses O(1) flat index lookup for performance
  */
 export function getPhase13Message(ruleId: string): EnhancedValidationMessage | null {
+  // Ensure catalog is loaded and indexes are built
   const catalog = loadMessageCatalog();
-  const section = getSectionForRule(ruleId, catalog);
 
-  if (!section || !section[ruleId]) {
+  // Phase 17: O(1) lookup via flat index
+  if (!flatMessageIndex) {
     return null;
   }
 
-  const message = section[ruleId];
+  const message = flatMessageIndex.get(ruleId);
+  if (!message) {
+    return null;
+  }
+
   const baseUrl = catalog.help_config?.base_url || '';
 
   return {
@@ -200,24 +264,25 @@ export function getHelpConfig(): HelpConfig {
 /**
  * Get support category for a rule
  */
+/**
+ * Get support category for a rule
+ *
+ * Phase 17: Uses O(1) pre-built index lookup for performance
+ */
 export function getSupportCategory(ruleId: string): {
   category: string;
   priority: 'low' | 'medium' | 'high';
   typicalResolution: string;
 } | null {
-  const catalog = loadMessageCatalog();
+  // Ensure catalog is loaded and indexes are built
+  loadMessageCatalog();
 
-  for (const [categoryName, category] of Object.entries(catalog.support_categories)) {
-    if (category.rules.includes(ruleId)) {
-      return {
-        category: categoryName,
-        priority: category.escalation_priority,
-        typicalResolution: category.typical_resolution,
-      };
-    }
+  // Phase 17: O(1) lookup via pre-built index
+  if (!supportCategoryIndex) {
+    return null;
   }
 
-  return null;
+  return supportCategoryIndex.get(ruleId) || null;
 }
 
 // ============================================================================

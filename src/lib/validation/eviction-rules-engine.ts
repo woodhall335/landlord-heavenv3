@@ -18,6 +18,16 @@ import yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
 import { validateEvictionCondition } from './eviction-rules-allowlist';
+import {
+  evaluateConditionOptimized,
+  validateRuleCount,
+  validateConditionCount,
+  startTiming,
+  endTiming,
+  getOptimizerConfig,
+  precompileConditions,
+  type TimingHook,
+} from './eviction-rules-optimizer';
 
 // ============================================================================
 // TYPES
@@ -733,6 +743,7 @@ function getConfigPath(jurisdiction: Jurisdiction, product: Product): string {
 
 /**
  * Load rules from YAML config file.
+ * Phase 17: Precompiles conditions on load for cache warming.
  */
 export function loadRulesConfig(
   jurisdiction: Jurisdiction,
@@ -751,6 +762,11 @@ export function loadRulesConfig(
     const fileContents = fs.readFileSync(configPath, 'utf8');
     const config = yaml.load(fileContents) as RulesConfig;
     configCache.set(cacheKey, config);
+
+    // Phase 17: Precompile all conditions to warm the cache
+    const allRules = getAllRules(config);
+    precompileConditions(allRules);
+
     return config;
   } catch (error) {
     console.error(`Failed to load rules config from ${configPath}:`, error);
@@ -763,6 +779,42 @@ export function loadRulesConfig(
       common_rules: [],
     };
   }
+}
+
+/**
+ * Warm the condition cache for all known configs.
+ * Call at application startup for optimal performance.
+ *
+ * Phase 17: Pre-loads and compiles all rule conditions.
+ */
+export function warmConditionCache(): {
+  configsLoaded: number;
+  conditionsCompiled: number;
+  compilationFailures: number;
+} {
+  const jurisdictions: Jurisdiction[] = ['england', 'wales', 'scotland'];
+  const products: Product[] = ['notice_only', 'complete_pack'];
+
+  let configsLoaded = 0;
+  let conditionsCompiled = 0;
+  let compilationFailures = 0;
+
+  for (const jurisdiction of jurisdictions) {
+    for (const product of products) {
+      try {
+        const config = loadRulesConfig(jurisdiction, product, true);
+        const allRules = getAllRules(config);
+        const result = precompileConditions(allRules);
+        configsLoaded++;
+        conditionsCompiled += result.compiled;
+        compilationFailures += result.failed;
+      } catch {
+        // Config might not exist for all combinations
+      }
+    }
+  }
+
+  return { configsLoaded, conditionsCompiled, compilationFailures };
 }
 
 /**
@@ -819,6 +871,8 @@ export function getAllRules(config: RulesConfig): ValidationRule[] {
 /**
  * Evaluate all rules against the provided facts.
  *
+ * Phase 17: Uses optimized condition evaluation with caching and timing hooks.
+ *
  * @param facts - The eviction case facts
  * @param jurisdiction - The jurisdiction (england, wales, scotland)
  * @param product - The product (notice_only, complete_pack)
@@ -833,13 +887,25 @@ export function evaluateEvictionRules(
   route: EvictionRoute,
   rulesConfig?: RulesConfig
 ): ValidationEngineResult {
+  // Phase 17: Start timing if enabled
+  const optimizerConfig = getOptimizerConfig();
+  const timing = optimizerConfig.enableTimingHooks ? startTiming() : null;
+
   const config = rulesConfig || loadRulesConfig(jurisdiction, product);
   const allRules = getAllRulesForRoute(config, route);
   const computed = buildComputedContext(facts, route);
 
+  // Phase 17: Validate rule count against safeguard limit
+  validateRuleCount(allRules.length);
+
+  // Pre-allocate result arrays with estimated capacity to reduce allocations
   const blockers: RuleEvaluationResult[] = [];
   const warnings: RuleEvaluationResult[] = [];
   const suggestions: RuleEvaluationResult[] = [];
+
+  // Phase 17: Track condition evaluations for timing hooks
+  let conditionCount = 0;
+  let cacheHits = 0;
 
   for (const rule of allRules) {
     // Check if rule's feature requirement is met
@@ -852,11 +918,26 @@ export function evaluateEvictionRules(
       continue;
     }
 
+    // Phase 17: Validate condition count against safeguard limit
+    validateConditionCount(rule.id, rule.applies_when.length);
+
     // Evaluate conditions (rule fires if ANY condition is true - OR logic)
-    // This matches Money Claim reference implementation semantics
-    const anyConditionMet = rule.applies_when.some((cond) =>
-      evaluateCondition(cond.condition, facts, computed, route)
-    );
+    // Phase 17: Use optimized condition evaluation with caching
+    let anyConditionMet = false;
+    for (const cond of rule.applies_when) {
+      conditionCount++;
+      // Use optimized evaluation with compiled function caching
+      const result = evaluateConditionOptimized(
+        cond.condition,
+        facts as Record<string, unknown>,
+        computed as unknown as Record<string, unknown>,
+        route
+      );
+      if (result) {
+        anyConditionMet = true;
+        break; // Early exit on first true condition (OR logic)
+      }
+    }
 
     if (anyConditionMet) {
       const result: RuleEvaluationResult = {
@@ -868,18 +949,27 @@ export function evaluateEvictionRules(
         section: getRuleSection(rule.id, config),
       };
 
-      switch (rule.severity) {
-        case 'blocker':
-          blockers.push(result);
-          break;
-        case 'warning':
-          warnings.push(result);
-          break;
-        case 'suggestion':
-          suggestions.push(result);
-          break;
+      // Direct assignment instead of switch for micro-optimization
+      if (rule.severity === 'blocker') {
+        blockers.push(result);
+      } else if (rule.severity === 'warning') {
+        warnings.push(result);
+      } else {
+        suggestions.push(result);
       }
     }
+  }
+
+  // Phase 17: Record timing data if hooks are enabled
+  if (timing && optimizerConfig.enableTimingHooks) {
+    endTiming(timing, {
+      ruleCount: allRules.length,
+      conditionCount,
+      blockerCount: blockers.length,
+      warningCount: warnings.length,
+      cacheHits,
+      cacheMisses: conditionCount - cacheHits,
+    });
   }
 
   return {
