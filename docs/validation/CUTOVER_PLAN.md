@@ -1309,6 +1309,125 @@ npm run validation:governance-check
 
 ---
 
+### Phase 20: Validation Platform Productization & Visibility
+
+**Status**: ✅ Complete
+
+**Description**: Expose validation insights and controls to product, support, and (optionally) customers to unlock business value and reduce operational load.
+
+**Objectives**:
+- Make validation outcomes visible and understandable outside engineering
+- Reduce support burden via self-service insights
+- Enable enterprise/commercial leverage where appropriate
+
+**Scope**:
+- Validation outcomes and metrics
+- Phase 13+ correctness rules
+- Tenant overrides and suppressions
+- Explainability data
+
+**Deliverables**:
+
+- [x] **Validation Insights Dashboard** (`scripts/validation-insights-dashboard.ts`)
+  - Validation volume by jurisdiction/product
+  - Top blockers & warnings
+  - Newly introduced blockers (Phase 13+)
+  - Tenant override usage
+  - Emergency suppressions status
+  - CLI tool: `npm run validation:dashboard`
+  - JSON output option: `npm run validation:dashboard -- --json`
+
+- [x] **Support Rule Lookup Tool** (`scripts/validation-rule-lookup.ts`)
+  - Rule meaning and description
+  - Legal basis lookup
+  - How-to-fix guidance
+  - Escalation path information
+  - Phase 13+ status check
+  - Tenant override status
+  - Emergency suppression status
+  - CLI tool: `npm run validation:rule-lookup <rule_id>`
+  - Search mode: `npm run validation:rule-lookup -- --search <keyword>`
+  - List mode: `npm run validation:rule-lookup -- --list`
+
+- [x] **Customer-Facing Explainability Policy** (`docs/validation/EXPLAINABILITY_POLICY.md`)
+  - Tier-based explainability levels (Basic, Enhanced, Full)
+  - User-visible vs restricted content definitions
+  - Jurisdiction-specific rules
+  - Implementation guidelines and code examples
+  - "What changed?" communication policy
+
+- [x] **Enterprise Features Documentation** (`docs/validation/ENTERPRISE_FEATURES.md`)
+  - Feature matrix by tier
+  - Custom rules capabilities and limits
+  - Rule overrides with legal signoff requirements
+  - Audit exports for compliance teams
+  - Portfolio validation history
+  - API access documentation
+  - Commercial terms and SLAs
+
+**Usage - Validation Dashboard**:
+
+```bash
+# Human-readable dashboard
+npm run validation:dashboard
+
+# JSON output for automation
+npm run validation:dashboard -- --json
+
+# Filter by time period
+npm run validation:dashboard -- --period=7d
+npm run validation:dashboard -- --period=30d
+```
+
+**Usage - Rule Lookup**:
+
+```bash
+# Look up a specific rule
+npm run validation:rule-lookup s21_deposit_not_protected
+
+# Search rules by keyword
+npm run validation:rule-lookup -- --search deposit
+
+# List all rules
+npm run validation:rule-lookup -- --list
+
+# JSON output
+npm run validation:rule-lookup s21_deposit_not_protected -- --json
+```
+
+**Enterprise Features Summary**:
+
+| Feature | Free | Pro | Enterprise |
+|---------|------|-----|------------|
+| Real-time validation | Yes | Yes | Yes |
+| Enhanced messages | Basic | Yes | Yes |
+| How-to-fix guidance | No | Yes | Yes |
+| Legal references | No | Simplified | Full |
+| Custom rules | No | No | Yes |
+| Rule overrides | No | No | Yes |
+| Audit exports | No | No | Yes |
+| API access | No | Limited | Full |
+| Explainability mode | No | No | Yes |
+
+**What's Configurable vs Fixed by Law**:
+
+| Configurable | Fixed by Law |
+|--------------|--------------|
+| Custom compliance rules | Notice period minimums |
+| Message text overrides | Deposit protection check |
+| Warning → Blocker upgrades | Gas safety certificate |
+| Internal workflow rules | Landlord registration |
+| Data quality checks | Prescribed information |
+
+**Success Criteria**:
+- [x] Support can answer validation questions without engineering help
+- [x] Product can see impact of new rules via dashboard
+- [x] Enterprise features are clearly bounded and auditable
+- [x] No change to validation correctness or performance
+- [x] Explainability policy documented for all tiers
+
+---
+
 ## Future Correctness Phases Policy
 
 This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
@@ -1433,6 +1552,7 @@ unset EVICTION_YAML_PRIMARY
 | 17. Performance Hardening | Complete | - | Caching, safeguards, O(1) lookups |
 | 18. Rule Authoring & Expansion | Complete | - | Linting CLI, explainability, multi-tenant |
 | 19. Governance & Change Management | Complete | - | CODEOWNERS, PR templates, emergency suppression |
+| 20. Productization & Visibility | Complete | - | Dashboard, rule lookup, enterprise features |
 
 ## Risk Mitigation
 
