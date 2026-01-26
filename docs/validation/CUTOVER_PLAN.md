@@ -1192,6 +1192,123 @@ productRegistry.has('eviction-notices');  // true
 
 ---
 
+### Phase 19: Validation Platform Governance & Change Management
+
+**Status**: ✅ Complete
+
+**Description**: Establish formal governance, ownership, and change controls to prevent accidental or unreviewed rule changes and ensure legal, product, and engineering alignment.
+
+**Objectives**:
+- Prevent accidental or unreviewed rule changes
+- Make ownership and escalation explicit
+- Ensure legal, product, and engineering are aligned on changes
+
+**Scope**:
+- YAML rules (`config/legal-requirements/**/*.yaml`)
+- Message catalog (`config/validation/phase13-messages.yaml`)
+- Tenant overrides (`src/lib/validation/rule-targeting.ts`)
+- Feature flags (`VALIDATION_*` environment variables)
+
+**Deliverables**:
+
+- [x] **Governance Documentation** (`docs/validation/GOVERNANCE.md`)
+  - Ownership model with RACI matrix
+  - Change classification (Safe, Behavioral, Legal-critical, Emergency)
+  - Review requirements per change type
+  - PR process and reviewer checklists
+  - Audit trail and compliance requirements
+  - Emergency procedures
+
+- [x] **PR Templates** (`.github/PULL_REQUEST_TEMPLATE/`)
+  - `validation-safe.md` - Low-risk changes (typos, comments)
+  - `validation-behavioral.md` - Behavior changes (new warnings/suggestions)
+  - `validation-legal-critical.md` - Legal enforcement changes (blockers)
+  - `validation-emergency.md` - Critical fixes requiring immediate deployment
+  - `validation-tenant-override.md` - Tenant-specific rule overrides
+
+- [x] **CODEOWNERS** (`.github/CODEOWNERS`)
+  - Jurisdiction-specific owners for rule files
+  - Validation engine code owners
+  - Documentation owners
+
+- [x] **Emergency Suppression System** (`src/lib/validation/emergency-suppressions.ts`)
+  - "Break glass" mechanism for immediate rule suppression
+  - Environment variable suppression: `VALIDATION_SUPPRESS_RULES=rule1,rule2`
+  - Code-level suppression with audit trail
+  - Suppression status reporting and logging
+  - Integration with validation engine via `filterSuppressedRules()`
+
+- [x] **Governance Check Script** (`scripts/validation-governance-check.ts`)
+  - CI-integrated governance compliance checking
+  - Checks: emergency suppressions, blocker legal basis, rule metadata, test coverage, documentation
+  - Added to CI pipeline: `npm run validation:governance-check`
+
+**Change Classification**:
+
+| Classification | Description | Required Reviewers | Test Requirements |
+|----------------|-------------|-------------------|-------------------|
+| **Safe** | Typos, comments, formatting | 1 engineering | Existing tests pass |
+| **Behavioral** | New suggestions, warnings | 1 engineering + 1 product | New test cases |
+| **Legal-critical** | New blockers, severity changes | 1 engineering + 1 product + legal review | Golden tests, staging validation |
+| **Emergency** | Production hotfix | 2 engineering + post-incident review | Minimal, expedited |
+
+**Ownership Model**:
+
+| Component | Owner | Reviewers |
+|-----------|-------|-----------|
+| `config/legal-requirements/england/**` | Validation Team | @validation-team + @legal-england |
+| `config/legal-requirements/wales/**` | Validation Team | @validation-team + @legal-wales |
+| `config/legal-requirements/scotland/**` | Validation Team | @validation-team + @legal-scotland |
+| `src/lib/validation/**` | Platform Engineering | @platform-eng |
+| `config/validation/phase13-messages.yaml` | Product | @product-team |
+| `docs/validation/**` | Validation Team | @validation-team |
+
+**Emergency Suppression Procedure**:
+
+1. **Immediate (no deploy)**:
+   ```bash
+   # Suppress via environment variable
+   export VALIDATION_SUPPRESS_RULES=problematic_rule_id
+   ```
+
+2. **Short-term (with deploy)**:
+   ```typescript
+   // src/lib/validation/emergency-suppressions.ts
+   export const EMERGENCY_SUPPRESSED_RULES: string[] = [
+     'rule_id',  // 2026-01-26 - Reason - INC-123 - Restore by 2026-01-28
+   ];
+   ```
+
+3. **Check suppression status**:
+   ```typescript
+   import { getSuppressionStatus } from '@/lib/validation/emergency-suppressions';
+   const status = getSuppressionStatus();
+   console.log(status.suppressedRules);
+   ```
+
+**Usage - Governance Check**:
+
+```bash
+# Run governance check
+npm run validation:governance-check
+
+# Output shows:
+# - Emergency suppression status
+# - Blocker rules without legal references
+# - Missing rule metadata
+# - Test coverage status
+# - Documentation completeness
+```
+
+**Success Criteria**:
+- [x] No rule changes can land without correct review (CODEOWNERS enforced)
+- [x] High-risk changes are obvious via PR templates
+- [x] Platform ownership is clear and documented
+- [x] Emergency suppression procedure is operational
+- [x] Governance check integrated into CI
+
+---
+
 ## Future Correctness Phases Policy
 
 This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
@@ -1315,6 +1432,7 @@ unset EVICTION_YAML_PRIMARY
 | 16. UX Messaging | Complete | - | Message catalog, support guide, tests |
 | 17. Performance Hardening | Complete | - | Caching, safeguards, O(1) lookups |
 | 18. Rule Authoring & Expansion | Complete | - | Linting CLI, explainability, multi-tenant |
+| 19. Governance & Change Management | Complete | - | CODEOWNERS, PR templates, emergency suppression |
 
 ## Risk Mitigation
 

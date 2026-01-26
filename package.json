@@ -33,7 +33,8 @@
     "validation:status": "npx tsx scripts/validation-status.ts",
     "validation:phase14-report": "npx tsx scripts/phase14-impact-report.ts",
     "validation:lint-rules": "npx tsx scripts/validation-lint-rules.ts",
-    "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants && npm run audit:tenancy-clauses && npm run audit:seo-metadata && npm run audit:eviction-rules && npm run validation:lint-rules"
+    "validation:governance-check": "npx tsx scripts/validation-governance-check.ts",
+    "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants && npm run audit:tenancy-clauses && npm run audit:seo-metadata && npm run audit:eviction-rules && npm run validation:lint-rules && npm run validation:governance-check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
