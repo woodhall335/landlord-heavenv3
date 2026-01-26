@@ -953,3 +953,398 @@ export function deriveJurisdictionFromFacts(
 export function deriveRouteFromFacts(facts: Record<string, any>): string {
   return facts.selected_notice_route || facts.eviction_route || 'unknown';
 }
+
+// =============================================================================
+// PHASE 8: YAML PRIMARY VALIDATION
+// =============================================================================
+
+/**
+ * Fallback reason codes for telemetry.
+ */
+export type FallbackReason =
+  | 'yaml_error'           // YAML engine threw an error
+  | 'yaml_no_result'       // YAML returned undefined/null
+  | 'yaml_disabled'        // YAML primary not enabled
+  | 'explicit_fallback';   // TS fallback explicitly requested
+
+/**
+ * Result from YAML primary validation.
+ */
+export interface YamlPrimaryValidationResult {
+  /** Whether YAML was used as primary */
+  yamlPrimary: boolean;
+  /** Whether TS fallback was used */
+  usedFallback: boolean;
+  /** Reason for fallback if used */
+  fallbackReason?: FallbackReason;
+  /** Blockers from the authoritative source */
+  blockers: Array<{
+    id: string;
+    severity: 'blocker';
+    message: string;
+    userFix?: string;
+  }>;
+  /** Warnings from the authoritative source */
+  warnings: Array<{
+    id: string;
+    severity: 'warning';
+    message: string;
+    userFix?: string;
+  }>;
+  /** Whether validation passed (no blockers) */
+  isValid: boolean;
+  /** Duration of the primary validation in ms */
+  durationMs: number;
+  /** Telemetry event if recorded */
+  telemetry?: ValidationTelemetryEvent;
+}
+
+/**
+ * Parameters for YAML primary validation.
+ */
+export interface YamlPrimaryValidationParams {
+  /** Jurisdiction */
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  /** Product type */
+  product: 'notice_only' | 'complete_pack';
+  /** Eviction route */
+  route: string;
+  /** Wizard facts for validation */
+  facts: Record<string, any>;
+  /** TS validation function to use as fallback */
+  tsFallbackFn: () => {
+    blockers: Array<{ code: string; message?: string; legal_reason?: string; user_fix_hint?: string }>;
+    warnings: Array<{ code: string; message?: string; legal_reason?: string; user_fix_hint?: string }>;
+  };
+}
+
+// Fallback counter for monitoring
+let fallbackCount = 0;
+let totalYamlPrimaryCount = 0;
+
+/**
+ * Get fallback statistics for monitoring.
+ */
+export function getFallbackStats(): {
+  totalRequests: number;
+  fallbackCount: number;
+  fallbackRate: number;
+} {
+  return {
+    totalRequests: totalYamlPrimaryCount,
+    fallbackCount,
+    fallbackRate: totalYamlPrimaryCount > 0 ? fallbackCount / totalYamlPrimaryCount : 0,
+  };
+}
+
+/**
+ * Reset fallback statistics (for testing).
+ */
+export function resetFallbackStats(): void {
+  fallbackCount = 0;
+  totalYamlPrimaryCount = 0;
+}
+
+/**
+ * Run validation with YAML as primary and TS as fallback.
+ *
+ * Phase 8: YAML Primary Cutover
+ *
+ * When EVICTION_YAML_PRIMARY=true:
+ * 1. YAML validation runs first and is authoritative
+ * 2. If YAML errors or returns no result, TS fallback is used
+ * 3. Telemetry records which engine was used and any fallback events
+ *
+ * When EVICTION_YAML_PRIMARY=false:
+ * 1. TS validation is used directly (no YAML)
+ * 2. This is the safe rollback state
+ *
+ * @param params - Validation parameters including TS fallback function
+ * @returns Validation result from the authoritative source
+ */
+export async function runYamlPrimaryValidation(
+  params: YamlPrimaryValidationParams
+): Promise<YamlPrimaryValidationResult> {
+  const startTime = Date.now();
+  totalYamlPrimaryCount++;
+
+  // If YAML primary is not enabled, use TS directly
+  if (!isYamlPrimary()) {
+    const tsResult = params.tsFallbackFn();
+    return {
+      yamlPrimary: false,
+      usedFallback: true,
+      fallbackReason: 'yaml_disabled',
+      blockers: tsResult.blockers.map((b) => ({
+        id: normalizeId(b.code),
+        severity: 'blocker' as const,
+        message: b.message || b.legal_reason || b.code,
+        userFix: b.user_fix_hint,
+      })),
+      warnings: tsResult.warnings.map((w) => ({
+        id: normalizeId(w.code),
+        severity: 'warning' as const,
+        message: w.message || w.legal_reason || w.code,
+        userFix: w.user_fix_hint,
+      })),
+      isValid: tsResult.blockers.length === 0,
+      durationMs: Date.now() - startTime,
+    };
+  }
+
+  // YAML Primary Mode
+  try {
+    // Import eviction rules engine dynamically to avoid circular deps
+    const { evaluateEvictionRules } = await import('./eviction-rules-engine');
+
+    // Run YAML validation
+    const yamlResult = evaluateEvictionRules(
+      params.facts,
+      params.jurisdiction as Jurisdiction,
+      params.product as Product,
+      params.route as EvictionRoute
+    );
+
+    // Check if YAML returned a valid result
+    if (!yamlResult || (!yamlResult.blockers && !yamlResult.warnings)) {
+      // YAML returned no result - fall back to TS
+      fallbackCount++;
+      console.warn(
+        `[YamlPrimary] YAML returned no result, falling back to TS: ${params.jurisdiction}/${params.product}/${params.route}`
+      );
+
+      const tsResult = params.tsFallbackFn();
+      return {
+        yamlPrimary: false,
+        usedFallback: true,
+        fallbackReason: 'yaml_no_result',
+        blockers: tsResult.blockers.map((b) => ({
+          id: normalizeId(b.code),
+          severity: 'blocker' as const,
+          message: b.message || b.legal_reason || b.code,
+          userFix: b.user_fix_hint,
+        })),
+        warnings: tsResult.warnings.map((w) => ({
+          id: normalizeId(w.code),
+          severity: 'warning' as const,
+          message: w.message || w.legal_reason || w.code,
+          userFix: w.user_fix_hint,
+        })),
+        isValid: tsResult.blockers.length === 0,
+        durationMs: Date.now() - startTime,
+      };
+    }
+
+    const durationMs = Date.now() - startTime;
+
+    // YAML succeeded - use its results
+    const result: YamlPrimaryValidationResult = {
+      yamlPrimary: true,
+      usedFallback: false,
+      blockers: yamlResult.blockers.map((b) => ({
+        id: b.id,
+        severity: 'blocker' as const,
+        message: b.message,
+        userFix: b.rationale,
+      })),
+      warnings: yamlResult.warnings.map((w) => ({
+        id: w.id,
+        severity: 'warning' as const,
+        message: w.message,
+        userFix: w.rationale,
+      })),
+      isValid: yamlResult.blockers.length === 0,
+      durationMs,
+    };
+
+    // Record telemetry if enabled (compare with TS for monitoring)
+    if (shouldSampleTelemetry()) {
+      const tsResult = params.tsFallbackFn();
+      const tsBlockerIds = tsResult.blockers.map((b) => normalizeId(b.code));
+      const yamlBlockerIds = yamlResult.blockers.map((b) => b.id);
+
+      const tsBlockerSet = new Set(tsBlockerIds.map(mapTsIdToYamlId));
+      const yamlBlockerSet = new Set(yamlBlockerIds);
+
+      const parity = tsBlockerSet.size === yamlBlockerSet.size &&
+        tsBlockerIds.every((id) => yamlBlockerSet.has(mapTsIdToYamlId(id)));
+
+      const discrepancies: Array<{ type: DiscrepancyType; ruleId: string }> = [];
+
+      for (const tsId of tsBlockerIds) {
+        const mappedId = mapTsIdToYamlId(tsId);
+        if (!yamlBlockerSet.has(mappedId)) {
+          discrepancies.push({ type: 'missing_in_yaml', ruleId: tsId });
+        }
+      }
+
+      for (const yamlId of yamlBlockerIds) {
+        if (!tsBlockerSet.has(yamlId)) {
+          discrepancies.push({ type: 'missing_in_ts', ruleId: yamlId });
+        }
+      }
+
+      const telemetryEvent: ValidationTelemetryEvent = {
+        timestamp: new Date().toISOString(),
+        jurisdiction: params.jurisdiction,
+        product: params.product,
+        route: params.route,
+        parity,
+        parityPercent: parity ? 100 : Math.round(
+          (1 - discrepancies.length / Math.max(tsBlockerIds.length + yamlBlockerIds.length, 1)) * 100
+        ),
+        tsBlockers: tsBlockerIds.length,
+        yamlBlockers: yamlBlockerIds.length,
+        tsWarnings: tsResult.warnings.length,
+        yamlWarnings: yamlResult.warnings.length,
+        durationMs,
+        discrepancyCount: discrepancies.length,
+        discrepancies,
+        blockerIds: {
+          ts: tsBlockerIds,
+          yaml: yamlBlockerIds,
+        },
+      };
+
+      // Store telemetry
+      if (metricsStore.length >= MAX_METRICS_STORE_SIZE) {
+        metricsStore.shift();
+      }
+      metricsStore.push(telemetryEvent);
+
+      if (isTelemetryEnabled()) {
+        console.log('[Telemetry:YamlPrimary]', JSON.stringify({
+          ...telemetryEvent,
+          yamlPrimary: true,
+          usedFallback: false,
+        }));
+      }
+
+      // Log parity mismatches at warning level
+      if (!parity) {
+        console.warn(
+          `[YamlPrimary] Parity mismatch (YAML is authoritative): ${params.jurisdiction}/${params.product}/${params.route}`,
+          { tsBlockers: tsBlockerIds, yamlBlockers: yamlBlockerIds, discrepancies }
+        );
+      }
+
+      result.telemetry = telemetryEvent;
+    }
+
+    return result;
+  } catch (error) {
+    // YAML threw an error - fall back to TS
+    fallbackCount++;
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(
+      `[YamlPrimary] YAML validation error, falling back to TS: ${params.jurisdiction}/${params.product}/${params.route}`,
+      errorMessage
+    );
+
+    if (isTsFallbackEnabled()) {
+      const tsResult = params.tsFallbackFn();
+      return {
+        yamlPrimary: false,
+        usedFallback: true,
+        fallbackReason: 'yaml_error',
+        blockers: tsResult.blockers.map((b) => ({
+          id: normalizeId(b.code),
+          severity: 'blocker' as const,
+          message: b.message || b.legal_reason || b.code,
+          userFix: b.user_fix_hint,
+        })),
+        warnings: tsResult.warnings.map((w) => ({
+          id: normalizeId(w.code),
+          severity: 'warning' as const,
+          message: w.message || w.legal_reason || w.code,
+          userFix: w.user_fix_hint,
+        })),
+        isValid: tsResult.blockers.length === 0,
+        durationMs: Date.now() - startTime,
+      };
+    }
+
+    // TS fallback disabled - rethrow
+    throw error;
+  }
+}
+
+/**
+ * Convenience wrapper for notice_only validation with YAML primary.
+ * Uses evaluateNoticeCompliance as the TS fallback.
+ */
+export async function runYamlPrimaryNoticeValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, any>;
+}): Promise<YamlPrimaryValidationResult> {
+  return runYamlPrimaryValidation({
+    jurisdiction: params.jurisdiction,
+    product: 'notice_only',
+    route: params.route,
+    facts: params.facts,
+    tsFallbackFn: () => {
+      const { evaluateNoticeCompliance } = require('../notices/evaluate-notice-compliance');
+      const result = evaluateNoticeCompliance({
+        jurisdiction: params.jurisdiction,
+        product: 'notice_only',
+        selected_route: params.route,
+        wizardFacts: params.facts,
+        stage: 'generate',
+      });
+      return {
+        blockers: result.hardFailures.map((f: any) => ({
+          code: f.code,
+          message: f.legal_reason,
+          legal_reason: f.legal_reason,
+          user_fix_hint: f.user_fix_hint,
+        })),
+        warnings: result.warnings.map((w: any) => ({
+          code: w.code,
+          message: w.legal_reason,
+          legal_reason: w.legal_reason,
+          user_fix_hint: w.user_fix_hint,
+        })),
+      };
+    },
+  });
+}
+
+/**
+ * Convenience wrapper for complete_pack validation with YAML primary.
+ * Uses runRuleBasedChecks as the TS fallback.
+ */
+export async function runYamlPrimaryCompletePackValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, any>;
+}): Promise<YamlPrimaryValidationResult> {
+  return runYamlPrimaryValidation({
+    jurisdiction: params.jurisdiction,
+    product: 'complete_pack',
+    route: params.route,
+    facts: params.facts,
+    tsFallbackFn: () => {
+      const { runRuleBasedChecks } = require('./pre-generation-check');
+      const issues = runRuleBasedChecks(params.facts, 'complete_pack');
+      return {
+        blockers: issues
+          .filter((i: any) => i.severity === 'blocker')
+          .map((i: any) => ({
+            code: i.code,
+            message: i.description,
+            legal_reason: i.description,
+            user_fix_hint: i.user_fix_hint,
+          })),
+        warnings: issues
+          .filter((i: any) => i.severity === 'warning')
+          .map((i: any) => ({
+            code: i.code,
+            message: i.description,
+            legal_reason: i.description,
+            user_fix_hint: i.user_fix_hint,
+          })),
+      };
+    },
+  });
+}

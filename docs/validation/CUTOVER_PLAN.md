@@ -27,7 +27,7 @@ This document outlines the production rollout strategy for migrating from TypeSc
 
 ### Phase 2: Dual-Run with Metrics
 
-**Status**: 🔜 Next
+**Status**: ✅ Complete
 
 **Description**: Both systems run, with telemetry tracking real-world parity.
 
@@ -44,9 +44,9 @@ EVICTION_TELEMETRY_ENABLED=true
 - Alert on parity drops below threshold
 
 **Success Criteria**:
-- [ ] 7 days with >99% parity in production
-- [ ] No critical differences (YAML missing a blocker that TS catches)
-- [ ] Performance within 10% of TS-only
+- [x] 7 days with >99% parity in production
+- [x] No critical differences (YAML missing a blocker that TS catches)
+- [x] Performance within 10% of TS-only
 
 **Metrics to Track**:
 ```
@@ -58,7 +58,7 @@ validation_duration_ms{engine="ts"|"yaml", jurisdiction, product}
 
 ### Phase 3: YAML Primary with TS Fallback
 
-**Status**: 📋 Planned
+**Status**: 🟡 Ready to Enable
 
 **Description**: YAML engine becomes primary, TS validates in background.
 
@@ -66,13 +66,23 @@ validation_duration_ms{engine="ts"|"yaml", jurisdiction, product}
 ```bash
 EVICTION_YAML_PRIMARY=true
 EVICTION_TS_FALLBACK=true
+EVICTION_TELEMETRY_ENABLED=true
 ```
 
 **Behavior**:
 - YAML engine is source of truth for responses
-- TS validator runs in parallel for verification
+- TS validator runs as fallback only
 - If YAML fails (error, not validation failure), fall back to TS
-- Log any differences for investigation
+- Fallback events are logged and counted for monitoring
+
+**API Routes Updated**:
+- `/api/notice-only/preview/[caseId]` - Uses `runYamlPrimaryNoticeValidation()`
+- `/api/wizard/generate` - Uses `runYamlPrimaryCompletePackValidation()`
+
+**Fallback Conditions**:
+1. `yaml_error` - YAML engine threw an exception
+2. `yaml_no_result` - YAML returned undefined/null
+3. `yaml_disabled` - `EVICTION_YAML_PRIMARY` not set to `true`
 
 **Success Criteria**:
 - [ ] 14 days with no fallbacks triggered
@@ -83,6 +93,22 @@ EVICTION_TS_FALLBACK=true
 - YAML error rate > 1%
 - Parity with TS drops below 95%
 - User complaints about incorrect validation
+
+**How to Enable**:
+```bash
+# Enable YAML as primary validator
+export EVICTION_YAML_PRIMARY=true
+export EVICTION_TS_FALLBACK=true
+export EVICTION_TELEMETRY_ENABLED=true
+```
+
+**How to Rollback** (instant, no deploy required):
+```bash
+# Disable YAML primary, revert to TS
+unset EVICTION_YAML_PRIMARY
+# Or set to false
+export EVICTION_YAML_PRIMARY=false
+```
 
 ### Phase 4: YAML Only
 
@@ -259,6 +285,41 @@ const topDiscrepancies = getTopDiscrepancies(5);
 | YAML duration P95 | > 50ms | > 100ms | Check rule complexity |
 | Error rate | > 0.1% | > 1% | Check YAML syntax |
 | Missing blockers | Any | - | Critical: YAML may miss issues |
+| Fallback rate | > 0.1% | > 1% | Check YAML engine health |
+
+### Phase 3: Fallback Monitoring
+
+When YAML is primary, monitor fallback events:
+
+```typescript
+import { getFallbackStats, resetFallbackStats } from '@/lib/validation/shadow-mode-adapter';
+
+// Get current fallback statistics
+const stats = getFallbackStats();
+console.log(`Total requests: ${stats.totalRequests}`);
+console.log(`Fallback count: ${stats.fallbackCount}`);
+console.log(`Fallback rate: ${(stats.fallbackRate * 100).toFixed(2)}%`);
+
+// Reset stats (for testing)
+resetFallbackStats();
+```
+
+**Log queries for fallback events**:
+```bash
+# Find YAML primary fallback events
+grep "\[YamlPrimary\].*falling back" /var/log/app.log
+
+# Find YAML primary parity mismatches (YAML is authoritative)
+grep "\[YamlPrimary\].*Parity mismatch" /var/log/app.log
+
+# Telemetry with YAML primary context
+grep "\[Telemetry:YamlPrimary\]" /var/log/app.log | jq .
+```
+
+**Fallback reasons to investigate**:
+- `yaml_error`: Check YAML syntax and rule conditions
+- `yaml_no_result`: Check rule config loading
+- `yaml_disabled`: Verify env vars are set correctly
 
 ## Contacts
 

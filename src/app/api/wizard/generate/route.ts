@@ -20,6 +20,8 @@ import {
   runProductionShadowValidation,
   deriveJurisdictionFromFacts,
   deriveRouteFromFacts,
+  isYamlPrimary,
+  runYamlPrimaryCompletePackValidation,
 } from '@/lib/validation/shadow-mode-adapter';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
@@ -63,49 +65,83 @@ export async function POST(request: Request) {
         (documentType.includes('eviction') || documentType.includes('pack') ? 'complete_pack' : 'notice_only'));
 
     if (product === 'complete_pack' || product === 'eviction_pack') {
-      const preGenResult = await runPreGenerationCheck(caseFacts, product);
+      // ========================================================================
+      // Phase 8: YAML Primary Mode for complete_pack
+      // Use YAML as authoritative when EVICTION_YAML_PRIMARY=true
+      // ========================================================================
+      let blockers: Array<{ code: string; description?: string }> = [];
+      let warnings: Array<{ code: string; description?: string }> = [];
+      let llmCheckRan = false;
 
-      // Log warnings but don't block
-      if (preGenResult.warnings.length > 0) {
-        console.log(`[API Generate] Pre-generation warnings:`, preGenResult.warnings.map(w => w.code));
+      if (isYamlPrimary()) {
+        // Phase 8: YAML is authoritative
+        console.log('[API Generate] Using YAML primary validation for complete_pack');
+        const yamlResult = await runYamlPrimaryCompletePackValidation({
+          jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
+          route: deriveRouteFromFacts(caseFacts),
+          facts: caseFacts,
+        });
+
+        blockers = yamlResult.blockers.map((b) => ({
+          code: b.id,
+          description: b.message,
+        }));
+        warnings = yamlResult.warnings.map((w) => ({
+          code: w.id,
+          description: w.message,
+        }));
+
+        // Log YAML primary usage
+        if (yamlResult.usedFallback) {
+          console.warn('[API Generate] YAML primary fell back to TS:', {
+            reason: yamlResult.fallbackReason,
+          });
+        }
+      } else {
+        // Phase 7: TS is authoritative, YAML runs in shadow mode
+        const preGenResult = await runPreGenerationCheck(caseFacts, product);
+        blockers = preGenResult.blockers;
+        warnings = preGenResult.warnings;
+        llmCheckRan = preGenResult.llm_check_ran;
+
+        // Shadow validation for parity monitoring
+        runProductionShadowValidation({
+          jurisdiction: deriveJurisdictionFromFacts(caseFacts),
+          product: 'complete_pack',
+          route: deriveRouteFromFacts(caseFacts),
+          facts: caseFacts,
+          tsBlockers: preGenResult.blockers.map((b) => ({
+            code: b.code,
+            severity: 'blocker',
+            message: b.description || b.code,
+          })),
+          tsWarnings: preGenResult.warnings.map((w) => ({
+            code: w.code,
+            severity: 'warning',
+            message: w.description || w.code,
+          })),
+        }).catch((err) => {
+          // Shadow validation should never block the response
+          console.error('[API Generate] Shadow validation error (non-fatal):', err);
+        });
       }
 
-      // ========================================================================
-      // SHADOW VALIDATION (Phase 7 - Production Telemetry)
-      // Run YAML validation in parallel for parity monitoring.
-      // This does NOT affect the response - TS result is authoritative.
-      // ========================================================================
-      runProductionShadowValidation({
-        jurisdiction: deriveJurisdictionFromFacts(caseFacts),
-        product: 'complete_pack',
-        route: deriveRouteFromFacts(caseFacts),
-        facts: caseFacts,
-        tsBlockers: preGenResult.blockers.map((b) => ({
-          code: b.code,
-          severity: 'blocker',
-          message: b.description || b.code,
-        })),
-        tsWarnings: preGenResult.warnings.map((w) => ({
-          code: w.code,
-          severity: 'warning',
-          message: w.description || w.code,
-        })),
-      }).catch((err) => {
-        // Shadow validation should never block the response
-        console.error('[API Generate] Shadow validation error (non-fatal):', err);
-      });
+      // Log warnings but don't block
+      if (warnings.length > 0) {
+        console.log(`[API Generate] Pre-generation warnings:`, warnings.map(w => w.code));
+      }
 
       // Block on blocker issues
-      if (!preGenResult.passed) {
-        console.log(`[API Generate] Pre-generation blockers:`, preGenResult.blockers.map(b => b.code));
+      if (blockers.length > 0) {
+        console.log(`[API Generate] Pre-generation blockers:`, blockers.map(b => b.code), { yaml_primary: isYamlPrimary() });
         return NextResponse.json(
           {
             error: 'PRE_GENERATION_VALIDATION_FAILED',
             code: 'CONSISTENCY_CHECK_FAILED',
             message: 'Document generation blocked due to data inconsistencies',
-            blocking_issues: preGenResult.blockers,
-            warnings: preGenResult.warnings,
-            llm_check_ran: preGenResult.llm_check_ran,
+            blocking_issues: blockers,
+            warnings: warnings,
+            llm_check_ran: llmCheckRan,
           },
           { status: 400 }
         );
