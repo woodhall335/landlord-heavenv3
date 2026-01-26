@@ -220,14 +220,21 @@ console.log(`Error rate: ${(stats.errorRate * 100).toFixed(2)}%`);
 
 ### Phase 11A: 14-Day Stability Signoff + Dashboards/Alerts
 
-**Status**: 🟢 Active
+**Status**: ✅ Complete
 
-**Description**: Prove YAML-only mode is production-stable for 14 consecutive days with comprehensive monitoring.
+**Description**: Define signoff criteria, implement dashboards, and configure alerting for YAML-only stability monitoring.
 
 **Prerequisites**:
 - [x] Phase 10 (YAML-only mode) enabled
 - [x] All validation paths use YAML-only wrappers
 - [x] Telemetry enabled and recording
+
+**Deliverables**:
+- [x] Signoff criteria defined (error rate, latency, coverage thresholds)
+- [x] Dashboard documentation with queries (`CUTOVER_PLAN.md`)
+- [x] Alert definitions with runbooks (`ALERTS.md`)
+- [x] 14-day tracking template (`STABILITY_TRACKER.md`)
+- [x] `npm run validation:status` CLI tool
 
 **Environment Variables**:
 ```bash
@@ -301,7 +308,109 @@ Phase 11A is complete when:
 - [ ] Sign-off from on-call engineer each day
 - [ ] Final review and approval from validation team lead
 
-**Next Phase**: After 14-day signoff, proceed to Phase 5 (TS Code Removal)
+**Next Phase**: Proceed to Phase 11B (Execution)
+
+---
+
+### Phase 11B: 14-Day Stability Execution & Final Signoff
+
+**Status**: 🟢 Active
+
+**Description**: Execute the 14-day YAML-only stability window and formally sign off production readiness.
+
+**Prerequisites**:
+- [x] Phase 11A complete (monitoring infrastructure ready)
+- [x] YAML-only mode enabled in production
+- [x] All alerts and dashboards operational
+
+**Start Date**: ___________________ (fill in when execution begins)
+**Target End Date**: ___________________ (start date + 14 days)
+
+#### Daily Operations
+
+Each day during the 14-day window:
+
+1. **Run status check**:
+   ```bash
+   npm run validation:status
+   ```
+
+2. **Record metrics in `STABILITY_TRACKER.md`**:
+   - Request count
+   - Error rate
+   - P95 latency
+   - Top blockers
+   - Incidents (if any)
+
+3. **Verify thresholds**:
+   - [ ] Error rate ≤ 0.05% (daily)
+   - [ ] P95 latency within 10% of baseline
+   - [ ] TS usage = 0%
+   - [ ] Telemetry coverage ≥ 95%
+
+4. **Sign off daily entry** in tracker
+
+#### Incident Handling
+
+If any alert fires during the 14-day window:
+
+1. **Follow runbook** in `ALERTS.md`
+2. **Document outcome** in `STABILITY_TRACKER.md` incident log
+3. **Assess impact**:
+   - If criteria breached → rollback and restart 14-day window
+   - If criteria maintained → continue, document incident
+
+**Rollback commands** (if needed):
+```bash
+# Partial rollback (YAML primary with TS fallback)
+export EVICTION_YAML_ONLY=false
+
+# Full rollback (TS only)
+export EVICTION_YAML_ONLY=false
+export EVICTION_YAML_PRIMARY=false
+```
+
+#### Rolling Review (Days 7-14)
+
+Starting Day 7, verify rolling metrics:
+- [ ] Rolling 7-day error rate ≤ 0.02%
+- [ ] No sustained latency regression
+- [ ] Telemetry coverage maintained
+
+#### Final Signoff (Day 14)
+
+On completion of Day 14:
+
+1. **Verify all criteria met**:
+   - [ ] 14 consecutive days with daily error rate ≤ 0.05%
+   - [ ] Rolling 7-day error rate ≤ 0.02% (final week)
+   - [ ] P95 latency within 10% of baseline throughout
+   - [ ] Zero TS validator executions
+   - [ ] Telemetry coverage ≥ 95%
+   - [ ] All discrepancies within Parity Contract
+
+2. **Complete tracker**:
+   - [ ] All 14 daily entries signed off
+   - [ ] Final approval section completed in `STABILITY_TRACKER.md`
+
+3. **Update this document**:
+   - Mark Phase 11B as ✅ Complete
+   - Record completion date
+
+4. **Formal authorization**:
+   - System is **Approved for TS Removal**
+   - Proceed to Phase 5
+
+#### Success Criteria
+
+Phase 11B is complete when:
+- [ ] 14 consecutive days with all Phase 11A thresholds met
+- [ ] No unresolved incidents
+- [ ] `STABILITY_TRACKER.md` fully completed and signed
+- [ ] Explicit approval from validation team lead
+- [ ] This document updated with completion status
+
+**Next Phase**: Proceed to Phase 5 (TS Code Removal)
 
 ---
 
@@ -312,8 +421,9 @@ Phase 11A is complete when:
 **Description**: Complete removal of TS validation code.
 
 **Prerequisites**:
-- [ ] Phase 11A complete (14-day signoff achieved)
-- [ ] Zero TS fallback events
+- [ ] Phase 11B complete (14-day stability window passed)
+- [ ] Formal signoff in `STABILITY_TRACKER.md`
+- [ ] Zero TS validator executions during Phase 11B
 - [ ] All tests migrated to YAML-only paths
 - [ ] Code review approved
 
@@ -364,8 +474,9 @@ unset EVICTION_YAML_PRIMARY
 | 2. Dual-Run | Complete | 2 weeks | 99% prod parity |
 | 3. YAML Primary | Complete | 2 weeks | No fallbacks |
 | 4/10. YAML Only | Complete | - | YAML-only enabled |
-| 11A. Stability Signoff | Active | 14 days | All metrics within thresholds |
-| 5. TS Code Removal | After 11A | 1 week | Code deleted, tests pass |
+| 11A. Stability Setup | Complete | - | Dashboards, alerts, tracker ready |
+| 11B. Stability Execution | Active | 14 days | All metrics within thresholds |
+| 5. TS Code Removal | After 11B | 1 week | Code deleted, tests pass |
 
 ## Risk Mitigation
 

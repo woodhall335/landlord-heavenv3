@@ -1,11 +1,22 @@
 # YAML-Only Validation Stability Tracker
 
-## Phase 11A: 14-Day Stability Window
+## Phase 11B: 14-Day Stability Execution
 
-**Start Date**: _______________
-**Target End Date**: _______________
-**Phase 8 Baseline P95**: _______________ ms
+**Status**: 🟢 IN PROGRESS
+
+**Start Date**: _______________ *(fill in when execution begins)*
+**Target End Date**: _______________ *(start date + 14 calendar days)*
+**Phase 8 Baseline P95**: _______________ ms *(measure before starting)*
 **Validation Team Lead**: _______________
+
+### Execution Checklist (Before Starting)
+
+- [ ] Phase 11A infrastructure complete (dashboards, alerts, CLI)
+- [ ] YAML-only mode enabled (`EVICTION_YAML_ONLY=true`)
+- [ ] Telemetry enabled (`EVICTION_TELEMETRY_ENABLED=true`)
+- [ ] Phase 8 baseline metrics captured
+- [ ] On-call rotation confirmed for 14-day period
+- [ ] Alert channels configured and tested
 
 ---
 
@@ -132,18 +143,37 @@ Track non-Wales discrepancies for investigation:
 
 ## Final Signoff
 
-### Phase 11A Completion Checklist
+### Phase 11B Completion Checklist
+
+Complete all items before signing off:
 
 - [ ] 14 consecutive days with error rate ≤ 0.05% daily
 - [ ] Rolling 7-day error rate ≤ 0.02% for final week
 - [ ] P95 latency within 10% of Phase 8 baseline
-- [ ] Zero TS validator executions
-- [ ] Telemetry coverage ≥ 95%
+- [ ] Zero TS validator executions throughout
+- [ ] Telemetry coverage ≥ 95% maintained
 - [ ] All discrepancies within Parity Contract
 - [ ] No unresolved incidents
-- [ ] Alert infrastructure verified and operational
+- [ ] All 14 daily entries completed and signed
 
-### Approval
+### Final Authorization
+
+**Upon completion of the above checklist, this system is:**
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ✅ APPROVED FOR TS CODE REMOVAL (Phase 5)                   ║
+║                                                               ║
+║   The YAML-only validation system has demonstrated            ║
+║   production stability for 14 consecutive days.               ║
+║                                                               ║
+║   Proceed to Phase 5: TS Code Removal                         ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+### Approval Signatures
 
 | Role | Name | Date | Signature |
 |------|------|------|-----------|
@@ -151,6 +181,9 @@ Track non-Wales discrepancies for investigation:
 | On-call Engineer (Week 2) | | | |
 | Validation Team Lead | | | |
 | Product Owner | | | |
+
+**Completion Date**: _______________
+**CUTOVER_PLAN.md Updated**: [ ] Yes
 
 ---
 
