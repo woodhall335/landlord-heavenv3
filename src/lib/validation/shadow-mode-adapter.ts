@@ -22,6 +22,12 @@ import {
   type Product,
   type EvictionRoute,
 } from './eviction-rules-engine';
+import {
+  getPhase13Message,
+  enhanceValidationIssue,
+  type EnhancedValidationMessage,
+  type ValidationIssueWithHelp,
+} from './phase13-messages';
 
 // ============================================================================
 // TYPES
@@ -611,3 +617,100 @@ export async function runYamlOnlyCompletePackValidation(params: {
     durationMs,
   };
 }
+
+// ============================================================================
+// PHASE 16: ENHANCED VALIDATION WITH HELP CONTENT
+// ============================================================================
+
+export interface EnhancedValidationIssue {
+  id: string;
+  severity: 'blocker' | 'warning';
+  message: string;
+  rationale?: string;
+  // Phase 16 enhanced fields
+  title?: string;
+  howToFix?: string[];
+  legalRef?: string;
+  helpUrl?: string;
+}
+
+export interface EnhancedYamlValidationResult {
+  blockers: EnhancedValidationIssue[];
+  warnings: EnhancedValidationIssue[];
+  isValid: boolean;
+  durationMs: number;
+}
+
+/**
+ * Enhance a validation issue with Phase 13 message catalog details.
+ * Adds title, howToFix steps, legal reference, and help URL.
+ */
+function enhanceIssue(issue: {
+  id: string;
+  severity: 'blocker' | 'warning';
+  message: string;
+  rationale?: string;
+}): EnhancedValidationIssue {
+  const phase13Message = getPhase13Message(issue.id);
+
+  if (!phase13Message) {
+    return issue;
+  }
+
+  return {
+    ...issue,
+    title: phase13Message.title,
+    howToFix: phase13Message.howToFix,
+    legalRef: phase13Message.legalRef,
+    helpUrl: phase13Message.helpUrl,
+  };
+}
+
+/**
+ * Run YAML validation with enhanced Phase 16 messaging.
+ * Returns validation results with help content for Phase 13 rules.
+ *
+ * Phase 16: UX Messaging + Help Content + Support Readiness
+ */
+export async function runEnhancedNoticeValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, unknown>;
+}): Promise<EnhancedYamlValidationResult> {
+  const baseResult = await runYamlOnlyNoticeValidation(params);
+
+  return {
+    blockers: baseResult.blockers.map(enhanceIssue),
+    warnings: baseResult.warnings.map(enhanceIssue),
+    isValid: baseResult.isValid,
+    durationMs: baseResult.durationMs,
+  };
+}
+
+/**
+ * Run YAML complete_pack validation with enhanced Phase 16 messaging.
+ * Returns validation results with help content for Phase 13 rules.
+ *
+ * Phase 16: UX Messaging + Help Content + Support Readiness
+ */
+export async function runEnhancedCompletePackValidation(params: {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  route: string;
+  facts: Record<string, unknown>;
+}): Promise<EnhancedYamlValidationResult> {
+  const baseResult = await runYamlOnlyCompletePackValidation(params);
+
+  return {
+    blockers: baseResult.blockers.map(enhanceIssue),
+    warnings: baseResult.warnings.map(enhanceIssue),
+    isValid: baseResult.isValid,
+    durationMs: baseResult.durationMs,
+  };
+}
+
+// Re-export Phase 16 message types for consumers
+export {
+  getPhase13Message,
+  type EnhancedValidationMessage,
+  type ValidationIssueWithHelp,
+} from './phase13-messages';

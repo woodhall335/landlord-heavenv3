@@ -784,6 +784,136 @@ unset VALIDATION_PHASE13_ROLLOUT_PERCENT
 
 ---
 
+### Phase 16: UX Messaging + Help Content + Support Readiness
+
+**Status**: ✅ Complete
+
+**Description**: Standardize validation messages, add help links, and prepare support documentation for Phase 13 rules.
+
+**Objectives**:
+- Provide consistent, user-friendly messaging for all Phase 13 validation issues
+- Add actionable "how to fix" guidance and legal references
+- Enable support team to efficiently handle Phase 13-related inquiries
+- Add test coverage for message catalog completeness
+
+**Deliverables**:
+- [x] **Message Catalog** (`config/validation/phase13-messages.yaml`)
+  - Standardized messages for all 15 Phase 13 rules
+  - Each message includes: title, description, howToFix steps, legalRef, helpLink, supportTags
+  - Support escalation categories with priority levels
+
+- [x] **Message Loader** (`src/lib/validation/phase13-messages.ts`)
+  - TypeScript module for loading and querying message catalog
+  - Functions: `getPhase13Message()`, `getAllPhase13Messages()`, `getSupportCategory()`
+  - Cache management for performance
+
+- [x] **Enhanced Validation** (`src/lib/validation/shadow-mode-adapter.ts`)
+  - `runEnhancedNoticeValidation()` - Returns validation results with help content
+  - `runEnhancedCompletePackValidation()` - Same for complete_pack
+  - Enhanced issue interface includes title, howToFix, legalRef, helpUrl
+
+- [x] **Support Guide** (`docs/validation/PHASE13_SUPPORT_GUIDE.md`)
+  - Rule-by-rule reference with resolution steps
+  - Escalation categories and priorities
+  - Common user questions and answers
+  - Troubleshooting decision tree
+
+- [x] **Test Coverage** (`tests/validation/phase16-messages.test.ts`)
+  - 32 tests for message catalog coverage
+  - Validates all Phase 13 rules have messages
+  - Validates support categories are assigned
+  - Validates message content completeness
+
+**Message Catalog Structure**:
+
+```yaml
+# config/validation/phase13-messages.yaml
+england_s21:
+  s21_deposit_cap_exceeded:
+    title: "Deposit Exceeds Legal Cap"
+    description: "The deposit amount exceeds the legal maximum..."
+    howToFix:
+      - "Calculate the legal deposit cap based on annual rent"
+      - "If deposit exceeds cap, return the excess amount"
+      - "Document the return with receipts or bank transfer"
+      - "Confirm this in the wizard before generating"
+    legalRef: "Tenant Fees Act 2019, Section 3"
+    helpLink: "/help/validation/deposit-cap"
+    supportTags: ["deposit", "tenant-fees-act", "s21", "england"]
+```
+
+**Enhanced Validation Response**:
+
+```typescript
+import { runEnhancedNoticeValidation } from '@/lib/validation/shadow-mode-adapter';
+
+const result = await runEnhancedNoticeValidation({
+  jurisdiction: 'england',
+  route: 'section_21',
+  facts: wizardFacts,
+});
+
+// Blockers now include enhanced fields
+for (const blocker of result.blockers) {
+  console.log(blocker.id);        // 's21_deposit_cap_exceeded'
+  console.log(blocker.message);   // Original message
+  console.log(blocker.title);     // 'Deposit Exceeds Legal Cap'
+  console.log(blocker.howToFix);  // ['Calculate...', 'If deposit...', ...]
+  console.log(blocker.legalRef);  // 'Tenant Fees Act 2019, Section 3'
+  console.log(blocker.helpUrl);   // 'https://landlord-heaven.co.uk/help/validation/deposit-cap'
+}
+```
+
+**Support Category Priorities**:
+
+| Category | Priority | Rules |
+|----------|----------|-------|
+| `retaliatory_eviction` | High | s21_retaliatory_improvement_notice, s21_retaliatory_emergency_action |
+| `deposit_issues` | Medium | s21_deposit_cap_exceeded, s173_deposit_not_protected, ntl_deposit_not_protected |
+| `licensing_registration` | Medium | s21_licensing_required_not_licensed, ntl_landlord_not_registered |
+| `pre_action` | Medium | ntl_pre_action_letter_not_sent, ntl_pre_action_signposting_missing, ntl_ground_1_arrears_threshold |
+| `timing_issues` | Low | s21_four_month_bar, s21_notice_period_short, s173_notice_period_short, s8_notice_period_short |
+| `documentation` | Low | s173_written_statement_missing |
+
+**Usage in UI Components**:
+
+```tsx
+// Example: Display validation issue with help content
+function ValidationIssue({ issue }: { issue: EnhancedValidationIssue }) {
+  return (
+    <div className="validation-issue">
+      <h3>{issue.title || issue.message}</h3>
+      <p>{issue.message}</p>
+      {issue.howToFix && (
+        <div className="how-to-fix">
+          <h4>How to Fix</h4>
+          <ol>
+            {issue.howToFix.map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
+          </ol>
+        </div>
+      )}
+      {issue.helpUrl && (
+        <a href={issue.helpUrl} target="_blank">Learn more</a>
+      )}
+      {issue.legalRef && (
+        <p className="legal-ref">Legal reference: {issue.legalRef}</p>
+      )}
+    </div>
+  );
+}
+```
+
+**Success Criteria**:
+- [x] All 15 Phase 13 rules have message catalog entries
+- [x] All messages have title, description, howToFix, legalRef, helpLink
+- [x] Support guide covers all rules with resolution steps
+- [x] 32 tests pass for message coverage
+- [x] Enhanced validation functions return help content
+
+---
+
 ## Future Correctness Phases Policy
 
 This section documents the permanent policy for introducing future correctness improvements (Phase 16+).
@@ -904,6 +1034,7 @@ unset EVICTION_YAML_PRIMARY
 | 13. Correctness Improvements | Available | Incremental | Feature-flagged enhancements |
 | 14. Controlled Rollout | Available | ~3 weeks | 10% → 50% → 100% with metrics |
 | 15. Full Enablement | Available | 1-2 days | ENABLED=true, policy lock-in |
+| 16. UX Messaging | Complete | - | Message catalog, support guide, tests |
 
 ## Risk Mitigation
 
