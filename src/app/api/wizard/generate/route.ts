@@ -16,6 +16,16 @@ import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
 import { getCaseFacts } from './getCaseFacts';
 import { runPreGenerationCheck } from '@/lib/validation/pre-generation-check';
+import {
+  runProductionShadowValidation,
+  deriveJurisdictionFromFacts,
+  deriveRouteFromFacts,
+  isYamlPrimary,
+  isYamlOnlyMode,
+  runYamlPrimaryCompletePackValidation,
+  runYamlOnlyCompletePackValidation,
+  trackYamlOnlyValidation,
+} from '@/lib/validation/shadow-mode-adapter';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
 function parseUTCDate(dateStr: string): Date {
@@ -58,24 +68,123 @@ export async function POST(request: Request) {
         (documentType.includes('eviction') || documentType.includes('pack') ? 'complete_pack' : 'notice_only'));
 
     if (product === 'complete_pack' || product === 'eviction_pack') {
-      const preGenResult = await runPreGenerationCheck(caseFacts, product);
+      // ========================================================================
+      // Phase 10: YAML-Only Mode - TS validators completely bypassed
+      // Phase 8: YAML Primary Mode - YAML authoritative with TS fallback
+      // Default: TS authoritative with YAML shadow mode
+      // ========================================================================
+      let blockers: Array<{ code: string; description?: string }> = [];
+      let warnings: Array<{ code: string; description?: string }> = [];
+      let llmCheckRan = false;
+
+      if (isYamlOnlyMode()) {
+        // Phase 10: YAML-only mode - NO TS fallback
+        console.log('[API Generate] Using YAML-only validation for complete_pack (Phase 10)');
+        try {
+          const yamlResult = await runYamlOnlyCompletePackValidation({
+            jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
+            route: deriveRouteFromFacts(caseFacts),
+            facts: caseFacts,
+          });
+
+          trackYamlOnlyValidation(true);
+
+          blockers = yamlResult.blockers.map((b) => ({
+            code: b.id,
+            description: b.message,
+          }));
+          warnings = yamlResult.warnings.map((w) => ({
+            code: w.id,
+            description: w.message,
+          }));
+
+          console.log('[API Generate] YAML-only validation complete', {
+            blockers: blockers.length,
+            warnings: warnings.length,
+            durationMs: yamlResult.durationMs,
+          });
+        } catch (error) {
+          // YAML-only mode error - no fallback available
+          trackYamlOnlyValidation(false);
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          console.error('[API Generate] YAML-only validation error (CRITICAL):', {
+            error: errorMessage,
+            product,
+          });
+          throw error; // Re-throw to trigger 500 error
+        }
+      } else if (isYamlPrimary()) {
+        // Phase 8: YAML is authoritative with TS fallback
+        console.log('[API Generate] Using YAML primary validation for complete_pack');
+        const yamlResult = await runYamlPrimaryCompletePackValidation({
+          jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
+          route: deriveRouteFromFacts(caseFacts),
+          facts: caseFacts,
+        });
+
+        blockers = yamlResult.blockers.map((b) => ({
+          code: b.id,
+          description: b.message,
+        }));
+        warnings = yamlResult.warnings.map((w) => ({
+          code: w.id,
+          description: w.message,
+        }));
+
+        // Log YAML primary usage
+        if (yamlResult.usedFallback) {
+          console.warn('[API Generate] YAML primary fell back to TS:', {
+            reason: yamlResult.fallbackReason,
+          });
+        }
+      } else {
+        // Default: TS is authoritative, YAML runs in shadow mode
+        const preGenResult = await runPreGenerationCheck(caseFacts, product);
+        blockers = preGenResult.blockers;
+        warnings = preGenResult.warnings;
+        llmCheckRan = preGenResult.llm_check_ran;
+
+        // Shadow validation for parity monitoring
+        runProductionShadowValidation({
+          jurisdiction: deriveJurisdictionFromFacts(caseFacts),
+          product: 'complete_pack',
+          route: deriveRouteFromFacts(caseFacts),
+          facts: caseFacts,
+          tsBlockers: preGenResult.blockers.map((b) => ({
+            code: b.code,
+            severity: 'blocker',
+            message: b.description || b.code,
+          })),
+          tsWarnings: preGenResult.warnings.map((w) => ({
+            code: w.code,
+            severity: 'warning',
+            message: w.description || w.code,
+          })),
+        }).catch((err) => {
+          // Shadow validation should never block the response
+          console.error('[API Generate] Shadow validation error (non-fatal):', err);
+        });
+      }
 
       // Log warnings but don't block
-      if (preGenResult.warnings.length > 0) {
-        console.log(`[API Generate] Pre-generation warnings:`, preGenResult.warnings.map(w => w.code));
+      if (warnings.length > 0) {
+        console.log(`[API Generate] Pre-generation warnings:`, warnings.map(w => w.code));
       }
 
       // Block on blocker issues
-      if (!preGenResult.passed) {
-        console.log(`[API Generate] Pre-generation blockers:`, preGenResult.blockers.map(b => b.code));
+      if (blockers.length > 0) {
+        console.log(`[API Generate] Pre-generation blockers:`, blockers.map(b => b.code), {
+          yaml_only: isYamlOnlyMode(),
+          yaml_primary: isYamlPrimary(),
+        });
         return NextResponse.json(
           {
             error: 'PRE_GENERATION_VALIDATION_FAILED',
             code: 'CONSISTENCY_CHECK_FAILED',
             message: 'Document generation blocked due to data inconsistencies',
-            blocking_issues: preGenResult.blockers,
-            warnings: preGenResult.warnings,
-            llm_check_ran: preGenResult.llm_check_ran,
+            blocking_issues: blockers,
+            warnings: warnings,
+            llm_check_ran: llmCheckRan,
           },
           { status: 400 }
         );

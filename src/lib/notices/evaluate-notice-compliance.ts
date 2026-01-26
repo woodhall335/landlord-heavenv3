@@ -110,7 +110,36 @@ function normalizeSection8Grounds(grounds: any): string[] {
   return [];
 }
 
+/**
+ * Evaluate notice compliance for notice_only and complete_pack products.
+ *
+ * @deprecated Phase 9: This function is being replaced by the YAML rules engine.
+ * Use `runYamlPrimaryNoticeValidation()` from `@/lib/validation/shadow-mode-adapter`
+ * for production validation flows. This TS implementation remains as a fallback
+ * when EVICTION_YAML_PRIMARY=false or when YAML validation fails.
+ *
+ * Migration status:
+ * - England S21: ✅ YAML parity achieved
+ * - England S8: ✅ YAML parity achieved
+ * - Wales S173: ✅ YAML parity achieved
+ * - Scotland NTL: ✅ YAML parity achieved
+ *
+ * This function will be removed once YAML-only mode is stable in production.
+ * Track removal progress in CUTOVER_PLAN.md.
+ *
+ * @param input - Compliance evaluation input
+ * @returns Compliance result with hard failures and warnings
+ */
 export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult {
+  // Phase 9: Log deprecation warning when called directly (not via YAML primary)
+  if (process.env.EVICTION_YAML_PRIMARY === 'true' && process.env.NODE_ENV !== 'test') {
+    console.warn(
+      '[DEPRECATED] evaluateNoticeCompliance called directly while YAML is primary.',
+      'This TS validator should only be used as fallback.',
+      { jurisdiction: input.jurisdiction, route: input.selected_route }
+    );
+  }
+
   const { jurisdiction, product, selected_route, stage = 'wizard' } = input;
 
   // Apply canonical fact normalization to ensure consistent field names

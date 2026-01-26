@@ -1,0 +1,316 @@
+# Notice Only Validation Rules - Wales
+# Tiered validation: blocker (cannot proceed) | warning (risk displayed) | suggestion (optional improvement)
+# All rules are deterministic and testable
+# Migrated 1:1 from evaluate-notice-compliance.ts and pre-generation-check.ts
+# Uses RH(W)A 2016 terminology: occupation contract, contract holder (not tenancy, tenant)
+#
+# PARITY STATUS (Phase 3):
+# - S173 rule IDs aligned with TS codes: s173_licensing, s173_period_bar, s173_notice_period_undetermined
+# - 100% parity for RSW registration, 6-month bar, and valid cases
+# - INTENTIONAL DIVERGENCE: YAML fires common rules (contract_start_date_required, notice_service_date_required)
+#   in addition to s173_notice_period_undetermined when dates are missing. This provides more granular UX
+#   feedback than TS which only fires the consolidated code.
+
+version: "1.0"
+jurisdiction: wales
+product: notice_only
+last_updated: "2026-01-26"
+
+metadata:
+  effective_from: "2026-01-26"
+  source:
+    - "Renting Homes (Wales) Act 2016"
+    - "evaluate-notice-compliance.ts"
+    - "pre-generation-check.ts"
+  notes: "Wales Notice Only covers Section 173 (no-fault) and fault-based (s157/s159/s161/s162) eviction notices under RH(W)A 2016."
+  parity_status: "Phase 3 complete - S173 100% parity on core rules (s173_licensing, s173_period_bar)"
+
+# Route identifiers
+routes:
+  - section_173
+  - fault_based
+
+# =============================================================================
+# SECTION 173 RULES (No-fault notice for standard occupation contracts)
+# Renting Homes (Wales) Act 2016
+# =============================================================================
+# NOTE: For notice_only parity with TS evaluateNoticeCompliance, only
+# s173_licensing, s173_period_bar, and s173_notice_period_undetermined are validated.
+# Additional rules are commented but preserved for complete_pack or future use.
+
+section_173_rules:
+
+  # ---------------------------------------------------------------------------
+  # RENT SMART WALES REGISTRATION (RH(W)A 2016)
+  # TS Code: S173-LICENSING
+  # ---------------------------------------------------------------------------
+
+  - id: s173_licensing
+    severity: blocker
+    applies_to: [section_173]
+    applies_when:
+      - condition: "facts.rent_smart_wales_registered !== true"
+    message: "Rent Smart Wales registration is mandatory before serving Section 173 notice."
+    rationale: "Renting Homes (Wales) Act 2016 requires all landlords in Wales to be registered with Rent Smart Wales."
+    field: rent_smart_wales_registered
+
+  # ---------------------------------------------------------------------------
+  # SIX-MONTH BAR (RH(W)A 2016 s.173)
+  # TS Code: S173-PERIOD-BAR
+  # ---------------------------------------------------------------------------
+
+  - id: s173_period_bar
+    severity: blocker
+    applies_to: [section_173]
+    applies_when:
+      - condition: "computed.within_six_month_bar === true"
+    message: "Section 173 cannot be served in the first six months of the occupation contract."
+    rationale: "RH(W)A 2016 s.173 prohibits no-fault notices during the first 6 months of a standard occupation contract."
+    field: contract_start_date
+
+  # ---------------------------------------------------------------------------
+  # NOTICE PERIOD UNDETERMINED (missing dates)
+  # TS Code: S173-NOTICE-PERIOD-UNDETERMINED
+  # ---------------------------------------------------------------------------
+
+  - id: s173_notice_period_undetermined
+    severity: blocker
+    applies_to: [section_173]
+    applies_when:
+      # Contract start date missing
+      - condition: "!facts.contract_start_date && !facts.tenancy_start_date"
+      # Service date missing
+      - condition: "!computed.service_date && !facts.notice_service_date && !facts.notice_served_date"
+      # Expiry date missing (when dates exist but expiry not provided)
+      - condition: "(facts.contract_start_date || facts.tenancy_start_date) && computed.service_date && !facts.notice_expiry_date && !computed.expiry_date"
+    message: "Cannot calculate statutory minimum notice period - contract start date, service date, and expiry date are all required."
+    rationale: "The 6-month bar and notice period calculations require all dates to be provided."
+    field: notice_expiry_date
+
+  # ---------------------------------------------------------------------------
+  # FUTURE/COMPLETE_PACK RULES (not validated by TS evaluateNoticeCompliance)
+  # These are preserved for potential future use or complete_pack product.
+  # ---------------------------------------------------------------------------
+
+  # Notice period too short - currently TS doesn't validate for notice_only
+  # - id: s173_notice_period_short
+  #   severity: blocker
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "computed.s173_notice_period_too_short === true"
+  #   message: "Wales Section 173 requires minimum 6 months notice period."
+  #   rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
+  #   field: notice_expiry_date
+
+  # Deposit protection - currently TS doesn't validate for notice_only
+  # - id: s173_deposit_not_protected
+  #   severity: blocker
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+  #   message: "Wales Section 173 notice is invalid without deposit protection."
+  #   rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
+  #   field: deposit_protected
+
+  # Written statement - currently TS doesn't validate for notice_only
+  # - id: s173_written_statement_missing
+  #   severity: warning
+  #   applies_to: [section_173]
+  #   applies_when:
+  #     - condition: "facts.written_statement_provided === false"
+  #   message: "Wales law requires a written statement of occupation contract to be provided."
+  #   rationale: "RH(W)A 2016 requires landlords to provide a written statement setting out the contract terms."
+  #   field: written_statement_provided
+
+# =============================================================================
+# FAULT-BASED RULES (Sections 157, 159, 161, 162)
+# Renting Homes (Wales) Act 2016 Schedule 9
+# =============================================================================
+
+fault_based_rules:
+
+  # ---------------------------------------------------------------------------
+  # GROUNDS REQUIRED
+  # ---------------------------------------------------------------------------
+
+  - id: wales_fault_no_grounds
+    severity: blocker
+    applies_to: [fault_based]
+    applies_when:
+      - condition: "!facts.wales_breach_type && !facts.section8_grounds && (!facts.wales_fault_grounds || facts.wales_fault_grounds.length === 0)"
+    message: "Wales fault-based notice requires breach grounds under Schedule 9 of RH(W)A 2016."
+    rationale: "Fault-based possession requires specification of the breach ground (s157, s159, s161, or s162)."
+    field: wales_breach_type
+
+  # ---------------------------------------------------------------------------
+  # NOTICE PERIOD (Minimum 56 days / 8 weeks for discretionary grounds)
+  # ---------------------------------------------------------------------------
+
+  - id: wales_fault_notice_period_short
+    severity: blocker
+    applies_to: [fault_based]
+    applies_when:
+      - condition: "computed.wales_fault_notice_period_too_short === true"
+    message: "Wales Section 159 requires minimum 56 days (8 weeks) notice."
+    rationale: "RH(W)A 2016 s.159 requires discretionary grounds to give at least 8 weeks notice."
+    field: notice_expiry_date
+
+  # ---------------------------------------------------------------------------
+  # RENT SMART WALES (also required for fault-based)
+  # ---------------------------------------------------------------------------
+
+  - id: wales_fault_rsw_not_registered
+    severity: blocker
+    applies_to: [fault_based]
+    applies_when:
+      - condition: "facts.rent_smart_wales_registered !== true"
+    message: "Rent Smart Wales registration is mandatory before serving any eviction notice in Wales."
+    rationale: "All landlords in Wales must be registered with Rent Smart Wales."
+    field: rent_smart_wales_registered
+
+  # ---------------------------------------------------------------------------
+  # DEPOSIT PROTECTION
+  # ---------------------------------------------------------------------------
+
+  - id: wales_fault_deposit_not_protected
+    severity: blocker
+    applies_to: [fault_based]
+    applies_when:
+      - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+    message: "Deposit must be protected before serving fault-based notice."
+    rationale: "Deposit protection is required for all occupation contracts in Wales."
+    field: deposit_protected
+
+# =============================================================================
+# COMMON RULES (Apply to both routes)
+# =============================================================================
+
+common_rules:
+
+  # ---------------------------------------------------------------------------
+  # PARTY INFORMATION (Using RH(W)A terminology)
+  # ---------------------------------------------------------------------------
+
+  - id: landlord_name_required
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "!facts.landlord_full_name && !facts.landlord_name"
+    message: "Landlord name is required for document generation."
+    rationale: "The notice must identify the landlord serving it."
+    field: landlord_full_name
+
+  - id: contract_holder_name_required
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "!facts.tenant_full_name && !facts.tenant_name && !facts.contract_holder_name"
+    message: "Contract holder name is required for document generation."
+    rationale: "The notice must identify the contract holder being served."
+    field: tenant_full_name
+
+  - id: property_address_required
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "!facts.property_address_line1"
+    message: "Dwelling address is required for document generation."
+    rationale: "The notice must identify the dwelling."
+    field: property_address_line1
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT DATES
+  # ---------------------------------------------------------------------------
+
+  - id: contract_start_date_required
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "!facts.contract_start_date && !facts.tenancy_start_date"
+    message: "Occupation contract start date is required for notice period calculations."
+    rationale: "Contract start date is needed to check timing bars and calculate notice periods."
+    field: contract_start_date
+
+  - id: contract_start_date_future
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "(facts.contract_start_date || facts.tenancy_start_date) && computed.contract_start_in_future === true"
+    message: "Occupation contract start date cannot be in the future."
+    rationale: "Cannot serve eviction notice for an occupation contract that has not yet begun."
+    field: contract_start_date
+
+  # ---------------------------------------------------------------------------
+  # NOTICE SERVICE
+  # ---------------------------------------------------------------------------
+
+  - id: notice_service_date_required
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "!facts.notice_service_date && !facts.notice_served_date && !computed.service_date"
+    message: "Notice service date is required."
+    rationale: "Service date is needed to calculate expiry date and check timing requirements."
+    field: notice_service_date
+
+  - id: notice_before_contract
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "computed.notice_before_contract_start === true"
+    message: "Notice cannot be served before the occupation contract started."
+    rationale: "Eviction notice must be served during the contract period."
+    field: notice_service_date
+
+  - id: expiry_before_service
+    severity: blocker
+    applies_to: [section_173, fault_based]
+    applies_when:
+      - condition: "computed.expiry_before_service === true"
+    message: "Notice expiry date must be after service date."
+    rationale: "The notice period runs from service to expiry."
+    field: notice_expiry_date
+
+# =============================================================================
+# VALIDATION SUMMARY CONFIG
+# =============================================================================
+
+summary:
+  blocker_prevents_generation: true
+  warning_shown_in_review: true
+  suggestion_shown_as_tips: true
+  group_by_section: true
+  sections:
+    - id: parties
+      label: "Party Details"
+      rules:
+        - landlord_name_required
+        - contract_holder_name_required
+        - property_address_required
+    - id: registration
+      label: "Rent Smart Wales Registration"
+      rules:
+        - s173_licensing
+        - wales_fault_rsw_not_registered
+    - id: contract
+      label: "Occupation Contract"
+      rules:
+        - contract_start_date_required
+        - contract_start_date_future
+    - id: deposit
+      label: "Deposit Protection"
+      rules:
+        - wales_fault_deposit_not_protected
+    - id: grounds
+      label: "Grounds for Possession"
+      rules:
+        - wales_fault_no_grounds
+    - id: notice_service
+      label: "Notice Service"
+      rules:
+        - notice_service_date_required
+        - notice_before_contract
+        - expiry_before_service
+        - s173_period_bar
+        - s173_notice_period_undetermined
+        - wales_fault_notice_period_short
