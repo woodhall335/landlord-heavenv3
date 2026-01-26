@@ -748,8 +748,10 @@ describe('Rule Counts', () => {
     expect(ruleIds.length).toBeGreaterThanOrEqual(10);
   });
 
-  it('England complete_pack should have 30+ rules', () => {
+  it('England complete_pack should have 20+ rules', () => {
+    // Note: Some rules are commented out for TS parity (Phase 5)
+    // The TS runRuleBasedChecks doesn't validate: licensing, four_month_bar, notice_period, deposit_cap
     const ruleIds = getAllRuleIds('england', 'complete_pack');
-    expect(ruleIds.length).toBeGreaterThanOrEqual(30);
+    expect(ruleIds.length).toBeGreaterThanOrEqual(20);
   });
 });

@@ -94,22 +94,57 @@ function normalizeId(id: string): string {
  * This mapping handles remaining legacy codes and other jurisdictions.
  */
 const TS_TO_YAML_ID_MAP: Record<string, string> = {
-  // Pre-generation-check.ts codes -> YAML IDs
-  'missing_landlord_name': 'landlord_name_required',
-  'missing_tenant_name': 'tenant_name_required',
-  'missing_property_address': 'property_address_required',
-  'missing_tenancy_start_date': 'tenancy_start_date_required',
-  'future_tenancy_start': 'tenancy_start_date_future',
-  'missing_notice_service_date': 'notice_service_date_required',
-  's21_retaliatory_eviction_risk': 's21_retaliatory_risk',
-  's8_no_grounds': 's8_grounds_required',
+  // ============================================================================
+  // NOTICE_ONLY MAPPINGS (evaluateNoticeCompliance -> notice_only_rules.yaml)
+  // These map TS codes to notice_only YAML rule IDs
+  // ============================================================================
+
+  // Common rules (notice_only uses different IDs)
+  // Note: complete_pack uses the same IDs as TS, so these mappings only apply to notice_only
+  // The adapter uses product-aware comparison in detectDiscrepancies
+
+  // ============================================================================
+  // COMPLETE_PACK MAPPINGS (runRuleBasedChecks -> complete_pack_rules.yaml)
+  // Phase 5: complete_pack YAML uses same IDs as TS codes (after normalization)
+  // These are identity mappings to ensure parity
+  // ============================================================================
+
+  // S21 Complete Pack rules - identity mappings
+  's21_deposit_not_protected': 's21_deposit_not_protected',
+  's21_prescribed_info_missing': 's21_prescribed_info_missing',
+  's21_missing_deposit_amount': 's21_missing_deposit_amount',
+  's21_missing_deposit_date': 's21_missing_deposit_date',
+  's21_missing_deposit_scheme': 's21_missing_deposit_scheme',
+  's21_how_to_rent_missing': 's21_how_to_rent_missing',
+  's21_epc_missing': 's21_epc_missing',
+  's21_gas_cert_missing': 's21_gas_cert_missing',
+  's21_retaliatory_eviction_risk': 's21_retaliatory_eviction_risk',
+
+  // S8 Complete Pack rules - identity mappings
+  's8_no_grounds': 's8_no_grounds',
   's8_arrears_ground_no_data': 's8_arrears_ground_no_data',
-  'ground_8_threshold_not_met': 's8_ground8_threshold_not_met',
+  'ground_8_threshold_not_met': 'ground_8_threshold_not_met',
+  's8_asb_ground_no_data': 's8_asb_ground_no_data',
+  's8_breach_ground_no_data': 's8_breach_ground_no_data',
   's8_no_particulars': 's8_no_particulars',
 
-  // England S21 - evaluate-notice-compliance.ts codes
-  // Note: YAML rules now use same IDs as TS codes (after normalization)
-  // These mappings are identity mappings for clarity
+  // Common rules (complete_pack) - identity mappings
+  'missing_landlord_name': 'missing_landlord_name',
+  'missing_tenant_name': 'missing_tenant_name',
+  'missing_property_address': 'missing_property_address',
+  'missing_tenancy_start_date': 'missing_tenancy_start_date',
+  'missing_notice_service_date': 'missing_notice_service_date',
+  'future_tenancy_start': 'future_tenancy_start',
+  'notice_before_tenancy': 'notice_before_tenancy',
+  'expiry_before_service': 'expiry_before_service',
+  'arrears_contradiction': 'arrears_contradiction',
+  'arrears_amount_missing': 'arrears_amount_missing',
+
+  // ============================================================================
+  // NOTICE_ONLY MAPPINGS - England S21
+  // Source: evaluate-notice-compliance.ts -> notice_only_rules.yaml
+  // ============================================================================
+
   's21_deposit_noncompliant': 's21_deposit_noncompliant',
   's21_epc': 's21_epc',
   's21_h2r': 's21_h2r',
@@ -123,6 +158,8 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   's21_minimum_notice': 's21_notice_period_short',
   's21_prohibited_fees': 's21_prohibited_fees_charged',
   's21_prohibited_fees_unconfirmed': 's21_prohibited_fees_unconfirmed',
+  // notice_only retaliatory risk rule (different ID than complete_pack)
+  // Note: For notice_only, evaluateNoticeCompliance uses s21_retaliatory_risk
 
   // Legacy dash-separated versions (normalize to underscore)
   's21-deposit-noncompliant': 's21_deposit_noncompliant',
@@ -139,16 +176,15 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   's21-date-too-soon': 's21_notice_period_short',
   's21-prescribed-info-required': 's21_prescribed_info_unconfirmed',
 
-  // England S8 - TS Codes: S8-GROUNDS-REQUIRED, S8-NOTICE-PERIOD
+  // ============================================================================
+  // NOTICE_ONLY MAPPINGS - England S8
+  // Source: evaluate-notice-compliance.ts -> notice_only_rules.yaml
+  // ============================================================================
+
   's8-grounds-required': 's8_grounds_required',
   's8_grounds_required': 's8_grounds_required',
   's8-notice-period': 's8_notice_period',
   's8_notice_period': 's8_notice_period',
-  // Legacy mappings (commented rules in YAML, kept for complete_pack)
-  's8-ground8-threshold': 's8_ground8_threshold_not_met',
-  's8_ground8_threshold': 's8_ground8_threshold_not_met',
-  's8-particulars-incomplete': 's8_no_particulars',
-  's8_particulars_incomplete': 's8_no_particulars',
 
   // Wales S173 codes - TS Codes: S173-LICENSING, S173-PERIOD-BAR, S173-NOTICE-PERIOD-UNDETERMINED
   // YAML now uses TS-compatible IDs for parity

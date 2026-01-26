@@ -108,6 +108,7 @@ export const EVICTION_ALLOWED_IDENTIFIERS = new Set([
   // ==========================================================================
   'deposit_taken',
   'deposit_protected',
+  'deposit_protected_scheme',
   'deposit_amount',
   'deposit_protection_date',
   'deposit_scheme_name',
