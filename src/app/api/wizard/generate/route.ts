@@ -16,6 +16,11 @@ import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
 import { getCaseFacts } from './getCaseFacts';
 import { runPreGenerationCheck } from '@/lib/validation/pre-generation-check';
+import {
+  runProductionShadowValidation,
+  deriveJurisdictionFromFacts,
+  deriveRouteFromFacts,
+} from '@/lib/validation/shadow-mode-adapter';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
 function parseUTCDate(dateStr: string): Date {
@@ -64,6 +69,31 @@ export async function POST(request: Request) {
       if (preGenResult.warnings.length > 0) {
         console.log(`[API Generate] Pre-generation warnings:`, preGenResult.warnings.map(w => w.code));
       }
+
+      // ========================================================================
+      // SHADOW VALIDATION (Phase 7 - Production Telemetry)
+      // Run YAML validation in parallel for parity monitoring.
+      // This does NOT affect the response - TS result is authoritative.
+      // ========================================================================
+      runProductionShadowValidation({
+        jurisdiction: deriveJurisdictionFromFacts(caseFacts),
+        product: 'complete_pack',
+        route: deriveRouteFromFacts(caseFacts),
+        facts: caseFacts,
+        tsBlockers: preGenResult.blockers.map((b) => ({
+          code: b.code,
+          severity: 'blocker',
+          message: b.description || b.code,
+        })),
+        tsWarnings: preGenResult.warnings.map((w) => ({
+          code: w.code,
+          severity: 'warning',
+          message: w.description || w.code,
+        })),
+      }).catch((err) => {
+        // Shadow validation should never block the response
+        console.error('[API Generate] Shadow validation error (non-fatal):', err);
+      });
 
       // Block on blocker issues
       if (!preGenResult.passed) {

@@ -165,6 +165,101 @@ unset EVICTION_YAML_PRIMARY
 - CI runs full parity suite
 - Runtime falls back to empty config (safe default)
 
+## Monitoring & Observability
+
+### Environment Variables
+
+```bash
+# Enable shadow mode (YAML runs alongside TS, TS remains authoritative)
+EVICTION_SHADOW_MODE=true
+
+# Enable telemetry logging
+EVICTION_TELEMETRY_ENABLED=true
+
+# Sampling rate for telemetry (0.0 to 1.0)
+# Default: 1.0 (100% of validations)
+# For high-traffic, set to 0.1 (10%) or 0.01 (1%)
+VALIDATION_TELEMETRY_SAMPLE_RATE=0.1
+```
+
+### Telemetry Event Schema
+
+Each shadow validation produces a telemetry event:
+
+```typescript
+{
+  timestamp: string;          // ISO 8601
+  jurisdiction: string;       // 'england' | 'wales' | 'scotland'
+  product: string;            // 'notice_only' | 'complete_pack'
+  route: string;              // 'section_21', 'section_8', etc.
+  parity: boolean;            // true if TS and YAML agree
+  parityPercent: number;      // 0-100
+  tsBlockers: number;         // Count of TS blockers
+  yamlBlockers: number;       // Count of YAML blockers
+  tsWarnings: number;         // Count of TS warnings
+  yamlWarnings: number;       // Count of YAML warnings
+  durationMs: number;         // YAML validation duration
+  discrepancyCount: number;   // Number of discrepancies
+  discrepancies: Array<{      // Details of each discrepancy
+    type: string;             // 'missing_in_yaml' | 'missing_in_ts' | 'severity_mismatch'
+    ruleId: string;           // Rule ID that differs
+  }>;
+  blockerIds: {
+    ts: string[];             // TS blocker IDs
+    yaml: string[];           // YAML blocker IDs
+  };
+}
+```
+
+### Log Queries
+
+#### Find parity mismatches
+```bash
+# In application logs, look for:
+grep "ShadowValidation.*Parity mismatch" /var/log/app.log
+```
+
+#### Telemetry JSON lines (when EVICTION_TELEMETRY_ENABLED=true)
+```bash
+grep "\[Telemetry\]" /var/log/app.log | jq .
+```
+
+### Programmatic Monitoring
+
+Use the exported helpers to query in-memory metrics:
+
+```typescript
+import {
+  getAggregatedMetrics,
+  getTopBlockers,
+  getTopDiscrepancies,
+  getMetricsStore,
+} from '@/lib/validation/shadow-mode-adapter';
+
+// Get overall metrics
+const metrics = getAggregatedMetrics();
+console.log(`Parity rate: ${(metrics.parityRate * 100).toFixed(1)}%`);
+console.log(`Total validations: ${metrics.totalValidations}`);
+
+// Get metrics for specific jurisdiction
+const englandMetrics = getAggregatedMetrics({ jurisdiction: 'england' });
+
+// Get top 5 most frequent blockers
+const topBlockers = getTopBlockers(5);
+
+// Get top 5 most frequent discrepancies
+const topDiscrepancies = getTopDiscrepancies(5);
+```
+
+### Alerting Thresholds
+
+| Metric | Warning | Critical | Action |
+|--------|---------|----------|--------|
+| Parity rate | < 99% | < 95% | Investigate discrepancies |
+| YAML duration P95 | > 50ms | > 100ms | Check rule complexity |
+| Error rate | > 0.1% | > 1% | Check YAML syntax |
+| Missing blockers | Any | - | Critical: YAML may miss issues |
+
 ## Contacts
 
 - **Validation Team**: Responsible for parity and cutover

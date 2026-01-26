@@ -39,6 +39,10 @@ import {
 } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, buildWalesPartDFromWizardFacts } from '@/lib/wales';
+import {
+  runProductionShadowValidation,
+  deriveJurisdictionFromFacts,
+} from '@/lib/validation/shadow-mode-adapter';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -409,6 +413,31 @@ export async function GET(
       selected_route,
       wizardFacts,
       stage: 'preview',
+    });
+
+    // ========================================================================
+    // SHADOW VALIDATION (Phase 7 - Production Telemetry)
+    // Run YAML validation in parallel for parity monitoring.
+    // This does NOT affect the response - TS result is authoritative.
+    // ========================================================================
+    runProductionShadowValidation({
+      jurisdiction: deriveJurisdictionFromFacts(wizardFacts),
+      product: 'notice_only',
+      route: selected_route,
+      facts: wizardFacts,
+      tsBlockers: compliance.hardFailures.map((f) => ({
+        code: f.code,
+        severity: 'blocker',
+        message: f.legal_reason || f.code,
+      })),
+      tsWarnings: compliance.warnings.map((w) => ({
+        code: w.code,
+        severity: 'warning',
+        message: w.legal_reason || w.code,
+      })),
+    }).catch((err) => {
+      // Shadow validation should never block the response
+      console.error('[NOTICE-PREVIEW-API] Shadow validation error (non-fatal):', err);
     });
 
     if (compliance.hardFailures.length > 0) {

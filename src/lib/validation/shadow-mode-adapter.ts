@@ -34,6 +34,7 @@ import {
 export type DiscrepancyType =
   | 'missing_in_yaml'      // TS found it, YAML didn't
   | 'extra_in_yaml'        // YAML found it, TS didn't
+  | 'missing_in_ts'        // YAML found it, TS didn't (alias for production telemetry)
   | 'severity_mismatch'    // Both found it but different severity
   | 'message_mismatch';    // Both found it but different message (informational)
 
@@ -74,6 +75,9 @@ export interface ShadowModeReport {
   parityPercent: number;
   durationMs: number;
 }
+
+// Type alias for backward compatibility
+export type ShadowValidationReport = ShadowModeReport;
 
 // ============================================================================
 // ID NORMALIZATION
@@ -534,7 +538,7 @@ export interface ValidationTelemetryEvent {
   durationMs: number;
   discrepancyCount: number;
   discrepancies?: Array<{
-    type: 'missing_in_yaml' | 'missing_in_ts' | 'severity_mismatch';
+    type: DiscrepancyType;
     ruleId: string;
   }>;
   blockerIds: {
@@ -723,4 +727,229 @@ export function clearMetricsStore(): void {
  */
 export function getMetricsStore(): ValidationTelemetryEvent[] {
   return [...metricsStore];
+}
+
+// =============================================================================
+// SAMPLING CONTROLS
+// =============================================================================
+
+/**
+ * Get the telemetry sampling rate from environment variable.
+ * Default is 1.0 (100% sampling) when telemetry is enabled.
+ * Set VALIDATION_TELEMETRY_SAMPLE_RATE to a value between 0.0 and 1.0.
+ *
+ * Examples:
+ * - VALIDATION_TELEMETRY_SAMPLE_RATE=1.0 -> 100% of validations
+ * - VALIDATION_TELEMETRY_SAMPLE_RATE=0.1 -> 10% of validations
+ * - VALIDATION_TELEMETRY_SAMPLE_RATE=0.01 -> 1% of validations
+ */
+export function getTelemetrySampleRate(): number {
+  const rate = parseFloat(process.env.VALIDATION_TELEMETRY_SAMPLE_RATE || '1.0');
+  if (isNaN(rate) || rate < 0) return 0;
+  if (rate > 1) return 1;
+  return rate;
+}
+
+/**
+ * Determine if the current request should be sampled for telemetry.
+ * Uses a random number compared against the sample rate.
+ */
+export function shouldSampleTelemetry(): boolean {
+  if (!isTelemetryEnabled()) return false;
+  const rate = getTelemetrySampleRate();
+  if (rate >= 1) return true;
+  if (rate <= 0) return false;
+  return Math.random() < rate;
+}
+
+// =============================================================================
+// PRODUCTION SHADOW VALIDATION
+// =============================================================================
+
+/**
+ * Parameters for production shadow validation.
+ * Includes the TS validation result to avoid re-running it.
+ */
+export interface ProductionShadowParams {
+  /** Jurisdiction derived from facts */
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  /** Product type */
+  product: 'notice_only' | 'complete_pack';
+  /** Eviction route */
+  route: string;
+  /** Wizard facts for validation */
+  facts: Record<string, any>;
+  /** Pre-computed TS blockers (from existing validation) */
+  tsBlockers: Array<{ code: string; severity: string; message: string }>;
+  /** Pre-computed TS warnings (from existing validation) */
+  tsWarnings?: Array<{ code: string; severity: string; message: string }>;
+}
+
+/**
+ * Result of production shadow validation.
+ * Contains the telemetry event if recorded, null otherwise.
+ */
+export interface ProductionShadowResult {
+  /** Whether shadow validation was executed */
+  executed: boolean;
+  /** Telemetry event if recorded, null if skipped */
+  telemetry: ValidationTelemetryEvent | null;
+  /** Error message if shadow validation failed */
+  error?: string;
+}
+
+/**
+ * Run shadow validation in production without affecting the response.
+ *
+ * This function:
+ * 1. Checks if shadow mode is enabled
+ * 2. Checks if this request should be sampled
+ * 3. Runs the YAML rules engine
+ * 4. Compares with the TS result
+ * 5. Records telemetry
+ *
+ * IMPORTANT: This function NEVER throws. All errors are caught and logged.
+ * The TS validation result should be used as the authoritative response.
+ *
+ * @param params - Shadow validation parameters including pre-computed TS results
+ * @returns Result with telemetry if recorded, or null if skipped
+ */
+export async function runProductionShadowValidation(
+  params: ProductionShadowParams
+): Promise<ProductionShadowResult> {
+  // Check if shadow mode is enabled
+  if (!isShadowModeEnabled()) {
+    return { executed: false, telemetry: null };
+  }
+
+  // Check sampling
+  if (!shouldSampleTelemetry()) {
+    return { executed: false, telemetry: null };
+  }
+
+  try {
+    const startTime = Date.now();
+
+    // Import eviction rules engine dynamically to avoid circular deps
+    const { evaluateEvictionRules } = await import('./eviction-rules-engine');
+
+    // Run YAML validation
+    const yamlResult = evaluateEvictionRules(
+      params.facts,
+      params.jurisdiction as Jurisdiction,
+      params.product as Product,
+      params.route as EvictionRoute
+    );
+
+    const durationMs = Date.now() - startTime;
+
+    // Map TS results to normalized format
+    const tsBlockerIds = params.tsBlockers.map((b) => normalizeId(b.code));
+    const tsWarningIds = (params.tsWarnings || []).map((w) => normalizeId(w.code));
+
+    // Map YAML results
+    const yamlBlockerIds = yamlResult.blockers.map((b) => b.id);
+    const yamlWarningIds = yamlResult.warnings.map((w) => w.id);
+
+    // Calculate parity
+    const tsBlockerSet = new Set(tsBlockerIds.map(mapTsIdToYamlId));
+    const yamlBlockerSet = new Set(yamlBlockerIds);
+
+    // Check if all TS blockers are present in YAML (and vice versa)
+    const tsInYaml = tsBlockerIds.every((id) => yamlBlockerSet.has(mapTsIdToYamlId(id)));
+    const yamlInTs = yamlBlockerIds.every((id) => tsBlockerSet.has(id));
+    const parity = tsInYaml && yamlInTs && tsBlockerSet.size === yamlBlockerSet.size;
+
+    // Find discrepancies
+    const discrepancies: Array<{
+      type: DiscrepancyType;
+      ruleId: string;
+    }> = [];
+
+    for (const tsId of tsBlockerIds) {
+      const mappedId = mapTsIdToYamlId(tsId);
+      if (!yamlBlockerSet.has(mappedId)) {
+        discrepancies.push({ type: 'missing_in_yaml', ruleId: tsId });
+      }
+    }
+
+    for (const yamlId of yamlBlockerIds) {
+      if (!tsBlockerSet.has(yamlId)) {
+        discrepancies.push({ type: 'missing_in_ts', ruleId: yamlId });
+      }
+    }
+
+    // Build report
+    const report: ShadowValidationReport = {
+      timestamp: new Date().toISOString(),
+      jurisdiction: params.jurisdiction as Jurisdiction,
+      product: params.product as Product,
+      route: params.route as EvictionRoute,
+      durationMs,
+      parity,
+      parityPercent: parity ? 100 : Math.round(
+        (1 - discrepancies.length / Math.max(tsBlockerIds.length + yamlBlockerIds.length, 1)) * 100
+      ),
+      ts: {
+        blockers: tsBlockerIds.length,
+        warnings: tsWarningIds.length,
+        blockerIds: tsBlockerIds,
+        warningIds: tsWarningIds,
+      },
+      yaml: {
+        blockers: yamlBlockerIds.length,
+        warnings: yamlWarningIds.length,
+        blockerIds: yamlBlockerIds,
+        warningIds: yamlWarningIds,
+      },
+      discrepancies: discrepancies.map((d) => ({
+        ...d,
+        tsValue: undefined,
+        yamlValue: undefined,
+      })),
+    };
+
+    // Record telemetry
+    const telemetry = recordValidationTelemetry(report);
+
+    // Log parity mismatches at warning level for monitoring
+    if (!parity) {
+      console.warn(
+        `[ShadowValidation] Parity mismatch: ${params.jurisdiction}/${params.product}/${params.route}`,
+        {
+          tsBlockers: tsBlockerIds,
+          yamlBlockers: yamlBlockerIds,
+          discrepancies,
+        }
+      );
+    }
+
+    return { executed: true, telemetry };
+  } catch (error) {
+    // Never throw - just log and return
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[ShadowValidation] Error during shadow validation:', errorMessage);
+    return { executed: false, telemetry: null, error: errorMessage };
+  }
+}
+
+/**
+ * Helper to derive jurisdiction from wizard facts.
+ */
+export function deriveJurisdictionFromFacts(
+  facts: Record<string, any>
+): 'england' | 'wales' | 'scotland' {
+  const jurisdiction = facts.jurisdiction || facts.property_country || facts.country || 'england';
+  const normalized = String(jurisdiction).toLowerCase().replace(/[^a-z-]/g, '');
+
+  if (normalized.includes('wales')) return 'wales';
+  if (normalized.includes('scotland')) return 'scotland';
+  return 'england';
+}
+
+/**
+ * Helper to derive route from wizard facts.
+ */
+export function deriveRouteFromFacts(facts: Record<string, any>): string {
+  return facts.selected_notice_route || facts.eviction_route || 'unknown';
 }
