@@ -4,13 +4,24 @@
  * Triggered daily (recommended: 2am)
  * Checks all enabled legal sources for changes and creates events
  *
- * Usage: Call from Vercel Cron or external cron service
- * Authorization: Requires CRON_SECRET token (Bearer or Vercel header)
- *
  * Phase 23: Admin Portal Cron Summary + One-Click "Push PR" Workflow
  *
+ * Authentication Methods:
+ * 1. Bearer token (manual/API calls): Authorization: Bearer <CRON_SECRET>
+ * 2. Vercel Cron (scheduled): x-vercel-cron header + ?key=<CRON_SECRET> query param
+ *
+ * Usage:
+ * - Health check (no auth): GET /api/cron/legal-change-check
+ *   Returns status info only, does NOT persist a run
+ *
+ * - Manual execution: GET/POST with Authorization: Bearer <CRON_SECRET>
+ *   Executes the job and persists run to Supabase
+ *
+ * - Vercel Cron: GET /api/cron/legal-change-check?key=<CRON_SECRET>
+ *   Vercel sends x-vercel-cron: 1 header automatically
+ *
  * Environment Variables:
- * - CRON_SECRET: Required for authorization
+ * - CRON_SECRET: Required for authorization (do not expose in logs)
  * - LEGAL_CHANGE_SIMULATION_ENABLED: Set to "true" to enable test event simulation
  *   (defaults to false - no simulated events in production)
  */
@@ -46,7 +57,14 @@ function isSimulationEnabled(): boolean {
 
 /**
  * Verify cron authorization.
- * Supports both Bearer token and Vercel cron header.
+ *
+ * Supports multiple authentication methods:
+ * 1. Bearer token (for manual/API calls): Authorization: Bearer <CRON_SECRET>
+ * 2. Vercel Cron (scheduled): x-vercel-cron: 1 header + ?key=<CRON_SECRET> query param
+ *
+ * Note: Vercel Cron Jobs cannot send custom headers, only x-vercel-cron: 1.
+ * Therefore, for scheduled jobs we require BOTH the header AND a secret in the URL.
+ * This prevents unauthorized execution while allowing Vercel's scheduler to work.
  */
 function verifyCronAuth(request: NextRequest): { authorized: boolean; source: string } {
   const cronSecret = process.env.CRON_SECRET;
@@ -55,16 +73,34 @@ function verifyCronAuth(request: NextRequest): { authorized: boolean; source: st
     return { authorized: false, source: 'no_secret_configured' };
   }
 
-  // Check Bearer token (standard auth)
+  // Method 1: Bearer token (standard auth for manual/API calls)
   const authHeader = request.headers.get('authorization');
   if (authHeader === `Bearer ${cronSecret}`) {
     return { authorized: true, source: 'bearer' };
   }
 
-  // Check Vercel cron header (for Vercel Cron jobs)
+  // Method 2: Vercel Cron (x-vercel-cron: 1 header + secret in query param)
+  // Vercel sends x-vercel-cron: "1" for scheduled jobs - it cannot send custom values
   const vercelCronHeader = request.headers.get('x-vercel-cron');
-  if (vercelCronHeader === cronSecret) {
-    return { authorized: true, source: 'vercel_cron' };
+  if (vercelCronHeader === '1') {
+    // Vercel cron header present - now verify the secret from query param
+    const keyParam = request.nextUrl.searchParams.get('key');
+
+    // Use timing-safe comparison to prevent timing attacks
+    if (keyParam && keyParam.length === cronSecret.length) {
+      let match = true;
+      for (let i = 0; i < cronSecret.length; i++) {
+        if (keyParam[i] !== cronSecret[i]) {
+          match = false;
+        }
+      }
+      if (match) {
+        return { authorized: true, source: 'vercel_cron' };
+      }
+    }
+
+    // x-vercel-cron present but key missing or invalid
+    return { authorized: false, source: 'vercel_cron_missing_key' };
   }
 
   return { authorized: false, source: 'invalid_credentials' };
