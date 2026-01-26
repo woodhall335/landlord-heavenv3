@@ -90,7 +90,8 @@ function normalizeId(id: string): string {
 
 /**
  * Map known TS validator codes to YAML rule IDs.
- * This handles cases where the naming convention differs.
+ * Phase 1: YAML rules now use TS-compatible IDs for England S21.
+ * This mapping handles remaining legacy codes and other jurisdictions.
  */
 const TS_TO_YAML_ID_MAP: Record<string, string> = {
   // Pre-generation-check.ts codes -> YAML IDs
@@ -100,37 +101,45 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   'missing_tenancy_start_date': 'tenancy_start_date_required',
   'future_tenancy_start': 'tenancy_start_date_future',
   'missing_notice_service_date': 'notice_service_date_required',
-  's21_deposit_not_protected': 's21_deposit_not_protected',
-  's21_prescribed_info_missing': 's21_prescribed_info_not_served',
-  's21_how_to_rent_missing': 's21_h2r_not_provided',
-  's21_epc_missing': 's21_epc_not_provided',
-  's21_gas_cert_missing': 's21_gas_cert_not_provided',
   's21_retaliatory_eviction_risk': 's21_retaliatory_risk',
   's8_no_grounds': 's8_grounds_required',
   's8_arrears_ground_no_data': 's8_arrears_ground_no_data',
   'ground_8_threshold_not_met': 's8_ground8_threshold_not_met',
   's8_no_particulars': 's8_no_particulars',
 
-  // evaluate-notice-compliance.ts codes -> YAML IDs (both dash and underscore versions)
-  's21-deposit-noncompliant': 's21_deposit_not_protected',
-  's21_deposit_noncompliant': 's21_deposit_not_protected',
-  's21-prescribed-info-required': 's21_prescribed_info_not_served',
-  's21-gas-cert': 's21_gas_cert_not_provided',
-  's21_gas_cert': 's21_gas_cert_not_provided',
-  's21-epc': 's21_epc_not_provided',
-  's21_epc': 's21_epc_unconfirmed',
-  's21-h2r': 's21_h2r_not_provided',
-  's21_h2r': 's21_h2r_unconfirmed',
-  's21-licensing': 's21_licensing_required_not_licensed',
-  's21_licensing': 's21_licensing_required_not_licensed',
-  's21-four-month-bar': 's21_four_month_bar',
+  // England S21 - evaluate-notice-compliance.ts codes
+  // Note: YAML rules now use same IDs as TS codes (after normalization)
+  // These mappings are identity mappings for clarity
+  's21_deposit_noncompliant': 's21_deposit_noncompliant',
+  's21_epc': 's21_epc',
+  's21_h2r': 's21_h2r',
+  's21_gas_cert': 's21_gas_cert',
+  's21_licensing': 's21_licensing',
   's21_four_month_bar': 's21_four_month_bar',
-  's21-retaliatory': 's21_retaliatory_improvement_notice',
-  's21_retaliatory': 's21_retaliatory_improvement_notice',
-  's21-deposit-cap': 's21_deposit_cap_exceeded',
-  's21_deposit_cap': 's21_deposit_cap_exceeded',
-  's21-notice-period': 's21_notice_period_short',
-  's21_notice_period': 's21_notice_period_short',
+  's21_retaliatory_improvement_notice': 's21_retaliatory_improvement_notice',
+  's21_retaliatory_emergency_action': 's21_retaliatory_emergency_action',
+  's21_deposit_cap_exceeded': 's21_deposit_cap_exceeded',
+  's21_date_too_soon': 's21_notice_period_short',
+  's21_minimum_notice': 's21_notice_period_short',
+  's21_prohibited_fees': 's21_prohibited_fees_charged',
+  's21_prohibited_fees_unconfirmed': 's21_prohibited_fees_unconfirmed',
+
+  // Legacy dash-separated versions (normalize to underscore)
+  's21-deposit-noncompliant': 's21_deposit_noncompliant',
+  's21-epc': 's21_epc',
+  's21-h2r': 's21_h2r',
+  's21-gas-cert': 's21_gas_cert',
+  's21-licensing': 's21_licensing',
+  's21-licensing-required': 's21_licensing',
+  's21-licensing-confirm': 's21_licensing',
+  's21-four-month-bar': 's21_four_month_bar',
+  's21-retaliatory-improvement-notice': 's21_retaliatory_improvement_notice',
+  's21-retaliatory-emergency-action': 's21_retaliatory_emergency_action',
+  's21-deposit-cap-exceeded': 's21_deposit_cap_exceeded',
+  's21-date-too-soon': 's21_notice_period_short',
+  's21-prescribed-info-required': 's21_prescribed_info_unconfirmed',
+
+  // England S8
   's8-grounds-required': 's8_grounds_required',
   's8_grounds_required': 's8_grounds_required',
   's8-notice-period': 's8_notice_period_short',
@@ -142,7 +151,9 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
 
   // Wales codes
   's173-period-bar': 's173_six_month_bar',
+  's173_period_bar': 's173_six_month_bar',
   's173-licensing': 's173_rsw_not_registered',
+  's173_licensing': 's173_rsw_not_registered',
   's173-deposit': 's173_deposit_not_protected',
   's173-notice-period': 's173_notice_period_short',
   'wales_s173_notice_period_short': 's173_notice_period_short',
@@ -157,6 +168,7 @@ const TS_TO_YAML_ID_MAP: Record<string, string> = {
   'scotland_pre_action_not_completed': 'ntl_pre_action_required',
   'scotland_notice_period_short': 'ntl_notice_period_short',
   'ntl-ground-required': 'ntl_ground_required',
+  'ntl_ground_required': 'ntl_ground_required',
   'ntl-pre-action': 'ntl_pre_action_required',
   'ntl-notice-period': 'ntl_notice_period_short',
 };

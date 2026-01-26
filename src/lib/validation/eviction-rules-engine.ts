@@ -744,12 +744,13 @@ export function evaluateEvictionRules(
       continue;
     }
 
-    // Evaluate all conditions (all must be true for rule to trigger)
-    const allConditionsMet = rule.applies_when.every((cond) =>
+    // Evaluate conditions (rule fires if ANY condition is true - OR logic)
+    // This matches Money Claim reference implementation semantics
+    const anyConditionMet = rule.applies_when.some((cond) =>
       evaluateCondition(cond.condition, facts, computed, route)
     );
 
-    if (allConditionsMet) {
+    if (anyConditionMet) {
       const result: RuleEvaluationResult = {
         id: rule.id,
         severity: rule.severity,

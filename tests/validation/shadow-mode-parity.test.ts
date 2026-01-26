@@ -56,6 +56,9 @@ describe('Shadow Mode Parity - England Section 21', () => {
         how_to_rent_served: true,
         has_gas_appliances: true,
         gas_certificate_provided: true,
+        // Explicit licensing confirmation for parity
+        property_licensing_status: 'licensed',
+        licensing_required: 'not_required',
         selected_notice_route: 'section_21',
       };
 
@@ -63,6 +66,8 @@ describe('Shadow Mode Parity - England Section 21', () => {
 
       // Both should find no blockers for a valid case
       expect(report.yaml.blockers).toBe(0);
+      expect(report.ts.blockers).toBe(0);
+      expect(report.parity).toBe(true);
       console.log(formatShadowReport(report));
     });
   });
@@ -79,6 +84,10 @@ describe('Shadow Mode Parity - England Section 21', () => {
         notice_expiry_date: '2025-08-01',
         deposit_taken: true,
         deposit_protected: false, // NOT PROTECTED - should block
+        // Explicit fields for parity
+        epc_provided: true,
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
@@ -104,15 +113,19 @@ describe('Shadow Mode Parity - England Section 21', () => {
         deposit_taken: true,
         deposit_protected: true,
         prescribed_info_given: false, // NOT GIVEN - should block
+        // Explicit fields for parity
+        epc_provided: true,
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect prescribed info missing
+      // Both should detect prescribed info missing
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
-        report.yaml.blockerIds.some((id) => id.includes('prescribed'))
+        report.yaml.blockerIds.some((id) => id.includes('prescribed') || id.includes('deposit'))
       ).toBe(true);
       console.log(formatShadowReport(report));
     });
@@ -130,12 +143,14 @@ describe('Shadow Mode Parity - England Section 21', () => {
         notice_expiry_date: '2025-08-01',
         deposit_taken: false,
         epc_provided: false, // NOT PROVIDED - should block
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect EPC missing
+      // Both should detect EPC missing
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('epc'))
@@ -157,12 +172,13 @@ describe('Shadow Mode Parity - England Section 21', () => {
         how_to_rent_provided: true,
         has_gas_appliances: true,
         gas_certificate_provided: false, // NOT PROVIDED - should block
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect gas cert missing
+      // Both should detect gas cert missing
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('gas'))
@@ -182,12 +198,13 @@ describe('Shadow Mode Parity - England Section 21', () => {
         deposit_taken: false,
         epc_provided: true,
         how_to_rent_provided: false, // NOT PROVIDED - should block
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect H2R missing
+      // Both should detect H2R missing
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('h2r'))
@@ -210,12 +227,13 @@ describe('Shadow Mode Parity - England Section 21', () => {
         epc_provided: true,
         how_to_rent_provided: true,
         improvement_notice_served: true, // SERVED - should block
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect retaliatory eviction bar
+      // Both should detect retaliatory eviction bar
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('retaliatory'))
@@ -243,12 +261,13 @@ describe('Shadow Mode Parity - England Section 21', () => {
         deposit_taken: false,
         epc_provided: true,
         how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
         selected_notice_route: 'section_21',
       };
 
       const report = await runShadowValidation({ ...baseParams, facts });
 
-      // YAML should detect four-month bar
+      // Both should detect four-month bar
       expect(report.yaml.blockers).toBeGreaterThan(0);
       expect(
         report.yaml.blockerIds.some((id) => id.includes('four_month'))

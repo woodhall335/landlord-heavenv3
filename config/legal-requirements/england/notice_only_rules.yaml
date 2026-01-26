@@ -28,44 +28,44 @@ routes:
 # =============================================================================
 # SECTION 21 RULES (No-fault eviction)
 # =============================================================================
+# NOTE: Rule IDs are aligned with TS validator codes for shadow mode parity.
+# The TS validator uses the same code for "not provided" and "unconfirmed" states,
+# so we consolidate rules where the TS does.
 
 section_21_rules:
 
   # ---------------------------------------------------------------------------
   # DEPOSIT COMPLIANCE (Housing Act 2004 s.213)
+  # TS Code: S21-DEPOSIT-NONCOMPLIANT
   # ---------------------------------------------------------------------------
 
-  - id: s21_deposit_not_protected
+  - id: s21_deposit_noncompliant
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # Deposit not protected
       - condition: "facts.deposit_taken === true && facts.deposit_protected === false"
-    message: "Deposit must be protected before a Section 21 notice can be served."
-    rationale: "Housing Act 2004 s.213 requires tenancy deposits to be protected in an approved scheme within 30 days."
+      # Deposit protected but prescribed info not given
+      - condition: "facts.deposit_taken === true && facts.deposit_protected === true && facts.prescribed_info_given === false"
+    message: "Deposit compliance issue - deposit must be protected and prescribed information must be served before Section 21."
+    rationale: "Housing Act 2004 s.213 requires tenancy deposits to be protected and prescribed information to be served."
     field: deposit_protected
 
-  - id: s21_deposit_protection_unconfirmed
+  - id: s21_deposit_unconfirmed
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # Deposit protection status unknown (generate stage)
       - condition: "facts.deposit_taken === true && facts.deposit_protected !== true && facts.deposit_protected !== false"
     message: "Confirm whether the deposit is protected before generating Section 21."
     rationale: "Deposit protection status must be confirmed to validate Section 21 notice."
     field: deposit_protected
 
-  - id: s21_prescribed_info_not_served
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
-      - condition: "facts.deposit_taken === true && facts.deposit_protected === true && facts.prescribed_info_given === false"
-    message: "Prescribed information must be served before a Section 21 notice can be served."
-    rationale: "Housing Act 2004 s.213(6) requires landlords to provide prescribed information within 30 days of deposit protection."
-    field: prescribed_info_given
-
   - id: s21_prescribed_info_unconfirmed
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # Prescribed info status unknown when deposit is protected (generate stage)
       - condition: "facts.deposit_taken === true && facts.deposit_protected === true && (facts.prescribed_info_given === undefined || facts.prescribed_info_given === null)"
     message: "Confirm whether prescribed information has been served before generating the notice."
     rationale: "Prescribed information status must be confirmed for Section 21 validity."
@@ -73,6 +73,7 @@ section_21_rules:
 
   # ---------------------------------------------------------------------------
   # DEPOSIT CAP (Tenant Fees Act 2019 s.3)
+  # TS Code: S21-DEPOSIT-CAP-EXCEEDED
   # ---------------------------------------------------------------------------
 
   - id: s21_deposit_cap_exceeded
@@ -95,99 +96,74 @@ section_21_rules:
 
   # ---------------------------------------------------------------------------
   # LICENSING (Housing Act 2004 s.75/s.98)
+  # TS Codes: S21-LICENSING-REQUIRED, S21-LICENSING-CONFIRM, S21-LICENSING
   # ---------------------------------------------------------------------------
 
-  - id: s21_licensing_required_not_licensed
+  - id: s21_licensing
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # New MQS: licensing required but no valid licence
       - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && facts.has_valid_licence === false"
-    message: "Section 21 notices are INVALID for properties that require licensing but are unlicensed."
-    rationale: "Housing Act 2004 (HMO: s.75, Selective: s.98) prevents serving a valid Section 21 notice on unlicensed properties."
-    field: has_valid_licence
-
-  - id: s21_licensing_unconfirmed
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
-      - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && (facts.has_valid_licence === undefined || facts.has_valid_licence === null)"
-    message: "Property requires licensing - confirm you have a valid licence to use Section 21."
-    rationale: "Licensing status must be confirmed before generating Section 21 notice."
-    field: has_valid_licence
-
-  - id: s21_licensing_legacy_unlicensed
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
+      # New MQS: licensing required but status unconfirmed
+      - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && facts.has_valid_licence === undefined"
+      # Legacy: property marked as unlicensed
       - condition: "facts.property_licensing_status === 'unlicensed'"
-    message: "Section 21 cannot be used while the property remains unlicensed."
-    rationale: "Housing Act 2004 prevents serving a valid Section 21 notice on unlicensed HMO or selectively licensed properties."
+      # Legacy fallback: no licensing info provided (generate stage behavior)
+      - condition: "facts.property_licensing_status === undefined && !facts.licensing_required"
+    message: "Licensing compliance issue - confirm property licensing status before serving Section 21."
+    rationale: "Housing Act 2004 (HMO: s.75, Selective: s.98) prevents serving a valid Section 21 notice on unlicensed properties."
     field: property_licensing
 
   # ---------------------------------------------------------------------------
   # GAS SAFETY (Gas Safety (Installation and Use) Regulations 1998)
+  # TS Code: S21-GAS-CERT
   # ---------------------------------------------------------------------------
 
-  - id: s21_gas_cert_not_provided
+  - id: s21_gas_cert
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # Gas cert not provided
       - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided === false"
+      # Gas cert status unconfirmed (generate stage)
+      - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided === undefined"
     message: "Gas safety certificate must be provided before serving Section 21."
     rationale: "Landlords must provide tenants with a copy of the gas safety record within 28 days of the check."
     field: gas_certificate_provided
 
-  - id: s21_gas_cert_unconfirmed
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
-      - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided === undefined"
-    message: "Confirm gas safety certificate status."
-    rationale: "Gas safety status must be confirmed for properties with gas appliances."
-    field: gas_certificate_provided
-
   # ---------------------------------------------------------------------------
   # EPC (Energy Performance of Buildings Regulations 2012)
+  # TS Code: S21-EPC
   # ---------------------------------------------------------------------------
 
-  - id: s21_epc_not_provided
+  - id: s21_epc
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # EPC not provided
       - condition: "facts.epc_provided === false"
+      # EPC status unconfirmed (generate stage)
+      - condition: "facts.epc_provided === undefined"
     message: "An EPC must be provided before serving Section 21."
     rationale: "Energy Performance of Buildings Regulations require EPC to be provided to tenants."
     field: epc_provided
 
-  - id: s21_epc_unconfirmed
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
-      - condition: "facts.epc_provided === undefined"
-    message: "Confirm EPC status."
-    rationale: "EPC provision status must be confirmed before generating notice."
-    field: epc_provided
-
   # ---------------------------------------------------------------------------
   # HOW TO RENT GUIDE (Deregulation Act 2015)
+  # TS Code: S21-H2R
   # ---------------------------------------------------------------------------
 
-  - id: s21_h2r_not_provided
+  - id: s21_h2r
     severity: blocker
     applies_to: [section_21]
     applies_when:
+      # H2R not provided
       - condition: "facts.how_to_rent_provided === false"
+      # H2R status unconfirmed (generate stage)
+      - condition: "facts.how_to_rent_provided === undefined"
     message: "The latest How to Rent guide must be provided before serving Section 21."
     rationale: "Deregulation Act 2015 requires the How to Rent guide to be provided to tenants for tenancies starting from 1 October 2015."
-    field: how_to_rent_provided
-
-  - id: s21_h2r_unconfirmed
-    severity: blocker
-    applies_to: [section_21]
-    applies_when:
-      - condition: "facts.how_to_rent_provided === undefined"
-    message: "Confirm if the How to Rent guide was served."
-    rationale: "How to Rent provision status must be confirmed before generating notice."
     field: how_to_rent_provided
 
   # ---------------------------------------------------------------------------
@@ -499,27 +475,21 @@ summary:
     - id: deposit
       label: "Deposit Compliance"
       rules:
-        - s21_deposit_not_protected
-        - s21_deposit_protection_unconfirmed
-        - s21_prescribed_info_not_served
+        - s21_deposit_noncompliant
+        - s21_deposit_unconfirmed
         - s21_prescribed_info_unconfirmed
         - s21_deposit_cap_exceeded
         - s21_deposit_cap_inconsistent
     - id: licensing
       label: "Property Licensing"
       rules:
-        - s21_licensing_required_not_licensed
-        - s21_licensing_unconfirmed
-        - s21_licensing_legacy_unlicensed
+        - s21_licensing
     - id: safety_compliance
       label: "Safety Compliance"
       rules:
-        - s21_gas_cert_not_provided
-        - s21_gas_cert_unconfirmed
-        - s21_epc_not_provided
-        - s21_epc_unconfirmed
-        - s21_h2r_not_provided
-        - s21_h2r_unconfirmed
+        - s21_gas_cert
+        - s21_epc
+        - s21_h2r
     - id: retaliatory
       label: "Retaliatory Eviction"
       rules:

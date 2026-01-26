@@ -317,10 +317,12 @@ describe('England Section 21 Rule Evaluation', () => {
     how_to_rent_provided: true,
     has_gas_appliances: true,
     gas_certificate_provided: true,
+    // Explicit licensing status for Phase 1 parity
+    property_licensing_status: 'licensed',
   };
 
   describe('Deposit Protection Rules', () => {
-    it('should trigger s21_deposit_not_protected when deposit is not protected', () => {
+    it('should trigger s21_deposit_noncompliant when deposit is not protected', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         deposit_taken: true,
@@ -329,10 +331,10 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_deposit_not_protected')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's21_deposit_noncompliant')).toBe(true);
     });
 
-    it('should NOT trigger s21_deposit_not_protected when deposit is protected', () => {
+    it('should NOT trigger s21_deposit_noncompliant when deposit is protected', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         deposit_taken: true,
@@ -341,7 +343,7 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_deposit_not_protected')).toBe(false);
+      expect(result.blockers.some((b) => b.id === 's21_deposit_noncompliant')).toBe(false);
     });
 
     it('should NOT trigger deposit rules when no deposit was taken', () => {
@@ -356,7 +358,7 @@ describe('England Section 21 Rule Evaluation', () => {
       expect(result.blockers.some((b) => b.id.includes('deposit'))).toBe(false);
     });
 
-    it('should trigger s21_prescribed_info_not_served when prescribed info not given', () => {
+    it('should trigger s21_deposit_noncompliant when prescribed info not given', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         deposit_taken: true,
@@ -366,12 +368,12 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_prescribed_info_not_served')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's21_deposit_noncompliant')).toBe(true);
     });
   });
 
   describe('How to Rent Rule', () => {
-    it('should trigger s21_h2r_not_provided when How to Rent not provided', () => {
+    it('should trigger s21_h2r when How to Rent not provided', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         how_to_rent_provided: false,
@@ -379,12 +381,12 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_h2r_not_provided')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(true);
     });
   });
 
   describe('EPC Rule', () => {
-    it('should trigger s21_epc_not_provided when EPC not provided', () => {
+    it('should trigger s21_epc when EPC not provided', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         epc_provided: false,
@@ -392,12 +394,12 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_epc_not_provided')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's21_epc')).toBe(true);
     });
   });
 
   describe('Gas Safety Rule', () => {
-    it('should trigger s21_gas_cert_not_provided when gas cert not provided (has gas)', () => {
+    it('should trigger s21_gas_cert when gas cert not provided (has gas)', () => {
       const facts: EvictionFacts = {
         ...baseValidFacts,
         has_gas_appliances: true,
@@ -406,7 +408,7 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_gas_cert_not_provided')).toBe(true);
+      expect(result.blockers.some((b) => b.id === 's21_gas_cert')).toBe(true);
     });
 
     it('should NOT trigger gas rule when no gas appliances', () => {
@@ -418,7 +420,7 @@ describe('England Section 21 Rule Evaluation', () => {
 
       const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
 
-      expect(result.blockers.some((b) => b.id === 's21_gas_cert_not_provided')).toBe(false);
+      expect(result.blockers.some((b) => b.id === 's21_gas_cert')).toBe(false);
     });
   });
 
