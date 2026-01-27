@@ -28,6 +28,7 @@ import {
   precompileConditions,
   type TimingHook,
 } from './eviction-rules-optimizer';
+import { normalizeFactKeys } from '../wizard/normalizeFacts';
 
 // ============================================================================
 // TYPES
@@ -905,6 +906,40 @@ export function getAllRules(config: RulesConfig): ValidationRule[] {
 }
 
 // ============================================================================
+// FACTS CANONICALIZATION
+// ============================================================================
+
+/**
+ * Build a normalized facts view for YAML rule evaluation.
+ *
+ * This function canonicalizes wizard fact keys to the standard keys expected by
+ * notice_only_rules.yaml (and other YAML rule files). This ensures that variant
+ * keys like `epc_served`, `how_to_rent_served`, `how_to_rent_given` are mapped
+ * to their canonical counterparts (`epc_provided`, `how_to_rent_provided`) before
+ * rule conditions are evaluated.
+ *
+ * Key mappings handled:
+ * - epc_served → epc_provided
+ * - how_to_rent_served / how_to_rent_given → how_to_rent_provided
+ * - Nested containers (compliance, section21, section_21, property) are flattened
+ *
+ * Precedence rules:
+ * - If a canonical key (e.g., `epc_provided`) already has an explicit value
+ *   (true/false), it is NEVER overwritten by variant keys.
+ * - Variant keys only fill in when canonical keys are undefined.
+ *
+ * @param rawFacts - The raw facts object from wizard/case data
+ * @returns Normalized facts view suitable for YAML rule evaluation
+ */
+export function buildRuleFactsView(rawFacts: EvictionFacts): EvictionFacts {
+  // Use the centralised normalizeFactKeys which handles:
+  // 1. Top-level key aliases (epc_served -> epc_provided, etc.)
+  // 2. Nested container flattening (compliance.epc_served, section21.how_to_rent_served, etc.)
+  // 3. Proper precedence (never overwrites explicit canonical values)
+  return normalizeFactKeys(rawFacts) as EvictionFacts;
+}
+
+// ============================================================================
 // MAIN EVALUATION FUNCTION
 // ============================================================================
 
@@ -912,6 +947,9 @@ export function getAllRules(config: RulesConfig): ValidationRule[] {
  * Evaluate all rules against the provided facts.
  *
  * Phase 17: Uses optimized condition evaluation with caching and timing hooks.
+ *
+ * NOTE: Facts are automatically canonicalized before rule evaluation to handle
+ * variant keys (e.g., epc_served -> epc_provided). See buildRuleFactsView().
  *
  * @param facts - The eviction case facts
  * @param jurisdiction - The jurisdiction (england, wales, scotland)
@@ -931,9 +969,13 @@ export function evaluateEvictionRules(
   const optimizerConfig = getOptimizerConfig();
   const timing = optimizerConfig.enableTimingHooks ? startTiming() : null;
 
+  // Canonicalize facts to handle variant keys (epc_served -> epc_provided, etc.)
+  // This ensures YAML rule conditions see the expected canonical key names
+  const normalizedFacts = buildRuleFactsView(facts);
+
   const config = rulesConfig || loadRulesConfig(jurisdiction, product);
   const allRules = getAllRulesForRoute(config, route);
-  const computed = buildComputedContext(facts, route);
+  const computed = buildComputedContext(normalizedFacts, route);
 
   // Phase 17: Validate rule count against safeguard limit
   validateRuleCount(allRules.length);
@@ -967,9 +1009,10 @@ export function evaluateEvictionRules(
     for (const cond of rule.applies_when) {
       conditionCount++;
       // Use optimized evaluation with compiled function caching
+      // Note: Using normalizedFacts to ensure canonical keys are available
       const result = evaluateConditionOptimized(
         cond.condition,
-        facts as Record<string, unknown>,
+        normalizedFacts as Record<string, unknown>,
         computed as unknown as Record<string, unknown>,
         route
       );
@@ -1322,9 +1365,12 @@ export function evaluateEvictionRulesExplained(
 ): ExplainableResult {
   const startTime = performance.now();
 
+  // Canonicalize facts to handle variant keys (epc_served -> epc_provided, etc.)
+  const normalizedFacts = buildRuleFactsView(facts);
+
   const config = rulesConfig || loadRulesConfig(jurisdiction, product);
   const allRules = getAllRulesForRoute(config, route);
-  const computed = buildComputedContext(facts, route);
+  const computed = buildComputedContext(normalizedFacts, route);
 
   // Pre-allocate result arrays
   const blockers: RuleEvaluationResult[] = [];
@@ -1378,9 +1424,10 @@ export function evaluateEvictionRulesExplained(
     for (const cond of rule.applies_when) {
       conditionsEvaluated++;
 
+      // Note: Using normalizedFacts to ensure canonical keys are available
       const result = evaluateConditionOptimized(
         cond.condition,
-        facts as Record<string, unknown>,
+        normalizedFacts as Record<string, unknown>,
         computed as unknown as Record<string, unknown>,
         route
       );
