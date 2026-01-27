@@ -141,29 +141,34 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     setUploadError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('case_id', caseId);
-      formData.append('category', categoryEnum);
+      const allNewFiles: UploadedFile[] = [];
 
+      // Upload files one at a time (API expects single file per request)
       for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]);
+        const formData = new FormData();
+        formData.append('caseId', caseId);
+        formData.append('questionId', `evidence_section_${categoryEnum}`);
+        formData.append('category', categoryEnum);
+        formData.append('file', files[i]);
+
+        const response = await fetch('/api/wizard/upload-evidence', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Upload failed');
+        }
+
+        const data = await response.json();
+        if (data.files) {
+          allNewFiles.push(...data.files);
+        }
       }
-
-      const response = await fetch('/api/wizard/upload-evidence', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Upload failed');
-      }
-
-      const data = await response.json();
 
       // Update facts with new files
-      const newFiles: UploadedFile[] = data.files || [];
-      const updatedFiles = [...existingFiles, ...newFiles];
+      const updatedFiles = [...existingFiles, ...allNewFiles];
 
       await onUpdate({
         evidence: {
