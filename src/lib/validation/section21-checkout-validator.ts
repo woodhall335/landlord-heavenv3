@@ -16,6 +16,59 @@ import {
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 
 // =============================================================================
+// FACTS FLATTENING
+// =============================================================================
+
+/**
+ * Flatten nested facts into a single object for uniform key lookup.
+ *
+ * Problem: Wizard flows may store compliance facts in nested objects like:
+ *   facts.compliance.epc_served = true
+ *   facts.section21.how_to_rent_served = true
+ *   facts.tenancy.tenancy_start_date = '2024-01-01'
+ *
+ * But extractSection21ValidationInput expects flat keys:
+ *   facts.epc_served = true
+ *
+ * This function creates a merged view where nested values are accessible at
+ * the top level, while preserving any top-level values (which take precedence).
+ */
+function flattenFacts(facts: Record<string, any>): Record<string, any> {
+  // Common nested object keys where compliance/tenancy data may be stored
+  const nestedKeys = [
+    'compliance',
+    'section21',
+    'section_21',
+    'tenancy',
+    'property',
+    'meta',
+    '__meta',
+  ];
+
+  // Start with empty object, then spread nested objects in order
+  // (later spreads override earlier ones if keys collide)
+  const flattened: Record<string, any> = {};
+
+  // First, spread all nested objects (lower priority)
+  for (const nestedKey of nestedKeys) {
+    const nested = facts[nestedKey];
+    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
+      Object.assign(flattened, nested);
+    }
+  }
+
+  // Then, spread top-level facts (higher priority - override nested values)
+  for (const [key, value] of Object.entries(facts)) {
+    // Skip the nested container keys themselves and objects
+    if (nestedKeys.includes(key)) continue;
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) continue;
+    flattened[key] = value;
+  }
+
+  return flattened;
+}
+
+// =============================================================================
 // TYPES
 // =============================================================================
 
@@ -80,10 +133,18 @@ export function isSection21Case(
 /**
  * Extract Section 21 validation input from wizard/collected facts.
  * Maps various field naming conventions to the canonical validator input.
+ *
+ * NOTE: This function flattens nested facts (compliance, section21, tenancy, etc.)
+ * so that values stored under facts.compliance.epc_served are found when looking
+ * up facts.epc_served. This fixes the "EPC UNKNOWN" / "HOW TO RENT UNKNOWN"
+ * issue where users answered these questions but the validator couldn't find them.
  */
 export function extractSection21ValidationInput(
-  facts: Record<string, any>
+  rawFacts: Record<string, any>
 ): Section21ValidationInput {
+  // Flatten nested facts for uniform lookup
+  const facts = flattenFacts(rawFacts);
+
   // Helper to check boolean from multiple possible field names
   const getBoolean = (...keys: string[]): boolean | undefined => {
     for (const key of keys) {
