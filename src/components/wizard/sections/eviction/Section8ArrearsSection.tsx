@@ -185,6 +185,11 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   }, [validationCtx]);
 
   // Convert facts to the format expected by ArrearsScheduleStep
+  // Use notice_served_date (if already served) OR notice_date (if generating new notice)
+  const effectiveNoticeDate = useMemo(
+    () => facts.notice_served_date || facts.notice_date || '',
+    [facts.notice_served_date, facts.notice_date]
+  );
   const scheduleStepFacts = useMemo(() => ({
     tenancy: {
       start_date: facts.tenancy_start_date,
@@ -195,16 +200,24 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
     rent_amount: facts.rent_amount,
     rent_frequency: facts.rent_frequency,
     notice: {
-      notice_date: facts.notice_served_date,
+      notice_date: effectiveNoticeDate,
     },
-    notice_date: facts.notice_served_date,
+    notice_date: effectiveNoticeDate,
+    // Also include notice_served_date directly for ArrearsScheduleStep compatibility
+    notice_served_date: effectiveNoticeDate,
     issues: {
       rent_arrears: {
         arrears_items: arrearsItems,
         has_arrears: arrearsItems.length > 0,
       },
     },
-  }), [facts, arrearsItems]);
+  }), [
+    facts.tenancy_start_date,
+    facts.rent_amount,
+    facts.rent_frequency,
+    effectiveNoticeDate,
+    arrearsItems,
+  ]);
 
   // Handle updates from ArrearsScheduleStep
   const handleArrearsUpdate = async (updates: Record<string, any>) => {
