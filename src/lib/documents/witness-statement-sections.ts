@@ -565,9 +565,12 @@ function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
   // === VERIFIED UPLOADED/CONFIRMED DOCUMENTS ===
   const verifiedDocs: string[] = [];
 
-  // Check evidence uploads
+  // Check evidence uploads - filter out undefined/null/empty values to prevent "undefined" in output
   if (input.evidence_uploads && input.evidence_uploads.length > 0) {
-    verifiedDocs.push(...input.evidence_uploads.map(upload => upload));
+    const validUploads = input.evidence_uploads.filter(
+      (upload): upload is string => typeof upload === 'string' && upload.trim().length > 0
+    );
+    verifiedDocs.push(...validUploads);
   }
 
   // Check compliance-related uploads (only if explicitly verified)
@@ -587,9 +590,14 @@ function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
     verifiedDocs.push('"How to Rent" Guide - Government prescribed information');
   }
 
-  if (verifiedDocs.length > 0) {
+  // Filter final list to ensure no undefined/null values and render only if we have valid docs
+  const filteredVerifiedDocs = verifiedDocs.filter(
+    (doc): doc is string => typeof doc === 'string' && doc.trim().length > 0
+  );
+
+  if (filteredVerifiedDocs.length > 0) {
     lines.push('Verified Documents Available:');
-    verifiedDocs.forEach(doc => {
+    filteredVerifiedDocs.forEach(doc => {
       lines.push(`• ${doc}`);
     });
     lines.push('');
@@ -840,10 +848,14 @@ export function extractWitnessStatementSectionsInput(
     arrearsMonths = arrearsTotal / rentAmount;
   }
 
-  // Extract evidence uploads
-  const evidenceUploads = data.evidence_uploads ||
-    data.evidence?.files?.map((f: any) => f.name) ||
-    [];
+  // Extract evidence uploads - filter out undefined/null values to prevent "undefined" in output
+  const evidenceUploads: string[] = data.evidence_uploads
+    ? data.evidence_uploads.filter((u: any): u is string => typeof u === 'string' && u.trim().length > 0)
+    : data.evidence?.files
+      ? data.evidence.files
+          .map((f: any) => f.name || f.filename || f.original_name)
+          .filter((name: any): name is string => typeof name === 'string' && name.trim().length > 0)
+      : [];
 
   // Signing data extraction
   const nestedSigning = data.signing || {};
