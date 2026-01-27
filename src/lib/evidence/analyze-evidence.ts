@@ -102,14 +102,14 @@ export function isNameLike(value: string | null | undefined): boolean {
   return true;
 }
 
-/** Master timeout for entire analysis (30s) - prevents infinite hangs */
-const ANALYSIS_MASTER_TIMEOUT_MS = 30000;
+/** Master timeout for entire analysis (45s) - prevents infinite hangs */
+const ANALYSIS_MASTER_TIMEOUT_MS = 45000;
 
-/** Hard timeout for OpenAI LLM calls (10s) - allows fallback to regex */
-const LLM_CALL_TIMEOUT_MS = 10000;
+/** Hard timeout for OpenAI LLM calls (20s) - allows fallback to regex */
+const LLM_CALL_TIMEOUT_MS = 20000;
 
-/** Hard timeout for Level A validation calls (8s) - uses GPT-4o-mini for speed */
-const LEVEL_A_CALL_TIMEOUT_MS = 8000;
+/** Hard timeout for Level A validation calls (12s) - uses GPT-4o-mini for speed */
+const LEVEL_A_CALL_TIMEOUT_MS = 12000;
 
 /** Maximum characters to send to LLM - prevents slow responses on large docs */
 const LLM_MAX_TEXT_CHARS = 6000;
