@@ -1943,7 +1943,7 @@ function NoticeOnlyReviewContent({
           no_retaliatory_notice: normalizedFacts.no_retaliatory_notice ?? caseFacts?.no_retaliatory_notice,
           improvement_notice_served: normalizedFacts.improvement_notice_served ?? caseFacts?.improvement_notice_served,
           tenancy_start_date: normalizedFacts.tenancy_start_date ?? caseFacts?.tenancy_start_date,
-          service_date: normalizedFacts.notice_service_date ?? normalizedFacts.notice_served_date ?? caseFacts?.notice_served_date || caseFacts?.intended_service_date,
+          service_date: normalizedFacts.notice_service_date ?? normalizedFacts.notice_served_date ?? (caseFacts?.notice_served_date || caseFacts?.intended_service_date),
         });
 
         const hasBlockers = s21Validation.blockers.length > 0;
