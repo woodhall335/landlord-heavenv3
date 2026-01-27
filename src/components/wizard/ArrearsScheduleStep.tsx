@@ -110,7 +110,11 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
   const tenancyStartDate = tenancy.start_date || facts.tenancy_start_date || '';
   const rentAmount = tenancy.rent_amount ?? facts.rent_amount ?? 0;
   const rentFrequency = (tenancy.rent_frequency || facts.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
-  const noticeDate = facts.notice?.notice_date || facts.notice_date || '';
+  // Support multiple notice_date field locations across different wizard flows:
+  // - facts.notice?.notice_date (nested notice object)
+  // - facts.notice_date (notice-only wizard)
+  // - facts.notice_served_date (eviction wizard - the actual date notice is served)
+  const noticeDate = facts.notice?.notice_date || facts.notice_date || facts.notice_served_date || '';
 
   // State for arrears items - sync with props on mount and when props change
   const [arrearsItems, setArrearsItems] = useState<ArrearsItem[]>(
