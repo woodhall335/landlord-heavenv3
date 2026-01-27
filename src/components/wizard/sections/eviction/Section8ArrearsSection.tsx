@@ -90,18 +90,25 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
     }
 
     const errors: Array<{ index: number; message: string }> = [];
+    // Track indices with invalid date ranges to exclude from overlap detection
+    const invalidRangeIndices = new Set<number>();
 
     arrearsItems.forEach((item, index) => {
+      // Normalize numeric values to avoid crashes if values are strings
+      const rentPaid = Number(item.rent_paid ?? 0);
+      const rentDue = Number(item.rent_due ?? 0);
+
       // Check start <= end
       if (item.period_start && item.period_end && item.period_start > item.period_end) {
         errors.push({
           index,
           message: `Period ${index + 1}: Start date (${item.period_start}) is after end date (${item.period_end})`,
         });
+        invalidRangeIndices.add(index);
       }
 
       // Check for negative rent due (shouldn't happen but validate)
-      if (item.rent_due < 0) {
+      if (rentDue < 0) {
         errors.push({
           index,
           message: `Period ${index + 1}: Rent due cannot be negative`,
@@ -109,24 +116,41 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       }
 
       // Check rent_paid is not greater than rent_due
-      if (item.rent_paid > item.rent_due) {
+      if (rentPaid > rentDue) {
         errors.push({
           index,
-          message: `Period ${index + 1}: Amount paid (£${item.rent_paid.toFixed(2)}) exceeds rent due (£${item.rent_due.toFixed(2)})`,
+          message: `Period ${index + 1}: Amount paid (£${rentPaid.toFixed(2)}) exceeds rent due (£${rentDue.toFixed(2)})`,
         });
       }
     });
 
-    // Check for overlapping periods (only if multiple periods)
-    if (arrearsItems.length > 1) {
-      for (let i = 0; i < arrearsItems.length - 1; i++) {
-        const current = arrearsItems[i];
-        const next = arrearsItems[i + 1];
-        // Periods should not overlap - next period should start after current ends
-        if (current.period_end > next.period_start) {
+    // Check for overlapping periods using sorted order
+    // Only include items with valid date ranges (both dates present, start <= end)
+    const validItemsWithIndex = arrearsItems
+      .map((item, originalIndex) => ({ item, originalIndex }))
+      .filter(({ item, originalIndex }) =>
+        item.period_start &&
+        item.period_end &&
+        !invalidRangeIndices.has(originalIndex)
+      );
+
+    if (validItemsWithIndex.length > 1) {
+      // Sort by period_start, then by period_end (ISO date strings sort correctly)
+      const sorted = [...validItemsWithIndex].sort((a, b) => {
+        const startCmp = a.item.period_start.localeCompare(b.item.period_start);
+        if (startCmp !== 0) return startCmp;
+        return a.item.period_end.localeCompare(b.item.period_end);
+      });
+
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const current = sorted[i];
+        const next = sorted[i + 1];
+        // Overlap exists if current.period_end > next.period_start
+        // Note: end == start (boundary touch) is NOT an overlap
+        if (current.item.period_end > next.item.period_start) {
           errors.push({
-            index: i,
-            message: `Period ${i + 1} overlaps with period ${i + 2}`,
+            index: current.originalIndex,
+            message: `Period ${current.originalIndex + 1} overlaps with period ${next.originalIndex + 1}`,
           });
         }
       }
