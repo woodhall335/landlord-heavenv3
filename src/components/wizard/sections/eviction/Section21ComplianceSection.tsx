@@ -107,9 +107,12 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
         <h4 className="text-sm font-medium text-amber-900 mb-1">Section 21 Validity Requirements</h4>
         <p className="text-sm text-amber-800">
-          Section 21 notices can only be served if key compliance requirements are met. Failure to
-          comply with requirements like deposit protection, gas safety, EPC and the How to Rent guide
-          can make the notice INVALID.
+          Section 21 notices can only be served if key compliance requirements are met. Courts
+          routinely reject Section 21 claims where these requirements are not met — we check
+          each one so you can proceed with confidence.
+        </p>
+        <p className="text-xs text-amber-700 mt-2">
+          Legal basis: Housing Act 1988, s.21(4B) and Deregulation Act 2015
         </p>
       </div>
 
@@ -145,8 +148,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               value={facts.deposit_protected}
               onChange={(v) => onUpdate({ deposit_protected: v })}
               required
-              helperText="Must be protected within 30 days of receipt."
-              blockingMessage="Section 21 cannot be used if the deposit is not protected."
+              helperText="Why this matters: Unprotected deposits are one of the most common reasons courts reject Section 21 claims. The deposit must be protected within 30 days of receipt in a government-approved scheme (DPS, MyDeposits, or TDS). Legal reference: Housing Act 2004, s.213-214."
+              blockingMessage="Section 21 cannot be used if the deposit is not protected. Courts may also award the tenant 1-3x the deposit as compensation."
               sectionId={SECTION_ID}
             />
 
@@ -193,8 +196,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               value={facts.prescribed_info_served}
               onChange={(v) => onUpdate({ prescribed_info_served: v })}
               required
-              helperText="You must provide the tenant with prescribed information about the deposit protection."
-              blockingMessage="Section 21 cannot be used if prescribed information was not served."
+              helperText="Why this matters: Even if the deposit is protected, you must also give the tenant 'prescribed information' within 30 days. This includes details about the scheme, how to apply for release, and what happens at the end of the tenancy. Missing this step invalidates Section 21. Legal reference: Housing Act 2004, s.213(5)."
+              blockingMessage="Section 21 cannot be used if prescribed information was not served within 30 days of receiving the deposit."
               sectionId={SECTION_ID}
             />
 
@@ -232,8 +235,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               value={facts.gas_safety_cert_served}
               onChange={(v) => onUpdate({ gas_safety_cert_served: v })}
               required
-              helperText="A copy of the current CP12 must be provided annually."
-              blockingMessage="Section 21 cannot be used if the gas safety certificate was not provided."
+              helperText="Why this matters: Courts often dismiss Section 21 claims where gas safety certificates (CP12) were not provided. A valid certificate must be given to the tenant before they move in and within 28 days of each annual check. Legal reference: Gas Safety (Installation and Use) Regulations 1998."
+              blockingMessage="Section 21 cannot be used if the gas safety certificate was not provided. This is a strict requirement."
               sectionId={SECTION_ID}
             />
 
@@ -319,8 +322,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           value={facts.epc_served}
           onChange={(v) => onUpdate({ epc_served: v })}
           required
-          helperText="The property must have a valid EPC with a rating of E or above."
-          blockingMessage="Section 21 cannot be used if the EPC was not provided."
+          helperText="Why this matters: An Energy Performance Certificate must be provided to the tenant before the tenancy begins. Properties must also have a minimum rating of E (with some exemptions). Missing EPCs are a common defence against Section 21 claims. Legal reference: Energy Performance of Buildings Regulations 2012, The Energy Efficiency (Private Rented Property) Regulations 2015."
+          blockingMessage="Section 21 cannot be used if the EPC was not provided before the tenancy started."
           sectionId={SECTION_ID}
         />
 
@@ -352,8 +355,8 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           value={facts.how_to_rent_served}
           onChange={(v) => onUpdate({ how_to_rent_served: v })}
           required
-          helperText="Required for tenancies starting on or after 1 October 2015."
-          blockingMessage="Section 21 cannot be used if the 'How to Rent' guide was not provided."
+          helperText="Why this matters: The government's 'How to Rent' guide must be provided to tenants (for tenancies starting from 1 October 2015). Courts can refuse possession if this wasn't done. The correct version for when the tenancy started must be used. Legal reference: Deregulation Act 2015, s.41."
+          blockingMessage="Section 21 cannot be used if the 'How to Rent' guide was not provided to the tenant."
           sectionId={SECTION_ID}
         />
 
