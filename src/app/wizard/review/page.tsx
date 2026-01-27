@@ -1963,42 +1963,42 @@ function NoticeOnlyReviewContent({
               </div>
             )}
 
-            {/* Always show checklist */}
+            {/* Always show checklist - use validationInput (normalized by buildSection21ValidationInputFromFacts) */}
             <div className="space-y-3">
               {[
                 {
                   label: 'Deposit protected in approved scheme',
-                  passed: caseFacts?.deposit_taken !== true || caseFacts?.deposit_protected === true,
-                  notApplicable: caseFacts?.deposit_taken !== true,
+                  passed: validationInput.deposit_taken !== true || validationInput.deposit_protected === true,
+                  notApplicable: validationInput.deposit_taken !== true,
                 },
                 {
                   label: 'Prescribed information given to tenant',
-                  passed: caseFacts?.deposit_taken !== true || caseFacts?.prescribed_info_served === true,
-                  notApplicable: caseFacts?.deposit_taken !== true,
+                  passed: validationInput.deposit_taken !== true || validationInput.prescribed_info_served === true || validationInput.prescribed_info_given === true,
+                  notApplicable: validationInput.deposit_taken !== true,
                 },
                 {
                   label: 'Gas Safety Certificate provided',
-                  passed: caseFacts?.has_gas_appliances !== true || caseFacts?.gas_safety_cert_served === true,
-                  notApplicable: caseFacts?.has_gas_appliances !== true,
+                  passed: validationInput.has_gas_appliances !== true || validationInput.gas_safety_cert_served === true || validationInput.gas_certificate_provided === true,
+                  notApplicable: validationInput.has_gas_appliances !== true,
                 },
                 {
                   label: 'Energy Performance Certificate (EPC) provided',
-                  passed: caseFacts?.epc_served === true,
+                  passed: validationInput.epc_served === true || validationInput.epc_provided === true,
                   notApplicable: false,
                 },
                 {
                   label: 'How to Rent guide provided',
-                  passed: caseFacts?.how_to_rent_served === true,
+                  passed: validationInput.how_to_rent_served === true || validationInput.how_to_rent_provided === true,
                   notApplicable: false,
                 },
                 {
                   label: 'Property licensing compliance (if required)',
-                  passed: !caseFacts?.licensing_required || caseFacts?.licensing_required === 'not_required' || caseFacts?.has_valid_licence === true,
-                  notApplicable: !caseFacts?.licensing_required || caseFacts?.licensing_required === 'not_required',
+                  passed: !validationInput.licensing_required || validationInput.licensing_required === 'not_required' || validationInput.has_valid_licence === true,
+                  notApplicable: !validationInput.licensing_required || validationInput.licensing_required === 'not_required',
                 },
                 {
                   label: 'No retaliatory eviction bar in effect',
-                  passed: caseFacts?.improvement_notice_served !== true,
+                  passed: validationInput.improvement_notice_served !== true,
                   notApplicable: false,
                 },
               ].map((item, index) => (

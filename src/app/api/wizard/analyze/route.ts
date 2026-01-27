@@ -1160,18 +1160,52 @@ export async function POST(request: Request) {
 
     // Build case_facts object for review page consumption
     // Contains persisted wizard facts relevant to grounds selection and review display
+    // IMPORTANT: Include Section 21 compliance fields for Review page validation
+    const wf = wizardFacts as any;
     const caseFacts = {
       section8_grounds: getSelectedGrounds(wizardFacts as any),
-      include_recommended_grounds: (wizardFacts as any)?.include_recommended_grounds || false,
+      include_recommended_grounds: wf?.include_recommended_grounds || false,
       // Check both flat and nested locations for arrears_items (notice_only stores in nested location)
-      arrears_items: (wizardFacts as any)?.arrears_items ||
-                     (wizardFacts as any)?.issues?.rent_arrears?.arrears_items || [],
+      arrears_items: wf?.arrears_items ||
+                     wf?.issues?.rent_arrears?.arrears_items || [],
       recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
       jurisdiction: canonicalJurisdiction,
-      eviction_route: (wizardFacts as any)?.eviction_route || null,
-      selected_notice_route: (wizardFacts as any)?.selected_notice_route || null,
+      eviction_route: wf?.eviction_route || null,
+      selected_notice_route: wf?.selected_notice_route || null,
       // Wales fault-based grounds for document list display
-      wales_fault_grounds: (wizardFacts as any)?.wales_fault_grounds || [],
+      wales_fault_grounds: wf?.wales_fault_grounds || [],
+
+      // Section 21 compliance fields - CRITICAL for Review page validation
+      // These fields may be at top-level or nested in compliance/section21/property containers
+      // The Review page uses buildSection21ValidationInputFromFacts() which expects these fields
+      deposit_taken: wf?.deposit_taken ?? wf?.compliance?.deposit_taken ?? wf?.tenancy?.deposit_taken,
+      deposit_amount: wf?.deposit_amount ?? wf?.compliance?.deposit_amount ?? wf?.tenancy?.deposit_amount,
+      deposit_protected: wf?.deposit_protected ?? wf?.deposit_protected_scheme ?? wf?.compliance?.deposit_protected,
+      deposit_scheme: wf?.deposit_scheme ?? wf?.deposit_scheme_name ?? wf?.compliance?.deposit_scheme,
+      prescribed_info_served: wf?.prescribed_info_served ?? wf?.prescribed_info_given ?? wf?.compliance?.prescribed_info_served,
+
+      // Gas safety
+      has_gas_appliances: wf?.has_gas_appliances ?? wf?.property_has_gas ?? wf?.property?.has_gas_appliances,
+      gas_safety_cert_served: wf?.gas_safety_cert_served ?? wf?.gas_certificate_provided ?? wf?.compliance?.gas_safety_cert_served,
+
+      // EPC - support both key variants
+      epc_served: wf?.epc_served ?? wf?.epc_provided ?? wf?.compliance?.epc_served ?? wf?.property?.epc_served,
+      epc_provided: wf?.epc_provided ?? wf?.epc_served ?? wf?.compliance?.epc_provided ?? wf?.property?.epc_provided,
+
+      // How to Rent - support all key variants
+      how_to_rent_served: wf?.how_to_rent_served ?? wf?.how_to_rent_provided ?? wf?.how_to_rent_given ?? wf?.compliance?.how_to_rent_served,
+      how_to_rent_provided: wf?.how_to_rent_provided ?? wf?.how_to_rent_served ?? wf?.how_to_rent_given ?? wf?.compliance?.how_to_rent_provided,
+
+      // Licensing
+      licensing_required: wf?.licensing_required ?? wf?.property?.licensing_required,
+      has_valid_licence: wf?.has_valid_licence ?? wf?.has_license ?? wf?.property?.has_valid_licence,
+
+      // Retaliatory eviction
+      improvement_notice_served: wf?.improvement_notice_served ?? wf?.compliance?.improvement_notice_served,
+      no_retaliatory_notice: wf?.no_retaliatory_notice ?? wf?.compliance?.no_retaliatory_notice,
+
+      // Tenancy dates
+      tenancy_start_date: wf?.tenancy_start_date ?? wf?.tenancy?.start_date,
     };
 
     return NextResponse.json({
