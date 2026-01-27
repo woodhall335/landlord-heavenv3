@@ -416,4 +416,123 @@ describe('validateSection21Preconditions with buildSection21ValidationInputFromF
       expect(result.blockers.some((b) => b.code === 'S21_EPC_UNKNOWN')).toBe(true);
     });
   });
+
+  describe('Review page regression: caseFacts from /api/wizard/analyze', () => {
+    /**
+     * REGRESSION TEST: Review page was bypassing the extraction/normalization step
+     *
+     * Root cause: The /api/wizard/analyze endpoint was returning a limited caseFacts
+     * object that only included grounds-related fields but NOT the Section 21 compliance
+     * fields (epc_served, how_to_rent_served, etc.).
+     *
+     * The Review page passed this incomplete caseFacts to buildSection21ValidationInputFromFacts,
+     * which couldn't find the compliance fields and returned undefined values,
+     * causing UNKNOWN blockers.
+     *
+     * Fix: Include Section 21 compliance fields in the caseFacts response from /api/wizard/analyze
+     */
+
+    it('should NOT show UNKNOWN blockers when caseFacts includes compliance fields from analyze endpoint', () => {
+      // Simulate caseFacts structure as returned by /api/wizard/analyze (AFTER fix)
+      const caseFacts = {
+        section8_grounds: [],
+        include_recommended_grounds: false,
+        arrears_items: [],
+        recommended_grounds: [],
+        jurisdiction: 'england',
+        eviction_route: null,
+        selected_notice_route: 'section_21',
+        wales_fault_grounds: [],
+
+        // Section 21 compliance fields (NOW INCLUDED after fix)
+        deposit_taken: false,
+        deposit_amount: undefined,
+        deposit_protected: undefined,
+        epc_served: true,
+        epc_provided: true,
+        how_to_rent_served: true,
+        how_to_rent_provided: true,
+        has_gas_appliances: false,
+        gas_safety_cert_served: undefined,
+        licensing_required: undefined,
+        has_valid_licence: undefined,
+        improvement_notice_served: undefined,
+        no_retaliatory_notice: true,
+        tenancy_start_date: '2024-01-15',
+      };
+
+      const input = buildSection21ValidationInputFromFacts(caseFacts);
+      const result = validateSection21Preconditions(input);
+
+      // Should NOT have UNKNOWN blockers
+      expect(result.blockers.some((b) => b.code === 'S21_EPC_UNKNOWN')).toBe(false);
+      expect(result.blockers.some((b) => b.code === 'S21_HOW_TO_RENT_UNKNOWN')).toBe(false);
+
+      // Should pass validation
+      expect(result.ok).toBe(true);
+    });
+
+    it('should show UNKNOWN blockers when caseFacts is MISSING compliance fields (pre-fix scenario)', () => {
+      // Simulate caseFacts structure as returned by /api/wizard/analyze (BEFORE fix)
+      // This was the bug: no compliance fields included
+      const caseFacts = {
+        section8_grounds: [],
+        include_recommended_grounds: false,
+        arrears_items: [],
+        recommended_grounds: [],
+        jurisdiction: 'england',
+        eviction_route: null,
+        selected_notice_route: 'section_21',
+        wales_fault_grounds: [],
+        // NO compliance fields - this was the bug!
+      };
+
+      const input = buildSection21ValidationInputFromFacts(caseFacts);
+      const result = validateSection21Preconditions(input);
+
+      // Should have UNKNOWN blockers (pre-fix behavior)
+      expect(result.blockers.some((b) => b.code === 'S21_EPC_UNKNOWN')).toBe(true);
+      expect(result.blockers.some((b) => b.code === 'S21_HOW_TO_RENT_UNKNOWN')).toBe(true);
+      expect(result.ok).toBe(false);
+    });
+
+    it('should correctly extract compliance fields from nested wizardFacts structure', () => {
+      // Simulate wizardFacts structure with compliance nested under different containers
+      // This is how the wizard stores data
+      const wizardFacts = {
+        // Top-level meta
+        selected_notice_route: 'section_21',
+        jurisdiction: 'england',
+        tenancy_start_date: '2024-01-15',
+
+        // Compliance fields stored in various nested locations
+        compliance: {
+          epc_served: true,
+          how_to_rent_served: true,
+        },
+        tenancy: {
+          deposit_taken: false,
+        },
+        property: {
+          has_gas_appliances: false,
+        },
+      };
+
+      const input = buildSection21ValidationInputFromFacts(wizardFacts);
+      const result = validateSection21Preconditions(input);
+
+      // Should extract nested values correctly
+      expect(input.epc_served).toBe(true);
+      expect(input.how_to_rent_served).toBe(true);
+      expect(input.deposit_taken).toBe(false);
+      expect(input.has_gas_appliances).toBe(false);
+
+      // Should NOT have UNKNOWN blockers
+      expect(result.blockers.some((b) => b.code === 'S21_EPC_UNKNOWN')).toBe(false);
+      expect(result.blockers.some((b) => b.code === 'S21_HOW_TO_RENT_UNKNOWN')).toBe(false);
+
+      // Should pass validation
+      expect(result.ok).toBe(true);
+    });
+  });
 });
