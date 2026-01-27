@@ -47,11 +47,12 @@ export async function GET(request: Request) {
     }
 
     if (!caseId) {
+      // Match evidence documents with both old ('evidence') and new ('evidence_*') types
       const { data: docRow, error: docError } = await supabase
         .from('documents')
         .select('id, case_id, pdf_url')
         .eq('id', evidenceId)
-        .eq('document_type', 'evidence')
+        .like('document_type', 'evidence%')
         .maybeSingle();
 
       if (docError) {
@@ -163,12 +164,13 @@ export async function GET(request: Request) {
       }
 
       // Fallback: check documents table for evidence documents
+      // Match evidence documents with both old ('evidence') and new ('evidence_*') types
       const { data: docRow, error: docError } = await supabase
         .from('documents')
         .select('id, pdf_url, case_id')
         .eq('id', evidenceId)
         .eq('case_id', caseId)
-        .eq('document_type', 'evidence')
+        .like('document_type', 'evidence%')
         .maybeSingle();
 
       if (docError || !docRow) {
