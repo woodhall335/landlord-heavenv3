@@ -29,6 +29,7 @@ import {
   ValidatedSelect,
   ValidatedTextarea,
 } from '@/components/wizard/ValidatedField';
+import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 interface CourtSigningSectionProps {
@@ -92,6 +93,33 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
   // Validate signature date - show error if before notice expiry
   const [signatureDateError, setSignatureDateError] = useState<string | null>(null);
 
+  // P0-3 FIX: Get validation context to register blocking errors
+  const validationCtx = useValidationContextSafe();
+  const SIGNATURE_DATE_FIELD_ID = 'court_signing_signature_date';
+
+  // P0-3 FIX: Sync signature date error with ValidationContext for proper blocking
+  useEffect(() => {
+    if (signatureDateError) {
+      // Register error with ValidationContext so Next button is blocked
+      validationCtx?.setFieldError(SIGNATURE_DATE_FIELD_ID, {
+        field: SIGNATURE_DATE_FIELD_ID,
+        message: signatureDateError,
+        severity: 'error',
+        section: SECTION_ID,
+      });
+    } else {
+      // Clear error when signature date is valid
+      validationCtx?.clearFieldError(SIGNATURE_DATE_FIELD_ID);
+    }
+  }, [signatureDateError, validationCtx]);
+
+  // Cleanup validation context on unmount
+  useEffect(() => {
+    return () => {
+      validationCtx?.clearFieldError(SIGNATURE_DATE_FIELD_ID);
+    };
+  }, [validationCtx]);
+
   // Initialize default values for signatory_name and signature_date
   // This ensures displayed defaults are saved to facts for isComplete checks
   useEffect(() => {
@@ -122,6 +150,20 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noticeExpiryDate]); // Re-run when notice_expiry_date changes
+
+  // P0-3 FIX: Validate signature date on mount and when data changes
+  // This catches invalid states when navigating back to this section
+  useEffect(() => {
+    const currentSignatureDate = facts.signature_date;
+    if (isSection8 && isCompletePack && noticeExpiryDate && currentSignatureDate && currentSignatureDate < noticeExpiryDate) {
+      setSignatureDateError(
+        `Signature date cannot be before notice expiry (${noticeExpiryDate}). ` +
+        `Court forms can only be signed after the notice period expires.`
+      );
+    } else {
+      setSignatureDateError(null);
+    }
+  }, [facts.signature_date, noticeExpiryDate, isSection8, isCompletePack]);
 
   // Handle signature date change with validation
   const handleSignatureDateChange = (newDate: string | number) => {

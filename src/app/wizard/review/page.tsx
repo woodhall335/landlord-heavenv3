@@ -235,7 +235,9 @@ function ReviewPageInner() {
   };
 
   const handleProceed = async () => {
-    if (hasBlockingIssues && !hasAcknowledgedBlockers) {
+    // P0-1 FIX: Blocking issues are non-bypassable - users MUST fix them before proceeding.
+    // Acknowledgement checkbox is kept for warnings only (non-blocking issues).
+    if (hasBlockingIssues) {
       return;
     }
 
@@ -889,26 +891,18 @@ function MoneyClaimReviewContent({
         </Card>
       )}
 
+      {/* P0-1 FIX: Blocking issues MUST be fixed - no bypass allowed */}
       {hasBlockingIssues && (
         <Card className="p-6 border-red-200 bg-red-50">
-          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Blocking issues must be fixed</h2>
           <p className="text-sm text-red-800 mb-4">
-            These issues may prevent your document from being valid or court-ready. Fix them first,
-            or acknowledge and continue.
+            These issues will prevent your document from being valid or court-ready.
+            You must fix them before you can proceed.
           </p>
-          <label className="flex items-start gap-3 text-sm text-red-900">
-            <input
-              type="checkbox"
-              checked={hasAcknowledgedBlockers}
-              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
-              aria-label="Acknowledge critical issues"
-            />
-            <span>
-              I understand these issues may prevent the document being court-ready, and I want to
-              proceed.
-            </span>
-          </label>
+          <div className="flex items-center gap-2 text-sm text-red-700 font-medium">
+            <RiCloseLine className="h-5 w-5" />
+            <span>Cannot proceed until blocking issues are resolved</span>
+          </div>
         </Card>
       )}
 
@@ -921,17 +915,17 @@ function MoneyClaimReviewContent({
           <Button
             onClick={onFixIssues}
             variant="outline"
-            className="flex-1"
-            aria-label="Fix critical issues first"
+            className="flex-1 border-red-300 text-red-700 hover:bg-red-50"
+            aria-label="Fix blocking issues"
           >
-            Fix issues first
+            Fix issues to continue
           </Button>
         )}
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
+          disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
         >
           {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
@@ -1141,26 +1135,18 @@ function EvictionReviewContent({
         </Card>
       )}
 
+      {/* P0-1 FIX: Blocking issues MUST be fixed - no bypass allowed */}
       {hasBlockingIssues && (
         <Card className="p-6 border-red-200 bg-red-50">
-          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Blocking issues must be fixed</h2>
           <p className="text-sm text-red-800 mb-4">
-            These issues may prevent your document from being valid or court-ready. Fix them first,
-            or acknowledge and continue.
+            These issues will prevent your document from being valid or court-ready.
+            You must fix them before you can proceed.
           </p>
-          <label className="flex items-start gap-3 text-sm text-red-900">
-            <input
-              type="checkbox"
-              checked={hasAcknowledgedBlockers}
-              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
-              aria-label="Acknowledge critical issues"
-            />
-            <span>
-              I understand these issues may prevent the document being court-ready, and I want to
-              proceed.
-            </span>
-          </label>
+          <div className="flex items-center gap-2 text-sm text-red-700 font-medium">
+            <RiCloseLine className="h-5 w-5" />
+            <span>Cannot proceed until blocking issues are resolved</span>
+          </div>
         </Card>
       )}
 
@@ -1657,17 +1643,17 @@ function EvictionReviewContent({
           <Button
             onClick={onFixIssues}
             variant="outline"
-            className="flex-1"
-            aria-label="Fix critical issues first"
+            className="flex-1 border-red-300 text-red-700 hover:bg-red-50"
+            aria-label="Fix blocking issues"
           >
-            Fix issues first
+            Fix issues to continue
           </Button>
         )}
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || isRegenerating || isLoadingPaymentStatus}
+          disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
         >
           {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
         </Button>
@@ -1676,6 +1662,8 @@ function EvictionReviewContent({
       <p className="text-xs text-center text-gray-500 mt-2">
         {isPaid
           ? 'Your updated answers will be used to regenerate your documents.'
+          : hasBlockingIssues
+          ? 'Fix blocking issues above before proceeding.'
           : 'We will generate your full pack regardless of readiness. Use the guidance to reach a safe, court-ready position before issuing.'}
       </p>
     </div>
@@ -2352,26 +2340,18 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
+      {/* P0-1 FIX: Blocking issues MUST be fixed - no bypass allowed */}
       {hasBlockingIssues && (
         <Card className="p-6 border-red-200 bg-red-50">
-          <h2 className="text-lg font-semibold text-red-900 mb-2">Critical issues found</h2>
+          <h2 className="text-lg font-semibold text-red-900 mb-2">Blocking issues must be fixed</h2>
           <p className="text-sm text-red-800 mb-4">
-            These issues may prevent your document from being valid or court-ready. Fix them first,
-            or acknowledge and continue.
+            These issues will prevent your document from being valid or court-ready.
+            You must fix them before you can proceed.
           </p>
-          <label className="flex items-start gap-3 text-sm text-red-900">
-            <input
-              type="checkbox"
-              checked={hasAcknowledgedBlockers}
-              onChange={(event) => onAcknowledgeBlockers(event.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-red-300 text-primary focus:ring-primary"
-              aria-label="Acknowledge critical issues"
-            />
-            <span>
-              I understand these issues may prevent the document being court-ready, and I want to
-              proceed.
-            </span>
-          </label>
+          <div className="flex items-center gap-2 text-sm text-red-700 font-medium">
+            <RiCloseLine className="h-5 w-5" />
+            <span>Cannot proceed until blocking issues are resolved</span>
+          </div>
         </Card>
       )}
 
@@ -2483,27 +2463,31 @@ function NoticeOnlyReviewContent({
           <Button
             onClick={onFixIssues}
             variant="outline"
-            className="flex-1"
-            aria-label="Fix critical issues first"
+            className="flex-1 border-red-300 text-red-700 hover:bg-red-50"
+            aria-label="Fix blocking issues"
           >
-            Fix issues first
+            Fix issues to continue
           </Button>
         )}
         <Button
           onClick={onProceed}
           className="flex-1"
-          disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
-          aria-disabled={(hasBlockingIssues && !hasAcknowledgedBlockers) || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
+          disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
+          aria-disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
         >
           {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment and pack'}
         </Button>
       </div>
 
       {/* Disclaimer for issues */}
-      {(hasBlockingIssues || (isSection21 && hasComplianceIssues)) && !isPaid && (
+      {hasBlockingIssues && !isPaid && (
         <p className="text-center text-sm text-gray-500 pb-4">
-          By proceeding, you acknowledge the issues above. We recommend resolving compliance issues
-          before serving your notice.
+          Fix blocking issues above before proceeding.
+        </p>
+      )}
+      {!hasBlockingIssues && (isSection21 && hasComplianceIssues) && !isPaid && (
+        <p className="text-center text-sm text-gray-500 pb-4">
+          We recommend resolving compliance issues before serving your notice.
         </p>
       )}
       {isPaid && (
