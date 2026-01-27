@@ -1326,6 +1326,7 @@ import {
   clearMetricsStore,
   type ValidationTelemetryEvent,
 } from '@/lib/validation/shadow-mode-adapter';
+import { buildRuleFactsView } from '@/lib/validation/eviction-rules-engine';
 
 describe('Phase 15: Telemetry Verification', () => {
   const originalEnabled = process.env.VALIDATION_PHASE13_ENABLED;
@@ -1546,6 +1547,205 @@ describe('Phase 15: Telemetry Verification', () => {
       expect(impact.phase13NewlyBlockedCount).toBe(1);
       expect(impact.newlyBlockedPercent).toBeCloseTo(33.33, 1);
       expect(impact.warningToBlockerRatio).toBe(1); // 1 warning / 1 blocker
+    });
+  });
+});
+
+// ============================================================================
+// FACT CANONICALIZATION REGRESSION TESTS
+// ============================================================================
+// Tests to verify that variant keys (epc_served, how_to_rent_served, etc.)
+// are correctly mapped to canonical keys (epc_provided, how_to_rent_provided)
+// before YAML rule evaluation.
+//
+// See: notice_only_rules.yaml uses epc_provided/how_to_rent_provided as canonical keys.
+// The wizard may save answers under variant keys like epc_served/how_to_rent_served.
+
+describe('Fact Canonicalization for YAML Rules', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  // Base facts for a valid Section 21 case (excluding EPC/H2R which we'll test)
+  const baseMinimalFacts: EvictionFacts = {
+    landlord_full_name: 'John Landlord',
+    tenant_full_name: 'Jane Tenant',
+    property_address_line1: '123 Test Street',
+    tenancy_start_date: '2024-01-01',
+    notice_service_date: '2025-06-01',
+    notice_expiry_date: '2025-08-01',
+    deposit_taken: true,
+    deposit_protected: true,
+    prescribed_info_given: true,
+    has_gas_appliances: false,
+    property_licensing_status: 'licensed',
+  };
+
+  describe('buildRuleFactsView', () => {
+    it('should map epc_served to epc_provided', () => {
+      const facts = { epc_served: true };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.epc_provided).toBe(true);
+    });
+
+    it('should map how_to_rent_served to how_to_rent_provided', () => {
+      const facts = { how_to_rent_served: true };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.how_to_rent_provided).toBe(true);
+    });
+
+    it('should map how_to_rent_given to how_to_rent_provided', () => {
+      const facts = { how_to_rent_given: true };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.how_to_rent_provided).toBe(true);
+    });
+
+    it('should NOT override explicit epc_provided=false with epc_served=true', () => {
+      const facts = { epc_provided: false, epc_served: true };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.epc_provided).toBe(false);
+    });
+
+    it('should NOT override explicit how_to_rent_provided=false with how_to_rent_served=true', () => {
+      const facts = { how_to_rent_provided: false, how_to_rent_served: true };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.how_to_rent_provided).toBe(false);
+    });
+  });
+
+  describe('Nested Object Flattening', () => {
+    it('should flatten compliance.epc_served to epc_provided', () => {
+      const facts = { compliance: { epc_served: true } };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.epc_provided).toBe(true);
+    });
+
+    it('should flatten compliance.how_to_rent_served to how_to_rent_provided', () => {
+      const facts = { compliance: { how_to_rent_served: true } };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.how_to_rent_provided).toBe(true);
+    });
+
+    it('should flatten section21.epc_served to epc_provided', () => {
+      const facts = { section21: { epc_served: true } };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.epc_provided).toBe(true);
+    });
+
+    it('should flatten section_21.how_to_rent_given to how_to_rent_provided', () => {
+      const facts = { section_21: { how_to_rent_given: true } };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.how_to_rent_provided).toBe(true);
+    });
+
+    it('should flatten property.epc_served to epc_provided', () => {
+      const facts = { property: { epc_served: true } };
+      const normalized = buildRuleFactsView(facts);
+      expect(normalized.epc_provided).toBe(true);
+    });
+  });
+
+  describe('Case A: Top-level variant keys satisfy S21 rules', () => {
+    it('should NOT trigger s21_epc or s21_h2r when epc_served=true and how_to_rent_served=true', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        epc_served: true,
+        how_to_rent_served: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_epc')).toBe(false);
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(false);
+    });
+  });
+
+  describe('Case B: Nested variant keys satisfy S21 rules', () => {
+    it('should NOT trigger s21_epc or s21_h2r when compliance contains epc_served/how_to_rent_served', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        compliance: {
+          epc_served: true,
+          how_to_rent_served: true,
+        },
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_epc')).toBe(false);
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(false);
+    });
+
+    it('should NOT trigger s21_epc or s21_h2r when section21 contains epc_served/how_to_rent_given', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        section21: {
+          epc_served: true,
+          how_to_rent_given: true,
+        },
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_epc')).toBe(false);
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(false);
+    });
+  });
+
+  describe('Case C: Explicit provided=false should still block', () => {
+    it('should trigger s21_epc when epc_provided=false even if epc_served=true', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        epc_provided: false,
+        epc_served: true, // Should NOT override explicit false
+        how_to_rent_provided: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_epc')).toBe(true);
+    });
+
+    it('should trigger s21_h2r when how_to_rent_provided=false even if how_to_rent_served=true', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        epc_provided: true,
+        how_to_rent_provided: false,
+        how_to_rent_served: true, // Should NOT override explicit false
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(true);
+    });
+  });
+
+  describe('Case D: how_to_rent_given should satisfy how_to_rent_provided', () => {
+    it('should NOT trigger s21_h2r when how_to_rent_given=true', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        epc_provided: true,
+        how_to_rent_given: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.blockers.some((b) => b.id === 's21_h2r')).toBe(false);
+    });
+  });
+
+  describe('Complete valid S21 case with variant keys', () => {
+    it('should return isValid=true when all requirements met via variant keys', () => {
+      const facts: EvictionFacts = {
+        ...baseMinimalFacts,
+        epc_served: true,
+        how_to_rent_given: true,
+      };
+
+      const result = evaluateEvictionRules(facts, 'england', 'notice_only', 'section_21');
+
+      expect(result.isValid).toBe(true);
+      expect(result.blockers).toHaveLength(0);
     });
   });
 });

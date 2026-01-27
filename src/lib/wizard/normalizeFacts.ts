@@ -26,6 +26,7 @@ export const CANONICAL_FACT_KEYS: Record<string, string> = {
   prescribed_information_given: 'prescribed_info_given',
 
   // How to Rent Guide
+  // NOTE: notice_only_rules.yaml uses how_to_rent_provided as the canonical key
   how_to_rent_given: 'how_to_rent_provided',
   h2r_provided: 'how_to_rent_provided',
   how_to_rent_served: 'how_to_rent_provided',
@@ -37,8 +38,10 @@ export const CANONICAL_FACT_KEYS: Record<string, string> = {
   gas_cert_provided: 'gas_certificate_provided',
 
   // EPC (Energy Performance Certificate)
+  // NOTE: notice_only_rules.yaml uses epc_provided as the canonical key
   epc_certificate_provided: 'epc_provided',
   energy_certificate_provided: 'epc_provided',
+  epc_served: 'epc_provided',
 
   // Property Licensing
   licensing_status: 'property_licensing_status',
@@ -152,6 +155,73 @@ export function normalizeFactKeys(facts?: Record<string, any>): Record<string, a
   if (safeFacts.tenancy) {
     if (safeFacts.tenancy.prescribed_info_given !== undefined && normalized.prescribed_info_given === undefined) {
       normalized.prescribed_info_given = safeFacts.tenancy.prescribed_info_given;
+    }
+  }
+
+  // Handle compliance nested object (wizard may store compliance facts here)
+  if (safeFacts.compliance && typeof safeFacts.compliance === 'object') {
+    const compliance = safeFacts.compliance as Record<string, any>;
+    // Flatten EPC variants from compliance
+    if (compliance.epc_served !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = compliance.epc_served;
+    }
+    if (compliance.epc_provided !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = compliance.epc_provided;
+    }
+    // Flatten How to Rent variants from compliance
+    if (compliance.how_to_rent_served !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = compliance.how_to_rent_served;
+    }
+    if (compliance.how_to_rent_given !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = compliance.how_to_rent_given;
+    }
+    if (compliance.how_to_rent_provided !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = compliance.how_to_rent_provided;
+    }
+  }
+
+  // Handle section21 / section_21 nested objects (wizard may store S21-specific facts here)
+  const section21Container = safeFacts.section21 || safeFacts.section_21;
+  if (section21Container && typeof section21Container === 'object') {
+    const s21 = section21Container as Record<string, any>;
+    // Flatten EPC variants from section21
+    if (s21.epc_served !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = s21.epc_served;
+    }
+    if (s21.epc_provided !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = s21.epc_provided;
+    }
+    // Flatten How to Rent variants from section21
+    if (s21.how_to_rent_served !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = s21.how_to_rent_served;
+    }
+    if (s21.how_to_rent_given !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = s21.how_to_rent_given;
+    }
+    if (s21.how_to_rent_provided !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = s21.how_to_rent_provided;
+    }
+  }
+
+  // Handle property nested object (some wizard flows store compliance here)
+  if (safeFacts.property && typeof safeFacts.property === 'object') {
+    const property = safeFacts.property as Record<string, any>;
+    // Flatten EPC variants from property
+    if (property.epc_served !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = property.epc_served;
+    }
+    if (property.epc_provided !== undefined && normalized.epc_provided === undefined) {
+      normalized.epc_provided = property.epc_provided;
+    }
+    // Flatten How to Rent variants from property
+    if (property.how_to_rent_served !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = property.how_to_rent_served;
+    }
+    if (property.how_to_rent_given !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = property.how_to_rent_given;
+    }
+    if (property.how_to_rent_provided !== undefined && normalized.how_to_rent_provided === undefined) {
+      normalized.how_to_rent_provided = property.how_to_rent_provided;
     }
   }
 
