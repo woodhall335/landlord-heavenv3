@@ -44,6 +44,8 @@ import { saveCaseFacts } from '@/lib/wizard/facts-client';
 
 // Section 21 precondition validation
 import { validateSection21Preconditions } from '@/lib/validators/section21-preconditions';
+// Fact normalization for variant key canonicalization
+import { normalizeFactKeys } from '@/lib/wizard/normalizeFacts';
 
 // Compliance timing error display
 import {
@@ -1916,23 +1918,32 @@ function NoticeOnlyReviewContent({
 
       {/* Section 21 Compliance Checklist - Enhanced with Precondition Validation */}
       {isSection21 && !isWales && !isScotland && (() => {
-        // Run the full Section 21 precondition validation
+        // Normalize facts to handle variant keys (epc_served -> epc_provided, etc.)
+        // and flatten nested containers (compliance.epc_served, section21.how_to_rent_served)
+        // See: notice_only_rules.yaml uses canonical keys like epc_provided/how_to_rent_provided
+        const normalizedFacts = normalizeFactKeys(caseFacts || {});
+
+        // Run the full Section 21 precondition validation with normalized facts
         const s21Validation = validateSection21Preconditions({
-          deposit_taken: caseFacts?.deposit_taken,
-          deposit_amount: caseFacts?.deposit_amount,
-          deposit_protected: caseFacts?.deposit_protected,
-          prescribed_info_served: caseFacts?.prescribed_info_served,
-          has_gas_appliances: caseFacts?.has_gas_appliances,
-          gas_safety_cert_served: caseFacts?.gas_safety_cert_served,
-          epc_served: caseFacts?.epc_served,
-          epc_rating: caseFacts?.epc_rating,
-          how_to_rent_served: caseFacts?.how_to_rent_served,
-          licensing_required: caseFacts?.licensing_required,
-          has_valid_licence: caseFacts?.has_valid_licence,
-          no_retaliatory_notice: caseFacts?.no_retaliatory_notice,
-          improvement_notice_served: caseFacts?.improvement_notice_served,
-          tenancy_start_date: caseFacts?.tenancy_start_date,
-          service_date: caseFacts?.notice_served_date || caseFacts?.intended_service_date,
+          deposit_taken: normalizedFacts.deposit_taken ?? caseFacts?.deposit_taken,
+          deposit_amount: normalizedFacts.deposit_amount ?? caseFacts?.deposit_amount,
+          deposit_protected: normalizedFacts.deposit_protected ?? caseFacts?.deposit_protected,
+          prescribed_info_served: normalizedFacts.prescribed_info_given ?? normalizedFacts.prescribed_info_served ?? caseFacts?.prescribed_info_served,
+          prescribed_info_given: normalizedFacts.prescribed_info_given ?? caseFacts?.prescribed_info_given,
+          has_gas_appliances: normalizedFacts.has_gas_appliances ?? caseFacts?.has_gas_appliances,
+          gas_safety_cert_served: normalizedFacts.gas_certificate_provided ?? normalizedFacts.gas_safety_cert_served ?? caseFacts?.gas_safety_cert_served,
+          gas_certificate_provided: normalizedFacts.gas_certificate_provided ?? caseFacts?.gas_certificate_provided,
+          epc_served: normalizedFacts.epc_provided ?? normalizedFacts.epc_served ?? caseFacts?.epc_served,
+          epc_provided: normalizedFacts.epc_provided ?? caseFacts?.epc_provided,
+          epc_rating: normalizedFacts.epc_rating ?? caseFacts?.epc_rating,
+          how_to_rent_served: normalizedFacts.how_to_rent_provided ?? normalizedFacts.how_to_rent_served ?? caseFacts?.how_to_rent_served,
+          how_to_rent_provided: normalizedFacts.how_to_rent_provided ?? caseFacts?.how_to_rent_provided,
+          licensing_required: normalizedFacts.licensing_required ?? caseFacts?.licensing_required,
+          has_valid_licence: normalizedFacts.has_valid_licence ?? caseFacts?.has_valid_licence,
+          no_retaliatory_notice: normalizedFacts.no_retaliatory_notice ?? caseFacts?.no_retaliatory_notice,
+          improvement_notice_served: normalizedFacts.improvement_notice_served ?? caseFacts?.improvement_notice_served,
+          tenancy_start_date: normalizedFacts.tenancy_start_date ?? caseFacts?.tenancy_start_date,
+          service_date: normalizedFacts.notice_service_date ?? normalizedFacts.notice_served_date ?? (caseFacts?.notice_served_date || caseFacts?.intended_service_date),
         });
 
         const hasBlockers = s21Validation.blockers.length > 0;
