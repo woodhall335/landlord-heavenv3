@@ -13,7 +13,7 @@
 
 'use client';
 
-import React, { useMemo, useEffect, useCallback, useState } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   getScotlandGrounds,
@@ -22,6 +22,7 @@ import {
 } from '@/lib/scotland/grounds';
 import { buildScotlandEvidenceSummary } from '@/lib/scotland/noticeNarrativeBuilder';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 
 interface ScotlandGroundsSectionProps {
   facts: WizardFacts;
@@ -44,6 +45,102 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
 
   const selectedGround = facts.scotland_eviction_ground as number | undefined;
   const evidenceDescription = (facts.scotland_evidence_description as string) || '';
+
+  // Pre-action requirements state (for Ground 1 - rent arrears)
+  const preActionLetterSent = facts.issues?.rent_arrears?.pre_action_letter_sent === true;
+  const preActionSignposted = facts.issues?.rent_arrears?.debt_advice_signposted === true;
+  const preActionConfirmed = facts.issues?.rent_arrears?.pre_action_confirmed === true;
+
+  // Validation context for registering blocking errors
+  const validation = useValidationContextSafe();
+
+  // Ground 1 (rent arrears) requires pre-action protocol compliance
+  const isGround1Selected = selectedGround === 1;
+
+  // Validate pre-action requirements for Ground 1
+  useEffect(() => {
+    if (!validation) return;
+
+    if (isGround1Selected) {
+      // Pre-action letter is required for Ground 1
+      if (!preActionLetterSent) {
+        validation.setFieldError('scotland_pre_action_letter', {
+          field: 'scotland_pre_action_letter',
+          message: 'Pre-action letter must be sent before Ground 1 Notice to Leave',
+          severity: 'error',
+          section: 'scotland_grounds',
+        });
+      } else {
+        validation.clearFieldError('scotland_pre_action_letter');
+      }
+
+      // Pre-action signposting is a warning (recommended but not strictly blocking)
+      if (!preActionSignposted) {
+        validation.setFieldError('scotland_pre_action_signposting', {
+          field: 'scotland_pre_action_signposting',
+          message: 'Pre-action requirements include signposting tenant to debt advice',
+          severity: 'warning',
+          section: 'scotland_grounds',
+        });
+      } else {
+        validation.clearFieldError('scotland_pre_action_signposting');
+      }
+
+      // Overall pre-action confirmation
+      if (!preActionConfirmed) {
+        validation.setFieldError('scotland_pre_action_confirmed', {
+          field: 'scotland_pre_action_confirmed',
+          message: 'You must confirm pre-action requirements are complete',
+          severity: 'error',
+          section: 'scotland_grounds',
+        });
+      } else {
+        validation.clearFieldError('scotland_pre_action_confirmed');
+      }
+    } else {
+      // Clear all pre-action errors when Ground 1 is not selected
+      validation.clearFieldError('scotland_pre_action_letter');
+      validation.clearFieldError('scotland_pre_action_signposting');
+      validation.clearFieldError('scotland_pre_action_confirmed');
+    }
+  }, [isGround1Selected, preActionLetterSent, preActionSignposted, preActionConfirmed, validation]);
+
+  // Handler for pre-action checkbox updates
+  const handlePreActionUpdate = useCallback(
+    (field: string, value: boolean) => {
+      const updates: Record<string, unknown> = {
+        issues: {
+          ...facts.issues,
+          rent_arrears: {
+            ...facts.issues?.rent_arrears,
+            [field]: value,
+          },
+        },
+      };
+
+      // If both letter sent and signposted, auto-confirm
+      if (field === 'pre_action_letter_sent' && value && preActionSignposted) {
+        updates.issues = {
+          ...updates.issues as Record<string, unknown>,
+          rent_arrears: {
+            ...(updates.issues as Record<string, unknown>).rent_arrears as Record<string, unknown>,
+            pre_action_confirmed: true,
+          },
+        };
+      } else if (field === 'debt_advice_signposted' && value && preActionLetterSent) {
+        updates.issues = {
+          ...updates.issues as Record<string, unknown>,
+          rent_arrears: {
+            ...(updates.issues as Record<string, unknown>).rent_arrears as Record<string, unknown>,
+            pre_action_confirmed: true,
+          },
+        };
+      }
+
+      onUpdate(updates);
+    },
+    [facts.issues, preActionLetterSent, preActionSignposted, onUpdate]
+  );
 
   // Set current question ID for Ask Heaven context when section renders
   useEffect(() => {
@@ -212,6 +309,80 @@ export const ScotlandGroundsSection: React.FC<ScotlandGroundsSectionProps> = ({
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* Pre-action requirements for Ground 1 (Rent Arrears) */}
+                {isGround1Selected && (
+                  <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <h5 className="font-semibold text-amber-800 flex items-center gap-2 mb-3">
+                      <span className="text-lg">⚠️</span>
+                      Pre-Action Requirements (Ground 1)
+                    </h5>
+                    <p className="text-sm text-amber-700 mb-4">
+                      The Pre-Action Requirements (Notice to Leave and Notice of Proceedings) (Scotland)
+                      Regulations 2020 require specific steps before serving a Notice to Leave for rent arrears.
+                      You must confirm these steps have been completed.
+                    </p>
+
+                    <div className="space-y-3">
+                      {/* Pre-action letter sent */}
+                      <label className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                        preActionLetterSent
+                          ? 'border-green-300 bg-green-50'
+                          : 'border-amber-200 bg-white hover:bg-amber-25'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={preActionLetterSent}
+                          onChange={(e) => handlePreActionUpdate('pre_action_letter_sent', e.target.checked)}
+                          className="mt-0.5"
+                        />
+                        <div>
+                          <span className={`font-medium ${preActionLetterSent ? 'text-green-800' : 'text-amber-800'}`}>
+                            Pre-action letter sent
+                            <span className="text-red-500 ml-1">*</span>
+                          </span>
+                          <p className="text-xs text-gray-600 mt-1">
+                            I have sent a letter to the tenant setting out the arrears, giving 28 days to respond,
+                            and explaining their rights before serving the Notice to Leave.
+                          </p>
+                        </div>
+                      </label>
+
+                      {/* Debt advice signposting */}
+                      <label className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                        preActionSignposted
+                          ? 'border-green-300 bg-green-50'
+                          : 'border-amber-200 bg-white hover:bg-amber-25'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={preActionSignposted}
+                          onChange={(e) => handlePreActionUpdate('debt_advice_signposted', e.target.checked)}
+                          className="mt-0.5"
+                        />
+                        <div>
+                          <span className={`font-medium ${preActionSignposted ? 'text-green-800' : 'text-amber-800'}`}>
+                            Signposted to debt advice
+                          </span>
+                          <p className="text-xs text-gray-600 mt-1">
+                            I have provided the tenant with information about free debt advice services
+                            (e.g., Citizens Advice Scotland, StepChange, Money Advice Service).
+                          </p>
+                        </div>
+                      </label>
+
+                      {/* Validation error message */}
+                      {!preActionLetterSent && (
+                        <div className="flex items-start gap-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                          <svg className="w-4 h-4 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                          </svg>
+                          <span>Pre-action letter is required before you can proceed with Ground 1.</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 

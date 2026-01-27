@@ -681,15 +681,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     void loadFacts();
   }, [caseId, jurisdiction]);
 
-  // Cleanup debounce timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    };
-  }, []);
-
   // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
     const isWales = jurisdiction === 'wales';
@@ -813,6 +804,20 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     },
     [facts, saveFactsToServer]
   );
+
+  // Cleanup debounce timeout on unmount and flush pending saves
+  // FIX: Previously only cleared timeout without flushing, causing data loss
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        // Flush any pending changes before unmount to prevent data loss
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+        }
+      }
+    };
+  }, [saveFactsToServer]);
 
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
