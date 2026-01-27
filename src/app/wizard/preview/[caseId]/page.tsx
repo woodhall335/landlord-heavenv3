@@ -657,6 +657,10 @@ export default function WizardPreviewPage() {
       'validity-checklist-s173': ['service_checklist'],
       'validity-checklist-fault': ['service_checklist'],
       'validity-checklist-ntl': ['service_checklist'],
+      // Pre-Service Compliance Declaration (England)
+      'pre-service-compliance-s8': ['compliance_checklist', 'pre_service_compliance'],
+      'pre-service-compliance-s21': ['compliance_checklist_section21', 'pre_service_compliance'],
+      'pre-service-checklist-fault': ['compliance_checklist', 'pre_service_compliance'],
       // Guidance docs (consolidated - expert guidance, timeline, case summary merged into roadmap)
       'eviction-roadmap': ['eviction_roadmap'],
       'court-filing-guide': ['court_filing_guide'],

@@ -27,11 +27,13 @@ describe('Notice Only Preview - Document List', () => {
         ]);
       });
 
-      it('returns 4 documents when includeArrearsSchedule is true', () => {
+      it('returns 5 documents when includeArrearsSchedule is true', () => {
+        // Includes: notice, service instructions, validity checklist, pre-service compliance, arrears schedule
         const docs = getNoticeOnlyDocuments('england', 'section_8', { includeArrearsSchedule: true });
 
-        expect(docs).toHaveLength(4);
+        expect(docs).toHaveLength(5);
         expect(docs.map(d => d.id)).toContain('arrears-schedule');
+        expect(docs.map(d => d.id)).toContain('pre-service-compliance-s8');
       });
 
       it('includes arrears schedule with correct metadata', () => {
@@ -189,13 +191,15 @@ describe('Complete Pack Document List', () => {
 });
 
 describe('Document Count in Preview', () => {
-  it('shows 3 documents for Notice Only without arrears schedule', () => {
+  it('shows 4 documents for Notice Only without arrears schedule', () => {
+    // Includes: notice, service instructions, validity checklist, pre-service compliance
     const docs = getNoticeOnlyDocuments('england', 'section_8');
-    expect(docs).toHaveLength(3);
+    expect(docs).toHaveLength(4);
   });
 
-  it('shows 4 documents for Notice Only with arrears schedule', () => {
+  it('shows 5 documents for Notice Only with arrears schedule', () => {
+    // Includes: notice, service instructions, validity checklist, pre-service compliance, arrears schedule
     const docs = getNoticeOnlyDocuments('england', 'section_8', { includeArrearsSchedule: true });
-    expect(docs).toHaveLength(4);
+    expect(docs).toHaveLength(5);
   });
 });

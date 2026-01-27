@@ -46,6 +46,14 @@ export function getNoticeOnlyDocuments(
           icon: 'checklist',
           pages: '2 pages',
           category: 'Checklists',
+        },
+        {
+          id: 'pre-service-compliance-s21',
+          title: 'Pre-Service Compliance Declaration',
+          description: 'Verification of compliance requirements before serving notice',
+          icon: 'compliance',
+          pages: '2-3 pages',
+          category: 'Checklists',
         }
       );
     } else if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
@@ -72,6 +80,14 @@ export function getNoticeOnlyDocuments(
           description: 'Pre-service checklist to ensure your notice meets all legal requirements',
           icon: 'checklist',
           pages: '2 pages',
+          category: 'Checklists',
+        },
+        {
+          id: 'pre-service-compliance-s8',
+          title: 'Pre-Service Compliance Declaration',
+          description: 'Verification of compliance requirements before serving notice',
+          icon: 'compliance',
+          pages: '2-3 pages',
           category: 'Checklists',
         }
       );
@@ -583,7 +599,8 @@ export function getProductMeta(product: string): ProductMeta {
       features: [
         'Legally compliant eviction notice',
         'Service instructions',
-        'Validity checklist',
+        'Service & validity checklist',
+        'Pre-service compliance declaration',
         'Instant PDF download',
       ],
     },

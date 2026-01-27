@@ -2406,7 +2406,11 @@ function NoticeOnlyReviewContent({
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Compliance Checklist
+                Service & Validity Checklist
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Pre-Service Compliance Declaration
               </li>
             </>
           ) : isSection8 ? (
@@ -2421,7 +2425,11 @@ function NoticeOnlyReviewContent({
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Grounds Summary
+                Service & Validity Checklist
+              </li>
+              <li className="flex items-center gap-2 text-gray-700">
+                <RiFileTextLine className="w-4 h-4 text-gray-400" />
+                Pre-Service Compliance Declaration
               </li>
               {includesArrearsGrounds && arrearsEvidenceStatus.complete && (
                 <li className="flex items-center gap-2 text-gray-700">
