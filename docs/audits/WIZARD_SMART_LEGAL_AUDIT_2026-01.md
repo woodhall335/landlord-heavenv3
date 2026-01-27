@@ -103,17 +103,19 @@ This audit covers all wizard flows (EvictionSectionFlow, NoticeOnlySectionFlow, 
 
 | Flow | Debounce | Flush on Review Nav | Flush on Unmount | Flush on Tab Close |
 |------|----------|---------------------|------------------|-------------------|
-| EvictionSectionFlow | 500ms | ✅ handleComplete() | ✅ **FIXED** (B1) | ❌ None |
-| NoticeOnlySectionFlow | 500ms | ✅ handleGenerateNotice() | ✅ **FIXED** (B1) | ❌ None |
-| MoneyClaimSectionFlow | 500ms | ✅ handleComplete() | ✅ Correct | ❌ None |
-| TenancySectionFlow | ⚠️ Direct | N/A | ❌ **GAP** | ❌ None |
+| EvictionSectionFlow | 500ms | ✅ handleComplete() | ✅ **FIXED** (B1) | ✅ **FIXED** |
+| NoticeOnlySectionFlow | 500ms | ✅ handleGenerateNotice() | ✅ **FIXED** (B1) | ✅ **FIXED** |
+| MoneyClaimSectionFlow | 500ms | ✅ handleComplete() | ✅ Correct | ✅ **FIXED** |
+| TenancySectionFlow | 500ms | ✅ handleNext() | ✅ **FIXED** | ✅ **FIXED** |
 
 **Fixed Issues:**
 - ✅ B1: EvictionSectionFlow and NoticeOnlySectionFlow now flush pending facts on unmount
+- ✅ TenancySectionFlow: Now has 500ms debouncing like other flows
+- ✅ TenancySectionFlow: Now flushes pending saves on unmount
+- ✅ All flows: visibilitychange handler flushes saves when tab becomes hidden
 
 **Remaining Gaps:**
-- ⚠️ TenancySectionFlow: No debouncing (immediate API call on every change) - performance issue
-- ⚠️ No flows handle tab close (beforeunload/visibilitychange) - 500ms data loss window
+- None (all data integrity issues fixed)
 
 ### Facts Merging Semantics
 
@@ -225,14 +227,19 @@ This audit covers all wizard flows (EvictionSectionFlow, NoticeOnlySectionFlow, 
 | Blocking issues bypass | Removed acknowledgement checkbox | ✅ DONE |
 | Save retry on failure | Added retry button | ✅ DONE |
 
-### P1 (New Findings)
+### P1 (Completed)
+
+| Issue | File/Location | Fix | Status |
+|-------|--------------|-----|--------|
+| TenancySectionFlow no debouncing | `TenancySectionFlow.tsx:372-408` | Added 500ms debounce like other flows | ✅ DONE |
+| TenancySectionFlow no unmount flush | `TenancySectionFlow.tsx:410-421` | Added cleanup effect with pendingFactsRef flush | ✅ DONE |
+| No tab close protection | All flows | Added visibilitychange handler to flush saves | ✅ DONE |
+
+### P1 (Remaining)
 
 | Issue | File/Location | Fix | Effort |
 |-------|--------------|-----|--------|
 | Phase 13 content not surfaced | `ValidationErrors.tsx:1-359` | Add props for title, howToFix[], legalRef, helpUrl and render them | Medium |
-| TenancySectionFlow no debouncing | `TenancySectionFlow.tsx:341-389` | Add 500ms debounce like other flows | Low |
-| TenancySectionFlow no unmount flush | `TenancySectionFlow.tsx` | Add cleanup effect with pendingFactsRef flush | Low |
-| No tab close protection | All flows | Add visibilitychange handler to flush saves | Low |
 
 ### P2 (Future)
 

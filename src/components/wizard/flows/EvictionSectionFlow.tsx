@@ -574,6 +574,25 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     };
   }, [saveFactsToServer]);
 
+  // Flush pending saves when tab becomes hidden (prevents data loss on tab close)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && pendingFactsRef.current) {
+        // Flush immediately when tab is hidden
+        if (saveTimeoutRef.current) {
+          clearTimeout(saveTimeoutRef.current);
+        }
+        saveFactsToServer(pendingFactsRef.current);
+        pendingFactsRef.current = null;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [saveFactsToServer]);
+
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < visibleSections.length - 1) {

@@ -27,7 +27,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -297,6 +297,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Debounced save refs (aligned with MoneyClaimSectionFlow pattern)
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<any>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -365,7 +369,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     saveFactsToServer(facts);
   }, [facts, saveFactsToServer]);
 
-  // Update facts and save
+  // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
     async (updates: Record<string, any>) => {
       // Deep merge to preserve existing nested fields
@@ -383,10 +387,57 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       }
 
       setFacts(next);
-      await saveFactsToServer(next);
+
+      // Store the latest facts to save
+      pendingFactsRef.current = next;
+
+      // Clear any existing debounce timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Debounce the save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
     },
     [facts, saveFactsToServer]
   );
+
+  // Cleanup debounce timeout on unmount and flush pending saves
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        // Flush any pending changes before unmount to prevent data loss
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+        }
+      }
+    };
+  }, [saveFactsToServer]);
+
+  // Flush pending saves when tab becomes hidden (prevents data loss on tab close)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && pendingFactsRef.current) {
+        // Flush immediately when tab is hidden
+        if (saveTimeoutRef.current) {
+          clearTimeout(saveTimeoutRef.current);
+        }
+        saveFactsToServer(pendingFactsRef.current);
+        pendingFactsRef.current = null;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [saveFactsToServer]);
 
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
