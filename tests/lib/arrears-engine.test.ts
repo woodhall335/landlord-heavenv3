@@ -401,6 +401,94 @@ describe('Arrears Engine', () => {
   });
 
   // ============================================================================
+  // PRO-RATA CALCULATION TESTS
+  // ============================================================================
+  describe('Pro-rata calculation for partial final periods', () => {
+    it('should pro-rate final period when notice date falls mid-period', () => {
+      // Tenancy starts 14th July 2025, notice date 2nd Feb 2026
+      // Period 4 runs from 14 Jan to 13 Feb (31 days)
+      // But with notice on 2nd Feb, only 20 days are in the partial period (14 Jan - 2 Feb)
+      const periods = generateRentPeriods({
+        tenancy_start_date: '2025-07-14',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        notice_date: '2026-02-02',
+      });
+
+      // The final period should be pro-rated
+      const lastPeriod = periods[periods.length - 1];
+      expect(lastPeriod.is_pro_rated).toBe(true);
+      expect(lastPeriod.notes).toContain('Pro-rated');
+      expect(lastPeriod.rent_due).toBeLessThan(1000); // Pro-rated amount
+
+      // Verify the calculation: approximately 20 days out of ~31 = ~645.16
+      // The exact value depends on the calculation method
+      expect(lastPeriod.rent_due).toBeGreaterThan(600);
+      expect(lastPeriod.rent_due).toBeLessThan(700);
+    });
+
+    it('should NOT pro-rate when notice date is on period end date', () => {
+      // Period ends exactly on the cut-off date - no pro-rata needed
+      const periods = generateRentPeriods({
+        tenancy_start_date: '2025-01-01',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        cut_off_date: '2025-01-31', // Exactly one full month
+      });
+
+      expect(periods.length).toBe(1);
+      expect(periods[0].is_pro_rated).toBeFalsy();
+      expect(periods[0].rent_due).toBe(1000);
+    });
+
+    it('should include pro-rata fields in createEmptyArrearsSchedule', () => {
+      const items = createEmptyArrearsSchedule({
+        tenancy_start_date: '2025-07-14',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        notice_date: '2026-02-02',
+      });
+
+      const lastItem = items[items.length - 1];
+      expect(lastItem.is_pro_rated).toBe(true);
+      expect(lastItem.notes).toContain('Pro-rated');
+      expect(lastItem.days_in_period).toBeGreaterThan(0);
+      expect(lastItem.amount_owed).toBeLessThan(1000);
+    });
+
+    it('should calculate correct total arrears with pro-rated final period', () => {
+      // Example: 3 full months + 1 partial month
+      const items = createEmptyArrearsSchedule({
+        tenancy_start_date: '2025-10-14',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        notice_date: '2026-02-02',
+      });
+
+      const computed = computeArrears(items, 'monthly', 1000);
+
+      // Total should be less than 4 * 1000 = 4000 due to pro-rating
+      expect(computed.total_arrears).toBeLessThan(4000);
+      expect(computed.total_arrears).toBeGreaterThan(3500); // At least 3.5 months worth
+    });
+
+    it('should handle weekly pro-rata calculation correctly', () => {
+      const periods = generateRentPeriods({
+        tenancy_start_date: '2025-01-01',
+        rent_amount: 200,
+        rent_frequency: 'weekly',
+        cut_off_date: '2025-01-10', // 10 days = 1 full week + 3 partial days
+      });
+
+      // First period: 1 Jan - 7 Jan (7 days) = full £200
+      // Second period: 8 Jan - 10 Jan (3 days) = pro-rated £200 * 3/7 ≈ £85.71
+      expect(periods.length).toBe(2);
+      expect(periods[1].is_pro_rated).toBe(true);
+      expect(periods[1].rent_due).toBeLessThan(200);
+    });
+  });
+
+  // ============================================================================
   // INTEGRATION TESTS
   // ============================================================================
   describe('Integration: End-to-End Arrears Calculation', () => {

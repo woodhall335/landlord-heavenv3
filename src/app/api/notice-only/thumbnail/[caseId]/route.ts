@@ -85,6 +85,14 @@ function resolveDocumentType(configId: string, jurisdiction: string, route: stri
     return 'arrears_schedule';
   }
 
+  // Pre-Service Compliance Declaration
+  if (configId.startsWith('pre-service-compliance') ||
+      configId === 'compliance_checklist' ||
+      configId === 'compliance_checklist_section21' ||
+      configId === 'pre_service_compliance') {
+    return 'compliance_checklist';
+  }
+
   return null;
 }
 
@@ -116,6 +124,13 @@ function getTemplatePath(
     if (docType === 'arrears_schedule') {
       return 'uk/england/templates/money_claims/schedule_of_arrears.hbs';
     }
+    if (docType === 'compliance_checklist') {
+      // Use route-specific compliance checklist
+      const isSection21 = route === 'section_21' || route === 'accelerated_possession';
+      return isSection21
+        ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
+        : 'uk/england/templates/eviction/compliance_checklist.hbs';
+    }
   }
 
   // Wales templates
@@ -138,6 +153,9 @@ function getTemplatePath(
     if (docType === 'arrears_schedule') {
       return 'uk/wales/templates/money_claims/schedule_of_arrears.hbs';
     }
+    if (docType === 'compliance_checklist') {
+      return 'uk/wales/templates/eviction/compliance_checklist.hbs';
+    }
   }
 
   // Scotland templates
@@ -153,6 +171,9 @@ function getTemplatePath(
     }
     if (docType === 'arrears_schedule') {
       return 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs';
+    }
+    if (docType === 'compliance_checklist') {
+      return 'uk/scotland/templates/eviction/compliance_checklist.hbs';
     }
   }
 

@@ -97,6 +97,12 @@ export interface ArrearsItem {
   rent_paid: number;
   // Some modules work directly with "amount_owed"
   amount_owed?: number | null;
+  // Pro-rata fields for partial final periods
+  is_pro_rated?: boolean;
+  /** Notes explaining pro-rata calculation e.g. "Pro-rated (20 days)" */
+  notes?: string;
+  /** Number of days in this period (for pro-rata calculation display) */
+  days_in_period?: number;
 }
 
 export interface IssueFacts {

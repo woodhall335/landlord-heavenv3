@@ -25,6 +25,12 @@ export interface RentPeriod {
   period_start: string; // YYYY-MM-DD
   period_end: string;   // YYYY-MM-DD
   rent_due: number;
+  /** Whether this period is pro-rated (partial period) */
+  is_pro_rated?: boolean;
+  /** Number of days in this period */
+  days_in_period?: number;
+  /** Notes explaining pro-rata calculation */
+  notes?: string;
 }
 
 export interface ArrearsScheduleInput {
@@ -110,6 +116,10 @@ const PERIODS_PER_MONTH: Record<NonNullable<TenancyFacts['rent_frequency']>, num
  * - Monthly: Calendar months (same day each month)
  * - Quarterly: 3-month periods
  * - Yearly: 12-month periods
+ *
+ * The final period is pro-rated if the cut-off/notice date falls within
+ * an incomplete rental period. Pro-rata is calculated as:
+ *   (rent_amount / full_period_days) * partial_days
  */
 export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
   const {
@@ -139,24 +149,44 @@ export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
   let periodStart = new Date(startDate);
 
   while (periodStart <= endDate) {
-    const periodEnd = calculatePeriodEnd(periodStart, rent_frequency);
+    const fullPeriodEnd = calculatePeriodEnd(periodStart, rent_frequency);
 
     // Don't include periods that start after the end date
     if (periodStart > endDate) {
       break;
     }
 
-    // Cap the period end at the cut-off date
-    const effectiveEnd = periodEnd > endDate ? endDate : periodEnd;
+    // Check if this is a partial final period
+    const isPartialPeriod = fullPeriodEnd > endDate;
+    const effectiveEnd = isPartialPeriod ? endDate : fullPeriodEnd;
+
+    // Calculate days
+    const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
+    const actualDays = daysInclusive(periodStart, effectiveEnd);
+
+    // Calculate rent due (pro-rata for partial periods)
+    let rentDue = rent_amount;
+    let isProRated = false;
+    let notes: string | undefined;
+
+    if (isPartialPeriod && actualDays < fullPeriodDays) {
+      // Pro-rata calculation: (rent / full period days) * actual days
+      rentDue = Math.round((rent_amount / fullPeriodDays) * actualDays * 100) / 100;
+      isProRated = true;
+      notes = `Pro-rated (${actualDays} days)`;
+    }
 
     periods.push({
       period_start: formatDate(periodStart),
       period_end: formatDate(effectiveEnd),
-      rent_due: rent_amount,
+      rent_due: rentDue,
+      is_pro_rated: isProRated || undefined,
+      days_in_period: actualDays,
+      notes: notes,
     });
 
     // Move to next period
-    periodStart = new Date(periodEnd);
+    periodStart = new Date(fullPeriodEnd);
     periodStart.setDate(periodStart.getDate() + 1);
   }
 
@@ -205,6 +235,29 @@ function calculatePeriodEnd(
  */
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0];
+}
+
+/**
+ * Calculate the number of days between two dates (inclusive).
+ */
+function daysInclusive(startDate: Date, endDate: Date): number {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  // Reset time to midnight to avoid DST issues
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  const diffTime = end.getTime() - start.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + 1; // +1 because both start and end are inclusive
+}
+
+/**
+ * Get the number of days in a calendar month.
+ */
+function getDaysInMonth(date: Date): number {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  return new Date(year, month + 1, 0).getDate();
 }
 
 // ============================================================================
@@ -441,6 +494,7 @@ export function hasGround8Selected(groundCodes: number[]): boolean {
  * Create an empty arrears schedule with generated periods.
  *
  * Used by the wizard to initialize the schedule when user starts entering data.
+ * Includes pro-rata calculation for the final period if applicable.
  */
 export function createEmptyArrearsSchedule(input: ArrearsScheduleInput): ArrearsItem[] {
   const periods = generateRentPeriods(input);
@@ -451,6 +505,9 @@ export function createEmptyArrearsSchedule(input: ArrearsScheduleInput): Arrears
     rent_due: period.rent_due,
     rent_paid: 0, // Default to unpaid
     amount_owed: period.rent_due, // Full amount owed by default
+    is_pro_rated: period.is_pro_rated,
+    notes: period.notes,
+    days_in_period: period.days_in_period,
   }));
 }
 
