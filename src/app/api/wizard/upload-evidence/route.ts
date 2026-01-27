@@ -720,12 +720,40 @@ export async function POST(request: Request) {
         } as typeof current;
       });
 
-      const validatorOutcome = runLegalValidator({
-        product: (factsSnapshot as any)?.__meta?.product || (factsSnapshot as any)?.product,
-        jurisdiction: caseRow.jurisdiction,
-        facts: intelligence.facts as any,
-        analysis,
-      });
+      // Only run notice validator (S8/S21) when the uploaded document is actually a notice
+      // Supporting documents (bank statements, rent schedules, correspondence, etc.) should NOT
+      // be validated as notices - they're evidence for the case, not the notice itself
+      const noticeCategories = ['notice_s8', 'notice_s21'];
+      const noticeDocTypes = ['notice_s8', 'notice_s21', 's8_notice', 's21_notice'];
+      const classifiedType = docClassification?.docType?.toLowerCase() ?? '';
+      const categoryLower = validatedCategory?.toLowerCase() ?? '';
+
+      const isNoticeDocument =
+        noticeCategories.includes(categoryLower) ||
+        noticeDocTypes.includes(classifiedType) ||
+        classifiedType.includes('section_8') ||
+        classifiedType.includes('section_21') ||
+        classifiedType.includes('form_6a') ||
+        classifiedType.includes('form_3');
+
+      // Skip validator for non-notice supporting documents
+      if (!isNoticeDocument) {
+        console.log('[upload-evidence] Skipping notice validator for supporting document', {
+          debug_id: debugId,
+          category: validatedCategory,
+          classifiedType: docClassification?.docType,
+          reason: 'Not a notice document',
+        });
+      }
+
+      const validatorOutcome = isNoticeDocument
+        ? runLegalValidator({
+            product: (factsSnapshot as any)?.__meta?.product || (factsSnapshot as any)?.product,
+            jurisdiction: caseRow.jurisdiction,
+            facts: intelligence.facts as any,
+            analysis,
+          })
+        : { result: null, validator_key: null, recommendations: [], level_a_questions: [], level_a_mode: false };
 
       validationResult = validatorOutcome.result;
       validationKey = validatorOutcome.validator_key;
