@@ -592,8 +592,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create Stripe checkout session using Stripe Price ID
-    // Price is controlled in Stripe Dashboard - no hardcoded amounts
+    // Create Stripe checkout session using price_data from products.ts (source of truth)
+    // This ensures UI price and Stripe charge match exactly
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
@@ -602,6 +602,9 @@ export async function POST(request: Request) {
     // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
+    // Convert price from GBP (e.g., 149.99) to pence (14999) for Stripe
+    const unitAmountPence = Math.round(product.price * 100);
+
     const session = await stripe.checkout.sessions.create(
       {
         customer: customerId,
@@ -609,7 +612,14 @@ export async function POST(request: Request) {
         payment_method_types: ['card'],
         line_items: [
           {
-            price: priceId,
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: product.label,
+                description: product.description,
+              },
+              unit_amount: unitAmountPence,
+            },
             quantity: 1,
           },
         ],

@@ -1701,6 +1701,10 @@ export async function generateCompleteEvictionPack(
             // Schedule and notice dates
             schedule_date: today,
             notice_date: noticeDate,
+            generation_date: today,
+            // Tenancy information (required by template for summary box)
+            rent_amount: rentAmount,
+            tenancy_start_date: evictionCase.tenancy_start_date,
             // Arrears at key dates
             arrears_at_notice_date: arrearsAtNoticeDate,
             arrears_at_schedule_date: arrearsAtScheduleDate,
@@ -1710,7 +1714,7 @@ export async function generateCompleteEvictionPack(
             meets_threshold_at_notice: meetsThresholdAtNotice,
             meets_threshold_at_schedule: meetsThresholdAtSchedule,
             rent_frequency: rentFrequencyDisplay[rentFrequency] || rentFrequency,
-            // Add generation date
+            // Add generation date (legacy alias)
             generated_date: today,
           },
           isPreview: false,

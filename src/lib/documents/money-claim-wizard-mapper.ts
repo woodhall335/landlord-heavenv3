@@ -4,8 +4,34 @@ import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generat
 import { mapArrearsItemsToEntries, getArrearsScheduleFromFacts } from './arrears-schedule-mapper';
 import { calculateMoneyClaimFee } from '@/lib/court-fees/hmcts-fees';
 
+/**
+ * Build address string from components, with deduplication.
+ * Prevents duplicate city/postcode when address_line2 already contains them.
+ * Uses comma separator for money claim documents.
+ */
 function buildAddress(...parts: Array<string | null>): string {
-  return parts.filter(Boolean).join(', ');
+  const cleanParts = parts
+    .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+    .map(p => p.trim());
+
+  if (cleanParts.length === 0) return '';
+
+  // Build address with deduplication - check if part is already present in earlier parts
+  const result: string[] = [];
+  const addressSoFarLower: string[] = [];
+
+  for (const part of cleanParts) {
+    const partLower = part.toLowerCase();
+    // Check if this part is already included in any earlier part
+    const isSubstringOfExisting = addressSoFarLower.some(existing => existing.includes(partLower));
+
+    if (!isSubstringOfExisting) {
+      result.push(part);
+      addressSoFarLower.push(partLower);
+    }
+  }
+
+  return result.join(', ');
 }
 
 /**

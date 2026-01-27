@@ -18,8 +18,43 @@ import {
   type N5BFields,
 } from './n5b-field-builder';
 
+/**
+ * Build address string from components, with deduplication.
+ * Prevents duplicate city/postcode when address_line2 already contains them.
+ *
+ * Example fix: Prevents "... LS28 7PW\nPudsey\nLS28 7PW" duplication
+ * Input: ["123 Main Street", "Pudsey LS28 7PW", "Pudsey", "LS28 7PW"]
+ * Output: "123 Main Street\nPudsey LS28 7PW"
+ */
 function buildAddress(...parts: Array<string | null | undefined>): string {
-  return parts.filter(Boolean).join('\n');
+  const cleanParts = parts
+    .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+    .map(p => p.trim());
+
+  if (cleanParts.length === 0) return '';
+
+  // Build address with deduplication - check if part is already present in earlier parts
+  const result: string[] = [];
+  const addressSoFarLower: string[] = []; // Track all parts we've added (lowercase for comparison)
+
+  for (const part of cleanParts) {
+    const partLower = part.toLowerCase();
+
+    // Check if this part (or its content) is already included in any earlier part
+    const isSubstringOfExisting = addressSoFarLower.some(existing => existing.includes(partLower));
+
+    // Also check if this part already contains one of the existing parts (shouldn't add duplicate info)
+    const containsExisting = addressSoFarLower.some(existing => partLower.includes(existing) && existing.length > 3);
+
+    if (!isSubstringOfExisting) {
+      // Only skip if the part is redundant (already fully contained in a previous line)
+      // This allows "Pudsey LS28 7PW" even if "Pudsey" was added, but not "LS28 7PW" again
+      result.push(part);
+      addressSoFarLower.push(partLower);
+    }
+  }
+
+  return result.join('\n');
 }
 
 /**
