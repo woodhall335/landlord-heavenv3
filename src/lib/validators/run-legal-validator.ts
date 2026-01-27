@@ -314,13 +314,24 @@ function buildSection21Answers(facts: Record<string, any>, extracted?: Record<st
   ]);
   const epcProvided = ext.epc_mentioned ?? getFactValue(facts, [
     'epc_provided',
+    'epc_served',  // Section21ComplianceSection uses this key
     'epc_provided_to_tenant', // Level A key
     'property.epc_provided',
+    'section21.epc_provided',
+    'section21.epc_served',
+    'compliance.epc_provided',
+    'compliance.epc_served',
   ]);
   const howToRent = ext.how_to_rent_mentioned ?? getFactValue(facts, [
     'how_to_rent_provided',
+    'how_to_rent_served',  // Section21ComplianceSection uses this key
+    'how_to_rent_given',
     'how_to_rent_guide_provided', // Level A key
     'tenancy.how_to_rent_provided',
+    'section21.how_to_rent_provided',
+    'section21.how_to_rent_served',
+    'compliance.how_to_rent_provided',
+    'compliance.how_to_rent_served',
   ]);
 
   // For licensing, check both canonical and Level A keys
