@@ -46,7 +46,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import {
   ValidatedInput,
@@ -54,6 +54,56 @@ import {
   ValidatedCurrencyInput,
   ValidatedYesNoToggle,
 } from '@/components/wizard/ValidatedField';
+
+// ============================================================================
+// INLINE DATE WARNING COMPONENT
+// ============================================================================
+
+interface DateWarningProps {
+  message: string;
+  show: boolean;
+}
+
+/**
+ * DateWarning - Inline warning component for date validation issues
+ *
+ * These are WARNINGS, not hard blocks. Hard blocks remain on the Review page.
+ * Warnings appear immediately below the date field and disappear when corrected.
+ */
+const DateWarning: React.FC<DateWarningProps> = ({ message, show }) => {
+  if (!show) return null;
+
+  return (
+    <div className="mt-2 p-3 bg-amber-50 border border-amber-300 rounded-md">
+      <p className="text-sm text-amber-800 whitespace-pre-line">
+        {message}
+      </p>
+    </div>
+  );
+};
+
+// ============================================================================
+// DATE COMPARISON HELPERS
+// ============================================================================
+
+/**
+ * Compares two dates at day-level precision.
+ * Returns true if date1 is AFTER date2.
+ */
+function isDateAfter(date1: string | undefined, date2: string | undefined): boolean {
+  if (!date1 || !date2) return false;
+  // Compare date strings directly (ISO format: YYYY-MM-DD)
+  return date1 > date2;
+}
+
+/**
+ * Checks if a date is in the future (after today).
+ */
+function isDateInFuture(date: string | undefined): boolean {
+  if (!date) return false;
+  const today = new Date().toISOString().split('T')[0];
+  return date > today;
+}
 
 interface Section21ComplianceSectionProps {
   facts: WizardFacts;
@@ -101,6 +151,51 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
     facts.n5b_q19_has_unreturned_prohibited_payment === undefined
       ? undefined
       : !facts.n5b_q19_has_unreturned_prohibited_payment;
+
+  // ============================================================================
+  // INLINE DATE VALIDATION WARNINGS (Part B)
+  // ============================================================================
+  // These are WARNINGS, not hard blocks. Hard blocks remain on the Review page.
+
+  const tenancyStartDate = facts.tenancy_start_date as string | undefined;
+
+  // EPC date warning: Show if EPC was provided AFTER tenancy started
+  const showEpcDateWarning = useMemo(() => {
+    if (facts.epc_served !== true) return false;
+    const epcDate = facts.epc_provided_date as string | undefined;
+    return isDateAfter(epcDate, tenancyStartDate);
+  }, [facts.epc_served, facts.epc_provided_date, tenancyStartDate]);
+
+  // How to Rent date warning: Show if guide was provided AFTER tenancy started
+  const showHowToRentDateWarning = useMemo(() => {
+    if (facts.how_to_rent_served !== true) return false;
+    const howToRentDate = facts.how_to_rent_date as string | undefined;
+    return isDateAfter(howToRentDate, tenancyStartDate);
+  }, [facts.how_to_rent_served, facts.how_to_rent_date, tenancyStartDate]);
+
+  // Gas Safety pre-occupation date warning: Show if date is AFTER tenancy started OR in the future
+  const showGasSafetyPreOccupationWarning = useMemo(() => {
+    if (facts.has_gas_appliances !== true) return false;
+    if (facts.gas_safety_before_occupation !== true) return false;
+    const gasDate = facts.gas_safety_record_served_pre_occupation_date as string | undefined;
+    // Show warning if date is after tenancy start OR in the future
+    return isDateAfter(gasDate, tenancyStartDate) || isDateInFuture(gasDate);
+  }, [
+    facts.has_gas_appliances,
+    facts.gas_safety_before_occupation,
+    facts.gas_safety_record_served_pre_occupation_date,
+    tenancyStartDate,
+  ]);
+
+  // Warning message constants
+  const EPC_DATE_WARNING = `⚠️ The Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts.
+If the EPC was provided after the start of the tenancy, a Section 21 notice may be invalid.`;
+
+  const HOW_TO_RENT_DATE_WARNING = `⚠️ The 'How to Rent' guide should normally be given to the tenant at the start of the tenancy.
+Providing it later can invalidate a Section 21 notice.`;
+
+  const GAS_SAFETY_DATE_WARNING = `⚠️ A Gas Safety Certificate must be given to the tenant BEFORE they move in.
+If it was not provided before occupation, a Section 21 notice is likely to be invalid.`;
 
   return (
     <div className="space-y-8">
@@ -266,18 +361,21 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                       className="max-w-xs"
                     />
 
-                    <ValidatedInput
-                      id="gas_safety_record_served_pre_occupation_date"
-                      label="Date the pre-occupation gas safety record was given to the tenant"
-                      type="date"
-                      value={facts.gas_safety_record_served_pre_occupation_date as string}
-                      onChange={(v) => onUpdate({ gas_safety_record_served_pre_occupation_date: v })}
-                      validation={{ required: true }}
-                      required
-                      helperText="The date you provided the CP12 to the tenant before they moved in. This is the critical date for Section 21 compliance."
-                      sectionId={SECTION_ID}
-                      className="max-w-xs"
-                    />
+                    <div>
+                      <ValidatedInput
+                        id="gas_safety_record_served_pre_occupation_date"
+                        label="Date the pre-occupation gas safety record was given to the tenant"
+                        type="date"
+                        value={facts.gas_safety_record_served_pre_occupation_date as string}
+                        onChange={(v) => onUpdate({ gas_safety_record_served_pre_occupation_date: v })}
+                        validation={{ required: true }}
+                        required
+                        helperText="The date you provided the CP12 to the tenant before they moved in. This is the critical date for Section 21 compliance."
+                        sectionId={SECTION_ID}
+                        className="max-w-xs"
+                      />
+                      <DateWarning show={showGasSafetyPreOccupationWarning} message={GAS_SAFETY_DATE_WARNING} />
+                    </div>
                   </div>
                 )}
 
@@ -341,6 +439,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
               sectionId={SECTION_ID}
               className="max-w-xs"
             />
+            <DateWarning show={showEpcDateWarning} message={EPC_DATE_WARNING} />
           </div>
         )}
       </div>
@@ -363,17 +462,20 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
         {facts.how_to_rent_served === true && (
           <div className="pl-4 border-l-2 border-purple-200 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ValidatedInput
-                id="how_to_rent_date"
-                label="Date 'How to Rent' was provided"
-                type="date"
-                value={facts.how_to_rent_date as string}
-                onChange={(v) => onUpdate({ how_to_rent_date: v })}
-                validation={{ required: true }}
-                required
-                helperText="The date you provided the guide to the tenant."
-                sectionId={SECTION_ID}
-              />
+              <div>
+                <ValidatedInput
+                  id="how_to_rent_date"
+                  label="Date 'How to Rent' was provided"
+                  type="date"
+                  value={facts.how_to_rent_date as string}
+                  onChange={(v) => onUpdate({ how_to_rent_date: v })}
+                  validation={{ required: true }}
+                  required
+                  helperText="The date you provided the guide to the tenant."
+                  sectionId={SECTION_ID}
+                />
+                <DateWarning show={showHowToRentDateWarning} message={HOW_TO_RENT_DATE_WARNING} />
+              </div>
 
               <ValidatedSelect
                 id="how_to_rent_method"

@@ -409,4 +409,267 @@ describe('Section21ComplianceSection', () => {
       expect(howToRentDateInput.value).toBe('2024-01-02');
     });
   });
+
+  describe('Inline Date Validation Warnings', () => {
+    describe('EPC Date Warnings', () => {
+      it('should show warning when EPC date is after tenancy start date', () => {
+        const factsWithBadDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          epc_served: true,
+          epc_provided_date: '2024-01-15', // AFTER tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithBadDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown
+        expect(screen.getByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).toBeInTheDocument();
+      });
+
+      it('should NOT show warning when EPC date is before tenancy start date', () => {
+        const factsWithGoodDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-15',
+          epc_served: true,
+          epc_provided_date: '2024-01-01', // BEFORE tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithGoodDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should NOT be shown
+        expect(screen.queryByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).not.toBeInTheDocument();
+      });
+
+      it('should NOT show EPC warning when epc_served is false', () => {
+        const factsNoEpc: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          epc_served: false,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsNoEpc}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should NOT be shown (EPC not served, so no date field visible)
+        expect(screen.queryByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).not.toBeInTheDocument();
+      });
+    });
+
+    describe('How to Rent Date Warnings', () => {
+      it('should show warning when How to Rent date is after tenancy start date', () => {
+        const factsWithBadDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          how_to_rent_served: true,
+          how_to_rent_date: '2024-02-01', // AFTER tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithBadDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown
+        expect(screen.getByText(/How to Rent' guide should normally be given to the tenant at the start of the tenancy/)).toBeInTheDocument();
+      });
+
+      it('should NOT show warning when How to Rent date is before tenancy start date', () => {
+        const factsWithGoodDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-15',
+          how_to_rent_served: true,
+          how_to_rent_date: '2024-01-10', // BEFORE tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithGoodDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should NOT be shown
+        expect(screen.queryByText(/How to Rent' guide should normally be given to the tenant at the start of the tenancy/)).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Gas Safety Pre-Occupation Date Warnings', () => {
+      it('should show warning when gas safety date is after tenancy start date', () => {
+        const factsWithBadDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_before_occupation: true,
+          gas_safety_record_served_pre_occupation_date: '2024-01-15', // AFTER tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithBadDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown
+        expect(screen.getByText(/Gas Safety Certificate must be given to the tenant BEFORE they move in/)).toBeInTheDocument();
+      });
+
+      it('should show warning when gas safety date is in the future', () => {
+        // Set a future date
+        const futureDate = new Date();
+        futureDate.setFullYear(futureDate.getFullYear() + 1);
+        const futureDateStr = futureDate.toISOString().split('T')[0];
+
+        const factsWithFutureDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_before_occupation: true,
+          gas_safety_record_served_pre_occupation_date: futureDateStr, // IN THE FUTURE
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithFutureDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown
+        expect(screen.getByText(/Gas Safety Certificate must be given to the tenant BEFORE they move in/)).toBeInTheDocument();
+      });
+
+      it('should NOT show warning when gas safety date is before tenancy start date', () => {
+        const factsWithGoodDate: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-15',
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_before_occupation: true,
+          gas_safety_record_served_pre_occupation_date: '2024-01-01', // BEFORE tenancy start
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithGoodDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should NOT be shown
+        expect(screen.queryByText(/Gas Safety Certificate must be given to the tenant BEFORE they move in/)).not.toBeInTheDocument();
+      });
+
+      it('should NOT show gas safety warning when no gas appliances', () => {
+        const factsNoGas: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          has_gas_appliances: false,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsNoGas}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should NOT be shown (no gas appliances)
+        expect(screen.queryByText(/Gas Safety Certificate must be given to the tenant BEFORE they move in/)).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Warnings do not block progression', () => {
+      it('should still allow onUpdate when warnings are shown', () => {
+        const factsWithWarning: WizardFacts = {
+          ...baseFacts,
+          tenancy_start_date: '2024-01-01',
+          epc_served: true,
+          epc_provided_date: '2024-01-15', // AFTER tenancy start - should trigger warning
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithWarning}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown
+        expect(screen.getByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).toBeInTheDocument();
+
+        // But user can still update other fields
+        const depositToggleYes = screen.getAllByRole('radio', { name: 'Yes' }).find(
+          (r) => r.getAttribute('name') === 'deposit_taken'
+        );
+        fireEvent.click(depositToggleYes!);
+
+        // onUpdate should still be called - warnings don't block
+        expect(mockOnUpdate).toHaveBeenCalledWith({ deposit_taken: true });
+      });
+
+      it('should remove warning when date is corrected', () => {
+        const { rerender } = render(
+          <Section21ComplianceSection
+            facts={{
+              ...baseFacts,
+              tenancy_start_date: '2024-01-01',
+              epc_served: true,
+              epc_provided_date: '2024-01-15', // AFTER tenancy start
+            }}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be shown initially
+        expect(screen.getByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).toBeInTheDocument();
+
+        // Re-render with corrected date
+        rerender(
+          <Section21ComplianceSection
+            facts={{
+              ...baseFacts,
+              tenancy_start_date: '2024-01-15',
+              epc_served: true,
+              epc_provided_date: '2024-01-01', // BEFORE tenancy start (corrected)
+            }}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Warning should be gone
+        expect(screen.queryByText(/Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts/)).not.toBeInTheDocument();
+      });
+    });
+  });
 });
