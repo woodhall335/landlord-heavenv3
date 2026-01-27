@@ -2486,6 +2486,16 @@ function NoticeOnlyReviewContent({
         </div>
       </Card>
 
+      {/* Smart Review Panel - Document analysis warnings (England pilot) */}
+      {analysis?.case_facts?.__smart_review?.warnings?.length > 0 && (
+        <Card className="p-6">
+          <SmartReviewPanel
+            warnings={analysis.case_facts.__smart_review.warnings}
+            summary={analysis.case_facts.__smart_review.summary}
+          />
+        </Card>
+      )}
+
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">

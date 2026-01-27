@@ -128,9 +128,9 @@ export interface SmartReviewInput {
   evidenceBundle: EvidenceBundle;
   /** Wizard facts to compare against */
   wizardFacts: WizardFacts;
-  /** Product type (only complete_pack/eviction_pack supported) */
+  /** Product type (complete_pack, eviction_pack, notice_only) */
   product: string;
-  /** Jurisdiction (only england supported in v1) */
+  /** Jurisdiction (england only in v1; notice_only pilot also england-only) */
   jurisdiction: string;
   /** Optional comparison config overrides */
   comparisonConfig?: Partial<ComparisonConfig>;
@@ -649,7 +649,17 @@ export async function runSmartReview(
       }
     }
 
-    // 9. Count warnings by severity
+    // 9. For notice_only pilot, downgrade all blockers to warnings (warning-only mode)
+    // This ensures notice_only users get information but are not blocked from proceeding
+    if (input.product === 'notice_only') {
+      for (const warning of allWarnings) {
+        if (warning.severity === 'blocker') {
+          warning.severity = 'warning';
+        }
+      }
+    }
+
+    // 10. Count warnings by severity
     const warningCounts = {
       blocker: allWarnings.filter((w) => w.severity === 'blocker').length,
       warning: allWarnings.filter((w) => w.severity === 'warning').length,
@@ -738,8 +748,9 @@ function getCachedExtraction(upload: EvidenceUploadItem): EvidenceExtractedFacts
 
 /**
  * Check if Smart Review is eligible to run.
+ * Exported for testing purposes.
  */
-function checkEligibility(input: SmartReviewInput): {
+export function checkEligibility(input: SmartReviewInput): {
   eligible: boolean;
   skipReason?: {
     reason: string;
@@ -757,20 +768,23 @@ function checkEligibility(input: SmartReviewInput): {
     };
   }
 
-  // Check product (only complete_pack/eviction_pack)
-  const supportedProducts = ['complete_pack', 'eviction_pack'];
+  // Check product (complete_pack, eviction_pack, notice_only)
+  // notice_only is supported as of Jan 2026 pilot (warning-only mode)
+  const supportedProducts = ['complete_pack', 'eviction_pack', 'notice_only'];
   if (!supportedProducts.includes(input.product)) {
     return {
       eligible: false,
       skipReason: {
-        reason: `Smart Review is only available for complete_pack, not ${input.product}`,
+        reason: `Smart Review is only available for complete_pack/notice_only, not ${input.product}`,
         code: 'WRONG_PRODUCT',
       },
     };
   }
 
   // Check jurisdiction (only england in v1)
-  if (input.jurisdiction !== 'england') {
+  // For notice_only pilot, also restricted to England only
+  const supportedJurisdictions = ['england'];
+  if (!supportedJurisdictions.includes(input.jurisdiction)) {
     return {
       eligible: false,
       skipReason: {
