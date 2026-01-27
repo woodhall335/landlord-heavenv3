@@ -162,8 +162,27 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         }
 
         const data = await response.json();
-        if (data.files) {
-          allNewFiles.push(...data.files);
+
+        // API returns files under evidence.files, extract the newly added file
+        if (data.evidence?.files) {
+          // Find the file that was just added (last in the array typically)
+          const latestFile = data.evidence.files[data.evidence.files.length - 1];
+          if (latestFile) {
+            allNewFiles.push({
+              id: latestFile.id,
+              filename: latestFile.file_name || files[i].name,
+              category: latestFile.category || categoryEnum,
+              uploadedAt: latestFile.uploaded_at || new Date().toISOString(),
+            });
+          }
+        } else if (data.document) {
+          // Fallback: construct from document response
+          allNewFiles.push({
+            id: data.document.id,
+            filename: data.document.document_title || files[i].name,
+            category: categoryEnum,
+            uploadedAt: data.document.created_at || new Date().toISOString(),
+          });
         }
       }
 

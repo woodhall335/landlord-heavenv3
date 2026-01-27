@@ -124,7 +124,7 @@ function normalizeExtractedFields(raw: Record<string, any>): Record<string, any>
     // How to rent
     { sources: ['how_to_rent_mentioned', 'howToRentMentioned', 'how_to_rent', 'howToRent'], target: 'how_to_rent_mentioned' },
     // Section 8 fields
-    { sources: ['grounds_cited', 'groundsCited', 'grounds', 'eviction_grounds', 'evictionGrounds'], target: 'grounds_cited' },
+    { sources: ['grounds_cited', 'groundsCited', 'grounds', 'eviction_grounds', 'evictionGrounds', 'ground_for_possession', 'groundForPossession'], target: 'grounds_cited' },
     { sources: ['rent_arrears_stated', 'rentArrearsStated', 'arrears_amount', 'arrearsAmount', 'rent_arrears'], target: 'rent_arrears_stated' },
     { sources: ['tenant_details', 'tenantDetails'], target: 'tenant_details' },
     { sources: ['notice_period', 'noticePeriod'], target: 'notice_period' },
@@ -457,6 +457,7 @@ function extractFieldsFromFacts(facts: Record<string, any>): Record<string, any>
 
   // Section 8 specific
   if (facts.grounds_cited !== undefined) extracted.grounds_cited = facts.grounds_cited;
+  if (facts.ground_for_possession !== undefined) extracted.ground_for_possession = facts.ground_for_possession;
   if (facts.rent_arrears_stated !== undefined) extracted.rent_arrears_stated = facts.rent_arrears_stated;
   if (facts.tenant_details !== undefined) extracted.tenant_details = facts.tenant_details;
   if (facts.notice_period !== undefined) extracted.notice_period = facts.notice_period;
