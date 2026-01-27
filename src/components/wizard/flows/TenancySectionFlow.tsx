@@ -27,7 +27,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -297,6 +297,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Debounce ref for save operations to prevent excessive API calls
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingFactsRef = useRef<any>(null);
+
   // Load existing facts on mount
   useEffect(() => {
     const loadFacts = async () => {
@@ -365,9 +369,9 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     saveFactsToServer(facts);
   }, [facts, saveFactsToServer]);
 
-  // Update facts and save
+  // Update facts and save with debouncing to prevent excessive API calls
   const handleUpdate = useCallback(
-    async (updates: Record<string, any>) => {
+    (updates: Record<string, any>) => {
       // Deep merge to preserve existing nested fields
       const next = { ...facts };
 
@@ -383,10 +387,61 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       }
 
       setFacts(next);
-      await saveFactsToServer(next);
+
+      // Store the latest facts to save
+      pendingFactsRef.current = next;
+
+      // Clear any existing debounce timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Debounce the save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }, 500);
     },
     [facts, saveFactsToServer]
   );
+
+  // Cleanup debounce timeout on unmount and flush pending saves
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        // Flush any pending changes before unmount to prevent data loss
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+        }
+      }
+    };
+  }, [saveFactsToServer]);
+
+  // Flush pending saves when tab is hidden (reduces debounce loss window)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // Clear any pending debounce timeout
+        if (saveTimeoutRef.current) {
+          clearTimeout(saveTimeoutRef.current);
+          saveTimeoutRef.current = null;
+        }
+        // Flush any pending changes when tab is hidden
+        if (pendingFactsRef.current) {
+          saveFactsToServer(pendingFactsRef.current);
+          pendingFactsRef.current = null;
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [saveFactsToServer]);
 
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
@@ -428,8 +483,30 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
   // Handle wizard completion - redirect to review page for validation
   const handleComplete = useCallback(async () => {
+    // Flush any pending debounced saves BEFORE navigating to review
+    // This ensures all user edits are persisted to the database
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+
+    // If there are pending facts to save, save them now and wait for completion
+    if (pendingFactsRef.current) {
+      try {
+        await saveCaseFacts(caseId, pendingFactsRef.current, {
+          jurisdiction,
+          caseType: 'tenancy_agreement',
+          product: product,
+        });
+        pendingFactsRef.current = null;
+      } catch (err) {
+        console.error('[Wizard] Failed to flush pending facts before navigation:', err);
+        // Continue with navigation even if save fails - user can retry from review page
+      }
+    }
+
     router.push(`/wizard/review?case_id=${caseId}&product=${product}`);
-  }, [caseId, product, router]);
+  }, [caseId, jurisdiction, product, router]);
 
   // Calculate progress
   const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
