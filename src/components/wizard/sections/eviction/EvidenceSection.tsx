@@ -115,11 +115,32 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 }) => {
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  // Local state to track uploaded files for immediate UI updates
+  const [localFiles, setLocalFiles] = useState<UploadedFile[]>([]);
 
   const evictionRoute = facts.eviction_route as 'section_8' | 'section_21' | undefined;
 
-  // Get existing files from facts
-  const existingFiles: UploadedFile[] = facts.evidence?.files || [];
+  // Normalize files from facts (handle both snake_case and camelCase)
+  const normalizeFile = (f: any): UploadedFile => ({
+    id: f.id,
+    filename: f.filename || f.file_name || 'Unknown',
+    category: f.category || '',
+    uploadedAt: f.uploadedAt || f.uploaded_at || new Date().toISOString(),
+  });
+
+  // Get existing files from facts, normalized to consistent format
+  // Merge with local files for immediate updates
+  const factsFiles: UploadedFile[] = (facts.evidence?.files || []).map(normalizeFile);
+
+  // Combine facts files with local files, deduplicating by id
+  const existingFiles: UploadedFile[] = React.useMemo(() => {
+    const fileMap = new Map<string, UploadedFile>();
+    // Add facts files first
+    factsFiles.forEach(f => fileMap.set(f.id, f));
+    // Add local files (these take precedence for immediate updates)
+    localFiles.forEach(f => fileMap.set(f.id, f));
+    return Array.from(fileMap.values());
+  }, [factsFiles, localFiles]);
 
   // Filter categories by route
   const relevantCategories = EVIDENCE_CATEGORIES.filter(
@@ -186,7 +207,10 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         }
       }
 
-      // Update facts with new files
+      // Update local state immediately for instant UI feedback
+      setLocalFiles(prev => [...prev, ...allNewFiles]);
+
+      // Update facts with new files (normalized format)
       const updatedFiles = [...existingFiles, ...allNewFiles];
 
       await onUpdate({
@@ -205,6 +229,9 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 
   // Handle file removal
   const handleRemoveFile = useCallback(async (fileId: string) => {
+    // Update local state immediately
+    setLocalFiles(prev => prev.filter(f => f.id !== fileId));
+
     const updatedFiles = existingFiles.filter((f) => f.id !== fileId);
     await onUpdate({
       evidence: {
