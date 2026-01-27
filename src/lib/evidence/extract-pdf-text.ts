@@ -5,6 +5,7 @@
  * This works in Node.js server environment (Next.js API routes).
  *
  * Fallback for scanned/image PDFs: marks as LOW_TEXT for vision processing.
+ * Fallback for serverless environments: uses unpdf when pdf-parse fails with DOMMatrix errors.
  *
  * IMPORTANT: All PDF parsing operations have hard timeouts to prevent hanging.
  */
@@ -292,6 +293,19 @@ export async function extractPdfText(
       safeCleanupParser(parser);
     }
 
+    // Check if this is a serverless/DOMMatrix error - try unpdf as fallback
+    const isServerlessError = error.message?.includes('DOMMatrix') ||
+      error.message?.includes('is not defined') ||
+      error.message?.includes('Cannot polyfill');
+
+    if (isServerlessError) {
+      console.log('[extractPdfText] Trying unpdf fallback for serverless environment...');
+      const unpdfResult = await extractWithUnpdf(buffer, maxPages);
+      if (unpdfResult.method !== 'failed') {
+        return unpdfResult;
+      }
+    }
+
     return {
       text: '',
       pageCount: 0,
@@ -299,6 +313,95 @@ export async function extractPdfText(
       isMetadataOnly: true,
       method: 'failed',
       error: error.message,
+    };
+  }
+}
+
+/**
+ * Extract text from PDF using unpdf library (serverless-friendly fallback).
+ * This library is designed to work in serverless environments without DOM dependencies.
+ */
+async function extractWithUnpdf(
+  buffer: Buffer,
+  maxPages: number = 10
+): Promise<PdfExtractionResult> {
+  const startTime = Date.now();
+  debugLog('unpdf_start', { bufferSize: buffer.length, maxPages });
+  console.log('[extractPdfText] Using unpdf fallback...', { bufferSize: buffer.length, maxPages });
+
+  try {
+    const { extractText, getDocumentProxy } = await import('unpdf');
+
+    // Get document info for page count
+    const pdf = await getDocumentProxy(new Uint8Array(buffer));
+    const pageCount = pdf.numPages;
+
+    // Extract text from all pages (up to maxPages)
+    const pagesToExtract = Math.min(pageCount, maxPages);
+    const textParts: string[] = [];
+
+    for (let i = 1; i <= pagesToExtract; i++) {
+      try {
+        const { text } = await extractText(new Uint8Array(buffer), { mergePages: false });
+        if (text && text[i - 1]) {
+          textParts.push(text[i - 1]);
+        }
+        // Only need to call extractText once since it extracts all pages
+        break;
+      } catch (pageError) {
+        debugLog('unpdf_page_error', { page: i, error: (pageError as any).message });
+      }
+    }
+
+    // If above approach failed, try mergePages mode
+    if (textParts.length === 0) {
+      try {
+        const { text } = await extractText(new Uint8Array(buffer), { mergePages: true });
+        if (text) {
+          textParts.push(text);
+        }
+      } catch (mergeError) {
+        debugLog('unpdf_merge_error', { error: (mergeError as any).message });
+      }
+    }
+
+    const rawText = textParts.join('\n\n');
+    const cleanedText = cleanExtractedText(rawText);
+
+    const duration = Date.now() - startTime;
+    debugLog('unpdf_complete', {
+      textLength: cleanedText.length,
+      pageCount,
+      durationMs: duration,
+    });
+    console.log('[extractPdfText] unpdf extraction complete:', {
+      textLength: cleanedText.length,
+      pageCount,
+      durationMs: duration,
+    });
+
+    const isMetadataOnly = isMetadataOnlyText(cleanedText);
+    const isLowText = cleanedText.length < LOW_TEXT_THRESHOLD || isMetadataOnly;
+
+    return {
+      text: cleanedText,
+      pageCount,
+      isLowText,
+      isMetadataOnly,
+      method: 'pdf_parse', // Report as pdf_parse for compatibility
+    };
+  } catch (error: any) {
+    const duration = Date.now() - startTime;
+    debugLog('unpdf_error', { error: error.message, durationMs: duration });
+    console.error('[extractPdfText] unpdf fallback failed after', duration, 'ms:', error.message);
+
+    return {
+      text: '',
+      pageCount: 0,
+      isLowText: true,
+      isMetadataOnly: true,
+      method: 'failed',
+      error: `unpdf fallback failed: ${error.message}`,
     };
   }
 }
