@@ -89,6 +89,15 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
+  // Pre-Service Compliance Declaration - verification of compliance requirements
+  items.push({
+    key: 'compliance_declaration',
+    title: 'Pre-Service Compliance Declaration',
+    description: 'Verification of compliance requirements before serving notice',
+    category: 'Checklists',
+    required: true,
+  });
+
   // Arrears schedule for Section 8 rent arrears cases
   if (route === 'section_8' && (has_arrears || include_arrears_schedule)) {
     items.push({
