@@ -10,63 +10,11 @@
 
 import {
   validateSection21Preconditions,
+  buildSection21ValidationInputFromFacts,
   type Section21ValidationResult,
   type Section21ValidationInput,
 } from '@/lib/validators/section21-preconditions';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
-
-// =============================================================================
-// FACTS FLATTENING
-// =============================================================================
-
-/**
- * Flatten nested facts into a single object for uniform key lookup.
- *
- * Problem: Wizard flows may store compliance facts in nested objects like:
- *   facts.compliance.epc_served = true
- *   facts.section21.how_to_rent_served = true
- *   facts.tenancy.tenancy_start_date = '2024-01-01'
- *
- * But extractSection21ValidationInput expects flat keys:
- *   facts.epc_served = true
- *
- * This function creates a merged view where nested values are accessible at
- * the top level, while preserving any top-level values (which take precedence).
- */
-function flattenFacts(facts: Record<string, any>): Record<string, any> {
-  // Common nested object keys where compliance/tenancy data may be stored
-  const nestedKeys = [
-    'compliance',
-    'section21',
-    'section_21',
-    'tenancy',
-    'property',
-    'meta',
-    '__meta',
-  ];
-
-  // Start with empty object, then spread nested objects in order
-  // (later spreads override earlier ones if keys collide)
-  const flattened: Record<string, any> = {};
-
-  // First, spread all nested objects (lower priority)
-  for (const nestedKey of nestedKeys) {
-    const nested = facts[nestedKey];
-    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
-      Object.assign(flattened, nested);
-    }
-  }
-
-  // Then, spread top-level facts (higher priority - override nested values)
-  for (const [key, value] of Object.entries(facts)) {
-    // Skip the nested container keys themselves and objects
-    if (nestedKeys.includes(key)) continue;
-    if (value !== null && typeof value === 'object' && !Array.isArray(value)) continue;
-    flattened[key] = value;
-  }
-
-  return flattened;
-}
 
 // =============================================================================
 // TYPES
@@ -134,99 +82,16 @@ export function isSection21Case(
  * Extract Section 21 validation input from wizard/collected facts.
  * Maps various field naming conventions to the canonical validator input.
  *
- * NOTE: This function flattens nested facts (compliance, section21, tenancy, etc.)
- * so that values stored under facts.compliance.epc_served are found when looking
- * up facts.epc_served. This fixes the "EPC UNKNOWN" / "HOW TO RENT UNKNOWN"
- * issue where users answered these questions but the validator couldn't find them.
+ * NOTE: This function delegates to buildSection21ValidationInputFromFacts
+ * which is the single source of truth for facts normalization.
+ *
+ * @deprecated Use buildSection21ValidationInputFromFacts directly from section21-preconditions.ts
  */
 export function extractSection21ValidationInput(
   rawFacts: Record<string, any>
 ): Section21ValidationInput {
-  // Flatten nested facts for uniform lookup
-  const facts = flattenFacts(rawFacts);
-
-  // Helper to check boolean from multiple possible field names
-  const getBoolean = (...keys: string[]): boolean | undefined => {
-    for (const key of keys) {
-      const value = facts[key];
-      if (value === true || value === 'yes') return true;
-      if (value === false || value === 'no') return false;
-    }
-    return undefined;
-  };
-
-  // Deposit
-  const depositTaken =
-    getBoolean('deposit_taken') ??
-    (facts.deposit_amount != null && facts.deposit_amount > 0);
-
-  return {
-    // Deposit protection
-    deposit_taken: depositTaken,
-    deposit_amount: facts.deposit_amount ?? facts.deposit,
-    deposit_protected: getBoolean('deposit_protected'),
-    deposit_scheme:
-      facts.deposit_scheme ||
-      facts.deposit_scheme_name ||
-      facts.deposit_protection_scheme,
-    deposit_scheme_name: facts.deposit_scheme_name || facts.deposit_scheme,
-    deposit_protection_date: facts.deposit_protection_date,
-    prescribed_info_served: getBoolean(
-      'prescribed_info_served',
-      'prescribed_info_given',
-      'prescribed_information_served'
-    ),
-    prescribed_info_given: getBoolean(
-      'prescribed_info_given',
-      'prescribed_info_served'
-    ),
-
-    // Gas safety
-    has_gas_appliances: getBoolean('has_gas_appliances', 'property_has_gas'),
-    gas_safety_cert_served: getBoolean(
-      'gas_safety_cert_served',
-      'gas_certificate_provided',
-      'gas_safety_certificate_provided'
-    ),
-    gas_certificate_provided: getBoolean(
-      'gas_certificate_provided',
-      'gas_safety_cert_served'
-    ),
-
-    // EPC
-    epc_served: getBoolean('epc_served', 'epc_provided'),
-    epc_provided: getBoolean('epc_provided', 'epc_served'),
-    epc_rating: facts.epc_rating,
-
-    // How to Rent
-    how_to_rent_served: getBoolean(
-      'how_to_rent_served',
-      'how_to_rent_provided',
-      'how_to_rent_given'
-    ),
-    how_to_rent_provided: getBoolean(
-      'how_to_rent_provided',
-      'how_to_rent_served'
-    ),
-
-    // Licensing
-    licensing_required: facts.licensing_required,
-    has_valid_licence: getBoolean('has_valid_licence', 'has_license'),
-
-    // Retaliatory eviction
-    no_retaliatory_notice: getBoolean('no_retaliatory_notice'),
-    tenant_complaint_made: getBoolean('tenant_complaint_made'),
-    council_involvement: getBoolean('council_involvement'),
-    improvement_notice_served: getBoolean('improvement_notice_served'),
-
-    // Dates
-    tenancy_start_date: facts.tenancy_start_date,
-    service_date:
-      facts.service_date ||
-      facts.notice_date ||
-      facts.notice_service_date ||
-      facts.intended_service_date,
-  };
+  // Delegate to the shared adapter in section21-preconditions.ts
+  return buildSection21ValidationInputFromFacts(rawFacts);
 }
 
 /**

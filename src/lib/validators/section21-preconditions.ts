@@ -90,6 +90,186 @@ export interface Section21ValidationInput {
 }
 
 // =============================================================================
+// FACTS TO VALIDATION INPUT ADAPTER
+// =============================================================================
+
+/**
+ * Flatten nested facts into a single object for uniform key lookup.
+ *
+ * Problem: Wizard flows may store compliance facts in nested objects like:
+ *   facts.compliance.epc_served = true
+ *   facts.section21.how_to_rent_served = true
+ *   facts.tenancy.tenancy_start_date = '2024-01-01'
+ *
+ * But validateSection21Preconditions expects flat keys:
+ *   input.epc_served = true
+ *
+ * This function creates a merged view where nested values are accessible at
+ * the top level, while preserving any top-level values (which take precedence).
+ */
+function flattenFactsForValidation(facts: Record<string, any>): Record<string, any> {
+  // Common nested object keys where compliance/tenancy data may be stored
+  const nestedKeys = [
+    'compliance',
+    'section21',
+    'section_21',
+    'tenancy',
+    'property',
+    'meta',
+    '__meta',
+  ];
+
+  // Start with empty object, then spread nested objects in order
+  // (later spreads override earlier ones if keys collide)
+  const flattened: Record<string, any> = {};
+
+  // First, spread all nested objects (lower priority)
+  for (const nestedKey of nestedKeys) {
+    const nested = facts[nestedKey];
+    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
+      Object.assign(flattened, nested);
+    }
+  }
+
+  // Then, spread top-level facts (higher priority - override nested values)
+  for (const [key, value] of Object.entries(facts)) {
+    // Skip the nested container keys themselves and objects
+    if (nestedKeys.includes(key)) continue;
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) continue;
+    flattened[key] = value;
+  }
+
+  return flattened;
+}
+
+/**
+ * Build Section 21 validation input from raw wizard/case facts.
+ *
+ * This is the SINGLE SOURCE OF TRUTH for converting raw facts into
+ * Section21ValidationInput. EVERY place that calls validateSection21Preconditions()
+ * should use this function to prepare the input.
+ *
+ * Features:
+ * 1. Flattens nested containers (compliance, section21, section_21, tenancy, property)
+ * 2. Maps variant key names to canonical validator fields:
+ *    - epc_served / epc_provided → both epc_served and epc_provided
+ *    - how_to_rent_served / how_to_rent_given / how_to_rent_provided → how_to_rent_*
+ *    - gas_safety_cert_served / gas_certificate_provided → gas_*
+ *    - prescribed_info_served / prescribed_info_given → prescribed_info_*
+ * 3. Preserves explicit false values (user said "No" - don't overwrite with true)
+ * 4. Handles 'yes'/'no' string values as boolean equivalents
+ *
+ * @param rawFacts - Raw facts from wizard, database, or API
+ * @returns Section21ValidationInput ready for validateSection21Preconditions()
+ */
+export function buildSection21ValidationInputFromFacts(
+  rawFacts: Record<string, any>
+): Section21ValidationInput {
+  // Flatten nested facts for uniform lookup
+  const facts = flattenFactsForValidation(rawFacts);
+
+  // Helper to get boolean from multiple possible field names
+  // Returns the first defined boolean value found, or undefined
+  // Handles 'yes'/'no' strings as boolean equivalents
+  const getBoolean = (...keys: string[]): boolean | undefined => {
+    for (const key of keys) {
+      const value = facts[key];
+      if (value === true || value === 'yes') return true;
+      if (value === false || value === 'no') return false;
+    }
+    return undefined;
+  };
+
+  // Helper to get string from multiple possible field names
+  const getString = (...keys: string[]): string | undefined => {
+    for (const key of keys) {
+      const value = facts[key];
+      if (typeof value === 'string' && value.length > 0) return value;
+    }
+    return undefined;
+  };
+
+  // Deposit detection
+  const depositTaken =
+    getBoolean('deposit_taken') ??
+    (facts.deposit_amount != null && facts.deposit_amount > 0);
+
+  return {
+    // Deposit protection
+    deposit_taken: depositTaken,
+    deposit_amount: facts.deposit_amount ?? facts.deposit,
+    deposit_protected: getBoolean('deposit_protected'),
+    deposit_scheme: getString(
+      'deposit_scheme',
+      'deposit_scheme_name',
+      'deposit_protection_scheme'
+    ),
+    deposit_scheme_name: getString('deposit_scheme_name', 'deposit_scheme'),
+    deposit_protection_date: getString('deposit_protection_date'),
+    prescribed_info_served: getBoolean(
+      'prescribed_info_served',
+      'prescribed_info_given',
+      'prescribed_information_served'
+    ),
+    prescribed_info_given: getBoolean(
+      'prescribed_info_given',
+      'prescribed_info_served'
+    ),
+
+    // Gas safety
+    has_gas_appliances: getBoolean('has_gas_appliances', 'property_has_gas'),
+    gas_safety_cert_served: getBoolean(
+      'gas_safety_cert_served',
+      'gas_certificate_provided',
+      'gas_safety_certificate_provided'
+    ),
+    gas_certificate_provided: getBoolean(
+      'gas_certificate_provided',
+      'gas_safety_cert_served'
+    ),
+
+    // EPC - map epc_served and epc_provided to BOTH fields
+    // The validator checks: input.epc_served === true || input.epc_provided === true
+    epc_served: getBoolean('epc_served', 'epc_provided'),
+    epc_provided: getBoolean('epc_provided', 'epc_served'),
+    epc_rating: getString('epc_rating'),
+
+    // How to Rent - map all variants to BOTH fields
+    // The validator checks: input.how_to_rent_served === true || input.how_to_rent_provided === true
+    how_to_rent_served: getBoolean(
+      'how_to_rent_served',
+      'how_to_rent_provided',
+      'how_to_rent_given'
+    ),
+    how_to_rent_provided: getBoolean(
+      'how_to_rent_provided',
+      'how_to_rent_served',
+      'how_to_rent_given'
+    ),
+
+    // Licensing
+    licensing_required: getString('licensing_required'),
+    has_valid_licence: getBoolean('has_valid_licence', 'has_license'),
+
+    // Retaliatory eviction
+    no_retaliatory_notice: getBoolean('no_retaliatory_notice'),
+    tenant_complaint_made: getBoolean('tenant_complaint_made'),
+    council_involvement: getBoolean('council_involvement'),
+    improvement_notice_served: getBoolean('improvement_notice_served'),
+
+    // Dates - check multiple possible key names
+    tenancy_start_date: getString('tenancy_start_date'),
+    service_date: getString(
+      'service_date',
+      'notice_date',
+      'notice_service_date',
+      'notice_served_date',
+      'intended_service_date'
+    ),
+  };
+}
+
+// =============================================================================
 // VALIDATION LOGIC
 // =============================================================================
 
