@@ -4,10 +4,23 @@ import { useState } from 'react';
 import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { CheckCircle, Shield, Clock, Download } from 'lucide-react';
+import { CheckCircle, Shield, Clock, Download, Scale } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
+
+/**
+ * Solicitor cost comparison data by product
+ * Source: Average UK solicitor fees for residential landlord matters (2024)
+ */
+const SOLICITOR_COSTS: Record<string, { low: string; high: string; label: string }> = {
+  notice_only: { low: '200', high: '300', label: 'eviction notices' },
+  complete_pack: { low: '1,500', high: '2,500', label: 'eviction packs' },
+  money_claim: { low: '800', high: '1,200', label: 'money claims' },
+  ast_standard: { low: '150', high: '400', label: 'tenancy agreements' },
+  ast_premium: { low: '150', high: '400', label: 'tenancy agreements' },
+  tenancy_agreement: { low: '150', high: '400', label: 'tenancy agreements' },
+};
 
 interface PreviewPageLayoutProps {
   caseId: string;
@@ -159,6 +172,30 @@ export function PreviewPageLayout({
                   <p className="text-green-600 font-medium mt-2">{savings}</p>
                 )}
               </div>
+
+              {/* Solicitor Comparison Box */}
+              {SOLICITOR_COSTS[product] && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <Scale className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-green-900">
+                        Solicitor comparison
+                      </p>
+                      <p className="text-sm text-green-800 mt-1">
+                        A property solicitor typically charges{' '}
+                        <span className="font-semibold">
+                          £{SOLICITOR_COSTS[product].low}–£{SOLICITOR_COSTS[product].high}
+                        </span>{' '}
+                        for {SOLICITOR_COSTS[product].label}.
+                      </p>
+                      <p className="text-xs text-green-700 mt-2">
+                        You pay: <span className="font-bold text-green-900">{price}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* CTA Button */}
               <button
