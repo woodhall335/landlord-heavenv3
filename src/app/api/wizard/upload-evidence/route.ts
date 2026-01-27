@@ -352,21 +352,49 @@ export async function POST(request: Request) {
     // Store only the storage path (objectKey) - never expose public URLs.
     // Downloads will be served via signed URLs through /api/evidence/download endpoint.
 
-    const evidenceDocumentType = `evidence_${validatedCategory ?? 'upload'}_${randomUUID()}`;
+    // Generate unique document type with UUID to avoid constraint violations
+    // Format: evidence_{category}_{uuid}
+    let evidenceDocumentType = `evidence_${validatedCategory ?? 'upload'}_${randomUUID()}`;
 
-    const { data: documentRow, error: documentError } = await supabase
-      .from('documents')
-      .insert({
-        user_id: caseRow.user_id || user?.id || null,
-        case_id: caseId,
-        document_type: evidenceDocumentType,
-        document_title: file.name || safeFilename,
-        jurisdiction: caseRow.jurisdiction,
-        pdf_url: objectKey, // Store storage path only, NOT public URL
-        is_preview: false,
-      })
-      .select('id, document_title, document_type, pdf_url, created_at')
-      .single();
+    // Insert document record with retry on collision (belt + braces for edge cases)
+    let documentRow: { id: string; document_title: string; document_type: string; pdf_url: string; created_at: string } | null = null;
+    let documentError: any = null;
+    const MAX_INSERT_RETRIES = 3;
+
+    for (let attempt = 1; attempt <= MAX_INSERT_RETRIES; attempt++) {
+      const { data: insertedDoc, error: insertError } = await supabase
+        .from('documents')
+        .insert({
+          user_id: caseRow.user_id || user?.id || null,
+          case_id: caseId,
+          document_type: evidenceDocumentType,
+          document_title: file.name || safeFilename,
+          jurisdiction: caseRow.jurisdiction,
+          pdf_url: objectKey, // Store storage path only, NOT public URL
+          is_preview: false,
+        })
+        .select('id, document_title, document_type, pdf_url, created_at')
+        .single();
+
+      if (insertError) {
+        // Handle 23505 duplicate key error by generating new unique type and retrying
+        if (insertError.code === '23505' && attempt < MAX_INSERT_RETRIES) {
+          console.warn(`[upload-evidence] Duplicate document type collision on attempt ${attempt}, retrying with new UUID`, {
+            debug_id: debugId,
+            document_type: evidenceDocumentType,
+            attempt,
+          });
+          // Generate new unique type and retry
+          evidenceDocumentType = `evidence_${validatedCategory ?? 'upload'}_${randomUUID()}`;
+          continue;
+        }
+        documentError = insertError;
+        break;
+      }
+
+      documentRow = insertedDoc;
+      break;
+    }
 
     if (documentError || !documentRow) {
       console.error('Failed to insert document record', documentError);
