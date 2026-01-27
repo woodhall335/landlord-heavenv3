@@ -352,12 +352,14 @@ export async function POST(request: Request) {
     // Store only the storage path (objectKey) - never expose public URLs.
     // Downloads will be served via signed URLs through /api/evidence/download endpoint.
 
+    const evidenceDocumentType = `evidence_${validatedCategory ?? 'upload'}_${randomUUID()}`;
+
     const { data: documentRow, error: documentError } = await supabase
       .from('documents')
       .insert({
         user_id: caseRow.user_id || user?.id || null,
         case_id: caseId,
-        document_type: 'evidence',
+        document_type: evidenceDocumentType,
         document_title: file.name || safeFilename,
         jurisdiction: caseRow.jurisdiction,
         pdf_url: objectKey, // Store storage path only, NOT public URL
