@@ -15,6 +15,55 @@ import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 
 export const runtime = 'nodejs';
 
+/**
+ * Deep merge helper for wizard facts.
+ * - Deep merges nested plain objects (eg issues, tenancy, parties, compliance)
+ * - Arrays are treated as 'replace' (new array overwrites old, no element-wise merge)
+ * - Null/undefined in source overwrites target value
+ * - Primitives are replaced directly
+ */
+function deepMergeFacts(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...target };
+
+  for (const key of Object.keys(source)) {
+    const sourceValue = source[key];
+    const targetValue = result[key];
+
+    // If source value is null or undefined, use it directly (explicit clear)
+    if (sourceValue === null || sourceValue === undefined) {
+      result[key] = sourceValue;
+      continue;
+    }
+
+    // If source is an array, replace entirely (no element-wise merge)
+    if (Array.isArray(sourceValue)) {
+      result[key] = sourceValue;
+      continue;
+    }
+
+    // If source is a plain object and target is also a plain object, deep merge
+    if (
+      typeof sourceValue === 'object' &&
+      sourceValue !== null &&
+      !Array.isArray(sourceValue) &&
+      typeof targetValue === 'object' &&
+      targetValue !== null &&
+      !Array.isArray(targetValue)
+    ) {
+      result[key] = deepMergeFacts(
+        targetValue as Record<string, unknown>,
+        sourceValue as Record<string, unknown>
+      );
+      continue;
+    }
+
+    // Otherwise, replace with source value
+    result[key] = sourceValue;
+  }
+
+  return result;
+}
+
 export async function POST(request: NextRequest) {
   try {
     logSupabaseAdminDiagnostics({ route: '/api/wizard/save-facts', writesUsingAdmin: true });
@@ -65,16 +114,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Deep merge the new facts with existing facts
-    const existingFacts = existingCase?.collected_facts || {};
-    const mergedFacts = {
-      ...existingFacts,
-      ...facts,
-      __meta: {
-        ...(existingFacts?.__meta || {}),
-        ...(facts?.__meta || {}),
-        case_id,
-        updated_at: new Date().toISOString(),
-      },
+    // Uses deepMergeFacts to properly merge nested objects while treating arrays as replace
+    const existingFacts = (existingCase?.collected_facts || {}) as Record<string, unknown>;
+    const mergedFacts = deepMergeFacts(existingFacts, facts as Record<string, unknown>);
+
+    // Ensure __meta is always properly merged with required fields
+    mergedFacts.__meta = {
+      ...((existingFacts.__meta || {}) as Record<string, unknown>),
+      ...((facts.__meta || {}) as Record<string, unknown>),
+      case_id,
+      updated_at: new Date().toISOString(),
     };
 
     const timestamp = new Date().toISOString();

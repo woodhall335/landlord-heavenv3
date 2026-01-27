@@ -490,10 +490,20 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
         }
       }
 
+      // Invalidate Smart Review when facts change to prevent stale warnings
+      // Only invalidate if there are actual data changes (not just __meta or __smart_review)
+      const changedKeys = Object.keys(updates).filter(
+        (k) => k !== '__meta' && k !== '__smart_review'
+      );
+      if (changedKeys.length > 0 && smartReviewWarnings.length > 0) {
+        setSmartReviewWarnings([]);
+        setSmartReviewSummary(null);
+      }
+
       setFacts(next);
       debouncedSave(next);
     },
-    [facts, debouncedSave]
+    [facts, debouncedSave, smartReviewWarnings.length]
   );
 
   // Helper to get current claim reasons from facts
