@@ -5,7 +5,7 @@
  * domain model used by document generators and analysis tools.
  */
 
-import type { WizardFacts, CaseFacts, PartyDetails } from './schema';
+import type { WizardFacts, CaseFacts, PartyDetails, ArrearsItem } from './schema';
 import { createEmptyCaseFacts } from './schema';
 import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
 import { normalizeJurisdiction } from '../types/jurisdiction';
@@ -14,6 +14,7 @@ import {
   type Section8GroundDefinition,
 } from '../grounds/section8-ground-definitions';
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
+import { getArrearsScheduleData } from '../documents/arrears-schedule-mapper';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -2822,47 +2823,104 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     let explanation = '';
     const particularLines: string[] = [];
 
-    if (groundDef.code === 8) {
-      const arrears = templateData.arrears_at_notice_date || templateData.total_arrears || 0;
+    if (groundDef.code === 8 || groundDef.code === 10 || groundDef.code === 11) {
+      // USE CANONICAL ARREARS DATA from arrears-schedule-mapper
+      // This ensures Notice figures match the Rent Schedule exactly
       const rentAmount = templateData.rent_amount || 0;
       const rentFreq = templateData.rent_frequency || 'monthly';
+      const arrearsItems = templateData.arrears_items || [];
 
-      let threshold = 0;
-      let thresholdDescription = '';
-      if (rentFreq === 'weekly') {
-        threshold = rentAmount * 8;
-        thresholdDescription = '8 weeks';
-      } else if (rentFreq === 'fortnightly') {
-        threshold = rentAmount * 4;
-        thresholdDescription = '8 weeks (4 fortnightly payments)';
-      } else if (rentFreq === 'monthly') {
-        threshold = rentAmount * 2;
-        thresholdDescription = '2 months';
-      } else if (rentFreq === 'quarterly') {
-        threshold = rentAmount * 1;
-        thresholdDescription = '1 quarter';
-      }
+      // Get canonical arrears data from the schedule mapper (SINGLE SOURCE OF TRUTH)
+      const scheduleData = getArrearsScheduleData({
+        arrears_items: arrearsItems,
+        total_arrears: templateData.total_arrears,
+        rent_amount: rentAmount,
+        rent_frequency: rentFreq,
+        rent_due_day: templateData.rent_due_day,
+        include_schedule: true,
+      });
 
-      if (arrears >= threshold) {
-        explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
-        particularLines.push(`Rent arrears at date of notice: £${arrears.toFixed(2)}`);
-        particularLines.push(`Threshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})`);
-        particularLines.push('Ground 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.');
+      // Use computed total from schedule (or legacy total as fallback)
+      const arrears = scheduleData.arrears_total;
+      const arrearsInMonths = scheduleData.arrears_in_months;
+
+      if (groundDef.code === 8) {
+        // Ground 8 - Serious Rent Arrears (MANDATORY)
+        let threshold = 0;
+        let thresholdDescription = '';
+        if (rentFreq === 'weekly') {
+          threshold = rentAmount * 8;
+          thresholdDescription = '8 weeks';
+        } else if (rentFreq === 'fortnightly') {
+          threshold = rentAmount * 4;
+          thresholdDescription = '8 weeks (4 fortnightly payments)';
+        } else if (rentFreq === 'monthly') {
+          threshold = rentAmount * 2;
+          thresholdDescription = '2 months';
+        } else if (rentFreq === 'quarterly') {
+          threshold = rentAmount * 1;
+          thresholdDescription = '1 quarter';
+        }
+
+        if (arrears >= threshold) {
+          explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount.toFixed(2)} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
+
+          // Build period-by-period breakdown from schedule (to match Rent Schedule)
+          particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong> (approximately ${arrearsInMonths.toFixed(1)} months' rent):`);
+          particularLines.push('');
+
+          // Add period-by-period breakdown from canonical schedule data
+          const periodsWithArrears = scheduleData.arrears_schedule.filter((p) => p.arrears > 0);
+          if (periodsWithArrears.length > 0) {
+            for (const entry of periodsWithArrears) {
+              // Format period with en-dash to match Rent Schedule format
+              const periodParts = entry.period.split(' to ');
+              const periodLabel = periodParts.length === 2
+                ? `${periodParts[0]} – ${periodParts[1]}`
+                : entry.period;
+              particularLines.push(`• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})`);
+            }
+            particularLines.push('');
+          }
+
+          particularLines.push(`<strong>Total arrears: £${arrears.toFixed(2)}</strong>`);
+          particularLines.push(`Threshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})`);
+          particularLines.push('Ground 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.');
+          particularLines.push('A detailed schedule of arrears is attached.');
+        } else {
+          explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
+          particularLines.push(`Current arrears: £${arrears.toFixed(2)}`);
+          particularLines.push(`Required threshold: £${threshold.toFixed(2)} (${thresholdDescription})`);
+          particularLines.push('Ground 8 is NOT satisfied at this time.');
+        }
       } else {
-        explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
-        particularLines.push(`Current arrears: £${arrears.toFixed(2)}`);
-        particularLines.push(`Required threshold: £${threshold.toFixed(2)} (${thresholdDescription})`);
-        particularLines.push('Ground 8 is NOT satisfied at this time.');
+        // Ground 10 or 11 - Rent Arrears (DISCRETIONARY)
+        explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears (approximately ${arrearsInMonths.toFixed(1)} months' rent).`;
+
+        // Build period-by-period breakdown from schedule
+        particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong>:`);
+        particularLines.push('');
+
+        const periodsWithArrears = scheduleData.arrears_schedule.filter((p) => p.arrears > 0);
+        if (periodsWithArrears.length > 0) {
+          for (const entry of periodsWithArrears) {
+            const periodParts = entry.period.split(' to ');
+            const periodLabel = periodParts.length === 2
+              ? `${periodParts[0]} – ${periodParts[1]}`
+              : entry.period;
+            particularLines.push(`• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})`);
+          }
+          particularLines.push('');
+        }
+
+        particularLines.push(`<strong>Total arrears: £${arrears.toFixed(2)}</strong>`);
+        particularLines.push(
+          groundDef.code === 10
+            ? 'Ground 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.'
+            : 'Ground 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.'
+        );
+        particularLines.push('A detailed schedule of arrears is attached.');
       }
-    } else if (groundDef.code === 10 || groundDef.code === 11) {
-      const arrears = templateData.total_arrears || 0;
-      explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears.`;
-      particularLines.push(`Rent arrears outstanding: £${arrears.toFixed(2)}`);
-      particularLines.push(
-        groundDef.code === 10
-          ? 'Ground 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.'
-          : 'Ground 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.'
-      );
     } else if (groundDef.code === 12) {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
@@ -3943,6 +4001,25 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   const lastPaymentAmount = getWizardValue(wizard, 'last_payment_amount');
   templateData.last_payment_amount = lastPaymentAmount !== null ? Number(lastPaymentAmount) || null : null;
+
+  // Extract arrears_items (canonical arrears schedule data)
+  // This is the SINGLE SOURCE OF TRUTH for arrears - used by both Rent Schedule and Notice
+  const arrearsItemsRaw = getFirstValue(wizard, [
+    'case_facts.issues.rent_arrears.arrears_items',
+    'arrears.items',
+    'arrears_items',
+  ]);
+  let arrearsItems: ArrearsItem[] = [];
+  if (Array.isArray(arrearsItemsRaw)) {
+    arrearsItems = arrearsItemsRaw as ArrearsItem[];
+  } else if (
+    arrearsItemsRaw &&
+    typeof arrearsItemsRaw === 'object' &&
+    Array.isArray((arrearsItemsRaw as any).arrears_items)
+  ) {
+    arrearsItems = (arrearsItemsRaw as any).arrears_items;
+  }
+  templateData.arrears_items = arrearsItems;
 
   // =============================================================================
   // ASB & BREACH DETAILS
