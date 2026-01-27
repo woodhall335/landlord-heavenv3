@@ -51,6 +51,7 @@ import {
   type ComplianceTimingIssue,
 } from '@/components/ui/ComplianceTimingBlocker';
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
+import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -582,6 +583,15 @@ function MoneyClaimReviewContent({
         </Card>
       )}
 
+      {/* Value Communication: Jurisdiction Explainer + Checks Summary */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <JurisdictionExplainer jurisdiction={jurisdiction} product="money_claim" />
+        <ChecksSummaryBox
+          caseHealth={caseHealth}
+          product="money_claim"
+        />
+      </div>
+
       {/* Claim Summary - Money amounts */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -1102,6 +1112,17 @@ function EvictionReviewContent({
           </div>
         </Card>
       )}
+
+      {/* Value Communication: Jurisdiction Explainer + Checks Summary */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <JurisdictionExplainer jurisdiction={jurisdiction} product={product} />
+        <ChecksSummaryBox
+          blockingIssues={analysis.decision_engine?.blocking_issues || []}
+          warnings={analysis.decision_engine?.warnings || []}
+          positives={analysis.decision_engine?.positives || []}
+          product={product}
+        />
+      </div>
 
       {/* Blocking Issues */}
       {hasBlockingIssues && (
@@ -1852,6 +1873,17 @@ function NoticeOnlyReviewContent({
             )
           )}
         </div>
+      </div>
+
+      {/* Value Communication: Jurisdiction Explainer + Checks Summary */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <JurisdictionExplainer jurisdiction={jurisdiction} product="notice_only" />
+        <ChecksSummaryBox
+          blockingIssues={blockingIssues}
+          warnings={warnings}
+          positives={decisionEngine?.positives || []}
+          product="notice_only"
+        />
       </div>
 
       {/* Blocking Issues */}
@@ -2831,6 +2863,16 @@ function TenancyReviewContent({
             </span>
           )}
         </div>
+      </div>
+
+      {/* Value Communication: Jurisdiction Explainer + Checks Summary */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <JurisdictionExplainer jurisdiction={jurisdiction} product="tenancy_agreement" />
+        <ChecksSummaryBox
+          blockingIssues={validation.blockers.map(b => ({ ...b, severity: 'blocking' }))}
+          warnings={validation.warnings}
+          product="tenancy_agreement"
+        />
       </div>
 
       {/* Blockers */}
