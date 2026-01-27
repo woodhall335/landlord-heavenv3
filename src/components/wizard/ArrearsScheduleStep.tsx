@@ -59,7 +59,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
   };
 
   return (
-    <tr className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+    <tr className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} ${item.is_pro_rated ? 'bg-blue-50/50' : ''}`}>
       <td className="px-3 py-2 text-sm text-gray-700">
         {formatDate(item.period_start)} - {formatDate(item.period_end)}
       </td>
@@ -93,6 +93,9 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
       </td>
       <td className={`px-3 py-2 text-sm text-right font-medium ${amount_owed > 0 ? 'text-red-600' : 'text-green-600'}`}>
         £{amount_owed.toFixed(2)}
+      </td>
+      <td className="px-3 py-2 text-xs text-gray-500">
+        {item.notes || (item.is_pro_rated ? `Pro-rated (${item.days_in_period} days)` : '')}
       </td>
     </tr>
   );
@@ -349,6 +352,33 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
             </button>
           </div>
 
+          {/* Pro-rata info box - show only when there's a pro-rated period */}
+          {arrearsItems.some(item => item.is_pro_rated) && (
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+              <p className="text-sm font-medium text-blue-800 flex items-center gap-2">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                Pro-Rata Calculation Applied
+              </p>
+              <p className="text-sm text-blue-700 mt-1">
+                The final period has been automatically pro-rated to the notice service date.
+                This ensures your arrears figure is accurate and matches what you can claim in court.
+                {(() => {
+                  const proRatedItem = arrearsItems.find(item => item.is_pro_rated);
+                  if (proRatedItem) {
+                    return (
+                      <span className="block mt-2 text-xs">
+                        Final period: {proRatedItem.days_in_period} days × daily rate = £{proRatedItem.rent_due.toFixed(2)}
+                      </span>
+                    );
+                  }
+                  return null;
+                })()}
+              </p>
+            </div>
+          )}
+
           {/* Table */}
           <div className="overflow-x-auto rounded-lg border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
@@ -365,6 +395,9 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   </th>
                   <th className="px-3 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Amount Owed
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Notes
                   </th>
                 </tr>
               </thead>
@@ -430,7 +463,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   ✓ Ground 18 Threshold Met
                 </p>
                 <p className="text-sm text-green-700 mt-1">
-                  Arrears of {computed.arrears_in_months.toFixed(2)} rent periods meet the Ground 18 threshold
+                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). The Tribunal will consider whether eviction is reasonable.
                 </p>
               </div>
@@ -440,7 +473,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   ⚠ Ground 18 Threshold Not Met
                 </p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Arrears of {computed.arrears_in_months.toFixed(2)} rent periods do not meet the Ground 18 threshold
+                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). You may still proceed but evidence strength is reduced.
                 </p>
               </div>
@@ -454,13 +487,13 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <p className="text-sm text-green-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Section 157 threshold
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Section 157 threshold
                     for serious rent arrears under the Renting Homes (Wales) Act 2016.
                   </>
                 ) : (
                   <>
-                    Arrears of {computed.arrears_in_months.toFixed(2)} months meet the Ground 8 threshold
-                    (minimum 2 months required).
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 8 threshold
+                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required).
                   </>
                 )}
               </p>
@@ -473,13 +506,13 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <p className="text-sm text-amber-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Section 157 threshold
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Section 157 threshold
                     (minimum 2 months required). You can still use Section 159 for smaller arrears claims.
                   </>
                 ) : (
                   <>
-                    Arrears of {computed.arrears_in_months.toFixed(2)} months do not meet the Ground 8 threshold
-                    (minimum 2 months required). You can still use Grounds 10 or 11 for arrears claims.
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 8 threshold
+                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required). You can still use Grounds 10 or 11 for arrears claims.
                   </>
                 )}
               </p>

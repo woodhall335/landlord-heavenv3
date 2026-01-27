@@ -99,6 +99,7 @@ export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | n
     amount_due: item.rent_due,
     amount_paid: item.rent_paid,
     arrears: amount_owed,
+    notes: item.notes || (item.is_pro_rated ? `Pro-rated (${item.days_in_period} days)` : undefined),
   };
 }
 
