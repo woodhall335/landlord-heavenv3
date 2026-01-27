@@ -27,6 +27,11 @@ export interface ValidationIssue {
   legal_reason?: string;
   friendlyAction?: string;
   friendlyQuestionLabel?: string;
+  // Phase 13 enhanced fields
+  title?: string;
+  howToFix?: string[];
+  legalRef?: string;
+  helpUrl?: string;
 }
 
 export interface ValidationErrorsProps {
@@ -199,9 +204,43 @@ export function ValidationErrors({
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900 mb-1">
+                          {/* Phase 13: Title as main heading when available */}
+                          {issue.title && (
+                            <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                              {issue.title}
+                            </h4>
+                          )}
+                          <p className={`text-sm ${issue.title ? 'text-gray-700' : 'font-medium text-gray-900'} mb-1`}>
                             {getActionMessage(issue)}
                           </p>
+
+                          {/* Phase 13: How to fix steps */}
+                          {issue.howToFix && issue.howToFix.length > 0 && (
+                            <ul className="mt-2 ml-4 text-sm text-gray-700 list-disc space-y-1">
+                              {issue.howToFix.map((step, stepIndex) => (
+                                <li key={stepIndex}>{step}</li>
+                              ))}
+                            </ul>
+                          )}
+
+                          {/* Phase 13: Legal reference */}
+                          {issue.legalRef && (
+                            <p className="mt-2 text-xs text-gray-500">
+                              <span className="font-medium">Legal reference:</span> {issue.legalRef}
+                            </p>
+                          )}
+
+                          {/* Phase 13: Help URL */}
+                          {issue.helpUrl && (
+                            <a
+                              href={issue.helpUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block mt-2 text-xs text-red-600 hover:text-red-800 underline"
+                            >
+                              Learn more →
+                            </a>
+                          )}
 
                           {issue.legal_reason && (
                             <div className="mt-2">
@@ -332,9 +371,43 @@ export function ValidationErrors({
                     className="bg-white border border-yellow-200 rounded p-3 flex items-start justify-between gap-4"
                   >
                     <div className="flex-1">
-                      <p className="text-sm text-gray-900">
+                      {/* Phase 13: Title as main heading when available */}
+                      {warning.title && (
+                        <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                          {warning.title}
+                        </h4>
+                      )}
+                      <p className={`text-sm ${warning.title ? 'text-gray-700' : 'text-gray-900'}`}>
                         {getActionMessage(warning)}
                       </p>
+
+                      {/* Phase 13: How to fix steps */}
+                      {warning.howToFix && warning.howToFix.length > 0 && (
+                        <ul className="mt-2 ml-4 text-sm text-gray-700 list-disc space-y-1">
+                          {warning.howToFix.map((step, stepIndex) => (
+                            <li key={stepIndex}>{step}</li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Phase 13: Legal reference */}
+                      {warning.legalRef && (
+                        <p className="mt-2 text-xs text-gray-500">
+                          <span className="font-medium">Legal reference:</span> {warning.legalRef}
+                        </p>
+                      )}
+
+                      {/* Phase 13: Help URL */}
+                      {warning.helpUrl && (
+                        <a
+                          href={warning.helpUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block mt-2 text-xs text-yellow-700 hover:text-yellow-900 underline"
+                        >
+                          Learn more →
+                        </a>
+                      )}
                     </div>
 
                     {warning.affected_question_id && (

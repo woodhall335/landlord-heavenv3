@@ -173,3 +173,110 @@ describe('ValidationErrors component - Go to question routing', () => {
     expect(url).not.toContain('jump_to');
   });
 });
+
+describe('ValidationErrors component - Phase 13 enhanced fields', () => {
+  beforeEach(() => {
+    mockPush.mockClear();
+  });
+
+  it('renders Phase 13 title, howToFix, legalRef, and helpUrl when provided', () => {
+    render(
+      <ValidationErrors
+        blocking_issues={[
+          {
+            code: 's21_deposit_cap_exceeded',
+            fields: ['deposit_amount'],
+            affected_question_id: 'deposit_details',
+            user_fix_hint: 'Reduce deposit amount',
+            title: 'Deposit Exceeds Legal Cap',
+            howToFix: [
+              'Check the deposit amount entered',
+              'Ensure it does not exceed 5 weeks rent',
+              'Update the deposit field if incorrect',
+            ],
+            legalRef: 'Tenant Fees Act 2019, s.3',
+            helpUrl: 'https://example.com/help/deposit-cap',
+          },
+        ]}
+        warnings={[]}
+        caseId="test-case-phase13"
+      />
+    );
+
+    // Title should be rendered as main heading
+    expect(screen.getByText('Deposit Exceeds Legal Cap')).toBeDefined();
+
+    // How to fix steps should be rendered as list items
+    expect(screen.getByText('Check the deposit amount entered')).toBeDefined();
+    expect(screen.getByText('Ensure it does not exceed 5 weeks rent')).toBeDefined();
+    expect(screen.getByText('Update the deposit field if incorrect')).toBeDefined();
+
+    // Legal reference should be rendered
+    expect(screen.getByText(/Tenant Fees Act 2019, s.3/)).toBeDefined();
+
+    // Help URL should be rendered as a link
+    const learnMoreLink = screen.getByText('Learn more →');
+    expect(learnMoreLink).toBeDefined();
+    expect(learnMoreLink.getAttribute('href')).toBe('https://example.com/help/deposit-cap');
+    expect(learnMoreLink.getAttribute('target')).toBe('_blank');
+    expect(learnMoreLink.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+
+  it('renders old layout when Phase 13 fields are not provided', () => {
+    render(
+      <ValidationErrors
+        blocking_issues={[
+          {
+            code: 'DEPOSIT_NOT_PROTECTED',
+            fields: ['deposit_protected'],
+            affected_question_id: 'deposit_and_compliance',
+            user_fix_hint: 'Deposit must be protected in a government scheme',
+          },
+        ]}
+        warnings={[]}
+        caseId="test-case-legacy"
+      />
+    );
+
+    // User fix hint should be displayed as the main message
+    expect(screen.getByText('Deposit must be protected in a government scheme')).toBeDefined();
+
+    // No Phase 13 elements should be rendered
+    expect(screen.queryByText('Legal reference:')).toBeNull();
+    expect(screen.queryByText('Learn more →')).toBeNull();
+  });
+
+  it('renders Phase 13 fields in warnings section', () => {
+    render(
+      <ValidationErrors
+        blocking_issues={[]}
+        warnings={[
+          {
+            code: 's21_notice_period_short',
+            fields: ['notice_period'],
+            affected_question_id: 'notice_details',
+            user_fix_hint: 'Consider extending notice period',
+            title: 'Notice Period May Be Short',
+            howToFix: ['Review the minimum notice period requirements'],
+            legalRef: 'Housing Act 1988, s.21',
+            helpUrl: 'https://example.com/help/notice-period',
+          },
+        ]}
+        caseId="test-case-warning-phase13"
+        product="complete_pack"
+      />
+    );
+
+    // Title should be rendered
+    expect(screen.getByText('Notice Period May Be Short')).toBeDefined();
+
+    // How to fix should be rendered
+    expect(screen.getByText('Review the minimum notice period requirements')).toBeDefined();
+
+    // Legal reference should be rendered
+    expect(screen.getByText(/Housing Act 1988, s.21/)).toBeDefined();
+
+    // Help URL should be rendered
+    expect(screen.getByText('Learn more →')).toBeDefined();
+  });
+});
