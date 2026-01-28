@@ -1,0 +1,869 @@
+[
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/about/page.tsx",
+    "route": "/about",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/ask-heaven/page.tsx",
+    "route": "/ask-heaven",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/assured-shorthold-tenancy-agreement-template/page.tsx",
+    "route": "/assured-shorthold-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/ast-template-england/page.tsx",
+    "route": "/ast-template-england",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/confirm/page.tsx",
+    "route": "/auth/confirm",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/forgot-password/page.tsx",
+    "route": "/auth/forgot-password",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/login/page.tsx",
+    "route": "/auth/login",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/reset-password/page.tsx",
+    "route": "/auth/reset-password",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/signup/page.tsx",
+    "route": "/auth/signup",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/auth/verify-email/page.tsx",
+    "route": "/auth/verify-email",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/blog/[slug]/page.tsx",
+    "route": "/blog/[slug]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "slug"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/blog/page.tsx",
+    "route": "/blog",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/contact/page.tsx",
+    "route": "/contact",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/cookies/page.tsx",
+    "route": "/cookies",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/ai-usage/page.tsx",
+    "route": "/dashboard/admin/ai-usage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/email-previews/page.tsx",
+    "route": "/dashboard/admin/email-previews",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/failed-payments/page.tsx",
+    "route": "/dashboard/admin/failed-payments",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/leads/page.tsx",
+    "route": "/dashboard/admin/leads",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/legal-changes/[id]/page.tsx",
+    "route": "/dashboard/admin/legal-changes/[id]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "id"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/legal-changes/inbox/page.tsx",
+    "route": "/dashboard/admin/legal-changes/inbox",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/legal-changes/page.tsx",
+    "route": "/dashboard/admin/legal-changes",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/orders/page.tsx",
+    "route": "/dashboard/admin/orders",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/page.tsx",
+    "route": "/dashboard/admin",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/admin/users/page.tsx",
+    "route": "/dashboard/admin/users",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/billing/page.tsx",
+    "route": "/dashboard/billing",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/cases/[id]/page.tsx",
+    "route": "/dashboard/cases/[id]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "id"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/cases/page.tsx",
+    "route": "/dashboard/cases",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/documents/page.tsx",
+    "route": "/dashboard/documents",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/page.tsx",
+    "route": "/dashboard/hmo",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/properties/[id]/page.tsx",
+    "route": "/dashboard/hmo/properties/[id]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "id"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/properties/new/page.tsx",
+    "route": "/dashboard/hmo/properties/new",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/properties/page.tsx",
+    "route": "/dashboard/hmo/properties",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/tenants/new/page.tsx",
+    "route": "/dashboard/hmo/tenants/new",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/hmo/tenants/page.tsx",
+    "route": "/dashboard/hmo/tenants",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/page.tsx",
+    "route": "/dashboard",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/profile/page.tsx",
+    "route": "/dashboard/profile",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/dashboard/settings/page.tsx",
+    "route": "/dashboard/settings",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/eviction-cost-uk/page.tsx",
+    "route": "/eviction-cost-uk",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/eviction-notice-template/page.tsx",
+    "route": "/eviction-notice-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/help/page.tsx",
+    "route": "/help",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/how-to-evict-tenant/page.tsx",
+    "route": "/how-to-evict-tenant",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/joint-tenancy-agreement-template/page.tsx",
+    "route": "/joint-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-abandoned-goods/page.tsx",
+    "route": "/money-claim-abandoned-goods",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-appliance-damage/page.tsx",
+    "route": "/money-claim-appliance-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-bathroom-damage/page.tsx",
+    "route": "/money-claim-bathroom-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-carpet-damage/page.tsx",
+    "route": "/money-claim-carpet-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-ccj-enforcement/page.tsx",
+    "route": "/money-claim-ccj-enforcement",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-cleaning-costs/page.tsx",
+    "route": "/money-claim-cleaning-costs",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-council-tax/page.tsx",
+    "route": "/money-claim-council-tax",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-deposit-shortfall/page.tsx",
+    "route": "/money-claim-deposit-shortfall",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-early-termination/page.tsx",
+    "route": "/money-claim-early-termination",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-former-tenant/page.tsx",
+    "route": "/money-claim-former-tenant",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-garden-damage/page.tsx",
+    "route": "/money-claim-garden-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-guarantor/page.tsx",
+    "route": "/money-claim-guarantor",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-letter-before-action/page.tsx",
+    "route": "/money-claim-letter-before-action",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-n1-claim-form/page.tsx",
+    "route": "/money-claim-n1-claim-form",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-online-mcol/page.tsx",
+    "route": "/money-claim-online-mcol",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-pap-financial-statement/page.tsx",
+    "route": "/money-claim-pap-financial-statement",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-property-damage/page.tsx",
+    "route": "/money-claim-property-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-schedule-of-debt/page.tsx",
+    "route": "/money-claim-schedule-of-debt",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-small-claims-landlord/page.tsx",
+    "route": "/money-claim-small-claims-landlord",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-tenant-defends/page.tsx",
+    "route": "/money-claim-tenant-defends",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-unpaid-bills/page.tsx",
+    "route": "/money-claim-unpaid-bills",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-unpaid-rent/page.tsx",
+    "route": "/money-claim-unpaid-rent",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-unpaid-utilities/page.tsx",
+    "route": "/money-claim-unpaid-utilities",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/money-claim-wall-damage/page.tsx",
+    "route": "/money-claim-wall-damage",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/n5b-form-guide/page.tsx",
+    "route": "/n5b-form-guide",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/ni-private-tenancy-agreement/page.tsx",
+    "route": "/ni-private-tenancy-agreement",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/ni-tenancy-agreement-template-free/page.tsx",
+    "route": "/ni-tenancy-agreement-template-free",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/northern-ireland-tenancy-agreement-template/page.tsx",
+    "route": "/northern-ireland-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/notice-to-quit-northern-ireland-guide/page.tsx",
+    "route": "/notice-to-quit-northern-ireland-guide",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/occupation-contract-template-wales/page.tsx",
+    "route": "/occupation-contract-template-wales",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/page.tsx",
+    "route": "/",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/possession-claim-guide/page.tsx",
+    "route": "/possession-claim-guide",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/pricing/page.tsx",
+    "route": "/pricing",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/privacy/page.tsx",
+    "route": "/privacy",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/private-residential-tenancy-agreement-template/page.tsx",
+    "route": "/private-residential-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/products/ast/page.tsx",
+    "route": "/products/ast",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/products/complete-pack/page.tsx",
+    "route": "/products/complete-pack",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/products/money-claim/page.tsx",
+    "route": "/products/money-claim",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/products/money-claim-pack/page.tsx",
+    "route": "/products/money-claim-pack",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/products/notice-only/page.tsx",
+    "route": "/products/notice-only",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/prt-template-scotland/page.tsx",
+    "route": "/prt-template-scotland",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/refunds/page.tsx",
+    "route": "/refunds",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/rent-arrears-letter-template/page.tsx",
+    "route": "/rent-arrears-letter-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/renting-homes-wales-written-statement/page.tsx",
+    "route": "/renting-homes-wales-written-statement",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/scotland-eviction-notices/page.tsx",
+    "route": "/scotland-eviction-notices",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/scotland-notice-to-leave-template/page.tsx",
+    "route": "/scotland-notice-to-leave-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/scotland-prt-model-agreement-guide/page.tsx",
+    "route": "/scotland-prt-model-agreement-guide",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/scottish-tenancy-agreement-template/page.tsx",
+    "route": "/scottish-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/section-21-ban/page.tsx",
+    "route": "/section-21-ban",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/section-21-notice-template/page.tsx",
+    "route": "/section-21-notice-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/section-8-notice-template/page.tsx",
+    "route": "/section-8-notice-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/standard-occupation-contract-wales/page.tsx",
+    "route": "/standard-occupation-contract-wales",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/success/[product]/[caseId]/page.tsx",
+    "route": "/success/[product]/[caseId]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "product",
+      "caseId"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreement-template/page.tsx",
+    "route": "/tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreement-template-free/page.tsx",
+    "route": "/tenancy-agreement-template-free",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreements/england/page.tsx",
+    "route": "/tenancy-agreements/england",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreements/england-wales/page.tsx",
+    "route": "/tenancy-agreements/england-wales",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreements/northern-ireland/page.tsx",
+    "route": "/tenancy-agreements/northern-ireland",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreements/scotland/page.tsx",
+    "route": "/tenancy-agreements/scotland",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenancy-agreements/wales/page.tsx",
+    "route": "/tenancy-agreements/wales",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenant-not-paying-rent/page.tsx",
+    "route": "/tenant-not-paying-rent",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tenant-wont-leave/page.tsx",
+    "route": "/tenant-wont-leave",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/terms/page.tsx",
+    "route": "/terms",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/free-rent-demand-letter/page.tsx",
+    "route": "/tools/free-rent-demand-letter",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/free-section-21-notice-generator/page.tsx",
+    "route": "/tools/free-section-21-notice-generator",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/free-section-8-notice-generator/page.tsx",
+    "route": "/tools/free-section-8-notice-generator",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/hmo-license-checker/page.tsx",
+    "route": "/tools/hmo-license-checker",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/page.tsx",
+    "route": "/tools",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/rent-arrears-calculator/page.tsx",
+    "route": "/tools/rent-arrears-calculator",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/validators/page.tsx",
+    "route": "/tools/validators",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/validators/section-21/page.tsx",
+    "route": "/tools/validators/section-21",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/tools/validators/section-8/page.tsx",
+    "route": "/tools/validators/section-8",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wales-eviction-notice-template/page.tsx",
+    "route": "/wales-eviction-notice-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wales-eviction-notices/page.tsx",
+    "route": "/wales-eviction-notices",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wales-tenancy-agreement-template/page.tsx",
+    "route": "/wales-tenancy-agreement-template",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/warrant-of-possession/page.tsx",
+    "route": "/warrant-of-possession",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wizard/flow/page.tsx",
+    "route": "/wizard/flow",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wizard/page.tsx",
+    "route": "/wizard",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wizard/preview/[caseId]/page.tsx",
+    "route": "/wizard/preview/[caseId]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "caseId"
+    ],
+    "pageType": "dynamic"
+  },
+  {
+    "filePath": "/home/user/landlord-heavenv3/src/app/wizard/review/page.tsx",
+    "route": "/wizard/review",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  }
+]
