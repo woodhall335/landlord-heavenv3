@@ -126,6 +126,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/ni-private-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/notice-to-quit-northern-ireland-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
+    // High-Intent SEO Landing Pages (Jan 2026)
+    { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/eviction-notice-uk', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/form-3-section-8', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/lodger-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/mcol-money-claim-online', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/rolling-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/how-to-rent-guide', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/pre-action-protocol-debt', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenant-damaging-property', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/eicr-landlord-requirements', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic
