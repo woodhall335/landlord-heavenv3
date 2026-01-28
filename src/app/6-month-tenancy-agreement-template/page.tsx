@@ -7,6 +7,7 @@ import {
   productLinks,
   landingPageLinks,
   toolLinks,
+  tenancyAgreementPageLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
@@ -477,9 +478,9 @@ export default function SixMonthTenancyAgreementPage() {
             <RelatedLinks
               title="Related Resources"
               links={[
-                productLinks.ast,
-                landingPageLinks.tenancyAgreementTemplate,
-                landingPageLinks.jointTenancyAgreement,
+                productLinks.tenancyAgreement,
+                landingPageLinks.tenancyTemplate,
+                tenancyAgreementPageLinks.jointTenancy,
                 { title: 'Fixed Term Tenancy Agreement', href: '/fixed-term-tenancy-agreement-template', description: 'Compare fixed-term options' },
               ]}
             />

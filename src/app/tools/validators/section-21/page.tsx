@@ -632,7 +632,7 @@ export default function Section21ValidatorPage() {
             landingPageLinks.section21Template,
             toolLinks.section21Generator,
             toolLinks.section8Validator,
-            blogLinks.section21vs8,
+            blogLinks.section21VsSection8,
           ]}
         />
       </Container>
