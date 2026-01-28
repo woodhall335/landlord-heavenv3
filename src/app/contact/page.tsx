@@ -17,9 +17,15 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: 'Contact Landlord Heaven | Get Help With Your Documents',
   description:
-    "Get in touch with Landlord Heaven. Support, refunds, sales inquiries. Average response time: 24 hours.",
+    "Contact the Landlord Heaven team. We're here to help with eviction notices, tenancy agreements, money claims and any questions about our landlord document services.",
+  openGraph: {
+    title: 'Contact Landlord Heaven',
+    description:
+      "Get in touch with our support team. We're here to help with your landlord documents.",
+    type: 'website',
+  },
 };
 
 export default function ContactPage() {

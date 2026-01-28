@@ -6,13 +6,22 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StandardHero } from '@/components/marketing/StandardHero';
 
 export const metadata: Metadata = {
-  title: 'Free Tools for UK Landlords',
+  title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
   description:
-    'Free landlord tools including notice generators, rent arrears calculators, validators, and Ask Heaven guidance.',
+    'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO licence checker, and Section 21/Section 8 validity checkers. No signup required.',
+  keywords: [
+    'free landlord tools',
+    'landlord calculator UK',
+    'eviction notice generator',
+    'rent arrears calculator',
+    'HMO checker',
+    'section 21 generator',
+    'section 8 generator',
+  ],
   openGraph: {
-    title: 'Free Tools for UK Landlords | Landlord Heaven',
+    title: 'Free Landlord Tools UK | Landlord Heaven',
     description:
-      'Free landlord tools including notice generators, rent arrears calculators, validators, and Ask Heaven guidance.',
+      'Free calculators, generators and checkers for UK landlords. Section 21, Section 8, rent arrears and more.',
     type: 'website',
     url: getCanonicalUrl('/tools'),
   },

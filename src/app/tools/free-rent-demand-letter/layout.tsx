@@ -2,23 +2,22 @@ import { Metadata } from 'next';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Rent Demand Letter Generator',
+  title: 'Free Rent Demand Letter Template | Formal Arrears Letter Generator',
   description:
-    'Generate a free rent demand letter template for UK landlords. Professional arrears demand letters for unpaid rent with formal legal warning.',
+    'Generate a free rent demand letter for your tenant. Professional template that formally requests payment of rent arrears. Download as PDF or Word document.',
   keywords: [
-    'rent demand letter uk',
-    'arrears demand letter',
-    'formal rent demand',
+    'rent demand letter template',
+    'rent demand letter',
+    'formal rent arrears letter',
+    'tenant arrears letter',
+    'rent demand template free',
     'landlord letter template',
-    'rent arrears letter',
-    'demand for rent payment',
     'rent recovery letter',
-    'section 8 preparation',
   ],
   openGraph: {
-    title: 'Free Rent Demand Letter Generator | Landlord Heaven',
+    title: 'Free Rent Demand Letter Template | Landlord Heaven',
     description:
-      'Generate professional rent demand letters for unpaid rent. Free template for UK landlords.',
+      'Generate a professional rent demand letter in minutes. Free template for UK landlords.',
     type: 'website',
     url: getCanonicalUrl('/tools/free-rent-demand-letter'),
   },
