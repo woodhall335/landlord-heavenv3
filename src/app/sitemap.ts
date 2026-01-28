@@ -138,6 +138,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/pre-action-protocol-debt', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenant-damaging-property', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eicr-landlord-requirements', priority: 0.8, changeFrequency: 'weekly' as const },
+    // AI Overview Keyword Pages (Jan 2026)
+    { path: '/county-court-claim-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/6-month-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/fixed-term-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic

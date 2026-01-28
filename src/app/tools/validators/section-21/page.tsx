@@ -14,6 +14,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks, landingPageLinks, blogLinks } from '@/lib/seo/internal-links';
 
 // Pre-built wizard links for Section 21 validator page
 const wizardLinkNoticeOnly = buildWizardLink({
@@ -619,6 +621,21 @@ export default function Section21ValidatorPage() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <Container className="py-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.noticeOnly,
+            productLinks.completePack,
+            landingPageLinks.section21Template,
+            toolLinks.section21Generator,
+            toolLinks.section8Validator,
+            blogLinks.section21vs8,
+          ]}
+        />
+      </Container>
     </>
   );
 }
