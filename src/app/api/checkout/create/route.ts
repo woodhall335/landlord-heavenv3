@@ -27,6 +27,12 @@ import {
   NoticeOnlyCaseValidationError,
 } from '@/lib/validation/notice-only-case-validator';
 import { validateSection21ForCheckout } from '@/lib/validation/section21-checkout-validator';
+import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
+import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
+import {
+  sanitizeComplianceIssues,
+  type ComplianceTimingBlockResponse,
+} from '@/lib/documents/compliance-timing-types';
 import crypto from 'crypto';
 
 /**
@@ -393,6 +399,45 @@ export async function POST(request: Request) {
               },
               { status: 422 }
             );
+          }
+
+          // =========================================================================
+          // COMPLIANCE TIMING VALIDATION (PRE-PAYMENT GATE)
+          // For Section 21 cases, validate compliance timing BEFORE payment.
+          // This prevents the scenario where user pays but documents can't be
+          // generated due to timing violations (e.g., gas safety > 12 months old).
+          //
+          // Uses the SAME validation as document generation (fulfillment) to ensure
+          // consistency. If this check passes, fulfillment should also pass.
+          // =========================================================================
+          if (section21Validation.isSection21Case) {
+            const wizardFacts = collectedFacts as Record<string, unknown>;
+            const timingData = buildComplianceTimingDataFromFacts(wizardFacts);
+            const timingResult = validateComplianceTiming(timingData);
+
+            if (!timingResult.isValid) {
+              const blockingIssues = timingResult.issues.filter(i => i.severity === 'error');
+              const sanitizedIssues = sanitizeComplianceIssues(blockingIssues);
+
+              logger.warn('Checkout blocked - compliance timing violations detected', {
+                caseId: case_id,
+                userId: user.id,
+                productType: product_type,
+                issues: blockingIssues.map(i => i.field),
+                tenancy_start_date: timingData.tenancy_start_date,
+              });
+
+              const response: ComplianceTimingBlockResponse = {
+                ok: false,
+                error: 'compliance_timing_block',
+                code: 'COMPLIANCE_TIMING_BLOCK',
+                issues: sanitizedIssues,
+                tenancy_start_date: timingData.tenancy_start_date,
+                message: "We can't process your order yet because some compliance requirements haven't been met. Please update the relevant dates in the wizard.",
+              };
+
+              return NextResponse.json(response, { status: 422 });
+            }
           }
         }
       }
