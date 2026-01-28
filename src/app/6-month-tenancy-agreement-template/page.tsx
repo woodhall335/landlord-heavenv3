@@ -461,16 +461,11 @@ export default function SixMonthTenancyAgreementPage() {
 
         {/* CTA Section */}
         <SeoCtaBlock
+          pageType="tenancy"
+          variant="final"
           title="Get Your 6 Month Tenancy Agreement"
           description="Our AST templates are fully customisable for any fixed term. Set the dates, add optional clauses, and download instantly."
-          primaryCTA={{ label: 'Standard AST — £14.99', href: wizardLinkAST }}
-          secondaryCTA={{ label: 'Premium AST — £24.99', href: '/products/ast' }}
-          features={[
-            'Customisable fixed term length',
-            'Optional break clause included',
-            'Housing Act 1988 compliant',
-            'Tenant Fees Act 2019 ready',
-          ]}
+          jurisdiction="england"
         />
 
         {/* Disclaimer */}
