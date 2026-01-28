@@ -127,10 +127,22 @@ const FIELD_ALIASES: Record<keyof ComplianceTimingData, string[]> = {
   ],
 
   // Prescribed info served date
+  // IMPORTANT: This field captures when prescribed information was served to the tenant.
+  // The wizard stores this as 'prescribed_info_date' but we need to validate against deposit protection date.
   prescribed_info_served_date: [
-    'prescribed_info_served_date', // preferred
-    'prescribed_info_date', // short legacy
+    'prescribed_info_served_date', // preferred (verbose form)
+    'prescribed_info_date', // wizard uses this
     'pi_served_date', // abbreviation legacy
+    'deposit_prescribed_info_date', // alternative naming
+  ],
+
+  // Gas certificate issue date (NEW - for N5B Q17b)
+  // This is the date the CP12 certificate was issued by the Gas Safe engineer.
+  // Required for N5B form Q17b "Date of issue" column.
+  gas_cert_issue_date: [
+    'gas_cert_issue_date', // preferred
+    'gas_safety_issue_date', // alternative
+    'cp12_issue_date', // technical alias
   ],
 };
 
@@ -393,6 +405,7 @@ export function buildComplianceTimingDataFromFacts(
       facts,
       FIELD_ALIASES.gas_safety_record_served_pre_occupation_date
     ),
+    gas_cert_issue_date: resolveStringField(facts, FIELD_ALIASES.gas_cert_issue_date),
     how_to_rent_provided_date: resolveStringField(
       facts,
       FIELD_ALIASES.how_to_rent_provided_date
