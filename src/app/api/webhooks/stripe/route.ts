@@ -28,6 +28,7 @@ const VALIDATION_ERROR_PATTERNS = [
   'MISSING_REQUIRED_FIELDS',
   'VALIDATION_FAILED',
   'ELIGIBILITY_FAILED',
+  'COMPLIANCE_TIMING_BLOCK', // Section 21 compliance timing violations
   'Case not found',
   'Unable to resolve user',
   'Unsupported product type',
@@ -303,26 +304,50 @@ export async function POST(request: Request) {
               const isValidation = isValidationError(fulfillmentError);
               const errorType = isValidation ? 'validation' : 'server';
 
+              // Check for compliance timing block specifically
+              const isComplianceBlock = fulfillmentError?.code === 'COMPLIANCE_TIMING_BLOCK';
+              const complianceIssues = isComplianceBlock ? fulfillmentError.issues : null;
+
               logger.error('Fulfillment error', {
                 orderId: (order as any).id,
                 caseId: resolvedCaseId,
                 productType: resolvedProductType,
                 errorType,
                 error: truncatedError,
+                ...(isComplianceBlock && {
+                  complianceBlock: true,
+                  issues: complianceIssues?.map((i: { field: string }) => i.field) || [],
+                }),
               });
 
-              // Mark order as failed
+              // Build order update with failure details
+              // Store compliance issues in fulfillment_error_details for user display
+              const orderUpdate: Record<string, unknown> = {
+                fulfillment_status: 'failed',
+              };
+
+              // If compliance timing block, persist the structured issues
+              if (isComplianceBlock && complianceIssues) {
+                orderUpdate.fulfillment_error_details = {
+                  code: 'COMPLIANCE_TIMING_BLOCK',
+                  message: fulfillmentError.message || 'Compliance timing violations detected',
+                  issues: complianceIssues,
+                  failed_at: new Date().toISOString(),
+                };
+              }
+
+              // Mark order as failed with optional error details
               await supabase
                 .from('orders')
-                .update({
-                  fulfillment_status: 'failed',
-                })
+                .update(orderUpdate)
                 .eq('id', (order as any).id);
 
               // For validation errors, DON'T throw - return 200 so Stripe doesn't retry
               // The order is marked as failed, user can see it in dashboard
-              if (isValidation) {
-                processingResult = 'fulfillment_validation_failed';
+              if (isValidation || isComplianceBlock) {
+                processingResult = isComplianceBlock
+                  ? 'fulfillment_compliance_block'
+                  : 'fulfillment_validation_failed';
                 // Don't throw - continue to return 200
               } else {
                 // For server/transient errors, throw to return 500 (Stripe will retry)

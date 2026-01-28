@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { CheckCircle, Shield, Clock, Download, Scale } from 'lucide-react';
+import { CheckCircle, Shield, Clock, Download, Scale, AlertTriangle, XCircle } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
+import type { SanitizedComplianceIssue } from '@/lib/documents/compliance-timing-types';
 
 /**
  * Solicitor cost comparison data by product
@@ -33,6 +34,14 @@ interface PreviewPageLayoutProps {
   savings?: string;
 }
 
+/**
+ * Compliance timing block state for displaying blocker UI
+ */
+interface ComplianceBlockState {
+  issues: SanitizedComplianceIssue[];
+  message: string;
+}
+
 export function PreviewPageLayout({
   caseId,
   product,
@@ -45,11 +54,13 @@ export function PreviewPageLayout({
 }: PreviewPageLayoutProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [complianceBlock, setComplianceBlock] = useState<ComplianceBlockState | null>(null);
   const supabase = getSupabaseBrowserClient();
 
   const handleCheckout = async () => {
     setIsLoading(true);
     setError(null);
+    setComplianceBlock(null); // Clear any previous compliance block
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -88,6 +99,16 @@ export function PreviewPageLayout({
       });
 
       const data = await response.json();
+
+      // Handle compliance timing block (422 with COMPLIANCE_TIMING_BLOCK code)
+      if (response.status === 422 && data.code === 'COMPLIANCE_TIMING_BLOCK') {
+        setComplianceBlock({
+          issues: data.issues || [],
+          message: data.message || 'Compliance requirements not met.',
+        });
+        setIsLoading(false);
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create checkout session');
@@ -218,6 +239,51 @@ export function PreviewPageLayout({
 
               {error && (
                 <p className="text-red-600 text-sm mt-3 text-center">{error}</p>
+              )}
+
+              {/* Compliance Timing Block UI */}
+              {complianceBlock && (
+                <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-amber-900 text-sm">
+                        Action Required
+                      </h4>
+                      <p className="text-sm text-amber-800 mt-1">
+                        {complianceBlock.message}
+                      </p>
+                      {complianceBlock.issues.length > 0 && (
+                        <ul className="mt-3 space-y-2">
+                          {complianceBlock.issues.map((issue, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <XCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <span className="font-medium text-gray-800">
+                                  {issue.documentLabel}:
+                                </span>
+                                <span className="text-gray-700 ml-1">
+                                  {issue.message}
+                                </span>
+                                {issue.actual && (
+                                  <span className="text-gray-500 text-xs block mt-0.5">
+                                    Current value: {issue.actual}
+                                  </span>
+                                )}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <a
+                        href={`/wizard/eviction/${caseId}?section=compliance`}
+                        className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
+                      >
+                        Update Compliance Dates
+                      </a>
+                    </div>
+                  </div>
+                </div>
               )}
 
               {/* Trust Signals */}
