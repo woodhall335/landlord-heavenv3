@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   AlertTriangle,
   CheckCircle,
@@ -9,10 +9,11 @@ import {
   Scale,
   Home,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { walesEvictionFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
@@ -40,49 +41,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'Does Section 21 apply in Wales?',
-    answer:
-      'No. Section 21 notices do not apply in Wales. Since December 2022, Wales uses the Renting Homes (Wales) Act 2016, which has its own notice types and procedures. The equivalent "no-fault" eviction has been effectively abolished in Wales.',
-  },
-  {
-    question: 'What is an occupation contract in Wales?',
-    answer:
-      'An occupation contract is the Welsh equivalent of a tenancy agreement. Under the Renting Homes (Wales) Act 2016, rental agreements are called "occupation contracts" and tenants are called "contract holders". There are two main types: standard contracts (private landlords) and secure contracts (social housing).',
-  },
-  {
-    question: 'How much notice do I need to give to evict a tenant in Wales?',
-    answer:
-      'For standard occupation contracts in Wales, landlords typically need to give 6 months notice for possession claims without specific grounds. Shorter notice periods may apply for serious rent arrears or breach of contract - check current Welsh Government guidance for exact requirements.',
-  },
-  {
-    question: 'Can I evict for rent arrears in Wales?',
-    answer:
-      'Yes. The Renting Homes (Wales) Act includes provisions for possession where the contract holder has serious rent arrears. Specific grounds and notice periods apply - these differ from the English Section 8 system. Consult current Welsh legislation or seek legal advice.',
-  },
-  {
-    question: 'What court handles evictions in Wales?',
-    answer:
-      'Eviction cases in Wales are handled by the county court, similar to England. However, the grounds, notices, and procedures follow Welsh law under the Renting Homes (Wales) Act 2016, not the Housing Act 1988.',
-  },
-  {
-    question: 'Do I need to protect deposits in Wales?',
-    answer:
-      'Yes. Landlords in Wales must protect deposits in a government-approved scheme within 30 days. The deposit protection rules are similar to England. Failure to protect the deposit can affect your ability to gain possession.',
-  },
-  {
-    question: 'Can I use English eviction notice templates in Wales?',
-    answer:
-      'No. Section 21 and Section 8 notices are specific to England. Wales has its own notice requirements under the Renting Homes (Wales) Act. Using incorrect notices will invalidate your possession claim.',
-  },
-  {
-    question: 'What is a "contract holder" in Wales?',
-    answer:
-      'A contract holder is the Welsh term for a tenant under the Renting Homes (Wales) Act 2016. The person who signs the occupation contract and has the right to live in the property is called the contract holder.',
-  },
-];
-
 export default function WalesEvictionNoticesPage() {
   return (
     <>
@@ -96,7 +54,6 @@ export default function WalesEvictionNoticesPage() {
           dateModified: '2026-01-01',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -621,8 +578,8 @@ export default function WalesEvictionNoticesPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          title="Frequently Asked Questions"
-          faqs={faqs}
+          title="Wales Eviction FAQ"
+          faqs={walesEvictionFAQs}
           showContactCTA={false}
           variant="white"
         />

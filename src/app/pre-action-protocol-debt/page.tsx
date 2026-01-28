@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { preActionProtocolFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Pre-Action Protocol for Debt Claims | Landlord Guide 2026',
@@ -28,29 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is the Pre-Action Protocol for Debt Claims?',
-    answer:
-      'It\'s a set of rules you must follow before starting a county court claim for money. The protocol aims to encourage settlement without court proceedings and ensure debtors have enough information to respond.',
-  },
-  {
-    question: 'Does the Pre-Action Protocol apply to rent arrears?',
-    answer:
-      'Yes. If you\'re claiming money owed by a tenant (or former tenant) through the county court, you must follow the Pre-Action Protocol. This applies to claims for unpaid rent, damages, or other debts.',
-  },
-  {
-    question: 'What happens if I don\'t follow the protocol?',
-    answer:
-      'The court may impose cost sanctions even if you win. You might be ordered to pay the defendant\'s costs, have your own costs reduced, or face other penalties. Always follow the protocol.',
-  },
-  {
-    question: 'How long must I wait before starting court proceedings?',
-    answer:
-      'You must wait at least 30 days after sending the Letter Before Claim before starting court proceedings. This gives the debtor time to respond, propose payment, or dispute the debt.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Pre-Action Protocol', url: '/pre-action-protocol-debt' },
@@ -59,7 +38,6 @@ const breadcrumbs = [
 export default function PreActionProtocolPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -230,17 +208,13 @@ export default function PreActionProtocolPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={preActionProtocolFAQs}
+                title="Pre-Action Protocol FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

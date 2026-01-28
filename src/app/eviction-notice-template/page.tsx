@@ -7,6 +7,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { evictionNoticeTemplateFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   FileText,
@@ -75,65 +77,10 @@ export default function EvictionNoticeTemplatePage() {
     },
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What types of eviction notices are there in the UK?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'In England, there are two main types: Section 21 (no-fault eviction) and Section 8 (grounds-based eviction). Section 21 requires no reason but ends May 2026. Section 8 requires proving specific grounds like rent arrears or antisocial behaviour.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How much notice do I need to give a tenant?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Section 21 requires a minimum of 2 months notice. Section 8 notice periods vary by ground - from 2 weeks for serious rent arrears to 2 months for other grounds.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I evict a tenant without a reason?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Currently yes, using a Section 21 notice. However, this ends on 1 May 2026 when the Renters Rights Act takes effect. After that, all evictions will require proving specific grounds under Section 8.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Which eviction notice should I use?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Use Section 21 for no-fault eviction (e.g., selling property, moving in yourself). Use Section 8 if the tenant has breached the tenancy (rent arrears, damage, antisocial behaviour). You can serve both notices simultaneously.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What happens after I serve an eviction notice?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'After the notice period expires, if the tenant does not leave, you must apply to court for a possession order. You cannot force the tenant to leave without a court order and bailiff warrant.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Are eviction notice templates legally valid?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, if they use the correct prescribed forms. Section 21 requires Form 6A, and Section 8 has its own prescribed format. Our court-ready templates use official government formats.',
-        },
-      },
-    ],
-  };
 
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Eviction Notice Template', url: 'https://landlordheaven.co.uk/eviction-notice-template' },
@@ -559,82 +506,12 @@ export default function EvictionNoticeTemplatePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Eviction Notice Template FAQ
-              </h2>
-
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What types of eviction notices are there in the UK?
-                  </h3>
-                  <p className="text-gray-600">
-                    In England, there are two main types: Section 21 (no-fault eviction) and Section 8
-                    (grounds-based eviction). Section 21 requires no reason but ends May 2026. Section 8
-                    requires proving specific grounds like rent arrears or antisocial behaviour.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    How much notice do I need to give a tenant?
-                  </h3>
-                  <p className="text-gray-600">
-                    Section 21 requires a minimum of 2 months notice. Section 8 notice periods vary by
-                    ground - from 2 weeks for serious rent arrears to 2 months for other grounds.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Can I evict a tenant without a reason?
-                  </h3>
-                  <p className="text-gray-600">
-                    Currently yes, using a Section 21 notice. However, this ends on 1 May 2026 when
-                    the Renters&apos; Rights Act takes effect. After that, all evictions will require
-                    proving specific grounds under Section 8.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Which eviction notice should I use?
-                  </h3>
-                  <p className="text-gray-600">
-                    Use Section 21 for no-fault eviction (e.g., selling property, moving in yourself).
-                    Use Section 8 if the tenant has breached the tenancy (rent arrears, damage, antisocial
-                    behaviour). You can serve both notices simultaneously.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What happens after I serve an eviction notice?
-                  </h3>
-                  <p className="text-gray-600">
-                    After the notice period expires, if the tenant does not leave, you must apply to
-                    court for a possession order. You cannot force the tenant to leave without a court
-                    order and bailiff warrant.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Are eviction notice templates legally valid?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes, if they use the correct prescribed forms. Section 21 requires Form 6A, and
-                    Section 8 has its own prescribed format. Our court-ready templates use official
-                    government formats.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          faqs={evictionNoticeTemplateFAQs}
+          title="Eviction Notice Template FAQ"
+          showContactCTA={false}
+          variant="gray"
+        />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20">

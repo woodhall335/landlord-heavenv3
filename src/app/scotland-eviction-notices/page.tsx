@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   AlertTriangle,
   CheckCircle,
@@ -10,10 +10,11 @@ import {
   Home,
   Gavel,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { scotlandEvictionFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Scottish Eviction Notice 2026 for Landlords | Notice to Leave',
@@ -40,59 +41,6 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/scotland-eviction-notices'),
   },
 };
-
-const faqs = [
-  {
-    question: 'Does Section 21 apply in Scotland?',
-    answer:
-      'No. Section 21 notices do not apply in Scotland. Scottish landlords must use a Notice to Leave citing one of 18 eviction grounds under the Private Housing (Tenancies) (Scotland) Act 2016. Scotland has had grounds-based eviction since 2017.',
-  },
-  {
-    question: 'What is a Private Residential Tenancy (PRT)?',
-    answer:
-      'A Private Residential Tenancy (PRT) is the standard tenancy type in Scotland since December 2017. Unlike English ASTs, PRTs are open-ended with no fixed term. Landlords cannot end a PRT without citing a valid eviction ground. Tenants can end a PRT with 28 days notice.',
-  },
-  {
-    question: 'What is a Notice to Leave?',
-    answer:
-      'A Notice to Leave is the Scottish equivalent of an eviction notice. It must cite one or more of the 18 eviction grounds under the Private Housing (Tenancies) (Scotland) Act 2016. Notice periods range from 28 to 84 days depending on the ground used.',
-  },
-  {
-    question: 'How much notice do I need to give to evict in Scotland?',
-    answer:
-      'Notice periods in Scotland depend on the eviction ground. Rent arrears (Ground 12) and antisocial behaviour (Ground 14) require 28 days. Most other grounds including landlord selling (Ground 1) and landlord moving in (Ground 4) require 84 days notice.',
-  },
-  {
-    question: 'What is the First-tier Tribunal for Scotland?',
-    answer:
-      'The First-tier Tribunal for Scotland (Housing and Property Chamber) handles eviction cases in Scotland. If a tenant does not leave after the notice period, landlords must apply to the Tribunal for an eviction order - not the county court as in England.',
-  },
-  {
-    question: 'What are the eviction grounds in Scotland?',
-    answer:
-      'There are 18 eviction grounds under Scottish law. Key grounds include: Ground 1 (landlord intends to sell), Ground 4 (landlord/family moving in), Ground 12 (rent arrears for 3+ months), Ground 13 (breach of tenancy), Ground 14 (antisocial behaviour). Some are mandatory, others discretionary.',
-  },
-  {
-    question: 'Can I evict for rent arrears in Scotland?',
-    answer:
-      'Yes. Ground 12 applies when the tenant has 3 or more consecutive months of rent arrears. Ground 12A applies to substantial cumulative arrears. Notice period is 28 days. You must also have completed pre-action requirements before applying to the Tribunal.',
-  },
-  {
-    question: 'Do I need to register as a landlord in Scotland?',
-    answer:
-      'Yes. All private landlords in Scotland must register with their local council on the Scottish Landlord Register. It is a criminal offence to let property without registration. Your registration number must appear on the Notice to Leave.',
-  },
-  {
-    question: 'How long does eviction take in Scotland?',
-    answer:
-      'Scottish eviction typically takes 4-8 months. This includes: Notice period (28-84 days), Tribunal application processing (4-8 weeks), Tribunal hearing (4-8 weeks), and enforcement if needed. Contested cases take longer.',
-  },
-  {
-    question: 'Can I use English eviction notice templates in Scotland?',
-    answer:
-      'No. Section 21 and Section 8 notices are specific to England. Scotland requires a Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016. Using incorrect notices will be rejected by the Tribunal.',
-  },
-];
 
 const evictionGrounds = [
   { ground: '1', description: 'Landlord intends to sell', notice: '84 days', type: 'Mandatory' },
@@ -129,7 +77,6 @@ export default function ScotlandEvictionNoticesPage() {
           dateModified: '2026-01-01',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -780,8 +727,8 @@ export default function ScotlandEvictionNoticesPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          title="Frequently Asked Questions"
-          faqs={faqs}
+          title="Scottish Eviction FAQ"
+          faqs={scotlandEvictionFAQs}
           showContactCTA={false}
           variant="white"
         />

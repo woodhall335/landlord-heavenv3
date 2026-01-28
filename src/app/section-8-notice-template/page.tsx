@@ -6,6 +6,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { section8NoticeTemplateFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   FileText,
@@ -87,65 +89,9 @@ export default function Section8NoticeTemplatePage() {
     },
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is a Section 8 notice?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'A Section 8 notice is a formal notice used by landlords to seek possession of a property based on specific grounds, such as rent arrears, antisocial behaviour, or breach of tenancy agreement. Unlike Section 21, you must prove the grounds in court.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What are the grounds for Section 8 eviction?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'There are 17 grounds for Section 8 eviction, split into mandatory (court must grant possession) and discretionary (court may grant possession). Common grounds include rent arrears over 2 months (Ground 8), antisocial behaviour (Ground 14), and breach of tenancy (Ground 12).',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What notice period is required for Section 8?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Notice periods vary by ground. Serious rent arrears (Ground 8) and antisocial behaviour require only 2 weeks notice. Most other grounds require 2 months notice. The notice remains valid for 12 months.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is Section 8 better than Section 21?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'It depends on your situation. Section 8 can be faster for rent arrears (2 weeks notice vs 2 months) but requires proving grounds in court. Section 21 is simpler but ends May 2026. Many landlords serve both notices together.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Will Section 8 still work after May 2026?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. The Renters Rights Act only abolishes Section 21 (no-fault eviction). Section 8 grounds-based eviction will continue, though some grounds may be modified. This makes understanding Section 8 essential for future evictions.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How much rent arrears for Section 8?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'For mandatory Ground 8, the tenant must be at least 2 months (8 weeks) in arrears when you serve the notice AND when the court hearing takes place. For discretionary Ground 10, any amount of arrears may be sufficient.',
-        },
-      },
-    ],
-  };
-
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Templates", url: "https://landlordheaven.co.uk/eviction-notice-template" },
@@ -621,84 +567,12 @@ export default function Section8NoticeTemplatePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Section 8 Notice Template FAQ
-              </h2>
-
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What is a Section 8 notice?
-                  </h3>
-                  <p className="text-gray-600">
-                    A Section 8 notice is a formal notice used by landlords to seek possession of a
-                    property based on specific grounds, such as rent arrears, antisocial behaviour, or
-                    breach of tenancy agreement. Unlike Section 21, you must prove the grounds in court.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What are the grounds for Section 8 eviction?
-                  </h3>
-                  <p className="text-gray-600">
-                    There are 17 grounds for Section 8 eviction, split into mandatory (court must grant
-                    possession) and discretionary (court may grant possession). Common grounds include
-                    rent arrears over 2 months (Ground 8), antisocial behaviour (Ground 14), and breach
-                    of tenancy (Ground 12).
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What notice period is required for Section 8?
-                  </h3>
-                  <p className="text-gray-600">
-                    Notice periods vary by ground. Serious rent arrears (Ground 8) and antisocial
-                    behaviour require only 2 weeks notice. Most other grounds require 2 months notice.
-                    The notice remains valid for 12 months.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Is Section 8 better than Section 21?
-                  </h3>
-                  <p className="text-gray-600">
-                    It depends on your situation. Section 8 can be faster for rent arrears (2 weeks
-                    notice vs 2 months) but requires proving grounds in court. Section 21 is simpler
-                    but ends May 2026. Many landlords serve both notices together.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Will Section 8 still work after May 2026?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes. The Renters&apos; Rights Act only abolishes Section 21 (no-fault eviction).
-                    Section 8 grounds-based eviction will continue, though some grounds may be modified.
-                    This makes understanding Section 8 essential for future evictions.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    How much rent arrears for Section 8?
-                  </h3>
-                  <p className="text-gray-600">
-                    For mandatory Ground 8, the tenant must be at least 2 months (8 weeks) in arrears
-                    when you serve the notice AND when the court hearing takes place. For discretionary
-                    Ground 10, any amount of arrears may be sufficient.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          faqs={section8NoticeTemplateFAQs}
+          title="Section 8 Notice Template FAQ"
+          showContactCTA={false}
+          variant="white"
+        />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20 bg-gray-50">

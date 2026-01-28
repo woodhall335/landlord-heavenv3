@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { eicrFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'EICR Landlord Requirements UK | Electrical Safety Guide 2026',
@@ -28,34 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is an EICR?',
-    answer:
-      'An EICR (Electrical Installation Condition Report) is an inspection of a property\'s electrical installations by a qualified electrician. It checks wiring, sockets, consumer units, and other fixed electrical parts for safety.',
-  },
-  {
-    question: 'How often do landlords need an EICR?',
-    answer:
-      'Landlords must have an EICR at least every 5 years, or more frequently if the previous report recommends it. New tenancies also require a valid EICR before the tenant moves in.',
-  },
-  {
-    question: 'What happens if I don\'t have an EICR?',
-    answer:
-      'Local authorities can issue fines of up to £30,000 for non-compliance. They can also arrange for an inspection themselves and recover costs from you, plus require urgent remedial work.',
-  },
-  {
-    question: 'Do I need to give the EICR to tenants?',
-    answer:
-      'Yes. You must provide a copy of the EICR to existing tenants within 28 days of the inspection. For new tenants, provide it before they move in. Keep proof of providing it.',
-  },
-  {
-    question: 'What if the EICR shows problems?',
-    answer:
-      'You must complete any remedial work required by the report within 28 days (or the timescale specified in the report if shorter). Then get written confirmation from a qualified electrician that the work is done.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'EICR Landlord Requirements', url: '/eicr-landlord-requirements' },
@@ -64,7 +38,6 @@ const breadcrumbs = [
 export default function EICRPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -229,17 +202,13 @@ export default function EICRPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={eicrFAQs}
+                title="EICR Frequently Asked Questions"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

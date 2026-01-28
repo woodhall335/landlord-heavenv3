@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { lodgerAgreementFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Lodger Agreement Template UK | Free Download 2026',
@@ -29,34 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a lodger agreement?',
-    answer:
-      'A lodger agreement is a contract between a live-in landlord and someone renting a room in the landlord\'s home. Unlike tenants, lodgers don\'t have exclusive possession and share common areas with the landlord.',
-  },
-  {
-    question: 'Do I need a written lodger agreement?',
-    answer:
-      'While not legally required, a written agreement is strongly recommended. It clarifies rent, notice periods, house rules, and both parties\' responsibilities, helping avoid disputes.',
-  },
-  {
-    question: 'How much notice do I need to give a lodger?',
-    answer:
-      'There\'s no minimum statutory notice for lodgers. The notice period is whatever you agree in your lodger agreement. Typically, landlords use the rent payment period (e.g., one week or one month).',
-  },
-  {
-    question: 'Do I need to protect a lodger\'s deposit?',
-    answer:
-      'No. Deposit protection rules only apply to assured shorthold tenancies. Since lodgers are excluded occupiers, not tenants, deposit protection is not required.',
-  },
-  {
-    question: 'Is lodger rent tax-free?',
-    answer:
-      'Under the Rent a Room scheme, you can earn up to £7,500 per year tax-free from letting a furnished room in your home. If you earn more, you\'ll need to declare it on your tax return.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Lodger Agreement Template', url: '/lodger-agreement-template' },
@@ -65,7 +39,6 @@ const breadcrumbs = [
 export default function LodgerAgreementPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -205,17 +178,13 @@ export default function LodgerAgreementPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={lodgerAgreementFAQs}
+                title="Lodger Agreement FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

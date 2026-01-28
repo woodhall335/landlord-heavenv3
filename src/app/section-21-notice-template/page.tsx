@@ -8,6 +8,8 @@ import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { section21NoticeTemplateFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   FileText,
@@ -99,57 +101,10 @@ export default function Section21NoticeTemplatePage() {
     },
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Is the Section 21 notice template free?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version using the official Form 6A format, the cost is £49.99.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is Form 6A?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Form 6A is the official prescribed form for Section 21 notices in England. Using any other format can make your notice invalid.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How long is Section 21 notice valid?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'A Section 21 notice is valid for 6 months after it expires. You must start court proceedings within this time.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I still use Section 21 in 2026?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Section 21 notices can only be served until 30 April 2026. After 1 May 2026, the Section 21 ban takes effect and no-fault evictions will no longer be possible.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What notice period is required for Section 21?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'The minimum notice period for a Section 21 notice is 2 months. The notice cannot expire before the end of any fixed term tenancy.',
-        },
-      },
-    ],
-  };
 
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Templates", url: "https://landlordheaven.co.uk/eviction-notice-template" },
@@ -503,83 +458,12 @@ export default function Section21NoticeTemplatePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Section 21 Notice Template FAQ
-              </h2>
-
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Is the Section 21 notice template free?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes, we offer a free Section 21 notice template that you can preview and use
-                    for educational purposes. For a court-ready version using the official Form 6A
-                    format, the cost is £49.99.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What is Form 6A?
-                  </h3>
-                  <p className="text-gray-600">
-                    Form 6A is the official prescribed form for Section 21 notices in England.
-                    It was introduced in 2015 and is the only valid format for no-fault eviction
-                    notices. Using any other format or an outdated version can make your notice invalid.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    How long is a Section 21 notice valid?
-                  </h3>
-                  <p className="text-gray-600">
-                    A Section 21 notice is valid for 6 months after it expires. This means you
-                    must start court proceedings within 6 months of the notice expiry date, or
-                    you&apos;ll need to serve a new notice.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Can I still use Section 21 in 2026?
-                  </h3>
-                  <p className="text-gray-600">
-                    Section 21 notices can only be served until 30 April 2026. After 1 May 2026,
-                    the Section 21 ban takes effect and no-fault evictions will no longer be
-                    possible in England. You&apos;ll need to use Section 8 instead.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What notice period is required for Section 21?
-                  </h3>
-                  <p className="text-gray-600">
-                    The minimum notice period for a Section 21 notice is 2 months. The notice
-                    cannot expire before the end of any fixed term tenancy. For periodic tenancies,
-                    it must expire on the last day of a rental period.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What documents do I need before serving Section 21?
-                  </h3>
-                  <p className="text-gray-600">
-                    Before serving a valid Section 21 notice, you must have: protected the deposit
-                    in a government scheme, provided the tenant with an EPC, Gas Safety Certificate
-                    (if applicable), the &quot;How to Rent&quot; guide, and the deposit prescribed information.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          faqs={section21NoticeTemplateFAQs}
+          title="Section 21 Notice Template FAQ"
+          showContactCTA={false}
+          variant="gray"
+        />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20">

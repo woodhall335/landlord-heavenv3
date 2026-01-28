@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { noFaultEvictionFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'No Fault Eviction UK | Section 21 Guide for Landlords [2026]',
@@ -29,29 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a no-fault eviction?',
-    answer:
-      'A no-fault eviction allows a landlord to regain possession of their property without proving the tenant has done anything wrong. In England, this is done using a Section 21 notice. You don\'t need to give a reason for wanting the property back.',
-  },
-  {
-    question: 'Is no-fault eviction being banned?',
-    answer:
-      'The UK government has proposed abolishing Section 21 no-fault evictions through the Renters Reform Bill. However, as of 2026, Section 21 remains in effect. Check our blog for the latest updates on this legislation.',
-  },
-  {
-    question: 'How much notice must I give for a no-fault eviction?',
-    answer:
-      'In England, you must give at least 2 months\' notice using Form 6A. The notice cannot expire before the end of any fixed term, and for periodic tenancies, it should align with the tenancy period.',
-  },
-  {
-    question: 'Can I use a no-fault eviction if the tenant has rent arrears?',
-    answer:
-      'Yes, you can use Section 21 even if the tenant owes rent. However, if arrears are significant (2+ months), you might prefer Section 8 Ground 8, which can be faster if the tenant doesn\'t pay by the court date.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'No Fault Eviction', url: '/no-fault-eviction' },
@@ -60,7 +39,6 @@ const breadcrumbs = [
 export default function NoFaultEvictionPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -179,17 +157,13 @@ export default function NoFaultEvictionPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={noFaultEvictionFAQs}
+                title="No-Fault Eviction FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

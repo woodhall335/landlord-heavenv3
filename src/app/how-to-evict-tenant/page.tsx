@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import {
   AlertTriangle,
@@ -12,9 +12,10 @@ import {
   FileText,
   MapPin,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
+import { howToEvictTenantFAQs } from '@/data/faqs';
 
 // Pre-built Ask Heaven compliance links for eviction page
 const complianceLinks = {
@@ -70,69 +71,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'How long does it take to evict a tenant in the UK?',
-    answer:
-      'Eviction timelines vary by jurisdiction and grounds. England: 3-6 months (Section 21: 4-5 months; Section 8 rent arrears: 3-4 months). Wales: 4-6 months under Renting Homes Act. Scotland: 4-8 months via First-tier Tribunal. Northern Ireland: 3-6 months. Contested cases take longer.',
-  },
-  {
-    question: 'Can I evict a tenant without a reason?',
-    answer:
-      'In England (until May 2026), you can use Section 21 for "no-fault" eviction. Wales abolished no-fault eviction in December 2022. Scotland requires one of 18 eviction grounds under the PRT. After May 2026, England will also require grounds for eviction.',
-  },
-  {
-    question: 'What is the cheapest way to evict a tenant?',
-    answer:
-      'The cheapest legal route is DIY eviction using proper notices and court forms. Our Notice Only pack (£49.99) includes court-ready notices. For the full process including court forms, the Complete Eviction Pack (£199.99) covers everything from notice to possession order.',
-  },
-  {
-    question: 'Do I need a solicitor to evict a tenant?',
-    answer:
-      'No, you can represent yourself in possession proceedings. Most landlord evictions are straightforward if you follow correct procedures. Solicitors typically charge £1,500-3,000+. Our document packs provide everything you need for DIY eviction.',
-  },
-  {
-    question: 'What happens if my tenant refuses to leave after eviction notice?',
-    answer:
-      'If the tenant does not leave after the notice period expires, you must apply to court (England/Wales), First-tier Tribunal (Scotland), or county court (Northern Ireland) for a possession order. You cannot legally remove tenants yourself - only court bailiffs can enforce eviction.',
-  },
-  {
-    question: 'Can I evict a tenant for not paying rent?',
-    answer:
-      'Yes. England: Use Section 8 Ground 8 (2+ months arrears) or Ground 10/11. Wales: Use serious rent arrears grounds under Renting Homes Act. Scotland: Use Ground 12 (3+ consecutive months arrears). All require serving the correct notice with proper notice periods.',
-  },
-  {
-    question: 'What is the Section 21 ban?',
-    answer:
-      'The Renters Rights Act 2025 abolishes Section 21 "no-fault" evictions in England from 1 May 2026. After this date, landlords must use grounds-based eviction (similar to Section 8). Wales already abolished equivalent no-fault eviction in December 2022.',
-  },
-  {
-    question: 'Can I evict a tenant during winter?',
-    answer:
-      'Yes, there is no legal prohibition on evictions during winter in the UK. However, courts may be slower during Christmas/New Year periods. The eviction process continues year-round.',
-  },
-  {
-    question: 'How do I evict a tenant in Scotland?',
-    answer:
-      'In Scotland, you must serve a Notice to Leave citing one of 18 eviction grounds under the Private Housing (Tenancies) (Scotland) Act 2016. Notice periods range from 28 to 84 days depending on the ground. If the tenant does not leave, apply to the First-tier Tribunal for an eviction order.',
-  },
-  {
-    question: 'How do I evict a tenant in Wales?',
-    answer:
-      'Wales uses the Renting Homes (Wales) Act 2016. You must serve appropriate notices under this Act (not Section 21/Section 8). Notice periods and grounds differ from England. Standard contracts require 6 months notice for landlord-initiated possession.',
-  },
-  {
-    question: 'What documents do I need to evict a tenant?',
-    answer:
-      'Required documents vary by jurisdiction but typically include: valid tenancy agreement, proof of deposit protection, gas safety certificate, EPC, How to Rent guide (England), the correct eviction notice, and court claim forms. Our Complete Eviction Pack includes all necessary documents.',
-  },
-  {
-    question: 'Can I change the locks to evict a tenant?',
-    answer:
-      'No. Changing locks or removing a tenant without a court order is illegal "self-help" eviction and a criminal offence under the Protection from Eviction Act 1977. You must follow the legal eviction process through the courts.',
-  },
-];
-
 export default function HowToEvictTenantPage() {
   return (
     <>
@@ -146,7 +84,6 @@ export default function HowToEvictTenantPage() {
           dateModified: '2026-01-01',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -830,7 +767,7 @@ export default function HowToEvictTenantPage() {
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
-          faqs={faqs}
+          faqs={howToEvictTenantFAQs}
           showContactCTA={false}
           variant="white"
         />

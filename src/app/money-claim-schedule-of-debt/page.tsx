@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
@@ -11,9 +11,10 @@ import {
   Table,
   ClipboardList,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { scheduleOfDebtFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Schedule of Debt Template for Landlords 2026 | Rent Arrears Breakdown',
@@ -43,59 +44,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a Schedule of Debt?',
-    answer:
-      'A Schedule of Debt is a detailed breakdown showing exactly what the debtor owes and how you calculated it. For landlord claims, it typically lists rent due, rent paid, arrears by period, damage costs, other debts, and interest - all totalled clearly.',
-  },
-  {
-    question: 'Is a Schedule of Debt required for court?',
-    answer:
-      'It\'s not a formal court requirement, but judges strongly expect itemised breakdowns. A clear Schedule of Debt makes your claim easier to understand and more likely to succeed. It\'s also required as part of the Pre-Action Protocol for Debt Claims.',
-  },
-  {
-    question: 'What should a landlord\'s Schedule of Debt include?',
-    answer:
-      'Include: rent periods and amounts due, payments received and dates, outstanding balance per period, any other debts (utilities, damage, etc.) with dates and amounts, interest calculation, and grand total. Show your working clearly.',
-  },
-  {
-    question: 'How do I calculate rent arrears in the schedule?',
-    answer:
-      'List each rent period chronologically. Show: rent due for that period, any payment received, running balance. For example: "March 2025: £1,200 due, £0 paid, balance £1,200. April 2025: £1,200 due, £500 paid, balance £1,900."',
-  },
-  {
-    question: 'Should I include interest in the Schedule of Debt?',
-    answer:
-      'Yes. Show interest as a separate line item. Calculate at 8% per year (statutory rate) from when each debt was due until your claim date. Break down the calculation so the court can verify it.',
-  },
-  {
-    question: 'What if the tenant made partial payments?',
-    answer:
-      'Record every payment received with dates and amounts. Apply payments to the oldest debt first (unless agreed otherwise). Your schedule should clearly show the running balance after each payment.',
-  },
-  {
-    question: 'Can I include multiple debt types in one schedule?',
-    answer:
-      'Yes. Group them logically: rent arrears in one section, damage costs in another, utilities in another. Total each section, then show the grand total at the end. This helps the court understand your claim.',
-  },
-  {
-    question: 'How detailed should damage costs be in the schedule?',
-    answer:
-      'List each item of damage separately with: description, date discovered, repair cost (quote or invoice), and reference to supporting evidence. For example: "Carpet replacement (bedroom) - £450 - per invoice dated 15/03/2025".',
-  },
-  {
-    question: 'What format should I use?',
-    answer:
-      'A table format works best. Use spreadsheet software or create a simple table with columns for: Date, Description, Amount Due, Amount Paid, Balance. Keep it clear and easy to read.',
-  },
-  {
-    question: 'Should I attach supporting documents?',
-    answer:
-      'Reference supporting documents in your schedule (e.g., "per invoice at Exhibit 3") but don\'t attach everything to the schedule itself. Keep the schedule clean; provide supporting documents separately as exhibits.',
-  },
-];
-
 export default function MoneyClaimScheduleOfDebtPage() {
   return (
     <>
@@ -109,7 +57,6 @@ export default function MoneyClaimScheduleOfDebtPage() {
           dateModified: '2026-01-15',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -425,10 +372,12 @@ export default function MoneyClaimScheduleOfDebtPage() {
         <section className="py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
-              </h2>
-              <FAQSection faqs={faqs} />
+              <FAQSection
+                faqs={scheduleOfDebtFAQs}
+                title="Schedule of Debt FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
           </div>
         </section>

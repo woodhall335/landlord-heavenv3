@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { tenancyAgreementTemplateFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
@@ -32,49 +34,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is an Assured Shorthold Tenancy Agreement (AST)?',
-    answer: 'An Assured Shorthold Tenancy (AST) is the default private residential tenancy in England. It is a legally binding contract between a landlord and tenant that grants the tenant exclusive possession of a property for a fixed term (typically 6-12 months) or on a periodic (rolling) basis. ASTs are governed by the Housing Act 1988 and provide both parties with defined rights and obligations, including the landlord\'s right to regain possession using Section 21 or Section 8 notices.',
-  },
-  {
-    question: 'Is your AST template legally valid in court?',
-    answer: 'Yes. Our AST templates are drafted by legal professionals to comply with the Housing Act 1988 (as amended), Landlord and Tenant Act 1985, Tenant Fees Act 2019, and all current England tenancy legislation. A properly executed AST from Landlord Heaven is legally binding and defensible in county court possession proceedings, provided you have also met your other landlord obligations such as deposit protection and providing the How to Rent guide.',
-  },
-  {
-    question: 'What clauses are commonly missing from free AST templates?',
-    answer: 'Free templates often lack critical clauses including: (1) Tenant Fees Act 2019 compliant deposit caps, (2) clear break clause provisions, (3) rent review mechanisms compliant with Section 13, (4) inventory obligations for deposit disputes, (5) HMO-specific terms for shared properties, (6) proper notice requirements for periodic tenancies, (7) utility and council tax responsibility clauses, and (8) garden/exterior maintenance obligations. Missing these clauses can leave landlords vulnerable in disputes.',
-  },
-  {
-    question: 'Can I use this template for Houses in Multiple Occupation (HMOs)?',
-    answer: 'Yes, but we recommend our Premium AST (£24.99) for HMOs. The Premium version includes additional clauses covering shared facilities, room-specific terms, multiple tenant obligations, joint and several liability, and HMO licence compliance requirements. Standard ASTs may not adequately address the complexities of multi-tenant properties.',
-  },
-  {
-    question: 'What is the difference between Standard and Premium AST templates?',
-    answer: 'The Standard AST (£14.99) includes all legally required clauses for a compliant tenancy: deposit protection terms, rent payment obligations, maintenance responsibilities, and proper termination provisions. The Premium AST (£24.99) adds 13 comprehensive terms and conditions, detailed inventory sections, professional styling, rights of change clauses, HMO coverage, and enhanced legal compliance information boxes.',
-  },
-  {
-    question: 'Do I need to have my AST witnessed or notarised?',
-    answer: 'No. AST agreements do not require witnesses or notarisation to be legally valid in England. The agreement becomes binding when signed by both the landlord (or their agent) and the tenant(s). However, we recommend having each party sign in the presence of the other and exchanging signed copies immediately. Both parties should retain their signed copy for the duration of the tenancy.',
-  },
-  {
-    question: 'What happens if I evict a tenant without a proper written AST?',
-    answer: 'While verbal tenancies can exist, evicting without a written AST creates significant problems: (1) You cannot serve a valid Section 21 notice without providing the prescribed information, (2) dispute resolution becomes difficult without documented terms, (3) deposit disputes are harder to defend, and (4) courts may question the tenancy terms. Always use a written AST to protect your interests.',
-  },
-  {
-    question: 'Can I modify the AST template after downloading?',
-    answer: 'Our wizard collects all necessary information upfront to generate a complete, ready-to-sign agreement. The generated PDF is final and professional. If you need to make subsequent changes, you can either create a new agreement through the wizard or use a Lease Addendum (variation agreement) to document modifications. Any changes must be signed by all parties to be legally effective.',
-  },
-  {
-    question: 'How does your AST template link to eviction procedures?',
-    answer: 'Our AST templates are designed to work seamlessly with the Section 21 and Section 8 eviction processes. The agreement includes the correct prescribed terms, deposit protection clauses, and notice provisions required for valid eviction notices. If you later need to evict, our Complete Eviction Pack uses the same case information to generate court-ready notices and possession claim forms.',
-  },
-  {
-    question: 'What must I provide to tenants alongside the AST?',
-    answer: 'Before or at the start of an AST in England, you must provide: (1) A copy of the current How to Rent guide, (2) Gas Safety Certificate (if gas appliances present), (3) Energy Performance Certificate (EPC), (4) Electrical Installation Condition Report (EICR), and (5) Deposit protection certificate and prescribed information within 30 days. Failure to provide these documents can invalidate Section 21 notices.',
-  },
-];
-
 export default function AssuredShortholdTenancyAgreementTemplatePage() {
   return (
     <>
@@ -87,7 +46,6 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
           dateModified: '2026-01-25',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -313,15 +271,12 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
         {/* FAQ Section */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
+            <FAQSection
+              faqs={tenancyAgreementTemplateFAQs}
+              title="Frequently Asked Questions"
+              showContactCTA={false}
+              variant="white"
+            />
           </div>
         </section>
 

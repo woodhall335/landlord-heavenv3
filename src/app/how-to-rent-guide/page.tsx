@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { howToRentGuideFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'How to Rent Guide | Landlord Requirements UK 2026',
@@ -28,34 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is the How to Rent guide?',
-    answer:
-      'The How to Rent guide is a government document that explains tenants\' rights and responsibilities. Landlords in England must provide it to tenants at the start of new tenancies.',
-  },
-  {
-    question: 'When do I need to provide the How to Rent guide?',
-    answer:
-      'You must provide it before the tenancy begins or on the day it starts. For new tenants, provide it before they move in. You don\'t need to re-issue it for renewals with the same tenant unless a new version has been published.',
-  },
-  {
-    question: 'What happens if I don\'t provide the How to Rent guide?',
-    answer:
-      'You cannot serve a valid Section 21 notice until you have provided the How to Rent guide. This means you cannot use the accelerated possession procedure for no-fault evictions.',
-  },
-  {
-    question: 'Which version of the How to Rent guide should I use?',
-    answer:
-      'Always use the version that was current at the start of the tenancy. If a new version is published during the tenancy, you don\'t need to re-issue it unless the tenant starts a new tenancy.',
-  },
-  {
-    question: 'How do I prove I provided the How to Rent guide?',
-    answer:
-      'Keep evidence that you provided it - email delivery confirmation, signed receipt from the tenant, or a clause in the tenancy agreement confirming receipt. This evidence may be needed for court.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'How to Rent Guide', url: '/how-to-rent-guide' },
@@ -64,7 +38,6 @@ const breadcrumbs = [
 export default function HowToRentGuidePage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -194,17 +167,13 @@ export default function HowToRentGuidePage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={howToRentGuideFAQs}
+                title="How to Rent Guide FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}
