@@ -83,6 +83,9 @@ export interface MoneyClaimFacts {
   enforcement_reviewed?: boolean;
   enforcement_preference?: string;
 
+  // Court details
+  court_name?: string;
+
   // Money claim nested object
   money_claim?: {
     primary_issue?: string;
@@ -98,6 +101,17 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    court_name?: string;
+    // Totals for combined claim amount calculation
+    totals?: {
+      rent_arrears?: number;
+      damage?: number;
+      cleaning?: number;
+      utilities?: number;
+      council_tax?: number;
+      other?: number;
+      combined_total?: number;
+    };
   };
 
   // Issues nested (legacy)
@@ -237,7 +251,7 @@ export function validateTenancySection(
  */
 export function validateClaimDetailsSection(
   facts: MoneyClaimFacts,
-  _jurisdiction: Jurisdiction
+  jurisdiction: Jurisdiction
 ): { blockers: string[]; warnings: string[] } {
   const blockers: string[] = [];
   const warnings: string[] = [];
@@ -247,6 +261,14 @@ export function validateClaimDetailsSection(
   // Must select at least one claim type
   if (reasons.size === 0) {
     blockers.push('Please select at least one type of claim');
+  }
+
+  // England/Wales: Court name is required for N1 form
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
+    const courtName = facts.money_claim?.court_name || (facts as any).court_name;
+    if (!courtName) {
+      blockers.push('Please enter the County Court name where you will file your claim');
+    }
   }
 
   // England: must explicitly opt in/out of statutory interest
@@ -287,6 +309,11 @@ export function validateClaimDetailsSection(
 
 /**
  * Validate arrears section
+ *
+ * Warning behavior:
+ * - Only show "no arrears periods" blocker when schedule is empty and user has selected rent arrears
+ * - Only show "incomplete row" warning when there are actually incomplete rows (not just empty schedule)
+ * - Only show "outstanding balance = 0" warning when at least one complete row exists
  */
 export function validateArrearsSection(
   facts: MoneyClaimFacts
@@ -303,29 +330,46 @@ export function validateArrearsSection(
     facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
 
   if (items.length === 0) {
-    blockers.push('Please add at least one arrears entry to the schedule');
+    // Only block if user has selected rent arrears but hasn't added any periods
+    blockers.push('Please add at least one arrears period to the schedule');
   } else {
-    // Check for incomplete entries
-    const incompleteItems = items.filter(
-      (item) =>
-        !item.period_start ||
-        !item.period_end ||
-        item.rent_due === null ||
-        item.rent_due === undefined
-    );
+    // Check for incomplete entries - only items that have SOME data but are missing fields
+    const incompleteItems = items.filter((item) => {
+      const hasAnyData =
+        item.period_start ||
+        item.period_end ||
+        item.rent_due !== null ||
+        item.rent_paid !== null;
+      const isComplete =
+        item.period_start &&
+        item.period_end &&
+        item.rent_due !== null &&
+        item.rent_due !== undefined;
+      return hasAnyData && !isComplete;
+    });
 
     if (incompleteItems.length > 0) {
       warnings.push(
-        `${incompleteItems.length} arrears ${incompleteItems.length === 1 ? 'entry has' : 'entries have'} incomplete information`
+        `${incompleteItems.length} arrears ${incompleteItems.length === 1 ? 'period has' : 'periods have'} incomplete information`
       );
     }
 
-    // Check total
-    const total = calculateTotalArrears(facts);
-    if (total <= 0) {
-      warnings.push(
-        'Your arrears schedule shows no outstanding balance - check the amounts'
-      );
+    // Check total - only warn if there are complete items but total is zero
+    const completeItems = items.filter(
+      (item) =>
+        item.period_start &&
+        item.period_end &&
+        item.rent_due !== null &&
+        item.rent_due !== undefined
+    );
+
+    if (completeItems.length > 0) {
+      const total = calculateTotalArrears(facts);
+      if (total <= 0) {
+        warnings.push(
+          'Your arrears schedule shows no outstanding balance - the tenant may have paid all rent owed'
+        );
+      }
     }
   }
 

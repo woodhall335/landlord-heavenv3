@@ -234,6 +234,43 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       {/* Court Finder Link */}
       <CourtFinderLink jurisdiction="england" context="money_claim" />
 
+      {/* Court Name Input - required for N1 form */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-charcoal">
+          County Court name <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          className={`w-full rounded-md border px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] ${
+            !moneyClaim.court_name && !facts.court_name
+              ? 'border-amber-300 bg-amber-50'
+              : 'border-gray-300'
+          }`}
+          value={moneyClaim.court_name || facts.court_name || ''}
+          onChange={(e) => {
+            // Store in both money_claim.court_name and top-level court_name
+            onUpdate({
+              court_name: e.target.value,
+              money_claim: {
+                ...moneyClaim,
+                court_name: e.target.value,
+              },
+            });
+          }}
+          placeholder="e.g. Manchester County Court"
+        />
+        <p className="text-xs text-gray-500">
+          Enter the County Court you found using the HMCTS Court Finder above.
+          This will appear on your N1 claim form.
+        </p>
+        {!moneyClaim.court_name && !facts.court_name && (
+          <p className="text-xs text-amber-600 flex items-center gap-1">
+            <RiInformationLine className="w-3.5 h-3.5" />
+            Please enter the court name to continue
+          </p>
+        )}
+      </div>
+
       {/* MAIN CHANGE: Checkbox-based claim reasons selector */}
       <div className="space-y-3">
         <label className="text-sm font-medium text-charcoal">

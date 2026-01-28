@@ -41,11 +41,70 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisd
     return reasons;
   }, [facts]);
 
+  /**
+   * Calculate subtotals by category from damage items
+   */
+  const calculateCategoryTotals = (itemsList: DamageItem[]) => {
+    const totals = {
+      damage: 0,
+      cleaning: 0,
+      utilities: 0,
+      council_tax: 0,
+      other: 0,
+    };
+
+    itemsList.forEach((item) => {
+      const amount = item.amount || 0;
+      switch (item.category) {
+        case 'property_damage':
+          totals.damage += amount;
+          break;
+        case 'cleaning':
+          totals.cleaning += amount;
+          break;
+        case 'unpaid_utilities':
+          totals.utilities += amount;
+          break;
+        case 'unpaid_council_tax':
+          totals.council_tax += amount;
+          break;
+        case 'legal_costs':
+        case 'other':
+        default:
+          totals.other += amount;
+          break;
+      }
+    });
+
+    return totals;
+  };
+
+  /**
+   * Persist damage items and update money_claim.totals for combined total calculation
+   */
   const persist = (nextItems: DamageItem[]) => {
+    const categoryTotals = calculateCategoryTotals(nextItems);
+    const existingTotals = moneyClaim.totals || {};
+
+    // Calculate new combined total
+    const rentArrearsTotal = existingTotals.rent_arrears || facts.total_arrears || 0;
+    const combinedTotal =
+      rentArrearsTotal +
+      categoryTotals.damage +
+      categoryTotals.cleaning +
+      categoryTotals.utilities +
+      categoryTotals.council_tax +
+      categoryTotals.other;
+
     onUpdate({
       money_claim: {
         ...moneyClaim,
         damage_items: nextItems,
+        totals: {
+          ...existingTotals,
+          ...categoryTotals,
+          combined_total: combinedTotal,
+        },
       },
     });
   };

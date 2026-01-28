@@ -25,6 +25,11 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
     onUpdate({ [field]: value });
   };
 
+  /**
+   * Updates tenant data in both nested (parties.tenants[index].*) and top-level keys.
+   * The validator expects top-level keys like tenant_full_name, defendant_address_line1, etc.
+   * We maintain both for backward compatibility and to ensure validation works correctly.
+   */
   const updateTenant = (index: number, field: string, value: string) => {
     const updatedTenants = [...tenants];
     const existing = updatedTenants[index] || {};
@@ -33,12 +38,31 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
       [field]: value,
     };
 
-    onUpdate({
+    // Map nested fields to top-level validator keys (only for primary defendant - index 0)
+    const topLevelKeyMap: Record<string, string> = {
+      name: 'tenant_full_name',
+      address_line1: 'defendant_address_line1',
+      address_line2: 'defendant_address_line2',
+      postcode: 'defendant_address_postcode',
+      email: 'tenant_email',
+      phone: 'tenant_phone',
+    };
+
+    const topLevelKey = index === 0 ? topLevelKeyMap[field] : undefined;
+
+    const updates: Record<string, any> = {
       parties: {
         ...(facts.parties || {}),
         tenants: updatedTenants,
       },
-    });
+    };
+
+    // Also write to top-level key for validator compatibility (primary defendant only)
+    if (topLevelKey) {
+      updates[topLevelKey] = value;
+    }
+
+    onUpdate(updates);
   };
 
   const handleJointDefendantsToggle = (enabled: boolean) => {
@@ -77,7 +101,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={mainTenant.name || ''}
+            value={mainTenant.name || facts.tenant_full_name || ''}
             onChange={(e) => updateTenant(0, 'name', e.target.value)}
             placeholder="e.g. John Tenant"
           />
@@ -93,7 +117,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={mainTenant.address_line1 || ''}
+            value={mainTenant.address_line1 || facts.defendant_address_line1 || ''}
             onChange={(e) => updateTenant(0, 'address_line1', e.target.value)}
             placeholder="Usually the let property address"
           />
@@ -107,7 +131,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={mainTenant.address_line2 || ''}
+              value={mainTenant.address_line2 || facts.defendant_address_line2 || ''}
               onChange={(e) => updateTenant(0, 'address_line2', e.target.value)}
               placeholder="Town/city"
             />
@@ -120,7 +144,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={mainTenant.postcode || ''}
+              value={mainTenant.postcode || facts.defendant_address_postcode || ''}
               onChange={(e) => updateTenant(0, 'postcode', e.target.value)}
               placeholder="e.g. SW1A 1AA"
             />
