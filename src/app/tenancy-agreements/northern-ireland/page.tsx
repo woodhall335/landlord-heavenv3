@@ -4,11 +4,11 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
-  title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
-  description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022 and 2025 EICR rules. From £9.99.',
+  title: 'Private Tenancy Agreement Northern Ireland 2026 | From £14.99',
+  description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022 and 2025 EICR rules. From £14.99.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {
-    title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
+    title: 'Private Tenancy Agreement Northern Ireland 2026 | From £14.99',
     description: 'Create a legally compliant Private Tenancy Agreement for NI. Updated for 2026 with 2025 EICR requirements and rent increase restrictions.',
     type: 'website',
     url: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
@@ -76,7 +76,7 @@ export default function NorthernIrelandTenancyPage() {
       {
         '@type': 'Offer',
         name: 'Standard Private Tenancy',
-        price: '9.99',
+        price: '14.99',
         priceCurrency: 'GBP',
         priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         availability: 'https://schema.org/InStock',
@@ -194,13 +194,13 @@ export default function NorthernIrelandTenancyPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-secondary"
               >
-                Create Standard - £9.99
+                Create Standard - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-primary"
               >
-                Create Premium - £14.99
+                Create Premium - £24.99
               </Link>
             </div>
           </div>
@@ -741,7 +741,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard - £9.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ All legal essentials for NI tenancies</li>
                     <li>✓ 2025 legal updates (EICR, rent restrictions)</li>
@@ -762,7 +762,7 @@ export default function NorthernIrelandTenancyPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium - £14.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium - £24.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ Everything in Standard PLUS:</li>
                     <li>✓ Comprehensive inventory section with white goods grid</li>
@@ -988,7 +988,7 @@ export default function NorthernIrelandTenancyPage() {
             },
             {
               question: "What is the difference between Standard and Premium agreements?",
-              answer: "The Standard (£9.99) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (£14.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation."
+              answer: "The Standard (£14.99) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (£24.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation."
             },
             {
               question: "What is the maximum deposit I can charge in Northern Ireland?",
@@ -1066,13 +1066,13 @@ export default function NorthernIrelandTenancyPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard - £9.99
+                Standard - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium - £14.99 ⭐
+                Premium - £24.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

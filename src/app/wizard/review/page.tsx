@@ -2479,7 +2479,7 @@ function NoticeOnlyReviewContent({
         </ul>
         <div className="mt-4 pt-4 border-t">
           <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">£39.99</span>
+            Price: <span className="font-semibold text-gray-900">£49.99</span>
           </p>
         </div>
       </Card>
@@ -3061,7 +3061,7 @@ function TenancyReviewContent({
         </div>
         <div className="mt-4 pt-4 border-t">
           <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">{isPremium ? '£14.99' : '£9.99'}</span>
+            Price: <span className="font-semibold text-gray-900">{isPremium ? '£14.99' : '£14.99'}</span>
           </p>
         </div>
       </Card>

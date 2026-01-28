@@ -92,7 +92,7 @@ export default function Section21NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '39.99',
+        highPrice: '49.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -108,7 +108,7 @@ export default function Section21NoticeTemplatePage() {
         name: 'Is the Section 21 notice template free?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version using the official Form 6A format, the cost is £39.99.',
+          text: 'Yes, we offer a free Section 21 notice template that you can preview. For a court-ready version using the official Form 6A format, the cost is £49.99.',
         },
       },
       {
@@ -163,7 +163,7 @@ export default function Section21NoticeTemplatePage() {
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
           title="Section 21 Notice Template (England) / Court-Ready Form 6A"
           subtitle={<>Download a free <strong>Section 21 notice template</strong> or generate a court-ready <strong>Form 6A</strong> in minutes. Trusted by over 10,000 UK landlords.</>}
-          primaryCTA={{ label: "Get Court-Ready Notice — £39.99", href: wizardLink }}
+          primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLink }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
         >
@@ -273,7 +273,7 @@ export default function Section21NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£39.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£49.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -518,7 +518,7 @@ export default function Section21NoticeTemplatePage() {
                   <p className="text-gray-600">
                     Yes, we offer a free Section 21 notice template that you can preview and use
                     for educational purposes. For a court-ready version using the official Form 6A
-                    format, the cost is £39.99.
+                    format, the cost is £49.99.
                   </p>
                 </div>
 
@@ -604,7 +604,7 @@ export default function Section21NoticeTemplatePage() {
                   href={wizardLink}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Court-Ready — £39.99
+                  Get Court-Ready — £49.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

@@ -127,14 +127,14 @@ const documentOptions: DocumentOption[] = [
     title: 'Eviction Notices',
     description: 'Court-ready possession notices for England, Wales & Scotland with service instructions',
     icon: '📄',
-    price: 'From £39.99',
+    price: 'From £49.99',
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
     description: 'Full bundle from notice to possession order with court forms and guidance',
     icon: '⚖️',
-    price: '£149.99',
+    price: '£199.99',
     regionBadge: 'England only',
   },
   {
@@ -142,7 +142,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Money Claims',
     description: 'Rent arrears claims with evidence checklists and court form templates',
     icon: '💰',
-    price: '£99.99',
+    price: '£149.99',
     regionBadge: 'England only',
   },
   {
@@ -150,7 +150,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Tenancy Agreements',
     description: 'AST (England), Occupation Contract (Wales), PRT (Scotland), or NI Tenancy Agreement',
     icon: '📝',
-    price: 'From £9.99',
+    price: 'From £14.99',
   },
 ];
 

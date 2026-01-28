@@ -181,7 +181,7 @@ export default function TenancyAgreementTemplatePage() {
           badgeIcon={<FileText className="w-4 h-4" />}
           title="Tenancy Agreement Template UK"
           subtitle={<>Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
-          primaryCTA={{ label: "Get Premium AST — £14.99", href: wizardLinkAST }}
+          primaryCTA={{ label: "Get Premium AST — £24.99", href: wizardLinkAST }}
           secondaryCTA={{ label: "View Free Templates", href: "/tenancy-agreements" }}
           variant="pastel"
         >
@@ -747,7 +747,7 @@ export default function TenancyAgreementTemplatePage() {
                   href={wizardLinkAST}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Premium AST — £14.99
+                  Get Premium AST — £24.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

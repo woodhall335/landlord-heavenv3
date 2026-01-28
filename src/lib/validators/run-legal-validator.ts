@@ -258,15 +258,15 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
   if (product === 'notice_only') {
     return {
       product: 'eviction_pack',
-      price: 149.99,
-      reason: applyPricingMessage(149.99, 'Upgrade to the Eviction Pack for court-ready documents'),
+      price: 199.99,
+      reason: applyPricingMessage(199.99, 'Upgrade to the Eviction Pack for court-ready documents'),
     };
   }
   if (product === 'money_claim') {
     return {
       product: 'money_claim_pack',
-      price: 179.99,
-      reason: applyPricingMessage(179.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
+      price: 149.99,
+      reason: applyPricingMessage(149.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
     };
   }
   if (product === 'tenancy_agreement') {
@@ -274,14 +274,14 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
     if (tier !== 'premium') {
       return {
         product: 'tenancy_premium',
-        price: 14.99,
-        reason: applyPricingMessage(14.99, 'Upgrade to the Premium Tenancy Agreement for enhanced clauses'),
+        price: 24.99,
+        reason: applyPricingMessage(24.99, 'Upgrade to the Premium Tenancy Agreement for enhanced clauses'),
       };
     }
     return {
       product: 'tenancy_standard',
-      price: 9.99,
-      reason: applyPricingMessage(9.99, 'Standard tenancy agreement remains available'),
+      price: 14.99,
+      reason: applyPricingMessage(14.99, 'Standard tenancy agreement remains available'),
     };
   }
   return undefined;

@@ -74,7 +74,7 @@ const faqs = [
   },
   {
     question: 'How much does it cost to evict a tenant through court?',
-    answer: 'Court fees are approximately £355 for possession claims, plus £130 for a bailiff warrant if needed. Using our Complete Pack (£149.99) can save hundreds compared to solicitor fees (typically £1,000-2,000).',
+    answer: 'Court fees are approximately £355 for possession claims, plus £130 for a bailiff warrant if needed. Using our Complete Pack (£199.99) can save hundreds compared to solicitor fees (typically £1,000-2,000).',
   },
   {
     question: 'Can the tenant stop the eviction?',
@@ -124,7 +124,7 @@ export default function TenantWontLeavePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenant Won't Leave After Notice?"
           subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
-          primaryCTA={{ label: 'Get Court-Ready Notice — £39.99', href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: 'Get Court-Ready Notice — £49.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'Need Court Forms Too?', href: '/products/complete-pack' }}
           variant="pastel"
         >

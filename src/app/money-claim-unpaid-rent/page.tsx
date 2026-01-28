@@ -154,7 +154,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   href="/products/money-claim"
                   className="inline-flex items-center justify-center gap-2 bg-white text-green-800 font-semibold py-4 px-8 rounded-xl hover:bg-green-50 transition-colors"
                 >
-                  Get Money Claim Pack — £99.99
+                  Get Money Claim Pack — £149.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -528,7 +528,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
                 >
                   <FileText className="w-4 h-4" />
-                  Get Money Claim Pack — £99.99
+                  Get Money Claim Pack — £149.99
                 </Link>
               </div>
             </div>
@@ -799,7 +799,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   href="/products/money-claim"
                   className="inline-flex items-center justify-center gap-2 bg-white text-green-700 font-semibold py-4 px-8 rounded-xl hover:bg-green-50 transition-colors"
                 >
-                  Get Money Claim Pack — £99.99
+                  Get Money Claim Pack — £149.99
                 </Link>
                 <Link
                   href="/tools/rent-arrears-calculator"
@@ -823,7 +823,7 @@ export default function MoneyClaimUnpaidRentPage() {
                 jurisdictionLabel="UK money claims"
                 scenarioLabel="recovering rent arrears"
                 primaryCTA={{
-                  label: 'Start money claim pack — £99.99',
+                  label: 'Start money claim pack — £149.99',
                   href: productLinks.moneyClaim.href,
                 }}
                 secondaryCTA={{

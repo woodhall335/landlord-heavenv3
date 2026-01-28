@@ -159,7 +159,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
                 <p className="text-gray-700 mb-4">
-                  Generate professional documents in 10-15 minutes for £9.99-£149.99. That's 95% cheaper than
+                  Generate professional documents in 10-15 minutes for £14.99-£199.99. That's 95% cheaper than
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">

@@ -159,7 +159,7 @@ export default function Section8NoticeTemplatePage() {
           badgeIcon={<CheckCircle className="w-4 h-4" />}
           title="Section 8 Notice (Form 3) — Free Template for England"
           subtitle={<>Download a free <strong>Section 8 notice</strong> template for England. Grounds-based eviction for rent arrears (Ground 8, 10, 11), antisocial behaviour, property damage and more.</>}
-          primaryCTA={{ label: "Get Complete Pack — £149.99", href: wizardLinkCompletePack }}
+          primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
           variant="pastel"
         >
@@ -421,7 +421,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
-                  Get both notices for £39.99
+                  Get both notices for £49.99
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -491,7 +491,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Complete Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£149.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£199.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -533,7 +533,7 @@ export default function Section8NoticeTemplatePage() {
                 <p className="text-gray-600">
                   Just need the notice? Get{' '}
                   <Link href={wizardLinkNoticeOnly} className="text-primary font-medium hover:underline">
-                    Notice Only for £39.99
+                    Notice Only for £49.99
                   </Link>
                   {' '}(Section 8 + Section 21 included)
                 </p>
@@ -722,7 +722,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkCompletePack}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Complete Pack — £149.99
+                  Get Complete Pack — £199.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

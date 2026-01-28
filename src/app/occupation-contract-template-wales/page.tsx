@@ -8,7 +8,7 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Occupation Contract Template Wales 2026 | Renting Homes Act Compliant',
-  description: 'Download a legally compliant Occupation Contract template for Wales. Fully compliant with Renting Homes (Wales) Act 2016. Written statement included. From £9.99.',
+  description: 'Download a legally compliant Occupation Contract template for Wales. Fully compliant with Renting Homes (Wales) Act 2016. Written statement included. From £14.99.',
   keywords: [
     'occupation contract template Wales',
     'Welsh tenancy agreement',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Occupation Contract Template Wales 2026 | Renting Homes Act Compliant',
-    description: 'Download an Occupation Contract template for Wales. Renting Homes (Wales) Act 2016 compliant. From £9.99.',
+    description: 'Download an Occupation Contract template for Wales. Renting Homes (Wales) Act 2016 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/occupation-contract-template-wales'),
   },
@@ -130,13 +130,13 @@ export default function OccupationContractTemplateWalesPage() {
                 href="/wizard?product=ast_standard&src=seo_occupation_wales&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
-                Standard Contract — £9.99
+                Standard Contract — £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_occupation_wales&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Premium Contract — £14.99
+                Premium Contract — £24.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Written statement included • Instant PDF • Fully compliant</p>
@@ -266,11 +266,11 @@ export default function OccupationContractTemplateWalesPage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Wales Eviction Notices — £39.99</h3>
+                <h3 className="font-semibold text-gray-900">Wales Eviction Notices — £49.99</h3>
                 <p className="text-sm text-gray-600">Section 173 and Section 181 notices for Welsh properties</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £99.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack — £149.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears and damage costs through Welsh courts</p>
               </Link>
             </div>

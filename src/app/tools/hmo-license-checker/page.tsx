@@ -745,7 +745,7 @@ export default function HMOLicenseChecker() {
                 for all tenants. Individual agreements give you more flexibility (tenants can move out
                 independently) but require more administration. Joint agreements make all tenants
                 jointly and severally liable for the rent, providing more security. Our paid HMO
-                tenancy agreement product (from £9.99) includes both options with HMO-specific terms.
+                tenancy agreement product (from £14.99) includes both options with HMO-specific terms.
               </p>
             </div>
           </div>

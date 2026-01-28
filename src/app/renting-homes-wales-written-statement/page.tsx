@@ -8,7 +8,7 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
-  description: 'Understand the written statement requirements under the Renting Homes (Wales) Act 2016. What must be included, 14-day deadline, and consequences of non-compliance. Template from £9.99.',
+  description: 'Understand the written statement requirements under the Renting Homes (Wales) Act 2016. What must be included, 14-day deadline, and consequences of non-compliance. Template from £14.99.',
   keywords: [
     'renting homes Wales written statement',
     'Wales written statement requirement',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
-    description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from £9.99.',
+    description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from £14.99.',
     type: 'article',
     url: getCanonicalUrl('/renting-homes-wales-written-statement'),
   },
@@ -138,7 +138,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
                 href="/wizard?product=ast_standard&src=seo_written_statement_wales&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Get Compliant Written Statement — £9.99
+                Get Compliant Written Statement — £14.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Includes all fundamental & supplementary terms required by law</p>

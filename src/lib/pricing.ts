@@ -6,12 +6,12 @@
  *
  * DO NOT modify these without updating the blueprint
  *
- * Regional Pricing (January 2026):
- * - Notice Only: £39.99 (England, Wales, Scotland)
- * - Eviction Pack: £149.99 (England only)
- * - Money Claim: £99.99 (England only)
- * - Tenancy Agreement: £9.99 (all UK regions)
- * - Premium TA (HMO): £14.99 (all UK regions)
+ * Regional Pricing (January 2026 - Updated):
+ * - Notice Only: £49.99 (England, Wales, Scotland)
+ * - Eviction Pack: £199.99 (England only)
+ * - Money Claim: £149.99 (England only)
+ * - Tenancy Agreement: £14.99 (all UK regions) - Standardised
+ * - Premium TA (HMO): £24.99 (all UK regions)
  */
 
 export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland';
@@ -22,30 +22,30 @@ export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland'
  */
 export const REGIONAL_PRICING = {
   notice_only: {
-    england: 39.99,
-    wales: 39.99,
-    scotland: 39.99,
+    england: 49.99,
+    wales: 49.99,
+    scotland: 49.99,
     // Not available in Northern Ireland
   },
   complete_pack: {
-    england: 149.99,
+    england: 199.99,
     // Wales, Scotland, NI not available
   },
   money_claim: {
-    england: 99.99,
+    england: 149.99,
     // Wales, Scotland, NI not available
   },
   tenancy_agreement: {
-    england: 9.99,
-    wales: 9.99,
-    scotland: 9.99,
-    northern_ireland: 9.99,
-  },
-  tenancy_agreement_premium: {
     england: 14.99,
     wales: 14.99,
     scotland: 14.99,
     northern_ireland: 14.99,
+  },
+  tenancy_agreement_premium: {
+    england: 24.99,
+    wales: 24.99,
+    scotland: 24.99,
+    northern_ireland: 24.99,
   },
 } as const;
 
@@ -85,13 +85,13 @@ export function getRegionalPrice(
 export const PRICING = {
   // Eviction Products (One-Time)
   // NOTE: These prices must match src/lib/pricing/products.ts (source of truth for UI)
-  NOTICE_ONLY: 39.99,
-  COMPLETE_EVICTION_PACK: 149.99,
-  MONEY_CLAIM_PACK: 99.99,
+  NOTICE_ONLY: 49.99,
+  COMPLETE_EVICTION_PACK: 199.99,
+  MONEY_CLAIM_PACK: 149.99,
 
   // Tenancy Products (One-Time)
-  STANDARD_AST: 9.99,
-  PREMIUM_AST: 14.99,
+  STANDARD_AST: 14.99,
+  PREMIUM_AST: 24.99,
 
   // HMO Pro Membership (TIERED SUBSCRIPTION)
   HMO_PRO: {

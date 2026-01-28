@@ -8,7 +8,7 @@ import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
-  description: 'Download a legally compliant Assured Shorthold Tenancy Agreement (AST) template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £9.99 with instant delivery.',
+  description: 'Download a legally compliant Assured Shorthold Tenancy Agreement (AST) template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99 with instant delivery.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'AST template',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
-    description: 'Download a legally compliant AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £9.99.',
+    description: 'Download a legally compliant AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/assured-shorthold-tenancy-agreement-template'),
   },
@@ -47,11 +47,11 @@ const faqs = [
   },
   {
     question: 'Can I use this template for Houses in Multiple Occupation (HMOs)?',
-    answer: 'Yes, but we recommend our Premium AST (£14.99) for HMOs. The Premium version includes additional clauses covering shared facilities, room-specific terms, multiple tenant obligations, joint and several liability, and HMO licence compliance requirements. Standard ASTs may not adequately address the complexities of multi-tenant properties.',
+    answer: 'Yes, but we recommend our Premium AST (£24.99) for HMOs. The Premium version includes additional clauses covering shared facilities, room-specific terms, multiple tenant obligations, joint and several liability, and HMO licence compliance requirements. Standard ASTs may not adequately address the complexities of multi-tenant properties.',
   },
   {
     question: 'What is the difference between Standard and Premium AST templates?',
-    answer: 'The Standard AST (£9.99) includes all legally required clauses for a compliant tenancy: deposit protection terms, rent payment obligations, maintenance responsibilities, and proper termination provisions. The Premium AST (£14.99) adds 13 comprehensive terms and conditions, detailed inventory sections, professional styling, rights of change clauses, HMO coverage, and enhanced legal compliance information boxes.',
+    answer: 'The Standard AST (£14.99) includes all legally required clauses for a compliant tenancy: deposit protection terms, rent payment obligations, maintenance responsibilities, and proper termination provisions. The Premium AST (£24.99) adds 13 comprehensive terms and conditions, detailed inventory sections, professional styling, rights of change clauses, HMO coverage, and enhanced legal compliance information boxes.',
   },
   {
     question: 'Do I need to have my AST witnessed or notarised?',
@@ -128,13 +128,13 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&src=seo_ast_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard AST — £9.99
+                Standard AST — £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_ast_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium AST — £14.99
+                Premium AST — £24.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Instant PDF download • No subscription • Legally binding</p>
@@ -291,15 +291,15 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £39.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £49.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 notices when you need to regain possession</p>
               </Link>
               <Link href="/products/complete-pack" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £149.99</h3>
+                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £199.99</h3>
                 <p className="text-sm text-gray-600">Full eviction package including court forms and witness statements</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £99.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack — £149.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears, property damage, and other tenant debts</p>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">

@@ -29,7 +29,7 @@ export default function RentDemandLetterGenerator() {
     toolName: 'Free Rent Demand Letter Generator',
     toolType: 'generator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack — £99.99',
+    ctaLabel: 'Upgrade to court-ready pack — £149.99',
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -845,7 +845,7 @@ URL.revokeObjectURL(url);
                 (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10,
                 or 11. (2) Start a money claim through the courts to recover the debt (without seeking
                 possession). (3) Continue to pursue payment informally while considering your options.
-                Our Complete Eviction Pack (£149.99) includes Section 8 notices with compliance checks.
+                Our Complete Eviction Pack (£199.99) includes Section 8 notices with compliance checks.
               </p>
             </div>
 

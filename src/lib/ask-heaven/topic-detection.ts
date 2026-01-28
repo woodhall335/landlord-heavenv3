@@ -105,7 +105,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 49.99, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
@@ -113,7 +113,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: 149.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: 199.99, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -121,7 +121,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears', 'damage_claim'],
     ctas: [
-      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 99.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 149.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -129,7 +129,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 39.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: 49.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
@@ -137,7 +137,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
     topics: ['tenancy', 'deposit'],
     ctas: [
       { label: 'Premium AST', href: '/products/ast?tier=premium', price: 14.99, topic: 'tenancy', type: 'wizard' },
-      { label: 'Standard AST', href: '/products/ast?tier=standard', price: 9.99, topic: 'tenancy', type: 'wizard' },
+      { label: 'Standard AST', href: '/products/ast?tier=standard', price: 14.99, topic: 'tenancy', type: 'wizard' },
     ],
     // Tenancy agreements are allowed in NI
   },
@@ -281,8 +281,8 @@ export function getRecommendedProduct(
         product: 'notice_only',
         label: jurisdiction === 'wales' ? 'Section 173 Notice' : 'Notice to Leave',
         description: jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act compliant notice for rent arrears (£39.99)'
-          : 'Create a Notice to Leave for rent arrears under PRT (£39.99)',
+          ? 'Generate a Renting Homes Act compliant notice for rent arrears (£49.99)'
+          : 'Create a Notice to Leave for rent arrears under PRT (£49.99)',
       };
     }
   }
@@ -294,34 +294,34 @@ export function getRecommendedProduct(
         product: 'notice_only',
         label: jurisdiction === 'wales' ? 'Section 173 Notice' : jurisdiction === 'scotland' ? 'Notice to Leave' : 'Eviction Notice',
         description: jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act compliant notice (£39.99)'
+          ? 'Generate a Renting Homes Act compliant notice (£49.99)'
           : jurisdiction === 'scotland'
-          ? 'Create a Notice to Leave for PRT tenancies (£39.99)'
-          : 'Create a compliant Section 21 or Section 8 notice (£39.99)',
+          ? 'Create a Notice to Leave for PRT tenancies (£49.99)'
+          : 'Create a compliant Section 21 or Section 8 notice (£49.99)',
       };
     case 'arrears':
       // Money claim is England-only
       return {
         product: 'money_claim',
         label: 'Money Claim Pack',
-        description: 'Recover rent arrears through the courts (£99.99, England only)',
+        description: 'Recover rent arrears through the courts (£149.99, England only)',
       };
     case 'damage_claim':
       // Money claim for damage/cleaning/utilities - England only
       return {
         product: 'money_claim',
         label: 'Money Claim Pack',
-        description: 'Recover property damage, cleaning costs and other tenant debts (£99.99, England only)',
+        description: 'Recover property damage, cleaning costs and other tenant debts (£149.99, England only)',
       };
     case 'tenancy':
       return {
         product: 'ast_standard',
         label: jurisdiction === 'scotland' ? 'PRT Agreement' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Tenancy Agreement',
         description: jurisdiction === 'scotland'
-          ? 'Create a compliant Private Residential Tenancy (£9.99)'
+          ? 'Create a compliant Private Residential Tenancy (£14.99)'
           : jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act occupation contract (£9.99)'
-          : 'Create an Assured Shorthold Tenancy agreement (£9.99)',
+          ? 'Generate a Renting Homes Act occupation contract (£14.99)'
+          : 'Create an Assured Shorthold Tenancy agreement (£14.99)',
       };
     default:
       return null;

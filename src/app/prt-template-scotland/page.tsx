@@ -8,7 +8,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'PRT Template Scotland 2026 | Private Residential Tenancy Agreement',
-  description: 'Download a PRT template for Scotland. Compliant with Private Housing (Tenancies) Act 2016. Includes landlord registration, Repairing Standard, and all 18 eviction grounds. From £9.99.',
+  description: 'Download a PRT template for Scotland. Compliant with Private Housing (Tenancies) Act 2016. Includes landlord registration, Repairing Standard, and all 18 eviction grounds. From £14.99.',
   keywords: [
     'PRT template Scotland',
     'Scotland PRT download',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'PRT Template Scotland 2026 | Private Residential Tenancy Agreement',
-    description: 'Download a PRT template for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £9.99.',
+    description: 'Download a PRT template for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/prt-template-scotland'),
   },
@@ -79,7 +79,7 @@ const faqs = [
   },
   {
     question: 'Does the PRT template work for HMOs in Scotland?',
-    answer: 'Our Premium PRT (£14.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.',
+    answer: 'Our Premium PRT (£24.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.',
   },
 ];
 
@@ -138,13 +138,13 @@ export default function PrtTemplateScotlandPage() {
                 href="/wizard?product=ast_standard&src=seo_prt_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
-                Standard PRT — £9.99
+                Standard PRT — £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_prt_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Premium PRT — £14.99
+                Premium PRT — £24.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Tribunal-ready</p>
@@ -236,12 +236,12 @@ export default function PrtTemplateScotlandPage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Notice to Leave</h3>
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
-                <span className="text-indigo-600 font-medium">£39.99</span>
+                <span className="text-indigo-600 font-medium">£49.99</span>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Simple Procedure for Scottish courts</p>
-                <span className="text-indigo-600 font-medium">£99.99</span>
+                <span className="text-indigo-600 font-medium">£149.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven</h3>

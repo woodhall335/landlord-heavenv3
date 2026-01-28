@@ -146,7 +146,7 @@ export default function EvictionNoticeTemplatePage() {
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
           title="Eviction Notice Template UK"
           subtitle={<>Download free <strong>eviction notice templates</strong> for Section 21 and Section 8. Court-ready documents trusted by over 10,000 UK landlords.</>}
-          primaryCTA={{ label: "Get Court-Ready Notice — £39.99", href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
         >
@@ -441,7 +441,7 @@ export default function EvictionNoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£39.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£49.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -659,7 +659,7 @@ export default function EvictionNoticeTemplatePage() {
                   href={wizardLinkNoticeOnly}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Court-Ready — £39.99
+                  Get Court-Ready — £49.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
