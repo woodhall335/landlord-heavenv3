@@ -501,16 +501,11 @@ export default function FixedTermTenancyAgreementPage() {
 
         {/* CTA Section */}
         <SeoCtaBlock
+          pageType="tenancy"
+          variant="final"
           title="Create Your Fixed Term Tenancy Agreement"
           description="Our AST templates let you set any fixed term length with optional break clauses. Fully compliant with the Housing Act 1988."
-          primaryCTA={{ label: 'Standard AST — £14.99', href: wizardLinkAST }}
-          secondaryCTA={{ label: 'Premium AST — £24.99', href: '/products/ast' }}
-          features={[
-            'Choose any fixed term length',
-            'Optional break clause template',
-            'Renewal guidance included',
-            'Instant PDF download',
-          ]}
+          jurisdiction="england"
         />
 
         {/* Disclaimer */}

@@ -508,16 +508,11 @@ export default function CountyCourtClaimFormGuidePage() {
 
         {/* CTA Section */}
         <SeoCtaBlock
+          pageType="court"
+          variant="final"
           title="Get Court-Ready Documents"
           description="Our packs include pre-filled court forms, evidence checklists, and step-by-step filing instructions."
-          primaryCTA={{ label: 'Money Claim Pack — £149.99', href: wizardLinkMoneyClaim }}
-          secondaryCTA={{ label: 'Possession Pack — £199.99', href: wizardLinkCompletePack }}
-          features={[
-            'All forms pre-completed',
-            'Evidence checklist included',
-            'Filing instructions step-by-step',
-            'Witness statement template',
-          ]}
+          jurisdiction="england"
         />
 
         {/* Disclaimer */}
