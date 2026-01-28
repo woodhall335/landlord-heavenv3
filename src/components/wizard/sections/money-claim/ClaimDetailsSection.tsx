@@ -120,54 +120,10 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
   // Derive currently selected reasons from facts
   const selectedReasons = useMemo(() => getSelectedReasonsFromFacts(facts), [facts]);
 
-  /**
-   * Check if the user needs to enter arrears schedule or damage items
-   * based on the selected claim reasons.
-   */
-  const requiredDataStatus = useMemo(() => {
-    const needsArrearsSchedule = selectedReasons.has('rent_arrears');
-    const needsDamageItems =
-      selectedReasons.has('property_damage') ||
-      selectedReasons.has('cleaning') ||
-      selectedReasons.has('unpaid_utilities') ||
-      selectedReasons.has('unpaid_council_tax') ||
-      selectedReasons.has('other_tenant_debt');
-
-    // Check arrears items from either location
-    const arrearsItems =
-      facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
-    const hasArrearsData = Array.isArray(arrearsItems) && arrearsItems.length > 0;
-
-    // Check damage items
-    const damageItems = facts.money_claim?.damage_items || [];
-    const hasDamageData = Array.isArray(damageItems) && damageItems.length > 0;
-
-    // Build list of missing sections
-    const missingSections: string[] = [];
-    if (needsArrearsSchedule && !hasArrearsData) {
-      missingSections.push('Arrears');
-    }
-    if (needsDamageItems && !hasDamageData) {
-      missingSections.push('Damages');
-    }
-
-    const hasAllRequired =
-      (!needsArrearsSchedule || hasArrearsData) &&
-      (!needsDamageItems || hasDamageData);
-
-    return {
-      needsArrearsSchedule,
-      needsDamageItems,
-      hasArrearsData,
-      hasDamageData,
-      missingSections,
-      hasAllRequired,
-    };
-  }, [selectedReasons, facts]);
-
   // Determine if we can show the statement/interest/occupancy sections
-  const canShowDetailedSections =
-    selectedReasons.size > 0 && requiredDataStatus.hasAllRequired;
+  // Only require claim reasons to be selected - arrears/damages data is validated
+  // when proceeding to review, not while filling out Claim Details
+  const canShowDetailedSections = selectedReasons.size > 0;
 
   /**
    * Updates all claim-related facts based on selected reasons.
@@ -425,45 +381,8 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         </div>
       )}
 
-      {/* Gating callout: Required data missing - direct user to complete other tabs */}
-      {selectedReasons.size > 0 &&
-        !requiredDataStatus.hasAllRequired &&
-        requiredDataStatus.missingSections.length > 0 && (
-          <div className="rounded-lg border-2 border-amber-300 bg-amber-50 p-4">
-            <div className="flex items-start gap-3">
-              <RiInformationLine className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-amber-900">
-                  Complete required sections first
-                </p>
-                <p className="text-sm text-amber-800 mt-1">
-                  Before you can draft your claim statement, please complete the{' '}
-                  <strong>{requiredDataStatus.missingSections.join(' and ')}</strong>{' '}
-                  {requiredDataStatus.missingSections.length === 1 ? 'tab' : 'tabs'} with
-                  at least one line item.
-                </p>
-                <ul className="mt-2 text-sm text-amber-700 list-disc list-inside">
-                  {requiredDataStatus.needsArrearsSchedule &&
-                    !requiredDataStatus.hasArrearsData && (
-                      <li>
-                        <strong>Arrears tab:</strong> Add your rent arrears schedule showing
-                        each period with rent due and amounts paid
-                      </li>
-                    )}
-                  {requiredDataStatus.needsDamageItems &&
-                    !requiredDataStatus.hasDamageData && (
-                      <li>
-                        <strong>Damages tab:</strong> Add itemised costs for damage, cleaning,
-                        utilities, or other amounts you are claiming
-                      </li>
-                    )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
-      {/* === GATED SECTIONS: Only show when claim reasons selected AND required data entered === */}
+      {/* === GATED SECTIONS: Only show when claim reasons selected === */}
+      {/* Note: Arrears/Damages data validation happens at the Review stage, not here */}
       {canShowDetailedSections && (
         <>
           {/* Basis of claim (core field used elsewhere) */}
