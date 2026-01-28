@@ -2,22 +2,22 @@ import { Metadata } from 'next';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Rent Arrears Calculator',
+  title: 'Rent Arrears Calculator UK | Calculate What Your Tenant Owes',
   description:
-    'Calculate rent arrears and 8% statutory interest for UK landlords. Free arrears schedule generator with PDF download. Court-ready money claim upgrade available.',
+    'Free rent arrears calculator for UK landlords. Calculate total arrears, statutory interest at 8%, and check if you meet Section 8 Ground 8 thresholds. Instant results.',
   keywords: [
     'rent arrears calculator',
-    'rent arrears interest',
-    'landlord arrears calculator',
+    'rent arrears calculator UK',
+    'calculate rent owed',
+    'tenant debt calculator',
+    'ground 8 calculator',
     'statutory interest calculator',
     'rent arrears schedule',
-    'money claim calculator',
-    'landlord tools UK',
   ],
   openGraph: {
-    title: 'Free Rent Arrears Calculator | Landlord Heaven',
+    title: 'Rent Arrears Calculator UK | Landlord Heaven',
     description:
-      'Calculate rent arrears and statutory interest. Free PDF schedule for UK landlords.',
+      'Calculate exactly what your tenant owes including statutory interest. Free, instant results.',
     type: 'website',
     url: getCanonicalUrl('/tools/rent-arrears-calculator'),
   },

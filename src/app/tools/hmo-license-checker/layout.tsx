@@ -2,23 +2,22 @@ import { Metadata } from 'next';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free HMO License Checker',
+  title: 'HMO Licence Checker UK | Check If Your Property Needs a Licence',
   description:
-    'Check if your rental property needs HMO licensing. Free HMO checker for UK landlords. Get instant assessment and guidance on HMO requirements.',
+    'Free HMO licence checker for UK landlords. Enter your property details to instantly check if you need mandatory or additional HMO licensing. Covers England, Wales & Scotland.',
   keywords: [
-    'hmo license checker',
-    'hmo licensing uk',
+    'HMO licence checker',
+    'HMO licensing UK',
+    'do I need HMO licence',
+    'mandatory HMO licence',
+    'additional licensing check',
     'house in multiple occupation',
-    'hmo rules',
-    'do i need hmo license',
-    'hmo checker',
-    'hmo requirements',
-    'mandatory hmo licensing',
+    'HMO requirements',
   ],
   openGraph: {
-    title: 'Free HMO License Checker | Landlord Heaven',
+    title: 'HMO Licence Checker UK | Landlord Heaven',
     description:
-      'Check if your property needs HMO licensing. Free instant assessment tool for UK landlords.',
+      'Instantly check if your property needs an HMO licence. Free tool for UK landlords.',
     type: 'website',
     url: getCanonicalUrl('/tools/hmo-license-checker'),
   },

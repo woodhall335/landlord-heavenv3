@@ -2,21 +2,22 @@ import { Metadata } from 'next';
 import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Generator (England)',
+  title: 'Free Section 8 Notice Generator | Create Form 3 Online',
   description:
-    'Generate a free Section 8 notice with grounds for possession in England. Upgrade to a court-ready version with ground-specific validation. Free landlord tool.',
+    'Generate a free Section 8 notice (Form 3) for England. Select your grounds, enter arrears details, and download a valid eviction notice. Covers Ground 8, 10, 11 and more.',
   keywords: [
     'free section 8 notice generator',
-    'section 8 template',
+    'section 8 generator',
+    'form 3 generator',
+    'rent arrears notice generator',
+    'ground 8 notice',
     'section 8 grounds',
-    'eviction notice grounds',
-    'landlord tools UK',
-    'free section 8 form',
+    'eviction notice generator',
   ],
   openGraph: {
-    title: 'Free Section 8 Notice Generator (England) | Landlord Heaven',
+    title: 'Free Section 8 Notice Generator | Landlord Heaven',
     description:
-      'Generate a free Section 8 notice with grounds for possession in England. Upgrade for a court-ready version.',
+      'Create a valid Section 8 notice with correct grounds and notice periods. Free for UK landlords.',
     type: 'website',
     url: getCanonicalUrl('/tools/free-section-8-notice-generator'),
   },

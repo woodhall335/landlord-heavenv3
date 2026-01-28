@@ -12,11 +12,22 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 
 export const metadata: Metadata = {
-  title: 'Document Validators for Landlords',
-  description: 'Free AI-powered validators for landlord notices, tenancy agreements, and rent arrears documents.',
+  title: 'Eviction Notice Validity Checker | Check Your Notice is Valid',
+  description:
+    "Free eviction notice validity checker. Upload your Section 21 or Section 8 notice and we'll check it meets all legal requirements. Instant results with fix suggestions.",
+  keywords: [
+    'eviction notice checker',
+    'section 21 validity checker',
+    'section 8 checker',
+    'notice validity check',
+    'is my eviction notice valid',
+    'eviction notice validator',
+    'landlord notice checker',
+  ],
   openGraph: {
-    title: 'Document Validators for Landlords | Landlord Heaven',
-    description: 'Free AI-powered validators for landlord notices, tenancy agreements, and rent arrears documents.',
+    title: 'Eviction Notice Validity Checker | Landlord Heaven',
+    description:
+      'Check if your eviction notice is legally valid. Free instant checker for Section 21 and Section 8.',
     type: 'website',
     url: getCanonicalUrl('/tools/validators'),
   },
@@ -53,7 +64,7 @@ export default function ValidatorsHubPage() {
               <span className="text-sm font-semibold text-primary">Free Tools</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Document Validators
+              Eviction Notice Validity Checker
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
               Upload your notices and documents for instant AI-powered validation

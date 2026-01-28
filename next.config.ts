@@ -46,6 +46,12 @@ const nextConfig: NextConfig = {
         destination: '/products/complete-pack',
         permanent: true,
       },
+      // Consolidate duplicate money claim product pages
+      {
+        source: '/products/money-claim-pack',
+        destination: '/products/money-claim',
+        permanent: true,
+      },
       // HMO Pro is parked
       {
         source: '/hmo-pro',
