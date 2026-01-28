@@ -19,7 +19,8 @@
 import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
-import { RiCheckLine, RiErrorWarningLine, RiArrowDownCircleLine, RiFileTextLine } from 'react-icons/ri';
+import { RiCheckLine, RiErrorWarningLine, RiArrowDownCircleLine, RiFileTextLine, RiCalendarLine } from 'react-icons/ri';
+import { calculateFilingWindow, formatDate } from '@/lib/validators/s21-court-pack';
 
 interface WizardSection {
   id: string;
@@ -50,6 +51,18 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   onJumpToSection,
 }) => {
   const evictionRoute = facts.eviction_route as 'section_8' | 'section_21' | undefined;
+
+  // Calculate filing window for Section 21 cases
+  const filingWindowInfo = useMemo(() => {
+    if (evictionRoute !== 'section_21') return null;
+
+    const serviceDate = facts.notice_service_date as string | undefined;
+    const possessionDate = facts.notice_expiry_date as string | undefined; // This is the earliest possession date
+
+    if (!serviceDate || !possessionDate) return null;
+
+    return calculateFilingWindow(serviceDate, possessionDate);
+  }, [evictionRoute, facts.notice_service_date, facts.notice_expiry_date]);
 
   // Collect all blockers and warnings from all sections
   const { blockers, warnings, incompleteRequired } = useMemo(() => {
@@ -177,6 +190,58 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           }
         </p>
       </div>
+
+      {/* Filing Window Warning (Section 21 only) */}
+      {filingWindowInfo?.warning && (
+        <div className={`p-4 rounded-lg border ${
+          filingWindowInfo.warning.severity === 'error'
+            ? 'bg-red-50 border-red-300'
+            : 'bg-amber-50 border-amber-200'
+        }`}>
+          <div className="flex items-start gap-3">
+            <RiCalendarLine className={`h-5 w-5 mt-0.5 flex-shrink-0 ${
+              filingWindowInfo.warning.severity === 'error' ? 'text-red-500' : 'text-amber-500'
+            }`} />
+            <div className="flex-1">
+              <h4 className={`font-medium ${
+                filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
+              }`}>
+                {filingWindowInfo.warning.blocking ? 'Filing Window Issue' : 'Filing Window Notice'}
+              </h4>
+              <p className={`text-sm mt-1 ${
+                filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
+              }`}>
+                {filingWindowInfo.warning.message}
+              </p>
+              {filingWindowInfo.warning.helpText && (
+                <p className={`text-sm mt-2 ${
+                  filingWindowInfo.warning.severity === 'error' ? 'text-red-700' : 'text-amber-700'
+                }`}>
+                  {filingWindowInfo.warning.helpText}
+                </p>
+              )}
+              {filingWindowInfo.windowDays > 0 && (
+                <div className={`mt-3 p-2 rounded ${
+                  filingWindowInfo.warning.severity === 'error' ? 'bg-red-100' : 'bg-amber-100'
+                }`}>
+                  <p className={`text-xs font-medium ${
+                    filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
+                  }`}>
+                    Key Dates:
+                  </p>
+                  <ul className={`text-xs mt-1 space-y-0.5 ${
+                    filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
+                  }`}>
+                    <li>• Earliest court application: {formatDate(facts.notice_expiry_date as string)}</li>
+                    <li>• Notice expires: {formatDate(filingWindowInfo.expiryDate)}</li>
+                    <li>• Filing window: {filingWindowInfo.windowDays} days</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Case Info */}
       <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">

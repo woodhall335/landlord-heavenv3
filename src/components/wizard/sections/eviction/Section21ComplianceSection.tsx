@@ -57,6 +57,8 @@ import {
 import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
 import { formatLocalDateLong } from '@/lib/utils';
+import { validatePrescribedInfoDate, validateGasCertificateDates, formatDate as formatValidationDate } from '@/lib/validators/s21-court-pack';
+import { InlineValidationMessage } from '@/components/ui/InlineValidationMessage';
 
 // ============================================================================
 // INLINE DATE WARNING COMPONENT
@@ -196,6 +198,56 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
     facts.n5b_q19_has_unreturned_prohibited_payment === undefined
       ? undefined
       : !facts.n5b_q19_has_unreturned_prohibited_payment;
+
+  // ============================================================================
+  // PRESCRIBED INFO DATE VALIDATION (TASK 1)
+  // ============================================================================
+  // Validates that prescribed info date is on/after deposit protection date
+  // and within 30 days (legal requirement).
+
+  const prescribedInfoValidation = useMemo(() => {
+    if (facts.deposit_protected !== true) return null;
+    if (facts.prescribed_info_served !== true) return null;
+    if (!facts.prescribed_info_date || !facts.deposit_protection_date) return null;
+
+    const result = validatePrescribedInfoDate(
+      facts.prescribed_info_date as string,
+      facts.deposit_protection_date as string
+    );
+
+    return result.valid ? null : result;
+  }, [
+    facts.deposit_protected,
+    facts.prescribed_info_served,
+    facts.prescribed_info_date,
+    facts.deposit_protection_date,
+  ]);
+
+  // ============================================================================
+  // GAS CERTIFICATE ISSUE DATE VALIDATION (TASK 2)
+  // ============================================================================
+  // Validates gas certificate issue date for N5B form compliance.
+
+  const gasCertIssueValidation = useMemo(() => {
+    if (facts.has_gas_appliances !== true) return null;
+    if (facts.gas_safety_cert_served !== true) return null;
+
+    const { errors } = validateGasCertificateDates(
+      true, // has gas
+      facts.gas_cert_issue_date as string | undefined,
+      facts.gas_safety_served_date as string | undefined,
+      facts.tenancy_start_date as string | undefined
+    );
+
+    // Return the first error related to gas_cert_issue_date
+    return errors.find(e => e.field === 'gas_cert_issue_date') || null;
+  }, [
+    facts.has_gas_appliances,
+    facts.gas_safety_cert_served,
+    facts.gas_cert_issue_date,
+    facts.gas_safety_served_date,
+    facts.tenancy_start_date,
+  ]);
 
   // ============================================================================
   // INLINE DATE VALIDATION WARNINGS (Part B)
@@ -371,6 +423,37 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
               sectionId={SECTION_ID}
             />
 
+            {facts.prescribed_info_served === true && (
+              <div>
+                <ValidatedInput
+                  id="prescribed_info_date"
+                  label="Date prescribed information was given to tenant"
+                  type="date"
+                  value={facts.prescribed_info_date as string}
+                  onChange={(v) => onUpdate({ prescribed_info_date: v })}
+                  validation={{ required: true }}
+                  required
+                  helperText={
+                    prescribedInfoValidation
+                      ? undefined
+                      : facts.deposit_protection_date
+                        ? `Must be on or after ${formatValidationDate(facts.deposit_protection_date as string)} (deposit protection date)`
+                        : 'Enter the date you gave prescribed information to the tenant'
+                  }
+                  error={prescribedInfoValidation?.message}
+                  sectionId={SECTION_ID}
+                  className="max-w-xs"
+                />
+                {prescribedInfoValidation && (
+                  <InlineValidationMessage
+                    severity={prescribedInfoValidation.severity}
+                    message={prescribedInfoValidation.message}
+                    helpText={prescribedInfoValidation.helpText}
+                  />
+                )}
+              </div>
+            )}
+
             <ValidatedYesNoToggle
               id="deposit_returned"
               label="Has the deposit been returned to the tenant?"
@@ -453,6 +536,34 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
                     </div>
                   </div>
                 )}
+
+                {/* Gas Certificate Issue Date - Required for N5B Q17b */}
+                <div>
+                  <ValidatedInput
+                    id="gas_cert_issue_date"
+                    label="Date gas safety certificate was issued"
+                    type="date"
+                    value={facts.gas_cert_issue_date as string}
+                    onChange={(v) => onUpdate({ gas_cert_issue_date: v })}
+                    validation={{ required: true }}
+                    required
+                    helperText={
+                      gasCertIssueValidation
+                        ? undefined
+                        : 'The issue date shown on the CP12 certificate. This is required for the N5B court form.'
+                    }
+                    error={gasCertIssueValidation?.message}
+                    sectionId={SECTION_ID}
+                    className="max-w-xs"
+                  />
+                  {gasCertIssueValidation && (
+                    <InlineValidationMessage
+                      severity={gasCertIssueValidation.severity}
+                      message={gasCertIssueValidation.message}
+                      helpText={gasCertIssueValidation.helpText}
+                    />
+                  )}
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>

@@ -824,6 +824,8 @@ export interface ComplianceTimingData {
   gas_safety_before_occupation?: boolean; // User confirmed a record was provided before move-in
   gas_safety_before_occupation_date?: string; // Date of the pre-occupation CP12 check
   gas_safety_record_served_pre_occupation_date?: string; // Date pre-occupation CP12 was given to tenant (CRITICAL)
+  // NEW: Gas certificate issue date (for N5B Q17b)
+  gas_cert_issue_date?: string; // Date the CP12 was issued by the Gas Safe engineer
 
   // How to Rent timing
   how_to_rent_provided_date?: string;
