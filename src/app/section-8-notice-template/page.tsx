@@ -104,7 +104,7 @@ export default function Section8NoticeTemplatePage() {
           badge="Works after May 2026"
           badgeIcon={<CheckCircle className="w-4 h-4" />}
           title="Section 8 Notice (Form 3) — Free Template for England"
-          subtitle={<>Download a free <strong>Section 8 notice</strong> template for England. Grounds-based eviction for rent arrears (Ground 8, 10, 11), antisocial behaviour, property damage and more.</>}
+          subtitle={<>Download a free <strong>Section 8 notice</strong> template for England. You must serve notice on <Link href="/form-3-section-8" className="text-primary hover:underline">Form 3</Link>. Grounds-based eviction for rent arrears (Ground 8, 10, 11), antisocial behaviour, property damage and more.</>}
           primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
           variant="pastel"

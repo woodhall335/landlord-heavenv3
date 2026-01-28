@@ -163,7 +163,7 @@ export default function TenantWontLeavePage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Check Your Notice is Valid</h3>
                       <p className="text-gray-600 mb-3">
-                        Before going to court, ensure your eviction notice was correctly served. Common issues include:
+                        Before going to court, ensure you served a valid <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notice</Link> and it was correctly served. Common issues include:
                       </p>
                       <ul className="space-y-2 text-gray-600">
                         <li className="flex items-start gap-2">

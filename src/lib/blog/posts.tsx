@@ -2707,7 +2707,7 @@ export const blogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What happens when the fixed term ends?</h3>
             <p className="text-gray-600">
-              If neither party takes action, the AST automatically becomes a <strong>statutory periodic tenancy</strong>
+              If neither party takes action, the AST automatically becomes a <Link href="/rolling-tenancy-agreement" className="text-primary hover:underline">statutory periodic tenancy</Link>
               running on the same terms, usually month-to-month. You don&apos;t need to sign a new agreement unless you
               want to change the terms.
             </p>
@@ -2779,7 +2779,7 @@ export const blogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           The <strong>Section 21 eviction process</strong> has been the primary route for landlords in England
-          to regain possession of their property since 1988. Also known as &quot;no-fault&quot; eviction, it allows
+          to regain possession of their property since 1988. Also known as <Link href="/no-fault-eviction" className="text-primary hover:underline">&quot;no-fault&quot; eviction</Link>, it allows
           you to end an Assured Shorthold Tenancy without proving any wrongdoing by the tenant. This guide
           walks you through every step of the process—but time is running out.
         </p>
@@ -2814,7 +2814,7 @@ export const blogPosts: BlogPost[] = [
           <li><strong>No reason required:</strong> You don&apos;t need to justify why you want possession</li>
           <li><strong>Mandatory possession:</strong> If valid, the court must grant a possession order</li>
           <li><strong>Two months&apos; notice:</strong> Minimum notice period for most tenancies</li>
-          <li><strong>Form 6A:</strong> The prescribed form that must be used</li>
+          <li><strong><Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A</Link>:</strong> The prescribed form that must be used</li>
           <li><strong>Compliance requirements:</strong> Various legal boxes must be ticked first</li>
         </ul>
 
@@ -2879,12 +2879,12 @@ export const blogPosts: BlogPost[] = [
                 <td className="p-4 border-b text-red-600">Section 21 invalid</td>
               </tr>
               <tr>
-                <td className="p-4 border-b font-medium">How to Rent Guide</td>
+                <td className="p-4 border-b font-medium"><Link href="/how-to-rent-guide" className="text-primary hover:underline">How to Rent Guide</Link></td>
                 <td className="p-4 border-b">Current version given to tenant</td>
                 <td className="p-4 border-b text-red-600">Section 21 invalid</td>
               </tr>
               <tr>
-                <td className="p-4 border-b font-medium">EICR</td>
+                <td className="p-4 border-b font-medium"><Link href="/eicr-landlord-requirements" className="text-primary hover:underline">EICR</Link></td>
                 <td className="p-4 border-b">Satisfactory EICR report provided</td>
                 <td className="p-4 border-b text-red-600">Section 21 invalid</td>
               </tr>
@@ -2918,7 +2918,7 @@ export const blogPosts: BlogPost[] = [
 
         <p>
           Once you&apos;ve confirmed all pre-requisites are met, you can serve the Section 21 notice using
-          <strong> Form 6A</strong>—the prescribed notice form.
+          <Link href="/form-6a-section-21" className="text-primary hover:underline font-medium">Form 6A</Link>—the prescribed notice form.
         </p>
 
         <h3>Form 6A Requirements</h3>

@@ -223,7 +223,7 @@ export default function Section8ValidatorPage() {
             {/* Intro paragraph with target keywords */}
             <p className="text-lg md:text-xl text-gray-600 mb-6">
               Free online <strong>Section 8 notice checker</strong> for England landlords. Upload
-              your notice to check if it&apos;s valid for court. Get an instant report on Form 3
+              your notice to check if it&apos;s valid for court. Ensure your notice meets all <Link href="/form-3-section-8" className="text-primary hover:underline">Form 3 requirements</Link>. Get an instant report on
               compliance, grounds for possession, notice periods, and evidence requirements.
             </p>
 

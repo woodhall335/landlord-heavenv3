@@ -92,7 +92,7 @@ export default function MCOLPage() {
 
                 <h2>Before You Start: Pre-Action Protocol</h2>
                 <p>
-                  The Pre-Action Protocol for Debt Claims is mandatory. You must:
+                  The <Link href="/pre-action-protocol-debt" className="text-primary hover:underline">Pre-Action Protocol for Debt Claims</Link> is mandatory. You must:
                 </p>
                 <ol>
                   <li>

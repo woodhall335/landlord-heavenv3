@@ -151,8 +151,9 @@ export default function EvictionNoticeTemplatePage() {
                     </div>
                   </div>
                   <p className="text-gray-600 mb-4">
-                    End an assured shorthold tenancy without giving a reason. Requires 2 months&apos; notice
-                    and compliance with deposit protection rules.
+                    End an assured shorthold tenancy without giving a reason. Uses the prescribed{' '}
+                    <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A</Link>.
+                    Requires 2 months&apos; notice and compliance with deposit protection rules.
                   </p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2 text-sm text-gray-600">

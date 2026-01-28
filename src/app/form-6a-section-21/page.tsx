@@ -116,7 +116,7 @@ export default function Form6APage() {
                   <li>At least 4 months have passed since the tenancy began</li>
                   <li>You have protected the deposit and served prescribed information</li>
                   <li>
-                    You have provided the EPC, Gas Safety Certificate, and How to Rent guide
+                    You have provided the EPC, Gas Safety Certificate, and <Link href="/how-to-rent-guide" className="text-primary hover:underline">How to Rent guide</Link>
                   </li>
                   <li>No relevant improvement notice or emergency remedial action is in effect</li>
                 </ul>
@@ -163,8 +163,8 @@ export default function Form6APage() {
 
                 <h2>Form 6A vs Form 3 (Section 8)</h2>
                 <p>
-                  Form 6A is for <strong>no-fault</strong> evictions where you don&apos;t need to
-                  prove the tenant did anything wrong. Form 3 (Section 8) is for{' '}
+                  Form 6A is for <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault evictions</Link> where you don&apos;t need to
+                  prove the tenant did anything wrong. <Link href="/form-3-section-8" className="text-primary hover:underline">Form 3</Link> (Section 8) is for{' '}
                   <strong>fault-based</strong> evictions like rent arrears or breach of tenancy.
                 </p>
                 <p>
