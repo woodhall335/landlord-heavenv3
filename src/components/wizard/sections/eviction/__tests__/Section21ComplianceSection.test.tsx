@@ -606,6 +606,226 @@ describe('Section21ComplianceSection', () => {
       });
     });
 
+    describe('Gas Safety Certificate Expiry Errors (BLOCKING)', () => {
+      // Base facts for gas safety tests - includes tenancy_start_date which is required
+      // for the validateComplianceTiming function to run gas safety checks
+      const gasTestBaseFacts: WizardFacts = {
+        ...baseFacts,
+        tenancy_start_date: '2023-01-01', // Required for gas safety timing validation
+      };
+
+      it('should show inline error when gas safety check date is older than 12 months', () => {
+        // Create a date more than 12 months ago
+        const oldDate = new Date();
+        oldDate.setMonth(oldDate.getMonth() - 13);
+        const oldDateStr = oldDate.toISOString().split('T')[0];
+
+        const factsWithExpiredCert: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: oldDateStr,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithExpiredCert}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Error should be shown immediately when an expired date is present
+        expect(
+          screen.getByText('The current gas safety certificate must be less than 12 months old.')
+        ).toBeInTheDocument();
+      });
+
+      it('should NOT show error when gas safety check date is within 12 months', () => {
+        // Create a date within 12 months
+        const recentDate = new Date();
+        recentDate.setMonth(recentDate.getMonth() - 6);
+        const recentDateStr = recentDate.toISOString().split('T')[0];
+
+        const factsWithValidCert: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: recentDateStr,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithValidCert}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Error should NOT be shown for valid dates
+        expect(
+          screen.queryByText('The current gas safety certificate must be less than 12 months old.')
+        ).not.toBeInTheDocument();
+      });
+
+      it('should NOT expose internal field code "gas_safety_expiry" in rendered output', () => {
+        // Create a date more than 12 months ago
+        const oldDate = new Date();
+        oldDate.setMonth(oldDate.getMonth() - 13);
+        const oldDateStr = oldDate.toISOString().split('T')[0];
+
+        const factsWithExpiredCert: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: oldDateStr,
+        };
+
+        const { container } = render(
+          <Section21ComplianceSection
+            facts={factsWithExpiredCert}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // The internal field code should NEVER appear in the rendered output
+        expect(container.textContent).not.toContain('gas_safety_expiry');
+      });
+
+      it('should show additional helper with required timeframe and certificate date', () => {
+        // Create a date more than 12 months ago
+        const oldDate = new Date();
+        oldDate.setMonth(oldDate.getMonth() - 14);
+        const oldDateStr = oldDate.toISOString().split('T')[0];
+
+        const factsWithExpiredCert: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: oldDateStr,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithExpiredCert}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Helper should show required timeframe
+        expect(screen.getByText(/Required:/)).toBeInTheDocument();
+        expect(screen.getByText(/Within last 12 months/)).toBeInTheDocument();
+
+        // Helper should show certificate date
+        expect(screen.getByText(/Certificate date:/)).toBeInTheDocument();
+      });
+
+      it('should register error with ValidationContext when expired', () => {
+        // Create a date more than 12 months ago
+        const oldDate = new Date();
+        oldDate.setMonth(oldDate.getMonth() - 13);
+        const oldDateStr = oldDate.toISOString().split('T')[0];
+
+        const factsWithExpiredCert: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: oldDateStr,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsWithExpiredCert}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // The error should be registered with ValidationContext
+        expect(mockValidationContext.setFieldError).toHaveBeenCalledWith(
+          'gas_safety_check_date',
+          expect.objectContaining({
+            field: 'gas_safety_check_date',
+            message: 'The current gas safety certificate must be less than 12 months old.',
+            severity: 'error',
+            section: 'section21_compliance',
+          })
+        );
+      });
+
+      it('should clear error when date is corrected to within 12 months', () => {
+        // Create a date more than 12 months ago
+        const oldDate = new Date();
+        oldDate.setMonth(oldDate.getMonth() - 13);
+        const oldDateStr = oldDate.toISOString().split('T')[0];
+
+        const { rerender } = render(
+          <Section21ComplianceSection
+            facts={{
+              ...gasTestBaseFacts,
+              has_gas_appliances: true,
+              gas_safety_cert_served: true,
+              gas_safety_check_date: oldDateStr,
+            }}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Error should be shown initially
+        expect(
+          screen.getByText('The current gas safety certificate must be less than 12 months old.')
+        ).toBeInTheDocument();
+
+        // Now update with a valid date
+        const recentDate = new Date();
+        recentDate.setMonth(recentDate.getMonth() - 3);
+        const recentDateStr = recentDate.toISOString().split('T')[0];
+
+        rerender(
+          <Section21ComplianceSection
+            facts={{
+              ...gasTestBaseFacts,
+              has_gas_appliances: true,
+              gas_safety_cert_served: true,
+              gas_safety_check_date: recentDateStr,
+            }}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Error should be gone
+        expect(
+          screen.queryByText('The current gas safety certificate must be less than 12 months old.')
+        ).not.toBeInTheDocument();
+      });
+
+      it('should NOT show error when gas_safety_check_date is empty', () => {
+        const factsNoDate: WizardFacts = {
+          ...gasTestBaseFacts,
+          has_gas_appliances: true,
+          gas_safety_cert_served: true,
+          gas_safety_check_date: undefined,
+        };
+
+        render(
+          <Section21ComplianceSection
+            facts={factsNoDate}
+            jurisdiction="england"
+            onUpdate={mockOnUpdate}
+          />
+        );
+
+        // Expiry error should NOT be shown (field is empty)
+        expect(
+          screen.queryByText('The current gas safety certificate must be less than 12 months old.')
+        ).not.toBeInTheDocument();
+      });
+    });
+
     describe('Warnings do not block progression', () => {
       it('should still allow onUpdate when warnings are shown', () => {
         const factsWithWarning: WizardFacts = {

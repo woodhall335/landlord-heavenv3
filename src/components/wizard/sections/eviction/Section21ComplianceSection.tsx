@@ -54,6 +54,9 @@ import {
   ValidatedCurrencyInput,
   ValidatedYesNoToggle,
 } from '@/components/wizard/ValidatedField';
+import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
+import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
+import { formatLocalDateLong } from '@/lib/utils';
 
 // ============================================================================
 // INLINE DATE WARNING COMPONENT
@@ -78,6 +81,48 @@ const DateWarning: React.FC<DateWarningProps> = ({ message, show }) => {
       <p className="text-sm text-amber-800 whitespace-pre-line">
         {message}
       </p>
+    </div>
+  );
+};
+
+// ============================================================================
+// GAS SAFETY EXPIRY INLINE ERROR HELPER
+// ============================================================================
+
+interface GasSafetyExpiryHelperProps {
+  show: boolean;
+  expected?: string;
+  certificateDate?: string;
+}
+
+/**
+ * GasSafetyExpiryHelper - Shows additional context for gas safety expiry errors
+ *
+ * Displays:
+ * - Required timeframe ("Within last 12 months")
+ * - Certificate date in user-friendly format
+ */
+const GasSafetyExpiryHelper: React.FC<GasSafetyExpiryHelperProps> = ({
+  show,
+  expected,
+  certificateDate,
+}) => {
+  if (!show) return null;
+
+  const formattedDate = formatLocalDateLong(certificateDate);
+
+  return (
+    <div className="mt-1 text-xs text-red-600 space-y-0.5">
+      {expected && (
+        <div>
+          <span className="font-medium">Required:</span> {expected}
+        </div>
+      )}
+      {formattedDate && (
+        <div>
+          <span className="font-medium">Certificate date:</span> {formattedDate}
+        </div>
+      )}
     </div>
   );
 };
@@ -186,6 +231,36 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
     facts.gas_safety_record_served_pre_occupation_date,
     tenancyStartDate,
   ]);
+
+  // ============================================================================
+  // GAS SAFETY CERTIFICATE EXPIRY VALIDATION (INLINE ERROR - BLOCKS PROGRESSION)
+  // ============================================================================
+  // Uses the same validateComplianceTiming function as checkout to ensure consistency.
+  // For date inputs, we show validation after a value is entered (not on blur of empty field).
+
+  // Compute gas safety expiry error from compliance timing validator
+  // Only compute when has_gas_appliances=true AND gas_safety_check_date has a value
+  const gasSafetyExpiryIssue = useMemo(() => {
+    if (facts.has_gas_appliances !== true) return null;
+    const gasCheckDate = facts.gas_safety_check_date as string | undefined;
+    if (!gasCheckDate) return null;
+
+    // Build timing data and validate using the same functions as checkout
+    const timingData = buildComplianceTimingDataFromFacts(facts);
+    const result = validateComplianceTiming(timingData);
+
+    // Find the gas_safety_expiry issue if present
+    const expiryIssue = result.issues.find(
+      (issue) => issue.field === 'gas_safety_expiry' && issue.severity === 'error'
+    );
+
+    return expiryIssue || null;
+  }, [facts]);
+
+  // User-friendly error message for gas safety expiry (never show raw field code)
+  const gasSafetyExpiryError = gasSafetyExpiryIssue
+    ? 'The current gas safety certificate must be less than 12 months old.'
+    : undefined;
 
   // Warning message constants
   const EPC_DATE_WARNING = `⚠️ The Energy Performance Certificate should be given to the tenant BEFORE the tenancy starts.
@@ -380,17 +455,25 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <ValidatedInput
-                    id="gas_safety_check_date"
-                    label="Date of most recent gas safety check"
-                    type="date"
-                    value={facts.gas_safety_check_date as string}
-                    onChange={(v) => onUpdate({ gas_safety_check_date: v })}
-                    validation={{ required: true }}
-                    required
-                    helperText="Date on the current CP12 certificate."
-                    sectionId={SECTION_ID}
-                  />
+                  <div>
+                    <ValidatedInput
+                      id="gas_safety_check_date"
+                      label="Date of most recent gas safety check"
+                      type="date"
+                      value={facts.gas_safety_check_date as string}
+                      onChange={(v) => onUpdate({ gas_safety_check_date: v })}
+                      validation={{ required: true }}
+                      required
+                      helperText={gasSafetyExpiryError ? undefined : 'Date on the current CP12 certificate.'}
+                      error={gasSafetyExpiryError}
+                      sectionId={SECTION_ID}
+                    />
+                    <GasSafetyExpiryHelper
+                      show={!!gasSafetyExpiryIssue}
+                      expected={gasSafetyExpiryIssue?.expected}
+                      certificateDate={facts.gas_safety_check_date as string}
+                    />
+                  </div>
 
                   <ValidatedInput
                     id="gas_safety_served_date"
