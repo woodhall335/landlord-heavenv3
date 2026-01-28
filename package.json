@@ -29,6 +29,7 @@
     "audit:tenancy-variants": "npx tsx scripts/audit-tenancy-variants.ts",
     "audit:tenancy-clauses": "npx tsx scripts/audit-tenancy-clauses.ts",
     "audit:seo-metadata": "npx tsx scripts/seo-metadata-audit.ts",
+    "audit:seo-keywords": "npx tsx scripts/seo-keyword-mapping-audit.ts",
     "audit:eviction-rules": "npx tsx scripts/audit-eviction-rules.ts",
     "validation:status": "npx tsx scripts/validation-status.ts",
     "validation:phase14-report": "npx tsx scripts/phase14-impact-report.ts",
