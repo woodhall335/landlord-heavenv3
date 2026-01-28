@@ -222,6 +222,16 @@ export const ComplianceTimingBlocker: React.FC<ComplianceTimingBlockerProps> = (
               const formattedActual = formatDate(issue.actual);
               const formattedTenancyStart = formatDate(tenancyStartDate);
 
+              // Determine if this is an expiry issue (certificate date) vs timing issue (provided date)
+              const isExpiryIssue =
+                issue.category === 'expiry' ||
+                issue.field?.includes('expiry');
+
+              // Use appropriate label based on issue type
+              const actualDateLabel = isExpiryIssue
+                ? 'Certificate date:'
+                : 'Date recorded as provided:';
+
               return (
                 <li
                   key={`issue-${index}`}
@@ -236,8 +246,8 @@ export const ComplianceTimingBlocker: React.FC<ComplianceTimingBlockerProps> = (
                         <span className="font-medium">Required:</span> {issue.expected}
                       </div>
                     )}
-                    {/* Show tenancy start date for context */}
-                    {formattedTenancyStart && (
+                    {/* Show tenancy start date for context - but not for expiry issues where it's irrelevant */}
+                    {formattedTenancyStart && !isExpiryIssue && (
                       <div>
                         <span className="font-medium">Tenancy start date:</span>{' '}
                         {formattedTenancyStart}
@@ -246,7 +256,7 @@ export const ComplianceTimingBlocker: React.FC<ComplianceTimingBlockerProps> = (
                     {/* Only show actual date if recorded */}
                     {formattedActual && (
                       <div>
-                        <span className="font-medium">Date recorded as provided:</span>{' '}
+                        <span className="font-medium">{actualDateLabel}</span>{' '}
                         {formattedActual}
                       </div>
                     )}
