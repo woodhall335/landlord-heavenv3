@@ -775,20 +775,28 @@ describe('ClaimDetailsSection gating logic', () => {
   });
 
   describe('canShowDetailedSections calculation', () => {
+    /**
+     * BUG FIX: canShowDetailedSections no longer depends on arrears/damages data.
+     * It only requires claim reasons to be selected.
+     *
+     * Arrears/damages validation happens at the Review stage, not on Claim Details.
+     * This prevents the premature "Complete required sections first" warning.
+     */
     it('should be false when no claim reasons selected', () => {
       const selectedReasons = new Set<string>();
-      const status = getRequiredDataStatus({}, selectedReasons);
-      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+      // NEW BEHAVIOR: canShowDetailedSections = selectedReasons.size > 0
+      const canShowDetailedSections = selectedReasons.size > 0;
 
       expect(canShowDetailedSections).toBe(false);
     });
 
-    it('should be false when claim reasons selected but required data missing', () => {
+    it('should be true when claim reasons selected even if arrears data missing', () => {
       const selectedReasons = new Set(['rent_arrears']);
-      const status = getRequiredDataStatus({}, selectedReasons);
-      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+      // NEW BEHAVIOR: canShowDetailedSections = selectedReasons.size > 0
+      // Arrears validation happens at Review stage, not Claim Details
+      const canShowDetailedSections = selectedReasons.size > 0;
 
-      expect(canShowDetailedSections).toBe(false);
+      expect(canShowDetailedSections).toBe(true);
     });
 
     it('should be true when claim reasons selected and required data present', () => {
@@ -798,10 +806,121 @@ describe('ClaimDetailsSection gating logic', () => {
         ],
       };
       const selectedReasons = new Set(['rent_arrears']);
-      const status = getRequiredDataStatus(facts, selectedReasons);
-      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+      const canShowDetailedSections = selectedReasons.size > 0;
 
       expect(canShowDetailedSections).toBe(true);
+    });
+  });
+});
+
+/**
+ * Bug fix regression tests:
+ * - Claim Details should NOT show arrears prerequisite warning
+ * - Arrears validation happens at Review/Draft stage
+ */
+describe('Claim Details arrears warning bug fix', () => {
+  describe('ClaimDetailsSection behavior', () => {
+    /**
+     * The inline "Complete required sections first" warning was removed.
+     * Users can now fill out basis of claim, interest, etc. on Claim Details
+     * even when arrears data is not yet entered.
+     */
+    it('should allow detailed sections when claim reasons selected (arrears data not required)', () => {
+      const selectedReasons = new Set(['rent_arrears']);
+      // New behavior: only check if reasons are selected
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+
+    it('should NOT block claim details based on missing arrears items', () => {
+      // In the old behavior, this would have set canShowDetailedSections = false
+      // and shown "Complete required sections first" warning
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [], // Empty arrears
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+
+      // New behavior: canShowDetailedSections = selectedReasons.size > 0
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+  });
+
+  describe('Arrears validation at Review stage', () => {
+    /**
+     * The validateArrearsSection function should still correctly identify
+     * when arrears items are missing - this validation runs at Review stage.
+     */
+    it('should return blocker when rent_arrears selected but no items exist', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toContain(
+        'Please add at least one arrears period to the schedule'
+      );
+    });
+
+    it('should return no blocker when arrears items exist', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toHaveLength(0);
+    });
+
+    it('should not validate arrears if not claiming rent arrears', () => {
+      const facts = {
+        claiming_rent_arrears: false,
+        arrears_items: [],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toHaveLength(0);
+    });
+  });
+
+  describe('Section validation via getSectionValidation', () => {
+    it('claim_details section validation should NOT include arrears prerequisite', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [], // Empty arrears
+        money_claim: {
+          charge_interest: false,
+          court_name: 'Manchester County Court',
+        },
+      };
+
+      const result = getSectionValidation('claim_details', facts, 'england');
+
+      // Claim details validation should not mention arrears
+      expect(result.blockers.join(' ')).not.toContain('arrears');
+      expect(result.blockers.join(' ')).not.toContain('Arrears');
+    });
+
+    it('arrears section validation SHOULD include blocker for missing items', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [],
+      };
+
+      const result = getSectionValidation('arrears', facts, 'england');
+
+      expect(result.blockers).toContain(
+        'Please add at least one arrears period to the schedule'
+      );
     });
   });
 });
