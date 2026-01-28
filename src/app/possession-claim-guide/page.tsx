@@ -117,7 +117,7 @@ export default function PossessionClaimGuidePage() {
           badgeIcon={<Gavel className="w-4 h-4" />}
           title="Possession Claim Guide UK"
           subtitle={<>Your tenant hasn&apos;t left after the notice expired? Here&apos;s how to <strong>apply for a court possession order</strong> to legally regain your property.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £149.99', href: wizardLinkCompletePack }}
+          primaryCTA={{ label: 'Get Complete Pack — £199.99', href: wizardLinkCompletePack }}
           secondaryCTA={{ label: 'Learn About N5B Form', href: '/n5b-form-guide' }}
           variant="pastel"
         >
@@ -445,7 +445,7 @@ export default function PossessionClaimGuidePage() {
 
               <div className="mt-6 text-center">
                 <p className="text-gray-600 text-sm">
-                  Plus our Complete Pack (£149.99) — <strong>save £850-1,550</strong> vs solicitor fees
+                  Plus our Complete Pack (£199.99) — <strong>save £850-1,550</strong> vs solicitor fees
                 </p>
                 <Link
                   href="/eviction-cost-uk"

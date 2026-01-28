@@ -168,7 +168,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} rent arrears`,
       scenarioLabel: 'recovering unpaid rent',
       primaryCTA: {
-        label: 'Start money claim pack — £99.99',
+        label: 'Start money claim pack — £149.99',
         href: productLinks.moneyClaim.href,
       },
       secondaryCTA: {
@@ -296,11 +296,11 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} eviction notices`,
       scenarioLabel: 'serving the correct notice',
       primaryCTA: {
-        label: 'Generate eviction notice — £39.99',
+        label: 'Generate eviction notice — £49.99',
         href: productLinks.noticeOnly.href,
       },
       secondaryCTA: {
-        label: 'Complete eviction pack — £149.99',
+        label: 'Complete eviction pack — £199.99',
         href: productLinks.completePack.href,
       },
       relatedLinks: [primaryRelated, secondaryRelated],
@@ -816,7 +816,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                     href="/products/notice-only"
                     className="hero-btn-primary block w-full text-center text-sm"
                   >
-                    Get Section 21 — £39.99
+                    Get Section 21 — £49.99
                   </Link>
                 </div>
 

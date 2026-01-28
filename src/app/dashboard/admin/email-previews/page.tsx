@@ -189,7 +189,7 @@ export default function AdminEmailPreviewsPage() {
                   <table style="width: 100%; border-collapse: collapse;">
                     <tr><td class="email-text" style="padding: 8px 0; font-weight: bold;">Order Number:</td><td class="email-text" style="padding: 8px 0; text-align: right;">#ABC12345</td></tr>
                     <tr><td class="email-text" style="padding: 8px 0; font-weight: bold;">Product:</td><td class="email-text" style="padding: 8px 0; text-align: right;">Section 21 Notice Pack</td></tr>
-                    <tr style="border-top: 2px solid #e5e7eb;"><td class="email-text" style="padding: 12px 0; font-weight: bold; font-size: 18px;">Total Paid:</td><td style="padding: 12px 0; text-align: right; font-weight: bold; font-size: 18px; color: #4F46E5;">£39.99</td></tr>
+                    <tr style="border-top: 2px solid #e5e7eb;"><td class="email-text" style="padding: 12px 0; font-weight: bold; font-size: 18px;">Total Paid:</td><td style="padding: 12px 0; text-align: right; font-weight: bold; font-size: 18px; color: #4F46E5;">£49.99</td></tr>
                   </table>
                 </div>
                 <div style="text-align: center; margin: 30px 0;">

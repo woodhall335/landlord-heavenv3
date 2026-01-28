@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant',
-    description: 'Create a legally compliant NI tenancy agreement. Private Tenancies Act (NI) 2022 compliant. From £9.99.',
+    description: 'Create a legally compliant NI tenancy agreement. Private Tenancies Act (NI) 2022 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },

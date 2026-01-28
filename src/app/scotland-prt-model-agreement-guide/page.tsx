@@ -71,7 +71,7 @@ const faqs = [
   },
   {
     question: 'Is the government model agreement free to use?',
-    answer: 'Yes, the Scottish Government model agreement is free to download. However, "free" has costs: you need to customise it yourself (risking errors), you don\'t get inventory sections, and you don\'t have integration with eviction or money claim processes. Many landlords find the £9.99-14.99 for a professional template is well worth avoiding these issues.',
+    answer: 'Yes, the Scottish Government model agreement is free to download. However, "free" has costs: you need to customise it yourself (risking errors), you don\'t get inventory sections, and you don\'t have integration with eviction or money claim processes. Many landlords find the £14.99-14.99 for a professional template is well worth avoiding these issues.',
   },
   {
     question: 'Can I use the government model and add your inventory sections?',
@@ -203,7 +203,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                   <tr className="bg-gray-100 font-semibold">
                     <td className="px-6 py-4">Price</td>
                     <td className="px-6 py-4 text-center">Free (+ your time)</td>
-                    <td className="px-6 py-4 text-center bg-blue-100 text-blue-800">£9.99 - £14.99</td>
+                    <td className="px-6 py-4 text-center bg-blue-100 text-blue-800">£14.99 - £14.99</td>
                   </tr>
                 </tbody>
               </table>

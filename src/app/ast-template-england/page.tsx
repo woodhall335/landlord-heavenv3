@@ -8,7 +8,7 @@ import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'AST Template England 2026 | Assured Shorthold Tenancy Agreement Download',
-  description: 'Download an AST template for England that complies with Housing Act 1988 and Tenant Fees Act 2019. Instant PDF generation from £9.99. Create your legally binding tenancy agreement today.',
+  description: 'Download an AST template for England that complies with Housing Act 1988 and Tenant Fees Act 2019. Instant PDF generation from £14.99. Create your legally binding tenancy agreement today.',
   keywords: [
     'AST template England',
     'England AST download',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'AST Template England 2026 | Assured Shorthold Tenancy Agreement Download',
-    description: 'Download an AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £9.99.',
+    description: 'Download an AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/ast-template-england'),
   },
@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     question: 'Can I use your AST template for a furnished or unfurnished property?',
-    answer: 'Yes. Our AST template works for both furnished and unfurnished properties. The wizard asks about furnishing level and, for furnished properties, prompts you to include inventory details. The Premium AST (£14.99) includes comprehensive inventory sections where you can document all included items, their condition, and any existing damage — essential for deposit deduction evidence.',
+    answer: 'Yes. Our AST template works for both furnished and unfurnished properties. The wizard asks about furnishing level and, for furnished properties, prompts you to include inventory details. The Premium AST (£24.99) includes comprehensive inventory sections where you can document all included items, their condition, and any existing damage — essential for deposit deduction evidence.',
   },
   {
     question: 'Does the template include a break clause?',
@@ -138,13 +138,13 @@ export default function AstTemplateEnglandPage() {
                 href="/wizard?product=ast_standard&src=seo_ast_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
               >
-                Standard AST — £9.99
+                Standard AST — £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_ast_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
               >
-                Premium AST — £14.99
+                Premium AST — £24.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Legally valid</p>
@@ -160,7 +160,7 @@ export default function AstTemplateEnglandPage() {
                 <div className="text-sm text-gray-600">Average completion time</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">£9.99</div>
+                <div className="text-3xl font-bold text-purple-600">£14.99</div>
                 <div className="text-sm text-gray-600">Starting price</div>
               </div>
               <div className="text-center">
@@ -224,7 +224,7 @@ export default function AstTemplateEnglandPage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Our AST Template</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard AST (£9.99)</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard AST (£14.99)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -260,7 +260,7 @@ export default function AstTemplateEnglandPage() {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                   RECOMMENDED
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Premium AST (£14.99)</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Premium AST (£24.99)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -345,12 +345,12 @@ export default function AstTemplateEnglandPage() {
               <Link href="/products/notice-only" className="bg-orange-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Eviction Notices</h3>
                 <p className="text-sm text-gray-600 mb-2">Section 21 & Section 8 notices when you need to regain possession.</p>
-                <span className="text-orange-600 font-medium">From £39.99</span>
+                <span className="text-orange-600 font-medium">From £49.99</span>
               </Link>
               <Link href="/products/money-claim" className="bg-green-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Recover rent arrears and property damage through the courts.</p>
-                <span className="text-green-600 font-medium">From £99.99</span>
+                <span className="text-green-600 font-medium">From £149.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-blue-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Ask Heaven</h3>

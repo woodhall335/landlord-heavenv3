@@ -68,7 +68,7 @@ export default function RentArrearsLetterTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '99.99',
+        highPrice: '149.99',
         priceCurrency: 'GBP',
         offerCount: '3',
       },
@@ -142,7 +142,7 @@ export default function RentArrearsLetterTemplatePage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Rent Arrears Letter Template"
           subtitle={<>Download a free <strong>rent arrears letter template</strong> to demand unpaid rent. Escalate to eviction or money claim if needed.</>}
-          primaryCTA={{ label: "Get Money Claim Pack — £99.99", href: wizardLinkMoneyClaim }}
+          primaryCTA={{ label: "Get Money Claim Pack — £149.99", href: wizardLinkMoneyClaim }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-rent-demand-letter" }}
           variant="pastel"
         >
@@ -296,7 +296,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Money Claim Pack — £99.99
+                    Get Money Claim Pack — £149.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -334,7 +334,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Eviction Notice — £39.99
+                    Get Eviction Notice — £49.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -405,7 +405,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Money Claim Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£99.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£149.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -629,7 +629,7 @@ export default function RentArrearsLetterTemplatePage() {
                   href={wizardLinkMoneyClaim}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Money Claim Pack — £99.99
+                  Get Money Claim Pack — £149.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

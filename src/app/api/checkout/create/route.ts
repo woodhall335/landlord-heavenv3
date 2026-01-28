@@ -37,7 +37,7 @@ import crypto from 'crypto';
 
 /**
  * Map product types to Stripe Price IDs
- * Note: sc_money_claim uses the same Stripe price as money_claim (both £199.99)
+ * Note: sc_money_claim uses the same Stripe price as money_claim (both £149.99)
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   notice_only: PRICE_IDS.NOTICE_ONLY,
@@ -551,7 +551,7 @@ export async function POST(request: Request) {
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
-    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 39.99)
+    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 49.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
     const orderPayload = {
         user_id: user.id,

@@ -593,9 +593,9 @@ export function getProductMeta(product: string): ProductMeta {
   const products: Record<string, ProductMeta> = {
     'notice_only': {
       name: 'Notice Only Pack',
-      price: '£39.99',
+      price: '£49.99',
       originalPrice: '£150+',
-      savings: 'Save £110+ vs solicitors',
+      savings: 'Save £100+ vs solicitors',
       features: [
         'Legally compliant eviction notice',
         'Service instructions',
@@ -606,9 +606,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£149.99',
+      price: '£199.99',
       originalPrice: '£2,500+',
-      savings: 'Save £2,350+ vs solicitors',
+      savings: 'Save £2,300+ vs solicitors',
       features: [
         'Everything in Notice Only',
         'Court forms (N5, N119, N5B)',
@@ -620,9 +620,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£99.99',
+      price: '£149.99',
       originalPrice: '£3,000+',
-      savings: 'Save £2,900+ vs solicitors',
+      savings: 'Save £2,850+ vs solicitors',
       features: [
         'Form N1 money claim',
         'Particulars of claim',
@@ -636,9 +636,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£99.99',
+      price: '£149.99',
       originalPrice: '£3,000+',
-      savings: 'Save £2,900+ vs solicitors',
+      savings: 'Save £2,850+ vs solicitors',
       features: [
         'Form 3A simple procedure claim',
         'Particulars of claim',
@@ -652,9 +652,9 @@ export function getProductMeta(product: string): ProductMeta {
     // STANDARD TENANCY AGREEMENT - Base product (agreement only)
     'ast_standard': {
       name: 'Tenancy Agreement',
-      price: '£9.99',
+      price: '£14.99',
       originalPrice: '£100+',
-      savings: 'Save £90+ vs solicitors',
+      savings: 'Save £85+ vs solicitors',
       features: [
         'Includes the tenancy agreement only',
         'Jurisdiction-compliant (England/Wales/Scotland/NI)',
@@ -664,9 +664,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'tenancy_agreement': {
       name: 'Tenancy Agreement',
-      price: '£9.99',
+      price: '£14.99',
       originalPrice: '£100+',
-      savings: 'Save £90+ vs solicitors',
+      savings: 'Save £85+ vs solicitors',
       features: [
         'Includes the tenancy agreement only',
         'Jurisdiction-compliant (England/Wales/Scotland/NI)',
@@ -677,9 +677,9 @@ export function getProductMeta(product: string): ProductMeta {
     // PREMIUM HMO TENANCY AGREEMENT - HMO-specific clauses
     'ast_premium': {
       name: 'HMO Tenancy Agreement',
-      price: '£14.99',
+      price: '£24.99',
       originalPrice: '£200+',
-      savings: 'Save £185+ vs solicitors',
+      savings: 'Save £175+ vs solicitors',
       features: [
         'Includes HMO-specific clauses for multi-occupancy properties',
         'Multiple occupants & joint liability clauses',

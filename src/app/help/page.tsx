@@ -91,7 +91,7 @@ export default function HelpPage() {
                         <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
-                        <li>Complete payment (£39.99 - £149.99 depending on product)</li>
+                        <li>Complete payment (£49.99 - £199.99 depending on product)</li>
                         <li>Download your documents as PDF immediately</li>
                       </ol>
                       <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -121,17 +121,17 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices (£39.99):</strong> Just need an eviction notice (Section 8/21, Notice to
+                        <strong>Notices (£49.99):</strong> Just need an eviction notice (Section 8/21, Notice to
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (£99.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims (£149.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
-                        <strong>Standard AST (£9.99):</strong> Simple tenancy agreement for standard lettings.
+                        <strong>Standard AST (£14.99):</strong> Simple tenancy agreement for standard lettings.
                       </li>
                       <li>
-                        <strong>Premium AST (£14.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                        <strong>Premium AST (£24.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                         increases.
                       </li>
                       <li>

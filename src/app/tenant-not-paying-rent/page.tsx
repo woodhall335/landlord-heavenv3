@@ -126,7 +126,7 @@ export default function TenantNotPayingRentPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Tenant Not Paying Rent?"
           subtitle={<>You have <strong>three main options</strong>: demand payment, evict for rent arrears, or claim the money through court. Here&apos;s how each works.</>}
-          primaryCTA={{ label: 'Get Section 8 Notice — £39.99', href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: 'Get Section 8 Notice — £49.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'Claim Unpaid Rent', href: '/products/money-claim' }}
           variant="pastel"
         >
@@ -232,7 +232,7 @@ export default function TenantNotPayingRentPage() {
                     href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Get Section 8 Notice — £39.99
+                    Get Section 8 Notice — £49.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -265,7 +265,7 @@ export default function TenantNotPayingRentPage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim — £99.99
+                    Start Money Claim — £149.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -496,7 +496,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack — £99.99
+                        Get Money Claim Pack — £149.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"
