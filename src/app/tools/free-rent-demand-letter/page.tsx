@@ -9,6 +9,8 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -882,6 +884,19 @@ URL.revokeObjectURL(url);
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            toolLinks.rentArrearsCalculator,
+            toolLinks.section8Generator,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
+      </Container>
 
       {/* Email Gate Modal */}
       {gate.showGate && (
