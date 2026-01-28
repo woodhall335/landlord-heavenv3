@@ -6,14 +6,17 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
+import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine } from 'react-icons/ri';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
+import type { OrderBySessionResponse } from '@/app/api/orders/by-session/route';
 
 interface Case {
   id: string;
@@ -22,43 +25,64 @@ interface Case {
   status: string;
   wizard_progress: number;
   created_at: string;
-}
-
-interface Document {
-  id: string;
-  document_title: string;
-  document_type: string;
-  is_preview: boolean;
-  created_at: string;
+  // Derived display status from API
+  display_status?: string;
+  display_label?: string;
+  display_badge_variant?: 'neutral' | 'warning' | 'success';
+  has_paid_order?: boolean;
 }
 
 export default function DashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isLoading: authLoading, isAuthenticated, user } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
-  const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const statsSectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  // Session ID fallback redirect handling
+  const sessionId = searchParams.get('session_id');
+  const [sessionOrder, setSessionOrder] = useState<OrderBySessionResponse | null>(null);
+  const [sessionOrderLoading, setSessionOrderLoading] = useState(false);
 
-  const fetchDashboardData = async () => {
+  const handleScrollToStats = () => {
+    setTimeout(() => {
+      statsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
+
+  // Fetch order by session_id if present
+  const fetchSessionOrder = useCallback(async () => {
+    if (!sessionId || !isAuthenticated) return;
+
+    setSessionOrderLoading(true);
     try {
-      const [casesRes, docsRes, statsRes] = await Promise.all([
+      const response = await fetch(`/api/orders/by-session?session_id=${encodeURIComponent(sessionId)}`);
+      if (response.ok) {
+        const data: OrderBySessionResponse = await response.json();
+        setSessionOrder(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch session order:', error);
+    } finally {
+      setSessionOrderLoading(false);
+    }
+  }, [sessionId, isAuthenticated]);
+
+  const fetchDashboardData = useCallback(async () => {
+    if (!isAuthenticated) return;
+
+    setIsLoadingData(true);
+    try {
+      const [casesRes, statsRes] = await Promise.all([
         fetch('/api/cases'),
-        fetch('/api/documents'),
         fetch('/api/cases/stats'),
       ]);
 
       if (casesRes.ok) {
         const casesData = await casesRes.json();
         setCases(casesData.cases || []);
-      }
-
-      if (docsRes.ok) {
-        const docsData = await docsRes.json();
-        setDocuments(docsData.documents || []);
       }
 
       if (statsRes.ok) {
@@ -68,9 +92,17 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingData(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  // Only fetch data once auth check completes and user is authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      fetchDashboardData();
+      fetchSessionOrder();
+    }
+  }, [authLoading, isAuthenticated, fetchDashboardData, fetchSessionOrder]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -80,7 +112,8 @@ export default function DashboardPage() {
     });
   };
 
-  if (isLoading) {
+  // Show loading while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -91,26 +124,114 @@ export default function DashboardPage() {
     );
   }
 
+  // Show login prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card padding="large" className="max-w-md mx-auto text-center">
+          <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <RiLoginBoxLine className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
+          <p className="text-gray-600 mb-6">
+            Please log in to access your dashboard and manage your cases.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link href="/auth/login">
+              <Button variant="primary" size="large" className="w-full">
+                Log In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button variant="secondary" size="large" className="w-full">
+                Create Account
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show loading while fetching data
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading your data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero
         title="Dashboard"
-        subtitle="Overview of your cases & activity"
-        eyebrow="Workspace"
-        actions={
-          <Link href="/wizard">
-            <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90">
-              + New Document
-            </Button>
-          </Link>
+        subtitle={
+          <button onClick={handleScrollToStats} className="hero-btn-pulse">
+            Overview of your cases & activity →
+          </button>
         }
+        eyebrow={`Welcome${user?.full_name ? `, ${user.full_name}` : ''}`}
         align="left"
       />
 
       <Container size="large" className="py-8">
+        {/* Session Order Banner - shown when redirected from Stripe with session_id */}
+        {sessionId && !sessionOrderLoading && sessionOrder && (
+          <>
+            {sessionOrder.found && sessionOrder.paid && sessionOrder.case_id ? (
+              <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
+                <div className="flex items-start gap-3">
+                  <div className="text-success text-2xl">✔</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-charcoal">Payment confirmed</h3>
+                    <p className="text-gray-700 mt-1">
+                      Your payment was successful. View your case to download your documents.
+                    </p>
+                    <div className="mt-4">
+                      <Link href={`/dashboard/cases/${sessionOrder.case_id}`}>
+                        <Button variant="primary">
+                          View Your Case
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : sessionOrder.found && !sessionOrder.paid ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Payment pending</h3>
+                    <p className="text-gray-600 mt-1">
+                      Your payment is being processed. Please check back shortly or contact support if you believe this is an error.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : !sessionOrder.found ? (
+              <div className="mb-6 p-6 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-start gap-3">
+                  <div className="text-gray-500 text-2xl">ℹ️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-charcoal">Session not found</h3>
+                    <p className="text-gray-600 mt-1">
+                      We couldn't find a purchase associated with this session. If you recently made a payment, it may still be processing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
+
         {/* Stats Overview */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 scroll-mt-8">
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Total Cases</div>
               <div className="text-3xl font-bold text-charcoal">{stats.overview.total}</div>
@@ -122,10 +243,6 @@ export default function DashboardPage() {
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Completed</div>
               <div className="text-3xl font-bold text-green-600">{stats.overview.completed}</div>
-            </Card>
-            <Card padding="medium">
-              <div className="text-sm text-gray-600 mb-1">Documents</div>
-              <div className="text-3xl font-bold text-charcoal">{documents.length}</div>
             </Card>
           </div>
         )}
@@ -146,7 +263,7 @@ export default function DashboardPage() {
               {cases.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-gray-600 mb-4">No cases yet</p>
-                  <Link href="/wizard">
+                  <Link href="/wizard?src=dashboard">
                     <Button variant="primary">Start Your First Case</Button>
                   </Link>
                 </div>
@@ -164,13 +281,13 @@ export default function DashboardPage() {
                             {caseItem.case_type.replace('_', ' ')}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {caseItem.jurisdiction === 'england-wales' ? 'England & Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : 'Northern Ireland'}
+                            {caseItem.jurisdiction === 'england' ? 'England' : caseItem.jurisdiction === 'wales' ? 'Wales' : caseItem.jurisdiction === 'scotland' ? 'Scotland' : caseItem.jurisdiction === 'northern-ireland' ? 'Northern Ireland' : caseItem.jurisdiction}
                           </div>
                         </div>
                         <Badge
-                          variant={caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral'}
+                          variant={caseItem.display_badge_variant || (caseItem.status === 'completed' ? 'success' : caseItem.status === 'in_progress' ? 'warning' : 'neutral')}
                         >
-                          {caseItem.status}
+                          {caseItem.display_label || caseItem.status.replace('_', ' ')}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -184,43 +301,7 @@ export default function DashboardPage() {
               )}
             </Card>
 
-            {/* Documents */}
-            <Card padding="large">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-charcoal">Documents</h2>
-                <Link href="/dashboard/documents" className="text-sm text-primary hover:text-primary-dark font-medium">
-                  View all →
-                </Link>
-              </div>
-
-              {documents.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">No documents generated yet</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {documents.slice(0, 5).map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <svg className="w-8 h-8 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                        </svg>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-charcoal truncate">{doc.document_title}</div>
-                          <div className="text-xs text-gray-500">{formatDate(doc.created_at)}</div>
-                        </div>
-                      </div>
-                      {doc.is_preview && (
-                        <Badge variant="warning" size="small">Preview</Badge>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
+            {/* Note: Documents section removed - documents are available within each case */}
           </div>
 
           {/* Right Column: Quick Actions & Info (1/3) */}
@@ -229,14 +310,15 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <Link href="/wizard">
+                <Link href="/wizard?src=dashboard">
                   <button className="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-left font-medium">
                     📝 Create New Document
                   </button>
                 </Link>
-                <Link href="/dashboard/hmo">
-                  <button className="w-full px-4 py-3 bg-linear-to-r from-secondary to-primary text-white rounded-lg hover:opacity-90 transition-opacity text-left font-medium">
-                    🏘️ HMO Pro Dashboard
+                {/* HMO Pro Dashboard removed - parked for later review */}
+                <Link href="/dashboard/billing">
+                  <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
+                    💳 Billing & Orders
                   </button>
                 </Link>
                 <Link href="/dashboard/settings">
@@ -251,16 +333,16 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/docs" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  Documentation
+                <Link href="/help" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiBookOpenLine className="w-4 h-4 text-primary" />
+                  </div>
+                  Help Center
                 </Link>
-                <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
+                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiCustomerService2Line className="w-4 h-4 text-primary" />
+                  </div>
                   Contact Support
                 </Link>
               </div>

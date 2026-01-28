@@ -36,12 +36,14 @@
 </ul>
 {{/if}}
 
+{{#if claim_interest}}
 <h2>Interest</h2>
 <p>
   The Claimant claims interest pursuant to section 69 County Courts Act 1984 at {{interest_rate}}% per annum
   from {{interest_start_date}} to {{generation_date}}, calculated at {{currency interest_to_date}}, and continuing at
   {{currency daily_interest}} per day until judgment or earlier payment.
 </p>
+{{/if}}
 
 <h2>Relief sought</h2>
 <ol>
@@ -50,7 +52,9 @@
   {{#if solicitor_costs}}
   <li>Fixed legal costs of {{currency solicitor_costs}}</li>
   {{/if}}
+  {{#if claim_interest}}
   <li>Interest under section 69 CCA 1984</li>
+  {{/if}}
 </ol>
 
 <h2>Statement of truth</h2>

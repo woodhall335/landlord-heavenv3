@@ -1,10 +1,241 @@
 /**
  * AST (Assured Shorthold Tenancy) Generator
  *
- * Generates standard and premium tenancy agreements for England & Wales.
+ * Generates jurisdiction-specific tenancy agreements:
+ * - England: Assured Shorthold Tenancy (Housing Act 1988, Deregulation Act 2015)
+ * - Wales: Standard Occupation Contract (Renting Homes (Wales) Act 2016)
+ * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
+ * - Northern Ireland: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
+ *
+ * PRODUCT TIERS:
+ * - Standard: Base product - includes ONLY the tenancy agreement document
+ * - Premium: HMO-specific tenancy agreement with multi-occupancy clauses
+ *
+ * IMPORTANT: Each jurisdiction uses different terminology and legal frameworks.
+ * This generator ensures the correct template and document_type is used.
+ *
+ * LEGAL NOTES BY JURISDICTION:
+ * - England: Uses "Landlord", "Tenant", "Premises". AST wording only (not generic).
+ * - Wales: Uses "Landlord", "Contract-holder", "Dwelling". Written Statement required.
+ * - Scotland: Open-ended tenancy (no fixed end date). Rent Pressure Zone compatibility.
+ * - NI: County Court NI jurisdiction. Electrical safety mandatory from 1 April 2025.
  */
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
+import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
+import path from 'path';
+
+// ============================================================================
+// PRODUCT TIER (2-VARIANTS ONLY RULE)
+// ============================================================================
+
+/**
+ * TENANCY PRODUCT TIERS - EXACTLY 2 VARIANTS
+ *
+ * Standard: Base tenancy agreement ONLY, NO HMO clauses
+ * Premium: HMO-specific tenancy agreement with multi-occupancy clauses
+ *
+ * This is enforced at compile time via TypeScript and runtime via assertions.
+ */
+export type TenancyTier = 'standard' | 'premium';
+
+/**
+ * Runtime validation for product tier
+ * Throws if an invalid tier is provided
+ */
+export function validateTenancyTier(tier: string): asserts tier is TenancyTier {
+  if (tier !== 'standard' && tier !== 'premium') {
+    throw new Error(
+      `Invalid tenancy tier: "${tier}". ` +
+      `Only 2 tiers are allowed: "standard" (no HMO) or "premium" (HMO). ` +
+      `This is a hard constraint - no other variants are permitted.`
+    );
+  }
+}
+
+/**
+ * Assert that HMO flags are correctly set for the tier
+ * - Standard: is_hmo MUST be false
+ * - Premium: is_hmo MUST be true
+ */
+export function assertTierHMOConsistency(tier: TenancyTier, isHMO: boolean): void {
+  if (tier === 'standard' && isHMO) {
+    throw new Error(
+      `HMO flag mismatch: Standard tier cannot have is_hmo=true. ` +
+      `Standard = NO HMO clauses. Use "premium" tier for HMO properties.`
+    );
+  }
+  if (tier === 'premium' && !isHMO) {
+    throw new Error(
+      `HMO flag mismatch: Premium tier must have is_hmo=true. ` +
+      `Premium = HMO-specific agreement. Set is_hmo=true or use "standard" tier.`
+    );
+  }
+}
+
+// ============================================================================
+// JURISDICTION CONFIGURATION
+// ============================================================================
+
+export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
+
+/**
+ * Jurisdiction-specific configuration for tenancy agreements
+ */
+interface JurisdictionConfig {
+  jurisdiction: TenancyJurisdiction;
+  agreementTitle: string;
+  agreementDescription: string;
+  agreementDocumentType: string; // Must match pack-contents keys
+  modelClausesTitle: string;
+  modelClausesDescription: string;
+  legalFramework: string;
+  jurisdictionLabel: string;
+  templatePaths: {
+    standard: string;
+    premium: string;
+    modelClauses: string;
+    termsSchedule: string;
+    inventory: string;
+    keySchedule: string;
+    maintenanceGuide: string;
+    checkoutProcedure: string;
+  };
+}
+
+/**
+ * Configuration for each UK jurisdiction
+ */
+const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
+  // ENGLAND: Uses AST terminology. Housing Act 1988 + Deregulation Act 2015.
+  // Terminology: "Landlord", "Tenant", "Premises" (NOT generic tenancy)
+  // Premium tier includes HMO-specific clauses aligned with Housing Act 2004
+  england: {
+    jurisdiction: 'england',
+    agreementTitle: 'Assured Shorthold Tenancy Agreement',
+    agreementDescription: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.',
+    agreementDocumentType: 'ast_agreement',
+    modelClausesTitle: 'Government Model Clauses',
+    modelClausesDescription: 'Recommended clauses from official government guidance',
+    legalFramework: 'Housing Act 1988',
+    jurisdictionLabel: 'England',
+    templatePaths: {
+      standard: 'uk/england/templates/standard_ast_formatted.hbs',
+      premium: 'uk/england/templates/ast_hmo.hbs', // HMO-specific template
+      modelClauses: 'uk/england/templates/government_model_clauses.hbs',
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'shared/templates/inventory_template.hbs',
+      keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  // WALES: Uses Occupation Contract terminology. Renting Homes (Wales) Act 2016.
+  // Terminology: "Landlord", "Contract-holder" (NOT Tenant), "Dwelling"
+  // NO AST references allowed. Written Statement requirements apply.
+  // Premium tier includes HMO clauses aligned with Housing Act 2004
+  wales: {
+    jurisdiction: 'wales',
+    agreementTitle: 'Standard Occupation Contract',
+    agreementDescription: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.',
+    agreementDocumentType: 'soc_agreement',
+    modelClausesTitle: 'Model Clauses (Wales)',
+    modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act 2016',
+    legalFramework: 'Renting Homes (Wales) Act 2016',
+    jurisdictionLabel: 'Wales',
+    templatePaths: {
+      standard: 'uk/wales/templates/standard_occupation_contract.hbs',
+      premium: 'uk/wales/templates/occupation_contract_hmo.hbs', // HMO-specific template
+      modelClauses: 'uk/wales/templates/model_clauses.hbs',
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'shared/templates/inventory_template.hbs',
+      keySchedule: 'uk/wales/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/wales/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/wales/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  // SCOTLAND: Private Residential Tenancy (open-ended, no fixed end date).
+  // Private Housing (Tenancies) (Scotland) Act 2016.
+  // Key differences: Open-ended tenancy, Rent Pressure Zone compatibility required.
+  // First-tier Tribunal for Scotland (not County Court).
+  scotland: {
+    jurisdiction: 'scotland',
+    agreementTitle: 'Private Residential Tenancy Agreement',
+    agreementDescription: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
+    agreementDocumentType: 'prt_agreement',
+    modelClausesTitle: 'Model Clauses (Scotland)',
+    modelClausesDescription: 'Scottish Government prescribed terms for PRTs',
+    legalFramework: 'Private Housing (Tenancies) (Scotland) Act 2016',
+    jurisdictionLabel: 'Scotland',
+    templatePaths: {
+      standard: 'uk/scotland/templates/prt_agreement.hbs',
+      premium: 'uk/scotland/templates/prt_agreement_hmo.hbs', // HMO-specific template
+      modelClauses: 'uk/scotland/templates/model_clauses.hbs',
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'uk/scotland/templates/inventory_template.hbs',
+      keySchedule: 'uk/scotland/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/scotland/templates/premium/checkout_procedure.hbs',
+    },
+  },
+  // NORTHERN IRELAND: Updated to 2022 Act. Key requirements:
+  // - Electrical safety mandatory from 1 April 2025
+  // - Rent increase restrictions: 12-month gap, 3-month notice
+  // - County Court Northern Ireland jurisdiction
+  'northern-ireland': {
+    jurisdiction: 'northern-ireland',
+    agreementTitle: 'Private Tenancy Agreement',
+    agreementDescription: 'Compliant with Private Tenancies Act (Northern Ireland) 2022',
+    agreementDocumentType: 'private_tenancy_agreement',
+    modelClausesTitle: 'Model Clauses (Northern Ireland)',
+    modelClausesDescription: 'Prescribed statutory terms under NI legislation',
+    legalFramework: 'Private Tenancies Act (Northern Ireland) 2022',
+    jurisdictionLabel: 'Northern Ireland',
+    templatePaths: {
+      standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
+      premium: 'uk/northern-ireland/templates/private_tenancy_hmo.hbs',
+      modelClauses: 'uk/northern-ireland/templates/model_clauses.hbs',
+      termsSchedule: 'shared/templates/terms_and_conditions.hbs',
+      inventory: 'uk/northern-ireland/templates/inventory_template.hbs',
+      keySchedule: 'uk/northern-ireland/templates/premium/key_schedule.hbs',
+      maintenanceGuide: 'uk/northern-ireland/templates/premium/property_maintenance_guide.hbs',
+      checkoutProcedure: 'uk/northern-ireland/templates/premium/checkout_procedure.hbs',
+    },
+  },
+};
+
+/**
+ * Detect jurisdiction from ASTData
+ * Checks multiple possible sources and normalizes to canonical jurisdiction
+ */
+function detectJurisdiction(data: ASTData): TenancyJurisdiction {
+  // Check explicit jurisdiction field (canonical)
+  const explicitJurisdiction = (data as any).jurisdiction;
+  if (explicitJurisdiction) {
+    const normalized = explicitJurisdiction.toLowerCase().replace(/\s+/g, '-');
+    if (normalized === 'scotland') return 'scotland';
+    if (normalized === 'northern-ireland' || normalized === 'ni') return 'northern-ireland';
+    if (normalized === 'wales') return 'wales';
+    if (normalized === 'england') return 'england';
+  }
+
+  // Check legacy jurisdiction flags
+  if ((data as any).jurisdiction_scotland) return 'scotland';
+  if ((data as any).jurisdiction_northern_ireland || (data as any).jurisdiction_ni) return 'northern-ireland';
+  if (data.jurisdiction_wales) return 'wales';
+  if (data.jurisdiction_england) return 'england';
+
+  // Default to England if not specified
+  console.warn('[AST Generator] No jurisdiction specified, defaulting to England');
+  return 'england';
+}
+
+/**
+ * Get jurisdiction configuration
+ */
+export function getJurisdictionConfig(jurisdiction: TenancyJurisdiction): JurisdictionConfig {
+  return JURISDICTION_CONFIGS[jurisdiction];
+}
 
 // ============================================================================
 // TYPES
@@ -153,11 +384,20 @@ export interface ASTData {
 
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
+  gas_safety_certificate_date?: string;
+  gas_safety_certificate_expiry?: string;
   epc_rating?: string;
+  epc_certificate_date?: string;
   electrical_safety_certificate?: boolean;
+  eicr_certificate_date?: string;
+  eicr_next_inspection_date?: string;
   smoke_alarms_fitted?: boolean;
   carbon_monoxide_alarms?: boolean;
   how_to_rent_guide_provided?: boolean;
+  how_to_rent_guide_date?: string;
+
+  // Deposit Compliance Dates
+  prescribed_information_date?: string;
 
   // Maintenance & Repairs
   landlord_maintenance_responsibilities?: string;
@@ -408,7 +648,11 @@ export function validateASTData(data: ASTData): string[] {
 // ============================================================================
 
 /**
- * Generate a standard AST with all bonus documents
+ * Generate a standard tenancy agreement (base product - agreement only, no supporting docs)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
+ *
+ * IMPORTANT: Base product includes ONLY the tenancy agreement document.
+ * No guides, no notices, no annexes, no explanatory PDFs.
  */
 export async function generateStandardAST(
   data: ASTData,
@@ -419,10 +663,9 @@ export async function generateStandardAST(
     throw new Error(`AST validation failed:\n${errors.join('\n')}`);
   }
 
-  // Set defaults
-  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
-    data.jurisdiction_england = true;
-  }
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
 
   if (!data.rent_period) {
     data.rent_period = 'month';
@@ -433,30 +676,28 @@ export async function generateStandardAST(
   }
 
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-STD-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
 
   // Add metadata flags
   const enrichedData = {
     ...data,
     premium: false,
-    product_tier: data.product_tier || 'Standard AST',
+    is_hmo: false,
+    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
   };
 
-  // List of all templates to merge (in order)
+  // BASE PRODUCT: ONLY the tenancy agreement template - NO supporting documents
+  // This ensures legal clarity: "Includes the tenancy agreement only"
   const templatePaths = [
-    'uk/england-wales/templates/standard_ast_formatted.hbs',
-    'shared/templates/terms_and_conditions.hbs',
-    'shared/templates/certificate_of_curation.hbs',
-    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
-    'uk/england-wales/templates/government_model_clauses.hbs',
-    'shared/templates/deposit_protection_certificate.hbs',
-    'shared/templates/inventory_template.hbs',
+    config.templatePaths.standard,
   ];
 
-  // Compile and merge all templates
+  // Compile and merge all templates (just one for base product)
   const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
 
   // Generate PDF from merged HTML
@@ -466,16 +707,27 @@ export async function generateStandardAST(
     html: mergedHtml,
     pdf,
     metadata: {
-      templateUsed: 'standard_ast_with_bonus_docs',
+      templateUsed: `${jurisdiction}_standard_tenancy`,
       generatedAt: new Date().toISOString(),
       documentId,
       isPreview,
+      jurisdiction,
     },
   };
 }
 
 /**
- * Generate a premium AST with all bonus documents + enhanced clauses
+ * Generate a premium HMO tenancy agreement (single document with HMO clauses)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
+ *
+ * IMPORTANT: Premium product includes ONLY the HMO-specific tenancy agreement.
+ * HMO clauses cover: multiple occupants, joint liability, shared facilities,
+ * fire safety, licensing acknowledgement, house rules, occupancy limits.
+ *
+ * Jurisdiction handling:
+ * - England/Wales: HMO clauses aligned with Housing Act 2004
+ * - Scotland: Adapted to PRT framework
+ * - NI: Only includes HMO clauses where legally permitted
  */
 export async function generatePremiumAST(
   data: ASTData,
@@ -486,10 +738,9 @@ export async function generatePremiumAST(
     throw new Error(`AST validation failed:\n${errors.join('\n')}`);
   }
 
-  // Set defaults
-  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
-    data.jurisdiction_england = true;
-  }
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
 
   if (!data.rent_period) {
     data.rent_period = 'month';
@@ -500,36 +751,28 @@ export async function generatePremiumAST(
   }
 
   const generationTimestamp = new Date().toISOString();
-  const documentId = `AST-PREM-${Date.now()}`;
+  const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
 
-  // Add metadata flags for premium
+  // Add metadata flags for HMO premium
   const enrichedData = {
     ...data,
     premium: true,
-    product_tier: data.product_tier || 'Premium AST',
+    is_hmo: true,
+    product_tier: data.product_tier || `HMO ${config.agreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
-    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
   };
 
-  // Premium includes all standard docs PLUS exclusive premium documents
+  // PREMIUM PRODUCT: ONLY the HMO-specific tenancy agreement template
+  // Includes HMO-specific clauses for multi-occupancy properties
   const templatePaths = [
-    'uk/england-wales/templates/premium_ast_formatted.hbs',
-    'shared/templates/terms_and_conditions.hbs',
-    'shared/templates/certificate_of_curation.hbs',
-    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
-    'uk/england-wales/templates/government_model_clauses.hbs',
-    'shared/templates/deposit_protection_certificate.hbs',
-    'shared/templates/inventory_template.hbs',
-    // Premium-exclusive documents (Option 2 enhancement)
-    'uk/england-wales/templates/premium/key_schedule.hbs',
-    'uk/england-wales/templates/premium/tenant_welcome_pack.hbs',
-    'uk/england-wales/templates/premium/property_maintenance_guide.hbs',
-    'uk/england-wales/templates/premium/move_in_condition_report.hbs',
-    'uk/england-wales/templates/premium/checkout_procedure.hbs',
+    config.templatePaths.premium,
   ];
 
-  // Compile and merge all templates
+  // Compile and merge all templates (just one for premium product)
   const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
 
   // Generate PDF from merged HTML
@@ -539,11 +782,305 @@ export async function generatePremiumAST(
     html: mergedHtml,
     pdf,
     metadata: {
-      templateUsed: 'premium_ast_with_bonus_docs',
+      templateUsed: `${jurisdiction}_hmo_tenancy`,
       generatedAt: new Date().toISOString(),
       documentId,
       isPreview,
+      jurisdiction,
     },
+  };
+}
+
+// ============================================================================
+// UNIFIED GENERATOR (Enforces 2-Variant Rule)
+// ============================================================================
+
+/**
+ * Generate a tenancy agreement by tier (standard or premium)
+ *
+ * This is the PREFERRED entry point for generating tenancy agreements.
+ * It enforces the 2-variant rule:
+ * - Standard: Base agreement, NO HMO clauses
+ * - Premium: HMO-specific agreement with multi-occupancy clauses
+ *
+ * @param data - Tenancy data
+ * @param tier - 'standard' or 'premium' (NO other values allowed)
+ * @param isPreview - Whether to generate a preview
+ * @returns Generated document
+ *
+ * @example
+ * // Generate standard agreement
+ * const doc = await generateTenancyAgreement(data, 'standard');
+ *
+ * // Generate HMO agreement
+ * const doc = await generateTenancyAgreement(data, 'premium');
+ */
+// Runtime self-check flag to avoid repeated checks
+let _runtimeSelfCheckDone = false;
+
+export async function generateTenancyAgreement(
+  data: ASTData,
+  tier: TenancyTier,
+  isPreview = false
+): Promise<GeneratedDocument> {
+  // RUNTIME GUARDRAIL: Validate tier is exactly 'standard' or 'premium'
+  validateTenancyTier(tier);
+
+  // RUNTIME SELF-CHECK: On first generation, validate all invariants
+  // Logs warning in production if invariants fail, but throws when generating
+  if (!_runtimeSelfCheckDone) {
+    _runtimeSelfCheckDone = true;
+    try {
+      const configDir = path.join(process.cwd(), 'config/jurisdictions');
+      const selfCheckResult = runtimeTenancyVariantsSelfCheck(configDir);
+
+      // If self-check fails, throw to prevent generating invalid documents
+      if (!selfCheckResult.valid) {
+        throw new Error(
+          `Tenancy variant invariants failed during generation. ` +
+          `Errors: ${selfCheckResult.errors.join('; ')}`
+        );
+      }
+    } catch (err) {
+      // Log but continue - the individual generator functions have their own validation
+      console.error('[AST Generator] Runtime self-check error:', err);
+    }
+  }
+
+  // Route to correct generator based on tier
+  if (tier === 'standard') {
+    // RUNTIME GUARDRAIL: Ensure is_hmo is not accidentally set for standard
+    if ((data as any).is_hmo === true) {
+      console.warn(
+        '[AST Generator] WARNING: is_hmo=true provided for standard tier. ' +
+        'This will be overridden to false. Use "premium" tier for HMO properties.'
+      );
+    }
+    return generateStandardAST(data, isPreview);
+  }
+
+  // Premium tier
+  return generatePremiumAST(data, isPreview);
+}
+
+/**
+ * Get the correct template path for a jurisdiction and tier
+ * This is a helper for external code that needs to know which template will be used.
+ */
+export function getTemplatePath(
+  jurisdiction: TenancyJurisdiction,
+  tier: TenancyTier
+): string {
+  validateTenancyTier(tier);
+  const config = getJurisdictionConfig(jurisdiction);
+  return tier === 'standard' ? config.templatePaths.standard : config.templatePaths.premium;
+}
+
+/**
+ * Get the document key for a jurisdiction and tier
+ * This matches the keys used in pack-contents.ts
+ */
+export function getDocumentKey(
+  jurisdiction: TenancyJurisdiction,
+  tier: TenancyTier
+): string {
+  validateTenancyTier(tier);
+  const config = getJurisdictionConfig(jurisdiction);
+
+  // Document keys by jurisdiction and tier
+  const keyMap: Record<TenancyJurisdiction, Record<TenancyTier, string>> = {
+    england: { standard: 'ast_agreement', premium: 'ast_agreement_hmo' },
+    wales: { standard: 'soc_agreement', premium: 'soc_agreement_hmo' },
+    scotland: { standard: 'prt_agreement', premium: 'prt_agreement_hmo' },
+    'northern-ireland': { standard: 'private_tenancy_agreement', premium: 'private_tenancy_agreement_hmo' },
+  };
+
+  return keyMap[jurisdiction][tier];
+}
+
+// ============================================================================
+// UNBUNDLED DOCUMENT GENERATION (Separate PDFs)
+// ============================================================================
+
+export interface ASTPackDocument {
+  title: string;
+  description: string;
+  category: 'agreement' | 'schedule' | 'checklist' | 'guidance';
+  /** Canonical document type key matching pack-contents (e.g., 'ast_agreement', 'terms_schedule') */
+  document_type: string;
+  html: string;
+  pdf?: Buffer;
+  file_name: string;
+}
+
+export interface ASTDocumentPack {
+  case_id: string;
+  tier: 'standard' | 'premium';
+  generated_at: string;
+  documents: ASTPackDocument[];
+}
+
+/**
+ * Generate Standard tenancy agreement as separate documents (unbundled)
+ * Jurisdiction-aware: uses correct templates and document_type for each UK jurisdiction
+ *
+ * IMPORTANT: Base product includes ONLY the tenancy agreement document.
+ * No guides, no notices, no annexes, no explanatory PDFs.
+ */
+export async function generateStandardASTDocuments(
+  data: ASTData,
+  caseId?: string
+): Promise<ASTDocumentPack> {
+  const errors = validateASTData(data);
+  if (errors.length > 0) {
+    throw new Error(`AST validation failed:\n${errors.join('\n')}`);
+  }
+
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
+
+  console.log(`[AST Generator] Using jurisdiction: ${jurisdiction} (${config.legalFramework})`);
+
+  // Set defaults
+  if (!data.rent_period) data.rent_period = 'month';
+  if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
+
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+
+  const enrichedData = {
+    ...data,
+    premium: false,
+    is_hmo: false,
+    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
+    generation_timestamp: generationTimestamp,
+    document_id: documentId,
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
+    current_date: new Date().toISOString().split('T')[0],
+  };
+
+  const documents: ASTPackDocument[] = [];
+
+  // Import generateDocument for individual templates
+  const { generateDocument } = await import('./generator');
+
+  // BASE PRODUCT: ONLY the Main Agreement - NO supporting documents
+  // This ensures: "Includes the tenancy agreement only"
+  try {
+    const agreementDoc = await generateDocument({
+      templatePath: config.templatePaths.standard,
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: config.agreementTitle,
+      description: config.agreementDescription,
+      category: 'agreement',
+      document_type: config.agreementDocumentType, // jurisdiction-specific key
+      html: agreementDoc.html,
+      pdf: agreementDoc.pdf,
+      file_name: 'tenancy_agreement.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate ${config.agreementTitle}:`, err);
+    throw err;
+  }
+
+  console.log(`✅ Generated ${documents.length} document for ${config.jurisdictionLabel} Standard pack (agreement only)`);
+
+  return {
+    case_id: caseId || documentId,
+    tier: 'standard',
+    generated_at: generationTimestamp,
+    documents,
+  };
+}
+
+/**
+ * Generate Premium HMO tenancy agreement as separate documents (unbundled)
+ * Jurisdiction-aware: uses correct templates for each UK jurisdiction
+ *
+ * IMPORTANT: Premium product includes ONLY the HMO-specific tenancy agreement.
+ * HMO clauses cover: multiple occupants, joint liability, shared facilities,
+ * fire safety, licensing acknowledgement, house rules, occupancy limits.
+ */
+export async function generatePremiumASTDocuments(
+  data: ASTData,
+  caseId?: string
+): Promise<ASTDocumentPack> {
+  const errors = validateASTData(data);
+  if (errors.length > 0) {
+    throw new Error(`AST validation failed:\n${errors.join('\n')}`);
+  }
+
+  // Detect jurisdiction and get configuration
+  const jurisdiction = detectJurisdiction(data);
+  const config = getJurisdictionConfig(jurisdiction);
+
+  console.log(`[AST Generator] Using jurisdiction: ${jurisdiction} (${config.legalFramework}) - HMO Premium`);
+
+  // Set defaults
+  if (!data.rent_period) data.rent_period = 'month';
+  if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
+
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
+
+  const enrichedData = {
+    ...data,
+    premium: true,
+    is_hmo: true,
+    product_tier: `HMO ${config.agreementTitle}`,
+    generation_timestamp: generationTimestamp,
+    document_id: documentId,
+    jurisdiction_name: config.jurisdictionLabel,
+    jurisdiction: jurisdiction,
+    legal_framework: config.legalFramework,
+    current_date: new Date().toISOString().split('T')[0],
+  };
+
+  const documents: ASTPackDocument[] = [];
+
+  const { generateDocument } = await import('./generator');
+
+  // PREMIUM PRODUCT: ONLY the HMO-specific tenancy agreement
+  // Includes HMO-specific clauses for multi-occupancy properties
+  try {
+    const agreementDoc = await generateDocument({
+      templatePath: config.templatePaths.premium,
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    // Get HMO-specific document type key
+    const hmoDocumentType = config.agreementDocumentType + '_hmo';
+
+    documents.push({
+      title: `HMO ${config.agreementTitle}`,
+      description: `Includes HMO-specific clauses for multi-occupancy properties. Compliant with ${config.legalFramework}.`,
+      category: 'agreement',
+      document_type: hmoDocumentType,
+      html: agreementDoc.html,
+      pdf: agreementDoc.pdf,
+      file_name: 'tenancy_agreement_hmo.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate HMO ${config.agreementTitle}:`, err);
+    throw err;
+  }
+
+  console.log(`✅ Generated ${documents.length} document for ${config.jurisdictionLabel} HMO Premium pack`);
+
+  return {
+    case_id: caseId || documentId,
+    tier: 'premium',
+    generated_at: generationTimestamp,
+    documents,
   };
 }
 

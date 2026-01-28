@@ -1,8 +1,693 @@
-<h1>Eviction Roadmap - England & Wales</h1>
-<p>Case: {{case_id}} | Grounds: {{#each grounds}}{{this.code}}{{#if @last}}{{else}}, {{/if}}{{/each}}</p>
-<p>Generated on {{current_date}}</p>
-<ul>
-  <li>Serve appropriate notice: {{case_type}}</li>
-  <li>Prepare court filing with Form N5/N119</li>
-  <li>Attend possession hearing</li>
-</ul>
+{{!--
+  ============================================================================
+  EVICTION ROADMAP & TIMELINE
+  Comprehensive Guide from Notice to Possession
+  ============================================================================
+  Consolidates: roadmap, timeline, expert guidance, and expectations
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eviction Roadmap & Timeline</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 9pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 16pt;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      color: #1a1a1a;
+    }
+
+    .doc-subtitle {
+      font-size: 10pt;
+      color: #666;
+    }
+
+    /* Case Summary */
+    .case-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5em 1.5em;
+      background: #f8f8f8;
+      padding: 1em;
+      margin: 1em 0;
+      border: 1px solid #ddd;
+      font-size: 8pt;
+    }
+
+    .case-summary dt {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .case-summary dd {
+      margin: 0;
+    }
+
+    /* Visual Timeline */
+    .timeline-visual {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.5em 0;
+      padding: 1em;
+      background: linear-gradient(90deg, #dcfce7 0%, #fef3c7 50%, #fee2e2 100%);
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .timeline-stage {
+      text-align: center;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-stage::after {
+      content: "→";
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16pt;
+      color: #666;
+    }
+
+    .timeline-stage:last-child::after {
+      display: none;
+    }
+
+    .stage-icon {
+      font-size: 20pt;
+      margin-bottom: 0.25em;
+    }
+
+    .stage-name {
+      font-weight: 700;
+      font-size: 8pt;
+      color: #1a1a1a;
+    }
+
+    .stage-duration {
+      font-size: 7pt;
+      color: #666;
+    }
+
+    /* Stage Cards */
+    .stage-card {
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .stage-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      padding: 0.75em 1em;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .stage-number {
+      width: 28px;
+      height: 28px;
+      background: white;
+      color: #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12pt;
+      flex-shrink: 0;
+    }
+
+    .stage-title {
+      flex: 1;
+    }
+
+    .stage-title h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .stage-title .duration {
+      font-size: 8pt;
+      opacity: 0.8;
+    }
+
+    .stage-status {
+      padding: 0.3em 0.6em;
+      border-radius: 3px;
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-current {
+      background: #22c55e;
+      color: white;
+    }
+
+    .status-upcoming {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .stage-card-content {
+      padding: 1em;
+      background: #fff;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+    }
+
+    .stage-section h3 {
+      font-size: 9pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+      color: #1a1a1a;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.25em;
+    }
+
+    .stage-section ul {
+      margin: 0;
+      padding-left: 1.25em;
+      font-size: 8pt;
+    }
+
+    .stage-section li {
+      margin: 0.3em 0;
+    }
+
+    /* Tips Box */
+    .tips-box {
+      margin: 0.75em 0;
+      padding: 0.75em;
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+      font-size: 8pt;
+    }
+
+    .tips-box strong {
+      color: #b45309;
+    }
+
+    /* Warning Box */
+    .warning-box {
+      margin: 0.75em 0;
+      padding: 0.75em;
+      background: #fee2e2;
+      border-left: 3px solid #dc2626;
+      font-size: 8pt;
+    }
+
+    .warning-box strong {
+      color: #dc2626;
+    }
+
+    /* Cost Table */
+    .cost-summary {
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .cost-summary-header {
+      padding: 0.75em 1em;
+      background: #1a1a1a;
+      color: white;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+    }
+
+    .cost-table th, .cost-table td {
+      padding: 0.5em 1em;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cost-table th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+
+    .cost-table .total {
+      font-weight: 700;
+      background: #f0fdf4;
+    }
+
+    /* Expert Tips Section */
+    .expert-tips {
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .expert-tips-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      margin-bottom: 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .expert-tips-header h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+    }
+
+    .tip-card {
+      padding: 0.75em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 8pt;
+    }
+
+    .tip-card h4 {
+      font-size: 9pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+      color: #15803d;
+    }
+
+    .tip-card.warning h4 {
+      color: #dc2626;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 1.5em;
+      padding-top: 0.75em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 8pt;
+      color: #666;
+    }
+
+    @media print {
+      .stage-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Eviction Roadmap & Timeline</h1>
+  <div class="doc-subtitle">Your complete guide from notice to possession</div>
+</div>
+
+<!-- Case Summary -->
+<dl class="case-summary">
+  <dt>Property:</dt>
+  <dd>{{property_address}}</dd>
+  <dt>Tenant:</dt>
+  <dd>{{tenant_name}}</dd>
+  <dt>Notice Type:</dt>
+  <dd>{{notice_type}}</dd>
+  <dt>Service Date:</dt>
+  <dd>{{service_date_formatted}}</dd>
+  <dt>Notice Expiry:</dt>
+  <dd>{{earliest_possession_date_formatted}}</dd>
+  <dt>Estimated Completion:</dt>
+  <dd>4-7 months from service</dd>
+</dl>
+
+<!-- Visual Timeline -->
+<div class="timeline-visual">
+  <div class="timeline-stage">
+    <div class="stage-icon">📝</div>
+    <div class="stage-name">Serve Notice</div>
+    <div class="stage-duration">Day 0</div>
+  </div>
+  <div class="timeline-stage">
+    <div class="stage-icon">⏳</div>
+    <div class="stage-name">Wait Period</div>
+    <div class="stage-duration">14d - 2m</div>
+  </div>
+  <div class="timeline-stage">
+    <div class="stage-icon">⚖️</div>
+    <div class="stage-name">File Claim</div>
+    <div class="stage-duration">4-8 weeks</div>
+  </div>
+  <div class="timeline-stage">
+    <div class="stage-icon">🏛️</div>
+    <div class="stage-name">Court Hearing</div>
+    <div class="stage-duration">8-16 weeks</div>
+  </div>
+  <div class="timeline-stage">
+    <div class="stage-icon">🔑</div>
+    <div class="stage-name">Possession</div>
+    <div class="stage-duration">2-6 weeks</div>
+  </div>
+</div>
+
+<!-- Stage 1: Serve Notice -->
+<div class="stage-card">
+  <div class="stage-card-header">
+    <div class="stage-number">1</div>
+    <div class="stage-title">
+      <h2>Serve the Notice</h2>
+      <div class="duration">Day 0 - Complete this stage first</div>
+    </div>
+    <span class="stage-status status-current">CURRENT</span>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>What You Need to Do</h3>
+        <ul>
+          <li>Print your notice (included in this pack)</li>
+          <li>Serve via first-class post, recorded delivery, or hand delivery</li>
+          <li>Complete the Proof of Service certificate</li>
+          <li>Take photos/keep receipts as evidence</li>
+          <li>Note exact date and time of service</li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>Key Documents</h3>
+        <ul>
+          <li>{{notice_type}} (your notice)</li>
+          <li>Service Instructions</li>
+          <li>Proof of Service Certificate</li>
+          <li>Witness statement (if hand-delivered)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tips-box">
+      <strong>💡 Pro Tip:</strong> Hand delivery with a witness is the most secure method. Take a timestamped photo of the notice going through the letterbox.
+    </div>
+  </div>
+</div>
+
+<!-- Stage 2: Waiting Period -->
+<div class="stage-card">
+  <div class="stage-card-header">
+    <div class="stage-number">2</div>
+    <div class="stage-title">
+      <h2>Notice Waiting Period</h2>
+      <div class="duration">{{#if (eq notice_type "Section 8")}}14 days - 2 months (ground dependent){{else}}2 months minimum{{/if}}</div>
+    </div>
+    <span class="stage-status status-upcoming">UPCOMING</span>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>During This Period</h3>
+        <ul>
+          <li>Tenant should continue paying rent</li>
+          <li>Keep records of all payments/non-payments</li>
+          <li>Document any communications</li>
+          <li>Prepare your court bundle</li>
+          <li>Gather evidence (see Evidence Checklist)</li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>What to Expect</h3>
+        <ul>
+          <li>Tenant may try to negotiate</li>
+          <li>They may seek advice from CAB or shelter</li>
+          <li>They might leave voluntarily (best outcome!)</li>
+          <li>They might ignore the notice</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>⚠️ Important:</strong> Do NOT change locks, remove belongings, or harass the tenant. This is illegal eviction and could result in criminal charges against you.
+    </div>
+  </div>
+</div>
+
+<!-- Stage 3: File Court Claim -->
+<div class="stage-card">
+  <div class="stage-card-header">
+    <div class="stage-number">3</div>
+    <div class="stage-title">
+      <h2>File Possession Claim</h2>
+      <div class="duration">Court processing: 4-8 weeks</div>
+    </div>
+    <span class="stage-status status-upcoming">UPCOMING</span>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>Filing Requirements</h3>
+        <ul>
+          <li>Complete Form N5 (or N5B for accelerated)</li>
+          <li>Complete Form N119 Particulars</li>
+          <li>Pay court fee (£325-£355)</li>
+          <li>Submit online (PCOL) or at local court</li>
+          <li>Include copies of all evidence</li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>What Happens Next</h3>
+        <ul>
+          <li>Court sends claim to tenant</li>
+          <li>Tenant has 14 days to respond</li>
+          <li>Court allocates a hearing date</li>
+          <li>You receive hearing notice by post</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tips-box">
+      <strong>💡 Pro Tip:</strong> File online using Possession Claim Online (PCOL) at possessionclaim.gov.uk - it's faster and you can track progress.
+    </div>
+  </div>
+</div>
+
+<!-- Stage 4: Court Hearing -->
+<div class="stage-card">
+  <div class="stage-card-header">
+    <div class="stage-number">4</div>
+    <div class="stage-title">
+      <h2>Court Hearing</h2>
+      <div class="duration">Wait time: 8-16 weeks from filing</div>
+    </div>
+    <span class="stage-status status-upcoming">UPCOMING</span>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>Preparing for Court</h3>
+        <ul>
+          <li>Organize evidence bundle chronologically</li>
+          <li>Number all pages</li>
+          <li>Prepare 3 copies (court, tenant, yourself)</li>
+          <li>Review your witness statement</li>
+          <li>Know your arrears figures (if applicable)</li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>At the Hearing</h3>
+        <ul>
+          <li>Arrive early (30 mins before)</li>
+          <li>Dress smartly</li>
+          <li>Bring all original documents</li>
+          <li>Answer questions clearly and honestly</li>
+          <li>Address the judge as "Sir/Madam" or "Your Honour"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tips-box">
+      <strong>💡 Pro Tip:</strong> If tenant doesn't attend or defend, you'll usually get a possession order. Section 21 accelerated claims often don't require a hearing at all.
+    </div>
+  </div>
+</div>
+
+<!-- Stage 5: Possession Order -->
+<div class="stage-card">
+  <div class="stage-card-header">
+    <div class="stage-number">5</div>
+    <div class="stage-title">
+      <h2>Possession Order & Enforcement</h2>
+      <div class="duration">2-6 weeks after hearing</div>
+    </div>
+    <span class="stage-status status-upcoming">UPCOMING</span>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>If Tenant Leaves</h3>
+        <ul>
+          <li>Conduct final inspection</li>
+          <li>Complete inventory check</li>
+          <li>Take photos of condition</li>
+          <li>Return deposit (less deductions)</li>
+          <li>Change locks and secure property</li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>If Tenant Doesn't Leave</h3>
+        <ul>
+          <li>Apply for warrant of possession</li>
+          <li>Pay bailiff fee (£121-£130)</li>
+          <li>Bailiff gives tenant eviction date</li>
+          <li>Attend on eviction day</li>
+          <li>Take back possession legally</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>⚠️ Never Self-Evict:</strong> Even with a possession order, you MUST use court bailiffs to physically evict. Changing locks yourself is still illegal.
+    </div>
+  </div>
+</div>
+
+<!-- Cost Summary -->
+<div class="cost-summary">
+  <div class="cost-summary-header">💰 Cost Summary</div>
+  <table class="cost-table">
+    <tr>
+      <th>Item</th>
+      <th>Cost</th>
+      <th>When Due</th>
+    </tr>
+    <tr>
+      <td>Landlord Heaven Pack</td>
+      <td>Already paid</td>
+      <td>Now</td>
+    </tr>
+    <tr>
+      <td>Court Fee (Possession Claim)</td>
+      <td>£325 - £355</td>
+      <td>Stage 3</td>
+    </tr>
+    <tr>
+      <td>Bailiff Warrant (if needed)</td>
+      <td>£121 - £130</td>
+      <td>Stage 5</td>
+    </tr>
+    <tr>
+      <td>High Court Enforcement (optional)</td>
+      <td>£66 + costs</td>
+      <td>Stage 5</td>
+    </tr>
+    <tr class="total">
+      <td>Estimated Total</td>
+      <td>£450 - £550</td>
+      <td>-</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Expert Tips -->
+<div class="expert-tips">
+  <div class="expert-tips-header">
+    <span style="font-size: 16pt;">💡</span>
+    <h2>Expert Tips & Common Pitfalls</h2>
+  </div>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <h4>✅ Do: Keep Meticulous Records</h4>
+      <p>Document everything. Courts love evidence. Keep copies of all letters, emails, texts, and payment records. A well-organized bundle wins cases.</p>
+    </div>
+    <div class="tip-card">
+      <h4>✅ Do: Communicate in Writing</h4>
+      <p>Avoid phone calls where possible. Written communication (email/letter) creates a paper trail that can be used as evidence in court.</p>
+    </div>
+    <div class="tip-card warning">
+      <h4>❌ Don't: Accept Partial Payments</h4>
+      <p>If claiming rent arrears, be careful about accepting partial payments during proceedings. It can complicate your case. Get legal advice first.</p>
+    </div>
+    <div class="tip-card warning">
+      <h4>❌ Don't: Make Verbal Agreements</h4>
+      <p>Any agreement with the tenant should be in writing. Verbal promises to "move out next month" are worthless in court and reset your timeline.</p>
+    </div>
+  </div>
+</div>
+
+<!-- What to Expect -->
+<div class="stage-card" style="border-color: #7c3aed;">
+  <div class="stage-card-header" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+    <div class="stage-number" style="color: #7c3aed;">?</div>
+    <div class="stage-title">
+      <h2>What to Realistically Expect</h2>
+      <div class="duration">Managing your expectations</div>
+    </div>
+  </div>
+  <div class="stage-card-content">
+    <div class="stage-grid">
+      <div class="stage-section">
+        <h3>Best Case Scenario</h3>
+        <ul>
+          <li>Tenant leaves voluntarily after notice</li>
+          <li>No court proceedings needed</li>
+          <li>Property returned in good condition</li>
+          <li><strong>Timeline: 2-3 months</strong></li>
+        </ul>
+      </div>
+      <div class="stage-section">
+        <h3>Typical Scenario</h3>
+        <ul>
+          <li>Court proceedings required</li>
+          <li>Possession order granted</li>
+          <li>Tenant leaves before bailiff</li>
+          <li><strong>Timeline: 4-6 months</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="tips-box" style="background: #e0e7ff; border-color: #6366f1;">
+      <strong>Reality Check:</strong> Even with a perfect case, eviction in England typically takes 4-7 months. Plan accordingly and don't rely on the property being available quickly.
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{current_date}} | <strong>Landlord Heaven</strong> | Eviction Roadmap & Timeline</p>
+  <p style="font-size: 7pt; color: #999;">This guide is for information only and does not constitute legal advice. For complex cases, consult a solicitor.</p>
+</div>
+
+</body>
+</html>

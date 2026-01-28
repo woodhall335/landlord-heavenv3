@@ -1,0 +1,121 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#92400E" font-size="22" font-weight="bold" font-family="Arial">DEPOSIT PROTECTION - NORTHERN IRELAND</text>
+  <text x="400" y="55" text-anchor="middle" fill="#B45309" font-size="11" font-family="Arial">Legal requirements for protecting tenancy deposits in NI</text>
+
+  <!-- NI Shield icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <g transform="translate(50, 10)">
+      <!-- NI map outline simplified with shield -->
+      <path d="M50 5 L90 20 L90 60 C90 85 70 100 50 110 C30 100 10 85 10 60 L10 20 Z" fill="#F59E0B" opacity="0.2" stroke="#F59E0B" stroke-width="2"/>
+      <!-- NI letters inside -->
+      <text x="50" y="55" text-anchor="middle" fill="#92400E" font-size="24" font-weight="bold">NI</text>
+      <text x="50" y="80" text-anchor="middle" fill="#F59E0B" font-size="14" font-weight="bold">£</text>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#92400E" font-size="11" font-weight="bold">NI DEPOSIT</text>
+    <text x="100" y="143" text-anchor="middle" fill="#B45309" font-size="9">Protection required</text>
+    <text x="100" y="158" text-anchor="middle" fill="#B45309" font-size="9">since April 2013</text>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#92400E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">NI REQUIREMENTS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#F59E0B"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Protect within 14 days</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#F59E0B"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Give prescribed info in 28 days</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">TDS NI is the only scheme</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Keep records of compliance</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#F59E0B" font-size="9" font-weight="bold">Different rules than England</text>
+    </g>
+  </g>
+
+  <!-- Protection options -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">TDS NI OPTIONS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Custodial (free)</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Insured (fee applies)</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Register online</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Free dispute resolution</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">www.nidirect.gov.uk</text>
+    </g>
+  </g>
+
+  <!-- Penalties section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="680" height="12" fill="#92400E"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">FAILURE TO COMPLY - CONSEQUENCES</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">FINANCIAL PENALTY</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Tenant can claim compensation</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">1-3 times deposit amount</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Plus return of deposit</text>
+      <text x="100" y="94" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">Significant financial risk</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">NOTICE VALIDITY</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Cannot serve valid NTQ</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Until deposit protected</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Blocks possession claims</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Eviction process delayed</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">PROTECT NOW</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Register with TDS NI</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Provide required info</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Keep confirmation records</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Avoid costly penalties</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#F59E0B" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#92400E" opacity="0.12"/>
+</svg>

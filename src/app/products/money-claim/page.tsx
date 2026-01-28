@@ -1,81 +1,261 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import { RiCheckboxCircleLine, RiAlertLine } from "react-icons/ri";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
+import {
+  FileText,
+  Mail,
+  Calculator,
+  BookOpen,
+  Eye,
+  RefreshCw,
+  Cloud,
+  AlertTriangle,
+} from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
+import { PRODUCTS } from "@/lib/pricing/products";
+import { FAQSection } from "@/components/marketing/FAQSection";
+import {
+  WhyLandlordHeaven,
+  AskHeavenSection,
+  JurisdictionAccordion,
+  VsSolicitorComparison,
+  WhatYouGet,
+} from "@/components/value-proposition";
+
+// Get price from single source of truth
+const product = PRODUCTS.money_claim;
+const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
+  title: `Money Claim Pack 2026 for England Landlords | ${price}`,
   description:
-    "Claim unpaid rent arrears through UK courts. PAP-DEBT compliance, N1 claim form, arrears schedule, interest calculator. £179.99 one-time payment. England & Wales + Scotland.",
+    `Recover unpaid rent, property damage, cleaning costs and other tenant debts through English courts. N1 form, PAP-DEBT Letter Before Claim, interest calculator, and enforcement guidance. England only - ${price} one-time.`,
+  openGraph: {
+    title: `Money Claim Pack 2026 for England Landlords | ${price}`,
+    description: "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs and other tenant debts. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
+    url: getCanonicalUrl('/products/money-claim'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/money-claim'),
+  },
 };
+
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "What documents do I get?",
+    answer: "You receive 11 documents: Court Claim Form (N1 or Simple Procedure 3A), Particulars of Claim, Schedule of Debt, Interest Calculation, Letter Before Claim, Defendant Information Sheet, Reply Form, Financial Statement Form, Court Filing Guide, and Enforcement Guide."
+  },
+  {
+    question: "Can I claim for damage or cleaning after the tenant leaves?",
+    answer: "Yes! You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You'll need evidence such as photos, invoices, and quotes. Select the relevant reasons in the wizard and itemise each cost in the Damages section."
+  },
+  {
+    question: "Can I claim arrears if the tenant has already left?",
+    answer: "Yes! You have 6 years from the date arrears became due to make a claim. You'll need the tenant's current address for court service."
+  },
+  {
+    question: "Can I combine rent arrears with damage claims?",
+    answer: "Yes! Our wizard lets you select multiple claim reasons. You can claim rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts all in one claim."
+  },
+  {
+    question: "Can I claim interest on the debt?",
+    answer: "Yes! You can claim 8% statutory interest per year on debts. Our interest calculator works this out automatically for rent arrears. For damage claims, interest runs from when you notified the tenant of the amount owed."
+  },
+  {
+    question: "What happens if the tenant defends the claim?",
+    answer: "If the tenant submits a defence, the court will schedule a hearing. You'll need to attend and present your evidence."
+  },
+  {
+    question: "How do I collect the money after winning?",
+    answer: "After judgment, if the tenant doesn't pay voluntarily, you can use: Bailiffs, Attachment of Earnings (deduct from wages), or Charging Order (secure against their property). We include guides for all enforcement methods."
+  },
+  {
+    question: "Which jurisdictions do you support?",
+    answer: "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts."
+  },
+  {
+    question: "How long are documents stored?",
+    answer: "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+  },
+  {
+    question: "Do you provide legal advice?",
+    answer: "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation."
+  }
+];
 
 export default function MoneyClaimPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Money Claim Pack - Recover Rent Arrears",
+        description: "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim and Letter Before Action. PAP-DEBT compliance, N1 form, interest calculator, and enforcement guidance included.",
+        price: product.price.toString(),
+        url: "https://landlordheaven.co.uk/products/money-claim"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+      <StructuredData data={breadcrumbSchema([
+        { name: "Home", url: "https://landlordheaven.co.uk" },
+        { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
+        { name: "Money Claim Pack", url: "https://landlordheaven.co.uk/products/money-claim" }
+      ])} />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven Money Claim Pack</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              Money Claim Pack
+            </h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              AI-drafted claim documents + UK Court claim forms
+              11 court-ready documents for England
             </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£179.99</span>
-              <span className="text-xl text-gray-600">one-time</span>
+            <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
+              England only
+            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-6">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
+              <span className="text-gray-500 text-lg">one-time</span>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="hero-btn-primary"
-              >
-                England &amp; Wales Claim →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="hero-btn-secondary"
-              >
-                Scotland Simple Procedure →
-              </Link>
+
+            {/* Key differentiators */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
+              <span className="flex items-center gap-1 text-gray-700">
+                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
+              </span>
+              <span className="flex items-center gap-1 text-gray-700">
+                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
+              </span>
+              <span className="flex items-center gap-1 text-gray-700">
+                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
+              </span>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
+
+            <Link
+              href="/wizard?product=money_claim&src=product_page"
+              className="hero-btn-primary"
+            >
+              Start Money Claim →
+            </Link>
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Ask Heaven Features Section */}
+      {/* Important Warning About Collection */}
+      <section className="py-8">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 flex items-start gap-4">
+              <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-amber-800 mb-2">Important: Consider Before You Claim</h4>
+                <p className="text-amber-700 text-sm">
+                  Even if you win a judgment, collecting money can be difficult. Only pursue a claim if the tenant has income, assets, or you can locate them for enforcement. If they have no assets or have left the country, winning the claim may not result in payment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* What You Get Section */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <WhatYouGet product="money_claim" />
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+              Money Claim Timeline, Fees & Evidence
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Prepare the right evidence, understand court fees, and keep your claim moving without
+              unnecessary delays.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Letter before claim: 14 days.</li>
+                  <li>Default judgment: 2–4 weeks.</li>
+                  <li>Defended claims: 3–6 months.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Court fees</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Fees vary by claim size and route.</li>
+                  <li>Most fees can be added to the claim.</li>
+                  <li>Pack includes fee guidance by jurisdiction.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Evidence checklist</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Tenancy agreement + rent schedule.</li>
+                  <li>Bank statements showing missed payments.</li>
+                  <li>Demand letters and tenant responses.</li>
+                </ul>
+                <Link href="/money-claim-unpaid-rent" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
+                  See the landlord money claim guide →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Jurisdiction Accordion */}
+      <section className="py-8">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <JurisdictionAccordion product="money_claim" defaultExpanded={true} />
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Section */}
+      <AskHeavenSection variant="full" product="money_claim" />
+
+      {/* AI-Drafted Documents Feature */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-                Ask Heaven AI Drafting (Included!)
+                AI-Drafted Court Documents
               </h2>
-              <p className="text-xl text-gray-700 mb-2">
-                Professional legal documents drafted by AI - saves £300-600
-              </p>
-              <p className="text-gray-600">
-                Ask Heaven analyzes your arrears and damages to write compelling court documents
+              <p className="text-xl text-gray-700">
+                Ask Heaven drafts professional court documents for your claim
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Particulars of Claim */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
-                  <h3 className="text-xl font-bold text-charcoal">Ask Heaven-Drafted Particulars of Claim</h3>
-                </div>
-                <div className="mb-4">
-                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
-                    Saves £300-600
-                  </span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-charcoal">Particulars of Claim</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
-                  Ask Heaven drafts a professional Particulars of Claim document for your money claim, including:
+                  Ask Heaven drafts a professional Particulars of Claim document:
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
@@ -92,33 +272,26 @@ export default function MoneyClaimPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Damages claims (if applicable)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">✓</span>
                     <span>Legal formatting ready for court submission</span>
                   </li>
                 </ul>
               </div>
 
-              {/* Letter Before Action */}
+              {/* Letter Before Claim */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
-                  <h3 className="text-xl font-bold text-charcoal">Ask Heaven Letter Before Action</h3>
-                </div>
-                <div className="mb-4">
-                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
-                    PAP-DEBT Compliant
-                  </span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-charcoal">Letter Before Claim</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
-                  Ask Heaven drafts a Pre-Action Protocol compliant Letter Before Action:
+                  PAP-DEBT compliant Letter Before Action:
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>PAP-DEBT compliance (required for England & Wales)</span>
+                    <span>PAP-DEBT compliance (required for E&W)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
@@ -130,264 +303,24 @@ export default function MoneyClaimPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>Includes all required PAP forms</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-600 font-bold">✓</span>
-                    <span>Professional tone to encourage settlement</span>
+                    <span>Includes all required PAP enclosures</span>
                   </li>
                 </ul>
               </div>
             </div>
 
-            {/* Value Callout */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3">💰 Ask Heaven Saves £300-600 in Legal Fees</h3>
-              <p className="text-lg mb-4">
-                Solicitors charge £300-600 to draft Particulars of Claim and Letters Before Action
-              </p>
-              <p className="text-white/90 text-base">
-                With Ask Heaven at £179.99, you get AI-drafted documents PLUS all court forms, arrears schedules, and filing guides
-              </p>
-            </div>
+            <p className="text-xs text-gray-500 text-center italic">
+              AI-drafted documents should be reviewed before submission. You may wish to have a solicitor review for complex claims.
+            </p>
           </div>
         </Container>
       </section>
 
-      {/* What's Included */}
+      {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">What's Included</h2>
-            <p className="text-center text-gray-600 mb-12">
-              Everything you need to claim rent arrears through the courts
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Court Forms */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="text-3xl mb-3">📋</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Court Claim Forms</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>England & Wales:</strong> Form N1 (Dec 2024) - Pre-filled PDF
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Scotland:</strong> Simple Procedure Form 3A - Pre-filled PDF
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>☁️ Ask Heaven-Drafted Particulars of Claim</strong> - AI-written statement saving £300-600 in solicitor fees
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Evidence Index</strong> - Checklist for supporting documents
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Pre-Action Compliance */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="text-3xl mb-3">✉️</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Pre-Action Compliance</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>England & Wales:</strong> PAP-DEBT Letter Before Claim
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Information Sheet</strong> for defendants (enclose with letter)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Reply Form</strong> + Financial Statement Form
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Scotland:</strong> Pre-action demand letter
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Arrears & Interest */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">📊</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Arrears & Interest Documentation</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Schedule of Arrears</strong> - Period-by-period breakdown
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Interest Calculation</strong> - 8% statutory rate with daily accrual
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Damages & Other Charges</strong> - Line itemization of costs
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Court Fee Calculator</strong> - Accurate fee based on claim value
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Filing Guides & Strategy */}
-              <div className="bg-primary-50 rounded-lg border border-primary-200 p-6">
-                <div className="text-3xl mb-3">📚</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Filing Guides & Strategy</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>England & Wales:</strong> MCOL + paper filing instructions
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Scotland:</strong> Sheriff Court lodging guide
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Timeline Guide</strong> - What happens after you file
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Enforcement Guidance</strong> - Bailiffs, wage attachment, charging orders
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <WhyLandlordHeaven variant="full" />
           </div>
         </Container>
       </section>
@@ -405,7 +338,7 @@ export default function MoneyClaimPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
                 <p className="text-sm text-gray-600">
-                  Tell us rent amount, payment dates, and what's been paid. We calculate total arrears + interest.
+                  Tell us rent amount, payment dates, and what&apos;s been paid. We calculate total arrears + interest.
                 </p>
               </div>
 
@@ -413,9 +346,9 @@ export default function MoneyClaimPage() {
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
+                <h3 className="text-lg font-semibold text-charcoal mb-2">Preview Your Documents</h3>
                 <p className="text-sm text-gray-600">
-                  Claim forms pre-filled with your case details, arrears schedule, and supporting documentation ready.
+                  Review all documents with watermarked previews. Edit answers and regenerate until satisfied.
                 </p>
               </div>
 
@@ -433,9 +366,9 @@ export default function MoneyClaimPage() {
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   4
                 </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Collect Your Money</h3>
+                <h3 className="text-lg font-semibold text-charcoal mb-2">Enforce Judgment</h3>
                 <p className="text-sm text-gray-600">
-                  If tenant doesn't pay/defend, apply for default judgment. Then use bailiffs or wage attachment.
+                  If tenant doesn&apos;t pay, use our enforcement guide for bailiffs, wage attachment, or charging orders.
                 </p>
               </div>
             </div>
@@ -444,8 +377,7 @@ export default function MoneyClaimPage() {
               <h4 className="font-semibold text-charcoal mb-3">Typical Timeline:</h4>
               <div className="space-y-2 text-sm text-gray-700">
                 <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 1:</strong> File claim with court (pay court
-                  fee)
+                  <span className="text-primary">→</span> <strong>Day 1:</strong> File claim with court (pay court fee)
                 </p>
                 <p className="flex items-center gap-2">
                   <span className="text-primary">→</span> <strong>Day 7:</strong> Court serves claim on tenant
@@ -454,75 +386,80 @@ export default function MoneyClaimPage() {
                   <span className="text-primary">→</span> <strong>Day 21:</strong> Tenant has 14 days to respond
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 28:</strong> If no response, apply for default
-                  judgment
+                  <span className="text-primary">→</span> <strong>Day 28:</strong> If no response, apply for default judgment
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 35:</strong> Judgment granted (you win!)
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 42+:</strong> Enforcement (bailiffs, wage
-                  attachment, charging order)
+                  <span className="text-primary">→</span> <strong>Day 42+:</strong> Enforcement (if needed)
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="mt-8 text-center">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                href="/wizard?product=money_claim&src=product_page"
+                className="hero-btn-primary"
               >
-                England &amp; Wales Claim - £179.99 →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-primary-200"
-              >
-                Scotland Claim - £179.99 →
+                Start Money Claim - {price} →
               </Link>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* When to Use */}
+      {/* Comparison Table */}
       <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
+              How We Compare
+            </h2>
+            <VsSolicitorComparison product="money_claim" />
+          </div>
+        </Container>
+      </section>
+
+      {/* When to Use */}
+      <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">When to Use Money Claim Pack</h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-charcoal mb-3">✅ Use Money Claim If:</h3>
+              <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Use Money Claim If:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant has left but owes rent arrears</li>
-                  <li>• Tenancy has ended, you just want money back</li>
-                  <li>• You've already got possession but need arrears</li>
+                  <li>• Tenant owes rent arrears (current or former tenant)</li>
+                  <li>• Tenant caused property damage needing repair</li>
+                  <li>• You paid for professional cleaning or rubbish removal</li>
+                  <li>• Tenant left unpaid utilities in your name</li>
                   <li>• Claim is under £10,000</li>
-                  <li>• You know where tenant lives/works (for enforcement)</li>
+                  <li>• You know where tenant lives/works</li>
                 </ul>
               </div>
 
-              <div className="bg-warning/10 border-l-4 border-warning p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-charcoal mb-3">⚠️ Need Multiple Products?</h3>
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg">
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Consider Carefully If:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant is still in the property? Check our{" "}
-                    <Link href="/products/notice-only" className="text-primary hover:underline">Notices</Link>
-                  </li>
-                  <li>• Need possession claim? Check our{" "}
-                    <Link href="/legal-proceedings" className="text-primary hover:underline">Legal Proceedings</Link>
-                  </li>
-                  <li>• Each product is independent - buy what you need</li>
+                  <li>• Tenant has no known income or assets</li>
+                  <li>• Tenant has left the country</li>
+                  <li>• You don&apos;t have current contact details</li>
+                  <li>• Arrears are very small (court fees may exceed recovery)</li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <p className="text-charcoal font-semibold mb-2">💡 Pro Tip</p>
+              <p className="text-charcoal font-semibold mb-2">Need to evict first?</p>
               <p className="text-gray-700">
-                Money claims have high success rates (70%+ win) but LOW collection rates (only 30% of judgments are
-                fully paid). Only pursue if tenant has assets, employment, or you can find them. Otherwise, accept the
-                loss and move on.
+                If your tenant is still in the property, start with our{" "}
+                <Link href="/products/notice-only" className="text-primary hover:underline">
+                  Notice Only Pack
+                </Link>{" "}
+                or{" "}
+                <Link href="/products/complete-pack" className="text-primary hover:underline">
+                  Complete Eviction Pack
+                </Link>
+                . You can pursue money claims separately after possession.
               </p>
             </div>
           </div>
@@ -530,7 +467,7 @@ export default function MoneyClaimPage() {
       </section>
 
       {/* Court Fees */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
@@ -538,7 +475,7 @@ export default function MoneyClaimPage() {
             </h2>
 
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse bg-white shadow-sm">
+              <table className="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="text-left p-4 border font-semibold text-charcoal">Claim Amount</th>
@@ -586,93 +523,115 @@ export default function MoneyClaimPage() {
               </table>
             </div>
 
-            <div className="mt-6 space-y-3 text-sm text-gray-600">
+            <div className="mt-6 space-y-2 text-sm text-gray-600">
               <p>• Court fees are paid to the court when filing, NOT to Landlord Heaven</p>
               <p>• If you win, court fees can be added to your claim (tenant pays)</p>
-              <p>• Money Claim Online (MCOL) is cheaper - save £10-45 vs paper</p>
-              <p>• Our pack includes a fee calculator based on your arrears amount</p>
+              <p>• Money Claim Online (MCOL) is cheaper - use it where possible</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Cross-sell: Eviction for Tenant Still in Property */}
+      <section className="py-12 md:py-16 bg-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl border-2 border-purple-200 p-6 md:p-8 shadow-sm">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <FileText className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-charcoal mb-2">
+                    Need to evict the tenant too?
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    A money claim recovers what you&apos;re owed — but if you also need the tenant OUT of the
+                    property, you&apos;ll need an eviction notice. You can pursue both simultaneously: eviction
+                    for possession and money claim for the debt.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/wizard?product=notice_only&src=money_claim_crosssell"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+                    >
+                      Get Notice Only — {PRODUCTS.notice_only.displayPrice}
+                    </Link>
+                    <Link
+                      href="/wizard?product=complete_pack&src=money_claim_crosssell"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-purple-300 text-primary font-medium rounded-lg hover:bg-purple-50 transition-colors"
+                    >
+                      Get Complete Pack — {PRODUCTS.complete_pack.displayPrice}
+                    </Link>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-3">
+                    <Link href="/how-to-evict-tenant" className="text-primary hover:underline">
+                      Learn about the eviction process →
+                    </Link>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-20">
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* Retention Policy Notice */}
+      <section className="py-8">
         <Container>
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-6">
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Can I claim arrears if the tenant has already left?
-                </h3>
-                <p className="text-gray-700">
-                  Yes! You have 6 years from the date arrears became due to make a claim. Many landlords successfully
-                  claim arrears after tenancy ends. You'll need tenant's current address for court service.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">What if I don't know where the tenant lives?</h3>
-                <p className="text-gray-700">
-                  You can apply to court for "alternative service" (e.g., email, Facebook, last known address). However,
-                  if you can't locate them for enforcement, winning the claim won't help you collect. Consider if it's
-                  worth pursuing.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Can I claim interest on the arrears?
-                </h3>
-                <p className="text-gray-700">
-                  Yes! You can claim 8% statutory interest per year on rent arrears (or the rate in your tenancy
-                  agreement if higher). Our interest calculator works this out automatically.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  What happens if the tenant defends the claim?
-                </h3>
-                <p className="text-gray-700">
-                  If tenant submits a defense, the court will schedule a hearing. You'll need to attend (in person or by
-                  phone) and present your evidence (tenancy agreement, rent statements, payment records). Most landlords
-                  win if they have proper documentation.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  How do I actually collect the money after winning?
-                </h3>
-                <p className="text-gray-700">
-                  After judgment, if tenant doesn't pay voluntarily, you can use:
-                  <br />• Bailiffs (High Court Enforcement Officers) - most effective
-                  <br />• Attachment of Earnings - deduct from wages
-                  <br />• Charging Order - secure against tenant's property
-                  <br />
-                  We include guides for all enforcement methods.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  When should I use Money Claims?
-                </h3>
-                <p className="text-gray-700">
-                  Use <strong>Money Claims (£179.99)</strong> when you need to recover rent arrears through the county court.
-                  This product focuses specifically on the financial claim process. If your tenant is still in the property
-                  and you need to evict them first, start with our{" "}
-                  <Link href="/products/notice-only" className="text-primary hover:underline">
-                    Notices product
-                  </Link>.
+            <div className="bg-blue-50 rounded-lg p-6 flex items-start gap-4">
+              <Cloud className="w-6 h-6 text-primary shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-charcoal mb-1">Document Storage</h4>
+                <p className="text-gray-700 text-sm">
+                  Documents are stored in your portal for at least 12 months. You can download and save them any time.
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="money_claim"
+              product="money_claim"
+              title="Have questions about recovering money from tenants?"
+              description="Ask Heaven can help you understand what you can claim, PAP-DEBT requirements, court procedures, and enforcement options."
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.completePack,
+                productLinks.noticeOnly,
+                toolLinks.rentArrearsCalculator,
+                toolLinks.section8Generator,
+                blogLinks.rentArrearsEviction,
+                landingPageLinks.rentArrearsTemplate,
+              ]}
+            />
           </div>
         </Container>
       </section>
@@ -681,25 +640,19 @@ export default function MoneyClaimPage() {
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Claim Your Arrears?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Recover What You&apos;re Owed?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Court-ready money claim documents in 10 minutes. Recover what you're owed.
+              Claim rent arrears, damage, cleaning costs and more. Preview before you pay.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="hero-btn-primary"
-              >
-                England &amp; Wales Claim - £179.99 →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="hero-btn-secondary"
-              >
-                Scotland Claim - £179.99 →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
+            <Link
+              href="/wizard?product=money_claim&src=product_page"
+              className="hero-btn-primary"
+            >
+              Start Money Claim - {price} →
+            </Link>
+            <p className="mt-4 text-sm text-gray-600">
+              One-time payment • Unlimited regenerations • No subscription
+            </p>
           </div>
         </Container>
       </section>

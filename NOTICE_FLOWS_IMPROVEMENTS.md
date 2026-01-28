@@ -114,7 +114,7 @@ Created REST API for real-time date validation:
 2. Review generator.ts to ensure Puppeteer CSS styling handles headings and bold correctly
 3. Search for `[object Object]` in template output (likely caused by unformatted address/party objects)
 4. Add Handlebars helpers to format structured fields as strings
-5. Find and update footer domain references to `landlordheaven.com`
+5. Find and update footer domain references to `landlordheaven.co.uk`
 6. Create centralized config for domain/footer
 
 ### Part D: Fix Preview Page (Product-Specific Copy + Pricing)

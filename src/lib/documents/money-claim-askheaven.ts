@@ -97,13 +97,17 @@ export async function generateMoneyClaimAskHeavenDrafts(
   options?: {
     includePostIssue?: boolean;
     includeRiskReport?: boolean;
-    jurisdiction?: 'england-wales' | 'scotland';
+    jurisdiction?: 'england' | 'wales' | 'scotland';
   }
 ): Promise<MoneyClaimDrafts> {
-  const jurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england-wales');
+  const rawJurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england');
+
+  // Map to internal legal framework identifier (NOT a jurisdiction)
+  // England and Wales share the same legal framework for money claims
+  const legalFramework: 'ew_shared_framework' | 'scotland' = rawJurisdiction === 'scotland' ? 'scotland' : 'ew_shared_framework';
 
   // Start with fallback content as a baseline (ensures we never return incomplete data)
-  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, jurisdiction, options);
+  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, legalFramework, options);
 
   // Check if AI is disabled via env var (allows safe rollout)
   if (process.env.DISABLE_MONEY_CLAIM_AI === 'true') {
@@ -119,10 +123,10 @@ export async function generateMoneyClaimAskHeavenDrafts(
 
   try {
     // Build comprehensive prompt for the AI
-    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, jurisdiction);
+    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, legalFramework);
 
     // Call the LLM to generate AI drafts
-    const aiDrafts = await callMoneyClaimLLM(prompt, jurisdiction, options);
+    const aiDrafts = await callMoneyClaimLLM(prompt, legalFramework, options);
 
     // Merge AI content with fallback (AI takes precedence, fallback fills gaps)
     return mergeAIDraftsWithFallback(aiDrafts, fallbackDrafts);
@@ -140,13 +144,14 @@ export async function generateMoneyClaimAskHeavenDrafts(
 
 /**
  * Builds a comprehensive prompt for AI drafting
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 function buildMoneyClaimDraftingPrompt(
   caseFacts: CaseFacts,
   moneyClaimCase: MoneyClaimCase | ScotlandMoneyClaimCase,
-  jurisdiction: 'england-wales' | 'scotland'
+  legalFramework: 'ew_shared_framework' | 'scotland'
 ): string {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
 
   return `
 You are a legal drafting assistant specializing in ${isScotland ? 'Scottish Simple Procedure' : 'England & Wales County Court'} money claims for residential rent arrears and related claims.
@@ -168,7 +173,7 @@ ${moneyClaimCase.arrears_schedule ? `Schedule: ${JSON.stringify(moneyClaimCase.a
 
 DAMAGE CLAIMS: ${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? JSON.stringify(moneyClaimCase.damage_items, null, 2) : 'None'}
 
-INTEREST: ${moneyClaimCase.interest_rate || 8}% from ${moneyClaimCase.interest_start_date || 'date of issue'}
+INTEREST: ${moneyClaimCase.claim_interest === true ? `${moneyClaimCase.interest_rate || 8}% from ${moneyClaimCase.interest_start_date || 'date of issue'}` : 'Not claimed'}
 
 PRE-ACTION: ${caseFacts.money_claim.lba_date ? `Letter before action sent on ${caseFacts.money_claim.lba_date}` : 'No formal pre-action letter sent'}
 
@@ -189,13 +194,14 @@ Tone: Professional, factual, firm but not aggressive. Cite relevant law where ap
 /**
  * Calls the LLM to generate AI-drafted money claim content
  * Returns structured JSON matching MoneyClaimDrafts interface
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 async function callMoneyClaimLLM(
   prompt: string,
-  jurisdiction: 'england-wales' | 'scotland',
+  legalFramework: 'ew_shared_framework' | 'scotland',
   options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
 ): Promise<Partial<MoneyClaimDrafts>> {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
 
   // Build system prompt for legal drafting
   const systemPrompt = `
@@ -218,7 +224,7 @@ CRITICAL RULES FOR THIS MODE:
 - Structure content for court/tribunal submission.
 - Use neutral, professional language suitable for legal documents.
 
-Jurisdiction: ${jurisdiction}
+Legal Framework: ${legalFramework}
 ${isScotland ? 'Court: Sheriff Court (Simple Procedure)' : 'Court: County Court'}
 
 STRICT JSON OUTPUT REQUIREMENTS:
@@ -377,14 +383,15 @@ function mergeAIDraftsWithFallback(
 /**
  * Generates fallback content when AI is unavailable
  * This ensures pack generation never fails
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 function generateFallbackDrafts(
   caseFacts: CaseFacts,
   moneyClaimCase: MoneyClaimCase | ScotlandMoneyClaimCase,
-  jurisdiction: 'england-wales' | 'scotland',
+  legalFramework: 'ew_shared_framework' | 'scotland',
   options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
 ): MoneyClaimDrafts {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
   const tenant = moneyClaimCase.tenant_full_name;
   const property = moneyClaimCase.property_address;
   const arrears = moneyClaimCase.arrears_total || 0;
@@ -429,8 +436,13 @@ function generateFallbackDrafts(
     })(),
 
     interest_claim: (() => {
+      // Interest: only include if user explicitly opted in via claim_interest === true
+      if (moneyClaimCase.claim_interest !== true) {
+        return 'The Claimant does not claim interest.';
+      }
       if (isScotland) {
-        return 'The Claimant claims interest on the sum due at the rate of 8% per annum from the date of accrual of the debt.';
+        const rate = moneyClaimCase.interest_rate || 8;
+        return `The Claimant claims interest on the sum due at the rate of ${rate}% per annum from the date of accrual of the debt.`;
       } else {
         const rate = moneyClaimCase.interest_rate || 8;
         const startDate = moneyClaimCase.interest_start_date || 'the date of issue';
@@ -457,12 +469,19 @@ function generateFallbackDrafts(
     })(),
 
     remedy_sought: (() => {
-      let remedy = `The Claimant seeks:\n1. Payment of the sum of \u00A3${arrears} being rent arrears.\n`;
+      let itemNum = 1;
+      let remedy = `The Claimant seeks:\n${itemNum++}. Payment of the sum of \u00A3${arrears} being rent arrears.\n`;
       if (moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0) {
-        remedy += '2. Payment of damages as particularised.\n';
+        remedy += `${itemNum++}. Payment of damages as particularised.\n`;
       }
-      remedy += isScotland ? '3. Interest at 8% per annum.\n' : '3. Interest pursuant to section 69 of the County Courts Act 1984.\n';
-      remedy += isScotland ? '4. Costs.' : '4. Costs and court fees.';
+      // Interest: only include if user explicitly opted in
+      if (moneyClaimCase.claim_interest === true) {
+        const rate = moneyClaimCase.interest_rate || 8;
+        remedy += isScotland
+          ? `${itemNum++}. Interest at ${rate}% per annum.\n`
+          : `${itemNum++}. Interest pursuant to section 69 of the County Courts Act 1984 at ${rate}% per annum.\n`;
+      }
+      remedy += isScotland ? `${itemNum++}. Costs.` : `${itemNum++}. Costs and court fees.`;
       return remedy;
     })(),
   };

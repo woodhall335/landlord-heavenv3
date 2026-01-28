@@ -27,10 +27,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    // Fetch recent users
+    // Fetch recent users with subscription info from users table
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, email, full_name, email_verified, created_at, last_sign_in_at')
+      .select('id, email, full_name, email_verified, hmo_pro_active, hmo_pro_tier, created_at, last_sign_in_at')
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -42,28 +42,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch subscription information for each user
-    const usersWithSubscriptions = await Promise.all(
-      (users || []).map(async (u) => {
-        const { data: subData } = await supabase
-          .from('hmo_subscriptions')
-          .select('tier, status')
-          .eq('user_id', u.id)
-          .eq('status', 'active')
-          .single();
-
-        return {
-          id: u.id,
-          email: u.email,
-          full_name: u.full_name,
-          email_verified: u.email_verified,
-          created_at: u.created_at,
-          last_sign_in_at: u.last_sign_in_at,
-          subscription_tier: subData?.tier || null,
-          subscription_status: subData?.status || null,
-        };
-      })
-    );
+    // Map users with subscription info from users table fields
+    const usersWithSubscriptions = (users || []).map((u: any) => ({
+      id: u.id,
+      email: u.email,
+      full_name: u.full_name,
+      email_verified: u.email_verified,
+      created_at: u.created_at,
+      last_sign_in_at: u.last_sign_in_at,
+      subscription_tier: u.hmo_pro_tier || null,
+      subscription_status: u.hmo_pro_active ? 'active' : null,
+    }));
 
     return NextResponse.json(
       {

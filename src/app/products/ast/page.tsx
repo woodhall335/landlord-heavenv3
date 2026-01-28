@@ -2,602 +2,570 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
+import { RiCheckboxCircleLine, RiCloseLine } from "react-icons/ri";
+import {
+  Home,
+  GraduationCap,
+  Briefcase,
+  BadgePoundSterling,
+  Eye,
+  RefreshCw,
+  Cloud,
+} from "lucide-react";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { getCanonicalUrl } from "@/lib/seo";
+import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
+import { PRODUCTS } from "@/lib/pricing/products";
+import { FAQSection } from "@/components/marketing/FAQSection";
+import {
+  WhyLandlordHeaven,
+  AskHeavenSection,
+  JurisdictionAccordion,
+  VsSolicitorComparison,
+} from "@/components/value-proposition";
+import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
+import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
+
+// Get prices from single source of truth
+const standardPrice = PRODUCTS.ast_standard.displayPrice;
+const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
+  title: `Tenancy Agreement Pack 2026 | All UK Regions | From ${standardPrice}`,
   description:
-    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£39.99) or Premium (£59.00). Covers England, Wales, Scotland, and Northern Ireland.",
+    `Compliant tenancy agreements for all UK: AST (England), Standard Occupation Contract (Wales), PRT (Scotland), and Private Tenancy (NI). Standard ${standardPrice} or Premium ${premiumPrice}.`,
+  openGraph: {
+    title: `Tenancy Agreement Pack 2026 | England, Wales, Scotland & NI | From ${standardPrice}`,
+    description:
+      "Landlord-ready tenancy agreements for all UK regions: AST, Occupation Contracts, PRT, and NI templates. Preview before you buy.",
+    type: 'website',
+    url: getCanonicalUrl('/products/ast'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/products/ast'),
+  },
 };
+
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "What's the difference between Standard and Premium?",
+    answer: "Standard includes core tenancy clauses suitable for single households. Premium adds HMO-specific clauses (joint & several liability, shared facilities rules, tenant replacement), guarantor provisions, rent review mechanisms, and anti-subletting terms - ideal for multi-tenant properties, student lets, or professional landlords."
+  },
+  {
+    question: "Which agreement type do I get for my region?",
+    answer: "The wizard generates the correct legal format automatically: AST (Assured Shorthold Tenancy) for England, Standard Occupation Contract for Wales, PRT (Private Residential Tenancy) for Scotland, and Private Tenancy for Northern Ireland. All comply with their respective housing legislation."
+  },
+  {
+    question: "Do I need Premium for an HMO?",
+    answer: "If you're letting to 3+ unrelated tenants sharing facilities, Premium is recommended. It includes clauses commonly required under HMO licensing (Housing Act 2004 for England, equivalent legislation for other regions): joint & several liability, shared facilities rules, and terms aligned with licence conditions."
+  },
+  {
+    question: "Can I preview before I pay?",
+    answer: "Yes. You can preview your agreement with a watermark before paying. This lets you verify the clauses and property details are correct before committing."
+  },
+  {
+    question: "What if I need to make changes?",
+    answer: "You can edit your answers and regenerate instantly at no extra cost. Unlimited regenerations are included."
+  },
+  {
+    question: "How long are documents stored?",
+    answer: "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+  },
+  {
+    question: "Is this legally valid?",
+    answer: "Yes. Both Standard and Premium are legally valid tenancy agreements compliant with current housing legislation. However, for complex situations (commercial mixed-use, unusual property types), consult a solicitor."
+  },
+  {
+    question: "What about pets, break clauses, and guarantors?",
+    answer: "Pets clauses and break clauses are included in both tiers. Guarantor clauses with clear liability terms are Premium-only, as they require more sophisticated legal drafting."
+  }
+];
 
 export default function ASTPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+        description: "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+        price: PRODUCTS.ast_standard.price.toString(),
+        url: "https://landlordheaven.co.uk/products/ast"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+      <StructuredData data={breadcrumbSchema([
+        { name: "Home", url: "https://landlordheaven.co.uk" },
+        { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
+        { name: "Tenancy Agreements", url: "https://landlordheaven.co.uk/products/ast" }
+      ])} />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Professional Tenancies</span>
-            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Tenancy Agreements</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Legally Compliant ASTs, PRTs & NI Tenancies
+            <p className="text-xl md:text-2xl mb-4 text-gray-600">
+              Legally Compliant for All UK Regions
             </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-2xl text-gray-600">from</span>
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£39.99</span>
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: AST</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales: Occupation Contract</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: PRT</span>
+              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🇬🇧 Northern Ireland</span>
             </div>
+            <div className="flex items-baseline justify-center gap-2 mb-6">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">{standardPrice}</span>
+              <span className="text-gray-500 text-lg">standard</span>
+            </div>
+
+            {/* Key differentiators */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
+              <span className="flex items-center gap-1 text-gray-700">
+                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
+              </span>
+              <span className="flex items-center gap-1 text-gray-700">
+                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
+              </span>
+              <span className="flex items-center gap-1 text-gray-700">
+                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
+              </span>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=ast_standard"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
                 className="hero-btn-primary"
               >
-                Standard - £39.99 →
+                Standard - {standardPrice} →
               </Link>
               <Link
-                href="/wizard?product=ast_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
                 className="hero-btn-secondary"
               >
-                Premium - £59.00 →
+                Premium (HMO-Ready) - {premiumPrice} →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England, Wales, Scotland, or Northern Ireland</p>
+            <p className="mt-4 text-sm text-gray-600">One-time payment • Unlimited regenerations • No subscription</p>
+            <p className="mt-2 text-xs text-gray-500">Standard for single households • Premium for HMOs, students &amp; multi-tenant</p>
           </div>
         </Container>
       </section>
 
-      {/* Comparison Table */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+              Tenancy Agreement Compliance Checklist
+            </h2>
+            <p className="text-gray-600 mb-12">
+              Ensure your agreement matches the correct jurisdiction, includes mandatory clauses,
+              and avoids costly compliance errors.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Use the right agreement</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>AST for England tenancies.</li>
+                  <li>Occupation Contract for Wales.</li>
+                  <li>PRT for Scotland (open-ended).</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Mandatory details</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Correct landlord registration details.</li>
+                  <li>Deposit and rent terms stated clearly.</li>
+                  <li>Required clauses and repair obligations.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Avoid common mistakes</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Using an outdated template.</li>
+                  <li>Missing signatures or dates.</li>
+                  <li>Mixing England/Wales/Scotland terms.</li>
+                </ul>
+                <Link href="/tenancy-agreements/scotland" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
+                  Scotland PRT guidance →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* What You Get - Standard vs Premium */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
               Standard vs Premium
             </h2>
             <p className="text-center text-gray-600 mb-12">
-              Both are legally valid. Premium adds extra protection and customization.
+              Both are legally valid agreements. Premium includes additional clauses for HMOs and multi-tenant properties.
             </p>
 
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Standard AST */}
-              <div className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden">
-                <div className="bg-gray-100 p-6 text-center">
-                  <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-                  <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold text-charcoal">£39.99</span>
-                  </div>
-                  <p className="text-sm text-gray-600">Perfect for straightforward lettings</p>
-                </div>
-
-                <div className="p-6">
-                  <h4 className="font-semibold text-charcoal mb-4">What's Included:</h4>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Core clauses (rent, deposit, duration, notice)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Tenant responsibilities</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Landlord access rights</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Break clause (optional)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Pets clause (allowed/not allowed)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">Basic repair obligations</span>
-                    </li>
-                  </ul>
-
-                  <h4 className="font-semibold text-charcoal mb-3">Best For:</h4>
-                  <ul className="space-y-2 mb-6 text-sm text-gray-700">
-                    <li>✓ Standard residential properties</li>
-                    <li>✓ Single tenants or couples</li>
-                    <li>✓ Simple, straightforward lettings</li>
-                    <li>✓ First-time landlords</li>
-                  </ul>
-
+              {/* Standard */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-xl font-bold text-charcoal mb-2">Standard - {standardPrice}</h3>
+                <p className="text-sm text-gray-600 mb-4">For single households and standard residential lets</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Jurisdiction-Specific Agreement</span>
+                      <span className="text-sm text-gray-500 block">AST (England) / Occupation Contract (Wales) / PRT (Scotland) / NI Tenancy</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Core Tenancy Clauses</span>
+                      <span className="text-sm text-gray-500 block">Rent, deposit, duration, tenant &amp; landlord obligations</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Pets &amp; Break Clauses</span>
+                      <span className="text-sm text-gray-500 block">Optional clauses included if selected</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Property Care Requirements</span>
+                      <span className="text-sm text-gray-500 block">Access, maintenance, and conduct rules</span>
+                    </div>
+                  </li>
+                </ul>
+                <div className="mt-6">
                   <Link
-                    href="/wizard?product=ast_standard"
-                    className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                    className="hero-btn-secondary block w-full text-center"
                   >
-                    Get Standard - £39.99
+                    Get Standard - {standardPrice}
                   </Link>
                 </div>
               </div>
 
-              {/* Premium AST */}
-              <div className="bg-white rounded-lg border-2 border-primary overflow-hidden shadow-lg relative">
-                <div className="absolute top-4 right-4 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  RECOMMENDED
+              {/* Premium */}
+              <div className="bg-white rounded-lg border-2 border-primary p-6 relative">
+                <div className="absolute -top-3 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
+                  HMO READY
                 </div>
-                <div className="bg-linear-to-br from-primary to-emerald-600 text-white p-6 text-center">
-                  <h3 className="text-2xl font-bold mb-2">Premium AST</h3>
-                  <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold">£59.00</span>
-                  </div>
-                  <p className="text-sm text-white/90">Maximum protection & customization</p>
-                </div>
-
-                <div className="p-6">
-                  <h4 className="font-semibold text-charcoal mb-4">Everything in Standard, PLUS:</h4>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>HMO-ready clauses</strong> (room licenses, shared facilities)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Joint & several liability</strong> (all tenants responsible for full rent)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Guarantor clauses</strong> (parent/employer guarantees)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Rent increase provisions</strong> (RPI/CPI annual increases)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Furnished inventory schedule</strong> (detailed item list)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Professional cleaning clause</strong> (end of tenancy)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Subletting prohibition</strong> (strict Airbnb prevention)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Utility payment clauses</strong> (who pays what)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700 text-sm">
-                        <strong>Insurance requirements</strong> (tenant contents insurance)
-                      </span>
-                    </li>
-                  </ul>
-
-                  <h4 className="font-semibold text-charcoal mb-3">Best For:</h4>
-                  <ul className="space-y-2 mb-6 text-sm text-gray-700">
-                    <li>✓ HMOs (multi-tenant properties)</li>
-                    <li>✓ Student lettings</li>
-                    <li>✓ Higher-value properties</li>
-                    <li>✓ Professional landlords with portfolios</li>
-                    <li>✓ Complex tenancy arrangements</li>
-                  </ul>
-
+                <h3 className="text-xl font-bold text-charcoal mb-2">Premium - {premiumPrice}</h3>
+                <p className="text-sm text-gray-600 mb-4">For HMOs, student lets &amp; multi-tenant properties</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">All Standard Clauses</span>
+                      <span className="text-sm text-gray-500 block">Plus HMO-specific provisions</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Joint &amp; Several Liability</span>
+                      <span className="text-sm text-gray-500 block">Each tenant fully liable for entire rent</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Shared Facilities Rules</span>
+                      <span className="text-sm text-gray-500 block">Kitchen, bathroom, communal area responsibilities</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Tenant Replacement Procedure</span>
+                      <span className="text-sm text-gray-500 block">Process when a sharer leaves mid-tenancy</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Guarantor Clauses</span>
+                      <span className="text-sm text-gray-500 block">Third-party guarantee provisions</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <span className="font-medium">Rent Review &amp; Anti-Subletting</span>
+                      <span className="text-sm text-gray-500 block">CPI/RPI-linked increases, Airbnb prohibition</span>
+                    </div>
+                  </li>
+                </ul>
+                <div className="mt-6">
                   <Link
-                    href="/wizard?product=ast_premium"
-                    className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                    className="hero-btn-primary block w-full text-center"
                   >
-                    Get Premium - £59.00
+                    Get Premium - {premiumPrice}
                   </Link>
                 </div>
               </div>
-            </div>
-
-            <div className="mt-12 bg-primary-subtle border border-primary/20 rounded-lg p-6">
-              <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
-                <Image src="/lgb.svg" alt="UK" width={24} height={24} className="w-6 h-6" />
-                Full UK Coverage
-              </p>
-              <p className="text-gray-700">
-                Both Standard and Premium work across the UK:
-                <br />• <strong>England:</strong> Assured Shorthold Tenancy (AST)
-                <br />• <strong>Wales:</strong> Occupation Contract (Renting Homes Act 2016)
-                <br />• <strong>Scotland:</strong> Private Residential Tenancy (PRT)
-                <br />• <strong>Northern Ireland:</strong> Private Tenancy Agreement
-                <br />
-                Our wizard automatically generates the correct format for your jurisdiction.
-              </p>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* How It Works */}
+      {/* Jurisdiction Details */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">How It Works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              What You Get By Region
+            </h2>
+            <p className="text-center text-gray-600 mb-12">
+              The wizard automatically generates the correct agreement type for your property&apos;s jurisdiction
+            </p>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  1
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* England */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                  <h3 className="text-lg font-semibold text-charcoal">England</h3>
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Answer Questions</h3>
-                <p className="text-gray-600">
-                  Tell us about your property, tenancy dates, rent amount, deposit, special clauses (pets, break clause,
-                  etc.)
+                <p className="text-sm font-medium text-gray-900 mb-2">Assured Shorthold Tenancy (AST)</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Compliant with Housing Act 1988</li>
+                  <li>• Deposit protection requirements included</li>
+                  <li>• How to Rent Guide acknowledgement</li>
+                  <li>• Section 21/8 grounds referenced</li>
+                </ul>
+                <p className="mt-3 text-xs text-gray-500">
+                  <strong>HMO note:</strong> Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  2
+              {/* Wales */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                  <h3 className="text-lg font-semibold text-charcoal">Wales</h3>
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Agreement Generated</h3>
-                <p className="text-gray-600">
-                  We create a jurisdiction-specific agreement with all clauses pre-filled based on your answers. Review and
-                  customize if needed.
+                <p className="text-sm font-medium text-gray-900 mb-2">Standard Occupation Contract</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Compliant with Renting Homes (Wales) Act 2016</li>
+                  <li>• Uses &quot;Contract Holder&quot; terminology</li>
+                  <li>• Rent Smart Wales registration referenced</li>
+                  <li>• Section 173 notice provisions</li>
+                </ul>
+                <p className="mt-3 text-xs text-gray-500">
+                  <strong>Note:</strong> Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  3
+              {/* Scotland */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                  <h3 className="text-lg font-semibold text-charcoal">Scotland</h3>
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Download & Sign</h3>
-                <p className="text-gray-600">
-                  Download as PDF, print, and get signatures from all parties. Provide copy to tenant as required by
-                  law.
+                <p className="text-sm font-medium text-gray-900 mb-2">Private Residential Tenancy (PRT)</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Compliant with Private Housing (Tenancies) (Scotland) Act 2016</li>
+                  <li>• Open-ended tenancy (no fixed end date)</li>
+                  <li>• Rent Pressure Zone compatible</li>
+                  <li>• First-tier Tribunal jurisdiction</li>
+                </ul>
+                <p className="mt-3 text-xs text-gray-500">
+                  <strong>Key difference:</strong> PRTs are open-ended. Tenants can give 28 days&apos; notice at any time.
                 </p>
               </div>
-            </div>
 
-            <div className="mt-12 bg-gray-50 rounded-lg p-6">
-              <h4 className="font-semibold text-charcoal mb-3">What You'll Receive:</h4>
-              <ul className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> Main tenancy agreement (10-20 pages)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> Prescribed information form (deposits)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> How to Rent guide (England)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> EPC, Gas Safety, EICR checklists
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> Signature page template
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">→</span> Tenant welcome letter
-                </li>
-              </ul>
+              {/* Northern Ireland */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🇬🇧</span>
+                  <h3 className="text-lg font-semibold text-charcoal">Northern Ireland</h3>
+                </div>
+                <p className="text-sm font-medium text-gray-900 mb-2">Private Tenancy</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Compliant with Private Tenancies Act (NI) 2022</li>
+                  <li>• Rent increase restrictions (12-month gap)</li>
+                  <li>• Electrical safety mandatory from April 2025</li>
+                  <li>• County Court Northern Ireland jurisdiction</li>
+                </ul>
+                <p className="mt-3 text-xs text-gray-500">
+                  <strong>Note:</strong> Tenancy deposit protection and Energy Performance Certificates required.
+                </p>
+              </div>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Why Choose Premium */}
+      {/* Jurisdiction Accordion - Additional Details */}
+      <section className="py-8">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <JurisdictionAccordion product="ast" defaultExpanded={false} />
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Section */}
+      <AskHeavenSection variant="full" product="ast" />
+
+      {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              When to Choose Premium
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🏠</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs & Multi-Tenant</h3>
-                <p className="text-gray-700 mb-3">
-                  If you're letting to multiple unrelated tenants, Premium is essential. It includes:
-                </p>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Joint & several liability clauses</li>
-                  <li>• Shared facilities rules</li>
-                  <li>• Individual room licenses</li>
-                  <li>• Tenant replacement provisions</li>
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎓</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Student Lettings</h3>
-                <p className="text-gray-700 mb-3">Premium protects you from common student tenancy risks:</p>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Guarantor requirements (parents)</li>
-                  <li>• Anti-Airbnb/subletting clauses</li>
-                  <li>• Professional cleaning end-clause</li>
-                  <li>• Noise/anti-social behavior terms</li>
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💼</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Landlords</h3>
-                <p className="text-gray-700 mb-3">Managing multiple properties? Premium offers:</p>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Rent increase mechanisms (CPI/RPI)</li>
-                  <li>• Stronger termination clauses</li>
-                  <li>• Detailed inventory schedules</li>
-                  <li>• Utility payment clarity</li>
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">High-Value Properties</h3>
-                <p className="text-gray-700 mb-3">
-                  For properties worth £300k+ or rent £1,500+/month, Premium provides:
-                </p>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Comprehensive insurance requirements</li>
-                  <li>• Detailed maintenance obligations</li>
-                  <li>• Garden/exterior care clauses</li>
-                  <li>• Professional cleaning standards</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <p className="text-gray-700 mb-4">
-                <strong>Still unsure?</strong> Our wizard will ask about your property and recommend Standard or Premium
-                based on your answers.
-              </p>
-            </div>
+            <WhyLandlordHeaven variant="full" />
           </div>
         </Container>
       </section>
 
-      {/* Jurisdiction-Specific */}
+      {/* Premium Features - Jurisdiction-Aware Comparison Table */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Jurisdiction-Specific Agreements
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              Standard vs Premium: What&apos;s Included
             </h2>
+            <p className="text-center text-gray-600 mb-4">
+              Both are legally valid tenancy agreements. Premium includes clauses commonly required under the Housing Act 2004 for HMOs and multi-tenant properties.
+            </p>
+            <p className="text-center text-sm text-gray-500 mb-12">
+              Click &quot;Why does this matter?&quot; to see the legal rationale for each feature.
+            </p>
 
-            <div className="space-y-6">
-              <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Image src="/gb-eng.svg" alt="England" width={32} height={32} className="w-8 h-8" />
-                  <h3 className="text-xl font-semibold text-charcoal">England - AST</h3>
+            <TenancyComparisonTable
+              jurisdiction="england"
+              highlightPremium={true}
+              showRationale={true}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Clause Diff Preview - Visual comparison of actual clauses */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <ClauseDiffPreview
+              jurisdiction="england"
+              showUpgradeCTA={true}
+              variant="full"
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Comparison vs Solicitor */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
+              How We Compare
+            </h2>
+            <VsSolicitorComparison product="ast_standard" />
+          </div>
+        </Container>
+      </section>
+
+      {/* When to Choose Premium - Enhanced with legal context */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              When Premium is Recommended
+            </h2>
+            <p className="text-center text-gray-600 mb-12">
+              Based on common landlord requirements and UK housing legislation
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Home className="w-7 h-7 text-primary" />
                 </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs &amp; Multi-Tenant Properties</h3>
                 <p className="text-gray-700 mb-3">
-                  Assured Shorthold Tenancy (AST) under Housing Act 1988. Includes all mandatory requirements:
+                  Letting to 3+ unrelated tenants sharing facilities? Premium includes HMO clauses commonly required under the Housing Act 2004: joint &amp; several liability, shared facilities rules, and tenant replacement provisions.
                 </p>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Section 21 compliance (6-month minimum, deposit protection, prescribed info)</li>
-                  <li>✓ How to Rent guide (mandatory for Section 21)</li>
-                  <li>✓ Right to Rent check reminders</li>
-                  <li>✓ Deposit protection scheme details</li>
-                </ul>
+                <p className="text-sm text-gray-500">
+                  Properties with 5+ people from 2+ households require mandatory HMO licensing in England.
+                </p>
               </div>
 
-              <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Image src="/gb-wls.svg" alt="Wales" width={32} height={32} className="w-8 h-8" />
-                  <h3 className="text-xl font-semibold text-charcoal">Wales - Occupation Contract</h3>
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <GraduationCap className="w-7 h-7 text-primary" />
                 </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Student Lettings</h3>
                 <p className="text-gray-700 mb-3">
-                  Standard Occupation Contract under Renting Homes (Wales) Act 2016. Includes:
+                  Premium includes guarantor clauses (with clear liability terms), anti-subletting provisions to prevent Airbnb-style lets, and professional cleaning requirements commonly used for student accommodation.
                 </p>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Section 173 notice provisions (Wales no-fault notice)</li>
-                  <li>✓ Contract-holder rights under Welsh law</li>
-                  <li>✓ Deposit protection scheme (Wales-specific)</li>
-                  <li>✓ Fitness for Human Habitation requirements</li>
-                </ul>
+                <p className="text-sm text-gray-500">
+                  Student lets with 3+ unrelated individuals may also require HMO licensing.
+                </p>
               </div>
 
-              <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Image src="/gb-sct.svg" alt="Scotland" width={32} height={32} className="w-8 h-8" />
-                  <h3 className="text-xl font-semibold text-charcoal">Scotland - PRT</h3>
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Briefcase className="w-7 h-7 text-primary" />
                 </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Landlords</h3>
                 <p className="text-gray-700 mb-3">
-                  Private Residential Tenancy (PRT) under Private Housing (Tenancies) (Scotland) Act 2016:
+                  Managing multiple properties? Premium offers contractual rent increase provisions (CPI/RPI-linked), enhanced maintenance schedules, and tenant replacement procedures.
                 </p>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Open-ended tenancy (no fixed term)</li>
-                  <li>✓ Rent pressure zone compliance</li>
-                  <li>✓ 18 eviction grounds properly worded</li>
-                  <li>✓ First-tier Tribunal notice periods</li>
-                  <li>✓ Repairing Standard compliance</li>
-                </ul>
+                <p className="text-sm text-gray-500">
+                  Rent review clauses allow predictable increases without requiring Section 13 notices.
+                </p>
               </div>
 
-              <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Image src="/gb-nir.svg" alt="Northern Ireland" width={32} height={32} className="w-8 h-8" />
-                  <h3 className="text-xl font-semibold text-charcoal">Northern Ireland</h3>
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
                 </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">High-Value Properties</h3>
                 <p className="text-gray-700 mb-3">
-                  Private Tenancy Agreement under Private Tenancies (Northern Ireland) Order 2006:
+                  For properties with higher rent or value, Premium provides comprehensive contents insurance requirements, detailed inventory schedules, and enhanced maintenance obligations.
                 </p>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Tenancy deposit scheme registration (TDS NI)</li>
-                  <li>✓ Notice to Quit provisions</li>
-                  <li>✓ Fitness standard compliance</li>
-                  <li>✓ Landlord registration requirements</li>
-                </ul>
+                <p className="text-sm text-gray-500">
+                  Premium clauses are drafted to be enforceable under unfair terms regulations.
+                </p>
               </div>
+            </div>
+
+            <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
+              <p className="text-gray-700">
+                <strong>Not sure which to choose?</strong> Our wizard will recommend Standard or Premium based on your property and tenancy details. The recommendation is non-blocking &mdash; you can always choose either tier.
+              </p>
             </div>
           </div>
         </Container>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-20">
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* Retention Policy Notice */}
+      <section className="py-8">
         <Container>
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-6">
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Is this legally valid or do I need a solicitor?
-                </h3>
-                <p className="text-gray-700">
-                  Both Standard and Premium are legally valid tenancy agreements used by thousands of UK landlords.
-                  However, we are NOT a law firm. For complex situations (commercial let, unusual clauses, legal
-                  disputes), consult a solicitor.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Can I edit the agreement?</h3>
-                <p className="text-gray-700">
-                  Yes! You receive an editable PDF. You can modify clauses, add custom terms, or remove sections. Just
-                  ensure any changes comply with tenancy law in your jurisdiction.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  What's the difference between Standard and Premium?
-                </h3>
-                <p className="text-gray-700">
-                  Standard (£39.99) covers basic clauses for simple lettings. Premium (£59.00) adds 10+ advanced
-                  clauses: HMO provisions, guarantors, rent increases, detailed inventory, insurance requirements, and
-                  stronger protections. See comparison table above.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Can I use this for lodgers or live-in landlords?
-                </h3>
-                <p className="text-gray-700">
-                  No. This is for ASTs/PRTs where the landlord doesn't live in the property. For lodger agreements
-                  (resident landlord), you need a different agreement type. Contact us if you need this.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  What if I need to make changes after signing?
-                </h3>
-                <p className="text-gray-700">
-                  You can create addendums/amendments signed by both parties. For major changes (rent increase, adding
-                  tenant), you may need a new agreement. You can regenerate unlimited times before signing.
-                </p>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Do you include the How to Rent guide?
-                </h3>
-                <p className="text-gray-700">
-                  Yes (England only). We include the latest government How to Rent guide which is mandatory for Section
-                  21 notices. Scotland and Northern Ireland have different requirements which are also included.
+            <div className="bg-blue-50 rounded-lg p-6 flex items-start gap-4">
+              <Cloud className="w-6 h-6 text-primary shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-charcoal mb-1">Document Storage</h4>
+                <p className="text-gray-700 text-sm">
+                  Documents are stored in your portal for at least 12 months. You can download and save them any time.
                 </p>
               </div>
             </div>
@@ -605,29 +573,68 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      {/* Ask Heaven Widget */}
+      <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
-            <p className="text-xl mb-8 text-white/90">
-              Choose Standard or Premium. Get your jurisdiction-specific agreement in 10 minutes.
+          <div className="max-w-2xl mx-auto">
+            <AskHeavenWidget
+              variant="banner"
+              source="product_page"
+              topic="tenancy_agreement"
+              product="tenancy_agreement"
+              title="Have questions about tenancy agreements?"
+              description="Ask Heaven can help you understand AST, PRT, and occupation contract requirements."
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.completePack,
+                toolLinks.hmoChecker,
+                toolLinks.section21Generator,
+                landingPageLinks.tenancyTemplate,
+              ]}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Create Your Tenancy Agreement?</h2>
+            <p className="text-xl mb-8 text-gray-600">
+              Preview before you pay. Edit and regenerate instantly. Stored in your portal.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=ast_standard"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                className="hero-btn-primary"
               >
-                Standard - £39.99 →
+                Standard - {standardPrice} →
               </Link>
               <Link
-                href="/wizard?product=ast_premium"
-                className="inline-block bg-charcoal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                className="hero-btn-secondary"
               >
-                Premium - £59.00 →
+                Premium (HMO-Ready) - {premiumPrice} →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription required</p>
+            <p className="mt-4 text-sm text-gray-600">
+              One-time payment • Unlimited regenerations • No subscription
+            </p>
+            <p className="mt-2 text-xs text-gray-500">
+              Standard for single households • Premium for HMOs, students &amp; multi-tenant
+            </p>
           </div>
         </Container>
       </section>

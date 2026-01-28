@@ -8,7 +8,7 @@ import Link from "next/link";
 
 interface AIUsageLog {
   id: string;
-  operation: string;
+  operation_type: string;  // Correct field name from schema
   model: string;
   input_tokens: number | null;
   output_tokens: number | null;
@@ -95,14 +95,15 @@ export default function AdminAIUsagePage() {
 
       const avgCostPerOperation = logs.length > 0 ? totalCostAllTime / logs.length : 0;
 
-      // Calculate costs by operation
+      // Calculate costs by operation type
       const costsByOperation: Record<string, { count: number; totalCost: number }> = {};
       logs.forEach((log) => {
-        if (!costsByOperation[log.operation]) {
-          costsByOperation[log.operation] = { count: 0, totalCost: 0 };
+        const opType = log.operation_type || 'unknown';
+        if (!costsByOperation[opType]) {
+          costsByOperation[opType] = { count: 0, totalCost: 0 };
         }
-        costsByOperation[log.operation].count++;
-        costsByOperation[log.operation].totalCost += log.total_cost_usd || 0;
+        costsByOperation[opType].count++;
+        costsByOperation[opType].totalCost += log.total_cost_usd || 0;
       });
 
       setStats({
@@ -274,7 +275,7 @@ export default function AdminAIUsagePage() {
                       </span>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm text-gray-700">{log.operation}</span>
+                      <span className="text-sm text-gray-700">{log.operation_type}</span>
                     </td>
                     <td className="p-4">
                       <span className="text-xs font-mono text-gray-600">{log.model}</span>

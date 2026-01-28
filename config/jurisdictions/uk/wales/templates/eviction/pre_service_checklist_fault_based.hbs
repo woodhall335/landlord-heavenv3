@@ -1,0 +1,626 @@
+{{!--
+  ============================================================================
+  WALES FAULT-BASED BREACH NOTICE - PRE-SERVICE COMPLIANCE CHECKLIST
+  Renting Homes (Wales) Act 2016, Sections 157, 159, 161, 162
+  ============================================================================
+
+  This checklist records pre-service compliance confirmations and does NOT
+  form part of the notice itself.
+
+  Generated from wizard answers using the Wales Compliance Schema.
+
+  STYLING NORMALISATION RULES APPLIED:
+  - No red text, icons, or emojis
+  - Black text only with bold headings
+  - Language hierarchy: CRITICAL - MUST COMPLY / REQUIRED / RECOMMENDED
+  - Professional, court-document tone
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pre-Service Compliance Checklist - Wales Fault-Based Breach Notice</title>
+  <style>
+    {{{print_css}}}
+
+    /* === PAGE SETUP === */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #000000;
+      max-width: 190mm;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    /* === TYPOGRAPHY === */
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 5px 0;
+      color: #000000;
+    }
+
+    h2 {
+      font-size: 13pt;
+      font-weight: bold;
+      margin: 20px 0 10px 0;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #000000;
+      color: #000000;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 11pt;
+      font-weight: bold;
+      margin: 15px 0 8px 0;
+      color: #000000;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 11pt;
+      margin-bottom: 20px;
+      color: #000000;
+    }
+
+    /* === LEGAL POSITIONING BOX === */
+    .legal-positioning {
+      border: 2px solid #000000;
+      padding: 12px;
+      margin: 20px 0;
+      background: #f5f5f5;
+    }
+
+    .legal-positioning p {
+      margin: 0;
+      font-size: 10pt;
+      font-weight: bold;
+    }
+
+    /* === CASE DETAILS === */
+    .case-details {
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 15px 0;
+      border: 1px solid #cccccc;
+    }
+
+    .case-details p {
+      margin: 5px 0;
+    }
+
+    .case-details strong {
+      display: inline-block;
+      width: 180px;
+    }
+
+    /* === EMPHASIS LABELS === */
+    .critical-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      margin-bottom: 10px;
+    }
+
+    .required-label {
+      font-weight: bold;
+      font-size: 10pt;
+      margin-bottom: 10px;
+    }
+
+    /* === TABLE STYLES === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    th, td {
+      border: 1px solid #000000;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e0e0e0;
+      font-weight: bold;
+    }
+
+    /* === STATUS STYLES (text-based, no colour) === */
+    .status-compliant {
+      font-weight: bold;
+    }
+
+    .status-non-compliant {
+      font-weight: bold;
+    }
+
+    .status-na {
+      font-style: italic;
+    }
+
+    /* === DECLARATION BOX === */
+    .declaration-box {
+      border: 2px solid #000000;
+      padding: 15px;
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .declaration-box ol {
+      margin: 10px 0 10px 20px;
+      padding: 0;
+    }
+
+    .declaration-box li {
+      margin: 5px 0;
+    }
+
+    .signature-line {
+      margin-top: 30px;
+    }
+
+    .signature-line p {
+      margin: 15px 0;
+    }
+
+    /* === FOOTER === */
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .footer p {
+      margin: 0.3em 0;
+    }
+
+    /* === PRINT OPTIMISATION === */
+    .page-break {
+      page-break-before: always;
+    }
+
+    .keep-together {
+      page-break-inside: avoid;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+
+      .declaration-box,
+      table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- === HEADER === -->
+<h1>PRE-SERVICE COMPLIANCE CHECKLIST</h1>
+<p class="subtitle">Wales - Fault-Based Breach Notice<br>Renting Homes (Wales) Act 2016</p>
+
+<!-- === LEGAL POSITIONING === -->
+<div class="legal-positioning">
+  <p>This checklist records pre-service compliance confirmations and does not form part of the notice itself.</p>
+</div>
+
+<!-- === CASE DETAILS === -->
+<div class="case-details">
+  <p><strong>Property Address:</strong> {{#if property_address}}{{property_address}}{{else}}{{property_address_line1}}{{#if property_address_town}}, {{property_address_town}}{{/if}}{{#if property_postcode}} {{property_postcode}}{{/if}}{{/if}}</p>
+  <p><strong>Landlord:</strong> {{landlord_full_name}}</p>
+  <p><strong>Contract-Holder:</strong> {{#if contract_holder_full_name}}{{contract_holder_full_name}}{{else}}{{tenant_full_name}}{{/if}}</p>
+  <p><strong>Date Generated:</strong> {{generated_date}}</p>
+  {{#if selected_grounds_display}}
+  <p><strong>Selected Ground(s):</strong> {{selected_grounds_display}}</p>
+  {{/if}}
+</div>
+
+<!-- === SECTION 1: LANDLORD REGISTRATION === -->
+<h2>1. Landlord Registration</h2>
+<p class="critical-label">CRITICAL - MUST COMPLY</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registered with Rent Smart Wales</td>
+      <td>{{#if rent_smart_wales_registered}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if rent_smart_wales_registered}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if rent_smart_wales_registered}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if rent_smart_wales_registered}}
+    {{#if rent_smart_wales_number}}
+    <tr>
+      <td>Registration Number</td>
+      <td>{{rent_smart_wales_number}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+  </tbody>
+</table>
+
+<!-- === SECTION 2: OCCUPATION CONTRACT === -->
+<h2>2. Occupation Contract</h2>
+<p class="required-label">REQUIRED</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Written Statement provided within 14 days</td>
+      <td>{{#if written_statement_provided}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if written_statement_provided}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if written_statement_provided}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if written_statement_provided}}
+    {{#if written_statement_date_formatted}}
+    <tr>
+      <td>Date Written Statement provided</td>
+      <td>{{written_statement_date_formatted}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+  </tbody>
+</table>
+
+<!-- === SECTION 3: DEPOSIT PROTECTION === -->
+<h2>3. Deposit Protection</h2>
+<p class="required-label">REQUIRED (if deposit taken)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Deposit taken</td>
+      <td>{{#if deposit_taken}}Yes{{else}}No{{/if}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{#if deposit_taken}}
+    <tr>
+      <td>Deposit protected in approved scheme</td>
+      <td>{{#if deposit_protected}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if deposit_protected}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if deposit_protected}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if deposit_protected}}
+    {{#if deposit_scheme_display}}
+    <tr>
+      <td>Deposit Scheme</td>
+      <td>{{deposit_scheme_display}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    <tr>
+      <td>Prescribed Information served within 30 days</td>
+      <td>{{#if prescribed_info_served}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if prescribed_info_served}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if prescribed_info_served}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if prescribed_info_served}}
+    {{#if prescribed_info_date_formatted}}
+    <tr>
+      <td>Date Prescribed Information served</td>
+      <td>{{prescribed_info_date_formatted}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{else}}
+    <tr>
+      <td>Deposit protected in approved scheme</td>
+      <td>N/A</td>
+      <td class="status-na">NOT APPLICABLE</td>
+    </tr>
+    <tr>
+      <td>Prescribed Information served within 30 days</td>
+      <td>N/A</td>
+      <td class="status-na">NOT APPLICABLE</td>
+    </tr>
+    {{/if}}
+  </tbody>
+</table>
+
+<!-- === SECTION 4: PROPERTY SAFETY === -->
+<h2>4. Property Safety</h2>
+<p class="required-label">REQUIRED</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if gas_supply_present}}
+    <tr>
+      <td>Valid Gas Safety Certificate (within 12 months)</td>
+      <td>{{#if gas_safety_certificate_valid}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if gas_safety_certificate_valid}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if gas_safety_certificate_valid}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if gas_safety_certificate_valid}}
+    {{#if gas_cert_expiry_date_formatted}}
+    <tr>
+      <td>Gas Certificate Expiry Date</td>
+      <td>{{gas_cert_expiry_date_formatted}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{else}}
+    <tr>
+      <td>Valid Gas Safety Certificate</td>
+      <td>No gas supply</td>
+      <td class="status-na">NOT APPLICABLE</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td>Valid EICR (within 5 years)</td>
+      <td>{{#if eicr_valid}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if eicr_valid}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if eicr_valid}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if eicr_valid}}
+    {{#if eicr_next_inspection_date_formatted}}
+    <tr>
+      <td>EICR Next Inspection Date</td>
+      <td>{{eicr_next_inspection_date_formatted}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    <tr>
+      <td>Smoke alarms installed on each floor</td>
+      <td>{{#if smoke_alarms_installed}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if smoke_alarms_installed}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if smoke_alarms_installed}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if smoke_alarms_installed}}
+    <tr>
+      <td>Smoke alarms tested and working</td>
+      <td>{{#if smoke_alarms_tested}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if smoke_alarms_tested}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if smoke_alarms_tested}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{/if}}
+    {{#if co_alarm_required}}
+    <tr>
+      <td>Carbon monoxide alarm installed</td>
+      <td>{{#if co_alarm_installed}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if co_alarm_installed}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if co_alarm_installed}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{else}}
+    <tr>
+      <td>Carbon monoxide alarm installed</td>
+      <td>Not required</td>
+      <td class="status-na">NOT APPLICABLE</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td>Property fit for human habitation</td>
+      <td>{{#if property_fit_for_habitation}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if property_fit_for_habitation}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if property_fit_for_habitation}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- === SECTION 5: EVICTION SAFEGUARDS === -->
+<h2>5. Eviction Safeguards</h2>
+<p class="required-label">REQUIRED</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Contract-holder complaint in last 6 months</td>
+      <td>{{#if retaliatory_eviction_complaint}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#unless retaliatory_eviction_complaint}}status-compliant{{else}}status-non-compliant{{/unless}}">
+        {{#unless retaliatory_eviction_complaint}}NO COMPLAINT{{else}}COMPLAINT RECORDED{{/unless}}
+      </td>
+    </tr>
+    {{#if retaliatory_eviction_complaint}}
+    {{#if complaint_date_formatted}}
+    <tr>
+      <td>Complaint Date</td>
+      <td>{{complaint_date_formatted}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    <tr>
+      <td>Ongoing local authority investigation</td>
+      <td>{{#if local_authority_investigation}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#unless local_authority_investigation}}status-compliant{{else}}status-non-compliant{{/unless}}">
+        {{#unless local_authority_investigation}}NO INVESTIGATION{{else}}INVESTIGATION ACTIVE{{/unless}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- === SECTION 6: BREACH EVIDENCE === -->
+<h2>6. Breach Evidence</h2>
+<p class="critical-label">CRITICAL - MUST COMPLY</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 50%">Requirement</th>
+      <th style="width: 25%">Response</th>
+      <th style="width: 25%">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Statutory ground selected</td>
+      <td>{{#if selected_grounds_display}}{{selected_grounds_display}}{{else}}None{{/if}}</td>
+      <td class="{{#if selected_grounds_display}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if selected_grounds_display}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    <tr>
+      <td>Evidence exists and can be produced</td>
+      <td>{{#if evidence_exists}}Yes{{else}}No{{/if}}</td>
+      <td class="{{#if evidence_exists}}status-compliant{{else}}status-non-compliant{{/if}}">
+        {{#if evidence_exists}}COMPLIANT{{else}}NON-COMPLIANT{{/if}}
+      </td>
+    </tr>
+    {{#if evidence_exists}}
+    {{#if evidence_type_display}}
+    <tr>
+      <td>Evidence type(s)</td>
+      <td>{{evidence_type_display}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{#if has_arrears_ground}}
+    <tr>
+      <td>Arrears amount at date of notice</td>
+      <td>{{currency arrears_amount}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{#if arrears_schedule_uploaded}}
+    <tr>
+      <td>Arrears schedule uploaded</td>
+      <td>Yes</td>
+      <td class="status-compliant">COMPLIANT</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{#if has_asb_ground}}
+    {{#if asb_incident_description}}
+    <tr>
+      <td>ASB incidents described</td>
+      <td>Yes</td>
+      <td class="status-compliant">COMPLIANT</td>
+    </tr>
+    {{/if}}
+    {{#if asb_police_involved}}
+    <tr>
+      <td>Police involvement</td>
+      <td>Yes{{#if asb_police_reference}} (Ref: {{asb_police_reference}}){{/if}}</td>
+      <td class="status-compliant">RECORDED</td>
+    </tr>
+    {{/if}}
+    {{#if asb_witness_statements}}
+    <tr>
+      <td>Witness statements available</td>
+      <td>Yes</td>
+      <td class="status-compliant">COMPLIANT</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{#if has_breach_ground}}
+    {{#if breach_clause_identified}}
+    <tr>
+      <td>Breached clause identified</td>
+      <td>Yes</td>
+      <td class="status-compliant">COMPLIANT</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+    {{#if has_false_statement_ground}}
+    {{#if false_statement_description}}
+    <tr>
+      <td>False statement described</td>
+      <td>Yes</td>
+      <td class="status-compliant">COMPLIANT</td>
+    </tr>
+    {{/if}}
+    {{/if}}
+  </tbody>
+</table>
+
+<!-- === PAGE BREAK BEFORE DECLARATION === -->
+<div class="page-break"></div>
+
+<!-- === SECTION 7: DECLARATION === -->
+<h2>7. Declaration</h2>
+
+<div class="declaration-box">
+  <p>I confirm that:</p>
+  <ol>
+    <li>I have verified each of the above compliance requirements.</li>
+    <li>The information provided is true and accurate to the best of my knowledge.</li>
+    <li>I understand that serving a notice without proper grounds or evidence may result in legal liability.</li>
+    <li>I am aware that this checklist does not constitute legal advice.</li>
+  </ol>
+
+  <div class="signature-line">
+    <p><strong>Signed:</strong> _________________________________________________</p>
+    <p><strong>Print Name:</strong> {{landlord_full_name}}</p>
+    <p><strong>Date:</strong> _________________________________________________</p>
+  </div>
+</div>
+
+<!-- === FOOTER === -->
+<div class="footer">
+  <p><strong>Legal Basis:</strong> Renting Homes (Wales) Act 2016, Sections 157, 159, 161, 162</p>
+  <p><strong>Important:</strong> This checklist is for record-keeping purposes and does not constitute legal advice.</p>
+  <p><strong>Generated:</strong> {{generated_date}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
+</div>
+
+</body>
+</html>

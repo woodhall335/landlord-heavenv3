@@ -1,0 +1,141 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">FAIR VS UNFAIR TENANCY TERMS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Ensure your agreement contains only fair, enforceable terms</text>
+
+  <!-- Balance scale icon in center -->
+  <g transform="translate(360, 75)">
+    <!-- Scale base -->
+    <rect x="35" y="70" width="10" height="50" fill="#7C3AED"/>
+    <rect x="20" y="115" width="40" height="8" rx="4" fill="#7C3AED"/>
+    <!-- Scale beam -->
+    <rect x="0" y="65" width="80" height="6" rx="3" fill="#7C3AED"/>
+    <!-- Scale top -->
+    <circle cx="40" cy="68" r="8" fill="#7C3AED"/>
+    <circle cx="40" cy="68" r="4" fill="white"/>
+  </g>
+
+  <!-- Fair Terms Column (Left - Green) -->
+  <g transform="translate(40, 150)">
+    <rect x="0" y="0" width="340" height="310" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="340" height="35" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="340" height="15" fill="#22C55E"/>
+    <circle cx="25" cy="18" r="10" fill="white"/>
+    <path d="M20 18 L24 22 L30 14" stroke="#22C55E" stroke-width="2" fill="none"/>
+    <text x="170" y="23" text-anchor="middle" fill="white" font-size="12" font-weight="bold">FAIR TERMS</text>
+
+    <!-- Fair term examples -->
+    <g transform="translate(15, 50)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Reasonable rent increases</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Annual increases tied to market rates</text>
+    </g>
+
+    <g transform="translate(15, 90)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Clear repair responsibilities</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Defined landlord and tenant obligations</text>
+    </g>
+
+    <g transform="translate(15, 130)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Proper notice periods</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Minimum statutory notice required</text>
+    </g>
+
+    <g transform="translate(15, 170)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Standard deposit deductions</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Only for actual damage beyond wear</text>
+    </g>
+
+    <g transform="translate(15, 210)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Balanced break clause</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Equal rights for both parties</text>
+    </g>
+
+    <g transform="translate(15, 250)">
+      <circle cx="8" cy="8" r="8" fill="#22C55E"/>
+      <path d="M4 8 L7 11 L12 5" stroke="white" stroke-width="2" fill="none"/>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Reasonable guest policies</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Visitors permitted within limits</text>
+    </g>
+  </g>
+
+  <!-- Unfair Terms Column (Right - Red) -->
+  <g transform="translate(420, 150)">
+    <rect x="0" y="0" width="340" height="310" rx="12" fill="white" stroke="#EF4444" stroke-width="2"/>
+    <rect x="0" y="0" width="340" height="35" rx="12" fill="#EF4444"/>
+    <rect x="0" y="20" width="340" height="15" fill="#EF4444"/>
+    <circle cx="25" cy="18" r="10" fill="white"/>
+    <text x="22" y="23" fill="#EF4444" font-size="14" font-weight="bold">X</text>
+    <text x="170" y="23" text-anchor="middle" fill="white" font-size="12" font-weight="bold">UNFAIR TERMS</text>
+
+    <!-- Unfair term examples -->
+    <g transform="translate(15, 50)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Unlimited rent increases</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Landlord can raise rent anytime</text>
+    </g>
+
+    <g transform="translate(15, 90)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Tenant pays all repairs</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Including structural issues</text>
+    </g>
+
+    <g transform="translate(15, 130)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Immediate eviction clauses</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">No proper notice required</text>
+    </g>
+
+    <g transform="translate(15, 170)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Excessive penalty fees</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Unreasonable charges for minor issues</text>
+    </g>
+
+    <g transform="translate(15, 210)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">One-sided break clause</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Only landlord can end early</text>
+    </g>
+
+    <g transform="translate(15, 250)">
+      <circle cx="8" cy="8" r="8" fill="#EF4444"/>
+      <text x="5" y="12" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="12" fill="#6D28D9" font-size="10" font-weight="bold">Excessive lifestyle restrictions</text>
+      <text x="25" y="26" fill="#94A3B8" font-size="8">Unreasonable rules on daily living</text>
+    </g>
+  </g>
+
+  <!-- Legal warning at bottom -->
+  <g transform="translate(130, 470)">
+    <rect x="0" y="0" width="540" height="22" rx="6" fill="#7C3AED" opacity="0.1"/>
+    <text x="270" y="15" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">Unfair terms may be unenforceable under the Consumer Rights Act 2015</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

@@ -2,18 +2,25 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Button } from "./Button";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
+import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine, RiDashboardLine } from 'react-icons/ri';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { freeTools } from '@/lib/tools/tools';
 
 interface NavItem {
   href: string;
   label: string;
 }
 
+interface NavBarUser {
+  email: string;
+  name?: string;
+}
+
 interface NavBarProps {
-  user?: { email: string; name?: string } | null;
+  user?: NavBarUser | null;
 }
 
 const primaryLinks: NavItem[] = [
@@ -21,29 +28,122 @@ const primaryLinks: NavItem[] = [
   { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
   { href: "/products/ast", label: "Tenancy Agreements" },
-  // HMO Pro removed from navigation for V1 - will be re-enabled in V2
-  // { href: "/hmo-pro", label: "HMO Pro" },
+  { href: "/blog", label: "Landlord Guides" },
 ];
 
-const freeToolsLinks: NavItem[] = [
-  { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
-  { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
-  { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },
-  { href: "/tools/hmo-license-checker", label: "HMO License Checker" },
-  { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
-];
+const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
+  href: tool.href,
+  label: tool.label,
+}));
 
-export function NavBar({ user }: NavBarProps) {
+export function NavBar({ user: serverUser }: NavBarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Client-side auth state - starts with server prop, updates on auth changes
+  const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
+
+  // Check auth state on mount and listen for changes
+  const checkAuthState = useCallback(async () => {
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+
+      if (authUser) {
+        setClientUser({
+          email: authUser.email || '',
+          name: authUser.user_metadata?.full_name,
+        });
+      } else {
+        setClientUser(null);
+      }
+    } catch {
+      // Keep current state on error
+    }
+  }, []);
+
+  useEffect(() => {
+    // Check auth state on mount
+    checkAuthState();
+
+    // Listen for auth state changes
+    const supabase = getSupabaseBrowserClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        } else if (event === 'SIGNED_OUT') {
+          setClientUser(null);
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [checkAuthState]);
+
+  // Use client-side state (more up-to-date than server prop)
+  const user = clientUser;
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut();
+      setClientUser(null);
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      // Trigger sticky header and menu after 200px scroll
+      const isPastThreshold = scrollY >= 200;
+      setIsScrolled(isPastThreshold);
+      // Menu visible at top (0-10px) or after 200px scroll
+      setShowMenu(scrollY <= 10 || isPastThreshold);
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header
+      className={clsx(
+        "site-header fixed left-0 right-0 z-50 transition-all duration-300",
+        isScrolled
+          ? "bg-white border-b border-gray-200 shadow-sm"
+          : "bg-transparent border-b border-transparent"
+      )}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
-            src="/logo.png"
+            src="/headerlogo2.png"
             alt="Landlord Heaven - Legal Documents for Landlords"
             width={280}
             height={50}
@@ -52,21 +152,27 @@ export function NavBar({ user }: NavBarProps) {
           />
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav className={clsx(
+          "items-center gap-9 lg:flex transition-all duration-300",
+          showMenu
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none",
+          "hidden"
+        )}>
           {/* Free Tools Dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setShowFreeTools(true)}
             onMouseLeave={() => setShowFreeTools(false)}
           >
-            <button
-              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
+            <Link
+              href="/tools"
+              className="text-sm font-semibold text-gray-700 hover:text-[#692ED4] transition-colors relative py-2 flex items-center gap-1"
+              aria-label="Free tools hub"
             >
               Free Tools
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
+              <RiArrowDownSLine className="h-4 w-4 text-[#692ED4]" />
+            </Link>
 
             {showFreeTools && (
               <div
@@ -77,7 +183,7 @@ export function NavBar({ user }: NavBarProps) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -94,8 +200,8 @@ export function NavBar({ user }: NavBarProps) {
               className={clsx(
                 "text-sm font-semibold transition-colors relative py-2",
                 pathname === item.href
-                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
-                  : "text-gray-700 hover:text-primary"
+                  ? "text-[#692ED4] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#692ED4]"
+                  : "text-gray-700 hover:text-[#692ED4]"
               )}
             >
               {item.label}
@@ -103,22 +209,37 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className={clsx(
+          "items-center gap-4 lg:flex transition-all duration-300",
+          showMenu
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none",
+          "hidden"
+        )}>
           {user ? (
-            <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
+            <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </span>
-              <span className="max-w-[140px] truncate font-semibold">{user.name || user.email}</span>
-              <Link href="/dashboard" className="text-primary hover:text-primary-dark font-semibold">
-                Dashboard
+              <Link
+                href="/dashboard"
+                className="text-gray-500 hover:text-primary transition-colors"
+                title="Dashboard"
+              >
+                <RiDashboardLine className="h-5 w-5" />
               </Link>
+              <button
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="text-gray-500 hover:text-red-600 transition-colors"
+                title="Logout"
+              >
+                <RiLogoutBoxLine className="h-5 w-5" />
+              </button>
             </div>
           ) : (
-            <Link href="/auth/login">
-              <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
-                Login
-              </Button>
+            <Link href="/auth/login" className="header-login-btn">
+              Login
             </Link>
           )}
         </div>
@@ -129,9 +250,7 @@ export function NavBar({ user }: NavBarProps) {
           aria-expanded={open}
         >
           <span>Menu</span>
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <RiMenuLine className="h-5 w-5 text-[#692ED4]" />
         </button>
       </div>
 
@@ -141,11 +260,18 @@ export function NavBar({ user }: NavBarProps) {
             {/* Free Tools Section */}
             <div>
               <div className="mb-2 text-xs font-bold uppercase text-gray-500">Free Tools</div>
+              <Link
+                href="/tools"
+                className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
+                onClick={() => setOpen(false)}
+              >
+                Free Tools Hub
+              </Link>
               {freeToolsLinks.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block py-2 text-sm font-semibold text-charcoal hover:text-primary"
+                  className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
@@ -169,10 +295,53 @@ export function NavBar({ user }: NavBarProps) {
               ))}
             </div>
 
-            {user && (
-              <div className="flex items-center gap-3 pt-2">
-                <Link href="/dashboard" className="text-sm font-semibold text-primary">
-                  Go to dashboard
+            {user ? (
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
+                    {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-charcoal">{user.name || user.email}</p>
+                    {user.name && <p className="text-xs text-gray-500">{user.email}</p>}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 py-2 text-sm font-semibold text-primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      handleLogout();
+                    }}
+                    disabled={isLoggingOut}
+                    className="flex items-center gap-2 py-2 text-sm font-semibold text-red-600 hover:text-red-700"
+                  >
+                    <RiLogoutBoxLine className="h-4 w-4" />
+                    {isLoggingOut ? 'Logging out...' : 'Logout'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                <Link
+                  href="/auth/login"
+                  className="block py-2 text-sm font-semibold text-primary"
+                  onClick={() => setOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="block py-2 text-sm font-semibold text-charcoal"
+                  onClick={() => setOpen(false)}
+                >
+                  Create Account
                 </Link>
               </div>
             )}

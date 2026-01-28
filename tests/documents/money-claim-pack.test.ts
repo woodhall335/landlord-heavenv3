@@ -73,7 +73,7 @@ describe('Money claim pack generator', () => {
       const pack = await generateMoneyClaimPack(sampleCase);
 
       expect(pack.documents.length).toBeGreaterThanOrEqual(5);
-      expect(pack.documents.some((doc) => doc.file_name === 'n1-claim-form.pdf')).toBe(true);
+      expect(pack.documents.some((doc) => doc.file_name === '10-n1-claim-form.pdf')).toBe(true);
       expect(pack.metadata.includes_official_pdf).toBe(true);
       expect(pack.metadata.total_with_fees).toBeGreaterThan(0);
     },
@@ -100,5 +100,106 @@ describe('Money claim pack generator', () => {
         jurisdiction: 'scotland' as any,
       }),
     ).rejects.toThrow('England & Wales');
+  });
+
+  describe('pre-generation validation', () => {
+    it('fails loudly when landlord name is missing', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        landlord_full_name: '',
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('fails loudly when tenant name is missing', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        tenant_full_name: '',
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('fails loudly when no claim amount exists', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        arrears_total: 0,
+        arrears_schedule: [],
+        damage_items: [],
+        other_charges: [],
+      };
+
+      await expect(generateMoneyClaimPack(invalidCase)).rejects.toThrow(
+        /Money claim data validation failed/
+      );
+    });
+
+    it('error message includes human-readable field labels', async () => {
+      const invalidCase = {
+        ...sampleCase,
+        landlord_full_name: '',
+        property_address: '',
+      };
+
+      try {
+        await generateMoneyClaimPack(invalidCase);
+        expect.fail('Should have thrown');
+      } catch (err: any) {
+        expect(err.message).toContain('Claimant');
+        expect(err.message).toContain('Property address');
+      }
+    });
+  });
+
+  describe('conditional interest document generation', () => {
+    it('excludes interest calculation document when claim_interest is undefined', async () => {
+      const caseWithoutInterest = {
+        ...sampleCase,
+        claim_interest: undefined,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithoutInterest);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeUndefined();
+    });
+
+    it('excludes interest calculation document when claim_interest is false', async () => {
+      const caseWithInterestFalse = {
+        ...sampleCase,
+        claim_interest: false,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithInterestFalse);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeUndefined();
+    });
+
+    it('includes interest calculation document when claim_interest is true', async () => {
+      const caseWithInterest = {
+        ...sampleCase,
+        claim_interest: true,
+        interest_rate: 8,
+      };
+
+      const pack = await generateMoneyClaimPack(caseWithInterest);
+
+      const interestDoc = pack.documents.find(
+        (doc) => doc.title === 'Interest calculation' || doc.file_name === '03-interest-calculation.pdf'
+      );
+      expect(interestDoc).toBeDefined();
+      expect(interestDoc?.category).toBe('guidance');
+      expect(interestDoc?.description).toContain('Section 69');
+    });
   });
 });

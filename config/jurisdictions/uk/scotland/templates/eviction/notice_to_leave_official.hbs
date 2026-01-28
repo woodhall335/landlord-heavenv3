@@ -1,0 +1,601 @@
+{{!--
+  ============================================================================
+  SCOTLAND - NOTICE TO LEAVE (PRESCRIBED FORM)
+  Private Housing (Tenancies) (Scotland) Act 2016, Section 50(1)(a)
+  ============================================================================
+
+  Based on official prescribed form from Scottish Government:
+  https://www.mygov.scot/private-tenant-eviction
+
+  Version: Form in place from 30 March 2022 onwards
+
+  IMPORTANT:
+  - This template matches the exact prescribed form structure and wording
+  - Uses official Scottish Government language throughout
+  - Variable names match mapWizardToNoticeToLeave() output
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notice to Leave - Scotland</title>
+  <style>
+    {{{print_css}}}
+
+    /* ===== NOTICE TO LEAVE @PAGE OVERRIDE ===== */
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      padding: 0;
+      margin: 0 auto;
+      max-width: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* ===== FORM HEADER ===== */
+    .form-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .form-header h1 {
+      font-size: 18pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-header .legal-ref {
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 0.5em;
+      text-transform: uppercase;
+    }
+
+    .form-header .version-note {
+      font-size: 9pt;
+      font-style: italic;
+      color: #666;
+      margin-top: 0.75em;
+      padding-top: 0.5em;
+      border-top: 1px solid #ccc;
+    }
+
+    /* ===== IMPORTANT INFO BOX ===== */
+    .info-box {
+      border: 2px solid #1a1a1a;
+      padding: 1.25em;
+      margin: 1.5em 0;
+      background: #f8f8f8;
+    }
+
+    .info-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .info-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.5em 0;
+    }
+
+    .info-box ul {
+      margin: 0.5em 0;
+      padding-left: 1.5em;
+    }
+
+    .info-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.3em 0;
+    }
+
+    .info-box .highlight {
+      font-weight: 600;
+    }
+
+    /* ===== PART SECTIONS ===== */
+    .part-section {
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .part-header {
+      background: #1a1a1a;
+      color: white;
+      padding: 0.5em 0.75em;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-bottom: 1em;
+    }
+
+    .part-content {
+      padding: 0 0.5em;
+    }
+
+    /* ===== FORM FIELDS ===== */
+    .field-row {
+      margin: 0.75em 0;
+    }
+
+    .field-label {
+      font-size: 10pt;
+      color: #444;
+      margin-bottom: 0.25em;
+    }
+
+    .field-value {
+      font-size: 11pt;
+      font-weight: 500;
+      padding: 0.4em 0;
+      border-bottom: 1px solid #333;
+      min-height: 1.5em;
+    }
+
+    .field-value.multi-line {
+      white-space: pre-line;
+      line-height: 1.5;
+    }
+
+    .field-inline {
+      display: flex;
+      gap: 1em;
+      align-items: baseline;
+    }
+
+    .field-inline .field-label {
+      min-width: 200px;
+    }
+
+    .field-inline .field-value {
+      flex: 1;
+    }
+
+    /* ===== GROUNDS CHECKLIST ===== */
+    .grounds-list {
+      margin: 1em 0;
+    }
+
+    .ground-item {
+      display: flex;
+      align-items: flex-start;
+      margin: 0.5em 0;
+      padding: 0.5em;
+      background: #fafafa;
+      border-left: 3px solid transparent;
+    }
+
+    .ground-item.selected {
+      background: #e8f4e8;
+      border-left-color: #2e7d32;
+    }
+
+    .ground-checkbox {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #1a1a1a;
+      margin-right: 0.75em;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12pt;
+    }
+
+    .ground-item.selected .ground-checkbox {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .ground-text {
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    /* ===== PARTICULARS SECTION ===== */
+    .particulars-box {
+      margin: 1em 0;
+      padding: 1em;
+      border: 1px solid #ccc;
+      background: #fff;
+      min-height: 100px;
+    }
+
+    .particulars-box p {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      white-space: pre-wrap;
+    }
+
+    /* ===== EVIDENCE SECTION ===== */
+    .evidence-box {
+      margin: 1em 0;
+      padding: 1em;
+      border: 1px dashed #999;
+      background: #fafafa;
+    }
+
+    .evidence-box h4 {
+      font-size: 10pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+    }
+
+    .evidence-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    /* ===== SIGNATURE SECTION ===== */
+    .signature-section {
+      margin: 2em 0;
+      padding: 1.25em;
+      border: 1px solid #ccc;
+      background: #fafafa;
+    }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5em;
+      margin-top: 1em;
+    }
+
+    .signature-block label {
+      font-size: 9pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #444;
+      display: block;
+      margin-bottom: 0.25em;
+    }
+
+    .signature-block .value {
+      font-size: 10pt;
+      padding: 0.3em 0;
+      border-bottom: 1px solid #333;
+      min-height: 1.25em;
+    }
+
+    .signature-line {
+      border-bottom: 1px solid #1a1a1a;
+      min-height: 2em;
+      margin-top: 0.5em;
+    }
+
+    /* ===== IMPORTANT NOTICE ===== */
+    .important-notice {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 4px;
+    }
+
+    .important-notice p {
+      font-size: 10pt;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* ===== PAGE BREAK ===== */
+    .page-break {
+      page-break-before: always;
+    }
+
+    /* ===== FOOTER ===== */
+    .form-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ccc;
+      font-size: 9pt;
+      color: #666;
+      text-align: center;
+    }
+
+    @media print {
+      .part-section {
+        page-break-inside: avoid;
+      }
+      .info-box {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Form Header -->
+<div class="form-header">
+  <h1>Notice to Leave</h1>
+  <p class="legal-ref">Landlord's Notice to a Tenant to Leave under Section 50(1)(a) of the<br>Private Housing (Tenancies) (Scotland) Act 2016</p>
+  <p class="version-note">This version of the form is in place from 30 March 2022 onwards</p>
+</div>
+
+<!-- Important Information for Tenant -->
+<div class="info-box">
+  <h3>Important Information for the Tenant(s) - Please read this notice carefully</h3>
+
+  <p><span class="highlight">Advice</span> - If you have questions about this notice, speak to your Landlord or contact one of the following:</p>
+  <ul>
+    <li>your local council</li>
+    <li>Shelter Scotland (0808 800 4444)</li>
+    <li>your local Citizens Advice Bureau</li>
+    <li>a solicitor (you may be able to get legal aid depending on your income)</li>
+  </ul>
+
+  <p><span class="highlight">Homelessness</span> - Speak to your local council if you're worried about having somewhere to live. They can advise you on your options.</p>
+
+  <p>This notice informs you, the Tenant, that your Landlord is giving you notice to leave the Let Property, and if you do not leave the property once the relevant notice period has expired, your Landlord can apply to the First-tier Tribunal for Scotland (the Tribunal) for an eviction order.</p>
+
+  <p>Your Landlord must give you a minimum of <span class="highlight">28 days' notice</span>, and may be required to give you <span class="highlight">84 days' notice</span>, depending on how long you have occupied the Let Property and the grounds on which they intend to apply for eviction.</p>
+</div>
+
+<!-- Part 1: Tenant's Details -->
+<div class="part-section">
+  <div class="part-header">Part 1 - Tenant's Details</div>
+  <div class="part-content">
+    <div class="field-row">
+      <div class="field-label">To (Name of tenant(s)):</div>
+      <div class="field-value multi-line">{{tenant_full_name}}{{#if tenant_2_name}}
+{{tenant_2_name}}{{/if}}</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-label">Of (Address of Let Property):</div>
+      <div class="field-value multi-line">{{property_address}}</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-inline">
+        <span class="field-label">The tenant(s) has lived in the property since:</span>
+        <span class="field-value">{{#if tenancy_start_date}}{{format_date tenancy_start_date 'long'}}{{/if}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Part 2: Eviction Ground(s) Being Used -->
+<div class="part-section">
+  <div class="part-header">Part 2 - Eviction Ground(s) Being Used</div>
+  <div class="part-content">
+    <div class="field-row">
+      <div class="field-label">[I/We] your [Landlord(s)/Landlord's Agent]:</div>
+      <div class="field-value">{{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-label">Of (address and telephone number of Landlord(s)/Agent):</div>
+      <div class="field-value multi-line">{{landlord_address}}
+{{#if landlord_phone}}Tel: {{landlord_phone}}{{/if}}{{#if landlord_email}}
+Email: {{landlord_email}}{{/if}}{{#if landlord_reg_number}}
+Landlord Registration: {{landlord_reg_number}}{{/if}}</div>
+    </div>
+
+    <p style="font-size: 10pt; margin: 1em 0; line-height: 1.5;">inform you that if you choose not to leave the Let Property on the date shown in Part 4 of this notice, I/we intend to apply to the Tribunal for an eviction order in respect of the Let Property on the following ground(s) which is a ground(s) for eviction as set out in schedule 3 of the Private Housing (Tenancies) (Scotland) Act 2016:</p>
+
+    <div class="grounds-list">
+      <div class="ground-item {{#if ground_5_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_5_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord intends to sell the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_13_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_13_claimed}}✓{{/if}}</div>
+        <div class="ground-text">The Let Property is to be sold by the mortgage lender</div>
+      </div>
+
+      <div class="ground-item {{#if ground_6_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_6_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord intends to refurbish the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_4_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_4_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord intends to live in the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_4_family_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_4_family_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord's family member intends to live in the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_8_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_8_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord intends to use the Let Property for a non-residential purpose</div>
+      </div>
+
+      <div class="ground-item {{#if ground_14_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_14_claimed}}✓{{/if}}</div>
+        <div class="ground-text">The Let Property is required for a religious purpose</div>
+      </div>
+
+      <div class="ground-item {{#if ground_15_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_15_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You cease to be - or fail to become - an employee of the Landlord</div>
+      </div>
+
+      <div class="ground-item {{#if ground_16_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_16_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You no longer need supported accommodation</div>
+      </div>
+
+      <div class="ground-item {{#if ground_11_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_11_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You are no longer occupying the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_2_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_2_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You have breached a term(s) of your tenancy agreement</div>
+      </div>
+
+      <div class="ground-item {{#if ground_1_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_1_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You are in rent arrears over three consecutive months</div>
+      </div>
+
+      <div class="ground-item {{#if ground_12_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_12_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You have a relevant criminal conviction</div>
+      </div>
+
+      <div class="ground-item {{#if ground_3_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_3_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You have engaged in relevant antisocial behaviour</div>
+      </div>
+
+      <div class="ground-item {{#if ground_3_association_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_3_association_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You have associated in the Let Property with someone who has a relevant criminal conviction or has engaged in relevant antisocial behaviour</div>
+      </div>
+
+      <div class="ground-item {{#if ground_10_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_10_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord has had their registration refused or revoked</div>
+      </div>
+
+      <div class="ground-item {{#if ground_7_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_7_claimed}}✓{{/if}}</div>
+        <div class="ground-text">Your Landlord's HMO licence has been revoked or renewal has been refused</div>
+      </div>
+
+      <div class="ground-item {{#if ground_9_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_9_claimed}}✓{{/if}}</div>
+        <div class="ground-text">An Overcrowding Statutory Notice has been served on your Landlord</div>
+      </div>
+
+      <div class="ground-item {{#if ground_17_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_17_claimed}}✓{{/if}}</div>
+        <div class="ground-text">An Overcrowding Statutory Notice has been served in respect of the Let Property</div>
+      </div>
+
+      <div class="ground-item {{#if ground_18_claimed}}selected{{/if}}">
+        <div class="ground-checkbox">{{#if ground_18_claimed}}✓{{/if}}</div>
+        <div class="ground-text">You have made a false statement to obtain the tenancy</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Part 3: Details and Evidence of Eviction Ground(s) -->
+<div class="part-section page-break">
+  <div class="part-header">Part 3 - Details and Evidence of Eviction Ground(s)</div>
+  <div class="part-content">
+    <p style="font-size: 10pt; margin-bottom: 1em;">[I/We] also inform you that [I/we] are seeking eviction under the above ground(s) for the following reasons:</p>
+
+    <p style="font-size: 9pt; color: #666; font-style: italic; margin-bottom: 0.5em;">[State particulars of how you believe the ground(s) have arisen. Please give as much detail as possible including relevant dates, and in cases of rent arrears insert the amount of arrears outstanding and the period over which it has built up.]</p>
+
+    <div class="particulars-box">
+      {{#each grounds}}
+      <p><strong>Ground {{this.number}} - {{this.title}}</strong></p>
+      <p>{{this.particulars}}</p>
+      {{#if this.supporting_evidence}}
+      <p><em>Evidence: {{this.supporting_evidence}}</em></p>
+      {{/if}}
+      {{#unless @last}}<hr style="border: none; border-top: 1px dashed #ccc; margin: 1em 0;">{{/unless}}
+      {{/each}}
+
+      {{#if ground_1_claimed}}
+      {{#if total_arrears}}
+      <hr style="border: none; border-top: 1px dashed #ccc; margin: 1em 0;">
+      <p><strong>Rent Arrears Summary:</strong></p>
+      <p>Current rent: £{{rent_amount}} per {{rent_period}}</p>
+      <p>Total arrears: £{{total_arrears}} as of {{arrears_date}}</p>
+      {{#if arrears_breakdown}}
+      <p>Arrears breakdown:</p>
+      <ul style="font-size: 10pt;">
+        {{#each arrears_breakdown}}
+        <li>{{this.period}}: Due £{{this.amount_due}}, Paid £{{this.amount_paid}}, Balance £{{this.balance}}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+      {{/if}}
+      {{/if}}
+    </div>
+
+    <p style="font-size: 10pt; margin: 1em 0;">It is important that the Tenant fully understands why you are seeking to evict them and that the action you are taking is justified. The provision of supporting evidence with this notice can help do that.</p>
+
+    <div class="evidence-box">
+      <h4>[I/We] attach the following evidence to support the eviction action:</h4>
+      <p>{{#if evidence_list}}{{evidence_list}}{{else}}[List evidence attached to this notice]{{/if}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Part 4: The End of the Notice Period -->
+<div class="part-section">
+  <div class="part-header">Part 4 - The End of the Notice Period</div>
+  <div class="part-content">
+    <p style="font-size: 10pt; margin-bottom: 1em;">An application will not be submitted to the Tribunal for an eviction order before:</p>
+
+    <div class="field-row">
+      <div class="field-value" style="font-size: 12pt; font-weight: 700; text-align: center; padding: 0.75em; background: #f0f0f0;">
+        {{#if earliest_tribunal_date}}
+          {{format_date earliest_tribunal_date 'long'}}
+        {{else if earliest_leaving_date}}
+          {{format_date earliest_leaving_date 'long'}}
+        {{else}}
+          [insert date]
+        {{/if}}
+      </div>
+    </div>
+
+    <p style="font-size: 10pt; margin: 1em 0; line-height: 1.5;">This is the earliest date that Tribunal proceedings can start and will be at least the day after the end date of the relevant notice period ({{notice_period_days}} days depending on the eviction ground).</p>
+
+    <div class="signature-section">
+      <div class="signature-grid">
+        <div class="signature-block">
+          <label>Signed (Landlord(s) or Agent)</label>
+          <div class="signature-line"></div>
+        </div>
+        <div class="signature-block">
+          <label>Date</label>
+          <div class="value">{{#if notice_date}}{{format_date notice_date 'long'}}{{/if}}</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1em;">
+        <label style="font-size: 9pt; font-weight: 600; text-transform: uppercase; color: #444;">Name</label>
+        <div class="field-value">{{landlord_full_name}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Important Notice -->
+<div class="important-notice">
+  <p>This is an important document and you should keep it in a safe place.</p>
+</div>
+
+<!-- Footer -->
+<div class="form-footer">
+  {{#if is_preview}}
+  <p><strong>PREVIEW DOCUMENT - NOT FOR LEGAL USE</strong></p>
+  <p>This is a preview generated by Landlord Heaven. A final, legally binding version will be provided upon payment.</p>
+  {{else}}
+  <p>Document generated by Landlord Heaven ({{site_domain}})</p>
+  <p>Generated: {{generation_timestamp}} | Document ID: {{document_id}}</p>
+  {{/if}}
+  <p style="margin-top: 0.5em; font-size: 8pt;"><strong>Legal Disclaimer:</strong> This notice has been generated based on the information provided. While every effort has been made to ensure accuracy and compliance with the Private Housing (Tenancies) (Scotland) Act 2016, this does not constitute legal advice. You should seek independent legal advice before serving this notice.</p>
+</div>
+
+</body>
+</html>

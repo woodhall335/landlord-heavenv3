@@ -39,7 +39,7 @@ export const TimelineSection: React.FC<SectionProps> = ({
   };
 
   const jurisdictionLabel =
-    jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland';
+    (jurisdiction === 'england' || jurisdiction === 'wales') ? 'England & Wales' : 'Scotland';
 
   const handleNumber =
     (fn: (val: number | null) => void) =>

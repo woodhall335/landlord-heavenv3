@@ -1,0 +1,147 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">PORTFOLIO SUCCESS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Keys to building a successful property portfolio</text>
+
+  <!-- Trophy icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Trophy -->
+    <g transform="translate(45, 10)">
+      <!-- Trophy cup -->
+      <path d="M30 0 L80 0 L75 45 Q55 60 35 45 L30 0 Z" fill="#F59E0B"/>
+      <ellipse cx="55" cy="5" rx="25" ry="8" fill="#F59E0B"/>
+      <!-- Handles -->
+      <path d="M30 15 Q10 15 15 35 Q20 45 35 40" fill="none" stroke="#F59E0B" stroke-width="6"/>
+      <path d="M80 15 Q100 15 95 35 Q90 45 75 40" fill="none" stroke="#F59E0B" stroke-width="6"/>
+      <!-- Base -->
+      <rect x="45" y="50" width="20" height="15" fill="#7C3AED"/>
+      <rect x="35" y="65" width="40" height="10" rx="2" fill="#6D28D9"/>
+      <rect x="30" y="75" width="50" height="8" rx="2" fill="#7C3AED"/>
+      <!-- Star -->
+      <polygon points="55,15 58,25 68,25 60,32 63,42 55,35 47,42 50,32 42,25 52,25" fill="white"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">SUCCESS</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Achieve your</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">goals</text>
+  </g>
+
+  <!-- Success factors -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SUCCESS FACTORS</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Clear investment strategy</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Strong financial foundation</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Excellent tenant relations</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Continuous learning</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text>
+      <text x="20" y="11" fill="#6D28D9" font-size="9">Long-term thinking</text>
+    </g>
+  </g>
+
+  <!-- Habits of successful landlords -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WINNING HABITS</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Track every number</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Stay compliant always</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Network with others</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Review performance</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Plan ahead</text>
+    </g>
+  </g>
+
+  <!-- Key metrics for success -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MEASURE YOUR SUCCESS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">FINANCIAL KPIs</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Net yield per property</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Total portfolio value</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Monthly cashflow</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Return on investment</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Track monthly</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">OPERATIONAL KPIs</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Occupancy rate</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Arrears percentage</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Maintenance costs</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Tenant retention</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Review quarterly</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">GROWTH TARGETS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Properties per year</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Equity growth</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Income targets</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Freedom number</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Set annual goals</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

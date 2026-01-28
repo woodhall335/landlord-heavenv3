@@ -1,0 +1,8 @@
+pdfPath,matchedRule,referencedBy,suggestion
+"public/official-forms/n119-eng.pdf","n-form","orphan","ensure mapped"
+"public/official-forms/n5-eng.pdf","n-form","orphan","ensure mapped"
+"public/official-forms/n5b-eng.pdf","n-form","orphan","ensure mapped"
+"public/official-forms/scotland/form-3a.pdf","form-number","orphan","ensure mapped"
+"public/official-forms/scotland/notice_to_leave.pdf","notice-to-leave","orphan","ensure mapped"
+"config/jurisdictions/uk/_official_form_sources/scotland/notice_to_leave_parts_1_3.pdf","notice-to-leave","orphan","move to /public/official-forms or whitelist"
+"config/jurisdictions/uk/_official_form_sources/scotland/notice_to_leave_parts_1_3.pdf","notice-to-leave","orphan","move to /public/official-forms or whitelist"
