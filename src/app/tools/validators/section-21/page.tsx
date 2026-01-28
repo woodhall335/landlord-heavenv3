@@ -434,7 +434,7 @@ export default function Section21ValidatorPage() {
             </h3>
             <p className="text-gray-700 mb-4">
               Since 1 October 2015, all Section 21 notices for Assured Shorthold Tenancies must use
-              the prescribed Form 6A. Using an old-style notice, a letter, or any other format will
+              the prescribed <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A</Link>. Using an old-style notice, a letter, or any other format will
               make the notice invalid. The form must be completed accurately with the correct
               property address, tenant names, and landlord details.
             </p>

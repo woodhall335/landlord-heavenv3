@@ -174,7 +174,7 @@ export default function Section21NoticeTemplatePage() {
                 Free Template vs Court-Ready Notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Our free Section 21 template is great for understanding the process, but for
+                Our free Section 21 template is great for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but for
                 proper compliance with current requirements, choose our court-ready version.
               </p>
 
@@ -402,7 +402,7 @@ export default function Section21NoticeTemplatePage() {
                   <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li>Deposit protected + prescribed info served.</li>
-                    <li>EPC, gas safety, and “How to Rent” delivered.</li>
+                    <li>EPC, gas safety, and <Link href="/how-to-rent-guide" className="text-primary hover:underline">"How to Rent"</Link> delivered.</li>
                     <li>Correct Form 6A version and dates.</li>
                     <li>Licensing and HMO rules satisfied.</li>
                   </ul>
@@ -417,7 +417,7 @@ export default function Section21NoticeTemplatePage() {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-3">Common mistakes</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Using an outdated Form 6A template.</li>
+                    <li>Using an outdated <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A</Link> template.</li>
                     <li>Miscalculating the expiry date.</li>
                     <li>Serving without proof of service.</li>
                     <li>Skipping compliance documents.</li>

@@ -179,8 +179,9 @@ export default function HowToEvictTenantPage() {
 
               <div className="prose prose-lg max-w-none mb-8">
                 <p>
-                  Evicting a tenant in the UK requires following strict legal procedures. The
-                  process varies significantly depending on which part of the UK your property
+                  Evicting a tenant in the UK requires following strict legal procedures. The first step is
+                  understanding <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notices in the UK</Link> and
+                  which type applies to your situation. The process varies significantly depending on which part of the UK your property
                   is located in:
                 </p>
               </div>

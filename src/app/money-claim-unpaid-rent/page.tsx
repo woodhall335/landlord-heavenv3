@@ -81,7 +81,7 @@ export default function MoneyClaimUnpaidRentPage() {
 
               <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                 Complete guide to recovering unpaid rent through{' '}
-                <strong>Money Claim Online (MCOL)</strong> in England & Wales,{' '}
+                <Link href="/mcol-money-claim-online" className="text-white hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales,{' '}
                 <strong>Simple Procedure</strong> in Scotland, and court processes in
                 Northern Ireland.
               </p>
@@ -152,7 +152,7 @@ export default function MoneyClaimUnpaidRentPage() {
                 <p className="text-amber-900 text-sm flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                   <span>
-                    <strong>Important:</strong> You must follow the Pre-Action Protocol before
+                    <strong>Important:</strong> You must follow the <Link href="/pre-action-protocol-debt" className="text-amber-800 hover:underline font-medium">Pre-Action Protocol</Link> before
                     starting court proceedings. This includes sending a formal letter before
                     action giving the tenant a chance to pay.
                   </span>

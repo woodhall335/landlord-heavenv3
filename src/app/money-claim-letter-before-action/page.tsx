@@ -133,7 +133,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
               </h1>
 
               <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                The Pre-Action Protocol requires a formal demand letter before issuing
+                The <Link href="/pre-action-protocol-debt" className="text-white hover:underline font-semibold">Pre-Action Protocol</Link> requires a formal demand letter before issuing
                 a court claim. Here&apos;s what to include and how to do it right.
               </p>
 

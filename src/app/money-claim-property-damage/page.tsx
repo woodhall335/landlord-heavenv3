@@ -134,7 +134,7 @@ export default function MoneyClaimPropertyDamagePage() {
               </h1>
 
               <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                When tenant damage exceeds the deposit, recover your repair costs
+                When <Link href="/tenant-damaging-property" className="text-white hover:underline font-semibold">tenant damage</Link> exceeds the deposit, recover your repair costs
                 through the courts. Document properly, claim correctly, get paid.
               </p>
 

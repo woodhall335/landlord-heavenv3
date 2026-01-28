@@ -78,6 +78,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </h1>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Create a <strong>legally compliant AST</strong> for your England rental property in minutes.
+              Note: An AST is not suitable for lodgers — use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement</Link> instead.
               Our templates meet all Housing Act 1988 and Tenant Fees Act 2019 requirements,
               giving you a <strong>court-defensible tenancy agreement</strong> you can trust.
             </p>
@@ -140,9 +141,9 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
               <ul className="space-y-2">
                 <li><strong>Deposit caps</strong> under the Tenant Fees Act 2019 (5 weeks for rent under £50,000/year)</li>
                 <li><strong>Deposit protection</strong> in a government-authorised scheme within 30 days</li>
-                <li><strong>How to Rent guide</strong> must be provided before tenancy starts</li>
-                <li><strong>EPC, Gas Safety Certificate, and EICR</strong> must be provided to tenants</li>
-                <li><strong>Section 21</strong> (no-fault eviction) and <strong>Section 8</strong> (grounds-based eviction) procedures</li>
+                <li><Link href="/how-to-rent-guide" className="text-primary hover:underline font-semibold">How to Rent guide</Link> must be provided before tenancy starts</li>
+                <li><strong>EPC, Gas Safety Certificate, and <Link href="/eicr-landlord-requirements" className="text-primary hover:underline">EICR</Link></strong> must be provided to tenants</li>
+                <li><strong>Section 21</strong> (<Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction</Link>) and <strong>Section 8</strong> (grounds-based eviction) procedures</li>
               </ul>
               <p>
                 Wales now uses <strong>Occupation Contracts</strong> under the Renting Homes (Wales) Act 2016 —
@@ -186,7 +187,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Rent Review Mechanisms</h3>
                 <p className="text-gray-700">
                   Section 13-compliant rent increase provisions. Our templates include proper notice
-                  periods and procedures for rent reviews, whether during a fixed term or periodic tenancy.
+                  periods and procedures for rent reviews, whether during a fixed term or <Link href="/rolling-tenancy-agreement" className="text-primary hover:underline">periodic tenancy</Link>.
                 </p>
               </div>
             </div>

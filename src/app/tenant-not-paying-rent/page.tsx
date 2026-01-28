@@ -128,7 +128,7 @@ export default function TenantNotPayingRentPage() {
                 Your Three Options for Rent Arrears
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose based on your priority: recovering the money, regaining the property, or both.
+                Choose the right <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notice for your region</Link> based on your circumstances—recovering the money, regaining the property, or both.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">

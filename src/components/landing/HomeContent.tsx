@@ -446,6 +446,7 @@ export default function HomeContent() {
             {/* Section 8 CTA - SEO Internal Linking */}
             <div className="mt-8 pt-6 border-t border-gray-300/30">
               <p className="text-gray-600">
+                Generate valid <Link href="/eviction-notice-uk" className="text-primary hover:underline font-medium">eviction notices</Link> for all UK regions.{' '}
                 Need a free Section 8 notice?{' '}
                 <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">Template</Link>
                 {' • '}

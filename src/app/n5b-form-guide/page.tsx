@@ -119,8 +119,9 @@ export default function N5BFormGuidePage() {
                 <div>
                   <h2 className="font-bold text-amber-900 mb-1">Section 21 Required First</h2>
                   <p className="text-amber-800 text-sm">
-                    Form N5B can only be used after serving a valid Section 21 notice and the notice period
-                    has expired. If you haven&apos;t served notice yet, start with our{' '}
+                    Form N5B can only be used after serving a valid{' '}
+                    <Link href="/form-6a-section-21" className="underline hover:text-amber-900">Form 6A Section 21 notice</Link>{' '}
+                    and the notice period has expired. If you haven&apos;t served notice yet, start with our{' '}
                     <Link href="/section-21-notice-template" className="underline hover:text-amber-900">
                       Section 21 template
                     </Link>.

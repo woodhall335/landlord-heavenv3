@@ -139,8 +139,8 @@ export default function Section21BanPage() {
             <h2 className="text-3xl font-bold mb-6">What Is Section 21?</h2>
             <p className="text-gray-600 text-lg mb-4">
               Section 21 of the Housing Act 1988 allows landlords in England to evict tenants
-              without giving a reason — known as a &quot;no-fault&quot; eviction. You simply need to
-              give 2 months&apos; notice using the correct Form 6A.
+              without giving a reason — known as a <Link href="/no-fault-eviction" className="text-primary hover:underline">&quot;no-fault&quot; eviction</Link>. You simply need to
+              give 2 months&apos; notice using the correct <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A</Link>.
             </p>
             <p className="text-gray-600 text-lg">
               It&apos;s been the fastest, simplest way for landlords to regain possession of their
@@ -161,7 +161,7 @@ export default function Section21BanPage() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <span className="text-red-500 mt-1 text-xl">✗</span>
-                <span className="text-gray-600 text-lg">No more no-fault evictions</span>
+                <span className="text-gray-600 text-lg">No more <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault evictions</Link></span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-red-500 mt-1 text-xl">✗</span>

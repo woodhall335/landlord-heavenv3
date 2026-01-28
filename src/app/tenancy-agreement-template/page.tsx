@@ -218,7 +218,7 @@ export default function TenancyAgreementTemplatePage() {
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Each UK nation has different tenancy laws. We provide the correct agreement type
-                for your jurisdiction.
+                for your jurisdiction. Live-in landlords should use our <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement template</Link> instead.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -581,7 +581,7 @@ export default function TenancyAgreementTemplatePage() {
                 </div>
                 <div className="bg-white/10 rounded-xl p-4">
                   <CheckCircle className="w-6 h-6 text-white mb-2" />
-                  <h4 className="font-semibold mb-1">How to Rent</h4>
+                  <h4 className="font-semibold mb-1"><Link href="/how-to-rent-guide" className="hover:underline">How to Rent</Link></h4>
                   <p className="text-white/80 text-sm">Government guide for tenants</p>
                 </div>
               </div>
