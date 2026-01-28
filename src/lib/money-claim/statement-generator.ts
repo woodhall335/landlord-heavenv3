@@ -15,17 +15,18 @@
 import type { ClaimReasonType } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 
 export interface MoneyClaimFacts {
-  // Tenant/defendant
+  // Tenant/defendant (top-level keys used by validator)
   tenant_full_name?: string;
   defendant_name?: string;
+  defendant_address_line1?: string;
 
-  // Property
+  // Property (top-level keys used by validator)
   property_address_line1?: string;
   property_address_line2?: string;
   property_address_town?: string;
   property_address_postcode?: string;
 
-  // Tenancy
+  // Tenancy (top-level keys used by validator)
   tenancy_start_date?: string;
   tenancy_end_date?: string;
   rent_amount?: number;
@@ -36,7 +37,7 @@ export interface MoneyClaimFacts {
   claiming_damages?: boolean;
   claiming_other?: boolean;
 
-  // Arrears data
+  // Arrears data (top-level)
   arrears_items?: Array<{
     period_start?: string | null;
     period_end?: string | null;
@@ -56,6 +57,48 @@ export interface MoneyClaimFacts {
     }>;
     tenant_still_in_property?: boolean;
     basis_of_claim?: string;
+    totals?: {
+      rent_arrears?: number;
+      damage?: number;
+      cleaning?: number;
+      utilities?: number;
+      council_tax?: number;
+      other?: number;
+      combined_total?: number;
+    };
+  };
+
+  // Nested parties object (fallback for legacy wizard data)
+  parties?: {
+    landlord?: {
+      name?: string;
+      address_line1?: string;
+      address_line2?: string;
+      city?: string;
+      postcode?: string;
+    };
+    tenants?: Array<{
+      name?: string;
+      address_line1?: string;
+      address_line2?: string;
+      postcode?: string;
+    }>;
+  };
+
+  // Nested property object (fallback for legacy wizard data)
+  property?: {
+    address_line1?: string;
+    address_line2?: string;
+    city?: string;
+    postcode?: string;
+  };
+
+  // Nested tenancy object (fallback for legacy wizard data)
+  tenancy?: {
+    start_date?: string;
+    end_date?: string;
+    rent_amount?: number;
+    rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   };
 
   // Issues nested (legacy path)
@@ -99,13 +142,15 @@ function formatDate(dateStr: string | undefined | null): string {
 
 /**
  * Get full property address string
+ * Checks both top-level keys and nested property object as fallback
  */
 function getPropertyAddress(facts: MoneyClaimFacts): string {
+  // Try top-level keys first, then nested property object as fallback
   const parts = [
-    facts.property_address_line1,
-    facts.property_address_line2,
-    facts.property_address_town,
-    facts.property_address_postcode,
+    facts.property_address_line1 || facts.property?.address_line1,
+    facts.property_address_line2 || facts.property?.address_line2,
+    facts.property_address_town || facts.property?.city,
+    facts.property_address_postcode || facts.property?.postcode,
   ].filter(Boolean);
 
   return parts.length > 0 ? parts.join(', ') : '[property address]';
@@ -113,9 +158,39 @@ function getPropertyAddress(facts: MoneyClaimFacts): string {
 
 /**
  * Get tenant name with fallback
+ * Checks top-level keys, then nested parties.tenants array
  */
 function getTenantName(facts: MoneyClaimFacts): string {
-  return facts.tenant_full_name || facts.defendant_name || '[tenant name]';
+  // Try top-level keys first
+  if (facts.tenant_full_name) return facts.tenant_full_name;
+  if (facts.defendant_name) return facts.defendant_name;
+
+  // Fallback to nested parties.tenants array
+  const firstTenant = facts.parties?.tenants?.[0];
+  if (firstTenant?.name) return firstTenant.name;
+
+  return '[tenant name]';
+}
+
+/**
+ * Get tenancy start date with fallback
+ */
+function getTenancyStartDate(facts: MoneyClaimFacts): string | undefined {
+  return facts.tenancy_start_date || facts.tenancy?.start_date;
+}
+
+/**
+ * Get rent amount with fallback
+ */
+function getRentAmount(facts: MoneyClaimFacts): number | undefined {
+  return facts.rent_amount ?? facts.tenancy?.rent_amount;
+}
+
+/**
+ * Get rent frequency with fallback
+ */
+function getRentFrequency(facts: MoneyClaimFacts): MoneyClaimFacts['rent_frequency'] | undefined {
+  return facts.rent_frequency || facts.tenancy?.rent_frequency;
 }
 
 /**
@@ -268,8 +343,9 @@ export function generateBasisOfClaimStatement(
         ? 'was the tenant'
         : 'is/was the tenant';
 
-  const tenancyStartStr = facts.tenancy_start_date
-    ? ` which commenced on ${formatDate(facts.tenancy_start_date)}`
+  const tenancyStart = getTenancyStartDate(facts);
+  const tenancyStartStr = tenancyStart
+    ? ` which commenced on ${formatDate(tenancyStart)}`
     : '';
 
   parts.push(
@@ -280,8 +356,8 @@ export function generateBasisOfClaimStatement(
   if (reasons.has('rent_arrears')) {
     const totalArrears = calculateTotalArrears(facts);
     const periodDesc = getArrearsPeriodDescription(facts);
-    const rentAmount = facts.rent_amount;
-    const rentFreq = facts.rent_frequency;
+    const rentAmount = getRentAmount(facts);
+    const rentFreq = getRentFrequency(facts);
 
     let arrearsStatement = 'The Defendant has failed to pay rent as required under the tenancy agreement';
 
@@ -462,12 +538,14 @@ export function getMissingStatementInfo(
   const reasons = selectedReasons || getClaimReasonsFromFacts(facts);
   const missing: string[] = [];
 
-  // General info
-  if (!facts.tenant_full_name && !facts.defendant_name) {
+  // General info - check top-level and nested paths
+  const tenantName = getTenantName(facts);
+  if (tenantName === '[tenant name]') {
     missing.push('Tenant/defendant name');
   }
 
-  if (!facts.property_address_line1) {
+  const propertyAddress = getPropertyAddress(facts);
+  if (propertyAddress === '[property address]') {
     missing.push('Property address');
   }
 
@@ -478,10 +556,11 @@ export function getMissingStatementInfo(
   // Rent arrears specific
   if (reasons.has('rent_arrears')) {
     const items = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
-    if (items.length === 0 && !facts.total_arrears) {
+    if (items.length === 0 && !facts.total_arrears && !facts.issues?.rent_arrears?.total_arrears) {
       missing.push('Rent arrears schedule or total amount');
     }
-    if (!facts.rent_amount) {
+    const rentAmount = getRentAmount(facts);
+    if (!rentAmount) {
       missing.push('Rent amount');
     }
   }
