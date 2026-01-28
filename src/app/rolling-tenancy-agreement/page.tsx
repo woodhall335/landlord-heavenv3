@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { rollingTenancyFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Rolling Tenancy Agreement UK | Month-to-Month Guide 2026',
@@ -28,29 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a rolling tenancy?',
-    answer:
-      'A rolling tenancy (also called a periodic tenancy) runs on a month-to-month or week-to-week basis with no fixed end date. It usually arises automatically when a fixed-term tenancy expires and the tenant stays on.',
-  },
-  {
-    question: 'How much notice do I need to give to end a rolling tenancy?',
-    answer:
-      'For Section 21 (no-fault), you need to give at least 2 months notice, expiring on the last day of a tenancy period. For tenant-given notice, they typically need to give one month (or one rental period).',
-  },
-  {
-    question: 'Can I increase rent during a rolling tenancy?',
-    answer:
-      'Yes. You can increase rent using a Section 13 notice, which requires at least one month\'s notice for monthly tenancies. Alternatively, if the tenant agrees in writing, you can increase rent by mutual agreement.',
-  },
-  {
-    question: 'Is a rolling tenancy the same as a periodic tenancy?',
-    answer:
-      'Yes, the terms are used interchangeably. A "rolling" or "periodic" tenancy is one that continues from period to period (usually month-to-month) without a fixed end date.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Rolling Tenancy Agreement', url: '/rolling-tenancy-agreement' },
@@ -59,7 +38,6 @@ const breadcrumbs = [
 export default function RollingTenancyPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -194,17 +172,13 @@ export default function RollingTenancyPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={rollingTenancyFAQs}
+                title="Rolling Tenancy FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

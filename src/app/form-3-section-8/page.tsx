@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { form3Section8FAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
@@ -29,29 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is Form 3?',
-    answer:
-      'Form 3 is the prescribed notice form for Section 8 evictions in England. It lists the grounds for possession you\'re relying on and gives the tenant notice that you intend to seek a court order.',
-  },
-  {
-    question: 'What grounds can I use on Form 3?',
-    answer:
-      'Section 8 has 17 grounds, including Ground 8 (2+ months rent arrears), Ground 10 (some rent arrears), Ground 11 (persistent late payment), Ground 12 (breach of tenancy), Ground 14 (antisocial behaviour), and others.',
-  },
-  {
-    question: 'How much notice do I need to give?',
-    answer:
-      'Notice periods vary by ground: Ground 8, 10, 11 require 2 weeks minimum. Grounds 1, 2, 5-7 require 2 months. Ground 14 (antisocial behaviour) requires no notice period. Always check the specific requirements for your grounds.',
-  },
-  {
-    question: 'Can I use both Section 8 and Section 21?',
-    answer:
-      'Yes, many landlords serve both notices together. This gives you the flexibility to pursue whichever route becomes most advantageous depending on whether the tenant pays the arrears or other circumstances change.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Tools', url: '/tools' },
@@ -61,7 +40,6 @@ const breadcrumbs = [
 export default function Form3Section8Page() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -217,17 +195,13 @@ export default function Form3Section8Page() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={form3Section8FAQs}
+                title="Form 3 Section 8 FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

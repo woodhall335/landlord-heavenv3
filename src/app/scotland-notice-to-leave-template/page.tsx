@@ -1,12 +1,14 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { scotlandNoticeToLeaveFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   FileText,
@@ -51,39 +53,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a Notice to Leave in Scotland?',
-    answer:
-      'A Notice to Leave is the Scottish eviction notice required under the Private Housing (Tenancies) (Scotland) Act 2016. It must cite one or more of the 18 eviction grounds and include the correct notice period (28 or 84 days depending on the ground).',
-  },
-  {
-    question: 'What notice period is required in Scotland?',
-    answer:
-      'Notice periods in Scotland depend on the eviction ground. Most grounds require 84 days notice, including selling the property (Ground 1) and landlord moving in (Ground 4). Rent arrears (Ground 12) and antisocial behaviour (Ground 14) require only 28 days.',
-  },
-  {
-    question: 'Can I use an England eviction notice in Scotland?',
-    answer:
-      'No. Section 21 and Section 8 notices are England-only and do not apply in Scotland. Using English notices will be rejected by the First-tier Tribunal. You must use a Scotland Notice to Leave under the 2016 Act.',
-  },
-  {
-    question: 'What is a Private Residential Tenancy (PRT)?',
-    answer:
-      'A Private Residential Tenancy is the standard tenancy type in Scotland since December 2017. Unlike English ASTs, PRTs are open-ended with no fixed term. Tenants can end with 28 days notice; landlords must cite one of 18 grounds and use a Notice to Leave.',
-  },
-  {
-    question: 'Do I need to register as a landlord in Scotland?',
-    answer:
-      'Yes. All private landlords in Scotland must register with their local council on the Scottish Landlord Register. Your registration number must appear on the Notice to Leave. Letting without registration is a criminal offence.',
-  },
-  {
-    question: 'Where do Scottish eviction cases go?',
-    answer:
-      'Scottish eviction cases go to the First-tier Tribunal for Scotland (Housing and Property Chamber), not the county court. If the tenant does not leave after the notice period, you apply to the Tribunal for an eviction order.',
-  },
-];
-
 // Common eviction grounds for display
 const commonGrounds = [
   { ground: '1', description: 'Landlord intends to sell', notice: '84 days', type: 'Mandatory' },
@@ -126,7 +95,6 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -379,18 +347,12 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Scotland Notice to Leave FAQ
-              </h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+              <FAQSection
+                faqs={scotlandNoticeToLeaveFAQs}
+                title="Scotland Notice to Leave FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
           </div>
         </section>

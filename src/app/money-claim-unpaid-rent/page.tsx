@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
@@ -12,9 +12,10 @@ import {
   Calculator,
   Mail,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
+import { moneyClaimUnpaidRentFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
@@ -44,69 +45,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is Money Claim Online (MCOL)?',
-    answer:
-      'Money Claim Online (MCOL) is an online service for making money claims in England and Wales. It allows landlords to claim unpaid rent and other debts up to £100,000 through a simple online process. It is faster and cheaper than paper claims.',
-  },
-  {
-    question: 'How much does it cost to make a money claim?',
-    answer:
-      'Court fees for MCOL in England & Wales range from £35 (claims up to £300) to £455 (claims £5,000-£10,000). For larger claims, fees increase further. Scotland Simple Procedure costs £19 (claims up to £300) to £104 (claims £3,001-£5,000). You can usually claim these fees back from the defendant if you win.',
-  },
-  {
-    question: 'Do I need to send a letter before action?',
-    answer:
-      'Yes. Before making a court claim, you should send a formal "letter before action" giving the tenant a final chance to pay (usually 14 days). This is required by court rules (Pre-Action Protocol) and failure to follow it may affect costs awarded. Our rent demand letter tool can help.',
-  },
-  {
-    question: 'Can I claim rent AND evict at the same time?',
-    answer:
-      'Yes, but they are separate legal processes. A possession claim (eviction) does not automatically include a money judgment for arrears. You can claim both in the same proceedings using the appropriate court forms, or make separate claims. Many landlords pursue eviction first, then claim arrears.',
-  },
-  {
-    question: 'How long does a money claim take?',
-    answer:
-      'If the tenant does not respond to your claim (default judgment), you may get judgment in 2-4 weeks. If they dispute the claim, it could take 3-6 months to reach a hearing. Enforcement after judgment can add more time.',
-  },
-  {
-    question: 'What if the tenant has no money to pay?',
-    answer:
-      'A County Court Judgment (CCJ) lasts 6 years and affects the tenant\'s credit rating. You can use various enforcement methods including attachment of earnings, bailiffs, charging orders on property, and third party debt orders. However, you cannot get money that does not exist - consider whether it is worth pursuing.',
-  },
-  {
-    question: 'Can I claim interest on rent arrears?',
-    answer:
-      'Yes. You can claim statutory interest at 8% per year on the unpaid amount. This accrues from the date each rent payment was due. Our rent arrears calculator can help you work out the total with interest.',
-  },
-  {
-    question: 'How do I make a money claim in Scotland?',
-    answer:
-      'In Scotland, claims up to £5,000 use the Simple Procedure through the Sheriff Court. You complete a Simple Claim Form (Form 3A) either online or on paper. For claims over £5,000, you use Ordinary Cause procedure. The process is similar to MCOL but uses Scottish forms and courts.',
-  },
-  {
-    question: 'How do I make a money claim in Northern Ireland?',
-    answer:
-      'In Northern Ireland, small claims (up to £3,000) go through the Small Claims Court. Larger claims use the County Court. The process involves completing claim forms and paying the appropriate fee. Check the NI Courts and Tribunals Service website for current forms and fees.',
-  },
-  {
-    question: 'What evidence do I need for a money claim?',
-    answer:
-      'Key evidence includes: the tenancy agreement showing rent amount and payment terms, rent statements showing missed payments, bank statements showing non-payment, copies of demand letters sent, any tenant correspondence acknowledging the debt, and proof of deposit protection compliance.',
-  },
-  {
-    question: 'Can I use MCOL if the tenant has left?',
-    answer:
-      'Yes. You can make a money claim against a former tenant for unpaid rent. You will need their current address for service. If you do not have their address, you may need to use tracing services or apply to the court for alternative service.',
-  },
-  {
-    question: 'What is a CCJ and how does it affect the tenant?',
-    answer:
-      'A County Court Judgment (CCJ) is a court order confirming someone owes you money. It appears on the tenant\'s credit file for 6 years and makes it very difficult for them to get credit, mortgages, or pass landlord reference checks. This can be a powerful incentive for payment.',
-  },
-];
-
 export default function MoneyClaimUnpaidRentPage() {
   return (
     <>
@@ -120,7 +58,6 @@ export default function MoneyClaimUnpaidRentPage() {
           dateModified: '2026-01-01',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -860,7 +797,7 @@ export default function MoneyClaimUnpaidRentPage() {
         {/* FAQ Section */}
         <FAQSection
           title="Frequently Asked Questions"
-          faqs={faqs}
+          faqs={moneyClaimUnpaidRentFAQs}
           showContactCTA={false}
           variant="white"
         />

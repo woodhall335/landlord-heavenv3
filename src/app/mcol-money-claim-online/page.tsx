@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { mcolFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'MCOL Money Claim Online | How to Claim Rent Arrears 2026',
@@ -29,34 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is MCOL?',
-    answer:
-      'MCOL (Money Claim Online) is the government\'s online system for making county court claims for money. Landlords can use it to claim unpaid rent, damages, or other debts from tenants.',
-  },
-  {
-    question: 'How much does MCOL cost?',
-    answer:
-      'Court fees depend on the claim amount: up to £300 costs £35, £300-£500 costs £50, £500-£1,000 costs £70, £1,000-£1,500 costs £80, £1,500-£3,000 costs £115, and £3,000-£5,000 costs £205. Fees increase for larger amounts.',
-  },
-  {
-    question: 'Do I need to send a letter before claim?',
-    answer:
-      'Yes. The Pre-Action Protocol for Debt Claims requires you to send a Letter Before Claim giving the debtor at least 30 days to respond before starting court proceedings. Failure to follow the protocol can result in cost penalties.',
-  },
-  {
-    question: 'Can I claim interest on rent arrears?',
-    answer:
-      'Yes. You can claim statutory interest at 8% per year under the Late Payment of Commercial Debts Act, calculated from the date each payment was due. Our rent arrears calculator helps you work this out.',
-  },
-  {
-    question: 'What if the tenant doesn\'t respond to the claim?',
-    answer:
-      'If the tenant doesn\'t respond within 14 days (or 28 days if they\'re outside England/Wales), you can request a default judgment. The court will then issue a County Court Judgment (CCJ) against them.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'MCOL Money Claim Online', url: '/mcol-money-claim-online' },
@@ -65,7 +39,6 @@ const breadcrumbs = [
 export default function MCOLPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -231,17 +204,13 @@ export default function MCOLPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={mcolFAQs}
+                title="MCOL Frequently Asked Questions"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

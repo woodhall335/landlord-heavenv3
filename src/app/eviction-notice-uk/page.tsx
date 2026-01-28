@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { evictionNoticeUKFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice UK | Types, Templates & How to Serve [2026]',
@@ -30,29 +32,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is the minimum notice period for eviction in the UK?',
-    answer:
-      'It varies by region and notice type. In England, Section 21 requires 2 months minimum. Section 8 varies from 2 weeks to 2 months depending on the ground. Scotland requires 28-84 days for Notice to Leave. Wales requires 6 months for no-fault evictions under the new Renting Homes Act.',
-  },
-  {
-    question: 'Can I evict a tenant without a reason in the UK?',
-    answer:
-      'In England, you can currently use a Section 21 "no-fault" eviction (though this may be abolished under the Renters Reform Bill). Wales requires 6 months notice and at least 6 months into the tenancy. Scotland has abolished no-fault evictions for most tenancies.',
-  },
-  {
-    question: 'How do I serve an eviction notice?',
-    answer:
-      'You can serve notices by first class post (deemed served 2 days later), recorded delivery, or hand delivery with a witness. Keep proof of service as you will need this for court.',
-  },
-  {
-    question: 'What happens after I serve an eviction notice?',
-    answer:
-      'Wait for the notice period to expire. If the tenant does not leave, you must apply to court for a possession order. Never try to evict a tenant yourself - this is illegal and you could face criminal charges.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Eviction Notice UK', url: '/eviction-notice-uk' },
@@ -61,7 +40,6 @@ const breadcrumbs = [
 export default function EvictionNoticeUKPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -307,17 +285,13 @@ export default function EvictionNoticeUKPage() {
             </section>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={evictionNoticeUKFAQs}
+                title="UK Eviction Notice FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

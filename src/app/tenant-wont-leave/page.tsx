@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { tenantWontLeaveRelatedLinks } from '@/lib/seo/internal-links';
@@ -8,6 +8,8 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { tenantWontLeaveFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   Clock,
@@ -55,41 +57,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What can I do if my tenant won\'t leave after a Section 21 notice?',
-    answer: 'You must apply to court for a possession order. You cannot force the tenant to leave yourself - this would be illegal eviction. After the notice period expires, apply for accelerated possession using form N5B (Section 21) or standard possession using N5 (Section 8).',
-  },
-  {
-    question: 'How long does it take to evict a tenant who won\'t leave?',
-    answer: 'The process typically takes 4-6 months in total: 2 months notice period, 6-10 weeks for court hearing, and 4-6 weeks for bailiff appointment if needed. Accelerated possession (Section 21) is usually faster as it doesn\'t require a hearing.',
-  },
-  {
-    question: 'Can I change the locks if my tenant won\'t leave?',
-    answer: 'No. Changing locks, removing belongings, or cutting off utilities is illegal eviction and can result in criminal prosecution and civil liability. You must go through the court process and use certified bailiffs.',
-  },
-  {
-    question: 'What is a possession order?',
-    answer: 'A possession order is a court order that legally requires the tenant to leave by a specific date. If they still refuse, you can then apply for a warrant of possession to have bailiffs enforce the order.',
-  },
-  {
-    question: 'How much does it cost to evict a tenant through court?',
-    answer: 'Court fees are approximately £355 for possession claims, plus £130 for a bailiff warrant if needed. Using our Complete Pack (£199.99) can save hundreds compared to solicitor fees (typically £1,000-2,000).',
-  },
-  {
-    question: 'Can the tenant stop the eviction?',
-    answer: 'Tenants can apply to suspend or delay the possession order in some circumstances, particularly for Section 8 discretionary grounds. For Section 21, defences are limited to procedural issues with the notice or deposit protection.',
-  },
-  {
-    question: 'What if my tenant claims they didn\'t receive the notice?',
-    answer: 'Keep proof of service - recorded delivery receipt, witness statement, or photos of hand delivery. Courts require evidence that the notice was properly served. Our documents include a certificate of service template.',
-  },
-  {
-    question: 'Should I use Section 21 or Section 8 if my tenant won\'t leave?',
-    answer: 'If you have grounds (rent arrears, breach), Section 8 can be faster with only 2 weeks notice for some grounds. Section 21 is simpler but requires 2 months notice. Many landlords serve both together.',
-  },
-];
-
 export default function TenantWontLeavePage() {
   const pageSchema = {
     '@context': 'https://schema.org',
@@ -102,7 +69,6 @@ export default function TenantWontLeavePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
@@ -441,31 +407,12 @@ export default function TenantWontLeavePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Tenant Won&apos;t Leave: FAQ
-              </h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-
-              <SeoCtaBlock
-                pageType="problem"
-                variant="faq"
-                pagePath={PAGE_PATH}
-                jurisdiction="england"
-              />
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          faqs={tenantWontLeaveFAQs}
+          title="Tenant Won't Leave: FAQ"
+          showContactCTA={false}
+          variant="gray"
+        />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20">

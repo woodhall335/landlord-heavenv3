@@ -14,10 +14,12 @@ import {
   RiFileWarningLine,
   RiScales3Line
 } from 'react-icons/ri';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { northernIrelandFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
@@ -45,57 +47,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is a Notice to Quit in Northern Ireland?',
-    answer: 'A Notice to Quit (NTQ) is a formal written notice that a landlord must serve on a tenant to end a Private Tenancy in Northern Ireland. Under the Private Tenancies Act (NI) 2022, the NTQ must be in the prescribed statutory form, state valid grounds for ending the tenancy, give the correct notice period based on tenancy length, and be served correctly. An invalid NTQ cannot be used to obtain a possession order from the courts.'
-  },
-  {
-    question: 'What notice period must a landlord give in Northern Ireland?',
-    answer: 'The notice period depends on how long the tenant has occupied the property: for tenancies under 12 months, 28 days\' notice (4 weeks); for tenancies between 1-5 years, 56 days\' notice (8 weeks); for tenancies over 5 years, 84 days\' notice (12 weeks). These minimum notice periods apply regardless of what the tenancy agreement states - any shorter period in the contract is unenforceable.'
-  },
-  {
-    question: 'What grounds can a landlord use for a Notice to Quit?',
-    answer: 'Landlords must state valid grounds on the Notice to Quit. Permitted grounds include: landlord or family member intending to live in the property; selling the property; substantial renovation works required; tenant rent arrears over 8 weeks; anti-social behaviour; breach of tenancy terms; property needed by employer landlord; or the property will no longer be used for renting. No-fault grounds are limited after 12 months.'
-  },
-  {
-    question: 'Can I serve a Notice to Quit without a written tenancy agreement?',
-    answer: 'No. Under the Private Tenancies Act (NI) 2022, landlords cannot serve a valid Notice to Quit unless they have complied with their legal obligations, including providing a written statement of tenancy terms within 28 days of the tenancy starting. If you haven\'t provided the required documentation, any NTQ you serve will be invalid and court proceedings will fail.'
-  },
-  {
-    question: 'What happens if my Notice to Quit is invalid?',
-    answer: 'If your Notice to Quit is invalid - whether due to wrong notice period, incorrect form, missing grounds, or non-compliance with landlord obligations - you cannot proceed with court action to evict the tenant. You would need to serve a new, valid NTQ and wait for the notice period to expire before applying to court. This can add months to the eviction process.'
-  },
-  {
-    question: 'How do I serve a Notice to Quit correctly?',
-    answer: 'A Notice to Quit must be served in writing, preferably by recorded delivery post or hand-delivered with a witness. Keep proof of service. The notice must: use the correct prescribed form; state the grounds for ending the tenancy; give the correct notice period; include the landlord\'s name, address, and registration number; and specify the date by which the tenant must leave.'
-  },
-  {
-    question: 'What if the tenant doesn\'t leave after the Notice to Quit expires?',
-    answer: 'If a tenant remains after a valid Notice to Quit expires, you must apply to the County Court for a possession order. You cannot physically evict a tenant yourself - this is illegal and could result in criminal charges. The court will review whether the NTQ was valid and if grounds are proven. If granted, bailiffs can enforce eviction if the tenant still doesn\'t leave.'
-  },
-  {
-    question: 'Can a tenant challenge a Notice to Quit?',
-    answer: 'Yes, tenants can challenge a Notice to Quit on several grounds: the notice period was incorrect; the wrong form was used; the landlord isn\'t registered; no written tenancy agreement was provided; the deposit wasn\'t protected; the stated grounds are false; or the notice is retaliatory for a legitimate complaint. Tenants should seek advice from Housing Rights immediately.'
-  },
-  {
-    question: 'How much does it cost to evict a tenant through the courts in NI?',
-    answer: 'Court fees for possession proceedings in Northern Ireland start at approximately £100-200 for the application. If the tenant contests the eviction, costs can increase significantly with potential hearing fees. If you need to use bailiffs for enforcement, there are additional fees. Legal representation adds further costs. Having a valid tenancy agreement and correct NTQ from the start minimizes these risks.'
-  },
-  {
-    question: 'What notice must a tenant give to end a tenancy in Northern Ireland?',
-    answer: 'Tenants in Northern Ireland must give at least 4 weeks\' written notice to end their tenancy, regardless of how long they have lived there. This is much shorter than landlord notice periods. Notice should be given in writing and can be for any date - it doesn\'t need to align with rent payment dates unless the tenancy agreement specifically requires this.'
-  },
-  {
-    question: 'Can I evict a tenant for rent arrears in Northern Ireland?',
-    answer: 'Yes, persistent rent arrears is a valid ground for eviction in Northern Ireland. If a tenant owes more than 8 weeks\' rent, landlords can serve a Notice to Quit using this ground. However, landlords should first attempt to resolve arrears through communication, payment plans, or housing benefit claims. Courts may refuse possession if arrears are reduced significantly before the hearing.'
-  },
-  {
-    question: 'What is a retaliatory eviction in Northern Ireland?',
-    answer: 'A retaliatory eviction occurs when a landlord serves a Notice to Quit because a tenant has complained about disrepair or exercised their legal rights. The Private Tenancies Act 2022 provides some protection against retaliation. If a tenant can show the NTQ was served in response to a legitimate complaint, courts may refuse to grant a possession order. Landlords should document genuine grounds carefully.'
-  }
-];
-
 export default function NoticeToQuitNIGuidePage() {
   return (
     <>
@@ -108,7 +59,6 @@ export default function NoticeToQuitNIGuidePage() {
           dateModified: '2025-01-20',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },
@@ -462,26 +412,12 @@ export default function NoticeToQuitNIGuidePage() {
 
           {/* FAQ Section */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-              <RiQuestionLine className="w-6 h-6 text-emerald-600" />
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <details
-                  key={index}
-                  className="group bg-white border border-slate-200 rounded-lg shadow-sm"
-                >
-                  <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-slate-900 hover:bg-slate-50">
-                    {faq.question}
-                    <RiArrowRightLine className="w-5 h-5 text-slate-400 transition-transform group-open:rotate-90" />
-                  </summary>
-                  <div className="px-4 pb-4 text-slate-600">
-                    {faq.answer}
-                  </div>
-                </details>
-              ))}
-            </div>
+            <FAQSection
+              faqs={northernIrelandFAQs}
+              title="Northern Ireland Eviction FAQ"
+              showContactCTA={false}
+              variant="white"
+            />
           </section>
 
           {/* Final CTA */}

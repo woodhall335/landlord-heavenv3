@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -12,6 +12,8 @@ import {
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { n5bFormFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   Clock,
@@ -55,41 +57,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'What is Form N5B?',
-    answer: 'Form N5B is the court form used to apply for accelerated possession of a property after serving a Section 21 notice. It\'s called "accelerated" because it\'s usually decided on paper without a court hearing, making it faster than standard possession claims.',
-  },
-  {
-    question: 'When can I use Form N5B?',
-    answer: 'You can use N5B when: (1) you have an assured shorthold tenancy, (2) you served a valid Section 21 notice, (3) the notice period has expired, (4) there is a written tenancy agreement. You cannot use N5B if claiming rent arrears as part of the claim.',
-  },
-  {
-    question: 'How long does N5B accelerated possession take?',
-    answer: 'Typically 6-8 weeks from filing to receiving the possession order. This is faster than standard possession (N5) which takes 8-12 weeks due to the requirement for a court hearing.',
-  },
-  {
-    question: 'What is the court fee for N5B?',
-    answer: 'The court fee for Form N5B is £355 (same as standard possession Form N5). This fee must be paid when you submit the form to the court.',
-  },
-  {
-    question: 'Can the tenant defend against N5B?',
-    answer: 'Yes, but defences are limited to procedural issues such as: the notice being invalid, deposit not being protected, required documents not provided (EPC, gas certificate, How to Rent guide), or the tenancy not being an AST.',
-  },
-  {
-    question: 'What if the court orders a hearing?',
-    answer: 'If the tenant files a defence or the judge has concerns, they may order a hearing. This converts the accelerated procedure into something closer to standard possession, adding 4-6 weeks to the timeline.',
-  },
-  {
-    question: 'Can I claim rent arrears with N5B?',
-    answer: 'No, you cannot include a rent arrears claim in Form N5B. If you want to claim arrears, you must use Form N5 (standard possession) or file a separate money claim after getting possession.',
-  },
-  {
-    question: 'What documents do I need to file with N5B?',
-    answer: 'You\'ll need: the completed N5B form, copy of the tenancy agreement, copy of the Section 21 notice, proof of service, and the court fee (£355). Some courts also want copies of EPC, gas certificate, and How to Rent guide.',
-  },
-];
-
 export default function N5BFormGuidePage() {
   const pageSchema = {
     '@context': 'https://schema.org',
@@ -102,7 +69,6 @@ export default function N5BFormGuidePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/possession-claim-guide' },
@@ -446,18 +412,12 @@ export default function N5BFormGuidePage() {
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                N5B Form FAQ
-              </h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+              <FAQSection
+                faqs={n5bFormFAQs}
+                title="N5B Form FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
 
               <SeoCtaBlock
                 pageType="court"

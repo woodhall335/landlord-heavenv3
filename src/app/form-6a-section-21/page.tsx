@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { form6aFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Download & Guide 2026',
@@ -29,29 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'Where can I download Form 6A?',
-    answer:
-      'You can download the blank Form 6A from gov.uk, or use our free generator to create a pre-filled form with your details already completed.',
-  },
-  {
-    question: 'Can I use Form 6A in Wales?',
-    answer:
-      'No. Wales uses different forms under the Renting Homes (Wales) Act 2016. Form 6A is only valid for properties in England.',
-  },
-  {
-    question: 'What happens if I use the wrong form?',
-    answer:
-      "If you don't use Form 6A (or a form substantially to the same effect), your notice will be invalid and the court will reject your possession claim.",
-  },
-  {
-    question: 'How long is a Section 21 notice valid?',
-    answer:
-      "You must start court proceedings within 6 months of serving the notice. After 6 months, the notice expires and you'll need to serve a new one.",
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Tools', url: '/tools' },
@@ -61,7 +40,6 @@ const breadcrumbs = [
 export default function Form6APage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -198,17 +176,13 @@ export default function Form6APage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="mt-12 bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mt-12">
+              <FAQSection
+                faqs={form6aFAQs}
+                title="Form 6A Frequently Asked Questions"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

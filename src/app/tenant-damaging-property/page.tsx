@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { tenantDamagingPropertyFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Tenant Damaging Property | Landlord Rights & Actions UK 2026',
@@ -29,29 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'Can I evict a tenant for damaging my property?',
-    answer:
-      'Yes. You can use Section 8 Ground 13 (deterioration of property due to tenant\'s neglect or default) or Ground 12 (breach of tenancy agreement). These are discretionary grounds, meaning the court decides if eviction is reasonable.',
-  },
-  {
-    question: 'Can I deduct damage costs from the deposit?',
-    answer:
-      'You can deduct the cost of repairing damage beyond normal wear and tear. You must provide evidence (photos, invoices) and follow the deposit scheme\'s dispute process if the tenant disagrees.',
-  },
-  {
-    question: 'What if the damage costs more than the deposit?',
-    answer:
-      'You can make a money claim through the county court for the additional costs. You\'ll need to follow the Pre-Action Protocol and provide evidence of the damage and repair costs.',
-  },
-  {
-    question: 'Should I do an inspection before taking action?',
-    answer:
-      'Yes. Document everything with dated photographs and a written inspection report. This evidence is crucial for deposit disputes, eviction proceedings, or money claims.',
-  },
-];
-
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Tenant Damaging Property', url: '/tenant-damaging-property' },
@@ -60,7 +39,6 @@ const breadcrumbs = [
 export default function TenantDamagingPropertyPage() {
   return (
     <>
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -207,17 +185,13 @@ export default function TenantDamagingPropertyPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-12">
+              <FAQSection
+                faqs={tenantDamagingPropertyFAQs}
+                title="Tenant Property Damage FAQ"
+                showContactCTA={false}
+                variant="white"
+              />
             </div>
 
             {/* CTA */}

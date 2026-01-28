@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -12,6 +12,8 @@ import {
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { tenantNotPayingRentFAQs } from '@/data/faqs';
 import {
   CheckCircle,
   AlertTriangle,
@@ -65,41 +67,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'How much rent arrears before I can evict?',
-    answer: 'For mandatory Ground 8 (Section 8), the tenant must owe at least 2 months rent at the time of serving the notice AND at the court hearing. For discretionary Ground 10, any amount of arrears may be sufficient, though courts consider whether eviction is reasonable.',
-  },
-  {
-    question: 'Should I evict or claim the money?',
-    answer: 'You can do both. Serve a Section 8 notice to regain possession, then file a separate money claim for the arrears. Many landlords do this in parallel. If the tenant has moved out, a money claim through MCOL is often the best option.',
-  },
-  {
-    question: 'What notice period for rent arrears eviction?',
-    answer: 'Ground 8 (2+ months arrears) and Ground 10/11 require only 2 weeks notice - significantly faster than Section 21\'s 2 month notice. This makes Section 8 attractive for serious rent arrears cases.',
-  },
-  {
-    question: 'What if the tenant pays some of the arrears?',
-    answer: 'If arrears drop below 2 months before the hearing, you lose the mandatory Ground 8. However, you can still proceed with discretionary Ground 10/11. This is why we recommend citing multiple grounds on your notice.',
-  },
-  {
-    question: 'How do I prove rent arrears in court?',
-    answer: 'You\'ll need: the tenancy agreement showing rent amount and due date, a rent schedule showing payments and arrears, bank statements showing missed payments, and any correspondence with the tenant about the debt.',
-  },
-  {
-    question: 'Can I charge interest on unpaid rent?',
-    answer: 'Yes, if your tenancy agreement includes an interest clause. If not, you can claim statutory interest (8% + Bank of England base rate) when making a court claim. Our rent arrears calculator includes interest calculations.',
-  },
-  {
-    question: 'What is a rent demand letter?',
-    answer: 'A formal letter demanding payment of overdue rent, typically giving 14 days to pay. While not legally required before eviction, it documents your attempts to resolve the issue and can be useful evidence in court.',
-  },
-  {
-    question: 'Can Universal Credit be paid directly to me?',
-    answer: 'Yes, you can request Alternative Payment Arrangements (APA) if the tenant is 2+ months in arrears, has a history of arrears, or is likely to have difficulty managing their finances. Contact the UC helpline to request this.',
-  },
-];
-
 export default function TenantNotPayingRentPage() {
   const pageSchema = {
     '@context': 'https://schema.org',
@@ -112,7 +79,6 @@ export default function TenantNotPayingRentPage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
@@ -514,30 +480,12 @@ export default function TenantNotPayingRentPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Tenant Not Paying Rent: FAQ
-              </h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-
-              <SeoCtaBlock
-                pageType="problem"
-                variant="faq"
-                jurisdiction="england"
-              />
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          faqs={tenantNotPayingRentFAQs}
+          title="Tenant Not Paying Rent: FAQ"
+          showContactCTA={false}
+          variant="white"
+        />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20 bg-gray-50">

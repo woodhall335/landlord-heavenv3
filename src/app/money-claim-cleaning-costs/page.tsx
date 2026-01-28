@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
@@ -13,9 +13,10 @@ import {
   ClipboardList,
   Receipt,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { cleaningCostsFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Claim Cleaning Costs from Tenant 2026 | End of Tenancy Claims',
@@ -45,59 +46,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqs = [
-  {
-    question: 'Can I charge a tenant for cleaning when they leave?',
-    answer:
-      'You can only charge for cleaning if the property is returned in a worse condition than at the start of the tenancy (allowing for fair wear and tear). If the tenancy agreement required the property to be professionally cleaned on departure and this wasn\'t done, you may have a claim. You cannot charge for routine cleaning between tenancies.',
-  },
-  {
-    question: 'What counts as excessive cleaning vs normal cleaning?',
-    answer:
-      'Excessive cleaning includes: heavy grease build-up in kitchen, limescale damage in bathrooms, stained carpets or upholstery, mould from tenant neglect, pet odors or mess, rubbish left behind, and filthy ovens or appliances. Normal cleaning includes light dusting, hoovering, and general tidying that any landlord would do between tenants.',
-  },
-  {
-    question: 'How much can I claim for end of tenancy cleaning?',
-    answer:
-      'You can claim the actual cost of returning the property to its check-in condition. Get quotes from professional cleaning companies. Typical professional deep cleans range from £150-£400 depending on property size. Keep all invoices. You can only claim for cleaning above what was needed regardless of tenant behaviour.',
-  },
-  {
-    question: 'Can I claim for rubbish removal?',
-    answer:
-      'Yes, if the tenant left items or rubbish that required removal. You can claim for skip hire, waste collection services, or your time at a reasonable hourly rate. Document everything with photos and keep all receipts. Large items or hazardous waste may cost more to remove.',
-  },
-  {
-    question: 'What evidence do I need for a cleaning claim?',
-    answer:
-      'You need: check-in inventory showing original cleanliness, check-out photos showing the mess, professional cleaning quotes or invoices, photos of rubbish left behind, and any correspondence with the tenant about the condition. Video walkthrough evidence is also helpful.',
-  },
-  {
-    question: 'The tenant says the property was clean when they left - what now?',
-    answer:
-      'This is why check-out inspections and photos are crucial. If you have dated photos showing the condition when keys were returned, these trump the tenant\'s verbal claims. If you didn\'t document the condition, your claim becomes harder to prove.',
-  },
-  {
-    question: 'Should I use the deposit for cleaning costs?',
-    answer:
-      'Yes, cleaning costs are a valid deposit deduction if evidenced. Use the deposit scheme\'s free dispute resolution if the tenant disagrees. Only go to court if costs exceed the deposit or the tenant disputes the deposit decision and you want a binding judgment.',
-  },
-  {
-    question: 'Can I charge for my own time spent cleaning?',
-    answer:
-      'This is debatable. Courts may allow reasonable hourly rates for your own labour, but professional cleaning invoices are stronger evidence. If you clean yourself, document hours spent, tasks completed, and apply a reasonable rate (£15-25/hour typically).',
-  },
-  {
-    question: 'The tenant abandoned the property with belongings - can I claim removal costs?',
-    answer:
-      'Yes, but you must follow the Torts (Interference with Goods) Act 1977 first. Give the tenant written notice to collect their belongings within a reasonable time (14-28 days). If uncollected, you can dispose of items and claim the cost. Document everything.',
-  },
-  {
-    question: 'How long after the tenant leaves can I make a cleaning claim?',
-    answer:
-      'Act promptly - ideally within days of the tenancy ending. Document the condition immediately at check-out. While you technically have 6 years for contract claims, fresh evidence is much stronger. Courts question delays in documenting mess.',
-  },
-];
-
 export default function MoneyClaimCleaningCostsPage() {
   return (
     <>
@@ -111,7 +59,6 @@ export default function MoneyClaimCleaningCostsPage() {
           dateModified: '2026-01-01',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -654,7 +601,7 @@ export default function MoneyClaimCleaningCostsPage() {
         {/* FAQ Section */}
         <FAQSection
           title="Cleaning Costs Claims: Frequently Asked Questions"
-          faqs={faqs}
+          faqs={cleaningCostsFAQs}
           showContactCTA={false}
           variant="white"
         />
