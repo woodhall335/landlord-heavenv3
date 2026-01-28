@@ -545,3 +545,263 @@ describe('Section completion in flow', () => {
     expect(isComplete).toBe(true);
   });
 });
+
+describe('ClaimDetailsSection gating logic', () => {
+  /**
+   * Helper function that mirrors the requiredDataStatus logic from ClaimDetailsSection.tsx
+   */
+  function getRequiredDataStatus(facts: any, selectedReasons: Set<string>) {
+    const needsArrearsSchedule = selectedReasons.has('rent_arrears');
+    const needsDamageItems =
+      selectedReasons.has('property_damage') ||
+      selectedReasons.has('cleaning') ||
+      selectedReasons.has('unpaid_utilities') ||
+      selectedReasons.has('unpaid_council_tax') ||
+      selectedReasons.has('other_tenant_debt');
+
+    // Check arrears items from either location
+    const arrearsItems =
+      facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
+    const hasArrearsData = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+
+    // Check damage items
+    const damageItems = facts.money_claim?.damage_items || [];
+    const hasDamageData = Array.isArray(damageItems) && damageItems.length > 0;
+
+    // Build list of missing sections
+    const missingSections: string[] = [];
+    if (needsArrearsSchedule && !hasArrearsData) {
+      missingSections.push('Arrears');
+    }
+    if (needsDamageItems && !hasDamageData) {
+      missingSections.push('Damages');
+    }
+
+    const hasAllRequired =
+      (!needsArrearsSchedule || hasArrearsData) &&
+      (!needsDamageItems || hasDamageData);
+
+    return {
+      needsArrearsSchedule,
+      needsDamageItems,
+      hasArrearsData,
+      hasDamageData,
+      missingSections,
+      hasAllRequired,
+    };
+  }
+
+  describe('when no claim reasons selected', () => {
+    it('should not require any data', () => {
+      const facts = {};
+      const selectedReasons = new Set<string>();
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(false);
+      expect(status.needsDamageItems).toBe(false);
+      expect(status.missingSections).toHaveLength(0);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when rent_arrears is selected', () => {
+    it('should require arrears schedule when no arrears items exist', () => {
+      const facts = {};
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.hasArrearsData).toBe(false);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should be satisfied when arrears_items is populated at top level', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.missingSections).not.toContain('Arrears');
+      expect(status.hasAllRequired).toBe(true);
+    });
+
+    it('should be satisfied when arrears_items is populated in nested path', () => {
+      const facts = {
+        issues: {
+          rent_arrears: {
+            arrears_items: [
+              { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+            ],
+          },
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when damage categories are selected', () => {
+    it('should require damage items when property_damage is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.hasDamageData).toBe(false);
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should require damage items when cleaning is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['cleaning']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should require damage items when unpaid_utilities is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['unpaid_utilities']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should require damage items when other_tenant_debt is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['other_tenant_debt']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should be satisfied when damage_items is populated', () => {
+      const facts = {
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).not.toContain('Damages');
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when both arrears and damage categories are selected', () => {
+    it('should require both schedules when neither is populated', () => {
+      const facts = {};
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should still be missing Damages when only arrears is populated', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasDamageData).toBe(false);
+      expect(status.missingSections).not.toContain('Arrears');
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should still be missing Arrears when only damages is populated', () => {
+      const facts = {
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(false);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.missingSections).not.toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should be satisfied when both schedules are populated', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage', 'cleaning']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).toHaveLength(0);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('canShowDetailedSections calculation', () => {
+    it('should be false when no claim reasons selected', () => {
+      const selectedReasons = new Set<string>();
+      const status = getRequiredDataStatus({}, selectedReasons);
+      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+
+      expect(canShowDetailedSections).toBe(false);
+    });
+
+    it('should be false when claim reasons selected but required data missing', () => {
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus({}, selectedReasons);
+      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+
+      expect(canShowDetailedSections).toBe(false);
+    });
+
+    it('should be true when claim reasons selected and required data present', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+      const canShowDetailedSections = selectedReasons.size > 0 && status.hasAllRequired;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+  });
+});
