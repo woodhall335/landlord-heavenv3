@@ -736,6 +736,10 @@ export interface CaseData {
   court_fee?: number;
   solicitor_costs?: number;
 
+  // Money claim line items (for N1 brief details)
+  damage_items?: Array<{ description: string; amount: number }>;
+  other_charges?: Array<{ description: string; amount: number }>;
+
   // Deposit
   deposit_amount?: number;
   deposit_scheme?: 'DPS' | 'MyDeposits' | 'TDS';
@@ -2695,12 +2699,29 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextRequired(form, 'Text22', defendantDetails, ctx);
 
   // Brief details of claim - REQUIRED
-  const briefDetails = data.particulars_of_claim
-    ? data.particulars_of_claim.substring(0, 200) + (data.particulars_of_claim.length > 200 ? '...' : '')
-    : 'Claim for unpaid rent arrears and/or damages';
+  // For money claims with attached PoC, use a standardised brief summary
+  // The full particulars are attached as a separate document (01-particulars-of-claim.pdf)
+  const isMoneyClaimWithPoC = data.claim_type === 'money_claim';
+  let briefDetails: string;
+  if (isMoneyClaimWithPoC) {
+    // Standard brief details with clear reference to attached PoC
+    const claimTypes: string[] = [];
+    if (data.total_claim_amount && data.total_claim_amount > 0) {
+      claimTypes.push('rent arrears');
+    }
+    if (data.damage_items && data.damage_items.length > 0) {
+      claimTypes.push('property damage');
+    }
+    const claimDescription = claimTypes.length > 0 ? claimTypes.join(' and ') : 'rent arrears';
+    briefDetails = `Claim for ${claimDescription} under assured shorthold tenancy. Particulars of Claim attached.`;
+  } else if (data.particulars_of_claim) {
+    briefDetails = data.particulars_of_claim.substring(0, 200) + (data.particulars_of_claim.length > 200 ? '...' : '');
+  } else {
+    briefDetails = 'Claim for unpaid rent arrears and/or damages. Particulars of Claim attached.';
+  }
   setTextRequired(form, 'Text23', briefDetails, ctx);
 
-  // Value box - optional (Text24 removed from Dec 2024 N1 template)
+  // Value box (Text24 exists in Dec 2024 N1 template - corrected from earlier comment)
   setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
 
   // Defendant's address for service
@@ -2722,11 +2743,26 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextRequired(form, 'Text28', totalAmount.toFixed(2), ctx);
 
   // === PAGE 2 ===
-  setCheckbox(form, 'Check Box40', true, ctx); // Vulnerability: No
-  setCheckbox(form, 'Check Box42', true, ctx); // Human Rights Act: No
+  // Preferred County Court Hearing Centre (required field on page 2)
+  if (data.court_name) {
+    setTextOptional(form, 'Text37', data.court_name, ctx);
+  }
+  // Vulnerability question: Check "No" (Check Box40)
+  setCheckbox(form, 'Check Box40', true, ctx);
+  // Human Rights Act question: Check "No" (Check Box42)
+  setCheckbox(form, 'Check Box42', true, ctx);
 
-  // === PAGE 3 ===
-  if (data.particulars_of_claim) {
+  // === PAGE 3 - Particulars of Claim ===
+  // For money claims: Always check "attached" as the full PoC is a separate document
+  // The text box (Text30) contains a brief summary pointing to the attached document
+  if (isMoneyClaimWithPoC) {
+    // Always check "attached" checkbox for money claims with separate PoC document
+    setCheckbox(form, 'Check Box43', true, ctx);
+    // Brief summary in Text30 referencing the attached PoC
+    const pocSummary = `See attached Particulars of Claim document for full details.\n\nClaim summary:\n- Property: ${data.property_address || 'See above'}\n- Total claimed: £${data.total_claim_amount?.toFixed(2) || '0.00'}\n- Schedule of arrears attached`;
+    setTextOptional(form, 'Text30', pocSummary, ctx);
+  } else if (data.particulars_of_claim) {
+    // For other claim types, use the provided particulars directly
     setCheckbox(form, 'Check Box43', true, ctx);
     setTextOptional(form, 'Text30', data.particulars_of_claim, ctx);
   }
