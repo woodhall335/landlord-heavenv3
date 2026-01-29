@@ -265,8 +265,8 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
   if (product === 'money_claim') {
     return {
       product: 'money_claim_pack',
-      price: 149.99,
-      reason: applyPricingMessage(149.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
+      price: 99.99,
+      reason: applyPricingMessage(99.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
     };
   }
   if (product === 'tenancy_agreement') {

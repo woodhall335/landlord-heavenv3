@@ -501,7 +501,7 @@ export default function EvictionCostUkPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack — £149.99
+                        Get Money Claim Pack — £99.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"

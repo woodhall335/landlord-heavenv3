@@ -24,7 +24,7 @@
  * 3. CORRECT PRODUCT PRICES (as of Jan 2026 - Updated):
  *    - Notice Only: £49.99
  *    - Complete Pack: £199.99
- *    - Money Claim: £149.99
+ *    - Money Claim: £99.99
  *    - AST Standard: £14.99
  *    - AST Premium: £24.99
  *    - All prices come from PRODUCTS config - single source of truth.
@@ -401,7 +401,7 @@ export function softwareApplicationSchema() {
     PRODUCTS.ast_standard.price,  // £14.99 (lowest)
     PRODUCTS.ast_premium.price,   // £24.99
     PRODUCTS.notice_only.price,   // £49.99
-    PRODUCTS.money_claim.price,   // £149.99
+    PRODUCTS.money_claim.price,   // £99.99
     PRODUCTS.complete_pack.price, // £199.99 (highest)
   ];
   const lowPrice = Math.min(...prices).toFixed(2);

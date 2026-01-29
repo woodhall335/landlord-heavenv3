@@ -125,7 +125,7 @@ export default function HelpPage() {
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (£149.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims (£99.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
                         <strong>Standard AST (£14.99):</strong> Simple tenancy agreement for standard lettings.

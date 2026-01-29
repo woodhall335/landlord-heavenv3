@@ -168,7 +168,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} rent arrears`,
       scenarioLabel: 'recovering unpaid rent',
       primaryCTA: {
-        label: 'Start money claim pack — £149.99',
+        label: 'Start money claim pack — £99.99',
         href: productLinks.moneyClaim.href,
       },
       secondaryCTA: {

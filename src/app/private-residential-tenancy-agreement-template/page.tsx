@@ -293,7 +293,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <p className="text-sm text-gray-600">All 18 eviction grounds with correct notice periods</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Scotland Money Claim — £149.99</h3>
+                <h3 className="font-semibold text-gray-900">Scotland Money Claim — £99.99</h3>
                 <p className="text-sm text-gray-600">Simple Procedure for Scottish courts</p>
               </Link>
             </div>

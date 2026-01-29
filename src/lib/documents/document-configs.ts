@@ -610,9 +610,9 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£149.99',
+      price: '£99.99',
       originalPrice: '£3,000+',
-      savings: 'Save £2,850+ vs solicitors',
+      savings: 'Save £2,900+ vs solicitors',
       features: [
         'Form N1 money claim',
         'Particulars of claim',
@@ -626,7 +626,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£149.99',
+      price: '£99.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,850+ vs solicitors',
       features: [

@@ -191,7 +191,7 @@ export default function HomeContent() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£149.99"
+              price="£99.99"
               solicitorPrice="£400-600"
               badge="England only"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}

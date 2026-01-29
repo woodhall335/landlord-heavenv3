@@ -22,7 +22,7 @@ export const productLinks = {
   moneyClaim: {
     href: '/products/money-claim',
     title: 'Money Claim Pack',
-    description: 'Recover rent, damage, and other tenant debts — £149.99',
+    description: 'Recover rent, damage, and other tenant debts — £99.99',
     icon: 'document' as const,
     type: 'product' as const,
   },
