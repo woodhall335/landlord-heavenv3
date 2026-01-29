@@ -278,6 +278,13 @@ function calculateClaimClarityScore(facts: CaseFactsForScoring): CategoryScore {
 
 /**
  * Calculate PAP compliance score
+ *
+ * Two-stage PAP scoring model:
+ * - Stage 1: PAP pack generated and ready to send (partial credit ~60-68%)
+ * - Stage 2: PAP letter sent + 30 days elapsed (full credit 100%)
+ *
+ * This ensures users get fair credit when we generate PAP documents for them,
+ * while still encouraging them to actually send and wait before filing.
  */
 function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore {
   const factors: string[] = [];
@@ -289,8 +296,8 @@ function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore 
   const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
 
   if (hasAlreadySentLetter) {
-    // Letter Before Claim already sent
-    score += 15;
+    // Stage 2: Letter Before Claim already sent
+    score += 17;
     factors.push('Letter Before Claim sent');
 
     // Calculate days since PAP letter
@@ -302,10 +309,10 @@ function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore 
       );
 
       if (daysSince >= 30) {
-        score += 8;
+        score += 6;
         factors.push('30-day response period elapsed');
       } else if (daysSince >= 14) {
-        score += 4;
+        score += 3;
         factors.push(`${daysSince} days since PAP letter (30 required)`);
       }
     }
@@ -320,10 +327,11 @@ function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore 
       );
     }
   } else if (willGenerateLetter) {
-    // User has chosen to have us generate the letter
-    // Give partial credit - they've addressed PAP but still need to send and wait
-    score += 10;
-    factors.push('Pre-Action Letter will be generated');
+    // Stage 1: User has chosen to have us generate the letter
+    // Give substantial credit - PAP pack generated and ready to send
+    // This is fair because the docs exist, user just needs to send and wait
+    score += 15;
+    factors.push('PAP pack generated (Letter Before Claim, Info Sheet, Reply Form, Financial Statement)');
   }
 
   // Cap at max score
@@ -430,24 +438,26 @@ function generateImprovements(
     }
   }
 
-  // PAP improvements
-  if (papScore.score < papScore.maxScore * 0.8) {
-    const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
-    const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+  // PAP improvements - reflect two-stage model
+  const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+  const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
 
-    if (!hasAlreadySentLetter && !willGenerateLetter) {
-      improvements.push('Indicate whether you have sent a Pre-Action Letter or need us to generate one');
-    } else if (willGenerateLetter) {
-      improvements.push('After generating your pack, send the Pre-Action Letter and wait 30 days before filing');
-    } else if (facts.pap_letter_date) {
-      const letterDate = new Date(facts.pap_letter_date);
-      const today = new Date();
-      const daysSince = Math.floor(
-        (today.getTime() - letterDate.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      if (daysSince < 30) {
-        improvements.push(`Wait ${30 - daysSince} more days for 30-day PAP period to elapse`);
-      }
+  if (!hasAlreadySentLetter && !willGenerateLetter) {
+    // Neither generated nor sent - needs to address PAP
+    improvements.push('Complete the Pre-Action section to generate your PAP-DEBT compliant letter pack');
+  } else if (willGenerateLetter) {
+    // Stage 1: PAP pack generated but not yet sent
+    // Show the next step (send and wait) but don't frame it as a problem
+    improvements.push('Send the PAP Letter Before Claim pack and wait 30 days before filing your court claim');
+  } else if (hasAlreadySentLetter && facts.pap_letter_date) {
+    // Stage 2 in progress: Letter sent, check if 30 days elapsed
+    const letterDate = new Date(facts.pap_letter_date);
+    const today = new Date();
+    const daysSince = Math.floor(
+      (today.getTime() - letterDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    if (daysSince < 30) {
+      improvements.push(`Wait ${30 - daysSince} more days for the 30-day PAP response period to elapse before filing`);
     }
   }
 

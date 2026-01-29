@@ -152,6 +152,12 @@ describe('Outcome Confidence Indicator', () => {
     });
 
     describe('PAP compliance scoring', () => {
+      /**
+       * Two-stage PAP scoring model tests:
+       * - Stage 1: PAP pack generated (60% = 15/25)
+       * - Stage 2: PAP sent + 30 days (full credit ~100%)
+       */
+
       it('gives high PAP score when letter sent and 30 days elapsed', () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 35);
@@ -167,7 +173,7 @@ describe('Outcome Confidence Indicator', () => {
         expect(result.positiveFactors).toContain('30-day response period elapsed');
       });
 
-      it('gives lower PAP score when letter sent but less than 30 days', () => {
+      it('gives substantial PAP score when letter sent but less than 30 days', () => {
         const tenDaysAgo = new Date();
         tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
 
@@ -178,17 +184,146 @@ describe('Outcome Confidence Indicator', () => {
         };
 
         const result = calculateOutcomeConfidence(facts);
-        expect(result.breakdown.papCompliance.score).toBeLessThan(20);
+        // Letter sent but not yet 30 days - should still get credit for sending
+        expect(result.breakdown.papCompliance.score).toBeGreaterThanOrEqual(17);
+        expect(result.positiveFactors).toContain('Letter Before Claim sent');
       });
 
-      it('gives low PAP score when no letter sent', () => {
+      it('gives zero PAP score when no letter sent AND no PAP pack generated', () => {
         const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: false,
+          // generate_pap_documents not set
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.breakdown.papCompliance.score).toBe(0);
+      });
+
+      /**
+       * CRITICAL FIX: Stage 1 - PAP pack generated gives substantial credit (15/25 = 60%)
+       * This ensures users who chose to have us generate the PAP pack don't get near-zero score.
+       */
+      it('gives substantial PAP score when PAP pack is generated (Stage 1)', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: false,
+          money_claim: {
+            generate_pap_documents: true,
+          },
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        // Stage 1: PAP pack generated = 15/25 = 60%
+        expect(result.breakdown.papCompliance.score).toBeGreaterThanOrEqual(15);
+        expect(result.positiveFactors).toContain(
+          'PAP pack generated (Letter Before Claim, Info Sheet, Reply Form, Financial Statement)'
+        );
+      });
+
+      it('shows appropriate improvement tip when PAP pack is generated but not sent', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: false,
+          money_claim: {
+            generate_pap_documents: true,
+          },
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        // Should guide user to send the pack and wait 30 days
+        expect(result.improvements).toContainEqual(
+          expect.stringContaining('Send the PAP Letter Before Claim pack')
+        );
+        expect(result.improvements).toContainEqual(
+          expect.stringContaining('wait 30 days')
+        );
+      });
+
+      it('shows improvement tip to complete Pre-Action when neither generated nor sent', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: false,
+          // No generate_pap_documents flag
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.improvements).toContainEqual(
+          expect.stringContaining('Complete the Pre-Action section')
+        );
+      });
+
+      it('gives full PAP score when letter sent, 30 days elapsed, and response documented', () => {
+        const thirtyFiveDaysAgo = new Date();
+        thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: true,
+          pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+          pap_response_received: false, // No response from tenant
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        // Full compliance: 17 (letter sent) + 6 (30 days) + 2 (response documented) = 25
+        expect(result.breakdown.papCompliance.score).toBe(25);
+        expect(result.positiveFactors).toContain('Letter Before Claim sent');
+        expect(result.positiveFactors).toContain('30-day response period elapsed');
+        expect(result.positiveFactors).toContain('No tenant response recorded');
+      });
+
+      it('shows waiting period improvement when letter sent but 30 days not elapsed', () => {
+        const fifteenDaysAgo = new Date();
+        fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: true,
+          pap_letter_date: fifteenDaysAgo.toISOString().split('T')[0],
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        // Should suggest waiting remaining days
+        expect(result.improvements).toContainEqual(
+          expect.stringContaining('Wait 15 more days')
+        );
+      });
+
+      it('PAP pack generated score is between no-PAP and fully-sent scores', () => {
+        const thirtyFiveDaysAgo = new Date();
+        thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+
+        const noPAPFacts: CaseFactsForScoring = {
           claiming_rent_arrears: true,
           letter_before_claim_sent: false,
         };
 
-        const result = calculateOutcomeConfidence(facts);
-        expect(result.breakdown.papCompliance.score).toBeLessThan(5);
+        const generatedPAPFacts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: false,
+          money_claim: {
+            generate_pap_documents: true,
+          },
+        };
+
+        const fullySentPAPFacts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: true,
+          pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+          pap_response_received: false,
+        };
+
+        const noPAP = calculateOutcomeConfidence(noPAPFacts);
+        const generatedPAP = calculateOutcomeConfidence(generatedPAPFacts);
+        const fullySentPAP = calculateOutcomeConfidence(fullySentPAPFacts);
+
+        // Order should be: no PAP < generated PAP < fully sent PAP
+        expect(generatedPAP.breakdown.papCompliance.score).toBeGreaterThan(
+          noPAP.breakdown.papCompliance.score
+        );
+        expect(fullySentPAP.breakdown.papCompliance.score).toBeGreaterThan(
+          generatedPAP.breakdown.papCompliance.score
+        );
       });
     });
 
