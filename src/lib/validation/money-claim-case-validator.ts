@@ -102,6 +102,8 @@ export interface MoneyClaimFacts {
     interest_rate?: number;
     interest_start_date?: string;
     court_name?: string;
+    /** Flag indicating we will generate PAP documents for the user */
+    generate_pap_documents?: boolean;
     // Totals for combined claim amount calculation
     totals?: {
       rent_arrears?: number;
@@ -454,10 +456,23 @@ export function validatePreActionSection(
   const blockers: string[] = [];
   const warnings: string[] = [];
 
+  // Check if user has addressed the PAP requirement
+  const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+  const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+  const hasSelectedPreActionOption = hasAlreadySentLetter || willGenerateLetter;
+
   // England - PAP-DEBT compliance required
-  if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
+  // Only block if NO selection has been made yet
+  if (!hasSelectedPreActionOption) {
     blockers.push(
-      'You must send a Letter Before Claim to comply with the Pre-Action Protocol for Debt Claims'
+      'Please indicate whether you have already sent a Pre-Action Letter, or if you need us to generate one for you.'
+    );
+  }
+
+  // If user selected "Yes" but hasn't provided the date, show warning
+  if (facts.letter_before_claim_sent === true && !facts.pap_letter_date) {
+    warnings.push(
+      'Please provide the date you sent the Pre-Action Letter to verify the 30-day response period.'
     );
   }
 
@@ -611,10 +626,15 @@ export function validateMoneyClaimCase(
     damagesItems.length > 0;
 
   // Check PAP compliance
+  // User is PAP compliant if:
+  // - Scotland (PAP-DEBT doesn't apply)
+  // - They've already sent a letter
+  // - We're generating the letter for them (they'll be compliant once they send it)
   const papCompliant =
     jurisdiction === 'scotland' ||
     facts.letter_before_claim_sent === true ||
-    !!facts.pap_letter_date;
+    !!facts.pap_letter_date ||
+    facts.money_claim?.generate_pap_documents === true;
 
   return {
     valid: errors.length === 0,

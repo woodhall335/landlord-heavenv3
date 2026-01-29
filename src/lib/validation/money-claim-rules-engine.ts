@@ -358,6 +358,8 @@ export interface MoneyClaimFacts {
     interest_start_date?: string;
     // Deposit deduction tracking - prevents double recovery
     deposit_deductions_confirmed?: boolean;
+    /** Flag indicating we will generate PAP documents for the user */
+    generate_pap_documents?: boolean;
   };
 
   // Issues nested (legacy)
