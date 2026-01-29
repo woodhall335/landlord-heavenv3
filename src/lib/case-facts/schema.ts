@@ -251,7 +251,9 @@ export interface MoneyClaimFacts {
   lba_date?: string | null;
   lba_method?: string[] | null;
   lba_response_deadline?: string | null;
-  pap_documents_sent?: string[] | null;
+  pap_documents_sent?: string[] | null | false;
+  /** Flag indicating we will generate PAP documents for the user */
+  generate_pap_documents?: boolean | null;
   tenant_responded?: boolean | null;
   tenant_response_details?: string | null;
   lba_second_sent?: boolean | null;
@@ -757,6 +759,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     lba_method: null,
     lba_response_deadline: null,
     pap_documents_sent: null,
+    generate_pap_documents: null,
     tenant_responded: null,
     tenant_response_details: null,
     lba_second_sent: null,
