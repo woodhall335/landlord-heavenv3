@@ -137,61 +137,74 @@ export function computeMoneyClaimHealth(
   const papDocsSent = money_claim.pap_documents_sent || [];
   const papServed = money_claim.pap_documents_served;
   const preActionDeadlineOk = money_claim.pre_action_deadline_confirmation;
+  const generatePapDocuments = money_claim.generate_pap_documents;
 
-  if (!lbaSent || !lbaDate) {
+  // Check if user has made a choice about pre-action letter:
+  // - Either they've already sent it (lbaSent with lbaDate)
+  // - Or we're generating it for them (generate_pap_documents = true)
+  const hasPreActionChoice = (lbaSent && lbaDate) || generatePapDocuments === true;
+
+  if (!hasPreActionChoice) {
+    // No selection made yet - this is a blocker
     addIssue(buckets, {
       code: 'no_pre_action_letter',
       severity: 'blocker',
-      title: 'Pre-action Letter Before Claim missing',
+      title: 'Pre-action Letter Before Claim not addressed',
       message:
-        'You have not confirmed that a formal Letter Before Claim was sent to the tenant before issuing a money claim.',
+        'Please indicate whether you have already sent a Pre-Action Letter, or if you need us to generate one for you.',
       details:
-        'Under the pre-action protocol for debt, you should send a Letter Before Claim with at least 30 days to respond before starting a court claim.',
+        'Under the pre-action protocol for debt, you must send a Letter Before Claim with at least 30 days to respond before starting a court claim.',
     });
+  } else if (generatePapDocuments === true) {
+    // User chose to have us generate the letter - just a note, not a blocker
+    positives.push('Pre-Action Letter will be generated as part of your document pack.');
   } else {
     positives.push(`Letter Before Claim recorded as sent on ${lbaDate}.`);
   }
 
-  if (!papDocsSent.length) {
-    addIssue(buckets, {
-      code: 'no_pap_documents',
-      severity: 'risk',
-      title: 'PAP-DEBT documents not recorded',
-      message:
-        'You have not confirmed that you enclosed the information sheet, reply form and financial statement with your Letter Before Claim.',
-      details:
-        'The court expects these PAP-DEBT documents to be provided. Your pack includes them – make sure they were actually sent to the tenant.',
-    });
-  } else {
-    positives.push('PAP-DEBT documents ticked as included with your letter.');
-  }
+  // PAP documents check - only relevant if user already sent the letter
+  if (lbaSent && lbaDate) {
+    if (!papDocsSent.length) {
+      addIssue(buckets, {
+        code: 'no_pap_documents',
+        severity: 'risk',
+        title: 'PAP-DEBT documents not recorded',
+        message:
+          'You have not confirmed that you enclosed the information sheet, reply form and financial statement with your Letter Before Claim.',
+        details:
+          'The court expects these PAP-DEBT documents to be provided. Your pack includes them – make sure they were actually sent to the tenant.',
+      });
+    } else {
+      positives.push('PAP-DEBT documents ticked as included with your letter.');
+    }
 
-  if (!papServed) {
-    addIssue(buckets, {
-      code: 'pre_action_not_served',
-      severity: 'risk',
-      title: 'No proof of pre-action service',
-      message:
-        'You have not confirmed that the pre-action pack was properly served on the tenant.',
-      details:
-        'Record how you sent the letter (post, email, hand delivery) and keep proof of posting or delivery where possible.',
-    });
-  } else {
-    positives.push('Pre-action pack recorded as served on the tenant.');
-  }
+    if (!papServed) {
+      addIssue(buckets, {
+        code: 'pre_action_not_served',
+        severity: 'risk',
+        title: 'No proof of pre-action service',
+        message:
+          'You have not confirmed that the pre-action pack was properly served on the tenant.',
+        details:
+          'Record how you sent the letter (post, email, hand delivery) and keep proof of posting or delivery where possible.',
+      });
+    } else {
+      positives.push('Pre-action pack recorded as served on the tenant.');
+    }
 
-  if (preActionDeadlineOk === false) {
-    addIssue(buckets, {
-      code: 'insufficient_pre_action_time',
-      severity: 'blocker',
-      title: 'Less than 30 days allowed before issuing',
-      message:
-        'You indicated that the tenant was not given a full 30 days to respond before you issued or plan to issue a claim.',
-      details:
-        'To stay compliant with PAP-DEBT, adjust your timeline so that at least 30 days pass between the Letter Before Claim and issuing proceedings.',
-    });
-  } else if (preActionDeadlineOk === true) {
-    positives.push('You confirmed the tenant had at least 30 days to respond before claim issue.');
+    if (preActionDeadlineOk === false) {
+      addIssue(buckets, {
+        code: 'insufficient_pre_action_time',
+        severity: 'blocker',
+        title: 'Less than 30 days allowed before issuing',
+        message:
+          'You indicated that the tenant was not given a full 30 days to respond before you issued or plan to issue a claim.',
+        details:
+          'To stay compliant with PAP-DEBT, adjust your timeline so that at least 30 days pass between the Letter Before Claim and issuing proceedings.',
+      });
+    } else if (preActionDeadlineOk === true) {
+      positives.push('You confirmed the tenant had at least 30 days to respond before claim issue.');
+    }
   }
 
   // ---------------------------------------------------------------------------

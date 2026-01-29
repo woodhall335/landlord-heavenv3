@@ -116,9 +116,11 @@ common_rules:
     severity: blocker
     applies_to: [all]
     applies_when:
-      - condition: "!facts.letter_before_claim_sent && !facts.pap_letter_date"
-    message: "You must send a Letter Before Claim to comply with the Pre-Action Protocol for Debt Claims (PAP-DEBT)."
-    rationale: "PAP-DEBT requires a formal letter giving the debtor 30 days to respond before court action."
+      # Only block if NO choice has been made yet
+      # Not a blocker if: letter_before_claim_sent=true OR generate_pap_documents=true OR pap_letter_date is set
+      - condition: "!facts.letter_before_claim_sent && !facts.pap_letter_date && !facts.money_claim?.generate_pap_documents"
+    message: "Please indicate whether you have already sent a Pre-Action Letter, or if you need us to generate one for you."
+    rationale: "PAP-DEBT requires a formal letter giving the debtor 30 days to respond before court action. We can generate this for you."
     evidence_hint: "Keep a copy of the letter and proof of posting/delivery."
     field: letter_before_claim_sent
 

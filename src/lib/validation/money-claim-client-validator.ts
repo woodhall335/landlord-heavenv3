@@ -82,6 +82,8 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    /** Flag indicating we will generate PAP documents for the user */
+    generate_pap_documents?: boolean;
   };
   issues?: {
     rent_arrears?: {
@@ -276,15 +278,32 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
     });
   }
 
-  // PAP letter
-  if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
+  // PAP letter - only block if NO choice has been made yet
+  // If user selected "No" (generate_pap_documents=true), we'll generate the letter for them - not a blocker
+  // If user selected "Yes" (letter_before_claim_sent=true), they've already sent it - not a blocker
+  const hasSelectedPreActionOption =
+    facts.letter_before_claim_sent === true ||
+    facts.money_claim?.generate_pap_documents === true;
+
+  if (!hasSelectedPreActionOption && !facts.pap_letter_date) {
     blockers.push({
       id: 'pap_letter_required',
       severity: 'blocker',
-      message: 'You must send a Letter Before Claim to comply with the Pre-Action Protocol for Debt Claims (PAP-DEBT).',
+      message: 'Please indicate whether you have already sent a Pre-Action Letter, or if you need us to generate one for you.',
       section: 'preaction',
       field: 'letter_before_claim_sent',
       evidenceHint: 'Keep a copy of the letter and proof of posting/delivery.',
+    });
+  }
+
+  // Warning: User selected "Yes" to having sent a letter but hasn't provided the date
+  if (facts.letter_before_claim_sent === true && !facts.pap_letter_date) {
+    warnings.push({
+      id: 'pap_letter_date_missing',
+      severity: 'warning',
+      message: 'Please provide the date you sent the Pre-Action Letter. This is needed to verify the 30-day response period has elapsed.',
+      section: 'preaction',
+      field: 'pap_letter_date',
     });
   }
 

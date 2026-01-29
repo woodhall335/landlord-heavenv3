@@ -59,6 +59,8 @@ export interface CaseFactsForScoring {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    /** Flag indicating we will generate PAP documents for the user */
+    generate_pap_documents?: boolean;
   };
 
   // Evidence
@@ -283,8 +285,12 @@ function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore 
   let score = 0;
   const maxScore = 25; // PAP compliance is 25% of total
 
-  // Letter Before Claim sent
-  if (facts.letter_before_claim_sent || facts.pap_letter_date) {
+  // Check if user has addressed the PAP requirement
+  const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+  const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+
+  if (hasAlreadySentLetter) {
+    // Letter Before Claim already sent
     score += 15;
     factors.push('Letter Before Claim sent');
 
@@ -304,16 +310,21 @@ function calculatePAPComplianceScore(facts: CaseFactsForScoring): CategoryScore 
         factors.push(`${daysSince} days since PAP letter (30 required)`);
       }
     }
-  }
 
-  // Response received
-  if (facts.pap_response_received !== undefined) {
-    score += 2;
-    factors.push(
-      facts.pap_response_received
-        ? 'Tenant response documented'
-        : 'No tenant response recorded'
-    );
+    // Response received
+    if (facts.pap_response_received !== undefined) {
+      score += 2;
+      factors.push(
+        facts.pap_response_received
+          ? 'Tenant response documented'
+          : 'No tenant response recorded'
+      );
+    }
+  } else if (willGenerateLetter) {
+    // User has chosen to have us generate the letter
+    // Give partial credit - they've addressed PAP but still need to send and wait
+    score += 10;
+    factors.push('Pre-Action Letter will be generated');
   }
 
   // Cap at max score
@@ -422,8 +433,13 @@ function generateImprovements(
 
   // PAP improvements
   if (papScore.score < papScore.maxScore * 0.8) {
-    if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
-      improvements.push('Send a Letter Before Claim (PAP-DEBT requirement)');
+    const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+    const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+
+    if (!hasAlreadySentLetter && !willGenerateLetter) {
+      improvements.push('Indicate whether you have sent a Pre-Action Letter or need us to generate one');
+    } else if (willGenerateLetter) {
+      improvements.push('After generating your pack, send the Pre-Action Letter and wait 30 days before filing');
     } else if (facts.pap_letter_date) {
       const letterDate = new Date(facts.pap_letter_date);
       const today = new Date();

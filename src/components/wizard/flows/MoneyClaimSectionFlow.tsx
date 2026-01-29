@@ -261,8 +261,12 @@ const SECTIONS: WizardSection[] = [
     label: 'Pre-Action',
     description: 'Letter Before Claim (PAP-DEBT compliance)',
     isComplete: (facts) =>
+      // Complete if user has either:
+      // - Already sent a letter (letter_before_claim_sent or pap_letter_date)
+      // - Chosen to have us generate the letter (generate_pap_documents)
       Boolean(facts.letter_before_claim_sent) ||
-      Boolean(facts.pap_letter_date),
+      Boolean(facts.pap_letter_date) ||
+      Boolean(facts.money_claim?.generate_pap_documents),
     hasBlockers: (facts, jurisdiction) => {
       const result = getSectionValidation('preaction', facts, jurisdiction || 'england');
       return result.blockers;
