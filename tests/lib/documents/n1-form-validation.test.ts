@@ -40,7 +40,7 @@ describe.skip('N1 Form Validation', () => {
       expect(fieldNames).toContain('Text21'); // Claimant details
       expect(fieldNames).toContain('Text22'); // Defendant details
       expect(fieldNames).toContain('Text23'); // Brief details of claim
-      expect(fieldNames).toContain('Text24'); // Value
+      // Note: Text24 was removed from the Dec 2024 N1 PDF template
       expect(fieldNames).toContain('Text25'); // Claim amount
       expect(fieldNames).toContain('Text26'); // Court fee
       expect(fieldNames).toContain('Text28'); // Total amount

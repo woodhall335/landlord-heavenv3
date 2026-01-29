@@ -567,7 +567,7 @@ const N1_REQUIRED_PDF_FIELDS = [
   // Brief details of claim - CRITICAL for claim validity
   'Text23', // Brief details of claim
   // Value/Amount - CRITICAL for money claim
-  'Text24', // Value box
+  // Note: Text24 was removed from Dec 2024 N1 PDF template
   'Text25', // Claim amount
   // Financial totals
   'Text26', // Court fee
@@ -2700,8 +2700,8 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
     : 'Claim for unpaid rent arrears and/or damages';
   setTextRequired(form, 'Text23', briefDetails, ctx);
 
-  // Value - REQUIRED
-  setTextRequired(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
+  // Value box - optional (Text24 removed from Dec 2024 N1 template)
+  setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
 
   // Defendant's address for service
   setTextOptional(form, 'Text Field 48', data.property_address, ctx);
