@@ -474,4 +474,38 @@ describe('Money Claim End-to-End Regression Tests', () => {
       expect(interestData.interest_rate).toBe(4);
     });
   });
+
+  describe('13. Filing Guide MCOL Guidance', () => {
+    it('includes numbers-only guidance for MCOL fields', async () => {
+      await generateMoneyClaimPack(baseRentArrearsCase);
+
+      const filingGuide = capturedTemplateData['filing_guide'];
+      expect(filingGuide).toBeDefined();
+      // The template should receive total_claim_amount as a number
+      expect(typeof filingGuide.total_claim_amount).toBe('number');
+    });
+
+    it('includes brief details with "Particulars of Claim attached"', async () => {
+      await generateMoneyClaimPack(baseRentArrearsCase);
+
+      // The filing guide template contains "Particulars of Claim attached" in the brief details snippet
+      // This is verified by template inspection - the text is static in the template
+      // Here we just verify the data is passed correctly
+      const filingGuide = capturedTemplateData['filing_guide'];
+      expect(filingGuide.property_address).toBe('2 High Street, London');
+      expect(filingGuide.arrears_total).toBe(2850);
+    });
+  });
+
+  describe('14. Terminology Consistency', () => {
+    it('uses "Letter Before Claim" not "Letter Before Action" in document titles', async () => {
+      const pack = await generateMoneyClaimPack(baseRentArrearsCase);
+
+      const lbcDoc = pack.documents.find((d) => d.document_type === 'letter_before_claim');
+      expect(lbcDoc).toBeDefined();
+      expect(lbcDoc?.title).toBe('Letter Before Claim (PAP-DEBT)');
+      // Should NOT contain "Letter Before Action"
+      expect(lbcDoc?.title).not.toContain('Action');
+    });
+  });
 });

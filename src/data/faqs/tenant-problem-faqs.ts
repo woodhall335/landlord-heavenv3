@@ -94,7 +94,7 @@ export const tenantDamagingPropertyFAQs: FAQItem[] = [
   },
   {
     question: 'What if damage costs exceed the deposit?',
-    answer: 'You can pursue the tenant for the excess through a money claim. Send a Letter Before Action, wait 30 days, then file a claim through Money Claim Online (MCOL) with evidence of the damage and costs.',
+    answer: 'You can pursue the tenant for the excess through a money claim. Send a Letter Before Claim, wait 30 days, then file a claim through Money Claim Online (MCOL) with evidence of the damage and costs.',
   },
   {
     question: 'Can I evict a tenant for damaging the property?',
