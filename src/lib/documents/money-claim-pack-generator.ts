@@ -217,6 +217,7 @@ interface CalculatedTotals {
   interest_rate: number | null;
   interest_to_date: number | null;
   daily_interest: number | null;
+  interest_days: number | null;
   total_claim_amount: number;
   court_fee: number;
   solicitor_costs: number;
@@ -244,19 +245,32 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   let interest_rate: number | null = null;
   let interest_to_date: number | null = null;
   let daily_interest: number | null = null;
+  let interest_days: number | null = null;
 
   if (claimInterest) {
     // User opted in - use their rate or suggest 8% statutory rate
     // Note: The rate should have been explicitly confirmed in the wizard
     interest_rate = claim.interest_rate ?? 8;
-    interest_to_date =
-      claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
     daily_interest =
       claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
 
+    // Calculate actual days from interest_start_date to today for accurate interest
+    // Default to 90 days only if no interest_start_date provided
+    if (claim.interest_start_date) {
+      const startDate = new Date(claim.interest_start_date + 'T00:00:00.000Z');
+      const today = new Date();
+      const diffMs = today.getTime() - startDate.getTime();
+      interest_days = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+    } else {
+      interest_days = 90; // Fallback only if no start date provided
+    }
+
+    interest_to_date =
+      claim.interest_to_date ?? Number((daily_interest * interest_days).toFixed(2));
+
     console.log(
       `[money-claim] Interest claimed at ${interest_rate}% (user opted in). ` +
-        `Interest to date: £${interest_to_date}, Daily rate: £${daily_interest}`
+        `Days: ${interest_days}, Interest to date: £${interest_to_date}, Daily rate: £${daily_interest}`
     );
   } else {
     console.log('[money-claim] No interest claimed (user did not opt in or claim_interest !== true)');
@@ -276,6 +290,7 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
     interest_rate,
     interest_to_date,
     daily_interest,
+    interest_days,
     total_claim_amount,
     court_fee,
     solicitor_costs,
