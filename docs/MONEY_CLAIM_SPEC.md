@@ -44,7 +44,7 @@ The N1 form filler maps **43 fields** from `CaseData` to the official PDF:
 | **Claimant Details** | `Text21` | `landlord_full_name` + `landlord_address` | Yes |
 | **Defendant Details** | `Text22` | `tenant_full_name` + `property_address` | Yes |
 | **Brief Details** | `Text23` | `particulars_of_claim` (truncated to 200 chars) | Yes |
-| **Value** | `Text24` | `total_claim_amount` | Yes |
+| **Value** | ~~`Text24`~~ | ~~`total_claim_amount`~~ | ~~Removed from Dec 2024 N1 template~~ |
 | **Financial Details** | `Text25` | `total_claim_amount` (amount only) | Yes |
 | | `Text26` | `court_fee` | No |
 | | `Text27` | `solicitor_costs` | No |
