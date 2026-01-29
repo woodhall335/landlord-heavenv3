@@ -191,17 +191,19 @@ describe('Notice Only Thumbnail URL Generation', () => {
   });
 
   describe('Non-notice_only products', () => {
-    it('does NOT generate thumbnailUrl for complete_pack', () => {
+    it('does NOT generate notice-only thumbnailUrl for complete_pack', () => {
       const url = generateThumbnailUrl('case-123', 'notice-section-8', 'complete_pack', docTypeMapping);
       expect(url).toBeUndefined();
     });
 
-    it('does NOT generate thumbnailUrl for money_claim', () => {
+    it('does NOT generate notice-only thumbnailUrl for money_claim (money_claim uses its own endpoint)', () => {
+      // Note: money_claim now uses /api/money-claim/thumbnail instead
+      // This test verifies notice_only endpoint is not used for money_claim
       const url = generateThumbnailUrl('case-123', 'form-n1', 'money_claim', docTypeMapping);
       expect(url).toBeUndefined();
     });
 
-    it('does NOT generate thumbnailUrl for ast_standard', () => {
+    it('does NOT generate notice-only thumbnailUrl for ast_standard', () => {
       const url = generateThumbnailUrl('case-123', 'tenancy-agreement', 'ast_standard', docTypeMapping);
       expect(url).toBeUndefined();
     });
