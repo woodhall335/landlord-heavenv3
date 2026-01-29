@@ -11,8 +11,8 @@
  * 4. Claim details - Jurisdiction-specific claim info
  * 5. Rent & arrears - Schedule of arrears breakdown
  * 6. Damages & costs - Additional claims
- * 7. Pre-action steps - Letter before action
- * 8. Timeline & PAP summary - Pre-action protocol timeline
+ * 7. Claim statement - Basis of claim and interest
+ * 8. Pre-action steps - Letter before action
  * 9. Evidence - Supporting documents upload
  * 10. Enforcement preferences - Bailiff/wage attachment choices
  * 11. Review & finish - Final review and checkout
@@ -45,7 +45,6 @@ import { ClaimStatementSection } from '@/components/wizard/sections/money-claim/
 import { ArrearsSection } from '@/components/wizard/money-claim/ArrearsSection';
 import { DamagesSection } from '@/components/wizard/money-claim/DamagesSection';
 import { PreActionSection } from '@/components/wizard/money-claim/PreActionSection';
-import { TimelineSection } from '@/components/wizard/money-claim/TimelineSection';
 import { EvidenceSection } from '@/components/wizard/money-claim/EvidenceSection';
 import { EnforcementSection } from '@/components/wizard/money-claim/EnforcementSection';
 import { ReviewSection } from '@/components/wizard/money-claim/ReviewSection';
@@ -273,17 +272,6 @@ const SECTIONS: WizardSection[] = [
     },
     hasWarnings: (facts, jurisdiction) => {
       const result = getSectionValidation('preaction', facts, jurisdiction || 'england');
-      return result.warnings;
-    },
-  },
-  {
-    id: 'timeline',
-    label: 'Timeline',
-    description: 'Pre-action protocol timeline',
-    // Optional section - only complete when user has visited and reviewed
-    isComplete: (facts) => Boolean(facts.timeline_reviewed),
-    hasWarnings: (facts) => {
-      const result = getSectionValidation('timeline', facts, facts.__meta?.jurisdiction || 'england');
       return result.warnings;
     },
   },
@@ -650,7 +638,6 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       damages: 'damages',
       claim_statement: 'claim_statement',
       preaction: 'preaction',
-      timeline: 'timeline',
       evidence: 'evidence',
       enforcement: 'enforcement',
       review: 'review',
@@ -734,14 +721,6 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       case 'preaction':
         return (
           <PreActionSection
-            facts={facts}
-            onUpdate={handleUpdate}
-            jurisdiction={jurisdiction}
-          />
-        );
-      case 'timeline':
-        return (
-          <TimelineSection
             facts={facts}
             onUpdate={handleUpdate}
             jurisdiction={jurisdiction}

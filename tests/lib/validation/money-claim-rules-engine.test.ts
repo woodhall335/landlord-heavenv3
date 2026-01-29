@@ -70,7 +70,6 @@ const completeValidFacts: MoneyClaimFacts = {
 
   // Reviews
   evidence_reviewed: true,
-  timeline_reviewed: true,
   enforcement_reviewed: true,
 };
 
