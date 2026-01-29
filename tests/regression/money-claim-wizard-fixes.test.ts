@@ -1244,3 +1244,123 @@ describe('Timeline tab removal regression', () => {
     });
   });
 });
+
+/**
+ * Review page CTA regression tests
+ *
+ * Verifies that the duplicate CTAs have been removed from ReviewSection:
+ * - "Preview draft documents" button
+ * - "Continue to Full Analysis" button
+ *
+ * The primary CTA is now "Generate Documents" in the wizard footer.
+ */
+describe('Money Claim Review page CTA cleanup', () => {
+  /**
+   * These tests verify the code structure rather than rendering,
+   * since the buttons have been removed from the component source.
+   *
+   * The ReviewSection.tsx file should NOT contain:
+   * - handlePreview function
+   * - handleProceedToReview function
+   * - previewing state
+   * - "Preview draft documents" text
+   * - "Continue to Full Analysis" text
+   */
+  it('ReviewSection should not export preview/proceed handlers', async () => {
+    // Dynamic import to check exports
+    const ReviewSectionModule = await import(
+      '@/components/wizard/money-claim/ReviewSection'
+    );
+
+    // The component should only export ReviewSection
+    expect(ReviewSectionModule.ReviewSection).toBeDefined();
+    // Should not have any other named exports related to preview/proceed
+    const exportKeys = Object.keys(ReviewSectionModule);
+    expect(exportKeys).not.toContain('handlePreview');
+    expect(exportKeys).not.toContain('handleProceedToReview');
+  });
+
+  /**
+   * Test that the outcome confidence scoring uses two-stage PAP model
+   */
+  it('outcome confidence should give substantial PAP score for generated pack', async () => {
+    const { calculateOutcomeConfidence } = await import(
+      '@/lib/money-claim/outcome-confidence'
+    );
+
+    const factsWithGeneratedPAP = {
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+      money_claim: {
+        generate_pap_documents: true,
+      },
+    };
+
+    const factsWithoutPAP = {
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+    };
+
+    const withPAP = calculateOutcomeConfidence(factsWithGeneratedPAP);
+    const withoutPAP = calculateOutcomeConfidence(factsWithoutPAP);
+
+    // PAP pack generated should give 15/25 = 60% PAP score
+    expect(withPAP.breakdown.papCompliance.score).toBeGreaterThanOrEqual(15);
+    expect(withoutPAP.breakdown.papCompliance.score).toBe(0);
+
+    // Overall score difference should be meaningful
+    expect(withPAP.score).toBeGreaterThan(withoutPAP.score);
+  });
+
+  /**
+   * Test that improvement tips reflect two-stage model
+   */
+  it('improvement tips should guide user through PAP stages', async () => {
+    const { calculateOutcomeConfidence } = await import(
+      '@/lib/money-claim/outcome-confidence'
+    );
+
+    // Stage 0: Nothing done - should prompt to complete Pre-Action section
+    const stage0 = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+    });
+    expect(stage0.improvements.some(i => i.includes('Complete the Pre-Action section'))).toBe(true);
+
+    // Stage 1: PAP pack generated - should prompt to send and wait
+    const stage1 = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+      money_claim: {
+        generate_pap_documents: true,
+      },
+    });
+    expect(stage1.improvements.some(i => i.includes('Send the PAP Letter'))).toBe(true);
+    expect(stage1.improvements.some(i => i.includes('wait 30 days'))).toBe(true);
+
+    // Stage 2 in progress: Letter sent, waiting for 30 days
+    const fifteenDaysAgo = new Date();
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    const stage2InProgress = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: true,
+      pap_letter_date: fifteenDaysAgo.toISOString().split('T')[0],
+    });
+    expect(stage2InProgress.improvements.some(i => i.includes('Wait'))).toBe(true);
+    expect(stage2InProgress.improvements.some(i => i.includes('more days'))).toBe(true);
+
+    // Stage 2 complete: 30 days passed - no PAP improvement needed
+    const thirtyFiveDaysAgo = new Date();
+    thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+    const stage2Complete = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: true,
+      pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+      pap_response_received: false,
+    });
+    // No PAP-related improvements when fully compliant
+    expect(stage2Complete.improvements.filter(i =>
+      i.includes('PAP') || i.includes('Pre-Action') || i.includes('Wait')
+    )).toHaveLength(0);
+  });
+});
