@@ -93,13 +93,31 @@ describe('Money claim pack generator', () => {
     20000, // allow up to 20s for error path too
   );
 
-  it('rejects unsupported jurisdictions', async () => {
+  it('rejects non-England jurisdictions (Scotland)', async () => {
     await expect(
       generateMoneyClaimPack({
         ...sampleCase,
         jurisdiction: 'scotland' as any,
       }),
-    ).rejects.toThrow('England & Wales');
+    ).rejects.toThrow(/Money Claim is only available for England/);
+  });
+
+  it('rejects non-England jurisdictions (Wales)', async () => {
+    await expect(
+      generateMoneyClaimPack({
+        ...sampleCase,
+        jurisdiction: 'wales' as any,
+      }),
+    ).rejects.toThrow(/Money Claim is only available for England/);
+  });
+
+  it('rejects non-England jurisdictions (Northern Ireland)', async () => {
+    await expect(
+      generateMoneyClaimPack({
+        ...sampleCase,
+        jurisdiction: 'northern-ireland' as any,
+      }),
+    ).rejects.toThrow(/Money Claim is only available for England/);
   });
 
   describe('pre-generation validation', () => {

@@ -58,11 +58,9 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     facts.property.city
   );
 
-  // Derive jurisdiction from property country or default to england
-  const jurisdiction: MoneyClaimCase['jurisdiction'] =
-    facts.property.country === 'wales' ? 'wales' :
-    facts.property.country === 'scotland' ? 'scotland' :
-    'england';
+  // Money Claim is ENGLAND-ONLY
+  // Scotland uses Simple Procedure (sc_money_claim), Wales/NI not supported
+  const jurisdiction: MoneyClaimCase['jurisdiction'] = 'england';
 
   return {
     jurisdiction,
