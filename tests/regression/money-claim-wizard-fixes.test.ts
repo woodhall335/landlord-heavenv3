@@ -20,6 +20,7 @@ import {
   validateDefendantSection,
   validateTenancySection,
   validateClaimDetailsSection,
+  validateClaimStatementSection,
   validateArrearsSection,
   getSectionValidation,
 } from '@/lib/validation/money-claim-case-validator';
@@ -431,11 +432,16 @@ describe('Pre-Action PAP document generation', () => {
   });
 });
 
-describe('Claim Details section validation', () => {
+describe('Claim Details section validation (simplified)', () => {
+  /**
+   * After UX refactor, Claim Details only validates:
+   * - At least one claim type selected
+   * - Court name (for England/Wales)
+   * Interest decision moved to Claim Statement section.
+   */
   it('should require at least one claim type', () => {
     const facts = {
       money_claim: {
-        charge_interest: false,
         court_name: 'Manchester County Court',
       },
     };
@@ -444,7 +450,21 @@ describe('Claim Details section validation', () => {
     expect(result.blockers).toContain('Please select at least one type of claim');
   });
 
-  it('should require interest decision for England', () => {
+  it('should require court name for England', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        // No court_name
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).toContain(
+      'Please enter the County Court name where you will file your claim'
+    );
+  });
+
+  it('should NOT require interest decision (moved to Claim Statement)', () => {
     const facts = {
       claiming_rent_arrears: true,
       court_name: 'Manchester County Court',
@@ -455,25 +475,137 @@ describe('Claim Details section validation', () => {
     };
 
     const result = validateClaimDetailsSection(facts, 'england');
-    expect(result.blockers).toContain(
+    // Interest validation is now in Claim Statement section, not Claim Details
+    expect(result.blockers).not.toContain(
       'Please indicate whether you want to claim statutory interest'
     );
   });
 
-  it('should pass with all required fields', () => {
+  it('should pass with claim type and court name only', () => {
     const facts = {
       claiming_rent_arrears: true,
       court_name: 'Manchester County Court',
       money_claim: {
-        charge_interest: true,
-        interest_start_date: '2024-01-01',
         court_name: 'Manchester County Court',
-        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        // No interest decision needed here anymore
       },
     };
 
     const result = validateClaimDetailsSection(facts, 'england');
     expect(result.blockers).toHaveLength(0);
+  });
+});
+
+describe('Claim Statement section validation (new)', () => {
+  /**
+   * The new Claim Statement section validates:
+   * - charge_interest decision (blocker for England)
+   * - interest_start_date (warning when charging interest)
+   * - basis_of_claim (warning)
+   * - tenant_still_in_property (warning)
+   */
+  it('should require interest decision for England', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        // No charge_interest decision
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toContain(
+      'Please indicate whether you want to claim statutory interest'
+    );
+  });
+
+  it('should pass when interest decision is made (true)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: true,
+        interest_start_date: '2024-01-01',
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  it('should pass when interest decision is made (false)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  it('should warn when interest start date is missing but charging interest', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: true,
+        // No interest_start_date
+        basis_of_claim: 'The defendant owes rent arrears.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Consider adding an interest start date for accurate calculations'
+    );
+  });
+
+  it('should warn when basis of claim is missing', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        // No basis_of_claim
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Provide a basis of claim statement to explain what this claim is about'
+    );
+  });
+
+  it('should warn when basis of claim is too short', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'Tenant owes money.', // Too short
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Your basis of claim statement is quite short - consider adding more detail'
+    );
+  });
+
+  it('should warn when occupancy status is not set', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        // No tenant_still_in_property
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Consider indicating whether the tenant is still living in the property'
+    );
   });
 });
 
@@ -524,23 +656,42 @@ describe('Section completion in flow', () => {
     expect(isComplete).toBe(true);
   });
 
-  it('claim details should be complete with interest and claim type', () => {
+  it('claim details should be complete with claim type and court name (no interest needed)', () => {
     const facts = {
       claiming_rent_arrears: true,
+      money_claim: {
+        court_name: 'Manchester County Court',
+        // No charge_interest decision needed for Claim Details anymore
+      },
+      __meta: { jurisdiction: 'england' },
+    } as const;
+
+    // This mirrors the NEW isComplete check in MoneyClaimSectionFlow
+    // Interest decision moved to Claim Statement section
+    const hasClaimType = facts.claiming_rent_arrears === true;
+    const jurisdiction = facts.__meta?.jurisdiction;
+    const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+    const hasCourtName = !!(facts.money_claim?.court_name);
+    const isComplete = hasClaimType && (!isEnglandWales || hasCourtName);
+
+    expect(isComplete).toBe(true);
+  });
+
+  it('claim statement should be complete when interest decision is made', () => {
+    const facts = {
       money_claim: {
         charge_interest: false,
       },
       __meta: { jurisdiction: 'england' },
-    };
+    } as const;
 
-    // This mirrors the isComplete check in MoneyClaimSectionFlow
-    const hasClaimType = facts.claiming_rent_arrears === true;
+    // This mirrors the isComplete check for claim_statement in MoneyClaimSectionFlow
     const jurisdiction = facts.__meta?.jurisdiction;
     const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
     const interestDecided =
       facts.money_claim?.charge_interest === true ||
       facts.money_claim?.charge_interest === false;
-    const isComplete = hasClaimType && (!isEnglandWales || interestDecided);
+    const isComplete = !isEnglandWales || interestDecided;
 
     expect(isComplete).toBe(true);
   });
