@@ -385,6 +385,85 @@ function ValidationPanel({
   );
 }
 
+/**
+ * Determine PAP (Pre-Action Protocol) filing status
+ * Returns status object indicating readiness to generate docs vs file in court
+ */
+function getPapFilingStatus(facts: any): {
+  canGenerateDocs: boolean;
+  canFileInCourt: boolean;
+  papLetterSent: boolean;
+  papWaitingPeriodMet: boolean;
+  daysElapsed: number | null;
+  statusMessage: string;
+  statusType: 'ready_to_file' | 'ready_to_generate' | 'needs_pap_send' | 'needs_pap_wait';
+} {
+  const moneyClaim = facts?.money_claim || {};
+  const letterSent = facts?.letter_before_claim_sent === true;
+  const generatePapDocs = moneyClaim.generate_pap_documents === true;
+
+  // Calculate days elapsed since PAP letter was sent
+  let daysElapsed: number | null = null;
+  if (letterSent && (moneyClaim.lba_date || facts?.pap_letter_date)) {
+    const sentDate = new Date(moneyClaim.lba_date || facts?.pap_letter_date);
+    const today = new Date();
+    daysElapsed = Math.floor((today.getTime() - sentDate.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  const papWaitingPeriodMet = daysElapsed !== null && daysElapsed >= 30;
+
+  // Case 1: PAP letter already sent AND 30 days have passed → Ready to file
+  if (letterSent && papWaitingPeriodMet) {
+    return {
+      canGenerateDocs: true,
+      canFileInCourt: true,
+      papLetterSent: true,
+      papWaitingPeriodMet: true,
+      daysElapsed,
+      statusMessage: 'Your PAP compliance is complete. You can proceed to file your claim.',
+      statusType: 'ready_to_file',
+    };
+  }
+
+  // Case 2: PAP letter sent but 30 days haven't passed yet
+  if (letterSent && !papWaitingPeriodMet) {
+    const daysRemaining = 30 - (daysElapsed || 0);
+    return {
+      canGenerateDocs: true,
+      canFileInCourt: false,
+      papLetterSent: true,
+      papWaitingPeriodMet: false,
+      daysElapsed,
+      statusMessage: `Wait ${daysRemaining} more day${daysRemaining === 1 ? '' : 's'} before filing (30-day PAP period).`,
+      statusType: 'needs_pap_wait',
+    };
+  }
+
+  // Case 3: User opted to generate PAP docs (hasn't sent yet)
+  if (generatePapDocs) {
+    return {
+      canGenerateDocs: true,
+      canFileInCourt: false,
+      papLetterSent: false,
+      papWaitingPeriodMet: false,
+      daysElapsed: null,
+      statusMessage: 'After downloading, send the Letter Before Claim and wait 30 days before filing.',
+      statusType: 'needs_pap_send',
+    };
+  }
+
+  // Case 4: No PAP selection made yet - still allow generation
+  return {
+    canGenerateDocs: true,
+    canFileInCourt: false,
+    papLetterSent: false,
+    papWaitingPeriodMet: false,
+    daysElapsed: null,
+    statusMessage: 'Complete the Pre-Action section to ensure PAP compliance.',
+    statusType: 'needs_pap_send',
+  };
+}
+
 export const ReviewSection: React.FC<SectionProps> = ({
   facts,
   caseId,
@@ -397,6 +476,9 @@ export const ReviewSection: React.FC<SectionProps> = ({
 
   // Run validation
   const validation = useMemo(() => validateMoneyClaimClient(facts || {}), [facts]);
+
+  // Get PAP filing status
+  const papStatus = useMemo(() => getPapFilingStatus(facts), [facts]);
 
   // Calculate claim types for display
   const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
@@ -540,6 +622,62 @@ export const ReviewSection: React.FC<SectionProps> = ({
         claimTypes={claimTypes}
       />
 
+      {/* PAP Filing Status Banner - Critical for user understanding */}
+      {validation.isValid && (
+        <div
+          className={`rounded-lg border-2 p-4 ${
+            papStatus.canFileInCourt
+              ? 'border-green-300 bg-green-50'
+              : papStatus.papLetterSent
+              ? 'border-amber-300 bg-amber-50'
+              : 'border-blue-300 bg-blue-50'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            {papStatus.canFileInCourt ? (
+              <RiCheckboxCircleLine className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            ) : (
+              <RiAlertLine className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            )}
+            <div className="space-y-1">
+              <p
+                className={`text-sm font-semibold ${
+                  papStatus.canFileInCourt ? 'text-green-900' : papStatus.papLetterSent ? 'text-amber-900' : 'text-blue-900'
+                }`}
+              >
+                {papStatus.canFileInCourt
+                  ? 'Ready to file your claim in court'
+                  : 'Ready to generate your document pack'}
+              </p>
+              <p
+                className={`text-sm ${
+                  papStatus.canFileInCourt ? 'text-green-800' : papStatus.papLetterSent ? 'text-amber-800' : 'text-blue-800'
+                }`}
+              >
+                {papStatus.statusMessage}
+              </p>
+              {!papStatus.canFileInCourt && !papStatus.papLetterSent && (
+                <p className="text-xs text-blue-700 mt-2 font-medium">
+                  Your pack includes the Letter Before Claim and all required PAP-DEBT documents.
+                  Send these to the defendant and wait 30 days before filing with the court.
+                </p>
+              )}
+              {papStatus.papLetterSent && papStatus.daysElapsed !== null && !papStatus.papWaitingPeriodMet && (
+                <p className="text-xs text-amber-700 mt-2">
+                  Letter sent {papStatus.daysElapsed} day{papStatus.daysElapsed === 1 ? '' : 's'} ago.
+                  The 30-day waiting period ends on{' '}
+                  {new Date(
+                    new Date(facts?.money_claim?.lba_date || facts?.pap_letter_date).getTime() +
+                      30 * 24 * 60 * 60 * 1000
+                  ).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  .
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Outcome Confidence Indicator */}
       {claimTypes.length > 0 && (
         <OutcomeConfidenceIndicator
@@ -611,7 +749,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
               Ask Heaven Legal Drafting Included
             </h4>
             <p className="text-sm text-gray-600">
-              Your Particulars of Claim and Letter Before Action will be professionally
+              Your Particulars of Claim and Letter Before Claim will be professionally
               drafted by Ask Heaven, saving you £300-600 in solicitor fees.
             </p>
           </div>

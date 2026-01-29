@@ -9,7 +9,7 @@ import type { FAQItem } from '@/components/marketing/FAQSection';
 export const moneyClaimUnpaidRentFAQs: FAQItem[] = [
   {
     question: 'How do I make a money claim for unpaid rent?',
-    answer: 'First, send a Letter Before Action and wait 30 days (pre-action protocol). If unpaid, submit your claim through Money Claim Online (MCOL) for claims up to £100,000. You need evidence of the tenancy, rent due, and payments received.',
+    answer: 'First, send a Letter Before Claim and wait 30 days (pre-action protocol). If unpaid, submit your claim through Money Claim Online (MCOL) for claims up to £100,000. You need evidence of the tenancy, rent due, and payments received.',
   },
   {
     question: 'How long do I have to claim unpaid rent?',
@@ -63,14 +63,14 @@ export const mcolFAQs: FAQItem[] = [
 export const preActionProtocolFAQs: FAQItem[] = [
   {
     question: 'What is the pre-action protocol for debt claims?',
-    answer: 'The pre-action protocol sets out steps creditors must take before issuing court proceedings. It aims to encourage settlement without court action, including sending a Letter Before Action and allowing time to respond.',
+    answer: 'The pre-action protocol sets out steps creditors must take before issuing court proceedings. It aims to encourage settlement without court action, including sending a Letter Before Claim and allowing time to respond.',
   },
   {
-    question: 'What must a Letter Before Action include?',
+    question: 'What must a Letter Before Claim include?',
     answer: 'It must state: the amount owed, how the debt arose, details of any interest claimed, how to pay, the deadline to respond (30 days), and that court action may follow if not paid.',
   },
   {
-    question: 'How long must I wait after sending a Letter Before Action?',
+    question: 'How long must I wait after sending a Letter Before Claim?',
     answer: 'You must wait at least 30 days from when the debtor receives the letter before starting court proceedings. This gives them time to respond, dispute the debt, or propose a payment plan.',
   },
   {
@@ -82,7 +82,7 @@ export const preActionProtocolFAQs: FAQItem[] = [
     answer: 'Yes, the protocol applies to all debt claims. However, non-compliance is less likely to result in severe cost penalties in small claims (under £10,000) compared to higher value claims.',
   },
   {
-    question: 'What if the debtor responds to my Letter Before Action?',
+    question: 'What if the debtor responds to my Letter Before Claim?',
     answer: 'If they dispute the debt, consider their response before proceeding. If they propose a payment plan, consider if it is reasonable. If they ignore it or refuse to pay, proceed to court after 30 days.',
   },
 ];
@@ -125,7 +125,7 @@ export const cleaningCostsFAQs: FAQItem[] = [
   },
   {
     question: 'What if cleaning costs exceed the deposit?',
-    answer: 'You can pursue the excess through a money claim. Send a Letter Before Action with evidence, wait 30 days, then file through MCOL. Cleaning claims alone rarely exceed deposits.',
+    answer: 'You can pursue the excess through a money claim. Send a Letter Before Claim with evidence, wait 30 days, then file through MCOL. Cleaning claims alone rarely exceed deposits.',
   },
   {
     question: 'Do I need professional cleaning receipts?',
