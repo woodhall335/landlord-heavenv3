@@ -2030,6 +2030,35 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   if (lbaSent !== null && lbaSent !== undefined) {
     base.money_claim.lba_sent = coerceBoolean(lbaSent);
   }
+
+  // Map letter_before_claim_sent from PreActionSection
+  const letterBeforeClaimSent = getFirstValue(wizard, [
+    'letter_before_claim_sent',
+    'case_facts.money_claim.letter_before_claim_sent',
+  ]);
+  if (letterBeforeClaimSent !== null && letterBeforeClaimSent !== undefined) {
+    (base.money_claim as any).letter_before_claim_sent = coerceBoolean(letterBeforeClaimSent);
+  }
+
+  // Map pap_letter_date (top-level fact set by PreActionSection)
+  const papLetterDate = getFirstValue(wizard, [
+    'pap_letter_date',
+    'case_facts.money_claim.pap_letter_date',
+  ]);
+  if (papLetterDate) {
+    (base.money_claim as any).pap_letter_date = papLetterDate;
+  }
+
+  // Map generate_pap_documents from PreActionSection
+  const generatePapDocuments = getFirstValue(wizard, [
+    'money_claim.generate_pap_documents',
+    'generate_pap_documents',
+    'case_facts.money_claim.generate_pap_documents',
+  ]);
+  if (generatePapDocuments !== null && generatePapDocuments !== undefined) {
+    (base.money_claim as any).generate_pap_documents = coerceBoolean(generatePapDocuments);
+  }
+
   base.money_claim.lba_date ??= getFirstValue(wizard, [
     'lba_date',
     'case_facts.money_claim.lba_date',

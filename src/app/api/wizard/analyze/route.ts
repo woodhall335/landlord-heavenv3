@@ -265,7 +265,13 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
       facts.issues.rent_arrears.arrears_items.length > 0) ||
     facts.money_claim.arrears_schedule_confirmed === true;
 
-  const lbaSent = facts.money_claim.lba_sent;
+  // Pre-action letter status - check the correct fields from PreActionSection
+  // User selected "Yes, I've already sent it": letter_before_claim_sent=true OR pap_letter_date is set
+  // User selected "No, generate for me": generate_pap_documents=true
+  const lbaSent = facts.money_claim.letter_before_claim_sent === true ||
+    facts.money_claim.pap_letter_date ||
+    facts.money_claim.lba_sent;
+  const willGenerateLetter = facts.money_claim.generate_pap_documents === true;
   const papServed = facts.money_claim.pap_documents_served;
   const preActionConfirmed = facts.money_claim.pre_action_deadline_confirmation;
 
@@ -284,7 +290,8 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     if (!facts.evidence.rent_schedule_uploaded) {
       missing_prerequisites.push('Rent schedule document upload');
     }
-    if (!lbaSent && !papServed) {
+    // Pre-action is satisfied if: already sent OR we'll generate it for them
+    if (!lbaSent && !papServed && !willGenerateLetter) {
       missing_prerequisites.push('Pre-action demand / Letter Before Claim');
     }
   }
@@ -293,7 +300,7 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
   if (isMoneyClaim) {
     if ((lbaSent || papServed) && preActionConfirmed) {
       pre_action_status = 'complete';
-    } else if (lbaSent || papServed) {
+    } else if (lbaSent || papServed || willGenerateLetter) {
       pre_action_status = 'partial';
     } else {
       pre_action_status = 'missing';
