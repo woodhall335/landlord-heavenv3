@@ -158,7 +158,7 @@ export function CostComparison() {
             />
             <PriceAnchor
               product="Claim Unpaid Rent and Damages"
-              ourPrice="£149.99"
+              ourPrice="£99.99"
               solicitorPrice="£800-1200"
               savings="£650+"
               href="/products/money-claim"

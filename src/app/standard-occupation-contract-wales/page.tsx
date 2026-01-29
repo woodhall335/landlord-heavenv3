@@ -283,7 +283,7 @@ export default function StandardOccupationContractWalesPage() {
                 <p className="text-sm text-gray-600">Section 173 and Section 181 notices for Welsh law</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £149.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack — £99.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears through Welsh courts</p>
               </Link>
             </div>

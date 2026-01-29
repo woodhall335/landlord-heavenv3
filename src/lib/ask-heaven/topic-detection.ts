@@ -121,7 +121,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears', 'damage_claim'],
     ctas: [
-      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 149.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 99.99, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -304,14 +304,14 @@ export function getRecommendedProduct(
       return {
         product: 'money_claim',
         label: 'Money Claim Pack',
-        description: 'Recover rent arrears through the courts (£149.99, England only)',
+        description: 'Recover rent arrears through the courts (£99.99, England only)',
       };
     case 'damage_claim':
       // Money claim for damage/cleaning/utilities - England only
       return {
         product: 'money_claim',
         label: 'Money Claim Pack',
-        description: 'Recover property damage, cleaning costs and other tenant debts (£149.99, England only)',
+        description: 'Recover property damage, cleaning costs and other tenant debts (£99.99, England only)',
       };
     case 'tenancy':
       return {

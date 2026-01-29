@@ -314,7 +314,7 @@ export default function WalesTenancyAgreementTemplatePage() {
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Recover rent & damage</p>
-                <span className="text-red-600 font-medium">£149.99</span>
+                <span className="text-red-600 font-medium">£99.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven</h3>

@@ -142,7 +142,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Money Claims',
     description: 'Rent arrears claims with evidence checklists and court form templates',
     icon: '💰',
-    price: '£149.99',
+    price: '£99.99',
     regionBadge: 'England only',
   },
   {

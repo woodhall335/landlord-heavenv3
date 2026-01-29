@@ -37785,7 +37785,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_lba"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Money Claim — £149.99
+            Start Your Money Claim — £99.99
           </Link>
         </div>
 
@@ -38017,7 +38017,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_ccj"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -38228,7 +38228,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_interest"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -38433,7 +38433,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_mcol_timeline"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -38649,7 +38649,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=guarantor&src=blog_guarantor"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Guarantor Claim — £149.99
+            Start Guarantor Claim — £99.99
           </Link>
         </div>
 
@@ -38863,7 +38863,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=cleaning&src=blog_cleaning"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -39092,7 +39092,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=damage&src=blog_wear_tear"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -39275,7 +39275,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_payment_plan"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Court Claim — £149.99
+            Start Court Claim — £99.99
           </Link>
         </div>
 
@@ -39500,7 +39500,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_small_claims"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 
@@ -39735,7 +39735,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_wont_pay"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £149.99
+            Start Your Claim — £99.99
           </Link>
         </div>
 

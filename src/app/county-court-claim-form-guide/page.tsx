@@ -121,7 +121,7 @@ export default function CountyCourtClaimFormGuidePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
-          primaryCTA={{ label: 'Get Money Claim Pack — £149.99', href: wizardLinkMoneyClaim }}
+          primaryCTA={{ label: 'Get Money Claim Pack — £99.99', href: wizardLinkMoneyClaim }}
           secondaryCTA={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
           variant="pastel"
         >

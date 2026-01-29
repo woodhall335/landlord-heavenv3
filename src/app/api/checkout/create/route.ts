@@ -37,7 +37,7 @@ import crypto from 'crypto';
 
 /**
  * Map product types to Stripe Price IDs
- * Note: sc_money_claim uses the same Stripe price as money_claim (both £149.99)
+ * Note: money_claim is £99.99, sc_money_claim (discontinued) shares the same Stripe price ID
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   notice_only: PRICE_IDS.NOTICE_ONLY,
@@ -647,7 +647,7 @@ export async function POST(request: Request) {
     // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
-    // Convert price from GBP (e.g., 149.99) to pence (14999) for Stripe
+    // Convert price from GBP (e.g., 99.99) to pence (9999) for Stripe
     const unitAmountPence = Math.round(product.price * 100);
 
     const session = await stripe.checkout.sessions.create(
