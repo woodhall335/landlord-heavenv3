@@ -669,6 +669,24 @@ export default function WizardPreviewPage() {
       'arrears-schedule': ['arrears_schedule'],
       'evidence-checklist': ['evidence_checklist'],
       'proof-of-service': ['proof_of_service', 'proof_of_service_certificate'],
+      // ===========================================
+      // MONEY CLAIM DOCUMENTS
+      // ===========================================
+      // Court forms
+      'form-n1': ['form_n1', 'n1_claim', 'money_claim_form'],
+      'form-3a': ['form_3a', 'simple_procedure_claim'],
+      // Court documents
+      'particulars-of-claim': ['particulars_of_claim', 'money_claim_particulars'],
+      'schedule-of-arrears': ['schedule_of_arrears', 'arrears_schedule'],
+      'interest-calculation': ['interest_calculation', 'interest_workings'],
+      // Pre-Action Protocol
+      'letter-before-claim': ['letter_before_claim', 'lba', 'pre_action_letter'],
+      'information-sheet': ['information_sheet', 'information_sheet_for_defendants', 'defendant_info'],
+      'reply-form': ['reply_form', 'defendant_reply'],
+      'financial-statement': ['financial_statement', 'financial_statement_form'],
+      // Guidance
+      'filing-guide': ['filing_guide', 'court_filing_guide', 'filing_guide_scotland'],
+      'enforcement-guide': ['enforcement_guide', 'enforcement_guide_scotland'],
     };
 
     // Enrich documents with generated document IDs for thumbnails
@@ -682,19 +700,23 @@ export default function WizardPreviewPage() {
               doc.id.replace(/-/g, '_') === gd.document_type
       );
 
-      // For notice_only products, use the notice-only thumbnail endpoint
+      // For notice_only and money_claim products, use dedicated thumbnail endpoints
       // This allows thumbnails without requiring database document records
       let thumbnailUrl: string | undefined;
       if (product === 'notice_only') {
         // Map config IDs to document_type for the thumbnail API
         const docTypeForThumbnail = possibleTypes[0] || doc.id;
         thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+      } else if (product === 'money_claim' || product === 'sc_money_claim') {
+        // Map config IDs to document_type for the money claim thumbnail API
+        const docTypeForThumbnail = possibleTypes[0] || doc.id;
+        thumbnailUrl = `/api/money-claim/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
       }
 
       return {
         ...doc,
         documentId: matchingGenDoc?.id,
-        // For notice_only, use the new thumbnail endpoint
+        // For notice_only and money_claim, use the dedicated thumbnail endpoints
         // For other products, DocumentCard will use documentId to fetch from /api/documents/thumbnail
         thumbnailUrl: thumbnailUrl,
       };
