@@ -72,9 +72,6 @@ export interface MoneyClaimFacts {
   pap_response_received?: boolean;
   pap_response_date?: string;
 
-  // Timeline
-  timeline_reviewed?: boolean;
-
   // Evidence
   evidence_reviewed?: boolean;
   uploaded_documents?: Array<{ id: string; name: string; type?: string }>;
@@ -495,22 +492,6 @@ export function validatePreActionSection(
 }
 
 /**
- * Validate timeline section
- */
-export function validateTimelineSection(
-  facts: MoneyClaimFacts
-): { blockers: string[]; warnings: string[] } {
-  const blockers: string[] = [];
-  const warnings: string[] = [];
-
-  if (!facts.timeline_reviewed) {
-    warnings.push('Review your case timeline before proceeding');
-  }
-
-  return { blockers, warnings };
-}
-
-/**
  * Validate evidence section
  */
 export function validateEvidenceSection(
@@ -588,7 +569,6 @@ export function validateMoneyClaimCase(
     { id: 'damages', fn: () => validateDamagesSection(facts) },
     { id: 'claim_statement', fn: () => validateClaimStatementSection(facts, jurisdiction) },
     { id: 'preaction', fn: () => validatePreActionSection(facts, jurisdiction) },
-    { id: 'timeline', fn: () => validateTimelineSection(facts) },
     { id: 'evidence', fn: () => validateEvidenceSection(facts) },
     { id: 'enforcement', fn: () => validateEnforcementSection(facts) },
   ];
@@ -673,8 +653,6 @@ export function getSectionValidation(
       return validateClaimStatementSection(facts, jurisdiction);
     case 'preaction':
       return validatePreActionSection(facts, jurisdiction);
-    case 'timeline':
-      return validateTimelineSection(facts);
     case 'evidence':
       return validateEvidenceSection(facts);
     case 'enforcement':

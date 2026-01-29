@@ -115,7 +115,6 @@ const ALLOWED_IDENTIFIERS = new Set([
   'pap_response_received',
   'evidence_reviewed',
   'uploaded_documents',
-  'timeline_reviewed',
   'enforcement_reviewed',
   'enforcement_preference',
   'total_arrears',
@@ -332,7 +331,6 @@ export interface MoneyClaimFacts {
   uploaded_documents?: Array<{ id: string; name: string; type?: string }>;
 
   // Reviews
-  timeline_reviewed?: boolean;
   enforcement_reviewed?: boolean;
   enforcement_preference?: string;
 

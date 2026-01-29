@@ -262,16 +262,6 @@ common_rules:
     evidence_hint: null
     field: null
 
-  - id: timeline_review_suggested
-    severity: suggestion
-    applies_to: [all]
-    applies_when:
-      - condition: "!facts.timeline_reviewed"
-    message: "Review the case timeline to ensure all dates and events are accurate."
-    rationale: "Accurate chronology supports your claim narrative."
-    evidence_hint: null
-    field: null
-
 # =============================================================================
 # RENT ARREARS RULES
 # =============================================================================

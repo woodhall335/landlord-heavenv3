@@ -88,7 +88,6 @@ export interface CaseFactsForScoring {
   rent_frequency?: string;
 
   // Reviews
-  timeline_reviewed?: boolean;
   enforcement_reviewed?: boolean;
 }
 

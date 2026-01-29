@@ -65,7 +65,6 @@ export interface MoneyClaimFacts {
   pap_response_received?: boolean;
   evidence_reviewed?: boolean;
   uploaded_documents?: Array<{ id: string; name: string; type?: string }>;
-  timeline_reviewed?: boolean;
   enforcement_reviewed?: boolean;
   enforcement_preference?: string;
   money_claim?: {
@@ -599,16 +598,6 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
       id: 'enforcement_review_suggested',
       severity: 'suggestion',
       message: "Consider your enforcement options in case the defendant doesn't pay voluntarily after judgment.",
-      section: 'next_steps',
-    });
-  }
-
-  // Timeline review
-  if (!facts.timeline_reviewed) {
-    suggestions.push({
-      id: 'timeline_review_suggested',
-      severity: 'suggestion',
-      message: 'Review the case timeline to ensure all dates and events are accurate.',
       section: 'next_steps',
     });
   }
