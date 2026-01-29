@@ -797,7 +797,7 @@ summary:
       rules: [principal_total_positive]
     - id: next_steps
       label: "Next Steps"
-      rules: [enforcement_review_suggested, timeline_review_suggested]
+      rules: [enforcement_review_suggested]
     - id: legal_compliance
       label: "Legal Compliance"
       rules: [limitation_period_warning, limitation_period_arrears_warning, property_damage_betterment_warning, deposit_deduction_overlap_warning, deposit_deduction_check_required]

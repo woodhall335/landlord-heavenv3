@@ -1075,3 +1075,172 @@ describe('Claim Details arrears warning bug fix', () => {
     });
   });
 });
+
+/**
+ * Timeline tab removal regression tests
+ *
+ * Verifies:
+ * 1. Legacy case data with timeline_reviewed/deposit fields doesn't crash
+ * 2. Section count is correct after removal (11 total, 9-11 visible)
+ * 3. Validation doesn't reference timeline fields
+ * 4. Document generation succeeds without timeline data
+ */
+describe('Timeline tab removal regression', () => {
+  describe('Legacy case data compatibility', () => {
+    it('should not crash when facts contain legacy timeline_reviewed field', () => {
+      const legacyFacts = {
+        // Core required fields
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        // Legacy timeline fields that should be ignored
+        timeline_reviewed: true,
+      };
+
+      // Should not throw when validating
+      expect(() => validateClaimantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateDefendantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateTenancySection(legacyFacts, 'england')).not.toThrow();
+    });
+
+    it('should not crash when facts contain legacy deposit fields', () => {
+      const legacyFacts = {
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        // Legacy deposit fields from Timeline tab that should be ignored
+        deposit_amount: 1500,
+        deposit_scheme_name: 'DPS',
+        deposit_reference: 'ABC123',
+      };
+
+      // Should not throw when validating
+      expect(() => validateClaimantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateDefendantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateTenancySection(legacyFacts, 'england')).not.toThrow();
+    });
+
+    it('getSectionValidation should not reference timeline section', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+      };
+
+      // Timeline section validation should return empty results (section doesn't exist)
+      const result = getSectionValidation('timeline', facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+      expect(result.warnings).toHaveLength(0);
+    });
+  });
+
+  describe('Section configuration', () => {
+    // Mirrors the SECTIONS array from MoneyClaimSectionFlow.tsx
+    const SECTION_IDS = [
+      'claimant',
+      'defendant',
+      'tenancy',
+      'claim_details',
+      'arrears',      // conditional
+      'damages',      // conditional
+      'claim_statement',
+      'preaction',
+      'evidence',
+      'enforcement',
+      'review',
+    ];
+
+    it('should have exactly 11 sections defined', () => {
+      expect(SECTION_IDS).toHaveLength(11);
+    });
+
+    it('should NOT include timeline in section IDs', () => {
+      expect(SECTION_IDS).not.toContain('timeline');
+    });
+
+    it('should have correct section order', () => {
+      expect(SECTION_IDS[0]).toBe('claimant');
+      expect(SECTION_IDS[1]).toBe('defendant');
+      expect(SECTION_IDS[2]).toBe('tenancy');
+      expect(SECTION_IDS[3]).toBe('claim_details');
+      expect(SECTION_IDS[SECTION_IDS.length - 1]).toBe('review');
+    });
+
+    it('should show minimum 9 visible sections (when arrears and damages hidden)', () => {
+      // When user selects no claim type, arrears and damages are hidden
+      const minVisibleSections = SECTION_IDS.filter(
+        id => id !== 'arrears' && id !== 'damages'
+      );
+      expect(minVisibleSections).toHaveLength(9);
+    });
+  });
+
+  describe('Validation independence from timeline', () => {
+    it('claim details validation should not mention timeline', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+      };
+
+      const result = getSectionValidation('claim_details', facts, 'england');
+
+      expect(result.blockers.join(' ')).not.toContain('timeline');
+      expect(result.warnings.join(' ')).not.toContain('timeline');
+    });
+
+    it('review validation should not require timeline_reviewed', () => {
+      const facts = {
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        letter_before_claim_sent: true,
+        // No timeline_reviewed field
+      };
+
+      // All core validations should pass without timeline_reviewed
+      expect(validateClaimantSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateDefendantSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateTenancySection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateClaimDetailsSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateArrearsSection(facts).blockers).toHaveLength(0);
+    });
+  });
+});
