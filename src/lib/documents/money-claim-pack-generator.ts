@@ -33,6 +33,31 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
+/**
+ * Format a date string as UK legal format: "DD Month YYYY" (e.g., "14 July 2025")
+ * Used for court documents, pleadings and formal notices.
+ */
+function formatUKLegalDate(dateInput: string | Date | undefined): string {
+  if (!dateInput) return '';
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  // Parse the date - handle both ISO strings and Date objects
+  const dateStr = typeof dateInput === 'string' ? dateInput : dateInput.toISOString();
+  const d = new Date(dateStr + (typeof dateStr === 'string' && !dateStr.includes('T') ? 'T00:00:00.000Z' : ''));
+
+  if (isNaN(d.getTime())) return '';
+
+  const day = d.getUTCDate();
+  const month = monthNames[d.getUTCMonth()];
+  const year = d.getUTCFullYear();
+
+  return `${day} ${month} ${year}`;
+}
+
 // Money Claim is England-only. Wales/Scotland/NI are not supported.
 export type MoneyClaimJurisdiction = 'england';
 
@@ -405,10 +430,20 @@ async function generateEnglandMoneyClaimPack(
     }
   }
 
+  // Pre-format all dates as UK legal format (DD Month YYYY) for court documents
+  const formattedGenerationDate = formatUKLegalDate(generationDate);
+  const formattedSignatureDate = formatUKLegalDate(claim.signature_date || generationDate);
+  const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
+  const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
+
   const baseTemplateData = {
     ...claim,
     ...totals,
-    generation_date: generationDate.split('T')[0],
+    // All dates pre-formatted as UK legal format (DD Month YYYY)
+    generation_date: formattedGenerationDate,
+    signature_date: formattedSignatureDate,
+    tenancy_start_date: formattedTenancyStartDate,
+    interest_start_date: formattedInterestStartDate,
     total_principal: totals.arrears_total + totals.damages_total + totals.other_total,
     arrears_schedule: claim.arrears_schedule || [],
     damage_items: claim.damage_items || [],
@@ -489,7 +524,8 @@ async function generateEnglandMoneyClaimPack(
 
   const extendedData = {
     ...baseTemplateData,
-    response_deadline: responseDeadline.toISOString().split('T')[0],
+    // Response deadline also formatted as UK legal date
+    response_deadline: formatUKLegalDate(responseDeadline),
   };
 
   const letterBeforeClaim = await generateDocument({

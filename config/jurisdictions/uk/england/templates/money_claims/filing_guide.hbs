@@ -1,5 +1,5 @@
 <h1>Money Claims Filing Guide</h1>
-<p><em>Step-by-step instructions for filing your rent arrears claim in England & Wales</em></p>
+<p><em>Step-by-step instructions for filing your rent arrears claim in England</em></p>
 
 <hr>
 
@@ -47,7 +47,7 @@
 
 <h2>How to File Your Claim</h2>
 
-<p>You have <strong>TWO options</strong> for filing a money claim in England & Wales:</p>
+<p>You have <strong>TWO options</strong> for filing a money claim in England:</p>
 
 <ol>
   <li><strong>Online via Money Claim Online (MCOL)</strong> — Faster, cheaper, available 24/7</li>
@@ -137,16 +137,16 @@
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
   <tr>
     <td width="40%"><strong>Claim amount:</strong></td>
-    <td width="60%">{{total_claim_amount}}</td>
+    <td width="60%">{{currency total_claim_amount}}</td>
   </tr>
   <tr>
     <td><strong>Court fee (paid online):</strong></td>
-    <td>{{court_fee}}</td>
+    <td>{{currency court_fee}}</td>
   </tr>
   {{#if solicitor_costs}}
   <tr>
     <td><strong>Legal representative costs:</strong></td>
-    <td>{{solicitor_costs}}</td>
+    <td>{{currency solicitor_costs}}</td>
   </tr>
   {{/if}}
 </table>
