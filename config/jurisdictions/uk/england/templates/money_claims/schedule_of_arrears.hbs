@@ -239,12 +239,12 @@
   <h3>Arrears Summary</h3>
   <div class="summary-grid">
     <div class="summary-item">
-      <dt>Monthly Rent</dt>
-      <dd>{{currency rent_amount}}</dd>
+      <dt>Rent Amount</dt>
+      <dd>{{currency rent_amount}} {{rent_frequency}}</dd>
     </div>
     <div class="summary-item">
-      <dt>Payment Frequency</dt>
-      <dd>{{rent_frequency}}</dd>
+      <dt>Due Day</dt>
+      <dd>{{#if payment_day}}{{payment_day}}{{#if usual_payment_weekday}} ({{usual_payment_weekday}}){{/if}} of each {{rent_frequency}} period{{else}}Per tenancy agreement{{/if}}</dd>
     </div>
     <div class="summary-item">
       <dt>Tenancy Start Date</dt>
