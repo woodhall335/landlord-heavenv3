@@ -2679,21 +2679,32 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextOptional(form, 'Text36', data.claimant_reference, ctx);
 
   // Claimant details (large text box) - REQUIRED
-  const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
+  // CRITICAL: Include postcode explicitly - court requires full address with postcode
+  const claimantPostcode = data.landlord_postcode || extractPostcodeFromAddress(data.landlord_address) || '';
+  const claimantAddressWithPostcode = claimantPostcode && !data.landlord_address?.includes(claimantPostcode)
+    ? `${data.landlord_address}\n${claimantPostcode}`
+    : data.landlord_address;
+  const claimantDetails = `${data.landlord_full_name}\n${claimantAddressWithPostcode}`;
   setTextRequired(form, 'Text21', claimantDetails, ctx);
 
   // Defendant details (large text box) - REQUIRED
-  // Include second defendant if joint tenancy
-  let defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
+  // CRITICAL: Include postcode explicitly - court requires full address with postcode
+  const defendantPostcode = data.property_postcode || extractPostcodeFromAddress(data.property_address) || '';
+  const defendantAddressWithPostcode = defendantPostcode && !data.property_address?.includes(defendantPostcode)
+    ? `${data.property_address}\n${defendantPostcode}`
+    : data.property_address;
+  let defendantDetails = `${data.tenant_full_name}\n${defendantAddressWithPostcode}`;
   if (data.has_joint_defendants && data.tenant_2_name) {
     // Build second defendant address - use their own address if provided, otherwise use property address
+    // Ensure second defendant also has postcode included
+    const defendant2Postcode = data.tenant_2_postcode || defendantPostcode;
     const defendant2Address = data.tenant_2_address_line1
       ? [
           data.tenant_2_address_line1,
           data.tenant_2_address_line2,
-          data.tenant_2_postcode
+          defendant2Postcode
         ].filter(Boolean).join(', ')
-      : data.property_address;
+      : defendantAddressWithPostcode;
     defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2Address}`;
   }
   setTextRequired(form, 'Text22', defendantDetails, ctx);

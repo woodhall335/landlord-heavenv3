@@ -1,7 +1,7 @@
 {{!--
   ============================================================================
   SCHEDULE OF DEBT (Court-Ready)
-  Money Claim Pack - England & Wales
+  Money Claim Pack - England
   ============================================================================
   Court-credible schedule with:
   - Running balance column (for arrears)
@@ -274,7 +274,7 @@
     {{#each arrears_schedule}}
     <tr>
       <td class="period-col">{{period}}</td>
-      <td>{{due_date}}</td>
+      <td>{{format_date due_date "long"}}</td>
       <td class="amount">{{currency amount_due}}</td>
       <td class="amount">{{currency amount_paid}}</td>
       <td class="amount">{{currency arrears}}</td>
