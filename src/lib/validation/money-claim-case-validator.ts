@@ -247,6 +247,8 @@ export function validateTenancySection(
 
 /**
  * Validate claim details section
+ * Now simplified - only validates claim type selection and court name
+ * Interest, basis of claim, and occupancy moved to Claim Statement section
  * Note: Money Claim is England-only
  */
 export function validateClaimDetailsSection(
@@ -270,6 +272,28 @@ export function validateClaimDetailsSection(
       blockers.push('Please enter the County Court name where you will file your claim');
     }
   }
+
+  // Council tax warning
+  if (reasons.has('unpaid_council_tax')) {
+    warnings.push(
+      'Ensure you have evidence that council tax was the tenant\'s liability under the agreement'
+    );
+  }
+
+  return { blockers, warnings };
+}
+
+/**
+ * Validate claim statement section
+ * Contains: basis_of_claim, tenant_still_in_property, charge_interest, interest_start_date
+ * Note: Money Claim is England-only
+ */
+export function validateClaimStatementSection(
+  facts: MoneyClaimFacts,
+  _jurisdiction: Jurisdiction
+): { blockers: string[]; warnings: string[] } {
+  const blockers: string[] = [];
+  const warnings: string[] = [];
 
   // England: must explicitly opt in/out of statutory interest
   if (
@@ -297,10 +321,10 @@ export function validateClaimDetailsSection(
     );
   }
 
-  // Council tax warning
-  if (reasons.has('unpaid_council_tax')) {
+  // Occupancy status is helpful but not blocking
+  if (facts.money_claim?.tenant_still_in_property === undefined) {
     warnings.push(
-      'Ensure you have evidence that council tax was the tenant\'s liability under the agreement'
+      'Consider indicating whether the tenant is still living in the property'
     );
   }
 
@@ -547,6 +571,7 @@ export function validateMoneyClaimCase(
     { id: 'claim_details', fn: () => validateClaimDetailsSection(facts, jurisdiction) },
     { id: 'arrears', fn: () => validateArrearsSection(facts) },
     { id: 'damages', fn: () => validateDamagesSection(facts) },
+    { id: 'claim_statement', fn: () => validateClaimStatementSection(facts, jurisdiction) },
     { id: 'preaction', fn: () => validatePreActionSection(facts, jurisdiction) },
     { id: 'timeline', fn: () => validateTimelineSection(facts) },
     { id: 'evidence', fn: () => validateEvidenceSection(facts) },
@@ -624,6 +649,8 @@ export function getSectionValidation(
       return validateArrearsSection(facts);
     case 'damages':
       return validateDamagesSection(facts);
+    case 'claim_statement':
+      return validateClaimStatementSection(facts, jurisdiction);
     case 'preaction':
       return validatePreActionSection(facts, jurisdiction);
     case 'timeline':

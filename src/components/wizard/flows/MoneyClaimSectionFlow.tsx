@@ -41,6 +41,7 @@ import { DefendantSection } from '@/components/wizard/money-claim/DefendantSecti
 import { TenancySection } from '@/components/wizard/money-claim/TenancySection';
 import { ClaimDetailsSection } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 import type { ClaimReasonType } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
+import { ClaimStatementSection } from '@/components/wizard/sections/money-claim/ClaimStatementSection';
 import { ArrearsSection } from '@/components/wizard/money-claim/ArrearsSection';
 import { DamagesSection } from '@/components/wizard/money-claim/DamagesSection';
 import { PreActionSection } from '@/components/wizard/money-claim/PreActionSection';
@@ -140,22 +141,18 @@ const SECTIONS: WizardSection[] = [
     description: 'What you are claiming',
     isComplete: (facts) => {
       // Must select at least one claim type
+      // Interest decision moved to Claim Statement section
       const hasClaimType =
         facts.claiming_rent_arrears === true ||
         facts.claiming_damages === true ||
         facts.claiming_other === true;
 
-      // For England/Wales, must explicitly opt in/out of interest
-      // Scotland doesn't use the same interest mechanism
+      // Also require court name for England/Wales
       const jurisdiction = facts.__meta?.jurisdiction;
       const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
-
       if (isEnglandWales) {
-        // Interest must be explicitly set (true or false, not null/undefined)
-        const interestDecided =
-          facts.money_claim?.charge_interest === true ||
-          facts.money_claim?.charge_interest === false;
-        return hasClaimType && interestDecided;
+        const hasCourtName = !!(facts.money_claim?.court_name || facts.court_name);
+        return hasClaimType && hasCourtName;
       }
 
       return hasClaimType;
@@ -228,6 +225,35 @@ const SECTIONS: WizardSection[] = [
         facts.claiming_damages !== undefined ||
         facts.claiming_other !== undefined;
       return !hasSelectedAnyClaimType || facts.claiming_damages === true || facts.claiming_other === true;
+    },
+  },
+  {
+    id: 'claim_statement',
+    label: 'Claim Statement',
+    description: 'Statement, occupancy status, and interest',
+    isComplete: (facts) => {
+      // For England/Wales, must explicitly opt in/out of interest
+      const jurisdiction = facts.__meta?.jurisdiction;
+      const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+
+      if (isEnglandWales) {
+        // Interest must be explicitly set (true or false, not null/undefined)
+        const interestDecided =
+          facts.money_claim?.charge_interest === true ||
+          facts.money_claim?.charge_interest === false;
+        return interestDecided;
+      }
+
+      // For other jurisdictions, just check if basis_of_claim is provided
+      return !!facts.money_claim?.basis_of_claim;
+    },
+    hasBlockers: (facts, jurisdiction) => {
+      const result = getSectionValidation('claim_statement', facts, jurisdiction || 'england');
+      return result.blockers;
+    },
+    hasWarnings: (facts, jurisdiction) => {
+      const result = getSectionValidation('claim_statement', facts, jurisdiction || 'england');
+      return result.warnings;
     },
   },
   {
@@ -618,6 +644,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       claim_details: 'claim_details',
       arrears: 'arrears',
       damages: 'damages',
+      claim_statement: 'claim_statement',
       preaction: 'preaction',
       timeline: 'timeline',
       evidence: 'evidence',
@@ -685,13 +712,21 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             onUpdate={handleUpdate}
             jurisdiction={jurisdiction}
             initialClaimReasons={initialClaimReasons}
-            onSetCurrentQuestionId={setCurrentQuestionId}
           />
         );
       case 'arrears':
         return <ArrearsSection facts={facts} onUpdate={handleUpdate} />;
       case 'damages':
         return <DamagesSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
+      case 'claim_statement':
+        return (
+          <ClaimStatementSection
+            facts={facts}
+            onUpdate={handleUpdate}
+            jurisdiction={jurisdiction}
+            onSetCurrentQuestionId={setCurrentQuestionId}
+          />
+        );
       case 'preaction':
         return (
           <PreActionSection
