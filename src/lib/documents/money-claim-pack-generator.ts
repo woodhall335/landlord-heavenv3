@@ -1,8 +1,8 @@
 /**
- * Money Claim Pack Generator (England & Wales)
+ * Money Claim Pack Generator (England)
  *
- * Builds a complete England & Wales money-claim bundle including:
- * - Official N1 claim form (PDF fill)
+ * Builds a complete England money-claim bundle including:
+ * - Official N1 claim form (PDF fill via AcroForm)
  * - Particulars of claim (template)
  * - Schedule of arrears (template)
  * - Interest calculation (template)
@@ -13,6 +13,10 @@
  *   - Financial Statement Form
  * - Filing guide (MCOL or paper)
  * - Enforcement guide (post-judgment options)
+ *
+ * IMPORTANT: This generator is ENGLAND-ONLY.
+ * - Wales, Scotland, and Northern Ireland are NOT supported
+ * - Scotland has a separate Simple Procedure implementation (sc_money_claim)
  *
  * Note:
  * - This pack is aligned with the Jan 2026 restructure:
@@ -29,7 +33,8 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
-export type MoneyClaimJurisdiction = Exclude<CanonicalJurisdiction, 'northern-ireland'>; // england, wales, scotland
+// Money Claim is England-only. Wales/Scotland/NI are not supported.
+export type MoneyClaimJurisdiction = 'england';
 
 export interface ArrearsEntry {
   period: string;
@@ -367,7 +372,7 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
   };
 }
 
-async function generateEnglandWalesMoneyClaimPack(
+async function generateEnglandMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
@@ -383,8 +388,8 @@ async function generateEnglandWalesMoneyClaimPack(
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
 
-  const jurisdictionKey = claim.jurisdiction === 'wales' ? 'wales' : 'england';
-  const templateBase = `uk/${jurisdictionKey}`;
+  // Money Claim uses England templates only
+  const templateBase = 'uk/england';
 
   // Generate AI-drafted content for templates (embedded into docs via templates)
   let askHeavenDrafts;
@@ -393,7 +398,7 @@ async function generateEnglandWalesMoneyClaimPack(
       askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
         includePostIssue: true,
         includeRiskReport: false,
-        jurisdiction: jurisdictionKey,
+        jurisdiction: 'england',
       });
     } catch (error) {
       console.error('Failed to generate AI drafts, proceeding without:', error);
@@ -625,11 +630,16 @@ export async function generateMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
-  const isEnglandWales = claim.jurisdiction === 'england' || claim.jurisdiction === 'wales';
-
-  if (!isEnglandWales) {
-    throw new Error('Money claim pack generation is currently available only for England & Wales.');
+  // GUARDRAIL: Money Claim is ENGLAND-ONLY
+  // Fail loudly if any other jurisdiction is passed
+  if (claim.jurisdiction !== 'england') {
+    throw new Error(
+      `Money Claim is only available for England. ` +
+      `Received jurisdiction: "${claim.jurisdiction}". ` +
+      `For Scotland, use the Simple Procedure product (sc_money_claim). ` +
+      `Wales and Northern Ireland are not supported.`
+    );
   }
 
-  return generateEnglandWalesMoneyClaimPack(claim, caseFacts);
+  return generateEnglandMoneyClaimPack(claim, caseFacts);
 }

@@ -7,29 +7,33 @@
  * WITHOUT creating persistent database records. This allows preview thumbnails for
  * money claim flows where documents are only generated post-payment.
  *
- * Supports:
- * - England/Wales: form_n1, particulars_of_claim, schedule_of_arrears, interest_calculation,
- *   letter_before_claim, information_sheet, reply_form, financial_statement,
- *   filing_guide, enforcement_guide
- * - Scotland: form_3a, simple_procedure_particulars, schedule_of_arrears, interest_calculation,
- *   pre_action_letter, filing_guide, enforcement_guide
+ * IMPORTANT: Money Claim is ENGLAND-ONLY.
+ * Scotland uses Simple Procedure (sc_money_claim) with separate endpoints.
+ * Wales and Northern Ireland are not supported.
+ *
+ * Supports (England):
+ * - form_n1 (official HMCTS N1 PDF - generated from actual filled form)
+ * - particulars_of_claim, schedule_of_arrears, interest_calculation
+ * - letter_before_claim, information_sheet, reply_form, financial_statement
+ * - filing_guide, enforcement_guide
  *
  * Returns:
  * - 200 OK with image/jpeg content type
  * - 400 if document_type is missing or invalid
  * - 404 if case not found
- * - 422 if validation fails
+ * - 422 if validation fails (including non-England jurisdiction)
  * - 500 on generation error
  */
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
+import { htmlToPreviewThumbnail, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { mapCaseFactsToMoneyClaimCase, mapCaseFactsToScotlandMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
+import { fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -107,62 +111,24 @@ function resolveDocumentType(configId: string): string | null {
 }
 
 /**
- * Get template path for a document type
+ * Get template path for a document type (England only for money_claim)
+ * Note: form_n1 is handled specially - it generates from the actual official PDF
  */
-function getTemplatePath(
-  docType: string,
-  jurisdiction: CanonicalJurisdiction
-): string | null {
-  // England templates
-  if (jurisdiction === 'england') {
-    const templates: Record<string, string> = {
-      'form_n1': 'uk/england/templates/money_claims/n1_claim.hbs',
-      'particulars_of_claim': 'uk/england/templates/money_claims/particulars_of_claim.hbs',
-      'schedule_of_arrears': 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
-      'interest_calculation': 'uk/england/templates/money_claims/interest_workings.hbs',
-      'letter_before_claim': 'uk/england/templates/money_claims/letter_before_claim.hbs',
-      'information_sheet': 'uk/england/templates/money_claims/information_sheet_for_defendants.hbs',
-      'reply_form': 'uk/england/templates/money_claims/reply_form.hbs',
-      'financial_statement': 'uk/england/templates/money_claims/financial_statement_form.hbs',
-      'filing_guide': 'uk/england/templates/money_claims/filing_guide.hbs',
-      'enforcement_guide': 'uk/england/templates/money_claims/enforcement_guide.hbs',
-    };
-    return templates[docType] || null;
-  }
-
-  // Wales templates (same structure as England)
-  if (jurisdiction === 'wales') {
-    const templates: Record<string, string> = {
-      'form_n1': 'uk/wales/templates/money_claims/n1_claim.hbs',
-      'particulars_of_claim': 'uk/wales/templates/money_claims/particulars_of_claim.hbs',
-      'schedule_of_arrears': 'uk/wales/templates/money_claims/schedule_of_arrears.hbs',
-      'interest_calculation': 'uk/wales/templates/money_claims/interest_workings.hbs',
-      'letter_before_claim': 'uk/wales/templates/money_claims/letter_before_claim.hbs',
-      'information_sheet': 'uk/wales/templates/money_claims/information_sheet_for_defendants.hbs',
-      'reply_form': 'uk/wales/templates/money_claims/reply_form.hbs',
-      'financial_statement': 'uk/wales/templates/money_claims/financial_statement_form.hbs',
-      'filing_guide': 'uk/wales/templates/money_claims/filing_guide.hbs',
-      'enforcement_guide': 'uk/wales/templates/money_claims/enforcement_guide.hbs',
-    };
-    return templates[docType] || null;
-  }
-
-  // Scotland templates
-  if (jurisdiction === 'scotland') {
-    const templates: Record<string, string> = {
-      'form_3a': 'uk/scotland/templates/money_claims/simple_procedure_particulars.hbs',
-      'particulars_of_claim': 'uk/scotland/templates/money_claims/simple_procedure_particulars.hbs',
-      'schedule_of_arrears': 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs',
-      'interest_calculation': 'uk/scotland/templates/money_claims/interest_calculation.hbs',
-      'pre_action_letter': 'uk/scotland/templates/money_claims/pre_action_letter.hbs',
-      'letter_before_claim': 'uk/scotland/templates/money_claims/pre_action_letter.hbs', // Alias
-      'filing_guide': 'uk/scotland/templates/money_claims/filing_guide_scotland.hbs',
-      'enforcement_guide': 'uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs',
-    };
-    return templates[docType] || null;
-  }
-
-  return null;
+function getTemplatePath(docType: string): string | null {
+  // Money Claim is ENGLAND-ONLY
+  // Note: form_n1 doesn't use a template - it's generated from the official PDF
+  const templates: Record<string, string> = {
+    'particulars_of_claim': 'uk/england/templates/money_claims/particulars_of_claim.hbs',
+    'schedule_of_arrears': 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+    'interest_calculation': 'uk/england/templates/money_claims/interest_workings.hbs',
+    'letter_before_claim': 'uk/england/templates/money_claims/letter_before_claim.hbs',
+    'information_sheet': 'uk/england/templates/money_claims/information_sheet_for_defendants.hbs',
+    'reply_form': 'uk/england/templates/money_claims/reply_form.hbs',
+    'financial_statement': 'uk/england/templates/money_claims/financial_statement_form.hbs',
+    'filing_guide': 'uk/england/templates/money_claims/filing_guide.hbs',
+    'enforcement_guide': 'uk/england/templates/money_claims/enforcement_guide.hbs',
+  };
+  return templates[docType] || null;
 }
 
 /**
@@ -239,15 +205,21 @@ export async function GET(
     const caseRow = data as any;
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
 
-    // Determine jurisdiction
+    // Determine jurisdiction - Money Claim is ENGLAND-ONLY
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts) as CanonicalJurisdiction;
 
     if (!jurisdiction) {
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422);
     }
 
-    if (jurisdiction === 'northern-ireland') {
-      return errorResponse('NI_NOT_SUPPORTED', 'Northern Ireland not supported for money claims', 422);
+    // GUARDRAIL: Money Claim is ENGLAND-ONLY
+    if (jurisdiction !== 'england') {
+      return errorResponse(
+        'JURISDICTION_NOT_SUPPORTED',
+        `Money Claim is only available for England. Received: "${jurisdiction}". ` +
+        `For Scotland, use Simple Procedure (sc_money_claim). Wales and Northern Ireland are not supported.`,
+        422
+      );
     }
 
     // Resolve the document type from config ID
@@ -256,23 +228,96 @@ export async function GET(
       return errorResponse('INVALID_DOCUMENT_TYPE', `Unknown document type: ${documentType}`, 400);
     }
 
-    // Get template path
-    const templatePath = getTemplatePath(resolvedDocType, jurisdiction);
-    if (!templatePath) {
-      return errorResponse('NO_TEMPLATE', `No template found for ${resolvedDocType} in ${jurisdiction}`, 400);
-    }
-
-    console.log(`[Money-Claim-Thumbnail] Generating:`, {
-      docType: resolvedDocType,
-      templatePath,
-      jurisdiction,
-    });
-
     // Convert wizard facts to case facts and then to money claim case
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    const moneyClaimCase = jurisdiction === 'scotland'
-      ? mapCaseFactsToScotlandMoneyClaimCase(caseFacts)
-      : mapCaseFactsToMoneyClaimCase(caseFacts);
+    const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+
+    // =========================================================================
+    // SPECIAL HANDLING: N1 Form - Generate from OFFICIAL PDF, not HTML template
+    // =========================================================================
+    if (resolvedDocType === 'form_n1') {
+      console.log(`[Money-Claim-Thumbnail] Generating N1 from official PDF`);
+
+      // Build CaseData for fillN1Form
+      const n1Data: CaseData = {
+        jurisdiction: 'england',
+        claim_type: 'money_claim',
+        landlord_full_name: moneyClaimCase.landlord_full_name || '',
+        landlord_2_name: moneyClaimCase.landlord_2_name,
+        landlord_address: moneyClaimCase.landlord_address || '',
+        landlord_postcode: moneyClaimCase.landlord_postcode,
+        landlord_email: moneyClaimCase.landlord_email,
+        landlord_phone: moneyClaimCase.landlord_phone,
+        tenant_full_name: moneyClaimCase.tenant_full_name || '',
+        tenant_2_name: moneyClaimCase.tenant_2_name,
+        property_address: moneyClaimCase.property_address || '',
+        property_postcode: moneyClaimCase.property_postcode,
+        has_joint_defendants: moneyClaimCase.has_joint_defendants,
+        tenant_2_address_line1: moneyClaimCase.tenant_2_address_line1,
+        tenant_2_address_line2: moneyClaimCase.tenant_2_address_line2,
+        tenant_2_postcode: moneyClaimCase.tenant_2_postcode,
+        tenancy_start_date: moneyClaimCase.tenancy_start_date || '',
+        rent_amount: moneyClaimCase.rent_amount || 0,
+        rent_frequency: moneyClaimCase.rent_frequency || 'monthly',
+        total_claim_amount: moneyClaimCase.arrears_total || 0,
+        court_fee: moneyClaimCase.court_fee,
+        solicitor_costs: moneyClaimCase.solicitor_costs,
+        court_name: moneyClaimCase.court_name,
+        signatory_name: moneyClaimCase.signatory_name || moneyClaimCase.landlord_full_name || '',
+        signature_date: moneyClaimCase.signature_date || new Date().toISOString().split('T')[0],
+        service_postcode: moneyClaimCase.landlord_postcode || moneyClaimCase.property_postcode || '',
+        damage_items: moneyClaimCase.damage_items,
+        other_charges: moneyClaimCase.other_charges,
+        claimant_reference: moneyClaimCase.claimant_reference,
+        solicitor_firm: moneyClaimCase.solicitor_firm,
+      };
+
+      // Generate the actual official N1 PDF
+      const pdfBytes = await fillN1Form(n1Data);
+
+      // Convert PDF page 1 to thumbnail
+      const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
+        quality: 75,
+        watermarkText: 'PREVIEW',
+        documentId: `n1-${caseId}`,
+      });
+
+      const elapsed = Date.now() - startTime;
+      console.log(`[Money-Claim-Thumbnail] N1 PDF thumbnail success:`, {
+        caseId,
+        size: thumbnail.length,
+        elapsed: `${elapsed}ms`,
+      });
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'image/jpeg',
+        'Content-Disposition': 'inline; filename="preview.jpg"',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'X-Thumbnail-Runtime': 'nodejs',
+        'X-Document-Type': 'form_n1',
+        'X-Source': 'official-pdf',
+      };
+
+      if (!isVercel) {
+        headers['Content-Length'] = thumbnail.length.toString();
+      }
+
+      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
+    }
+
+    // =========================================================================
+    // OTHER DOCUMENTS: Generate from HTML templates
+    // =========================================================================
+    const templatePath = getTemplatePath(resolvedDocType);
+    if (!templatePath) {
+      return errorResponse('NO_TEMPLATE', `No template found for ${resolvedDocType}`, 400);
+    }
+
+    console.log(`[Money-Claim-Thumbnail] Generating from template:`, {
+      docType: resolvedDocType,
+      templatePath,
+    });
 
     // Build template data from money claim case
     const templateData: Record<string, any> = {
@@ -288,10 +333,8 @@ export async function GET(
       arrears_total_formatted: formatCurrency(moneyClaimCase.arrears_total),
       court_fee_formatted: formatCurrency(moneyClaimCase.court_fee),
       solicitor_costs_formatted: formatCurrency(moneyClaimCase.solicitor_costs),
-      // Convenience flags
-      is_england: jurisdiction === 'england',
-      is_wales: jurisdiction === 'wales',
-      is_scotland: jurisdiction === 'scotland',
+      // Convenience flags (England-only for money_claim)
+      is_england: true,
       has_interest: moneyClaimCase.claim_interest === true,
       has_arrears: (moneyClaimCase.arrears_total || 0) > 0,
       has_damages: (moneyClaimCase.damage_items || []).length > 0,

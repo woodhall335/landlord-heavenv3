@@ -374,25 +374,15 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
 export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
   const documents: DocumentInfo[] = [];
 
-  // Court Form
-  if (jurisdiction === 'england' || jurisdiction === 'wales') {
+  // Court Form - Money Claim is ENGLAND-ONLY
+  // Scotland uses Simple Procedure (sc_money_claim) product with separate configs
+  if (jurisdiction === 'england') {
     documents.push({
       id: 'form-n1',
       title: 'Form N1 - Money Claim Form',
-      description: 'Official court form to claim unpaid rent and other sums',
+      description: 'Official HMCTS court form to claim unpaid rent and other sums',
       icon: 'court-form',
-      pages: '8 pages',
-      category: 'Court Forms',
-    });
-  }
-
-  if (jurisdiction === 'scotland') {
-    documents.push({
-      id: 'form-3a',
-      title: 'Form 3A - Simple Procedure Claim',
-      description: 'Sheriff Court simple procedure claim form',
-      icon: 'court-form',
-      pages: '6 pages',
+      pages: '5 pages',
       category: 'Court Forms',
     });
   }

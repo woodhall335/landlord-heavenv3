@@ -1808,3 +1808,305 @@ export async function pdfToPreviewThumbnail(
     }
   }
 }
+
+/**
+ * Convert PDF bytes directly to a preview thumbnail JPEG.
+ * Similar to pdfToPreviewThumbnail but takes raw bytes instead of URL.
+ * Used for generating thumbnails from filled official PDFs (like N1 form).
+ */
+export async function pdfBytesToPreviewThumbnail(
+  pdfBytes: Buffer | Uint8Array,
+  options?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    watermarkText?: string;
+    documentId?: string;
+  }
+): Promise<Buffer> {
+  const width = options?.width || 400;
+  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
+  const quality = options?.quality || 80;
+  const watermarkText = options?.watermarkText || 'PREVIEW';
+  const documentId = options?.documentId || `pdf-bytes-${Date.now()}`;
+
+  let browser;
+  const startTime = Date.now();
+
+  try {
+    console.log(`[pdfBytesToPreviewThumbnail] Starting for document: ${documentId}`);
+    console.log(`[pdfBytesToPreviewThumbnail] Input size: ${pdfBytes.length} bytes`);
+
+    // Validate PDF header
+    const pdfBuffer = Buffer.isBuffer(pdfBytes) ? pdfBytes : Buffer.from(pdfBytes);
+    const pdfHeader = pdfBuffer.slice(0, 5).toString('utf-8');
+    if (!pdfHeader.startsWith('%PDF-')) {
+      throw new Error(`Invalid PDF: Header "${pdfHeader}" does not start with %PDF-`);
+    }
+
+    // Convert PDF bytes to base64 for embedding in HTML
+    const pdfBase64 = pdfBuffer.toString('base64');
+    console.log(`[pdfBytesToPreviewThumbnail] PDF base64 length: ${pdfBase64.length}`);
+
+    // Create HTML page with PDF.js that renders PDF from base64
+    const renderStart = Date.now();
+    browser = await getBrowser();
+
+    const page = await browser.newPage();
+
+    // Set viewport to A4-like dimensions for rendering
+    await page.setViewport({
+      width: 794, // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI
+      deviceScaleFactor: 1,
+    });
+
+    // Create HTML with inline PDF.js that renders the PDF to canvas
+    const pdfJsHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 794px;
+      height: 1123px;
+      background: white;
+      overflow: hidden;
+    }
+    #pdf-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: white;
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    #error {
+      color: red;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+    #loading {
+      padding: 20px;
+      font-family: sans-serif;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div id="pdf-container">
+    <div id="loading">Loading PDF...</div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+  <script type="module">
+    // PDF.js worker
+    const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
+    const container = document.getElementById('pdf-container');
+
+    try {
+      // Decode base64 PDF
+      const pdfData = atob('${pdfBase64}');
+      const pdfBytes = new Uint8Array(pdfData.length);
+      for (let i = 0; i < pdfData.length; i++) {
+        pdfBytes[i] = pdfData.charCodeAt(i);
+      }
+
+      // Load PDF
+      const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
+      const pdf = await loadingTask.promise;
+
+      // Render first page
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 }); // Higher scale for quality
+
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const context = canvas.getContext('2d');
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+
+      // Replace loading with canvas
+      container.innerHTML = '';
+      container.appendChild(canvas);
+
+      // Signal render complete
+      window.pdfRendered = true;
+    } catch (err) {
+      container.innerHTML = '<div id="error">Failed to render PDF: ' + err.message + '</div>';
+      window.pdfError = err.message;
+    }
+  </script>
+</body>
+</html>
+`;
+
+    // Set content and wait for PDF.js to render
+    await page.setContent(pdfJsHtml, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    // Wait for PDF.js to finish rendering (check for pdfRendered flag)
+    await page.waitForFunction('window.pdfRendered === true || window.pdfError', {
+      timeout: 15000,
+    });
+
+    // Check for errors
+    const pdfError = await page.evaluate(() => (window as any).pdfError);
+    if (pdfError) {
+      throw new Error(`PDF.js rendering failed: ${pdfError}`);
+    }
+
+    // Additional wait for canvas to fully paint
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Take screenshot of first page
+    const screenshot = await page.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: 794,
+        height: 1123,
+      },
+    });
+
+    const renderTime = Date.now() - renderStart;
+    console.log(`[pdfBytesToPreviewThumbnail] Screenshot captured in ${renderTime}ms`);
+
+    await browser.close();
+
+    // Add watermark overlay
+    browser = await getBrowser();
+
+    const watermarkPage = await browser.newPage();
+    await watermarkPage.setViewport({
+      width: 794,
+      height: 1123,
+      deviceScaleFactor: 1,
+    });
+
+    // Create HTML with the screenshot as background and watermark overlay
+    const base64Image = (screenshot as Buffer).toString('base64');
+    const watermarkHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body {
+            width: 794px;
+            height: 1123px;
+            position: relative;
+            background-image: url(data:image/jpeg;base64,${base64Image});
+            background-size: cover;
+            background-position: top left;
+          }
+          .watermark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+          }
+          .watermark-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 120px;
+            font-weight: bold;
+            color: rgba(200, 200, 200, 0.4);
+            white-space: nowrap;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 20px;
+          }
+          .watermark-repeat {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(-45deg);
+          }
+          .watermark-item {
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(180, 180, 180, 0.2);
+            padding: 60px 80px;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="watermark-overlay">
+          <div class="watermark-text">${watermarkText}</div>
+          <div class="watermark-repeat">
+            ${Array(20).fill(`<span class="watermark-item">${watermarkText}</span>`).join('')}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await watermarkPage.setContent(watermarkHtml, {
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
+    });
+
+    // Take final screenshot with watermark
+    const finalScreenshot = await watermarkPage.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      },
+    });
+
+    await browser.close();
+    browser = null;
+
+    const totalTime = Date.now() - startTime;
+    console.log(`[pdfBytesToPreviewThumbnail] Complete in ${totalTime}ms (render: ${renderTime}ms)`);
+
+    return finalScreenshot as Buffer;
+  } catch (error: any) {
+    console.error(`[pdfBytesToPreviewThumbnail] Error:`, error.message);
+    throw error;
+  } finally {
+    // Cleanup: close browser
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    }
+  }
+}
