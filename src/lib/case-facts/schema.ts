@@ -254,6 +254,10 @@ export interface MoneyClaimFacts {
   pap_documents_sent?: string[] | null | false;
   /** Flag indicating we will generate PAP documents for the user */
   generate_pap_documents?: boolean | null;
+  /** Flag from PreActionSection indicating user has already sent a letter before claim */
+  letter_before_claim_sent?: boolean | null;
+  /** Date when the PAP letter was sent (from PreActionSection) */
+  pap_letter_date?: string | null;
   tenant_responded?: boolean | null;
   tenant_response_details?: string | null;
   lba_second_sent?: boolean | null;
@@ -760,6 +764,8 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     lba_response_deadline: null,
     pap_documents_sent: null,
     generate_pap_documents: null,
+    letter_before_claim_sent: null,
+    pap_letter_date: null,
     tenant_responded: null,
     tenant_response_details: null,
     lba_second_sent: null,
