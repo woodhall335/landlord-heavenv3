@@ -15,6 +15,10 @@
 import type { ClaimReasonType } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 
 export interface MoneyClaimFacts {
+  // Claimant/landlord (top-level keys)
+  landlord_full_name?: string;
+  claimant_name?: string;
+
   // Tenant/defendant (top-level keys used by validator)
   tenant_full_name?: string;
   defendant_name?: string;
@@ -128,13 +132,19 @@ function formatCurrency(amount: number | undefined | null): string {
 }
 
 /**
- * Format date for display
+ * Format date for display in DD/MM/YYYY format (UK legal standard)
  */
 function formatDate(dateStr: string | undefined | null): string {
   if (!dateStr) return '[date]';
   try {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    if (isNaN(date.getTime())) return '[date]';
+    // Use DD/MM/YYYY format for UK legal documents
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
   } catch {
     return '[date]';
   }
@@ -170,6 +180,21 @@ function getTenantName(facts: MoneyClaimFacts): string {
   if (firstTenant?.name) return firstTenant.name;
 
   return '[tenant name]';
+}
+
+/**
+ * Get claimant/landlord name with fallback
+ * Checks top-level keys, then nested parties.landlord object
+ */
+function getClaimantName(facts: MoneyClaimFacts): string {
+  // Try top-level keys first
+  if (facts.landlord_full_name) return facts.landlord_full_name;
+  if (facts.claimant_name) return facts.claimant_name;
+
+  // Fallback to nested parties.landlord object
+  if (facts.parties?.landlord?.name) return facts.parties.landlord.name;
+
+  return '[claimant name]';
 }
 
 /**
@@ -329,13 +354,14 @@ export function generateBasisOfClaimStatement(
     return '';
   }
 
+  const claimantName = getClaimantName(facts);
   const tenantName = getTenantName(facts);
   const propertyAddress = getPropertyAddress(facts);
   const tenantStillInProperty = facts.money_claim?.tenant_still_in_property;
 
   const parts: string[] = [];
 
-  // Opening statement
+  // Opening statement with both claimant and defendant names
   const tenantStatus =
     tenantStillInProperty === true
       ? 'is the tenant'
@@ -345,11 +371,11 @@ export function generateBasisOfClaimStatement(
 
   const tenancyStart = getTenancyStartDate(facts);
   const tenancyStartStr = tenancyStart
-    ? ` which commenced on ${formatDate(tenancyStart)}`
+    ? ` under a tenancy which commenced on ${formatDate(tenancyStart)}`
     : '';
 
   parts.push(
-    `The Defendant, ${tenantName}, ${tenantStatus} at ${propertyAddress}${tenancyStartStr}.`
+    `The Claimant, ${claimantName}, is the landlord of the property at ${propertyAddress}. The Defendant, ${tenantName}, ${tenantStatus} at this property${tenancyStartStr}.`
   );
 
   // Rent arrears claim

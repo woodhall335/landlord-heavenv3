@@ -25,6 +25,8 @@ import {
   getSectionValidation,
 } from '@/lib/validation/money-claim-case-validator';
 
+import { validateMoneyClaimClient } from '@/lib/validation/money-claim-client-validator';
+
 import {
   generateBasisOfClaimStatement,
   generateClaimSummary,
@@ -240,7 +242,8 @@ describe('Statement generator uses real values', () => {
 
     const statement = generateBasisOfClaimStatement(facts);
 
-    expect(statement).toContain('January 2024');
+    // Date is now formatted as DD/MM/YYYY
+    expect(statement).toContain('01/01/2024');
   });
 
   it('getMissingStatementInfo should not report missing fields when nested paths have data', () => {
@@ -1073,5 +1076,238 @@ describe('Claim Details arrears warning bug fix', () => {
         'Please add at least one arrears period to the schedule'
       );
     });
+  });
+});
+
+/**
+ * PAP Document Generation Flow Tests
+ *
+ * These tests verify that:
+ * - When user selects "No, I have not sent them", they can still generate PAP documents
+ * - The blocker is removed when generate_pap_documents is true
+ * - A warning is shown instead to clarify they can generate but not issue
+ */
+describe('PAP document generation blocker fix', () => {
+  it('should NOT block when user wants to generate PAP documents (generate_pap_documents=true)', () => {
+    const facts = {
+      letter_before_claim_sent: false,
+      pap_letter_date: undefined,
+      money_claim: {
+        generate_pap_documents: true, // User selected "No, I haven't sent them"
+        pap_documents_sent: false,
+      },
+      // Minimal required fields to avoid other blockers
+      landlord_full_name: 'Tariq Mohammed',
+      landlord_address_line1: '123 Main Street',
+      landlord_address_postcode: 'M1 1AA',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly' as const,
+      claiming_rent_arrears: true,
+      arrears_items: [{ period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0 }],
+      court_name: 'Manchester County Court',
+    };
+
+    const result = validateMoneyClaimClient(facts);
+
+    // Should NOT have the pap_letter_required blocker
+    const papBlocker = result.blockers.find((b) => b.id === 'pap_letter_required');
+    expect(papBlocker).toBeUndefined();
+
+    // Should have the pap_documents_pending warning instead
+    const papWarning = result.warnings.find((w) => w.id === 'pap_documents_pending');
+    expect(papWarning).toBeDefined();
+    expect(papWarning?.message).toContain('generate your PAP document pack');
+    expect(papWarning?.message).toContain('cannot issue the claim');
+  });
+
+  it('should still block when user has not chosen to generate PAP documents', () => {
+    const facts = {
+      letter_before_claim_sent: false,
+      pap_letter_date: undefined,
+      // No generate_pap_documents flag set
+      money_claim: {},
+      landlord_full_name: 'Tariq Mohammed',
+      landlord_address_line1: '123 Main Street',
+      landlord_address_postcode: 'M1 1AA',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly' as const,
+      claiming_rent_arrears: true,
+      arrears_items: [{ period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0 }],
+      court_name: 'Manchester County Court',
+    };
+
+    const result = validateMoneyClaimClient(facts);
+
+    // Should have the pap_letter_required blocker
+    const papBlocker = result.blockers.find((b) => b.id === 'pap_letter_required');
+    expect(papBlocker).toBeDefined();
+  });
+
+  it('should not block when PAP letter has been sent (letter_before_claim_sent=true)', () => {
+    const facts = {
+      letter_before_claim_sent: true,
+      pap_letter_date: '2024-01-01',
+      money_claim: {},
+      landlord_full_name: 'Tariq Mohammed',
+      landlord_address_line1: '123 Main Street',
+      landlord_address_postcode: 'M1 1AA',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly' as const,
+      claiming_rent_arrears: true,
+      arrears_items: [{ period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0 }],
+      court_name: 'Manchester County Court',
+    };
+
+    const result = validateMoneyClaimClient(facts);
+
+    // Should NOT have the pap_letter_required blocker
+    const papBlocker = result.blockers.find((b) => b.id === 'pap_letter_required');
+    expect(papBlocker).toBeUndefined();
+
+    // Should NOT have the pap_documents_pending warning (they already sent it)
+    const papWarning = result.warnings.find((w) => w.id === 'pap_documents_pending');
+    expect(papWarning).toBeUndefined();
+  });
+});
+
+/**
+ * Claim Statement Generator Tests - Claimant Name
+ *
+ * These tests verify that:
+ * - The claimant name is included in the generated statement
+ * - Fallbacks work correctly (landlord_full_name -> claimant_name -> parties.landlord.name)
+ */
+describe('Claim statement claimant name fix', () => {
+  it('should include landlord_full_name in the generated statement', () => {
+    const facts = {
+      landlord_full_name: 'Tariq Mohammed',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      property_address_town: 'Manchester',
+      property_address_postcode: 'M1 1BB',
+      claiming_rent_arrears: true,
+      rent_amount: 1000,
+      rent_frequency: 'monthly' as const,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('Tariq Mohammed');
+    expect(statement).not.toContain('[claimant name]');
+    expect(statement).toContain('The Claimant, Tariq Mohammed, is the landlord');
+  });
+
+  it('should fallback to parties.landlord.name if landlord_full_name is not set', () => {
+    const facts = {
+      parties: {
+        landlord: {
+          name: 'Jane Landlord',
+        },
+        tenants: [{ name: 'John Tenant' }],
+      },
+      property_address_line1: '456 Property Road',
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('Jane Landlord');
+    expect(statement).not.toContain('[claimant name]');
+  });
+
+  it('should show placeholder when no claimant name is available', () => {
+    const facts = {
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('[claimant name]');
+  });
+});
+
+/**
+ * Claim Statement Generator Tests - Tenancy Start Date Format
+ *
+ * These tests verify that:
+ * - The tenancy start date is formatted as DD/MM/YYYY (UK legal standard)
+ * - The date comes from tenancy_start_date, not rent_due_day
+ */
+describe('Claim statement tenancy start date format fix', () => {
+  it('should format tenancy start date as DD/MM/YYYY', () => {
+    const facts = {
+      landlord_full_name: 'Tariq Mohammed',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy_start_date: '2025-07-14', // ISO format
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    // Should show UK format DD/MM/YYYY
+    expect(statement).toContain('14/07/2025');
+    // Should NOT show just "July 2025" or similar
+    expect(statement).not.toMatch(/\bJuly 2025\b/);
+  });
+
+  it('should use tenancy_start_date, not rent_due_day', () => {
+    const facts = {
+      landlord_full_name: 'Tariq Mohammed',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy_start_date: '2024-03-15',
+      rent_due_day: 1, // This should NOT appear as the start date
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    // Should show the actual tenancy start date
+    expect(statement).toContain('15/03/2024');
+    // Should NOT show just "1" or the rent_due_day
+    expect(statement).not.toMatch(/commenced on 1[^\d]/);
+  });
+
+  it('should use nested tenancy.start_date as fallback', () => {
+    const facts = {
+      landlord_full_name: 'Tariq Mohammed',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      tenancy: {
+        start_date: '2024-06-20',
+      },
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('20/06/2024');
+  });
+
+  it('should show placeholder when no tenancy start date is available', () => {
+    const facts = {
+      landlord_full_name: 'Tariq Mohammed',
+      tenant_full_name: 'John Tenant',
+      property_address_line1: '456 Property Road',
+      claiming_rent_arrears: true,
+      // No tenancy_start_date
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    // Should not include a date portion
+    expect(statement).not.toContain('commenced on');
   });
 });

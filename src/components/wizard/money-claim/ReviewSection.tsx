@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   RiCheckboxCircleLine,
   RiErrorWarningLine,
   RiAlertLine,
   RiLightbulbLine,
-  RiArrowRightLine,
   RiArrowUpLine,
   RiFileListLine,
   RiImageLine,
@@ -395,8 +393,6 @@ export const ReviewSection: React.FC<SectionProps> = ({
   const moneyClaim = facts?.money_claim || {};
   const chargeInterest = moneyClaim.charge_interest === true;
   const interestRate = moneyClaim.interest_rate || 8;
-  const router = useRouter();
-  const [previewing, setPreviewing] = useState(false);
   const [showEvidenceGallery, setShowEvidenceGallery] = useState(false);
 
   // Run validation
@@ -477,24 +473,6 @@ export const ReviewSection: React.FC<SectionProps> = ({
     window.dispatchEvent(event);
     // Also scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handlePreview = async () => {
-    try {
-      setPreviewing(true);
-      // Open the HTML preview in a new tab/window
-      window.open(
-        `/api/money-claim/preview/${encodeURIComponent(caseId)}`,
-        '_blank'
-      );
-    } finally {
-      setPreviewing(false);
-    }
-  };
-
-  const handleProceedToReview = () => {
-    // Navigate to the full review page with analysis
-    router.push(`/wizard/review?case_id=${caseId}&product=money_claim`);
   };
 
   return (
@@ -661,38 +639,18 @@ export const ReviewSection: React.FC<SectionProps> = ({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={handlePreview}
-          disabled={previewing}
-          className="inline-flex items-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 disabled:opacity-60"
-        >
-          {previewing ? 'Preparing preview…' : 'Preview draft documents'}
-        </button>
-
-        <button
-          type="button"
-          onClick={handleProceedToReview}
-          disabled={validation.blockers.length > 0}
-          className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          Continue to Full Analysis
-          <RiArrowRightLine className="w-4 h-4" />
-        </button>
-      </div>
-
+      {/* CTA buttons removed - "Generate Documents" button is shown in the wizard flow footer */}
       {validation.blockers.length > 0 ? (
         <p className="text-xs text-red-600 mt-2">
-          Please resolve the blockers above before proceeding to the full analysis.
+          Please resolve the blockers above before generating documents.
         </p>
       ) : validation.warnings.length > 0 ? (
         <p className="text-xs text-amber-600 mt-2">
           You can proceed with warnings, but addressing them will strengthen your case.
         </p>
       ) : (
-        <p className="text-xs text-gray-500 mt-2">
-          The full analysis will provide AI-powered review and final checks before payment.
+        <p className="text-xs text-green-600 mt-2">
+          Ready to generate your document pack. Click &quot;Generate Documents&quot; below to continue.
         </p>
       )}
     </div>

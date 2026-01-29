@@ -82,6 +82,10 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    /** User selected "No, I have not sent them" - wants to generate PAP documents */
+    generate_pap_documents?: boolean;
+    /** Pre-action documents sent status */
+    pap_documents_sent?: string[] | false;
   };
   issues?: {
     rent_arrears?: {
@@ -277,7 +281,12 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   }
 
   // PAP letter
-  if (!facts.letter_before_claim_sent && !facts.pap_letter_date) {
+  // If user explicitly wants to generate PAP documents (selected "No, I haven't sent them"),
+  // this is NOT a blocker for document generation - they're generating the PAP pack to send.
+  // It only blocks actually ISSUING the claim (which happens later in the flow).
+  const wantsToGeneratePapDocuments = facts.money_claim?.generate_pap_documents === true;
+
+  if (!facts.letter_before_claim_sent && !facts.pap_letter_date && !wantsToGeneratePapDocuments) {
     blockers.push({
       id: 'pap_letter_required',
       severity: 'blocker',
@@ -285,6 +294,18 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
       section: 'preaction',
       field: 'letter_before_claim_sent',
       evidenceHint: 'Keep a copy of the letter and proof of posting/delivery.',
+    });
+  }
+
+  // If user wants to generate PAP documents, add an informational warning instead
+  if (wantsToGeneratePapDocuments) {
+    warnings.push({
+      id: 'pap_documents_pending',
+      severity: 'warning',
+      message: 'You can generate your PAP document pack now, but you cannot issue the claim until you have sent the Letter Before Claim and waited at least 30 days for a response.',
+      section: 'preaction',
+      field: 'letter_before_claim_sent',
+      evidenceHint: 'Send the Letter Before Claim with all PAP documents by post and keep proof of posting.',
     });
   }
 
