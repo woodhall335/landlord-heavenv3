@@ -341,6 +341,10 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
     claimant_reference: claim.claimant_reference,
     court_name: claim.court_name,
 
+    // Money claim line items (for N1 brief details detection)
+    damage_items: claim.damage_items,
+    other_charges: claim.other_charges,
+
     // Representation (passed through for N1 + fallbacks)
     solicitor_firm: claim.solicitor_firm,
     solicitor_address: claim.solicitor_address,
