@@ -249,8 +249,15 @@ export async function GET(
       .single();
 
     if (fetchError || !caseData) {
-      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, undefined, rateLimitHeaders);
+      console.error('[Wizard-Preview-API] Database fetch failed:', {
+        caseId,
+        fetchError: fetchError ? { message: fetchError.message, code: fetchError.code, details: fetchError.details } : null,
+        hasData: !!caseData,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, { dbError: fetchError?.message }, rateLimitHeaders);
     }
+
+    console.log('[Wizard-Preview-API] Case found:', { caseId, userId: (caseData as any).user_id });
 
     // Access control: Allow if user owns the case OR case is not linked to anyone yet
     // This supports the wizard flow where users create cases before signing in
