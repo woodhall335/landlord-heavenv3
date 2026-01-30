@@ -79,6 +79,7 @@ export interface MoneyClaimFacts {
   // Enforcement
   enforcement_reviewed?: boolean;
   enforcement_preference?: string;
+  enforcement_preferences?: string[];
 
   // Court details
   court_name?: string;
@@ -536,7 +537,11 @@ export function validateEnforcementSection(
   const blockers: string[] = [];
   const warnings: string[] = [];
 
-  if (!facts.enforcement_reviewed && !facts.enforcement_preference) {
+  // Check for enforcement preferences - support both singular (legacy) and plural (current) field names
+  const hasEnforcementPreference = facts.enforcement_preference ||
+    (Array.isArray(facts.enforcement_preferences) && facts.enforcement_preferences.length > 0);
+
+  if (!facts.enforcement_reviewed && !hasEnforcementPreference) {
     warnings.push(
       'Consider your enforcement options in case the defendant does not pay voluntarily'
     );
