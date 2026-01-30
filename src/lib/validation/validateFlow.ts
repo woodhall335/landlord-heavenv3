@@ -273,16 +273,33 @@ export function normalizeTenancyFacts(facts: Record<string, unknown>): Record<st
     normalized.fixed_term = normalized.is_fixed_term;
   }
 
-  // === landlord_address from landlord_service_address (fallback) ===
-  // If landlord address is missing but service address exists, use service address
-  if (!normalized.landlord_address_line1 && normalized.landlord_service_address_line1) {
-    normalized.landlord_address_line1 = normalized.landlord_service_address_line1;
+  // === landlord_address from various fallback sources ===
+  // Priority: service_address > nested landlord object > landlord_address (concatenated)
+  // This matches the fallback paths in wizardFactsToCaseFacts
+  if (!normalized.landlord_address_line1) {
+    const landlord = normalized.landlord as Record<string, any> | undefined;
+    normalized.landlord_address_line1 =
+      normalized.landlord_service_address_line1 ||
+      landlord?.address_line1 ||
+      landlord?.address_line_1 ||
+      undefined;
   }
-  if (!normalized.landlord_address_town && normalized.landlord_service_address_town) {
-    normalized.landlord_address_town = normalized.landlord_service_address_town;
+  if (!normalized.landlord_address_town) {
+    const landlord = normalized.landlord as Record<string, any> | undefined;
+    normalized.landlord_address_town =
+      normalized.landlord_service_address_town ||
+      normalized.landlord_city ||
+      landlord?.city ||
+      landlord?.town ||
+      undefined;
   }
-  if (!normalized.landlord_address_postcode && normalized.landlord_service_address_postcode) {
-    normalized.landlord_address_postcode = normalized.landlord_service_address_postcode;
+  if (!normalized.landlord_address_postcode) {
+    const landlord = normalized.landlord as Record<string, any> | undefined;
+    normalized.landlord_address_postcode =
+      normalized.landlord_service_address_postcode ||
+      normalized.landlord_postcode ||
+      landlord?.postcode ||
+      undefined;
   }
 
   // === number_of_tenants for joint tenants detection ===
