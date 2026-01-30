@@ -256,7 +256,7 @@ common_rules:
     severity: suggestion
     applies_to: [all]
     applies_when:
-      - condition: "!facts.enforcement_reviewed && !facts.enforcement_preference"
+      - condition: "!facts.enforcement_reviewed && !facts.enforcement_preference && (!facts.enforcement_preferences || facts.enforcement_preferences.length === 0)"
     message: "Consider your enforcement options in case the defendant doesn't pay voluntarily after judgment."
     rationale: "Planning enforcement early helps if payment isn't received."
     evidence_hint: null
