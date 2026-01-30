@@ -237,22 +237,30 @@ export async function GET(
 
     console.log(`[Wizard-Preview-API] Request:`, { caseId, product, tier, userId: user?.id, forceRegenerate });
 
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    // Use admin client for fetching case data - we need to check access rules ourselves
+    // because the case might not be linked to the user yet (created during wizard before signup)
+    const adminSupabase = createAdminClient();
 
-    // Verify case exists and user has access
-    let query = supabase.from('cases').select('id, jurisdiction, collected_facts, wizard_facts, facts').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data: caseData, error: fetchError } = await query.single();
+    // Fetch case data without user filtering first
+    const { data: caseData, error: fetchError } = await adminSupabase
+      .from('cases')
+      .select('id, user_id, jurisdiction, collected_facts, wizard_facts, facts')
+      .eq('id', caseId)
+      .single();
 
     if (fetchError || !caseData) {
-      return errorResponse('CASE_NOT_FOUND', 'Case not found or access denied', 404, undefined, rateLimitHeaders);
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, undefined, rateLimitHeaders);
+    }
+
+    // Access control: Allow if user owns the case OR case is not linked to anyone yet
+    // This supports the wizard flow where users create cases before signing in
+    const caseRow = caseData as any;
+    if (user && caseRow.user_id && caseRow.user_id !== user.id) {
+      // Case belongs to a different user - deny access
+      return errorResponse('ACCESS_DENIED', 'You do not have permission to view this case', 403, undefined, rateLimitHeaders);
     }
 
     // Calculate facts hash for cache validation
-    const caseRow = caseData as any;
     const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
     const currentFactsHash = hashFacts(facts);
 
