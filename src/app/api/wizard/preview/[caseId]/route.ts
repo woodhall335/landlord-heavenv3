@@ -239,7 +239,14 @@ export async function GET(
 
     // Use admin client for fetching case data - we need to check access rules ourselves
     // because the case might not be linked to the user yet (created during wizard before signup)
-    const adminSupabase = createAdminClient();
+    let adminSupabase;
+    try {
+      adminSupabase = createAdminClient();
+      console.log('[Wizard-Preview-API] Admin client created successfully');
+    } catch (adminError: any) {
+      console.error('[Wizard-Preview-API] Failed to create admin client:', adminError.message);
+      return errorResponse('INTERNAL_ERROR', 'Database configuration error', 500, { error: adminError.message }, rateLimitHeaders);
+    }
 
     // Fetch case data without user filtering first
     const { data: caseData, error: fetchError } = await adminSupabase
