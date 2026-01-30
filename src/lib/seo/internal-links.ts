@@ -963,3 +963,362 @@ export const tenancyAgreementNILinks = [
   tenancyAgreementPageLinks.niTenancyFree,
   askHeavenLink,
 ];
+
+// ============================================
+// TENANCY AGREEMENT SEO LANDING PAGE LINKS (Q1 2026)
+// ============================================
+
+// England AST SEO Pages
+export const tenancySeoEnglandPages = {
+  astMain: {
+    href: '/assured-shorthold-tenancy-agreement',
+    title: 'Assured Shorthold Tenancy Agreement',
+    description: 'Create a legally valid AST for England',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  astTemplate: {
+    href: '/ast-tenancy-agreement-template',
+    title: 'AST Tenancy Agreement Template',
+    description: 'Court-ready AST template England',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  fixedTermPeriodic: {
+    href: '/fixed-term-periodic-tenancy-england',
+    title: 'Fixed Term vs Periodic Tenancy',
+    description: 'Which tenancy type to use (England)',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  jointTenancy: {
+    href: '/joint-tenancy-agreement-england',
+    title: 'Joint Tenancy Agreement England',
+    description: 'Agreements for multiple tenants',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  renewUpdate: {
+    href: '/renew-tenancy-agreement-england',
+    title: 'Renewing a Tenancy Agreement',
+    description: 'How to renew or update an AST',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// Scotland PRT SEO Pages
+export const tenancySeoScotlandPages = {
+  prtMain: {
+    href: '/private-residential-tenancy-agreement-scotland',
+    title: 'Private Residential Tenancy Agreement',
+    description: 'Create a legally valid PRT for Scotland',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  prtTemplate: {
+    href: '/prt-tenancy-agreement-template-scotland',
+    title: 'PRT Template Scotland',
+    description: 'Court-ready PRT template',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  jointPrt: {
+    href: '/joint-prt-tenancy-agreement-scotland',
+    title: 'Joint PRT Agreement Scotland',
+    description: 'Multiple tenant PRT agreements',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  updatePrt: {
+    href: '/update-prt-tenancy-agreement-scotland',
+    title: 'Updating a PRT Agreement',
+    description: 'How to update PRT terms',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  prtMistakes: {
+    href: '/common-prt-tenancy-mistakes-scotland',
+    title: 'Common PRT Mistakes',
+    description: 'Avoid costly landlord errors',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// Wales Occupation Contract SEO Pages
+export const tenancySeoWalesPages = {
+  occupationContractMain: {
+    href: '/standard-occupation-contract-wales',
+    title: 'Standard Occupation Contract Wales',
+    description: 'Create a valid occupation contract',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  occupationContractTemplate: {
+    href: '/occupation-contract-template-wales',
+    title: 'Occupation Contract Template Wales',
+    description: 'Renting Homes Act compliant template',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  fixedTermPeriodicWales: {
+    href: '/fixed-term-periodic-occupation-contract-wales',
+    title: 'Fixed Term vs Periodic Wales',
+    description: 'Occupation contract types explained',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  jointOccupationContract: {
+    href: '/joint-occupation-contract-wales',
+    title: 'Joint Occupation Contract Wales',
+    description: 'Contracts for multiple holders',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  updateOccupationContract: {
+    href: '/update-occupation-contract-wales',
+    title: 'Updating an Occupation Contract',
+    description: 'How to update contract terms',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// Northern Ireland Tenancy SEO Pages
+export const tenancySeoNIPages = {
+  niTenancyMain: {
+    href: '/tenancy-agreement-northern-ireland',
+    title: 'Tenancy Agreement Northern Ireland',
+    description: 'Create a legally valid NI tenancy',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  niTenancyTemplate: {
+    href: '/tenancy-agreement-template-northern-ireland',
+    title: 'NI Tenancy Agreement Template',
+    description: 'Private Tenancies Act compliant',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  niFixedTerm: {
+    href: '/fixed-term-tenancy-agreement-northern-ireland',
+    title: 'Fixed Term Tenancy NI',
+    description: 'Fixed term agreements in NI',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  niJointTenancy: {
+    href: '/joint-tenancy-agreement-northern-ireland',
+    title: 'Joint Tenancy Agreement NI',
+    description: 'Multiple tenant agreements NI',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  niUpdateTenancy: {
+    href: '/update-tenancy-agreement-northern-ireland',
+    title: 'Updating a Tenancy Agreement NI',
+    description: 'How to renew or update NI tenancy',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+};
+
+// Related link groups for each jurisdiction's tenancy pages
+
+// England AST Related Links
+export const astMainRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoEnglandPages.astTemplate,
+  tenancySeoEnglandPages.fixedTermPeriodic,
+  tenancySeoEnglandPages.jointTenancy,
+  landingPageLinks.section21Template,
+  guideLinks.howToEvictTenant,
+  askHeavenLink,
+];
+
+export const astTemplateRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoEnglandPages.astMain,
+  tenancySeoEnglandPages.fixedTermPeriodic,
+  tenancySeoEnglandPages.renewUpdate,
+  landingPageLinks.section21Template,
+  toolLinks.section21Validator,
+  askHeavenLink,
+];
+
+export const fixedTermPeriodicEnglandRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoEnglandPages.astMain,
+  tenancySeoEnglandPages.astTemplate,
+  tenancySeoEnglandPages.renewUpdate,
+  landingPageLinks.section21Template,
+  blogLinks.evictionTimeline,
+  askHeavenLink,
+];
+
+export const jointTenancyEnglandRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoEnglandPages.astMain,
+  tenancySeoEnglandPages.astTemplate,
+  toolLinks.hmoChecker,
+  landingPageLinks.section21Template,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const renewUpdateEnglandRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoEnglandPages.astMain,
+  tenancySeoEnglandPages.astTemplate,
+  tenancySeoEnglandPages.fixedTermPeriodic,
+  landingPageLinks.section21Template,
+  guideLinks.howToEvictTenant,
+  askHeavenLink,
+];
+
+// Scotland PRT Related Links
+export const prtMainRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoScotlandPages.prtTemplate,
+  tenancySeoScotlandPages.jointPrt,
+  tenancySeoScotlandPages.prtMistakes,
+  guideLinks.scotlandEviction,
+  landingPageLinks.scotlandNoticeToLeaveTemplate,
+  askHeavenLink,
+];
+
+export const prtTemplateRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoScotlandPages.prtMain,
+  tenancySeoScotlandPages.updatePrt,
+  tenancySeoScotlandPages.prtMistakes,
+  guideLinks.scotlandEviction,
+  landingPageLinks.scotlandNoticeToLeaveTemplate,
+  askHeavenLink,
+];
+
+export const jointPrtRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoScotlandPages.prtMain,
+  tenancySeoScotlandPages.prtTemplate,
+  tenancySeoScotlandPages.prtMistakes,
+  guideLinks.scotlandEviction,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const updatePrtRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoScotlandPages.prtMain,
+  tenancySeoScotlandPages.prtTemplate,
+  tenancySeoScotlandPages.prtMistakes,
+  guideLinks.scotlandEviction,
+  landingPageLinks.scotlandNoticeToLeaveTemplate,
+  askHeavenLink,
+];
+
+export const prtMistakesRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoScotlandPages.prtMain,
+  tenancySeoScotlandPages.prtTemplate,
+  tenancySeoScotlandPages.updatePrt,
+  guideLinks.scotlandEviction,
+  landingPageLinks.scotlandNoticeToLeaveTemplate,
+  askHeavenLink,
+];
+
+// Wales Occupation Contract Related Links
+export const occupationContractMainRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoWalesPages.occupationContractTemplate,
+  tenancySeoWalesPages.fixedTermPeriodicWales,
+  tenancySeoWalesPages.jointOccupationContract,
+  guideLinks.walesEviction,
+  landingPageLinks.walesEvictionTemplate,
+  askHeavenLink,
+];
+
+export const occupationContractTemplateRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoWalesPages.occupationContractMain,
+  tenancySeoWalesPages.updateOccupationContract,
+  tenancySeoWalesPages.fixedTermPeriodicWales,
+  guideLinks.walesEviction,
+  landingPageLinks.walesEvictionTemplate,
+  askHeavenLink,
+];
+
+export const fixedTermPeriodicWalesRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoWalesPages.occupationContractMain,
+  tenancySeoWalesPages.occupationContractTemplate,
+  tenancySeoWalesPages.updateOccupationContract,
+  guideLinks.walesEviction,
+  landingPageLinks.walesEvictionTemplate,
+  askHeavenLink,
+];
+
+export const jointOccupationContractRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoWalesPages.occupationContractMain,
+  tenancySeoWalesPages.occupationContractTemplate,
+  guideLinks.walesEviction,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const updateOccupationContractRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoWalesPages.occupationContractMain,
+  tenancySeoWalesPages.occupationContractTemplate,
+  tenancySeoWalesPages.fixedTermPeriodicWales,
+  guideLinks.walesEviction,
+  landingPageLinks.walesEvictionTemplate,
+  askHeavenLink,
+];
+
+// Northern Ireland Tenancy Related Links
+export const niTenancyMainRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoNIPages.niTenancyTemplate,
+  tenancySeoNIPages.niFixedTerm,
+  tenancySeoNIPages.niJointTenancy,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const niTenancyTemplateRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoNIPages.niTenancyMain,
+  tenancySeoNIPages.niUpdateTenancy,
+  tenancySeoNIPages.niFixedTerm,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const niFixedTermRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoNIPages.niTenancyMain,
+  tenancySeoNIPages.niTenancyTemplate,
+  tenancySeoNIPages.niUpdateTenancy,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const niJointTenancyRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoNIPages.niTenancyMain,
+  tenancySeoNIPages.niTenancyTemplate,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];
+
+export const niUpdateTenancyRelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancySeoNIPages.niTenancyMain,
+  tenancySeoNIPages.niTenancyTemplate,
+  tenancySeoNIPages.niFixedTerm,
+  guideLinks.moneyClaimGuide,
+  askHeavenLink,
+];

@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { occupationContractMainRelatedLinks } from '@/lib/seo/internal-links';
+import { astMainRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { occupationContractWalesFAQs } from '@/data/faqs';
+import { astTenancyAgreementFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
@@ -26,59 +26,59 @@ import {
 } from 'lucide-react';
 
 // Page constants for analytics
-const PAGE_PATH = '/standard-occupation-contract-wales';
-const PAGE_TITLE = 'Standard Occupation Contract Wales';
+const PAGE_PATH = '/assured-shorthold-tenancy-agreement';
+const PAGE_TITLE = 'Assured Shorthold Tenancy Agreement';
 const PAGE_TYPE = 'tenancy' as const;
 
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
-  jurisdiction: 'wales',
+  jurisdiction: 'england',
   src: 'guide',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
-  jurisdiction: 'wales',
+  jurisdiction: 'england',
   src: 'guide',
   topic: 'tenancy',
 });
 
 export const metadata: Metadata = {
-  title: 'Standard Occupation Contract Wales | Create Welsh Tenancy Agreement',
+  title: 'Assured Shorthold Tenancy Agreement (England) | Create AST Online',
   description:
-    'Create a legally valid Standard Occupation Contract for Wales. Compliant with the Renting Homes (Wales) Act 2016. Written statement included. Court-ready documentation.',
+    'Create a legally valid Assured Shorthold Tenancy agreement for England. Court-enforceable AST compliant with Housing Act 1988. Protects your eviction rights.',
   keywords: [
-    'standard occupation contract',
-    'occupation contract wales',
-    'welsh tenancy agreement',
-    'renting homes wales act',
-    'wales landlord contract',
-    'contract holder wales',
-    'occupation contract template',
-    'wales rental agreement',
-    'written statement wales',
-    'landlord wales',
+    'assured shorthold tenancy agreement',
+    'ast tenancy agreement',
+    'tenancy agreement england landlord',
+    'assured shorthold tenancy',
+    'ast agreement',
+    'tenancy agreement template england',
+    'landlord tenancy agreement',
+    'housing act 1988 tenancy',
+    'create tenancy agreement',
+    'legal tenancy agreement',
   ],
   alternates: {
-    canonical: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+    canonical: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement',
   },
   openGraph: {
-    title: 'Standard Occupation Contract Wales | Landlord Heaven',
+    title: 'Assured Shorthold Tenancy Agreement (England) | Landlord Heaven',
     description:
-      'Create a legally valid occupation contract for Wales. Fully compliant with the Renting Homes (Wales) Act 2016.',
+      'Create a legally valid AST for England. Court-enforceable tenancy agreement compliant with current legislation.',
     type: 'website',
   },
 };
 
-export default function StandardOccupationContractWalesPage() {
+export default function AssuredShortholdTenancyAgreementPage() {
   const pageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Standard Occupation Contract Wales',
+    name: 'Assured Shorthold Tenancy Agreement (England)',
     description:
-      'Create a legally valid Standard Occupation Contract for Wales, compliant with the Renting Homes (Wales) Act 2016.',
-    url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+      'Create a legally valid Assured Shorthold Tenancy agreement for England. Court-enforceable and compliant with Housing Act 1988.',
+    url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement',
   };
 
   return (
@@ -89,8 +89,8 @@ export default function StandardOccupationContractWalesPage() {
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
           { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
           {
-            name: 'Standard Occupation Contract Wales',
-            url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+            name: 'Assured Shorthold Tenancy Agreement',
+            url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement',
           },
         ])}
       />
@@ -100,28 +100,28 @@ export default function StandardOccupationContractWalesPage() {
         pagePath={PAGE_PATH}
         pageTitle={PAGE_TITLE}
         pageType={PAGE_TYPE}
-        jurisdiction="wales"
+        jurisdiction="england"
       />
 
       <main>
         {/* Hero Section */}
         <StandardHero
-          badge="Wales Only"
+          badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
-          title="Standard Occupation Contract Wales"
+          title="Assured Shorthold Tenancy Agreement"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> occupation contract for Wales.
-              Compliant with the Renting Homes (Wales) Act 2016, with written statement
-              and all fundamental terms included.
+              Create a <strong>legally valid</strong> tenancy agreement for England.
+              Court-enforceable, compliant with the Housing Act 1988, and designed to protect your
+              eviction rights.
             </>
           }
           primaryCTA={{
-            label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Tenancy Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
           secondaryCTA={{
-            label: 'Premium Contract with Extra Protection',
+            label: 'Premium Agreement with Extra Protection',
             href: wizardLinkPremium,
           }}
           variant="pastel"
@@ -130,7 +130,7 @@ export default function StandardOccupationContractWalesPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              Renting Homes Act 2016 Compliant
+              Housing Act 1988 Compliant
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
@@ -150,59 +150,54 @@ export default function StandardOccupationContractWalesPage() {
           </div>
         </section>
 
-        {/* What is an Occupation Contract Section */}
+        {/* What is an AST Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Is a Standard Occupation Contract?
+                What Is an Assured Shorthold Tenancy Agreement?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding the tenancy type that applies to all private lettings in Wales
-                since December 2022.
+                Understanding the most common tenancy type in England and why getting it right
+                matters for your property.
               </p>
 
               <div className="prose prose-lg max-w-none text-gray-600">
                 <p>
-                  A <strong>Standard Occupation Contract</strong> is the type of tenancy agreement
-                  used for private residential lettings in Wales. It was introduced by the
-                  Renting Homes (Wales) Act 2016, which came into force on 1 December 2022,
-                  replacing the Assured Shorthold Tenancy (AST) that previously applied in Wales.
+                  An <strong>Assured Shorthold Tenancy (AST)</strong> is the default tenancy type
+                  for most private residential lettings in England. It was introduced by the Housing
+                  Act 1988 and gives landlords the right to regain possession of their property
+                  using either a Section 21 notice (no-fault eviction) or a Section 8 notice
+                  (grounds-based eviction).
                 </p>
                 <p>
-                  Under Welsh law, tenants are called <strong>contract-holders</strong> rather
-                  than tenants, and the agreement is an occupation contract rather than a tenancy
-                  agreement. This reflects the Act&apos;s approach of treating housing as a matter
-                  of contract law with statutory protections built in.
+                  An AST provides tenants with certain statutory rights, including protection from
+                  unfair eviction and the right to have their deposit protected in a government-
+                  approved scheme. For landlords, it provides a clear legal framework for managing
+                  the tenancy and recovering possession when needed.
                 </p>
                 <p>
-                  The Standard Occupation Contract gives contract-holders security of occupation
-                  while providing landlords with clear procedures for recovering possession when
-                  needed. The key difference from English ASTs is that landlords must give at
-                  least six months&apos; notice for no-fault possession using a Section 173 notice.
-                </p>
-                <p>
-                  Every landlord in Wales must provide a <strong>written statement</strong> of
-                  the occupation contract within 14 days of the occupation date. This written
-                  statement must contain all the fundamental and supplementary terms that apply
-                  to the contract. Failure to provide a written statement has consequences for
-                  your ability to serve possession notices.
+                  The tenancy agreement itself is the contract between you and your tenant. While a
+                  tenancy can technically exist without a written agreement, having a properly
+                  drafted AST is essential for several reasons:
                 </p>
                 <ul>
                   <li>
-                    <strong>Fundamental terms:</strong> These are set by law and cannot be
-                    changed. They include the landlord&apos;s repair obligations, the
-                    contract-holder&apos;s right to occupy, and rules about deposits.
+                    <strong>Deposit protection compliance:</strong> You must provide prescribed
+                    information about deposit protection, and a written agreement is the clearest
+                    way to document this.
                   </li>
                   <li>
-                    <strong>Supplementary terms:</strong> These are default terms that apply
-                    unless you agree otherwise. They cover matters like keeping the property
-                    in good condition and not causing nuisance.
+                    <strong>Section 21 validity:</strong> Courts examine whether all pre-tenancy
+                    requirements were met. A clear written agreement helps prove compliance.
                   </li>
                   <li>
-                    <strong>Additional terms:</strong> You can add your own terms covering
-                    property-specific matters like gardens, pets, and parking, as long as
-                    they are fair and do not contradict fundamental terms.
+                    <strong>Dispute resolution:</strong> If disagreements arise about rent, repairs,
+                    or tenancy terms, a written agreement provides definitive evidence.
+                  </li>
+                  <li>
+                    <strong>Money claims:</strong> If you need to pursue the tenant for unpaid rent
+                    or damage, the court will want to see the agreed terms.
                   </li>
                 </ul>
               </div>
@@ -220,29 +215,29 @@ export default function StandardOccupationContractWalesPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Why Using the Correct Contract Type Matters in Wales
+                    Why Using the Correct Tenancy Agreement Matters
                   </h2>
                   <p className="text-amber-800 mb-4">
-                    Since 1 December 2022, using an English AST template in Wales is not legally
-                    valid. Your contract must comply with Welsh housing law.
+                    Many landlords only discover their tenancy agreement has problems when they try
+                    to evict a tenant or make a court claim. By then, it can be too late.
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Common Mistakes</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>Using an English AST template</li>
-                        <li>Not providing a written statement within 14 days</li>
-                        <li>Missing fundamental terms required by law</li>
-                        <li>Including unfair additional terms</li>
+                        <li>• Using a Scottish or Welsh template in England</li>
+                        <li>• Outdated agreements missing required clauses</li>
+                        <li>• Unfair terms that courts will not enforce</li>
+                        <li>• Missing deposit protection information</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Consequences</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>Section 173 notice invalid without written statement</li>
-                        <li>Cannot serve no-fault notice for 6 months</li>
-                        <li>Possession claims rejected by court</li>
-                        <li>Contract-holder can apply to tribunal</li>
+                        <li>• Section 21 notice declared invalid</li>
+                        <li>• Possession claim thrown out by court</li>
+                        <li>• Unable to recover unpaid rent</li>
+                        <li>• Deposit penalties of up to 3x deposit</li>
                       </ul>
                     </div>
                   </div>
@@ -257,11 +252,11 @@ export default function StandardOccupationContractWalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Legal Requirements for Welsh Occupation Contracts
+                Legal Requirements for a Valid AST
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Your occupation contract must comply with the Renting Homes (Wales) Act 2016
-                and related regulations.
+                Your tenancy agreement must comply with multiple pieces of legislation to be fully
+                enforceable.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -269,11 +264,11 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <FileText className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Renting Homes (Wales) Act 2016</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Housing Act 1988</h3>
                   <p className="text-gray-600 text-sm">
-                    The foundational legislation for all occupation contracts in Wales. Defines
-                    contract-holder rights, landlord obligations, and the framework for
-                    possession proceedings. Came into force 1 December 2022.
+                    The foundational legislation for ASTs. Defines tenant security, eviction
+                    grounds, and landlord rights. Your agreement must not conflict with statutory
+                    tenant protections.
                   </p>
                 </div>
 
@@ -281,11 +276,11 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Shield className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Written Statement Requirement</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Tenant Fees Act 2019</h3>
                   <p className="text-gray-600 text-sm">
-                    Landlords must provide a written statement within 14 days of occupation
-                    starting. This must contain all fundamental terms, supplementary terms,
-                    and any additional terms agreed. Failure blocks Section 173 notices.
+                    Prohibits most fees charged to tenants. Your agreement cannot include banned
+                    fees for viewings, references, inventory, or early termination beyond
+                    prescribed limits.
                   </p>
                 </div>
 
@@ -293,11 +288,11 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Scale className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Rent Smart Wales Registration</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Consumer Rights Act 2015</h3>
                   <p className="text-gray-600 text-sm">
-                    All private landlords must be registered with Rent Smart Wales, and anyone
-                    carrying out letting or management activities must be licensed. This is
-                    separate from the occupation contract but required for lawful letting.
+                    Unfair contract terms are not enforceable. Clauses must be transparent, fair,
+                    and not create significant imbalance. Courts can strike out unfair terms
+                    entirely.
                   </p>
                 </div>
 
@@ -305,37 +300,36 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Gavel className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Deposit Protection</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Deregulation Act 2015</h3>
                   <p className="text-gray-600 text-sm">
-                    Deposits must be protected in an approved scheme within 30 days of receipt.
-                    The contract must state the deposit amount, protection scheme, and how
-                    deductions work. Unprotected deposits affect possession rights.
+                    Requires landlords to provide EPC, gas safety certificate, and How to Rent
+                    guide before a valid Section 21 notice can be served. Non-compliance invalidates
+                    eviction notices.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                 <p className="text-green-900 text-sm">
-                  <strong>Landlord Heaven occupation contracts</strong> are drafted specifically
-                  for Wales and comply with the Renting Homes (Wales) Act 2016. They include
-                  all fundamental terms, appropriate supplementary terms, and are regularly
-                  updated when regulations change.
+                  <strong>Landlord Heaven AST agreements</strong> are drafted to comply with all
+                  current legislation. They are regularly updated when laws change, so you always
+                  have a compliant agreement.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Key Terms Section */}
+        {/* What to Include Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Your Occupation Contract Must Include
+                What Your AST Should Include
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                The written statement must contain specific information and terms required
-                by Welsh law.
+                A comprehensive tenancy agreement covers all essential terms to protect both
+                landlord and tenant.
               </p>
 
               <div className="space-y-6">
@@ -349,10 +343,10 @@ export default function StandardOccupationContractWalesPage() {
                         Parties and Property Details
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        The written statement must identify the landlord, all contract-holders
-                        by full legal name, and the dwelling address. For joint contracts, all
-                        contract-holders must be named with their joint and several liability
-                        clearly established.
+                        The agreement must clearly identify the landlord (or their agent), all
+                        tenants by full legal name, and the property address. For joint tenancies,
+                        all tenants should be named and their joint and several liability
+                        established.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
@@ -361,15 +355,15 @@ export default function StandardOccupationContractWalesPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          All contract-holder names
+                          All tenant names and addresses
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Full dwelling address
+                          Full property address
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Occupation date
+                          Agent details (if applicable)
                         </li>
                       </ul>
                     </div>
@@ -384,9 +378,9 @@ export default function StandardOccupationContractWalesPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Rent and Payment Terms</h3>
                       <p className="text-gray-600 mb-3">
-                        Specify the rent amount, payment frequency, due date, and acceptable
-                        payment methods. The contract must explain how rent increases work and
-                        reference the statutory procedure for increases.
+                        Specify the rent amount, payment frequency, due date, and acceptable payment
+                        methods. Include provisions for rent review if the tenancy may continue
+                        beyond the initial term.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
@@ -399,11 +393,11 @@ export default function StandardOccupationContractWalesPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Payment method
+                          Payment method (bank transfer, etc.)
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Rent increase procedure
+                          Rent review provisions
                         </li>
                       </ul>
                     </div>
@@ -416,28 +410,28 @@ export default function StandardOccupationContractWalesPage() {
                       <Shield className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Fundamental Terms</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Deposit Protection</h3>
                       <p className="text-gray-600 mb-3">
-                        These terms are set by law and cannot be changed. They include the
-                        landlord&apos;s repair and maintenance obligations, fitness for human
-                        habitation requirements, and the contract-holder&apos;s right to occupy.
+                        The deposit amount, which scheme it will be protected in, and how it will
+                        be returned at the end of the tenancy. You must provide the tenant with
+                        prescribed information within 30 days.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Landlord repair obligations
+                          Deposit amount (max 5 weeks rent)
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fitness for human habitation
+                          Protection scheme name
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Right to occupy
+                          Return conditions
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Deposit protection rules
+                          Prescribed information requirements
                         </li>
                       </ul>
                     </div>
@@ -451,29 +445,29 @@ export default function StandardOccupationContractWalesPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">
-                        Contract Duration and Ending
+                        Tenancy Duration and Termination
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        Whether the contract is fixed-term or periodic, the occupation date,
-                        end date (if fixed-term), and how either party can end the contract
-                        including the Section 173 and Section 181 notice procedures.
+                        Whether it is a fixed term or periodic tenancy, the start date, end date
+                        (if fixed), and how either party can end the tenancy including notice
+                        periods required.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Occupation date
+                          Tenancy start date
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fixed-term end date (if applicable)
+                          Fixed term end date (if applicable)
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Section 173 notice (no-fault)
+                          Notice periods
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Section 181 notice (breach)
+                          Break clause (if included)
                         </li>
                       </ul>
                     </div>
@@ -487,29 +481,29 @@ export default function StandardOccupationContractWalesPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">
-                        Supplementary and Additional Terms
+                        Responsibilities and Obligations
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        Supplementary terms are defaults that apply unless varied by agreement.
-                        Additional terms cover property-specific matters and must be fair and
-                        not contradict fundamental terms.
+                        Clearly define who is responsible for repairs, maintenance, bills, and
+                        other obligations. This prevents disputes and establishes grounds for
+                        action if terms are breached.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Contract-holder behaviour obligations
+                          Landlord repair obligations
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Property condition requirements
+                          Tenant responsibilities
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Garden maintenance (if applicable)
+                          Utility bill responsibility
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Pet policy
+                          Garden and exterior maintenance
                         </li>
                       </ul>
                     </div>
@@ -528,105 +522,43 @@ export default function StandardOccupationContractWalesPage() {
                 pageType="tenancy"
                 variant="section"
                 pagePath={PAGE_PATH}
-                jurisdiction="wales"
-                title="Create Your Occupation Contract Now"
-                description="Our Welsh occupation contracts are drafted for the Renting Homes Act 2016, include all fundamental terms, and are designed to stand up in court."
+                jurisdiction="england"
+                title="Create Your Tenancy Agreement Now"
+                description="Our AST agreements are drafted by legal professionals, updated for current legislation, and designed to stand up in court."
               />
             </div>
           </div>
         </section>
 
-        {/* Ending an Occupation Contract Section */}
+        {/* Standard vs Premium Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Ending a Standard Occupation Contract
+                Standard vs Premium Tenancy Agreement
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding how possession works under Welsh law is essential for landlords.
-              </p>
-
-              <div className="prose prose-lg max-w-none text-gray-600">
-                <h3>Section 173 Notice (No-Fault Possession)</h3>
-                <p>
-                  To end an occupation contract without needing to prove a breach, you must
-                  serve a Section 173 notice. This requires at least <strong>six months&apos;
-                  notice</strong> and cannot be served until at least six months after the
-                  occupation date. This is significantly longer than the two-month Section 21
-                  notice period in England.
-                </p>
-                <p>
-                  Importantly, you cannot serve a valid Section 173 notice if you have not
-                  provided the contract-holder with a written statement. If the written
-                  statement was late, you must wait six months from when you provided it
-                  before the Section 173 notice can take effect.
-                </p>
-
-                <h3>Section 181 Notice (Breach of Contract)</h3>
-                <p>
-                  If the contract-holder has breached the contract, you may be able to use
-                  a Section 181 notice instead. For rent arrears, you can give one month&apos;s
-                  notice after at least two months&apos; rent is unpaid. For serious antisocial
-                  behaviour, the notice period can be as short as 14 days.
-                </p>
-                <p>
-                  Section 181 is similar to Section 8 in England but with Welsh-specific
-                  grounds and procedures. The court will consider whether the breach is
-                  serious enough to warrant possession.
-                </p>
-
-                <h3>Court Proceedings</h3>
-                <p>
-                  If the contract-holder does not leave after a valid notice expires, you
-                  must apply to the county court for a possession order. The court will
-                  check that all requirements have been met, including providing the written
-                  statement and protecting the deposit.
-                </p>
-              </div>
-
-              <div className="mt-8">
-                <Link
-                  href="/wales-eviction-notices"
-                  className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
-                >
-                  Learn more about Wales eviction notices
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Standard vs Premium Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium Occupation Contract
-              </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the level of protection that suits your Welsh letting situation.
+                Choose the level of protection that suits your letting situation.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Contract</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Agreement</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
                     {PRODUCTS.ast_standard.displayPrice}
                   </p>
                   <p className="text-gray-600 mb-6">
-                    A complete, legally valid occupation contract with all fundamental and
-                    supplementary terms required by Welsh law.
+                    A complete, legally valid AST with all essential clauses required for
+                    compliance.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Renting Homes Act 2016 compliant</span>
+                      <span>Housing Act 1988 compliant</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>All fundamental terms included</span>
+                      <span>Tenant Fees Act 2019 compliant</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -638,14 +570,14 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Written statement format</span>
+                      <span>Repair responsibilities defined</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkStandard}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Create Standard Contract
+                    Create Standard Agreement
                   </Link>
                 </div>
 
@@ -653,13 +585,13 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm px-3 py-1 rounded-full">
                     Recommended
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Contract</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Agreement</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
                     {PRODUCTS.ast_premium.displayPrice}
                   </p>
                   <p className="text-gray-600 mb-6">
-                    Enhanced protection with additional terms for complex situations and
-                    extra security under Welsh law.
+                    Enhanced protection with additional clauses for complex situations and extra
+                    security.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">
@@ -676,7 +608,7 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Detailed pet policy</span>
+                      <span>Pet policy clauses</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -684,14 +616,14 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Professional cleaning clause</span>
+                      <span>Rent review mechanism</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkPremium}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Create Premium Contract
+                    Create Premium Agreement
                   </Link>
                 </div>
               </div>
@@ -699,10 +631,142 @@ export default function StandardOccupationContractWalesPage() {
           </div>
         </section>
 
+        {/* Why Enforceability Matters Section */}
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Why Enforceability Matters
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Your tenancy agreement is only valuable if it holds up when you need it most.
+              </p>
+
+              <div className="prose prose-lg max-w-none text-gray-600">
+                <p>
+                  Most tenancies run smoothly, but when problems arise, your tenancy agreement
+                  becomes the foundation of any legal action. Whether you need to evict a
+                  non-paying tenant, recover rent arrears through the courts, or defend against a
+                  tenant claim, the agreement must be legally sound.
+                </p>
+
+                <h3>Section 21 Evictions</h3>
+                <p>
+                  To serve a valid Section 21 notice, you must have complied with various
+                  requirements including deposit protection, providing the How to Rent guide, EPC,
+                  and gas safety certificate. Your tenancy agreement should document these
+                  obligations and confirm compliance.
+                </p>
+                <p>
+                  If a tenant challenges your Section 21 notice, the court will examine whether all
+                  requirements were met. A well-drafted agreement that references these obligations
+                  helps establish compliance.
+                </p>
+
+                <h3>Section 8 Evictions</h3>
+                <p>
+                  Section 8 notices rely on specific grounds, many of which relate to tenant
+                  breaches of the tenancy agreement. For example, Ground 8 (rent arrears) requires
+                  proving the rent amount and that it is at least 2 months in arrears. Ground 12
+                  (breach of tenancy obligation) requires a clear term that has been breached.
+                </p>
+                <p>
+                  If your agreement does not clearly state the rent amount, payment date, or
+                  specific obligations, proving a breach becomes more difficult.
+                </p>
+
+                <h3>Money Claims</h3>
+                <p>
+                  When pursuing a tenant for unpaid rent, damage, or other losses through the
+                  courts (typically using Money Claim Online), the judge will want to see evidence
+                  of the agreed terms. A clear, signed tenancy agreement is essential evidence.
+                </p>
+                <p>
+                  Claims are also strengthened when the agreement explicitly states tenant
+                  obligations around property condition, cleaning, and returning the property at
+                  the end of the tenancy.
+                </p>
+              </div>
+
+              <div className="mt-8">
+                <Link
+                  href="/money-claim-unpaid-rent"
+                  className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                >
+                  Learn about recovering unpaid rent through the courts
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Internal Links Section */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Related Tenancy Agreement Guides
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Explore our other resources for England landlords.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <Link
+                  href="/ast-tenancy-agreement-template"
+                  className="bg-white rounded-xl p-4 border border-gray-200 hover:border-primary hover:shadow-md transition-all group"
+                >
+                  <h3 className="font-semibold text-gray-900 group-hover:text-primary mb-1">
+                    AST Template Guide
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Detailed guide to what makes a good AST template
+                  </p>
+                </Link>
+
+                <Link
+                  href="/fixed-term-periodic-tenancy-england"
+                  className="bg-white rounded-xl p-4 border border-gray-200 hover:border-primary hover:shadow-md transition-all group"
+                >
+                  <h3 className="font-semibold text-gray-900 group-hover:text-primary mb-1">
+                    Fixed Term vs Periodic
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Which tenancy type is right for your situation
+                  </p>
+                </Link>
+
+                <Link
+                  href="/joint-tenancy-agreement-england"
+                  className="bg-white rounded-xl p-4 border border-gray-200 hover:border-primary hover:shadow-md transition-all group"
+                >
+                  <h3 className="font-semibold text-gray-900 group-hover:text-primary mb-1">
+                    Joint Tenancy Agreements
+                  </h3>
+                  <p className="text-sm text-gray-600">Letting to multiple tenants in England</p>
+                </Link>
+
+                <Link
+                  href="/renew-tenancy-agreement-england"
+                  className="bg-white rounded-xl p-4 border border-gray-200 hover:border-primary hover:shadow-md transition-all group"
+                >
+                  <h3 className="font-semibold text-gray-900 group-hover:text-primary mb-1">
+                    Renewing Your AST
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    How to renew or update an existing tenancy
+                  </p>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <FAQSection
-          faqs={occupationContractWalesFAQs}
-          title="Standard Occupation Contract FAQ"
+          faqs={astTenancyAgreementFAQs}
+          title="AST Tenancy Agreement FAQ"
           showContactCTA={false}
           variant="gray"
         />
@@ -715,9 +779,9 @@ export default function StandardOccupationContractWalesPage() {
                 pageType="tenancy"
                 variant="final"
                 pagePath={PAGE_PATH}
-                jurisdiction="wales"
-                title="Create Your Welsh Occupation Contract Today"
-                description="Legally valid. Renting Homes Act compliant. Written statement included. Ready in minutes."
+                jurisdiction="england"
+                title="Create Your AST Agreement Today"
+                description="Legally valid. Court-enforceable. Updated for current legislation. Ready in minutes."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -729,7 +793,7 @@ export default function StandardOccupationContractWalesPage() {
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <RelatedLinks title="Related Resources" links={occupationContractMainRelatedLinks} />
+              <RelatedLinks title="Related Resources" links={astMainRelatedLinks} />
             </div>
           </div>
         </section>

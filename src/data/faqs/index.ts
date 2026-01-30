@@ -46,6 +46,34 @@ export {
   howToRentGuideFAQs,
 } from './tenancy-faqs';
 
+// Tenancy Agreement SEO Landing Page FAQs
+export {
+  // England AST
+  astTenancyAgreementFAQs,
+  astTemplateFAQs,
+  fixedTermPeriodicEnglandFAQs,
+  jointTenancyEnglandFAQs,
+  renewUpdateEnglandFAQs,
+  // Scotland PRT
+  prtTenancyAgreementFAQs,
+  prtTemplateFAQs,
+  jointPrtFAQs,
+  updatePrtFAQs,
+  prtMistakesFAQs,
+  // Wales Occupation Contracts
+  occupationContractWalesFAQs,
+  occupationContractTemplateFAQs,
+  fixedTermPeriodicWalesFAQs,
+  jointOccupationContractFAQs,
+  updateOccupationContractFAQs,
+  // Northern Ireland
+  niTenancyAgreementFAQs,
+  niTenancyTemplateFAQs,
+  fixedTermNIFAQs,
+  jointTenancyNIFAQs,
+  updateNITenancyFAQs,
+} from './tenancy-agreement-seo-faqs';
+
 // Court Form FAQs
 export {
   n5bFormFAQs,

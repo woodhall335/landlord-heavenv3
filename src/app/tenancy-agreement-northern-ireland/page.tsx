@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { occupationContractMainRelatedLinks } from '@/lib/seo/internal-links';
+import { niTenancyMainRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { occupationContractWalesFAQs } from '@/data/faqs';
+import { niTenancyAgreementFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
@@ -23,62 +23,62 @@ import {
   Users,
   Gavel,
   BadgeCheck,
+  XCircle,
 } from 'lucide-react';
 
 // Page constants for analytics
-const PAGE_PATH = '/standard-occupation-contract-wales';
-const PAGE_TITLE = 'Standard Occupation Contract Wales';
+const PAGE_PATH = '/tenancy-agreement-northern-ireland';
+const PAGE_TITLE = 'Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
-  jurisdiction: 'wales',
+  jurisdiction: 'northern-ireland',
   src: 'guide',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
-  jurisdiction: 'wales',
+  jurisdiction: 'northern-ireland',
   src: 'guide',
   topic: 'tenancy',
 });
 
 export const metadata: Metadata = {
-  title: 'Standard Occupation Contract Wales | Create Welsh Tenancy Agreement',
+  title: 'Tenancy Agreement Northern Ireland | Create NI Tenancy Online',
   description:
-    'Create a legally valid Standard Occupation Contract for Wales. Compliant with the Renting Homes (Wales) Act 2016. Written statement included. Court-ready documentation.',
+    'Create a legally valid tenancy agreement for Northern Ireland. Compliant with the Private Tenancies (NI) Order 2006 and Private Tenancies Act 2022.',
   keywords: [
-    'standard occupation contract',
-    'occupation contract wales',
-    'welsh tenancy agreement',
-    'renting homes wales act',
-    'wales landlord contract',
-    'contract holder wales',
-    'occupation contract template',
-    'wales rental agreement',
-    'written statement wales',
-    'landlord wales',
+    'tenancy agreement northern ireland',
+    'landlord tenancy agreement ni',
+    'northern ireland tenancy agreement',
+    'private tenancy agreement ni',
+    'ni landlord agreement',
+    'tenancy agreement template ni',
+    'create tenancy agreement northern ireland',
+    'private tenancies act 2022',
+    'ni rental agreement',
   ],
   alternates: {
-    canonical: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+    canonical: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
   openGraph: {
-    title: 'Standard Occupation Contract Wales | Landlord Heaven',
+    title: 'Tenancy Agreement Northern Ireland | Landlord Heaven',
     description:
-      'Create a legally valid occupation contract for Wales. Fully compliant with the Renting Homes (Wales) Act 2016.',
+      'Create a legally valid tenancy agreement for Northern Ireland. Compliant with NI tenancy legislation.',
     type: 'website',
   },
 };
 
-export default function StandardOccupationContractWalesPage() {
+export default function TenancyAgreementNorthernIrelandPage() {
   const pageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Standard Occupation Contract Wales',
+    name: 'Tenancy Agreement Northern Ireland',
     description:
-      'Create a legally valid Standard Occupation Contract for Wales, compliant with the Renting Homes (Wales) Act 2016.',
-    url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+      'Create a legally valid tenancy agreement for Northern Ireland. Compliant with the Private Tenancies (NI) Order 2006 and Private Tenancies Act 2022.',
+    url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   };
 
   return (
@@ -89,8 +89,8 @@ export default function StandardOccupationContractWalesPage() {
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
           { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
           {
-            name: 'Standard Occupation Contract Wales',
-            url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
+            name: 'Tenancy Agreement Northern Ireland',
+            url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
           },
         ])}
       />
@@ -100,28 +100,28 @@ export default function StandardOccupationContractWalesPage() {
         pagePath={PAGE_PATH}
         pageTitle={PAGE_TITLE}
         pageType={PAGE_TYPE}
-        jurisdiction="wales"
+        jurisdiction="northern-ireland"
       />
 
       <main>
         {/* Hero Section */}
         <StandardHero
-          badge="Wales Only"
+          badge="Northern Ireland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
-          title="Standard Occupation Contract Wales"
+          title="Tenancy Agreement Northern Ireland"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> occupation contract for Wales.
-              Compliant with the Renting Homes (Wales) Act 2016, with written statement
-              and all fundamental terms included.
+              Create a <strong>legally valid</strong> tenancy agreement for Northern Ireland.
+              Compliant with the Private Tenancies (NI) Order 2006 and the Private Tenancies Act
+              (Northern Ireland) 2022.
             </>
           }
           primaryCTA={{
-            label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Tenancy Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
           secondaryCTA={{
-            label: 'Premium Contract with Extra Protection',
+            label: 'Premium Agreement with Extra Protection',
             href: wizardLinkPremium,
           }}
           variant="pastel"
@@ -130,7 +130,7 @@ export default function StandardOccupationContractWalesPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              Renting Homes Act 2016 Compliant
+              2022 Act Compliant
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
@@ -150,59 +150,54 @@ export default function StandardOccupationContractWalesPage() {
           </div>
         </section>
 
-        {/* What is an Occupation Contract Section */}
+        {/* What is a NI Tenancy Agreement Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Is a Standard Occupation Contract?
+                What Is a Private Tenancy Agreement in Northern Ireland?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding the tenancy type that applies to all private lettings in Wales
-                since December 2022.
+                Understanding Northern Ireland&apos;s unique tenancy framework and legal requirements.
               </p>
 
               <div className="prose prose-lg max-w-none text-gray-600">
                 <p>
-                  A <strong>Standard Occupation Contract</strong> is the type of tenancy agreement
-                  used for private residential lettings in Wales. It was introduced by the
-                  Renting Homes (Wales) Act 2016, which came into force on 1 December 2022,
-                  replacing the Assured Shorthold Tenancy (AST) that previously applied in Wales.
+                  A <strong>private tenancy agreement</strong> in Northern Ireland is a legally binding
+                  contract between a landlord and tenant for the rental of residential property. Unlike
+                  England, Scotland, or Wales, Northern Ireland has its own distinct tenancy legislation
+                  governed primarily by the Private Tenancies (Northern Ireland) Order 2006 and the
+                  more recent Private Tenancies Act (Northern Ireland) 2022.
                 </p>
                 <p>
-                  Under Welsh law, tenants are called <strong>contract-holders</strong> rather
-                  than tenants, and the agreement is an occupation contract rather than a tenancy
-                  agreement. This reflects the Act&apos;s approach of treating housing as a matter
-                  of contract law with statutory protections built in.
+                  The 2022 Act introduced significant changes to landlord obligations, including a
+                  mandatory requirement to provide tenants with a written tenancy agreement within 28
+                  days of the tenancy starting. This written agreement must contain specific statutory
+                  information prescribed by regulations, making it essential that landlords use an
+                  up-to-date, compliant template.
                 </p>
                 <p>
-                  The Standard Occupation Contract gives contract-holders security of occupation
-                  while providing landlords with clear procedures for recovering possession when
-                  needed. The key difference from English ASTs is that landlords must give at
-                  least six months&apos; notice for no-fault possession using a Section 173 notice.
+                  Northern Ireland tenancies are neither Assured Shorthold Tenancies (England), Private
+                  Residential Tenancies (Scotland), nor Occupation Contracts (Wales). Using a template
+                  from another UK jurisdiction will not comply with NI law and could leave you unable
+                  to enforce your rights or serve valid notices.
                 </p>
-                <p>
-                  Every landlord in Wales must provide a <strong>written statement</strong> of
-                  the occupation contract within 14 days of the occupation date. This written
-                  statement must contain all the fundamental and supplementary terms that apply
-                  to the contract. Failure to provide a written statement has consequences for
-                  your ability to serve possession notices.
-                </p>
+                <p>Key features of NI private tenancies include:</p>
                 <ul>
                   <li>
-                    <strong>Fundamental terms:</strong> These are set by law and cannot be
-                    changed. They include the landlord&apos;s repair obligations, the
-                    contract-holder&apos;s right to occupy, and rules about deposits.
+                    <strong>Written agreement required:</strong> Must be provided within 28 days of
+                    tenancy start under the 2022 Act
                   </li>
                   <li>
-                    <strong>Supplementary terms:</strong> These are default terms that apply
-                    unless you agree otherwise. They cover matters like keeping the property
-                    in good condition and not causing nuisance.
+                    <strong>Deposit protection:</strong> Tenancy deposits must be protected in an
+                    approved NI scheme
                   </li>
                   <li>
-                    <strong>Additional terms:</strong> You can add your own terms covering
-                    property-specific matters like gardens, pets, and parking, as long as
-                    they are fair and do not contradict fundamental terms.
+                    <strong>Notice to Quit:</strong> Different notice periods than the rest of the UK
+                  </li>
+                  <li>
+                    <strong>Separate legislation:</strong> NI tenancy law is distinct from England,
+                    Scotland, and Wales
                   </li>
                 </ul>
               </div>
@@ -220,29 +215,32 @@ export default function StandardOccupationContractWalesPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Why Using the Correct Contract Type Matters in Wales
+                    Do Not Use Templates from Other UK Jurisdictions
                   </h2>
                   <p className="text-amber-800 mb-4">
-                    Since 1 December 2022, using an English AST template in Wales is not legally
-                    valid. Your contract must comply with Welsh housing law.
+                    Northern Ireland has separate tenancy legislation. Using an English AST, Scottish
+                    PRT, or Welsh Occupation Contract template will result in an invalid agreement that
+                    cannot be properly enforced.
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
-                      <h3 className="font-semibold text-amber-900 mb-2">Common Mistakes</h3>
+                      <h3 className="font-semibold text-amber-900 mb-2">
+                        Problems with Wrong Templates
+                      </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>Using an English AST template</li>
-                        <li>Not providing a written statement within 14 days</li>
-                        <li>Missing fundamental terms required by law</li>
-                        <li>Including unfair additional terms</li>
+                        <li>• Reference wrong legislation (Housing Act, 2016 Acts)</li>
+                        <li>• Include Section 21/Section 8 terms not valid in NI</li>
+                        <li>• Missing NI statutory requirements</li>
+                        <li>• Incorrect notice periods and procedures</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Consequences</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>Section 173 notice invalid without written statement</li>
-                        <li>Cannot serve no-fault notice for 6 months</li>
-                        <li>Possession claims rejected by court</li>
-                        <li>Contract-holder can apply to tribunal</li>
+                        <li>• Notice to Quit may be invalid</li>
+                        <li>• Court may refuse possession order</li>
+                        <li>• Unable to recover arrears or damages</li>
+                        <li>• Non-compliance with 2022 Act requirements</li>
                       </ul>
                     </div>
                   </div>
@@ -252,16 +250,85 @@ export default function StandardOccupationContractWalesPage() {
           </div>
         </section>
 
-        {/* Legal Requirements Section */}
+        {/* How NI Differs Section */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Legal Requirements for Welsh Occupation Contracts
+                How NI Tenancy Law Differs from the Rest of the UK
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Your occupation contract must comply with the Renting Homes (Wales) Act 2016
-                and related regulations.
+                Key differences between Northern Ireland and other UK jurisdictions.
+              </p>
+
+              <div className="overflow-x-auto">
+                <table className="w-full bg-white rounded-xl border border-gray-200">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="text-left p-4 font-semibold text-gray-900">Feature</th>
+                      <th className="text-left p-4 font-semibold text-gray-900">Northern Ireland</th>
+                      <th className="text-left p-4 font-semibold text-gray-900">England (AST)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr>
+                      <td className="p-4 text-gray-600">Primary legislation</td>
+                      <td className="p-4 text-gray-900">
+                        Private Tenancies (NI) Order 2006 & 2022 Act
+                      </td>
+                      <td className="p-4 text-gray-900">Housing Act 1988</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-600">Written agreement</td>
+                      <td className="p-4 text-gray-900">
+                        <span className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          Required within 28 days
+                        </span>
+                      </td>
+                      <td className="p-4 text-gray-900">
+                        <span className="flex items-center gap-2">
+                          <XCircle className="w-4 h-4 text-amber-500" />
+                          Not legally required (but recommended)
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-600">No-fault eviction</td>
+                      <td className="p-4 text-gray-900">Notice to Quit (varying periods)</td>
+                      <td className="p-4 text-gray-900">Section 21 notice (2 months)</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-600">Grounds-based eviction</td>
+                      <td className="p-4 text-gray-900">Under NI Order/Act grounds</td>
+                      <td className="p-4 text-gray-900">Section 8 grounds</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-600">Deposit protection deadline</td>
+                      <td className="p-4 text-gray-900">Within 28 days</td>
+                      <td className="p-4 text-gray-900">Within 30 days</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-600">Enforcement body</td>
+                      <td className="p-4 text-gray-900">County Court NI</td>
+                      <td className="p-4 text-gray-900">County Court England</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Legal Requirements Section */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Legal Requirements for NI Tenancy Agreements
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                Your tenancy agreement must comply with Northern Ireland-specific legislation.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -269,11 +336,13 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <FileText className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Renting Homes (Wales) Act 2016</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    Private Tenancies (NI) Order 2006
+                  </h3>
                   <p className="text-gray-600 text-sm">
-                    The foundational legislation for all occupation contracts in Wales. Defines
-                    contract-holder rights, landlord obligations, and the framework for
-                    possession proceedings. Came into force 1 December 2022.
+                    The foundational legislation for private tenancies in Northern Ireland. Establishes
+                    the legal framework for landlord-tenant relationships, notice requirements, and
+                    grounds for possession.
                   </p>
                 </div>
 
@@ -281,11 +350,13 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Shield className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Written Statement Requirement</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    Private Tenancies Act (NI) 2022
+                  </h3>
                   <p className="text-gray-600 text-sm">
-                    Landlords must provide a written statement within 14 days of occupation
-                    starting. This must contain all fundamental terms, supplementary terms,
-                    and any additional terms agreed. Failure blocks Section 173 notices.
+                    Introduced mandatory written agreements within 28 days, new notice periods, and
+                    enhanced tenant protections. All NI tenancy agreements must now comply with these
+                    requirements.
                   </p>
                 </div>
 
@@ -293,11 +364,11 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Scale className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Rent Smart Wales Registration</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Tenancy Deposit Scheme NI</h3>
                   <p className="text-gray-600 text-sm">
-                    All private landlords must be registered with Rent Smart Wales, and anyone
-                    carrying out letting or management activities must be licensed. This is
-                    separate from the occupation contract but required for lawful letting.
+                    All deposits taken for NI tenancies must be protected in an approved scheme within
+                    28 days. Prescribed information must be provided to the tenant. Non-compliance can
+                    result in penalties and affect your ability to recover possession.
                   </p>
                 </div>
 
@@ -305,37 +376,35 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Gavel className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Deposit Protection</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Consumer Rights</h3>
                   <p className="text-gray-600 text-sm">
-                    Deposits must be protected in an approved scheme within 30 days of receipt.
-                    The contract must state the deposit amount, protection scheme, and how
-                    deductions work. Unprotected deposits affect possession rights.
+                    Unfair contract terms are not enforceable under consumer protection law. Your
+                    tenancy agreement must contain fair, transparent terms that do not create
+                    significant imbalance between landlord and tenant.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                 <p className="text-green-900 text-sm">
-                  <strong>Landlord Heaven occupation contracts</strong> are drafted specifically
-                  for Wales and comply with the Renting Homes (Wales) Act 2016. They include
-                  all fundamental terms, appropriate supplementary terms, and are regularly
-                  updated when regulations change.
+                  <strong>Landlord Heaven NI agreements</strong> are drafted to comply with all current
+                  Northern Ireland legislation. They are regularly updated when laws change, ensuring
+                  you always have a compliant agreement.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Key Terms Section */}
-        <section className="py-16 lg:py-20">
+        {/* What to Include Section */}
+        <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Your Occupation Contract Must Include
+                What Your NI Tenancy Agreement Must Include
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                The written statement must contain specific information and terms required
-                by Welsh law.
+                Essential terms required by Northern Ireland legislation.
               </p>
 
               <div className="space-y-6">
@@ -345,31 +414,28 @@ export default function StandardOccupationContractWalesPage() {
                       <Users className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">
-                        Parties and Property Details
-                      </h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Parties and Property Details</h3>
                       <p className="text-gray-600 mb-3">
-                        The written statement must identify the landlord, all contract-holders
-                        by full legal name, and the dwelling address. For joint contracts, all
-                        contract-holders must be named with their joint and several liability
-                        clearly established.
+                        The agreement must clearly identify the landlord (with contact address),
+                        all tenants by full legal name, and the complete property address including
+                        postcode.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Landlord name and contact address
+                          Landlord name and address
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          All contract-holder names
+                          All tenant names
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Full dwelling address
+                          Full property address
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Occupation date
+                          Agent details (if applicable)
                         </li>
                       </ul>
                     </div>
@@ -384,9 +450,8 @@ export default function StandardOccupationContractWalesPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Rent and Payment Terms</h3>
                       <p className="text-gray-600 mb-3">
-                        Specify the rent amount, payment frequency, due date, and acceptable
-                        payment methods. The contract must explain how rent increases work and
-                        reference the statutory procedure for increases.
+                        Clear specification of the rent amount, payment frequency, due date, and
+                        acceptable payment methods. Include provisions for rent review if appropriate.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
@@ -403,7 +468,7 @@ export default function StandardOccupationContractWalesPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Rent increase procedure
+                          Rent review provisions
                         </li>
                       </ul>
                     </div>
@@ -416,28 +481,27 @@ export default function StandardOccupationContractWalesPage() {
                       <Shield className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Fundamental Terms</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Deposit Protection</h3>
                       <p className="text-gray-600 mb-3">
-                        These terms are set by law and cannot be changed. They include the
-                        landlord&apos;s repair and maintenance obligations, fitness for human
-                        habitation requirements, and the contract-holder&apos;s right to occupy.
+                        The deposit amount, which NI approved scheme it will be protected in, the
+                        deadline for protection (28 days), and conditions for return at tenancy end.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Landlord repair obligations
+                          Deposit amount
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fitness for human habitation
+                          Protection scheme name
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Right to occupy
+                          28-day protection deadline
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Deposit protection rules
+                          Return conditions
                         </li>
                       </ul>
                     </div>
@@ -451,29 +515,28 @@ export default function StandardOccupationContractWalesPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">
-                        Contract Duration and Ending
+                        Tenancy Duration and Termination
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        Whether the contract is fixed-term or periodic, the occupation date,
-                        end date (if fixed-term), and how either party can end the contract
-                        including the Section 173 and Section 181 notice procedures.
+                        Whether fixed term or periodic, the start date, end date (if fixed), and
+                        crucially the correct NI notice periods for ending the tenancy.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Occupation date
+                          Tenancy start date
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fixed-term end date (if applicable)
+                          Fixed term end date (if applicable)
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Section 173 notice (no-fault)
+                          NI notice periods
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Section 181 notice (breach)
+                          Notice to Quit requirements
                         </li>
                       </ul>
                     </div>
@@ -487,29 +550,28 @@ export default function StandardOccupationContractWalesPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">
-                        Supplementary and Additional Terms
+                        Responsibilities and Obligations
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        Supplementary terms are defaults that apply unless varied by agreement.
-                        Additional terms cover property-specific matters and must be fair and
-                        not contradict fundamental terms.
+                        Clear definition of landlord repair obligations, tenant responsibilities,
+                        utility bill arrangements, and property maintenance requirements.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Contract-holder behaviour obligations
+                          Landlord repair obligations
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Property condition requirements
+                          Tenant responsibilities
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Garden maintenance (if applicable)
+                          Utility arrangements
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Pet policy
+                          Garden and exterior maintenance
                         </li>
                       </ul>
                     </div>
@@ -521,76 +583,78 @@ export default function StandardOccupationContractWalesPage() {
         </section>
 
         {/* Mid-page CTA */}
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <SeoCtaBlock
                 pageType="tenancy"
                 variant="section"
                 pagePath={PAGE_PATH}
-                jurisdiction="wales"
-                title="Create Your Occupation Contract Now"
-                description="Our Welsh occupation contracts are drafted for the Renting Homes Act 2016, include all fundamental terms, and are designed to stand up in court."
+                jurisdiction="northern-ireland"
+                title="Create Your NI Tenancy Agreement Now"
+                description="Compliant with the 2006 Order and 2022 Act. Includes all statutory requirements. Ready to use immediately."
               />
             </div>
           </div>
         </section>
 
-        {/* Ending an Occupation Contract Section */}
-        <section className="py-16 lg:py-20">
+        {/* Notice to Quit Section */}
+        <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Ending a Standard Occupation Contract
+                Notice to Quit in Northern Ireland
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding how possession works under Welsh law is essential for landlords.
+                Understanding the notice periods required to end a NI tenancy.
               </p>
 
               <div className="prose prose-lg max-w-none text-gray-600">
-                <h3>Section 173 Notice (No-Fault Possession)</h3>
                 <p>
-                  To end an occupation contract without needing to prove a breach, you must
-                  serve a Section 173 notice. This requires at least <strong>six months&apos;
-                  notice</strong> and cannot be served until at least six months after the
-                  occupation date. This is significantly longer than the two-month Section 21
-                  notice period in England.
-                </p>
-                <p>
-                  Importantly, you cannot serve a valid Section 173 notice if you have not
-                  provided the contract-holder with a written statement. If the written
-                  statement was late, you must wait six months from when you provided it
-                  before the Section 173 notice can take effect.
+                  To end a private tenancy in Northern Ireland, landlords must serve a valid Notice
+                  to Quit. The notice periods depend on the length of the tenancy and changed
+                  significantly under the Private Tenancies Act (NI) 2022.
                 </p>
 
-                <h3>Section 181 Notice (Breach of Contract)</h3>
+                <h3>Minimum Notice Periods</h3>
                 <p>
-                  If the contract-holder has breached the contract, you may be able to use
-                  a Section 181 notice instead. For rent arrears, you can give one month&apos;s
-                  notice after at least two months&apos; rent is unpaid. For serious antisocial
-                  behaviour, the notice period can be as short as 14 days.
+                  The minimum notice period depends on how long the tenant has been in occupation:
                 </p>
+                <ul>
+                  <li>
+                    <strong>Less than 12 months:</strong> At least 4 weeks notice
+                  </li>
+                  <li>
+                    <strong>12 months or more:</strong> At least 8 weeks notice
+                  </li>
+                  <li>
+                    <strong>Certain grounds:</strong> Longer notice periods may apply under the 2022 Act
+                  </li>
+                </ul>
+
+                <h3>Grounds for Possession</h3>
                 <p>
-                  Section 181 is similar to Section 8 in England but with Welsh-specific
-                  grounds and procedures. The court will consider whether the breach is
-                  serious enough to warrant possession.
+                  Unlike England&apos;s Section 21, Northern Ireland does not have a simple &quot;no-fault&quot;
+                  eviction route. Landlords must typically establish grounds for possession, which may
+                  include rent arrears, breach of tenancy terms, the landlord requiring the property for
+                  their own use, or intention to sell.
                 </p>
 
-                <h3>Court Proceedings</h3>
+                <h3>Why a Valid Agreement Matters</h3>
                 <p>
-                  If the contract-holder does not leave after a valid notice expires, you
-                  must apply to the county court for a possession order. The court will
-                  check that all requirements have been met, including providing the written
-                  statement and protecting the deposit.
+                  When you serve a Notice to Quit, the court will examine whether your tenancy agreement
+                  complies with NI law, whether you have met your obligations (including providing a
+                  written agreement within 28 days and protecting the deposit), and whether the notice
+                  itself is valid. A defective agreement can undermine your entire case.
                 </p>
               </div>
 
               <div className="mt-8">
                 <Link
-                  href="/wales-eviction-notices"
+                  href="/money-claim-unpaid-rent"
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
-                  Learn more about Wales eviction notices
+                  Learn about recovering unpaid rent through the courts
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -599,38 +663,38 @@ export default function StandardOccupationContractWalesPage() {
         </section>
 
         {/* Standard vs Premium Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium Occupation Contract
+                Standard vs Premium NI Tenancy Agreement
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the level of protection that suits your Welsh letting situation.
+                Choose the level of protection that suits your letting situation.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Contract</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Agreement</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
                     {PRODUCTS.ast_standard.displayPrice}
                   </p>
                   <p className="text-gray-600 mb-6">
-                    A complete, legally valid occupation contract with all fundamental and
-                    supplementary terms required by Welsh law.
+                    A complete, legally valid NI tenancy agreement with all essential clauses required
+                    for compliance.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Renting Homes Act 2016 compliant</span>
+                      <span>2006 Order and 2022 Act compliant</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>All fundamental terms included</span>
+                      <span>NI deposit protection clauses</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Deposit protection clauses</span>
+                      <span>Correct NI notice periods</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -638,14 +702,14 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Written statement format</span>
+                      <span>Repair responsibilities defined</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkStandard}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Create Standard Contract
+                    Create Standard Agreement
                   </Link>
                 </div>
 
@@ -653,13 +717,13 @@ export default function StandardOccupationContractWalesPage() {
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm px-3 py-1 rounded-full">
                     Recommended
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Contract</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Agreement</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
                     {PRODUCTS.ast_premium.displayPrice}
                   </p>
                   <p className="text-gray-600 mb-6">
-                    Enhanced protection with additional terms for complex situations and
-                    extra security under Welsh law.
+                    Enhanced protection with additional clauses for complex situations and extra
+                    security.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">
@@ -676,7 +740,7 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Detailed pet policy</span>
+                      <span>Pet policy clauses</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -684,14 +748,14 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Professional cleaning clause</span>
+                      <span>Rent review mechanism</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkPremium}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Create Premium Contract
+                    Create Premium Agreement
                   </Link>
                 </div>
               </div>
@@ -701,8 +765,8 @@ export default function StandardOccupationContractWalesPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          faqs={occupationContractWalesFAQs}
-          title="Standard Occupation Contract FAQ"
+          faqs={niTenancyAgreementFAQs}
+          title="Northern Ireland Tenancy Agreement FAQ"
           showContactCTA={false}
           variant="gray"
         />
@@ -715,9 +779,9 @@ export default function StandardOccupationContractWalesPage() {
                 pageType="tenancy"
                 variant="final"
                 pagePath={PAGE_PATH}
-                jurisdiction="wales"
-                title="Create Your Welsh Occupation Contract Today"
-                description="Legally valid. Renting Homes Act compliant. Written statement included. Ready in minutes."
+                jurisdiction="northern-ireland"
+                title="Create Your NI Tenancy Agreement Today"
+                description="Legally valid. Court-ready. Compliant with NI legislation. Ready in minutes."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -729,7 +793,7 @@ export default function StandardOccupationContractWalesPage() {
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <RelatedLinks title="Related Resources" links={occupationContractMainRelatedLinks} />
+              <RelatedLinks title="Related Resources" links={niTenancyMainRelatedLinks} />
             </div>
           </div>
         </section>

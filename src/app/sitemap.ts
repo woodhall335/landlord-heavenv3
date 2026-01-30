@@ -129,6 +129,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/ni-private-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/notice-to-quit-northern-ireland-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Landing Pages - England (Jan 2026)
+    { path: '/assured-shorthold-tenancy-agreement', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/ast-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/fixed-term-periodic-tenancy-england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/joint-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Landing Pages - Scotland (Jan 2026)
+    { path: '/private-residential-tenancy-agreement-scotland', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/prt-tenancy-agreement-template-scotland', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/joint-prt-tenancy-agreement-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/update-prt-tenancy-agreement-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/common-prt-tenancy-mistakes-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Landing Pages - Wales (Jan 2026)
+    { path: '/standard-occupation-contract-wales', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/occupation-contract-template-wales', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/fixed-term-periodic-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/joint-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/update-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Tenancy Agreement SEO Landing Pages - Northern Ireland (Jan 2026)
+    { path: '/tenancy-agreement-northern-ireland', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template-northern-ireland', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/fixed-term-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/joint-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/update-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
     // High-Intent SEO Landing Pages (Jan 2026)
     { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-notice-uk', priority: 0.9, changeFrequency: 'weekly' as const },
