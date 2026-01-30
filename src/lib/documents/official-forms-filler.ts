@@ -2735,8 +2735,10 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   // Value box (Text24 exists in Dec 2024 N1 template - corrected from earlier comment)
   setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
 
-  // Defendant's address for service
-  setTextOptional(form, 'Text Field 48', data.property_address, ctx);
+  // Defendant's name and address for service including postcode
+  // CRITICAL: This field (lower-left on page 1) must contain the full defendant
+  // details matching Text22. Use the same defendantDetails string to ensure consistency.
+  setTextOptional(form, 'Text Field 48', defendantDetails, ctx);
 
   // Financial details - REQUIRED
   setTextRequired(form, 'Text25', data.total_claim_amount.toFixed(2), ctx);

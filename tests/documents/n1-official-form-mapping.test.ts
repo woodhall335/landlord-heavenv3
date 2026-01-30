@@ -335,6 +335,74 @@ describe('Official N1 Form Mapping', () => {
       expect(defendantText).toContain('Jane Doe');
       expect(defendantText).toContain('John Doe');
     });
+
+    it('fills defendant service address with full name, address, and postcode (Text Field 48)', async () => {
+      if (!officialPdfExists) {
+        console.warn('⚠️ Official N1 PDF not found - skipping test');
+        return;
+      }
+
+      const pdfBytes = await fillN1Form(sampleCaseData);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      // Text Field 48 is the "Defendant's name and address for service including postcode" box
+      const serviceAddressField = form.getTextField('Text Field 48');
+      const serviceAddressText = serviceAddressField.getText();
+
+      // Must contain defendant name
+      expect(serviceAddressText).toContain('Jane Doe');
+      // Must contain address line
+      expect(serviceAddressText).toContain('456 Tenant Street');
+      // Must contain postcode
+      expect(serviceAddressText).toContain('E1 6AN');
+    });
+
+    it('defendant service address matches defendant details box (Text22)', async () => {
+      if (!officialPdfExists) {
+        console.warn('⚠️ Official N1 PDF not found - skipping test');
+        return;
+      }
+
+      const pdfBytes = await fillN1Form(sampleCaseData);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      const defendantDetailsField = form.getTextField('Text22');
+      const serviceAddressField = form.getTextField('Text Field 48');
+
+      // Both fields should contain the same defendant information
+      // This ensures consistency between main box and service address box
+      expect(defendantDetailsField.getText()).toBe(serviceAddressField.getText());
+    });
+
+    it('defendant service address includes postcode for joint defendants', async () => {
+      if (!officialPdfExists) {
+        console.warn('⚠️ Official N1 PDF not found - skipping test');
+        return;
+      }
+
+      const caseWithJointDefendants: CaseData = {
+        ...sampleCaseData,
+        has_joint_defendants: true,
+        tenant_2_name: 'John Doe',
+        tenant_2_address_line1: '456 Tenant Street',
+        tenant_2_postcode: 'E1 6AN',
+      };
+
+      const pdfBytes = await fillN1Form(caseWithJointDefendants);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      const serviceAddressField = form.getTextField('Text Field 48');
+      const serviceAddressText = serviceAddressField.getText();
+
+      // Should contain both defendants
+      expect(serviceAddressText).toContain('Jane Doe');
+      expect(serviceAddressText).toContain('John Doe');
+      // Should contain postcode
+      expect(serviceAddressText).toContain('E1 6AN');
+    });
   });
 
   describe('Error Handling', () => {
