@@ -450,9 +450,11 @@ export async function generateTenancyPreview(
       };
     }
 
-    const facts = caseData.collected_facts || caseData.wizard_facts || caseData.facts || {};
+    // Cast to any for dynamic property access (Supabase returns generic types)
+    const caseRow = caseData as any;
+    const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
     const jurisdiction = deriveCanonicalJurisdiction(
-      caseData.jurisdiction,
+      caseRow.jurisdiction,
       facts
     ) as TenancyJurisdiction;
 
