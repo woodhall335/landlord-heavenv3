@@ -462,11 +462,12 @@ export function MultiPageViewer({
                   if (el) pageRefs.current.set(index, el);
                 }}
                 data-page={index}
-                className="relative bg-white shadow-lg rounded-lg overflow-hidden"
+                className="relative bg-white shadow-lg rounded-lg overflow-hidden select-none"
                 style={{
                   width: `${page.width * zoom}px`,
                   maxWidth: '100%',
                 }}
+                onContextMenu={(e) => e.preventDefault()}
               >
                 {/* Page number badge */}
                 <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-10">
@@ -507,7 +508,11 @@ export function MultiPageViewer({
 
                 {/* Page image - uses picture element for WebP fallback */}
                 {!loadState?.error && (
-                  <picture>
+                  <picture
+                    onContextMenu={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
+                    className="select-none"
+                  >
                     {/* WebP source for modern browsers */}
                     {page.mimeType === 'image/webp' && webpSupported && (
                       <source srcSet={imageUrl} type="image/webp" />
@@ -516,13 +521,17 @@ export function MultiPageViewer({
                     <img
                       src={imageUrl}
                       alt={`Page ${index + 1} of ${pageCount}`}
-                      className="w-full h-auto"
+                      className="w-full h-auto pointer-events-none"
                       style={{
                         aspectRatio: `${page.width} / ${page.height}`,
                         display: loadState?.error ? 'none' : 'block',
+                        WebkitUserSelect: 'none',
+                        userSelect: 'none',
+                        WebkitTouchCallout: 'none',
                       }}
                       loading="lazy"
                       decoding="async"
+                      draggable={false}
                       onLoad={() => handlePageLoad(index)}
                       onError={() => handlePageError(index)}
                     />
