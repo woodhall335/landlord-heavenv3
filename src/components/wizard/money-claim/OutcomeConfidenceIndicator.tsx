@@ -14,8 +14,8 @@ import {
 } from 'react-icons/ri';
 import {
   calculateOutcomeConfidence,
-  getConfidenceLevelLabel,
-  getConfidenceLevelColor,
+  getPackQualityLevelLabel,
+  getPackQualityLevelColor,
   type ConfidenceScore,
   type CaseFactsForScoring,
 } from '@/lib/money-claim/outcome-confidence';
@@ -78,76 +78,78 @@ export function OutcomeConfidenceIndicator({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const confidence = useMemo(() => calculateOutcomeConfidence(facts), [facts]);
-  const colors = getConfidenceLevelColor(confidence.level);
-  const levelLabel = getConfidenceLevelLabel(confidence.level);
 
-  // Get icon based on level
+  // Use pack quality score as the PRIMARY display (document drafting readiness)
+  const packQualityColors = getPackQualityLevelColor(confidence.packQualityLevel);
+  const packQualityLabel = getPackQualityLevelLabel(confidence.packQualityLevel);
+
+  // Get icon based on pack quality level
   const LevelIcon =
-    confidence.level === 'strong'
+    confidence.packQualityLevel === 'excellent'
       ? RiShieldCheckLine
-      : confidence.level === 'moderate'
-      ? RiAlertLine
-      : RiCloseLine;
+      : confidence.packQualityLevel === 'good'
+      ? RiCheckLine
+      : RiAlertLine;
 
   if (compact) {
     return (
-      <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${colors.bg} ${colors.border} border`}>
-        <LevelIcon className={`w-5 h-5 ${colors.text}`} />
+      <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${packQualityColors.bg} ${packQualityColors.border} border`}>
+        <LevelIcon className={`w-5 h-5 ${packQualityColors.text}`} />
         <div>
-          <span className={`text-sm font-semibold ${colors.text}`}>{levelLabel} Case</span>
-          <span className="text-xs text-gray-500 ml-2">({confidence.score}/100)</span>
+          <span className={`text-sm font-semibold ${packQualityColors.text}`}>{packQualityLabel} Pack Quality</span>
+          <span className="text-xs text-gray-500 ml-2">({confidence.packQualityScore}/100)</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`rounded-lg border-2 ${colors.border} ${colors.bg} overflow-hidden`}>
+    <div className={`rounded-lg border-2 ${packQualityColors.border} ${packQualityColors.bg} overflow-hidden`}>
       {/* Header */}
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-full ${colors.bg} border ${colors.border}`}>
-              <LevelIcon className={`w-6 h-6 ${colors.text}`} />
+            <div className={`p-2 rounded-full ${packQualityColors.bg} border ${packQualityColors.border}`}>
+              <LevelIcon className={`w-6 h-6 ${packQualityColors.text}`} />
             </div>
             <div>
-              <h3 className={`font-semibold ${colors.text}`}>
-                {levelLabel} Case Confidence
+              <h3 className={`font-semibold ${packQualityColors.text}`}>
+                {packQualityLabel} Document Pack Quality
               </h3>
               <p className="text-sm text-gray-600">
-                Based on evidence, clarity, and PAP compliance
+                Completeness and consistency of your claim details
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className={`text-3xl font-bold ${colors.text}`}>{confidence.score}</p>
+            <p className={`text-3xl font-bold ${packQualityColors.text}`}>{confidence.packQualityScore}</p>
             <p className="text-xs text-gray-500">out of 100</p>
           </div>
         </div>
 
-        {/* Quick summary */}
+        {/* Quick summary - based on pack quality level */}
         <div className="mt-4 flex flex-wrap gap-2">
-          {confidence.level === 'strong' && (
+          {confidence.packQualityLevel === 'excellent' && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
               <RiCheckLine className="w-3 h-3" />
-              Well-evidenced
+              Ready to generate
             </span>
           )}
-          {confidence.level === 'moderate' && (
+          {confidence.packQualityLevel === 'good' && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+              <RiCheckLine className="w-3 h-3" />
+              Documents well-prepared
+            </span>
+          )}
+          {confidence.packQualityLevel === 'needs_work' && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded-full">
               <RiAlertLine className="w-3 h-3" />
-              Could be stronger
+              Complete more details
             </span>
           )}
-          {confidence.level === 'weak' && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-              <RiCloseLine className="w-3 h-3" />
-              Needs attention
-            </span>
-          )}
-          {confidence.improvements.length > 0 && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-              {confidence.improvements.length} improvement{confidence.improvements.length !== 1 ? 's' : ''} available
+          {confidence.filingReadinessImprovements.length > 0 && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+              {confidence.filingReadinessImprovements.length} filing step{confidence.filingReadinessImprovements.length !== 1 ? 's' : ''} remaining
             </span>
           )}
         </div>
@@ -169,66 +171,66 @@ export function OutcomeConfidenceIndicator({
 
           {isExpanded && (
             <div className="px-4 pb-4 bg-white/70 space-y-4">
-              {/* Score bars */}
+              {/* Score bars - Pack Quality Breakdown */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
-                  <RiFolderOpenLine className="w-4 h-4" />
-                  <span className="font-medium">Evidence (40%)</span>
+                  <RiFileTextLine className="w-4 h-4" />
+                  <span className="font-medium">Claim Clarity (60%)</span>
                 </div>
                 <ScoreBar
-                  score={confidence.breakdown.evidence.score}
-                  maxScore={confidence.breakdown.evidence.maxScore}
-                  label="Supporting documents"
+                  score={confidence.packQualityBreakdown.claimClarity.score}
+                  maxScore={confidence.packQualityBreakdown.claimClarity.maxScore}
+                  label="Basis of claim, arrears schedule, amounts"
                   colorClass={
-                    confidence.breakdown.evidence.score >= 28
+                    confidence.packQualityBreakdown.claimClarity.score >= 45
                       ? 'bg-green-500'
-                      : confidence.breakdown.evidence.score >= 16
-                      ? 'bg-amber-500'
-                      : 'bg-red-500'
+                      : confidence.packQualityBreakdown.claimClarity.score >= 30
+                      ? 'bg-blue-500'
+                      : 'bg-amber-500'
                   }
                 />
 
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-2 mt-4">
-                  <RiFileTextLine className="w-4 h-4" />
-                  <span className="font-medium">Claim Clarity (35%)</span>
+                  <RiFolderOpenLine className="w-4 h-4" />
+                  <span className="font-medium">Document Completeness (25%)</span>
                 </div>
                 <ScoreBar
-                  score={confidence.breakdown.claimClarity.score}
-                  maxScore={confidence.breakdown.claimClarity.maxScore}
-                  label="Completeness & detail"
+                  score={confidence.packQualityBreakdown.documentCompleteness.score}
+                  maxScore={confidence.packQualityBreakdown.documentCompleteness.maxScore}
+                  label="Required fields & tenancy details"
                   colorClass={
-                    confidence.breakdown.claimClarity.score >= 25
+                    confidence.packQualityBreakdown.documentCompleteness.score >= 18
                       ? 'bg-green-500'
-                      : confidence.breakdown.claimClarity.score >= 14
-                      ? 'bg-amber-500'
-                      : 'bg-red-500'
+                      : confidence.packQualityBreakdown.documentCompleteness.score >= 12
+                      ? 'bg-blue-500'
+                      : 'bg-amber-500'
                   }
                 />
 
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-2 mt-4">
                   <RiScalesLine className="w-4 h-4" />
-                  <span className="font-medium">PAP Compliance (25%)</span>
+                  <span className="font-medium">PAP Documents Ready (15%)</span>
                 </div>
                 <ScoreBar
-                  score={confidence.breakdown.papCompliance.score}
-                  maxScore={confidence.breakdown.papCompliance.maxScore}
-                  label="Pre-action protocol"
+                  score={confidence.packQualityBreakdown.papPreparedness.score}
+                  maxScore={confidence.packQualityBreakdown.papPreparedness.maxScore}
+                  label="Letter Before Claim & forms"
                   colorClass={
-                    confidence.breakdown.papCompliance.score >= 20
+                    confidence.packQualityBreakdown.papPreparedness.score >= 12
                       ? 'bg-green-500'
-                      : confidence.breakdown.papCompliance.score >= 12
-                      ? 'bg-amber-500'
-                      : 'bg-red-500'
+                      : confidence.packQualityBreakdown.papPreparedness.score >= 8
+                      ? 'bg-blue-500'
+                      : 'bg-amber-500'
                   }
                 />
               </div>
 
-              {/* Positive factors */}
-              {confidence.positiveFactors.length > 0 && (
+              {/* Positive factors from pack quality */}
+              {confidence.packQualityFactors.length > 0 && (
                 <div className="pt-3 border-t border-gray-200">
-                  <p className="text-xs font-medium text-gray-600 mb-2">Strengths:</p>
+                  <p className="text-xs font-medium text-gray-600 mb-2">What&apos;s complete:</p>
                   <div className="flex flex-wrap gap-1">
-                    {confidence.positiveFactors.slice(0, 5).map((factor, i) => (
+                    {confidence.packQualityFactors.slice(0, 5).map((factor, i) => (
                       <span
                         key={i}
                         className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded"
@@ -237,34 +239,34 @@ export function OutcomeConfidenceIndicator({
                         {factor}
                       </span>
                     ))}
-                    {confidence.positiveFactors.length > 5 && (
+                    {confidence.packQualityFactors.length > 5 && (
                       <span className="text-xs text-gray-500">
-                        +{confidence.positiveFactors.length - 5} more
+                        +{confidence.packQualityFactors.length - 5} more
                       </span>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Improvements */}
-              {confidence.improvements.length > 0 && (
+              {/* Filing readiness improvements - shown separately */}
+              {confidence.filingReadinessImprovements.length > 0 && (
                 <div className="pt-3 border-t border-gray-200">
-                  <p className="text-xs font-medium text-gray-600 mb-2">To strengthen your case:</p>
+                  <p className="text-xs font-medium text-gray-600 mb-2">To be ready to file your claim:</p>
                   <ul className="space-y-1">
-                    {confidence.improvements.slice(0, 4).map((improvement, i) => (
+                    {confidence.filingReadinessImprovements.slice(0, 4).map((improvement, i) => (
                       <li key={i} className="flex items-start gap-2 text-xs text-gray-700">
                         <RiArrowRightLine className="w-3 h-3 mt-0.5 text-blue-500 flex-shrink-0" />
                         <span>{improvement}</span>
                       </li>
                     ))}
                   </ul>
-                  {confidence.improvements.length > 4 && onViewImprovements && (
+                  {confidence.filingReadinessImprovements.length > 4 && onViewImprovements && (
                     <button
                       type="button"
                       onClick={onViewImprovements}
                       className="mt-2 text-xs text-blue-600 hover:text-blue-800 font-medium"
                     >
-                      View all {confidence.improvements.length} improvements →
+                      View all {confidence.filingReadinessImprovements.length} filing steps →
                     </button>
                   )}
                 </div>
@@ -272,9 +274,9 @@ export function OutcomeConfidenceIndicator({
 
               {/* Disclaimer */}
               <p className="text-xs text-gray-500 pt-2 border-t border-gray-200">
-                This score is based on the information provided and does not guarantee court
-                outcomes. Courts consider many factors including evidence quality, tenant
-                defences, and judicial discretion.
+                This score reflects the completeness of your document pack. When you&apos;re ready to
+                file, you&apos;ll also need evidence (tenancy agreement, rent records) to submit with
+                your claim.
               </p>
             </div>
           )}
