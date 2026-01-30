@@ -311,6 +311,50 @@ describe('normalizeTenancyFacts', () => {
       expect(normalized.landlord_address_town).toBe('London');
       expect(normalized.landlord_address_postcode).toBe('SW1A 1AA');
     });
+
+    it('should use nested landlord.address_line1 when flat fields are missing', () => {
+      const facts = {
+        ...sampleFixedTermWizardFacts,
+        landlord_address_line1: undefined,
+        landlord_address_town: undefined,
+        landlord_address_postcode: undefined,
+        landlord: {
+          address_line1: '321 Nested Street',
+          city: 'Bristol',
+          postcode: 'BS1 1AB',
+        },
+      };
+
+      const normalized = normalizeTenancyFacts(facts);
+
+      expect(normalized.landlord_address_line1).toBe('321 Nested Street');
+      expect(normalized.landlord_address_town).toBe('Bristol');
+      expect(normalized.landlord_address_postcode).toBe('BS1 1AB');
+    });
+
+    it('should use landlord_city as fallback for landlord_address_town', () => {
+      const facts = {
+        ...sampleFixedTermWizardFacts,
+        landlord_address_town: undefined,
+        landlord_city: 'Leeds',
+      };
+
+      const normalized = normalizeTenancyFacts(facts);
+
+      expect(normalized.landlord_address_town).toBe('Leeds');
+    });
+
+    it('should use landlord_postcode as fallback for landlord_address_postcode', () => {
+      const facts = {
+        ...sampleFixedTermWizardFacts,
+        landlord_address_postcode: undefined,
+        landlord_postcode: 'LS1 1AB',
+      };
+
+      const normalized = normalizeTenancyFacts(facts);
+
+      expect(normalized.landlord_address_postcode).toBe('LS1 1AB');
+    });
   });
 });
 
