@@ -34,6 +34,8 @@ export {
   preActionProtocolFAQs,
   scheduleOfDebtFAQs,
   cleaningCostsFAQs,
+  rentArrearsClaimFAQs,
+  sueTenantUnpaidRentFAQs,
 } from './money-claim-faqs';
 
 // Tenancy Agreement FAQs

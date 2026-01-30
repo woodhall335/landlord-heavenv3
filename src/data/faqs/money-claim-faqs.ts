@@ -132,3 +132,81 @@ export const cleaningCostsFAQs: FAQItem[] = [
     answer: 'Receipts strengthen your claim but are not essential. Quotes from professional cleaners can establish reasonable costs. Keep all documentation as evidence.',
   },
 ];
+
+/**
+ * FAQs for /money-claim-rent-arrears page
+ * Target keyword: "claim rent arrears from tenant"
+ */
+export const rentArrearsClaimFAQs: FAQItem[] = [
+  {
+    question: 'How do I claim rent arrears from a tenant?',
+    answer: 'First, send a Letter Before Claim giving 30 days to pay. If they do not pay, submit a money claim through MCOL (Money Claim Online) or Form N1. You need the tenancy agreement, arrears schedule, and proof you sent the pre-action letter.',
+  },
+  {
+    question: 'Can I claim rent arrears if the tenant is still living in the property?',
+    answer: 'Yes. You can pursue a money claim for rent arrears whether the tenant is still in occupation or has left. The money claim is separate from any eviction proceedings.',
+  },
+  {
+    question: 'How much does it cost to claim rent arrears?',
+    answer: 'Court fees depend on the amount: £35 for claims up to £300, £70 for £500-1000, £105 for £1000-1500, rising to 5% for claims over £10,000. Fees are added to your claim - if you win, the tenant pays.',
+  },
+  {
+    question: 'How long does it take to claim rent arrears?',
+    answer: 'After the 30-day pre-action period, a default judgment (if undefended) takes 2-3 weeks. If the tenant defends, allow 2-4 months for a hearing. Enforcement adds more time if they still do not pay.',
+  },
+  {
+    question: 'What is the time limit for claiming rent arrears?',
+    answer: 'You have 6 years from when each rent payment was due. After 6 years, the debt is statute-barred and you cannot enforce it through the courts.',
+  },
+  {
+    question: 'Can I claim interest on rent arrears?',
+    answer: 'Yes. You can claim statutory interest at 8% per year from when each payment was due. Calculate interest for each missed payment separately and add it to your claim.',
+  },
+  {
+    question: 'What documents do I need to claim rent arrears?',
+    answer: 'You need: the tenancy agreement, a schedule of arrears showing each missed payment, bank statements or records of payments received, copy of the Letter Before Claim, and proof of posting.',
+  },
+  {
+    question: 'What happens if the tenant ignores my rent arrears claim?',
+    answer: 'If they do not respond within 14 days, you can request default judgment. This gives you a CCJ (County Court Judgment) which you can enforce through bailiffs, attachment of earnings, or other methods.',
+  },
+];
+
+/**
+ * FAQs for /how-to-sue-tenant-for-unpaid-rent page
+ * Target keyword: "how to sue tenant for unpaid rent"
+ */
+export const sueTenantUnpaidRentFAQs: FAQItem[] = [
+  {
+    question: 'Can I sue a tenant for unpaid rent?',
+    answer: 'Yes. You can make a money claim through the County Court for any unpaid rent. This applies whether the tenant is still in the property or has already left. You must first send a Letter Before Claim and wait 30 days.',
+  },
+  {
+    question: 'How much does it cost to sue a tenant for rent?',
+    answer: 'Court fees range from £35 (claims up to £300) to 5% of the claim value (for claims over £10,000). For example, a £3,000 rent arrears claim costs £205 in court fees. These are added to your claim.',
+  },
+  {
+    question: 'What is the process for suing a tenant?',
+    answer: 'Send a Letter Before Claim, wait 30 days, then submit your claim via MCOL or Form N1. The court serves the claim on the tenant, who has 14 days to respond. If no response, request default judgment.',
+  },
+  {
+    question: 'How long does it take to sue a tenant for rent?',
+    answer: 'The pre-action protocol requires 30 days. If undefended, judgment takes 2-3 weeks more. If defended, a hearing is typically 2-4 months later. Total time depends on whether the tenant responds.',
+  },
+  {
+    question: 'Can I sue a tenant who has already left?',
+    answer: 'Yes. You can sue a former tenant for up to 6 years after the debt arose. You need their current address to serve the claim. If unknown, you can use a tracing agent or ask the court to serve by alternative means.',
+  },
+  {
+    question: 'What happens if I win but the tenant cannot pay?',
+    answer: 'A CCJ lasts 6 years and can be enforced when their situation improves. Options include attachment of earnings (from future wages), charging order (secured against property they buy), or bailiff action.',
+  },
+  {
+    question: 'Do I need a solicitor to sue a tenant?',
+    answer: 'No. Most landlords handle rent arrears claims themselves using MCOL. For claims under £10,000 (small claims track), each side usually pays their own costs, so solicitors are rarely cost-effective.',
+  },
+  {
+    question: 'Can I sue for rent and evict at the same time?',
+    answer: 'Yes. The money claim (for rent owed) and possession claim (for eviction) are separate court processes. You can pursue both simultaneously. Many landlords issue the money claim after eviction when the final amount is known.',
+  },
+];
