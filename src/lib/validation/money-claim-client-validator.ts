@@ -67,6 +67,7 @@ export interface MoneyClaimFacts {
   uploaded_documents?: Array<{ id: string; name: string; type?: string }>;
   enforcement_reviewed?: boolean;
   enforcement_preference?: string;
+  enforcement_preferences?: string[];
   money_claim?: {
     primary_issue?: string;
     other_amounts_types?: string[];
@@ -592,8 +593,11 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
     });
   }
 
-  // Enforcement review
-  if (!facts.enforcement_reviewed && !facts.enforcement_preference) {
+  // Enforcement review - support both singular (legacy) and plural (current) field names
+  const hasEnforcementPreference = facts.enforcement_preference ||
+    (Array.isArray(facts.enforcement_preferences) && facts.enforcement_preferences.length > 0);
+
+  if (!facts.enforcement_reviewed && !hasEnforcementPreference) {
     suggestions.push({
       id: 'enforcement_review_suggested',
       severity: 'suggestion',
