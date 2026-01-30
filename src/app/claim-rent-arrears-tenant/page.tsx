@@ -39,6 +39,7 @@ import {
   Users,
   Building,
   CreditCard,
+  XCircle,
 } from 'lucide-react';
 
 const moneyClaimLink = buildWizardLink({
