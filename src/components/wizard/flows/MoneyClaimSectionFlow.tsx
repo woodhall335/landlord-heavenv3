@@ -14,8 +14,7 @@
  * 7. Claim statement - Basis of claim and interest
  * 8. Pre-action steps - Letter before action
  * 9. Evidence - Supporting documents upload
- * 10. Enforcement preferences - Bailiff/wage attachment choices
- * 11. Review & finish - Final review and checkout
+ * 10. Review & finish - Final review and checkout
  */
 
 'use client';
@@ -46,7 +45,6 @@ import { ArrearsSection } from '@/components/wizard/money-claim/ArrearsSection';
 import { DamagesSection } from '@/components/wizard/money-claim/DamagesSection';
 import { PreActionSection } from '@/components/wizard/money-claim/PreActionSection';
 import { EvidenceSection } from '@/components/wizard/money-claim/EvidenceSection';
-import { EnforcementSection } from '@/components/wizard/money-claim/EnforcementSection';
 import { ReviewSection } from '@/components/wizard/money-claim/ReviewSection';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
@@ -283,17 +281,6 @@ const SECTIONS: WizardSection[] = [
     isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
     hasWarnings: (facts) => {
       const result = getSectionValidation('evidence', facts, facts.__meta?.jurisdiction || 'england');
-      return result.warnings;
-    },
-  },
-  {
-    id: 'enforcement',
-    label: 'Enforcement',
-    description: 'Preferred enforcement methods',
-    // Optional section - only complete when user has made enforcement preferences
-    isComplete: (facts) => Boolean(facts.enforcement_reviewed || facts.enforcement_preference),
-    hasWarnings: (facts) => {
-      const result = getSectionValidation('enforcement', facts, facts.__meta?.jurisdiction || 'england');
       return result.warnings;
     },
   },
@@ -639,7 +626,6 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       claim_statement: 'claim_statement',
       preaction: 'preaction',
       evidence: 'evidence',
-      enforcement: 'enforcement',
       review: 'review',
     };
     return sectionMap[section] || section;
@@ -732,14 +718,6 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             facts={facts}
             onUpdate={handleUpdate}
             caseId={caseId}
-            jurisdiction={jurisdiction}
-          />
-        );
-      case 'enforcement':
-        return (
-          <EnforcementSection
-            facts={facts}
-            onUpdate={handleUpdate}
             jurisdiction={jurisdiction}
           />
         );
