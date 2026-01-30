@@ -13,12 +13,15 @@ import type { Jurisdiction, Product } from './capabilities/matrix';
  * Field name aliases - maps common/alternate field names to canonical names.
  * This allows tests and older wizard flows to use variant field names
  * while the requirements engine uses canonical names.
+ *
+ * Note: Primary normalization happens in validateFlow.ts via normalizeTenancyFacts().
+ * These aliases provide additional fallback for edge cases.
  */
 const FIELD_ALIASES: Record<string, string[]> = {
   // Address field aliases: canonical -> [alternates]
-  landlord_address_line1: ['landlord_address'],
-  landlord_address_town: ['landlord_city', 'landlord_town'],
-  landlord_address_postcode: ['landlord_postcode'],
+  landlord_address_line1: ['landlord_address', 'landlord_service_address_line1'],
+  landlord_address_town: ['landlord_city', 'landlord_town', 'landlord_service_address_town'],
+  landlord_address_postcode: ['landlord_postcode', 'landlord_service_address_postcode'],
   property_address_line1: ['property_address'],
   property_address_town: ['property_city', 'property_town'],
   property_address_postcode: ['property_postcode'],
@@ -27,6 +30,12 @@ const FIELD_ALIASES: Record<string, string[]> = {
   deposit_protected: ['deposit_protected_scheme', 'deposit_is_protected'],
   gas_safety_cert_date: ['gas_cert_date', 'gas_certificate_date'],
   notice_expiry_date: ['expiry_date', 'notice_expiry'],
+  // Tenancy agreement field aliases (TenancySectionFlow → legal schema)
+  rent_frequency: ['rent_period'],
+  payment_date: ['rent_due_day'],
+  fixed_term_end_date: ['tenancy_end_date'],
+  fixed_term: ['is_fixed_term'],
+  tenancy_type: [],  // Derived from is_fixed_term in normalizeTenancyFacts
 };
 
 /**

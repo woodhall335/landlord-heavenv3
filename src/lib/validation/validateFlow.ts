@@ -172,6 +172,131 @@ function normalizeRetaliatoryNotice(facts: Record<string, unknown>): Record<stri
 }
 
 /**
+ * Normalize tenancy agreement wizard facts to legal document schema fields.
+ *
+ * Maps TenancySectionFlow wizard fact names to the canonical legal schema names
+ * expected by the document generation validation.
+ *
+ * Wizard → Legal Schema:
+ * - tenants[].full_name → tenant_full_name (joined with " and " if multiple)
+ * - tenants[1].full_name → tenant_2_name
+ * - rent_period → rent_frequency
+ * - rent_due_day → payment_date
+ * - is_fixed_term → tenancy_type ("ast" for fixed, "periodic" otherwise)
+ * - tenancy_end_date → fixed_term_end_date (when is_fixed_term)
+ * - landlord_service_address_* → landlord_address_* (if no separate landlord address)
+ *
+ * @param facts - Wizard facts from TenancySectionFlow
+ * @returns Normalized facts with legal schema field names
+ */
+export function normalizeTenancyFacts(facts: Record<string, unknown>): Record<string, unknown> {
+  const normalized = { ...facts } as Record<string, unknown>;
+
+  // === tenant_full_name from tenants[] array ===
+  if (!normalized.tenant_full_name) {
+    const tenants = normalized.tenants as Array<{ full_name?: string }> | undefined;
+    if (tenants && Array.isArray(tenants) && tenants.length > 0) {
+      // Join all tenant names with " and "
+      const tenantNames = tenants
+        .map(t => t?.full_name)
+        .filter((name): name is string => Boolean(name));
+
+      if (tenantNames.length > 0) {
+        normalized.tenant_full_name = tenantNames.join(' and ');
+      }
+
+      // Also extract tenant_2_name for joint tenant validation
+      if (tenantNames.length > 1 && !normalized.tenant_2_name) {
+        normalized.tenant_2_name = tenantNames[1];
+      }
+
+      // Set joint_tenants flag if not already set
+      if (normalized.joint_tenants === undefined && tenantNames.length > 1) {
+        normalized.joint_tenants = true;
+      }
+    }
+  }
+
+  // === rent_frequency from rent_period ===
+  if (!normalized.rent_frequency && normalized.rent_period) {
+    const rentPeriod = String(normalized.rent_period).toLowerCase();
+    // Map wizard values to legal schema values
+    if (rentPeriod.includes('month')) {
+      normalized.rent_frequency = 'monthly';
+    } else if (rentPeriod.includes('week')) {
+      normalized.rent_frequency = 'weekly';
+    } else if (rentPeriod.includes('quarter')) {
+      normalized.rent_frequency = 'quarterly';
+    } else if (rentPeriod.includes('year') || rentPeriod.includes('annual')) {
+      normalized.rent_frequency = 'annually';
+    } else {
+      // Pass through as-is
+      normalized.rent_frequency = normalized.rent_period;
+    }
+  }
+
+  // === payment_date from rent_due_day ===
+  if (!normalized.payment_date && normalized.rent_due_day) {
+    const dueDay = normalized.rent_due_day;
+    if (typeof dueDay === 'number') {
+      normalized.payment_date = dueDay;
+    } else if (typeof dueDay === 'string') {
+      // Handle "1st", "2nd", "15th", "Last day of month" etc.
+      const dayMatch = dueDay.match(/^(\d+)/);
+      if (dayMatch) {
+        normalized.payment_date = parseInt(dayMatch[1], 10);
+      } else if (dueDay.toLowerCase().includes('last')) {
+        // Last day of month - use 31 as convention
+        normalized.payment_date = 31;
+      }
+    }
+  }
+
+  // === tenancy_type from is_fixed_term ===
+  if (!normalized.tenancy_type) {
+    if (normalized.is_fixed_term === true) {
+      normalized.tenancy_type = 'ast'; // Assured Shorthold Tenancy (fixed term)
+    } else if (normalized.is_fixed_term === false) {
+      normalized.tenancy_type = 'periodic'; // Periodic tenancy
+    }
+  }
+
+  // === fixed_term_end_date from tenancy_end_date (when fixed term) ===
+  if (!normalized.fixed_term_end_date && normalized.is_fixed_term === true) {
+    if (normalized.tenancy_end_date) {
+      normalized.fixed_term_end_date = normalized.tenancy_end_date;
+    }
+  }
+
+  // === fixed_term from is_fixed_term (alternate name) ===
+  if (normalized.fixed_term === undefined && normalized.is_fixed_term !== undefined) {
+    normalized.fixed_term = normalized.is_fixed_term;
+  }
+
+  // === landlord_address from landlord_service_address (fallback) ===
+  // If landlord address is missing but service address exists, use service address
+  if (!normalized.landlord_address_line1 && normalized.landlord_service_address_line1) {
+    normalized.landlord_address_line1 = normalized.landlord_service_address_line1;
+  }
+  if (!normalized.landlord_address_town && normalized.landlord_service_address_town) {
+    normalized.landlord_address_town = normalized.landlord_service_address_town;
+  }
+  if (!normalized.landlord_address_postcode && normalized.landlord_service_address_postcode) {
+    normalized.landlord_address_postcode = normalized.landlord_service_address_postcode;
+  }
+
+  // === number_of_tenants for joint tenants detection ===
+  if (normalized.number_of_tenants !== undefined) {
+    const numTenants = parseInt(String(normalized.number_of_tenants), 10);
+    if (!isNaN(numTenants) && numTenants > 1 && normalized.joint_tenants === undefined) {
+      normalized.joint_tenants = true;
+    }
+  }
+
+  return normalized;
+}
+
+/**
  * Unified flow validation orchestrator
  *
  * Steps:
@@ -188,8 +313,12 @@ function normalizeRetaliatoryNotice(facts: Record<string, unknown>): Record<stri
 export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   const { jurisdiction, product, route, stage } = input;
 
-  // Step 0: Normalize facts (canonicalize grounds)
-  const facts = normalizeRetaliatoryNotice(normalizeGroundsCodes(input.facts));
+  // Step 0: Normalize facts (canonicalize grounds, retaliatory notice, and tenancy fields)
+  const facts = normalizeTenancyFacts(
+    normalizeRetaliatoryNotice(
+      normalizeGroundsCodes(input.facts)
+    )
+  );
 
   // Step 1: Assert flow is supported
   let flow: FlowCapability;
