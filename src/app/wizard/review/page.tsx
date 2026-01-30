@@ -2557,38 +2557,64 @@ interface TenancyReviewContentProps {
 /**
  * Build validation checks for tenancy agreement
  * Returns blockers (critical issues) and warnings (non-blocking)
+ *
+ * NOTE: The TenancySectionFlow wizard stores facts with these keys:
+ * - Property: property_address_line1, property_address_town, property_address_postcode
+ * - Landlord: landlord_full_name
+ * - Tenants: tenants array with full_name for each tenant (tenants[0].full_name)
+ * - Rent: rent_amount, rent_period, rent_due_day
+ * - Tenancy: tenancy_start_date, is_fixed_term, tenancy_end_date
  */
 function buildTenancyValidation(facts: any, jurisdiction: string) {
   const blockers: Array<{ title: string; message: string }> = [];
   const warnings: Array<{ title: string; message: string }> = [];
 
-  // 1. Property address check
-  if (!facts.property_address && !facts.property_full_address) {
+  // 1. Property address check - check all possible field names from wizard and legacy formats
+  const hasPropertyAddress = Boolean(
+    facts.property_address ||
+    facts.property_full_address ||
+    facts.property_address_line1 // TenancySectionFlow uses this
+  );
+  if (!hasPropertyAddress) {
     blockers.push({
       title: 'Property address missing',
       message: 'The tenancy agreement requires a valid property address.',
     });
   }
 
-  // 2. Landlord details check
-  if (!facts.landlord_name && !facts.landlord_full_name) {
+  // 2. Landlord details check - check all possible field names
+  const hasLandlordName = Boolean(
+    facts.landlord_name ||
+    facts.landlord_full_name // TenancySectionFlow uses this
+  );
+  if (!hasLandlordName) {
     blockers.push({
       title: 'Landlord name missing',
       message: 'The landlord name is required for the agreement.',
     });
   }
 
-  // 3. Tenant details check
+  // 3. Tenant details check - check all possible field names including array format
   const tenantLabel = jurisdiction === 'wales' ? 'Contract holder' : 'Tenant';
-  if (!facts.tenant_names && !facts.tenant_1_name) {
+  const hasTenantName = Boolean(
+    facts.tenant_names ||
+    facts.tenant_1_name ||
+    // TenancySectionFlow stores tenants as array with full_name
+    (Array.isArray(facts.tenants) && facts.tenants[0]?.full_name)
+  );
+  if (!hasTenantName) {
     blockers.push({
       title: `${tenantLabel} name missing`,
       message: `At least one ${tenantLabel.toLowerCase()} name is required.`,
     });
   }
 
-  // 4. Rent amount check
-  if (!facts.rent_amount && !facts.monthly_rent) {
+  // 4. Rent amount check - check all possible field names
+  const hasRentAmount = Boolean(
+    facts.rent_amount || // TenancySectionFlow uses this
+    facts.monthly_rent
+  );
+  if (!hasRentAmount) {
     blockers.push({
       title: 'Rent amount not specified',
       message: 'The rent amount must be specified in the agreement.',
@@ -2836,11 +2862,36 @@ function TenancyReviewContent({
   const hasBlockers = validation.blockers.length > 0;
   const hasWarnings = validation.warnings.length > 0;
 
-  // Build summary from facts
-  const tenantNames = facts.tenant_names || facts.tenant_1_name || 'Not specified';
-  const propertyAddress = facts.property_address || facts.property_full_address || 'Not specified';
+  // Build summary from facts - support both TenancySectionFlow format and legacy formats
+  // TenancySectionFlow uses: tenants array with full_name, property_address_line1/town/postcode
+  const tenantNames = (() => {
+    // Try TenancySectionFlow format first (array of tenants)
+    if (Array.isArray(facts.tenants) && facts.tenants[0]?.full_name) {
+      const names = facts.tenants.map((t: any) => t.full_name).filter(Boolean);
+      return names.length > 0 ? names.join(', ') : 'Not specified';
+    }
+    // Fall back to legacy formats
+    return facts.tenant_names || facts.tenant_1_name || 'Not specified';
+  })();
+
+  const propertyAddress = (() => {
+    // Try legacy single-field format first
+    if (facts.property_address) return facts.property_address;
+    if (facts.property_full_address) return facts.property_full_address;
+    // TenancySectionFlow uses separate fields - combine them
+    if (facts.property_address_line1) {
+      const parts = [
+        facts.property_address_line1,
+        facts.property_address_town,
+        facts.property_address_postcode,
+      ].filter(Boolean);
+      return parts.length > 0 ? parts.join(', ') : 'Not specified';
+    }
+    return 'Not specified';
+  })();
+
   const rentAmount = facts.rent_amount || facts.monthly_rent;
-  const rentFrequency = facts.rent_frequency || 'monthly';
+  const rentFrequency = facts.rent_frequency || facts.rent_period || 'monthly';
   const depositAmount = facts.deposit_amount;
   const startDate = facts.tenancy_start_date || facts.start_date;
 

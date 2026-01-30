@@ -1213,6 +1213,54 @@ export async function POST(request: Request) {
 
       // Tenancy dates
       tenancy_start_date: wf?.tenancy_start_date ?? wf?.tenancy?.start_date,
+
+      // =========================================================================
+      // TENANCY AGREEMENT FIELDS (TenancySectionFlow)
+      // These fields are used by TenancyReviewContent for validation and display
+      // =========================================================================
+
+      // Property address - TenancySectionFlow uses separate fields
+      property_address: wf?.property_address ?? wf?.property_full_address,
+      property_address_line1: wf?.property_address_line1 ?? wf?.property?.address_line1,
+      property_address_town: wf?.property_address_town ?? wf?.property?.city,
+      property_address_postcode: wf?.property_address_postcode ?? wf?.property?.postcode,
+      property_type: wf?.property_type,
+      number_of_bedrooms: wf?.number_of_bedrooms,
+      furnished_status: wf?.furnished_status,
+
+      // Landlord details
+      landlord_name: wf?.landlord_name ?? wf?.landlord?.name,
+      landlord_full_name: wf?.landlord_full_name ?? wf?.landlord?.full_name,
+      landlord_email: wf?.landlord_email ?? wf?.landlord?.email,
+      landlord_phone: wf?.landlord_phone ?? wf?.landlord?.phone,
+      landlord_address_line1: wf?.landlord_address_line1 ?? wf?.landlord?.address_line1,
+      landlord_address_town: wf?.landlord_address_town ?? wf?.landlord?.city,
+      landlord_address_postcode: wf?.landlord_address_postcode ?? wf?.landlord?.postcode,
+
+      // Tenants - TenancySectionFlow stores as array with full_name
+      tenants: wf?.tenants ?? [],
+      number_of_tenants: wf?.number_of_tenants,
+      tenant_names: wf?.tenant_names,
+      tenant_1_name: wf?.tenant_1_name,
+
+      // Tenancy details
+      is_fixed_term: wf?.is_fixed_term ?? wf?.tenancy?.fixed_term,
+      tenancy_end_date: wf?.tenancy_end_date ?? wf?.tenancy?.end_date,
+      term_length: wf?.term_length,
+
+      // Rent - TenancySectionFlow uses rent_amount and rent_period
+      rent_amount: wf?.rent_amount ?? wf?.tenancy?.rent_amount,
+      rent_period: wf?.rent_period ?? wf?.rent_frequency ?? wf?.tenancy?.rent_frequency,
+      rent_frequency: wf?.rent_frequency ?? wf?.rent_period ?? wf?.tenancy?.rent_frequency,
+      rent_due_day: wf?.rent_due_day ?? wf?.tenancy?.rent_due_day,
+      payment_method: wf?.payment_method,
+
+      // Product tier (for premium vs standard)
+      product_tier: wf?.product_tier ?? wf?.__meta?.product_tier,
+
+      // HMO
+      is_hmo: wf?.is_hmo ?? wf?.property?.is_hmo,
+      hmo_license_number: wf?.hmo_licence_number ?? wf?.hmo_license_number,
     };
 
     return NextResponse.json({
