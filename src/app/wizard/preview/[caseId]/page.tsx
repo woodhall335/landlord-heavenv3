@@ -12,7 +12,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
-import { PreviewPageLayout, DocumentInfo } from '@/components/preview';
+import { PreviewPageLayout, DocumentInfo, MultiPageViewer } from '@/components/preview';
 import {
   getNoticeOnlyDocuments,
   getCompletePackDocuments,
@@ -26,8 +26,11 @@ import {
   validateNoticeOnlyCase,
 } from '@/lib/validation/notice-only-case-validator';
 import { hasWalesArrearsGroundSelected } from '@/lib/wales';
-import { Loader2 } from 'lucide-react';
-import { trackWizardPreviewViewed, trackCheckoutStarted } from '@/lib/analytics';
+import { Loader2, Scale, CheckCircle, Download, Shield, Clock } from 'lucide-react';
+import { trackWizardPreviewViewed, trackCheckoutStarted, trackBeginCheckout } from '@/lib/analytics';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
+import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 
 interface CaseData {
   id: string;
@@ -44,6 +47,121 @@ interface GeneratedDocument {
   id: string;
   document_type: string;
   title: string;
+}
+
+/**
+ * Checkout button for AST (tenancy agreement) products
+ */
+function ASTCheckoutButton({
+  caseId,
+  product,
+  productName,
+  price,
+}: {
+  caseId: string;
+  product: string;
+  productName: string;
+  price: string;
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const supabase = getSupabaseBrowserClient();
+
+  const handleCheckout = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        // Redirect to signup with return URL
+        const returnUrl = `/wizard/preview/${caseId}?product=${product}`;
+        window.location.href = `/auth/signup?redirect=${encodeURIComponent(returnUrl)}&case_id=${caseId}`;
+        return;
+      }
+
+      // Link case to user if not already linked
+      await fetch(`/api/cases/${caseId}/link`, { method: 'POST' });
+
+      // Get product-aware redirect URLs
+      const { successUrl, cancelUrl } = getCheckoutRedirectUrls({
+        product: product as CheckoutProduct,
+        caseId,
+      });
+
+      // Get attribution data for checkout
+      const attribution = getCheckoutAttribution();
+
+      // Create checkout session with attribution
+      const response = await fetch('/api/checkout/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_type: product,
+          case_id: caseId,
+          success_url: successUrl,
+          cancel_url: cancelUrl,
+          ...attribution,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      // Handle idempotent checkout responses
+      if (data.status === 'already_paid') {
+        window.location.href = data.redirect_url;
+        return;
+      }
+
+      if (data.status === 'pending') {
+        window.location.href = data.checkout_url;
+        return;
+      }
+
+      // New checkout session
+      const checkoutUrl = data.session_url || data.checkout_url;
+      if (checkoutUrl) {
+        const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
+        trackBeginCheckout(product, productName, priceValue);
+        trackCheckoutStarted({ product });
+        window.location.href = checkoutUrl;
+      }
+    } catch (err) {
+      console.error('Checkout failed:', err);
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <button
+        onClick={handleCheckout}
+        disabled={isLoading}
+        className="w-full py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
+      >
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Processing...
+          </span>
+        ) : (
+          'Get Your Tenancy Agreement'
+        )}
+      </button>
+      {error && (
+        <p className="text-red-600 text-sm mt-3 text-center">{error}</p>
+      )}
+    </>
+  );
 }
 
 export default function WizardPreviewPage() {
@@ -886,18 +1004,131 @@ export default function WizardPreviewPage() {
     ? [...productMeta.features, 'Rent schedule (arrears breakdown)']
     : productMeta.features;
 
+  // Determine if this is a tenancy agreement product (uses multi-page preview)
+  const isTenancyAgreement = product === 'ast_standard' || product === 'ast_premium' || product === 'tenancy_agreement';
+
+  // Get tier for tenancy agreement preview
+  const astTier = product === 'ast_premium' ? 'premium' : 'standard';
+
   return (
     <>
-      <PreviewPageLayout
-        caseId={caseId}
-        product={product}
-        productName={productMeta.name}
-        price={productMeta.price}
-        originalPrice={productMeta.originalPrice}
-        savings={productMeta.savings}
-        documents={documents}
-        features={dynamicFeatures}
-      />
+      {isTenancyAgreement ? (
+        // Tenancy Agreement: Use multi-page preview with checkout sidebar
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+          <div className="max-w-6xl mx-auto px-4">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{productMeta.name}</h1>
+              <p className="text-gray-600 mt-2 text-lg">
+                Full document preview with all pages
+              </p>
+            </div>
+
+            {/* Main Content - Two Column Layout */}
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Multi-Page Preview - 2 columns */}
+              <div className="lg:col-span-2">
+                <MultiPageViewer
+                  caseId={caseId}
+                  product={product}
+                  tier={astTier}
+                  className="h-[700px]"
+                />
+              </div>
+
+              {/* Pricing Sidebar - 1 column */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-xl shadow-lg border-2 border-blue-100 p-6 sticky top-8">
+                  {/* Price */}
+                  <div className="text-center mb-6">
+                    {productMeta.originalPrice && (
+                      <p className="text-gray-400 line-through text-lg">{productMeta.originalPrice}</p>
+                    )}
+                    <p className="text-4xl font-bold text-gray-900">{productMeta.price}</p>
+                    <p className="text-gray-600 mt-1">One-time payment</p>
+                    {productMeta.savings && (
+                      <p className="text-green-600 font-medium mt-2">{productMeta.savings}</p>
+                    )}
+                  </div>
+
+                  {/* Solicitor Comparison */}
+                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <Scale className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-green-900">Solicitor comparison</p>
+                        <p className="text-sm text-green-800 mt-1">
+                          A property solicitor typically charges <span className="font-semibold">£150–£400</span> for tenancy agreements.
+                        </p>
+                        <p className="text-xs text-green-700 mt-2">
+                          You pay: <span className="font-bold text-green-900">{productMeta.price}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <ASTCheckoutButton
+                    caseId={caseId}
+                    product={product}
+                    productName={productMeta.name}
+                    price={productMeta.price}
+                  />
+
+                  {/* Trust Signals */}
+                  <div className="mt-6 space-y-3">
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <Download className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      <span>Instant PDF download after payment</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      <span>Legally compliant for your jurisdiction</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <Clock className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      <span>Unlimited updates & regeneration</span>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  {dynamicFeatures && dynamicFeatures.length > 0 && (
+                    <div className="mt-6 pt-6 border-t">
+                      <h3 className="font-semibold text-gray-800 mb-3">Includes:</h3>
+                      <ul className="space-y-2">
+                        {dynamicFeatures.map((feature, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Guarantee */}
+                  <div className="mt-6 pt-6 border-t text-center">
+                    <p className="text-xs text-gray-500">Secure payment via Stripe</p>
+                    <p className="text-xs text-gray-400 mt-1">Questions? support@landlordheaven.co.uk</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Non-AST products: Use original document card layout
+        <PreviewPageLayout
+          caseId={caseId}
+          product={product}
+          productName={productMeta.name}
+          price={productMeta.price}
+          originalPrice={productMeta.originalPrice}
+          savings={productMeta.savings}
+          documents={documents}
+          features={dynamicFeatures}
+        />
+      )}
 
       {/* Signup Modal */}
       <SignupModal
