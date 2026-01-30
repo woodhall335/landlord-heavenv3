@@ -252,13 +252,13 @@ export function normalizeTenancyFacts(facts: Record<string, unknown>): Record<st
     }
   }
 
-  // === tenancy_type from is_fixed_term ===
+  // === tenancy_type defaults to "ast" for tenancy agreements ===
+  // IMPORTANT: tenancy_type is the LEGAL CLASSIFICATION (ast, assured, other), NOT fixed/periodic.
+  // Fixed vs periodic is determined by is_fixed_term and fixed_term_end_date.
+  // Valid enum values per facts_schema.json: ["ast", "assured", "other"]
+  // TenancySectionFlow creates ASTs, so default to "ast" if not explicitly set.
   if (!normalized.tenancy_type) {
-    if (normalized.is_fixed_term === true) {
-      normalized.tenancy_type = 'ast'; // Assured Shorthold Tenancy (fixed term)
-    } else if (normalized.is_fixed_term === false) {
-      normalized.tenancy_type = 'periodic'; // Periodic tenancy
-    }
+    normalized.tenancy_type = 'ast';
   }
 
   // === fixed_term_end_date from tenancy_end_date (when fixed term) ===
