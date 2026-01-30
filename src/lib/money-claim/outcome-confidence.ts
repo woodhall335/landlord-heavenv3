@@ -15,11 +15,12 @@
 import { buildEvidenceContext, type EvidenceContext } from '@/lib/evidence/money-claim-evidence-classifier';
 
 export type ConfidenceLevel = 'strong' | 'moderate' | 'weak';
+export type PackQualityLevel = 'excellent' | 'good' | 'needs_work';
 
 export interface ConfidenceScore {
-  /** Overall confidence level */
+  /** Overall confidence level (court filing readiness) */
   level: ConfidenceLevel;
-  /** Numeric score out of 100 */
+  /** Numeric score out of 100 (court filing readiness) */
   score: number;
   /** Breakdown by category */
   breakdown: {
@@ -33,6 +34,22 @@ export interface ConfidenceScore {
   negativeFactors: string[];
   /** Suggestions to improve score */
   improvements: string[];
+
+  // NEW: Pack Quality Score - for display on Review page
+  /** Pack quality score (document drafting readiness, excludes evidence uploads) */
+  packQualityScore: number;
+  /** Pack quality level */
+  packQualityLevel: PackQualityLevel;
+  /** Breakdown of pack quality score */
+  packQualityBreakdown: {
+    claimClarity: CategoryScore;
+    documentCompleteness: CategoryScore;
+    papPreparedness: CategoryScore;
+  };
+  /** Positive factors for pack quality */
+  packQualityFactors: string[];
+  /** Filing readiness improvements (separate from pack quality) */
+  filingReadinessImprovements: string[];
 }
 
 export interface CategoryScore {
@@ -376,6 +393,310 @@ function getClaimTypes(facts: CaseFactsForScoring): string[] {
   return types;
 }
 
+// =============================================================================
+// PACK QUALITY SCORE CALCULATIONS
+// These calculate the "Document Pack Quality" score shown on the Review page.
+// This score reflects drafting readiness (system-controlled quality), NOT
+// court filing readiness. Evidence uploads are excluded from this score.
+// =============================================================================
+
+/**
+ * Calculate claim clarity score for pack quality (60% weight)
+ * Enhanced from the standard clarity score to better reflect system-controlled quality
+ */
+function calculatePackQualityClaimClarity(facts: CaseFactsForScoring): CategoryScore {
+  const factors: string[] = [];
+  let score = 0;
+  const maxScore = 60; // 60% of total pack quality score
+
+  const claimTypes = getClaimTypes(facts);
+  const hasArrears = claimTypes.includes('rent_arrears');
+  const hasDamages =
+    claimTypes.includes('property_damage') ||
+    claimTypes.includes('cleaning') ||
+    claimTypes.includes('unpaid_utilities') ||
+    claimTypes.includes('unpaid_council_tax') ||
+    claimTypes.includes('other_tenant_debt');
+
+  // Core claim information (up to 20 points)
+  const basisOfClaim = facts.money_claim?.basis_of_claim || '';
+  if (basisOfClaim.length >= 100) {
+    score += 15;
+    factors.push('Detailed basis of claim provided');
+  } else if (basisOfClaim.length >= 50) {
+    score += 10;
+    factors.push('Basic basis of claim provided');
+  } else if (basisOfClaim.length >= 20) {
+    score += 5;
+    factors.push('Brief basis of claim provided');
+  }
+
+  // At least one claim type selected
+  if (claimTypes.length > 0) {
+    score += 5;
+    factors.push(`${claimTypes.length} claim type(s) configured`);
+  }
+
+  // Arrears schedule completeness (up to 20 points)
+  if (hasArrears && facts.arrears_items && facts.arrears_items.length > 0) {
+    const completeItems = facts.arrears_items.filter(
+      (item) => item.period_start && item.period_end && item.rent_due !== null
+    );
+    const completionRate = completeItems.length / facts.arrears_items.length;
+
+    if (completionRate === 1 && facts.arrears_items.length >= 1) {
+      score += 15;
+      factors.push('All arrears entries complete');
+    } else if (completionRate >= 0.8) {
+      score += 10;
+      factors.push('Most arrears entries complete');
+    } else if (completionRate >= 0.5) {
+      score += 5;
+      factors.push('Some arrears entries complete');
+    }
+
+    // Rent amount documented
+    if (facts.rent_amount && facts.rent_frequency) {
+      score += 5;
+      factors.push('Rent terms documented');
+    }
+  } else if (!hasArrears) {
+    // Non-arrears claims still get baseline clarity points if other info is present
+    score += 10;
+    factors.push('Non-arrears claim configured');
+  }
+
+  // Damage/other items clarity (up to 10 points)
+  if (hasDamages) {
+    const damageItems = facts.money_claim?.damage_items || [];
+    const otherCharges = facts.money_claim?.other_charges || [];
+    const allItems = [...damageItems, ...otherCharges];
+
+    if (allItems.length > 0) {
+      const itemsWithBoth = allItems.filter(
+        (item) => item.description && item.description.length > 5 && item.amount && item.amount > 0
+      );
+      const completionRate = itemsWithBoth.length / allItems.length;
+
+      if (completionRate === 1) {
+        score += 10;
+        factors.push('All damage/cost items clearly described');
+      } else if (completionRate >= 0.8) {
+        score += 7;
+        factors.push('Most damage/cost items described');
+      } else if (completionRate >= 0.5) {
+        score += 4;
+        factors.push('Some damage/cost items described');
+      }
+    }
+  }
+
+  // Interest configuration (up to 5 points)
+  if (facts.money_claim?.charge_interest === true) {
+    if (facts.money_claim.interest_rate && facts.money_claim.interest_start_date) {
+      score += 5;
+      factors.push('Interest calculation configured');
+    } else {
+      score += 2;
+      factors.push('Interest opted in');
+    }
+  } else if (facts.money_claim?.charge_interest === false) {
+    score += 5;
+    factors.push('Interest decision finalized');
+  }
+
+  // Cap at max score
+  score = Math.min(score, maxScore);
+
+  return {
+    score,
+    maxScore,
+    weight: 0.6,
+    factors,
+  };
+}
+
+/**
+ * Calculate document completeness for pack quality (25% weight)
+ * Measures completeness of required wizard fields (NOT evidence uploads)
+ */
+function calculatePackQualityDocumentCompleteness(facts: CaseFactsForScoring): CategoryScore {
+  const factors: string[] = [];
+  let score = 0;
+  const maxScore = 25; // 25% of total pack quality score
+
+  // Tenancy information (up to 10 points)
+  if (facts.tenancy_start_date) {
+    score += 3;
+    factors.push('Tenancy start date provided');
+  }
+  if (facts.rent_amount && facts.rent_amount > 0) {
+    score += 3;
+    factors.push('Rent amount documented');
+  }
+  if (facts.rent_frequency) {
+    score += 2;
+    factors.push('Rent frequency specified');
+  }
+  if (facts.tenancy_end_date) {
+    score += 2;
+    factors.push('Tenancy end date provided');
+  }
+
+  // Claim amount calculated (up to 8 points)
+  const hasArrears = facts.claiming_rent_arrears === true;
+  const arrearsItems = facts.arrears_items || [];
+  const damageItems = facts.money_claim?.damage_items || [];
+  const otherCharges = facts.money_claim?.other_charges || [];
+
+  if (hasArrears && arrearsItems.length > 0) {
+    const totalArrears = arrearsItems.reduce(
+      (sum, item) => sum + ((item.rent_due || 0) - (item.rent_paid || 0)),
+      0
+    );
+    if (totalArrears > 0) {
+      score += 5;
+      factors.push('Arrears total calculated');
+    }
+  }
+
+  if (damageItems.length > 0 || otherCharges.length > 0) {
+    const totalOther = [...damageItems, ...otherCharges].reduce(
+      (sum, item) => sum + (item.amount || 0),
+      0
+    );
+    if (totalOther > 0) {
+      score += 3;
+      factors.push('Other costs itemized');
+    }
+  }
+
+  // Basic total for non-itemized claims
+  if (facts.total_arrears && facts.total_arrears > 0 && arrearsItems.length === 0) {
+    score += 4;
+    factors.push('Total arrears amount specified');
+  }
+
+  // Enforcement reviewed (up to 3 points)
+  if (facts.enforcement_reviewed) {
+    score += 3;
+    factors.push('Enforcement options reviewed');
+  }
+
+  // PAP section addressed (up to 4 points)
+  const willGenerate = facts.money_claim?.generate_pap_documents === true;
+  const alreadySent = facts.letter_before_claim_sent || facts.pap_letter_date;
+  if (willGenerate || alreadySent) {
+    score += 4;
+    factors.push('Pre-action protocol addressed');
+  }
+
+  // Cap at max score
+  score = Math.min(score, maxScore);
+
+  return {
+    score,
+    maxScore,
+    weight: 0.25,
+    factors,
+  };
+}
+
+/**
+ * Calculate PAP preparedness for pack quality (15% weight)
+ * Awards points for having PAP documents generated/ready, NOT for sending/waiting
+ */
+function calculatePackQualityPapPreparedness(facts: CaseFactsForScoring): CategoryScore {
+  const factors: string[] = [];
+  let score = 0;
+  const maxScore = 15; // 15% of total pack quality score
+
+  const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+  const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+
+  // Full points if PAP docs are generated or will be generated
+  if (hasAlreadySentLetter) {
+    // Letter already sent - full points (docs were ready and sent)
+    score += 15;
+    factors.push('PAP Letter Before Claim documents completed');
+  } else if (willGenerateLetter) {
+    // User opted to generate docs - full points (system generates them)
+    score += 15;
+    factors.push('PAP documents ready for generation');
+  } else {
+    // No PAP selection - partial points since we can still generate docs
+    score += 5;
+    factors.push('PAP compliance section available');
+  }
+
+  // Cap at max score
+  score = Math.min(score, maxScore);
+
+  return {
+    score,
+    maxScore,
+    weight: 0.15,
+    factors,
+  };
+}
+
+/**
+ * Generate filing readiness improvements (shown separately from pack quality)
+ * These are the actions needed before actually filing with the court
+ */
+function generateFilingReadinessImprovements(
+  facts: CaseFactsForScoring,
+  evidenceContext: EvidenceContext
+): string[] {
+  const improvements: string[] = [];
+  const claimTypes = getClaimTypes(facts);
+
+  // PAP compliance requirements (critical for filing)
+  const hasAlreadySentLetter = facts.letter_before_claim_sent || facts.pap_letter_date;
+  const willGenerateLetter = facts.money_claim?.generate_pap_documents === true;
+
+  if (!hasAlreadySentLetter && !willGenerateLetter) {
+    improvements.push('Generate and send the PAP Letter Before Claim pack');
+  } else if (willGenerateLetter) {
+    improvements.push('Send the Letter Before Claim to the defendant and wait 30 days');
+  } else if (hasAlreadySentLetter && facts.pap_letter_date) {
+    const letterDate = new Date(facts.pap_letter_date);
+    const today = new Date();
+    const daysSince = Math.floor(
+      (today.getTime() - letterDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    if (daysSince < 30) {
+      const daysRemaining = 30 - daysSince;
+      improvements.push(`Wait ${daysRemaining} more day${daysRemaining === 1 ? '' : 's'} for the 30-day PAP period`);
+    }
+  }
+
+  // Evidence to have ready for court (not required for pack, but for filing)
+  if (!evidenceContext.has_tenancy_agreement_evidence) {
+    improvements.push('Have your tenancy agreement ready to include when filing');
+  }
+
+  if (claimTypes.includes('rent_arrears') && !evidenceContext.has_rent_ledger_bank_statement_evidence) {
+    improvements.push('Have rent records or bank statements ready for court');
+  }
+
+  if (
+    (claimTypes.includes('property_damage') || claimTypes.includes('cleaning')) &&
+    !evidenceContext.has_photo_evidence
+  ) {
+    improvements.push('Have photos of damage/condition ready for court');
+  }
+
+  if (
+    (claimTypes.includes('property_damage') || claimTypes.includes('cleaning')) &&
+    !evidenceContext.has_any_inventory_evidence
+  ) {
+    improvements.push('Have inventory reports ready if available');
+  }
+
+  return improvements;
+}
+
 /**
  * Generate improvement suggestions based on score breakdown
  */
@@ -474,12 +795,12 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
   // Build evidence context
   const evidenceContext = buildEvidenceContext(facts.uploaded_documents);
 
-  // Calculate category scores
+  // Calculate category scores (court filing readiness - includes evidence)
   const evidenceScore = calculateEvidenceScore(facts, evidenceContext);
   const clarityScore = calculateClaimClarityScore(facts);
   const papScore = calculatePAPComplianceScore(facts);
 
-  // Calculate weighted total
+  // Calculate weighted total (court filing readiness)
   const totalScore =
     evidenceScore.score * evidenceScore.weight +
     clarityScore.score * clarityScore.weight +
@@ -488,7 +809,7 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
   // Normalize to 0-100
   const normalizedScore = Math.round(totalScore);
 
-  // Determine confidence level
+  // Determine confidence level (court filing readiness)
   let level: ConfidenceLevel;
   if (normalizedScore >= 70) {
     level = 'strong';
@@ -517,7 +838,7 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
     negativeFactors.push('PAP compliance incomplete');
   }
 
-  // Generate improvements
+  // Generate improvements (court filing readiness)
   const improvements = generateImprovements(
     facts,
     evidenceScore,
@@ -526,7 +847,47 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
     evidenceContext
   );
 
+  // =========================================================================
+  // PACK QUALITY SCORE (Document Drafting Readiness)
+  // This is the PRIMARY score shown on the Review page.
+  // It excludes evidence uploads and focuses on system-controlled quality.
+  // =========================================================================
+
+  const packQualityClarity = calculatePackQualityClaimClarity(facts);
+  const packQualityCompleteness = calculatePackQualityDocumentCompleteness(facts);
+  const packQualityPap = calculatePackQualityPapPreparedness(facts);
+
+  // Calculate weighted pack quality total
+  const packQualityTotal =
+    packQualityClarity.score * packQualityClarity.weight +
+    packQualityCompleteness.score * packQualityCompleteness.weight +
+    packQualityPap.score * packQualityPap.weight;
+
+  // Normalize pack quality score to 0-100
+  const packQualityScore = Math.round(packQualityTotal);
+
+  // Determine pack quality level
+  let packQualityLevel: PackQualityLevel;
+  if (packQualityScore >= 80) {
+    packQualityLevel = 'excellent';
+  } else if (packQualityScore >= 60) {
+    packQualityLevel = 'good';
+  } else {
+    packQualityLevel = 'needs_work';
+  }
+
+  // Collect pack quality positive factors
+  const packQualityFactors = [
+    ...packQualityClarity.factors,
+    ...packQualityCompleteness.factors,
+    ...packQualityPap.factors,
+  ];
+
+  // Generate filing readiness improvements (separate from pack quality)
+  const filingReadinessImprovements = generateFilingReadinessImprovements(facts, evidenceContext);
+
   return {
+    // Court filing readiness (original score - kept for compatibility)
     level,
     score: normalizedScore,
     breakdown: {
@@ -537,6 +898,17 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
     positiveFactors,
     negativeFactors,
     improvements,
+
+    // Pack quality score (NEW - for Review page display)
+    packQualityScore,
+    packQualityLevel,
+    packQualityBreakdown: {
+      claimClarity: packQualityClarity,
+      documentCompleteness: packQualityCompleteness,
+      papPreparedness: packQualityPap,
+    },
+    packQualityFactors,
+    filingReadinessImprovements,
   };
 }
 
@@ -580,6 +952,50 @@ export function getConfidenceLevelColor(level: ConfidenceLevel): {
         bg: 'bg-red-50',
         text: 'text-red-800',
         border: 'border-red-200',
+      };
+  }
+}
+
+/**
+ * Get display label for pack quality level
+ */
+export function getPackQualityLevelLabel(level: PackQualityLevel): string {
+  switch (level) {
+    case 'excellent':
+      return 'Excellent';
+    case 'good':
+      return 'Good';
+    case 'needs_work':
+      return 'Needs Work';
+  }
+}
+
+/**
+ * Get color class for pack quality level
+ */
+export function getPackQualityLevelColor(level: PackQualityLevel): {
+  bg: string;
+  text: string;
+  border: string;
+} {
+  switch (level) {
+    case 'excellent':
+      return {
+        bg: 'bg-green-50',
+        text: 'text-green-800',
+        border: 'border-green-200',
+      };
+    case 'good':
+      return {
+        bg: 'bg-blue-50',
+        text: 'text-blue-800',
+        border: 'border-blue-200',
+      };
+    case 'needs_work':
+      return {
+        bg: 'bg-amber-50',
+        text: 'text-amber-800',
+        border: 'border-amber-200',
       };
   }
 }

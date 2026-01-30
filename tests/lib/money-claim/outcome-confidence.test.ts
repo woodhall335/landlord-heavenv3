@@ -8,6 +8,8 @@ import {
   calculateOutcomeConfidence,
   getConfidenceLevelLabel,
   getConfidenceLevelColor,
+  getPackQualityLevelLabel,
+  getPackQualityLevelColor,
   type CaseFactsForScoring,
 } from '@/lib/money-claim/outcome-confidence';
 
@@ -503,6 +505,394 @@ describe('Outcome Confidence Indicator', () => {
       const colors = getConfidenceLevelColor('weak');
       expect(colors.bg).toContain('red');
       expect(colors.text).toContain('red');
+    });
+  });
+
+  // ==========================================================================
+  // PACK QUALITY SCORE TESTS
+  // These test the new Document Pack Quality score shown on the Review page.
+  // The pack quality score measures drafting readiness (system-controlled quality),
+  // NOT court filing readiness. Evidence uploads are excluded.
+  // ==========================================================================
+  describe('Pack Quality Score', () => {
+    describe('baseline score for cleanly completed wizard', () => {
+      /**
+       * CRITICAL ACCEPTANCE CRITERIA:
+       * A typical case with all wizard fields completed, arrears schedule complete,
+       * interest configured, and PAP pack generated (but no evidence uploads)
+       * MUST score >= 70 on pack quality.
+       */
+      it('scores >= 70 for complete wizard with PAP generated but no evidence uploads', () => {
+        const typicalCompleteCase: CaseFactsForScoring = {
+          // Claim type
+          claiming_rent_arrears: true,
+          // Complete basis of claim
+          money_claim: {
+            basis_of_claim: 'The tenant John Smith rented 123 High Street, London under an AST dated 1 January 2024. The rent was £1,200 per month payable on the 1st. Despite the tenancy agreement and multiple reminders, rent has not been paid since January 2025.',
+            charge_interest: true,
+            interest_rate: 8,
+            interest_start_date: '2025-01-01',
+            generate_pap_documents: true, // PAP pack generated
+          },
+          // Complete arrears schedule
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1200, rent_paid: 0 },
+            { period_start: '2025-02-01', period_end: '2025-02-28', rent_due: 1200, rent_paid: 0 },
+            { period_start: '2025-03-01', period_end: '2025-03-31', rent_due: 1200, rent_paid: 0 },
+          ],
+          // Tenancy details
+          rent_amount: 1200,
+          rent_frequency: 'monthly',
+          tenancy_start_date: '2024-01-01',
+          tenancy_end_date: '2025-06-30',
+          // NO evidence uploads
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(typicalCompleteCase);
+
+        // Pack quality score must be >= 70 for this typical complete case
+        expect(result.packQualityScore).toBeGreaterThanOrEqual(70);
+        expect(result.packQualityLevel).not.toBe('needs_work');
+
+        // Filing readiness improvements should still be shown (PAP not sent, no evidence)
+        expect(result.filingReadinessImprovements.length).toBeGreaterThan(0);
+        expect(result.filingReadinessImprovements.some(i => i.includes('Letter Before Claim'))).toBe(true);
+      });
+
+      it('scores >= 70 even without interest when interest decision is made (opted out)', () => {
+        const caseNoInterest: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'The tenant owes rent arrears for the period January 2025 to March 2025. Total £3,600 outstanding at £1,200 per month.',
+            charge_interest: false, // Explicitly opted out
+            generate_pap_documents: true,
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1200, rent_paid: 0 },
+            { period_start: '2025-02-01', period_end: '2025-02-28', rent_due: 1200, rent_paid: 0 },
+            { period_start: '2025-03-01', period_end: '2025-03-31', rent_due: 1200, rent_paid: 0 },
+          ],
+          rent_amount: 1200,
+          rent_frequency: 'monthly',
+          tenancy_start_date: '2024-01-01',
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(caseNoInterest);
+        expect(result.packQualityScore).toBeGreaterThanOrEqual(70);
+      });
+
+      it('maintains high pack quality score even when PAP sent + 30 days completed', () => {
+        const thirtyFiveDaysAgo = new Date();
+        thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+
+        const caseWithPAPComplete: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant failed to pay rent for January to March 2025 despite reminders.',
+            charge_interest: true,
+            interest_rate: 8,
+            interest_start_date: '2025-01-01',
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+            { period_start: '2025-02-01', period_end: '2025-02-28', rent_due: 1000, rent_paid: 0 },
+          ],
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          tenancy_start_date: '2024-01-01',
+          letter_before_claim_sent: true,
+          pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(caseWithPAPComplete);
+        expect(result.packQualityScore).toBeGreaterThanOrEqual(70);
+
+        // Fewer filing readiness improvements when PAP is complete
+        const papImprovement = result.filingReadinessImprovements.find(
+          i => i.includes('Letter Before Claim') || i.includes('30 days')
+        );
+        expect(papImprovement).toBeUndefined(); // No PAP improvement needed
+      });
+    });
+
+    describe('score drops for incomplete wizard', () => {
+      it('scores below 70 when key wizard fields are missing', () => {
+        const incompleteCase: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          // Missing basis of claim
+          money_claim: {
+            basis_of_claim: '', // Empty
+            // Interest not configured
+          },
+          // Incomplete arrears
+          arrears_items: [
+            { period_start: null, period_end: null, rent_due: null, rent_paid: null },
+          ],
+          // Missing tenancy details
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(incompleteCase);
+        expect(result.packQualityScore).toBeLessThan(70);
+        expect(result.packQualityLevel).toBe('needs_work');
+      });
+
+      it('scores lower without PAP documents generated', () => {
+        const caseWithPAP: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant owes rent.',
+            generate_pap_documents: true,
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+          ],
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          uploaded_documents: [],
+        };
+
+        const caseWithoutPAP: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant owes rent.',
+            // No generate_pap_documents
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+          ],
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          uploaded_documents: [],
+        };
+
+        const withPAP = calculateOutcomeConfidence(caseWithPAP);
+        const withoutPAP = calculateOutcomeConfidence(caseWithoutPAP);
+
+        expect(withPAP.packQualityScore).toBeGreaterThan(withoutPAP.packQualityScore);
+      });
+    });
+
+    describe('pack quality vs court readiness scores', () => {
+      it('pack quality score is higher than court readiness when no evidence uploaded', () => {
+        const caseNoEvidence: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant failed to pay rent for January to March 2025. Total £3,000 owed.',
+            charge_interest: true,
+            interest_rate: 8,
+            interest_start_date: '2025-01-01',
+            generate_pap_documents: true,
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+            { period_start: '2025-02-01', period_end: '2025-02-28', rent_due: 1000, rent_paid: 0 },
+            { period_start: '2025-03-01', period_end: '2025-03-31', rent_due: 1000, rent_paid: 0 },
+          ],
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          tenancy_start_date: '2024-01-01',
+          uploaded_documents: [], // No evidence!
+        };
+
+        const result = calculateOutcomeConfidence(caseNoEvidence);
+
+        // Pack quality should be high (wizard complete)
+        // Court readiness should be lower (no evidence)
+        expect(result.packQualityScore).toBeGreaterThan(result.score);
+      });
+
+      it('pack quality and court readiness converge when evidence is uploaded', () => {
+        const thirtyFiveDaysAgo = new Date();
+        thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+
+        const fullCase: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant failed to pay rent for January to March 2025. Total £3,000 owed.',
+            charge_interest: true,
+            interest_rate: 8,
+            interest_start_date: '2025-01-01',
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+            { period_start: '2025-02-01', period_end: '2025-02-28', rent_due: 1000, rent_paid: 0 },
+          ],
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          tenancy_start_date: '2024-01-01',
+          letter_before_claim_sent: true,
+          pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+          pap_response_received: false,
+          evidence_reviewed: true,
+          uploaded_documents: [
+            { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+            { id: '2', name: 'bank-statement-jan.pdf', type: 'application/pdf' },
+          ],
+        };
+
+        const result = calculateOutcomeConfidence(fullCase);
+
+        // Both scores should be high
+        expect(result.packQualityScore).toBeGreaterThanOrEqual(70);
+        expect(result.score).toBeGreaterThanOrEqual(50); // Court readiness also improved
+      });
+    });
+
+    describe('filing readiness improvements', () => {
+      it('includes PAP send reminder when PAP docs generated but not sent', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant owes rent.',
+            generate_pap_documents: true,
+          },
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.filingReadinessImprovements.some(
+          i => i.includes('Letter Before Claim') && i.includes('30 days')
+        )).toBe(true);
+      });
+
+      it('includes evidence reminder when no tenancy agreement uploaded', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            generate_pap_documents: true,
+          },
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.filingReadinessImprovements.some(
+          i => i.includes('tenancy agreement')
+        )).toBe(true);
+      });
+
+      it('includes rent records reminder for arrears claims', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            generate_pap_documents: true,
+          },
+          uploaded_documents: [],
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.filingReadinessImprovements.some(
+          i => i.includes('rent records') || i.includes('bank statements')
+        )).toBe(true);
+      });
+
+      it('filing improvements empty when PAP complete and evidence uploaded', () => {
+        const thirtyFiveDaysAgo = new Date();
+        thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+
+        const fullCase: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          letter_before_claim_sent: true,
+          pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+          uploaded_documents: [
+            { id: '1', name: 'tenancy-agreement.pdf', type: 'application/pdf' },
+            { id: '2', name: 'bank-statement.pdf', type: 'application/pdf' },
+          ],
+        };
+
+        const result = calculateOutcomeConfidence(fullCase);
+        expect(result.filingReadinessImprovements.length).toBe(0);
+      });
+    });
+
+    describe('pack quality breakdown', () => {
+      it('provides breakdown with claim clarity, document completeness, and PAP preparedness', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+          money_claim: {
+            basis_of_claim: 'Tenant owes rent.',
+            generate_pap_documents: true,
+          },
+          arrears_items: [
+            { period_start: '2025-01-01', period_end: '2025-01-31', rent_due: 1000, rent_paid: 0 },
+          ],
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+
+        expect(result.packQualityBreakdown).toBeDefined();
+        expect(result.packQualityBreakdown.claimClarity).toBeDefined();
+        expect(result.packQualityBreakdown.documentCompleteness).toBeDefined();
+        expect(result.packQualityBreakdown.papPreparedness).toBeDefined();
+
+        // Check weights add up
+        const totalWeight =
+          result.packQualityBreakdown.claimClarity.weight +
+          result.packQualityBreakdown.documentCompleteness.weight +
+          result.packQualityBreakdown.papPreparedness.weight;
+        expect(totalWeight).toBe(1.0);
+      });
+
+      it('gives claim clarity 60% weight', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.packQualityBreakdown.claimClarity.weight).toBe(0.6);
+        expect(result.packQualityBreakdown.claimClarity.maxScore).toBe(60);
+      });
+
+      it('gives document completeness 25% weight', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.packQualityBreakdown.documentCompleteness.weight).toBe(0.25);
+        expect(result.packQualityBreakdown.documentCompleteness.maxScore).toBe(25);
+      });
+
+      it('gives PAP preparedness 15% weight', () => {
+        const facts: CaseFactsForScoring = {
+          claiming_rent_arrears: true,
+        };
+
+        const result = calculateOutcomeConfidence(facts);
+        expect(result.packQualityBreakdown.papPreparedness.weight).toBe(0.15);
+        expect(result.packQualityBreakdown.papPreparedness.maxScore).toBe(15);
+      });
+    });
+  });
+
+  describe('getPackQualityLevelLabel', () => {
+    it('returns correct labels', () => {
+      expect(getPackQualityLevelLabel('excellent')).toBe('Excellent');
+      expect(getPackQualityLevelLabel('good')).toBe('Good');
+      expect(getPackQualityLevelLabel('needs_work')).toBe('Needs Work');
+    });
+  });
+
+  describe('getPackQualityLevelColor', () => {
+    it('returns green colors for excellent', () => {
+      const colors = getPackQualityLevelColor('excellent');
+      expect(colors.bg).toContain('green');
+      expect(colors.text).toContain('green');
+    });
+
+    it('returns blue colors for good', () => {
+      const colors = getPackQualityLevelColor('good');
+      expect(colors.bg).toContain('blue');
+      expect(colors.text).toContain('blue');
+    });
+
+    it('returns amber colors for needs_work', () => {
+      const colors = getPackQualityLevelColor('needs_work');
+      expect(colors.bg).toContain('amber');
+      expect(colors.text).toContain('amber');
     });
   });
 });
