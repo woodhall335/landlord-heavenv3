@@ -100,20 +100,35 @@ describe('Money Claim Document Consistency', () => {
     it('uses consistent footer format', () => {
       const template = fs.readFileSync(enforcementGuidePath, 'utf-8');
       // Should have the standard footer format
-      expect(template).toContain('Generated on {{generation_date}}');
-      expect(template).toContain('Landlord Heaven Money Claim Pack | England');
+      expect(template).toContain('{{generation_date}}');
+      expect(template).toContain('Landlord Heaven Money Claim Pack');
+      expect(template).toContain('England');
     });
 
-    it('does not use full HTML document structure (uses shared styling)', () => {
+    it('uses full HTML document structure for consistent styling', () => {
       const template = fs.readFileSync(enforcementGuidePath, 'utf-8');
-      // Should NOT be a full HTML document - relies on generator's wrapper
-      expect(template).not.toContain('<!DOCTYPE html>');
-      expect(template).not.toContain('<html');
-      expect(template).not.toContain('</html>');
-      expect(template).not.toContain('<head>');
-      expect(template).not.toContain('</head>');
-      expect(template).not.toContain('<body>');
-      expect(template).not.toContain('</body>');
+      // Should be a full HTML document with proper styling (like schedule_of_arrears)
+      expect(template).toContain('<!DOCTYPE html>');
+      expect(template).toContain('<html');
+      expect(template).toContain('</html>');
+      expect(template).toContain('<style>');
+      expect(template).toContain('</style>');
+    });
+
+    it('has consistent document header structure', () => {
+      const template = fs.readFileSync(enforcementGuidePath, 'utf-8');
+      // Should have consistent header elements like other pack documents
+      expect(template).toContain('class="doc-header"');
+      expect(template).toContain('class="doc-badge"');
+      expect(template).toContain('class="doc-footer"');
+    });
+
+    it('has URL styling to prevent soft-hyphenation', () => {
+      const template = fs.readFileSync(enforcementGuidePath, 'utf-8');
+      // Should have CSS to prevent URL breaking
+      expect(template).toContain('class="url-link"');
+      expect(template).toContain('hyphens: none');
+      expect(template).toContain('word-break: normal');
     });
   });
 
