@@ -65,3 +65,15 @@ export {
 export {
   northernIrelandFAQs,
 } from './northern-ireland-faqs';
+
+// Eviction Process FAQs
+export {
+  evictionProcessEnglandFAQs,
+  section21ExpiredFAQs,
+  section8RentArrearsFAQs,
+  possessionOrderFAQs,
+  scotlandEvictionFAQs as evictionScotlandFAQs,
+  walesEvictionFAQs as evictionWalesFAQs,
+  claimRentArrearsFAQs,
+  section8VsSection21FAQs,
+} from './eviction-process-faqs';
