@@ -1,39 +1,272 @@
-<h1>Enforcement Guide</h1>
-<p><em>What to Do After Obtaining a County Court Judgment</em></p>
+{{!--
+  ============================================================================
+  ENFORCEMENT GUIDE (Post-Judgment)
+  Money Claim Pack - England
+  ============================================================================
+  Explains enforcement options after obtaining a County Court Judgment (CCJ).
+  Includes:
+  - Attachment of Earnings
+  - Warrant of Control (bailiff action)
+  - Third Party Debt Order (bank account freeze)
+  - Charging Order on Property
+  - Order to Obtain Information (oral examination)
+--}}
 
-<hr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enforcement Guide</title>
+  <style>
+    {{{print_css}}}
 
-<h2>Case Reference</h2>
+    /* ===== @PAGE OVERRIDE ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
 
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-  <tr>
-    <td width="40%"><strong>Claimant:</strong></td>
-    <td width="60%">{{landlord_full_name}}</td>
-  </tr>
-  <tr>
-    <td><strong>Defendant:</strong></td>
-    <td>{{tenant_full_name}}</td>
-  </tr>
-  <tr>
-    <td><strong>Claim Amount:</strong></td>
-    <td>{{currency total_claim_amount}}</td>
-  </tr>
-  {{#if claim_number}}
-  <tr>
-    <td><strong>Claim Number:</strong></td>
-    <td>{{claim_number}}</td>
-  </tr>
-  {{/if}}
-</table>
+    body {
+      padding: 0;
+      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+    }
 
-<hr>
+    /* Document Header - consistent with schedule_of_arrears */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
 
-<p>
-<strong>Important Notice:</strong> This guide provides general information only. It is NOT legal advice and does not constitute a substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific circumstances, the defendant's financial situation, and judicial decisions. Always consider taking independent legal advice before proceeding with enforcement action.
-</p>
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.3em 0;
+      line-height: 1.3;
+      color: #1a1a1a;
+    }
 
-<hr>
+    .doc-header p {
+      font-size: 10pt;
+      color: #666;
+      margin: 0;
+      font-style: italic;
+    }
 
+    .doc-badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 0.5em;
+    }
+
+    /* Case Details Box - consistent with schedule_of_arrears */
+    .case-details {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.4em 1em;
+      font-size: 10pt;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Section Headings */
+    h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 1.5em 0 0.5em 0;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h3 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 1.2em 0 0.4em 0;
+    }
+
+    /* Paragraphs and Lists */
+    p {
+      margin: 0.5em 0;
+    }
+
+    ul, ol {
+      margin: 0.5em 0 0.5em 1.5em;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.3em 0;
+    }
+
+    /* Warning/Notice Box */
+    .notice-box {
+      background: #fff7ed;
+      border-left: 4px solid #ea580c;
+      padding: 1em;
+      margin: 1em 0;
+      font-size: 10pt;
+    }
+
+    .notice-box strong {
+      color: #c2410c;
+    }
+
+    /* Info Box - consistent with schedule_of_arrears */
+    .info-box {
+      background: #f8f8f8;
+      border-left: 4px solid #1a1a1a;
+      padding: 1em;
+      margin: 1em 0;
+      font-size: 10pt;
+    }
+
+    /* Enforcement Preferences Box */
+    .preferences-box {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1em 0;
+      background: #f0f9ff;
+    }
+
+    .preferences-box h3 {
+      margin: 0 0 0.8em 0;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .preferences-box ul {
+      margin: 0;
+      padding-left: 1.5em;
+    }
+
+    .preferences-box li {
+      margin: 0.4em 0;
+    }
+
+    /* Fees Table - consistent with schedule_of_arrears */
+    .fees-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+      font-size: 9pt;
+    }
+
+    .fees-table th,
+    .fees-table td {
+      padding: 6px 8px;
+      border: 1px solid #1a1a1a;
+      text-align: left;
+    }
+
+    .fees-table th {
+      background: #1a1a1a;
+      color: white;
+      font-weight: 600;
+    }
+
+    .fees-table td {
+      background: #fff;
+    }
+
+    .fees-table tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    /* URL styling - prevent soft-hyphenation and wrapping issues */
+    .url-link {
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
+      -webkit-hyphens: none;
+      -ms-hyphens: none;
+      white-space: nowrap;
+      font-family: 'Courier New', monospace;
+      font-size: 9pt;
+      color: #1a1a1a;
+    }
+
+    /* Document Footer - consistent with schedule_of_arrears */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #e5e7eb;
+      font-size: 9pt;
+      color: #6b7280;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    /* Print styles */
+    @media print {
+      .notice-box, .info-box, .preferences-box {
+        page-break-inside: avoid;
+      }
+      .fees-table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Enforcement Guide</h1>
+  <p>What to Do After Obtaining a County Court Judgment</p>
+  <span class="doc-badge">Money Claim – Post-Judgment</span>
+</div>
+
+<!-- Case Details -->
+<div class="case-details">
+  <dl class="case-details-grid">
+    <dt>Claimant:</dt>
+    <dd>{{landlord_full_name}}</dd>
+    <dt>Defendant:</dt>
+    <dd>{{tenant_full_name}}</dd>
+    <dt>Claim Amount:</dt>
+    <dd>{{currency total_claim_amount}}</dd>
+    {{#if claim_number}}
+    <dt>Claim Number:</dt>
+    <dd>{{claim_number}}</dd>
+    {{/if}}
+  </dl>
+</div>
+
+<!-- Important Notice -->
+<div class="notice-box">
+  <strong>Important Notice:</strong> This guide provides general information only. It is NOT legal advice and does not constitute a substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific circumstances, the defendant's financial situation, and judicial decisions. Always consider taking independent legal advice before proceeding with enforcement action.
+</div>
+
+<!-- Introduction -->
 <h2>Introduction</h2>
 
 <p>
@@ -45,31 +278,34 @@ This guide explains the main enforcement methods available in England, the costs
 </p>
 
 {{#if enforcement_preferences}}
-<h3>Your Selected Enforcement Preferences</h3>
-
-<p>Based on your selections, you indicated interest in the following enforcement methods:</p>
-
-<ul>
-{{#each enforcement_preferences}}
-  {{#if (eq this "attachment_of_earnings")}}
-  <li><strong>Attachment of Earnings</strong> — deductions from wages</li>
-  {{else if (eq this "warrant_of_control")}}
-  <li><strong>Warrant of Control</strong> — bailiff action</li>
-  {{else if (eq this "charging_order")}}
-  <li><strong>Charging Order</strong> — security over property</li>
-  {{else}}
-  <li>{{this}}</li>
+<!-- Enforcement Preferences -->
+<div class="preferences-box">
+  <h3>Your Selected Enforcement Preferences</h3>
+  <p>Based on your selections, you indicated interest in the following enforcement methods:</p>
+  <ul>
+  {{#each enforcement_preferences}}
+    {{#if (eq this "attachment_of_earnings")}}
+    <li><strong>Attachment of Earnings</strong> — deductions from wages</li>
+    {{else if (eq this "warrant_of_control")}}
+    <li><strong>Warrant of Control</strong> — bailiff action</li>
+    {{else if (eq this "charging_order")}}
+    <li><strong>Charging Order</strong> — security over property</li>
+    {{else if (eq this "third_party_debt_order")}}
+    <li><strong>Third Party Debt Order</strong> — bank account freeze</li>
+    {{else if (eq this "order_to_obtain_information")}}
+    <li><strong>Order to Obtain Information</strong> — oral examination</li>
+    {{else}}
+    <li>{{this}}</li>
+    {{/if}}
+  {{/each}}
+  </ul>
+  {{#if enforcement_notes}}
+  <p style="margin-top: 0.8em;"><strong>Your notes:</strong> {{enforcement_notes}}</p>
   {{/if}}
-{{/each}}
-</ul>
-
-{{#if enforcement_notes}}
-<p><strong>Your notes:</strong> {{enforcement_notes}}</p>
+</div>
 {{/if}}
 
-<hr>
-{{/if}}
-
+<!-- Before You Start -->
 <h2>Before You Start Enforcement</h2>
 
 <h3>Checklist Before Enforcement</h3>
@@ -82,8 +318,7 @@ This guide explains the main enforcement methods available in England, the costs
   <li>Be prepared to pay court fees upfront (some are refundable from the defendant if enforcement is successful)</li>
 </ul>
 
-<hr>
-
+<!-- Enforcement Methods -->
 <h2>Enforcement Methods</h2>
 
 <p>The main enforcement methods available after obtaining a CCJ are:</p>
@@ -116,8 +351,6 @@ This guide explains the main enforcement methods available in England, the costs
 <p><strong>Court Fee:</strong> £110 (as of 2024)</p>
 <p><strong>How to apply:</strong> Complete form N337 and submit to the court that issued the judgment</p>
 
-<hr>
-
 <h3>2. Warrant of Control (Bailiff Action)</h3>
 
 <p><strong>What it is:</strong> An order authorizing enforcement agents (bailiffs) to visit the defendant's address, seize goods, and sell them at auction to recover the debt.</p>
@@ -147,11 +380,9 @@ This guide explains the main enforcement methods available in England, the costs
 <p><strong>Court Fee:</strong> £77 for claims up to £600; £110 for claims over £600 (plus bailiff fees)</p>
 <p><strong>How to apply:</strong> Complete form N323 and submit to the court that issued the judgment</p>
 
-<p>
+<div class="info-box">
 <strong>Note — For debts over £5,000:</strong> You need a <strong>Writ of Control</strong> enforced by High Court Enforcement Officers (HCEOs). This requires transferring your judgment to the High Court first (form N293A).
-</p>
-
-<hr>
+</div>
 
 <h3>3. Third Party Debt Order (Bank Account Freeze)</h3>
 
@@ -182,8 +413,6 @@ This guide explains the main enforcement methods available in England, the costs
 <p><strong>Court Fee:</strong> £110</p>
 <p><strong>How to apply:</strong> Complete form N349 and provide evidence of the defendant's bank details</p>
 
-<hr>
-
 <h3>4. Charging Order on Property</h3>
 
 <p><strong>What it is:</strong> An order securing your debt against the defendant's property or land. If the property is sold, you get paid from the sale proceeds. You can also apply for an order for sale to force a sale.</p>
@@ -213,8 +442,6 @@ This guide explains the main enforcement methods available in England, the costs
 <p><strong>Court Fee:</strong> £110 for interim order; additional fee for final order</p>
 <p><strong>How to apply:</strong> Complete form N379 and provide evidence of the defendant's property ownership</p>
 
-<hr>
-
 <h3>5. Order to Obtain Information (Oral Examination)</h3>
 
 <p><strong>What it is:</strong> An order requiring the defendant to attend court and answer questions under oath about their finances, employment, assets, and ability to pay.</p>
@@ -243,57 +470,59 @@ This guide explains the main enforcement methods available in England, the costs
 <p><strong>Court Fee:</strong> £55</p>
 <p><strong>How to apply:</strong> Complete form N316 and submit to the court</p>
 
-<hr>
-
+<!-- Fees Table -->
 <h2>Enforcement Fees and Costs</h2>
 
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-  <tr style="background-color: #f0f0f0;">
-    <th>Enforcement Method</th>
-    <th>Court Fee</th>
-    <th>Additional Costs</th>
-    <th>Recoverable?</th>
-  </tr>
-  <tr>
-    <td>Attachment of Earnings</td>
-    <td>£110</td>
-    <td>None</td>
-    <td>Yes (if successful)</td>
-  </tr>
-  <tr>
-    <td>Warrant of Control (up to £600)</td>
-    <td>£77</td>
-    <td>Bailiff fees (varies)</td>
-    <td>Partially</td>
-  </tr>
-  <tr>
-    <td>Warrant of Control (over £600)</td>
-    <td>£110</td>
-    <td>Bailiff fees (varies)</td>
-    <td>Partially</td>
-  </tr>
-  <tr>
-    <td>Third Party Debt Order</td>
-    <td>£110</td>
-    <td>None</td>
-    <td>Yes (if successful)</td>
-  </tr>
-  <tr>
-    <td>Charging Order</td>
-    <td>£110</td>
-    <td>Land Registry fees (£7)</td>
-    <td>Yes (when property sold)</td>
-  </tr>
-  <tr>
-    <td>Order to Obtain Information</td>
-    <td>£55</td>
-    <td>None</td>
-    <td>Yes</td>
-  </tr>
+<table class="fees-table">
+  <thead>
+    <tr>
+      <th>Enforcement Method</th>
+      <th>Court Fee</th>
+      <th>Additional Costs</th>
+      <th>Recoverable?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Attachment of Earnings</td>
+      <td>£110</td>
+      <td>None</td>
+      <td>Yes (if successful)</td>
+    </tr>
+    <tr>
+      <td>Warrant of Control (up to £600)</td>
+      <td>£77</td>
+      <td>Bailiff fees (varies)</td>
+      <td>Partially</td>
+    </tr>
+    <tr>
+      <td>Warrant of Control (over £600)</td>
+      <td>£110</td>
+      <td>Bailiff fees (varies)</td>
+      <td>Partially</td>
+    </tr>
+    <tr>
+      <td>Third Party Debt Order</td>
+      <td>£110</td>
+      <td>None</td>
+      <td>Yes (if successful)</td>
+    </tr>
+    <tr>
+      <td>Charging Order</td>
+      <td>£110</td>
+      <td>Land Registry fees (£7)</td>
+      <td>Yes (when property sold)</td>
+    </tr>
+    <tr>
+      <td>Order to Obtain Information</td>
+      <td>£55</td>
+      <td>None</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
 </table>
 
-<hr>
-
+<!-- Choosing the Right Method -->
 <h2>How to Choose the Right Enforcement Method</h2>
 
 <ol>
@@ -315,8 +544,7 @@ This guide explains the main enforcement methods available in England, the costs
   </li>
 </ol>
 
-<hr>
-
+<!-- Next Steps -->
 <h2>Next Steps</h2>
 
 <h3>Recommended Action Plan</h3>
@@ -331,35 +559,42 @@ This guide explains the main enforcement methods available in England, the costs
   <li><strong>Monitor and follow up:</strong> Track enforcement progress and be prepared to try alternative methods if needed</li>
 </ol>
 
-<hr>
-
+<!-- Important Warnings -->
 <h2>Important Warnings</h2>
 
-<p>
+<div class="notice-box">
 <strong>Do Not Harass the Defendant:</strong> You must not harass, threaten, or take the law into your own hands. Always use official court enforcement procedures. Harassment can result in criminal charges and may undermine your legal position.
-</p>
+</div>
 
-<p>
+<div class="notice-box">
 <strong>Insolvency Risk:</strong> If the defendant declares bankruptcy or enters into an Individual Voluntary Arrangement (IVA), enforcement action will be stayed (stopped). You will become an unsecured creditor in their insolvency proceedings and may only receive a small portion of the debt owed.
-</p>
+</div>
 
-<hr>
-
+<!-- Further Resources -->
 <h2>Further Resources</h2>
 
 <ul>
-  <li><strong>GOV.UK Enforcement Guidance:</strong> https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment</li>
-  <li><strong>Court Forms:</strong> https://www.gov.uk/government/collections/civil-and-family-court-forms</li>
-  <li><strong>Citizens Advice:</strong> https://www.citizensadvice.org.uk</li>
-  <li><strong>Money Claims Online (MCOL):</strong> https://www.moneyclaim.gov.uk</li>
+  <li><strong>GOV.UK Enforcement Guidance:</strong><br>
+    <span class="url-link">https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment</span></li>
+  <li><strong>Court Forms:</strong><br>
+    <span class="url-link">https://www.gov.uk/government/collections/civil-and-family-court-forms</span></li>
+  <li><strong>Citizens Advice:</strong><br>
+    <span class="url-link">https://www.citizensadvice.org.uk</span></li>
+  <li><strong>Money Claims Online (MCOL):</strong><br>
+    <span class="url-link">https://www.moneyclaim.gov.uk</span></li>
 </ul>
 
-<hr>
+<!-- Disclaimer -->
+<div class="info-box">
+<em>This guide is for information only and does not constitute legal advice. If you need legal advice, contact a solicitor.</em>
+</div>
 
-<p><em>
-This guide is for information only and does not constitute legal advice. If you need legal advice, contact a solicitor.
-</em></p>
+<!-- Document Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{generation_date}}</p>
+  <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
+  <p><em>This guide supports enforcement action following a County Court Judgment.</em></p>
+</div>
 
-<p><em>
-Generated on {{generation_date}} • Landlord Heaven Money Claim Pack | England
-</em></p>
+</body>
+</html>

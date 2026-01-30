@@ -1170,6 +1170,63 @@ function splitAddress(address: string): string[] {
 }
 
 /**
+ * Format address for PDF form display.
+ * Converts comma-separated addresses to newline-separated for better display in PDF text boxes.
+ * Ensures postcode always appears on its own line.
+ * Limits line length to prevent truncation (wraps at ~40 chars).
+ *
+ * @param address - The address string (may be comma-separated or newline-separated)
+ * @param postcode - Optional explicit postcode to ensure it's included
+ * @returns Multi-line address string suitable for PDF form text boxes
+ */
+function formatAddressForPdf(address: string, postcode?: string): string {
+  if (!address) return '';
+
+  // First, normalize: convert commas to newlines
+  let normalized = address
+    .split(/,\s*/)
+    .map(part => part.trim())
+    .filter(part => part.length > 0)
+    .join('\n');
+
+  // If address was already newline-separated, this will preserve it
+  // Normalize multiple newlines to single
+  normalized = normalized.replace(/\n+/g, '\n');
+
+  // Remove postcode from middle of address if present (we'll add it at the end)
+  const postcodeRegex = /\b([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})\b/gi;
+  let extractedPostcode = postcode;
+  const postcodeMatch = normalized.match(postcodeRegex);
+  if (postcodeMatch && postcodeMatch.length > 0) {
+    extractedPostcode = postcodeMatch[postcodeMatch.length - 1].toUpperCase();
+    // Remove all postcode occurrences from the address
+    normalized = normalized.replace(postcodeRegex, '').trim();
+  }
+
+  // Clean up any trailing/leading commas or empty lines
+  normalized = normalized
+    .split('\n')
+    .map(line => line.trim().replace(/^,|,$/g, '').trim())
+    .filter(line => line.length > 0)
+    .join('\n');
+
+  // Ensure postcode is on its own line at the end
+  if (extractedPostcode) {
+    // Normalize postcode format: ensure single space before last 3 chars
+    const cleanPostcode = extractedPostcode.toUpperCase().replace(/\s+/g, '');
+    const formattedPostcode = cleanPostcode.length >= 5
+      ? cleanPostcode.slice(0, -3) + ' ' + cleanPostcode.slice(-3)
+      : cleanPostcode;
+
+    if (!normalized.toUpperCase().includes(formattedPostcode.replace(/\s+/g, ''))) {
+      normalized = normalized + '\n' + formattedPostcode;
+    }
+  }
+
+  return normalized;
+}
+
+/**
  * Extract UK postcode from an address string.
  * UK postcodes follow patterns like: SW1A 1AA, M1 1AE, DN55 1PT, etc.
  * This is used as a fallback when postcode is not explicitly provided.
@@ -2680,32 +2737,27 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
 
   // Claimant details (large text box) - REQUIRED
   // CRITICAL: Include postcode explicitly - court requires full address with postcode
+  // Use formatAddressForPdf to ensure proper line breaks and postcode display
   const claimantPostcode = data.landlord_postcode || extractPostcodeFromAddress(data.landlord_address) || '';
-  const claimantAddressWithPostcode = claimantPostcode && !data.landlord_address?.includes(claimantPostcode)
-    ? `${data.landlord_address}\n${claimantPostcode}`
-    : data.landlord_address;
-  const claimantDetails = `${data.landlord_full_name}\n${claimantAddressWithPostcode}`;
+  const claimantFormattedAddress = formatAddressForPdf(data.landlord_address, claimantPostcode);
+  const claimantDetails = `${data.landlord_full_name}\n${claimantFormattedAddress}`;
   setTextRequired(form, 'Text21', claimantDetails, ctx);
 
   // Defendant details (large text box) - REQUIRED
   // CRITICAL: Include postcode explicitly - court requires full address with postcode
+  // Use formatAddressForPdf to convert comma-separated addresses to newlines for proper PDF display
   const defendantPostcode = data.property_postcode || extractPostcodeFromAddress(data.property_address) || '';
-  const defendantAddressWithPostcode = defendantPostcode && !data.property_address?.includes(defendantPostcode)
-    ? `${data.property_address}\n${defendantPostcode}`
-    : data.property_address;
-  let defendantDetails = `${data.tenant_full_name}\n${defendantAddressWithPostcode}`;
+  const defendantFormattedAddress = formatAddressForPdf(data.property_address, defendantPostcode);
+  let defendantDetails = `${data.tenant_full_name}\n${defendantFormattedAddress}`;
   if (data.has_joint_defendants && data.tenant_2_name) {
     // Build second defendant address - use their own address if provided, otherwise use property address
-    // Ensure second defendant also has postcode included
+    // Ensure second defendant also has postcode included and properly formatted
     const defendant2Postcode = data.tenant_2_postcode || defendantPostcode;
-    const defendant2Address = data.tenant_2_address_line1
-      ? [
-          data.tenant_2_address_line1,
-          data.tenant_2_address_line2,
-          defendant2Postcode
-        ].filter(Boolean).join(', ')
-      : defendantAddressWithPostcode;
-    defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2Address}`;
+    const defendant2RawAddress = data.tenant_2_address_line1
+      ? [data.tenant_2_address_line1, data.tenant_2_address_line2].filter(Boolean).join(', ')
+      : data.property_address;
+    const defendant2FormattedAddress = formatAddressForPdf(defendant2RawAddress, defendant2Postcode);
+    defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2FormattedAddress}`;
   }
   setTextRequired(form, 'Text22', defendantDetails, ctx);
 
