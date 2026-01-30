@@ -212,6 +212,14 @@ function registerHandlebarsHelpers() {
     return `£${amount.toFixed(2)}`;
   });
 
+  // Format number for MCOL (Money Claim Online) - 2 decimal places, no £ symbol
+  // Used in Filing Guide Step 5 where MCOL requires plain numbers only
+  // Prevents float artifacts like "3622.3900000000003" → outputs "3622.39"
+  Handlebars.registerHelper('mcol_number', function (amount) {
+    if (typeof amount !== 'number') return '0.00';
+    return amount.toFixed(2);
+  });
+
   // Format date (UK format: DD/MM/YYYY, using UTC to avoid DST issues)
   Handlebars.registerHelper('format_date', function (date, format) {
     if (!date) return '';
@@ -645,9 +653,11 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     }
 
     // Add generation metadata + site config + print system
+    // IMPORTANT: Only set generation_date as fallback if not already provided by the generator
+    // Money claim generator passes pre-formatted UK legal dates that must not be overwritten
     const enrichedData = {
       ...data,
-      generation_date: new Date().toISOString().split('T')[0],
+      generation_date: data.generation_date || new Date().toISOString().split('T')[0],
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
       // Site configuration (for footer, domain, etc.)

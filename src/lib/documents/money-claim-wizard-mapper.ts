@@ -35,10 +35,15 @@ function buildAddress(...parts: Array<string | null>): string {
 }
 
 /**
- * @deprecated Use mapArrearsItemsToEntries from arrears-schedule-mapper instead
+ * Format arrears items with proper due date computation.
+ * @param items - The arrears items from case facts
+ * @param rentDueDay - The day of month rent is due (1-31), from tenancy.rent_due_day
  */
-function formatArrearsItems(items: CaseFacts['issues']['rent_arrears']['arrears_items']) {
-  return mapArrearsItemsToEntries(items || []);
+function formatArrearsItems(
+  items: CaseFacts['issues']['rent_arrears']['arrears_items'],
+  rentDueDay?: number | null
+) {
+  return mapArrearsItemsToEntries(items || [], rentDueDay);
 }
 
 function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): MoneyClaimCase['rent_frequency'] {
@@ -85,7 +90,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
     arrears_total: facts.issues.rent_arrears.total_arrears || undefined,
-    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items),
+    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items, facts.tenancy.rent_due_day),
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
@@ -176,7 +181,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
     arrears_total: facts.issues.rent_arrears.total_arrears || undefined,
-    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items),
+    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items, facts.tenancy.rent_due_day),
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
