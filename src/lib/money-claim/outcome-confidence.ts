@@ -857,14 +857,13 @@ export function calculateOutcomeConfidence(facts: CaseFactsForScoring): Confiden
   const packQualityCompleteness = calculatePackQualityDocumentCompleteness(facts);
   const packQualityPap = calculatePackQualityPapPreparedness(facts);
 
-  // Calculate weighted pack quality total
-  const packQualityTotal =
-    packQualityClarity.score * packQualityClarity.weight +
-    packQualityCompleteness.score * packQualityCompleteness.weight +
-    packQualityPap.score * packQualityPap.weight;
-
-  // Normalize pack quality score to 0-100
-  const packQualityScore = Math.round(packQualityTotal);
+  // Calculate pack quality total - scores already represent weighted contribution
+  // (maxScores are 60, 25, 15 = 100 total, so we just sum the raw scores)
+  const packQualityScore = Math.round(
+    packQualityClarity.score +
+    packQualityCompleteness.score +
+    packQualityPap.score
+  );
 
   // Determine pack quality level
   let packQualityLevel: PackQualityLevel;
