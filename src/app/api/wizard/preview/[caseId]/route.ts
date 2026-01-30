@@ -239,18 +239,37 @@ export async function GET(
 
     // Use admin client for fetching case data - we need to check access rules ourselves
     // because the case might not be linked to the user yet (created during wizard before signup)
-    const adminSupabase = createAdminClient();
+    let adminSupabase;
+    try {
+      adminSupabase = createAdminClient();
+      console.log('[Wizard-Preview-API] Admin client created successfully');
+    } catch (adminError: any) {
+      console.error('[Wizard-Preview-API] Failed to create admin client:', adminError.message);
+      return errorResponse('INTERNAL_ERROR', 'Database configuration error', 500, { error: adminError.message }, rateLimitHeaders);
+    }
 
-    // Fetch case data without user filtering first
+    // Fetch case data without user filtering first - use select('*') like /api/cases/[id] does
     const { data: caseData, error: fetchError } = await adminSupabase
       .from('cases')
-      .select('id, user_id, jurisdiction, collected_facts, wizard_facts, facts')
+      .select('*')
       .eq('id', caseId)
       .single();
 
     if (fetchError || !caseData) {
-      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, undefined, rateLimitHeaders);
+      console.error('[Wizard-Preview-API] Database fetch failed:', {
+        caseId,
+        fetchError: fetchError ? { message: fetchError.message, code: fetchError.code, details: fetchError.details, hint: (fetchError as any).hint } : null,
+        hasData: !!caseData,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, { dbError: fetchError?.message }, rateLimitHeaders);
     }
+
+    console.log('[Wizard-Preview-API] Case found:', {
+      caseId,
+      userId: (caseData as any).user_id,
+      jurisdiction: (caseData as any).jurisdiction,
+      hasCollectedFacts: !!(caseData as any).collected_facts,
+    });
 
     // Access control: Allow if user owns the case OR case is not linked to anyone yet
     // This supports the wizard flow where users create cases before signing in
