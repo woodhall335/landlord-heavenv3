@@ -253,11 +253,25 @@ export const guideLinks = {
 
 // Money Claim SEO Landing Pages (Q1 2026 Expansion)
 export const moneyClaimGuides = {
-  // Core hub pages (4 existing)
+  // Core hub pages (6 existing)
   unpaidRent: {
     href: '/money-claim-unpaid-rent',
     title: 'Claim Unpaid Rent Guide',
     description: 'MCOL process for rent arrears',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  rentArrearsFromTenant: {
+    href: '/money-claim-rent-arrears',
+    title: 'Claim Rent Arrears from Tenant',
+    description: 'Step-by-step rent recovery guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  sueTenantUnpaidRent: {
+    href: '/how-to-sue-tenant-for-unpaid-rent',
+    title: 'How to Sue Tenant for Unpaid Rent',
+    description: 'Court action for rent recovery',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
@@ -730,6 +744,8 @@ export const moneyClaimUtilitiesLinks = [
 export const moneyClaimRentLinks = [
   productLinks.moneyClaim,
   moneyClaimGuides.unpaidRent,
+  moneyClaimGuides.rentArrearsFromTenant,
+  moneyClaimGuides.sueTenantUnpaidRent,
   moneyClaimGuides.formerTenant,
   moneyClaimGuides.guarantorClaims,
   moneyClaimGuides.breakClause,

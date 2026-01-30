@@ -96,6 +96,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/money-claim-guarantor', priority: 0.75, changeFrequency: 'weekly' as const },
     { path: '/money-claim-former-tenant', priority: 0.75, changeFrequency: 'weekly' as const },
     { path: '/money-claim-deposit-shortfall', priority: 0.75, changeFrequency: 'weekly' as const },
+    // Money Claim SEO Expansion (Q1 2026) - High-intent rent arrears keywords
+    { path: '/money-claim-rent-arrears', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/how-to-sue-tenant-for-unpaid-rent', priority: 0.85, changeFrequency: 'weekly' as const },
     // Money Claim SEO Expansion (Q1 2026) - Process focused
     { path: '/money-claim-online-mcol', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/money-claim-ccj-enforcement', priority: 0.75, changeFrequency: 'weekly' as const },
