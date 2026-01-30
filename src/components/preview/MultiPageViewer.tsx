@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Loader2, AlertCircle, ZoomIn, ZoomOut, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, AlertCircle, ZoomIn, ZoomOut, X, RefreshCw } from 'lucide-react';
 
 /** Page metadata from the preview API */
 export interface PreviewPage {
@@ -9,6 +9,7 @@ export interface PreviewPage {
   width: number;
   height: number;
   url: string;
+  mimeType?: 'image/webp' | 'image/jpeg';
   expiresAt?: string;
 }
 
@@ -23,6 +24,7 @@ export interface PreviewManifest {
   error?: string;
   generatedAt?: string;
   expiresAt?: string;
+  factsHash?: string;
 }
 
 interface MultiPageViewerProps {
@@ -45,17 +47,28 @@ interface PageLoadState {
   loading: boolean;
   error: boolean;
   loaded: boolean;
+  retries: number;
+}
+
+/** Check if browser supports WebP */
+function supportsWebP(): boolean {
+  if (typeof document === 'undefined') return true; // SSR default to true
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  return canvas.toDataURL('image/webp').startsWith('data:image/webp');
 }
 
 /**
  * Multi-Page Document Viewer
  *
- * Displays watermarked page images with:
+ * Displays watermarked page images (WebP or JPEG) with:
  * - Lazy loading via Intersection Observer
  * - Page navigation (prev/next, page indicator)
  * - Zoom controls
  * - Scroll-to-page functionality
- * - Loading and error states
+ * - Loading and error states with retry
+ * - WebP support with graceful fallback
  */
 export function MultiPageViewer({
   caseId,
@@ -71,6 +84,7 @@ export function MultiPageViewer({
   const [currentPage, setCurrentPage] = useState(0);
   const [zoom, setZoom] = useState(1);
   const [pageLoadStates, setPageLoadStates] = useState<Map<number, PageLoadState>>(new Map());
+  const [webpSupported] = useState(supportsWebP);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
@@ -80,17 +94,31 @@ export function MultiPageViewer({
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const pollCountRef = useRef(0);
   const MAX_POLLS = 60; // 5 minutes max (60 * 5s)
+  const MAX_PAGE_RETRIES = 3;
 
   /**
    * Fetch preview manifest from API
    */
-  const fetchManifest = useCallback(async () => {
+  const fetchManifest = useCallback(async (forceRegenerate = false) => {
     try {
       const params = new URLSearchParams({ product });
       if (tier) params.set('tier', tier);
+      if (forceRegenerate) params.set('force', 'true');
 
       const response = await fetch(`/api/wizard/preview/${caseId}?${params}`);
       const data: PreviewManifest = await response.json();
+
+      // Check for rate limiting
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || '60';
+        setError(`Too many requests. Please wait ${retryAfter} seconds.`);
+        setLoading(false);
+        if (pollIntervalRef.current) {
+          clearInterval(pollIntervalRef.current);
+          pollIntervalRef.current = null;
+        }
+        return;
+      }
 
       if (data.status === 'processing') {
         // Continue polling
@@ -122,7 +150,7 @@ export function MultiPageViewer({
       if (data.pages) {
         const states = new Map<number, PageLoadState>();
         data.pages.forEach((_, i) => {
-          states.set(i, { loading: false, error: false, loaded: false });
+          states.set(i, { loading: false, error: false, loaded: false, retries: 0 });
         });
         setPageLoadStates(states);
       }
@@ -208,27 +236,72 @@ export function MultiPageViewer({
   const handlePageLoad = useCallback((pageIndex: number) => {
     setPageLoadStates((prev) => {
       const newStates = new Map(prev);
-      newStates.set(pageIndex, { loading: false, error: false, loaded: true });
+      newStates.set(pageIndex, { loading: false, error: false, loaded: true, retries: 0 });
       return newStates;
     });
   }, []);
 
   /**
-   * Handle page image error
+   * Handle page image error with retry logic
    */
   const handlePageError = useCallback((pageIndex: number) => {
     setPageLoadStates((prev) => {
       const newStates = new Map(prev);
-      newStates.set(pageIndex, { loading: false, error: true, loaded: false });
+      const current = prev.get(pageIndex) || { loading: false, error: false, loaded: false, retries: 0 };
+
+      if (current.retries < MAX_PAGE_RETRIES) {
+        // Trigger retry by incrementing retry count
+        newStates.set(pageIndex, {
+          loading: true,
+          error: false,
+          loaded: false,
+          retries: current.retries + 1
+        });
+      } else {
+        // Max retries reached - show error
+        newStates.set(pageIndex, {
+          loading: false,
+          error: true,
+          loaded: false,
+          retries: current.retries
+        });
+      }
       return newStates;
     });
   }, []);
+
+  /**
+   * Force regenerate preview
+   */
+  const handleRegenerate = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    pollCountRef.current = 0;
+    setManifest(null);
+    setPageLoadStates(new Map());
+    fetchManifest(true);
+    // Restart polling
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+    }
+    pollIntervalRef.current = setInterval(fetchManifest, 5000);
+  }, [fetchManifest]);
 
   /**
    * Zoom controls
    */
   const handleZoomIn = () => setZoom((z) => Math.min(z + 0.25, 2));
   const handleZoomOut = () => setZoom((z) => Math.max(z - 0.25, 0.5));
+
+  /**
+   * Get image URL with cache buster for retries
+   */
+  const getImageUrl = (page: PreviewPage, retries: number): string => {
+    if (retries === 0) return page.url;
+    // Add cache buster for retry attempts
+    const separator = page.url.includes('?') ? '&' : '?';
+    return `${page.url}${separator}_retry=${retries}`;
+  };
 
   /**
    * Render loading state
@@ -254,13 +327,18 @@ export function MultiPageViewer({
         <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-4">
           <AlertCircle className="w-8 h-8 text-red-500" />
           <p className="text-gray-800 font-medium">Preview unavailable</p>
-          <p className="text-sm text-gray-500">{error}</p>
+          <p className="text-sm text-gray-500 text-center max-w-md">{error}</p>
           <button
             onClick={() => {
               setLoading(true);
               setError(null);
               pollCountRef.current = 0;
               fetchManifest();
+              // Restart polling
+              if (pollIntervalRef.current) {
+                clearInterval(pollIntervalRef.current);
+              }
+              pollIntervalRef.current = setInterval(fetchManifest, 5000);
             }}
             className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition"
           >
@@ -332,18 +410,38 @@ export function MultiPageViewer({
               <ZoomIn className="w-5 h-5" />
             </button>
           </div>
+
+          {/* Regenerate button */}
+          <div className="border-l pl-4 border-gray-200">
+            <button
+              onClick={handleRegenerate}
+              className="p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+              aria-label="Regenerate preview"
+              title="Regenerate preview"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
-        {/* Close button (for modal) */}
-        {asModal && onClose && (
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100"
-            aria-label="Close preview"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        {/* Format indicator and close button */}
+        <div className="flex items-center gap-3">
+          {/* WebP indicator */}
+          {manifest.pages[0]?.mimeType === 'image/webp' && (
+            <span className="text-xs text-gray-400 hidden sm:block">WebP</span>
+          )}
+
+          {/* Close button (for modal) */}
+          {asModal && onClose && (
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-gray-100"
+              aria-label="Close preview"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Page content */}
@@ -353,54 +451,86 @@ export function MultiPageViewer({
         style={{ maxHeight: asModal ? 'calc(100vh - 120px)' : '600px' }}
       >
         <div className="flex flex-col items-center gap-4">
-          {manifest.pages.map((page, index) => (
-            <div
-              key={page.page}
-              ref={(el) => {
-                if (el) pageRefs.current.set(index, el);
-              }}
-              data-page={index}
-              className="relative bg-white shadow-lg rounded-lg overflow-hidden"
-              style={{
-                width: `${page.width * zoom}px`,
-                maxWidth: '100%',
-              }}
-            >
-              {/* Page number badge */}
-              <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-10">
-                {index + 1}
-              </div>
+          {manifest.pages.map((page, index) => {
+            const loadState = pageLoadStates.get(index);
+            const imageUrl = getImageUrl(page, loadState?.retries || 0);
 
-              {/* Loading state */}
-              {pageLoadStates.get(index)?.loading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
-                  <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-                </div>
-              )}
-
-              {/* Error state */}
-              {pageLoadStates.get(index)?.error && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 gap-2">
-                  <AlertCircle className="w-6 h-6 text-red-400" />
-                  <span className="text-sm text-gray-500">Failed to load</span>
-                </div>
-              )}
-
-              {/* Page image */}
-              <img
-                src={page.url}
-                alt={`Page ${index + 1} of ${pageCount}`}
-                className="w-full h-auto"
-                style={{
-                  aspectRatio: `${page.width} / ${page.height}`,
-                  display: pageLoadStates.get(index)?.error ? 'none' : 'block',
+            return (
+              <div
+                key={page.page}
+                ref={(el) => {
+                  if (el) pageRefs.current.set(index, el);
                 }}
-                loading="lazy"
-                onLoad={() => handlePageLoad(index)}
-                onError={() => handlePageError(index)}
-              />
-            </div>
-          ))}
+                data-page={index}
+                className="relative bg-white shadow-lg rounded-lg overflow-hidden"
+                style={{
+                  width: `${page.width * zoom}px`,
+                  maxWidth: '100%',
+                }}
+              >
+                {/* Page number badge */}
+                <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-10">
+                  {index + 1}
+                </div>
+
+                {/* Loading state */}
+                {loadState?.loading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                    <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+                  </div>
+                )}
+
+                {/* Error state with retry button */}
+                {loadState?.error && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 gap-2">
+                    <AlertCircle className="w-6 h-6 text-red-400" />
+                    <span className="text-sm text-gray-500">Failed to load</span>
+                    <button
+                      onClick={() => {
+                        setPageLoadStates((prev) => {
+                          const newStates = new Map(prev);
+                          newStates.set(index, {
+                            loading: true,
+                            error: false,
+                            loaded: false,
+                            retries: 0
+                          });
+                          return newStates;
+                        });
+                      }}
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+
+                {/* Page image - uses picture element for WebP fallback */}
+                {!loadState?.error && (
+                  <picture>
+                    {/* WebP source for modern browsers */}
+                    {page.mimeType === 'image/webp' && webpSupported && (
+                      <source srcSet={imageUrl} type="image/webp" />
+                    )}
+                    {/* JPEG fallback or direct JPEG */}
+                    <img
+                      src={imageUrl}
+                      alt={`Page ${index + 1} of ${pageCount}`}
+                      className="w-full h-auto"
+                      style={{
+                        aspectRatio: `${page.width} / ${page.height}`,
+                        display: loadState?.error ? 'none' : 'block',
+                      }}
+                      loading="lazy"
+                      decoding="async"
+                      onLoad={() => handlePageLoad(index)}
+                      onError={() => handlePageError(index)}
+                    />
+                  </picture>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

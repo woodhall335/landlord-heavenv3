@@ -1,33 +1,46 @@
 /**
- * Wizard Preview API
+ * Wizard Preview API (Production-Hardened)
  *
  * GET /api/wizard/preview/[caseId]
  *
  * Returns a multi-page preview manifest for document preview.
- * Generates watermarked JPEG images for each page on demand.
+ * Generates watermarked WebP images (with JPEG fallback) for each page on demand.
  *
  * Query Parameters:
  * - product: 'ast_standard' | 'ast_premium' | etc.
  * - tier: 'standard' | 'premium' (default: 'standard')
+ * - force: 'true' to bypass cache and regenerate
  *
  * Response:
  * - status: 'ready' | 'processing' | 'error'
  * - pageCount: number of pages
- * - pages: array of { page, width, height, url }
+ * - pages: array of { page, width, height, url, mimeType }
+ * - factsHash: hash of facts for cache validation
  *
  * Security:
+ * - Authentication required
  * - Signed URLs expire after 15 minutes
  * - Watermarks include case ID and user identifier hash
  * - Images are not publicly accessible without signed URL
+ * - Rate limiting: 30 requests per 5 minutes per user/IP
+ *
+ * Image Format:
+ * - WebP by default (quality 80, ~30% smaller than JPEG)
+ * - JPEG fallback if WebP conversion fails
+ * - mimeType in manifest for proper rendering
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import {
   generateTenancyPreview,
   getPreviewFromCache,
+  hashFacts,
+  isPreviewCacheValid,
+  cleanupOldPreviews,
   type PreviewManifest,
 } from '@/lib/documents/preview-generator';
+import { rateLimiters } from '@/lib/rate-limit';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
 export const runtime = 'nodejs';
@@ -38,22 +51,64 @@ export const dynamic = 'force-dynamic';
 // Environment detection
 const isDev = process.env.NODE_ENV === 'development';
 
+// ============================================================================
+// ERROR HANDLING
+// ============================================================================
+
 /**
- * Structured error response
+ * Structured error response with proper status codes
  */
 function errorResponse(
   code: string,
   message: string,
   status: number,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
+  headers?: Record<string, string>
 ) {
   const logData = { code, message, status, ...details, timestamp: new Date().toISOString() };
   console.error(`[Wizard-Preview-API] ${code}:`, logData);
   return NextResponse.json(
-    { error: message, code, status: 'error', ...(isDev ? { details } : {}) },
-    { status }
+    {
+      error: message,
+      code,
+      status: 'error' as const,
+      ...(isDev ? { details } : {}),
+    },
+    {
+      status,
+      headers: headers || {},
+    }
   );
 }
+
+/**
+ * Rate limit exceeded response
+ */
+function rateLimitResponse(
+  retryAfter: number,
+  headers: Record<string, string>
+) {
+  return NextResponse.json(
+    {
+      error: 'Too many preview requests',
+      code: 'RATE_LIMIT_EXCEEDED',
+      status: 'error' as const,
+      message: 'Please wait before generating more previews.',
+      retryAfter,
+    },
+    {
+      status: 429,
+      headers: {
+        'Retry-After': String(retryAfter),
+        ...headers,
+      },
+    }
+  );
+}
+
+// ============================================================================
+// PRODUCT NORMALIZATION
+// ============================================================================
 
 /**
  * Map product query param to internal product name
@@ -99,8 +154,34 @@ function isTenancyProduct(product: string): boolean {
   return tenancyProducts.includes(product);
 }
 
+// ============================================================================
+// CLEANUP SCHEDULER
+// ============================================================================
+
+// Last cleanup timestamp (for rate limiting cleanup runs)
+let lastCleanupTime = 0;
+const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
+/**
+ * Trigger cleanup of old preview assets if interval has passed
+ */
+async function maybeCleanupOldPreviews(): Promise<void> {
+  const now = Date.now();
+  if (now - lastCleanupTime > CLEANUP_INTERVAL_MS) {
+    lastCleanupTime = now;
+    // Fire-and-forget cleanup (don't block response)
+    cleanupOldPreviews().catch(err => {
+      console.error('[Wizard-Preview-API] Cleanup failed:', err);
+    });
+  }
+}
+
+// ============================================================================
+// GET HANDLER
+// ============================================================================
+
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ caseId: string }> }
 ) {
   const startTime = Date.now();
@@ -114,9 +195,29 @@ export async function GET(
     const url = new URL(request.url);
     const productParam = url.searchParams.get('product');
     const tierParam = url.searchParams.get('tier') as 'standard' | 'premium' | null;
+    const forceRegenerate = url.searchParams.get('force') === 'true';
 
     if (!caseId) {
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
+    }
+
+    // Get user info for auth and watermarking
+    const user = await tryGetServerUser();
+
+    // Apply rate limiting (use user ID if authenticated, otherwise IP)
+    const rateLimitResult = user
+      ? await rateLimiters.previewForUser(request, user.id)
+      : await rateLimiters.preview(request);
+
+    const rateLimitHeaders = {
+      'X-RateLimit-Limit': String(rateLimitResult.limit),
+      'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+      'X-RateLimit-Reset': String(rateLimitResult.reset),
+    };
+
+    if (!rateLimitResult.success) {
+      const retryAfter = Math.ceil((rateLimitResult.reset - Date.now()) / 1000);
+      return rateLimitResponse(retryAfter, rateLimitHeaders);
     }
 
     // Normalize product name
@@ -129,18 +230,17 @@ export async function GET(
         'UNSUPPORTED_PRODUCT',
         'Multi-page preview is only available for tenancy agreements',
         422,
-        { product }
+        { product },
+        rateLimitHeaders
       );
     }
 
-    console.log(`[Wizard-Preview-API] Request:`, { caseId, product, tier });
+    console.log(`[Wizard-Preview-API] Request:`, { caseId, product, tier, userId: user?.id, forceRegenerate });
 
-    // Get user info for watermarking
-    const user = await tryGetServerUser();
     const supabase = user ? await createServerSupabaseClient() : createAdminClient();
 
     // Verify case exists and user has access
-    let query = supabase.from('cases').select('id, jurisdiction').eq('id', caseId);
+    let query = supabase.from('cases').select('id, jurisdiction, collected_facts, wizard_facts, facts').eq('id', caseId);
     if (user) {
       query = query.eq('user_id', user.id);
     }
@@ -148,21 +248,38 @@ export async function GET(
     const { data: caseData, error: fetchError } = await query.single();
 
     if (fetchError || !caseData) {
-      return errorResponse('CASE_NOT_FOUND', 'Case not found or access denied', 404);
+      return errorResponse('CASE_NOT_FOUND', 'Case not found or access denied', 404, undefined, rateLimitHeaders);
     }
 
-    // Check cache first for quick response
-    const cachedManifest = getPreviewFromCache(caseId, product, tier);
-    if (cachedManifest && cachedManifest.status === 'ready') {
-      console.log(`[Wizard-Preview-API] Cache hit for case ${caseId}`);
-      return NextResponse.json(cachedManifest, {
-        status: 200,
-        headers: {
-          'Cache-Control': 'private, max-age=60',
-          'X-Preview-Source': 'cache',
-        },
-      });
+    // Calculate facts hash for cache validation
+    const caseRow = caseData as any;
+    const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
+    const currentFactsHash = hashFacts(facts);
+
+    // Check cache with facts hash validation (unless force regenerate)
+    if (!forceRegenerate) {
+      const cachedManifest = getPreviewFromCache(caseId, product, tier);
+      if (cachedManifest && cachedManifest.status === 'ready') {
+        // Verify facts hash matches
+        if (isPreviewCacheValid(caseId, product, tier, currentFactsHash)) {
+          console.log(`[Wizard-Preview-API] Cache hit for case ${caseId} (facts hash valid)`);
+          return NextResponse.json(cachedManifest, {
+            status: 200,
+            headers: {
+              'Cache-Control': 'private, max-age=60',
+              'X-Preview-Source': 'cache',
+              'X-Facts-Hash': currentFactsHash,
+              ...rateLimitHeaders,
+            },
+          });
+        } else {
+          console.log(`[Wizard-Preview-API] Cache stale for case ${caseId} (facts changed)`);
+        }
+      }
     }
+
+    // Trigger background cleanup (non-blocking)
+    maybeCleanupOldPreviews();
 
     // Generate preview (this may take a few seconds)
     const manifest = await generateTenancyPreview({
@@ -171,6 +288,7 @@ export async function GET(
       tier,
       userId: user?.id,
       userEmail: user?.email,
+      forceRegenerate,
     });
 
     const elapsed = Date.now() - startTime;
@@ -180,7 +298,7 @@ export async function GET(
         caseId,
         product,
         elapsed: `${elapsed}ms`,
-      });
+      }, rateLimitHeaders);
     }
 
     console.log(`[Wizard-Preview-API] Success:`, {
@@ -188,6 +306,7 @@ export async function GET(
       product,
       tier,
       pageCount: manifest.pageCount,
+      factsHash: manifest.factsHash,
       elapsed: `${elapsed}ms`,
     });
 
@@ -198,10 +317,29 @@ export async function GET(
         'X-Preview-Source': 'generated',
         'X-Page-Count': String(manifest.pageCount || 0),
         'X-Generation-Time': `${elapsed}ms`,
+        'X-Facts-Hash': manifest.factsHash || '',
+        ...rateLimitHeaders,
       },
     });
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
+
+    // Handle specific error types
+    if (error.message?.includes('timeout') || error.message?.includes('Timeout')) {
+      return errorResponse('GENERATION_TIMEOUT', 'Preview generation timed out. Please try again.', 504, {
+        caseId,
+        elapsed: `${elapsed}ms`,
+      });
+    }
+
+    if (error.message?.includes('Chromium') || error.message?.includes('browser')) {
+      return errorResponse('BROWSER_ERROR', 'Preview service temporarily unavailable', 503, {
+        error: error.message,
+        caseId,
+        elapsed: `${elapsed}ms`,
+      });
+    }
+
     return errorResponse('INTERNAL_ERROR', 'Failed to generate preview', 500, {
       error: error.message,
       stack: isDev ? error.stack : undefined,
@@ -211,12 +349,16 @@ export async function GET(
   }
 }
 
+// ============================================================================
+// POST HANDLER (Background Generation)
+// ============================================================================
+
 /**
  * POST endpoint for triggering preview generation in background
- * (optional - can be used for async generation)
+ * Returns immediately with 'processing' status
  */
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ caseId: string }> }
 ) {
   const resolvedParams = await params;
@@ -226,6 +368,7 @@ export async function POST(
     const body = await request.json();
     const product = normalizeProduct(body.product);
     const tier = body.tier || getTierFromProduct(product);
+    const forceRegenerate = body.force === true;
 
     if (!caseId) {
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
@@ -242,14 +385,34 @@ export async function POST(
     // Get user info
     const user = await tryGetServerUser();
 
-    // Check cache - if ready, return immediately
-    const cachedManifest = getPreviewFromCache(caseId, product, tier);
-    if (cachedManifest && cachedManifest.status === 'ready') {
-      return NextResponse.json(cachedManifest, { status: 200 });
+    // Apply rate limiting
+    const rateLimitResult = user
+      ? await rateLimiters.previewForUser(request, user.id)
+      : await rateLimiters.preview(request);
+
+    if (!rateLimitResult.success) {
+      const retryAfter = Math.ceil((rateLimitResult.reset - Date.now()) / 1000);
+      return rateLimitResponse(retryAfter, {
+        'X-RateLimit-Limit': String(rateLimitResult.limit),
+        'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+        'X-RateLimit-Reset': String(rateLimitResult.reset),
+      });
+    }
+
+    // Check cache - if ready and not force regenerate, return immediately
+    if (!forceRegenerate) {
+      const cachedManifest = getPreviewFromCache(caseId, product, tier);
+      if (cachedManifest && cachedManifest.status === 'ready') {
+        return NextResponse.json(cachedManifest, {
+          status: 200,
+          headers: {
+            'X-Preview-Source': 'cache',
+          },
+        });
+      }
     }
 
     // Return processing status immediately
-    // In a production system, you'd queue this for background processing
     const processingResponse: PreviewManifest = {
       status: 'processing',
       caseId,
@@ -266,6 +429,7 @@ export async function POST(
       tier,
       userId: user?.id,
       userEmail: user?.email,
+      forceRegenerate,
     }).catch((err) => {
       console.error(`[Wizard-Preview-API] Background generation failed:`, err);
     });
@@ -274,6 +438,9 @@ export async function POST(
       status: 202,
       headers: {
         'X-Retry-After': '5',
+        'X-RateLimit-Limit': String(rateLimitResult.limit),
+        'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+        'X-RateLimit-Reset': String(rateLimitResult.reset),
       },
     });
   } catch (error: any) {

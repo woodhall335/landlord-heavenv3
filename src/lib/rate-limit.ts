@@ -250,6 +250,36 @@ export const rateLimiters = {
       keyPrefix: 'auth',
     });
   },
+
+  /**
+   * Rate limiter for preview generation endpoints
+   * Default: 30 requests per 5 minutes
+   * This is protective but generous for legitimate use
+   */
+  preview: (request: NextRequest) => {
+    const envConfig = process.env.RATE_LIMIT_PREVIEW;
+    const parsed = envConfig ? parseRateLimitString(envConfig) : null;
+    return rateLimit(request, {
+      limit: parsed?.limit ?? 30,
+      windowMs: parsed?.windowMs ?? 5 * 60 * 1000,
+      keyPrefix: 'preview',
+    });
+  },
+
+  /**
+   * Rate limiter for preview generation with user ID
+   * Uses user ID instead of IP for more accurate limiting
+   */
+  previewForUser: (request: NextRequest, userId: string) => {
+    const envConfig = process.env.RATE_LIMIT_PREVIEW;
+    const parsed = envConfig ? parseRateLimitString(envConfig) : null;
+    return rateLimit(request, {
+      limit: parsed?.limit ?? 30,
+      windowMs: parsed?.windowMs ?? 5 * 60 * 1000,
+      keyPrefix: 'preview',
+      keyGenerator: () => userId,
+    });
+  },
 };
 
 /**
