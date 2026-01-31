@@ -261,40 +261,59 @@ function getEnglandMoneyClaimContents(): PackItem[] {
  * ENGLAND TENANCY AGREEMENT CONTENTS
  *
  * Product tiers:
- * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
- * - 'premium': HMO-specific tenancy agreement with multi-occupancy clauses
+ * - 'standard': Tenancy agreement with blank inventory template and compliance checklist
+ * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory and compliance checklist
  *
  * Legal Framework: Housing Act 1988, Deregulation Act 2015, Housing Act 2004 (HMO)
  *
- * IMPORTANT: The base product must include ONLY the tenancy agreement.
- * Supporting documents (guides, checklists, annexes, notices) are NOT included.
+ * INTEGRATION LAYER REQUIREMENTS:
+ * - Inventory: Always included (blank for standard, wizard-completed for premium)
+ * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
+ * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
 function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
-  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
-  // This ensures legal clarity and simplicity for standard residential lettings
-  if (tier === 'standard') {
-    return [
-      {
-        key: 'ast_agreement',
-        title: 'Assured Shorthold Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.',
-        category: 'Tenancy agreement',
-        required: true,
-      },
-    ];
-  }
+  const items: PackItem[] = [];
 
-  // PREMIUM PRODUCT: HMO-specific tenancy agreement with additional clauses
-  // Aligned with Housing Act 2004 HMO licensing requirements
-  return [
-    {
+  // Main Agreement
+  if (tier === 'standard') {
+    items.push({
+      key: 'ast_agreement',
+      title: 'Assured Shorthold Tenancy Agreement',
+      description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Housing Act 1988.',
+      category: 'Tenancy agreement',
+      required: true,
+    });
+  } else {
+    items.push({
       key: 'ast_agreement_hmo',
       title: 'HMO Tenancy Agreement',
       description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with Housing Act 1988 & 2004.',
       category: 'Tenancy agreement',
       required: true,
-    },
-  ];
+    });
+  }
+
+  // Inventory Schedule - tier-specific behaviour
+  items.push({
+    key: 'inventory_schedule',
+    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
+    description: tier === 'premium'
+      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
+      : 'Structured blank inventory template ready for manual completion at check-in',
+    category: 'Tenancy agreement',
+    required: true,
+  });
+
+  // Pre-Tenancy Compliance Checklist - always included, non-contractual guidance
+  items.push({
+    key: 'pre_tenancy_checklist_england',
+    title: 'Pre-Tenancy Compliance Checklist (England)',
+    description: 'Non-contractual guidance covering deposit protection, gas safety, EPC, EICR, How to Rent Guide, and Right to Rent requirements',
+    category: 'Checklists',
+    required: true,
+  });
+
+  return items;
 }
 
 // =============================================================================
@@ -437,41 +456,61 @@ function getWalesCompletePackContents(args: GetPackContentsArgs): PackItem[] {
  * WALES OCCUPATION CONTRACT CONTENTS
  *
  * Product tiers:
- * - 'standard': Base product - ONLY the occupation contract, no supporting documents
- * - 'premium': HMO-specific occupation contract with multi-occupancy clauses
+ * - 'standard': Occupation contract with blank inventory template and compliance checklist
+ * - 'premium': HMO-specific occupation contract with wizard-completed inventory and compliance checklist
  *
  * Legal Framework: Renting Homes (Wales) Act 2016, Housing Act 2004 (HMO)
  *
  * Terminology: Wales uses "Contract Holder" (not Tenant), "Occupation Contract" (not Tenancy)
  *
- * IMPORTANT: The base product must include ONLY the occupation contract.
- * Supporting documents (guides, checklists, annexes) are NOT included.
+ * INTEGRATION LAYER REQUIREMENTS:
+ * - Inventory: Always included (blank for standard, wizard-completed for premium)
+ * - Compliance Checklist: Always included (Wales-specific, non-contractual guidance)
+ * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
 function getWalesSOCContents(tier: 'standard' | 'premium'): PackItem[] {
-  // BASE PRODUCT (standard): Only the occupation contract - NO supporting documents
-  if (tier === 'standard') {
-    return [
-      {
-        key: 'soc_agreement',
-        title: 'Standard Occupation Contract',
-        description: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.',
-        category: 'Tenancy agreement',
-        required: true,
-      },
-    ];
-  }
+  const items: PackItem[] = [];
 
-  // PREMIUM PRODUCT: HMO-specific occupation contract with additional clauses
-  // Aligned with Housing Act 2004 HMO licensing requirements
-  return [
-    {
+  // Main Agreement
+  if (tier === 'standard') {
+    items.push({
+      key: 'soc_agreement',
+      title: 'Standard Occupation Contract',
+      description: 'Solicitor-grade occupation contract with all embedded schedules. Compliant with Renting Homes (Wales) Act 2016.',
+      category: 'Tenancy agreement',
+      required: true,
+    });
+  } else {
+    items.push({
       key: 'soc_agreement_hmo',
       title: 'HMO Occupation Contract',
       description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with RH(W)A 2016 & Housing Act 2004.',
       category: 'Tenancy agreement',
       required: true,
-    },
-  ];
+    });
+  }
+
+  // Inventory Schedule - tier-specific behaviour
+  items.push({
+    key: 'inventory_schedule',
+    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
+    description: tier === 'premium'
+      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
+      : 'Structured blank inventory template ready for manual completion at check-in',
+    category: 'Tenancy agreement',
+    required: true,
+  });
+
+  // Pre-Tenancy Compliance Checklist - always included, non-contractual guidance
+  items.push({
+    key: 'pre_tenancy_checklist_wales',
+    title: 'Pre-Tenancy Compliance Checklist (Wales)',
+    description: 'Non-contractual guidance covering Rent Smart Wales registration, deposit protection, gas safety, EPC, and EICR requirements',
+    category: 'Checklists',
+    required: true,
+  });
+
+  return items;
 }
 
 // =============================================================================
@@ -615,8 +654,8 @@ function getScotlandMoneyClaimContents(): PackItem[] {
  * SCOTLAND PRIVATE RESIDENTIAL TENANCY CONTENTS
  *
  * Product tiers:
- * - 'standard': Base product - ONLY the PRT agreement, no supporting documents
- * - 'premium': HMO-specific PRT with multi-occupancy clauses
+ * - 'standard': PRT agreement with blank inventory template and compliance checklist
+ * - 'premium': HMO-specific PRT with wizard-completed inventory and compliance checklist
  *
  * Legal Framework: Private Housing (Tenancies) (Scotland) Act 2016
  *
@@ -625,34 +664,54 @@ function getScotlandMoneyClaimContents(): PackItem[] {
  * - Rent Pressure Zone compatibility required
  * - First-tier Tribunal for Scotland (not County Court)
  *
- * IMPORTANT: The base product must include ONLY the PRT agreement.
- * Supporting documents (guides, checklists, annexes) are NOT included.
+ * INTEGRATION LAYER REQUIREMENTS:
+ * - Inventory: Always included (blank for standard, wizard-completed for premium)
+ * - Compliance Checklist: Always included (Scotland-specific, non-contractual guidance)
+ * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
 function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
-  // BASE PRODUCT (standard): Only the PRT agreement - NO supporting documents
-  if (tier === 'standard') {
-    return [
-      {
-        key: 'prt_agreement',
-        title: 'Private Residential Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
-        category: 'Tenancy agreement',
-        required: true,
-      },
-    ];
-  }
+  const items: PackItem[] = [];
 
-  // PREMIUM PRODUCT: HMO-specific PRT with additional clauses
-  // Adapted to PRT framework for multi-occupancy properties
-  return [
-    {
+  // Main Agreement
+  if (tier === 'standard') {
+    items.push({
+      key: 'prt_agreement',
+      title: 'Private Residential Tenancy Agreement',
+      description: 'Solicitor-grade PRT agreement with all embedded schedules. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
+      category: 'Tenancy agreement',
+      required: true,
+    });
+  } else {
+    items.push({
       key: 'prt_agreement_hmo',
       title: 'HMO Private Residential Tenancy Agreement',
       description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with PH(T)(S)A 2016.',
       category: 'Tenancy agreement',
       required: true,
-    },
-  ];
+    });
+  }
+
+  // Inventory Schedule - tier-specific behaviour
+  items.push({
+    key: 'inventory_schedule',
+    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
+    description: tier === 'premium'
+      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
+      : 'Structured blank inventory template ready for manual completion at check-in',
+    category: 'Tenancy agreement',
+    required: true,
+  });
+
+  // Pre-Tenancy Compliance Checklist - always included, non-contractual guidance
+  items.push({
+    key: 'pre_tenancy_checklist_scotland',
+    title: 'Pre-Tenancy Compliance Checklist (Scotland)',
+    description: 'Non-contractual guidance covering landlord registration, deposit protection, Repairing Standard, gas safety, and fire alarm requirements',
+    category: 'Checklists',
+    required: true,
+  });
+
+  return items;
 }
 
 // =============================================================================
@@ -663,8 +722,8 @@ function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
  * NORTHERN IRELAND PRIVATE TENANCY CONTENTS
  *
  * Product tiers:
- * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
- * - 'premium': HMO-specific tenancy agreement (where legally permitted)
+ * - 'standard': Tenancy agreement with blank inventory template and compliance checklist
+ * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory and compliance checklist
  *
  * Legal Framework: Private Tenancies Act (Northern Ireland) 2022
  * (Updates the Private Tenancies (Northern Ireland) Order 2006)
@@ -674,34 +733,54 @@ function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
  * - Rent increase restrictions: 12-month gap, 3-month notice
  * - County Court Northern Ireland jurisdiction
  *
- * IMPORTANT: The base product must include ONLY the tenancy agreement.
- * Supporting documents (guides, checklists, annexes) are NOT included.
+ * INTEGRATION LAYER REQUIREMENTS:
+ * - Inventory: Always included (blank for standard, wizard-completed for premium)
+ * - Compliance Checklist: Always included (NI-specific, non-contractual guidance)
+ * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
 function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium'): PackItem[] {
-  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
-  if (tier === 'standard') {
-    return [
-      {
-        key: 'private_tenancy_agreement',
-        title: 'Private Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Private Tenancies Act (NI) 2022.',
-        category: 'Tenancy agreement',
-        required: true,
-      },
-    ];
-  }
+  const items: PackItem[] = [];
 
-  // PREMIUM PRODUCT: HMO-specific tenancy agreement (where legally permitted in NI)
-  // Note: NI HMO regulations differ from England - only include where applicable
-  return [
-    {
+  // Main Agreement
+  if (tier === 'standard') {
+    items.push({
+      key: 'private_tenancy_agreement',
+      title: 'Private Tenancy Agreement',
+      description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Private Tenancies Act (NI) 2022.',
+      category: 'Tenancy agreement',
+      required: true,
+    });
+  } else {
+    items.push({
       key: 'private_tenancy_agreement_hmo',
       title: 'HMO Private Tenancy Agreement',
       description: 'Includes HMO-specific clauses for multi-occupancy properties where legally permitted in NI.',
       category: 'Tenancy agreement',
       required: true,
-    },
-  ];
+    });
+  }
+
+  // Inventory Schedule - tier-specific behaviour
+  items.push({
+    key: 'inventory_schedule',
+    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
+    description: tier === 'premium'
+      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
+      : 'Structured blank inventory template ready for manual completion at check-in',
+    category: 'Tenancy agreement',
+    required: true,
+  });
+
+  // Pre-Tenancy Compliance Checklist - always included, non-contractual guidance
+  items.push({
+    key: 'pre_tenancy_checklist_northern_ireland',
+    title: 'Pre-Tenancy Compliance Checklist (Northern Ireland)',
+    description: 'Non-contractual guidance covering landlord registration, deposit protection, gas safety, EPC, and electrical safety (from April 2025)',
+    category: 'Checklists',
+    required: true,
+  });
+
+  return items;
 }
 
 // =============================================================================

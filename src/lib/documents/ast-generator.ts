@@ -96,7 +96,9 @@ interface JurisdictionConfig {
     premium: string;
     modelClauses: string;
     termsSchedule: string;
-    inventory: string;
+    inventory: string; // Wizard-completed inventory for premium tier
+    inventoryBlank: string; // Blank inventory template for standard tier
+    complianceChecklist: string; // Jurisdiction-specific pre-tenancy checklist
     keySchedule: string;
     maintenanceGuide: string;
     checkoutProcedure: string;
@@ -113,7 +115,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   england: {
     jurisdiction: 'england',
     agreementTitle: 'Assured Shorthold Tenancy Agreement',
-    agreementDescription: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.',
+    agreementDescription: 'Solicitor-grade tenancy agreement with embedded schedules. Compliant with Housing Act 1988.',
     agreementDocumentType: 'ast_agreement',
     modelClausesTitle: 'Government Model Clauses',
     modelClausesDescription: 'Recommended clauses from official government guidance',
@@ -124,7 +126,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       premium: 'uk/england/templates/ast_hmo.hbs', // HMO-specific template
       modelClauses: 'uk/england/templates/government_model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
-      inventory: 'shared/templates/inventory_template.hbs',
+      inventory: 'shared/templates/inventory_template.hbs', // Wizard-completed for premium
+      inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      complianceChecklist: '_shared/compliance/pre_tenancy_checklist_england.hbs',
       keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
@@ -137,7 +141,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   wales: {
     jurisdiction: 'wales',
     agreementTitle: 'Standard Occupation Contract',
-    agreementDescription: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.',
+    agreementDescription: 'Solicitor-grade occupation contract with embedded schedules. Compliant with Renting Homes (Wales) Act 2016.',
     agreementDocumentType: 'soc_agreement',
     modelClausesTitle: 'Model Clauses (Wales)',
     modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act 2016',
@@ -148,7 +152,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       premium: 'uk/wales/templates/occupation_contract_hmo.hbs', // HMO-specific template
       modelClauses: 'uk/wales/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
-      inventory: 'shared/templates/inventory_template.hbs',
+      inventory: 'shared/templates/inventory_template.hbs', // Wizard-completed for premium
+      inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      complianceChecklist: '_shared/compliance/pre_tenancy_checklist_wales.hbs',
       keySchedule: 'uk/wales/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/wales/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/wales/templates/premium/checkout_procedure.hbs',
@@ -161,7 +167,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   scotland: {
     jurisdiction: 'scotland',
     agreementTitle: 'Private Residential Tenancy Agreement',
-    agreementDescription: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
+    agreementDescription: 'Solicitor-grade PRT agreement with embedded schedules. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
     agreementDocumentType: 'prt_agreement',
     modelClausesTitle: 'Model Clauses (Scotland)',
     modelClausesDescription: 'Scottish Government prescribed terms for PRTs',
@@ -172,7 +178,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       premium: 'uk/scotland/templates/prt_agreement_hmo.hbs', // HMO-specific template
       modelClauses: 'uk/scotland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
-      inventory: 'uk/scotland/templates/inventory_template.hbs',
+      inventory: 'uk/scotland/templates/inventory_template.hbs', // Wizard-completed for premium
+      inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      complianceChecklist: '_shared/compliance/pre_tenancy_checklist_scotland.hbs',
       keySchedule: 'uk/scotland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/scotland/templates/premium/checkout_procedure.hbs',
@@ -185,7 +193,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   'northern-ireland': {
     jurisdiction: 'northern-ireland',
     agreementTitle: 'Private Tenancy Agreement',
-    agreementDescription: 'Compliant with Private Tenancies Act (Northern Ireland) 2022',
+    agreementDescription: 'Solicitor-grade tenancy agreement with embedded schedules. Compliant with Private Tenancies Act (Northern Ireland) 2022',
     agreementDocumentType: 'private_tenancy_agreement',
     modelClausesTitle: 'Model Clauses (Northern Ireland)',
     modelClausesDescription: 'Prescribed statutory terms under NI legislation',
@@ -196,7 +204,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       premium: 'uk/northern-ireland/templates/private_tenancy_hmo.hbs',
       modelClauses: 'uk/northern-ireland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
-      inventory: 'uk/northern-ireland/templates/inventory_template.hbs',
+      inventory: 'uk/northern-ireland/templates/inventory_template.hbs', // Wizard-completed for premium
+      inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      complianceChecklist: '_shared/compliance/pre_tenancy_checklist_northern_ireland.hbs',
       keySchedule: 'uk/northern-ireland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/northern-ireland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/northern-ireland/templates/premium/checkout_procedure.hbs',
@@ -648,11 +658,13 @@ export function validateASTData(data: ASTData): string[] {
 // ============================================================================
 
 /**
- * Generate a standard tenancy agreement (base product - agreement only, no supporting docs)
+ * Generate a standard tenancy agreement with inventory (blank) and compliance checklist
  * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  *
- * IMPORTANT: Base product includes ONLY the tenancy agreement document.
- * No guides, no notices, no annexes, no explanatory PDFs.
+ * INTEGRATION LAYER: Standard tier includes:
+ * - Main tenancy agreement
+ * - Blank inventory template (ready for manual completion)
+ * - Jurisdiction-specific pre-tenancy compliance checklist
  */
 export async function generateStandardAST(
   data: ASTData,
@@ -689,15 +701,24 @@ export async function generateStandardAST(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    // Flag for inventory: standard tier always uses blank inventory
+    inventory_wizard_completed: false,
+    current_date: new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }),
   };
 
-  // BASE PRODUCT: ONLY the tenancy agreement template - NO supporting documents
-  // This ensures legal clarity: "Includes the tenancy agreement only"
+  // STANDARD PRODUCT: Agreement + Blank Inventory + Compliance Checklist
+  // Integration Layer: Always includes inventory and checklist
   const templatePaths = [
     config.templatePaths.standard,
+    config.templatePaths.inventoryBlank, // Blank inventory for manual completion
+    config.templatePaths.complianceChecklist, // Jurisdiction-specific checklist
   ];
 
-  // Compile and merge all templates (just one for base product)
+  // Compile and merge all templates
   const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
 
   // Generate PDF from merged HTML
@@ -712,15 +733,22 @@ export async function generateStandardAST(
       documentId,
       isPreview,
       jurisdiction,
+      inventoryIncluded: true,
+      inventoryType: 'blank',
+      complianceChecklistIncluded: true,
     },
   };
 }
 
 /**
- * Generate a premium HMO tenancy agreement (single document with HMO clauses)
+ * Generate a premium HMO tenancy agreement with wizard-completed inventory and compliance checklist
  * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  *
- * IMPORTANT: Premium product includes ONLY the HMO-specific tenancy agreement.
+ * INTEGRATION LAYER: Premium tier includes:
+ * - HMO-specific tenancy agreement
+ * - Wizard-completed inventory (if data provided) OR blank inventory (fallback)
+ * - Jurisdiction-specific pre-tenancy compliance checklist
+ *
  * HMO clauses cover: multiple occupants, joint liability, shared facilities,
  * fire safety, licensing acknowledgement, house rules, occupancy limits.
  *
@@ -753,6 +781,9 @@ export async function generatePremiumAST(
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
 
+  // Check if inventory data was provided via wizard
+  const hasInventoryData = data.inventory_attached || data.inventory_provided || false;
+
   // Add metadata flags for HMO premium
   const enrichedData = {
     ...data,
@@ -764,15 +795,25 @@ export async function generatePremiumAST(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    // Flag for inventory: premium tier uses wizard-completed if data exists
+    inventory_wizard_completed: hasInventoryData,
+    current_date: new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }),
   };
 
-  // PREMIUM PRODUCT: ONLY the HMO-specific tenancy agreement template
-  // Includes HMO-specific clauses for multi-occupancy properties
+  // PREMIUM PRODUCT: HMO Agreement + Inventory (wizard or blank fallback) + Compliance Checklist
+  // Integration Layer: Always includes inventory and checklist
   const templatePaths = [
     config.templatePaths.premium,
+    // Use wizard-completed inventory if data exists, otherwise blank template
+    hasInventoryData ? config.templatePaths.inventory : config.templatePaths.inventoryBlank,
+    config.templatePaths.complianceChecklist, // Jurisdiction-specific checklist
   ];
 
-  // Compile and merge all templates (just one for premium product)
+  // Compile and merge all templates
   const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
 
   // Generate PDF from merged HTML
@@ -787,6 +828,9 @@ export async function generatePremiumAST(
       documentId,
       isPreview,
       jurisdiction,
+      inventoryIncluded: true,
+      inventoryType: hasInventoryData ? 'wizard-completed' : 'blank',
+      complianceChecklistIncluded: true,
     },
   };
 }

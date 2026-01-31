@@ -26,11 +26,18 @@ import {
   validateNoticeOnlyCase,
 } from '@/lib/validation/notice-only-case-validator';
 import { hasWalesArrearsGroundSelected } from '@/lib/wales';
-import { Loader2, Scale, CheckCircle, Download, Shield, Clock } from 'lucide-react';
+import { Loader2, Scale, CheckCircle, Download, Shield, Clock, FileText, List } from 'lucide-react';
 import { trackWizardPreviewViewed, trackCheckoutStarted, trackBeginCheckout } from '@/lib/analytics';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
+import {
+  getIncludedSummary,
+  getInventoryBehaviour,
+  COMPLIANCE_CHECKLIST_INFO,
+  type TenancyJurisdiction,
+  type TenancyTier,
+} from '@/lib/tenancy/included-features';
 
 interface CaseData {
   id: string;
@@ -1091,8 +1098,59 @@ export default function WizardPreviewPage() {
                     </div>
                   </div>
 
-                  {/* Features */}
-                  {dynamicFeatures && dynamicFeatures.length > 0 && (
+                  {/* What's Included - Integration Layer Disclosure */}
+                  {isTenancyAgreement && caseData && (
+                    <div className="mt-6 pt-6 border-t">
+                      <h3 className="font-semibold text-gray-800 mb-3">What&apos;s Included:</h3>
+                      {(() => {
+                        const jurisdiction = (caseData.jurisdiction || 'england') as TenancyJurisdiction;
+                        const tier = (product === 'ast_premium' ? 'premium' : 'standard') as TenancyTier;
+                        const inventoryInfo = getInventoryBehaviour(tier);
+                        const complianceInfo = COMPLIANCE_CHECKLIST_INFO[jurisdiction] || COMPLIANCE_CHECKLIST_INFO['england'];
+
+                        return (
+                          <ul className="space-y-3">
+                            {/* Main Agreement */}
+                            <li className="flex items-start gap-2 text-sm text-gray-600">
+                              <FileText className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                              <span>{tier === 'premium' ? 'HMO ' : ''}Tenancy Agreement</span>
+                            </li>
+                            {/* Schedules */}
+                            <li className="flex items-start gap-2 text-sm text-gray-600">
+                              <List className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                              <span>Embedded Schedules (Property, Rent, Utilities, House Rules)</span>
+                            </li>
+                            {/* Inventory - tier-specific */}
+                            <li className="flex items-start gap-2 text-sm text-gray-600">
+                              <CheckCircle className={`w-4 h-4 ${tier === 'premium' ? 'text-purple-600' : 'text-blue-600'} flex-shrink-0 mt-0.5`} />
+                              <div>
+                                <span>{inventoryInfo.label}</span>
+                                <p className="text-xs text-gray-500 mt-0.5">{inventoryInfo.description}</p>
+                              </div>
+                            </li>
+                            {/* Compliance Checklist */}
+                            <li className="flex items-start gap-2 text-sm text-gray-600">
+                              <Shield className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <span>{complianceInfo.title}</span>
+                                <p className="text-xs text-gray-500 mt-0.5">Non-contractual guidance</p>
+                              </div>
+                            </li>
+                            {/* Premium extras */}
+                            {tier === 'premium' && (
+                              <li className="flex items-start gap-2 text-sm text-gray-600">
+                                <CheckCircle className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                                <span>Premium clauses (Guarantor, HMO terms, rent review)</span>
+                              </li>
+                            )}
+                          </ul>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Features - for non-tenancy products */}
+                  {!isTenancyAgreement && dynamicFeatures && dynamicFeatures.length > 0 && (
                     <div className="mt-6 pt-6 border-t">
                       <h3 className="font-semibold text-gray-800 mb-3">Includes:</h3>
                       <ul className="space-y-2">
