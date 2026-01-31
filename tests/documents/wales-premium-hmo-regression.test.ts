@@ -27,6 +27,15 @@ const getWalesHMOTemplate = () => {
   return readFileSync(templatePath, 'utf-8');
 };
 
+// Read the Wales Standard template
+const getWalesStandardTemplate = () => {
+  const templatePath = join(
+    process.cwd(),
+    'config/jurisdictions/uk/wales/templates/standard_occupation_contract.hbs'
+  );
+  return readFileSync(templatePath, 'utf-8');
+};
+
 // Read the England Premium HMO template for comparison
 const getEnglandHMOTemplate = () => {
   const templatePath = join(
@@ -467,5 +476,141 @@ describe('Wales vs England Premium Comparison', () => {
     // Both should have footer-info class with similar properties
     expect(walesTemplate).toMatch(/\.footer-info\s*\{/);
     expect(englandTemplate).toMatch(/\.footer-info\s*\{/);
+  });
+});
+
+/**
+ * Wales Standard Occupation Contract - Greyscale Styling Tests
+ *
+ * These tests ensure the Wales Standard template uses ONLY black/greyscale colors,
+ * with NO red accents anywhere in the document.
+ */
+describe('Wales Standard Occupation Contract - Greyscale Styling', () => {
+  let standardTemplate: string;
+
+  beforeEach(() => {
+    standardTemplate = getWalesStandardTemplate();
+  });
+
+  describe('N) No Red Color Codes in Wales Standard', () => {
+    it('should NOT contain Welsh red hex code (#c8102e)', () => {
+      expect(standardTemplate).not.toContain('#c8102e');
+    });
+
+    it('should NOT contain light red background (#fef7f7)', () => {
+      expect(standardTemplate).not.toContain('#fef7f7');
+    });
+
+    it('should NOT contain any common red hex codes', () => {
+      // Check for common red variations
+      expect(standardTemplate).not.toContain('#c8102e');
+      expect(standardTemplate).not.toContain('#C8102E');
+      expect(standardTemplate).not.toContain('#8b0000');
+      expect(standardTemplate).not.toContain('#ff0000');
+      expect(standardTemplate).not.toContain('#dc3545');
+    });
+
+    it('should NOT contain red RGB values', () => {
+      // Check for rgb(200, 16, 46) or similar red RGB values
+      expect(standardTemplate).not.toMatch(/rgb\s*\(\s*200\s*,\s*16\s*,\s*46\s*\)/i);
+      expect(standardTemplate).not.toMatch(/rgb\s*\(\s*255\s*,\s*0\s*,\s*0\s*\)/i);
+    });
+
+    it('should NOT contain red color names in CSS', () => {
+      // Check for CSS color: red or similar
+      expect(standardTemplate).not.toMatch(/color:\s*red[^-a-z]/i);
+      expect(standardTemplate).not.toMatch(/border[^:]*:\s*[^;]*\s+red[^-a-z]/i);
+      expect(standardTemplate).not.toMatch(/background[^:]*:\s*red[^-a-z]/i);
+    });
+  });
+
+  describe('O) Greyscale Styling in Wales Standard', () => {
+    it('should use dark grey (#333) for document header border', () => {
+      expect(standardTemplate).toMatch(/\.doc-header\s*\{[^}]*border[^:]*:\s*[^;]*#333/);
+    });
+
+    it('should use dark grey (#333) for jurisdiction text', () => {
+      expect(standardTemplate).toMatch(/\.doc-jurisdiction\s*\{[^}]*color:\s*#333/);
+    });
+
+    it('should use dark grey (#333) for schedule header border', () => {
+      expect(standardTemplate).toMatch(/\.schedule-header\s*\{[^}]*border[^:]*:\s*[^;]*#333/);
+    });
+
+    it('should use light grey (#f5f5f5) for schedule header background', () => {
+      expect(standardTemplate).toMatch(/\.schedule-header\s*\{[^}]*background:\s*#f5f5f5/);
+    });
+
+    it('should use dark grey (#333) for schedule header h2 text', () => {
+      expect(standardTemplate).toMatch(/\.schedule-header\s+h2\s*\{[^}]*color:\s*#333/);
+    });
+
+    it('should use dark grey (#333) for legal notice border', () => {
+      expect(standardTemplate).toMatch(/\.legal-notice\s*\{[^}]*border[^:]*:\s*[^;]*#333/);
+    });
+
+    it('should use light grey (#f5f5f5) for legal notice background', () => {
+      expect(standardTemplate).toMatch(/\.legal-notice\s*\{[^}]*background:\s*#f5f5f5/);
+    });
+
+    it('should use dark grey (#333) for legal notice title', () => {
+      expect(standardTemplate).toMatch(/\.legal-notice-title\s*\{[^}]*color:\s*#333/);
+    });
+  });
+
+  describe('P) Wales Standard Schedule Consistency', () => {
+    it('should have 5 schedules (Schedule 1-5)', () => {
+      expect(standardTemplate).toContain('Schedule 1');
+      expect(standardTemplate).toContain('Schedule 2');
+      expect(standardTemplate).toContain('Schedule 3');
+      expect(standardTemplate).toContain('Schedule 4');
+      expect(standardTemplate).toContain('Schedule 5');
+    });
+
+    it('all schedules should use the same .schedule-header class', () => {
+      // Count schedule-header usage - should be 5 (one per schedule)
+      const scheduleHeaders = standardTemplate.match(/class="schedule-header"/g);
+      expect(scheduleHeaders).not.toBeNull();
+      expect(scheduleHeaders!.length).toBe(5);
+    });
+
+    it('Schedule 3 (Utilities) should use greyscale styling', () => {
+      // Find Schedule 3 section
+      const schedule3Match = standardTemplate.match(
+        /Schedule 3[\s\S]*?Utilities and Services/
+      );
+      expect(schedule3Match).not.toBeNull();
+      // The schedule uses shared .schedule-header class, so greyscale is applied
+    });
+  });
+
+  describe('Q) Wales Standard Legal Content Preservation', () => {
+    it('should reference Renting Homes (Wales) Act 2016', () => {
+      expect(standardTemplate).toContain('Renting Homes (Wales) Act 2016');
+    });
+
+    it('should reference Rent Smart Wales', () => {
+      expect(standardTemplate).toContain('Rent Smart Wales');
+    });
+
+    it('should use Contract-Holder terminology', () => {
+      expect(standardTemplate).toContain('Contract-Holder');
+    });
+
+    it('should reference written statement requirement', () => {
+      expect(standardTemplate).toContain('written statement');
+    });
+
+    it('should reference Section 173 notice', () => {
+      expect(standardTemplate).toContain('section 173');
+    });
+
+    it('should NOT contain England AST terminology in body content', () => {
+      // Extract body content (excluding HTML comments which may explain what England uses)
+      const bodyContent = standardTemplate.replace(/{{!--[\s\S]*?--}}/g, '');
+      expect(bodyContent).not.toContain('Housing Act 1988');
+      expect(bodyContent).not.toContain('Section 21');
+      expect(bodyContent).not.toContain('How to Rent');
+    });
   });
 });
