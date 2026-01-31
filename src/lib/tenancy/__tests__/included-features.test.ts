@@ -149,6 +149,55 @@ describe('Tenancy Included Features - Integration Layer', () => {
         });
       });
     });
+
+    describe('Premium tier with hasInventoryData context', () => {
+      it('should show "Wizard-completed inventory" when hasInventoryData=true', () => {
+        const features = getIncludedFeatures('england', 'premium', { hasInventoryData: true });
+        const inventory = features.find(f => f.id === 'schedule_inventory');
+        expect(inventory).toBeDefined();
+        expect(inventory?.description).toBe('Wizard-completed inventory');
+      });
+
+      it('should show "ready to complete" when hasInventoryData=false', () => {
+        const features = getIncludedFeatures('england', 'premium', { hasInventoryData: false });
+        const inventory = features.find(f => f.id === 'schedule_inventory');
+        expect(inventory).toBeDefined();
+        expect(inventory?.description).toBe('Inventory schedule ready to complete (fill in via wizard or manually)');
+      });
+
+      it('should default to "ready to complete" when hasInventoryData is not provided', () => {
+        const features = getIncludedFeatures('england', 'premium');
+        const inventory = features.find(f => f.id === 'schedule_inventory');
+        expect(inventory).toBeDefined();
+        expect(inventory?.description).toBe('Inventory schedule ready to complete (fill in via wizard or manually)');
+      });
+
+      it('should reflect hasInventoryData in summary headline', () => {
+        const summaryWithData = getIncludedSummary('england', 'premium', { hasInventoryData: true });
+        expect(summaryWithData.headline[1]).toBe('Wizard-completed inventory');
+
+        const summaryWithoutData = getIncludedSummary('england', 'premium', { hasInventoryData: false });
+        expect(summaryWithoutData.headline[1]).toBe('Inventory schedule ready to complete (fill in via wizard or manually)');
+      });
+
+      it('should reflect hasInventoryData in summary details', () => {
+        const summaryWithData = getIncludedSummary('england', 'premium', { hasInventoryData: true });
+        const schedulesWithData = summaryWithData.details.find(d => d.category === 'Schedules');
+        expect(schedulesWithData?.items).toContain('Inventory (wizard-completed)');
+
+        const summaryWithoutData = getIncludedSummary('england', 'premium', { hasInventoryData: false });
+        const schedulesWithoutData = summaryWithoutData.details.find(d => d.category === 'Schedules');
+        expect(schedulesWithoutData?.items).toContain('Inventory (ready to complete)');
+      });
+
+      it('should reflect hasInventoryData in tierDifference', () => {
+        const summaryWithData = getIncludedSummary('england', 'premium', { hasInventoryData: true });
+        expect(summaryWithData.tierDifference).toContain('wizard-completed inventory');
+
+        const summaryWithoutData = getIncludedSummary('england', 'premium', { hasInventoryData: false });
+        expect(summaryWithoutData.tierDifference).toContain('inventory schedule (ready to complete)');
+      });
+    });
   });
 
   // ============================================================================
