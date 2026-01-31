@@ -211,6 +211,18 @@ export function mapWizardToPRTData(wizardFacts: WizardFacts): PRTData {
     approved_pets: normalizeApprovedPets(getValueAtPath(wizardFacts, 'approved_pets')),
     smoking_allowed: coerceBoolean(getValueAtPath(wizardFacts, 'smoking_allowed')),
 
+    // Guarantor (Premium) - TODO: not yet in CaseFacts
+    guarantor_name: getValueAtPath(wizardFacts, 'guarantor_name'),
+    guarantor_address: getValueAtPath(wizardFacts, 'guarantor_address'),
+    guarantor_email: getValueAtPath(wizardFacts, 'guarantor_email'),
+    guarantor_phone: getValueAtPath(wizardFacts, 'guarantor_phone'),
+    guarantor_dob: getValueAtPath(wizardFacts, 'guarantor_dob'),
+    guarantor_relationship: getValueAtPath(wizardFacts, 'guarantor_relationship'),
+    guarantor_required: coerceBoolean(getValueAtPath(wizardFacts, 'guarantor_required')),
+
+    // Joint and Several Liability (Premium)
+    joint_and_several_liability: coerceBoolean(getValueAtPath(wizardFacts, 'joint_and_several_liability')) ?? tenants.length > 1,
+
     // Legal Compliance & Safety - boolean flags
     gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
     epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
