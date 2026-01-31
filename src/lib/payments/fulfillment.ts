@@ -4,6 +4,7 @@ import {
   mapCaseFactsToMoneyClaimCase,
   mapCaseFactsToScotlandMoneyClaimCase,
 } from '@/lib/documents/money-claim-wizard-mapper';
+import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { getPackContents } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
@@ -483,10 +484,13 @@ export async function fulfillOrder({
         '@/lib/documents/ast-generator'
       );
 
+      // Convert WizardFacts to ASTData format (maps component addresses to full strings)
+      const astData = mapWizardToASTData(wizardFacts as any);
+
       const astPack =
         productType === 'ast_standard'
-          ? await generateStandardASTDocuments(wizardFacts, caseId)
-          : await generatePremiumASTDocuments(wizardFacts, caseId);
+          ? await generateStandardASTDocuments(astData, caseId)
+          : await generatePremiumASTDocuments(astData, caseId);
 
       for (const doc of astPack.documents) {
         if (!doc.pdf) continue;
