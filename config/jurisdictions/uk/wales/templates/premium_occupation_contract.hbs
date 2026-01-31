@@ -247,9 +247,13 @@
     }
 
     /* ===== SIGNATURES ===== */
+    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
     .signature-section {
+      page-break-before: always;
       page-break-inside: avoid;
-      margin-top: 30pt;
+      margin-top: 0;
+      padding-top: 20pt;
+      min-height: 400pt;
     }
 
     .signature-block {
