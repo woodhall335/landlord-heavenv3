@@ -1,0 +1,378 @@
+{{!--
+  ============================================================================
+  SOLICITOR-GRADE CSS STYLES
+  Professional typography, layout, and print-safe formatting for tenancy agreements
+
+  USAGE:
+  Include in template <head>: {{> solicitor_grade_styles}}
+  ============================================================================
+--}}
+
+{{#*inline "solicitor_grade_styles"}}
+<style>
+  /* ===== PAGE SETUP ===== */
+  @page {
+    size: A4;
+    margin: 25mm 20mm 25mm 20mm;
+  }
+
+  /* ===== RESET & BASE ===== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    background: white;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1, h2, h3, h4 {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-weight: 600;
+    margin-top: 0;
+    page-break-after: avoid;
+  }
+
+  h1 {
+    font-size: 18pt;
+    text-align: center;
+    margin-bottom: 6pt;
+    text-transform: uppercase;
+    letter-spacing: 1pt;
+  }
+
+  h2 {
+    font-size: 13pt;
+    border-bottom: 1pt solid #333;
+    padding-bottom: 4pt;
+    margin: 20pt 0 12pt 0;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-size: 11pt;
+    margin: 14pt 0 8pt 0;
+  }
+
+  h4 {
+    font-size: 10pt;
+    margin: 10pt 0 6pt 0;
+  }
+
+  p {
+    margin: 0 0 8pt 0;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* ===== DOCUMENT HEADER ===== */
+  .doc-header {
+    text-align: center;
+    border-bottom: 2pt solid #333;
+    padding-bottom: 15pt;
+    margin-bottom: 20pt;
+  }
+
+  .doc-header h1 {
+    margin-bottom: 3pt;
+  }
+
+  .doc-subtitle {
+    font-size: 10pt;
+    color: #555;
+    margin: 5pt 0;
+  }
+
+  .doc-date {
+    font-size: 10pt;
+    margin-top: 10pt;
+  }
+
+  /* ===== PARTIES SECTION ===== */
+  .parties-section {
+    margin: 15pt 0;
+  }
+
+  .party-block {
+    margin: 10pt 0;
+    padding-left: 20pt;
+  }
+
+  .party-role {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 9pt;
+    letter-spacing: 0.5pt;
+    margin-bottom: 3pt;
+  }
+
+  .party-details-text {
+    line-height: 1.6;
+  }
+
+  /* ===== DEFINITIONS ===== */
+  .definitions-section {
+    margin: 20pt 0;
+    page-break-inside: avoid;
+  }
+
+  .definitions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .definitions-list li {
+    margin: 6pt 0;
+    padding-left: 0;
+  }
+
+  .defined-term {
+    font-weight: bold;
+  }
+
+  /* ===== CLAUSE NUMBERING ===== */
+  .clause {
+    margin: 8pt 0;
+    padding-left: 30pt;
+    text-indent: -30pt;
+  }
+
+  .clause-num {
+    display: inline-block;
+    width: 28pt;
+    font-weight: bold;
+  }
+
+  .sub-clause {
+    margin: 6pt 0 6pt 30pt;
+    padding-left: 25pt;
+    text-indent: -25pt;
+  }
+
+  .sub-clause-num {
+    display: inline-block;
+    width: 23pt;
+  }
+
+  /* ===== TABLES ===== */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12pt 0;
+    font-size: 10pt;
+  }
+
+  .data-table th,
+  .data-table td {
+    border: 0.5pt solid #666;
+    padding: 6pt 8pt;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .data-table th {
+    background: #f5f5f5;
+    font-weight: bold;
+    font-size: 9pt;
+    text-transform: uppercase;
+  }
+
+  .data-table td.label {
+    width: 35%;
+    font-weight: 500;
+    background: #fafafa;
+  }
+
+  .data-table td.value {
+    width: 65%;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* ===== SCHEDULES ===== */
+  .schedule {
+    page-break-before: always;
+    margin-top: 0;
+  }
+
+  .schedule:first-of-type {
+    page-break-before: auto;
+  }
+
+  .schedule-header {
+    text-align: center;
+    border: 1pt solid #333;
+    padding: 10pt;
+    margin-bottom: 15pt;
+    background: #f8f8f8;
+  }
+
+  .schedule-header h2 {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .schedule-title {
+    font-size: 12pt;
+    margin-top: 5pt;
+    font-weight: normal;
+    text-transform: none;
+  }
+
+  /* ===== SIGNATURE BLOCKS ===== */
+  .signature-section {
+    page-break-inside: avoid;
+    margin-top: 30pt;
+  }
+
+  .signature-block {
+    margin: 25pt 0;
+    page-break-inside: avoid;
+  }
+
+  .signature-role {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 9pt;
+    margin-bottom: 8pt;
+  }
+
+  .signature-name {
+    margin-bottom: 20pt;
+  }
+
+  .signature-line {
+    border-bottom: 1pt solid #333;
+    width: 250pt;
+    height: 25pt;
+  }
+
+  .signature-label {
+    font-size: 9pt;
+    color: #555;
+    margin-top: 3pt;
+  }
+
+  .signature-date {
+    margin-top: 15pt;
+  }
+
+  .signature-date-line {
+    border-bottom: 1pt solid #333;
+    width: 150pt;
+    display: inline-block;
+    margin-left: 10pt;
+  }
+
+  /* ===== LEGAL NOTICES ===== */
+  .legal-notice {
+    border: 1pt solid #333;
+    padding: 10pt;
+    margin: 12pt 0;
+    background: #fffef5;
+    page-break-inside: avoid;
+  }
+
+  .legal-notice-title {
+    font-weight: bold;
+    font-size: 10pt;
+    margin-bottom: 6pt;
+    text-transform: uppercase;
+  }
+
+  /* ===== LISTS ===== */
+  ul, ol {
+    margin: 6pt 0 6pt 25pt;
+    padding: 0;
+  }
+
+  li {
+    margin: 4pt 0;
+  }
+
+  /* ===== TEXT OVERFLOW PROTECTION ===== */
+  .wrap-text {
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .email-text,
+  .address-text,
+  .url-text {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  /* ===== NON-CONTRACTUAL APPENDIX ===== */
+  .non-contractual {
+    border: 1pt dashed #999;
+    padding: 10pt;
+    margin: 15pt 0;
+    background: #f9f9f9;
+  }
+
+  .non-contractual-header {
+    font-weight: bold;
+    font-size: 9pt;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 8pt;
+  }
+
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .schedule {
+      page-break-before: always;
+    }
+
+    .signature-section,
+    .signature-block,
+    .legal-notice,
+    .schedule-header {
+      page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+      page-break-after: avoid;
+    }
+
+    .data-table {
+      page-break-inside: avoid;
+    }
+
+    .data-table tr {
+      page-break-inside: avoid;
+    }
+  }
+
+  /* ===== SECTION REFERENCE ===== */
+  .section-ref {
+    font-style: italic;
+    color: #555;
+  }
+
+  /* ===== FOOTER ===== */
+  .doc-footer {
+    margin-top: 30pt;
+    padding-top: 10pt;
+    border-top: 0.5pt solid #999;
+    font-size: 8pt;
+    color: #666;
+    text-align: center;
+  }
+</style>
+{{/inline}}
