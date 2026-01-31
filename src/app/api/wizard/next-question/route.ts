@@ -17,7 +17,7 @@ import {
   type MasterQuestionSet,
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
-import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { getOrCreateWizardFacts, updateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
@@ -25,6 +25,12 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { getCasePaymentStatus } from '@/lib/payments/entitlement';
+import {
+  getTenancyTierLabelForSku,
+  getTenancyTierQuestionId,
+  type TenancyJurisdiction,
+} from '@/lib/tenancy/product-tier';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -253,7 +259,48 @@ export async function POST(request: Request) {
     const mqs = product ? loadMQS(product, canonicalJurisdiction) : null;
 
     // Use admin client to support anonymous users
-    const facts = await getOrCreateWizardFacts(adminSupabase, case_id);
+    let facts = await getOrCreateWizardFacts(adminSupabase, case_id);
+
+    const paymentStatus = await getCasePaymentStatus(case_id);
+    const entitlementProducts = paymentStatus.paidProducts;
+    const lockedTenancySku = entitlementProducts.includes('ast_premium')
+      ? 'ast_premium'
+      : entitlementProducts.includes('ast_standard')
+      ? 'ast_standard'
+      : null;
+    const purchasedProduct =
+      paymentStatus.latestOrder?.product_type || lockedTenancySku || null;
+
+    if (caseRow.case_type === 'tenancy_agreement' && lockedTenancySku) {
+      const jurisdiction = canonicalJurisdiction as TenancyJurisdiction;
+      const tierLabel = getTenancyTierLabelForSku(lockedTenancySku, jurisdiction);
+      const tierQuestionId = getTenancyTierQuestionId(jurisdiction);
+      const meta = facts.__meta || {};
+      const needsUpdate =
+        facts.product_tier !== tierLabel ||
+        facts[tierQuestionId] !== tierLabel ||
+        meta.purchased_product !== purchasedProduct ||
+        JSON.stringify(meta.entitlements || []) !== JSON.stringify(entitlementProducts);
+
+      if (needsUpdate) {
+        facts = await updateWizardFacts(
+          adminSupabase,
+          case_id,
+          (current) => ({
+            ...current,
+            product_tier: tierLabel,
+            [tierQuestionId]: tierLabel,
+          }),
+          {
+            meta: {
+              ...meta,
+              purchased_product: purchasedProduct,
+              entitlements: entitlementProducts,
+            },
+          }
+        );
+      }
+    }
 
     if (!mqs) {
       const aiResponse = await getNextAIQuestion({

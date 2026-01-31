@@ -38,6 +38,13 @@ import {
 } from '@/lib/evidence';
 import { logMutation } from '@/lib/auth/audit-log';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
+import { getCasePaymentStatus } from '@/lib/payments/entitlement';
+import {
+  getTenancyTierLabelForSku,
+  getTenancyTierQuestionId,
+  inferTenancySkuFromTierLabel,
+  type TenancyJurisdiction,
+} from '@/lib/tenancy/product-tier';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -704,6 +711,15 @@ export async function POST(request: Request) {
     }
 
     const isEnglandOrWales = canonicalJurisdiction === 'england' || canonicalJurisdiction === 'wales';
+    const paymentStatus = await getCasePaymentStatus(case_id);
+    const entitlementProducts = paymentStatus.paidProducts;
+    const lockedTenancySku = entitlementProducts.includes('ast_premium')
+      ? 'ast_premium'
+      : entitlementProducts.includes('ast_standard')
+      ? 'ast_standard'
+      : null;
+    const purchasedProduct =
+      paymentStatus.latestOrder?.product_type || lockedTenancySku || null;
 
     // ---------------------------------------
     // 2. Load MQS and question
@@ -751,6 +767,30 @@ export async function POST(request: Request) {
     }
 
     const normalizedAnswer = normalizeAnswer(question, answer);
+
+    if (caseRow.case_type === 'tenancy_agreement' && lockedTenancySku) {
+      const tierQuestionId = getTenancyTierQuestionId(canonicalJurisdiction as TenancyJurisdiction);
+      if (question_id === tierQuestionId) {
+        const requestedSku = inferTenancySkuFromTierLabel(String(normalizedAnswer));
+        if (requestedSku && requestedSku !== lockedTenancySku) {
+          const isUpgradeAttempt =
+            requestedSku === 'ast_premium' && !entitlementProducts.includes('ast_premium');
+          return NextResponse.json(
+            {
+              code: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+              error: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+              message: isUpgradeAttempt
+                ? 'Upgrade required to access Premium tenancy agreement features.'
+                : 'This case is locked to the purchased product.',
+              purchased_product: purchasedProduct,
+              requested_product: requestedSku,
+              entitlements: entitlementProducts,
+            },
+            { status: isUpgradeAttempt ? 402 : 409 },
+          );
+        }
+      }
+    }
 
     // For conversational eviction flows, skip strict MQS per-question validation.
     // The eviction wizard uses a looser, AI-driven flow and may send simple strings
@@ -1365,9 +1405,29 @@ export async function POST(request: Request) {
       }
     }
 
+    if (caseRow.case_type === 'tenancy_agreement' && lockedTenancySku) {
+      const tierLabel = getTenancyTierLabelForSku(
+        lockedTenancySku,
+        canonicalJurisdiction as TenancyJurisdiction,
+      );
+      mergedFacts.product_tier = tierLabel;
+      mergedFacts[getTenancyTierQuestionId(canonicalJurisdiction as TenancyJurisdiction)] =
+        tierLabel;
+    }
+
+    const updatedMeta = {
+      ...(collectedFacts as any).__meta,
+      ...(paymentStatus.hasPaidOrder
+        ? {
+            purchased_product: purchasedProduct,
+            entitlements: entitlementProducts,
+          }
+        : {}),
+    };
+
     // Use admin client to support anonymous users
     const newFacts = await updateWizardFacts(adminSupabase, case_id, () => mergedFacts, {
-      meta: (collectedFacts as any).__meta,
+      meta: updatedMeta,
     });
 
     // Audit log for paid cases (non-blocking, fire-and-forget)

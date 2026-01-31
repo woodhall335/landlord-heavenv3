@@ -12,6 +12,13 @@ import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/su
 import { NextRequest, NextResponse } from 'next/server';
 import { logMutation, getChangedKeys } from '@/lib/auth/audit-log';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
+import { getCasePaymentStatus } from '@/lib/payments/entitlement';
+import {
+  getTenancyTierLabelForSku,
+  getTenancyTierQuestionId,
+  inferTenancySkuFromFacts,
+  type TenancyJurisdiction,
+} from '@/lib/tenancy/product-tier';
 
 export const runtime = 'nodejs';
 
@@ -113,10 +120,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const paymentStatus = await getCasePaymentStatus(case_id);
+    const entitlementProducts = paymentStatus.paidProducts;
+    const lockedTenancySku = entitlementProducts.includes('ast_premium')
+      ? 'ast_premium'
+      : entitlementProducts.includes('ast_standard')
+      ? 'ast_standard'
+      : null;
+    const purchasedProduct =
+      paymentStatus.latestOrder?.product_type || lockedTenancySku || null;
+
+    if (lockedTenancySku) {
+      const requestedSku = inferTenancySkuFromFacts(facts);
+      if (requestedSku && requestedSku !== lockedTenancySku) {
+        const isUpgradeAttempt =
+          requestedSku === 'ast_premium' && !entitlementProducts.includes('ast_premium');
+        return NextResponse.json(
+          {
+            code: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+            error: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+            message: isUpgradeAttempt
+              ? 'Upgrade required to access Premium tenancy agreement features.'
+              : 'This case is locked to the purchased product.',
+            purchased_product: purchasedProduct,
+            requested_product: requestedSku,
+            entitlements: entitlementProducts,
+          },
+          { status: isUpgradeAttempt ? 402 : 409 },
+        );
+      }
+    }
+
     // Deep merge the new facts with existing facts
     // Uses deepMergeFacts to properly merge nested objects while treating arrays as replace
     const existingFacts = (existingCase?.collected_facts || {}) as Record<string, unknown>;
     const mergedFacts = deepMergeFacts(existingFacts, facts as Record<string, unknown>);
+
+    if (lockedTenancySku && existingCase?.jurisdiction) {
+      const jurisdiction = existingCase.jurisdiction as TenancyJurisdiction;
+      const tierLabel = getTenancyTierLabelForSku(lockedTenancySku, jurisdiction);
+      mergedFacts.product_tier = tierLabel;
+      mergedFacts[getTenancyTierQuestionId(jurisdiction)] = tierLabel;
+    }
 
     // Ensure __meta is always properly merged with required fields
     mergedFacts.__meta = {
@@ -124,6 +169,12 @@ export async function POST(request: NextRequest) {
       ...((facts.__meta || {}) as Record<string, unknown>),
       case_id,
       updated_at: new Date().toISOString(),
+      ...(paymentStatus.hasPaidOrder
+        ? {
+            purchased_product: purchasedProduct,
+            entitlements: entitlementProducts,
+          }
+        : {}),
     };
 
     const timestamp = new Date().toISOString();
