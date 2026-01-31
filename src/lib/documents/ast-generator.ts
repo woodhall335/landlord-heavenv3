@@ -23,6 +23,7 @@
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
 import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
+import { detectInventoryData } from '../tenancy/product-tier';
 import path from 'path';
 
 // ============================================================================
@@ -803,8 +804,8 @@ export async function generatePremiumAST(
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
 
-  // Check if inventory data was provided via wizard
-  const hasInventoryData = data.inventory_attached || data.inventory_provided || false;
+  // Use shared utility for consistent inventory detection across review/preview/generation
+  const hasInventoryData = detectInventoryData(data as Record<string, any>);
 
   // Add metadata flags for HMO premium
   const enrichedData = {
@@ -1155,8 +1156,8 @@ export async function generatePremiumASTDocuments(
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
 
-  // Check if wizard-completed inventory data is available
-  const hasInventoryData = data.inventory_attached || data.inventory_provided || false;
+  // Use shared utility for consistent inventory detection across review/preview/generation
+  const hasInventoryData = detectInventoryData(data as Record<string, any>);
 
   const enrichedData = {
     ...data,

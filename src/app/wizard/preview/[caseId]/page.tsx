@@ -38,6 +38,7 @@ import {
   type TenancyJurisdiction,
   type TenancyTier,
 } from '@/lib/tenancy/included-features';
+import { detectInventoryData } from '@/lib/tenancy/product-tier';
 
 interface CaseData {
   id: string;
@@ -734,13 +735,8 @@ export default function WizardPreviewPage() {
 
     const includeArrearsSchedule = shouldIncludeArrearsSchedule();
 
-    // Compute hasInventoryData for tenancy agreements
-    const inventoryData = facts.inventory || {};
-    const hasInventoryData = Boolean(
-      inventoryData.rooms?.length > 0 ||
-      facts.inventory_attached ||
-      facts.inventory_provided
-    );
+    // Use shared utility for consistent inventory detection across review/preview/generation
+    const hasInventoryData = detectInventoryData(facts);
 
     switch (product) {
       case 'notice_only':

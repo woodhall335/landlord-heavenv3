@@ -56,6 +56,15 @@ import {
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
 
+// Tenancy product tier utilities - single source of truth for pricing and product resolution
+import {
+  resolveEffectiveProduct,
+  getTenancyPricing,
+  isPremiumSku,
+  detectInventoryData,
+  type TenancyProductSku,
+} from '@/lib/tenancy/product-tier';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -2819,8 +2828,18 @@ function TenancyReviewContent({
   const validation = buildTenancyValidation(facts, jurisdiction);
   const obligations = getJurisdictionObligations(jurisdiction);
 
-  // Determine if premium tier
-  const isPremium = product === 'ast_premium' || facts.product_tier?.includes('Premium');
+  // SINGLE SOURCE OF TRUTH: Resolve effective product using consistent priority order
+  // Priority: purchased_product → URL product param → inferred from facts → default to standard
+  const effectiveProduct = resolveEffectiveProduct({
+    purchasedProduct: analysis.purchased_product,
+    urlProduct: product,
+    facts,
+  });
+  const isPremium = isPremiumSku(effectiveProduct);
+  const pricing = getTenancyPricing(effectiveProduct);
+
+  // Use shared utility for consistent inventory detection across review/preview/generation
+  const hasInventoryData = detectInventoryData(facts);
 
   // Get jurisdiction-specific terminology
   const terminologyMap: Record<string, { agreementType: string; tenantLabel: string }> = {
@@ -2849,12 +2868,20 @@ function TenancyReviewContent({
     { title: 'Landlord Obligations Checklist', included: true },
   ].filter(d => d.included);
 
+  // Premium documents with accurate inventory description based on wizard completion
+  const inventoryTitle = hasInventoryData
+    ? 'Inventory Schedule (Wizard-Completed)'
+    : 'Inventory Schedule (Ready to Complete)';
+  const inventoryDescription = hasInventoryData
+    ? 'Your inventory data from the wizard is included in Schedule 4'
+    : 'Structured template included in Schedule 4 for you to complete';
+
   const premiumDocs = [
-    { title: 'Guarantor Agreement', included: true },
-    { title: 'Inventory Template', included: true },
+    { title: 'Guarantor Agreement', included: true, description: 'Full guarantor deed with joint and several liability' },
+    { title: inventoryTitle, included: true, description: inventoryDescription },
     { title: 'Check-in/Check-out Form', included: true },
-    { title: 'HMO Additional Terms', included: facts.is_hmo },
-    { title: 'Rent Review Schedule', included: true },
+    { title: 'HMO Additional Terms', included: facts.is_hmo, description: 'Multi-occupancy clauses and shared facilities rules' },
+    { title: 'Rent Review Schedule', included: true, description: 'Annual CPI/RPI-linked rent review clause' },
     { title: 'Maintenance Request Form', included: true },
     { title: 'Notice Templates Pack', included: true },
   ].filter(d => d.included);
@@ -3000,6 +3027,79 @@ function TenancyReviewContent({
         </div>
       </Card>
 
+      {/* Premium Agreement Benefits - Only shown for Premium tier */}
+      {isPremium && (
+        <Card className="p-6 border-purple-200 bg-gradient-to-r from-purple-50 to-white">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <RiShieldCheckLine className="w-5 h-5 text-purple-600" />
+            What This Premium Agreement Includes
+          </h2>
+          <p className="text-gray-600 text-sm mb-4">
+            Your Premium agreement provides enhanced legal protections not available in the Standard version:
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Guarantor Agreement & Joint Liability</p>
+                  <p className="text-sm text-gray-600">Full guarantor deed ensuring rent recovery even if tenants default</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Annual Rent Review Clause</p>
+                  <p className="text-sm text-gray-600">CPI/RPI-capped increases to protect your rental income against inflation</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Enhanced Subletting Controls</p>
+                  <p className="text-sm text-gray-600">Strict prohibitions on Airbnb, short-lets, and unauthorised occupants</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {facts.is_hmo && (
+                <div className="flex items-start gap-3">
+                  <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">HMO & Shared Facilities Rules</p>
+                    <p className="text-sm text-gray-600">Multi-occupancy clauses covering communal areas, cleaning rotas, and house rules</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Stronger Breach Consequences</p>
+                  <p className="text-sm text-gray-600">Clear remedies and enforcement provisions for tenant breaches</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">{hasInventoryData ? 'Wizard-Completed Inventory' : 'Ready-to-Complete Inventory'}</p>
+                  <p className="text-sm text-gray-600">
+                    {hasInventoryData
+                      ? 'Your detailed inventory is embedded in Schedule 4 of the agreement'
+                      : 'Professional inventory template included in Schedule 4'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-purple-100">
+            <p className="text-sm text-purple-800">
+              <strong>Why Premium?</strong> These clauses are essential for HMO landlords, properties with guarantors,
+              or anyone wanting maximum legal protection. Standard agreements don&apos;t include these provisions.
+            </p>
+          </div>
+        </Card>
+      )}
+
       {/* Pre-Tenancy Checklist */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -3111,9 +3211,18 @@ function TenancyReviewContent({
           )}
         </div>
         <div className="mt-4 pt-4 border-t">
-          <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">{isPremium ? '£14.99' : '£14.99'}</span>
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500 text-sm">Price</p>
+              <p className="text-2xl font-bold text-gray-900">{pricing.displayPrice}</p>
+            </div>
+            {pricing.originalPrice && (
+              <div className="text-right">
+                <p className="text-gray-400 line-through text-sm">{pricing.originalPrice}</p>
+                <p className="text-green-600 text-sm font-medium">{pricing.savings}</p>
+              </div>
+            )}
+          </div>
         </div>
       </Card>
 
