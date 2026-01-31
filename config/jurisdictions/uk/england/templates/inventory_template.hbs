@@ -56,7 +56,6 @@ Patio/Decking: {{garden.patio}}
 {{#each entrance_hall}}
 **{{this.item}}**
 Condition: {{this.condition}}
-Quantity: {{this.quantity}}
 Description: {{this.description}}
 Notes: {{this.notes}}
 {{/each}}
@@ -170,7 +169,7 @@ Reading: {{water_meter.reading}}
 ## KEYS & ACCESS
 
 {{#each keys}}
-- {{this.description}}: {{this.quantity}} provided
+- {{this.description}}{{#if this.quantity}}: {{this.quantity}} provided{{/if}}{{#if this.notes}} - {{this.notes}}{{/if}}
 {{/each}}
 
 ---
