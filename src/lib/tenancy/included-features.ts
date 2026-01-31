@@ -9,10 +9,28 @@
  * - Generated PDF contents
  *
  * IMPORTANT: Do not hardcode copy elsewhere. Always reference this mapping.
+ *
+ * LEGAL NOTES:
+ * - Premium ≠ HMO. Premium tier includes enhanced features; HMO clauses are
+ *   only included when the property is actually an HMO (isHMO context flag).
+ * - All cleaning language must be Tenant Fees Act 2019 compliant.
+ * - Hardcoded dates should be avoided; use "as required by law" for canonical
+ *   mapping. Specific dates belong in jurisdiction checklist partials.
  */
 
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 export type TenancyTier = 'standard' | 'premium';
+
+/**
+ * Context for feature generation
+ * Used to customize features based on property characteristics
+ */
+export interface FeatureContext {
+  /** Is this property an HMO? Only adds HMO clauses when true */
+  isHMO?: boolean;
+  /** Was inventory data provided via wizard? */
+  hasInventoryData?: boolean;
+}
 
 /**
  * Individual feature/document included in the agreement
@@ -28,6 +46,8 @@ export interface IncludedFeature {
   category: 'agreement' | 'schedule' | 'compliance' | 'guidance';
   /** Whether this is a premium-only feature */
   isPremiumOnly?: boolean;
+  /** Whether this feature is HMO-specific (only included when isHMO=true) */
+  isHMOSpecific?: boolean;
   /** Whether this is tier-specific (e.g., different for standard vs premium) */
   tierVariant?: {
     standard: string;
@@ -80,6 +100,17 @@ export const JURISDICTION_AGREEMENT_INFO: Record<TenancyJurisdiction, Jurisdicti
 };
 
 /**
+ * Required schedule IDs that must be present in every tenancy agreement
+ */
+export const REQUIRED_SCHEDULE_IDS = [
+  'schedule_property',
+  'schedule_rent',
+  'schedule_utilities',
+  'schedule_inventory',
+  'schedule_house_rules',
+] as const;
+
+/**
  * Common schedules included in all agreements (both tiers)
  */
 const COMMON_SCHEDULES: IncludedFeature[] = [
@@ -124,7 +155,24 @@ const INVENTORY_SCHEDULE: IncludedFeature = {
 };
 
 /**
+ * Base subletting clause - included in BOTH tiers
+ * Standard tier: baseline prohibition requiring landlord consent
+ * Premium tier: enhanced controls for short-lets/Airbnb
+ */
+const SUBLETTING_CLAUSE: IncludedFeature = {
+  id: 'subletting_prohibition',
+  label: 'Subletting & Assignment Clause',
+  description: 'Prohibition on subletting without landlord consent',
+  category: 'agreement',
+  tierVariant: {
+    standard: 'Subletting and assignment prohibited without written landlord consent',
+    premium: 'Enhanced subletting controls including short-let and Airbnb restrictions',
+  },
+};
+
+/**
  * Premium-only features
+ * Note: HMO clauses are only included when isHMO=true in context
  */
 const PREMIUM_FEATURES: IncludedFeature[] = [
   {
@@ -140,6 +188,7 @@ const PREMIUM_FEATURES: IncludedFeature[] = [
     description: 'Joint & several liability, shared facilities rules, tenant replacement',
     category: 'agreement',
     isPremiumOnly: true,
+    isHMOSpecific: true, // Only included when isHMO=true
   },
   {
     id: 'late_payment',
@@ -163,9 +212,16 @@ const PREMIUM_FEATURES: IncludedFeature[] = [
     isPremiumOnly: true,
   },
   {
-    id: 'anti_subletting',
-    label: 'Anti-Subletting Clause',
-    description: 'Prohibition on Airbnb-style subletting',
+    id: 'short_let_controls',
+    label: 'Short-Let & Airbnb Controls',
+    description: 'Enhanced restrictions on short-term subletting and holiday lets',
+    category: 'agreement',
+    isPremiumOnly: true,
+  },
+  {
+    id: 'condition_standards',
+    label: 'End-of-Tenancy Condition Standards',
+    description: 'Property to be returned clean to a professional standard as at check-in',
     category: 'agreement',
     isPremiumOnly: true,
   },
@@ -173,6 +229,8 @@ const PREMIUM_FEATURES: IncludedFeature[] = [
 
 /**
  * Compliance checklist names by jurisdiction
+ * Note: Avoid hardcoded dates - use "as required by law" for canonical mapping.
+ * Specific dates belong in jurisdiction checklist partial templates.
  */
 export const COMPLIANCE_CHECKLIST_INFO: Record<TenancyJurisdiction, {
   title: string;
@@ -192,31 +250,40 @@ export const COMPLIANCE_CHECKLIST_INFO: Record<TenancyJurisdiction, {
   },
   'northern-ireland': {
     title: 'Pre-Tenancy Compliance Checklist (Northern Ireland)',
-    description: 'Non-contractual guidance covering landlord registration, deposit protection, gas safety, EPC, and electrical safety (from April 2025)',
+    description: 'Non-contractual guidance covering landlord registration, deposit protection, gas safety, EPC, and electrical safety as required by law',
   },
 };
 
 /**
  * Get all features included for a specific jurisdiction and tier
+ *
+ * @param jurisdiction - The jurisdiction for the agreement
+ * @param tier - The product tier (standard or premium)
+ * @param context - Optional context for feature customization (isHMO, hasInventoryData)
  */
 export function getIncludedFeatures(
   jurisdiction: TenancyJurisdiction,
-  tier: TenancyTier
+  tier: TenancyTier,
+  context?: FeatureContext
 ): IncludedFeature[] {
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
   const complianceInfo = COMPLIANCE_CHECKLIST_INFO[jurisdiction];
+  const isHMO = context?.isHMO ?? false;
 
   const features: IncludedFeature[] = [];
 
-  // 1. Main agreement
+  // 1. Main agreement - only label as HMO when isHMO is true
+  const isHMOAgreement = tier === 'premium' && isHMO;
   features.push({
     id: 'main_agreement',
-    label: tier === 'premium'
+    label: isHMOAgreement
       ? `HMO ${agreementInfo.agreementName}`
       : agreementInfo.agreementName,
-    description: tier === 'premium'
+    description: isHMOAgreement
       ? `HMO-specific agreement with multi-occupancy clauses. ${agreementInfo.legalReference}.`
-      : `Core tenancy agreement. ${agreementInfo.legalReference}.`,
+      : tier === 'premium'
+        ? `Premium tenancy agreement with enhanced terms. ${agreementInfo.legalReference}.`
+        : `Core tenancy agreement. ${agreementInfo.legalReference}.`,
     category: 'agreement',
   });
 
@@ -239,12 +306,27 @@ export function getIncludedFeatures(
       : INVENTORY_SCHEDULE.tierVariant!.standard,
   });
 
-  // 5. Premium-only features (if premium tier)
+  // 5. Subletting clause - included in BOTH tiers with tier-specific wording
+  features.push({
+    ...SUBLETTING_CLAUSE,
+    description: tier === 'premium'
+      ? SUBLETTING_CLAUSE.tierVariant!.premium
+      : SUBLETTING_CLAUSE.tierVariant!.standard,
+  });
+
+  // 6. Premium-only features (if premium tier)
   if (tier === 'premium') {
-    features.push(...PREMIUM_FEATURES);
+    // Filter: only include HMO-specific features when isHMO is true
+    const applicableFeatures = PREMIUM_FEATURES.filter(f => {
+      if (f.isHMOSpecific) {
+        return isHMO;
+      }
+      return true;
+    });
+    features.push(...applicableFeatures);
   }
 
-  // 6. Compliance checklist (both tiers)
+  // 7. Compliance checklist (both tiers)
   features.push({
     id: 'compliance_checklist',
     label: complianceInfo.title,
@@ -252,7 +334,7 @@ export function getIncludedFeatures(
     category: 'compliance',
   });
 
-  // 7. Signature blocks
+  // 8. Signature blocks
   features.push({
     id: 'signature_blocks',
     label: 'Tenant & Landlord Signature Blocks',
@@ -268,9 +350,10 @@ export function getIncludedFeatures(
  */
 export function getIncludedFeaturesGrouped(
   jurisdiction: TenancyJurisdiction,
-  tier: TenancyTier
+  tier: TenancyTier,
+  context?: FeatureContext
 ): Record<string, IncludedFeature[]> {
-  const features = getIncludedFeatures(jurisdiction, tier);
+  const features = getIncludedFeatures(jurisdiction, tier, context);
 
   return features.reduce((groups, feature) => {
     const category = feature.category;
@@ -299,12 +382,15 @@ export interface IncludedSummary {
 
 export function getIncludedSummary(
   jurisdiction: TenancyJurisdiction,
-  tier: TenancyTier
+  tier: TenancyTier,
+  context?: FeatureContext
 ): IncludedSummary {
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
+  const isHMO = context?.isHMO ?? false;
+  const isHMOAgreement = tier === 'premium' && isHMO;
 
   const headline: string[] = [
-    tier === 'premium'
+    isHMOAgreement
       ? `A solicitor-grade HMO ${agreementInfo.agreementShortName}`
       : `A solicitor-grade ${agreementInfo.agreementShortName}`,
     tier === 'premium'
@@ -319,17 +405,19 @@ export function getIncludedSummary(
       category: 'Agreement',
       items: tier === 'premium'
         ? [
-          agreementInfo.agreementName,
-          'Definitions & Interpretation',
-          'HMO-specific clauses',
-          'Guarantor provisions (if added)',
-          'Late payment & rent review terms',
-        ]
+            agreementInfo.agreementName,
+            'Definitions & Interpretation',
+            ...(isHMO ? ['HMO-specific clauses'] : []),
+            'Guarantor provisions (if added)',
+            'Late payment & rent review terms',
+            'Enhanced subletting controls',
+          ]
         : [
-          agreementInfo.agreementName,
-          'Definitions & Interpretation',
-          'Core tenancy clauses',
-        ],
+            agreementInfo.agreementName,
+            'Definitions & Interpretation',
+            'Core tenancy clauses',
+            'Subletting prohibition clause',
+          ],
     },
     {
       category: 'Schedules',
@@ -351,7 +439,9 @@ export function getIncludedSummary(
   ];
 
   const tierDifference = tier === 'premium'
-    ? 'Includes wizard-completed inventory, HMO clauses, guarantor provisions, and premium terms'
+    ? isHMO
+      ? 'Includes wizard-completed inventory, HMO clauses, guarantor provisions, and premium terms'
+      : 'Includes wizard-completed inventory, guarantor provisions, enhanced subletting controls, and premium terms'
     : 'Includes blank inventory template for manual completion';
 
   return { headline, details, tierDifference };
@@ -380,20 +470,36 @@ export function getInventoryBehaviour(tier: TenancyTier): {
 }
 
 /**
+ * PDF validation input structure
+ */
+export interface PDFValidationInput {
+  hasAgreement: boolean;
+  hasInventory: boolean;
+  /** Whether inventory contains completed data (rooms/items) */
+  inventoryIsCompleted: boolean;
+  /** Whether user explicitly completed the inventory wizard step */
+  inventoryWizardStepCompleted?: boolean;
+  hasComplianceChecklist: boolean;
+  hasSignatureBlocks: boolean;
+  /** IDs of schedules present in the PDF */
+  scheduleIds: string[];
+  /** @deprecated Use scheduleIds instead */
+  scheduleCount?: number;
+}
+
+/**
  * Validate that PDF contents match what's advertised
  * Used in consistency tests
+ *
+ * Validation rules:
+ * - Standard: inventory always present, always allowed to be blank
+ * - Premium: inventory always present; completed only required when
+ *   inventory data exists OR user completed the wizard step
  */
 export function validatePDFMatchesAdvertised(
   jurisdiction: TenancyJurisdiction,
   tier: TenancyTier,
-  pdfContents: {
-    hasAgreement: boolean;
-    hasInventory: boolean;
-    inventoryIsCompleted: boolean;
-    hasComplianceChecklist: boolean;
-    hasSignatureBlocks: boolean;
-    scheduleCount: number;
-  }
+  pdfContents: PDFValidationInput
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
@@ -402,17 +508,21 @@ export function validatePDFMatchesAdvertised(
     errors.push('PDF missing main tenancy agreement');
   }
 
-  // Inventory must always be present
+  // Inventory must always be present (both tiers)
   if (!pdfContents.hasInventory) {
     errors.push('PDF missing inventory schedule');
   }
 
-  // Inventory completion status must match tier
-  if (tier === 'premium' && !pdfContents.inventoryIsCompleted) {
-    errors.push('Premium PDF has blank inventory but should have wizard-completed inventory');
+  // Premium inventory validation:
+  // - If user completed wizard step AND inventory is blank, that's an error
+  // - If inventory has no data (fallback scenario), blank is acceptable
+  if (tier === 'premium' && pdfContents.inventoryWizardStepCompleted === true) {
+    if (!pdfContents.inventoryIsCompleted) {
+      errors.push('Premium PDF has blank inventory but wizard step was completed - inventory should be populated');
+    }
   }
-  // Note: Standard tier CAN have completed inventory if user filled in data, but it's optional
-  // So we don't check inventoryIsCompleted === false for standard
+  // Note: For premium tier without explicit wizard completion flag,
+  // we allow blank inventory as a legitimate fallback (user skipped step)
 
   // Compliance checklist must always be present
   if (!pdfContents.hasComplianceChecklist) {
@@ -424,9 +534,19 @@ export function validatePDFMatchesAdvertised(
     errors.push('PDF missing signature blocks');
   }
 
-  // Must have at least 5 schedules (Property, Rent, Utilities, Inventory, House Rules)
-  if (pdfContents.scheduleCount < 5) {
-    errors.push(`PDF has ${pdfContents.scheduleCount} schedules but should have at least 5`);
+  // Validate required schedules by ID (not just count)
+  if (pdfContents.scheduleIds && pdfContents.scheduleIds.length > 0) {
+    const missingSchedules = REQUIRED_SCHEDULE_IDS.filter(
+      id => !pdfContents.scheduleIds.includes(id)
+    );
+    if (missingSchedules.length > 0) {
+      errors.push(`PDF missing required schedules: ${missingSchedules.join(', ')}`);
+    }
+  } else if (pdfContents.scheduleCount !== undefined) {
+    // Fallback to count-based validation for backwards compatibility
+    if (pdfContents.scheduleCount < REQUIRED_SCHEDULE_IDS.length) {
+      errors.push(`PDF has ${pdfContents.scheduleCount} schedules but should have at least ${REQUIRED_SCHEDULE_IDS.length}`);
+    }
   }
 
   return {
@@ -440,19 +560,36 @@ export function validatePDFMatchesAdvertised(
  */
 export function isFeatureIncluded(
   featureId: string,
-  tier: TenancyTier
+  tier: TenancyTier,
+  context?: FeatureContext
 ): boolean {
-  // Premium-only features
-  const premiumOnlyIds = PREMIUM_FEATURES.map(f => f.id);
-  if (premiumOnlyIds.includes(featureId)) {
+  // Subletting prohibition is included in BOTH tiers
+  if (featureId === 'subletting_prohibition') {
+    return true;
+  }
+
+  // HMO-specific features require isHMO context
+  const hmoFeature = PREMIUM_FEATURES.find(f => f.id === featureId && f.isHMOSpecific);
+  if (hmoFeature) {
+    return tier === 'premium' && (context?.isHMO ?? false);
+  }
+
+  // Premium-only features (non-HMO-specific)
+  const premiumOnlyFeature = PREMIUM_FEATURES.find(f => f.id === featureId && f.isPremiumOnly && !f.isHMOSpecific);
+  if (premiumOnlyFeature) {
     return tier === 'premium';
   }
+
   // All other features are included in both tiers
   return true;
 }
 
 /**
  * Get tier recommendation based on property characteristics
+ *
+ * Note: Language must be Tenant Fees Act 2019 compliant.
+ * "Professional cleaning" as a requirement is banned - use
+ * "clean to a professional standard" or "end-of-tenancy condition standards".
  */
 export function getTierRecommendation(propertyInfo: {
   tenantCount?: number;
@@ -481,11 +618,11 @@ export function getTierRecommendation(propertyInfo: {
     };
   }
 
-  // Student lets benefit from guarantor clauses
+  // Student lets benefit from guarantor clauses and condition standards
   if (isStudentLet) {
     return {
       recommendedTier: 'premium',
-      reason: 'Student lets benefit from guarantor and professional cleaning clauses',
+      reason: 'Student lets benefit from guarantor provisions and end-of-tenancy condition standards',
     };
   }
 

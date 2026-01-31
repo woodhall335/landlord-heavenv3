@@ -28,7 +28,7 @@
       <td class="checkbox-cell">☐</td>
       <td>
         <strong>Deposit protected within 30 days</strong><br>
-        <span class="guidance-text">If you take a deposit, you must protect it in a government-authorised scheme within 30 days of receiving it. Failure to comply blocks Section 21 notices.</span>
+        <span class="guidance-text">If you take a deposit, you must protect it in a government-authorised scheme within 30 days of receiving it. Non-compliance may affect your ability to rely on certain possession routes.</span>
       </td>
     </tr>
     <tr>
@@ -104,14 +104,14 @@
       <td class="checkbox-cell">☐</td>
       <td>
         <strong>Current "How to Rent" guide provided</strong><br>
-        <span class="guidance-text">The latest version of the government's "How to Rent" checklist must be provided to tenants at the start of the tenancy. This is a Section 21 precondition - failure to provide blocks eviction.</span>
+        <span class="guidance-text">The latest version of the government's "How to Rent" checklist must be provided to tenants at the start of the tenancy. Non-compliance may affect enforceability and increase legal risk.</span>
       </td>
     </tr>
     <tr>
       <td class="checkbox-cell">☐</td>
       <td>
         <strong>Proof of provision retained</strong><br>
-        <span class="guidance-text">Keep evidence (email receipt, signed acknowledgement) that the guide was provided. The current version is dated {{#if how_to_rent_version}}{{how_to_rent_version}}{{else}}[check GOV.UK for latest version]{{/if}}.</span>
+        <span class="guidance-text">Keep evidence (email receipt, signed acknowledgement) that the guide was provided.{{#if how_to_rent_version}} The current version is dated {{how_to_rent_version}}.{{/if}}</span>
       </td>
     </tr>
   </table>
@@ -253,8 +253,8 @@
   </table>
 
   <div class="checklist-footer">
-    <p><strong>Important:</strong> Non-compliance with these requirements may prevent you from serving a valid Section 21 notice, result in penalties, or leave you exposed to legal claims. This checklist is for guidance only - always verify current requirements and seek professional advice where needed.</p>
-    <p class="small-text">Last reviewed: {{#if current_date}}{{current_date}}{{else}}[Date]{{/if}}</p>
+    <p><strong>Important:</strong> Non-compliance with these requirements may affect enforceability, result in penalties, or leave you exposed to legal claims. This checklist is for guidance only - always verify current requirements with the relevant authorities and seek professional advice where needed.</p>
+    {{#if current_date}}<p class="small-text">Last reviewed: {{formatUKDate current_date}}</p>{{/if}}
   </div>
 </section>
 {{/inline}}
