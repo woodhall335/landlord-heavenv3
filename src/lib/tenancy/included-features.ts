@@ -150,7 +150,7 @@ const INVENTORY_SCHEDULE: IncludedFeature = {
   category: 'schedule',
   tierVariant: {
     standard: 'Blank template (ready to complete)',
-    premium: 'Wizard-completed inventory with rooms, items, and conditions',
+    premium: 'Wizard-completed inventory (falls back to blank template if not completed)',
   },
 };
 
@@ -221,7 +221,7 @@ const PREMIUM_FEATURES: IncludedFeature[] = [
   {
     id: 'condition_standards',
     label: 'End-of-Tenancy Condition Standards',
-    description: 'Property to be returned clean to a professional standard as at check-in',
+    description: 'Property to be returned in the same condition as at check-in, fair wear and tear excepted',
     category: 'agreement',
     isPremiumOnly: true,
   },
@@ -246,7 +246,7 @@ export const COMPLIANCE_CHECKLIST_INFO: Record<TenancyJurisdiction, {
   },
   scotland: {
     title: 'Pre-Tenancy Compliance Checklist (Scotland)',
-    description: 'Non-contractual guidance covering landlord registration, deposit protection, legionella risk, gas safety, and repairing standard obligations',
+    description: 'Non-contractual guidance covering landlord registration, deposit protection, legionella risk, gas safety, and electrical safety / Repairing Standard obligations',
   },
   'northern-ireland': {
     title: 'Pre-Tenancy Compliance Checklist (Northern Ireland)',
@@ -394,7 +394,7 @@ export function getIncludedSummary(
       ? `A solicitor-grade HMO ${agreementInfo.agreementShortName}`
       : `A solicitor-grade ${agreementInfo.agreementShortName}`,
     tier === 'premium'
-      ? 'Wizard-completed inventory'
+      ? 'Wizard-completed inventory (or blank template if skipped)'
       : 'Structured inventory schedule (ready to complete)',
     'Jurisdiction-specific compliance checklist',
     'All required schedules and signature sections',
@@ -408,7 +408,7 @@ export function getIncludedSummary(
             agreementInfo.agreementName,
             'Definitions & Interpretation',
             ...(isHMO ? ['HMO-specific clauses'] : []),
-            'Guarantor provisions (if added)',
+            'Guarantor provisions (activates when guarantor details are provided)',
             'Late payment & rent review terms',
             'Enhanced subletting controls',
           ]
@@ -425,7 +425,7 @@ export function getIncludedSummary(
         'Property Details',
         'Rent & Deposit',
         'Utilities & Bills',
-        tier === 'premium' ? 'Inventory (wizard-completed)' : 'Inventory (blank template)',
+        tier === 'premium' ? 'Inventory (wizard-completed or blank if skipped)' : 'Inventory (blank template)',
         'House Rules',
       ],
     },
