@@ -13,6 +13,9 @@
 
 import type { CanonicalJurisdiction } from '@/lib/jurisdiction/normalize';
 
+// Re-export for convenience
+export type { CanonicalJurisdiction };
+
 // =============================================================================
 // TYPES
 // =============================================================================
