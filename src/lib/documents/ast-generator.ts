@@ -98,11 +98,17 @@ interface JurisdictionConfig {
     termsSchedule: string;
     inventory: string; // Wizard-completed inventory for premium tier
     inventoryBlank: string; // Blank inventory template for standard tier
+    inventoryStandalone: string; // Standalone inventory PDF template
     complianceChecklist: string; // Jurisdiction-specific pre-tenancy checklist
+    complianceChecklistStandalone: string; // Standalone checklist PDF template
     keySchedule: string;
     maintenanceGuide: string;
     checkoutProcedure: string;
   };
+  /** Document type key for inventory schedule (must match pack-contents) */
+  inventoryDocumentType: string;
+  /** Document type key for compliance checklist (must match pack-contents) */
+  checklistDocumentType: string;
 }
 
 /**
@@ -121,6 +127,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     modelClausesDescription: 'Recommended clauses from official government guidance',
     legalFramework: 'Housing Act 1988',
     jurisdictionLabel: 'England',
+    inventoryDocumentType: 'inventory_schedule',
+    checklistDocumentType: 'pre_tenancy_checklist_england',
     templatePaths: {
       standard: 'uk/england/templates/standard_ast_formatted.hbs',
       premium: 'uk/england/templates/ast_hmo.hbs', // HMO-specific template
@@ -128,7 +136,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'shared/templates/inventory_template.hbs', // Wizard-completed for premium
       inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      inventoryStandalone: '_shared/standalone/inventory_standalone.hbs', // Standalone inventory PDF
       complianceChecklist: '_shared/compliance/pre_tenancy_checklist_england.hbs',
+      complianceChecklistStandalone: '_shared/standalone/checklist_standalone.hbs', // Standalone checklist PDF
       keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
@@ -147,6 +157,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act 2016',
     legalFramework: 'Renting Homes (Wales) Act 2016',
     jurisdictionLabel: 'Wales',
+    inventoryDocumentType: 'inventory_schedule',
+    checklistDocumentType: 'pre_tenancy_checklist_wales',
     templatePaths: {
       standard: 'uk/wales/templates/standard_occupation_contract.hbs',
       premium: 'uk/wales/templates/occupation_contract_hmo.hbs', // HMO-specific template
@@ -154,7 +166,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'shared/templates/inventory_template.hbs', // Wizard-completed for premium
       inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      inventoryStandalone: '_shared/standalone/inventory_standalone.hbs', // Standalone inventory PDF
       complianceChecklist: '_shared/compliance/pre_tenancy_checklist_wales.hbs',
+      complianceChecklistStandalone: '_shared/standalone/checklist_standalone.hbs', // Standalone checklist PDF
       keySchedule: 'uk/wales/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/wales/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/wales/templates/premium/checkout_procedure.hbs',
@@ -173,6 +187,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     modelClausesDescription: 'Scottish Government prescribed terms for PRTs',
     legalFramework: 'Private Housing (Tenancies) (Scotland) Act 2016',
     jurisdictionLabel: 'Scotland',
+    inventoryDocumentType: 'inventory_schedule',
+    checklistDocumentType: 'pre_tenancy_checklist_scotland',
     templatePaths: {
       standard: 'uk/scotland/templates/prt_agreement.hbs',
       premium: 'uk/scotland/templates/prt_agreement_hmo.hbs', // HMO-specific template
@@ -180,7 +196,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/scotland/templates/inventory_template.hbs', // Wizard-completed for premium
       inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      inventoryStandalone: '_shared/standalone/inventory_standalone.hbs', // Standalone inventory PDF
       complianceChecklist: '_shared/compliance/pre_tenancy_checklist_scotland.hbs',
+      complianceChecklistStandalone: '_shared/standalone/checklist_standalone.hbs', // Standalone checklist PDF
       keySchedule: 'uk/scotland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/scotland/templates/premium/checkout_procedure.hbs',
@@ -199,6 +217,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     modelClausesDescription: 'Prescribed statutory terms under NI legislation',
     legalFramework: 'Private Tenancies Act (Northern Ireland) 2022',
     jurisdictionLabel: 'Northern Ireland',
+    inventoryDocumentType: 'inventory_schedule',
+    checklistDocumentType: 'pre_tenancy_checklist_northern_ireland',
     templatePaths: {
       standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
       premium: 'uk/northern-ireland/templates/private_tenancy_hmo.hbs',
@@ -206,7 +226,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/northern-ireland/templates/inventory_template.hbs', // Wizard-completed for premium
       inventoryBlank: '_shared/schedules/schedule_inventory_blank.hbs', // Blank for standard
+      inventoryStandalone: '_shared/standalone/inventory_standalone.hbs', // Standalone inventory PDF
       complianceChecklist: '_shared/compliance/pre_tenancy_checklist_northern_ireland.hbs',
+      complianceChecklistStandalone: '_shared/standalone/checklist_standalone.hbs', // Standalone checklist PDF
       keySchedule: 'uk/northern-ireland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/northern-ireland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/northern-ireland/templates/premium/checkout_procedure.hbs',
@@ -1011,8 +1033,7 @@ export async function generateStandardASTDocuments(
   // Import generateDocument for individual templates
   const { generateDocument } = await import('./generator');
 
-  // BASE PRODUCT: ONLY the Main Agreement - NO supporting documents
-  // This ensures: "Includes the tenancy agreement only"
+  // DOCUMENT 1: Main Agreement
   try {
     const agreementDoc = await generateDocument({
       templatePath: config.templatePaths.standard,
@@ -1034,7 +1055,63 @@ export async function generateStandardASTDocuments(
     throw err;
   }
 
-  console.log(`✅ Generated ${documents.length} document for ${config.jurisdictionLabel} Standard pack (agreement only)`);
+  // DOCUMENT 2: Standalone Inventory & Schedule of Condition (blank template for standard tier)
+  try {
+    const inventoryDoc = await generateDocument({
+      templatePath: config.templatePaths.inventoryStandalone,
+      data: {
+        ...enrichedData,
+        // Standard tier always uses blank template (no wizard data)
+        inventory: null,
+        case_id: caseId || documentId,
+        timestamp: Date.now(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Inventory & Schedule of Condition',
+      description: 'Blank inventory template for manual completion at check-in',
+      category: 'schedule',
+      document_type: config.inventoryDocumentType,
+      html: inventoryDoc.html,
+      pdf: inventoryDoc.pdf,
+      file_name: 'inventory_schedule.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate inventory schedule:`, err);
+    // Don't throw - inventory should never block generation
+    console.warn(`[AST Generator] Inventory generation failed but continuing without it`);
+  }
+
+  // DOCUMENT 3: Standalone Pre-Tenancy Compliance Checklist
+  try {
+    const checklistDoc = await generateDocument({
+      templatePath: config.templatePaths.complianceChecklistStandalone,
+      data: {
+        ...enrichedData,
+        case_id: caseId || documentId,
+        timestamp: Date.now(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: `Pre-Tenancy Compliance Checklist (${config.jurisdictionLabel})`,
+      description: `Non-contractual guidance for landlord compliance in ${config.jurisdictionLabel}`,
+      category: 'checklist',
+      document_type: config.checklistDocumentType,
+      html: checklistDoc.html,
+      pdf: checklistDoc.pdf,
+      file_name: 'compliance_checklist.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate compliance checklist:`, err);
+    // Don't throw - checklist should never block generation
+    console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
+  }
+
+  console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Standard pack`);
 
   return {
     case_id: caseId || documentId,
@@ -1048,7 +1125,11 @@ export async function generateStandardASTDocuments(
  * Generate Premium HMO tenancy agreement as separate documents (unbundled)
  * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  *
- * IMPORTANT: Premium product includes ONLY the HMO-specific tenancy agreement.
+ * PREMIUM PRODUCT includes 3 documents:
+ * 1. HMO-specific tenancy agreement (multi-occupancy clauses)
+ * 2. Inventory & Schedule of Condition (wizard-completed if data available, blank otherwise)
+ * 3. Pre-Tenancy Compliance Checklist (jurisdiction-specific)
+ *
  * HMO clauses cover: multiple occupants, joint liability, shared facilities,
  * fire safety, licensing acknowledgement, house rules, occupancy limits.
  */
@@ -1074,6 +1155,9 @@ export async function generatePremiumASTDocuments(
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
 
+  // Check if wizard-completed inventory data is available
+  const hasInventoryData = data.inventory_attached || data.inventory_provided || false;
+
   const enrichedData = {
     ...data,
     premium: true,
@@ -1085,13 +1169,15 @@ export async function generatePremiumASTDocuments(
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
     current_date: new Date().toISOString().split('T')[0],
+    // Flag for inventory template to know if wizard data is present
+    inventory_wizard_completed: hasInventoryData,
   };
 
   const documents: ASTPackDocument[] = [];
 
   const { generateDocument } = await import('./generator');
 
-  // PREMIUM PRODUCT: ONLY the HMO-specific tenancy agreement
+  // DOCUMENT 1: HMO-specific tenancy agreement
   // Includes HMO-specific clauses for multi-occupancy properties
   try {
     const agreementDoc = await generateDocument({
@@ -1118,7 +1204,67 @@ export async function generatePremiumASTDocuments(
     throw err;
   }
 
-  console.log(`✅ Generated ${documents.length} document for ${config.jurisdictionLabel} HMO Premium pack`);
+  // DOCUMENT 2: Standalone Inventory & Schedule of Condition
+  // Premium tier: Uses wizard-completed data if available, otherwise blank template
+  try {
+    const inventoryDoc = await generateDocument({
+      templatePath: config.templatePaths.inventoryStandalone,
+      data: {
+        ...enrichedData,
+        case_id: caseId || documentId,
+        timestamp: Date.now(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    const inventoryDescription = hasInventoryData
+      ? 'Wizard-completed inventory with property condition details'
+      : 'Blank inventory template for manual completion at check-in';
+
+    documents.push({
+      title: 'Inventory & Schedule of Condition',
+      description: inventoryDescription,
+      category: 'schedule',
+      document_type: config.inventoryDocumentType,
+      html: inventoryDoc.html,
+      pdf: inventoryDoc.pdf,
+      file_name: 'inventory_schedule.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate inventory schedule:`, err);
+    // Don't throw - inventory should never block generation
+    console.warn(`[AST Generator] Inventory generation failed but continuing without it`);
+  }
+
+  // DOCUMENT 3: Standalone Pre-Tenancy Compliance Checklist
+  try {
+    const checklistDoc = await generateDocument({
+      templatePath: config.templatePaths.complianceChecklistStandalone,
+      data: {
+        ...enrichedData,
+        case_id: caseId || documentId,
+        timestamp: Date.now(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: `Pre-Tenancy Compliance Checklist (${config.jurisdictionLabel})`,
+      description: `Non-contractual guidance for landlord compliance in ${config.jurisdictionLabel}`,
+      category: 'checklist',
+      document_type: config.checklistDocumentType,
+      html: checklistDoc.html,
+      pdf: checklistDoc.pdf,
+      file_name: 'compliance_checklist.pdf',
+    });
+  } catch (err) {
+    console.error(`Failed to generate compliance checklist:`, err);
+    // Don't throw - checklist should never block generation
+    console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
+  }
+
+  console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} HMO Premium pack`);
 
   return {
     case_id: caseId || documentId,
