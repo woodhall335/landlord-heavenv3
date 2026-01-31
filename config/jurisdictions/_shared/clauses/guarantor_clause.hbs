@@ -1,0 +1,202 @@
+{{!--
+  ============================================================================
+  GUARANTOR CLAUSE
+  Comprehensive guarantor provisions for premium tenancy agreements
+
+  LEGAL NOTES:
+  - Guarantor should be advised to seek independent legal advice
+  - Guarantee should specify maximum liability cap
+  - Guarantee continues through periodic tenancy unless specified otherwise
+  - For high-value guarantees (>certain threshold), consider deed execution
+
+  USAGE (HTML templates):
+  {{#if guarantor_name}}
+    {{> guarantor_clause}}
+  {{/if}}
+
+  USAGE (Markdown templates):
+  {{#if guarantor_name}}
+    {{> guarantor_clause_markdown}}
+  {{/if}}
+  ============================================================================
+--}}
+
+{{#*inline "guarantor_clause"}}
+<div class="party-details">
+  <div class="party-label">Guarantor</div>
+  <div class="party-info">
+    <strong>Name:</strong> {{guarantor_name}}<br/>
+    <strong>Address:</strong> {{guarantor_address}}<br/>
+    <strong>Email:</strong> {{guarantor_email}}<br/>
+    <strong>Phone:</strong> {{guarantor_phone}}<br/>
+    {{#if guarantor_dob}}<strong>Date of Birth:</strong> {{guarantor_dob}}<br/>{{/if}}
+    {{#if guarantor_relationship}}<strong>Relationship to Tenant:</strong> {{guarantor_relationship}}{{/if}}
+  </div>
+</div>
+
+<div class="legal-notice">
+  <div class="legal-notice-title">Guarantor Agreement</div>
+  <p style="margin-bottom: 15px;">
+    <strong>The Guarantor agrees to act as guarantor for the Tenant(s) named above and undertakes the following obligations:</strong>
+  </p>
+
+  <div style="margin: 20px 0;">
+    <p style="margin: 10px 0;"><strong>1. Joint and Several Liability</strong></p>
+    <p style="margin-left: 20px;">
+      The Guarantor agrees to be jointly and severally liable with the Tenant for all obligations under this Agreement.
+      This means the Guarantor may be held fully responsible for the Tenant's obligations, including the full rent amount,
+      not just a proportionate share.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>2. Rent Payment Guarantee</strong></p>
+    <p style="margin-left: 20px;">
+      If the Tenant fails to pay rent when due, the Guarantor must pay the outstanding rent within 14 days of
+      receiving written demand from the Landlord. This includes any rent arrears, plus interest on late payments
+      at the rate specified in this Agreement.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>3. Damage and Dilapidation</strong></p>
+    <p style="margin-left: 20px;">
+      The Guarantor is liable for the cost of repairing or making good any damage to the Property caused by the Tenant
+      beyond fair wear and tear, including cleaning costs, repair costs, and the cost of replacing damaged fixtures,
+      fittings, or contents.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>4. Breach of Agreement</strong></p>
+    <p style="margin-left: 20px;">
+      If the Tenant breaches any term of this Agreement, the Guarantor must either remedy the breach or compensate
+      the Landlord for any losses suffered as a result, including reasonable legal costs incurred in enforcement.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>5. Continuing Guarantee</strong></p>
+    <p style="margin-left: 20px;">
+      This guarantee continues throughout the tenancy, including any statutory periodic tenancy that arises after
+      the fixed term expires. The guarantee remains valid even if the tenancy terms are varied by agreement between
+      the Landlord and Tenant, provided such variation does not materially increase the Guarantor's liability without
+      their consent.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>6. Maximum Liability</strong></p>
+    <p style="margin-left: 20px;">
+      The Guarantor's total liability under this guarantee is capped at:
+      <strong>{{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve (12) months' rent{{/if}}</strong>,
+      plus reasonable costs of enforcement. This cap does not limit the Guarantor's liability for rent arrears that
+      accrue during the initial fixed term.
+    </p>
+
+    <p style="margin: 10px 0;"><strong>7. Release of Guarantor</strong></p>
+    <p style="margin-left: 20px;">
+      The Guarantor will be released from this guarantee only when:
+      <ul style="margin-left: 20px;">
+        <li>The tenancy has ended and all obligations have been satisfied, OR</li>
+        <li>The Landlord provides written release of the Guarantor, OR</li>
+        <li>A replacement guarantor acceptable to the Landlord has been provided</li>
+      </ul>
+    </p>
+
+    <p style="margin: 10px 0;"><strong>8. Independent Legal Advice</strong></p>
+    <p style="margin-left: 20px;">
+      The Guarantor confirms they have been advised to seek independent legal advice before signing this guarantee
+      and that they understand the full extent of their obligations. By signing, the Guarantor confirms they have
+      either obtained such advice or have chosen not to do so.
+    </p>
+  </div>
+</div>
+
+<div class="warning-box">
+  <div class="warning-title">Important Notice to Guarantor</div>
+  <p>
+    By signing this Agreement as Guarantor, you are making a legally binding financial commitment. You may be required
+    to pay the Tenant's rent and other obligations if they fail to do so. This liability could amount to a substantial
+    sum of money.
+  </p>
+  <p style="margin-top: 10px;">
+    <strong>We strongly recommend that you:</strong>
+  </p>
+  <ul>
+    <li>Read this entire Agreement carefully before signing</li>
+    <li>Seek independent legal advice about the extent of your obligations</li>
+    <li>Consider whether you can afford to meet these obligations if called upon</li>
+    <li>Keep a copy of this signed Agreement for your records</li>
+  </ul>
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  GUARANTOR SIGNATURE BLOCK (HTML)
+  ============================================================================
+--}}
+{{#*inline "guarantor_signature_block"}}
+{{#if guarantor_name}}
+<div class="signature-block" style="margin-top: 30px;">
+  <div class="signature-party">Guarantor</div>
+  <div style="margin-bottom: 20px;">
+    <strong>Name:</strong> {{guarantor_name}}
+  </div>
+  <div class="signature-line"></div>
+  <div class="signature-label">Signature</div>
+  <div class="signature-date">
+    <div class="signature-date-label">Date:</div>
+    <div class="signature-date-line"></div>
+  </div>
+</div>
+{{/if}}
+{{/inline}}
+
+{{!--
+  ============================================================================
+  GUARANTOR CLAUSE (Markdown format for Scotland/NI)
+  ============================================================================
+--}}
+{{#*inline "guarantor_clause_markdown"}}
+## GUARANTOR
+
+**Name:** {{guarantor_name}}
+**Address:** {{guarantor_address}}
+**Email:** {{guarantor_email}}
+**Phone:** {{guarantor_phone}}
+{{#if guarantor_dob}}**Date of Birth:** {{guarantor_dob}}{{/if}}
+{{#if guarantor_relationship}}**Relationship to Tenant:** {{guarantor_relationship}}{{/if}}
+
+---
+
+### Guarantor Agreement
+
+The Guarantor agrees to act as guarantor for the Tenant(s) named above and undertakes the following obligations:
+
+**1. Joint and Several Liability**
+The Guarantor agrees to be jointly and severally liable with the Tenant for all obligations under this Agreement.
+
+**2. Rent Payment Guarantee**
+If the Tenant fails to pay rent when due, the Guarantor must pay the outstanding rent within 14 days of receiving written demand from the Landlord.
+
+**3. Damage and Dilapidation**
+The Guarantor is liable for any damage to the Property beyond fair wear and tear, including cleaning and repair costs.
+
+**4. Breach of Agreement**
+If the Tenant breaches any term, the Guarantor must remedy the breach or compensate the Landlord for losses suffered.
+
+**5. Continuing Guarantee**
+This guarantee continues throughout the tenancy, including any periodic tenancy that arises after the fixed term expires.
+
+**6. Maximum Liability**
+The Guarantor's total liability is capped at {{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve (12) months' rent{{/if}}, plus reasonable enforcement costs.
+
+**7. Independent Legal Advice**
+The Guarantor is advised to seek independent legal advice before signing this guarantee.
+
+---
+
+**IMPORTANT:** By signing as Guarantor, you are making a legally binding financial commitment. You may be required to pay the Tenant's rent and other obligations if they fail to do so.
+
+---
+
+### Guarantor Signature
+
+Signed: _________________________
+
+Name: {{guarantor_name}}
+
+Date: _________________________
+{{/inline}}
