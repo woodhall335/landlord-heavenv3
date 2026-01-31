@@ -480,6 +480,14 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
 // ============================================
 
 /**
+ * Options for tenancy agreement document generation
+ */
+export interface ASTDocumentOptions {
+  /** Was inventory data completed via wizard? */
+  hasInventoryData?: boolean;
+}
+
+/**
  * TENANCY AGREEMENT DOCUMENTS
  *
  * Product tiers:
@@ -497,8 +505,13 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
  * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
  * - NI: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
  */
-export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premium'): DocumentInfo[] {
+export function getASTDocuments(
+  jurisdiction: string,
+  tier: 'standard' | 'premium',
+  options: ASTDocumentOptions = {}
+): DocumentInfo[] {
   const documents: DocumentInfo[] = [];
+  const { hasInventoryData } = options;
 
   // Agreement name based on jurisdiction
   const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
@@ -567,17 +580,28 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
     });
   }
 
-  // 2. Inventory Schedule - tier-specific
+  // 2. Inventory Schedule - tier and context-specific
+  // Standard: always blank template
+  // Premium + hasInventoryData: wizard-completed
+  // Premium + no data: ready to complete
+  const inventoryTitle = tier === 'standard'
+    ? 'Inventory & Schedule of Condition (Blank Template)'
+    : hasInventoryData
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Ready to Complete)';
+
+  const inventoryDescription = tier === 'standard'
+    ? 'Included as Schedule 4 inside the tenancy agreement (blank template)'
+    : hasInventoryData
+      ? 'Included as Schedule 4 inside the tenancy agreement (wizard-completed)'
+      : 'Included as Schedule 4 inside the tenancy agreement (ready to complete)';
+
   documents.push({
     id: 'inventory-schedule',
-    title: tier === 'premium'
-      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
-      : 'Inventory & Schedule of Condition (Blank Template)',
-    description: tier === 'premium'
-      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
-      : 'Structured blank inventory template ready for manual completion at check-in',
+    title: inventoryTitle,
+    description: inventoryDescription,
     icon: 'checklist',
-    pages: tier === 'premium' ? '3-8 pages' : '4-6 pages',
+    pages: tier === 'premium' && hasInventoryData ? '3-8 pages' : '4-6 pages',
     category: 'Schedule',
   });
 

@@ -40,6 +40,8 @@ export interface GetPackContentsArgs {
   has_arrears?: boolean;
   /** Whether arrears schedule is included */
   include_arrears_schedule?: boolean;
+  /** Whether inventory data was completed via wizard (for tenancy agreements) */
+  hasInventoryData?: boolean;
 }
 
 // =============================================================================
@@ -271,7 +273,7 @@ function getEnglandMoneyClaimContents(): PackItem[] {
  * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
-function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
+function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
   const items: PackItem[] = [];
 
   // Main Agreement
@@ -293,13 +295,26 @@ function getEnglandASTContents(tier: 'standard' | 'premium'): PackItem[] {
     });
   }
 
-  // Inventory Schedule - tier-specific behaviour
+  // Inventory Schedule - tier and context-specific behaviour
+  // Standard: always blank template
+  // Premium + hasInventoryData: wizard-completed
+  // Premium + no data: ready to complete
+  const inventoryTitle = tier === 'standard'
+    ? 'Inventory & Schedule of Condition (Blank Template)'
+    : hasInventoryData
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Ready to Complete)';
+
+  const inventoryDescription = tier === 'standard'
+    ? 'Included as Schedule 4 inside the tenancy agreement (blank template)'
+    : hasInventoryData
+      ? 'Included as Schedule 4 inside the tenancy agreement (wizard-completed)'
+      : 'Included as Schedule 4 inside the tenancy agreement (ready to complete)';
+
   items.push({
     key: 'inventory_schedule',
-    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
-    description: tier === 'premium'
-      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
-      : 'Structured blank inventory template ready for manual completion at check-in',
+    title: inventoryTitle,
+    description: inventoryDescription,
     category: 'Tenancy agreement',
     required: true,
   });
@@ -468,7 +483,7 @@ function getWalesCompletePackContents(args: GetPackContentsArgs): PackItem[] {
  * - Compliance Checklist: Always included (Wales-specific, non-contractual guidance)
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
-function getWalesSOCContents(tier: 'standard' | 'premium'): PackItem[] {
+function getWalesSOCContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
   const items: PackItem[] = [];
 
   // Main Agreement
@@ -490,13 +505,23 @@ function getWalesSOCContents(tier: 'standard' | 'premium'): PackItem[] {
     });
   }
 
-  // Inventory Schedule - tier-specific behaviour
+  // Inventory Schedule - tier and context-specific behaviour
+  const inventoryTitle = tier === 'standard'
+    ? 'Inventory & Schedule of Condition (Blank Template)'
+    : hasInventoryData
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Ready to Complete)';
+
+  const inventoryDescription = tier === 'standard'
+    ? 'Included as Schedule 4 inside the occupation contract (blank template)'
+    : hasInventoryData
+      ? 'Included as Schedule 4 inside the occupation contract (wizard-completed)'
+      : 'Included as Schedule 4 inside the occupation contract (ready to complete)';
+
   items.push({
     key: 'inventory_schedule',
-    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
-    description: tier === 'premium'
-      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
-      : 'Structured blank inventory template ready for manual completion at check-in',
+    title: inventoryTitle,
+    description: inventoryDescription,
     category: 'Tenancy agreement',
     required: true,
   });
@@ -669,7 +694,7 @@ function getScotlandMoneyClaimContents(): PackItem[] {
  * - Compliance Checklist: Always included (Scotland-specific, non-contractual guidance)
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
-function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
+function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
   const items: PackItem[] = [];
 
   // Main Agreement
@@ -691,13 +716,23 @@ function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
     });
   }
 
-  // Inventory Schedule - tier-specific behaviour
+  // Inventory Schedule - tier and context-specific behaviour
+  const inventoryTitle = tier === 'standard'
+    ? 'Inventory & Schedule of Condition (Blank Template)'
+    : hasInventoryData
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Ready to Complete)';
+
+  const inventoryDescription = tier === 'standard'
+    ? 'Included as Schedule 4 inside the tenancy agreement (blank template)'
+    : hasInventoryData
+      ? 'Included as Schedule 4 inside the tenancy agreement (wizard-completed)'
+      : 'Included as Schedule 4 inside the tenancy agreement (ready to complete)';
+
   items.push({
     key: 'inventory_schedule',
-    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
-    description: tier === 'premium'
-      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
-      : 'Structured blank inventory template ready for manual completion at check-in',
+    title: inventoryTitle,
+    description: inventoryDescription,
     category: 'Tenancy agreement',
     required: true,
   });
@@ -738,7 +773,7 @@ function getScotlandPRTContents(tier: 'standard' | 'premium'): PackItem[] {
  * - Compliance Checklist: Always included (NI-specific, non-contractual guidance)
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
-function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium'): PackItem[] {
+function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
   const items: PackItem[] = [];
 
   // Main Agreement
@@ -760,13 +795,23 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium'): PackIt
     });
   }
 
-  // Inventory Schedule - tier-specific behaviour
+  // Inventory Schedule - tier and context-specific behaviour
+  const inventoryTitle = tier === 'standard'
+    ? 'Inventory & Schedule of Condition (Blank Template)'
+    : hasInventoryData
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Ready to Complete)';
+
+  const inventoryDescription = tier === 'standard'
+    ? 'Included as Schedule 4 inside the tenancy agreement (blank template)'
+    : hasInventoryData
+      ? 'Included as Schedule 4 inside the tenancy agreement (wizard-completed)'
+      : 'Included as Schedule 4 inside the tenancy agreement (ready to complete)';
+
   items.push({
     key: 'inventory_schedule',
-    title: tier === 'premium' ? 'Inventory & Schedule of Condition (Wizard-Completed)' : 'Inventory & Schedule of Condition (Blank Template)',
-    description: tier === 'premium'
-      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
-      : 'Structured blank inventory template ready for manual completion at check-in',
+    title: inventoryTitle,
+    description: inventoryDescription,
     category: 'Tenancy agreement',
     required: true,
   });
@@ -794,7 +839,7 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium'): PackIt
  * @returns Array of PackItem objects describing included documents
  */
 export function getPackContents(args: GetPackContentsArgs): PackItem[] {
-  const { product, jurisdiction, route } = args;
+  const { product, jurisdiction, hasInventoryData } = args;
 
   // Normalize jurisdiction
   const jur = jurisdiction.toLowerCase();
@@ -809,9 +854,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'money_claim':
         return getEnglandMoneyClaimContents();
       case 'ast_standard':
-        return getEnglandASTContents('standard');
+        return getEnglandASTContents('standard', hasInventoryData);
       case 'ast_premium':
-        return getEnglandASTContents('premium');
+        return getEnglandASTContents('premium', hasInventoryData);
       default:
         return [];
     }
@@ -828,9 +873,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
         // Wales uses same forms as England
         return getEnglandMoneyClaimContents();
       case 'ast_standard':
-        return getWalesSOCContents('standard');
+        return getWalesSOCContents('standard', hasInventoryData);
       case 'ast_premium':
-        return getWalesSOCContents('premium');
+        return getWalesSOCContents('premium', hasInventoryData);
       default:
         return [];
     }
@@ -847,9 +892,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'money_claim': // Fallback for generic money_claim in Scotland
         return getScotlandMoneyClaimContents();
       case 'ast_standard':
-        return getScotlandPRTContents('standard');
+        return getScotlandPRTContents('standard', hasInventoryData);
       case 'ast_premium':
-        return getScotlandPRTContents('premium');
+        return getScotlandPRTContents('premium', hasInventoryData);
       default:
         return [];
     }
@@ -859,9 +904,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
   if (jur === 'northern-ireland') {
     switch (product) {
       case 'ast_standard':
-        return getNorthernIrelandTenancyContents('standard');
+        return getNorthernIrelandTenancyContents('standard', hasInventoryData);
       case 'ast_premium':
-        return getNorthernIrelandTenancyContents('premium');
+        return getNorthernIrelandTenancyContents('premium', hasInventoryData);
       // Eviction and money claim not supported in NI yet
       case 'notice_only':
       case 'complete_pack':

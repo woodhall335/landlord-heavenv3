@@ -366,17 +366,30 @@ export default function CaseDetailPage() {
     if (!caseDetails) return;
 
     try {
+      const facts = caseDetails.collected_facts || {};
+
       // Determine product from case_type
       const product = caseDetails.case_type === 'money_claim'
         ? (caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim')
         : caseDetails.case_type === 'eviction'
-          ? (caseDetails.collected_facts?.__meta?.product || 'complete_pack')
-          : caseDetails.case_type;
+          ? (facts.__meta?.product || 'complete_pack')
+          : caseDetails.case_type === 'tenancy_agreement'
+            ? (facts.tier === 'premium' ? 'ast_premium' : 'ast_standard')
+            : caseDetails.case_type;
+
+      // Compute hasInventoryData for tenancy agreements
+      const inventoryData = facts.inventory || {};
+      const hasInventoryData = Boolean(
+        inventoryData.rooms?.length > 0 ||
+        facts.inventory_attached ||
+        facts.inventory_provided
+      );
 
       const contents = getPackContents({
         product,
-        jurisdiction: caseDetails.jurisdiction as 'england' | 'wales' | 'scotland',
-        route: caseDetails.collected_facts?.eviction_route,
+        jurisdiction: caseDetails.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
+        route: facts.eviction_route,
+        hasInventoryData,
       });
       setPackContents(contents);
     } catch (err) {
@@ -701,6 +714,15 @@ export default function CaseDetailPage() {
       doc => doc.document_type === 'arrears_schedule'
     );
 
+    // Check if inventory data was completed via wizard (for tenancy agreements)
+    // Inventory data exists if inventory.rooms array has items
+    const inventoryData = facts.inventory || {};
+    const hasInventoryData = Boolean(
+      inventoryData.rooms?.length > 0 ||
+      facts.inventory_attached ||
+      facts.inventory_provided
+    );
+
     return {
       product,
       jurisdiction: caseDetails.jurisdiction,
@@ -709,6 +731,7 @@ export default function CaseDetailPage() {
       hasArrears,
       includeArrearsSchedule,
       grounds: facts.ground_codes || null,
+      hasInventoryData,
     };
   };
 
@@ -724,6 +747,7 @@ export default function CaseDetailPage() {
       grounds: params.grounds,
       has_arrears: params.hasArrears,
       include_arrears_schedule: params.includeArrearsSchedule,
+      hasInventoryData: params.hasInventoryData,
     });
   };
 
