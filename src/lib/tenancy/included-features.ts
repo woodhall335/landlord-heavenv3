@@ -269,6 +269,7 @@ export function getIncludedFeatures(
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
   const complianceInfo = COMPLIANCE_CHECKLIST_INFO[jurisdiction];
   const isHMO = context?.isHMO ?? false;
+  const hasInventoryData = context?.hasInventoryData ?? false;
 
   const features: IncludedFeature[] = [];
 
@@ -298,12 +299,18 @@ export function getIncludedFeatures(
   // 3. All common schedules
   features.push(...COMMON_SCHEDULES);
 
-  // 4. Inventory schedule (with tier-specific variant)
+  // 4. Inventory schedule (with tier and context-specific variant)
+  let inventoryDescription: string;
+  if (tier === 'premium') {
+    inventoryDescription = hasInventoryData
+      ? 'Wizard-completed inventory'
+      : 'Inventory schedule ready to complete (fill in via wizard or manually)';
+  } else {
+    inventoryDescription = INVENTORY_SCHEDULE.tierVariant!.standard;
+  }
   features.push({
     ...INVENTORY_SCHEDULE,
-    description: tier === 'premium'
-      ? INVENTORY_SCHEDULE.tierVariant!.premium
-      : INVENTORY_SCHEDULE.tierVariant!.standard,
+    description: inventoryDescription,
   });
 
   // 5. Subletting clause - included in BOTH tiers with tier-specific wording
@@ -387,15 +394,24 @@ export function getIncludedSummary(
 ): IncludedSummary {
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
   const isHMO = context?.isHMO ?? false;
+  const hasInventoryData = context?.hasInventoryData ?? false;
   const isHMOAgreement = tier === 'premium' && isHMO;
+
+  // Inventory headline based on tier and context
+  let inventoryHeadline: string;
+  if (tier === 'premium') {
+    inventoryHeadline = hasInventoryData
+      ? 'Wizard-completed inventory'
+      : 'Inventory schedule ready to complete (fill in via wizard or manually)';
+  } else {
+    inventoryHeadline = 'Structured inventory schedule (ready to complete)';
+  }
 
   const headline: string[] = [
     isHMOAgreement
       ? `A solicitor-grade HMO ${agreementInfo.agreementShortName}`
       : `A solicitor-grade ${agreementInfo.agreementShortName}`,
-    tier === 'premium'
-      ? 'Wizard-completed inventory (or blank template if skipped)'
-      : 'Structured inventory schedule (ready to complete)',
+    inventoryHeadline,
     'Jurisdiction-specific compliance checklist',
     'All required schedules and signature sections',
   ];
@@ -425,7 +441,9 @@ export function getIncludedSummary(
         'Property Details',
         'Rent & Deposit',
         'Utilities & Bills',
-        tier === 'premium' ? 'Inventory (wizard-completed or blank if skipped)' : 'Inventory (blank template)',
+        tier === 'premium'
+          ? (hasInventoryData ? 'Inventory (wizard-completed)' : 'Inventory (ready to complete)')
+          : 'Inventory (blank template)',
         'House Rules',
       ],
     },
@@ -438,11 +456,17 @@ export function getIncludedSummary(
     },
   ];
 
-  const tierDifference = tier === 'premium'
-    ? isHMO
-      ? 'Includes wizard-completed inventory, HMO clauses, guarantor provisions, and premium terms'
-      : 'Includes wizard-completed inventory, guarantor provisions, enhanced subletting controls, and premium terms'
-    : 'Includes blank inventory template for manual completion';
+  let tierDifference: string;
+  if (tier === 'premium') {
+    const inventoryNote = hasInventoryData
+      ? 'wizard-completed inventory'
+      : 'inventory schedule (ready to complete)';
+    tierDifference = isHMO
+      ? `Includes ${inventoryNote}, HMO clauses, guarantor provisions, and premium terms`
+      : `Includes ${inventoryNote}, guarantor provisions, enhanced subletting controls, and premium terms`;
+  } else {
+    tierDifference = 'Includes blank inventory template for manual completion';
+  }
 
   return { headline, details, tierDifference };
 }
