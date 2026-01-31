@@ -9,6 +9,10 @@ import { getPackContents } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import {
+  resolveEffectiveJurisdiction,
+  JurisdictionResolutionError,
+} from '@/lib/tenancy/jurisdiction';
+import {
   validateSection21ForCheckout,
   isSection21Case,
   type Section21MissingConfirmation,
@@ -190,27 +194,42 @@ export async function fulfillOrder({
   const hasArrears = wizardFacts.has_arrears || wizardFacts.arrears_claimed;
 
   // ===========================================================================
-  // CANONICAL JURISDICTION RESOLUTION
-  // Matches behavior in /api/wizard/analyze to handle Wales cases where DB
-  // jurisdiction is stored as "england" but property.country is "wales".
-  // This ensures Wales-specific validation and ground_codes derivation runs.
+  // CANONICAL JURISDICTION RESOLUTION - SINGLE SOURCE OF TRUTH
+  // Uses resolveEffectiveJurisdiction() which NEVER defaults to England.
+  // This ensures Wales/Scotland/NI cases always get their correct documents.
   // ===========================================================================
   const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
 
-  let canonicalJurisdiction =
-    normalizeJurisdiction((caseData as any).jurisdiction) ||
-    normalizeJurisdiction((caseData as any).property_location) ||
-    normalizeJurisdiction(caseFacts.property?.country as string | null);
-
-  // Critical fix: If jurisdiction is 'england' but property.country is 'wales',
-  // treat as Wales. This matches /api/wizard/analyze behavior.
-  if (canonicalJurisdiction === 'england' && caseFacts.property?.country === 'wales') {
-    console.log('[fulfillment] Correcting jurisdiction: DB has "england" but property.country is "wales"');
-    canonicalJurisdiction = 'wales';
+  let jurisdiction: string;
+  try {
+    const resolved = resolveEffectiveJurisdiction({
+      caseData: {
+        jurisdiction: (caseData as any).jurisdiction,
+        property_location: (caseData as any).property_location,
+      },
+      wizardFacts: wizardFacts as any,
+      caseFacts,
+      isPurchased: true, // This is post-purchase fulfillment
+      context: `fulfillment:${caseId}:${productType}`,
+    });
+    jurisdiction = resolved.jurisdiction;
+    console.log(
+      `[fulfillment] Resolved jurisdiction: "${jurisdiction}" from source: "${resolved.source}" for case ${caseId}`
+    );
+  } catch (error) {
+    if (error instanceof JurisdictionResolutionError) {
+      // This is a critical error - we cannot generate documents without jurisdiction
+      console.error(
+        `[fulfillment] CRITICAL: Failed to resolve jurisdiction for case ${caseId}. ` +
+        `Sources checked: ${error.sources.join(', ')}`
+      );
+      throw new Error(
+        `Cannot generate documents: jurisdiction not set on case. ` +
+        `Please contact support. Case ID: ${caseId}`
+      );
+    }
+    throw error;
   }
-
-  // Fallback to the raw DB value if normalization fails (shouldn't happen)
-  const jurisdiction = canonicalJurisdiction || (caseData as any).jurisdiction || 'england';
 
   // ==========================================================================
   // SECTION 8 COMPLETE PACK: Auto-normalize signature_date to notice_expiry_date

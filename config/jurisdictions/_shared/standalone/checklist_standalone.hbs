@@ -231,7 +231,8 @@
       {{#if (eq jurisdiction "wales")}}Wales{{/if}}
       {{#if (eq jurisdiction "scotland")}}Scotland{{/if}}
       {{#if (eq jurisdiction "northern-ireland")}}Northern Ireland{{/if}}
-      {{#unless jurisdiction}}England{{/unless}}
+      {{!-- CRITICAL: Never default to England - missing jurisdiction is a bug that must be fixed --}}
+      {{#unless jurisdiction}}<span style="background-color: #dc3545;">ERROR: Jurisdiction not set</span>{{/unless}}
     </div>
     {{#if property_address}}
     <div class="property-address">{{property_address}}</div>
