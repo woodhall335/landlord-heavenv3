@@ -360,12 +360,21 @@
       height: 30px;
     }
 
+    /* CRITICAL: Witness section must NEVER split across pages */
     .witness-section {
       margin-top: 40px;
       padding: 20px;
       background: #fffaf0;
       border: 1px solid #ed8936;
       border-radius: 8px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      min-height: auto;
+    }
+
+    .witness-block {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .witness-title {
@@ -508,7 +517,7 @@
       England &mdash; Professional Edition
     </div>
     <div class="agreement-date">
-      This Agreement is dated: <strong>{{agreement_date}}</strong>
+      This Agreement is dated: <strong>{{formatUKDate agreement_date}}</strong>
     </div>
   </div>
 
@@ -569,7 +578,7 @@
       {{#each tenants}}
       <div style="margin-bottom: 15px;">
         <strong>Tenant {{add @index 1}}:</strong> {{this.full_name}}<br/>
-        <strong>Date of Birth:</strong> {{this.dob}}<br/>
+        <strong>Date of Birth:</strong> {{formatUKDate this.dob}}<br/>
         <strong>Email:</strong> {{this.email}}<br/>
         <strong>Phone:</strong> {{this.phone}}
       </div>
@@ -597,7 +606,7 @@
       <strong>Address:</strong> {{guarantor_address}}<br/>
       <strong>Email:</strong> {{guarantor_email}}<br/>
       <strong>Phone:</strong> {{guarantor_phone}}<br/>
-      <strong>Date of Birth:</strong> {{guarantor_dob}}<br/>
+      <strong>Date of Birth:</strong> {{formatUKDate guarantor_dob}}<br/>
       <strong>Relationship to Tenant:</strong> {{guarantor_relationship}}
     </div>
   </div>
@@ -686,7 +695,7 @@
     <div class="clause">
       <span class="clause-number">1A.1</span>
       <strong>Landlord's Confirmation:</strong> The Landlord confirms that Right to Rent checks have been completed
-      for all Tenants named in this Agreement on <strong>{{right_to_rent_check_date}}</strong>.
+      for all Tenants named in this Agreement on <strong>{{formatUKDate right_to_rent_check_date}}</strong>.
     </div>
 
     <div class="clause">
@@ -807,13 +816,13 @@
 
     <div class="clause">
       <span class="clause-number">3.1</span>
-      <strong>Tenancy Start Date:</strong> {{tenancy_start_date}}
+      <strong>Tenancy Start Date:</strong> {{formatUKDate tenancy_start_date}}
     </div>
 
     {{#if is_fixed_term}}
     <div class="clause">
       <span class="clause-number">3.2</span>
-      <strong>Tenancy End Date:</strong> {{tenancy_end_date}} at 12:00 noon
+      <strong>Tenancy End Date:</strong> {{formatUKDate tenancy_end_date}} at 12:00 noon
     </div>
 
     <div class="clause">
@@ -903,7 +912,7 @@
 
     <div class="clause">
       <span class="clause-number">4.3</span>
-      The first payment of £{{rent_amount}} is due on or before {{tenancy_start_date}}.
+      The first payment of £{{rent_amount}} is due on or before {{formatUKDate tenancy_start_date}}.
     </div>
   </div>
 
@@ -1191,11 +1200,12 @@
     <div class="subsection-title">🚫 Subletting & Assignment (Premium Enhanced)</div>
 
     <div class="legal-notice">
-      <div class="legal-notice-title">⚠️ STRICTLY PROHIBITED - Criminal Offense</div>
+      <div class="legal-notice-title">⚠️ Subletting Strictly Prohibited</div>
       <p>
-        Subletting all or part of the Property without written consent is a serious breach of this Agreement and may
-        constitute a criminal offense under the Prevention of Social Housing Fraud Act 2013 (if applicable).
-        Unauthorized subletting can result in immediate eviction and criminal prosecution.
+        Subletting all or part of the Property without prior written consent is a serious breach of this Agreement.
+        Unauthorised subletting is grounds for seeking possession under Ground 12 of Schedule 2 to the Housing Act 1988.
+        In certain circumstances (e.g., social housing fraud), unauthorised subletting may also constitute a criminal
+        offence. The Tenant should be aware that any breach may result in eviction proceedings and potential civil liability.
       </p>
     </div>
 
@@ -1424,10 +1434,10 @@
     <!-- CLAUSE:PROFESSIONAL_CLEANING -->
     <div class="clause">
       <span class="clause-number">6A.19</span>
-      <strong>Professional Cleaning:</strong> {{#if professional_cleaning_required}}The Tenant MUST arrange professional
-      cleaning by a recognized company at the end of the tenancy. Receipts must be provided to the Landlord.
-      {{else}}The Tenant is strongly advised to arrange professional cleaning to ensure the Property is returned in
-      acceptable condition and avoid deposit deductions.{{/if}}
+      <strong>Cleaning Standard:</strong> The Tenant must return the Property at the end of the tenancy in the same
+      standard of cleanliness as at the commencement of this tenancy, fair wear and tear excepted. Professional cleaning
+      is not mandatory but may assist the Tenant in meeting this standard. The Tenant is encouraged to refer to the
+      check-in inventory and photographs when assessing the required cleaning standard.
     </div>
 
     <div class="warning-box">
@@ -1456,9 +1466,9 @@
 
     <div class="clause">
       <span class="clause-number">6A.20</span>
-      <strong>Room License Agreement:</strong> {{#if is_hmo}}This Agreement grants the Tenant a license to occupy the
-      room(s) specified in Section 2, together with shared use of communal facilities. This is NOT an exclusive tenancy
-      of the entire Property.{{else}}This Agreement includes shared use of communal areas as specified below.{{/if}}
+      <strong>HMO Occupancy:</strong> {{#if is_hmo}}The Tenant has exclusive occupation of the room(s) specified in Section 2
+      as their only or principal home, together with shared use of the communal facilities described below. This is an
+      Assured Shorthold Tenancy under the Housing Act 1988.{{else}}This Agreement includes shared use of communal areas as specified below.{{/if}}
     </div>
 
     <div class="clause">
@@ -1541,7 +1551,7 @@
     <div class="clause">
       <span class="clause-number">6A.27</span>
       <strong>HMO Licensing:</strong> This Property is licensed as a House in Multiple Occupation under the Housing Act 2004.
-      The Landlord holds a valid HMO license (license number: _____________). The Property complies with HMO standards including:
+      The Landlord holds a valid HMO licence (licence number: {{#if hmo_licence_number}}<strong>{{hmo_licence_number}}</strong>{{else}}<span style="background: #fff3cd; padding: 2px 6px; border: 1px solid #ffc107;">[TO BE COMPLETED BEFORE SIGNING]</span>{{/if}}). The Property complies with HMO standards including:
       <ul>
         <li>Minimum room sizes (6.51m² for single occupancy, 10.22m² for double occupancy)</li>
         <li>Adequate kitchen and bathroom facilities for the number of occupants</li>
@@ -1693,9 +1703,10 @@
 
     <div class="clause">
       <span class="clause-number">7.8</span>
-      <strong>Professional Cleaning:</strong> At the end of the tenancy, the Tenant must arrange professional carpet
-      and upholstery cleaning by a recognized company to remove pet hair, odors, and stains. Receipts must be provided
-      to the Landlord. The cost of this cleaning cannot be deducted from the deposit without prior agreement.
+      <strong>Pet Cleaning Responsibility:</strong> At the end of the tenancy, the Tenant must ensure the Property is
+      returned to the same standard of cleanliness as at commencement, taking particular care to remove pet hair, odours,
+      and any pet-related stains from carpets, upholstery, and other surfaces. Professional cleaning may assist in meeting
+      this standard but is not mandatory. Any damage caused by pets beyond fair wear and tear remains the Tenant's responsibility.
     </div>
 
     <div class="clause">
@@ -1816,7 +1827,7 @@
     <div class="clause">
       <span class="clause-number">8.1</span>
       <strong>Provision of Guide:</strong> The Landlord confirms that the latest version of the "How to Rent" guide
-      (dated {{how_to_rent_version}}) has been provided to the Tenant on {{how_to_rent_provision_date}}.
+      {{#if how_to_rent_version}}(dated {{how_to_rent_version}}){{else}}(latest version){{/if}} has been provided to the Tenant{{#if how_to_rent_provision_date}} on {{formatUKDate how_to_rent_provision_date}}{{else}} <span style="background: #fff3cd; padding: 2px 6px; border: 1px solid #ffc107;">[DATE TO BE COMPLETED BEFORE SIGNING]</span>{{/if}}.
     </div>
 
     <div class="clause">
@@ -1969,19 +1980,21 @@
     </div>
     {{/if}}
 
-    <!-- WITNESS SECTION -->
-    <div class="witness-section">
-      <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
-      <p style="margin-bottom: 20px; font-size: 10pt;">
-        While not legally required for assured shorthold tenancies, having signatures witnessed adds an extra layer of
-        authenticity and can be useful if the agreement is ever disputed.
-      </p>
+    <!-- WITNESS SECTION - MUST NOT SPLIT ACROSS PAGES -->
+    <div class="witness-section" style="page-break-inside: avoid; break-inside: avoid; page-break-before: auto;">
+      <div class="witness-block" style="page-break-inside: avoid; break-inside: avoid;">
+        <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
+        <p style="margin-bottom: 20px; font-size: 10pt;">
+          While not legally required for assured shorthold tenancies, having signatures witnessed adds an extra layer of
+          authenticity and can be useful if the agreement is ever disputed.
+        </p>
 
-      <div class="party-info">
-        <strong>Witness Name:</strong> _________________________________<br/><br/>
-        <strong>Witness Address:</strong> _________________________________<br/><br/>
-        <strong>Witness Signature:</strong> _________________________________<br/><br/>
-        <strong>Date:</strong> _________________________________
+        <div class="party-info" style="page-break-inside: avoid; break-inside: avoid;">
+          <strong>Witness Name:</strong> _________________________________<br/><br/>
+          <strong>Witness Address:</strong> _________________________________<br/><br/>
+          <strong>Witness Signature:</strong> _________________________________<br/><br/>
+          <strong>Date:</strong> _________________________________
+        </div>
       </div>
     </div>
   </div>
@@ -1991,10 +2004,10 @@
     <p>
       <strong>Document Reference:</strong> AST-PREMIUM-{{case_id}}<br/>
       <strong>Generated by:</strong> Landlord Heaven Professional Services<br/>
-      <strong>Date Generated:</strong> {{current_date}}<br/>
+      <strong>Date Generated:</strong> {{formatUKDate current_date}}<br/>
       <br/>
       This agreement complies with the Housing Act 1988 (as amended), Deregulation Act 2015, Tenant Fees Act 2019,
-      and all applicable England residential tenancy legislation current as of {{current_date}}.
+      and all applicable England residential tenancy legislation current as of {{formatUKDate current_date}}.
       This AST applies to England only and does not apply to Wales.
     </p>
   </div>

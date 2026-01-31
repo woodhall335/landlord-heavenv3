@@ -276,6 +276,29 @@
     margin-left: 10pt;
   }
 
+  /* ===== WITNESS SECTION ===== */
+  /* CRITICAL: Witness section must NEVER split across pages */
+  .witness-section {
+    margin-top: 30pt;
+    padding: 15pt;
+    background: #fffef5;
+    border: 1pt solid #e0c070;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .witness-block {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .witness-title {
+    font-weight: bold;
+    font-size: 10pt;
+    margin-bottom: 10pt;
+    text-transform: uppercase;
+  }
+
   /* ===== LEGAL NOTICES ===== */
   .legal-notice {
     border: 1pt solid #333;
@@ -352,7 +375,9 @@
     .signature-block,
     .legal-notice,
     .schedule-header,
-    .doc-footer {
+    .doc-footer,
+    .witness-section,
+    .witness-block {
       page-break-inside: avoid;
     }
 
