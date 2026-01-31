@@ -720,6 +720,14 @@ export default function WizardPreviewPage() {
 
     const includeArrearsSchedule = shouldIncludeArrearsSchedule();
 
+    // Compute hasInventoryData for tenancy agreements
+    const inventoryData = facts.inventory || {};
+    const hasInventoryData = Boolean(
+      inventoryData.rooms?.length > 0 ||
+      facts.inventory_attached ||
+      facts.inventory_provided
+    );
+
     switch (product) {
       case 'notice_only':
         baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute, { includeArrearsSchedule });
@@ -733,17 +741,17 @@ export default function WizardPreviewPage() {
         break;
       case 'ast_standard':
       case 'tenancy_agreement':
-        baseDocuments = getASTDocuments(jurisdiction, 'standard');
+        baseDocuments = getASTDocuments(jurisdiction, 'standard', { hasInventoryData });
         break;
       case 'ast_premium':
-        baseDocuments = getASTDocuments(jurisdiction, 'premium');
+        baseDocuments = getASTDocuments(jurisdiction, 'premium', { hasInventoryData });
         break;
       default:
         // Infer from case type
         if (caseType === 'money_claim') {
           baseDocuments = getMoneyClaimDocuments(jurisdiction);
         } else if (caseType === 'tenancy_agreement') {
-          baseDocuments = getASTDocuments(jurisdiction, 'standard');
+          baseDocuments = getASTDocuments(jurisdiction, 'standard', { hasInventoryData });
         } else {
           baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
         }

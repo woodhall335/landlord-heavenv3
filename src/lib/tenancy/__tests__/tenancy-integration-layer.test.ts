@@ -57,6 +57,7 @@ describe('Tenancy Agreement Integration Layer', () => {
           });
 
           it(`should show correct inventory type for ${tier}`, () => {
+            // Without hasInventoryData context, premium shows "Ready to Complete"
             const contents = getPackContents({
               product: tier === 'premium' ? 'ast_premium' : 'ast_standard',
               jurisdiction,
@@ -65,11 +66,25 @@ describe('Tenancy Agreement Integration Layer', () => {
             const inventoryItem = contents.find(item => item.key === 'inventory_schedule');
 
             if (tier === 'premium') {
-              expect(inventoryItem?.title).toContain('Wizard-Completed');
+              // Default (no hasInventoryData) shows "Ready to Complete"
+              expect(inventoryItem?.title).toContain('Ready to Complete');
             } else {
               expect(inventoryItem?.title).toContain('Blank');
             }
           });
+
+          if (tier === 'premium') {
+            it(`should show "Wizard-Completed" inventory when hasInventoryData is true`, () => {
+              const contents = getPackContents({
+                product: 'ast_premium',
+                jurisdiction,
+                hasInventoryData: true,
+              });
+
+              const inventoryItem = contents.find(item => item.key === 'inventory_schedule');
+              expect(inventoryItem?.title).toContain('Wizard-Completed');
+            });
+          }
         });
       });
     });
@@ -109,16 +124,26 @@ describe('Tenancy Agreement Integration Layer', () => {
           });
 
           it(`should show correct inventory type in ${tier} document config`, () => {
+            // Without hasInventoryData context, premium shows "Ready to Complete"
             const documents = getASTDocuments(jurisdiction, tier);
-
             const inventoryDoc = documents.find(d => d.id === 'inventory-schedule');
 
             if (tier === 'premium') {
-              expect(inventoryDoc?.title).toContain('Wizard-Completed');
+              // Default (no context) shows "Ready to Complete"
+              expect(inventoryDoc?.title).toContain('Ready to Complete');
             } else {
               expect(inventoryDoc?.title).toContain('Blank');
             }
           });
+
+          if (tier === 'premium') {
+            it(`should show "Wizard-Completed" when hasInventoryData is true`, () => {
+              const documents = getASTDocuments(jurisdiction, tier, { hasInventoryData: true });
+              const inventoryDoc = documents.find(d => d.id === 'inventory-schedule');
+              expect(inventoryDoc?.title).toContain('Wizard-Completed');
+              expect(inventoryDoc?.description).toContain('wizard-completed');
+            });
+          }
         });
       });
     });
@@ -136,7 +161,7 @@ describe('Tenancy Agreement Integration Layer', () => {
             // Get inventory info from included-features
             const inventoryBehaviour = getInventoryBehaviour(tier);
 
-            // Get pack contents
+            // Get pack contents (without context = default behavior)
             const contents = getPackContents({
               product: tier === 'premium' ? 'ast_premium' : 'ast_standard',
               jurisdiction,
@@ -144,11 +169,28 @@ describe('Tenancy Agreement Integration Layer', () => {
 
             const inventoryItem = contents.find(item => item.key === 'inventory_schedule');
 
-            // Labels should be consistent
-            expect(inventoryItem?.title).toContain(
-              tier === 'premium' ? 'Wizard-Completed' : 'Blank'
-            );
+            // Without hasInventoryData context:
+            // - Standard tier: always "Blank Template"
+            // - Premium tier: "Ready to Complete" (default when no inventory data)
+            if (tier === 'standard') {
+              expect(inventoryItem?.title).toContain('Blank Template');
+            } else {
+              expect(inventoryItem?.title).toContain('Ready to Complete');
+            }
           });
+
+          if (tier === 'premium') {
+            it(`should show "Wizard-Completed" inventory when hasInventoryData is true for ${tier}`, () => {
+              const contents = getPackContents({
+                product: 'ast_premium',
+                jurisdiction,
+                hasInventoryData: true,
+              });
+
+              const inventoryItem = contents.find(item => item.key === 'inventory_schedule');
+              expect(inventoryItem?.title).toContain('Wizard-Completed');
+            });
+          }
 
           it(`should have consistent feature count between pack-contents and document-configs for ${tier}`, () => {
             const contents = getPackContents({

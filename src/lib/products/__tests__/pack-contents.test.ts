@@ -244,159 +244,252 @@ describe('getPackContents', () => {
   });
 
   // ===========================================================================
-  // TENANCY AGREEMENT PRODUCTS - Jan 2026 Update
-  // Base product: ONLY the tenancy agreement (no supporting docs)
-  // Premium (HMO): ONLY the HMO tenancy agreement
+  // TENANCY AGREEMENT PRODUCTS
+  // Both tiers include: Agreement, Inventory Schedule, Compliance Checklist
   // ===========================================================================
 
-  describe('ast_standard product (base - agreement only)', () => {
-    it('returns ONLY the AST agreement for England (no supporting docs)', () => {
+  describe('ast_standard product', () => {
+    it('returns agreement, inventory, and checklist for England', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('ast_agreement');
-      expect(items[0].title).toContain('Assured Shorthold');
-      expect(items[0].description).toContain('agreement only');
-
-      // MUST NOT have supporting documents
-      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
-      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
-      expect(items.find(i => i.key === 'inventory_template')).toBeUndefined();
+      // MUST have 3 documents: agreement, inventory, checklist
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'ast_agreement')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_england')).toBeDefined();
     });
 
-    it('returns ONLY the SOC agreement for Wales (no supporting docs)', () => {
+    it('returns agreement, inventory, and checklist for Wales', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'wales',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('soc_agreement');
-      expect(items[0].title).toContain('Standard Occupation Contract');
-      expect(items[0].description).toContain('occupation contract only');
-
-      // MUST NOT have supporting documents
-      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
-      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'soc_agreement')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_wales')).toBeDefined();
     });
 
-    it('returns ONLY the PRT agreement for Scotland (no supporting docs)', () => {
+    it('returns agreement, inventory, and checklist for Scotland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'scotland',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('prt_agreement');
-      expect(items[0].title).toContain('Private Residential Tenancy');
-      expect(items[0].description).toContain('agreement only');
-
-      // MUST NOT have supporting documents
-      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
-      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'prt_agreement')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_scotland')).toBeDefined();
     });
 
-    it('returns ONLY the Private Tenancy agreement for Northern Ireland (no supporting docs)', () => {
+    it('returns agreement, inventory, and checklist for Northern Ireland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'northern-ireland',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('private_tenancy_agreement');
-      expect(items[0].title).toContain('Private Tenancy');
-      expect(items[0].description).toContain('agreement only');
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'private_tenancy_agreement')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+    });
 
-      // MUST NOT have supporting documents
-      expect(items.find(i => i.key === 'terms_schedule')).toBeUndefined();
-      expect(items.find(i => i.key === 'model_clauses')).toBeUndefined();
+    it('shows blank template copy for standard tier inventory', () => {
+      const items = getPackContents({
+        product: 'ast_standard',
+        jurisdiction: 'england',
+      });
+      const inventory = items.find(i => i.key === 'inventory_schedule');
+
+      expect(inventory?.title).toContain('Blank Template');
+      expect(inventory?.description).toContain('blank template');
     });
   });
 
-  describe('ast_premium product (HMO - HMO agreement only)', () => {
-    it('returns ONLY the HMO AST agreement for England (no supporting docs)', () => {
+  describe('ast_premium product', () => {
+    it('returns HMO agreement, inventory, and checklist for England', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the HMO agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('ast_agreement_hmo');
-      expect(items[0].title).toContain('HMO');
-      expect(items[0].description).toContain('HMO-specific');
-
-      // MUST NOT have supporting documents
-      expect(items.find(i => i.key === 'key_schedule')).toBeUndefined();
-      expect(items.find(i => i.key === 'maintenance_guide')).toBeUndefined();
-      expect(items.find(i => i.key === 'checkout_procedure')).toBeUndefined();
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'ast_agreement_hmo')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_england')).toBeDefined();
     });
 
-    it('returns ONLY the HMO SOC agreement for Wales (no supporting docs)', () => {
+    it('returns HMO agreement, inventory, and checklist for Wales', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'wales',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the HMO agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('soc_agreement_hmo');
-      expect(items[0].title).toContain('HMO');
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'soc_agreement_hmo')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
     });
 
-    it('returns ONLY the HMO PRT agreement for Scotland (no supporting docs)', () => {
+    it('returns HMO agreement, inventory, and checklist for Scotland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'scotland',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the HMO agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('prt_agreement_hmo');
-      expect(items[0].title).toContain('HMO');
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'prt_agreement_hmo')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
     });
 
-    it('returns ONLY the HMO Private Tenancy agreement for Northern Ireland (no supporting docs)', () => {
+    it('returns HMO agreement, inventory, and checklist for Northern Ireland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'northern-ireland',
       };
       const items = getPackContents(args);
 
-      // MUST have exactly 1 document - the HMO agreement only
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('private_tenancy_agreement_hmo');
-      expect(items[0].title).toContain('HMO');
+      expect(items.length).toBe(3);
+      expect(items.find(i => i.key === 'private_tenancy_agreement_hmo')).toBeDefined();
+      expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
     });
 
-    it('both standard and premium have exactly 1 document (no supporting docs for either)', () => {
+    it('shows ready to complete copy for premium tier without inventory data', () => {
+      const items = getPackContents({
+        product: 'ast_premium',
+        jurisdiction: 'england',
+        hasInventoryData: false,
+      });
+      const inventory = items.find(i => i.key === 'inventory_schedule');
+
+      expect(inventory?.title).toContain('Ready to Complete');
+      expect(inventory?.description).toContain('ready to complete');
+    });
+
+    it('shows wizard-completed copy for premium tier with inventory data', () => {
+      const items = getPackContents({
+        product: 'ast_premium',
+        jurisdiction: 'england',
+        hasInventoryData: true,
+      });
+      const inventory = items.find(i => i.key === 'inventory_schedule');
+
+      expect(inventory?.title).toContain('Wizard-Completed');
+      expect(inventory?.description).toContain('wizard-completed');
+    });
+
+    it('both standard and premium have 3 documents each', () => {
       const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
 
       for (const jur of jurisdictions) {
         const standardItems = getPackContents({ product: 'ast_standard', jurisdiction: jur });
         const premiumItems = getPackContents({ product: 'ast_premium', jurisdiction: jur });
 
-        // Both tiers now have exactly 1 document each (agreement only)
-        expect(standardItems.length).toBe(1);
-        expect(premiumItems.length).toBe(1);
+        expect(standardItems.length).toBe(3);
+        expect(premiumItems.length).toBe(3);
 
-        // But different document types
-        expect(standardItems[0].key).not.toBe(premiumItems[0].key);
+        // Both should have inventory_schedule
+        expect(standardItems.find(i => i.key === 'inventory_schedule')).toBeDefined();
+        expect(premiumItems.find(i => i.key === 'inventory_schedule')).toBeDefined();
       }
+    });
+  });
+
+  // ===========================================================================
+  // INVENTORY CONTEXT TESTS - Ensure correct messaging based on context
+  // ===========================================================================
+
+  describe('inventory context-aware messaging', () => {
+    const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
+
+    describe('standard tier always shows blank template', () => {
+      jurisdictions.forEach(jur => {
+        it(`${jur}: shows blank template copy regardless of hasInventoryData`, () => {
+          // Without hasInventoryData
+          const itemsWithout = getPackContents({
+            product: 'ast_standard',
+            jurisdiction: jur,
+          });
+          const inventoryWithout = itemsWithout.find(i => i.key === 'inventory_schedule');
+          expect(inventoryWithout?.title).toContain('Blank Template');
+          expect(inventoryWithout?.description).toContain('blank template');
+
+          // With hasInventoryData = true (should be ignored for standard)
+          const itemsWith = getPackContents({
+            product: 'ast_standard',
+            jurisdiction: jur,
+            hasInventoryData: true,
+          });
+          const inventoryWith = itemsWith.find(i => i.key === 'inventory_schedule');
+          expect(inventoryWith?.title).toContain('Blank Template');
+          expect(inventoryWith?.description).toContain('blank template');
+        });
+      });
+    });
+
+    describe('premium tier shows context-aware inventory messaging', () => {
+      jurisdictions.forEach(jur => {
+        it(`${jur}: shows "Ready to Complete" when hasInventoryData is false`, () => {
+          const items = getPackContents({
+            product: 'ast_premium',
+            jurisdiction: jur,
+            hasInventoryData: false,
+          });
+          const inventory = items.find(i => i.key === 'inventory_schedule');
+          expect(inventory?.title).toContain('Ready to Complete');
+          expect(inventory?.description).toContain('ready to complete');
+        });
+
+        it(`${jur}: shows "Wizard-Completed" when hasInventoryData is true`, () => {
+          const items = getPackContents({
+            product: 'ast_premium',
+            jurisdiction: jur,
+            hasInventoryData: true,
+          });
+          const inventory = items.find(i => i.key === 'inventory_schedule');
+          expect(inventory?.title).toContain('Wizard-Completed');
+          expect(inventory?.description).toContain('wizard-completed');
+        });
+
+        it(`${jur}: defaults to "Ready to Complete" when hasInventoryData is undefined`, () => {
+          const items = getPackContents({
+            product: 'ast_premium',
+            jurisdiction: jur,
+          });
+          const inventory = items.find(i => i.key === 'inventory_schedule');
+          expect(inventory?.title).toContain('Ready to Complete');
+        });
+      });
+    });
+
+    describe('inventory always included in pack (never blocks generation)', () => {
+      jurisdictions.forEach(jur => {
+        it(`${jur}: inventory_schedule is always present in standard tier`, () => {
+          const items = getPackContents({
+            product: 'ast_standard',
+            jurisdiction: jur,
+          });
+          expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+        });
+
+        it(`${jur}: inventory_schedule is always present in premium tier`, () => {
+          const items = getPackContents({
+            product: 'ast_premium',
+            jurisdiction: jur,
+          });
+          expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+        });
+      });
     });
   });
 
