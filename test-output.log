@@ -1,0 +1,1853 @@
+
+> landlord-heavenv3@0.1.0 test
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/user/landlord-heavenv3
+
+ ✓ src/lib/documents/__tests__/notice-date-calculator.test.ts (42 tests) 35ms
+ ✓ tests/lib/wizard-path-helpers.test.ts (17 tests) 8ms
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > maps grounds with statutory_text for Form 3 Section 3
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > derives arrears totals from shared arrears particulars when canonical fields are missing
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2025-12-15 service: 2025-12-15 earliest: 2025-12-29
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2025-12-15
+[mapNoticeOnlyFacts] notice_expiry_date: 2025-12-29
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > maps ground particulars for Section 4 from wizard facts
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 1
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > handles multiple grounds with correct numbering
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 3
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > calculates arrears properly for Ground 8 mandatory threshold
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 1
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > sets ground_numbers and ground_descriptions for checklist
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > handles unknown grounds gracefully
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 1
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stderr | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > handles unknown grounds gracefully
+[buildGroundsArray] Unknown ground: Ground 99 - Unknown ground
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > includes all mandatory ground metadata
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Grounds Rendering > normalizes internal ground ids and maps structured particulars
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: Landlord
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Tenant
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2024-02-01 service: 2024-02-01 earliest: 2024-02-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Main Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Tenant
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-02-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-02-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Preview Route Integration > does not leak internal ground keys like ground_8
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 1
+[mapNoticeOnlyFacts] Dates - notice: 2024-01-01 service: 2024-01-01 earliest: 2024-01-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-01-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-01-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/notice-only-section8-grounds.test.ts > Section 8 Notice Only - Preview Route Integration > assembles preview-friendly strings for grounds 8 and 11 with particulars
+[mapNoticeOnlyFacts] Mapped Notice Only template data
+[mapNoticeOnlyFacts] Landlord: John Doe
+[mapNoticeOnlyFacts] Landlord address: MISSING
+[mapNoticeOnlyFacts] Tenant: Jane Smith
+[mapNoticeOnlyFacts] Property address: SET
+[mapNoticeOnlyFacts] Property object: SET
+[mapNoticeOnlyFacts] Tenant object: SET
+[mapNoticeOnlyFacts] Grounds: 2
+[mapNoticeOnlyFacts] Dates - notice: 2024-03-01 service: 2024-03-01 earliest: 2024-03-15
+[mapNoticeOnlyFacts] Deposit - amount: 0 protected: null scheme: null
+[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===
+[mapNoticeOnlyFacts] property.address_line1: 123 Test Street
+[mapNoticeOnlyFacts] property.address_town: null
+[mapNoticeOnlyFacts] property.postcode: null
+[mapNoticeOnlyFacts] tenant.full_name: Jane Smith
+[mapNoticeOnlyFacts] tenancy.start_date: null
+[mapNoticeOnlyFacts] notice_service_date: 2024-03-01
+[mapNoticeOnlyFacts] notice_expiry_date: 2024-03-15
+[mapNoticeOnlyFacts] jurisdiction_display: England
+[mapNoticeOnlyFacts] ===========================
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should map basic PRT data correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should map basic PRT data correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle multiple tenants correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle multiple tenants correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should map Premium Enhanced Features correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should map Premium Enhanced Features correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle address building from components
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle address building from components
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should normalize deposit scheme names
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should normalize deposit scheme names
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle HMO properties correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle HMO properties correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle product tier mapping
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Jane Doe
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/scotland/prt-wizard-mapper.test.ts > PRT Wizard Mapper - Scotland > should handle product tier mapping
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should map basic private tenancy data correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should map basic private tenancy data correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle multiple tenants correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle multiple tenants correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle agent details correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle agent details correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should map Premium Enhanced Features correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should map Premium Enhanced Features correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle address building from components
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle address building from components
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should normalize deposit scheme names
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should normalize deposit scheme names
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle domestic rates registration deadline (NI specific)
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle domestic rates registration deadline (NI specific)
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle HMO properties correctly
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle HMO properties correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle product tier mapping
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle product tier mapping
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle missing optional fields gracefully
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: Patrick Murphy
+[Normalize] Landlord name: Mary O'Brien
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts > Private Tenancy Wizard Mapper - Northern Ireland > should handle missing optional fields gracefully
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ tests/lib/northern-ireland/private-tenancy-wizard-mapper.test.ts (10 tests) 29ms
+ ✓ tests/notice-only-section8-grounds.test.ts (12 tests) 20ms
+ ✓ tests/lib/scotland/prt-wizard-mapper.test.ts (7 tests) 23ms
+ ❯ src/app/api/wizard/generate/__tests__/api-enforcement.test.ts (16 tests | 16 skipped) 8ms
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map property address fields correctly
+[Normalize] Property address concatenated: 4 parts
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map property address fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map property country from property_country field
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map property country from property_country field
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should fallback to jurisdiction field for country
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should fallback to jurisdiction field for country
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should prefer property_country over jurisdiction
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should prefer property_country over jurisdiction
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map HMO status
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should map HMO status
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should default missing property fields to null
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Property Mapping > should default missing property fields to null
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map basic tenancy fields correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map basic tenancy fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map fixed term fields correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map fixed term fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map deposit protection fields correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map deposit protection fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map rent due day correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should map rent due day correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should default tenancy_type to "unknown" when missing
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should default tenancy_type to "unknown" when missing
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should default missing tenancy fields to null
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Tenancy Mapping > should default missing tenancy fields to null
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should map landlord details with underscore notation
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should map landlord details with underscore notation
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should map landlord details with dot notation fallback
+[Normalize] Landlord name: Jane Doe
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should map landlord details with dot notation fallback
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should prefer underscore notation over dot notation for landlord
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should prefer underscore notation over dot notation for landlord
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should default missing landlord fields to null
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Landlord > should default missing landlord fields to null
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should map single tenant correctly
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should map single tenant correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should support alternate tenant name field
+[Normalize] Tenant name: Bob Wilson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should support alternate tenant name field
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should prefer full_name over name for tenants
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should prefer full_name over name for tenants
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should support alternate phone field name
+[Normalize] Tenant name: Charlie Brown
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should support alternate phone field name
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should map multiple tenants correctly
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should map multiple tenants correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should handle non-sequential tenant indices correctly
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should handle non-sequential tenant indices correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should return empty array when no tenants present
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should return empty array when no tenants present
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should handle partial tenant data gracefully
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Tenants > should handle partial tenant data gracefully
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should map agent details correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should map agent details correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should map solicitor details correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should map solicitor details correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should default missing agent and solicitor fields to null
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Parties Mapping - Agent and Solicitor > should default missing agent and solicitor fields to null
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should map product metadata correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should map product metadata correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should handle missing __meta gracefully
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should handle missing __meta gracefully
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should handle partial __meta fields
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Meta Mapping > should handle partial __meta fields
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Full AST Flow Integration > should map complete AST England/Wales case correctly
+[Normalize] Property address concatenated: 4 parts
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Landlord name: John Smith
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Full AST Flow Integration > should map complete AST England/Wales case correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Full AST Flow Integration > should map premium tier AST with multiple tenants
+[Normalize] Property address concatenated: 2 parts
+[Normalize] Tenant name: Alice Johnson
+[Normalize] Landlord name: Sarah Williams
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Full AST Flow Integration > should map premium tier AST with multiple tenants
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle completely empty wizard facts
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle completely empty wizard facts
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle null values in wizard facts
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle null values in wizard facts
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle undefined values in wizard facts
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle undefined values in wizard facts
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should not explode with unexpected field types
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should not explode with unexpected field types
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle special characters in string fields
+[Normalize] Property address concatenated: 1 parts
+[Normalize] Tenant name: François Müller-Schmidt
+[Normalize] Landlord name: José García-López
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle special characters in string fields
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle zero values correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle zero values correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle boolean false values correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Edge Cases > should handle boolean false values correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map rent arrears fields
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map rent arrears fields
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map ASB fields
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map ASB fields
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map other breaches fields
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Issues Mapping > should map other breaches fields
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Notice Mapping > should map notice fields correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Notice Mapping > should map notice fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Notice Mapping > should handle alternate expiry_date field name
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Notice Mapping > should handle alternate expiry_date field name
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Court Mapping > should map court claim fields correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Court Mapping > should map court claim fields correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Court Mapping > should map court form requirements correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Court Mapping > should map court form requirements correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Evidence Mapping > should map evidence upload flags correctly
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Evidence Mapping > should map evidence upload flags correctly
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Evidence Mapping > should default evidence flags to false when missing
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Evidence Mapping > should default evidence flags to false when missing
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Service Contact Mapping > should map service contact with dot notation
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Service Contact Mapping > should map service contact with dot notation
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Service Contact Mapping > should fallback to underscore notation for service contact
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Service Contact Mapping > should fallback to underscore notation for service contact
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Money Claim Mapping > should map solicitor costs from wizard
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Money Claim Mapping > should map solicitor costs from wizard
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Money Claim Mapping > should default solicitor costs to null when missing
+[Normalize] Case facts normalization complete
+
+stderr | src/lib/case-facts/normalize.test.ts > wizardFactsToCaseFacts > Money Claim Mapping > should default solicitor costs to null when missing
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ src/lib/case-facts/normalize.test.ts (52 tests) 70ms
+ ✓ tests/api/wizard-gating.test.ts (28 tests) 95ms
+ ✓ tests/api/wizard-mqs-tenancy-agreement.test.ts (18 tests) 153ms
+ ✓ tests/ai/ask-heaven-advanced.test.ts (14 tests) 9ms
+12:52:19 AM [vite] warning: This case clause will never be evaluated because it duplicates an earlier case clause
+630|      case 'wales':
+631|      case 'england-wales': // Legacy compatibility
+632|      case 'england':
+   |           ^
+633|      case 'wales':
+634|        return `CONTEXT: England & Wales eviction law. Use Section 8/Section 21 terminology where appropriate.`;
+
+  Plugin: vite:esbuild
+  File: /home/user/landlord-heavenv3/src/lib/case-intel/narrative.ts
+12:52:19 AM [vite] warning: This case clause will never be evaluated because it duplicates an earlier case clause
+631|      case 'england-wales': // Legacy compatibility
+632|      case 'england':
+633|      case 'wales':
+   |           ^
+634|        return `CONTEXT: England & Wales eviction law. Use Section 8/Section 21 terminology where appropriate.`;
+635|  
+
+  Plugin: vite:esbuild
+  File: /home/user/landlord-heavenv3/src/lib/case-intel/narrative.ts
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > accepts case_id and returns structured response
+Failed to persist recommended_route: TypeError: supabase.from(...).update(...).eq is not a function
+    at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/checkpoint/route.ts:202:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at /home/user/landlord-heavenv3/tests/api/wizard-checkpoint.test.ts:162:22
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/user/landlord-heavenv3/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > persists recommended_route to cases table
+Failed to persist recommended_route: TypeError: supabase.from(...).update(...).eq is not a function
+    at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/checkpoint/route.ts:202:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at /home/user/landlord-heavenv3/tests/api/wizard-checkpoint.test.ts:180:5
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/user/landlord-heavenv3/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > accepts canonical jurisdiction "england" and normalizes for decision engine
+Failed to persist recommended_route: TypeError: supabase.from(...).update(...).eq is not a function
+    at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/checkpoint/route.ts:202:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at /home/user/landlord-heavenv3/tests/api/wizard-checkpoint.test.ts:294:22
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/user/landlord-heavenv3/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > accepts canonical jurisdiction "wales" and normalizes for decision engine
+Failed to persist recommended_route: TypeError: supabase.from(...).update(...).eq is not a function
+    at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/checkpoint/route.ts:202:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at /home/user/landlord-heavenv3/tests/api/wizard-checkpoint.test.ts:320:22
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/user/landlord-heavenv3/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > still accepts legacy jurisdiction "england-wales" for backwards compatibility
+Failed to persist recommended_route: TypeError: supabase.from(...).update(...).eq is not a function
+    at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/checkpoint/route.ts:202:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at /home/user/landlord-heavenv3/tests/api/wizard-checkpoint.test.ts:349:22
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/user/landlord-heavenv3/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+
+stderr | tests/api/wizard-checkpoint.test.ts > Wizard API Checkpoint > rejects invalid jurisdiction values
+[JURISDICTION] Invalid jurisdiction value: "invalid"
+
+ ✓ tests/api/wizard-checkpoint.test.ts (10 tests) 34ms
+12:52:19 AM [vite] warning: This case clause will never be evaluated because it duplicates an earlier case clause
+142|      case 'wales':
+143|      case 'england-wales': // Legacy compatibility
+144|      case 'england':
+   |           ^
+145|      case 'wales':
+146|        return 'Chronology of Events';
+
+  Plugin: vite:esbuild
+  File: /home/user/landlord-heavenv3/src/lib/bundles/evidence-index.ts
+12:52:19 AM [vite] warning: This case clause will never be evaluated because it duplicates an earlier case clause
+143|      case 'england-wales': // Legacy compatibility
+144|      case 'england':
+145|      case 'wales':
+   |           ^
+146|        return 'Chronology of Events';
+147|  
+
+  Plugin: vite:esbuild
+  File: /home/user/landlord-heavenv3/src/lib/bundles/evidence-index.ts
+ ✓ tests/bundles/bundle-generator.test.ts (12 tests) 52ms
+ ✓ tests/lib/wizard/dependency-matching.test.ts (7 tests) 22ms
+stderr | tests/api/wizard-mqs-eviction.test.ts > MQS eviction flow (England & Wales) > enhanceAnswer is called for MQS questions with suggestion_prompt
+[WIZARD_GATING] Blocking progression: {
+  case_id: 'case-3',
+  question_id: 'custom_question',
+  blocking: [
+    'DEPOSIT_FIELD_REQUIRED',
+    'DEPOSIT_FIELD_REQUIRED',
+    'REQUIRED_IF_EVALUATION_FAILED',
+    'REQUIRED_IF_EVALUATION_FAILED',
+    'REQUIRED_IF_EVALUATION_FAILED'
+  ]
+}
+
+ ❯ tests/api/wizard-mqs-eviction.test.ts (5 tests | 1 failed) 59ms
+   × MQS eviction flow (England & Wales) > enhanceAnswer is called for MQS questions with suggestion_prompt 21ms
+     → expected 422 to be 200 // Object.is equality
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > selects 2-month rule for historic date (2017)
+[Wales Config] Service date 2017-06-01 → Using rule effective 2016-12-01 (2 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > selects 6-month rule for current date (2023)
+[Wales Config] Service date 2023-06-01 → Using rule effective 2022-12-01 (6 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > selects 6-month rule for date on rule effective date (2022-12-01)
+[Wales Config] Service date 2022-12-01 → Using rule effective 2022-12-01 (6 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > selects 2-month rule for date just before new rule (2022-11-30)
+[Wales Config] Service date 2022-11-30 → Using rule effective 2016-12-01 (2 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > selects latest applicable rule when multiple match
+[Wales Config] Service date 2023-01-01 → Using rule effective 2022-12-01 (6 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > uses current date when no service date provided
+[Wales Config] Service date current → Using rule effective 2022-12-01 (6 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Section 173 Rule Selection (UTC Date Parsing) > includes prohibited period in result
+[Wales Config] Service date 2023-01-01 → Using rule effective 2022-12-01 (6 months)
+
+stdout | src/server/config/__tests__/wales-rule-selection.test.ts > Wales Config Structure > Section 173 rules are chronologically ordered
+[Wales Config] Service date 2017-01-01 → Using rule effective 2016-12-01 (2 months)
+[Wales Config] Service date 2023-01-01 → Using rule effective 2022-12-01 (6 months)
+
+ ✓ src/server/config/__tests__/wales-rule-selection.test.ts (17 tests) 19ms
+stdout | tests/integration/ast-wizard-flow.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+stdout | tests/integration/money-claim-wizard-flow.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+stdout | tests/lib/jurisdictions/legal-enforcement.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+stdout | src/lib/documents/__tests__/template-rendering.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+stdout | tests/documents/money-claim-data-pipeline.test.ts > Money claim data pipeline (wizard → caseFacts → pack) > should correctly map wizard facts through the entire pipeline
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Tom Tenant
+[Normalize] Landlord name: Alice Landlord
+[Normalize] Case facts normalization complete
+[MoneyClaimAI] No OpenAI API key available, using fallback content
+
+stderr | tests/documents/money-claim-data-pipeline.test.ts > Money claim data pipeline (wizard → caseFacts → pack) > should correctly map wizard facts through the entire pipeline
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/documents/money-claim-data-pipeline.test.ts > Money claim data pipeline (wizard → caseFacts → pack) > should handle Scotland money claim flow
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Rob Renter
+[Normalize] Landlord name: Sarah Landlord
+[Normalize] Case facts normalization complete
+
+stderr | tests/documents/money-claim-data-pipeline.test.ts > Money claim data pipeline (wizard → caseFacts → pack) > should handle Scotland money claim flow
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ tests/documents/money-claim-data-pipeline.test.ts (2 tests) 45ms
+stdout | src/lib/documents/__tests__/template-rendering.test.ts > Markdown Artifact Prevention > No raw markdown tokens (##, **, ---) in compiled Section 8 template
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs
+[PRINT SYSTEM] ✅ Loaded print.css
+
+stdout | src/lib/documents/__tests__/template-rendering.test.ts > Markdown Artifact Prevention > No raw markdown tokens in compiled Scotland Notice to Leave template
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs
+
+stdout | src/lib/documents/__tests__/template-rendering.test.ts > Markdown Artifact Prevention > Date formatting is DD/MM/YYYY in templates
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs
+
+stdout | src/lib/documents/__tests__/template-rendering.test.ts > Markdown Artifact Prevention > Site domain is landlordheaven.com in generated documents
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs
+
+ ✓ src/lib/documents/__tests__/template-rendering.test.ts (11 tests) 182ms
+ ✓ tests/api/wizard-hmo-gating.test.ts (6 tests) 44ms
+stdout | tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Standard AST - Happy Path > should create case, answer question, analyze, and generate document
+[Normalize] Case facts normalization complete
+
+stderr | tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Standard AST - Happy Path > should create case, answer question, analyze, and generate document
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Premium AST - Multiple Tenants > should create case and generate premium document
+[Normalize] Case facts normalization complete
+
+stderr | tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Premium AST - Multiple Tenants > should create case and generate premium document
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stderr | tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Error Handling > should reject non-existent case_id in answer route
+[classifyDatabaseError] Unclassified error in wizard/answer: {
+  errorMessage: 'Not found',
+  errorCode: undefined,
+  error: Error: Not found
+      at Object.single (/home/user/landlord-heavenv3/tests/integration/ast-wizard-flow.test.ts:26:61)
+      at Module.POST (/home/user/landlord-heavenv3/src/app/api/wizard/answer/route.ts:547:8)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at /home/user/landlord-heavenv3/tests/integration/ast-wizard-flow.test.ts:411:24
+      at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:5
+      at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:11)
+      at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+      at runFiles (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1262:5),
+  context: {
+    operation: 'wizard/answer',
+    caseId: '00000000-0000-0000-0000-000000000000'
+  }
+}
+[wizard/answer] unknown: {
+  caseId: '00000000-0000-0000-0000-000000000000',
+  message: 'Internal server error',
+  statusCode: 500,
+  retryable: false
+}
+
+ ❯ tests/integration/ast-wizard-flow.test.ts (4 tests | 1 failed) 149ms
+   × AST Wizard Flow - Integration Tests > Error Handling > should reject non-existent case_id in answer route 44ms
+     → expected 500 to be 404 // Object.is equality
+stdout | tests/api/wizard-ni-gating.test.ts > Wizard API Northern Ireland gating > rejects NI eviction analysis at /api/wizard/analyze
+[Normalize] Case facts normalization complete
+
+stderr | tests/api/wizard-ni-gating.test.ts > Wizard API Northern Ireland gating > rejects NI eviction analysis at /api/wizard/analyze
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ tests/api/wizard-ni-gating.test.ts (6 tests) 49ms
+ ❯ tests/api/wizard-info-questions.test.ts (2 tests | 2 failed) 52ms
+   × Wizard info-type question handling > returns info-type question (section21_intro) once and marks it as viewed 37ms
+     → expected 'landlord_details' to be 'section21_intro' // Object.is equality
+   × Wizard info-type question handling > does not get stuck in a loop on info questions 14ms
+     → expected 'landlord_details' to be 'section21_intro' // Object.is equality
+stdout | tests/api/wizard-money-claim-completion.test.ts > Money claim completion gating > falls back to AI when essential money-claim facts are missing
+[Normalize] Case facts normalization complete
+
+stderr | tests/api/wizard-money-claim-completion.test.ts > Money claim completion gating > falls back to AI when essential money-claim facts are missing
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/api/wizard-money-claim-completion.test.ts > Money claim completion gating > marks money-claim complete when essentials are present
+[Normalize] Property address concatenated: 2 parts
+[Normalize] Tenant name: Tom Tenant
+[Normalize] Landlord name: Alice Landlord
+[Normalize] Case facts normalization complete
+
+stderr | tests/api/wizard-money-claim-completion.test.ts > Money claim completion gating > marks money-claim complete when essentials are present
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ tests/api/wizard-money-claim-completion.test.ts (2 tests) 42ms
+stdout | tests/debug/money-claim-data-flow.test.ts > Money claim data flow debugging > trace wizard facts → caseFacts → moneyClaimCase
+
+========================================
+STEP 1: wizardFacts (from DB)
+========================================
+Keys: [
+  'claimant_full_name',
+  'claimant_email',
+  'claimant_phone',
+  'claimant_address.address_line1',
+  'claimant_address.address_line2',
+  'claimant_address.city',
+  'claimant_address.postcode',
+  'defendant_full_name',
+  'property_address.address_line1',
+  'property_address.address_line2',
+  'property_address.city',
+  'property_address.postcode',
+  'property_address.country',
+  'tenancy_start_date',
+  'rent_amount',
+  'rent_frequency',
+  'claim_type',
+  'arrears_total',
+  'arrears_schedule_upload.rent_schedule_uploaded',
+  'arrears_schedule_upload.arrears_items',
+  'charge_interest',
+  'interest_start_date',
+  'interest_rate',
+  'preferred_court',
+  'particulars_of_claim',
+  'payment_attempts',
+  'lba_sent',
+  'lba_date',
+  'lba_method',
+  'signatory_name'
+]
+
+========================================
+STEP 2: wizardFactsToCaseFacts()
+========================================
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Tom Tenant
+[Normalize] Landlord name: Alice Landlord
+[Normalize] Case facts normalization complete
+Landlord name: Alice Landlord
+Landlord email: alice@example.com
+Landlord phone: 01234567890
+Landlord address_line1: 1 High Street
+Landlord city: London
+Landlord postcode: N1 1AA
+Tenant name: Tom Tenant
+Property address_line1: 2 Rental Road
+Property city: London
+Property postcode: N2 2BB
+Rent amount: 750
+Rent frequency: monthly
+Tenancy start: 2024-01-01
+Arrears total: 1200
+
+========================================
+STEP 3: mapCaseFactsToMoneyClaimCase()
+========================================
+landlord_full_name: Alice Landlord
+landlord_address: 1 High Street, London
+landlord_postcode: N1 1AA
+landlord_email: alice@example.com
+landlord_phone: 01234567890
+tenant_full_name: Tom Tenant
+property_address: 2 Rental Road, London
+property_postcode: N2 2BB
+rent_amount: 750
+rent_frequency: monthly
+tenancy_start_date: 2024-01-01
+arrears_total: 1200
+
+stderr | tests/debug/money-claim-data-flow.test.ts > Money claim data flow debugging > trace wizard facts → caseFacts → moneyClaimCase
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stderr | tests/api/wizard-guest-flow.test.ts > Error Handling - Upstream vs Not Found > returns 503 for Cloudflare 500 HTML error (upstream failure)
+[wizard/answer] upstream_error: {
+  caseId: 'case-with-upstream-error',
+  message: 'Service temporarily unavailable. Please try again.',
+  statusCode: 503,
+  retryable: true
+}
+
+stderr | tests/api/wizard-guest-flow.test.ts > Error Handling - Upstream vs Not Found > returns 503 for timeout error (retryable)
+[wizard/next-question] upstream_error: {
+  caseId: 'case-with-timeout',
+  message: 'Service temporarily unavailable. Please try again.',
+  statusCode: 503,
+  retryable: true
+}
+
+stderr | tests/api/wizard-guest-flow.test.ts > Error Handling - Upstream vs Not Found > returns 503 for connection failure (retryable)
+[wizard/answer] upstream_error: {
+  caseId: 'case-with-connection-error',
+  message: 'Service temporarily unavailable. Please try again.',
+  statusCode: 503,
+  retryable: true
+}
+
+stderr | tests/api/wizard-guest-flow.test.ts > Error Handling - Upstream vs Not Found > returns 403 for RLS policy violation (permission denied)
+[wizard/answer] unauthorized: {
+  caseId: 'unauthorized-case',
+  message: 'Access denied',
+  statusCode: 403,
+  retryable: false
+}
+
+ ✓ tests/debug/money-claim-data-flow.test.ts (1 test) 23ms
+ ❯ tests/api/wizard-guest-flow.test.ts (8 tests | 1 failed) 80ms
+   × Guest Wizard Flow > allows guest to answer questions in wizard 18ms
+     → expected 400 to be 200 // Object.is equality
+stderr | tests/api/notice-compliance-blocking.test.ts > wizard answer compliance blocking > returns 422 with failures and no next_question when noncompliant at checkpoint
+[WIZARD_GATING] Blocking progression: {
+  case_id: 'case-123',
+  question_id: 'deposit_protected_scheme',
+  blocking: [
+    'DEPOSIT_FIELD_REQUIRED',
+    'DEPOSIT_NOT_PROTECTED',
+    'PRESCRIBED_INFO_MISSING',
+    'DEPOSIT_AMOUNT_REQUIRED'
+  ]
+}
+
+ ❯ tests/api/notice-compliance-blocking.test.ts (2 tests | 2 failed) 35ms
+   × wizard answer compliance blocking > returns 422 with failures and no next_question when noncompliant at checkpoint 31ms
+     → expected 'WIZARD_GATING_BLOCKED' to be 'NOTICE_NONCOMPLIANT' // Object.is equality
+   × wizard answer compliance blocking > allows non-checkpoint questions to pass even with compliance issues (downgrades to warnings) 3ms
+     → expected 400 to be 200 // Object.is equality
+stdout | tests/documents/eviction-pack-option-b.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+ ✓ tests/lib/grounds/format-ground-title.test.ts (11 tests) 6ms
+stdout | tests/documents/pdf-field-mapping.test.ts > Scotland official forms > treats Notice to Leave as non-fillable when no AcroForm fields exist
+[scotland/notice_to_leave.pdf] field count: 0
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > migrateToCanonicalJurisdiction > should FAIL CLOSED for "england-wales" without property_location (no default to england)
+[MIGRATION] Cannot migrate legacy jurisdiction "england-wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > migrateToCanonicalJurisdiction > should handle "england & wales" variant
+[MIGRATION] Cannot migrate legacy jurisdiction "england & wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > migrateToCanonicalJurisdiction > should handle "england and wales" variant
+[MIGRATION] Cannot migrate legacy jurisdiction "england and wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > migrateToCanonicalJurisdiction > should handle case-insensitive input
+[MIGRATION] Cannot migrate legacy jurisdiction "ENGLAND-WALES" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+[MIGRATION] Cannot migrate legacy jurisdiction "England-Wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+[MIGRATION] Cannot migrate legacy jurisdiction "  england-wales  " without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > migrateToCanonicalJurisdiction > should return null for unrecognized values
+[JURISDICTION] Invalid jurisdiction value: "france"
+[JURISDICTION] Invalid jurisdiction value: "invalid"
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > Real-world migration scenarios > should FAIL CLOSED for wizard API payloads with england-wales and no property_location
+[MIGRATION] Cannot migrate legacy jurisdiction "england-wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+stderr | tests/lib/types/jurisdiction-migration.test.ts > Jurisdiction Migration > Real-world migration scenarios > should FAIL CLOSED for database records without property_location (no default to england)
+[MIGRATION] Cannot migrate legacy jurisdiction "england-wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+ ✓ tests/lib/types/jurisdiction-migration.test.ts (12 tests) 8ms
+ ✓ tests/documents/pdf-field-mapping.test.ts (9 tests) 92ms
+ ✓ tests/notice-compliance-evaluate.test.ts (7 tests) 35ms
+stderr | tests/integration/money-claim-wizard-flow.test.ts > Money claim wizard integration > England & Wales money claim pack generation flow
+Answer error claimant_full_name { error: 'Unknown question_id' }
+
+stderr | tests/integration/money-claim-wizard-flow.test.ts > Money claim wizard integration > Scotland money claim flow produces Simple Procedure pack
+[WIZARD_GATING] Blocking progression: {
+  case_id: '2bec32c2-23db-4dbf-ba76-068c890c8a2e',
+  question_id: 'pursuer_full_name',
+  blocking: [ 'CLAIM_AMOUNT_REQUIRED', 'DEFENDANT_NAME_REQUIRED' ]
+}
+Answer error pursuer_full_name {
+  error: 'WIZARD_GATING_BLOCKED',
+  blocking_issues: [
+    {
+      code: 'CLAIM_AMOUNT_REQUIRED',
+      message: 'Money claim requires a claim amount greater than zero',
+      fields: [Array],
+      user_fix_hint: 'Specify the total amount you are claiming'
+    },
+    {
+      code: 'DEFENDANT_NAME_REQUIRED',
+      message: 'Defendant name is required for money claim',
+      fields: [Array],
+      user_fix_hint: 'Provide the full name of the defendant (tenant)'
+    }
+  ],
+  warnings: [],
+  block_next_question: true
+}
+
+ ❯ tests/integration/money-claim-wizard-flow.test.ts (2 tests | 2 failed) 66ms
+   × Money claim wizard integration > England & Wales money claim pack generation flow 53ms
+     → expected 400 to be 200 // Object.is equality
+   × Money claim wizard integration > Scotland money claim flow produces Simple Procedure pack 12ms
+     → expected 422 to be 200 // Object.is equality
+stdout | tests/documents/ast-pack-premium.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+ ✓ tests/documents/scotland-money-claim-pack.test.ts (6 tests) 19ms
+stdout | tests/documents/ast-pack-premium.test.ts > AST pack - Premium > renders premium-only content when flags are set
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Landlord name: Priya Landlord
+[Normalize] Case facts normalization complete
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium_ast_formatted.hbs
+[PRINT SYSTEM] ✅ Loaded print.css
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/terms_and_conditions.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/certificate_of_curation.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/ast_legal_validity_summary.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/government_model_clauses.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/deposit_protection_certificate.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/inventory_template.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium/key_schedule.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium/tenant_welcome_pack.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium/property_maintenance_guide.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium/move_in_condition_report.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/premium/checkout_procedure.hbs
+
+stderr | tests/documents/ast-pack-premium.test.ts > AST pack - Premium > renders premium-only content when flags are set
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ✓ tests/documents/ast-pack-premium.test.ts (1 test) 126ms
+ ✓ tests/api/wizard-askheaven-enhance-only.test.ts (1 test) 13ms
+ ✓ tests/api/wizard-money-claim-access.test.ts (3 tests) 29ms
+ ✓ tests/api/grounds-api.test.ts (5 tests) 85ms
+stdout | tests/documents/ast-pack-standard.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+ ✓ tests/api/documents-ni-gating.test.ts (1 test) 11ms
+stdout | tests/ai/option-b-fallbacks.test.ts > Option B AI failure modes > returns deterministic witness statement fallback when AI is disabled
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Terry Tenant
+[Normalize] Landlord name: Fallback Landlord
+[Normalize] Case facts normalization complete
+[WitnessStatementAI] AI drafting disabled via env var
+
+stderr | tests/ai/option-b-fallbacks.test.ts > Option B AI failure modes > returns deterministic witness statement fallback when AI is disabled
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/ai/option-b-fallbacks.test.ts > Option B AI failure modes > recovers with fallback compliance audit when the AI client throws
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Terry Tenant
+[Normalize] Landlord name: Fallback Landlord
+[Normalize] Case facts normalization complete
+
+stderr | tests/ai/option-b-fallbacks.test.ts > Option B AI failure modes > recovers with fallback compliance audit when the AI client throws
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[ComplianceAuditAI] AI audit failed, using fallback: Error: LLM unavailable
+    at Object.jsonCompletion (/home/user/landlord-heavenv3/tests/ai/option-b-fallbacks.test.ts:63:15)
+    at callComplianceAuditLLM (/home/user/landlord-heavenv3/src/lib/ai/compliance-audit-generator.ts:342:42)
+    at Module.generateComplianceAudit (/home/user/landlord-heavenv3/src/lib/ai/compliance-audit-generator.ts:129:27)
+    at /home/user/landlord-heavenv3/tests/ai/option-b-fallbacks.test.ts:76:25
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:146:14
+    at file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:533:11
+    at runWithTimeout (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:39:7)
+    at runTest (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1056:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runSuite (file:///home/user/landlord-heavenv3/node_modules/@vitest/runner/dist/index.js:1205:15)
+
+ ✓ tests/ai/option-b-fallbacks.test.ts (2 tests) 21ms
+stdout | tests/documents/ast-pack-standard.test.ts > AST pack - Standard > renders the standard AST pack with certificate and legal summary
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Landlord name: Alice Landlord
+[Normalize] Case facts normalization complete
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/standard_ast_formatted.hbs
+[PRINT SYSTEM] ✅ Loaded print.css
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/terms_and_conditions.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/certificate_of_curation.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/ast_legal_validity_summary.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/government_model_clauses.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/deposit_protection_certificate.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/inventory_template.hbs
+
+stderr | tests/documents/ast-pack-standard.test.ts > AST pack - Standard > renders the standard AST pack with certificate and legal summary
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+ ❯ tests/api/wizard-mqs-money-claim.test.ts (4 tests | 1 failed) 24ms
+   × Money claim MQS - England & Wales PAP-DEBT coverage > includes PAP-DEBT, court route, evidence, and enforcement questions 8ms
+     → expected false to be true // Object.is equality
+ ✓ tests/documents/ast-pack-standard.test.ts (1 test) 86ms
+ ✓ tests/supabase-config.test.ts (4 tests) 8ms
+stdout | tests/lib/jurisdictions/legal-enforcement.test.ts > jurisdiction gating enforcement > fails closed during notice-only pack generation when facts become invalid
+
+📄 Generating Notice Only Pack for england...
+
+stdout | tests/lib/jurisdictions/legal-enforcement.test.ts > jurisdiction gating enforcement > migrates legacy England & Wales cases to England rules during preview validation
+[NOTICE-PREVIEW-API] Generating preview for case: case-england
+[Normalize] Case facts normalization complete
+
+stderr | tests/lib/jurisdictions/legal-enforcement.test.ts > jurisdiction gating enforcement > migrates legacy England & Wales cases to England rules during preview validation
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+[MIGRATION] Cannot migrate legacy jurisdiction "england-wales" without property_location hint. Legacy england-wales cases must provide explicit property_location.
+
+ ❯ tests/lib/jurisdictions/legal-enforcement.test.ts (10 tests | 1 failed) 95ms
+   × jurisdiction gating enforcement > migrates legacy England & Wales cases to England rules during preview validation 22ms
+     → expected 400 to be 422 // Object.is equality
+ ❯ tests/notice-compliance-mqs-ids.test.ts (1 test | 1 failed) 42ms
+   × notice compliance affected_question_id coverage > all affected_question_id values exist in the MQS for the jurisdiction 28ms
+     → expected [ Array(1) ] to deeply equal []
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+
+📦 Generating Complete Eviction Pack for england...
+================================================================================
+
+stderr | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Tina Tenant
+[Normalize] Landlord name: Alex Landlord
+[Normalize] Case facts normalization complete
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs
+[PRINT SYSTEM] ✅ Loaded print.css
+📄 Filling N5 form (Claim for possession)...
+
+stderr | src/lib/types/jurisdiction.test.ts > jurisdiction helpers > normalizeJurisdiction FAILS CLOSED for legacy england-wales (returns undefined)
+[JURISDICTION] Legacy jurisdiction "england-wales" detected. Use migrateToCanonicalJurisdiction with property_location.
+[JURISDICTION] Legacy jurisdiction "England & Wales" detected. Use migrateToCanonicalJurisdiction with property_location.
+
+ ✓ src/lib/types/jurisdiction.test.ts (3 tests) 4ms
+ ✓ tests/api/wizard-edit-review-mode.test.ts (1 test) 10ms
+ ✓ tests/lib/wizard/gating.test.ts (3 tests) 16ms
+stderr | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+Field "claimant's details" not found in form, skipping: Error: PDFDocument has no form field with the name "claimant's details"
+Field "defendant's details" not found in form, skipping: Error: PDFDocument has no form field with the name "defendant's details"
+Checkbox "rent arrears - yes" not found in form, skipping: Error: PDFDocument has no form field with the name "rent arrears - yes"
+Field "rent arrears amount" not found in form, skipping: Error: PDFDocument has no form field with the name "rent arrears amount"
+Field "Ground(s) on which possession is claimed" not found in form, skipping: Error: PDFDocument has no form field with the name "Ground(s) on which possession is claimed"
+Field "Date section 8 notice served - DD" not found in form, skipping: Error: PDFDocument has no form field with the name "Date section 8 notice served - DD"
+Field "Date section 8 notice served - MM" not found in form, skipping: Error: PDFDocument has no form field with the name "Date section 8 notice served - MM"
+Field "Date section 8 notice served - YYYY" not found in form, skipping: Error: PDFDocument has no form field with the name "Date section 8 notice served - YYYY"
+Checkbox "HRA - yes" not found in form, skipping: Error: PDFDocument has no form field with the name "HRA - yes"
+Field "Date the Statement of Truth is signed - DD" not found in form, skipping: Error: PDFDocument has no form field with the name "Date the Statement of Truth is signed - DD"
+Field "Date the Statement of Truth is signed - MM" not found in form, skipping: Error: PDFDocument has no form field with the name "Date the Statement of Truth is signed - MM"
+Field "Date the Statement of Truth is signed - YYYY" not found in form, skipping: Error: PDFDocument has no form field with the name "Date the Statement of Truth is signed - YYYY"
+Checkbox "I believe that the facts stated in this clam form are true" not found in form, skipping: Error: PDFDocument has no form field with the name "I believe that the facts stated in this clam form are true"
+Checkbox "Statement of Truth is signed by the Claimant" not found in form, skipping: Error: PDFDocument has no form field with the name "Statement of Truth is signed by the Claimant"
+Field "Statement of Truth signature box" not found in form, skipping: Error: PDFDocument has no form field with the name "Statement of Truth signature box"
+Field "If applicable, phone number" not found in form, skipping: Error: PDFDocument has no form field with the name "If applicable, phone number"
+Field "If applicable, email address" not found in form, skipping: Error: PDFDocument has no form field with the name "If applicable, email address"
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+✅ N5 form filled successfully
+📄 Filling N119 form (Particulars of claim)...
+
+stderr | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+Field "3(b) The current rent is payable each month" not found in form, skipping: Error: PDFDocument has no form field with the name "3(b) The current rent is payable each month"
+Field "3(c) Any unpaid rent or charge for use and occupation should be calculated at £" not found in form, skipping: Error: PDFDocument has no form field with the name "3(c) Any unpaid rent or charge for use and occupation should be calculated at £"
+Field "3(d) Total amount outstanding" not found in form, skipping: Error: PDFDocument has no form field with the name "3(d) Total amount outstanding"
+Checkbox "13. The claimant is - other" not found in form, skipping: Error: Expected field "13. The claimant is - other" to be of type PDFCheckBox, but it is actually of type PDFTextField
+Checkbox "11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? No" not found in form, skipping: Error: PDFDocument has no form field with the name "11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? No"
+Field "Date Statement of Truth is signed - DD" not found in form, skipping: Error: PDFDocument has no form field with the name "Date Statement of Truth is signed - DD"
+Field "Date Statement of Truth is signed - MM" not found in form, skipping: Error: PDFDocument has no form field with the name "Date Statement of Truth is signed - MM"
+Field "Date Statement of Truth is signed - YYYY" not found in form, skipping: Error: PDFDocument has no form field with the name "Date Statement of Truth is signed - YYYY"
+Field "Full name of person signing the Statement of Truth" not found in form, skipping: Error: PDFDocument has no form field with the name "Full name of person signing the Statement of Truth"
+Checkbox "I believe that the facts stated in these particulars of claim are true" not found in form, skipping: Error: Expected field "I believe that the facts stated in these particulars of claim are true" to be of type PDFCheckBox, but it is actually of type PDFTextField
+Checkbox "Statement of Truth signed by Claimant" not found in form, skipping: Error: PDFDocument has no form field with the name "Statement of Truth signed by Claimant"
+Field "Statement of Truth signature box" not found in form, skipping: Error: PDFDocument has no form field with the name "Statement of Truth signature box"
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents
+✅ N119 form filled successfully
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/eviction_roadmap.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/expert_guidance.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/eviction_timeline.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/evidence_collection_checklist.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/proof_of_service.hbs
+[WitnessStatementAI] AI drafting disabled via env var
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/witness-statement.hbs
+✅ Generated witness statement
+[ComplianceAuditAI] AI audit disabled via env var
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/compliance-audit.hbs
+✅ Generated compliance audit
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/england/templates/eviction/risk-report.hbs
+✅ Generated risk assessment report
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/eviction_case_summary.hbs
+✅ Generated 12 documents for complete eviction pack
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+
+📦 Generating Complete Eviction Pack for scotland...
+================================================================================
+
+stderr | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+[Normalize] Found unexpected object for key "notice", flattening...
+[Normalize] Found unexpected object for key "service_contact", flattening...
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Sean Tenant
+[Normalize] Landlord name: Fiona Landlord
+[Normalize] Case facts normalization complete
+
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs
+
+🏴󠁧󠁢󠁳󠁣󠁴󠁿  Filling Scotland official form: FORM_E
+============================================================
+📄 Filling Form E (Tribunal Application for Eviction Order)...
+
+stderr | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+Field "Applicant Name" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Name"
+Field "Applicant Address" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Address"
+Field "Applicant Postcode" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Postcode"
+Field "Applicant Telephone" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Telephone"
+Field "Applicant Email" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Email"
+Field "Respondent Name" not found in form, skipping: Error: PDFDocument has no form field with the name "Respondent Name"
+Field "Property Address" not found in form, skipping: Error: PDFDocument has no form field with the name "Property Address"
+Field "Property Postcode" not found in form, skipping: Error: PDFDocument has no form field with the name "Property Postcode"
+Field "Tenancy Start Date" not found in form, skipping: Error: PDFDocument has no form field with the name "Tenancy Start Date"
+Field "Rent Amount" not found in form, skipping: Error: PDFDocument has no form field with the name "Rent Amount"
+Field "Rent Payment Frequency" not found in form, skipping: Error: PDFDocument has no form field with the name "Rent Payment Frequency"
+Field "Notice to Leave Served Date" not found in form, skipping: Error: PDFDocument has no form field with the name "Notice to Leave Served Date"
+Field "Notice to Leave Expiry Date" not found in form, skipping: Error: PDFDocument has no form field with the name "Notice to Leave Expiry Date"
+Checkbox "Copy of Notice to Leave attached" not found in form, skipping: Error: PDFDocument has no form field with the name "Copy of Notice to Leave attached"
+Checkbox "Ground 12 claimed" not found in form, skipping: Error: PDFDocument has no form field with the name "Ground 12 claimed"
+Checkbox "Tenancy agreement attached" not found in form, skipping: Error: PDFDocument has no form field with the name "Tenancy agreement attached"
+Checkbox "Copy of Notice to Leave attached" not found in form, skipping: Error: PDFDocument has no form field with the name "Copy of Notice to Leave attached"
+Checkbox "Proof of service attached" not found in form, skipping: Error: PDFDocument has no form field with the name "Proof of service attached"
+Field "Additional Information" not found in form, skipping: Error: PDFDocument has no form field with the name "Additional Information"
+Checkbox "I confirm the information is correct" not found in form, skipping: Error: PDFDocument has no form field with the name "I confirm the information is correct"
+Field "Applicant Signature" not found in form, skipping: Error: PDFDocument has no form field with the name "Applicant Signature"
+Field "Signature Date" not found in form, skipping: Error: PDFDocument has no form field with the name "Signature Date"
+
+ ✓ tests/documents/money-claim-pack.test.ts (3 tests) 8ms
+stdout | tests/documents/eviction-pack-option-b.test.ts > Complete eviction pack - Option B coverage > produces Scotland tribunal forms plus premium AI documents
+✅ Form E filled successfully
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/eviction_roadmap.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/expert_guidance.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/eviction_timeline.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/evidence_collection_checklist.hbs
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/proof_of_service.hbs
+[WitnessStatementAI] AI drafting disabled via env var
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/witness-statement.hbs
+✅ Generated witness statement
+[ComplianceAuditAI] AI audit disabled via env var
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/compliance-audit.hbs
+✅ Generated compliance audit
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/uk/scotland/templates/eviction/risk-report.hbs
+✅ Generated risk assessment report
+[TEMPLATE] ✅ Loading from: /home/user/landlord-heavenv3/config/jurisdictions/shared/templates/eviction_case_summary.hbs
+✅ Generated 11 documents for complete eviction pack
+
+ ✓ tests/documents/eviction-pack-option-b.test.ts (2 tests) 383ms
+   ✓ Complete eviction pack - Option B coverage > produces England & Wales court forms and premium AI documents 312ms
+ ❯ tests/notice-compliance-spec.test.ts (3 tests | 1 failed) 10ms
+   × noticeComplianceSpecs > defines hard bars and inline validations for each notice 6ms
+     → expected 0 to be greater than 0
+stdout | tests/notice-only-section8-pdf-text.test.ts
+[PRINT SYSTEM] ✅ Registered 11 print component partials
+
+ ✓ tests/decision-engine/northern-ireland-gating.test.ts (2 tests) 5ms
+ ↓ tests/notice-only-section8-pdf-text.test.ts (1 test | 1 skipped)
+ ✓ tests/documents/scotland-form-guards.test.ts (4 tests) 15ms
+ ✓ tests/ui/wizard-conversational-followups.test.tsx (1 test) 170ms
+ ✓ tests/ui/wizard-ni-gating.test.tsx (3 tests) 249ms
+ ✓ tests/ui/structured-wizard-edit-mode.test.tsx (2 tests) 140ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/wizard/generate/__tests__/api-enforcement.test.ts > API Enforcement - Real Pattern (Integration)
+Error: Test environment not configured. Missing: SUPABASE_URL_TEST, SUPABASE_SERVICE_ROLE_KEY_TEST, TEST_BASE_URL. See docs/TESTING.md for setup instructions.
+ ❯ Module.verifyTestEnvironment src/lib/testing/wizard-test-helpers.ts:111:11
+    109| 
+    110|   if (missing.length > 0) {
+    111|     throw new Error(
+       |           ^
+    112|       `Test environment not configured. Missing: ${missing.join(', ')}…
+    113|         `See docs/TESTING.md for setup instructions.`
+ ❯ src/app/api/wizard/generate/__tests__/api-enforcement.test.ts:24:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/notice-compliance-mqs-ids.test.ts > notice compliance affected_question_id coverage > all affected_question_id values exist in the MQS for the jurisdiction
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "notice-only/wales/fault-based:RHW23-GROUND-REQUIRED:breach_or_ground",
++ ]
+
+ ❯ tests/notice-compliance-mqs-ids.test.ts:64:21
+     62|     }
+     63| 
+     64|     expect(missing).toEqual([]);
+       |                     ^
+     65|   });
+     66| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  tests/notice-compliance-spec.test.ts > noticeComplianceSpecs > defines hard bars and inline validations for each notice
+AssertionError: expected 0 to be greater than 0
+ ❯ tests/notice-compliance-spec.test.ts:22:51
+     20|     noticeComplianceSpecs.forEach((spec) => {
+     21|       expect(spec.hard_bars.length).toBeGreaterThan(0);
+     22|       expect(spec.inline_validation_rules.length).toBeGreaterThan(0);
+       |                                                   ^
+     23|       expect(spec.required_inputs.every((input) => input.required)).to…
+     24|     });
+ ❯ tests/notice-compliance-spec.test.ts:20:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  tests/api/notice-compliance-blocking.test.ts > wizard answer compliance blocking > returns 422 with failures and no next_question when noncompliant at checkpoint
+AssertionError: expected 'WIZARD_GATING_BLOCKED' to be 'NOTICE_NONCOMPLIANT' // Object.is equality
+
+Expected: "NOTICE_NONCOMPLIANT"
+Received: "WIZARD_GATING_BLOCKED"
+
+ ❯ tests/api/notice-compliance-blocking.test.ts:116:24
+    114|     const body = await response.json();
+    115|     expect(response.status).toBe(422);
+    116|     expect(body.error).toBe('NOTICE_NONCOMPLIANT');
+       |                        ^
+    117|     expect(body.failures).toBeDefined();
+    118|     expect(body.failures.length).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  tests/api/notice-compliance-blocking.test.ts > wizard answer compliance blocking > allows non-checkpoint questions to pass even with compliance issues (downgrades to warnings)
+AssertionError: expected 400 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 400
+
+ ❯ tests/api/notice-compliance-blocking.test.ts:150:29
+    148|     // Should NOT return 422, even if there are compliance failures
+    149|     // Instead, compliance failures are downgraded to warnings
+    150|     expect(response.status).toBe(200);
+       |                             ^
+    151|     expect(body.answer_saved).toBe(true);
+    152|     // Compliance warnings may be present but shouldn't block
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  tests/api/wizard-guest-flow.test.ts > Guest Wizard Flow > allows guest to answer questions in wizard
+AssertionError: expected 400 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 400
+
+ ❯ tests/api/wizard-guest-flow.test.ts:110:29
+    108| 
+    109|     const body = await response.json();
+    110|     expect(response.status).toBe(200);
+       |                             ^
+    111|     expect(body.answer_saved).toBe(true);
+    112|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  tests/api/wizard-info-questions.test.ts > Wizard info-type question handling > returns info-type question (section21_intro) once and marks it as viewed
+AssertionError: expected 'landlord_details' to be 'section21_intro' // Object.is equality
+
+Expected: "section21_intro"
+Received: "landlord_details"
+
+ ❯ tests/api/wizard-info-questions.test.ts:121:36
+    119|     const body1 = await response1.json();
+    120|     expect(response1.status).toBe(200);
+    121|     expect(body1.next_question.id).toBe('section21_intro');
+       |                                    ^
+    122|     expect(body1.next_question.inputType).toBe('info');
+    123| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  tests/api/wizard-info-questions.test.ts > Wizard info-type question handling > does not get stuck in a loop on info questions
+AssertionError: expected 'landlord_details' to be 'section21_intro' // Object.is equality
+
+Expected: "section21_intro"
+Received: "landlord_details"
+
+ ❯ tests/api/wizard-info-questions.test.ts:211:26
+    209| 
+    210|     // Verify we don't get stuck on the same question
+    211|     expect(responses[0]).toBe('section21_intro');
+       |                          ^
+    212|     expect(responses[1]).not.toBe('section21_intro');
+    213|     expect(responses[2]).not.toBe('section21_intro');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  tests/api/wizard-mqs-eviction.test.ts > MQS eviction flow (England & Wales) > enhanceAnswer is called for MQS questions with suggestion_prompt
+AssertionError: expected 422 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 422
+
+ ❯ tests/api/wizard-mqs-eviction.test.ts:281:29
+    279| 
+    280|     const body = await response.json();
+    281|     expect(response.status).toBe(200);
+       |                             ^
+    282|     expect((enhanceAnswer as unknown as Mock)).toHaveBeenCalled();
+    283|     expect(body.enhanced_answer).toEqual({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+ FAIL  tests/api/wizard-mqs-money-claim.test.ts > Money claim MQS - England & Wales PAP-DEBT coverage > includes PAP-DEBT, court route, evidence, and enforcement questions
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/api/wizard-mqs-money-claim.test.ts:61:35
+     59| 
+     60|     englandWalesNewIds.forEach((id) => {
+     61|       expect(questionIds.has(id)).toBe(true);
+       |                                   ^
+     62|     });
+     63|   });
+ ❯ tests/api/wizard-mqs-money-claim.test.ts:60:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/14]⎯
+
+ FAIL  tests/integration/ast-wizard-flow.test.ts > AST Wizard Flow - Integration Tests > Error Handling > should reject non-existent case_id in answer route
+AssertionError: expected 500 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 500
+
+ ❯ tests/integration/ast-wizard-flow.test.ts:412:31
+    410| 
+    411|       const response = await wizardAnswer(answerRequest);
+    412|       expect(response.status).toBe(404);
+       |                               ^
+    413| 
+    414|       const data = await response.json();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/14]⎯
+
+ FAIL  tests/integration/money-claim-wizard-flow.test.ts > Money claim wizard integration > England & Wales money claim pack generation flow
+AssertionError: expected 400 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 400
+
+ ❯ answerQuestion tests/integration/money-claim-wizard-flow.test.ts:147:22
+    145|     console.error('Answer error', question_id, body);
+    146|   }
+    147|   expect(res.status).toBe(200);
+       |                      ^
+    148| }
+    149| 
+ ❯ tests/integration/money-claim-wizard-flow.test.ts:172:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/14]⎯
+
+ FAIL  tests/integration/money-claim-wizard-flow.test.ts > Money claim wizard integration > Scotland money claim flow produces Simple Procedure pack
+AssertionError: expected 422 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 422
+
+ ❯ answerQuestion tests/integration/money-claim-wizard-flow.test.ts:147:22
+    145|     console.error('Answer error', question_id, body);
+    146|   }
+    147|   expect(res.status).toBe(200);
+       |                      ^
+    148| }
+    149| 
+ ❯ tests/integration/money-claim-wizard-flow.test.ts:274:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+ FAIL  tests/lib/jurisdictions/legal-enforcement.test.ts > jurisdiction gating enforcement > migrates legacy England & Wales cases to England rules during preview validation
+AssertionError: expected 400 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 400
+
+ ❯ tests/lib/jurisdictions/legal-enforcement.test.ts:282:29
+    280|     });
+    281| 
+    282|     expect(response.status).toBe(422);
+       |                             ^
+    283|     const payload = await response.json();
+    284|     expect(payload.blocking_issues).toBeDefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/14]⎯
+
+ Test Files  11 failed | 42 passed | 1 skipped (54)
+      Tests  13 failed | 389 passed | 17 skipped (419)
+   Start at  00:52:17
+   Duration  10.98s (transform 7.44s, setup 4.57s, collect 38.83s, tests 3.11s, environment 8.90s, prepare 19.00s)
+

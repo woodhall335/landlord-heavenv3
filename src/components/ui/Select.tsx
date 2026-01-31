@@ -19,7 +19,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           className={clsx(
-            "w-full rounded-xl border bg-white px-4 py-3 text-sm font-medium text-gray-800 shadow-sm focus:border-primary focus:ring-primary",
+            "w-full rounded-xl border bg-white px-4 py-3 text-sm font-medium text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-primary focus:ring-primary/40",
             error ? "border-red-400" : "border-gray-200",
             className
           )}

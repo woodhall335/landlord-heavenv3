@@ -1,0 +1,171 @@
+{{!--
+  ============================================================================
+  DEFINITIONS & INTERPRETATION SECTION
+  Standard legal definitions for tenancy agreements across all UK jurisdictions
+
+  USAGE (HTML):
+  {{> definitions_section}}
+
+  NOTES:
+  - Jurisdiction-specific terms can be passed as parameters
+  - This creates defined terms that should be used consistently throughout the agreement
+  ============================================================================
+--}}
+
+{{#*inline "definitions_section"}}
+<section class="definitions-section">
+  <h2>Definitions and Interpretation</h2>
+
+  <p>In this Agreement, unless the context requires otherwise, the following definitions apply:</p>
+
+  <ul class="definitions-list">
+    <li>
+      <span class="defined-term">"Agreement"</span> means this tenancy agreement and any schedules attached hereto.
+    </li>
+    <li>
+      <span class="defined-term">"Landlord"</span> means {{landlord_full_name}} and includes their successors in title, assigns, and any person or company entitled to possession of the Property on termination of the Tenancy.
+    </li>
+    {{#if agent_name}}
+    <li>
+      <span class="defined-term">"Agent"</span> means {{agent_name}}, the Landlord's authorised managing agent, and includes their successors in business.
+    </li>
+    {{/if}}
+    <li>
+      <span class="defined-term">"Tenant"</span> means {{#if multiple_tenants}}jointly and severally{{/if}} {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}.
+    </li>
+    {{#if guarantor_name}}
+    <li>
+      <span class="defined-term">"Guarantor"</span> means {{guarantor_name}}.
+    </li>
+    {{/if}}
+    <li>
+      <span class="defined-term">"Property"</span> means the dwelling at {{property_address}} including all fixtures, fittings, and contents as set out in Schedule 1 and any inventory provided.
+    </li>
+    <li>
+      <span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term period commencing on {{tenancy_start_date}} and ending on {{tenancy_end_date}}, and any periodic tenancy that may arise thereafter{{else}}periodic tenancy commencing on {{tenancy_start_date}}{{/if}}.
+    </li>
+    <li>
+      <span class="defined-term">"Rent"</span> means the sum of {{currency_symbol}}{{rent_amount}} per {{rent_period}}, payable in accordance with Schedule 2.
+    </li>
+    <li>
+      <span class="defined-term">"Deposit"</span> means the sum of {{currency_symbol}}{{deposit_amount}} held as security in accordance with Schedule 2 and protected under the {{deposit_scheme_name}}.
+    </li>
+    <li>
+      <span class="defined-term">"Scheme"</span> means the government-authorised tenancy deposit protection scheme in which the Deposit is registered, being {{deposit_scheme_name}}.
+    </li>
+    <li>
+      <span class="defined-term">"Contents"</span> means the furniture, furnishings, and other items provided by the Landlord for use by the Tenant as specified in any inventory.
+    </li>
+    <li>
+      <span class="defined-term">"Schedule"</span> means a schedule attached to this Agreement, which forms part of and is incorporated into this Agreement.
+    </li>
+    <li>
+      <span class="defined-term">"Written Notice"</span> means a notice in writing delivered by hand, sent by first-class post to the address given in this Agreement, or sent by email to an email address provided by the recipient{{#if email_notices_permitted}} (email notices are permitted under this Agreement){{/if}}.
+    </li>
+    <li>
+      <span class="defined-term">"Working Day"</span> means any day other than a Saturday, Sunday, or public holiday in {{jurisdiction_name}}.
+    </li>
+  </ul>
+
+  <h3>Interpretation</h3>
+
+  <ul class="definitions-list">
+    <li>
+      References to statutes or statutory provisions include any statutory modification, re-enactment, or subordinate legislation in force from time to time.
+    </li>
+    <li>
+      Words importing the singular include the plural and vice versa; words importing any gender include all genders.
+    </li>
+    <li>
+      The headings in this Agreement are for convenience only and shall not affect its interpretation.
+    </li>
+    <li>
+      Where there is more than one Tenant, their obligations and liabilities under this Agreement are joint and several.
+    </li>
+    <li>
+      Any obligation on a party not to do something includes an obligation not to allow or permit that thing to be done.
+    </li>
+  </ul>
+</section>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  JURISDICTION-SPECIFIC DEFINITIONS (can extend the base)
+  ============================================================================
+--}}
+
+{{#*inline "definitions_england_ast"}}
+{{> definitions_section jurisdiction_name="England" currency_symbol="£"}}
+<ul class="definitions-list" style="margin-top: 10pt;">
+  <li>
+    <span class="defined-term">"AST"</span> means an Assured Shorthold Tenancy within the meaning of Chapter II of Part I of the Housing Act 1988.
+  </li>
+  <li>
+    <span class="defined-term">"Housing Act"</span> means the Housing Act 1988 as amended by the Housing Act 1996, the Localism Act 2011, and the Deregulation Act 2015.
+  </li>
+  <li>
+    <span class="defined-term">"Prescribed Information"</span> means the information required to be given to the Tenant under the Housing Act 2004 (as amended) in relation to the protection of the Deposit.
+  </li>
+  <li>
+    <span class="defined-term">"Section 21 Notice"</span> means a notice served under section 21 of the Housing Act 1988 requiring the Tenant to give up possession of the Property.
+  </li>
+</ul>
+{{/inline}}
+
+{{#*inline "definitions_wales_oc"}}
+{{> definitions_section jurisdiction_name="Wales" currency_symbol="£"}}
+<ul class="definitions-list" style="margin-top: 10pt;">
+  <li>
+    <span class="defined-term">"Occupation Contract"</span> means a contract for the occupation of a dwelling under the Renting Homes (Wales) Act 2016.
+  </li>
+  <li>
+    <span class="defined-term">"2016 Act"</span> means the Renting Homes (Wales) Act 2016 and any regulations made thereunder.
+  </li>
+  <li>
+    <span class="defined-term">"Contract-Holder"</span> means the Tenant as defined under the 2016 Act.
+  </li>
+  <li>
+    <span class="defined-term">"Written Statement"</span> means the document required under section 31 of the 2016 Act containing the terms of the Occupation Contract.
+  </li>
+</ul>
+{{/inline}}
+
+{{#*inline "definitions_scotland_prt"}}
+{{> definitions_section jurisdiction_name="Scotland" currency_symbol="£"}}
+<ul class="definitions-list" style="margin-top: 10pt;">
+  <li>
+    <span class="defined-term">"PRT"</span> means a Private Residential Tenancy within the meaning of the Private Housing (Tenancies) (Scotland) Act 2016.
+  </li>
+  <li>
+    <span class="defined-term">"2016 Act"</span> means the Private Housing (Tenancies) (Scotland) Act 2016 and any regulations made thereunder.
+  </li>
+  <li>
+    <span class="defined-term">"First-tier Tribunal"</span> means the First-tier Tribunal for Scotland (Housing and Property Chamber).
+  </li>
+  <li>
+    <span class="defined-term">"Notice to Leave"</span> means a notice served under section 50 of the 2016 Act.
+  </li>
+  <li>
+    <span class="defined-term">"Repairing Standard"</span> means the standard set out in the Housing (Scotland) Act 2006.
+  </li>
+</ul>
+{{/inline}}
+
+{{#*inline "definitions_ni_tenancy"}}
+{{> definitions_section jurisdiction_name="Northern Ireland" currency_symbol="£"}}
+<ul class="definitions-list" style="margin-top: 10pt;">
+  <li>
+    <span class="defined-term">"Private Tenancy"</span> means a tenancy within the meaning of the Private Tenancies (Northern Ireland) Order 2006.
+  </li>
+  <li>
+    <span class="defined-term">"2006 Order"</span> means the Private Tenancies (Northern Ireland) Order 2006 as amended.
+  </li>
+  <li>
+    <span class="defined-term">"Fitness Standard"</span> means the fitness standard for human habitation as set out in the Housing (Northern Ireland) Order 1981.
+  </li>
+  <li>
+    <span class="defined-term">"Notice to Quit"</span> means a notice served under the 2006 Order requiring the Tenant to vacate the Property.
+  </li>
+</ul>
+{{/inline}}

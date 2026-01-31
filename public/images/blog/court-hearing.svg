@@ -1,0 +1,157 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <g transform="translate(80, 30)">
+    <text x="320" y="30" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">COURT HEARING</text>
+    <text x="320" y="52" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">What to expect at a possession hearing</text>
+  </g>
+
+  <!-- Courtroom layout -->
+  <g transform="translate(80, 80)">
+    <rect x="0" y="0" width="400" height="280" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Judge bench -->
+    <rect x="130" y="20" width="140" height="60" rx="8" fill="#6D28D9"/>
+    <text x="200" y="45" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">JUDGE</text>
+    <text x="200" y="60" text-anchor="middle" fill="#F3F1FF" font-size="8" font-family="Arial">(District Judge)</text>
+
+    <!-- Scales of justice -->
+    <g transform="translate(180, 85)">
+      <line x1="20" y1="0" x2="20" y2="20" stroke="#7C3AED" stroke-width="2"/>
+      <line x1="5" y1="10" x2="35" y2="10" stroke="#7C3AED" stroke-width="2"/>
+      <path d="M5 12 L0 25 L15 25 L10 12" fill="#A78BFA"/>
+      <path d="M35 12 L30 25 L45 25 L40 12" fill="#A78BFA"/>
+    </g>
+
+    <!-- Court clerk -->
+    <rect x="150" y="115" width="100" height="35" rx="5" fill="#A78BFA"/>
+    <text x="200" y="137" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">COURT CLERK</text>
+
+    <!-- Landlord side -->
+    <g transform="translate(30, 170)">
+      <rect x="0" y="0" width="140" height="80" rx="8" fill="#7C3AED" opacity="0.15"/>
+      <text x="70" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">CLAIMANT</text>
+      <text x="70" y="35" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">(Landlord)</text>
+      <circle cx="50" cy="55" r="12" fill="#7C3AED"/>
+      <ellipse cx="50" cy="72" rx="15" ry="8" fill="#7C3AED"/>
+      <circle cx="95" cy="55" r="10" fill="#A78BFA" opacity="0.7"/>
+      <text x="95" y="75" text-anchor="middle" fill="#6D28D9" font-size="7" font-family="Arial">Solicitor</text>
+    </g>
+
+    <!-- Tenant side -->
+    <g transform="translate(230, 170)">
+      <rect x="0" y="0" width="140" height="80" rx="8" fill="#6D28D9" opacity="0.15"/>
+      <text x="70" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">DEFENDANT</text>
+      <text x="70" y="35" text-anchor="middle" fill="#6D28D9" font-size="9" font-family="Arial">(Tenant)</text>
+      <circle cx="50" cy="55" r="12" fill="#6D28D9"/>
+      <ellipse cx="50" cy="72" rx="15" ry="8" fill="#6D28D9"/>
+      <circle cx="95" cy="55" r="10" fill="#A78BFA" opacity="0.7"/>
+      <text x="95" y="75" text-anchor="middle" fill="#6D28D9" font-size="7" font-family="Arial">Advisor</text>
+    </g>
+
+    <text x="200" y="275" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">County Court</text>
+  </g>
+
+  <!-- What happens -->
+  <g transform="translate(500, 80)">
+    <rect x="0" y="0" width="220" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="220" height="40" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="28" width="220" height="12" fill="#7C3AED"/>
+    <text x="110" y="28" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">HEARING PROCESS</text>
+
+    <g transform="translate(15, 55)">
+      <circle cx="15" cy="12" r="12" fill="#7C3AED"/>
+      <text x="15" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="35" y="10" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">Case called</text>
+      <text x="35" y="22" fill="#A78BFA" font-size="8" font-family="Arial">Both parties present</text>
+    </g>
+
+    <g transform="translate(15, 95)">
+      <circle cx="15" cy="12" r="12" fill="#7C3AED"/>
+      <text x="15" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="35" y="10" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">Landlord presents</text>
+      <text x="35" y="22" fill="#A78BFA" font-size="8" font-family="Arial">Evidence and grounds</text>
+    </g>
+
+    <g transform="translate(15, 135)">
+      <circle cx="15" cy="12" r="12" fill="#7C3AED"/>
+      <text x="15" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="35" y="10" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">Tenant responds</text>
+      <text x="35" y="22" fill="#A78BFA" font-size="8" font-family="Arial">Defence and circumstances</text>
+    </g>
+
+    <g transform="translate(15, 175)">
+      <circle cx="15" cy="12" r="12" fill="#7C3AED"/>
+      <text x="15" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+      <text x="35" y="10" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">Judge questions</text>
+      <text x="35" y="22" fill="#A78BFA" font-size="8" font-family="Arial">Clarifies facts</text>
+    </g>
+
+    <g transform="translate(15, 215)">
+      <circle cx="15" cy="12" r="12" fill="#6D28D9"/>
+      <text x="15" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">5</text>
+      <text x="35" y="10" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">Judgment given</text>
+      <text x="35" y="22" fill="#A78BFA" font-size="8" font-family="Arial">Usually same day</text>
+    </g>
+
+    <rect x="15" y="245" width="190" height="25" rx="5" fill="#F3F1FF"/>
+    <text x="110" y="262" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold" font-family="Arial">Duration: 15-30 minutes</text>
+  </g>
+
+  <!-- What to bring -->
+  <g transform="translate(80, 380)">
+    <rect x="0" y="0" width="310" height="80" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="155" y="22" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">BRING TO HEARING</text>
+
+    <g transform="translate(20, 35)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="20" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Copy of tenancy</text>
+    </g>
+    <g transform="translate(110, 35)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="20" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Section 8 notice</text>
+    </g>
+    <g transform="translate(200, 35)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="20" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Evidence bundle</text>
+    </g>
+    <g transform="translate(20, 55)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="20" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Rent records</text>
+    </g>
+    <g transform="translate(110, 55)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="20" y="12" fill="#6D28D9" font-size="9" font-family="Arial">Photo ID</text>
+    </g>
+  </g>
+
+  <!-- Possible outcomes -->
+  <g transform="translate(410, 380)">
+    <rect x="0" y="0" width="310" height="80" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="155" y="22" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">POSSIBLE OUTCOMES</text>
+
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="85" height="30" rx="5" fill="#7C3AED"/>
+      <text x="42" y="20" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="Arial">POSSESSION</text>
+    </g>
+    <g transform="translate(115, 40)">
+      <rect x="0" y="0" width="85" height="30" rx="5" fill="#A78BFA"/>
+      <text x="42" y="20" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="Arial">SUSPENDED</text>
+    </g>
+    <g transform="translate(210, 40)">
+      <rect x="0" y="0" width="85" height="30" rx="5" fill="#6D28D9"/>
+      <text x="42" y="20" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="Arial">DISMISSED</text>
+    </g>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

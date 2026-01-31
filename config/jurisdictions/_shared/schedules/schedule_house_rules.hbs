@@ -1,0 +1,119 @@
+{{!--
+  ============================================================================
+  SCHEDULE 5: HOUSE RULES
+  Permitted use, pets, smoking, subletting, and conduct rules
+
+  USAGE:
+  {{> schedule_house_rules}}
+  ============================================================================
+--}}
+
+{{#*inline "schedule_house_rules"}}
+<section class="schedule" id="schedule-5">
+  <div class="schedule-header">
+    <h2>Schedule 5</h2>
+    <div class="schedule-title">House Rules</div>
+  </div>
+
+  <h3>Part A: Permitted Use</h3>
+  <p>The Property is let for use as a private residential dwelling only. The Tenant must not:</p>
+  <ul>
+    <li>Use the Property for any trade, business, or profession</li>
+    <li>Display any advertisement, sign, or notice at the Property</li>
+    <li>Keep any goods or materials that would be a fire or safety hazard</li>
+    <li>Do anything that causes nuisance, annoyance, or disturbance to neighbours</li>
+    <li>Allow more persons to reside at the Property than stated in this Agreement</li>
+  </ul>
+
+  <h3>Part B: Pets</h3>
+  {{#if pets_allowed}}
+  <table class="data-table">
+    <tr>
+      <td class="label">Pets Permitted</td>
+      <td class="value">Yes, subject to conditions below</td>
+    </tr>
+    {{#if approved_pets}}
+    <tr>
+      <td class="label">Approved Pets</td>
+      <td class="value">{{approved_pets}}</td>
+    </tr>
+    {{/if}}
+  </table>
+  <p>The Tenant must ensure that any approved pets:</p>
+  <ul>
+    <li>Are kept under proper control at all times</li>
+    <li>Do not cause nuisance, damage, or disturbance to neighbours</li>
+    <li>Are up to date with vaccinations and parasite treatments</li>
+    <li>Do not foul communal areas or neighbouring properties</li>
+  </ul>
+  <p>The Tenant is liable for any damage caused by pets. The Landlord may require additional cleaning at the end of the tenancy if the Property has been occupied by pets.</p>
+  {{else}}
+  <table class="data-table">
+    <tr>
+      <td class="label">Pets Permitted</td>
+      <td class="value">No</td>
+    </tr>
+  </table>
+  <p>The Tenant must not keep any animals, birds, or reptiles at the Property without the Landlord's prior written consent. The Tenant may request consent in writing, and the Landlord will not unreasonably refuse such requests for well-behaved pets.</p>
+  {{/if}}
+
+  <h3>Part C: Smoking</h3>
+  {{#if smoking_allowed}}
+  <table class="data-table">
+    <tr>
+      <td class="label">Smoking Permitted</td>
+      <td class="value">Yes, in designated areas only</td>
+    </tr>
+  </table>
+  <p>Smoking is permitted only in outdoor areas of the Property. The Tenant must dispose of smoking materials safely and keep ashtrays away from flammable materials.</p>
+  {{else}}
+  <table class="data-table">
+    <tr>
+      <td class="label">Smoking Permitted</td>
+      <td class="value">No</td>
+    </tr>
+  </table>
+  <p>Smoking (including e-cigarettes and vaping) is not permitted inside the Property. This prohibition applies to the Tenant, members of their household, and any visitors.</p>
+  {{/if}}
+
+  <h3>Part D: Subletting and Guests</h3>
+  <p>The Tenant must not:</p>
+  <ul>
+    <li>Sublet the whole or any part of the Property without the Landlord's prior written consent</li>
+    <li>Take in lodgers or paying guests without the Landlord's prior written consent</li>
+    <li>List the Property on short-term letting platforms (such as Airbnb, Booking.com, or similar)</li>
+    <li>Allow any person not named in this Agreement to reside at the Property for more than 14 consecutive days without notifying the Landlord</li>
+  </ul>
+  <p>Requests to sublet or take in lodgers will be considered by the Landlord and consent will not be unreasonably withheld. Unauthorised subletting is a serious breach of this Agreement.</p>
+
+  <h3>Part E: Quiet Enjoyment</h3>
+  <p>The Tenant must:</p>
+  <ul>
+    <li>Behave in a manner that does not cause nuisance or annoyance to neighbours</li>
+    <li>Keep noise to reasonable levels, particularly between 11pm and 7am</li>
+    <li>Ensure visitors respect these rules</li>
+    <li>Not hold parties or gatherings that cause disturbance</li>
+  </ul>
+
+  {{#if has_garden}}
+  <h3>Part F: Garden</h3>
+  <p>The Tenant is responsible for maintaining the garden in reasonable condition, including:</p>
+  <ul>
+    <li>{{#if lawn_mowing_responsibility}}{{lawn_mowing_responsibility}}{{else}}Keeping lawns mown and edges trimmed{{/if}}</li>
+    <li>{{#if hedge_trimming_responsibility}}{{hedge_trimming_responsibility}}{{else}}Keeping hedges and shrubs trimmed{{/if}}</li>
+    <li>Keeping paths and patio areas clear and weed-free</li>
+    <li>Not removing or planting trees, shrubs, or plants without consent</li>
+  </ul>
+  {{/if}}
+
+  <h3>Part G: Alterations</h3>
+  <p>The Tenant must not make any alterations or additions to the Property without the Landlord's prior written consent. This includes:</p>
+  <ul>
+    <li>Structural changes of any kind</li>
+    <li>Installing fixtures, fittings, or satellite dishes</li>
+    <li>Redecorating (painting, wallpapering) without consent</li>
+    <li>Drilling holes or using adhesive fixings that damage walls</li>
+  </ul>
+  <p>Picture hooks and similar minor fixings may be permitted with consent. Any alterations made with consent become the Landlord's property unless otherwise agreed.</p>
+</section>
+{{/inline}}

@@ -26,6 +26,48 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
+ * Parse a YYYY-MM-DD date string as a local date to avoid timezone off-by-one issues.
+ * Using `new Date('YYYY-MM-DD')` interprets as UTC, which can shift the date in some timezones.
+ *
+ * @param dateStr - Date string in YYYY-MM-DD format
+ * @returns Date object in local time, or null if invalid
+ */
+export function parseLocalDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+
+  // Handle YYYY-MM-DD format explicitly as local time
+  const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (match) {
+    const [, year, month, day] = match;
+    return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
+  }
+
+  // Fallback for other formats
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+/**
+ * Format a YYYY-MM-DD date string to long UK format (e.g., "15 January 2024").
+ * Uses parseLocalDate to avoid timezone issues with ISO date strings.
+ *
+ * @param dateStr - Date string in YYYY-MM-DD format
+ * @returns Formatted date string, or null if invalid
+ */
+export function formatLocalDateLong(dateStr: string | undefined | null): string | null {
+  if (!dateStr) return null;
+
+  const date = parseLocalDate(dateStr);
+  if (!date) return dateStr; // Return original if unparseable
+
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+/**
  * Format date to UK format (DD/MM/YYYY)
  */
 export function formatDate(date: string | Date): string {

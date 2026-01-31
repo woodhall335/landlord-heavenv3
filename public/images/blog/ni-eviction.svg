@@ -1,0 +1,138 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">NI EVICTION PROCESS</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Step-by-step legal eviction procedure in Northern Ireland</text>
+
+  <!-- Document icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Legal document -->
+    <g transform="translate(40, 10)">
+      <rect x="0" y="0" width="120" height="90" rx="4" fill="#F3F1FF" stroke="#7C3AED" stroke-width="2"/>
+      <!-- Header -->
+      <rect x="10" y="10" width="100" height="15" rx="2" fill="#7C3AED"/>
+      <text x="60" y="21" text-anchor="middle" fill="white" font-size="8" font-weight="bold">COUNTY COURT</text>
+      <!-- Lines -->
+      <line x1="10" y1="35" x2="110" y2="35" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="10" y1="45" x2="90" y2="45" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="10" y1="55" x2="100" y2="55" stroke="#A78BFA" stroke-width="2"/>
+      <line x1="10" y1="65" x2="80" y2="65" stroke="#A78BFA" stroke-width="2"/>
+      <!-- Seal -->
+      <circle cx="90" cy="75" r="12" fill="#EF4444" opacity="0.3"/>
+      <circle cx="90" cy="75" r="8" fill="#EF4444" opacity="0.5"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">COURT ORDER</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Required for</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">lawful eviction</text>
+  </g>
+
+  <!-- Step by step process -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EVICTION STEPS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#22C55E"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">1</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Serve Notice to Quit</text>
+    </g>
+    <line x1="10" y1="20" x2="10" y2="28" stroke="#7C3AED" stroke-width="2" stroke-dasharray="2"/>
+    <g transform="translate(15, 72)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">2</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Notice period expires</text>
+    </g>
+    <line x1="10" y1="47" x2="10" y2="55" stroke="#7C3AED" stroke-width="2" stroke-dasharray="2"/>
+    <g transform="translate(15, 99)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">3</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">File court summons</text>
+    </g>
+    <line x1="10" y1="74" x2="10" y2="82" stroke="#7C3AED" stroke-width="2" stroke-dasharray="2"/>
+    <g transform="translate(15, 126)">
+      <rect x="0" y="0" width="20" height="20" rx="10" fill="#A78BFA"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">4</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="9">Attend hearing</text>
+    </g>
+  </g>
+
+  <!-- Court details -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COURT APPLICATION</text>
+
+    <g transform="translate(15, 48)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">Where to apply:</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <text x="0" y="12" fill="#6D28D9" font-size="8">Small Claims / County Court</text>
+    </g>
+    <g transform="translate(15, 88)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">Court fee:</text>
+    </g>
+    <g transform="translate(15, 108)">
+      <text x="0" y="12" fill="#7C3AED" font-size="10" font-weight="bold">£120 - £300</text>
+    </g>
+    <g transform="translate(15, 130)">
+      <text x="0" y="12" fill="#6D28D9" font-size="9" font-weight="bold">Documents needed:</text>
+    </g>
+    <g transform="translate(15, 148)">
+      <text x="0" y="12" fill="#6D28D9" font-size="8">• NTQ served • Tenancy agreement</text>
+    </g>
+  </g>
+
+  <!-- Grounds and warnings -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GROUNDS FOR POSSESSION</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">COMMON GROUNDS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Rent arrears</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Breach of tenancy</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Landlord needs property</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Property sale</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Court decides all cases</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">ILLEGAL EVICTION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Changing locks</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Removing belongings</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Harassment</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Utility disconnection</text>
+      <text x="100" y="94" text-anchor="middle" fill="#EF4444" font-size="8" font-weight="bold">Criminal offence in NI</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">ENFORCEMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">After court order granted:</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Apply for warrant</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Court bailiff attends</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Lawful repossession</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Only legal method</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

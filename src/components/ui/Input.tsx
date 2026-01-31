@@ -52,7 +52,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       // Min height for touch target
       "min-h-touch",
       // Focus states
-      "focus:outline-none focus:ring-2 focus:ring-offset-1",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
       // Disabled styles
       "disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     );
@@ -60,11 +60,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputVariantStyles = hasError
       ? clsx(
           "border-error",
-          "focus:border-error focus:ring-error/20"
+          "focus:border-error focus:ring-error/40"
         )
       : clsx(
           "border-gray-300",
-          "focus:border-primary focus:ring-primary/20",
+          "focus:border-primary focus:ring-primary/40",
           "hover:border-gray-400"
         );
 
@@ -164,7 +164,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       "transition-all duration-200",
       "resize-vertical",
       // Focus states
-      "focus:outline-none focus:ring-2 focus:ring-offset-1",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
       // Disabled styles
       "disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     );
@@ -172,11 +172,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaVariantStyles = hasError
       ? clsx(
           "border-error",
-          "focus:border-error focus:ring-error/20"
+          "focus:border-error focus:ring-error/40"
         )
       : clsx(
           "border-gray-300",
-          "focus:border-primary focus:ring-primary/20",
+          "focus:border-primary focus:ring-primary/40",
           "hover:border-gray-400"
         );
 

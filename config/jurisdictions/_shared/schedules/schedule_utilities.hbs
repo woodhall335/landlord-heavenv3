@@ -1,0 +1,105 @@
+{{!--
+  ============================================================================
+  SCHEDULE 3: UTILITIES AND SERVICES
+  Utility responsibilities and meter readings
+
+  USAGE:
+  {{> schedule_utilities}}
+  ============================================================================
+--}}
+
+{{#*inline "schedule_utilities"}}
+<section class="schedule" id="schedule-3">
+  <div class="schedule-header">
+    <h2>Schedule 3</h2>
+    <div class="schedule-title">Utilities and Services</div>
+  </div>
+
+  <h3>Part A: Responsibility for Utilities</h3>
+  <table class="data-table">
+    <tr>
+      <th style="width: 40%;">Utility/Service</th>
+      <th style="width: 30%;">Responsible Party</th>
+      <th style="width: 30%;">Notes</th>
+    </tr>
+    <tr>
+      <td class="label">Council Tax</td>
+      <td>{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}Tenant{{/if}}</td>
+      <td>{{#if council_tax_band}}Band {{council_tax_band}}{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Gas</td>
+      <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td>
+      <td>Tenant to register with supplier</td>
+    </tr>
+    <tr>
+      <td class="label">Electricity</td>
+      <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td>
+      <td>Tenant to register with supplier</td>
+    </tr>
+    <tr>
+      <td class="label">Water and Sewerage</td>
+      <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td>
+      <td>{{#if water_metered}}Metered{{else}}Unmetered{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Internet/Broadband</td>
+      <td>{{#if internet_responsibility}}{{internet_responsibility}}{{else}}Tenant{{/if}}</td>
+      <td>{{#if internet_included}}Included in rent{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">TV Licence</td>
+      <td>Tenant</td>
+      <td>If required for property</td>
+    </tr>
+    {{#if landlord_insurance}}
+    <tr>
+      <td class="label">Buildings Insurance</td>
+      <td>Landlord</td>
+      <td>Tenant should arrange contents insurance</td>
+    </tr>
+    {{/if}}
+  </table>
+
+  {{#if meter_reading_gas}}{{#if meter_reading_electric}}
+  <h3>Part B: Meter Readings at Start of Tenancy</h3>
+  <table class="data-table">
+    <tr>
+      <th style="width: 40%;">Meter</th>
+      <th style="width: 30%;">Reading</th>
+      <th style="width: 30%;">Date Taken</th>
+    </tr>
+    {{#if meter_reading_gas}}
+    <tr>
+      <td class="label">Gas Meter</td>
+      <td>{{meter_reading_gas}}</td>
+      <td>{{#if tenancy_start_date}}{{tenancy_start_date}}{{else}}Start of tenancy{{/if}}</td>
+    </tr>
+    {{/if}}
+    {{#if meter_reading_electric}}
+    <tr>
+      <td class="label">Electricity Meter</td>
+      <td>{{meter_reading_electric}}</td>
+      <td>{{#if tenancy_start_date}}{{tenancy_start_date}}{{else}}Start of tenancy{{/if}}</td>
+    </tr>
+    {{/if}}
+    {{#if meter_reading_water}}
+    <tr>
+      <td class="label">Water Meter</td>
+      <td>{{meter_reading_water}}</td>
+      <td>{{#if tenancy_start_date}}{{tenancy_start_date}}{{else}}Start of tenancy{{/if}}</td>
+    </tr>
+    {{/if}}
+  </table>
+  {{/if}}{{/if}}
+
+  <h3>Part C: Utility Transfer</h3>
+  <p>The Tenant must notify all utility suppliers of their occupation of the Property within 7 days of the start of the tenancy and provide the Landlord with evidence of having done so if requested.</p>
+  <p>Upon leaving the Property, the Tenant must notify all utility suppliers of the tenancy end date and take final meter readings.</p>
+
+  {{#if communal_areas}}
+  <h3>Part D: Communal Services</h3>
+  <p>{{#if communal_cleaning}}The following communal services are provided: {{communal_cleaning}}{{else}}Communal areas are shared with other occupants. Costs may be apportioned as specified.{{/if}}</p>
+  {{/if}}
+</section>
+{{/inline}}

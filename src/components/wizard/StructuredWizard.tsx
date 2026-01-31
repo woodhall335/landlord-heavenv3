@@ -9,10 +9,111 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
-import type { ExtendedWizardQuestion, StepFlags } from '@/lib/wizard/types';
+import type { ExtendedWizardQuestion, StepFlags, WizardValidationIssue } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
+import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
+import { apiUrl } from '@/lib/api';
+import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
+import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
+import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { RiCheckboxCircleLine, RiAlertLine } from 'react-icons/ri';
+
+// ====================================================================================
+// PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
+// ====================================================================================
+const NOTICE_ONLY_DEBUG = typeof window !== 'undefined' &&
+  (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_NOTICE_ONLY_DEBUG === '1' ||
+   window.localStorage?.getItem('NOTICE_ONLY_DEBUG') === '1');
+
+function debugLog(context: string, ...args: any[]) {
+  if (NOTICE_ONLY_DEBUG) {
+    console.log(`[NOTICE-ONLY-DEBUG] [${context}]`, ...args);
+  }
+}
+
+// ====================================================================================
+// OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
+// ====================================================================================
+type MQSOption = string | { value: string; label?: string; [k: string]: any };
+
+interface NormalizedOption {
+  key: string;
+  value: string;
+  label: string;
+}
+
+/**
+ * Normalizes options to a consistent format, handling both string[] and object[] options.
+ * Prevents React key conflicts and [object Object] rendering errors.
+ */
+function normalizeOptions(options?: MQSOption[]): NormalizedOption[] {
+  return (options ?? []).map((opt) => {
+    if (typeof opt === "string") {
+      return { key: opt, value: opt, label: opt };
+    }
+    const value = String(opt.value ?? opt.id ?? "");
+    const label = String(opt.label ?? opt.name ?? value);
+    return { key: value, value, label };
+  }).filter(o => o.value);
+}
+
+// ====================================================================================
+// NESTED PATH HELPER FOR ASK HEAVEN (Task A)
+// ====================================================================================
+
+/**
+ * Sets a value at a nested path in an object, creating intermediate objects as needed.
+ * Example: setValueAtPath({}, "ground_particulars.ground_8.summary", "text")
+ *   => { ground_particulars: { ground_8: { summary: "text" } } }
+ *
+ * For ground_particulars, the path format is "ground_8.summary" or "ground_11.summary"
+ * which maps to the structure: { ground_8: { summary: "..." }, ground_11: { summary: "..." } }
+ */
+function setValueAtPath(obj: any, path: string, value: string): any {
+  if (!path) return obj;
+
+  const parts = path.split('.');
+  const result = typeof obj === 'object' && obj !== null ? { ...obj } : {};
+
+  let current = result;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    if (typeof current[part] !== 'object' || current[part] === null) {
+      current[part] = {};
+    } else {
+      current[part] = { ...current[part] };
+    }
+    current = current[part];
+  }
+
+  current[parts[parts.length - 1]] = value;
+  return result;
+}
+
+/**
+ * Gets a value at a nested path in an object.
+ * Example: getValueAtPath({ ground_8: { summary: "text" } }, "ground_8.summary") => "text"
+ */
+function getValueAtPath(obj: any, path: string): string | null {
+  if (!path || !obj || typeof obj !== 'object') return null;
+
+  const parts = path.split('.');
+  let current = obj;
+
+  for (const part of parts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = current[part];
+    } else {
+      return null;
+    }
+  }
+
+  return typeof current === 'string' ? current : null;
+}
 
 interface StructuredWizardProps {
   caseId: string;
@@ -21,6 +122,11 @@ interface StructuredWizardProps {
   product: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   initialQuestion?: ExtendedWizardQuestion | null;
   onComplete: (caseId: string) => void;
+  mode?: 'default' | 'edit';
+  /** Question ID to jump to on mount (from End Validator "Fix this" button) */
+  jumpToQuestionId?: string;
+  /** Single-question fix mode: after saving, returns to validation instead of continuing to next question */
+  fixMode?: boolean;
 }
 
 interface CaseAnalysisState {
@@ -38,6 +144,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   product,
   initialQuestion,
   onComplete,
+  mode = 'default',
+  jumpToQuestionId,
+  fixMode = false,
 }) => {
   const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(
     initialQuestion ?? null,
@@ -47,6 +156,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [reviewStepIndex, setReviewStepIndex] = useState(0);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
   const [askHeavenResult, setAskHeavenResult] = useState<{
     suggested_wording: string;
@@ -63,12 +173,42 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
 
   // ====================================================================================
+  // ACTIVE FIELD TRACKING FOR ASK HEAVEN (Task A)
+  // ====================================================================================
+  const [activeTextFieldPath, setActiveTextFieldPath] = useState<string | null>(null);
+
+  // ====================================================================================
+  // NOTICE EXPIRY DATE OVERRIDE STATE (Task B)
+  // ====================================================================================
+  const [expiryDateOverride, setExpiryDateOverride] = useState(false);
+
+  // ====================================================================================
+  // NOTICE COMPLIANCE ERROR STATE
+  // ====================================================================================
+  const [noticeComplianceError, setNoticeComplianceError] = useState<{
+    failures: Array<{
+      code: string;
+      affected_question_id: string;
+      legal_reason: string;
+      user_fix_hint: string;
+    }>;
+    warnings: Array<{
+      code: string;
+      affected_question_id: string;
+      legal_reason: string;
+      user_fix_hint: string;
+    }>;
+  } | null>(null);
+
+  // ====================================================================================
   // PHASE 2: PRE-STEP GATE + ROUTE GUARD STATE
   // ====================================================================================
   const [mqsLocked, setMqsLocked] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<'england' | 'wales' | null>(null);
   const previousRouteRef = React.useRef<string | null>(null);
   const routeGuardTriggeredRef = React.useRef(false);
+  // Track if user has explicitly saved at least once (prevents validation on initial mount)
+  const hasUserSavedRef = React.useRef(false);
 
   // ====================================================================================
   // SMART GUIDANCE STATE (Phase 3)
@@ -99,6 +239,84 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     legal_basis: string;
   }> | null>(null);
 
+  // ====================================================================================
+  // SMART REVIEW STATE (for persisted warnings from evidence analysis)
+  // ====================================================================================
+  // Smart Review warnings from AI-extracted document analysis
+  // These warnings survive page refresh via __smart_review in case_facts
+  const [smartReviewWarnings, setSmartReviewWarnings] = useState<Array<{
+    code: string;
+    severity: 'info' | 'warning' | 'blocker';
+    title: string;
+    message: string;
+    fields: string[];
+    relatedUploads: string[];
+    suggestedUserAction: string;
+    confidence?: number;
+    comparison?: {
+      wizardValue: any;
+      extractedValue: any;
+      source?: string;
+    };
+  }>>([]);
+
+  // Smart Review run summary
+  const [smartReviewSummary, setSmartReviewSummary] = useState<{
+    documentsProcessed: number;
+    warningsTotal: number;
+    warningsBlocker: number;
+    warningsWarning: number;
+    warningsInfo: number;
+    ranAt: string | null;
+  } | null>(null);
+
+  // ====================================================================================
+  // GROUNDS SELECTOR STATE
+  // ====================================================================================
+  const [availableGrounds, setAvailableGrounds] = useState<GroundMetadata[] | null>(null);
+  const [loadingGrounds, setLoadingGrounds] = useState(false);
+  const [groundsFetchError, setGroundsFetchError] = useState<string | null>(null);
+
+  // ====================================================================================
+  // PREVIEW VALIDATION STATE (for inline blocking issues - ALL MODES)
+  // ====================================================================================
+  // Canonical validation issues from /api/wizard/answer
+  // These are now returned in ALL modes (not just edit mode) to enable
+  // inline per-step warnings across all notice-only wizards.
+  const [previewBlockingIssues, setPreviewBlockingIssues] = useState<WizardValidationIssue[]>([]);
+  const [previewWarnings, setPreviewWarnings] = useState<WizardValidationIssue[]>([]);
+  const [, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
+  const [hasBlockingIssues, setHasBlockingIssues] = useState(false);
+  const [, setIsReviewComplete] = useState(false);
+  const [issueCounts, setIssueCounts] = useState<{ blocking: number; warnings: number }>({ blocking: 0, warnings: 0 });
+  // Service date validation warning
+  const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
+
+  // ====================================================================================
+  // NOTICE-ONLY INLINE VALIDATION STATE (NEW - rebuilt from first principles)
+  // ====================================================================================
+  // This replaces the legacy wizardIssueFilter approach for notice-only products.
+  // Guidance is non-blocking, field errors block navigation.
+  // KEY: Validation fires ONLY after Save/Next, not while typing.
+  // NOTE: State is kept for setter calls but UI rendering is disabled per UX cleanup.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_noticeOnlyGuidance, setNoticeOnlyGuidance] = useState<InlineGuidance[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_noticeOnlyRouteSuggestion, setNoticeOnlyRouteSuggestion] = useState<{
+    toRoute: string;
+    reason: string;
+  } | null>(null);
+  // Flow Not Available modal state
+  const [showFlowNotAvailableModal, setShowFlowNotAvailableModal] = useState(false);
+  const [flowNotAvailableDetails, setFlowNotAvailableDetails] = useState<{
+    blockedRoute: string;
+    reason: string;
+    legalBasis?: string;
+    alternativeRoutes: string[];
+  } | null>(null);
+  // Pending route block - when true, Next is blocked until user resolves via modal
+  const [pendingRouteBlock, setPendingRouteBlock] = useState(false);
+
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
     notice_period_days: number;
@@ -112,10 +330,55 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   >([]);
   const [uploadingEvidence, setUploadingEvidence] = useState(false);
 
+  // Complete Pack loading animation step
+  const [completePackStep, setCompletePackStep] = useState(0);
+
   // Step 3: money-claim case health / readiness
   const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  const deriveAnswerFromFacts = useCallback(
+    (question: ExtendedWizardQuestion | null, facts: Record<string, any>) => {
+      if (!question) return null;
+
+      const resolveValue = (paths: string[]): any => {
+        for (const path of paths) {
+          const value = getValueAtPath(facts, path);
+          if (value !== null && value !== undefined) {
+            return value;
+          }
+        }
+        return null;
+      };
+
+      if (question.inputType === 'group' && question.fields) {
+        const hydrated: Record<string, any> = {};
+
+        question.fields.forEach((field: any) => {
+          const fieldPaths =
+            (field.maps_to && Array.isArray(field.maps_to) && field.maps_to.length > 0
+              ? field.maps_to
+              : [field.id]
+            ).filter(Boolean);
+          const value = resolveValue(fieldPaths as string[]);
+          if (value !== null) {
+            hydrated[field.id] = value;
+          }
+        });
+
+        return Object.keys(hydrated).length > 0 ? hydrated : null;
+      }
+
+      const questionPaths =
+        (question.maps_to && question.maps_to.length > 0 ? question.maps_to : [question.id]).filter(
+          Boolean,
+        );
+
+      return resolveValue(questionPaths as string[]);
+    },
+    [],
+  );
 
   // Checkpoint state for live validation
   const [checkpoint, setCheckpoint] = useState<any>(null);
@@ -125,6 +388,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setCurrentQuestion(question);
     setUploadFilesForCurrentQuestion([]);
     setStepFlags(null);
+    setNoticeComplianceError(null); // Clear compliance error when question changes
+    setActiveTextFieldPath(null); // Clear active field when question changes (Task A)
+    setExpiryDateOverride(false); // Reset expiry date override when question changes (Task B)
+    setPastServiceDateWarning(null); // Clear past service date warning when question changes
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -168,7 +435,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setAnalysisError(null);
 
     try {
-      const response = await fetch('/api/wizard/analyze', {
+      const response = await fetch(apiUrl('/api/wizard/analyze'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -207,7 +474,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!caseId || caseType !== 'eviction') return;
 
     try {
-      const response = await fetch('/api/wizard/checkpoint', {
+      const response = await fetch(apiUrl('/api/wizard/checkpoint'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ case_id: caseId }),
@@ -225,20 +492,40 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   const handleApplySuggestion = useCallback(
     (newText: string) => {
-      if (currentQuestion?.inputType === 'textarea') {
+      // Use active field path to determine where to write the text
+      if (activeTextFieldPath) {
+        // For ground_particulars fields with paths like "ground_8.summary"
+        if (currentQuestion?.id === 'ground_particulars') {
+          const structuredValue = typeof currentAnswer === 'object' && currentAnswer !== null ? currentAnswer : {};
+          const updatedValue = setValueAtPath(structuredValue, activeTextFieldPath, newText);
+          setCurrentAnswer(updatedValue);
+        } else {
+          // For other nested fields (future-proofing)
+          const updatedValue = setValueAtPath(currentAnswer || {}, activeTextFieldPath, newText);
+          setCurrentAnswer(updatedValue);
+        }
+      } else if (currentQuestion?.inputType === 'textarea') {
+        // Fallback: simple textarea (original behavior)
         setCurrentAnswer(newText);
       }
     },
-    [currentQuestion],
+    [currentQuestion, activeTextFieldPath, currentAnswer],
   );
 
   const handleComplete = useCallback(
-    async () => {
+    async (options?: { redirect?: boolean }) => {
+      const shouldRedirect = options?.redirect ?? mode !== 'edit';
+
       try {
         setLoading(true);
 
         // Final analysis before redirect (non-blocking for UX, but awaited here)
         await refreshAnalysis();
+
+        if (mode === 'edit' && !shouldRedirect) {
+          setLoading(false);
+          return;
+        }
 
         onComplete(caseId);
       } catch (err: any) {
@@ -246,10 +533,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setLoading(false);
       }
     },
-    [caseId, onComplete, refreshAnalysis],
+    [caseId, mode, onComplete, refreshAnalysis],
   );
 
-  const loadNextQuestion = useCallback(async () => {
+  const loadNextQuestion = useCallback(async (opts?: { currentQuestionId?: string }) => {
     if (!caseId) return;
 
     setLoading(true);
@@ -258,10 +545,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setAskHeavenResult(null);
 
     try {
-      const response = await fetch('/api/wizard/next-question', {
+      const response = await fetch(apiUrl('/api/wizard/next-question'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_id: caseId }),
+        body: JSON.stringify({
+          case_id: caseId,
+          mode,
+          include_answered: mode === 'edit',
+          review_mode: mode === 'edit',
+          current_question_id: opts?.currentQuestionId ?? null,
+        }),
       });
 
       if (!response.ok) {
@@ -270,12 +563,51 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       const data = await response.json();
 
+      // PHASE 1: Debug instrumentation - log next-question response
+      debugLog('loadNextQuestion:response', {
+        is_complete: data.is_complete,
+        next_question_id: data.next_question?.id || null,
+        current_question_id: opts?.currentQuestionId || null,
+        progress: data.progress,
+      });
+
       if (data.is_complete) {
+        setProgress(data.progress || 100);
         setIsComplete(true);
+        if (mode === 'edit') {
+          if (opts?.currentQuestionId) {
+            setReviewStepIndex((prev) => prev + 1);
+          }
+          setCurrentQuestion(null);
+          setCurrentAnswer(null);
+          setUploadFilesForCurrentQuestion([]);
+          setLoading(false);
+          return;
+        }
         await handleComplete();
       } else if (data.next_question) {
+        // Debug: Check if next question is different from current
+        const isSameQuestion = opts?.currentQuestionId === data.next_question.id;
+        debugLog('loadNextQuestion:applying', {
+          current_question_id: opts?.currentQuestionId || null,
+          next_question_id: data.next_question.id,
+          is_same_question: isSameQuestion,
+        });
+
+        if (isSameQuestion) {
+          console.warn('[NOTICE-ONLY-DEBUG] Server returned same question - wizard may be stuck!');
+        }
+
+        if (mode === 'edit') {
+          setReviewStepIndex((prev) => (opts?.currentQuestionId ? prev + 1 : 0));
+        }
         initializeQuestion(data.next_question);
         setProgress(data.progress || 0);
+
+        // Debug: Confirm state was updated
+        debugLog('loadNextQuestion:stateUpdated', {
+          new_question_id: data.next_question.id,
+        });
       } else {
         throw new Error('No question returned from API');
       }
@@ -285,7 +617,69 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [caseId, handleComplete, initializeQuestion]);
+  }, [caseId, handleComplete, initializeQuestion, mode]);
+
+  // ====================================================================================
+  // JUMP-TO-QUESTION FUNCTIONALITY (for issue links)
+  // ====================================================================================
+  // Allows users to click on validation issues to navigate directly to the question
+  // that can fix the issue. Preserves case context (case_id, type, jurisdiction, product).
+  const jumpToQuestion = useCallback(async (questionId: string) => {
+    if (!caseId || !questionId) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Fetch the specific question by ID
+      const response = await fetch(apiUrl('/api/wizard/next-question'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          mode: 'edit', // Always use edit mode for jumping to questions
+          include_answered: true,
+          review_mode: true,
+          target_question_id: questionId, // Request specific question
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load question: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.next_question) {
+        initializeQuestion(data.next_question);
+        setProgress(data.progress || 0);
+        console.log('[VALIDATION-UI] Jumped to question:', questionId);
+      } else {
+        // If specific question not found, just log it
+        console.warn('[VALIDATION-UI] Question not found:', questionId);
+        setError(`Question "${questionId}" not found in current flow`);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to navigate to question');
+      console.error('Jump to question error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, initializeQuestion]);
+
+  // ====================================================================================
+  // JUMP-TO-QUESTION ON MOUNT (from End Validator "Fix this" button)
+  // ====================================================================================
+  // When the user clicks "Fix this" in the End Validator (preview page), they're
+  // redirected here with jumpToQuestionId. Jump to that question on mount.
+  useEffect(() => {
+    if (jumpToQuestionId && caseId) {
+      console.log('[JUMP-TO] Jumping to question from URL param:', jumpToQuestionId);
+      void jumpToQuestion(jumpToQuestionId);
+    }
+    // Only run on mount when we have a jumpToQuestionId
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jumpToQuestionId, caseId]);
 
   // ====================================================================================
   // PHASE 2: MQS LOADING FUNCTION
@@ -295,7 +689,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setError(null);
 
     try {
-      const response = await fetch('/api/wizard/mqs', {
+      const response = await fetch(apiUrl('/api/wizard/mqs'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -333,8 +727,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }, [caseId, loadNextQuestion]);
 
   // Load first question after intro or when no initial question was provided
+  // IMPORTANT: Skip if we have a jumpToQuestionId - let the jump effect handle it
   useEffect(() => {
+    // Don't load first question if we're jumping to a specific question
+    if (jumpToQuestionId) {
+      return;
+    }
+
     if (initialQuestion && !currentQuestion) {
+      if (mode === 'edit') {
+        setReviewStepIndex(0);
+      }
       initializeQuestion(initialQuestion);
       return;
     }
@@ -342,16 +745,42 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!showIntro && !currentQuestion) {
       void loadNextQuestion();
     }
-  }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, showIntro]);
+  }, [currentQuestion, initialQuestion, initializeQuestion, jumpToQuestionId, loadNextQuestion, mode, showIntro]);
 
   // Fetch case facts when question changes (for validation and side panels)
   useEffect(() => {
     const fetchCaseFacts = async () => {
       try {
-        const response = await fetch(`/api/cases/${caseId}`);
+        const response = await fetch(apiUrl(`/api/cases/${caseId}`));
         if (response.ok) {
           const data = await response.json();
-          setCaseFacts(data.case?.collected_facts || {});
+          const collectedFacts = data.case?.collected_facts || {};
+          setCaseFacts(collectedFacts);
+          // If we loaded existing facts, user has previously saved - enable validation
+          if (Object.keys(collectedFacts).length > 0) {
+            hasUserSavedRef.current = true;
+          }
+
+          // ============================================================================
+          // SMART REVIEW: Hydrate persisted warnings from case_facts.__smart_review
+          // ============================================================================
+          // Only for complete_pack/eviction_pack + England - Smart Review doesn't run for other products
+          if (
+            (product === 'complete_pack') &&
+            jurisdiction === 'england' &&
+            collectedFacts.__smart_review
+          ) {
+            const sr = collectedFacts.__smart_review;
+            setSmartReviewWarnings(sr.warnings || []);
+            setSmartReviewSummary({
+              documentsProcessed: sr.summary?.documentsProcessed ?? 0,
+              warningsTotal: sr.summary?.warningsTotal ?? 0,
+              warningsBlocker: sr.summary?.warningsBlocker ?? 0,
+              warningsWarning: sr.summary?.warningsWarning ?? 0,
+              warningsInfo: sr.summary?.warningsInfo ?? 0,
+              ranAt: sr.ranAt ?? null,
+            });
+          }
         }
       } catch (err) {
         console.error('Failed to fetch case facts:', err);
@@ -361,7 +790,70 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (currentQuestion && caseId) {
       void fetchCaseFacts();
     }
-  }, [currentQuestion, caseId]);
+  }, [currentQuestion, caseId, product, jurisdiction]);
+
+  useEffect(() => {
+    if (!currentQuestion) return;
+
+    const hydrated = deriveAnswerFromFacts(currentQuestion, caseFacts);
+
+    const shouldHydrate =
+      hydrated !== null &&
+      (currentAnswer === null ||
+        currentAnswer === undefined ||
+        (typeof currentAnswer === 'string' && currentAnswer.trim().length === 0));
+
+    if (shouldHydrate) {
+      setCurrentAnswer(hydrated);
+    }
+  }, [caseFacts, currentAnswer, currentQuestion, deriveAnswerFromFacts]);
+
+  // ====================================================================================
+  // FIX: Auto-initialize shared_arrears for ground_particulars when arrears grounds selected
+  // ====================================================================================
+  // Problem: Pre-populated arrears values are DISPLAYED but not in currentAnswer.
+  // When user fills factual summaries without touching arrears fields, validation fails
+  // because currentAnswer.shared_arrears is undefined.
+  // Solution: Auto-populate shared_arrears with pre-populated values including default end_date.
+  useEffect(() => {
+    if (!currentQuestion || currentQuestion.id !== 'ground_particulars') return;
+
+    // Get selected grounds
+    const selectedGrounds = caseFacts.section8_grounds || [];
+    const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
+      if (g.startsWith('ground_')) return g;
+      const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+      return match ? `ground_${match[1].toLowerCase()}` : g;
+    })));
+
+    // Check if any arrears grounds are selected
+    const hasArrearsGrounds = groundIds.some((id: string) =>
+      id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+    );
+
+    if (!hasArrearsGrounds) return;
+
+    // If shared_arrears already exists in currentAnswer, don't overwrite
+    const structuredValue = typeof currentAnswer === 'object' && currentAnswer !== null ? currentAnswer : {};
+    if (structuredValue.shared_arrears?.amount || structuredValue.shared_arrears?.end_date) return;
+
+    // Auto-populate shared_arrears with pre-populated values
+    // Default end_date to today (ISO format) since it's described as "Usually today or notice service date"
+    const todayISO = new Date().toISOString().split('T')[0];
+    const prePopulatedArrears = {
+      amount: caseFacts.arrears_total || '',
+      start_date: caseFacts.arrears_from_date || '',
+      end_date: todayISO,
+    };
+
+    // Only initialize if we have at least the amount from previous step
+    if (prePopulatedArrears.amount) {
+      setCurrentAnswer({
+        ...structuredValue,
+        shared_arrears: prePopulatedArrears,
+      });
+    }
+  }, [currentQuestion, caseFacts, currentAnswer]);
 
   // ====================================================================================
   // PHASE 2: ROUTE GUARD (CLAUDE CODE FIX #4 + #7 WITH LOOP PROTECTION)
@@ -448,38 +940,120 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentQuestion, caseType, runCheckpoint]);
 
-  // Inline deposit validation
+  // Inline deposit validation (Tenant Fees Act 2019)
+  // Shows computed max amount; does NOT block Next (per task requirements)
   useEffect(() => {
-    if (currentQuestion?.id === 'deposit_details' && currentAnswer?.deposit_amount) {
-      const depositAmount = parseFloat(currentAnswer.deposit_amount);
-      const rentAmount = parseFloat(caseFacts.rent_amount || 0);
-      const rentPeriod = caseFacts.rent_period || 'month';
+    const isDepositQuestion = currentQuestion?.id === 'deposit_amount' ||
+      currentQuestion?.id === 'deposit_details' ||
+      (currentQuestion?.id === 'rent_terms' && currentAnswer);
 
-      if (rentAmount > 0 && depositAmount > 0) {
-        // Calculate 5 weeks rent
-        let weeklyRent = rentAmount;
-        if (rentPeriod === 'month') weeklyRent = (rentAmount * 12) / 52;
-        else if (rentPeriod === 'quarter') weeklyRent = (rentAmount * 4) / 52;
-        else if (rentPeriod === 'year') weeklyRent = rentAmount / 52;
+    if (!isDepositQuestion) {
+      setDepositWarning(null);
+      return;
+    }
 
-        const maxDeposit = weeklyRent * 5;
+    // Get deposit and rent amounts from current answer or case facts
+    const depositAmount = parseFloat(currentAnswer?.deposit_amount || caseFacts.deposit_amount || 0);
+    const rentAmount = parseFloat(currentAnswer?.rent_amount || caseFacts.rent_amount || 0);
+    const rentFrequency = currentAnswer?.rent_frequency || caseFacts.rent_frequency || 'monthly';
 
-        if (depositAmount > maxDeposit) {
-          setDepositWarning(
-            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(
-              2,
-            )} exceeds 5 weeks rent (£${maxDeposit.toFixed(
-              2,
-            )}). This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`,
-          );
-        } else {
-          setDepositWarning(null);
-        }
-      }
+    if (rentAmount <= 0 || depositAmount <= 0) {
+      setDepositWarning(null);
+      return;
+    }
+
+    // Calculate annual rent based on frequency
+    let annualRent = rentAmount * 12; // default monthly
+    if (rentFrequency === 'weekly') annualRent = rentAmount * 52;
+    else if (rentFrequency === 'fortnightly') annualRent = rentAmount * 26;
+    else if (rentFrequency === 'quarterly') annualRent = rentAmount * 4;
+    else if (rentFrequency === 'yearly' || rentFrequency === 'annually') annualRent = rentAmount;
+
+    // Tenant Fees Act 2019: 5 weeks (or 6 weeks if annual rent > £50k)
+    const weeklyRent = annualRent / 52;
+    const maxWeeks = annualRent > 50000 ? 6 : 5;
+    const maxDeposit = weeklyRent * maxWeeks;
+
+    if (depositAmount > maxDeposit) {
+      setDepositWarning(
+        `Deposit entered: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent at £${weeklyRent.toFixed(2)}/week). ` +
+        `Per Tenant Fees Act 2019, deposits are capped at ${maxWeeks} weeks' rent. ` +
+        `This does not block Section 8, but may block Section 21 if not resolved.`,
+      );
     } else {
       setDepositWarning(null);
     }
   }, [currentAnswer, currentQuestion, caseFacts]);
+
+  // ====================================================================================
+  // NOTICE-ONLY INLINE VALIDATION (NEW - rebuilt from first principles)
+  // ====================================================================================
+  // KEY PRINCIPLE: Validation fires ONLY after Save/Next, not while typing.
+  // This useEffect runs when a NEW question is loaded (after save), showing guidance
+  // based on ALREADY SAVED facts. It does NOT run on currentAnswer changes.
+  //
+  // Why? Users should not see validation errors for incomplete data while typing.
+  // Validation is only meaningful after the user commits their answer.
+  const runNoticeOnlyValidation = useCallback(async (savedFacts: Record<string, any>) => {
+    if (product !== 'notice_only' || !currentQuestion || !jurisdiction) {
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+      return;
+    }
+
+    // Get the current route from case facts
+    const currentRoute = savedFacts.selected_notice_route ||
+      savedFacts.route_recommendation?.recommended_route ||
+      (jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8');
+
+    try {
+      const result = await validateStepInline({
+        jurisdiction: jurisdiction as CanonicalJurisdiction,
+        route: currentRoute,
+        msq: currentQuestion,
+        stepId: currentQuestion.id,
+        answers: {}, // Empty - we validate based on saved facts only
+        allFacts: savedFacts,
+        product: 'notice_only',
+      });
+
+      // Update guidance state
+      setNoticeOnlyGuidance(result.guidance);
+      setNoticeOnlyRouteSuggestion(result.routeSuggestion || null);
+
+      // Check if current route is blocked - trigger Flow Not Available modal
+      if (result.routeSuggestion) {
+        setFlowNotAvailableDetails({
+          blockedRoute: currentRoute,
+          reason: result.routeSuggestion.reason,
+          alternativeRoutes: [result.routeSuggestion.toRoute],
+        });
+        // Don't auto-show modal - let user see inline guidance first
+        // Modal is triggered by explicit action or severe blocking
+      }
+    } catch (error) {
+      console.error('[StructuredWizard] Notice-only inline validation error:', error);
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+    }
+  }, [product, currentQuestion, jurisdiction]);
+
+  // Run validation when question changes (after save) or on initial load with saved data
+  useEffect(() => {
+    if (product !== 'notice_only') {
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+      return;
+    }
+
+    // Only run if:
+    // 1. User has explicitly saved at least once (prevents validation on initial mount)
+    // 2. We have saved case facts to validate against
+    // This ensures we don't show errors for unanswered questions on initial load
+    if (hasUserSavedRef.current && Object.keys(caseFacts).length > 0) {
+      void runNoticeOnlyValidation(caseFacts);
+    }
+  }, [product, currentQuestion?.id, caseFacts, runNoticeOnlyValidation]);
 
   // EPC rating validation (England & Wales tenancies)
   useEffect(() => {
@@ -572,11 +1146,86 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentAnswer, currentQuestion]);
 
+  // ====================================================================================
+  // FETCH GROUNDS FOR GROUNDS SELECTION QUESTIONS
+  // ====================================================================================
+  useEffect(() => {
+    const isGroundsQuestion =
+      currentQuestion?.id === 'section8_grounds_selection' || // England
+      currentQuestion?.id === 'ground_particulars' || // England particulars (needs metadata too)
+      currentQuestion?.id === 'eviction_grounds' || // Scotland
+      currentQuestion?.id === 'wales_fault_based_section'; // Wales (not technically "grounds" but similar)
+
+    if (isGroundsQuestion && jurisdiction && !availableGrounds && !loadingGrounds) {
+      const fetchGrounds = async () => {
+        setLoadingGrounds(true);
+        setGroundsFetchError(null);
+        try {
+          const response = await fetch(apiUrl(`/api/grounds/${jurisdiction}`));
+          if (response.ok) {
+            const data = await response.json();
+            // API returns grounds with proper GroundMetadata shape
+            setAvailableGrounds(data.grounds as GroundMetadata[]);
+            setGroundsFetchError(null);
+          } else {
+            const errorMessage = `Failed to load ground descriptions (status ${response.status})`;
+            setGroundsFetchError(errorMessage);
+            console.error('Failed to fetch grounds:', response.status);
+          }
+        } catch (error) {
+          const errorMessage = 'Failed to load ground descriptions';
+          setGroundsFetchError(errorMessage);
+          console.error('Error fetching grounds:', error);
+        } finally {
+          setLoadingGrounds(false);
+        }
+      };
+
+      void fetchGrounds();
+    }
+
+    // Reset grounds when question changes to non-grounds question
+    if (!isGroundsQuestion && availableGrounds) {
+      setAvailableGrounds(null);
+    }
+    if (!isGroundsQuestion && groundsFetchError) {
+      setGroundsFetchError(null);
+    }
+  }, [currentQuestion, jurisdiction, availableGrounds, loadingGrounds, groundsFetchError]);
+
+  // Complete Pack loading animation auto-advance
+  const completePackSteps = [
+    'Ask Heaven Drafting Witness Statement',
+    'Ask Heaven Analyzing Compliance',
+    'Ask Heaven Calculating Risk Assessment',
+    'Filling Official Court Forms',
+  ];
+
+  useEffect(() => {
+    if (!isComplete || product !== 'complete_pack') return;
+
+    const interval = setInterval(() => {
+      setCompletePackStep((prev) => {
+        if (prev < completePackSteps.length - 1) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, 1500); // Change step every 1.5 seconds
+
+    return () => clearInterval(interval);
+  }, [isComplete, product, completePackSteps.length]);
+
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
 
     const resolvedInputType =
       currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
+
+    // Info questions are always valid - they don't require an answer
+    if (resolvedInputType === 'info') {
+      return true;
+    }
 
     if (resolvedInputType === 'upload' || resolvedInputType === 'file_upload') {
       if (currentQuestion.validation?.required && uploadFilesForCurrentQuestion.length === 0) {
@@ -590,6 +1239,41 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (resolvedInputType === 'group' && currentQuestion.fields) {
       for (const field of currentQuestion.fields) {
         const fieldValue = currentAnswer?.[field.id];
+
+        // ====================================================================================
+        // SPECIAL VALIDATION: Notice expiry date (Task B)
+        // Skip validation if auto-calc is available and override is OFF
+        // ====================================================================================
+        if (
+          field.id === 'notice_expiry_date' &&
+          currentQuestion.id === 'notice_service' &&
+          !expiryDateOverride &&
+          calculatedDate
+        ) {
+          // Auto-calc is being used, skip validation
+          continue;
+        }
+
+        // ====================================================================================
+        // SPECIAL VALIDATION: Past service date warning
+        // Warn user if the notice_service_date is in the past (implies already served)
+        // ====================================================================================
+        if (field.id === 'notice_service_date' && currentQuestion.id === 'notice_service' && fieldValue) {
+          const serviceDate = new Date(fieldValue);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          serviceDate.setHours(0, 0, 0, 0);
+
+          if (serviceDate < today) {
+            // Show warning but don't block - user may have already served
+            setPastServiceDateWarning(
+              `The service date (${fieldValue}) is in the past. This is valid if you've already served the notice. ` +
+              `If you haven't served it yet, please update the date to when you plan to serve.`
+            );
+          } else {
+            setPastServiceDateWarning(null);
+          }
+        }
 
         // Check for required fields - must handle boolean false as valid
         if (
@@ -626,6 +1310,78 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           }
         }
       }
+      return true;
+    }
+
+    // ====================================================================================
+    // SPECIAL VALIDATION: Ground-specific particulars (Problem 1 fix)
+    // ====================================================================================
+    if (currentQuestion.id === 'ground_particulars' && currentQuestion.validation?.required) {
+      // Get selected grounds from case facts
+      const selectedGrounds = caseFacts.section8_grounds || [];
+
+      // Extract ground IDs and deduplicate (caseFacts may contain duplicates or mixed formats)
+      const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
+        if (g.startsWith('ground_')) return g;
+        const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+        return match ? `ground_${match[1].toLowerCase()}` : g;
+      })));
+
+      // Ensure answer is an object
+      if (typeof currentAnswer !== 'object' || currentAnswer === null) {
+        setError('Please provide details for each selected ground');
+        return false;
+      }
+
+      // Check if any arrears grounds are selected
+      const hasArrearsGrounds = groundIds.some((id: string) =>
+        id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+      );
+
+      // Validate shared arrears if any arrears ground is selected
+      // Check both currentAnswer.shared_arrears AND pre-populated caseFacts values
+      if (hasArrearsGrounds) {
+        const sharedArrears = currentAnswer.shared_arrears || {};
+        // Use pre-populated values if shared_arrears fields are empty
+        const amount = sharedArrears.amount || caseFacts.arrears_total;
+        const startDate = sharedArrears.start_date || caseFacts.arrears_from_date;
+        const endDate = sharedArrears.end_date;
+
+        if (!amount) {
+          setError('Please provide the total arrears amount');
+          return false;
+        }
+        if (Number(amount) <= 0) {
+          setError('Arrears amount must be greater than zero');
+          return false;
+        }
+        if (!startDate) {
+          setError('Please provide the arrears start date');
+          return false;
+        }
+        if (!endDate) {
+          setError('Please provide the arrears end date (usually today or notice service date)');
+          return false;
+        }
+        // Validate dates for 2-month arrears threshold (Ground 8 requirement)
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (start > end) {
+          setError('Arrears start date must be before end date');
+          return false;
+        }
+      }
+
+      // Validate each ground has a summary
+      for (const groundId of groundIds) {
+        const groundParticulars = currentAnswer[groundId];
+        if (!groundParticulars || !groundParticulars.summary || groundParticulars.summary.trim() === '') {
+          const groundNum = groundId.replace('ground_', '').toUpperCase();
+          setError(`Please provide a factual summary for Ground ${groundNum}`);
+          return false;
+        }
+      }
+
       return true;
     }
 
@@ -680,13 +1436,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       return;
     }
 
-    // Block progression if deposit warning exists
-    if (depositWarning) {
-      setError(
-        'Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.',
-      );
-      return;
-    }
+    // NOTE: Deposit cap warning is informational only - do NOT block Next
+    // Per task requirements: "Never make it a step; never block Next"
+    // The deposit cap is enforced at preview/generate stage via compliance evaluator
 
     // Block progression if AST suitability warning exists
     if (astSuitabilityWarning) {
@@ -699,24 +1451,93 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setError(null);
     setLoading(true);
 
+    // For info questions, skip saving answer and go directly to next question
+    if (currentQuestion.inputType === 'info') {
+      try {
+        // Save to history before moving forward
+        if (currentQuestion) {
+          setQuestionHistory((prev) => [
+            ...prev,
+            { question: currentQuestion, answer: null, uploads: [] },
+          ]);
+        }
+
+        // Load next question directly without saving
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+      } catch (err: any) {
+        setError(err.message || 'Failed to load next question');
+        console.error('Load next question error:', err);
+        setLoading(false);
+      }
+      return;
+    }
+
     try {
       // Save answer to backend
-      const response = await fetch('/api/wizard/answer', {
+      const response = await fetch(apiUrl('/api/wizard/answer'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
           question_id: currentQuestion.id,
           answer: currentAnswer,
+          mode,
+          include_answered: mode === 'edit',
+          review_mode: mode === 'edit',
+          current_question_id: currentQuestion.id,
         }),
       });
 
+      // Parse response once upfront
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Failed to save answer: ${response.status}`);
+        // Handle NOTICE_NONCOMPLIANT (422) gracefully - DO NOT BLOCK navigation
+        // UX Rule: Wizard steps never hard-block based on compliance. Only Preview/Generate is a hard stop.
+        // Capture the compliance issues for inline display, but continue to next question.
+        if (response.status === 422 && data.error === 'NOTICE_NONCOMPLIANT') {
+          console.info('[WIZARD-UX] Notice compliance issues detected, continuing without blocking:', {
+            failures: data.failures?.length || data.blocking_issues?.length || 0,
+            warnings: data.warnings?.length || 0,
+          });
+          // Store compliance issues for inline banner display (non-blocking)
+          setNoticeComplianceError({
+            failures: data.failures || data.blocking_issues || [],
+            warnings: data.warnings || [],
+          });
+          // Continue to load next question despite compliance issues
+          // The issues will be displayed as inline warnings, not blocking the flow
+          await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+          return;
+        }
+
+        // Handle case not found (404) gracefully - this DOES block
+        if (response.status === 404 && data.code === 'CASE_NOT_FOUND') {
+          setError('Your session has expired or the case could not be found. Please restart the wizard from the beginning.');
+          setLoading(false);
+          return;
+        }
+
+        // Handle other validation errors that allow continuation (e.g., LEGAL_BLOCK)
+        if (response.status === 422 && (data.code === 'LEGAL_BLOCK' || data.blocking_issues)) {
+          console.info('[WIZARD-UX] Validation issues detected, continuing without blocking');
+          setPreviewBlockingIssues(data.blocking_issues || []);
+          setPreviewWarnings(data.warnings || []);
+          setHasBlockingIssues((data.blocking_issues?.length || 0) > 0);
+          // Continue to load next question despite validation issues
+          await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+          return;
+        }
+
+        // Other errors - throw as before
+        throw new Error(data.error || `Failed to save answer: ${response.status}`);
       }
 
-      const data = await response.json();
+      // Clear any previous compliance errors on successful save
+      setNoticeComplianceError(null);
+
+      // Mark that user has saved at least once - enables notice-only validation
+      hasUserSavedRef.current = true;
 
       // Check for validation errors from AST generator
       if (data.error && data.error.includes('validation failed')) {
@@ -765,6 +1586,165 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setStepFlags(null);
       }
 
+      // ====================================================================================
+      // SMART REVIEW: Update warnings from backend response (complete_pack only)
+      // ====================================================================================
+      // Smart Review runs after evidence uploads for complete_pack/eviction_pack (all jurisdictions)
+      // FIX: Also consume smart_review_warnings as fallback when smart_review object is missing
+      if (product === 'complete_pack') {
+        // Primary source: data.smart_review object
+        if (data.smart_review) {
+          const sr = data.smart_review;
+          setSmartReviewWarnings(sr.warnings || []);
+          if (sr.summary) {
+            setSmartReviewSummary({
+              documentsProcessed: sr.summary.documentsProcessed ?? 0,
+              warningsTotal: sr.summary.warningsTotal ?? 0,
+              warningsBlocker: sr.summary.warningsBlocker ?? 0,
+              warningsWarning: sr.summary.warningsWarning ?? 0,
+              warningsInfo: sr.summary.warningsInfo ?? 0,
+              ranAt: new Date().toISOString(),
+            });
+          }
+          console.log('[SMART-REVIEW-UI] Warnings received from smart_review:', sr.warnings?.length ?? 0);
+        }
+        // Fallback source: data.smart_review_warnings array (top-level convenience field)
+        // This ensures warnings are captured even if the full smart_review object is missing
+        else if (data.smart_review_warnings && Array.isArray(data.smart_review_warnings) && data.smart_review_warnings.length > 0) {
+          setSmartReviewWarnings(data.smart_review_warnings);
+          setSmartReviewSummary({
+            documentsProcessed: 0, // Unknown from top-level array
+            warningsTotal: data.smart_review_warnings.length,
+            warningsBlocker: data.smart_review_warnings.filter((w: any) => w.severity === 'blocker').length,
+            warningsWarning: data.smart_review_warnings.filter((w: any) => w.severity === 'warning').length,
+            warningsInfo: data.smart_review_warnings.filter((w: any) => w.severity === 'info').length,
+            ranAt: new Date().toISOString(),
+          });
+          console.log('[SMART-REVIEW-UI] Warnings received from smart_review_warnings fallback:', data.smart_review_warnings.length);
+        }
+      }
+
+      // ====================================================================================
+      // CANONICAL VALIDATION: Capture blocking issues for inline display (ALL MODES)
+      // ====================================================================================
+      // Always update with the latest validation state - this enables inline per-step
+      // warnings across ALL notice-only wizards (Section 21, Section 8, Wales, Scotland, etc.)
+      // Key UX rule: Never block navigation - only warn early and persistently.
+      setPreviewBlockingIssues(data.preview_blocking_issues || []);
+      setPreviewWarnings(data.preview_warnings || []);
+      setWizardWarnings(data.wizard_warnings || []);
+      setHasBlockingIssues(data.has_blocking_issues || false);
+      setIssueCounts(data.issue_counts || { blocking: 0, warnings: 0 });
+
+      if (mode === 'edit') {
+        setIsReviewComplete(data.is_review_complete || false);
+      }
+
+      if (data.preview_blocking_issues?.length > 0) {
+        console.log('[VALIDATION-UI] Preview blocking issues:', data.preview_blocking_issues.length);
+      }
+
+      // ====================================================================================
+      // NOTICE-ONLY: Route-Invalidating Block Check (After Save/Next)
+      // ====================================================================================
+      // PHASE 2 FIX: Use server-updated facts (data.facts) for validation, not stale local state.
+      // PHASE 3 FIX: Reset pendingRouteBlock when no route-invalidating issues.
+      // PHASE 4 FIX: Only treat issues with valid affectedQuestionId as blocking.
+      //
+      // For notice_only products, check if the saved answer triggers a route-invalidating
+      // issue. If so, block Next and show the Flow Not Available modal with options to:
+      // 1. Edit my answer (go back and change the answer)
+      // 2. Switch to alternative route (e.g., Section 8 instead of Section 21)
+      if (product === 'notice_only' && jurisdiction === 'england') {
+        // PHASE 2: Use server-returned facts (data.facts) as the source of truth
+        const serverUpdatedFacts = data.facts || caseFacts;
+        const currentRoute = serverUpdatedFacts.selected_notice_route ||
+          caseFacts.selected_notice_route ||
+          'section_21';
+
+        // Update local caseFacts with server state to keep them in sync
+        if (data.facts) {
+          setCaseFacts(data.facts);
+        }
+
+        // Extract wizard UX issues using the new helper
+        // lastSavedQuestionIds = the question(s) that were just saved
+        const lastSavedQuestionIds = currentQuestion?.inputType === 'group' && currentQuestion?.fields
+          ? [currentQuestion.id, ...currentQuestion.fields.map((f: any) => f.id)]
+          : [currentQuestion?.id].filter(Boolean) as string[];
+
+        // PHASE 1: Debug logging
+        debugLog('Save/Next', {
+          product,
+          route: currentRoute,
+          questionId: currentQuestion?.id,
+          answerPayloadType: typeof currentAnswer,
+          answerPayloadShape: Array.isArray(currentAnswer) ? 'array' : typeof currentAnswer === 'object' ? 'object' : 'primitive',
+          lastSavedQuestionIds,
+          serverFactsReturned: !!data.facts,
+        });
+
+        const wxIssues = extractWizardUxIssues({
+          jurisdiction: jurisdiction as CanonicalJurisdiction,
+          route: currentRoute,
+          savedFacts: serverUpdatedFacts,
+          lastSavedQuestionIds,
+        });
+
+        // PHASE 1: Debug log the extracted issues
+        debugLog('wxIssues', {
+          routeInvalidatingIssues: wxIssues.routeInvalidatingIssues.map(i => ({
+            code: i.code,
+            affectedQuestionId: i.affectedQuestionId,
+            userFixHint: i.userFixHint?.substring(0, 50),
+          })),
+          inlineWarnings: wxIssues.inlineWarnings.map(w => ({
+            code: w.code,
+            affectedQuestionId: w.affectedQuestionId,
+            message: w.message?.substring(0, 50),
+          })),
+        });
+
+        // Update inline warnings state for display
+        if (wxIssues.inlineWarnings.length > 0) {
+          // Convert to InlineGuidance format for existing UI
+          const newGuidance: InlineGuidance[] = wxIssues.inlineWarnings.map((w: InlineWarning) => ({
+            message: w.message,
+            severity: w.severity,
+            code: w.code,
+            legalBasis: w.legalBasis,
+            affectedQuestionId: w.affectedQuestionId,
+          }));
+          setNoticeOnlyGuidance(newGuidance);
+        } else {
+          // Clear inline warnings if none
+          setNoticeOnlyGuidance([]);
+        }
+
+        // ====================================================================================
+        // SIMPLIFIED UX: Per-step compliance blocking DISABLED for notice_only
+        // ====================================================================================
+        // All route-invalidating issues are collected and deferred to the End Validator UI
+        // shown at preview/generate time. Users can complete the wizard without interruption.
+        // Server-side validation remains the ultimate hard stop at /api/wizard/generate.
+        //
+        // The routeInvalidatingIssues are logged for debugging but NOT used to block navigation.
+        // Inline warnings (deposit cap, etc.) continue to be shown as non-blocking guidance.
+        //
+        // See: docs/notice-only-validation-ux-audit.md for design documentation.
+        debugLog('Simplified UX', {
+          routeInvalidatingIssuesCount: wxIssues.routeInvalidatingIssues.length,
+          inlineWarningsCount: wxIssues.inlineWarnings.length,
+          message: 'Per-step blocking disabled - issues deferred to End Validator',
+        });
+
+        // Always ensure pendingRouteBlock is false for notice_only (simplified UX)
+        if (pendingRouteBlock) {
+          setPendingRouteBlock(false);
+          setShowFlowNotAvailableModal(false);
+        }
+      }
+
       // Update progress
       setProgress(data.progress || 0);
 
@@ -784,10 +1764,22 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Check if complete
       if (data.is_complete) {
         setIsComplete(true);
+        if (mode === 'edit') {
+          setReviewStepIndex((prev) => prev + 1);
+          setLoading(false);
+          return;
+        }
         await handleComplete();
+      } else if (fixMode) {
+        // FIX MODE: After saving the single question, return to validation page
+        // instead of continuing to the next question
+        setIsComplete(true);
+        setReviewStepIndex((prev) => prev + 1);
+        setLoading(false);
+        return;
       } else {
         // Load next question
-        await loadNextQuestion();
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
       }
     } catch (err: any) {
       setError(err.message || 'Failed to save answer');
@@ -815,6 +1807,60 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setProgress((prev) => Math.max(0, prev - 5));
   };
 
+  // ====================================================================================
+  // ROUTE SWITCHING (Notice-Only) - Used when current route is blocked
+  // ====================================================================================
+  const switchNoticeRoute = useCallback(async (newRoute: string) => {
+    if (!caseId) return;
+
+    setLoading(true);
+    try {
+      // Persist the route change to backend
+      const response = await fetch(apiUrl('/api/wizard/answer'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: 'selected_notice_route',
+          answer: newRoute,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to switch route');
+      }
+
+      // Update local state
+      setCaseFacts((prev) => ({
+        ...prev,
+        selected_notice_route: newRoute,
+      }));
+
+      // Clear the route block state
+      setPendingRouteBlock(false);
+      setShowFlowNotAvailableModal(false);
+      setFlowNotAvailableDetails(null);
+      setNoticeOnlyRouteSuggestion(null);
+
+      // Continue to next question
+      if (currentQuestion) {
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to switch route');
+      console.error('Switch route error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, currentQuestion, loadNextQuestion]);
+
+  // Handle "Edit my answer" from route block modal - just close modal
+  const handleEditAnswer = useCallback(() => {
+    setPendingRouteBlock(false);
+    setShowFlowNotAvailableModal(false);
+    // Don't clear flowNotAvailableDetails - keep the warning visible inline
+  }, []);
+
   const renderInput = () => {
     if (!currentQuestion) return null;
 
@@ -823,7 +1869,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
 
     switch (inputType) {
-      case 'select':
+      case 'select': {
+        const options = normalizeOptions(currentQuestion.options as MQSOption[]);
         return (
           <select
             value={value}
@@ -832,13 +1879,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             disabled={loading}
           >
             <option value="">-- Select an option --</option>
-            {currentQuestion.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
+            {options.map((option) => (
+              <option key={option.key} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
         );
+      }
 
       case 'yes_no':
         return (
@@ -860,25 +1908,101 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           </div>
         );
 
-      case 'multi_select': {
+      case 'multi_select':
+      case 'multiselect': {
         const selectedValues = Array.isArray(value) ? value : [];
+
+        // Special handling for grounds selection questions
+        const isGroundsQuestion =
+          currentQuestion.id === 'section8_grounds_selection' || // England
+          currentQuestion.id === 'eviction_grounds'; // Scotland
+
+        if (isGroundsQuestion && availableGrounds && availableGrounds.length > 0) {
+          // Render grounds selector with detailed information from config
+          return (
+            <div className="space-y-3">
+              {loadingGrounds && (
+                <div className="text-sm text-gray-500">Loading grounds...</div>
+              )}
+              {availableGrounds.map((ground) => {
+                const groundId = `ground_${ground.ground}`;
+                const isSelected = selectedValues.includes(groundId) || selectedValues.includes(ground.ground);
+                const titleInfo = formatGroundTitle(ground.ground, availableGrounds);
+
+                return (
+                  <label
+                    key={ground.ground}
+                    className={`
+                      flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-all
+                      ${isSelected
+                        ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                        : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
+                      }
+                      ${loading ? 'opacity-50 cursor-not-allowed' : ''}
+                    `}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={(e) => {
+                        const newValues = e.target.checked
+                          ? [...selectedValues, groundId]
+                          : selectedValues.filter((v: string) => v !== groundId && v !== ground.ground);
+                        setCurrentAnswer(newValues);
+                      }}
+                      className="w-4 h-4 mt-1 text-primary"
+                      disabled={loading}
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900 flex items-center gap-2">
+                        <span>Ground {titleInfo.groundNum} – {titleInfo.name || ground.name}</span>
+                        {titleInfo.type && (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${getGroundTypeBadgeClasses(titleInfo.type)}`}>
+                            {titleInfo.type === 'mandatory' ? 'Mandatory' : 'Discretionary'}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        {ground.short_description}
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          );
+        }
+
+        // Default multi-select rendering for non-grounds questions
+        // OR for grounds questions where API fetch failed
+        const options = normalizeOptions(currentQuestion.options as MQSOption[]);
         return (
           <div className="space-y-2">
-            {currentQuestion.options?.map((option) => (
-              <label key={option} className="flex items-center gap-2 cursor-pointer">
+            {groundsFetchError && isGroundsQuestion && (
+              <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <span className="text-yellow-600">⚠️</span>
+                  <div className="flex-1 text-sm text-yellow-800">
+                    <strong>Warning:</strong> {groundsFetchError}. You can still select grounds below, but detailed descriptions may not be available.
+                  </div>
+                </div>
+              </div>
+            )}
+            {options.map((option) => (
+              <label key={option.key} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={selectedValues.includes(option)}
+                  checked={selectedValues.includes(option.value)}
                   onChange={(e) => {
                     const newValues = e.target.checked
-                      ? [...selectedValues, option]
-                      : selectedValues.filter((v: string) => v !== option);
+                      ? [...selectedValues, option.value]
+                      : selectedValues.filter((v: string) => v !== option.value);
                     setCurrentAnswer(newValues);
                   }}
                   className="w-4 h-4 text-primary"
                   disabled={loading}
                 />
-                <span>{option}</span>
+                <span>{option.label}</span>
               </label>
             ))}
           </div>
@@ -887,26 +2011,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       case 'radio': {
         // Handle options with nested structure (value, label, helperText)
-        const options = currentQuestion.options?.map((opt) => {
-          if (typeof opt === 'string') {
-            return { value: opt, label: opt, helperText: undefined };
-          }
-          return opt;
-        }) || [];
+        const normalizedOptions = normalizeOptions(currentQuestion.options as MQSOption[]);
+
+        // Preserve helperText from original options if they were objects
+        const optionsWithHelpers = normalizedOptions.map((normalized, idx) => {
+          const original = (currentQuestion.options as MQSOption[])?.[idx];
+          const helperText = typeof original === 'object' && original !== null && 'helperText' in original ? original.helperText : undefined;
+          return { ...normalized, helperText };
+        });
 
         return (
           <div className="space-y-3">
-            {options.map((option: any) => {
-              const optionValue = option.value || option;
-              const optionLabel = option.label || option;
-              const optionHelper = option.helperText;
-
+            {optionsWithHelpers.map((option) => {
               return (
                 <label
-                  key={optionValue}
+                  key={option.key}
                   className={`
                     flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-all
-                    ${value === optionValue
+                    ${value === option.value
                       ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                       : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
                     }
@@ -916,16 +2038,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   <input
                     type="radio"
                     name={currentQuestion.id}
-                    value={optionValue}
-                    checked={value === optionValue}
+                    value={option.value}
+                    checked={value === option.value}
                     onChange={(e) => setCurrentAnswer(e.target.value)}
                     className="w-4 h-4 mt-1 text-primary focus:ring-2 focus:ring-primary"
                     disabled={loading}
                   />
                   <div className="flex-1">
-                    <div className="font-medium text-gray-900">{optionLabel}</div>
-                    {optionHelper && (
-                      <div className="text-sm text-gray-600 mt-1">{optionHelper}</div>
+                    <div className="font-medium text-gray-900">{option.label}</div>
+                    {option.helperText && (
+                      <div className="text-sm text-gray-600 mt-1">{option.helperText}</div>
                     )}
                   </div>
                 </label>
@@ -984,17 +2106,279 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           />
         );
 
-      case 'textarea':
+      case 'textarea': {
+        // ====================================================================================
+        // SPECIAL HANDLING: Ground-specific particulars (Problem 1 fix)
+        // ====================================================================================
+        if (currentQuestion.id === 'ground_particulars') {
+          // Get selected grounds from case facts
+          const selectedGrounds = caseFacts.section8_grounds || [];
+
+          // Extract ground IDs from selected grounds and deduplicate
+          // (caseFacts may contain duplicates or mixed formats like ["ground_8", "Ground 8 - ..."])
+          const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
+            // If already in format "ground_8", use as-is
+            if (g.startsWith('ground_')) return g;
+            // If in format "Ground 8 - ...", extract the number
+            const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+            return match ? `ground_${match[1].toLowerCase()}` : g;
+          })));
+
+          // Initialize structured answer if needed
+          const structuredValue = typeof value === 'object' && value !== null ? value : {};
+
+          if (groundIds.length === 0) {
+            return (
+              <div className="text-sm text-gray-500 italic">
+                No grounds selected. Please go back and select at least one ground.
+              </div>
+            );
+          }
+
+          // Check if any arrears grounds are selected
+          const hasArrearsGrounds = groundIds.some((id: string) =>
+            id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+          );
+
+          // Pre-populate shared_arrears from previously collected arrears_details if not already set
+          // This ensures we use the data from the earlier arrears question step
+          // Default end_date to today since the field says "Usually today or notice service date"
+          const todayISO = new Date().toISOString().split('T')[0];
+          const prePopulatedArrears = {
+            amount: structuredValue.shared_arrears?.amount || caseFacts.arrears_total || '',
+            start_date: structuredValue.shared_arrears?.start_date || caseFacts.arrears_from_date || '',
+            end_date: structuredValue.shared_arrears?.end_date || todayISO,
+          };
+
+          return (
+            <div className="space-y-6">
+              {/* Shared arrears section for grounds 8, 10, 11 - pre-populated from arrears_details */}
+              {hasArrearsGrounds && (
+                <div className="p-5 border-2 border-green-300 rounded-lg bg-green-50">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="text-2xl">✓</div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-green-900 mb-1">
+                        Arrears Information (From Previous Step)
+                      </h3>
+                      <p className="text-sm text-green-800 mb-3">
+                        This information was collected earlier. You can update it here if needed.
+                        For Ground 8, arrears must be at least 2 months&apos; rent at both notice and hearing dates.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-green-900 mb-1">
+                        Total amount owed (£) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-3 text-gray-500">£</span>
+                        <input
+                          type="number"
+                          value={prePopulatedArrears.amount}
+                          onChange={(e) => setCurrentAnswer({
+                            ...structuredValue,
+                            shared_arrears: {
+                              ...structuredValue.shared_arrears,
+                              amount: e.target.value,
+                              start_date: prePopulatedArrears.start_date,
+                              end_date: prePopulatedArrears.end_date,
+                            }
+                          })}
+                          className="w-full pl-8 p-2 border border-green-300 rounded-lg bg-white"
+                          placeholder="e.g., 3000"
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-green-900 mb-1">
+                        Arrears from date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        value={prePopulatedArrears.start_date}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          shared_arrears: {
+                            ...structuredValue.shared_arrears,
+                            amount: prePopulatedArrears.amount,
+                            start_date: e.target.value,
+                            end_date: prePopulatedArrears.end_date,
+                          }
+                        })}
+                        className="w-full p-2 border border-green-300 rounded-lg bg-white"
+                        disabled={loading}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-green-900 mb-1">
+                        Arrears to date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        value={prePopulatedArrears.end_date}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          shared_arrears: {
+                            ...structuredValue.shared_arrears,
+                            amount: prePopulatedArrears.amount,
+                            start_date: prePopulatedArrears.start_date,
+                            end_date: e.target.value,
+                          }
+                        })}
+                        className="w-full p-2 border border-green-300 rounded-lg bg-white"
+                        disabled={loading}
+                      />
+                      <p className="text-xs text-green-700 mt-1">
+                        Usually today or notice service date
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Individual ground panels */}
+              {groundIds.map((groundId: string) => {
+                // Extract ground number for display
+                const groundNum = groundId.replace('ground_', '').toUpperCase();
+
+                // Find ground metadata and format title using shared helper
+                const titleInfo = formatGroundTitle(groundNum, availableGrounds);
+
+                // Get current particulars for this ground
+                const groundParticulars = structuredValue[groundId] || {};
+
+                // Determine if this is an arrears ground
+                const isArrearsGround = groundId === 'ground_8' || groundId === 'ground_10' || groundId === 'ground_11';
+
+                return (
+                  <div
+                    key={groundId}
+                    className="p-4 border border-gray-300 rounded-lg bg-gray-50"
+                  >
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span>
+                        Ground {titleInfo.groundNum}
+                        {titleInfo.name && ` – ${titleInfo.name}`}
+                      </span>
+                      {titleInfo.type && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${getGroundTypeBadgeClasses(titleInfo.type)}`}>
+                          {titleInfo.type === 'mandatory' ? 'Mandatory' : 'Discretionary'}
+                        </span>
+                      )}
+                    </h3>
+
+                    {/* Show shared arrears summary for arrears grounds - using pre-populated values */}
+                    {isArrearsGround && (prePopulatedArrears.amount || structuredValue.shared_arrears?.amount) && (
+                      <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-sm font-medium text-green-900 mb-1">Arrears Applied to This Ground:</p>
+                        <p className="text-sm text-green-800">
+                          <strong>Amount owed:</strong> £{prePopulatedArrears.amount || '0'}
+                        </p>
+                        <p className="text-sm text-green-800">
+                          <strong>Period:</strong>{' '}
+                          {prePopulatedArrears.start_date
+                            ? new Date(prePopulatedArrears.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
+                            : 'Not set'}{' '}
+                          to{' '}
+                          {prePopulatedArrears.end_date
+                            ? new Date(prePopulatedArrears.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
+                            : 'Not set'}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Factual summary (required for all grounds) */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Factual summary <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-600 mb-2">
+                        Provide specific details for Ground {groundNum}. Include dates, incidents, and factual evidence.
+                      </p>
+                    <textarea
+                      value={groundParticulars.summary || ''}
+                      onChange={(e) => setCurrentAnswer({
+                        ...structuredValue,
+                        [groundId]: { ...groundParticulars, summary: e.target.value }
+                      })}
+                      onFocus={() => setActiveTextFieldPath(`${groundId}.summary`)}
+                      className="w-full p-2 border border-gray-300 rounded-lg min-h-[100px]"
+                      placeholder="Provide specific dates, incidents, and factual details..."
+                      disabled={loading}
+                      rows={4}
+                    />
+                    <div className="mt-2 flex justify-end">
+                      <AskHeavenInlineEnhancer
+                        caseId={caseId}
+                        questionId={currentQuestion.id}
+                        questionText={currentQuestion.question}
+                        answer={groundParticulars.summary || ''}
+                        onApply={handleApplySuggestion}
+                        context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                        apiMode="generic"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Evidence available */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Evidence available
+                      </label>
+                      <input
+                        type="text"
+                        value={groundParticulars.evidence || ''}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          [groundId]: { ...groundParticulars, evidence: e.target.value }
+                        })}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="e.g., rent schedule, photographs, witness statements"
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <p className="text-xs text-gray-500 italic mt-2">
+                Each selected ground must have a factual summary to continue.
+              </p>
+            </div>
+          );
+        }
+
+        // Default textarea rendering
         return (
-          <textarea
-            value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
-            placeholder={currentQuestion.placeholder}
-            disabled={loading}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
-            rows={4}
-          />
+          <div className="space-y-2">
+            <textarea
+              value={value}
+              onChange={(e) => setCurrentAnswer(e.target.value)}
+              onFocus={() => setActiveTextFieldPath(currentQuestion.id)}
+              placeholder={currentQuestion.placeholder}
+              disabled={loading}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
+              rows={4}
+            />
+            <div className="flex justify-end">
+              <AskHeavenInlineEnhancer
+                caseId={caseId}
+                questionId={currentQuestion.id}
+                questionText={currentQuestion.question}
+                answer={typeof value === 'string' ? value : ''}
+                onApply={handleApplySuggestion}
+                context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                apiMode="generic"
+              />
+            </div>
+          </div>
         );
+      }
 
       case 'upload':
       case 'file_upload':
@@ -1002,12 +2386,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <UploadField
             caseId={caseId}
             questionId={currentQuestion.id}
+            jurisdiction={jurisdiction || 'england'}
             // Some MQS questions include a separate label, but it's not in the TS type.
             // Fall back to the main question text when label is missing.
             label={(currentQuestion as any).label ?? currentQuestion.question}
             description={currentQuestion.helperText}
-            // Use label as the evidence category tag if present
-            evidenceCategory={(currentQuestion as any).label}
+            // P0-D: Use evidenceCategory from MQS question for canonical category mapping.
+            // This enables N5B checkbox truthfulness: uploads with canonical categories
+            // (deposit_protection_certificate, epc, gas_safety_certificate) are tracked
+            // in facts.evidence.files[] and used to tick attachment checkboxes.
+            // Falls back to label for legacy compatibility.
+            evidenceCategory={(currentQuestion as any).evidenceCategory ?? (currentQuestion as any).label}
             required={!!currentQuestion.validation?.required}
             disabled={loading}
             value={uploadFilesForCurrentQuestion}
@@ -1124,9 +2513,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       disabled={loading}
                     >
                       <option value="">-- Select --</option>
-                      {field.options?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {normalizeOptions(field.options as MQSOption[]).map((opt) => (
+                        <option key={opt.key} value={opt.value}>
+                          {opt.label}
                         </option>
                       ))}
                     </select>
@@ -1147,16 +2536,98 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       />
                     </div>
                   ) : field.inputType === 'textarea' ? (
-                    <textarea
-                      value={fieldValue}
-                      onChange={(e) =>
-                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
-                      }
-                      placeholder={field.placeholder}
-                      disabled={loading}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
-                      rows={3}
-                    />
+                    <div className="space-y-2">
+                      <textarea
+                        value={fieldValue}
+                        onChange={(e) =>
+                          setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                        }
+                        onFocus={() =>
+                          setActiveTextFieldPath(
+                            (field.maps_to && field.maps_to[0]) || field.id,
+                          )
+                        }
+                        placeholder={field.placeholder}
+                        disabled={loading}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
+                        rows={3}
+                      />
+                      <div className="flex justify-end">
+                        <AskHeavenInlineEnhancer
+                          caseId={caseId}
+                          questionId={currentQuestion.id}
+                          questionText={currentQuestion.question}
+                          answer={fieldValue || ''}
+                          onApply={handleApplySuggestion}
+                          context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                          apiMode="generic"
+                        />
+                      </div>
+                    </div>
+                  ) : field.id === 'notice_expiry_date' && currentQuestion.id === 'notice_service' ? (
+                    // ====================================================================================
+                    // SPECIAL HANDLING: Notice expiry date with auto-calc and override (Task B)
+                    // ====================================================================================
+                    <div className="space-y-3">
+                      {/* Show calculated date if available and override is OFF */}
+                      {calculatedDate && !expiryDateOverride && (
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <RiCheckboxCircleLine className="h-4 w-4 text-primary" />
+                            <span className="text-sm font-semibold text-blue-900">
+                              Auto-calculated: {new Date(calculatedDate.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </span>
+                          </div>
+                          <p className="text-xs text-blue-700">
+                            Based on your grounds and service date ({calculatedDate.notice_period_days} days notice)
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Override toggle */}
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={expiryDateOverride}
+                          onChange={(e) => {
+                            const isOverriding = e.target.checked;
+                            setExpiryDateOverride(isOverriding);
+
+                            // If turning off override, clear the manual value and use calculated date
+                            if (!isOverriding && calculatedDate) {
+                              setCurrentAnswer({
+                                ...groupValue,
+                                [field.id]: calculatedDate.date
+                              });
+                            }
+                          }}
+                          className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary"
+                          disabled={loading}
+                        />
+                        <span className="text-sm text-gray-700">
+                          Override expiry date (advanced)
+                        </span>
+                      </label>
+
+                      {/* Editable input when override is ON */}
+                      {expiryDateOverride && (
+                        <div>
+                          <Input
+                            type="date"
+                            value={fieldValue}
+                            onChange={(e) =>
+                              setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                            }
+                            placeholder={field.placeholder}
+                            disabled={loading}
+                            className="w-full"
+                          />
+                          <p className="text-xs text-yellow-600 mt-1">
+                            ⚠️ Ensure the date complies with statutory notice period requirements
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <Input
                       type={field.inputType}
@@ -1174,6 +2645,34 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 </div>
               );
             })}
+          </div>
+        );
+
+      case 'info':
+        // Render read-only informational content
+        const content = (currentQuestion as any).content || '';
+        return (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+            <div className="flex items-start">
+              <div className="shrink-0">
+                <svg
+                  className="h-6 w-6 text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3 flex-1">
+                <div className="text-sm text-blue-700 whitespace-pre-wrap">{content}</div>
+              </div>
+            </div>
           </div>
         );
 
@@ -1195,16 +2694,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ------------------------------
   const isUploadQuestion =
     currentQuestion?.inputType === 'upload' || currentQuestion?.inputType === 'file_upload';
+  const isInfoQuestion = currentQuestion?.inputType === 'info';
   const uploadRequiredMissing = !!(
     isUploadQuestion &&
     currentQuestion?.validation?.required &&
     uploadFilesForCurrentQuestion.length === 0
   );
+  // For notice_only products: simplified UX means NO compliance blocking during wizard steps.
+  // Compliance validation happens at preview/generate time via the End Validator.
+  // For other products: pendingRouteBlock still applies to block navigation.
   const disableNextButton =
     loading ||
     uploadingEvidence ||
     uploadRequiredMissing ||
-    (!isUploadQuestion && (currentAnswer === null || currentAnswer === undefined));
+    (product !== 'notice_only' && pendingRouteBlock) || // Only block for non-notice_only products
+    (!isUploadQuestion && !isInfoQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------
   // Intro + completion states
@@ -1234,32 +2738,157 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     );
   }
 
+  if (isComplete && mode === 'edit') {
+    // Determine if there are blocking issues that prevent regeneration
+    const canRegenerate = !hasBlockingIssues && previewBlockingIssues.length === 0;
+    const totalIssues = previewBlockingIssues.length;
+    const totalWarnings = previewWarnings.length;
+
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <Card className="p-8 space-y-4">
+          {/* Show blocking issues banner if any exist */}
+          {!canRegenerate && (
+            <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">⚠️</div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-red-900 mb-1">
+                    {totalIssues} Blocking {totalIssues === 1 ? 'Issue' : 'Issues'} Must Be Fixed
+                  </h3>
+                  <p className="text-sm text-red-800 mb-3">
+                    You cannot regenerate the preview until these issues are resolved.
+                  </p>
+                  <div className="space-y-2">
+                    {previewBlockingIssues.map((issue, index) => (
+                      <div key={`${issue.code}-${index}`} className="bg-white border border-red-200 rounded p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-sm text-gray-900 flex-1">
+                            {issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields.join(', ')}`}
+                          </p>
+                          {issue.affected_question_id && (
+                            <Button
+                              onClick={() => {
+                                // Navigate back to the question to fix (fix_mode returns to validation after save)
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('jump_to', issue.affected_question_id || '');
+                                url.searchParams.set('mode', 'edit');
+                                url.searchParams.set('fix_mode', 'true');
+                                window.location.href = url.toString();
+                              }}
+                              variant="primary"
+                              size="small"
+                            >
+                              Fix this →
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Switch to Section 8 option (England only, when Section 21 is blocked) */}
+          {!canRegenerate && jurisdiction === 'england' &&
+           (caseFacts.selected_notice_route === 'section_21' || !caseFacts.selected_notice_route) && (
+            <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-xl">🔄</div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                    Alternative: Switch to Section 8
+                  </h3>
+                  <p className="text-sm text-blue-800 mb-3">
+                    Section 21 has strict compliance requirements. If you have grounds for possession
+                    (rent arrears, breach of tenancy, etc.), you can use Section 8 instead.
+                  </p>
+                  <Button
+                    onClick={() => void switchNoticeRoute('section_8')}
+                    variant="secondary"
+                    size="small"
+                    disabled={loading}
+                  >
+                    {loading ? 'Switching...' : 'Switch to Section 8 →'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Show warnings if any exist */}
+          {totalWarnings > 0 && (
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-xl">⚡</div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-1">
+                    {totalWarnings} {totalWarnings === 1 ? 'Warning' : 'Warnings'}
+                  </h3>
+                  <div className="space-y-1">
+                    {previewWarnings.slice(0, 3).map((warning, index) => (
+                      <p key={`${warning.code}-${index}`} className="text-sm text-yellow-800">
+                        • {warning.user_fix_hint || warning.user_message || `Warning: ${warning.fields.join(', ')}`}
+                      </p>
+                    ))}
+                    {totalWarnings > 3 && (
+                      <p className="text-sm text-yellow-700 italic">
+                        + {totalWarnings - 3} more warning{totalWarnings - 3 > 1 ? 's' : ''}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 ${canRegenerate ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'} rounded-full flex items-center justify-center text-xl`}>
+              {canRegenerate ? '✓' : '!'}
+            </div>
+            <div>
+              <p className={`text-sm uppercase tracking-wide ${canRegenerate ? 'text-green-700' : 'text-amber-700'} font-semibold mb-1`}>
+                {canRegenerate ? 'Review complete' : 'Review complete - Issues found'}
+              </p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {canRegenerate ? 'Your answers have been updated' : 'Please fix the issues above'}
+              </h2>
+            </div>
+          </div>
+
+          <p className="text-gray-700">
+            {canRegenerate
+              ? 'All answers have been reviewed. Choose whether to regenerate your preview now or just save your changes.'
+              : 'You have reviewed all questions, but there are blocking issues that must be fixed before you can regenerate the preview.'
+            }
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => void handleComplete({ redirect: true })}
+              variant="primary"
+              size="large"
+              disabled={!canRegenerate}
+              className={!canRegenerate ? 'opacity-50 cursor-not-allowed' : ''}
+            >
+              {canRegenerate ? 'Regenerate preview' : 'Fix issues to regenerate'}
+            </Button>
+            <Button onClick={() => void handleComplete({ redirect: false })} variant="secondary" size="large">
+              Save and exit
+            </Button>
+          </div>
+
+          <p className="text-sm text-gray-500">Reviewed steps: {reviewStepIndex}</p>
+        </Card>
+      </div>
+    );
+  }
+
   if (isComplete) {
     // Ask Heaven-branded loading modal for Complete Pack
     if (product === 'complete_pack') {
-      const [currentStep, setCurrentStep] = useState(0);
-
-      const steps = [
-        'Ask Heaven Drafting Witness Statement',
-        'Ask Heaven Analyzing Compliance',
-        'Ask Heaven Calculating Risk Assessment',
-        'Filling Official Court Forms',
-      ];
-
-      // Auto-advance through steps
-      useEffect(() => {
-        const interval = setInterval(() => {
-          setCurrentStep((prev) => {
-            if (prev < steps.length - 1) {
-              return prev + 1;
-            }
-            return prev;
-          });
-        }, 1500); // Change step every 1.5 seconds
-
-        return () => clearInterval(interval);
-      }, []);
-
       return (
         <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
@@ -1277,19 +2906,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
             {/* Progress Steps */}
             <div className="space-y-3 mb-6">
-              {steps.map((step, index) => (
+              {completePackSteps.map((step, index) => (
                 <div
                   key={index}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                    index === currentStep
+                    index === completePackStep
                       ? 'bg-purple-50 border-2 border-purple-500'
-                      : index < currentStep
+                      : index < completePackStep
                       ? 'bg-green-50 border border-green-200'
                       : 'bg-gray-50 border border-gray-200'
                   }`}
                 >
-                  {index < currentStep ? (
-                    <div className="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  {index < completePackStep ? (
+                    <div className="shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                       <svg
                         className="w-4 h-4 text-white"
                         fill="currentColor"
@@ -1302,16 +2931,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         />
                       </svg>
                     </div>
-                  ) : index === currentStep ? (
-                    <div className="flex-shrink-0 w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                  ) : index === completePackStep ? (
+                    <div className="shrink-0 w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <div className="flex-shrink-0 w-6 h-6 bg-gray-300 rounded-full" />
+                    <div className="shrink-0 w-6 h-6 bg-gray-300 rounded-full" />
                   )}
                   <span
                     className={`text-sm font-medium ${
-                      index === currentStep
+                      index === completePackStep
                         ? 'text-purple-900'
-                        : index < currentStep
+                        : index < completePackStep
                         ? 'text-green-900'
                         : 'text-gray-500'
                     }`}
@@ -1484,23 +3113,68 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   })();
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.5fr)] gap-6 items-start">
-        {/* LEFT: Wizard content */}
-        <div>
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>{currentQuestion.section || 'Question'}</span>
-              <span>{Math.round(progress)}% Complete</span>
+    <div className="min-h-screen bg-gray-50 pt-20">
+      {/* Header with progress - sticky like section-based flows */}
+      <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
+        <div className="max-w-5xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <h1 className="text-lg font-semibold text-gray-900">
+                {productLabel} Pack
+              </h1>
+              {/* Step counter */}
+              <span className="text-sm text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                Question {questionHistory.length + 1}
+              </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-sm font-bold text-primary">{Math.round(progress)}%</span>
+              </div>
             </div>
           </div>
+
+          {/* Progress bar */}
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#7C3AED] transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Current section indicator */}
+          <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-2">
+            <div className="px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap bg-[#7C3AED] text-white">
+              {currentQuestion.section || 'Question'}
+            </div>
+            {progress > 0 && progress < 100 && (
+              <span className="text-xs text-gray-500">
+                {progress < 25 ? 'Getting started...' : progress < 50 ? 'Making progress!' : progress < 75 ? 'Almost there!' : 'Final details...'}
+              </span>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main content with sidebar */}
+      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
+        {/* Main wizard column */}
+        <main className="flex-1 lg:max-w-3xl">
+
+          {/* Fix Mode Banner */}
+          {fixMode && (
+            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+              <div className="flex items-center gap-3">
+                <div className="text-xl">🔧</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900 text-sm">Fixing Issue</h4>
+                  <p className="text-sm text-blue-700">
+                    Update your answer below, then click "Save & Return to Issues" to continue fixing other issues.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Checkpoint: Blocking Issues Banner */}
           {checkpoint?.blocking_issues && checkpoint.blocking_issues.length > 0 && (
@@ -1559,7 +3233,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             currentQuestion?.section?.toLowerCase()?.includes('grounds')) && (
             <div className="mb-6 p-4 bg-warning-50 border-l-4 border-warning-500 rounded">
               <div className="flex items-start gap-3">
-                <div className="text-2xl flex-shrink-0 mt-0.5">⚠️</div>
+                <div className="text-2xl shrink-0 mt-0.5">⚠️</div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-warning-900 mb-1">
                     Wales: Section 8 Terminology Warning
@@ -1646,28 +3320,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {/* Ask Heaven Panel - inline on mobile (below the answer box) */}
-            {currentQuestion.inputType === 'textarea' && (
-              <div className="mb-6 lg:hidden">
-                <AskHeavenPanel
-                  caseId={caseId}
-                  caseType={caseType}
-                  jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
-                  product={product}
-                  currentQuestionId={currentQuestion.id}
-                  currentQuestionText={currentQuestion.question}
-                  currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
-                  onApplySuggestion={handleApplySuggestion}
-                />
-              </div>
-            )}
-
             {/* Contextual guidance helper – eviction, money claim, tenancy */}
             <GuidanceTips
               questionId={currentQuestion.id}
               jurisdiction={guidanceJurisdiction}
               caseType={caseType}
             />
+
+            {/* Smart Review Panel - Evidence document analysis warnings (complete_pack, all jurisdictions) */}
+            {product === 'complete_pack' && (
+              <SmartReviewPanel
+                warnings={smartReviewWarnings}
+                summary={smartReviewSummary}
+                defaultCollapsed={!currentQuestion?.id?.startsWith('evidence_')}
+              />
+            )}
 
             {/* Ask Heaven Suggestion (backend-driven) */}
             {askHeavenSuggestion && (
@@ -1730,7 +3397,91 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {depositWarning && (
+            {/* Notice Compliance Error Panel - DISABLED for notice_only per UX cleanup
+                Compliance issues only appear at Preview in the End Validator summary.
+                Wizard steps should only block on MSQ field validation (required/type/range).
+                See: docs/notice-only-rules-audit.md */}
+            {product !== 'notice_only' && noticeComplianceError && (
+              <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-5 mb-6 shadow-md">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="text-3xl shrink-0">⚠️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-orange-900 mb-1">
+                      Notice May Be Non-Compliant
+                    </h3>
+                    <p className="text-sm text-orange-800">
+                      We've detected potential compliance issues with this notice. Please review and fix the
+                      issues below before continuing.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Blocking Issues */}
+                {noticeComplianceError.failures.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-bold text-red-900 mb-2 flex items-center gap-2">
+                      <span>🚫</span>
+                      Blocking Issues (must fix to continue):
+                    </h4>
+                    <div className="space-y-2">
+                      {noticeComplianceError.failures.map((failure, idx) => (
+                        <div key={idx} className="bg-white border border-red-300 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-red-900 mb-1">
+                            {failure.code}
+                          </p>
+                          <p className="text-sm text-red-800 mb-2">
+                            <strong>Legal Reason:</strong> {failure.legal_reason}
+                          </p>
+                          <p className="text-sm text-red-700">
+                            <strong>How to fix:</strong> {failure.user_fix_hint}
+                          </p>
+                          {failure.affected_question_id && (
+                            <p className="text-xs text-red-600 mt-1">
+                              Affected field: {failure.affected_question_id}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Warnings */}
+                {noticeComplianceError.warnings.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-bold text-yellow-900 mb-2 flex items-center gap-2">
+                      <span>⚠️</span>
+                      Warnings (review carefully):
+                    </h4>
+                    <div className="space-y-2">
+                      {noticeComplianceError.warnings.map((warning, idx) => (
+                        <div key={idx} className="bg-white border border-yellow-300 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-yellow-900 mb-1">
+                            {warning.code}
+                          </p>
+                          <p className="text-sm text-yellow-800 mb-2">
+                            <strong>Legal Reason:</strong> {warning.legal_reason}
+                          </p>
+                          <p className="text-sm text-yellow-700">
+                            <strong>Recommendation:</strong> {warning.user_fix_hint}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-900">
+                    <strong>Next step:</strong> Update your answers above to resolve the blocking issues.
+                    Once fixed, try clicking "Next" again.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Deposit cap warning: Hidden for notice_only products - shown only at preview */}
+            {depositWarning && product !== 'notice_only' && (
               <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
                 <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
               </div>
@@ -1748,6 +3499,125 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
+            {/* Past service date warning */}
+            {pastServiceDateWarning && currentQuestion?.id === 'notice_service' && (
+              <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <span className="text-lg">📅</span>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-900 mb-1">Past Service Date</p>
+                    <p className="text-sm text-amber-800">{pastServiceDateWarning}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ============================================================================
+                INLINE VALIDATION - PRODUCT-AWARE
+                ============================================================================
+                For notice_only: Legal Guidance UI is DISABLED per UX cleanup.
+                  - All compliance issues only appear at Preview (End Validator summary)
+                  - Wizard steps only show MSQ field validation (required/type/range)
+                  - Route suggestion banners disabled during wizard
+                  - See: docs/notice-only-rules-audit.md
+
+                For other products: Use legacy issue filtering (previewBlockingIssues, previewWarnings)
+
+                Key UX: Never block navigation - only provide guidance.
+            */}
+            {product === 'notice_only' ? (
+              /* NOTICE-ONLY: Legal Guidance UI disabled per UX cleanup.
+                 Compliance issues only appear at Preview in the End Validator summary.
+                 noticeOnlyGuidance, noticeOnlyRouteSuggestion, and
+                 noticeComplianceError are kept as state for potential
+                 future use but not rendered during wizard steps. */
+              null
+            ) : (
+              /* OTHER PRODUCTS: Legacy inline validation */
+              (() => {
+                // Filter issues that match the current question
+                const currentQuestionId = currentQuestion?.id;
+                const currentFields = currentQuestion?.maps_to || [currentQuestionId];
+
+                // Match issues to current question by affected_question_id or fields
+                const matchingBlockingIssues = previewBlockingIssues.filter(issue =>
+                  issue.affected_question_id === currentQuestionId ||
+                  issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                  issue.fields?.some(field => currentFields?.includes(field))
+                );
+
+                const matchingWarnings = previewWarnings.filter(issue =>
+                  issue.affected_question_id === currentQuestionId ||
+                  issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                  issue.fields?.some(field => currentFields?.includes(field))
+                );
+
+                return (
+                  <>
+                    {/* Inline blocking issues for current step */}
+                    {matchingBlockingIssues.length > 0 && (
+                      <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg">📋</span>
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-red-900 mb-1">
+                              Fix {matchingBlockingIssues.length === 1 ? 'this' : 'these'} before generating your notice
+                            </p>
+                            <ul className="text-sm text-red-700 space-y-2 mt-2">
+                              {matchingBlockingIssues.map((issue, i) => (
+                                <li key={`block-${issue.code}-${i}`} className="flex items-start gap-2">
+                                  <span className="text-red-500 mt-0.5">•</span>
+                                  <div className="flex-1">
+                                    <span className="font-medium">
+                                      {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                                    </span>
+                                    {issue.legal_reason && (
+                                      <details className="mt-1">
+                                        <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                                          Why?
+                                        </summary>
+                                        <p className="text-xs text-red-600 mt-1 pl-2 border-l-2 border-red-200">
+                                          {issue.legal_reason}
+                                        </p>
+                                      </details>
+                                    )}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Inline warnings for current step */}
+                    {matchingWarnings.length > 0 && (
+                      <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg">💡</span>
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-amber-900 mb-1">
+                              {matchingWarnings.length === 1 ? 'Recommendation' : 'Recommendations'}
+                            </p>
+                            <ul className="text-sm text-amber-700 space-y-1 mt-2">
+                              {matchingWarnings.map((issue, i) => (
+                                <li key={`warn-${issue.code}-${i}`} className="flex items-start gap-2">
+                                  <span className="text-amber-500 mt-0.5">•</span>
+                                  <span>
+                                    {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()
+            )}
+
             {/* Navigation */}
             <div className="flex gap-4">
               {questionHistory.length > 0 && (
@@ -1762,14 +3632,150 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 className="flex-1"
                 disabled={disableNextButton}
               >
-                {loading ? 'Saving...' : 'Next →'}
+                {loading ? 'Saving...' : fixMode ? 'Save & Return to Issues ✓' : 'Next →'}
               </Button>
             </div>
           </Card>
-        </div>
 
-        {/* RIGHT: Side panels – Ask Heaven + case-specific widgets */}
-        <aside className="space-y-4">
+        </main>
+
+        {/* Ask Heaven sidebar - matching section-based flows */}
+        <aside className="lg:w-80 shrink-0 space-y-4">
+          <div className="sticky top-44">
+          {/* ============================================================================
+              PERSISTENT ISSUES SUMMARY PANEL (ALL MODES)
+              ============================================================================
+              Displays a compact summary of all blocking issues and warnings.
+              Users can click issues to jump to the relevant question.
+              Visible whenever there are any issues detected.
+
+              UX Rules:
+              - Title: "Fix before generating notice" (not "Compliance Issues")
+              - Sections: "Will block preview" (blocking), "Warnings" (non-blocking)
+              - User-friendly wording with friendly labels
+              - "Why?" expandable section with legal reason
+              - "Go to: [Question Label]" with friendly names
+          */}
+          {/*
+            RIGHT-SIDE VALIDATION PANEL - DISABLED FOR NOTICE-ONLY
+
+            Per the notice-only validation rebuild (docs/notice-only-rules-audit.md):
+            - Notice-only uses inline-only validation
+            - No right-side panel for notice_only products
+            - Other products (complete_pack) retain the right-side panel
+          */}
+          {(issueCounts.blocking > 0 || issueCounts.warnings > 0) && caseType === 'eviction' && product !== 'notice_only' && (
+            <div className="hidden lg:block sticky top-4 z-10 mb-4">
+              <Card className={`p-4 ${issueCounts.blocking > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
+                <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  {issueCounts.blocking > 0 ? '📋' : '⚠️'}
+                  Fix before generating notice
+                </h3>
+
+                {/* Will block preview section */}
+                {issueCounts.blocking > 0 && (
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between p-2 bg-red-100 rounded mb-2">
+                      <span className="text-sm font-medium text-red-900">
+                        Will block preview
+                      </span>
+                      <span className="text-sm font-bold text-red-600 bg-red-200 px-2 py-0.5 rounded-full">
+                        {issueCounts.blocking}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {previewBlockingIssues.slice(0, 3).map((issue, i) => (
+                        <div
+                          key={`summary-block-${issue.code}-${i}`}
+                          className="text-xs p-2 bg-white rounded border border-red-200"
+                        >
+                          <p className="text-red-800 font-medium">
+                            {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                          </p>
+                          {issue.legal_reason && (
+                            <details className="mt-1">
+                              <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                                Why?
+                              </summary>
+                              <p className="text-xs text-red-700 mt-1 pl-2 border-l-2 border-red-200">
+                                {issue.legal_reason}
+                              </p>
+                            </details>
+                          )}
+                          {issue.affected_question_id && (
+                            <button
+                              type="button"
+                              onClick={() => void jumpToQuestion(issue.affected_question_id!)}
+                              disabled={loading}
+                              className="mt-1 text-xs text-red-600 hover:text-red-800 hover:underline"
+                            >
+                              → Go to: {(issue as any).friendlyQuestionLabel || issue.affected_question_id.replace(/_/g, ' ')}
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {previewBlockingIssues.length > 3 && (
+                        <p className="text-xs text-red-600 italic">
+                          + {previewBlockingIssues.length - 3} more
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Warnings section */}
+                {issueCounts.warnings > 0 && (
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between p-2 bg-amber-100 rounded mb-2">
+                      <span className="text-sm font-medium text-amber-900">
+                        Warnings
+                      </span>
+                      <span className="text-sm font-bold text-amber-600 bg-amber-200 px-2 py-0.5 rounded-full">
+                        {issueCounts.warnings}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {previewWarnings.slice(0, 2).map((issue, i) => (
+                        <div
+                          key={`summary-warn-${issue.code}-${i}`}
+                          className="text-xs p-2 bg-white rounded border border-amber-200"
+                        >
+                          <p className="text-amber-800">
+                            {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                          </p>
+                          {issue.affected_question_id && (
+                            <button
+                              type="button"
+                              onClick={() => void jumpToQuestion(issue.affected_question_id!)}
+                              disabled={loading}
+                              className="mt-1 text-xs text-amber-600 hover:text-amber-800 hover:underline"
+                            >
+                              → Go to: {(issue as any).friendlyQuestionLabel || issue.affected_question_id.replace(/_/g, ' ')}
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {previewWarnings.length > 2 && (
+                        <p className="text-xs text-amber-600 italic">
+                          + {previewWarnings.length - 2} more
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Info message */}
+                <div className="p-2 bg-gray-100 rounded">
+                  <p className="text-xs text-gray-700">
+                    {issueCounts.blocking > 0
+                      ? 'You can continue through the wizard. Fix these before generating your preview.'
+                      : 'These are recommended but not required.'}
+                  </p>
+                </div>
+              </Card>
+            </div>
+          )}
+
           {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
           {caseType === 'eviction' && product === 'notice_only' && (
             <div className="hidden lg:block sticky top-32 space-y-4">
@@ -1908,7 +3914,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                                 Ground {ground.code}: {ground.title}
                               </div>
                               {ground.type === 'mandatory' && (
-                                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full font-bold ml-2 flex-shrink-0">
+                                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full font-bold ml-2 shrink-0">
                                   MANDATORY
                                 </span>
                               )}
@@ -1994,20 +4000,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 </div>
               )}
             </div>
-          )}
-
-          {/* Ask Heaven sidebar – stays in view on larger screens */}
-          {currentQuestion?.inputType === 'textarea' && (
-            <AskHeavenPanel
-              caseId={caseId}
-              caseType={caseType}
-              jurisdiction={(jurisdiction || 'england') as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
-              product={product}
-              currentQuestionId={currentQuestion.id}
-              currentQuestionText={currentQuestion.question}
-              currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
-              onApplySuggestion={handleApplySuggestion}
-            />
           )}
 
           {/* Case health & readiness (money claims only) */}
@@ -2204,8 +4196,110 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             </Card>
           )}
+          </div>
         </aside>
       </div>
+
+      {/* ============================================================================
+          FLOW NOT AVAILABLE MODAL
+          ============================================================================
+          Triggered when the decision engine reports the current route is blocked.
+
+          NOTE: For notice_only products, this modal is DISABLED as part of the
+          simplified UX. All compliance validation happens at preview/generate time
+          via the End Validator. This modal is only shown for other products.
+
+          Jurisdiction-aware, provides:
+          - Clear explanation of WHY the route is blocked
+          - Legal basis for the blocking rule
+          - Alternative routes available
+          - Actions needed to unblock the current route
+      */}
+      {product !== 'notice_only' && showFlowNotAvailableModal && flowNotAvailableDetails && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-red-50 border-b border-red-100 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <RiAlertLine className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-red-900">
+                    {flowNotAvailableDetails.blockedRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')} Not Available
+                  </h2>
+                  <p className="text-sm text-red-700">
+                    Based on your answers, this notice route cannot be used
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-4">
+              {/* Why blocked */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">Why is this blocked?</h3>
+                <p className="text-sm text-gray-700">{flowNotAvailableDetails.reason}</p>
+              </div>
+
+              {/* Legal basis */}
+              {flowNotAvailableDetails.legalBasis && (
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1">Legal basis:</p>
+                  <p className="text-sm text-gray-800">{flowNotAvailableDetails.legalBasis}</p>
+                </div>
+              )}
+
+              {/* Alternative routes */}
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">Available alternatives:</h3>
+                  <ul className="space-y-2">
+                    {flowNotAvailableDetails.alternativeRoutes.map((route, i) => (
+                      <li key={`alt-${route}-${i}`} className="flex items-center gap-2 p-2 bg-green-50 rounded-lg border border-green-200">
+                        <span className="text-green-600">✓</span>
+                        <span className="text-sm font-medium text-green-900">
+                          {route.replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Jurisdiction-specific guidance */}
+              <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                <p className="text-xs font-medium text-blue-800">
+                  {jurisdiction === 'england' && 'England-specific: Check deposit protection and prescribed information requirements.'}
+                  {jurisdiction === 'wales' && 'Wales-specific: Verify Rent Smart Wales registration and occupation contract type.'}
+                  {jurisdiction === 'scotland' && 'Scotland-specific: Check pre-action requirements if claiming rent arrears.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3 justify-end">
+              <Button
+                variant="secondary"
+                onClick={handleEditAnswer}
+                disabled={loading}
+              >
+                Edit my answer
+              </Button>
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <Button
+                  variant="primary"
+                  onClick={() => void switchNoticeRoute(flowNotAvailableDetails.alternativeRoutes[0])}
+                  disabled={loading}
+                >
+                  {loading ? 'Switching...' : `Switch to ${flowNotAvailableDetails.alternativeRoutes[0].replace(/_/g, ' ').replace(/section/i, 'Section ')}`}
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

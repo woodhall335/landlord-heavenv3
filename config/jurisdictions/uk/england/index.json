@@ -1,6 +1,6 @@
 {
-  "jurisdiction": "england-wales",
-  "name": "England and Wales",
+  "jurisdiction": "england",
+  "name": "England",
   "legal_system": "Unified jurisdiction under Housing Act 1988",
   "tenancy_types": {
     "assured_shorthold_tenancy": {

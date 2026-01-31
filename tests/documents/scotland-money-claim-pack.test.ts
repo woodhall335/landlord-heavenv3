@@ -68,7 +68,7 @@ describe('Scotland money claim pack generator', () => {
     const pack = await generateScotlandMoneyClaim(sampleCase);
 
     expect(pack.documents.length).toBeGreaterThanOrEqual(5);
-    expect(pack.documents.some((doc) => doc.file_name === 'simple-procedure-claim-form.pdf')).toBe(true);
+    expect(pack.documents.some((doc) => doc.file_name === '05-simple-procedure-claim-form.pdf')).toBe(true);
     expect(pack.metadata.includes_official_pdf).toBe(true);
     expect(pack.metadata.total_with_fees).toBeGreaterThan(0);
     expect(pack.jurisdiction).toBe('scotland');
@@ -122,7 +122,7 @@ describe('Scotland money claim pack generator', () => {
   it('includes attempts to resolve in pack', async () => {
     const pack = await generateScotlandMoneyClaim(sampleCase);
 
-    const particularsDoc = pack.documents.find(doc => doc.file_name === 'simple-procedure-particulars.pdf');
+    const particularsDoc = pack.documents.find(doc => doc.file_name === '02-simple-procedure-particulars.pdf');
     expect(particularsDoc).toBeDefined();
     expect(particularsDoc?.html).toContain('Attempts to resolve');
   });

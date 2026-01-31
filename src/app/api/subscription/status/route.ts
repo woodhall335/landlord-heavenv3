@@ -54,7 +54,7 @@ export async function GET() {
 
     // Get property count for tier limits
     const { count: propertyCount } = await supabase
-      .from('properties')
+      .from('hmo_properties')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id);
 

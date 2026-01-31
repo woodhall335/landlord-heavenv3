@@ -20,8 +20,9 @@ describe('Jurisdiction Migration', () => {
       expect(migrateToCanonicalJurisdiction('northern-ireland')).toBe('northern-ireland');
     });
 
-    it('should migrate "england-wales" to "england" by default', () => {
-      expect(migrateToCanonicalJurisdiction('england-wales')).toBe('england');
+    it('should FAIL CLOSED for "england-wales" without property_location (no default to england)', () => {
+      // IMPORTANT: Do NOT default to england - this could apply wrong legal framework
+      expect(migrateToCanonicalJurisdiction('england-wales')).toBeNull();
     });
 
     it('should migrate "england-wales" to "wales" if property_location is wales', () => {
@@ -33,19 +34,19 @@ describe('Jurisdiction Migration', () => {
     });
 
     it('should handle "england & wales" variant', () => {
-      expect(migrateToCanonicalJurisdiction('england & wales')).toBe('england');
+      expect(migrateToCanonicalJurisdiction('england & wales')).toBeNull();
       expect(migrateToCanonicalJurisdiction('england & wales', 'wales')).toBe('wales');
     });
 
     it('should handle "england and wales" variant', () => {
-      expect(migrateToCanonicalJurisdiction('england and wales')).toBe('england');
+      expect(migrateToCanonicalJurisdiction('england and wales')).toBeNull();
       expect(migrateToCanonicalJurisdiction('england and wales', 'wales')).toBe('wales');
     });
 
     it('should handle case-insensitive input', () => {
-      expect(migrateToCanonicalJurisdiction('ENGLAND-WALES')).toBe('england');
-      expect(migrateToCanonicalJurisdiction('England-Wales')).toBe('england');
-      expect(migrateToCanonicalJurisdiction('  england-wales  ')).toBe('england');
+      expect(migrateToCanonicalJurisdiction('ENGLAND-WALES')).toBeNull();
+      expect(migrateToCanonicalJurisdiction('England-Wales')).toBeNull();
+      expect(migrateToCanonicalJurisdiction('  england-wales  ')).toBeNull();
     });
 
     it('should return null for null/undefined', () => {
@@ -61,15 +62,16 @@ describe('Jurisdiction Migration', () => {
   });
 
   describe('Real-world migration scenarios', () => {
-    it('should handle wizard API payloads with england-wales', () => {
-      // Simulate old wizard data
+    it('should FAIL CLOSED for wizard API payloads with england-wales and no property_location', () => {
+      // Simulate old wizard data without property location
       const legacyPayload = {
         product: 'notice_only',
         jurisdiction: 'england-wales',
       };
 
       const migratedJurisdiction = migrateToCanonicalJurisdiction(legacyPayload.jurisdiction);
-      expect(migratedJurisdiction).toBe('england');
+      // Must fail closed - cannot assume England
+      expect(migratedJurisdiction).toBeNull();
     });
 
     it('should handle database records with england-wales and property_location', () => {
@@ -86,7 +88,7 @@ describe('Jurisdiction Migration', () => {
       expect(migratedJurisdiction).toBe('wales');
     });
 
-    it('should handle database records without property_location (default to england)', () => {
+    it('should FAIL CLOSED for database records without property_location (no default to england)', () => {
       const legacyCase = {
         jurisdiction: 'england-wales',
         // no property_location
@@ -95,7 +97,8 @@ describe('Jurisdiction Migration', () => {
       const migratedJurisdiction = migrateToCanonicalJurisdiction(
         legacyCase.jurisdiction
       );
-      expect(migratedJurisdiction).toBe('england');
+      // Must fail closed - cannot assume England, could be Wales with different legal framework
+      expect(migratedJurisdiction).toBeNull();
     });
   });
 });

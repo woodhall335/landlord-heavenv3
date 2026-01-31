@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
-import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 
 // Get councils data with optional filtering
 export async function GET(request: NextRequest) {

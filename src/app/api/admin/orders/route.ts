@@ -36,10 +36,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    // Fetch recent orders
+    // Fetch recent orders - use correct field names from schema
     const { data: orders, error } = await supabase
       .from('orders')
-      .select('id, user_id, product_type, amount, status, stripe_payment_intent_id, created_at')
+      .select('id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, created_at')
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -66,8 +66,8 @@ export async function GET(request: NextRequest) {
           user_name: userData?.full_name || null,
           product_name: PRODUCT_NAMES[order.product_type] || order.product_type,
           product_type: order.product_type,
-          total_amount: order.amount,
-          payment_status: order.status,
+          total_amount: order.total_amount,
+          payment_status: order.payment_status,
           stripe_payment_intent_id: order.stripe_payment_intent_id,
           created_at: order.created_at,
         };

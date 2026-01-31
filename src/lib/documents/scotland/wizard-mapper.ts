@@ -185,8 +185,9 @@ export function mapWizardToNoticeToLeave(wizardFacts: WizardFacts): NoticeToLeav
     landlord_address: landlordAddress,
     landlord_email: caseFacts.parties.landlord.email ?? undefined,
     landlord_phone: caseFacts.parties.landlord.phone ?? undefined,
-    // TODO: landlord_reg_number is Scotland-specific, not yet in CaseFacts
-    landlord_reg_number: getWizardValue(wizardFacts, 'landlord_reg_number') ?? undefined,
+    // Scotland landlord registration number - check both field names for compatibility
+    landlord_reg_number: getWizardValue(wizardFacts, 'landlord_registration_number') ??
+                         getWizardValue(wizardFacts, 'landlord_reg_number') ?? undefined,
 
     // Tenant details - use CaseFacts
     tenant_full_name: primaryTenant?.name || '',
@@ -205,6 +206,7 @@ export function mapWizardToNoticeToLeave(wizardFacts: WizardFacts): NoticeToLeav
     grounds,
 
     // Deposit - use CaseFacts
+    // Scotland NoticeToLeaveData type only supports deposit_scheme
     deposit_protected: caseFacts.tenancy.deposit_protected ?? undefined,
     deposit_amount: caseFacts.tenancy.deposit_amount ?? undefined,
     deposit_scheme: caseFacts.tenancy.deposit_scheme_name ?? undefined,

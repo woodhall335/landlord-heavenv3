@@ -1,0 +1,21 @@
+requiredOfficialForms: []
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: ni_tenancy_terms
+    description: "Northern Ireland tenancy terms"
+    mustAppearIn: template
+    match: "tenancy"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: statutory_information
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Private Tenancies Act (Northern Ireland)"

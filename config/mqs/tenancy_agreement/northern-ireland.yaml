@@ -698,12 +698,39 @@ questions:
       - bank_sort_code
       - bank_account_number
 
+  # RENT BOOK REQUIREMENT (Northern Ireland)
+  - id: rent_book_requirement_info
+    section: Rent Details
+    question: "Rent Book Requirement"
+    inputType: info
+    dependsOn:
+      questionId: rent_period
+      value: week
+    content: |
+      📚 **NORTHERN IRELAND: RENT BOOK REQUIRED**
+
+      Under the Rent (Northern Ireland) Order 1978, Article 5:
+
+      **You MUST provide a rent book** for tenancies where rent is payable weekly.
+
+      **The rent book must include:**
+      - Landlord's name and address
+      - Tenant's name
+      - Property address
+      - Amount of rent payable
+      - Rent payment period
+      - Space for recording rent payments
+
+      **Failure to provide a rent book is a criminal offence** punishable by a fine.
+
   # 6. Deposit
   - id: deposit_details
     section: Deposit
     question: "Deposit and protection"
     inputType: group
-    helperText: "We include deposit scheme details and certificate."
+    helperText: |
+      ⚠️ NORTHERN IRELAND: Deposits must be protected within 14 DAYS - the strictest deadline in the UK.
+      Failure to protect on time can result in penalties of up to 3x the deposit amount.
     fields:
       - id: deposit_amount
         label: "Deposit amount"
@@ -722,6 +749,7 @@ questions:
           - "Other"
         validation:
           required: true
+        helperText: "Only NI-approved schemes can be used"
         width: half
       - id: deposit_paid_date
         label: "Date deposit will be paid"
@@ -730,6 +758,7 @@ questions:
       - id: deposit_protection_date
         label: "Date you will protect the deposit"
         inputType: date
+        helperText: "⚠️ MUST be within 14 DAYS of receiving deposit"
         width: half
       - id: deposit_already_protected
         label: "Is the deposit already protected?"

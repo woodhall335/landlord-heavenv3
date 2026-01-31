@@ -1,0 +1,125 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#92400E" font-size="22" font-weight="bold" font-family="Arial">HOLIDAY LET LICENSING</text>
+  <text x="400" y="55" text-anchor="middle" fill="#D97706" font-size="11" font-family="Arial">Licensing and registration requirements for holiday lets</text>
+
+  <!-- License icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#D97706" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Certificate -->
+      <rect x="20" y="12" width="80" height="70" rx="4" fill="#FEF3C7" stroke="#92400E" stroke-width="2"/>
+      <line x1="35" y1="28" x2="85" y2="28" stroke="#D97706" stroke-width="2"/>
+      <line x1="35" y1="40" x2="85" y2="40" stroke="#D97706" stroke-width="1"/>
+      <line x1="35" y1="48" x2="85" y2="48" stroke="#D97706" stroke-width="1"/>
+      <line x1="35" y1="56" x2="65" y2="56" stroke="#D97706" stroke-width="1"/>
+      <!-- Seal -->
+      <circle cx="85" cy="65" r="12" fill="#D97706"/>
+      <text x="85" y="69" text-anchor="middle" fill="white" font-size="10" font-weight="bold">✓</text>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#92400E" font-size="11" font-weight="bold">LICENSING</text>
+    <text x="100" y="143" text-anchor="middle" fill="#D97706" font-size="9">Holiday</text>
+    <text x="100" y="158" text-anchor="middle" fill="#D97706" font-size="9">let</text>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#92400E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">REGISTRATION REQUIREMENTS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Check local authority rules</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Planning permission</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Registration scheme</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Display license number</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#D97706" font-size="9" font-weight="bold">Annual renewal required</text>
+    </g>
+  </g>
+
+  <!-- Regional differences -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#3B82F6" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#3B82F6"/>
+    <rect x="0" y="20" width="200" height="12" fill="#3B82F6"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BY REGION</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#3B82F6"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Scotland: License required</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#3B82F6"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">Wales: Scheme planned</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">England: Register coming</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#92400E" font-size="9">NI: Check local rules</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Rules vary by area</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="680" height="12" fill="#92400E"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">HOLIDAY LET LICENSING ESSENTIALS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#D97706" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#D97706" font-size="10" font-weight="bold">SCOTLAND</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Mandatory license scheme</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Apply to local council</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">3 year license</text>
+      <text x="100" y="94" text-anchor="middle" fill="#D97706" font-size="8" font-weight="bold">Safety conditions</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">ENGLAND</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">National register planned</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">90 day limit in London</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Planning changes coming</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Check local Article 4</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">COMPLIANCE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Fire safety certificate</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Gas safety record</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">PAT testing</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Insurance in place</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#D97706" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#92400E" opacity="0.12"/>
+</svg>

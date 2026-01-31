@@ -1,0 +1,328 @@
+# Phase 13 Message Catalog
+# Standardized messaging for Phase 13 correctness improvements
+#
+# This catalog provides enhanced user-facing content for Phase 13 validation rules:
+# - title: Short, actionable title (displayed in UI header)
+# - description: Full explanation of the issue
+# - howToFix: Step-by-step resolution guidance
+# - legalRef: Legal reference (legislation/regulation citation)
+# - helpLink: Link to help documentation (relative path)
+# - supportTags: Tags for support team filtering
+#
+# Phase 16 UX Messaging + Help Content + Support Readiness
+
+version: "1.0"
+last_updated: "2026-01-26"
+
+# =============================================================================
+# ENGLAND - SECTION 21 PHASE 13 RULES
+# =============================================================================
+
+england_s21:
+
+  s21_deposit_cap_exceeded:
+    title: "Deposit Exceeds Legal Cap"
+    description: >
+      The deposit amount exceeds the legal maximum under the Tenant Fees Act 2019.
+      For tenancies where annual rent is £50,000 or less, the deposit cap is 5 weeks' rent.
+      For tenancies with annual rent over £50,000, the cap is 6 weeks' rent.
+      Section 21 notices are invalid if excess deposit has not been returned to the tenant.
+    howToFix:
+      - "Calculate the legal deposit cap based on the annual rent"
+      - "If deposit exceeds the cap, return the excess amount to the tenant"
+      - "Document the return of the excess deposit with receipts or bank transfer evidence"
+      - "Once excess is returned, confirm this in the wizard before generating the notice"
+    legalRef: "Tenant Fees Act 2019, Section 3"
+    helpLink: "/help/validation/deposit-cap"
+    supportTags: ["deposit", "tenant-fees-act", "s21", "england"]
+
+  s21_four_month_bar:
+    title: "Four-Month Restriction Period"
+    description: >
+      Section 21 notices cannot be served during the first four months of a tenancy.
+      This restriction applies from the date the tenancy began, regardless of any
+      renewal or variation of the tenancy terms.
+    howToFix:
+      - "Check the tenancy start date"
+      - "Calculate when 4 months from the start date will have passed"
+      - "Wait until after the 4-month period has elapsed before serving the notice"
+      - "The notice can be served from day 121 of the tenancy onwards"
+    legalRef: "Housing Act 1988, Section 21(4B)"
+    helpLink: "/help/validation/four-month-bar"
+    supportTags: ["timing", "s21", "england", "notice-period"]
+
+  s21_notice_period_short:
+    title: "Notice Period Too Short"
+    description: >
+      The expiry date specified results in a notice period shorter than the
+      statutory minimum of 2 months. Section 21 notices must give the tenant
+      at least 2 months' notice before the possession date.
+    howToFix:
+      - "Calculate 2 months from the intended service date"
+      - "Ensure the expiry date is at least 2 months after service"
+      - "For periodic tenancies, the expiry date should also coincide with the end of a period"
+      - "Update the expiry date in the wizard to meet the minimum period"
+    legalRef: "Housing Act 1988, Section 21(4)"
+    helpLink: "/help/validation/s21-notice-period"
+    supportTags: ["notice-period", "s21", "england", "timing"]
+
+  s21_licensing_required_not_licensed:
+    title: "Selective Licensing Required"
+    description: >
+      The property is in an area where selective licensing applies, but no valid
+      licence is held. Section 21 notices cannot be served on properties that
+      require but do not have a valid HMO or selective licence.
+    howToFix:
+      - "Check if your property is in a selective licensing area with your local council"
+      - "If licensing is required, apply for and obtain the appropriate licence"
+      - "Ensure the licence is granted and valid before serving the notice"
+      - "If you believe licensing is not required, verify with the council and update your answers"
+    legalRef: "Housing Act 2004, Section 75 (HMO) and Section 98 (Selective)"
+    helpLink: "/help/validation/selective-licensing"
+    supportTags: ["licensing", "s21", "england", "hmo"]
+
+  s21_retaliatory_improvement_notice:
+    title: "Improvement Notice Blocks Section 21"
+    description: >
+      An improvement notice has been served on the property by the local authority.
+      Section 21 notices served within 6 months of an improvement notice may be
+      invalid under retaliatory eviction protection. This protection exists to
+      prevent landlords evicting tenants who complain about property conditions.
+    howToFix:
+      - "Check if the improvement notice has been fully complied with"
+      - "Wait until 6 months have passed since the improvement notice was served"
+      - "Alternatively, demonstrate the eviction is not connected to the complaint"
+      - "Consider addressing all property issues before proceeding"
+    legalRef: "Deregulation Act 2015, Section 33; Housing Act 2004"
+    helpLink: "/help/validation/retaliatory-eviction"
+    supportTags: ["retaliatory", "improvement-notice", "s21", "england", "local-authority"]
+
+  s21_retaliatory_emergency_action:
+    title: "Emergency Remedial Action Blocks Section 21"
+    description: >
+      Emergency remedial action has been taken by the local authority on the property.
+      Section 21 notices served within 6 months of emergency remedial action may be
+      invalid under retaliatory eviction protection. This includes emergency works
+      for Category 1 hazards posing imminent risk to health and safety.
+    howToFix:
+      - "Check when the emergency remedial action was taken"
+      - "Wait until 6 months have passed since the action"
+      - "Ensure all required remedial works have been completed"
+      - "Keep evidence of compliance with any local authority requirements"
+    legalRef: "Deregulation Act 2015, Section 33; Housing Act 2004"
+    helpLink: "/help/validation/retaliatory-eviction"
+    supportTags: ["retaliatory", "emergency-action", "s21", "england", "local-authority"]
+
+# =============================================================================
+# ENGLAND - SECTION 8 PHASE 13 RULES
+# =============================================================================
+
+england_s8:
+
+  s8_notice_period_short:
+    title: "Section 8 Notice Period Too Short"
+    description: >
+      The notice period does not meet the statutory minimum for the selected grounds.
+      Different Section 8 grounds have different minimum notice periods, ranging from
+      immediate (Ground 7A anti-social behaviour) to 2 months (discretionary grounds).
+    howToFix:
+      - "Check the required notice period for your selected grounds"
+      - "Mandatory grounds typically require 2 weeks' notice minimum"
+      - "Discretionary grounds typically require 2 months' notice"
+      - "Set the expiry date to meet the longest required period for your grounds"
+    legalRef: "Housing Act 1988, Schedule 2"
+    helpLink: "/help/validation/s8-notice-period"
+    supportTags: ["notice-period", "s8", "england", "grounds"]
+
+# =============================================================================
+# WALES - SECTION 173 PHASE 13 RULES
+# =============================================================================
+
+wales_s173:
+
+  s173_notice_period_short:
+    title: "Section 173 Notice Period Too Short"
+    description: >
+      Wales Section 173 (no-fault notice) requires a minimum of 6 months' notice.
+      This is significantly longer than the 2-month minimum in England, reflecting
+      the enhanced tenant protections under the Renting Homes (Wales) Act 2016.
+    howToFix:
+      - "Calculate 6 months from the intended service date"
+      - "Ensure the expiry date is at least 6 months after service"
+      - "Update the expiry date in the wizard to meet the 6-month minimum"
+      - "Remember this applies to all standard occupation contracts in Wales"
+    legalRef: "Renting Homes (Wales) Act 2016, Section 173"
+    helpLink: "/help/validation/wales-s173-notice-period"
+    supportTags: ["notice-period", "s173", "wales", "rhwa"]
+
+  s173_deposit_not_protected:
+    title: "Deposit Not Protected (Wales)"
+    description: >
+      The deposit must be protected in an approved tenancy deposit scheme before
+      serving a Section 173 notice. In Wales, deposits must be protected within
+      30 days of receipt. An unprotected deposit invalidates no-fault notices.
+    howToFix:
+      - "Protect the deposit in an approved scheme (DPS, MyDeposits, or TDS)"
+      - "Ensure protection occurred within 30 days of receiving the deposit"
+      - "Serve the prescribed information to the contract holder"
+      - "Confirm deposit protection status in the wizard before proceeding"
+    legalRef: "Renting Homes (Wales) Act 2016; Renting Homes (Deposit Schemes) (Wales) Regulations"
+    helpLink: "/help/validation/wales-deposit-protection"
+    supportTags: ["deposit", "s173", "wales", "protection"]
+
+  s173_written_statement_missing:
+    title: "Written Statement Not Provided"
+    description: >
+      Wales law requires landlords to provide a written statement of the occupation
+      contract to contract holders. This must be provided within 14 days of the
+      occupation date. Not providing this may affect your ability to obtain possession.
+    howToFix:
+      - "Prepare a written statement of the occupation contract"
+      - "Include all required terms under Renting Homes (Wales) Act 2016"
+      - "Serve the written statement on the contract holder"
+      - "Keep evidence of when and how you provided it"
+    legalRef: "Renting Homes (Wales) Act 2016, Section 31"
+    helpLink: "/help/validation/wales-written-statement"
+    supportTags: ["written-statement", "s173", "wales", "rhwa"]
+
+# =============================================================================
+# SCOTLAND - NOTICE TO LEAVE PHASE 13 RULES
+# =============================================================================
+
+scotland_ntl:
+
+  ntl_landlord_not_registered:
+    title: "Landlord Registration Required"
+    description: >
+      Scotland requires all private landlords to be registered with the Scottish
+      Landlord Register. Serving a Notice to Leave without valid registration
+      may result in the notice being invalid and potential criminal penalties.
+    howToFix:
+      - "Register with the Scottish Landlord Register at landlordregistrationscotland.gov.uk"
+      - "Ensure your registration is up to date and covers the property"
+      - "Enter your landlord registration number in the wizard"
+      - "Registration typically takes 5-10 working days to process"
+    legalRef: "Antisocial Behaviour etc. (Scotland) Act 2004, Part 8"
+    helpLink: "/help/validation/scotland-landlord-registration"
+    supportTags: ["registration", "ntl", "scotland", "landlord-register"]
+
+  ntl_pre_action_letter_not_sent:
+    title: "Pre-Action Letter Required"
+    description: >
+      Before serving a Ground 1 (rent arrears) Notice to Leave, you must send
+      the tenant a pre-action letter giving them 28 days' notice of your intention
+      to seek possession. This is a mandatory step under Scottish pre-action requirements.
+    howToFix:
+      - "Send a pre-action letter to the tenant"
+      - "The letter must give at least 28 days' notice"
+      - "Include information about the arrears amount and how to pay"
+      - "Wait for the 28-day period to expire before serving the Notice to Leave"
+      - "Keep a copy of the letter and evidence of posting/delivery"
+    legalRef: "Rent Arrears Pre-Action Requirements (Coronavirus) (Scotland) Regulations"
+    helpLink: "/help/validation/scotland-pre-action"
+    supportTags: ["pre-action", "ntl", "scotland", "ground-1", "arrears"]
+
+  ntl_pre_action_signposting_missing:
+    title: "Debt Advice Signposting Required"
+    description: >
+      As part of the pre-action requirements for rent arrears in Scotland, you
+      must signpost the tenant to debt advice services. This includes providing
+      contact details for free, independent debt advice organisations.
+    howToFix:
+      - "Include debt advice signposting in your pre-action letter"
+      - "Provide contact details for organisations like Citizens Advice Scotland"
+      - "Direct tenants to the National Debtline or StepChange"
+      - "Document that you provided this information"
+    legalRef: "Rent Arrears Pre-Action Requirements (Coronavirus) (Scotland) Regulations"
+    helpLink: "/help/validation/scotland-pre-action"
+    supportTags: ["pre-action", "ntl", "scotland", "ground-1", "debt-advice"]
+
+  ntl_ground_1_arrears_threshold:
+    title: "Arrears May Be Insufficient for Ground 1"
+    description: >
+      While Ground 1 can technically be used with any level of arrears, tribunals
+      in Scotland typically expect substantial arrears (usually 3+ months) before
+      granting possession. Proceeding with lower arrears may result in the
+      application being refused.
+    howToFix:
+      - "Consider waiting until arrears reach at least 3 months' rent"
+      - "Document all arrears with rent statements and payment records"
+      - "Ensure you have followed all pre-action requirements"
+      - "Consider alternative grounds if arrears are below 3 months"
+    legalRef: "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1"
+    helpLink: "/help/validation/scotland-ground-1"
+    supportTags: ["arrears", "ntl", "scotland", "ground-1", "threshold"]
+
+  ntl_deposit_not_protected:
+    title: "Deposit Not Protected (Scotland)"
+    description: >
+      Deposits taken for private residential tenancies in Scotland must be protected
+      in an approved tenancy deposit scheme within 30 working days of receipt.
+      An unprotected deposit may affect your ability to obtain possession.
+    howToFix:
+      - "Protect the deposit in an approved Scottish scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland)"
+      - "Ensure protection occurred within 30 working days of receipt"
+      - "Provide the prescribed information to the tenant"
+      - "If deposit was taken but not protected, consider returning it and documenting this"
+    legalRef: "Tenancy Deposit Schemes (Scotland) Regulations 2011"
+    helpLink: "/help/validation/scotland-deposit-protection"
+    supportTags: ["deposit", "ntl", "scotland", "protection"]
+
+# =============================================================================
+# HELP LINK BASE URL CONFIGURATION
+# =============================================================================
+
+help_config:
+  base_url: "https://landlord-heaven.co.uk"
+  support_email: "support@landlord-heaven.co.uk"
+  support_phone: "+44 (0)800 123 4567"
+
+# =============================================================================
+# SUPPORT ESCALATION CATEGORIES
+# =============================================================================
+
+support_categories:
+  deposit_issues:
+    rules:
+      - s21_deposit_cap_exceeded
+      - s173_deposit_not_protected
+      - ntl_deposit_not_protected
+    escalation_priority: "medium"
+    typical_resolution: "User guidance on deposit protection requirements"
+
+  timing_issues:
+    rules:
+      - s21_four_month_bar
+      - s21_notice_period_short
+      - s173_notice_period_short
+      - s8_notice_period_short
+    escalation_priority: "low"
+    typical_resolution: "Explain waiting period or date adjustment required"
+
+  licensing_registration:
+    rules:
+      - s21_licensing_required_not_licensed
+      - ntl_landlord_not_registered
+    escalation_priority: "medium"
+    typical_resolution: "Direct to relevant registration/licensing authority"
+
+  retaliatory_eviction:
+    rules:
+      - s21_retaliatory_improvement_notice
+      - s21_retaliatory_emergency_action
+    escalation_priority: "high"
+    typical_resolution: "May require legal review; advise waiting period"
+
+  pre_action:
+    rules:
+      - ntl_pre_action_letter_not_sent
+      - ntl_pre_action_signposting_missing
+      - ntl_ground_1_arrears_threshold
+    escalation_priority: "medium"
+    typical_resolution: "Guide through pre-action requirements checklist"
+
+  documentation:
+    rules:
+      - s173_written_statement_missing
+    escalation_priority: "low"
+    typical_resolution: "Provide template and guidance for written statement"

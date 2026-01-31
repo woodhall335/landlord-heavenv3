@@ -25,6 +25,12 @@ function buildSection21Facts() {
     notice_date: '2024-06-01',
     notice_expiry_date: '2024-08-01',
     eviction_route: 'Section 21',
+    // =========================================================================
+    // REQUIRED FOR COMPLETE PACK - N5B form fields
+    // =========================================================================
+    notice_service_method: 'first_class_post', // Required for N5B field 10a
+    court_name: 'Central London County Court', // Required for court form header
+    // =========================================================================
     deposit_amount: 1200,
     deposit_protected: true,
     deposit_protection_date: '2023-09-10',
