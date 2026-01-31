@@ -8,6 +8,7 @@
 
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse, NextRequest } from 'next/server';
+import { getCasePaymentStatus } from '@/lib/payments/entitlement';
 
 type RouteParams = { id: string };
 
@@ -54,10 +55,27 @@ export async function GET(
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
+    const paymentStatus = await getCasePaymentStatus(caseId);
+    const purchasedProduct = paymentStatus.latestOrder?.product_type || null;
+
+    const hydratedCase = {
+      ...caseData,
+      collected_facts: paymentStatus.hasPaidOrder
+        ? {
+            ...(caseData as any).collected_facts,
+            __meta: {
+              ...(((caseData as any).collected_facts || {}).__meta || {}),
+              purchased_product: purchasedProduct,
+              entitlements: paymentStatus.paidProducts,
+            },
+          }
+        : (caseData as any).collected_facts,
+    };
+
     return NextResponse.json(
       {
         success: true,
-        case: caseData,
+        case: hydratedCase,
       },
       { status: 200 }
     );

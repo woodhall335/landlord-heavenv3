@@ -11,6 +11,7 @@ import Stripe from 'stripe';
 import { sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import { getOrCreateWizardFacts, updateWizardFacts } from '@/lib/case-facts/store';
 import {
   sendServerPurchaseEventWithRetry,
   generateClientId,
@@ -70,6 +71,38 @@ function redactStripePayload(event: Stripe.Event) {
       },
     },
   };
+}
+
+async function updateCaseEntitlements(
+  supabase: ReturnType<typeof createAdminClient>,
+  caseId: string,
+  purchasedProduct: string,
+) {
+  try {
+    const currentFacts = await getOrCreateWizardFacts(supabase as any, caseId);
+    const currentMeta = currentFacts.__meta || {};
+    const currentEntitlements = Array.isArray(currentMeta.entitlements)
+      ? currentMeta.entitlements
+      : [];
+    const entitlements = Array.from(
+      new Set([...currentEntitlements, purchasedProduct].filter(Boolean))
+    );
+
+    await updateWizardFacts(
+      supabase as any,
+      caseId,
+      (current) => current,
+      {
+        meta: {
+          ...currentMeta,
+          purchased_product: purchasedProduct,
+          entitlements,
+        },
+      },
+    );
+  } catch (error) {
+    logger.warn('Failed to persist case entitlements', { caseId, error });
+  }
 }
 
 async function findOrderForCheckoutSession(
@@ -282,6 +315,12 @@ export async function POST(request: Request) {
           const resolvedProductType = productType || (order as any).product_type;
 
           if (resolvedCaseId && resolvedProductType) {
+            await updateCaseEntitlements(
+              supabase,
+              resolvedCaseId,
+              resolvedProductType,
+            );
+
             await supabase
               .from('orders')
               .update({ fulfillment_status: 'processing' })

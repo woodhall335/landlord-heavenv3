@@ -17,6 +17,8 @@ export interface WizardFactsMeta {
   product_tier?: string | null;
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
+  purchased_product?: string | null;
+  entitlements?: string[] | null;
 }
 
 export interface WizardFacts {

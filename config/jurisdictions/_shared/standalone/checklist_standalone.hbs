@@ -720,11 +720,13 @@
       <th style="width: 25%">Status</th>
       <th style="width: 25%">Date Completed</th>
     </tr>
+    {{#unless (eq jurisdiction "england")}}
     <tr>
       <td>{{#if (eq jurisdiction "wales")}}Rent Smart Wales registration{{else}}Landlord registration{{/if}}</td>
       <td>&#9744; Yes &nbsp; &#9744; N/A</td>
       <td>______________</td>
     </tr>
+    {{/unless}}
     <tr>
       <td>Deposit protected</td>
       <td>&#9744; Yes &nbsp; &#9744; N/A</td>

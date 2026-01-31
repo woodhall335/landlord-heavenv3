@@ -43,6 +43,10 @@ import {
   TenancyPremiumRecommendationReason,
 } from '@/lib/analytics';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+import {
+  getTenancyTierLabelFromFacts,
+  isPremiumTierLabel,
+} from '@/lib/tenancy/product-tier';
 
 // Premium recommendation
 import { detectPremiumRecommendation, type PremiumRecommendationResult } from '@/lib/utils/premium-recommendation';
@@ -73,14 +77,7 @@ interface TenancySectionFlowProps {
  * This handles all jurisdiction-specific premium tier names
  */
 const isPremiumTier = (productTier: string | undefined): boolean => {
-  if (!productTier) return false;
-  const premiumTiers = [
-    'Premium AST',
-    'Premium Occupation Contract',
-    'Premium PRT',
-    'Premium NI Private Tenancy',
-  ];
-  return premiumTiers.includes(productTier);
+  return isPremiumTierLabel(productTier);
 };
 
 const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
@@ -281,6 +278,23 @@ const SECTIONS: WizardSection[] = [
   },
 ];
 
+export function getVisibleSectionsForFacts(
+  facts: any,
+  isProductLocked: boolean,
+): WizardSection[] {
+  const tenancyTierLabel = getTenancyTierLabelFromFacts(facts);
+
+  return SECTIONS.filter((section) => {
+    if (section.id === 'product' && isProductLocked) {
+      return false;
+    }
+    if (section.premiumOnly && !isPremiumTier(tenancyTierLabel || undefined)) {
+      return false;
+    }
+    return true;
+  });
+}
+
 export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   caseId,
   jurisdiction,
@@ -330,14 +344,13 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   }, [caseId, jurisdiction, product]);
 
   // Filter sections based on premium status (jurisdiction-agnostic check)
+  const isProductLocked = Boolean(
+    facts.__meta?.purchased_product || (facts.__meta?.entitlements || []).length > 0
+  );
+
   const visibleSections = useMemo(() => {
-    return SECTIONS.filter((section) => {
-      if (section.premiumOnly && !isPremiumTier(facts.product_tier)) {
-        return false;
-      }
-      return true;
-    });
-  }, [facts.product_tier]);
+    return getVisibleSectionsForFacts(facts, isProductLocked);
+  }, [facts, isProductLocked]);
 
   const currentSection = visibleSections[currentSectionIndex];
 

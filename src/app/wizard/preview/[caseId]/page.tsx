@@ -313,6 +313,19 @@ export default function WizardPreviewPage() {
         const caseResult = await caseResponse.json();
         const fetchedCase: CaseData = caseResult.case;
 
+        let lockedProduct: string | null = null;
+        try {
+          const orderResponse = await fetch(`/api/orders/status?case_id=${caseId}`);
+          if (orderResponse.ok) {
+            const orderData = await orderResponse.json();
+            if (orderData.paid && orderData.product_type) {
+              lockedProduct = orderData.product_type;
+            }
+          }
+        } catch (orderError) {
+          console.warn('[Preview] Failed to check order status for product lock:', orderError);
+        }
+
         // Ensure recommended_route is set from wizard facts if not already set
         if (!fetchedCase.recommended_route && fetchedCase.collected_facts) {
           const wizardFacts = fetchedCase.collected_facts as any;
@@ -350,6 +363,7 @@ export default function WizardPreviewPage() {
         // 5. Infer from notice-only specific facts (selected_notice_route present indicates notice_only)
         const urlProduct = searchParams.get('product');
         let inferredProduct =
+          lockedProduct ||
           urlProduct ||
           factsMeta.product ||
           originalMeta.product ||
