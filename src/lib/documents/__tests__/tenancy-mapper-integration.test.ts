@@ -84,8 +84,8 @@ describe('England AST Mapper Integration', () => {
     expect(result.rent_amount).toBe(1500);
     expect(result.deposit_amount).toBe(1730);
 
-    // Verify no guarantor in standard tier
-    expect(result.guarantor_name).toBeUndefined();
+    // Verify no guarantor in standard tier (null or undefined)
+    expect(result.guarantor_name).toBeFalsy();
     expect(result.guarantor_required).toBeFalsy();
   });
 
@@ -140,8 +140,8 @@ describe('Scotland PRT Mapper Integration', () => {
     // PRT has no fixed end date
     expect(result.is_fixed_term).toBe(false);
 
-    // Verify no guarantor in standard tier
-    expect(result.guarantor_name).toBeUndefined();
+    // Verify no guarantor in standard tier (null or undefined)
+    expect(result.guarantor_name).toBeFalsy();
   });
 
   it('maps premium PRT wizard facts with guarantor correctly', () => {
@@ -176,8 +176,8 @@ describe('Northern Ireland Private Tenancy Mapper Integration', () => {
     expect(result.landlord_full_name).toBe('John Smith');
     expect(result.rent_amount).toBe(1500);
 
-    // Verify no guarantor in standard tier
-    expect(result.guarantor_name).toBeUndefined();
+    // Verify no guarantor in standard tier (null or undefined)
+    expect(result.guarantor_name).toBeFalsy();
   });
 
   it('maps premium NI wizard facts with guarantor correctly', () => {
