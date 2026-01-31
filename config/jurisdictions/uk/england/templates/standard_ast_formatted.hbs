@@ -227,9 +227,13 @@
     }
 
     /* ===== SIGNATURES ===== */
+    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
     .signature-section {
+      page-break-before: always;
       page-break-inside: avoid;
-      margin-top: 30pt;
+      margin-top: 0; /* Reset since we're on a new page */
+      padding-top: 20pt;
+      min-height: 400pt; /* Reserve minimum space for signature blocks */
     }
 
     .signature-block {
@@ -300,21 +304,73 @@
     }
 
     /* ===== FOOTER ===== */
+    /* Footer with guaranteed safety margin to prevent content overlap */
     .doc-footer {
-      margin-top: 30pt;
-      padding-top: 10pt;
+      margin-top: 40pt; /* Increased safety margin */
+      padding-top: 15pt;
       border-top: 0.5pt solid #999;
       font-size: 8pt;
       color: #666;
       text-align: center;
+      page-break-inside: avoid;
+      clear: both; /* Ensure no floating content overlaps */
+    }
+
+    /* Footer spacer - use before footer to guarantee minimum clearance */
+    .footer-spacer {
+      height: 30pt;
+      clear: both;
+    }
+
+    /* ===== PAGINATION SAFETY ===== */
+    /* Prevent orphaned headings and text */
+    h2, h3, h4 {
+      page-break-after: avoid;
+      orphans: 3;
+      widows: 3;
+    }
+
+    p, li {
+      orphans: 3;
+      widows: 3;
+    }
+
+    /* Utility class for explicit page breaks */
+    .page-break {
+      page-break-before: always;
+      height: 0;
+      margin: 0;
+      padding: 0;
     }
 
     /* ===== PRINT ===== */
     @media print {
       .schedule { page-break-before: always; }
-      .signature-section, .signature-block, .legal-notice, .schedule-header { page-break-inside: avoid; }
-      h2, h3, h4 { page-break-after: avoid; }
+
+      /* CRITICAL: Signatures MUST start on fresh page */
+      .signature-section {
+        page-break-before: always;
+        page-break-inside: avoid;
+      }
+
+      .signature-block, .legal-notice, .schedule-header, .doc-footer { page-break-inside: avoid; }
+
+      /* Prevent orphaned headings */
+      h2, h3, h4 {
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+      }
+
+      /* Prevent orphaned/widowed text */
+      p, li {
+        orphans: 3;
+        widows: 3;
+      }
+
       .data-table, .data-table tr { page-break-inside: avoid; }
+
+      .page-break { page-break-before: always; }
     }
   </style>
 </head>

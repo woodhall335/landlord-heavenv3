@@ -195,6 +195,14 @@
       border-bottom: 2px solid #1a1a1a;
       text-transform: uppercase;
     }
+    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
+    .signature-section {
+      page-break-before: always;
+      page-break-inside: avoid;
+      margin-top: 0;
+      padding-top: 20pt;
+      min-height: 400pt;
+    }
     .signature-block {
       margin: 2em 0;
       page-break-inside: avoid;
@@ -238,13 +246,33 @@
       position: absolute;
       left: 0;
     }
+    /* Footer with guaranteed safety margin */
     .footer-info {
-      margin-top: 3em;
-      padding-top: 1em;
+      margin-top: 40pt;
+      padding-top: 15pt;
       border-top: 1px solid #ccc;
       font-size: 9pt;
       color: #666;
       text-align: center;
+      page-break-inside: avoid;
+      clear: both;
+    }
+    /* ===== PAGINATION SAFETY ===== */
+    h2, h3, h4, .section-title, .subsection-title {
+      page-break-after: avoid;
+      orphans: 3;
+      widows: 3;
+    }
+    p, li {
+      orphans: 3;
+      widows: 3;
+    }
+    @media print {
+      .page-break { page-break-before: always; }
+      .signature-section { page-break-before: always; page-break-inside: avoid; }
+      .signature-block, .info-box, .footer-info { page-break-inside: avoid; }
+      h2, h3, h4, .section-title { page-break-after: avoid; orphans: 3; widows: 3; }
+      p, li { orphans: 3; widows: 3; }
     }
   </style>
 </head>
