@@ -275,12 +275,12 @@ export async function POST(request: Request) {
       const jurisdiction = canonicalJurisdiction as TenancyJurisdiction;
       const tierLabel = getTenancyTierLabelForSku(lockedTenancySku, jurisdiction);
       const tierQuestionId = getTenancyTierQuestionId(jurisdiction);
-      const meta = facts.__meta || {};
+      const meta = facts.__meta;
       const needsUpdate =
         facts.product_tier !== tierLabel ||
         facts[tierQuestionId] !== tierLabel ||
-        meta.purchased_product !== purchasedProduct ||
-        JSON.stringify(meta.entitlements || []) !== JSON.stringify(entitlementProducts);
+        (meta?.purchased_product ?? null) !== purchasedProduct ||
+        JSON.stringify(meta?.entitlements ?? []) !== JSON.stringify(entitlementProducts);
 
       if (needsUpdate) {
         facts = await updateWizardFacts(
