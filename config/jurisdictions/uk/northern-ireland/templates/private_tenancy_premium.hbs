@@ -294,7 +294,7 @@
     <div class="document-subtitle">Premium Professional Edition</div>
     <div class="premium-badge">Premium</div>
     <div class="document-jurisdiction">Northern Ireland &bull; Private Tenancies (Northern Ireland) Order 2006 (as amended)</div>
-    <div class="agreement-date"><strong>Agreement Date:</strong> {{agreement_date}}</div>
+    <div class="agreement-date"><strong>Agreement Date:</strong> {{formatUKDate agreement_date}}</div>
   </div>
 
   <!-- LEGAL COMPLIANCE NOTICE -->
@@ -547,12 +547,12 @@
     <table class="data-table">
       <tr>
         <td class="label">Commencement Date</td>
-        <td class="value">{{tenancy_start_date}}</td>
+        <td class="value">{{formatUKDate tenancy_start_date}}</td>
       </tr>
       {{#if is_fixed_term}}
       <tr>
         <td class="label">Fixed Term End Date</td>
-        <td class="value">{{tenancy_end_date}}</td>
+        <td class="value">{{formatUKDate tenancy_end_date}}</td>
       </tr>
       {{#if term_length}}
       <tr>
@@ -1304,7 +1304,7 @@
   <!-- FOOTER -->
   <div class="footer">
     <p><strong>Premium Private Tenancy Agreement - Northern Ireland</strong></p>
-    <p>Generated: {{generation_timestamp}} | Document ID: {{document_id}}</p>
+    <p>Generated: {{formatUKDate generation_timestamp}} | Document ID: {{document_id}}</p>
     <p>Compliant with Private Tenancies (Northern Ireland) Order 2006 (as amended)</p>
   </div>
 

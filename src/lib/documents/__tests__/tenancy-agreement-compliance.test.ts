@@ -511,6 +511,164 @@ describe('Premium Content Isolation', () => {
 });
 
 /**
+ * DATE FORMATTING COMPLIANCE
+ * Dates should use formatUKDate helper, not raw ISO format (YYYY-MM-DD)
+ * Output should be UK long form: "1 February 2026"
+ */
+describe('Date Formatting Compliance', () => {
+  /**
+   * Check that date fields use the formatUKDate helper
+   * Common date fields: agreement_date, tenancy_start_date, tenancy_end_date, first_payment_date, dob, expiry dates
+   */
+  const DATE_FIELDS = [
+    'agreement_date',
+    'tenancy_start_date',
+    'tenancy_end_date',
+    'first_payment_date',
+    'this.dob',
+    'guarantor_dob',
+    'epc_expiry',
+    'gas_safety_certificate_expiry',
+    'eicr_next_inspection_date',
+    'registration_expiry',
+    'generation_timestamp',
+    'current_date',
+  ];
+
+  it.each(Object.entries(STANDARD_TEMPLATES))(
+    '%s standard template should use formatUKDate helper for date fields',
+    (jurisdiction, templatePath) => {
+      const template = loadTemplate(templatePath);
+
+      DATE_FIELDS.forEach(field => {
+        // Find raw date field usages (not inside formatUKDate)
+        // Pattern: {{field}} but not {{formatUKDate field}}
+        const rawPattern = new RegExp(`\\{\\{(?!formatUKDate\\s)${field.replace('.', '\\.')}\\}\\}`, 'g');
+        const rawMatches = template.match(rawPattern);
+
+        // There should be no raw date field usages
+        if (rawMatches && rawMatches.length > 0) {
+          // Check if it's a legitimate non-date context (e.g., inside conditionals checking existence)
+          const legitContextPattern = new RegExp(`\\{\\{#if\\s+${field.replace('.', '\\.')}\\}\\}`);
+          const isLegit = rawMatches.every(match => {
+            // Allow in #if conditions for checking existence
+            const matchIndex = template.indexOf(match);
+            const surroundingContext = template.substring(Math.max(0, matchIndex - 50), matchIndex);
+            return legitContextPattern.test(surroundingContext) || surroundingContext.includes('{{#if') || surroundingContext.includes('{{#unless');
+          });
+
+          if (!isLegit) {
+            fail(`${jurisdiction} template has raw date field {{${field}}} without formatUKDate helper`);
+          }
+        }
+      });
+    }
+  );
+
+  it.each(Object.entries(PREMIUM_TEMPLATES))(
+    '%s premium template should use formatUKDate helper for date fields',
+    (jurisdiction, templatePath) => {
+      const template = loadTemplate(templatePath);
+
+      DATE_FIELDS.forEach(field => {
+        const rawPattern = new RegExp(`\\{\\{(?!formatUKDate\\s)${field.replace('.', '\\.')}\\}\\}`, 'g');
+        const rawMatches = template.match(rawPattern);
+
+        if (rawMatches && rawMatches.length > 0) {
+          const legitContextPattern = new RegExp(`\\{\\{#if\\s+${field.replace('.', '\\.')}\\}\\}`);
+          const isLegit = rawMatches.every(match => {
+            const matchIndex = template.indexOf(match);
+            const surroundingContext = template.substring(Math.max(0, matchIndex - 50), matchIndex);
+            return legitContextPattern.test(surroundingContext) || surroundingContext.includes('{{#if') || surroundingContext.includes('{{#unless');
+          });
+
+          if (!isLegit) {
+            fail(`${jurisdiction} premium template has raw date field {{${field}}} without formatUKDate helper`);
+          }
+        }
+      });
+    }
+  );
+
+  it.each(Object.entries(STANDARD_TEMPLATES))(
+    '%s standard template should contain formatUKDate usage for key dates',
+    (jurisdiction, templatePath) => {
+      const template = loadTemplate(templatePath);
+
+      // Must use formatUKDate for agreement_date
+      expect(template).toContain('{{formatUKDate agreement_date}}');
+
+      // Must use formatUKDate for tenancy_start_date
+      expect(template).toContain('{{formatUKDate tenancy_start_date}}');
+    }
+  );
+
+  it.each(Object.entries(PREMIUM_TEMPLATES))(
+    '%s premium template should contain formatUKDate usage for key dates',
+    (jurisdiction, templatePath) => {
+      const template = loadTemplate(templatePath);
+
+      // Must use formatUKDate for agreement_date
+      expect(template).toContain('{{formatUKDate agreement_date}}');
+
+      // Must use formatUKDate for tenancy_start_date
+      expect(template).toContain('{{formatUKDate tenancy_start_date}}');
+    }
+  );
+});
+
+/**
+ * RIGHT TO RENT COMPLIANCE
+ * Right to Rent (Immigration Act 2014) applies to ENGLAND ONLY
+ * Wales, Scotland, and Northern Ireland templates must NOT include Right to Rent clauses
+ */
+describe('Right to Rent Compliance', () => {
+  it('England standard template should include Right to Rent clause', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES.england);
+
+    // Must mention Right to Rent
+    expect(template).toContain('Right to Rent');
+
+    // Must reference Immigration Act 2014
+    expect(template).toContain('Immigration Act 2014');
+
+    // Must clarify landlord responsibility, not tenant
+    expect(template.toLowerCase()).toContain('landlord');
+    expect(template).toMatch(/Right to Rent.*checks.*carried out|Right to Rent checks.*been.*carried out/i);
+  });
+
+  it('England premium template should include Right to Rent clause', () => {
+    const template = loadTemplate(PREMIUM_TEMPLATES.england);
+
+    expect(template).toContain('Right to Rent');
+    expect(template).toContain('Immigration Act 2014');
+  });
+
+  it.each(['wales', 'scotland', 'northern-ireland'] as const)(
+    '%s standard template should NOT contain Right to Rent references',
+    (jurisdiction) => {
+      const template = loadTemplate(STANDARD_TEMPLATES[jurisdiction]);
+
+      // Should NOT contain Right to Rent
+      expect(template).not.toMatch(/Right to Rent/i);
+
+      // Should NOT reference Immigration Act 2014 (Right to Rent legislation)
+      expect(template).not.toContain('Immigration Act 2014');
+    }
+  );
+
+  it.each(['wales', 'scotland', 'northern-ireland'] as const)(
+    '%s premium template should NOT contain Right to Rent references',
+    (jurisdiction) => {
+      const template = loadTemplate(PREMIUM_TEMPLATES[jurisdiction]);
+
+      expect(template).not.toMatch(/Right to Rent/i);
+      expect(template).not.toContain('Immigration Act 2014');
+    }
+  );
+});
+
+/**
  * PROHIBITED FEES COMPLIANCE (Tenant Fees Act 2019)
  */
 describe('Tenant Fees Act 2019 Compliance', () => {
