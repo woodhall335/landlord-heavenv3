@@ -220,11 +220,31 @@ describe('Tenancy Agreement Integration Layer', () => {
         expect(hmoClause).toBeUndefined();
       });
 
-      it(`premium tier SHOULD include HMO clauses for ${jurisdiction}`, () => {
+      it(`premium tier should NOT include HMO clauses for ${jurisdiction} when isHMO=false`, () => {
+        // HMO clauses are only included when property is actually an HMO
         const features = getIncludedFeatures(jurisdiction, 'premium');
+        const hmoClause = features.find(f => f.id === 'hmo_clauses');
+        expect(hmoClause).toBeUndefined();
+      });
+
+      it(`premium tier SHOULD include HMO clauses for ${jurisdiction} when isHMO=true`, () => {
+        // When isHMO context is provided, HMO clauses should be included
+        const features = getIncludedFeatures(jurisdiction, 'premium', { isHMO: true });
         const hmoClause = features.find(f => f.id === 'hmo_clauses');
         expect(hmoClause).toBeDefined();
         expect(hmoClause?.isPremiumOnly).toBe(true);
+        expect(hmoClause?.isHMOSpecific).toBe(true);
+      });
+
+      it(`should include subletting prohibition in both tiers for ${jurisdiction}`, () => {
+        const standardFeatures = getIncludedFeatures(jurisdiction, 'standard');
+        const premiumFeatures = getIncludedFeatures(jurisdiction, 'premium');
+
+        const standardSubletting = standardFeatures.find(f => f.id === 'subletting_prohibition');
+        const premiumSubletting = premiumFeatures.find(f => f.id === 'subletting_prohibition');
+
+        expect(standardSubletting).toBeDefined();
+        expect(premiumSubletting).toBeDefined();
       });
     });
   });

@@ -5,6 +5,12 @@
  * 1. UI tests - Standard vs Premium feature display
  * 2. Document tests - PDF content inclusion by tier
  * 3. Consistency tests - UI matches PDF contents
+ *
+ * IMPORTANT LEGAL NOTES:
+ * - Premium ≠ HMO. Premium tier includes enhanced features; HMO clauses are
+ *   only included when the property is actually an HMO (isHMO context flag).
+ * - Subletting prohibition is included in BOTH tiers (baseline prohibition).
+ * - "Professional cleaning" language is banned (Tenant Fees Act 2019).
  */
 
 import {
@@ -16,8 +22,10 @@ import {
   getTierRecommendation,
   JURISDICTION_AGREEMENT_INFO,
   COMPLIANCE_CHECKLIST_INFO,
+  REQUIRED_SCHEDULE_IDS,
   type TenancyJurisdiction,
   type TenancyTier,
+  type FeatureContext,
 } from '../included-features';
 
 describe('Tenancy Included Features - Integration Layer', () => {
@@ -41,6 +49,10 @@ describe('Tenancy Included Features - Integration Layer', () => {
         expect(isFeatureIncluded('hmo_clauses', 'standard')).toBe(false);
         expect(isFeatureIncluded('late_payment', 'standard')).toBe(false);
         expect(isFeatureIncluded('rent_review', 'standard')).toBe(false);
+      });
+
+      it('should include subletting prohibition in standard tier (baseline)', () => {
+        expect(isFeatureIncluded('subletting_prohibition', 'standard')).toBe(true);
       });
 
       it('should always include compliance checklist', () => {
@@ -77,11 +89,19 @@ describe('Tenancy Included Features - Integration Layer', () => {
         expect(inventoryInfo.wizardRequired).toBe(true);
       });
 
-      it('should include premium-only features in premium tier', () => {
+      it('should include premium-only features in premium tier (non-HMO)', () => {
+        // Non-HMO premium features
         expect(isFeatureIncluded('guarantor_provisions', 'premium')).toBe(true);
-        expect(isFeatureIncluded('hmo_clauses', 'premium')).toBe(true);
         expect(isFeatureIncluded('late_payment', 'premium')).toBe(true);
         expect(isFeatureIncluded('rent_review', 'premium')).toBe(true);
+
+        // HMO clauses require isHMO=true context
+        expect(isFeatureIncluded('hmo_clauses', 'premium')).toBe(false);
+        expect(isFeatureIncluded('hmo_clauses', 'premium', { isHMO: true })).toBe(true);
+      });
+
+      it('should include subletting prohibition in premium tier (enhanced)', () => {
+        expect(isFeatureIncluded('subletting_prohibition', 'premium')).toBe(true);
       });
 
       it('should always include compliance checklist', () => {
@@ -89,13 +109,14 @@ describe('Tenancy Included Features - Integration Layer', () => {
       });
 
       jurisdictions.forEach((jurisdiction) => {
-        it(`should return correct premium features for ${jurisdiction}`, () => {
+        it(`should return correct premium features for ${jurisdiction} (non-HMO)`, () => {
+          // Without isHMO context, premium should NOT label as HMO
           const features = getIncludedFeatures(jurisdiction, 'premium');
 
-          // Must have main agreement (HMO version)
+          // Main agreement should NOT be labelled as HMO
           const agreement = features.find(f => f.id === 'main_agreement');
           expect(agreement).toBeDefined();
-          expect(agreement?.label).toContain('HMO');
+          expect(agreement?.label).not.toContain('HMO');
 
           // Must have inventory schedule
           const hasInventory = features.some(f => f.id === 'schedule_inventory');
@@ -105,9 +126,26 @@ describe('Tenancy Included Features - Integration Layer', () => {
           const hasChecklist = features.some(f => f.id === 'compliance_checklist');
           expect(hasChecklist).toBe(true);
 
-          // Must have premium-only features
-          const hasPremiumFeatures = features.some(f => f.isPremiumOnly);
+          // Must have premium-only features (non-HMO specific)
+          const hasPremiumFeatures = features.some(f => f.isPremiumOnly && !f.isHMOSpecific);
           expect(hasPremiumFeatures).toBe(true);
+
+          // Should NOT include HMO-specific features without isHMO context
+          const hasHMOClauses = features.some(f => f.id === 'hmo_clauses');
+          expect(hasHMOClauses).toBe(false);
+        });
+
+        it(`should return HMO features for ${jurisdiction} when isHMO=true`, () => {
+          const features = getIncludedFeatures(jurisdiction, 'premium', { isHMO: true });
+
+          // Main agreement SHOULD be labelled as HMO
+          const agreement = features.find(f => f.id === 'main_agreement');
+          expect(agreement).toBeDefined();
+          expect(agreement?.label).toContain('HMO');
+
+          // Should include HMO-specific features
+          const hasHMOClauses = features.some(f => f.id === 'hmo_clauses');
+          expect(hasHMOClauses).toBe(true);
         });
       });
     });
@@ -118,6 +156,9 @@ describe('Tenancy Included Features - Integration Layer', () => {
   // ============================================================================
 
   describe('Document Tests - PDF Content by Tier', () => {
+    // Full set of required schedule IDs for valid PDFs
+    const allScheduleIds = [...REQUIRED_SCHEDULE_IDS];
+
     describe('Standard PDFs', () => {
       it('should validate blank inventory schedule in standard PDFs', () => {
         const result = validatePDFMatchesAdvertised('england', 'standard', {
@@ -126,7 +167,7 @@ describe('Tenancy Included Features - Integration Layer', () => {
           inventoryIsCompleted: false, // Blank inventory
           hasComplianceChecklist: true,
           hasSignatureBlocks: true,
-          scheduleCount: 5,
+          scheduleIds: allScheduleIds,
         });
 
         expect(result.valid).toBe(true);
@@ -140,7 +181,7 @@ describe('Tenancy Included Features - Integration Layer', () => {
           inventoryIsCompleted: false,
           hasComplianceChecklist: true,
           hasSignatureBlocks: true,
-          scheduleCount: 4,
+          scheduleIds: allScheduleIds.filter(id => id !== 'schedule_inventory'),
         });
 
         expect(result.valid).toBe(false);
@@ -154,7 +195,7 @@ describe('Tenancy Included Features - Integration Layer', () => {
           inventoryIsCompleted: false,
           hasComplianceChecklist: false, // Missing!
           hasSignatureBlocks: true,
-          scheduleCount: 5,
+          scheduleIds: allScheduleIds,
         });
 
         expect(result.valid).toBe(false);
@@ -163,41 +204,93 @@ describe('Tenancy Included Features - Integration Layer', () => {
     });
 
     describe('Premium PDFs', () => {
-      it('should validate completed inventory in premium PDFs', () => {
+      it('should validate completed inventory in premium PDFs when wizard completed', () => {
         const result = validatePDFMatchesAdvertised('england', 'premium', {
           hasAgreement: true,
           hasInventory: true,
           inventoryIsCompleted: true, // Wizard-completed
+          inventoryWizardStepCompleted: true,
           hasComplianceChecklist: true,
           hasSignatureBlocks: true,
-          scheduleCount: 5,
+          scheduleIds: allScheduleIds,
         });
 
         expect(result.valid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should fail validation if premium PDF has blank inventory', () => {
+      it('should ALLOW blank inventory in premium PDF when wizard step was NOT completed (fallback)', () => {
+        // User may skip inventory wizard step - blank fallback is acceptable
         const result = validatePDFMatchesAdvertised('england', 'premium', {
           hasAgreement: true,
           hasInventory: true,
-          inventoryIsCompleted: false, // Should be completed!
+          inventoryIsCompleted: false, // Blank
+          inventoryWizardStepCompleted: false, // User skipped wizard step
           hasComplianceChecklist: true,
           hasSignatureBlocks: true,
-          scheduleCount: 5,
+          scheduleIds: allScheduleIds,
+        });
+
+        expect(result.valid).toBe(true);
+        expect(result.errors).toHaveLength(0);
+      });
+
+      it('should ALLOW blank inventory in premium PDF when wizard step flag is undefined (legacy)', () => {
+        // Legacy case: inventoryWizardStepCompleted is undefined
+        const result = validatePDFMatchesAdvertised('england', 'premium', {
+          hasAgreement: true,
+          hasInventory: true,
+          inventoryIsCompleted: false, // Blank
+          // inventoryWizardStepCompleted: undefined (not specified)
+          hasComplianceChecklist: true,
+          hasSignatureBlocks: true,
+          scheduleIds: allScheduleIds,
+        });
+
+        expect(result.valid).toBe(true);
+        expect(result.errors).toHaveLength(0);
+      });
+
+      it('should FAIL validation if premium PDF has blank inventory BUT wizard was completed', () => {
+        const result = validatePDFMatchesAdvertised('england', 'premium', {
+          hasAgreement: true,
+          hasInventory: true,
+          inventoryIsCompleted: false, // Blank - but user DID complete wizard!
+          inventoryWizardStepCompleted: true, // This is the problem
+          hasComplianceChecklist: true,
+          hasSignatureBlocks: true,
+          scheduleIds: allScheduleIds,
         });
 
         expect(result.valid).toBe(false);
-        expect(result.errors).toContain('Premium PDF has blank inventory but should have wizard-completed inventory');
+        expect(result.errors).toContain('Premium PDF has blank inventory but wizard step was completed - inventory should be populated');
       });
 
-      it('should fail validation if schedule count is too low', () => {
+      it('should fail validation if required schedules are missing', () => {
         const result = validatePDFMatchesAdvertised('england', 'premium', {
           hasAgreement: true,
           hasInventory: true,
           inventoryIsCompleted: true,
+          inventoryWizardStepCompleted: true,
           hasComplianceChecklist: true,
           hasSignatureBlocks: true,
+          scheduleIds: ['schedule_property', 'schedule_rent'], // Missing utilities, inventory, house_rules
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors[0]).toContain('PDF missing required schedules:');
+        expect(result.errors[0]).toContain('schedule_utilities');
+      });
+
+      it('should support legacy scheduleCount for backwards compatibility', () => {
+        const result = validatePDFMatchesAdvertised('england', 'premium', {
+          hasAgreement: true,
+          hasInventory: true,
+          inventoryIsCompleted: true,
+          inventoryWizardStepCompleted: true,
+          hasComplianceChecklist: true,
+          hasSignatureBlocks: true,
+          scheduleIds: [], // Empty - will fall back to scheduleCount
           scheduleCount: 3, // Too few!
         });
 
