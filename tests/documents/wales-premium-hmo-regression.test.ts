@@ -177,15 +177,14 @@ describe('Wales Premium HMO Contract Regression Tests', () => {
   });
 
   describe('E) NO England Legal Terminology', () => {
-    it('should NOT contain "Assured Shorthold Tenancy" or "AST"', () => {
-      // Check for AST terminology
-      expect(walesTemplate).not.toContain('Assured Shorthold Tenancy');
-      // Exception: It's OK to explain what Wales replaces
-      const astMentions = walesTemplate.match(/Assured Shorthold Tenancy/gi) || [];
+    it('should NOT contain "Assured Shorthold Tenancy" except in explanatory context', () => {
+      // AST may appear in explanatory context about what Wales replaces
+      // but should be in lowercase context explaining the difference
+      const astMentions = walesTemplate.match(/Assured Shorthold\s+Tenancy/gi) || [];
       if (astMentions.length > 0) {
         // Should only appear in explanatory context about Wales terminology
         expect(walesTemplate).toContain(
-          'This Standard Occupation Contract replaces the Assured Shorthold'
+          'This occupation contract replaces the Assured Shorthold'
         );
       }
     });
@@ -287,6 +286,142 @@ describe('Wales Premium HMO Contract Regression Tests', () => {
 
     it('should contain occupancy limits', () => {
       expect(walesTemplate).toContain('Occupancy Limit');
+    });
+  });
+});
+
+describe('Wales Premium Polish Regressions', () => {
+  let walesTemplate: string;
+
+  beforeEach(() => {
+    walesTemplate = getWalesHMOTemplate();
+  });
+
+  describe('I) Premium Badge Header Wrap Prevention', () => {
+    it('should have premium-badge with white-space: nowrap to prevent text wrapping', () => {
+      expect(walesTemplate).toMatch(/\.premium-badge\s*\{[^}]*white-space:\s*nowrap/);
+    });
+
+    it('should contain "Premium Edition" as single contiguous string in HTML', () => {
+      // The badge text should not be split across multiple elements
+      // It may have whitespace around it but should be in a single element
+      expect(walesTemplate).toMatch(/class="premium-badge">\s*Premium Edition\s*</);
+    });
+
+    it('should have reduced letter-spacing to prevent badge overflow', () => {
+      // Letter spacing should be 1px or less to avoid overflow
+      expect(walesTemplate).toMatch(/\.premium-badge\s*\{[^}]*letter-spacing:\s*1px/);
+    });
+  });
+
+  describe('J) No Stray Unicode Icons in Headings', () => {
+    it('should NOT have emojis in party-label elements', () => {
+      // Extract party-label content
+      const partyLabels = walesTemplate.match(/<div class="party-label">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const label of partyLabels) {
+        expect(label).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('should NOT have emojis in subsection-title elements', () => {
+      // Extract subsection-title content
+      const subsectionTitles = walesTemplate.match(/<div class="subsection-title">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const title of subsectionTitles) {
+        expect(title).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('should NOT have emojis in legal-notice-title elements', () => {
+      const legalNoticeTitles = walesTemplate.match(/<div class="legal-notice-title">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const title of legalNoticeTitles) {
+        expect(title).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('should NOT have emojis in warning-title elements', () => {
+      const warningTitles = walesTemplate.match(/<div class="warning-title">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const title of warningTitles) {
+        expect(title).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('should NOT have emojis in important-title elements', () => {
+      const importantTitles = walesTemplate.match(/<div class="important-title">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const title of importantTitles) {
+        expect(title).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('should NOT have emojis in witness-title elements', () => {
+      const witnessTitles = walesTemplate.match(/<div class="witness-title">[^<]+/g) || [];
+      const emojiPattern = /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      for (const title of witnessTitles) {
+        expect(title).not.toMatch(emojiPattern);
+      }
+    });
+
+    it('icons in explainer-icon spans are acceptable', () => {
+      // These are intentionally styled icons, not stray emojis in headings
+      expect(walesTemplate).toContain('class="explainer-icon"');
+    });
+  });
+
+  describe('K) No "Standard Occupation Contract" in Premium Template', () => {
+    it('should NOT contain "This Standard Occupation Contract"', () => {
+      expect(walesTemplate).not.toContain('This Standard Occupation Contract');
+    });
+
+    it('should NOT contain "For this Standard Occupation Contract"', () => {
+      expect(walesTemplate).not.toContain('For this Standard Occupation Contract');
+    });
+
+    it('should use "This occupation contract" instead', () => {
+      expect(walesTemplate).toContain('This occupation contract');
+    });
+  });
+
+  describe('L) No Unprofessional List Rendering', () => {
+    it('should NOT have "Tenant, Tenant, Tenant" style utility clause', () => {
+      // The old clause directly concatenated responsibility variables which could
+      // result in "Tenant, Tenant, Tenant" if all responsibilities were the same
+      expect(walesTemplate).not.toContain(
+        '{{council_tax_responsibility}}, {{utilities_responsibility}}, {{internet_responsibility}}'
+      );
+    });
+
+    it('should have professional utility obligations clause', () => {
+      // The clause should reference the table rather than repeating values
+      expect(walesTemplate).toContain('Responsibility for bills and utilities is allocated as shown');
+    });
+  });
+
+  describe('M) Witness Block Structural Integrity', () => {
+    it('should have all 4 witness fields in a contiguous block', () => {
+      // All witness fields must be together to prevent page break splits
+      expect(walesTemplate).toContain('Witness Name:</strong> _');
+      expect(walesTemplate).toContain('Witness Address:</strong> _');
+      expect(walesTemplate).toContain('Witness Signature:</strong> _');
+      expect(walesTemplate).toContain('Date:</strong> _');
+    });
+
+    it('witness fields should be within witness-block div', () => {
+      // Find witness-block content
+      const witnessBlockMatch = walesTemplate.match(
+        /class="witness-block"[^>]*>[\s\S]*?<\/div>\s*<\/div>/
+      );
+      expect(witnessBlockMatch).not.toBeNull();
+      if (witnessBlockMatch) {
+        const witnessContent = witnessBlockMatch[0];
+        expect(witnessContent).toContain('Witness Name');
+        expect(witnessContent).toContain('Witness Address');
+        expect(witnessContent).toContain('Witness Signature');
+        expect(witnessContent).toContain('Date');
+      }
     });
   });
 });
