@@ -171,6 +171,12 @@ export interface GeneratedDocument {
     documentId: string;
     isPreview: boolean;
     jurisdiction?: string;
+    /** Whether inventory schedule is included in the document */
+    inventoryIncluded?: boolean;
+    /** Type of inventory: 'blank' (standard) or 'wizard-completed' (premium) */
+    inventoryType?: 'blank' | 'wizard-completed';
+    /** Whether compliance checklist is included in the document */
+    complianceChecklistIncluded?: boolean;
   };
 }
 
