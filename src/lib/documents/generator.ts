@@ -326,6 +326,63 @@ function registerHandlebarsHelpers() {
   Handlebars.registerHelper('safe', function (value) {
     return safeText(value);
   });
+
+  /**
+   * formatUKDate - Format dates in UK legal document format (D Month YYYY)
+   *
+   * This is the REQUIRED helper for all tenancy agreement date fields.
+   * Renders dates like "1 February 2026" instead of "2026-02-01" (ISO format).
+   *
+   * Handles:
+   * - YYYY-MM-DD strings (parsed as local time to avoid timezone issues)
+   * - Date objects
+   * - null/undefined (returns empty string, no placeholder)
+   * - Invalid dates (returns empty string, no "Invalid Date")
+   *
+   * @example {{formatUKDate tenancy_start_date}} → "1 February 2026"
+   */
+  Handlebars.registerHelper('formatUKDate', function (date: any) {
+    // Handle null/undefined - return empty string, no placeholder
+    if (date === null || date === undefined || date === '') {
+      return '';
+    }
+
+    let d: Date;
+
+    if (typeof date === 'string') {
+      // Parse YYYY-MM-DD format as local time (not UTC)
+      // This avoids the timezone off-by-one issue where "2026-02-01" becomes "31 January 2026"
+      const isoMatch = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (isoMatch) {
+        const [, year, month, day] = isoMatch;
+        d = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
+      } else {
+        // Try parsing as a Date string (handles ISO with time, etc.)
+        d = new Date(date);
+      }
+    } else if (date instanceof Date) {
+      d = date;
+    } else {
+      // Unknown type - return empty string
+      return '';
+    }
+
+    // Check for invalid date
+    if (isNaN(d.getTime())) {
+      return '';
+    }
+
+    // Format as UK long form: "D Month YYYY" (no leading zero on day)
+    const day = d.getDate();
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const month = monthNames[d.getMonth()];
+    const year = d.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  });
 }
 
 // Register helpers once

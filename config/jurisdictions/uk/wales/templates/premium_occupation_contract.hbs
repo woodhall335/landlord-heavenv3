@@ -347,7 +347,7 @@
     <div class="premium-badge">Premium Edition</div>
     <div class="doc-subtitle">Renting Homes (Wales) Act 2016</div>
     <div class="doc-jurisdiction">Wales</div>
-    <div class="doc-date">Dated: <strong>{{agreement_date}}</strong></div>
+    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
   </div>
 
   <div class="legal-notice">
@@ -391,7 +391,7 @@
       <div class="party-role">Contract-Holder{{#if multiple_tenants}}s{{/if}}</div>
       <div class="party-details-text">
         {{#each tenants}}
-        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{this.dob}}){{/if}}<br>
+        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
         <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
         {{/each}}
       </div>
@@ -419,8 +419,8 @@
     <li><span class="defined-term">"Contract-Holder"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
     {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}.</li>{{/if}}
     <li><span class="defined-term">"Dwelling"</span> means {{property_address}} as described in Schedule 1.</li>
-    <li><span class="defined-term">"Occupation Date"</span> means {{tenancy_start_date}}.</li>
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{tenancy_start_date}} to {{tenancy_end_date}}{{else}}periodic contract from {{tenancy_start_date}}{{/if}} and any continuation.</li>
+    <li><span class="defined-term">"Occupation Date"</span> means {{formatUKDate tenancy_start_date}}.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic contract from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation.</li>
     <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} held in {{deposit_scheme_name}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Scheme"</span> means the government-authorised deposit protection scheme.</li>
@@ -439,10 +439,10 @@
   <!-- ===== 4. THE TERM ===== -->
   <h2>4. The Term</h2>
   {{#if is_fixed_term}}
-  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{tenancy_start_date}}</strong> and the contract ends on <strong>{{tenancy_end_date}}</strong> (the "Fixed Term").</p>
+  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and the contract ends on <strong>{{formatUKDate tenancy_end_date}}</strong> (the "Fixed Term").</p>
   <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the Fixed Term, unless either party serves notice, this contract continues as a periodic standard contract on the same terms.</p>
   {{else}}
-  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{tenancy_start_date}}</strong> and this is a periodic standard contract.</p>
+  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and this is a periodic standard contract.</p>
   <p class="clause"><span class="clause-num">4.2</span> The contract continues until terminated by either party giving proper notice.</p>
   {{/if}}
   <p class="clause"><span class="clause-num">4.3</span> The Landlord may give notice under section 173 RH(W)A 2016 (no-fault, minimum 6 months' notice) or seek possession on breach grounds.</p>
@@ -452,7 +452,7 @@
   <h2>5. Rent</h2>
   <p class="clause"><span class="clause-num">5.1</span> The Contract-Holder shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
   <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account specified in Schedule 2.</p>
-  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{tenancy_start_date}}.</p>
+  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
   <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for 14 days after the due date, interest may accrue at 3% above the Bank of England base rate per annum.</p>
   <p class="clause"><span class="clause-num">5.5</span> Rent increases require at least 2 months' written notice under section 123 RH(W)A 2016 and may be challenged at the Residential Property Tribunal Wales.</p>
 
@@ -606,15 +606,15 @@
     <table class="data-table">
       <tr>
         <td class="label">Gas Safety Certificate</td>
-        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{formatUKDate gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">EICR</td>
-        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{formatUKDate eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">EPC</td>
-        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{formatUKDate epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">Smoke Alarms</td>
@@ -660,7 +660,7 @@
       </tr>
       <tr>
         <td class="label">First Payment</td>
-        <td class="value">{{#if first_payment_date}}{{first_payment_date}}{{else}}{{tenancy_start_date}}{{/if}}</td>
+        <td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td>
       </tr>
     </table>
 
@@ -892,7 +892,7 @@
   <!-- ===== FOOTER ===== -->
   <div class="doc-footer">
     <p>Premium Occupation Contract &mdash; Wales</p>
-    <p>Generated: {{current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
+    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
     <p>Compliant with Renting Homes (Wales) Act 2016, Housing (Wales) Act 2014</p>
   </div>
 

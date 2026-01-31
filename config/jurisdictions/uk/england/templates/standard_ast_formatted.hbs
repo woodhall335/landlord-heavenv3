@@ -325,7 +325,7 @@
     <h1>Assured Shorthold Tenancy Agreement</h1>
     <div class="doc-subtitle">Housing Act 1988 (as amended)</div>
     <div class="doc-subtitle">England</div>
-    <div class="doc-date">Dated: <strong>{{agreement_date}}</strong></div>
+    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
   </div>
 
   <!-- ===== 1. PARTIES ===== -->
@@ -355,7 +355,7 @@
       <div class="party-role">Tenant{{#if multiple_tenants}}s{{/if}}</div>
       <div class="party-details-text">
         {{#each tenants}}
-        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{this.dob}}){{/if}}<br>
+        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
         <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
         {{/each}}
       </div>
@@ -383,7 +383,7 @@
     <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
     {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}.</li>{{/if}}
     <li><span class="defined-term">"Property"</span> means {{property_address}} as described in Schedule 1.</li>
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{tenancy_start_date}} to {{tenancy_end_date}}{{else}}periodic tenancy from {{tenancy_start_date}}{{/if}} and any continuation.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation.</li>
     <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} held in {{deposit_scheme_name}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Scheme"</span> means the government-authorised deposit protection scheme.</li>
@@ -401,10 +401,10 @@
   <!-- ===== 4. THE TERM ===== -->
   <h2>4. The Term</h2>
   {{#if is_fixed_term}}
-  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{tenancy_start_date}}</strong> and ends on <strong>{{tenancy_end_date}}</strong> (the "Fixed Term").</p>
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> and ends on <strong>{{formatUKDate tenancy_end_date}}</strong> (the "Fixed Term").</p>
   <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the Fixed Term, unless either party serves notice, the tenancy continues as a statutory periodic tenancy on the same terms.</p>
   {{else}}
-  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{tenancy_start_date}}</strong> as a periodic (monthly) tenancy.</p>
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic (monthly) tenancy.</p>
   <p class="clause"><span class="clause-num">4.2</span> The tenancy continues until terminated by either party giving proper notice.</p>
   {{/if}}
   <p class="clause"><span class="clause-num">4.3</span> The Landlord may seek possession using Section 21 (no-fault, minimum 2 months' notice) or Section 8 (fault-based) of the Housing Act 1988.</p>
@@ -414,7 +414,7 @@
   <h2>5. Rent</h2>
   <p class="clause"><span class="clause-num">5.1</span> The Tenant shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
   <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account specified in Schedule 2.</p>
-  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{tenancy_start_date}}.</p>
+  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
   <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for 14 days after the due date, interest may accrue at 3% above the Bank of England base rate per annum.</p>
 
   <!-- ===== 6. DEPOSIT ===== -->
@@ -445,6 +445,7 @@
   <p class="clause"><span class="clause-num">8.4</span> <strong>Deposit:</strong> Protect the Deposit in a government-authorised scheme and provide prescribed information within 30 days.</p>
   <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide the Tenant with the current How to Rent guide, EPC, Gas Safety Certificate, and EICR before the tenancy starts or as soon as reasonably practicable.</p>
   <p class="clause"><span class="clause-num">8.6</span> <strong>Insurance:</strong> Maintain buildings insurance for the Property.</p>
+  <p class="clause"><span class="clause-num">8.7</span> <strong>Right to Rent:</strong> The Landlord confirms that the required Right to Rent checks have been carried out in accordance with the Immigration Act 2014 before the Tenant occupies the Property. Nothing in this Agreement makes the Tenant responsible for the Landlord's compliance with Right to Rent requirements.</p>
 
   {{#if guarantor_name}}
   <!-- ===== 9. GUARANTOR ===== -->
@@ -562,15 +563,15 @@
     <table class="data-table">
       <tr>
         <td class="label">Gas Safety Certificate</td>
-        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{formatUKDate gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">EICR</td>
-        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{formatUKDate eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">EPC</td>
-        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{formatUKDate epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
       </tr>
       <tr>
         <td class="label">Smoke Alarms</td>
@@ -616,7 +617,7 @@
       </tr>
       <tr>
         <td class="label">First Payment</td>
-        <td class="value">{{#if first_payment_date}}{{first_payment_date}}{{else}}{{tenancy_start_date}}{{/if}}</td>
+        <td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td>
       </tr>
     </table>
 
@@ -800,8 +801,8 @@
   <!-- ===== FOOTER ===== -->
   <div class="doc-footer">
     <p>Assured Shorthold Tenancy Agreement &mdash; England</p>
-    <p>Generated: {{current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
-    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019</p>
+    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
+    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019, Immigration Act 2014</p>
   </div>
 
 </body>

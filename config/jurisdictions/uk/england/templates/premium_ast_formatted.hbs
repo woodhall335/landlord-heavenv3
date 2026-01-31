@@ -83,7 +83,7 @@
     <div class="doc-subtitle">Housing Act 1988 (as amended)</div>
     <div class="doc-subtitle">England</div>
     <div class="premium-badge">Premium Edition</div>
-    <div class="doc-date">Dated: <strong>{{agreement_date}}</strong></div>
+    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
   </div>
 
   <!-- 1. PARTIES -->
@@ -113,7 +113,7 @@
       <div class="party-role">Tenant{{#if multiple_tenants}}s{{/if}}</div>
       <div class="party-details-text">
         {{#each tenants}}
-        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{this.dob}}){{/if}}<br>
+        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
         <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
         {{/each}}
       </div>
@@ -126,7 +126,7 @@
         <strong>{{guarantor_name}}</strong><br>
         <span class="address-text">{{guarantor_address}}</span><br>
         <span class="email-text">{{guarantor_email}}</span> | {{guarantor_phone}}<br>
-        {{#if guarantor_dob}}DOB: {{guarantor_dob}} | {{/if}}{{#if guarantor_relationship}}Relationship: {{guarantor_relationship}}{{/if}}
+        {{#if guarantor_dob}}DOB: {{formatUKDate guarantor_dob}} | {{/if}}{{#if guarantor_relationship}}Relationship: {{guarantor_relationship}}{{/if}}
       </div>
     </div>
     {{/if}}
@@ -142,7 +142,7 @@
     <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally liable){{/if}}.</li>
     {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}, whose obligations are set out in Section 9.</li>{{/if}}
     <li><span class="defined-term">"Property"</span> means {{property_address}} as described in Schedule 1.</li>
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{tenancy_start_date}} to {{tenancy_end_date}}{{else}}periodic tenancy from {{tenancy_start_date}}{{/if}} and any statutory continuation.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any statutory continuation.</li>
     <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} payable as set out in Schedule 2.</li>
     <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} protected in the Scheme as set out in Schedule 2.</li>
     <li><span class="defined-term">"Scheme"</span> means {{deposit_scheme_name}}.</li>
@@ -161,10 +161,10 @@
   <!-- 4. THE TERM -->
   <h2>4. The Term</h2>
   {{#if is_fixed_term}}
-  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{tenancy_start_date}}</strong> and ends on <strong>{{tenancy_end_date}}</strong>.</p>
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> and ends on <strong>{{formatUKDate tenancy_end_date}}</strong>.</p>
   <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the fixed term, unless either party serves notice, the tenancy continues as a statutory periodic tenancy.</p>
   {{else}}
-  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{tenancy_start_date}}</strong> as a periodic (monthly) tenancy.</p>
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic (monthly) tenancy.</p>
   <p class="clause"><span class="clause-num">4.2</span> The tenancy continues until terminated by proper notice.</p>
   {{/if}}
   <p class="clause"><span class="clause-num">4.3</span> The Landlord may seek possession using Section 21 (minimum 2 months' notice) or Section 8 (fault-based) of the Housing Act 1988.</p>
@@ -174,7 +174,7 @@
   <h2>5. Rent</h2>
   <p class="clause"><span class="clause-num">5.1</span> The Tenant shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
   <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account in Schedule 2.</p>
-  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{tenancy_start_date}}.</p>
+  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
   <div class="premium-section">
     <div class="premium-label">Premium: Late Payment</div>
     <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for {{#if grace_period_days}}{{grace_period_days}}{{else}}14{{/if}} days after the due date, interest accrues at {{#if late_payment_interest_rate}}{{late_payment_interest_rate}}%{{else}}3%{{/if}} above the Bank of England base rate per annum.</p>
@@ -213,6 +213,7 @@
     <div class="premium-label">Premium: Emergency Contacts</div>
     <p class="clause"><span class="clause-num">8.7</span> The Landlord provides emergency contact details in Schedule 6 for use outside normal hours.</p>
   </div>
+  <p class="clause"><span class="clause-num">8.8</span> <strong>Right to Rent:</strong> The Landlord confirms that the required Right to Rent checks have been carried out in accordance with the Immigration Act 2014 before the Tenant occupies the Property. Nothing in this Agreement makes the Tenant responsible for the Landlord's compliance with Right to Rent requirements.</p>
 
   {{#if guarantor_name}}
   <!-- 9. GUARANTOR AGREEMENT -->
@@ -325,7 +326,7 @@
       <tr><td class="label">Amount</td><td class="value">£{{rent_amount}} per {{rent_period}}</td></tr>
       <tr><td class="label">Due Date</td><td class="value">{{rent_due_day}} of each {{rent_period}}</td></tr>
       <tr><td class="label">Method</td><td class="value">{{payment_method}}</td></tr>
-      <tr><td class="label">First Payment</td><td class="value">{{#if first_payment_date}}{{first_payment_date}}{{else}}{{tenancy_start_date}}{{/if}}</td></tr>
+      <tr><td class="label">First Payment</td><td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td></tr>
     </table>
     <h4>Bank Details</h4>
     <table class="data-table">
@@ -446,8 +447,8 @@
   <!-- FOOTER -->
   <div class="doc-footer">
     <p>Premium Assured Shorthold Tenancy Agreement &mdash; England</p>
-    <p>Generated: {{current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
-    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019</p>
+    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
+    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019, Immigration Act 2014</p>
   </div>
 
 </body>
