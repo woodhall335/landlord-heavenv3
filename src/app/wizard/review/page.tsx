@@ -240,6 +240,7 @@ function ReviewPageInner() {
       type: caseType,
       jurisdiction: normalizedJurisdiction,
       product: normalizedProduct,
+      mode: 'edit', // Prevent redirect back to review when all questions are answered
     });
 
     router.push(`/wizard/flow?${params.toString()}`);
