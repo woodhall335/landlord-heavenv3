@@ -416,13 +416,35 @@
       page-break-before: always;
     }
 
+    /* Footer with guaranteed safety margin to prevent content overlap */
     .footer-info {
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: 50pt; /* Increased safety margin */
+      padding-top: 20pt;
       border-top: 1px solid #cbd5e0;
       font-size: 9pt;
       color: #718096;
       text-align: center;
+      page-break-inside: avoid;
+      clear: both; /* Ensure no floating content overlaps */
+    }
+
+    /* Footer spacer - use before footer to guarantee minimum clearance */
+    .footer-spacer {
+      height: 30pt;
+      clear: both;
+    }
+
+    /* ===== PAGINATION SAFETY ===== */
+    /* Prevent orphaned headings and text */
+    h2, h3, h4 {
+      page-break-after: avoid;
+      orphans: 3;
+      widows: 3;
+    }
+
+    p, li {
+      orphans: 3;
+      widows: 3;
     }
 
     @media print {
@@ -430,11 +452,46 @@
         page-break-before: always;
       }
 
+      /* CRITICAL: Signatures MUST start on fresh page */
+      .signature-section {
+        page-break-before: always;
+        page-break-inside: avoid;
+      }
+
       .section-header,
       .subsection,
       .explainer-box,
       .warning-box,
-      .party-details {
+      .important-box,
+      .party-details,
+      .footer-info {
+        page-break-inside: avoid;
+      }
+
+      /* Section headers must stay with content */
+      .section-header {
+        page-break-after: avoid;
+      }
+
+      /* Prevent orphaned headings */
+      h2, h3, h4 {
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+      }
+
+      /* Prevent orphaned/widowed text */
+      p, li {
+        orphans: 3;
+        widows: 3;
+      }
+
+      /* Keep tables together */
+      .data-table, .data-table tr {
+        page-break-inside: avoid;
+      }
+
+      .signature-block {
         page-break-inside: avoid;
       }
     }
