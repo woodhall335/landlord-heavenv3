@@ -240,6 +240,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
 /**
  * Detect jurisdiction from ASTData
  * Checks multiple possible sources and normalizes to canonical jurisdiction
+ *
+ * IMPORTANT: This function throws if jurisdiction cannot be determined.
+ * We NEVER default to England - that causes Wales cases to get wrong documents.
  */
 function detectJurisdiction(data: ASTData): TenancyJurisdiction {
   // Check explicit jurisdiction field (canonical)
@@ -258,9 +261,19 @@ function detectJurisdiction(data: ASTData): TenancyJurisdiction {
   if (data.jurisdiction_wales) return 'wales';
   if (data.jurisdiction_england) return 'england';
 
-  // Default to England if not specified
-  console.warn('[AST Generator] No jurisdiction specified, defaulting to England');
-  return 'england';
+  // NO FALLBACK - THROW ERROR
+  // This is critical: we must never silently default to England.
+  // If we reach here, there's a bug in the calling code that failed to provide jurisdiction.
+  const errorMessage =
+    '[AST Generator] CRITICAL: No jurisdiction specified in ASTData. ' +
+    'Jurisdiction must be provided explicitly. ' +
+    'Check that mapWizardToASTData is passing jurisdiction from wizard facts. ' +
+    'DO NOT default to England - this causes Wales/Scotland/NI cases to get wrong documents.';
+
+  console.error(errorMessage);
+  console.error('[AST Generator] ASTData keys:', Object.keys(data).join(', '));
+
+  throw new Error(errorMessage);
 }
 
 /**
@@ -466,6 +479,7 @@ export interface ASTData {
   recycling_bins?: boolean;
 
   // Jurisdiction
+  jurisdiction?: string;  // Canonical jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland'
   jurisdiction_england?: boolean;
   jurisdiction_wales?: boolean;
 

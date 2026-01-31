@@ -392,9 +392,16 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
     cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) ?? 0,
 
-    // Jurisdiction
-    jurisdiction_england: true,
-    jurisdiction_wales: false,
+    // Jurisdiction - derive from wizard facts (NEVER hardcode)
+    // Priority: __meta.jurisdiction > property.country > property_country flat field
+    jurisdiction: caseFacts.meta.jurisdiction ||
+                  caseFacts.property.country ||
+                  getValueAtPath(wizardFacts, 'property_country') ||
+                  getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
+                  undefined,
+    // Legacy boolean flags for template compatibility - derive from resolved jurisdiction
+    jurisdiction_england: (caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'england',
+    jurisdiction_wales: (caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'wales',
 
     // Meta
     joint_and_several_liability: jointLiability ?? tenants.length > 1,
