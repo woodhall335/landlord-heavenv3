@@ -2635,9 +2635,9 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     facts['tenants.0.name'] ||
     // Check if tenants object with numeric keys exists
     (facts.tenants && typeof facts.tenants === 'object' && !Array.isArray(facts.tenants) && (
-      facts.tenants['0']?.full_name ||
-      facts.tenants['0']?.name ||
-      Object.values(facts.tenants)[0]?.full_name
+      (facts.tenants as Record<string, any>)['0']?.full_name ||
+      (facts.tenants as Record<string, any>)['0']?.name ||
+      (Object.values(facts.tenants) as any[])[0]?.full_name
     ))
   );
   if (!hasTenantName) {
