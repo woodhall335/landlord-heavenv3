@@ -171,20 +171,15 @@
     }
 
     .condition-cell {
-      width: 15%;
+      width: 20%;
       text-align: center;
     }
 
     .notes-cell {
-      width: 35%;
+      width: 50%;
       /* Allow long text to wrap */
       overflow-wrap: anywhere;
       word-break: break-word;
-    }
-
-    .qty-cell {
-      width: 10%;
-      text-align: center;
     }
 
     /* ===== CONDITION GUIDE ===== */
@@ -305,7 +300,7 @@
     </tr>
     <tr>
       <td class="label">Tenant(s)</td>
-      <td class="value">{{#if tenant_names}}{{#if (isArray tenant_names)}}{{#each tenant_names}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}{{tenant_names}}{{/if}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
+      <td class="value">{{#if tenant_names}}{{tenant_names}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
     </tr>
     <tr>
       <td class="label">Date of Inventory</td>
@@ -376,14 +371,12 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
         {{#each this.items}}
         <tr>
           <td>{{this.name}}</td>
-          <td class="qty-cell">{{#if this.quantity}}{{this.quantity}}{{else}}1{{/if}}</td>
           <td class="condition-cell">{{#if this.condition}}<span class="completed-value">{{this.condition}}</span>{{else}}__________{{/if}}</td>
           <td class="notes-cell">{{#if this.notes}}{{this.notes}}{{else}}&nbsp;{{/if}}</td>
         </tr>
@@ -391,7 +384,6 @@
         {{!-- Always add blank rows for additional items --}}
         <tr>
           <td>Other: ______________</td>
-          <td class="qty-cell">____</td>
           <td class="condition-cell">__________</td>
           <td class="notes-cell">_________________________</td>
         </tr>
@@ -406,21 +398,20 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Ceiling</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Windows</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Curtains/Blinds</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Light Fittings</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Sofa</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Armchairs</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Coffee Table</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>TV Stand/Unit</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Other:</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Windows</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Curtains/Blinds</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Light Fittings</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sofa</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Armchairs</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Coffee Table</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>TV Stand/Unit</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Other:</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
@@ -430,22 +421,21 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Worktops</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Cupboards</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Oven/Hob</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Extractor Hood</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Fridge/Freezer</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Washing Machine</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Dishwasher</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Microwave</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Kettle/Toaster</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Sink &amp; Taps</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Worktops</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Cupboards</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Oven/Hob</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Extractor Hood</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Fridge/Freezer</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Washing Machine</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Dishwasher</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Microwave</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Kettle/Toaster</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sink &amp; Taps</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
@@ -455,39 +445,58 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Ceiling</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring/Carpet</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Windows</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Curtains/Blinds</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Bed Frame</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Mattress</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Wardrobe</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Chest of Drawers</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Bedside Tables</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring/Carpet</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Windows</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Curtains/Blinds</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bed Frame</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mattress</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Wardrobe</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Chest of Drawers</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bedside Tables</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
     <!-- Bedroom 2 -->
     <div class="room-section">
-      <h4 class="room-title">Bedroom 2 (if applicable)</h4>
+      <h4 class="room-title">Bedroom 2</h4>
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring/Carpet</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Bed Frame</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Mattress</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Wardrobe</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Other:</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring/Carpet</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bed Frame</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mattress</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Wardrobe</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Chest of Drawers</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Other:</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Bedroom 3 -->
+    <div class="room-section">
+      <h4 class="room-title">Bedroom 3</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring/Carpet</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bed Frame</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mattress</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Wardrobe</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Other:</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
@@ -497,19 +506,19 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls/Tiles</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Bath</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Shower</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Toilet</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Sink &amp; Taps</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Mirror/Cabinet</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Towel Rail/Radiator</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Extractor Fan</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls/Tiles</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bath</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Shower</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Toilet</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sink &amp; Taps</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mirror/Cabinet</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Towel Rail/Radiator</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Extractor Fan</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
@@ -519,21 +528,23 @@
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Item</th>
-          <th class="qty-cell">Qty</th>
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
-        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Front Door</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Coat Hooks/Stand</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
-        <tr><td>Smoke Detector</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Walls</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Front Door</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Coat Hooks/Stand</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Smoke Detector</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>CO Detector</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
       </table>
     </div>
 
     <!-- Additional Rooms -->
     <div class="room-section">
       <h4 class="room-title">Additional Rooms / Areas</h4>
+      <p class="small-text">For additional bedrooms, studies, utility rooms, or other spaces not listed above:</p>
       <table class="room-inventory">
         <tr>
           <th style="width: 30%">Room/Area</th>
@@ -541,6 +552,8 @@
           <th class="condition-cell">Condition</th>
           <th class="notes-cell">Notes / Description</th>
         </tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
         <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
         <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
         <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
@@ -553,42 +566,39 @@
   <h2 class="page-break-before">Part D: Keys and Access Devices</h2>
   <table class="keys-table">
     <tr>
-      <th style="width: 40%">Item</th>
-      <th style="width: 20%">Quantity</th>
-      <th style="width: 40%">Notes</th>
+      <th style="width: 30%">Item</th>
+      <th style="width: 70%">Notes / Details</th>
     </tr>
     <tr>
       <td>Front Door Keys</td>
-      <td>{{#if number_of_front_door_keys}}{{number_of_front_door_keys}}{{else}}________{{/if}}</td>
-      <td>_________________________</td>
+      <td>{{#if number_of_front_door_keys}}Number issued: {{number_of_front_door_keys}}{{else}}_________________________{{/if}}</td>
     </tr>
     <tr>
       <td>Back Door Keys</td>
-      <td>{{#if number_of_back_door_keys}}{{number_of_back_door_keys}}{{else}}________{{/if}}</td>
-      <td>_________________________</td>
+      <td>{{#if number_of_back_door_keys}}Number issued: {{number_of_back_door_keys}}{{else}}_________________________{{/if}}</td>
     </tr>
     <tr>
       <td>Window Keys</td>
-      <td>{{#if number_of_window_keys}}{{number_of_window_keys}}{{else}}________{{/if}}</td>
-      <td>_________________________</td>
+      <td>{{#if number_of_window_keys}}Number issued: {{number_of_window_keys}}{{else}}_________________________{{/if}}</td>
     </tr>
     <tr>
       <td>Mailbox Keys</td>
-      <td>{{#if number_of_mailbox_keys}}{{number_of_mailbox_keys}}{{else}}________{{/if}}</td>
-      <td>_________________________</td>
+      <td>{{#if number_of_mailbox_keys}}Number issued: {{number_of_mailbox_keys}}{{else}}_________________________{{/if}}</td>
     </tr>
     <tr>
       <td>Access Cards/Fobs</td>
-      <td>{{#if access_cards_fobs}}{{access_cards_fobs}}{{else}}________{{/if}}</td>
+      <td>{{#if access_cards_fobs}}Details: {{access_cards_fobs}}{{else}}_________________________{{/if}}</td>
+    </tr>
+    <tr>
+      <td>Garage/Shed Keys</td>
       <td>_________________________</td>
     </tr>
     <tr>
       <td>Other (specify)</td>
-      <td>________</td>
       <td>_________________________</td>
     </tr>
   </table>
-  <p class="small-text">All keys, fobs, and access devices must be returned at the end of the tenancy. {{#if key_replacement_cost}}The cost of replacing lost keys is {{key_replacement_cost}} per key.{{else}}The cost of replacing lost keys will be charged at the current replacement cost.{{/if}}</p>
+  <p class="small-text">All keys, fobs, and access devices must be returned at the end of the tenancy. {{#if key_replacement_cost}}The cost of replacing lost keys is £{{key_replacement_cost}} per key.{{else}}The cost of replacing lost keys will be charged at the current replacement cost.{{/if}}</p>
 
   <!-- ===== PART E: GENERAL NOTES ===== -->
   <h2>Part E: General Notes and Observations</h2>
