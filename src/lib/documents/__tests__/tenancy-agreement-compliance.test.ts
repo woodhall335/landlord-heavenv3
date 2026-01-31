@@ -39,17 +39,44 @@ function loadTemplate(relativePath: string): string {
   return readFileSync(fullPath, 'utf-8');
 }
 
+/**
+ * Helper to extract subletting-related sections from template
+ * Looks for content within 500 chars of "sublet" keywords
+ */
+function extractSublettingContext(template: string): string {
+  const lowerTemplate = template.toLowerCase();
+  const sublettingKeywords = ['sublet', 'subletting', 'assignment'];
+  let context = '';
+
+  sublettingKeywords.forEach(keyword => {
+    let index = 0;
+    while ((index = lowerTemplate.indexOf(keyword, index)) !== -1) {
+      const start = Math.max(0, index - 250);
+      const end = Math.min(lowerTemplate.length, index + 500);
+      context += lowerTemplate.substring(start, end) + '\n';
+      index += keyword.length;
+    }
+  });
+
+  return context;
+}
+
 describe('Tenancy Agreement Legal Compliance', () => {
   describe('Subletting Clause Compliance', () => {
+    // The key issue is that subletting is NOT a criminal offense for private tenancies
+    // (only social housing tenants can be prosecuted under Prevention of Social Housing Fraud Act 2013)
+    // Other criminal references (gas safety, landlord registration, dangerous dogs) are legitimate
+
     it.each(Object.entries(STANDARD_TEMPLATES))(
-      '%s standard template should not contain "CRIMINAL OFFENCE" or "criminal offense" language',
+      '%s standard template should not contain misleading criminal language in subletting sections',
       (jurisdiction, templatePath) => {
         const template = loadTemplate(templatePath);
+        const sublettingContext = extractSublettingContext(template);
 
-        // Should not contain misleading criminal offence claims for private tenancies
-        expect(template.toLowerCase()).not.toContain('criminal offence');
-        expect(template.toLowerCase()).not.toContain('criminal offense');
-        expect(template.toLowerCase()).not.toContain('criminal prosecution');
+        // Subletting sections should not claim criminal offense for private tenancies
+        expect(sublettingContext).not.toContain('criminal offence');
+        expect(sublettingContext).not.toContain('criminal offense');
+        expect(sublettingContext).not.toContain('criminal prosecution');
 
         // Prevention of Social Housing Fraud Act 2013 should not be referenced in private tenancy templates
         expect(template).not.toContain('Prevention of Social Housing Fraud Act');
@@ -57,12 +84,16 @@ describe('Tenancy Agreement Legal Compliance', () => {
     );
 
     it.each(Object.entries(PREMIUM_TEMPLATES))(
-      '%s premium template should not contain "CRIMINAL OFFENCE" language',
+      '%s premium template should not contain misleading criminal language in subletting sections',
       (jurisdiction, templatePath) => {
         const template = loadTemplate(templatePath);
+        const sublettingContext = extractSublettingContext(template);
 
-        expect(template.toLowerCase()).not.toContain('criminal offence');
-        expect(template.toLowerCase()).not.toContain('criminal offense');
+        // Subletting sections should not claim criminal offense for private tenancies
+        expect(sublettingContext).not.toContain('criminal offence');
+        expect(sublettingContext).not.toContain('criminal offense');
+
+        // Prevention of Social Housing Fraud Act 2013 should not be referenced
         expect(template).not.toContain('Prevention of Social Housing Fraud Act');
       }
     );
