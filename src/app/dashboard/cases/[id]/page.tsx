@@ -25,6 +25,7 @@ import { getPackContents, getNextSteps } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
 import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 import { deriveDisplayStatus } from '@/lib/case-status';
+import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 
 interface CaseDetails {
   id: string;
@@ -826,8 +827,18 @@ export default function CaseDetailPage() {
       product = params?.product || '';
     }
 
-    const productParam = product ? `&product=${product}` : '';
-    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${caseDetails?.jurisdiction}&case_id=${caseId}${productParam}`);
+    // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
+    const isTenancyFlow = caseDetails?.case_type === 'tenancy_agreement' ||
+      product?.includes('ast') || product?.includes('prt') ||
+      product?.includes('occupation') || product?.includes('ni_');
+    const jurisdiction = (caseDetails?.jurisdiction || 'england') as CanonicalJurisdiction;
+
+    const normalizedProduct = isTenancyFlow && product
+      ? validateUrlProduct(product, jurisdiction)
+      : product;
+
+    const productParam = normalizedProduct ? `&product=${normalizedProduct}` : '';
+    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${jurisdiction}&case_id=${caseId}${productParam}`);
   };
 
   const handleDeleteCase = async () => {
