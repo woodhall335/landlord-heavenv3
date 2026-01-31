@@ -78,7 +78,9 @@
       font-size: 11pt;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      max-width: 100%;
     }
 
     .wales-notice {
@@ -567,7 +569,7 @@
   </div>
 
   <div class="important-box">
-    <div class="important-title">📜 Written Statement Requirement</div>
+    <div class="important-title">Written Statement Requirement</div>
     <p>
       Under the Renting Homes (Wales) Act 2016, the landlord must provide a written statement of the occupation
       contract within 14 days of the occupation date. This document serves as that written statement. Failure to
@@ -582,7 +584,7 @@
   </div>
 
   <div class="party-details">
-    <div class="party-label">🏠 Landlord</div>
+    <div class="party-label">Landlord</div>
     <div class="party-info">
       <strong>Name:</strong> {{landlord_full_name}}<br/>
       <strong>Address:</strong> {{landlord_address}}<br/>
@@ -593,7 +595,7 @@
 
   <!-- RENT SMART WALES REGISTRATION -->
   <div class="legal-notice">
-    <div class="legal-notice-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Rent Smart Wales Registration</div>
+    <div class="legal-notice-title">Rent Smart Wales Registration</div>
     <p>
       Under the Housing (Wales) Act 2014, all landlords letting property in Wales must be registered with
       <strong>Rent Smart Wales</strong>. Landlords who manage their own properties must also be licensed.
@@ -609,7 +611,7 @@
 
   {{#if agent_name}}
   <div class="party-details">
-    <div class="party-label">🏢 Landlord's Agent</div>
+    <div class="party-label">Landlord's Agent</div>
     <div class="party-info">
       <strong>Name:</strong> {{agent_name}}<br/>
       <strong>Address:</strong> {{agent_address}}<br/>
@@ -635,7 +637,7 @@
   {{/if}}
 
   <div class="party-details">
-    <div class="party-label">👤 Contract Holder(s)</div>
+    <div class="party-label">Contract Holder(s)</div>
     <div class="party-info">
       {{#each tenants}}
       <div style="margin-bottom: 15px;">
@@ -655,14 +657,14 @@
     </div>
     <p>
       In Wales, tenants are now referred to as <strong>"Contract Holders"</strong> and tenancy agreements are
-      <strong>"Occupation Contracts"</strong>. This Standard Occupation Contract replaces the Assured Shorthold
+      <strong>"Occupation Contracts"</strong>. This occupation contract replaces the Assured Shorthold
       Tenancy (AST) used in England.
     </p>
   </div>
 
   {{#if joint_and_several_liability}}
   <div class="important-box">
-    <div class="important-title">⚠️ Joint Contract</div>
+    <div class="important-title">Joint Contract</div>
     <p>
       Where there are multiple Contract Holders, this is a <strong>Joint Contract</strong>. Each Contract Holder
       is jointly and severally liable for all obligations under this Contract. This means each Contract Holder
@@ -674,7 +676,7 @@
   {{#if guarantor_name}}
   <!-- CLAUSE:GUARANTOR -->
   <div class="party-details">
-    <div class="party-label">🛡️ Guarantor</div>
+    <div class="party-label">Guarantor</div>
     <div class="party-info">
       <strong>Name:</strong> {{guarantor_name}}<br/>
       <strong>Address:</strong> {{guarantor_address}}<br/>
@@ -686,7 +688,7 @@
   </div>
 
   <div class="legal-notice">
-    <div class="legal-notice-title">🛡️ Guarantor Agreement</div>
+    <div class="legal-notice-title">Guarantor Agreement</div>
     <p style="margin-bottom: 15px;">
       <strong>The Guarantor hereby agrees to act as guarantor for the Contract Holder(s) named above and undertakes the following:</strong>
     </p>
@@ -723,7 +725,7 @@
   </div>
 
   <div class="warning-box">
-    <div class="warning-title">⚠️ Important Notice to Guarantor</div>
+    <div class="warning-title">Important Notice to Guarantor</div>
     <p>
       By signing this Contract as Guarantor, you are making a serious financial commitment. You will be responsible
       for paying the Contract Holder's rent and other obligations if they fail to do so.
@@ -743,7 +745,7 @@
 
   <div class="property-highlight">
     <div class="property-address">
-      📍 {{property_address}}
+      {{property_address}}
     </div>
     <div class="property-details">
       <div class="property-detail-item">
@@ -786,7 +788,7 @@
 
   {{#if parking_available}}
   <div class="subsection">
-    <div class="subsection-title">🚗 Parking</div>
+    <div class="subsection-title">Parking</div>
     <div class="clause">
       <span class="clause-number">2.1</span>
       Parking is included: {{parking_details}}
@@ -801,7 +803,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">📅 Occupation Period</div>
+    <div class="subsection-title">Occupation Period</div>
 
     <div class="clause">
       <span class="clause-number">3.1</span>
@@ -846,7 +848,7 @@
   </div>
 
   <div class="important-box">
-    <div class="important-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Key Difference from England</div>
+    <div class="important-title">Key Difference from England</div>
     <p>
       In Wales, the minimum no-fault notice period is <strong>6 months</strong> (Section 173), compared to 2 months
       in England. This provides greater security of tenure for Contract Holders in Wales.
@@ -886,7 +888,7 @@
   </table>
 
   <div class="subsection">
-    <div class="subsection-title">💳 Bank Account Details</div>
+    <div class="subsection-title">Bank Account Details</div>
 
     <div class="party-details">
       <div class="party-info">
@@ -913,7 +915,7 @@
   </div>
 
   <div class="warning-box">
-    <div class="warning-title">⚠️ Late Payment</div>
+    <div class="warning-title">Late Payment</div>
     <p>
       If rent is unpaid for 14 days or more after the due date, interest may accrue at 3% above the Bank of England
       base rate per annum. Serious rent arrears (2 months or more) may result in possession proceedings under the
@@ -947,7 +949,7 @@
   </table>
 
   <div class="legal-notice">
-    <div class="legal-notice-title">✅ Deposit Protection Requirements (Wales)</div>
+    <div class="legal-notice-title">Deposit Protection Requirements (Wales)</div>
     <ul class="checklist">
       <li>Deposit will be protected within 30 days in an authorized scheme</li>
       <li>Prescribed information will be provided within 30 days</li>
@@ -956,7 +958,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🛡️ Deposit Protection</div>
+    <div class="subsection-title">Deposit Protection</div>
 
     <div class="clause">
       <span class="clause-number">5.1</span>
@@ -978,7 +980,7 @@
   </div>
 
   <div class="warning-box">
-    <div class="warning-title">⚠️ Failure to Protect Deposit</div>
+    <div class="warning-title">Failure to Protect Deposit</div>
     <p>
       <strong>Landlord:</strong> If you fail to protect the deposit or provide the Prescribed Information within 30 days,
       you may be ordered to pay the Contract Holder compensation of 1-3 times the deposit amount. You will also be unable
@@ -1015,12 +1017,12 @@
   </table>
 
   <div class="subsection">
-    <div class="subsection-title">📊 Utility Obligations</div>
+    <div class="subsection-title">Utility Obligations</div>
 
     <div class="clause">
       <span class="clause-number">6.1</span>
-      The Contract Holder is responsible for paying the following utilities and services:
-      {{council_tax_responsibility}}, {{utilities_responsibility}}, {{internet_responsibility}}.
+      Responsibility for bills and utilities is allocated as shown in the table above. The Contract Holder
+      must pay all charges for utilities and services where they are listed as responsible.
     </div>
 
     <div class="clause">
@@ -1042,7 +1044,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🏠 Care of Dwelling</div>
+    <div class="subsection-title">Care of Dwelling</div>
 
     <div class="clause">
       <span class="clause-number">7.1</span>
@@ -1070,7 +1072,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🔨 Alterations & Decorations</div>
+    <div class="subsection-title">Alterations & Decorations</div>
 
     <div class="clause">
       <span class="clause-number">7.3</span>
@@ -1086,13 +1088,13 @@
 
   <!-- CLAUSE:ANTI_SUBLET -->
   <div class="subsection">
-    <div class="subsection-title">🚫 Subletting & Assignment</div>
+    <div class="subsection-title">Subletting & Assignment</div>
 
     <div class="legal-notice">
-      <div class="legal-notice-title">⚠️ Subletting Restrictions</div>
+      <div class="legal-notice-title">Subletting Restrictions</div>
       <p>
         Under the Renting Homes (Wales) Act 2016, the Contract Holder's right to sublet depends on the type of contract.
-        For this Standard Occupation Contract, subletting is <strong>prohibited without the Landlord's written consent</strong>.
+        For this occupation contract, subletting is <strong>prohibited without the Landlord's written consent</strong>.
       </p>
     </div>
 
@@ -1109,7 +1111,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🔑 Access for Inspections & Repairs</div>
+    <div class="subsection-title">Access for Inspections & Repairs</div>
 
     <div class="clause">
       <span class="clause-number">7.5</span>
@@ -1131,7 +1133,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🤝 Neighbourhood & Nuisance Prevention</div>
+    <div class="subsection-title">Neighbourhood & Nuisance Prevention</div>
 
     <div class="clause">
       <span class="clause-number">7.7</span>
@@ -1146,7 +1148,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🧹 End of Contract Obligations</div>
+    <div class="subsection-title">End of Contract Obligations</div>
 
     <div class="clause">
       <span class="clause-number">7.8</span>
@@ -1180,11 +1182,11 @@
 
   <!-- CLAUSE:PETS_CLAUSE -->
   <div class="subsection">
-    <div class="subsection-title">🐾 Pets</div>
+    <div class="subsection-title">Pets</div>
 
     {{#if pets_allowed}}
     <div class="legal-notice">
-      <div class="legal-notice-title">✅ Pets Are Permitted</div>
+      <div class="legal-notice-title">Pets Are Permitted</div>
       <p>
         The Landlord permits the Contract Holder to keep pet(s) at the Dwelling subject to conditions.
       </p>
@@ -1213,7 +1215,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🚭 Smoking</div>
+    <div class="subsection-title">Smoking</div>
 
     {{#if smoking_allowed}}
     <div class="clause">
@@ -1235,7 +1237,7 @@
   </div>
 
   <div class="legal-notice">
-    <div class="legal-notice-title">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Fitness for Human Habitation (Wales)</div>
+    <div class="legal-notice-title">Fitness for Human Habitation (Wales)</div>
     <p>
       Under the Renting Homes (Wales) Act 2016, the Landlord must ensure the Dwelling is fit for human habitation
       at the start of and throughout the occupation. This is a fundamental term that cannot be excluded.
@@ -1243,7 +1245,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🔧 Repair & Maintenance</div>
+    <div class="subsection-title">Repair & Maintenance</div>
 
     <div class="clause">
       <span class="clause-number">9.1</span>
@@ -1276,7 +1278,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">📋 Required Documents</div>
+    <div class="subsection-title">Required Documents</div>
 
     <div class="clause">
       <span class="clause-number">10.1</span>
@@ -1305,7 +1307,7 @@
   </div>
 
   <div class="warning-box">
-    <div class="warning-title">⚠️ Landlord Compliance Notice</div>
+    <div class="warning-title">Landlord Compliance Notice</div>
     <p>
       <strong>Landlord:</strong> Failure to provide these documents may result in:
     </p>
@@ -1326,7 +1328,7 @@
   </div>
 
   <div class="legal-notice">
-    <div class="legal-notice-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
+    <div class="legal-notice-title">House in Multiple Occupation (HMO) Provisions</div>
     <p>
       This Dwelling is a House in Multiple Occupation (HMO) under the Housing Act 2004. Additional terms apply
       to ensure all Contract Holders can enjoy the property peacefully and safely.
@@ -1335,7 +1337,7 @@
 
   <!-- CLAUSE:JOINT_LIABILITY -->
   <div class="subsection">
-    <div class="subsection-title">🤝 Joint and Several Liability</div>
+    <div class="subsection-title">Joint and Several Liability</div>
 
     <div class="clause">
       <span class="clause-number">11.1</span>
@@ -1351,7 +1353,7 @@
 
   <!-- CLAUSE:SHARED_FACILITIES -->
   <div class="subsection">
-    <div class="subsection-title">🏘️ Shared Facilities</div>
+    <div class="subsection-title">Shared Facilities</div>
 
     <div class="clause">
       <span class="clause-number">11.2</span>
@@ -1390,7 +1392,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🔥 Fire Safety (HMO)</div>
+    <div class="subsection-title">Fire Safety (HMO)</div>
 
     <div class="clause">
       <span class="clause-number">11.5</span>
@@ -1408,7 +1410,7 @@
 
   <!-- CLAUSE:HMO_LICENSING -->
   <div class="subsection">
-    <div class="subsection-title">📋 HMO Licensing</div>
+    <div class="subsection-title">HMO Licensing</div>
 
     <div class="clause">
       <span class="clause-number">11.6</span>
@@ -1427,7 +1429,7 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">📜 House Rules</div>
+    <div class="subsection-title">House Rules</div>
 
     <div class="clause">
       <span class="clause-number">11.7</span>
@@ -1448,7 +1450,7 @@
   </div>
 
   <div class="warning-box">
-    <div class="warning-title">⚠️ HMO Rules - Serious Breaches</div>
+    <div class="warning-title">HMO Rules - Serious Breaches</div>
     <p><strong>Serious breaches that may result in termination of this contract:</strong></p>
     <ul>
       <li>Persistent failure to keep communal areas clean</li>
@@ -1541,7 +1543,7 @@
     <!-- WITNESS SECTION - MUST NOT SPLIT ACROSS PAGES -->
     <div class="witness-section" style="page-break-inside: avoid; break-inside: avoid; page-break-before: auto;">
       <div class="witness-block" style="page-break-inside: avoid; break-inside: avoid;">
-        <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
+        <div class="witness-title">Witness (Optional but Recommended)</div>
         <p style="margin-bottom: 20px; font-size: 10pt;">
           While not legally required for occupation contracts, having signatures witnessed adds an extra layer of
           authenticity and can be useful if the contract is ever disputed.
