@@ -1,0 +1,655 @@
+{{!--
+  ============================================================================
+  STANDALONE INVENTORY & SCHEDULE OF CONDITION
+
+  Complete PDF document for standalone inventory download.
+  Can render either:
+  - Blank template (for manual completion at check-in)
+  - Wizard-completed inventory (from premium tier with data)
+
+  USAGE: This template is used by the inventory generator to create
+  a separate downloadable PDF in "Your Documents".
+
+  DATA EXPECTED:
+  - property_address: Full property address
+  - landlord_name: Landlord/agent name
+  - tenant_names: Array of tenant names or comma-separated string
+  - tenancy_start_date: UK formatted date
+  - inventory: { rooms: [...] } - wizard inventory data (optional)
+  - meter_reading_gas, meter_reading_electric, meter_reading_water (optional)
+  - current_date: For "generated on" timestamp
+  - jurisdiction: england | wales | scotland | northern-ireland
+  ============================================================================
+--}}
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory &amp; Schedule of Condition</title>
+  <style>
+    /* ===== PAGE SETUP ===== */
+    @page {
+      size: A4;
+      margin: 20mm 15mm 20mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      font-size: 10pt;
+      line-height: 1.4;
+      color: #1a1a1a;
+      background: white;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4 {
+      font-weight: 600;
+      margin-top: 0;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 16pt;
+      text-align: center;
+      margin-bottom: 6pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 12pt;
+      border-bottom: 1pt solid #666;
+      padding-bottom: 4pt;
+      margin: 16pt 0 10pt 0;
+      color: #333;
+    }
+
+    h3 {
+      font-size: 11pt;
+      margin: 12pt 0 6pt 0;
+      color: #444;
+    }
+
+    h4 {
+      font-size: 10pt;
+      margin: 10pt 0 4pt 0;
+      background-color: #f5f5f5;
+      padding: 6pt 8pt;
+      border-left: 3pt solid #4a90d9;
+    }
+
+    p {
+      margin: 0 0 6pt 0;
+    }
+
+    /* ===== DOCUMENT HEADER ===== */
+    .doc-header {
+      text-align: center;
+      border-bottom: 2pt solid #333;
+      padding-bottom: 12pt;
+      margin-bottom: 16pt;
+    }
+
+    .doc-subtitle {
+      font-size: 9pt;
+      color: #666;
+      margin: 4pt 0;
+    }
+
+    .property-address {
+      font-size: 11pt;
+      font-weight: 600;
+      margin: 8pt 0;
+      padding: 8pt;
+      background-color: #f8f9fa;
+      border: 1pt solid #dee2e6;
+    }
+
+    /* ===== TABLES ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8pt 0 12pt 0;
+    }
+
+    th, td {
+      border: 1pt solid #ccc;
+      padding: 6pt 8pt;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: 600;
+      font-size: 9pt;
+    }
+
+    td {
+      font-size: 9pt;
+    }
+
+    .data-table {
+      margin-bottom: 12pt;
+    }
+
+    .data-table .label {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      width: 30%;
+    }
+
+    .data-table .value {
+      width: 70%;
+    }
+
+    /* ===== ROOM SECTIONS ===== */
+    .room-section {
+      margin-bottom: 14pt;
+      page-break-inside: avoid;
+    }
+
+    .room-title {
+      background-color: #4a90d9;
+      color: white;
+      padding: 6pt 10pt;
+      margin: 0 0 8pt 0;
+      font-size: 10pt;
+    }
+
+    .room-inventory th {
+      background-color: #e8f4fc;
+    }
+
+    .condition-cell {
+      width: 15%;
+      text-align: center;
+    }
+
+    .notes-cell {
+      width: 35%;
+      /* Allow long text to wrap */
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .qty-cell {
+      width: 10%;
+      text-align: center;
+    }
+
+    /* ===== CONDITION GUIDE ===== */
+    .condition-guide {
+      margin: 12pt 0;
+      font-size: 9pt;
+    }
+
+    .condition-guide td:first-child {
+      width: 20%;
+      font-weight: 600;
+    }
+
+    /* ===== SIGNATURE SECTION ===== */
+    .signature-section {
+      margin-top: 20pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-table td {
+      width: 50%;
+      vertical-align: top;
+      padding: 12pt;
+    }
+
+    .signature-line {
+      border-bottom: 1pt solid #333;
+      margin: 20pt 0 4pt 0;
+      height: 1pt;
+    }
+
+    /* ===== FOOTER ===== */
+    .inventory-footer {
+      margin-top: 16pt;
+      padding: 10pt;
+      background-color: #fff3cd;
+      border: 1pt solid #ffc107;
+      font-size: 9pt;
+    }
+
+    .small-text {
+      font-size: 8pt;
+      color: #666;
+    }
+
+    /* ===== INSTRUCTIONS ===== */
+    .instructions {
+      background-color: #e7f5ff;
+      border: 1pt solid #74c0fc;
+      padding: 10pt;
+      margin: 12pt 0;
+      font-size: 9pt;
+    }
+
+    /* ===== PAGE BREAKS ===== */
+    .page-break-before {
+      page-break-before: always;
+    }
+
+    .page-break-avoid {
+      page-break-inside: avoid;
+    }
+
+    /* ===== BLANK LINES ===== */
+    .blank-line {
+      border-bottom: 1pt solid #999;
+      min-width: 150px;
+      display: inline-block;
+    }
+
+    /* ===== WIZARD COMPLETED DATA ===== */
+    .completed-value {
+      background-color: #d4edda;
+      padding: 2pt 4pt;
+    }
+
+    /* ===== KEYS TABLE ===== */
+    .keys-table th {
+      background-color: #f0f0f0;
+    }
+
+    /* ===== METER READINGS ===== */
+    .meter-readings {
+      margin: 12pt 0;
+    }
+
+    .meter-readings td {
+      padding: 8pt;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== DOCUMENT HEADER ===== -->
+  <div class="doc-header">
+    <h1>Inventory &amp; Schedule of Condition</h1>
+    <p class="doc-subtitle">Property Contents and Condition Record</p>
+    {{#if property_address}}
+    <div class="property-address">{{property_address}}</div>
+    {{/if}}
+  </div>
+
+  <div class="instructions">
+    <p><strong>Instructions:</strong> This inventory records the contents and condition of the property at the start of the tenancy. Both landlord (or agent) and tenant should complete and sign this document at move-in. Take photographs to supplement this written record.</p>
+    <p>This document will be used for comparison at the end of the tenancy when assessing any deposit deductions.</p>
+  </div>
+
+  <!-- ===== PART A: PROPERTY INFORMATION ===== -->
+  <h2>Part A: Property Information</h2>
+  <table class="data-table">
+    <tr>
+      <td class="label">Property Address</td>
+      <td class="value">{{#if property_address}}{{property_address}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Landlord / Agent</td>
+      <td class="value">{{#if landlord_name}}{{landlord_name}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Tenant(s)</td>
+      <td class="value">{{#if tenant_names}}{{#if (isArray tenant_names)}}{{#each tenant_names}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}{{tenant_names}}{{/if}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Date of Inventory</td>
+      <td class="value">{{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}______ / ______ / ______{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Inspection Clerk</td>
+      <td class="value">{{#if agent_name}}{{agent_name}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
+    </tr>
+  </table>
+
+  <!-- ===== METER READINGS ===== -->
+  <h3>Meter Readings at Start of Tenancy</h3>
+  <table class="data-table meter-readings">
+    <tr>
+      <td class="label">Gas Meter</td>
+      <td class="value">{{#if meter_reading_gas}}{{meter_reading_gas}}{{else}}____________________{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Electricity Meter</td>
+      <td class="value">{{#if meter_reading_electric}}{{meter_reading_electric}}{{else}}____________________{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Water Meter</td>
+      <td class="value">{{#if meter_reading_water}}{{meter_reading_water}}{{else}}____________________{{/if}}</td>
+    </tr>
+  </table>
+
+  <!-- ===== PART B: CONDITION RATING GUIDE ===== -->
+  <h2>Part B: Condition Rating Guide</h2>
+  <table class="condition-guide">
+    <tr>
+      <th>Rating</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><strong>Excellent</strong></td>
+      <td>As new or nearly new condition, no marks or wear</td>
+    </tr>
+    <tr>
+      <td><strong>Good</strong></td>
+      <td>Light wear consistent with normal use, fully functional</td>
+    </tr>
+    <tr>
+      <td><strong>Fair</strong></td>
+      <td>Moderate wear, some marks or minor damage, fully functional</td>
+    </tr>
+    <tr>
+      <td><strong>Poor</strong></td>
+      <td>Heavy wear, visible damage, may need attention</td>
+    </tr>
+    <tr>
+      <td><strong>N/A</strong></td>
+      <td>Not applicable or not present</td>
+    </tr>
+  </table>
+
+  <!-- ===== PART C: ROOM-BY-ROOM INVENTORY ===== -->
+  <h2 class="page-break-before">Part C: Room-by-Room Inventory</h2>
+  <p class="small-text">Complete the following for each room. Add additional sheets if required.</p>
+
+  {{!-- Check if wizard-completed inventory data exists --}}
+  {{#if inventory.rooms}}
+    {{!-- WIZARD-COMPLETED INVENTORY --}}
+    {{#each inventory.rooms}}
+    <div class="room-section">
+      <h4 class="room-title">{{this.name}}</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        {{#each this.items}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td class="qty-cell">{{#if this.quantity}}{{this.quantity}}{{else}}1{{/if}}</td>
+          <td class="condition-cell">{{#if this.condition}}<span class="completed-value">{{this.condition}}</span>{{else}}__________{{/if}}</td>
+          <td class="notes-cell">{{#if this.notes}}{{this.notes}}{{else}}&nbsp;{{/if}}</td>
+        </tr>
+        {{/each}}
+        {{!-- Always add blank rows for additional items --}}
+        <tr>
+          <td>Other: ______________</td>
+          <td class="qty-cell">____</td>
+          <td class="condition-cell">__________</td>
+          <td class="notes-cell">_________________________</td>
+        </tr>
+      </table>
+    </div>
+    {{/each}}
+  {{else}}
+    {{!-- BLANK TEMPLATE --}}
+    <!-- Living Room / Lounge -->
+    <div class="room-section">
+      <h4 class="room-title">Living Room / Lounge</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Windows</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Curtains/Blinds</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Light Fittings</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sofa</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Armchairs</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Coffee Table</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>TV Stand/Unit</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Other:</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Kitchen -->
+    <div class="room-section">
+      <h4 class="room-title">Kitchen</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Worktops</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Cupboards</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Oven/Hob</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Extractor Hood</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Fridge/Freezer</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Washing Machine</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Dishwasher</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Microwave</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Kettle/Toaster</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sink &amp; Taps</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Bedroom 1 -->
+    <div class="room-section page-break-before">
+      <h4 class="room-title">Bedroom 1 (Master)</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Ceiling</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring/Carpet</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Windows</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Curtains/Blinds</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bed Frame</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mattress</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Wardrobe</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Chest of Drawers</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bedside Tables</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Bedroom 2 -->
+    <div class="room-section">
+      <h4 class="room-title">Bedroom 2 (if applicable)</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring/Carpet</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bed Frame</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mattress</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Wardrobe</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Other:</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Bathroom -->
+    <div class="room-section">
+      <h4 class="room-title">Bathroom</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls/Tiles</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Bath</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Shower</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Toilet</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Sink &amp; Taps</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Mirror/Cabinet</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Towel Rail/Radiator</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Extractor Fan</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Hallway / Entrance -->
+    <div class="room-section">
+      <h4 class="room-title">Hallway / Entrance</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="qty-cell">Qty</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>Walls</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Flooring</td><td class="qty-cell">-</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Front Door</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Coat Hooks/Stand</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>Smoke Detector</td><td class="qty-cell">____</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+
+    <!-- Additional Rooms -->
+    <div class="room-section">
+      <h4 class="room-title">Additional Rooms / Areas</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Room/Area</th>
+          <th style="width: 20%">Item</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+        <tr><td>______________</td><td>__________</td><td class="condition-cell">__________</td><td class="notes-cell">_________________________</td></tr>
+      </table>
+    </div>
+  {{/if}}
+
+  <!-- ===== PART D: KEYS AND ACCESS DEVICES ===== -->
+  <h2 class="page-break-before">Part D: Keys and Access Devices</h2>
+  <table class="keys-table">
+    <tr>
+      <th style="width: 40%">Item</th>
+      <th style="width: 20%">Quantity</th>
+      <th style="width: 40%">Notes</th>
+    </tr>
+    <tr>
+      <td>Front Door Keys</td>
+      <td>{{#if number_of_front_door_keys}}{{number_of_front_door_keys}}{{else}}________{{/if}}</td>
+      <td>_________________________</td>
+    </tr>
+    <tr>
+      <td>Back Door Keys</td>
+      <td>{{#if number_of_back_door_keys}}{{number_of_back_door_keys}}{{else}}________{{/if}}</td>
+      <td>_________________________</td>
+    </tr>
+    <tr>
+      <td>Window Keys</td>
+      <td>{{#if number_of_window_keys}}{{number_of_window_keys}}{{else}}________{{/if}}</td>
+      <td>_________________________</td>
+    </tr>
+    <tr>
+      <td>Mailbox Keys</td>
+      <td>{{#if number_of_mailbox_keys}}{{number_of_mailbox_keys}}{{else}}________{{/if}}</td>
+      <td>_________________________</td>
+    </tr>
+    <tr>
+      <td>Access Cards/Fobs</td>
+      <td>{{#if access_cards_fobs}}{{access_cards_fobs}}{{else}}________{{/if}}</td>
+      <td>_________________________</td>
+    </tr>
+    <tr>
+      <td>Other (specify)</td>
+      <td>________</td>
+      <td>_________________________</td>
+    </tr>
+  </table>
+  <p class="small-text">All keys, fobs, and access devices must be returned at the end of the tenancy. {{#if key_replacement_cost}}The cost of replacing lost keys is {{key_replacement_cost}} per key.{{else}}The cost of replacing lost keys will be charged at the current replacement cost.{{/if}}</p>
+
+  <!-- ===== PART E: GENERAL NOTES ===== -->
+  <h2>Part E: General Notes and Observations</h2>
+  <div style="min-height: 80px; border: 1pt solid #ccc; padding: 10pt; margin-bottom: 12pt;">
+    <p class="small-text" style="color: #666; font-style: italic;">Record any additional observations, pre-existing damage, or special notes here:</p>
+    {{#if inventory_schedule_notes}}<p>{{inventory_schedule_notes}}</p>{{else}}<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>{{/if}}
+  </div>
+
+  <!-- ===== PART F: SIGNATURES ===== -->
+  <h2 class="page-break-before">Part F: Signatures</h2>
+  <p>By signing below, both parties confirm that this inventory has been inspected and agreed as an accurate record of the property's condition at the start of the tenancy.</p>
+
+  <table class="signature-table" style="margin-top: 16pt;">
+    <tr>
+      <td>
+        <p><strong>Landlord / Agent</strong></p>
+        <p>Name: ____________________________</p>
+        <div class="signature-line"></div>
+        <p class="small-text">Signature</p>
+        <p style="margin-top: 12pt;">Date: ____________________________</p>
+      </td>
+      <td>
+        <p><strong>Tenant</strong></p>
+        <p>Name: ____________________________</p>
+        <div class="signature-line"></div>
+        <p class="small-text">Signature</p>
+        <p style="margin-top: 12pt;">Date: ____________________________</p>
+      </td>
+    </tr>
+  </table>
+
+  {{!-- Additional tenant signatures if needed --}}
+  {{#if additional_tenants}}
+  <table class="signature-table" style="margin-top: 16pt;">
+    <tr>
+      <td>
+        <p><strong>Additional Tenant</strong></p>
+        <p>Name: ____________________________</p>
+        <div class="signature-line"></div>
+        <p class="small-text">Signature</p>
+        <p style="margin-top: 12pt;">Date: ____________________________</p>
+      </td>
+      <td>
+        <p><strong>Additional Tenant</strong></p>
+        <p>Name: ____________________________</p>
+        <div class="signature-line"></div>
+        <p class="small-text">Signature</p>
+        <p style="margin-top: 12pt;">Date: ____________________________</p>
+      </td>
+    </tr>
+  </table>
+  {{/if}}
+
+  <!-- ===== FOOTER ===== -->
+  <div class="inventory-footer">
+    <p><strong>Important:</strong> Any discrepancies not noted in writing within 7 days of the tenancy start date will be deemed accepted by the Tenant. This inventory will be used for comparison at the end of the tenancy when assessing any deposit deductions.</p>
+  </div>
+
+  <p class="small-text" style="margin-top: 12pt; text-align: center;">
+    Generated on {{#if current_date}}{{formatUKDate current_date}}{{else}}{{formatUKDate (now)}}{{/if}} | Document ID: INV-{{#if case_id}}{{case_id}}{{else}}{{timestamp}}{{/if}}
+  </p>
+
+</body>
+</html>
