@@ -65,6 +65,14 @@ import {
   type TenancyProductSku,
 } from '@/lib/tenancy/product-tier';
 
+// Jurisdiction-aware product normalization - ensures Scotland never shows "AST" labels
+import {
+  normalizeProductForJurisdiction,
+  getProductDisplayLabel,
+  validateUrlProduct,
+  type CanonicalJurisdiction,
+} from '@/lib/tenancy/product-normalization';
+
 function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -221,11 +229,17 @@ function ReviewPageInner() {
   const evidence = analysis.evidence_overview || {};
 
   const handleEdit = () => {
+    // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
+    const normalizedJurisdiction = (jurisdiction || 'england') as CanonicalJurisdiction;
+    const normalizedProduct = isTenancyFlow
+      ? validateUrlProduct(product, normalizedJurisdiction)
+      : product;
+
     const params = new URLSearchParams({
       case_id: caseId,
       type: caseType,
-      jurisdiction: jurisdiction,
-      product,
+      jurisdiction: normalizedJurisdiction,
+      product: normalizedProduct,
     });
 
     router.push(`/wizard/flow?${params.toString()}`);
@@ -2603,13 +2617,28 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     });
   }
 
-  // 3. Tenant details check - check all possible field names including array format
+  // 3. Tenant details check - check all possible field names including array format and flat format
   const tenantLabel = jurisdiction === 'wales' ? 'Contract holder' : 'Tenant';
+
+  // TenancySectionFlow stores tenants in nested array format (facts.tenants[0].full_name)
+  // But database facts may come in flat format (facts['tenants.0.full_name'])
+  // Check all possible formats:
   const hasTenantName = Boolean(
     facts.tenant_names ||
     facts.tenant_1_name ||
-    // TenancySectionFlow stores tenants as array with full_name
-    (Array.isArray(facts.tenants) && facts.tenants[0]?.full_name)
+    // Nested array format (TenancySectionFlow in-memory)
+    (Array.isArray(facts.tenants) && facts.tenants[0]?.full_name) ||
+    // Flat dot-notation format from database (tenants.0.full_name)
+    facts['tenants.0.full_name'] ||
+    // Alternative flat format variations
+    facts['tenants[0].full_name'] ||
+    facts['tenants.0.name'] ||
+    // Check if tenants object with numeric keys exists
+    (facts.tenants && typeof facts.tenants === 'object' && !Array.isArray(facts.tenants) && (
+      facts.tenants['0']?.full_name ||
+      facts.tenants['0']?.name ||
+      Object.values(facts.tenants)[0]?.full_name
+    ))
   );
   if (!hasTenantName) {
     blockers.push({
@@ -2897,6 +2926,26 @@ function TenancyReviewContent({
       const names = facts.tenants.map((t: any) => t.full_name).filter(Boolean);
       return names.length > 0 ? names.join(', ') : 'Not specified';
     }
+
+    // Try flat dot-notation format from database (tenants.0.full_name)
+    if (facts['tenants.0.full_name']) {
+      const names: string[] = [];
+      for (let i = 0; i < 10; i++) {
+        const name = facts[`tenants.${i}.full_name`];
+        if (name) names.push(name);
+        else break;
+      }
+      return names.length > 0 ? names.join(', ') : 'Not specified';
+    }
+
+    // Try object format with numeric keys (tenants: { '0': { full_name: '...' } })
+    if (facts.tenants && typeof facts.tenants === 'object' && !Array.isArray(facts.tenants)) {
+      const names = Object.values(facts.tenants)
+        .map((t: any) => t?.full_name || t?.name)
+        .filter(Boolean);
+      return names.length > 0 ? names.join(', ') : 'Not specified';
+    }
+
     // Fall back to legacy formats
     return facts.tenant_names || facts.tenant_1_name || 'Not specified';
   })();
