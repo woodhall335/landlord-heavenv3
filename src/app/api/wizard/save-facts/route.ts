@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     // First, check if the case exists using admin client to support anonymous users
     const { data: existingCase, error: fetchError } = await adminSupabase
       .from('cases')
-      .select('id, user_id, collected_facts')
+      .select('id, user_id, collected_facts, jurisdiction')
       .eq('id', case_id)
       .single();
 
