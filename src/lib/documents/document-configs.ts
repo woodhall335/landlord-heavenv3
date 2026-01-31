@@ -483,11 +483,13 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
  * TENANCY AGREEMENT DOCUMENTS
  *
  * Product tiers:
- * - 'standard': Base product - ONLY the tenancy agreement, no supporting documents
- * - 'premium': HMO-specific tenancy agreement with multi-occupancy clauses
+ * - 'standard': Tenancy agreement with blank inventory template and compliance checklist
+ * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory and compliance checklist
  *
- * IMPORTANT: The base product includes the tenancy agreement only.
- * No guides, no notices, no annexes, no explanatory PDFs.
+ * INTEGRATION LAYER REQUIREMENTS:
+ * - Inventory: Always included (blank for standard, wizard-completed for premium)
+ * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
+ * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  *
  * Jurisdiction handling:
  * - England: Assured Shorthold Tenancy (Housing Act 1988)
@@ -496,12 +498,14 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
  * - NI: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
  */
 export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premium'): DocumentInfo[] {
+  const documents: DocumentInfo[] = [];
+
   // Agreement name based on jurisdiction
   const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
     'england': {
       standard: {
         title: 'Assured Shorthold Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Housing Act 1988.'
+        description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Housing Act 1988.'
       },
       hmo: {
         title: 'HMO Tenancy Agreement',
@@ -511,7 +515,7 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
     'wales': {
       standard: {
         title: 'Standard Occupation Contract',
-        description: 'Includes the occupation contract only. Compliant with Renting Homes (Wales) Act 2016.'
+        description: 'Solicitor-grade occupation contract with all embedded schedules. Compliant with Renting Homes (Wales) Act 2016.'
       },
       hmo: {
         title: 'HMO Occupation Contract',
@@ -521,7 +525,7 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
     'scotland': {
       standard: {
         title: 'Private Residential Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.'
+        description: 'Solicitor-grade PRT agreement with all embedded schedules. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.'
       },
       hmo: {
         title: 'HMO Private Residential Tenancy Agreement',
@@ -531,7 +535,7 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
     'northern-ireland': {
       standard: {
         title: 'Private Tenancy Agreement',
-        description: 'Includes the tenancy agreement only. Compliant with Private Tenancies Act (NI) 2022.'
+        description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Private Tenancies Act (NI) 2022.'
       },
       hmo: {
         title: 'HMO Private Tenancy Agreement',
@@ -542,29 +546,72 @@ export function getASTDocuments(jurisdiction: string, tier: 'standard' | 'premiu
 
   const agreementConfig = agreementNames[jurisdiction] || agreementNames['england'];
 
-  // BASE PRODUCT (standard): Only the tenancy agreement - NO supporting documents
+  // 1. Main Agreement
   if (tier === 'standard') {
-    return [{
+    documents.push({
       id: 'tenancy-agreement',
       title: agreementConfig.standard.title,
       description: agreementConfig.standard.description,
       icon: 'agreement',
       pages: '15-20 pages',
       category: 'Agreement',
-    }];
+    });
+  } else {
+    documents.push({
+      id: 'tenancy-agreement-hmo',
+      title: agreementConfig.hmo.title,
+      description: agreementConfig.hmo.description,
+      icon: 'agreement',
+      pages: '20-25 pages',
+      category: 'Agreement',
+    });
   }
 
-  // PREMIUM PRODUCT (HMO): Only the HMO-specific tenancy agreement
-  // HMO clauses cover: multiple occupants, joint liability, shared facilities,
-  // fire safety, licensing acknowledgement, house rules, occupancy limits
-  return [{
-    id: 'tenancy-agreement-hmo',
-    title: agreementConfig.hmo.title,
-    description: agreementConfig.hmo.description,
-    icon: 'agreement',
-    pages: '20-25 pages',
-    category: 'Agreement',
-  }];
+  // 2. Inventory Schedule - tier-specific
+  documents.push({
+    id: 'inventory-schedule',
+    title: tier === 'premium'
+      ? 'Inventory & Schedule of Condition (Wizard-Completed)'
+      : 'Inventory & Schedule of Condition (Blank Template)',
+    description: tier === 'premium'
+      ? 'Room-by-room inventory completed via the wizard with items, conditions, and notes'
+      : 'Structured blank inventory template ready for manual completion at check-in',
+    icon: 'checklist',
+    pages: tier === 'premium' ? '3-8 pages' : '4-6 pages',
+    category: 'Schedule',
+  });
+
+  // 3. Pre-Tenancy Compliance Checklist - jurisdiction-specific
+  const checklistInfo: Record<string, { title: string; description: string }> = {
+    'england': {
+      title: 'Pre-Tenancy Compliance Checklist (England)',
+      description: 'Non-contractual guidance covering deposit protection, gas safety, EPC, EICR, How to Rent Guide, and Right to Rent',
+    },
+    'wales': {
+      title: 'Pre-Tenancy Compliance Checklist (Wales)',
+      description: 'Non-contractual guidance covering Rent Smart Wales, deposit protection, gas safety, EPC, and EICR requirements',
+    },
+    'scotland': {
+      title: 'Pre-Tenancy Compliance Checklist (Scotland)',
+      description: 'Non-contractual guidance covering landlord registration, deposit protection, Repairing Standard, and fire alarms',
+    },
+    'northern-ireland': {
+      title: 'Pre-Tenancy Compliance Checklist (Northern Ireland)',
+      description: 'Non-contractual guidance covering landlord registration, deposit protection, gas safety, and electrical safety',
+    },
+  };
+
+  const checklist = checklistInfo[jurisdiction] || checklistInfo['england'];
+  documents.push({
+    id: 'compliance-checklist',
+    title: checklist.title,
+    description: checklist.description,
+    icon: 'guidance',
+    pages: '2-3 pages',
+    category: 'Guidance',
+  });
+
+  return documents;
 }
 
 // ============================================

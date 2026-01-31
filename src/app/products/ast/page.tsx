@@ -11,6 +11,10 @@ import {
   Eye,
   RefreshCw,
   Cloud,
+  FileText,
+  List,
+  Shield,
+  CheckCircle,
 } from "lucide-react";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
@@ -27,6 +31,13 @@ import {
 } from "@/components/value-proposition";
 import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
 import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
+import {
+  getIncludedSummary,
+  JURISDICTION_AGREEMENT_INFO,
+  COMPLIANCE_CHECKLIST_INFO,
+  type TenancyJurisdiction,
+  type TenancyTier,
+} from "@/lib/tenancy/included-features";
 
 // Get prices from single source of truth
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
@@ -153,7 +164,166 @@ export default function ASTPage() {
         </Container>
       </section>
 
+      {/* What's Included in This Agreement - Integration Layer Disclosure */}
       <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              What&apos;s Included in This Agreement
+            </h2>
+            <p className="text-center text-gray-600 mb-12">
+              Every tenancy agreement pack includes the main contract, embedded schedules, inventory, and compliance guidance
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Standard Tier */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-charcoal">Standard - {standardPrice}</h3>
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                    Single Households
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Agreement */}
+                  <div className="flex items-start gap-3">
+                    <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Jurisdiction-Specific Agreement</p>
+                      <p className="text-sm text-gray-500">AST, Occupation Contract, PRT, or NI Tenancy</p>
+                    </div>
+                  </div>
+
+                  {/* Schedules */}
+                  <div className="flex items-start gap-3">
+                    <List className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Embedded Schedules</p>
+                      <p className="text-sm text-gray-500">Property, Rent, Utilities, Inventory, House Rules</p>
+                    </div>
+                  </div>
+
+                  {/* Inventory - Standard */}
+                  <div className="flex items-start gap-3">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Inventory &amp; Schedule of Condition</p>
+                      <span className="inline-flex items-center gap-1 text-sm text-blue-700 bg-blue-50 px-2 py-0.5 rounded mt-1">
+                        <FileText className="w-3 h-3" /> Blank template (ready to complete)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Compliance Checklist */}
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Pre-Tenancy Compliance Checklist</p>
+                      <p className="text-sm text-gray-500">Jurisdiction-specific, non-contractual guidance</p>
+                    </div>
+                  </div>
+
+                  {/* Signature Blocks */}
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Signature Blocks</p>
+                      <p className="text-sm text-gray-500">Landlord &amp; tenant signature sections</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Link
+                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                  className="mt-6 block w-full py-3 border-2 border-primary text-primary font-semibold rounded-lg text-center hover:bg-primary hover:text-white transition-colors"
+                >
+                  Get Standard - {standardPrice}
+                </Link>
+              </div>
+
+              {/* Premium Tier */}
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border-2 border-primary relative">
+                <div className="absolute -top-3 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
+                  HMO READY
+                </div>
+
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-charcoal">Premium - {premiumPrice}</h3>
+                  <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-medium">
+                    Multi-Tenant
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Agreement */}
+                  <div className="flex items-start gap-3">
+                    <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">HMO-Specific Agreement</p>
+                      <p className="text-sm text-gray-500">All standard terms plus HMO clauses</p>
+                    </div>
+                  </div>
+
+                  {/* Schedules */}
+                  <div className="flex items-start gap-3">
+                    <List className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Embedded Schedules</p>
+                      <p className="text-sm text-gray-500">Property, Rent, Utilities, Inventory, House Rules</p>
+                    </div>
+                  </div>
+
+                  {/* Inventory - Premium */}
+                  <div className="flex items-start gap-3">
+                    <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Inventory &amp; Schedule of Condition</p>
+                      <span className="inline-flex items-center gap-1 text-sm text-purple-700 bg-purple-100 px-2 py-0.5 rounded mt-1">
+                        <CheckCircle className="w-3 h-3" /> Wizard-completed (rooms, items, conditions)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Compliance Checklist */}
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Pre-Tenancy Compliance Checklist</p>
+                      <p className="text-sm text-gray-500">Jurisdiction-specific, non-contractual guidance</p>
+                    </div>
+                  </div>
+
+                  {/* Premium-only features */}
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Premium Clauses</p>
+                      <p className="text-sm text-gray-500">Guarantor, late payment, rent review, anti-subletting</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Link
+                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                  className="mt-6 block w-full py-3 bg-primary text-white font-semibold rounded-lg text-center hover:bg-primary/90 transition-colors"
+                >
+                  Get Premium - {premiumPrice}
+                </Link>
+              </div>
+            </div>
+
+            {/* Key difference callout */}
+            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+              <p className="text-sm text-blue-900">
+                <strong>Key Difference:</strong> Premium includes wizard-completed inventory. Standard includes a blank template for you to complete manually at check-in.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-20 bg-gray-50">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
