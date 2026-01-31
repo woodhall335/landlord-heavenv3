@@ -12,6 +12,7 @@ import { sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { getOrCreateWizardFacts, updateWizardFacts } from '@/lib/case-facts/store';
+import type { WizardFactsMeta } from '@/lib/case-facts/schema';
 import {
   sendServerPurchaseEventWithRetry,
   generateClientId,
@@ -80,7 +81,7 @@ async function updateCaseEntitlements(
 ) {
   try {
     const currentFacts = await getOrCreateWizardFacts(supabase as any, caseId);
-    const currentMeta = currentFacts.__meta || {};
+    const currentMeta = (currentFacts.__meta ?? {}) as WizardFactsMeta;
     const currentEntitlements = Array.isArray(currentMeta.entitlements)
       ? currentMeta.entitlements
       : [];
