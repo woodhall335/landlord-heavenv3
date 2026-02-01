@@ -215,8 +215,17 @@ const SECTIONS: WizardSection[] = [
     id: 'tenancy',
     label: 'Tenancy',
     description: 'Tenancy start date and term',
-    isComplete: (facts) =>
-      Boolean(facts.tenancy_start_date) && facts.is_fixed_term !== undefined,
+    isComplete: (facts) => {
+      // Start date is always required
+      if (!facts.tenancy_start_date) return false;
+      // Scotland PRTs are open-ended by law - no is_fixed_term required
+      const jurisdiction = facts.__meta?.jurisdiction;
+      if (jurisdiction === 'scotland') {
+        return true; // Only start date required for Scotland
+      }
+      // Other jurisdictions require fixed term selection
+      return facts.is_fixed_term !== undefined;
+    },
   },
   {
     id: 'rent',
@@ -1344,13 +1353,40 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 // Tenancy Section
 const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const terms = getJurisdictionTerminology(jurisdiction || 'england');
+  const isScotland = jurisdiction === 'scotland';
+
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Tenancy Start and Term</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          We tailor the {terms.agreementType} for fixed term vs periodic.
-        </p>
+
+        {/* Scotland PRT Informational Banner */}
+        {isScotland && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 mt-0.5">
+                <svg className="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-blue-800">Scottish PRTs are open-ended</h4>
+                <p className="text-sm text-blue-700 mt-1">
+                  Under the Private Housing (Tenancies) (Scotland) Act 2016, all Private Residential Tenancies
+                  are open-ended by law – there is no fixed term or end date. The tenancy continues until
+                  properly terminated by the tenant (28 days notice) or landlord (using one of 18 eviction grounds).
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!isScotland && (
+          <p className="text-sm text-gray-500 mb-4">
+            We tailor the {terms.agreementType} for fixed term vs periodic.
+          </p>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
             label="Start date"
@@ -1359,13 +1395,19 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             type="date"
             required
           />
-          <YesNoField
-            label="Is this a fixed term tenancy?"
-            value={facts.is_fixed_term}
-            onChange={(v) => onUpdate({ is_fixed_term: v })}
-            required
-          />
-          {facts.is_fixed_term && (
+
+          {/* Fixed term question - NOT shown for Scotland (PRTs are always open-ended) */}
+          {!isScotland && (
+            <YesNoField
+              label="Is this a fixed term tenancy?"
+              value={facts.is_fixed_term}
+              onChange={(v) => onUpdate({ is_fixed_term: v })}
+              required
+            />
+          )}
+
+          {/* Fixed term details - only for non-Scotland jurisdictions when fixed term is selected */}
+          {!isScotland && facts.is_fixed_term && (
             <>
               <SelectField
                 label="Fixed term length"
@@ -1469,13 +1511,22 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 };
 
 // Deposit Section
-const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
+  const isScotland = jurisdiction === 'scotland';
+
+  // Jurisdiction-specific deposit schemes
+  const depositSchemeOptions = isScotland
+    ? ['SafeDeposits Scotland', 'MyDeposits Scotland', 'Letting Protection Service Scotland']
+    : ['DPS', 'MyDeposits', 'TDS', 'Other'];
+
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Deposit and Protection</h3>
         <p className="text-sm text-gray-500 mb-4">
-          We include the deposit limit warning and scheme certificate.
+          {isScotland
+            ? 'Scottish deposits must be protected within 30 WORKING days. Maximum deposit is 2 months rent.'
+            : 'We include the deposit limit warning and scheme certificate.'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <CurrencyField
@@ -1489,7 +1540,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             label="Deposit protection scheme"
             value={facts.deposit_scheme_name}
             onChange={(v) => onUpdate({ deposit_scheme_name: v })}
-            options={['DPS', 'MyDeposits', 'TDS', 'Other']}
+            options={depositSchemeOptions}
             required
           />
           <TextField
@@ -1524,9 +1575,20 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
         <h3 className="text-lg font-medium text-gray-900 mb-4">Prescribed Information</h3>
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
           <p className="text-sm text-amber-800">
-            <strong>STATUTORY REQUIREMENT:</strong> You MUST serve prescribed information to the tenant
-            within 30 days of receiving the deposit. Failure to comply can result in compensation
-            of 1-3x the deposit amount and inability to serve valid Section 21 notices.
+            {isScotland ? (
+              <>
+                <strong>SCOTTISH LEGAL REQUIREMENT:</strong> You MUST protect the deposit in an approved
+                Scottish scheme within 30 WORKING days of receiving it. You must also provide the tenant with
+                prescribed information within 30 working days. Failure to comply can result in compensation
+                up to 3x the deposit amount.
+              </>
+            ) : (
+              <>
+                <strong>STATUTORY REQUIREMENT:</strong> You MUST serve prescribed information to the tenant
+                within 30 days of receiving the deposit. Failure to comply can result in compensation
+                of 1-3x the deposit amount and inability to serve valid Section 21 notices.
+              </>
+            )}
           </p>
         </div>
         <YesNoField
