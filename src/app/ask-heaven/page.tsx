@@ -10,6 +10,8 @@ import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/struc
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
+import { analyzeContent } from '@/lib/seo/commercial-linking';
 
 // Compliance topics data for SSR section
 interface ComplianceTopic {
@@ -245,6 +247,16 @@ export const metadata: Metadata = {
 };
 
 export default function AskHeavenPage(): React.ReactElement {
+  // Analyze page content for commercial linking
+  // Ask Heaven discusses eviction, rent arrears, and tenancy agreements - all core products
+  const commercialLinkingResult = analyzeContent({
+    pathname: '/ask-heaven',
+    title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
+    description: 'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
+    heading: 'Ask Heaven: Free UK Landlord Q&A Tool',
+    bodyText: 'eviction notice section 21 section 8 rent arrears money claim tenancy agreement AST PRT occupation contract notice to leave',
+  });
+
   return (
     <>
       {/* SSR Structured Data - visible to Googlebot immediately */}
@@ -314,6 +326,15 @@ export default function AskHeavenPage(): React.ReactElement {
                 <p className="text-xs text-gray-500 mt-1">Notice to Quit, rent recovery</p>
               </div>
             </div>
+
+            {/* Commercial Wizard Links - Automated CTAs to core products */}
+            <CommercialWizardLinks
+              result={commercialLinkingResult}
+              variant="card"
+              maxLinks={3}
+              utmSource="ask_heaven"
+              className="mb-12"
+            />
 
             {/* Popular questions */}
             <div className="bg-gray-50 rounded-2xl p-6 mb-12">

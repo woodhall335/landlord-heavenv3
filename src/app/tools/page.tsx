@@ -4,6 +4,8 @@ import { Container } from '@/components/ui';
 import { freeTools } from '@/lib/tools/tools';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
+import { analyzeContent } from '@/lib/seo/commercial-linking';
 
 export const metadata: Metadata = {
   title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
@@ -32,6 +34,15 @@ export const metadata: Metadata = {
 
 const featuredTools = freeTools.filter((tool) => tool.featured);
 const otherTools = freeTools.filter((tool) => !tool.featured);
+
+// Analyze page for commercial linking - tools pages relate to eviction/rent arrears products
+const commercialLinkingResult = analyzeContent({
+  pathname: '/tools',
+  title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
+  description: 'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO licence checker, and Section 21/Section 8 validity checkers.',
+  heading: 'Free Tools for UK Landlords',
+  bodyText: 'eviction notice generator section 21 section 8 rent arrears calculator money claim',
+});
 
 export default function ToolsHubPage() {
   return (
@@ -78,6 +89,20 @@ export default function ToolsHubPage() {
           </Container>
         </section>
       )}
+
+      {/* Commercial Wizard Links - Automated CTAs to core products */}
+      <section className="py-8 bg-gray-50">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <CommercialWizardLinks
+              result={commercialLinkingResult}
+              variant="card"
+              maxLinks={4}
+              utmSource="tools_hub"
+            />
+          </div>
+        </Container>
+      </section>
 
       <section id="tools" className="py-20 md:py-24">
         <Container>
