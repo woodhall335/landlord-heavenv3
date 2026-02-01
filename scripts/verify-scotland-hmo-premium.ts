@@ -39,7 +39,8 @@ const sampleData = {
 
   // Landlord
   landlord_full_name: 'Sarah MacDonald',
-  landlord_address: '123 Princes Street, Edinburgh, EH2 4AA',
+  landlord_address: '123 Princes Street, Edinburgh',
+  landlord_postcode: 'EH2 4AA',
   landlord_email: 'sarah.macdonald@example.com',
   landlord_phone: '0131 123 4567',
   landlord_reg_number: '123456/230/12345',
@@ -127,7 +128,6 @@ async function main() {
   console.log('3. PREMIUM STYLE MARKERS VERIFICATION:');
   const markers = [
     { name: 'Premium Badge', pattern: /premium-badge/ },
-    { name: 'HMO Badge', pattern: /hmo-badge/ },
     { name: 'Doc Header', pattern: /doc-header/ },
     { name: 'Data Tables', pattern: /data-table/ },
     { name: 'Legal Notice Blocks', pattern: /legal-notice/ },
@@ -182,6 +182,24 @@ async function main() {
   }
   console.log();
 
+  // 8. Verify 9/10 standard compliance
+  console.log('6. 9/10 STANDARD COMPLIANCE:');
+  const standardChecks = [
+    { name: 'No HMO badge class', pattern: /hmo-badge/, shouldBeMissing: true },
+    { name: 'No red accent (#d32f2f)', pattern: /#d32f2f/i, shouldBeMissing: true },
+    { name: 'Landlord postcode rendered', pattern: /EH2 4AA/, shouldBeMissing: false },
+    { name: 'Clean header title', pattern: /<h1>Premium Private Residential Tenancy Agreement<\/h1>/, shouldBeMissing: false },
+  ];
+
+  let standardPass = true;
+  for (const check of standardChecks) {
+    const found = check.pattern.test(html);
+    const pass = check.shouldBeMissing ? !found : found;
+    if (!pass) standardPass = false;
+    console.log(`   [${pass ? '✓' : '✗'}] ${check.name}`);
+  }
+  console.log();
+
   // Summary
   console.log('='.repeat(80));
   console.log('SUMMARY:');
@@ -189,6 +207,7 @@ async function main() {
   console.log(`   Premium markers: All present`);
   console.log(`   Wales leakage: ${hasLeakage ? 'DETECTED - FIX REQUIRED' : 'None detected'}`);
   console.log(`   Scottish mechanisms: All present`);
+  console.log(`   9/10 Standard: ${standardPass ? 'PASSED' : 'FAILED - FIX REQUIRED'}`);
   console.log('='.repeat(80));
 }
 

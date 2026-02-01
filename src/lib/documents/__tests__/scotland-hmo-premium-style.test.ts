@@ -41,8 +41,10 @@ describe('Scotland HMO Premium Template - Style Verification', () => {
       expect(scotlandHMOPremium).toContain('Premium Edition');
     });
 
-    it('should have HMO badge element', () => {
-      expect(scotlandHMOPremium).toContain('hmo-badge');
+    it('should NOT have HMO badge in header (9/10 standard)', () => {
+      // HMO badge should not appear as a visual tag in header
+      expect(scotlandHMOPremium).not.toContain('hmo-badge');
+      // But HMO content should still exist in the body
       expect(scotlandHMOPremium).toContain('HMO');
     });
 
@@ -109,6 +111,41 @@ describe('Scotland HMO Premium Template - Style Verification', () => {
     it('should have print-safe styling', () => {
       expect(scotlandHMOPremium).toContain('@media print');
       expect(scotlandHMOPremium).toContain('page-break-inside: avoid');
+    });
+  });
+
+  describe('9/10 Standard Compliance', () => {
+    it('should NOT have red color accents (#d32f2f)', () => {
+      // No red color should appear in the template
+      expect(scotlandHMOPremium).not.toContain('#d32f2f');
+      expect(scotlandHMOPremium).not.toContain('#D32F2F');
+    });
+
+    it('should use blue theme consistently for all notices', () => {
+      // All legal notices should use blue theme
+      expect(scotlandHMOPremium).toContain('border-color: #005eb8');
+      expect(scotlandHMOPremium).toContain('background: #f0f7ff');
+    });
+
+    it('should NOT have HMO in header title', () => {
+      // Header h1 should not mention HMO
+      expect(scotlandHMOPremium).toContain('<h1>Premium Private Residential Tenancy Agreement</h1>');
+      expect(scotlandHMOPremium).not.toContain('<h1>Premium HMO');
+    });
+
+    it('should support landlord postcode field', () => {
+      // Landlord address should include postcode conditional
+      expect(scotlandHMOPremium).toContain('landlord_postcode');
+    });
+
+    it('should have clean page title without HMO', () => {
+      expect(scotlandHMOPremium).toContain('<title>Premium Private Residential Tenancy Agreement</title>');
+      expect(scotlandHMOPremium).not.toContain('<title>Premium HMO');
+    });
+
+    it('should have clean footer without HMO', () => {
+      expect(scotlandHMOPremium).toContain('Premium Private Residential Tenancy Agreement &mdash; Scotland');
+      expect(scotlandHMOPremium).not.toContain('Premium HMO Private Residential Tenancy Agreement &mdash; Scotland');
     });
   });
 
