@@ -27,6 +27,8 @@ import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQInline } from '@/components/marketing/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
+import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
+import { analyzeBlogPost } from '@/lib/seo/blog-commercial-linking';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -510,6 +512,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   const postRegion = getPostRegion(slug);
   const regionConfig = postRegion ? BLOG_CATEGORIES[postRegion] : null;
 
+  // Analyze post for commercial linking (automated CTAs to core product pages)
+  const commercialLinkingResult = analyzeBlogPost(post, postRegion);
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -736,6 +741,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 image={post.author.image}
               />
 
+              {/* Commercial Wizard Links - Automated CTAs based on content analysis */}
+              <CommercialWizardLinks
+                result={commercialLinkingResult}
+                variant="inline"
+                maxLinks={2}
+                utmSource="blog_post"
+              />
+
               {/* Article Content */}
               <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-li:text-gray-600 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
                 {post.content}
@@ -806,19 +819,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 {/* Table of Contents */}
                 <TableOfContents items={post.tableOfContents} />
 
-                {/* Sidebar CTA */}
-                <div className="bg-primary/5 rounded-xl p-6 border border-primary/10">
-                  <h3 className="font-semibold text-gray-900 mb-3">Need a Court-Ready Notice?</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Generate legally compliant eviction notices in minutes.
-                  </p>
-                  <Link
-                    href="/products/notice-only"
-                    className="hero-btn-primary block w-full text-center text-sm"
-                  >
-                    Get Section 21 — £49.99
-                  </Link>
-                </div>
+                {/* Sidebar Commercial Links - Dynamic based on content analysis */}
+                <CommercialWizardLinks
+                  result={commercialLinkingResult}
+                  variant="sidebar"
+                  maxLinks={3}
+                  utmSource="blog_sidebar"
+                />
 
                 {/* Ask Heaven Widget */}
                 <AskHeavenWidget
