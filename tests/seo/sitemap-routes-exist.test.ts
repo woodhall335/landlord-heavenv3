@@ -189,4 +189,61 @@ describe('Sitemap Route Existence', () => {
       `Tenancy Agreement sitemap routes without pages: ${missingRoutes.join(', ')}`
     ).toEqual([]);
   });
+
+  it('should include all 5 wizard landing pages', () => {
+    // Critical wizard entry point landing pages for SEO
+    const wizardLandingPages = [
+      '/eviction-notice',
+      '/eviction-pack-england',
+      '/money-claim',
+      '/tenancy-agreement',
+      '/premium-tenancy-agreement',
+    ];
+
+    for (const page of wizardLandingPages) {
+      expect(sitemapPaths, `Missing wizard landing page: ${page}`).toContain(page);
+    }
+  });
+
+  it('all wizard landing pages should have corresponding routes', () => {
+    const wizardLandingPages = [
+      '/eviction-notice',
+      '/eviction-pack-england',
+      '/money-claim',
+      '/tenancy-agreement',
+      '/premium-tenancy-agreement',
+    ];
+
+    const missingRoutes: string[] = [];
+
+    for (const routePath of wizardLandingPages) {
+      if (!routeExistsForPath(routePath)) {
+        missingRoutes.push(routePath);
+      }
+    }
+
+    expect(
+      missingRoutes,
+      `Wizard landing page routes without pages: ${missingRoutes.join(', ')}`
+    ).toEqual([]);
+  });
+
+  it('wizard landing pages should have high priority (0.95)', async () => {
+    const sitemapModule = await import('@/app/sitemap');
+    const sitemap = sitemapModule.default();
+
+    const wizardLandingPages = [
+      '/eviction-notice',
+      '/eviction-pack-england',
+      '/money-claim',
+      '/tenancy-agreement',
+      '/premium-tenancy-agreement',
+    ];
+
+    for (const page of wizardLandingPages) {
+      const entry = sitemap.find((e) => new URL(e.url).pathname === page);
+      expect(entry, `Sitemap entry not found for ${page}`).toBeTruthy();
+      expect(entry?.priority, `Priority for ${page} should be 0.95`).toBe(0.95);
+    }
+  });
 });

@@ -47,6 +47,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
+  // SEO Landing Pages - Clean URLs for wizard entry points
+  // These are comprehensive, indexable landing pages with full SEO content
+  const wizardLandingPages = [
+    { path: '/eviction-notice', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/premium-tenancy-agreement', priority: 0.95, changeFrequency: 'weekly' as const },
+  ];
+
   // Tenancy agreement pages - individual jurisdiction pages
   const tenancyPages = [
     { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -233,6 +243,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Pages that always get stable dates (products, tools, etc.)
   const datedPages = [
     ...productPages,
+    ...wizardLandingPages,
     ...tenancyPages,
     ...landingPages,
     ...toolPages,
