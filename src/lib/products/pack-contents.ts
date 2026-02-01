@@ -746,6 +746,16 @@ function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?:
     required: true,
   });
 
+  // Easy Read Notes - Scotland-specific plain-language guide for tenants
+  // Required under PRT as part of prescribed information
+  items.push({
+    key: 'easy_read_notes_scotland',
+    title: 'Easy Read Notes (Scotland)',
+    description: 'Plain-language guide explaining tenant rights and responsibilities under the Private Housing (Tenancies) (Scotland) Act 2016',
+    category: 'Guidance',
+    required: true,
+  });
+
   return items;
 }
 
