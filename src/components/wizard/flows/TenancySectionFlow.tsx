@@ -1048,7 +1048,7 @@ const PropertySection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 
 // Landlord Section
 const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
-  const terms = getJurisdictionTerms(jurisdiction || 'england');
+  const terms = getJurisdictionTerminology(jurisdiction || 'england');
   return (
     <div className="space-y-6">
       <div>
@@ -1308,7 +1308,7 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 
 // Tenancy Section
 const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
-  const terms = getJurisdictionTerms(jurisdiction || 'england');
+  const terms = getJurisdictionTerminology(jurisdiction || 'england');
   return (
     <div className="space-y-6">
       <div>
