@@ -504,7 +504,8 @@ export async function fulfillOrder({
       );
 
       // Convert WizardFacts to ASTData format (maps component addresses to full strings)
-      const astData = mapWizardToASTData(wizardFacts as any);
+      // CRITICAL: Pass the canonical jurisdiction to ensure Scotland cases get Scotland templates
+      const astData = mapWizardToASTData(wizardFacts as any, { canonicalJurisdiction: jurisdiction });
 
       const astPack =
         productType === 'ast_standard'

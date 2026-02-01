@@ -131,9 +131,24 @@ function normalizeApprovedPets(value: any): string | undefined {
  * Maps WizardFacts (flat DB format) to ASTData (document generator format).
  *
  * @param wizardFacts - Flat facts from case_facts.facts or collected_facts
+ * @param options - Optional configuration including canonical jurisdiction
+ * @param options.canonicalJurisdiction - If provided, ALWAYS use this jurisdiction
+ *        instead of deriving from wizardFacts. This is critical for ensuring
+ *        Scotland cases never get Wales/England templates.
  * @returns ASTData ready for AST document generation
  */
-export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
+export function mapWizardToASTData(
+  wizardFacts: WizardFacts,
+  options?: { canonicalJurisdiction?: string }
+): ASTData {
+  // Log canonical jurisdiction usage for debugging
+  if (options?.canonicalJurisdiction) {
+    console.log(
+      `[AST Mapper] Using canonical jurisdiction: "${options.canonicalJurisdiction}" ` +
+      `(overrides any derived value from wizardFacts)`
+    );
+  }
+
   // Convert flat WizardFacts to nested CaseFacts domain model
   const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
@@ -392,16 +407,18 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
     cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) ?? 0,
 
-    // Jurisdiction - derive from wizard facts (NEVER hardcode)
-    // Priority: __meta.jurisdiction > property.country > property_country flat field
-    jurisdiction: caseFacts.meta.jurisdiction ||
+    // Jurisdiction - CRITICAL: Use canonical jurisdiction if provided (from fulfillment resolver)
+    // This ensures Scotland cases ALWAYS get Scotland templates, never Wales/England.
+    // Priority: canonicalJurisdiction > __meta.jurisdiction > property.country > property_country
+    jurisdiction: options?.canonicalJurisdiction ||
+                  caseFacts.meta.jurisdiction ||
                   caseFacts.property.country ||
                   getValueAtPath(wizardFacts, 'property_country') ||
                   getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
                   undefined,
     // Legacy boolean flags for template compatibility - derive from resolved jurisdiction
-    jurisdiction_england: (caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'england',
-    jurisdiction_wales: (caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'wales',
+    jurisdiction_england: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'england',
+    jurisdiction_wales: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'wales',
 
     // Meta
     joint_and_several_liability: jointLiability ?? tenants.length > 1,
