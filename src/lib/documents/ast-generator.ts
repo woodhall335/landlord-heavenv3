@@ -95,6 +95,8 @@ interface JurisdictionConfig {
   templatePaths: {
     standard: string;
     premium: string;
+    premiumHmo?: string; // HMO-specific premium template with HBS-style formatting (Scotland)
+    standardHmo?: string; // HMO-specific standard template (Scotland)
     modelClauses: string;
     termsSchedule: string;
     inventory: string; // Wizard-completed inventory for premium tier
@@ -196,7 +198,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     easyReadNotesDocumentType: 'easy_read_notes_scotland',
     templatePaths: {
       standard: 'uk/scotland/templates/prt_agreement.hbs',
-      premium: 'uk/scotland/templates/prt_agreement_hmo.hbs', // HMO-specific template
+      premium: 'uk/scotland/templates/prt_agreement_premium.hbs', // Non-HMO premium
+      premiumHmo: 'uk/scotland/templates/prt_agreement_hmo_premium.hbs', // HMO premium with HBS-style formatting
+      standardHmo: 'uk/scotland/templates/prt_agreement_hmo.hbs', // Standard HMO
       modelClauses: 'uk/scotland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/scotland/templates/inventory_template.hbs', // Wizard-completed for premium
@@ -848,8 +852,10 @@ export async function generatePremiumAST(
 
   // PREMIUM PRODUCT: HMO Agreement + Inventory (wizard or blank fallback) + Compliance Checklist
   // Integration Layer: Always includes inventory and checklist
+  // Use premiumHmo template if available (Scotland has HBS-style premium HMO template)
+  const agreementTemplate = config.templatePaths.premiumHmo || config.templatePaths.premium;
   const templatePaths = [
-    config.templatePaths.premium,
+    agreementTemplate,
     // Use wizard-completed inventory if data exists, otherwise blank template
     hasInventoryData ? config.templatePaths.inventory : config.templatePaths.inventoryBlank,
     config.templatePaths.complianceChecklist, // Jurisdiction-specific checklist
@@ -959,7 +965,11 @@ export function getTemplatePath(
 ): string {
   validateTenancyTier(tier);
   const config = getJurisdictionConfig(jurisdiction);
-  return tier === 'standard' ? config.templatePaths.standard : config.templatePaths.premium;
+  if (tier === 'standard') {
+    return config.templatePaths.standard;
+  }
+  // Premium tier: use premiumHmo if available (Scotland has HBS-style premium HMO template)
+  return config.templatePaths.premiumHmo || config.templatePaths.premium;
 }
 
 /**
@@ -1229,9 +1239,11 @@ export async function generatePremiumASTDocuments(
 
   // DOCUMENT 1: HMO-specific tenancy agreement
   // Includes HMO-specific clauses for multi-occupancy properties
+  // Use premiumHmo template if available (Scotland has HBS-style premium HMO template)
+  const hmoAgreementTemplate = config.templatePaths.premiumHmo || config.templatePaths.premium;
   try {
     const agreementDoc = await generateDocument({
-      templatePath: config.templatePaths.premium,
+      templatePath: hmoAgreementTemplate,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',

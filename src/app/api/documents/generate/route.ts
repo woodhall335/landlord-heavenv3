@@ -105,6 +105,8 @@ const generateDocumentSchema = z.object({
     'notice_to_leave', // Scotland
     'prt_agreement', // Scotland
     'prt_premium', // Scotland Premium
+    'prt_hmo', // Scotland HMO
+    'prt_hmo_premium', // Scotland HMO Premium
     'private_tenancy', // Northern Ireland
     'private_tenancy_premium', // Northern Ireland Premium
     // Court forms for complete_pack
@@ -646,7 +648,7 @@ export async function POST(request: Request) {
     } else if (document_type === 'notice_to_leave') {
       product = 'notice_only';
       route = 'notice_to_leave';
-    } else if (['prt_agreement', 'prt_premium'].includes(document_type)) {
+    } else if (['prt_agreement', 'prt_premium', 'prt_hmo', 'prt_hmo_premium'].includes(document_type)) {
       product = 'tenancy_agreement';
       route = 'tenancy_agreement';
     } else if (['private_tenancy', 'private_tenancy_premium'].includes(document_type)) {
@@ -1035,16 +1037,48 @@ export async function POST(request: Request) {
 
         case 'prt_agreement': {
           const prtData = mapWizardToPRTData(wizardFacts as any);
-          generatedDoc = await generatePRTAgreement(prtData);
-          documentTitle = 'Private Residential Tenancy Agreement - Scotland';
+          // Check if HMO and use appropriate generator
+          if (prtData.is_hmo) {
+            const { generateHMOPRT } = await import('@/lib/documents/scotland/prt-generator');
+            generatedDoc = await generateHMOPRT(prtData);
+            documentTitle = 'HMO Private Residential Tenancy Agreement - Scotland';
+          } else {
+            generatedDoc = await generatePRTAgreement(prtData);
+            documentTitle = 'Private Residential Tenancy Agreement - Scotland';
+          }
+          break;
+        }
+
+        case 'prt_hmo': {
+          const { generateHMOPRT } = await import('@/lib/documents/scotland/prt-generator');
+          const prtHmoData = mapWizardToPRTData(wizardFacts as any);
+          prtHmoData.is_hmo = true;
+          generatedDoc = await generateHMOPRT(prtHmoData);
+          documentTitle = 'HMO Private Residential Tenancy Agreement - Scotland';
           break;
         }
 
         case 'prt_premium': {
-          const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
           const prtPremiumData = mapWizardToPRTData(wizardFacts as any);
-          generatedDoc = await generatePremiumPRT(prtPremiumData);
-          documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
+          // Check if HMO and use appropriate generator
+          if (prtPremiumData.is_hmo) {
+            const { generatePremiumHMOPRT } = await import('@/lib/documents/scotland/prt-generator');
+            generatedDoc = await generatePremiumHMOPRT(prtPremiumData);
+            documentTitle = 'Premium HMO Private Residential Tenancy Agreement - Scotland';
+          } else {
+            const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
+            generatedDoc = await generatePremiumPRT(prtPremiumData);
+            documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
+          }
+          break;
+        }
+
+        case 'prt_hmo_premium': {
+          const { generatePremiumHMOPRT } = await import('@/lib/documents/scotland/prt-generator');
+          const prtHmoPremiumData = mapWizardToPRTData(wizardFacts as any);
+          prtHmoPremiumData.is_hmo = true;
+          generatedDoc = await generatePremiumHMOPRT(prtHmoPremiumData);
+          documentTitle = 'Premium HMO Private Residential Tenancy Agreement - Scotland';
           break;
         }
 
