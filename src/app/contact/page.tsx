@@ -3,6 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
+import { StructuredData, breadcrumbSchema, contactPageSchema } from "@/lib/seo";
 import {
   MessageCircle,
   Building2,
@@ -29,9 +30,17 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const breadcrumbs = [
+    { name: 'Home', url: 'https://landlordheaven.com' },
+    { name: 'Contact', url: 'https://landlordheaven.com/contact' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
+    <>
+      <StructuredData data={breadcrumbSchema(breadcrumbs)} />
+      <StructuredData data={contactPageSchema()} />
+      <div className="min-h-screen bg-gray-50">
+        {/* Hero Section */}
       <section className="relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
@@ -286,6 +295,7 @@ export default function ContactPage() {
           </p>
         </div>
       </Container>
-    </div>
+      </div>
+    </>
   );
 }

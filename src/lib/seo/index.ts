@@ -26,6 +26,8 @@ export {
   localBusinessSchema,
   softwareApplicationSchema,
   howToSchema,
+  aboutPageSchema,
+  contactPageSchema,
   HOWTO_SCHEMAS,
   StructuredData,
 } from './structured-data';

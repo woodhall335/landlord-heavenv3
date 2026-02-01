@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
-import { generateMetadata } from "@/lib/seo";
+import { generateMetadata, StructuredData, breadcrumbSchema, aboutPageSchema } from "@/lib/seo";
 import {
   BadgePoundSterling,
   Clock,
@@ -24,9 +24,17 @@ export const metadata: Metadata = generateMetadata({
 });
 
 export default function AboutPage() {
+  const breadcrumbs = [
+    { name: 'Home', url: 'https://landlordheaven.com' },
+    { name: 'About', url: 'https://landlordheaven.com/about' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <TealHero
+    <>
+      <StructuredData data={breadcrumbSchema(breadcrumbs)} />
+      <StructuredData data={aboutPageSchema()} />
+      <div className="min-h-screen bg-gray-50">
+        <TealHero
         title="Legal documents should be simple"
         subtitle="We make professional-grade landlord paperwork accessible, affordable, and compliant across the UK."
         eyebrow="About Landlord Heaven"
@@ -430,6 +438,7 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
-    </div>
+      </div>
+    </>
   );
 }
