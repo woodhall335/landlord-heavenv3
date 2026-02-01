@@ -190,28 +190,30 @@ function formatPaymentDetails(
  * - Returns placeholder strings if values cannot be determined
  */
 function calculateFirstPayment(
-  rentAmount: number | undefined,
+  rentAmount: number | string | undefined,
   tenancyStartDate: string | undefined,
   explicitFirstPayment: number | string | undefined,
   explicitFirstPaymentDate: string | undefined
 ): { amount: string; date: string } {
-  // First payment amount
+  // First payment amount - coerce to number safely (values may come as strings from DB)
   let amount: string;
   if (explicitFirstPayment !== undefined && explicitFirstPayment !== null && explicitFirstPayment !== '') {
-    const numAmount = typeof explicitFirstPayment === 'string' ? parseFloat(explicitFirstPayment) : explicitFirstPayment;
+    const numAmount = typeof explicitFirstPayment === 'string' ? parseFloat(explicitFirstPayment) : Number(explicitFirstPayment);
     amount = !isNaN(numAmount) && numAmount > 0 ? numAmount.toFixed(2) : '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
-  } else if (rentAmount && rentAmount > 0) {
-    amount = rentAmount.toFixed(2);
+  } else if (rentAmount !== undefined && rentAmount !== null && rentAmount !== '') {
+    // Coerce rentAmount to number - it might come as string from database
+    const numRent = typeof rentAmount === 'string' ? parseFloat(rentAmount) : Number(rentAmount);
+    amount = !isNaN(numRent) && numRent > 0 ? numRent.toFixed(2) : '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
   } else {
     amount = '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
   }
 
   // First payment date
   let date: string;
-  if (explicitFirstPaymentDate && explicitFirstPaymentDate.trim()) {
-    date = explicitFirstPaymentDate.trim();
-  } else if (tenancyStartDate && tenancyStartDate.trim()) {
-    date = tenancyStartDate.trim();
+  if (explicitFirstPaymentDate && String(explicitFirstPaymentDate).trim()) {
+    date = String(explicitFirstPaymentDate).trim();
+  } else if (tenancyStartDate && String(tenancyStartDate).trim()) {
+    date = String(tenancyStartDate).trim();
   } else {
     date = '[DATE TO BE COMPLETED BEFORE SIGNING]';
   }
