@@ -575,6 +575,47 @@ export const HOWTO_SCHEMAS = {
 };
 
 /**
+ * AboutPage structured data
+ * Use this on the about page to help search engines understand the page purpose
+ */
+export function aboutPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Landlord Heaven",
+    "description": "Learn about Landlord Heaven, the AI-powered platform helping UK landlords create legally compliant documents.",
+    "url": `${SITE_URL}/about`,
+    "mainEntity": organizationSchema(),
+  };
+}
+
+/**
+ * ContactPage structured data
+ * Use this on the contact page to help search engines understand contact options
+ */
+export function contactPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Landlord Heaven",
+    "description": "Get in touch with Landlord Heaven for support with eviction notices, tenancy agreements, and money claims.",
+    "url": `${SITE_URL}/contact`,
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Landlord Heaven",
+      "url": SITE_URL,
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "support@landlordheaven.co.uk",
+        "url": `${SITE_URL}/contact`,
+        "availableLanguage": "English",
+      },
+    },
+  };
+}
+
+/**
  * Utility function to render JSON-LD script tag
  */
 export function StructuredData({ data }: { data: object }) {
