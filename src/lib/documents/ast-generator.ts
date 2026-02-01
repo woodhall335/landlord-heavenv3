@@ -95,6 +95,8 @@ interface JurisdictionConfig {
   templatePaths: {
     standard: string;
     premium: string;
+    premiumHmo?: string; // HMO-specific premium template with HBS-style formatting (Scotland)
+    standardHmo?: string; // HMO-specific standard template (Scotland)
     modelClauses: string;
     termsSchedule: string;
     inventory: string; // Wizard-completed inventory for premium tier
