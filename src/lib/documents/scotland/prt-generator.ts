@@ -382,6 +382,90 @@ export async function generatePremiumPRT(
   });
 }
 
+/**
+ * Generates a standard HMO PRT agreement for Scotland
+ */
+export async function generateHMOPRT(
+  data: PRTData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'html'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePRTData(data);
+  if (!validation.valid) {
+    throw new Error(`HMO PRT data validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Validate HMO-specific requirements
+  if (!data.is_hmo) {
+    data.is_hmo = true;
+  }
+
+  // Enrich data with defaults
+  const enrichedData: PRTData = {
+    ...data,
+    is_hmo: true,
+    multiple_tenants: data.tenants.length > 1,
+    absence_notification_days: data.absence_notification_days || 28,
+    rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
+    document_id: data.document_id || `PRT-HMO-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+  };
+
+  // Generate from HMO template
+  return generateDocument({
+    templatePath: 'uk/scotland/templates/prt_agreement_hmo.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
+/**
+ * Generates a premium HMO PRT agreement for Scotland with HBS-style formatting
+ * Uses the same styling system as Wales premium agreements
+ */
+export async function generatePremiumHMOPRT(
+  data: PRTData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'both'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePRTData(data);
+  if (!validation.valid) {
+    throw new Error(`Premium HMO PRT data validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Validate HMO-specific requirements
+  if (!data.is_hmo) {
+    data.is_hmo = true;
+  }
+
+  // Enrich data with defaults
+  const enrichedData: PRTData = {
+    ...data,
+    is_hmo: true,
+    multiple_tenants: data.tenants.length > 1,
+    absence_notification_days: data.absence_notification_days || 28,
+    rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
+    current_date: data.current_date || new Date().toLocaleDateString('en-GB'),
+    current_year: data.current_year || new Date().getFullYear(),
+    document_id: data.document_id || `PRT-HMO-PREMIUM-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+    product_tier: 'premium',
+  };
+
+  // Generate from premium HMO template with HBS-style formatting
+  return generateDocument({
+    templatePath: 'uk/scotland/templates/prt_agreement_hmo_premium.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================

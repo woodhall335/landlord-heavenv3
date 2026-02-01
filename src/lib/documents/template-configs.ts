@@ -301,10 +301,10 @@ export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premiu
   } else if (jurisdiction === 'scotland') {
     templates.push({
       id: 'tenancy-agreement',
-      templatePath: 'uk/scotland/templates/private_residential_tenancy.hbs',
-      title: 'Private Residential Tenancy Agreement',
+      templatePath: tier === 'premium' ? 'uk/scotland/templates/prt_agreement_premium.hbs' : 'uk/scotland/templates/prt_agreement.hbs',
+      title: tier === 'premium' ? 'Premium PRT Agreement' : 'Standard PRT Agreement',
       type: 'agreement',
-      description: 'PRT compliant with Scottish legislation',
+      description: 'Private Residential Tenancy compliant with Scottish legislation',
       category: 'notice',
     });
   }
@@ -487,6 +487,60 @@ export function getMoneyClaimTemplates(jurisdiction: string): TemplateConfig[] {
       category: 'evidence_tool',
     }
   );
+
+  return templates;
+}
+
+// ============================================
+// HMO TEMPLATES
+// ============================================
+
+export function getHMOTemplates(jurisdiction: string, tier: 'standard' | 'premium'): TemplateConfig[] {
+  const templates: TemplateConfig[] = [];
+
+  // Currently only Scotland has dedicated HMO templates
+  if (jurisdiction === 'scotland') {
+    templates.push({
+      id: 'hmo-tenancy-agreement',
+      templatePath: tier === 'premium'
+        ? 'uk/scotland/templates/prt_agreement_hmo_premium.hbs'
+        : 'uk/scotland/templates/prt_agreement_hmo.hbs',
+      title: tier === 'premium' ? 'Premium HMO PRT Agreement' : 'Standard HMO PRT Agreement',
+      type: 'agreement',
+      description: 'HMO Private Residential Tenancy compliant with Scottish legislation',
+      category: 'notice',
+    });
+
+    // Premium tier additional documents for HMO
+    if (tier === 'premium') {
+      templates.push(
+        {
+          id: 'key-schedule',
+          templatePath: 'uk/scotland/templates/premium/key_schedule.hbs',
+          title: 'Key Schedule',
+          type: 'schedule',
+          description: 'Record of all keys provided to tenant',
+          category: 'checklist',
+        },
+        {
+          id: 'maintenance-guide',
+          templatePath: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
+          title: 'Property Maintenance Guide',
+          type: 'guidance',
+          description: 'Tenant and landlord responsibilities',
+          category: 'guidance',
+        },
+        {
+          id: 'checkout-procedure',
+          templatePath: 'uk/scotland/templates/premium/checkout_procedure.hbs',
+          title: 'Checkout Procedure',
+          type: 'guidance',
+          description: 'End of tenancy process guide',
+          category: 'guidance',
+        }
+      );
+    }
+  }
 
   return templates;
 }

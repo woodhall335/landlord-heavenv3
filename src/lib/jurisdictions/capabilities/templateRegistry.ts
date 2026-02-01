@@ -64,7 +64,12 @@ const tenancyAgreementTemplates: Record<Jurisdiction, string[]> = {
     "uk/wales/templates/standard_occupation_contract.hbs",
     "uk/wales/templates/premium_occupation_contract.hbs",
   ],
-  scotland: ["uk/scotland/templates/prt_agreement.hbs", "uk/scotland/templates/prt_agreement_premium.hbs"],
+  scotland: [
+    "uk/scotland/templates/prt_agreement.hbs",
+    "uk/scotland/templates/prt_agreement_premium.hbs",
+    "uk/scotland/templates/prt_agreement_hmo.hbs",
+    "uk/scotland/templates/prt_agreement_hmo_premium.hbs",
+  ],
   "northern-ireland": [
     "uk/northern-ireland/templates/private_tenancy_agreement.hbs",
     "uk/northern-ireland/templates/private_tenancy_premium.hbs",
