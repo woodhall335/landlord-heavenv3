@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line, RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine, RiLoader4Line, RiDeleteBinLine, RiAlertLine } from 'react-icons/ri';
 import { Section21ActionRequired } from '@/components/dashboard/Section21ActionRequired';
 import { PostPurchaseCrossSell } from '@/components/dashboard/PostPurchaseCrossSell';
+import { TenancySummaryPanel } from '@/components/dashboard/TenancySummaryPanel';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, trackMoneyClaimPurchaseCompleted, type PurchaseAttribution, type MoneyClaimReason } from '@/lib/analytics';
 import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
@@ -51,6 +52,44 @@ interface Document {
 // Polling configuration
 const POLL_INTERVAL_MS = 2500; // 2.5 seconds
 const POLL_TIMEOUT_MS = 60000; // 60 seconds max polling
+
+/**
+ * Check if a case is a tenancy agreement case
+ */
+function isTenancyAgreementCase(caseType: string | undefined): boolean {
+  return caseType === 'tenancy_agreement';
+}
+
+/**
+ * Check if a case is a Scottish tenancy agreement case
+ */
+function isScottishTenancyAgreementCase(
+  caseType: string | undefined,
+  jurisdiction: string | undefined
+): boolean {
+  return isTenancyAgreementCase(caseType) && jurisdiction === 'scotland';
+}
+
+/**
+ * Get the appropriate route/type label for tenancy agreement cases
+ * This prevents showing eviction routes like "notice_to_leave" for agreement cases
+ */
+function getTenancyAgreementRouteLabel(
+  jurisdiction: string | undefined,
+  isPremium: boolean
+): string {
+  switch (jurisdiction) {
+    case 'scotland':
+      return isPremium ? 'HMO Private Residential Tenancy' : 'Private Residential Tenancy';
+    case 'wales':
+      return isPremium ? 'HMO Occupation Contract' : 'Standard Occupation Contract';
+    case 'northern-ireland':
+      return isPremium ? 'HMO Private Tenancy' : 'Private Tenancy';
+    case 'england':
+    default:
+      return isPremium ? 'HMO Assured Shorthold Tenancy' : 'Assured Shorthold Tenancy';
+  }
+}
 
 export default function CaseDetailPage() {
   const router = useRouter();
@@ -590,8 +629,9 @@ export default function CaseDetailPage() {
       parts.push(getJurisdictionLabel(caseDetails.jurisdiction));
     }
 
-    // Add route for eviction cases
+    // Add route/type for different case types
     if (caseType === 'eviction') {
+      // Eviction cases show the notice route
       const facts = caseDetails?.collected_facts || {};
       const route = facts.route || facts.notice_route || facts.eviction_route;
       if (route) {
@@ -612,6 +652,15 @@ export default function CaseDetailPage() {
           parts.push(routeLabel);
         }
       }
+    } else if (caseType === 'tenancy_agreement') {
+      // Tenancy agreement cases show the agreement type, not eviction routes
+      const facts = caseDetails?.collected_facts || {};
+      const isPremium = facts.tier === 'premium' ||
+        facts.product_tier?.includes('premium') ||
+        facts.__meta?.product_tier?.includes('premium') ||
+        facts.is_hmo === true;
+      const agreementLabel = getTenancyAgreementRouteLabel(caseDetails?.jurisdiction, isPremium);
+      parts.push(agreementLabel);
     }
 
     return {
@@ -1329,10 +1378,25 @@ export default function CaseDetailPage() {
           </div>
         )}
 
+        {/* Tenancy Summary Panel - shown for tenancy agreement cases after payment success */}
+        {isTenancyAgreementCase(caseDetails.case_type) && orderStatus?.paid && orderStatus.has_final_documents && (
+          <TenancySummaryPanel
+            collectedFacts={caseDetails.collected_facts || {}}
+            jurisdiction={(caseDetails.jurisdiction || 'england') as CanonicalJurisdiction}
+            isPremium={
+              caseDetails.collected_facts?.tier === 'premium' ||
+              caseDetails.collected_facts?.product_tier?.includes('premium') ||
+              caseDetails.collected_facts?.__meta?.product_tier?.includes('premium') ||
+              caseDetails.collected_facts?.is_hmo === true
+            }
+          />
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Main Info */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Ask Heaven Case Q&A */}
+            {/* Ask Heaven Case Q&A - hidden for tenancy agreement cases on payment success */}
+            {!(isTenancyAgreementCase(caseDetails.case_type) && showPaymentSuccess) && (
             <Card padding="large" id="ask-heaven">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
                 <div>
@@ -1424,6 +1488,7 @@ export default function CaseDetailPage() {
                 </div>
               )}
             </Card>
+            )}
 
             {/* Case Analysis */}
             {caseDetails.ai_analysis && (
