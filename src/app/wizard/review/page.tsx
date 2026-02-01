@@ -2678,12 +2678,13 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     }
   }
 
-  // 7. Scotland-specific: PRT terms
+  // 7. Scotland-specific: PRT terms - warn if legacy data has fixed term set
+  // Note: The wizard no longer asks about fixed term for Scotland, but this catches legacy data
   if (jurisdiction === 'scotland') {
-    if (facts.fixed_term_tenancy === true || facts.tenancy_type === 'fixed_term') {
+    if (facts.fixed_term_tenancy === true || facts.tenancy_type === 'fixed_term' || facts.is_fixed_term === true) {
       warnings.push({
-        title: 'Fixed term not available for PRTs',
-        message: 'Private Residential Tenancies in Scotland cannot have a fixed term. The tenancy will be open-ended.',
+        title: 'Fixed term ignored for Scottish PRT',
+        message: 'Private Residential Tenancies in Scotland cannot have a fixed term. This will be generated as an open-ended tenancy (any fixed term data will be ignored).',
       });
     }
   }
