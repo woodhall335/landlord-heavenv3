@@ -183,11 +183,20 @@ const SECTIONS: WizardSection[] = [
     id: 'landlord',
     label: 'Landlord',
     description: 'Landlord contact and service address',
-    isComplete: (facts) =>
-      Boolean(facts.landlord_full_name) &&
-      Boolean(facts.landlord_email) &&
-      Boolean(facts.landlord_address_line1) &&
-      Boolean(facts.landlord_address_postcode),
+    isComplete: (facts) => {
+      const baseComplete =
+        Boolean(facts.landlord_full_name) &&
+        Boolean(facts.landlord_email) &&
+        Boolean(facts.landlord_address_line1) &&
+        Boolean(facts.landlord_address_postcode);
+
+      // Scotland requires landlord registration number
+      if (facts.__meta?.jurisdiction === 'scotland') {
+        return baseComplete && Boolean(facts.landlord_registration_number);
+      }
+
+      return baseComplete;
+    },
   },
   {
     id: 'tenants',
@@ -1116,6 +1125,32 @@ const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction
           />
         </div>
       </div>
+
+      {/* Scotland-specific: Landlord Registration (required by law) */}
+      {jurisdiction === 'scotland' && (
+        <div className="border-t border-gray-200 pt-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Scottish Landlord Registration</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            All landlords in Scotland must be registered with their local authority. This is a legal requirement.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextField
+              label="Registration number"
+              value={facts.landlord_registration_number}
+              onChange={(v) => onUpdate({ landlord_registration_number: v })}
+              placeholder="e.g., 123456/123/12345"
+              required
+            />
+            <TextField
+              label="Registering local authority"
+              value={facts.landlord_registration_authority}
+              onChange={(v) => onUpdate({ landlord_registration_authority: v })}
+              placeholder="e.g., City of Edinburgh Council"
+              required
+            />
+          </div>
+        </div>
+      )}
 
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Letting Agent</h3>
