@@ -551,13 +551,13 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'product':
         return <ProductSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'property':
-        return <PropertySection facts={facts} onUpdate={handleUpdate} />;
+        return <PropertySection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'landlord':
-        return <LandlordSection facts={facts} onUpdate={handleUpdate} />;
+        return <LandlordSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'tenants':
-        return <TenantsSection facts={facts} onUpdate={handleUpdate} />;
+        return <TenantsSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'tenancy':
-        return <TenancySection facts={facts} onUpdate={handleUpdate} />;
+        return <TenancySection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'rent':
         return <RentSection facts={facts} onUpdate={handleUpdate} />;
       case 'deposit':
@@ -1047,13 +1047,14 @@ const PropertySection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 };
 
 // Landlord Section
-const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
+  const terms = getJurisdictionTerms(jurisdiction || 'england');
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Landlord Contact Details</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Used on the AST, certificates and notices.
+          Used on the {terms.agreementType}, certificates and notices.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
@@ -1122,7 +1123,7 @@ const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           label="Are you using a letting agent?"
           value={facts.agent_usage}
           onChange={(v) => onUpdate({ agent_usage: v })}
-          helperText="If yes, their details can appear on the AST for rent collection and management."
+          helperText={`If yes, their details can appear on the ${terms.agreementType} for rent collection and management.`}
           required
         />
 
@@ -1306,13 +1307,14 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 };
 
 // Tenancy Section
-const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
+  const terms = getJurisdictionTerms(jurisdiction || 'england');
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Tenancy Start and Term</h3>
         <p className="text-sm text-gray-500 mb-4">
-          We tailor the AST for fixed term vs periodic.
+          We tailor the {terms.agreementType} for fixed term vs periodic.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField

@@ -353,17 +353,17 @@ function WizardFlowContent() {
     );
   }
 
-  // 🟪 NEW: For tenancy_agreement in England/Wales, use the redesigned section-based flow
+  // 🟪 NEW: For tenancy_agreement in England/Wales/Scotland, use the redesigned section-based flow
   // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
   if (
     type === 'tenancy_agreement' &&
     USE_TENANCY_SECTION_FLOW &&
-    (jurisdiction === 'england' || jurisdiction === 'wales')
+    (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <TenancySectionFlow
         caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales'}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
         product={
           normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium'
             ? normalizedProduct
@@ -373,7 +373,7 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for NI/Scotland tenancy agreements and NI eviction flows
+  // Use existing StructuredWizard for NI tenancy agreements and NI eviction flows
   // Note: Scotland eviction complete_pack now uses EvictionSectionFlow (above)
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
