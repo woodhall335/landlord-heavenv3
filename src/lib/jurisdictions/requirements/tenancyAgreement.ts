@@ -130,8 +130,10 @@ export function getTenancyAgreementRequirements(
     // PRT (Private Residential Tenancy) requirements
     if (stage === 'generate' || stage === 'preview') {
       requiredNow.add('property_type');
-      requiredNow.add('property_epc_rating');
-      requiredNow.add('landlord_registration_number');
+      requiredNow.add('epc_rating'); // TenancySectionFlow uses epc_rating
+      // landlord_registration_number is Scotland-specific but not yet in TenancySectionFlow
+      // Make it a warning for now rather than blocking
+      warnNow.add('landlord_registration_number');
     }
 
     // PRT-specific fields
