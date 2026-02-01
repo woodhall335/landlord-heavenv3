@@ -105,11 +105,14 @@ interface JurisdictionConfig {
     keySchedule: string;
     maintenanceGuide: string;
     checkoutProcedure: string;
+    easyReadNotes?: string; // Scotland-specific Easy Read Notes (optional for other jurisdictions)
   };
   /** Document type key for inventory schedule (must match pack-contents) */
   inventoryDocumentType: string;
   /** Document type key for compliance checklist (must match pack-contents) */
   checklistDocumentType: string;
+  /** Document type key for Easy Read Notes (Scotland only, must match pack-contents) */
+  easyReadNotesDocumentType?: string;
 }
 
 /**
@@ -190,6 +193,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     jurisdictionLabel: 'Scotland',
     inventoryDocumentType: 'inventory_schedule',
     checklistDocumentType: 'pre_tenancy_checklist_scotland',
+    easyReadNotesDocumentType: 'easy_read_notes_scotland',
     templatePaths: {
       standard: 'uk/scotland/templates/prt_agreement.hbs',
       premium: 'uk/scotland/templates/prt_agreement_hmo.hbs', // HMO-specific template
@@ -203,6 +207,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       keySchedule: 'uk/scotland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/scotland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/scotland/templates/premium/checkout_procedure.hbs',
+      easyReadNotes: 'uk/scotland/templates/easy_read_notes.hbs', // Scotland Easy Read Notes
     },
   },
   // NORTHERN IRELAND: Updated to 2022 Act. Key requirements:
@@ -366,7 +371,7 @@ export interface ASTData {
   bank_account_name?: string;
   bank_sort_code?: string;
   bank_account_number?: string;
-  first_payment?: number;
+  first_payment?: number | string; // Can be number or placeholder string
   first_payment_date?: string;
   rent_includes?: string; // What's included in rent
   rent_excludes?: string; // What tenant pays separately
@@ -1126,6 +1131,36 @@ export async function generateStandardASTDocuments(
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
   }
 
+  // DOCUMENT 4 (Scotland only): Easy Read Notes
+  // Required under PRT as part of prescribed information
+  if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
+    try {
+      const easyReadDoc = await generateDocument({
+        templatePath: config.templatePaths.easyReadNotes,
+        data: {
+          ...enrichedData,
+          case_id: caseId || documentId,
+          timestamp: Date.now(),
+        },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: `Easy Read Notes (${config.jurisdictionLabel})`,
+        description: `Plain-language guide explaining tenant rights and responsibilities under the ${config.legalFramework}`,
+        category: 'guidance',
+        document_type: config.easyReadNotesDocumentType,
+        html: easyReadDoc.html,
+        pdf: easyReadDoc.pdf,
+        file_name: 'easy_read_notes.pdf',
+      });
+    } catch (err) {
+      console.error(`Failed to generate Easy Read Notes:`, err);
+      // Don't throw - Easy Read Notes should never block generation
+      console.warn(`[AST Generator] Easy Read Notes generation failed but continuing without it`);
+    }
+  }
+
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Standard pack`);
 
   return {
@@ -1277,6 +1312,36 @@ export async function generatePremiumASTDocuments(
     console.error(`Failed to generate compliance checklist:`, err);
     // Don't throw - checklist should never block generation
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
+  }
+
+  // DOCUMENT 4 (Scotland only): Easy Read Notes
+  // Required under PRT as part of prescribed information
+  if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
+    try {
+      const easyReadDoc = await generateDocument({
+        templatePath: config.templatePaths.easyReadNotes,
+        data: {
+          ...enrichedData,
+          case_id: caseId || documentId,
+          timestamp: Date.now(),
+        },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: `Easy Read Notes (${config.jurisdictionLabel})`,
+        description: `Plain-language guide explaining tenant rights and responsibilities under the ${config.legalFramework}`,
+        category: 'guidance',
+        document_type: config.easyReadNotesDocumentType,
+        html: easyReadDoc.html,
+        pdf: easyReadDoc.pdf,
+        file_name: 'easy_read_notes.pdf',
+      });
+    } catch (err) {
+      console.error(`Failed to generate Easy Read Notes:`, err);
+      // Don't throw - Easy Read Notes should never block generation
+      console.warn(`[AST Generator] Easy Read Notes generation failed but continuing without it`);
+    }
   }
 
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} HMO Premium pack`);

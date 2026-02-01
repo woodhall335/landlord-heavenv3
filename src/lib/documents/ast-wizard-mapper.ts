@@ -128,6 +128,98 @@ function normalizeApprovedPets(value: any): string | undefined {
 }
 
 /**
+ * Format bank payment details into a professional, complete format.
+ * If fields are missing, uses bracketed placeholders instead of truncated/blank output.
+ */
+function formatPaymentDetails(
+  accountName: string | undefined,
+  sortCode: string | undefined,
+  accountNumber: string | undefined,
+  rawPaymentDetails: string | undefined
+): string {
+  const hasStructuredDetails = accountName || sortCode || accountNumber;
+
+  if (hasStructuredDetails) {
+    const parts: string[] = [];
+
+    // Account name
+    if (accountName && accountName.trim()) {
+      parts.push(`Account Name: ${accountName.trim()}`);
+    } else {
+      parts.push('Account Name: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    // Sort code
+    if (sortCode && sortCode.trim()) {
+      // Format sort code with hyphens if not already formatted
+      const formatted = sortCode.replace(/[^0-9]/g, '').replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+      parts.push(`Sort Code: ${formatted}`);
+    } else {
+      parts.push('Sort Code: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    // Account number
+    if (accountNumber && accountNumber.trim()) {
+      parts.push(`Account Number: ${accountNumber.trim()}`);
+    } else {
+      parts.push('Account Number: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    return parts.join(' | ');
+  }
+
+  // Fallback to raw payment details if provided
+  if (rawPaymentDetails && rawPaymentDetails.trim()) {
+    // Check if it looks like a truncated/incomplete value (single token without structure)
+    const trimmed = rawPaymentDetails.trim();
+    if (trimmed.length < 15 && !trimmed.includes(':') && !trimmed.includes(' ')) {
+      // Looks incomplete - wrap it with a note
+      return `${trimmed} [COMPLETE BANK DETAILS REQUIRED BEFORE SIGNING]`;
+    }
+    return trimmed;
+  }
+
+  // No payment details at all - return full placeholder
+  return 'Account Name: [TO BE COMPLETED] | Sort Code: [TO BE COMPLETED] | Account Number: [TO BE COMPLETED]';
+}
+
+/**
+ * Calculate first payment amount and date.
+ * - First payment defaults to monthly rent amount
+ * - First payment date defaults to tenancy start date
+ * - Returns placeholder strings if values cannot be determined
+ */
+function calculateFirstPayment(
+  rentAmount: number | undefined,
+  tenancyStartDate: string | undefined,
+  explicitFirstPayment: number | string | undefined,
+  explicitFirstPaymentDate: string | undefined
+): { amount: string; date: string } {
+  // First payment amount
+  let amount: string;
+  if (explicitFirstPayment !== undefined && explicitFirstPayment !== null && explicitFirstPayment !== '') {
+    const numAmount = typeof explicitFirstPayment === 'string' ? parseFloat(explicitFirstPayment) : explicitFirstPayment;
+    amount = !isNaN(numAmount) && numAmount > 0 ? numAmount.toFixed(2) : '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
+  } else if (rentAmount && rentAmount > 0) {
+    amount = rentAmount.toFixed(2);
+  } else {
+    amount = '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
+  }
+
+  // First payment date
+  let date: string;
+  if (explicitFirstPaymentDate && explicitFirstPaymentDate.trim()) {
+    date = explicitFirstPaymentDate.trim();
+  } else if (tenancyStartDate && tenancyStartDate.trim()) {
+    date = tenancyStartDate.trim();
+  } else {
+    date = '[DATE TO BE COMPLETED BEFORE SIGNING]';
+  }
+
+  return { amount, date };
+}
+
+/**
  * Maps WizardFacts (flat DB format) to ASTData (document generator format).
  *
  * @param wizardFacts - Flat facts from case_facts.facts or collected_facts
@@ -230,11 +322,32 @@ export function mapWizardToASTData(
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
     rent_period: mapRentPeriod(caseFacts.tenancy.rent_frequency),
     rent_due_day: caseFacts.tenancy.rent_due_day != null ? String(caseFacts.tenancy.rent_due_day) : '',
-    payment_method: getValueAtPath(wizardFacts, 'payment_method') || '',
-    payment_details: getValueAtPath(wizardFacts, 'payment_details') || '',
+    payment_method: getValueAtPath(wizardFacts, 'payment_method') || 'Bank Transfer',
+
+    // Payment details - formatted with proper structure or placeholders
+    payment_details: formatPaymentDetails(
+      getValueAtPath(wizardFacts, 'bank_account_name'),
+      getValueAtPath(wizardFacts, 'bank_sort_code'),
+      getValueAtPath(wizardFacts, 'bank_account_number'),
+      getValueAtPath(wizardFacts, 'payment_details')
+    ),
     bank_account_name: getValueAtPath(wizardFacts, 'bank_account_name'),
     bank_sort_code: getValueAtPath(wizardFacts, 'bank_sort_code'),
     bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
+
+    // First payment - calculated from rent or explicit values, with placeholders for missing data
+    first_payment: calculateFirstPayment(
+      caseFacts.tenancy.rent_amount ?? undefined,
+      caseFacts.tenancy.start_date ?? undefined,
+      getValueAtPath(wizardFacts, 'first_payment'),
+      getValueAtPath(wizardFacts, 'first_payment_date')
+    ).amount,
+    first_payment_date: calculateFirstPayment(
+      caseFacts.tenancy.rent_amount ?? undefined,
+      caseFacts.tenancy.start_date ?? undefined,
+      getValueAtPath(wizardFacts, 'first_payment'),
+      getValueAtPath(wizardFacts, 'first_payment_date')
+    ).date,
 
     // Deposit - use CaseFacts
     // Output both deposit_scheme and deposit_scheme_name for template compatibility
