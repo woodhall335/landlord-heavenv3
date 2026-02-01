@@ -1,6 +1,20 @@
 // src/lib/pricing/products.ts
 // Single source of truth for display pricing, labels, descriptions, and wizard hrefs
 
+/**
+ * SEO_PRICES - Canonical pricing for landing pages and SEO content
+ *
+ * IMPORTANT: This is the single source of truth for all SEO-visible pricing.
+ * Update ONLY here when prices change. All landing pages reference these values.
+ */
+export const SEO_PRICES = {
+  evictionNotice: { amount: 49.99, display: '£49.99' },
+  evictionBundle: { amount: 199.99, display: '£199.99' },
+  moneyClaim: { amount: 99.99, display: '£99.99' },
+  tenancyStandard: { amount: 14.99, display: '£14.99' },
+  tenancyPremium: { amount: 24.99, display: '£24.99' },
+} as const;
+
 export type ProductSku =
   | 'notice_only'
   | 'complete_pack'
@@ -34,8 +48,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Eviction Notice Pack',
     shortLabel: 'Notice Only',
     description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
-    price: 49.99,
-    displayPrice: '£49.99',
+    price: SEO_PRICES.evictionNotice.amount,
+    displayPrice: SEO_PRICES.evictionNotice.display,
     wizardHref: '/wizard?product=notice_only',
     productPageHref: '/notice-only',
   },
@@ -44,8 +58,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Complete Eviction Pack',
     shortLabel: 'Complete Pack',
     description: 'Full bundle with notice, court forms, and guidance',
-    price: 199.99,
-    displayPrice: '£199.99',
+    price: SEO_PRICES.evictionBundle.amount,
+    displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=complete_pack',
     productPageHref: '/complete-pack',
@@ -55,8 +69,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Money Claim Pack',
     shortLabel: 'Money Claim',
     description: 'Recover unpaid rent, damage, cleaning and other tenant debts',
-    price: 99.99,
-    displayPrice: '£99.99',
+    price: SEO_PRICES.moneyClaim.amount,
+    displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
     productPageHref: '/money-claim-pack',
@@ -66,8 +80,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Scotland Money Claim Pack',
     shortLabel: 'Scotland Money Claim',
     description: 'Recover unpaid rent and tenant debts through Simple Procedure',
-    price: 99.99,
-    displayPrice: '£99.99',
+    price: SEO_PRICES.moneyClaim.amount,
+    displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'Service discontinued - use Notice Only',
     wizardHref: '/wizard?product=notice_only&jurisdiction=scotland',
     productPageHref: '/notice-only',
@@ -77,8 +91,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Standard Tenancy Agreement',
     shortLabel: 'Standard AST',
     description: 'Government-compliant AST or PRT for your letting',
-    price: 14.99,
-    displayPrice: '£14.99',
+    price: SEO_PRICES.tenancyStandard.amount,
+    displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref: '/wizard?product=ast_standard',
     productPageHref: '/ast',
   },
@@ -87,8 +101,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Premium Tenancy Agreement',
     shortLabel: 'Premium AST',
     description: 'Enhanced AST with additional clauses and protections',
-    price: 24.99,
-    displayPrice: '£24.99',
+    price: SEO_PRICES.tenancyPremium.amount,
+    displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium',
     productPageHref: '/ast',
   },
@@ -113,14 +127,14 @@ export const ASK_HEAVEN_RECOMMENDATION_MAP: Record<
     primarySku: 'notice_only',
     label: 'Generate Eviction Notice',
     description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
-    displayPrice: '£49.99',
+    displayPrice: SEO_PRICES.evictionNotice.display,
     wizardHref: '/wizard?product=notice_only',
   },
   complete_pack: {
     primarySku: 'complete_pack',
     label: 'Get Complete Eviction Pack',
     description: 'Full bundle with notice, court forms, and guidance',
-    displayPrice: '£199.99',
+    displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=complete_pack',
   },
@@ -128,7 +142,7 @@ export const ASK_HEAVEN_RECOMMENDATION_MAP: Record<
     primarySku: 'money_claim',
     label: 'Start Money Claim',
     description: 'Recover unpaid rent, damage, cleaning and other tenant debts',
-    displayPrice: '£99.99',
+    displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
   },
@@ -136,8 +150,8 @@ export const ASK_HEAVEN_RECOMMENDATION_MAP: Record<
     primarySku: 'ast_standard',
     label: 'Create Tenancy Agreement',
     description: 'Generate a compliant AST or PRT',
-    displayPrice: 'from £14.99',
-    priceNote: 'Standard £14.99 · Premium £24.99',
+    displayPrice: `from ${SEO_PRICES.tenancyStandard.display}`,
+    priceNote: `Standard ${SEO_PRICES.tenancyStandard.display} · Premium ${SEO_PRICES.tenancyPremium.display}`,
     wizardHref: '/wizard?product=tenancy_agreement',
   },
 };
