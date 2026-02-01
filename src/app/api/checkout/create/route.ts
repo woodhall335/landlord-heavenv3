@@ -36,8 +36,25 @@ import {
 import crypto from 'crypto';
 
 /**
+ * Normalize display SKUs to payment SKUs for order storage
+ * Display SKUs (prt_*, occupation_*, ni_*) are converted to payment SKUs (ast_*)
+ */
+function normalizeToPaymentSku(productType: string): string {
+  const displayToPayment: Record<string, string> = {
+    prt_standard: 'ast_standard',
+    prt_premium: 'ast_premium',
+    occupation_standard: 'ast_standard',
+    occupation_premium: 'ast_premium',
+    ni_standard: 'ast_standard',
+    ni_premium: 'ast_premium',
+  };
+  return displayToPayment[productType] || productType;
+}
+
+/**
  * Map product types to Stripe Price IDs
  * Note: money_claim is £99.99, sc_money_claim (discontinued) shares the same Stripe price ID
+ * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   notice_only: PRICE_IDS.NOTICE_ONLY,
@@ -46,6 +63,13 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
   ast_standard: PRICE_IDS.STANDARD_AST,
   ast_premium: PRICE_IDS.PREMIUM_AST,
+  // Jurisdiction-specific display SKUs - map to same prices as AST
+  prt_standard: PRICE_IDS.STANDARD_AST,      // Scotland
+  prt_premium: PRICE_IDS.PREMIUM_AST,        // Scotland
+  occupation_standard: PRICE_IDS.STANDARD_AST, // Wales
+  occupation_premium: PRICE_IDS.PREMIUM_AST,   // Wales
+  ni_standard: PRICE_IDS.STANDARD_AST,       // Northern Ireland
+  ni_premium: PRICE_IDS.PREMIUM_AST,         // Northern Ireland
 };
 
 /**
@@ -79,8 +103,16 @@ function validateStripePriceIds(): void {
 validateStripePriceIds();
 
 // Validation schema
+// Accepts both payment SKUs (ast_*) and display SKUs (prt_*, occupation_*, ni_*)
 const createCheckoutSchema = z.object({
-  product_type: z.enum(['notice_only', 'complete_pack', 'money_claim', 'sc_money_claim', 'ast_standard', 'ast_premium']),
+  product_type: z.enum([
+    'notice_only', 'complete_pack', 'money_claim', 'sc_money_claim',
+    'ast_standard', 'ast_premium',
+    // Jurisdiction-specific display SKUs
+    'prt_standard', 'prt_premium',           // Scotland
+    'occupation_standard', 'occupation_premium', // Wales
+    'ni_standard', 'ni_premium',             // Northern Ireland
+  ]),
   case_id: z.string().uuid().optional(),
   success_url: z.string().url().optional(),
   cancel_url: z.string().url().optional(),
@@ -271,9 +303,13 @@ export async function POST(request: Request) {
       throw priceError;
     }
 
+    // Normalize display SKUs (prt_*, occupation_*, ni_*) to payment SKUs (ast_*)
+    // This ensures orders are stored with consistent payment SKUs
+    const normalizedProductType = normalizeToPaymentSku(product_type);
+
     // Get product details from source of truth (products.ts)
     // Map sc_money_claim to money_claim for product config lookup
-    const productSku: ProductSku = product_type === 'sc_money_claim' ? 'sc_money_claim' : product_type as ProductSku;
+    const productSku: ProductSku = normalizedProductType === 'sc_money_claim' ? 'sc_money_claim' : normalizedProductType as ProductSku;
     const product = PRODUCTS[productSku];
 
     // If case_id provided, validate jurisdiction match and ownership
@@ -448,11 +484,12 @@ export async function POST(request: Request) {
     // =========================================================================
     if (case_id) {
       // Check for existing orders for this case and product
+      // Use normalizedProductType to match stored orders (which use payment SKUs)
       const { data: existingOrders, error: orderQueryError } = await adminSupabase
         .from('orders')
         .select('id, payment_status, stripe_session_id, stripe_checkout_url')
         .eq('case_id', case_id)
-        .eq('product_type', product_type)
+        .eq('product_type', normalizedProductType)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
@@ -546,8 +583,9 @@ export async function POST(request: Request) {
     // =========================================================================
 
     // Generate idempotency key for Stripe API call (if case_id provided)
+    // Use normalizedProductType for consistent idempotency keys
     const idempotencyKey = case_id
-      ? generateIdempotencyKey(case_id, product_type, user.id)
+      ? generateIdempotencyKey(case_id, normalizedProductType, user.id)
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
@@ -556,7 +594,7 @@ export async function POST(request: Request) {
     const orderPayload = {
         user_id: user.id,
         case_id: case_id || null,
-        product_type,
+        product_type: normalizedProductType, // Use normalized payment SKU for order storage
         product_name: product.label,
         amount: product.price,
         currency: 'GBP',
