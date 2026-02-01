@@ -57,13 +57,26 @@
     }
     .premium-badge {
       display: inline-block;
-      background-color: #1a1a1a;
+      background-color: #2c5282;
       color: #fff;
       padding: 0.3em 1em;
       font-size: 10pt;
       font-weight: bold;
       letter-spacing: 1px;
       margin-top: 0.5em;
+    }
+    .premium-section {
+      border-left: 3pt solid #2c5282;
+      padding-left: 12pt;
+      margin: 15pt 0;
+    }
+    .premium-label {
+      font-size: 8pt;
+      color: #2c5282;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+      margin-bottom: 5pt;
+      font-weight: bold;
     }
     .doc-date {
       font-size: 11pt;
@@ -542,9 +555,11 @@
     </div>
     {{/if}}
 
-    <div class="subsection-title">Late Payment Interest (Premium)</div>
-    <div class="clause">
-      If Rent remains unpaid for more than 14 days after the due date, the Landlord may charge interest on the outstanding amount at a rate of 3% above the Bank of England base rate, calculated daily from the due date until payment is received in full.
+    <div class="premium-section">
+      <div class="premium-label">Premium: Late Payment Interest</div>
+      <div class="clause">
+        If Rent remains unpaid for more than 14 days after the due date, the Landlord may charge interest on the outstanding amount at a rate of 3% above the Bank of England base rate, calculated daily from the due date until payment is received in full.
+      </div>
     </div>
 
     <div class="subsection-title">Rent Increases</div>
@@ -620,9 +635,9 @@
   </div>
 
   {{#if guarantor_name}}
-  <!-- SECTION 6: GUARANTOR -->
+  <!-- SECTION 6: GUARANTOR (PREMIUM FEATURE) -->
   <div class="section">
-    <div class="section-title">6. Guarantor</div>
+    <div class="section-title">6. Guarantor <span class="premium-badge" style="font-size: 8pt; padding: 2pt 6pt; vertical-align: middle;">PREMIUM</span></div>
 
     <div class="guarantor-notice">
       <div class="guarantor-notice-title">Guarantee Agreement</div>
@@ -767,9 +782,12 @@
       <strong>Behaviour:</strong> Not behave in an antisocial manner or cause nuisance, annoyance or disturbance to neighbours. The Tenant shall keep noise to reasonable levels, especially between 11pm and 7am, and ensure household members and visitors behave appropriately.
     </div>
 
-    <div class="clause">
-      <span class="clause-num">{{#if guarantor_name}}7{{else}}6{{/if}}.{{#if has_garden}}14{{else}}13{{/if}}</span>
-      <strong>Contents Insurance (Premium Requirement):</strong> The Tenant shall obtain and maintain adequate contents insurance for personal belongings and third-party liability cover of at least £1,000,000 throughout the tenancy. Proof of insurance must be provided to the Landlord within 14 days of the tenancy start date.
+    <div class="premium-section">
+      <div class="premium-label">Premium: Contents Insurance Requirement</div>
+      <div class="clause">
+        <span class="clause-num">{{#if guarantor_name}}7{{else}}6{{/if}}.{{#if has_garden}}14{{else}}13{{/if}}</span>
+        The Tenant shall obtain and maintain adequate contents insurance for personal belongings and third-party liability cover of at least £1,000,000 throughout the tenancy. Proof of insurance must be provided to the Landlord within 14 days of the tenancy start date.
+      </div>
     </div>
 
     <div class="clause">
