@@ -24,7 +24,7 @@ import { FAQSection } from '@/components/marketing/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
-import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage } from '@/lib/seo/wizard-landing-content';
+import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
 
 interface WizardLandingPageProps {
   content: WizardLandingContent;
@@ -128,6 +128,9 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
         </Container>
       </section>
 
+      {/* Why Use This Section (NEW) */}
+      <WhyUseThisSectionComponent whyUseThis={content.whyUseThis} />
+
       {/* Notice Types (if applicable) */}
       {content.noticeTypes && content.noticeTypes.length > 0 && (
         <NoticeTypesSection noticeTypes={content.noticeTypes} />
@@ -161,15 +164,12 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
                 </div>
               ))}
             </div>
-            <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-              <p className="text-sm text-gray-600">
-                <strong>Note:</strong> This is systematic validation, not legal advice. For complex
-                situations, consult a qualified solicitor.
-              </p>
-            </div>
           </div>
         </Container>
       </section>
+
+      {/* Legal Validation Explainer (NEW) */}
+      <LegalValidationExplainerSection explainer={content.legalValidationExplainer} />
 
       {/* Who This Is For */}
       <section className="py-16 md:py-20">
@@ -366,6 +366,78 @@ function JurisdictionCoverageSection({
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Why Use This Section Component (NEW)
+ */
+function WhyUseThisSectionComponent({ whyUseThis }: { whyUseThis: WhyUseThisSection }) {
+  return (
+    <section className="py-16 md:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50">
+      <Container>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+            {whyUseThis.heading}
+          </h2>
+          <p className="text-center text-gray-700 mb-8 max-w-3xl mx-auto">
+            {whyUseThis.intro}
+          </p>
+          <ul className="space-y-3">
+            {whyUseThis.benefits.map((benefit, index) => (
+              <li key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
+                <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                <span className="text-gray-700">{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Legal Validation Explainer Section Component (NEW)
+ */
+function LegalValidationExplainerSection({ explainer }: { explainer: LegalValidationExplainer }) {
+  return (
+    <section className="py-16 md:py-20 bg-gray-50">
+      <Container>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Scale className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal">
+              What &quot;Validation&quot; Means
+            </h2>
+          </div>
+          <p className="text-center text-gray-600 mb-8">
+            Our system performs procedural checks — not legal advice
+          </p>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+            <h3 className="font-semibold text-charcoal mb-4">What our validation checks:</h3>
+            <ul className="space-y-2">
+              {explainer.whatItMeans.map((item, index) => (
+                <li key={index} className="flex items-start gap-2 text-gray-700">
+                  <ShieldCheck className="w-4 h-4 text-primary mt-1 shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-sm text-amber-800">
+                {explainer.disclaimer}
+              </p>
+            </div>
           </div>
         </div>
       </Container>

@@ -19,6 +19,7 @@ import {
   WIZARD_LANDING_CONTENT,
   getAllLandingPageSlugs,
 } from '@/lib/seo/wizard-landing-content';
+import { SEO_PRICES } from '@/lib/pricing/products';
 
 describe('Wizard Landing Pages - Content Configuration', () => {
   describe('Notice Only Content', () => {
@@ -29,14 +30,14 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(noticeOnlyContent.slug).toBe('eviction-notice');
     });
 
-    it('should mention "legally validated and procedurally correct"', () => {
+    it('should mention "procedurally correct"', () => {
       const combinedText = [
         noticeOnlyContent.description,
         noticeOnlyContent.subheading,
         ...noticeOnlyContent.faqs.map((f) => f.question + ' ' + f.answer),
       ].join(' ');
 
-      expect(combinedText.toLowerCase()).toContain('legally validated');
+      expect(combinedText.toLowerCase()).toContain('procedurally correct');
     });
 
     it('should cover all three jurisdictions: England, Wales, Scotland', () => {
@@ -255,7 +256,7 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(niCoverage?.agreementType).toContain('Private Tenancy');
     });
 
-    it('should state they are jurisdiction-specific and legally compliant', () => {
+    it('should state they are jurisdiction-specific with correct legislation', () => {
       const combinedText = [
         astStandardContent.description,
         astStandardContent.subheading,
@@ -263,7 +264,7 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       ].join(' ');
 
       expect(combinedText.toLowerCase()).toContain('jurisdiction');
-      expect(combinedText.toLowerCase()).toContain('compliant');
+      expect(combinedText.toLowerCase()).toContain('legislation');
     });
 
     it('should have FAQ items', () => {
@@ -404,6 +405,226 @@ describe('Wizard Landing Pages - FAQ Schema Validation', () => {
   it('should have at least 5 FAQs per product', () => {
     Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
       expect(content.faqs.length).toBeGreaterThanOrEqual(5);
+    });
+  });
+});
+
+describe('Wizard Landing Pages - Value Proposition Requirements', () => {
+  describe('All pages should have value proposition sections', () => {
+    it('should have whyUseThis section with heading, intro, and benefits', () => {
+      Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+        expect(content.whyUseThis).toBeTruthy();
+        expect(content.whyUseThis.heading).toBeTruthy();
+        expect(content.whyUseThis.intro).toBeTruthy();
+        expect(content.whyUseThis.benefits.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should have proceduralBenefits array with at least one item', () => {
+      Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+        expect(content.proceduralBenefits).toBeTruthy();
+        expect(content.proceduralBenefits.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should have legalValidationExplainer with whatItMeans and disclaimer', () => {
+      Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+        expect(content.legalValidationExplainer).toBeTruthy();
+        expect(content.legalValidationExplainer.whatItMeans.length).toBeGreaterThan(0);
+        expect(content.legalValidationExplainer.disclaimer).toBeTruthy();
+        expect(content.legalValidationExplainer.disclaimer.length).toBeGreaterThan(50);
+      });
+    });
+
+    it('should mention procedural benefits in whyUseThis section', () => {
+      Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+        const combinedBenefits = content.whyUseThis.benefits.join(' ').toLowerCase();
+        // At least one of these procedural terms should appear
+        const hasProceduralTerm =
+          combinedBenefits.includes('procedur') ||
+          combinedBenefits.includes('court') ||
+          combinedBenefits.includes('form') ||
+          combinedBenefits.includes('correct') ||
+          combinedBenefits.includes('validate') ||
+          combinedBenefits.includes('jurisdiction');
+        expect(hasProceduralTerm).toBe(true);
+      });
+    });
+  });
+
+  describe('Eviction Pack (England) - Particulars of Claim emphasis', () => {
+    it('should mention Particulars of Claim in content', () => {
+      const combinedText = [
+        completePackContent.title,
+        completePackContent.description,
+        completePackContent.subheading,
+        ...completePackContent.whatYouGet,
+        ...completePackContent.whyUseThis.benefits,
+        ...completePackContent.faqs.map((f) => f.question + ' ' + f.answer),
+      ].join(' ');
+
+      expect(combinedText).toContain('Particulars of Claim');
+    });
+
+    it('should mention N119 form', () => {
+      const combinedText = [
+        completePackContent.title,
+        completePackContent.description,
+        ...completePackContent.whatYouGet,
+      ].join(' ');
+
+      expect(combinedText).toContain('N119');
+    });
+
+    it('should explain why Particulars of Claim matter', () => {
+      const faqAboutParticulars = completePackContent.faqs.find(
+        (f) =>
+          f.question.toLowerCase().includes('particulars') ||
+          f.question.toLowerCase().includes('n119')
+      );
+      expect(faqAboutParticulars).toBeTruthy();
+    });
+  });
+
+  describe('Money Claim - Form N1 and daily interest rate', () => {
+    it('should mention Form N1 in title or description', () => {
+      const titleAndDesc = completePackContent.title + ' ' + moneyClaimContent.description;
+      expect(moneyClaimContent.title.toLowerCase()).toContain('n1');
+    });
+
+    it('should mention daily interest rate', () => {
+      const combinedText = [
+        moneyClaimContent.title,
+        moneyClaimContent.description,
+        moneyClaimContent.subheading,
+        ...moneyClaimContent.whatYouGet,
+        ...moneyClaimContent.whyUseThis.benefits,
+        ...moneyClaimContent.proceduralBenefits,
+        ...moneyClaimContent.faqs.map((f) => f.question + ' ' + f.answer),
+      ].join(' ');
+
+      expect(combinedText.toLowerCase()).toContain('daily rate');
+    });
+
+    it('should explain interest calculation in FAQs', () => {
+      const interestFaq = moneyClaimContent.faqs.find((f) =>
+        f.question.toLowerCase().includes('interest') ||
+        f.question.toLowerCase().includes('daily rate')
+      );
+      expect(interestFaq).toBeTruthy();
+      expect(interestFaq?.answer).toContain('8%');
+    });
+  });
+
+  describe('Premium Tenancy - HMO and guarantor clauses', () => {
+    it('should mention HMO clauses prominently', () => {
+      const combinedText = [
+        astPremiumContent.title,
+        astPremiumContent.description,
+        astPremiumContent.subheading,
+        ...astPremiumContent.whatYouGet,
+      ].join(' ');
+
+      expect(combinedText.toLowerCase()).toContain('hmo');
+      expect(combinedText.toLowerCase()).toContain('clause');
+    });
+
+    it('should mention guarantor clauses prominently', () => {
+      const combinedText = [
+        astPremiumContent.title,
+        astPremiumContent.description,
+        astPremiumContent.subheading,
+        ...astPremiumContent.whatYouGet,
+      ].join(' ');
+
+      expect(combinedText.toLowerCase()).toContain('guarantor');
+    });
+
+    it('should explain HMO clauses in FAQs', () => {
+      const hmoFaq = astPremiumContent.faqs.find((f) =>
+        f.question.toLowerCase().includes('hmo')
+      );
+      expect(hmoFaq).toBeTruthy();
+      expect(hmoFaq?.answer.toLowerCase()).toContain('joint and several');
+    });
+
+    it('should explain guarantor clauses in FAQs', () => {
+      const guarantorFaq = astPremiumContent.faqs.find((f) =>
+        f.question.toLowerCase().includes('guarantor')
+      );
+      expect(guarantorFaq).toBeTruthy();
+      expect(guarantorFaq?.answer.toLowerCase()).toContain('liability');
+    });
+
+    it('should mention supporting documents (inventory, compliance checklist)', () => {
+      const combinedText = [
+        ...astPremiumContent.whatYouGet,
+        ...astPremiumContent.whyUseThis.benefits,
+      ].join(' ');
+
+      expect(combinedText.toLowerCase()).toContain('inventory');
+      expect(combinedText.toLowerCase()).toContain('compliance checklist');
+    });
+  });
+});
+
+describe('Wizard Landing Pages - Pricing Accuracy', () => {
+  it('should use correct price for Eviction Notice', () => {
+    expect(noticeOnlyContent.price).toBe(SEO_PRICES.evictionNotice.display);
+    expect(noticeOnlyContent.price).toBe('£49.99');
+  });
+
+  it('should use correct price for Eviction Bundle', () => {
+    expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
+    expect(completePackContent.price).toBe('£199.99');
+  });
+
+  it('should use correct price for Money Claim', () => {
+    expect(moneyClaimContent.price).toBe(SEO_PRICES.moneyClaim.display);
+    expect(moneyClaimContent.price).toBe('£99.99');
+  });
+
+  it('should use correct price for Standard Tenancy Agreement', () => {
+    expect(astStandardContent.price).toBe(SEO_PRICES.tenancyStandard.display);
+    expect(astStandardContent.price).toBe('£14.99');
+  });
+
+  it('should use correct price for Premium Tenancy Agreement', () => {
+    expect(astPremiumContent.price).toBe(SEO_PRICES.tenancyPremium.display);
+    expect(astPremiumContent.price).toBe('£24.99');
+  });
+
+  it('should include price in title for all products', () => {
+    expect(noticeOnlyContent.title).toContain('£49.99');
+    expect(completePackContent.title).toContain('£199.99');
+    expect(moneyClaimContent.title).toContain('£99.99');
+    expect(astStandardContent.title).toContain('£14.99');
+    expect(astPremiumContent.title).toContain('£24.99');
+  });
+});
+
+describe('Wizard Landing Pages - Legal Safety Block', () => {
+  it('should have disclaimer in legalValidationExplainer for all products', () => {
+    Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+      expect(content.legalValidationExplainer.disclaimer).toBeTruthy();
+      // Should mention "not legal advice" or similar
+      expect(
+        content.legalValidationExplainer.disclaimer.toLowerCase()
+      ).toContain('not legal advice');
+    });
+  });
+
+  it('should explain what validation means for all products', () => {
+    Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+      expect(content.legalValidationExplainer.whatItMeans.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  it('should recommend solicitor for complex cases', () => {
+    Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+      expect(
+        content.legalValidationExplainer.disclaimer.toLowerCase()
+      ).toContain('solicitor');
     });
   });
 });

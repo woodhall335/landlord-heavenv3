@@ -9,6 +9,7 @@
  * - Validation claim explanations
  * - FAQ content with JSON-LD schema support
  * - Internal link suggestions
+ * - Value proposition sections explaining procedural benefits
  *
  * LEGAL SAFETY: Claims are accurate to what the product actually does:
  * - "Legally validated" means: jurisdiction selection, correct form mapping,
@@ -16,7 +17,7 @@
  * - NOT "lawyer approved" unless evidence exists
  */
 
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS, SEO_PRICES } from '@/lib/pricing/products';
 
 export interface FAQItem {
   question: string;
@@ -46,6 +47,28 @@ export interface JurisdictionCoverage {
   notes?: string;
 }
 
+/**
+ * Explains what "legally validated" means and provides disclaimer
+ */
+export interface LegalValidationExplainer {
+  /** What validation actually does */
+  whatItMeans: string[];
+  /** Clear disclaimer that this is not legal advice */
+  disclaimer: string;
+}
+
+/**
+ * "Why use this" section explaining procedural benefits
+ */
+export interface WhyUseThisSection {
+  /** Section heading */
+  heading: string;
+  /** Introduction paragraph */
+  intro: string;
+  /** List of procedural benefits */
+  benefits: string[];
+}
+
 export interface WizardLandingContent {
   // SEO metadata
   slug: string;
@@ -70,6 +93,11 @@ export interface WizardLandingContent {
   howValidationWorks: string[];
   whoThisIsFor: string[];
 
+  // Value proposition sections (NEW)
+  whyUseThis: WhyUseThisSection;
+  proceduralBenefits: string[];
+  legalValidationExplainer: LegalValidationExplainer;
+
   // FAQs
   faqs: FAQItem[];
 
@@ -84,16 +112,16 @@ export interface WizardLandingContent {
  */
 export const noticeOnlyContent: WizardLandingContent = {
   slug: 'eviction-notice',
-  title: `Eviction Notice Generator 2026 | England, Wales & Scotland | ${PRODUCTS.notice_only.displayPrice}`,
+  title: `Eviction Notice Generator 2026 | England, Wales & Scotland | ${SEO_PRICES.evictionNotice.display}`,
   description:
-    'Generate legally validated and procedurally correct eviction notices for England (Section 21, Section 8), Wales (possession notice under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Official forms, service instructions, and validity checklist included.',
+    'Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
   h1: 'Eviction Notice Generator',
   subheading:
-    'Legally validated and procedurally correct notices for England, Wales & Scotland',
+    'Procedurally correct notices with the right notice type, statutory wording, and notice period for your jurisdiction',
 
   product: 'notice_only',
   wizardUrl: '/wizard?product=notice_only&src=product_page&topic=eviction',
-  price: PRODUCTS.notice_only.displayPrice,
+  price: SEO_PRICES.evictionNotice.display,
 
   jurisdictions: ['England', 'Wales', 'Scotland'],
 
@@ -138,11 +166,51 @@ export const noticeOnlyContent: WizardLandingContent = {
   whatYouGet: [
     'Eviction notice in the correct legal format for your jurisdiction',
     'Official government forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland)',
+    'Correct statutory wording required by each jurisdiction\'s legislation',
     'Service Instructions explaining how to legally serve the notice',
     'Service & Validity Checklist to verify compliance before serving',
     'Unlimited regenerations - edit and regenerate instantly',
     'Portal storage for 12+ months',
   ],
+
+  // NEW: Why landlords use this instead of templates
+  whyUseThis: {
+    heading: 'Why Landlords Use This Instead of Templates',
+    intro:
+      'Incorrect eviction notices are a leading cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can result in your case being struck out. Our generator reduces this risk by ensuring your notice is procedurally correct from the start.',
+    benefits: [
+      'Correct notice type for your jurisdiction — Section 21/8 (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
+      'Statutory wording that matches current legislation — not outdated template language',
+      'Correct notice period calculated automatically based on tenancy start date and chosen grounds',
+      'Grounds selection (Section 8/Section 181/Notice to Leave) with required wording for each ground cited',
+      'Pre-flight compliance checks flag common blockers before you serve — deposit protection, gas safety, EPC, How to Rent',
+      'Prepared in the correct format for service — reduces the risk of procedural rejection at court or tribunal',
+    ],
+  },
+
+  // NEW: Concrete procedural benefits
+  proceduralBenefits: [
+    'Ensures the correct notice type is selected for your property location and tenancy type',
+    'Applies the correct notice period based on tenancy length and chosen grounds',
+    'Uses statutory wording required by Housing Act 1988, Renting Homes (Wales) Act 2016, or Private Housing (Tenancies) (Scotland) Act 2016',
+    'Generates official prescribed forms: Form 6A, Form 3, RHW forms, or Notice to Leave',
+    'Flags compliance issues (deposit, gas, EPC, How to Rent) that could invalidate your notice',
+    'Creates documents in the correct format for filing or service',
+  ],
+
+  // NEW: Legal validation explainer with disclaimer
+  legalValidationExplainer: {
+    whatItMeans: [
+      'Maps your property location to the correct notice type and form',
+      'Ensures all required fields are completed',
+      'Calculates notice periods based on tenancy length and grounds',
+      'Applies statutory wording required by current legislation',
+      'Checks compliance pre-requisites (deposit, gas safety, EPC, How to Rent)',
+      'Generates documents in the correct format for service or filing',
+    ],
+    disclaimer:
+      'This is systematic procedural validation, not legal advice. Our system checks that your notice is procedurally correct based on the information you provide. For complex situations — such as disputes about tenancy type, unusual lease terms, or potential defences — consult a qualified solicitor before serving.',
+  },
 
   howValidationWorks: [
     'Jurisdiction selection: System identifies correct notice type based on property location',
@@ -154,9 +222,9 @@ export const noticeOnlyContent: WizardLandingContent = {
   ],
 
   whoThisIsFor: [
-    'Landlords who need a valid eviction notice quickly',
-    'Property managers handling tenant departures',
-    'Landlords who want compliance checks before serving',
+    'Landlords who need a procedurally correct eviction notice quickly',
+    'Property managers handling tenant departures across multiple jurisdictions',
+    'Landlords who want compliance checks before serving to reduce rejection risk',
     'Anyone who needs to understand their eviction options by jurisdiction',
   ],
 
@@ -164,22 +232,27 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What eviction notices do you generate?',
       answer:
-        'We generate legally validated notices for three jurisdictions: England (Section 21 no-fault using Form 6A, Section 8 fault-based using Form 3), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes Wales Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016).',
+        'We generate procedurally correct notices for three jurisdictions: England (Section 21 no-fault using Form 6A, Section 8 fault-based using Form 3), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes Wales Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016).',
     },
     {
-      question: 'What does "legally validated" mean?',
+      question: 'What does "procedurally correct" mean?',
       answer:
-        'Our system validates: (1) Jurisdiction - correct notice type for your property location, (2) Compliance checks - flags blockers like missing deposit protection, (3) Date logic - calculates correct notice periods, (4) Required fields - ensures mandatory information is captured, (5) Form mapping - generates the correct official form. This is systematic validation, not legal advice.',
+        'It means your notice uses the correct notice type, statutory wording, notice period, and prescribed form for your jurisdiction. We check: (1) Jurisdiction — correct notice type for your property location, (2) Grounds — required wording for each ground cited, (3) Notice period — calculated based on tenancy length, (4) Compliance — flags blockers like missing deposit protection. This is procedural validation, not legal advice.',
     },
     {
       question: 'Are these official government forms?',
       answer:
-        'Yes. We use official forms: Form 6A for Section 21 (England), Form 3 for Section 8 (England), official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland.',
+        'Yes. We use official prescribed forms: Form 6A for Section 21 (England), Form 3 for Section 8 (England), official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland. These are the forms required by courts and tribunals.',
     },
     {
       question: 'What compliance checks are performed?',
       answer:
-        'For England, we check: deposit protection status, gas safety certificate, Energy Performance Certificate, How to Rent guide provision. For Wales: Rent Smart Wales registration. For Scotland: landlord registration, First-tier Tribunal jurisdiction. Issues are flagged before generation.',
+        'For England: deposit protection status, gas safety certificate, Energy Performance Certificate, How to Rent guide provision. For Wales: Rent Smart Wales registration. For Scotland: landlord registration, First-tier Tribunal jurisdiction. Issues are flagged before generation so you can address them first.',
+    },
+    {
+      question: 'Why do incorrect notices fail?',
+      answer:
+        'Common reasons: wrong notice type for the tenancy, incorrect notice period, outdated form version, missing statutory wording, grounds not properly cited, or serving before compliance requirements are met. Our system prevents these errors by validating each element before generation.',
     },
     {
       question: 'Can I preview before paying?',
@@ -192,14 +265,9 @@ export const noticeOnlyContent: WizardLandingContent = {
         'If your notice is rejected due to an error in our document generation, we will regenerate it free. Court acceptance ultimately depends on your specific circumstances and evidence.',
     },
     {
-      question: 'How long are documents stored?',
-      answer:
-        'Documents are stored in your portal for at least 12 months. Download and save them any time.',
-    },
-    {
       question: 'Do you provide legal advice?',
       answer:
-        'No. We provide document generation and validation, not legal advice. Our AI assistant helps you understand the process but is not a solicitor. Consult a qualified solicitor for complex cases.',
+        'No. We provide document generation and procedural validation, not legal advice. Our AI assistant helps you understand the process but is not a solicitor. Consult a qualified solicitor for complex cases or if you anticipate a defence.',
     },
   ],
 
@@ -213,16 +281,16 @@ export const noticeOnlyContent: WizardLandingContent = {
  */
 export const completePackContent: WizardLandingContent = {
   slug: 'eviction-pack-england',
-  title: `Complete Eviction Bundle 2026 – England Only | N5, N5B, N119 Forms | ${PRODUCTS.complete_pack.displayPrice}`,
+  title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
   description:
-    'Complete eviction bundle for England landlords: Section 21 notice + N5B accelerated possession, or Section 8 notice + N5 claim + N119 particulars. All court forms generated and validated. England only.',
+    'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',
   h1: 'Complete Eviction Bundle – England Only',
   subheading:
-    'Section 21/Section 8 notices plus all court forms, witness statement, and filing guide',
+    'End-to-end eviction paperwork: notice, court forms, Particulars of Claim, and filing guide — mapped to the correct possession route',
 
   product: 'complete_pack',
   wizardUrl: '/wizard?product=complete_pack&src=product_page&topic=eviction',
-  price: PRODUCTS.complete_pack.displayPrice,
+  price: SEO_PRICES.evictionBundle.display,
 
   jurisdictions: ['England'],
 
@@ -230,75 +298,126 @@ export const completePackContent: WizardLandingContent = {
     {
       name: 'Section 21 Notice',
       formNumber: 'Form 6A',
-      description: 'No-fault eviction notice using official prescribed form',
+      description: 'No-fault eviction notice using official prescribed form. Required before filing N5B accelerated possession.',
       route: 'section21',
     },
     {
       name: 'N5B Accelerated Possession',
       formNumber: 'N5B',
       description:
-        'Accelerated possession claim form for undefended Section 21 cases. Paper-only procedure, no hearing required if undefended.',
+        'Accelerated possession claim form for undefended Section 21 cases. Paper-only procedure — no hearing required if undefended. Faster than standard N5 route.',
       route: 'section21',
     },
     {
       name: 'Section 8 Notice',
       formNumber: 'Form 3',
-      description: 'Fault-based eviction notice citing grounds from Schedule 2',
+      description: 'Fault-based eviction notice citing grounds from Schedule 2. Grounds are mapped to your specific situation (rent arrears, breach, antisocial behaviour, etc.).',
       route: 'section8',
     },
     {
       name: 'N5 Claim for Possession',
       formNumber: 'N5',
       description:
-        'Standard possession claim form for Section 8 cases or defended Section 21 cases',
+        'Standard possession claim form for Section 8 cases or defended Section 21 cases. Filed at county court with N119.',
       route: 'section8',
     },
     {
       name: 'N119 Particulars of Claim',
       formNumber: 'N119',
       description:
-        'Particulars of claim for possession of property - details grounds, arrears, and history',
+        'Particulars of Claim for possession of property — the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is made — many competitors don\'t include this.',
       route: 'section8',
     },
   ],
 
   whatYouGet: [
-    'Eviction notice (Section 21 Form 6A or Section 8 Form 3)',
+    'Eviction notice (Section 21 Form 6A or Section 8 Form 3) with correct statutory wording',
     'Court claim forms: N5B for accelerated possession OR N5 + N119 for standard possession',
+    'N119 Particulars of Claim — the detailed case statement many landlords forget or get wrong',
     'AI-drafted witness statement with your case details',
     'Service instructions and validity checklist',
-    'Court filing guide with step-by-step instructions',
+    'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
     'Evidence checklist for court preparation',
     'Proof of service certificate template',
     'Unlimited regenerations and 12+ months portal storage',
   ],
 
+  // NEW: Why landlords use this - emphasising full court route
+  whyUseThis: {
+    heading: 'Why This Bundle — Not Just a Notice',
+    intro:
+      'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route — from notice to filed claim — ensuring your documents work together.',
+    benefits: [
+      'We map your situation to the correct possession route: Section 21 → N5B accelerated, or Section 8 → N5 + N119 standard',
+      'We create the Particulars of Claim (N119) — the detailed statement of your case that many landlords omit or draft incorrectly',
+      'For rent arrears: we itemise amounts, dates, and running totals in the particulars — exactly what the court requires',
+      'For breach grounds: we detail the specific ground(s) and supporting facts in the correct legal format',
+      'All forms are internally consistent — notice, claim form, and particulars align and cross-reference correctly',
+      'Reduces rejected claims: forms are validated before generation to catch missing fields, date errors, and compliance issues',
+    ],
+  },
+
+  // NEW: Procedural benefits with Particulars of Claim emphasis
+  proceduralBenefits: [
+    'Generates the Particulars of Claim (N119) — the statement of case that sets out your grounds, arrears history, and facts in detail',
+    'Maps your route: Section 21 cases get Form 6A + N5B; Section 8 cases get Form 3 + N5 + N119',
+    'Ensures internal consistency: notice grounds, claim form, and particulars align and reference each other correctly',
+    'Pre-fills official HMCTS forms with your case details — court-ready format',
+    'Calculates notice periods, court deadlines, and earliest filing dates',
+    'Flags compliance blockers (deposit, gas, EPC, How to Rent) before you file',
+    'Creates documents in the correct format for court filing',
+  ],
+
+  // NEW: Legal validation explainer
+  legalValidationExplainer: {
+    whatItMeans: [
+      'Maps your situation to the correct possession route (Section 21 vs Section 8)',
+      'Generates the correct forms for your route (N5B or N5 + N119)',
+      'Pre-fills all mandatory court form fields',
+      'Creates Particulars of Claim with grounds, arrears history, and case details',
+      'Validates internal consistency between notice, claim form, and particulars',
+      'Checks compliance requirements before generation',
+    ],
+    disclaimer:
+      'This is systematic procedural validation, not legal advice. We ensure your forms are complete, consistent, and in the correct format. For complex cases — such as disputes over tenancy type, potential defences, or enforcement — consult a qualified solicitor.',
+  },
+
   howValidationWorks: [
     'Route mapping: Section 21 → N5B accelerated route; Section 8 → N5 + N119 standard route',
     'Form generation: Official HMCTS forms pre-filled with your case details',
+    'Particulars of Claim: Grounds, arrears history, dates, and amounts drafted in legal format',
     'Compliance validation: Checks deposit, gas safety, EPC, How to Rent before generating',
     'Date calculations: Notice periods, court deadlines, and timeline guidance',
-    'Required fields: All mandatory court form fields validated',
-    'Grounds matching: Section 8 grounds mapped to correct particulars',
+    'Internal consistency: All documents cross-reference correctly — grounds match, dates align, amounts reconcile',
   ],
 
   whoThisIsFor: [
     'England landlords who need the complete eviction journey from notice to possession order',
-    'Landlords with rent arrears seeking Section 8 possession',
-    'Landlords seeking no-fault Section 21 possession',
-    'Property managers handling court filings',
+    'Landlords with rent arrears seeking Section 8 possession with properly drafted particulars',
+    'Landlords seeking no-fault Section 21 possession with N5B accelerated claim',
+    'Property managers handling court filings who need consistent, court-ready documents',
   ],
 
   faqs: [
     {
       question: 'What is the difference between Section 21 and Section 8 routes?',
       answer:
-        'Section 21 (no-fault): 2 months notice, then N5B accelerated possession (no hearing if undefended). Section 8 (fault-based): Notice period varies by ground (14 days for rent arrears), then N5 + N119 for standard possession (hearing required).',
+        'Section 21 (no-fault): 2 months notice, then N5B accelerated possession (no hearing if undefended). Section 8 (fault-based): Notice period varies by ground (14 days for rent arrears), then N5 + N119 for standard possession (hearing required). We map your situation to the correct route and generate the appropriate forms.',
+    },
+    {
+      question: 'What is the N119 Particulars of Claim?',
+      answer:
+        'N119 is the statement of your case filed with the N5 claim form. It details: your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is actually made — a weak or missing N119 can sink an otherwise valid claim. We draft this for you.',
+    },
+    {
+      question: 'Why do you emphasise the Particulars of Claim?',
+      answer:
+        'Many landlords serve a valid notice but then file an incomplete or poorly drafted court claim. The N119 Particulars of Claim is where you set out the facts that support your grounds. Courts expect itemised arrears, specific breach dates, and correct legal references. We create this document with your case details.',
     },
     {
       question: 'What court forms are included?',
       answer:
-        'For Section 21: Form 6A notice + N5B accelerated possession claim. For Section 8: Form 3 notice + N5 claim for possession + N119 particulars of claim. All are official HMCTS forms.',
+        'For Section 21: Form 6A notice + N5B accelerated possession claim. For Section 8: Form 3 notice + N5 claim for possession + N119 particulars of claim. All are official HMCTS forms, pre-filled with your case details.',
     },
     {
       question: 'Is this available for Wales or Scotland?',
@@ -306,29 +425,19 @@ export const completePackContent: WizardLandingContent = {
         'No. This bundle is England only. Wales uses different forms under Renting Homes (Wales) Act 2016. Scotland uses First-tier Tribunal forms. For Wales/Scotland, use our Notice Only pack.',
     },
     {
-      question: 'How are the forms validated?',
+      question: 'How does this reduce rejected claims?',
       answer:
-        'Each form is validated for: (1) Correct form selection based on route, (2) All mandatory fields completed, (3) Date logic and deadlines, (4) Grounds properly cited, (5) Compliance requirements met.',
-    },
-    {
-      question: 'What is N5B accelerated possession?',
-      answer:
-        'N5B is the accelerated possession claim form for Section 21 cases. It is a paper-only procedure - if the tenant does not defend, possession is granted without a hearing. Faster than standard N5 route.',
-    },
-    {
-      question: 'What is N119?',
-      answer:
-        'N119 is the Particulars of Claim for Possession of Property. It accompanies the N5 form and details your grounds, rent arrears history, and case specifics. Required for Section 8 claims.',
+        'Rejected claims usually fail due to: incomplete forms, inconsistent information between documents, incorrect dates, or missing particulars. Our system validates all fields, ensures consistency between notice and claim, and generates Particulars of Claim in the correct legal format.',
     },
     {
       question: 'Can I preview before paying?',
       answer:
-        'Yes. Preview all documents with watermark before paying. Edit and regenerate unlimited times.',
+        'Yes. Preview all documents with watermark before paying. Edit and regenerate unlimited times until you are satisfied.',
     },
     {
       question: 'Do you provide legal advice?',
       answer:
-        'No. We provide document generation and guidance. For complex cases or if you need representation, consult a solicitor.',
+        'No. We provide document generation and procedural validation. For contested cases, potential defences, or enforcement strategy, consult a solicitor.',
     },
   ],
 
@@ -342,64 +451,104 @@ export const completePackContent: WizardLandingContent = {
  */
 export const moneyClaimContent: WizardLandingContent = {
   slug: 'money-claim',
-  title: `Money Claim Pack 2026 | N1 Form Generator | Interest Calculator | ${PRODUCTS.money_claim.displayPrice}`,
+  title: `Money Claim Pack 2026 | Form N1 Generator | Daily Interest Rate Calculator | ${SEO_PRICES.moneyClaim.display}`,
   description:
-    'Generate N1 claim form for rent arrears, property damage, cleaning costs, and other tenant debts. Automatic interest calculation with daily rate. PAP-DEBT compliant Letter Before Claim. England courts.',
+    'Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. Automatic interest calculation with daily rate. Figures consistent across all documents. MCOL/CCMCC filing guide included.',
   h1: 'Money Claim Pack',
   subheading:
-    'N1 claim form, interest calculator, and Letter Before Claim for tenant debts',
+    'Form N1 claim form with automatic interest calculation, daily rate breakdown, and PAP-compliant Letter Before Claim',
 
   product: 'money_claim',
   wizardUrl: '/wizard?product=money_claim&src=product_page',
-  price: PRODUCTS.money_claim.displayPrice,
+  price: SEO_PRICES.moneyClaim.display,
 
   jurisdictions: ['England'],
 
   courtForms: [
     {
-      name: 'N1 Claim Form',
+      name: 'Form N1 Claim Form',
       formNumber: 'N1',
       description:
-        'Official county court claim form for money claims. Used for rent arrears, property damage, and other tenant debts.',
+        'Official county court claim form for money claims. This is the form you file to start proceedings to recover tenant debts — rent arrears, damage, cleaning, and other contractual sums.',
     },
     {
       name: 'Particulars of Claim',
       formNumber: 'POC',
       description:
-        'Detailed statement of your claim including amounts, dates, and legal basis.',
+        'Detailed statement of your claim. Sets out: what is owed, when it arose, the legal basis (contract/tenancy agreement), and why you are entitled to the amount claimed.',
     },
     {
       name: 'Schedule of Debt',
       formNumber: 'Schedule',
       description:
-        'Itemised breakdown of all amounts claimed with supporting dates.',
+        'Itemised breakdown of all amounts claimed with dates. Courts expect a clear schedule — especially for rent arrears spanning multiple months.',
     },
     {
       name: 'Interest Calculation',
       formNumber: 'Interest',
       description:
-        'Automatic calculation of statutory interest at 8% per annum with daily rate.',
+        'Automatic calculation of statutory interest at 8% per annum. Shows: total interest accrued, daily rate (continuing), and dates interest runs from. This is included in your claim total.',
     },
   ],
 
   whatYouGet: [
-    'N1 Claim Form - official county court money claim form',
-    'Particulars of Claim with legal basis for your claim',
-    'Schedule of Debt itemising all amounts',
-    'Automatic interest calculation at 8% statutory rate with daily accrual',
-    'Letter Before Claim (PAP-DEBT compliant)',
+    'Form N1 Claim Form — the official county court money claim form, pre-filled with your case details',
+    'Particulars of Claim with legal basis and factual summary',
+    'Schedule of Debt itemising all amounts with dates',
+    'Automatic interest calculation at 8% statutory rate with daily rate shown (e.g., "£1.37 per day")',
+    'Letter Before Claim (PAP-DEBT compliant) — required before issuing proceedings',
     'Defendant Information Sheet',
-    'Court filing guide - where and how to file (online via MCOL or paper)',
-    'Enforcement guide - bailiffs, attachment of earnings, charging orders',
+    'Court filing guide — where to file (MCOL online vs CCMCC paper), court fees, and timelines',
+    'Enforcement guide — bailiffs, attachment of earnings, charging orders',
     'Reply Form and Financial Statement templates',
     'Unlimited regenerations and 12+ months portal storage',
   ],
 
+  // NEW: Why landlords use this
+  whyUseThis: {
+    heading: 'Why This Pack — Not a DIY N1',
+    intro:
+      'Money claims fail when figures don\'t add up, interest is calculated incorrectly, or documents are inconsistent. Courts reject claims with arithmetic errors or incomplete particulars. Our system ensures every figure is consistent across Form N1, Schedule of Debt, and Particulars of Claim — and calculates interest correctly with the daily rate shown.',
+    benefits: [
+      'Form N1 pre-filled with your claim details — mapped to official court format',
+      'Automatic interest calculation at 8% statutory rate with correct start dates for each debt item',
+      'Daily rate shown clearly — courts and defendants expect this (e.g., "£1.37 per day continuing")',
+      'All figures reconcile: Schedule of Debt totals match N1 claim amount and Particulars',
+      'PAP-DEBT compliant Letter Before Claim — required before you can issue proceedings',
+      'Filing guidance: MCOL (online) for claims up to £100,000 or CCMCC (paper) — we explain which to use',
+    ],
+  },
+
+  // NEW: Procedural benefits
+  proceduralBenefits: [
+    'Generates Form N1 (Claim Form) — the official county court form to start money claim proceedings',
+    'Calculates interest automatically at 8% statutory rate with daily rate breakdown',
+    'Shows daily rate explicitly (e.g., "£1.37 per day") — required for judgment and enforcement',
+    'Ensures figures are consistent across N1, Schedule of Debt, and Particulars of Claim',
+    'Creates PAP-DEBT compliant Letter Before Claim with 30-day response period',
+    'Guides you on where to file: MCOL (online) or CCMCC (paper) based on claim type',
+    'Validates dates are within 6-year limitation period',
+  ],
+
+  // NEW: Legal validation explainer
+  legalValidationExplainer: {
+    whatItMeans: [
+      'Pre-fills Form N1 with your claim details in official court format',
+      'Calculates 8% statutory interest with correct start date for each debt item',
+      'Shows daily rate breakdown for continuing interest post-judgment',
+      'Ensures all figures reconcile across documents (no arithmetic errors)',
+      'Creates Schedule of Debt with itemised amounts and dates',
+      'Generates PAP-compliant Letter Before Claim',
+    ],
+    disclaimer:
+      'This is systematic procedural validation, not legal advice. We ensure your claim is correctly calculated and formatted. For disputed debts, counterclaims, or enforcement strategy, consult a qualified solicitor.',
+  },
+
   howValidationWorks: [
     'Claim types: Validates rent arrears, property damage, cleaning costs, unpaid utilities, and other contractual sums',
-    'Amount validation: Checks totals match itemised amounts',
-    'Interest calculation: Automatic 8% statutory interest with daily rate breakdown',
-    'Date validation: Ensures dates are consistent and within limitation period (6 years)',
+    'Amount validation: Ensures totals match itemised amounts across all documents',
+    'Interest calculation: Automatic 8% statutory interest from correct start dates, with daily rate calculation',
+    'Date validation: Confirms dates are consistent and within 6-year limitation period',
     'Required fields: All mandatory N1 fields validated',
     'PAP compliance: Letter Before Claim follows Pre-Action Protocol for Debt Claims',
   ],
@@ -407,50 +556,50 @@ export const moneyClaimContent: WizardLandingContent = {
   whoThisIsFor: [
     'Landlords owed rent arrears by current or former tenants',
     'Landlords claiming for property damage after tenancy ends',
-    'Landlords recovering cleaning costs, unpaid utilities, or other expenses',
-    'Anyone needing to file a county court money claim against a tenant',
+    'Landlords recovering cleaning costs, unpaid utilities, or other contractual expenses',
+    'Anyone who needs to file a county court money claim with correctly calculated interest',
   ],
 
   faqs: [
     {
-      question: 'What is the N1 form?',
+      question: 'What is Form N1?',
       answer:
-        'N1 is the official county court claim form for money claims in England and Wales. It is used to start legal proceedings to recover debts including rent arrears, property damage costs, and other sums owed by tenants.',
+        'Form N1 is the official county court claim form for money claims in England and Wales. It is the form you file to start legal proceedings to recover debts — including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement.',
     },
     {
       question: 'What can I claim for?',
       answer:
-        'You can claim for: rent arrears, property damage (carpets, walls, appliances, garden), professional cleaning costs, unpaid utilities, rubbish removal, abandoned goods disposal, council tax, early termination costs, and other contractual sums owed under the tenancy agreement.',
+        'You can claim for: rent arrears (itemised by month), property damage (carpets, walls, appliances, garden), professional cleaning costs, unpaid utilities, rubbish removal, abandoned goods disposal, council tax, early termination costs, and any other contractual sums owed under the tenancy agreement.',
     },
     {
       question: 'How is interest calculated?',
       answer:
-        'Statutory interest is 8% per annum. Our calculator works this out automatically, showing total interest and daily rate. For rent arrears, interest runs from each payment due date. For damage claims, interest runs from when you notified the tenant of the amount owed.',
+        'Statutory interest is 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998 or county court rules. Our calculator works this out automatically from the correct start date for each item. For rent arrears: interest runs from each payment due date. For damage claims: from when you notified the tenant.',
     },
     {
-      question: 'What is the daily rate?',
+      question: 'What is the daily rate and why does it matter?',
       answer:
-        'The daily rate is the amount of interest accruing each day. Calculated as: (Principal × 8%) ÷ 365. For example, £5,000 debt accrues £1.10 per day. This continues until payment or judgment.',
+        'The daily rate is the interest accruing each day after filing. Calculated as: (Principal × 8%) ÷ 365. For example: £5,000 debt accrues £1.10 per day. Courts expect the daily rate stated in your claim so they can calculate the final judgment amount. We include this in your N1.',
     },
     {
       question: 'Where do I file the claim?',
       answer:
-        'File online via Money Claim Online (MCOL) at gov.uk for claims up to £100,000, or submit paper forms to County Court Money Claims Centre (CCMCC). Our guide explains both options with step-by-step instructions.',
+        'File online via Money Claim Online (MCOL) at gov.uk for most claims up to £100,000, or submit paper forms to County Court Money Claims Centre (CCMCC) in Salford. MCOL is faster and cheaper for straightforward claims. Our guide explains both options step-by-step.',
     },
     {
       question: 'What is PAP-DEBT?',
       answer:
-        'PAP-DEBT is the Pre-Action Protocol for Debt Claims. Before issuing court proceedings, you must send a compliant Letter Before Claim giving the debtor 30 days to respond. Our Letter Before Claim follows this protocol.',
+        'PAP-DEBT is the Pre-Action Protocol for Debt Claims. Before issuing court proceedings, you must send a compliant Letter Before Claim giving the debtor 30 days to respond. If you skip this step, the court may refuse costs even if you win. Our Letter Before Claim follows this protocol exactly.',
     },
     {
       question: 'Can I claim against a tenant who has left?',
       answer:
-        'Yes. You have 6 years from when the debt arose to make a claim. You will need the tenant\'s current address for court service.',
+        'Yes. You have 6 years from when the debt arose to make a claim under the Limitation Act 1980. You will need the tenant\'s current address for court service. If you don\'t have it, tracing services can help.',
     },
     {
       question: 'What happens after I win?',
       answer:
-        'If the tenant does not pay voluntarily after judgment, enforcement options include: County Court Bailiffs, High Court Enforcement Officers (for debts over £600), Attachment of Earnings, and Charging Orders. Our enforcement guide covers all options.',
+        'If the tenant does not pay voluntarily after judgment, enforcement options include: County Court Bailiffs (warrant of control), High Court Enforcement Officers (for judgments over £600), Attachment of Earnings (deducted from wages), and Charging Orders (secured against property). Our enforcement guide covers all options.',
     },
   ],
 
@@ -468,16 +617,16 @@ export const moneyClaimContent: WizardLandingContent = {
  */
 export const astStandardContent: WizardLandingContent = {
   slug: 'tenancy-agreement',
-  title: `Tenancy Agreement Generator 2026 | All UK Regions | ${PRODUCTS.ast_standard.displayPrice}`,
+  title: `Tenancy Agreement Generator 2026 | AST, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
   description:
-    'Jurisdiction-specific tenancy agreements for all UK: Assured Shorthold Tenancy (England), Occupation Contract (Wales), Private Residential Tenancy (Scotland), Private Tenancy Agreement (Northern Ireland). Legally compliant and safe.',
+    'Jurisdiction-specific tenancy agreements: Assured Shorthold Tenancy (England), Occupation Contract (Wales), Private Residential Tenancy (Scotland), Private Tenancy Agreement (Northern Ireland). Correct terminology and legislation for each region.',
   h1: 'Tenancy Agreement Generator',
   subheading:
-    'Jurisdiction-specific, legally compliant agreements for England, Wales, Scotland & Northern Ireland',
+    'Jurisdiction-specific agreements with the correct terminology, clauses, and legislation for England, Wales, Scotland & Northern Ireland',
 
   product: 'ast_standard',
   wizardUrl: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
-  price: PRODUCTS.ast_standard.displayPrice,
+  price: SEO_PRICES.tenancyStandard.display,
 
   jurisdictions: ['England', 'Wales', 'Scotland', 'Northern Ireland'],
 
@@ -541,16 +690,56 @@ export const astStandardContent: WizardLandingContent = {
   ],
 
   whatYouGet: [
-    'Tenancy agreement in correct legal format for your jurisdiction',
-    'Core tenancy clauses: rent, deposit, duration, obligations',
+    'Tenancy agreement in the correct legal format for your jurisdiction',
+    'Correct agreement type: AST (England), Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
+    'Core statutory terms required by each jurisdiction\'s legislation',
     'Property schedules: address, inventory reference, utilities',
     'Rent and deposit schedule with payment terms',
     'House rules and property care requirements',
     'Pre-tenancy compliance checklist (jurisdiction-specific)',
     'Signature blocks for landlord and tenant',
     'Blank inventory template',
-    'Unlimited regenerations and 12+ months portal storage',
+    'Ready-to-sign format — print and use immediately',
   ],
+
+  // NEW: Why use this instead of generic templates
+  whyUseThis: {
+    heading: 'Why Jurisdiction-Specific — Not a Generic Template',
+    intro:
+      'Using the wrong terminology or law for your jurisdiction can make your agreement unenforceable or create disputes. An England AST is not valid in Wales — Wales requires an Occupation Contract under Renting Homes (Wales) Act 2016. Our generator produces the correct agreement type for your property\'s location.',
+    benefits: [
+      'Correct agreement type: AST (England), Standard Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
+      'Correct terminology: "Contract Holder" in Wales, "Tenant" in England — using wrong terms signals you don\'t understand the law',
+      'Correct legislation referenced: Housing Act 1988, Renting Homes (Wales) Act 2016, Private Housing (Tenancies) (Scotland) Act 2016, or Private Tenancies Act (NI) 2022',
+      'Core statutory terms included: rent, deposit, duration, repair obligations, termination provisions',
+      'Deposit protection rules applied correctly per jurisdiction',
+      'Ready-to-sign format — prepared for printing and signing',
+    ],
+  },
+
+  // NEW: Procedural benefits
+  proceduralBenefits: [
+    'Generates the correct agreement type for your property location (AST, Occupation Contract, PRT, or Private Tenancy)',
+    'Uses correct legal terminology required by each jurisdiction\'s legislation',
+    'Includes core statutory terms — rent, deposit, duration, obligations — as required by law',
+    'Applies correct deposit protection rules: 30 days (England), 30 days (Wales), immediate (Scotland), scheme rules (NI)',
+    'References correct termination provisions: Section 21/8 (England), Section 173/181 (Wales), Notice to Leave (Scotland)',
+    'Creates documents in ready-to-sign format',
+  ],
+
+  // NEW: Legal validation explainer
+  legalValidationExplainer: {
+    whatItMeans: [
+      'Detects jurisdiction from property location and generates correct agreement type',
+      'Uses terminology required by each nation\'s legislation (Contract Holder in Wales, Tenant in England)',
+      'Includes all core statutory terms required by law',
+      'Applies correct deposit protection requirements per jurisdiction',
+      'References correct notice periods and termination routes',
+      'Prevents cross-jurisdiction errors (England terms in Wales agreements)',
+    ],
+    disclaimer:
+      'This is systematic procedural validation, not legal advice. Agreements are drafted to comply with standard residential tenancies. For unusual situations — such as commercial mixed-use, licence agreements, or non-standard arrangements — consult a qualified solicitor.',
+  },
 
   howValidationWorks: [
     'Jurisdiction detection: Generates correct agreement type based on property location',
@@ -564,7 +753,7 @@ export const astStandardContent: WizardLandingContent = {
   whoThisIsFor: [
     'Landlords letting residential property in any UK jurisdiction',
     'Property managers needing compliant agreements for multiple regions',
-    'First-time landlords who want a professionally structured agreement',
+    'First-time landlords who want a correctly structured agreement for their jurisdiction',
     'Anyone renewing or creating a new tenancy agreement',
   ],
 
@@ -575,24 +764,24 @@ export const astStandardContent: WizardLandingContent = {
         'England: Assured Shorthold Tenancy (AST) under Housing Act 1988. Wales: Standard Occupation Contract under Renting Homes (Wales) Act 2016. Scotland: Private Residential Tenancy (PRT) under Private Housing (Tenancies) (Scotland) Act 2016. Northern Ireland: Private Tenancy Agreement under Private Tenancies Act (NI) 2022.',
     },
     {
-      question: 'Why does jurisdiction matter?',
+      question: 'Why does using the correct agreement type matter?',
       answer:
-        'Each UK nation has different housing legislation. Using an England AST in Wales is legally incorrect - Wales requires an Occupation Contract. Our system prevents cross-jurisdiction errors that could invalidate your agreement.',
-    },
-    {
-      question: 'Is this agreement legally compliant?',
-      answer:
-        'Yes. Agreements are drafted to comply with current legislation for each jurisdiction. However, for unusual situations (commercial mixed-use, licence agreements), consult a solicitor.',
+        'Each UK nation has different housing legislation with different terminology, rights, and procedures. Using an England AST in Wales is legally incorrect — Wales requires an Occupation Contract. Using wrong terminology signals you don\'t understand the law and can create problems at termination or in disputes.',
     },
     {
       question: 'What is included in the Standard agreement?',
       answer:
-        'Core tenancy clauses, property schedules, rent/deposit terms, house rules, compliance checklist, signature blocks, and blank inventory template. Suitable for single household residential lets.',
+        'The agreement document with core statutory terms (rent, deposit, duration, obligations), property schedules, rent/deposit payment terms, house rules, jurisdiction-specific compliance checklist, signature blocks, and blank inventory template. Suitable for single household residential lets.',
     },
     {
       question: 'Do I need Premium instead?',
       answer:
-        'Premium adds HMO clauses, guarantor provisions, and enhanced terms. Recommended for: HMOs (3+ unrelated tenants), student lets, properties requiring guarantors, or multi-tenant situations.',
+        'Premium adds HMO clauses, guarantor provisions, wizard-completed inventory, and enhanced terms. Recommended for: HMOs (3+ unrelated tenants), student lets, properties requiring guarantors, or multi-tenant situations.',
+    },
+    {
+      question: 'Is this agreement legally compliant?',
+      answer:
+        'Agreements are drafted to comply with current legislation for each jurisdiction and include required statutory terms. For unusual situations (commercial mixed-use, licence agreements, company lets), consult a solicitor.',
     },
     {
       question: 'Can I preview before paying?',
@@ -602,12 +791,12 @@ export const astStandardContent: WizardLandingContent = {
     {
       question: 'What about deposit protection?',
       answer:
-        'The agreement references deposit protection requirements for your jurisdiction: 30 days in England, SafeDeposits Scotland/MyDeposits Scotland in Scotland, Wales deposit schemes, NI requirements.',
+        'The agreement references deposit protection requirements for your jurisdiction: 30 days to protect in England, deposit schemes in Wales, SafeDeposits Scotland/MyDeposits Scotland in Scotland, NI scheme requirements.',
     },
     {
       question: 'Can I add custom clauses?',
       answer:
-        'Yes. The wizard allows additional terms. However, unfair terms under consumer protection legislation are unenforceable - stick to reasonable, clear provisions.',
+        'Yes. The wizard allows additional terms. However, unfair terms under consumer protection legislation are unenforceable — stick to reasonable, clear provisions.',
     },
   ],
 
@@ -625,16 +814,16 @@ export const astStandardContent: WizardLandingContent = {
  */
 export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
-  title: `Premium Tenancy Agreement 2026 | HMO & Guarantor Clauses | All UK | ${PRODUCTS.ast_premium.displayPrice}`,
+  title: `Premium Tenancy Agreement 2026 | HMO Clauses & Guarantor Provisions | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    'Premium tenancy agreements with HMO clauses, guarantor provisions, and enhanced terms for England (AST), Wales (Occupation Contract), Scotland (PRT), and Northern Ireland. Jurisdiction-specific drafting with detailed schedules.',
+    'Premium tenancy agreements with HMO clauses, guarantor provisions, inventory & schedule of condition, and compliance checklist. All UK jurisdictions: AST (England), Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI).',
   h1: 'Premium Tenancy Agreement',
   subheading:
-    'HMO clauses, guarantor provisions, and enhanced terms for all UK jurisdictions',
+    'HMO clauses, guarantor provisions, inventory & schedule of condition, and compliance checklist for all UK jurisdictions',
 
   product: 'ast_premium',
   wizardUrl: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
-  price: PRODUCTS.ast_premium.displayPrice,
+  price: SEO_PRICES.tenancyPremium.display,
 
   jurisdictions: ['England', 'Wales', 'Scotland', 'Northern Ireland'],
 
@@ -698,14 +887,55 @@ export const astPremiumContent: WizardLandingContent = {
     'Premium tenancy agreement with all Standard clauses plus HMO provisions',
     'HMO clauses: joint and several liability, shared facilities rules, tenant replacement procedure',
     'Guarantor clauses with clear liability terms and extent of guarantee',
+    'Inventory & schedule of condition — wizard-completed with rooms, items, and condition descriptions',
+    'Compliance checklist — jurisdiction-specific pre-tenancy requirements',
+    'Tenant notes/guidance — explains their obligations clearly',
     'Rent review mechanisms: CPI/RPI-linked increases, annual review process',
     'Anti-subletting clause: Airbnb and short-let prohibition',
     'Late payment provisions with reasonable charges',
-    'Wizard-completed inventory (rooms, items, conditions)',
-    'Pre-tenancy compliance checklist (jurisdiction-specific)',
     'Enhanced house rules for multi-tenant properties',
     'Unlimited regenerations and 12+ months portal storage',
   ],
+
+  // NEW: Why landlords use Premium
+  whyUseThis: {
+    heading: 'Why Premium — Not Just Standard',
+    intro:
+      'Standard agreements are designed for single-household lets. If you have multiple tenants sharing, require a guarantor, or operate an HMO, you need provisions that Standard doesn\'t include. Premium adds HMO clauses, guarantor provisions, and supporting documents that help you in disputes and protect you if things go wrong.',
+    benefits: [
+      'HMO clauses for shared properties: joint and several liability, shared facilities rules, tenant replacement procedure',
+      'Guarantor clauses: clear liability terms for third-party guarantors — essential for students and first-time renters',
+      'Inventory & schedule of condition: wizard-completed with rooms, items, and condition — evidence for deposit disputes',
+      'Compliance checklist: jurisdiction-specific pre-tenancy requirements so you don\'t miss anything',
+      'Tenant guidance notes: explains obligations clearly — reduces disputes by setting expectations',
+      'More detailed obligations: rent review, anti-subletting, late payment provisions',
+    ],
+  },
+
+  // NEW: Procedural benefits
+  proceduralBenefits: [
+    'Includes HMO clauses for multi-tenant properties: joint and several liability, shared facilities rules, tenant replacement',
+    'Includes guarantor clauses: guarantor identification, liability scope, duration, and recovery provisions',
+    'Generates inventory & schedule of condition with the wizard — not a blank template',
+    'Creates jurisdiction-specific compliance checklist for pre-tenancy requirements',
+    'Includes tenant guidance notes explaining obligations',
+    'Adds rent review mechanisms, anti-subletting provisions, and late payment clauses',
+    'All in the correct agreement type for your jurisdiction (AST, Occupation Contract, PRT, Private Tenancy)',
+  ],
+
+  // NEW: Legal validation explainer
+  legalValidationExplainer: {
+    whatItMeans: [
+      'Generates correct agreement type for your jurisdiction with Premium additions',
+      'HMO clauses adapted to each nation\'s legislation (Housing Act 2004, Civic Government Act 1982, HMO Act NI 2016)',
+      'Guarantor provisions structured with clear liability scope',
+      'Inventory & schedule of condition created through wizard — not blank',
+      'Compliance checklist specific to jurisdiction requirements',
+      'All Standard validation plus Premium-specific provisions',
+    ],
+    disclaimer:
+      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for typical HMO and multi-tenant situations. For complex arrangements — such as commercial HMOs, license agreements, or unusual guarantee structures — consult a qualified solicitor.',
+  },
 
   howValidationWorks: [
     'Jurisdiction-specific drafting: HMO clauses adapted to each nation\'s legislation',
@@ -719,8 +949,8 @@ export const astPremiumContent: WizardLandingContent = {
   whoThisIsFor: [
     'HMO landlords (3+ unrelated tenants sharing facilities)',
     'Student accommodation landlords',
-    'Landlords requiring guarantors (students, first-time renters)',
-    'Professional landlords wanting comprehensive protection',
+    'Landlords requiring guarantors (students, first-time renters, tenants without UK credit history)',
+    'Professional landlords wanting comprehensive protection in disputes',
     'Properties with 5+ occupants requiring mandatory HMO licensing (England)',
   ],
 
@@ -733,12 +963,17 @@ export const astPremiumContent: WizardLandingContent = {
     {
       question: 'What are guarantor clauses?',
       answer:
-        'Guarantor clauses provide third-party guarantee for tenant obligations. Includes: guarantor identification, extent of liability, duration of guarantee, and recovery provisions. Common for student lets and tenants without UK credit history.',
+        'Guarantor clauses provide third-party guarantee for tenant obligations. Includes: guarantor identification, extent of liability (full rent and damages), duration of guarantee (fixed term or indefinite), and recovery provisions. Essential for student lets and tenants without UK credit history.',
+    },
+    {
+      question: 'What supporting documents are included?',
+      answer:
+        'Premium includes: wizard-completed inventory & schedule of condition (with rooms, items, conditions), jurisdiction-specific compliance checklist, and tenant guidance notes explaining their obligations. These help in disputes and deposit claims.',
     },
     {
       question: 'Is Premium required for HMOs?',
       answer:
-        'Recommended, not strictly required. However, standard agreements lack clauses commonly needed under Housing Act 2004 HMO licensing conditions. Premium includes provisions that HMO licence conditions may require.',
+        'Recommended, not strictly required. However, Standard agreements lack clauses commonly needed under Housing Act 2004 HMO licensing conditions. Premium includes joint and several liability, shared facilities rules, and other provisions that HMO licence conditions may require.',
     },
     {
       question: 'What is joint and several liability?',
@@ -746,9 +981,9 @@ export const astPremiumContent: WizardLandingContent = {
         'Each tenant is individually liable for the entire rent amount, not just their share. If one tenant fails to pay, others are responsible. Essential for HMOs to prevent disputes over individual shares.',
     },
     {
-      question: 'What bundle inclusions are there?',
+      question: 'How does this help in disputes?',
       answer:
-        'Premium includes: wizard-completed inventory (Standard has blank template), pre-tenancy compliance checklist, enhanced house rules for multi-tenant, guarantor provisions, and rent review mechanisms.',
+        'The inventory & schedule of condition provides dated evidence of property condition at start — crucial for deposit disputes. Clear tenant obligations and house rules reduce ambiguity. Guarantor clauses give you another route to recovery if the tenant defaults.',
     },
     {
       question: 'Which laws apply to each jurisdiction?',
@@ -756,14 +991,9 @@ export const astPremiumContent: WizardLandingContent = {
         'England: Housing Act 1988 + Housing Act 2004 (HMO). Wales: Renting Homes (Wales) Act 2016. Scotland: Private Housing (Tenancies) (Scotland) Act 2016 + Civic Government (Scotland) Act 1982. NI: Private Tenancies Act (NI) 2022 + HMO Act (NI) 2016.',
     },
     {
-      question: 'Can I downgrade to Standard?',
-      answer:
-        'Yes. If you don\'t need HMO or guarantor clauses, Standard is sufficient and costs less. The wizard helps you decide based on your property and tenant situation.',
-    },
-    {
       question: 'Do Premium agreements work for single tenants?',
       answer:
-        'Yes. Premium includes all Standard clauses. The HMO clauses simply won\'t apply for a single-tenant property. Useful if you want guarantor provisions without full HMO terms.',
+        'Yes. Premium includes all Standard clauses. The HMO clauses simply won\'t apply for a single-tenant property. Useful if you want guarantor provisions and full inventory without HMO terms.',
     },
   ],
 
