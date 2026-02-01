@@ -39,7 +39,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premium HMO Private Residential Tenancy Agreement</title>
+  <title>Premium Private Residential Tenancy Agreement</title>
   <style>
     /* ===== PAGE SETUP ===== */
     @page {
@@ -128,16 +128,6 @@
       margin: 5pt 0;
     }
 
-    .hmo-badge {
-      display: inline-block;
-      background: #d32f2f;
-      color: white;
-      padding: 3pt 12pt;
-      font-size: 8pt;
-      text-transform: uppercase;
-      letter-spacing: 1pt;
-      margin: 5pt 5pt;
-    }
 
     .doc-date {
       font-size: 10pt;
@@ -328,17 +318,17 @@
     }
 
     .legal-notice.warning {
-      border-color: #d32f2f;
-      background: #fff5f5;
+      border-color: #005eb8;
+      background: #f0f7ff;
     }
 
     .legal-notice.warning .legal-notice-title {
-      color: #d32f2f;
+      color: #005eb8;
     }
 
     /* ===== HMO SECTION ===== */
     .hmo-section {
-      border-left: 3pt solid #d32f2f;
+      border-left: 3pt solid #005eb8;
       padding-left: 15pt;
       margin: 15pt 0;
     }
@@ -382,9 +372,8 @@
 
   <!-- ===== COVER / TITLE ===== -->
   <div class="doc-header">
-    <h1>Premium HMO Private Residential Tenancy Agreement</h1>
+    <h1>Premium Private Residential Tenancy Agreement</h1>
     <div class="premium-badge">Premium Edition</div>
-    <div class="hmo-badge">HMO Licensed Property</div>
     <div class="doc-subtitle">Private Housing (Tenancies) (Scotland) Act 2016</div>
     <div class="doc-jurisdiction">Scotland</div>
     <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
@@ -424,7 +413,7 @@
       <div class="party-role">Landlord</div>
       <div class="party-details-text">
         <strong>{{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}</strong><br>
-        <span class="address-text">{{landlord_address}}</span><br>
+        <span class="address-text">{{landlord_address}}{{#if landlord_postcode}}, {{landlord_postcode}}{{/if}}</span><br>
         <span class="email-text">{{landlord_email}}</span> | {{landlord_phone}}
       </div>
     </div>
@@ -1414,7 +1403,7 @@
 
   <!-- ===== FOOTER ===== -->
   <div class="doc-footer">
-    <p>Premium HMO Private Residential Tenancy Agreement &mdash; Scotland</p>
+    <p>Premium Private Residential Tenancy Agreement &mdash; Scotland</p>
     <p>Generated: {{formatUKDate current_date}} | Reference: {{#if document_id}}{{document_id}}{{else}}[Document ID]{{/if}}</p>
     <p>Compliant with Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, Civic Government (Scotland) Act 1982</p>
     <p>{{#if site_domain}}{{site_domain}}{{/if}}</p>
