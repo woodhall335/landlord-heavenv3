@@ -41,6 +41,9 @@ import crypto from 'crypto';
  */
 function normalizeToPaymentSku(productType: string): string {
   const displayToPayment: Record<string, string> = {
+    // Generic tenancy_agreement defaults to standard tier
+    tenancy_agreement: 'ast_standard',
+    // Jurisdiction-specific display SKUs
     prt_standard: 'ast_standard',
     prt_premium: 'ast_premium',
     occupation_standard: 'ast_standard',
@@ -63,6 +66,7 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
   ast_standard: PRICE_IDS.STANDARD_AST,
   ast_premium: PRICE_IDS.PREMIUM_AST,
+  tenancy_agreement: PRICE_IDS.STANDARD_AST, // Generic tenancy agreement defaults to standard
   // Jurisdiction-specific display SKUs - map to same prices as AST
   prt_standard: PRICE_IDS.STANDARD_AST,      // Scotland
   prt_premium: PRICE_IDS.PREMIUM_AST,        // Scotland
@@ -108,6 +112,7 @@ const createCheckoutSchema = z.object({
   product_type: z.enum([
     'notice_only', 'complete_pack', 'money_claim', 'sc_money_claim',
     'ast_standard', 'ast_premium',
+    'tenancy_agreement', // Generic tenancy agreement (defaults to standard tier)
     // Jurisdiction-specific display SKUs
     'prt_standard', 'prt_premium',           // Scotland
     'occupation_standard', 'occupation_premium', // Wales
