@@ -355,3 +355,86 @@ describe('Edit Answers URL Generation', () => {
     expect(normalizedProduct).toBe('prt_standard');
   });
 });
+
+describe('Canonical Jurisdiction in AST Mapper', () => {
+  // These tests verify the CRITICAL fix for Scotland fulfillment
+  // Previously, Scotland cases were generating Wales documents due to
+  // incorrect jurisdiction derivation from wizardFacts
+
+  it('should use canonical jurisdiction over wizardFacts jurisdiction', async () => {
+    const { mapWizardToASTData } = await import('@/lib/documents/ast-wizard-mapper');
+
+    // Simulate a case where wizardFacts has wrong jurisdiction (e.g., Wales)
+    // but canonical jurisdiction from case is Scotland
+    const wizardFacts = {
+      property_country: 'wales', // WRONG - this was the bug
+      landlord_full_name: 'Test Landlord',
+      landlord_email: 'test@test.com',
+      landlord_phone: '1234567890',
+      landlord_address_line1: '123 Test St',
+      landlord_city: 'Edinburgh',
+      landlord_postcode: 'EH1 1AA',
+      property_address_line1: '456 Property St',
+      property_city: 'Edinburgh',
+      property_postcode: 'EH2 2BB',
+      tenancy_start_date: '2025-01-01',
+      rent_amount: 1000,
+      deposit_amount: 1000,
+      tenants: [{ full_name: 'Test Tenant', email: 'tenant@test.com', phone: '9876543210' }],
+    };
+
+    // Pass canonical jurisdiction as 'scotland'
+    const astData = mapWizardToASTData(wizardFacts as any, { canonicalJurisdiction: 'scotland' });
+
+    // Canonical jurisdiction should override wizardFacts
+    expect(astData.jurisdiction).toBe('scotland');
+    expect(astData.jurisdiction_wales).toBe(false);
+  });
+
+  it('should derive jurisdiction from wizardFacts when canonical not provided', async () => {
+    const { mapWizardToASTData } = await import('@/lib/documents/ast-wizard-mapper');
+
+    const wizardFacts = {
+      property_country: 'scotland',
+      landlord_full_name: 'Test Landlord',
+      landlord_email: 'test@test.com',
+      landlord_phone: '1234567890',
+      landlord_address_line1: '123 Test St',
+      landlord_city: 'Edinburgh',
+      landlord_postcode: 'EH1 1AA',
+      property_address_line1: '456 Property St',
+      property_city: 'Edinburgh',
+      property_postcode: 'EH2 2BB',
+      tenancy_start_date: '2025-01-01',
+      rent_amount: 1000,
+      deposit_amount: 1000,
+      tenants: [{ full_name: 'Test Tenant', email: 'tenant@test.com', phone: '9876543210' }],
+    };
+
+    // No canonical jurisdiction - should use wizardFacts
+    const astData = mapWizardToASTData(wizardFacts as any);
+
+    expect(astData.jurisdiction).toBe('scotland');
+  });
+
+  it('should ensure Scotland cases never get England/Wales boolean flags', async () => {
+    const { mapWizardToASTData } = await import('@/lib/documents/ast-wizard-mapper');
+
+    const wizardFacts = {
+      landlord_full_name: 'Test Landlord',
+      landlord_email: 'test@test.com',
+      landlord_phone: '1234567890',
+      property_address_line1: '123 Test St',
+      tenancy_start_date: '2025-01-01',
+      rent_amount: 1000,
+      deposit_amount: 1000,
+      tenants: [{ full_name: 'Test Tenant', email: 'tenant@test.com', phone: '9876543210' }],
+    };
+
+    const astData = mapWizardToASTData(wizardFacts as any, { canonicalJurisdiction: 'scotland' });
+
+    // Scotland cases should have both England and Wales flags as false
+    expect(astData.jurisdiction_england).toBe(false);
+    expect(astData.jurisdiction_wales).toBe(false);
+  });
+});
