@@ -83,7 +83,8 @@ const COLORS = {
   borderLight: "#4B5563",
 } as const;
 
-const logoUrl = "https://landlordheaven.co.uk/headerlogo2.png";
+// Using smaller headerlogo.png for better email client compatibility
+const logoUrl = "https://landlordheaven.co.uk/headerlogo.png";
 const appUrl = "https://landlordheaven.co.uk";
 
 /**
