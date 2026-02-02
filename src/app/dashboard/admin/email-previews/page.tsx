@@ -119,10 +119,16 @@ function generateOutlookSafeEmail(
     <tr>
       <td align="center" style="padding: 20px 10px;">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%;">
-          <!-- Logo -->
+          <!-- Logo (on dark background for light logo visibility) -->
           <tr>
-            <td align="center" style="padding: 20px 0;">
-              <img src="${logoUrl}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
+            <td>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                <tr>
+                  <td align="center" bgcolor="${COLORS.cardBg}" style="background-color: ${COLORS.cardBg}; padding: 25px 20px; border-radius: 8px 8px 0 0;">
+                    <img src="${logoUrl}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <!-- Header Banner -->
@@ -130,7 +136,7 @@ function generateOutlookSafeEmail(
             <td>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                 <tr>
-                  <td align="center" bgcolor="${headerColor}" style="background-color: ${headerColor}; padding: 30px 20px; border-radius: 8px 8px 0 0;">
+                  <td align="center" bgcolor="${headerColor}" style="background-color: ${headerColor}; padding: 30px 20px;">
                     <h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: bold; color: ${COLORS.white}; line-height: 1.3;">${headerTitle}</h1>
                   </td>
                 </tr>

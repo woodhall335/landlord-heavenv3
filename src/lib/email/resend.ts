@@ -173,11 +173,18 @@ ${getEmailHead('Email from Landlord Heaven')}
 
 /**
  * Generate the logo header row
+ * Logo is placed on a dark background to ensure visibility (we have a light/white logo)
  */
 const getLogoRow = (): string => `
   <tr>
-    <td align="center" style="padding: 20px 0;">
-      <img src="${LOGO_URL}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
+    <td>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+        <tr>
+          <td align="center" bgcolor="${COLORS.cardBg}" style="background-color: ${COLORS.cardBg}; padding: 25px 20px; border-radius: 8px 8px 0 0;">
+            <img src="${LOGO_URL}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 `;
@@ -185,6 +192,7 @@ const getLogoRow = (): string => `
 /**
  * Generate the header banner with title
  * Uses MSO VML for background color support in Outlook
+ * Note: No top border-radius since logo row above has it
  */
 const getHeaderBanner = (title: string, backgroundColor: string = COLORS.primary): string => `
   <tr>
@@ -196,7 +204,7 @@ const getHeaderBanner = (title: string, backgroundColor: string = COLORS.primary
       <![endif]-->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
         <tr>
-          <td align="center" bgcolor="${backgroundColor}" style="background-color: ${backgroundColor}; padding: 30px 20px; border-radius: 8px 8px 0 0;">
+          <td align="center" bgcolor="${backgroundColor}" style="background-color: ${backgroundColor}; padding: 30px 20px;">
             <h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: bold; color: ${COLORS.white}; line-height: 1.3;">${title}</h1>
           </td>
         </tr>
