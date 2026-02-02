@@ -119,24 +119,18 @@ function generateOutlookSafeEmail(
     <tr>
       <td align="center" style="padding: 20px 10px;">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%;">
-          <!-- Logo (on dark background for light logo visibility) -->
+          <!-- Logo (on light outer background - our logo has dark text + purple icon) -->
           <tr>
-            <td>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                <tr>
-                  <td align="center" bgcolor="${COLORS.cardBg}" style="background-color: ${COLORS.cardBg}; padding: 25px 20px; border-radius: 8px 8px 0 0;">
-                    <img src="${logoUrl}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
-                  </td>
-                </tr>
-              </table>
+            <td align="center" style="padding: 25px 20px;">
+              <img src="${logoUrl}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
             </td>
           </tr>
-          <!-- Header Banner -->
+          <!-- Header Banner (with top border-radius since it's first colored element) -->
           <tr>
             <td>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                 <tr>
-                  <td align="center" bgcolor="${headerColor}" style="background-color: ${headerColor}; padding: 30px 20px;">
+                  <td align="center" bgcolor="${headerColor}" style="background-color: ${headerColor}; padding: 30px 20px; border-radius: 8px 8px 0 0;">
                     <h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: bold; color: ${COLORS.white}; line-height: 1.3;">${headerTitle}</h1>
                   </td>
                 </tr>
