@@ -6,6 +6,10 @@
  * Usage: npx tsx scripts/send-test-emails.ts
  */
 
+// Load environment variables from .env.local
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+
 import {
   sendPurchaseConfirmation,
   sendWelcomeEmail,
