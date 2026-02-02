@@ -52,9 +52,8 @@ export { resend };
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Landlord Heaven <no-reply@landlordheaven.co.uk>';
 const REPLY_TO_EMAIL = process.env.RESEND_REPLY_TO_EMAIL || 'support@landlordheaven.co.uk';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
-// Using headerlogo.png (942x140, 9KB) instead of headerlogo2.png (1884x280, 30KB)
-// Smaller images load more reliably in email clients like Outlook
-const LOGO_URL = `${APP_URL}/headerlogo.png`;
+// Using headerlogo2.png - this was working in old emails
+const LOGO_URL = `${APP_URL}/headerlogo2.png`;
 
 export interface SendEmailOptions {
   to: string | string[];
@@ -177,21 +176,12 @@ ${getEmailHead('Email from Landlord Heaven')}
  * Generate the logo header row
  * Logo has explicit white background to prevent Outlook dark mode inversion
  * Our logo has dark text + purple icon, so needs light background
+ * Using simple img tag format that was working in old emails
  */
 const getLogoRow = (): string => `
   <tr>
     <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 25px 20px; border-radius: 8px 8px 0 0;">
-      <!--[if mso]>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="280">
-        <tr>
-          <td>
-      <![endif]-->
-      <img src="${LOGO_URL}" alt="Landlord Heaven" width="280" height="70" border="0" style="display: block; max-width: 280px; width: 280px; height: auto;" />
-      <!--[if mso]>
-          </td>
-        </tr>
-      </table>
-      <![endif]-->
+      <img src="${LOGO_URL}" alt="Landlord Heaven" style="max-width: 280px; height: auto;" />
     </td>
   </tr>
 `;

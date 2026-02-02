@@ -83,8 +83,8 @@ const COLORS = {
   borderLight: "#4B5563",
 } as const;
 
-// Using smaller headerlogo.png for better email client compatibility
-const logoUrl = "https://landlordheaven.co.uk/headerlogo.png";
+// Using headerlogo2.png - this was working in old emails
+const logoUrl = "https://landlordheaven.co.uk/headerlogo2.png";
 const appUrl = "https://landlordheaven.co.uk";
 
 /**
@@ -123,7 +123,7 @@ function generateOutlookSafeEmail(
           <!-- Logo (explicit white background to prevent dark mode inversion) -->
           <tr>
             <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 25px 20px; border-radius: 8px 8px 0 0;">
-              <img src="${logoUrl}" alt="Landlord Heaven" width="280" height="70" style="display: block; max-width: 280px; width: 280px; height: auto;" />
+              <img src="${logoUrl}" alt="Landlord Heaven" style="max-width: 280px; height: auto;" />
             </td>
           </tr>
           <!-- Header Banner (no border-radius - logo row above has it) -->
