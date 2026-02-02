@@ -75,13 +75,14 @@ const JURISDICTION_INFO: Record<CanonicalJurisdiction, JurisdictionInfo> = {
     ],
   },
   'northern-ireland': {
-    legislation: 'Private Tenancies (Northern Ireland) Order 2006',
+    legislation: 'Private Tenancies Act (Northern Ireland) 2022',
     noticePeriod: '4 weeks–12 weeks depending on tenancy length',
     tenancyType: 'Private Tenancy',
     keyDifferences: [
       'Notice period increases with tenancy length',
       'Landlord registration required',
       'Limited eviction routes compared to England',
+      'Mandatory EICR from April 2025',
     ],
   },
 };

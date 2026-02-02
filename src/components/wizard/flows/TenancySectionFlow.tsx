@@ -8,7 +8,7 @@
  * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
- * - Northern Ireland: Private Tenancy - Private Tenancies (NI) Order 2006
+ * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
  *
  * Flow Structure:
  * 1. Product - Standard/Premium tier selection (jurisdiction-specific naming)
@@ -70,7 +70,7 @@ interface TenancySectionFlowProps {
  * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
- * - Northern Ireland: Private Tenancy - Private Tenancies (NI) Order 2006
+ * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
  */
 /**
  * Check if a product tier is a premium tier (jurisdiction-agnostic check)
@@ -118,7 +118,7 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         standardTier: 'Standard NI Private Tenancy',
         premiumTier: 'Premium NI Private Tenancy',
         suitabilityTitle: 'NI Private Tenancy Suitability Check',
-        suitabilityDescription: 'Basic checks to ensure this is a valid private tenancy under the Private Tenancies (Northern Ireland) Order 2006.',
+        suitabilityDescription: 'Basic checks to ensure this is a valid private tenancy under the Private Tenancies Act (Northern Ireland) 2022.',
         standardDescription: 'Simple, straightforward private tenancy for most lets.',
         premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
         landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a private tenancy.',
