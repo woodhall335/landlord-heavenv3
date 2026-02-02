@@ -5,7 +5,7 @@
 
 **ENGLAND & WALES**
 
-This Agreement is dated: **{{agreement_date}}**
+This Agreement is dated: **{{format_date agreement_date 'long'}}**
 
 ---
 
@@ -65,10 +65,10 @@ Description: {{property_description}}
 
 ## THE TERM
 
-**Start Date:** {{tenancy_start_date}}
+**Start Date:** {{format_date tenancy_start_date 'long'}}
 
 {{#if is_fixed_term}}
-**End Date:** {{tenancy_end_date}}
+**End Date:** {{format_date tenancy_end_date 'long'}}
 
 This is a **fixed term** tenancy for **{{term_length}}**.
 
@@ -89,7 +89,7 @@ This is a **periodic** tenancy running from {{rent_period}} to {{rent_period}}.
 
 **Payment Details:** {{payment_details}}
 
-**First Payment:** £{{first_payment}} due on {{first_payment_date}}
+**First Payment:** £{{first_payment}} due on {{format_date first_payment_date 'long'}}
 
 {{#if rent_includes}}
 **The rent includes:** {{rent_includes}}

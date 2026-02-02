@@ -53,12 +53,12 @@
 ## DEPOSIT DETAILS
 
 **Deposit Amount:** £{{deposit_amount}}
-**Date Received:** {{deposit_received_date}}
-**Date Protected:** {{deposit_protected_date}}
+**Date Received:** {{format_date deposit_received_date 'long'}}
+**Date Protected:** {{format_date deposit_protected_date 'long'}}
 **Deposit Reference Number:** {{deposit_reference}}
 **TDS Membership Number:** {{tds_membership_number}}
 
-**Protection Deadline:** {{protection_deadline}} (14 days from receipt)
+**Protection Deadline:** {{format_date protection_deadline 'long'}} (14 days from receipt)
 **Status:** {{#if protected_in_time}}✓ Protected within legal deadline{{else}}⚠ Protected late - see notes{{/if}}
 
 ---
@@ -101,8 +101,8 @@ This deposit has been protected using a **{{protection_type}}** scheme:
 ## TENANCY DETAILS
 
 **Tenancy Type:** Private Tenancy
-**Tenancy Start Date:** {{tenancy_start_date}}
-{{#if fixed_term}}**Fixed Term End Date:** {{tenancy_end_date}}{{/if}}
+**Tenancy Start Date:** {{format_date tenancy_start_date 'long'}}
+{{#if fixed_term}}**Fixed Term End Date:** {{format_date tenancy_end_date 'long'}}{{/if}}
 **Monthly Rent:** £{{monthly_rent}}
 
 ---
@@ -242,7 +242,7 @@ If a landlord fails to protect a deposit:
 This certificate provides the prescribed information required under the Private Tenancies (Northern Ireland) Order 2006:
 
 ✅ **Deposit amount:** £{{deposit_amount}}
-✅ **Deposit protection date:** {{deposit_protected_date}}
+✅ **Deposit protection date:** {{format_date deposit_protected_date 'long'}}
 ✅ **Scheme name:** Tenancy Deposit Scheme Northern Ireland (TDS NI)
 ✅ **Scheme contact details:** Provided above
 ✅ **Deposit reference:** {{deposit_reference}}
@@ -258,8 +258,8 @@ This certificate provides the prescribed information required under the Private 
 This certificate confirms that:
 
 1. The tenant's deposit of £{{deposit_amount}} has been protected with TDS NI
-2. The deposit was received on {{deposit_received_date}}
-3. The deposit was protected on {{deposit_protected_date}}
+2. The deposit was received on {{format_date deposit_received_date 'long'}}
+3. The deposit was protected on {{format_date deposit_protected_date 'long'}}
 4. The deposit reference number is: {{deposit_reference}}
 5. The tenant has been provided with all prescribed information
 
@@ -269,7 +269,7 @@ This certificate confirms that:
 
 **Print Name:** {{landlord_name}}
 
-**Date:** {{certificate_date}}
+**Date:** {{format_date certificate_date 'long'}}
 
 ---
 
@@ -314,5 +314,5 @@ If you have any questions about your deposit protection or this certificate:
 
 *This certificate complies with the Private Tenancies (Northern Ireland) Order 2006*
 
-**Document generated:** {{generation_date}}
+**Document generated:** {{format_date generation_date 'long'}}
 **Reference:** {{document_reference}}
