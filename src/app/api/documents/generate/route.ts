@@ -972,6 +972,14 @@ export async function POST(request: Request) {
          * AST
          */
         case 'ast_standard': {
+          // Northern Ireland uses Private Tenancy Agreement instead of AST
+          if (canonicalJurisdiction === 'northern-ireland') {
+            const privateTenancyData = mapWizardToPrivateTenancyData(wizardFacts as any);
+            generatedDoc = await generatePrivateTenancyAgreement(privateTenancyData);
+            documentTitle = 'Private Tenancy Agreement - Northern Ireland';
+            break;
+          }
+
           const astData = mapWizardToASTData(wizardFacts, { canonicalJurisdiction });
 
           const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
@@ -999,6 +1007,17 @@ export async function POST(request: Request) {
         }
 
         case 'ast_premium': {
+          // Northern Ireland uses Premium Private Tenancy Agreement instead of AST
+          if (canonicalJurisdiction === 'northern-ireland') {
+            const { generatePremiumPrivateTenancy } = await import(
+              '@/lib/documents/northern-ireland/private-tenancy-generator'
+            );
+            const privateTenancyPremiumData = mapWizardToPrivateTenancyData(wizardFacts as any);
+            generatedDoc = await generatePremiumPrivateTenancy(privateTenancyPremiumData);
+            documentTitle = 'Premium Private Tenancy Agreement - Northern Ireland';
+            break;
+          }
+
           const astData = mapWizardToASTData(wizardFacts, { canonicalJurisdiction });
 
           const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
