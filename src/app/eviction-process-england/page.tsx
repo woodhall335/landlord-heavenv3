@@ -53,7 +53,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Eviction Process England | How to Evict a Tenant | Landlord Heaven',
   description:
-    'Complete guide to the eviction process in England. Learn the legal steps, timelines, and costs for Section 21 and Section 8 evictions. Get court-ready eviction documents from £49.99.',
+    'Guide to the eviction process in England. Legal steps, timelines, and costs for Section 21 and Section 8 evictions. From £49.99.',
   keywords: [
     'eviction process england',
     'how to evict tenant england',

@@ -19,7 +19,7 @@ import {
 
 export const metadata: Metadata = generateMetadata({
   title: "About Us - Mission & Story",
-  description: "Landlord Heaven makes UK landlord legal documents accessible, affordable, and accurate. Professionally curated document generation for evictions, tenancies, and HMO compliance.",
+  description: "Landlord Heaven makes UK landlord legal documents accessible and affordable. Document generation for evictions, tenancies, and HMO compliance.",
   path: "/about",
 });
 

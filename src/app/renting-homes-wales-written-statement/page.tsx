@@ -8,7 +8,7 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
-  description: 'Understand the written statement requirements under the Renting Homes (Wales) Act 2016. What must be included, 14-day deadline, and consequences of non-compliance. Template from £14.99.',
+  description: 'Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template from £14.99.',
   keywords: [
     'renting homes Wales written statement',
     'Wales written statement requirement',

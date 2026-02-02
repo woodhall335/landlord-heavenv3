@@ -35,7 +35,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Eviction Notice Pack 2026 | England, Wales & Scotland | ${price}`,
   description:
-    `Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Official forms, service instructions, and validity checklist. ${price} one-time.`,
+    `Court-ready eviction notices for England, Wales, and Scotland. Official forms, service instructions, and validity checklist. ${price}.`,
   openGraph: {
     title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
     description: "Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Preview before you buy.",

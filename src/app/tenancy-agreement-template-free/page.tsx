@@ -8,7 +8,7 @@ import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know 2026',
-  description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. Learn what free templates miss, legal risks, and when £14.99 is worth every penny for landlord protection.',
+  description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free templates miss and why £14.99 is worth it.',
   keywords: [
     'free tenancy agreement template',
     'tenancy agreement template free',

@@ -8,7 +8,7 @@ import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'AST Template England 2026 | Assured Shorthold Tenancy Agreement Download',
-  description: 'Download an AST template for England that complies with Housing Act 1988 and Tenant Fees Act 2019. Instant PDF generation from £14.99. Create your legally binding tenancy agreement today.',
+  description: 'Download an AST template for England. Housing Act 1988 and Tenant Fees Act 2019 compliant. Instant PDF from £14.99.',
   keywords: [
     'AST template England',
     'England AST download',

@@ -31,7 +31,7 @@ const wizardLinkAST = buildWizardLink({
 
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template UK 2026 — Short-Term AST',
-  description: 'Free 6 month tenancy agreement template for UK landlords. Download a short-term assured shorthold tenancy (AST) template. Understand notice periods, break clauses, and renewal options.',
+  description: 'Free 6 month tenancy agreement template for UK landlords. Short-term AST with notice periods, break clauses, and renewal options.',
   keywords: [
     '6 month tenancy agreement',
     '6 month tenancy agreement template',

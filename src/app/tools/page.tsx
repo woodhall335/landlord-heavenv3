@@ -10,7 +10,7 @@ import { analyzeContent } from '@/lib/seo/commercial-linking';
 export const metadata: Metadata = {
   title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
   description:
-    'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO licence checker, and Section 21/Section 8 validity checkers. No signup required.',
+    'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO checker, and notice validators.',
   keywords: [
     'free landlord tools',
     'landlord calculator UK',

@@ -8,7 +8,7 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement Template 2026 | Occupation Contract Download',
-  description: 'Download a legally compliant tenancy agreement template for Wales. Occupation Contracts replaced ASTs in 2022. Renting Homes (Wales) Act 2016 compliant. From £14.99.',
+  description: 'Download a tenancy agreement template for Wales. Occupation Contracts replaced ASTs in 2022. Renting Homes Act compliant. From £14.99.',
   keywords: [
     'Wales tenancy agreement template',
     'Welsh tenancy agreement',

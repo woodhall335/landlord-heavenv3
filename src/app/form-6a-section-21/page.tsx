@@ -9,7 +9,7 @@ import { form6aFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Download & Guide 2026',
   description:
-    'Form 6A is the prescribed Section 21 notice for England. Download the official form, learn how to complete it correctly, or generate a pre-filled notice instantly.',
+    'Form 6A is the prescribed Section 21 notice for England. Download the official form or generate a pre-filled notice instantly.',
   keywords: [
     'form 6a',
     'form 6a section 21',

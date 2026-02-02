@@ -50,7 +50,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Joint PRT Tenancy Agreement Scotland | Multiple Tenants PRT 2026',
   description:
-    'Create a joint PRT tenancy agreement for multiple tenants in Scotland. Joint and several liability, adding and removing tenants, and shared responsibilities explained.',
+    'Create a joint PRT agreement for multiple tenants in Scotland. Joint and several liability and shared responsibilities explained.',
   keywords: [
     'joint prt tenancy agreement',
     'multiple tenants prt',

@@ -37,7 +37,7 @@ const wizardLinkCompletePack = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'County Court Claim Form Guide UK 2026 — N1, N5, N5B Forms Explained',
-  description: 'Complete guide to county court claim forms for UK landlords. Learn which form to use for money claims (N1), possession claims (N5), and accelerated possession (N5B). Fees, process, and timelines.',
+  description: 'Guide to county court claim forms for UK landlords. N1 for money claims, N5 for possession, N5B for accelerated. Fees and process explained.',
   keywords: [
     'county court claim form',
     'n1 claim form',

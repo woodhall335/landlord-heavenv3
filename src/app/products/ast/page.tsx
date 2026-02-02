@@ -46,7 +46,7 @@ const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 export const metadata: Metadata = {
   title: `Tenancy Agreement Pack 2026 | All UK Regions | From ${standardPrice}`,
   description:
-    `Compliant tenancy agreements for all UK: AST (England), Standard Occupation Contract (Wales), PRT (Scotland), and Private Tenancy (NI). Standard ${standardPrice} or Premium ${premiumPrice}.`,
+    `Compliant tenancy agreements for all UK: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI. From ${standardPrice}.`,
   openGraph: {
     title: `Tenancy Agreement Pack 2026 | England, Wales, Scotland & NI | From ${standardPrice}`,
     description:

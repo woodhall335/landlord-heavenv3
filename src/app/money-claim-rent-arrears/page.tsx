@@ -9,7 +9,7 @@ import { rentArrearsClaimFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Money Claim Guide 2026',
   description:
-    'How to claim rent arrears from a tenant in England. Step-by-step guide to recovering unpaid rent through the County Court using MCOL. Pre-action protocol, court fees, and enforcement options.',
+    'How to claim rent arrears from a tenant in England. Step-by-step guide to recovering unpaid rent through MCOL and the County Court.',
   keywords: [
     'claim rent arrears from tenant',
     'money claim rent arrears',

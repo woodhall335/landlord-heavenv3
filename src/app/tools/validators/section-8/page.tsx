@@ -55,7 +55,7 @@ const upsellConfig = {
 export const metadata: Metadata = {
   title: 'Free Section 8 Notice Checker (England) – Check Your Grounds',
   description:
-    'Free Section 8 notice checker for England. Upload your notice for an instant validity report. Checks Form 3 compliance, grounds for possession (8, 10, 11), notice periods, and evidence requirements.',
+    'Free Section 8 checker for England. Upload your notice for instant validation. Checks Form 3, grounds for possession, and notice periods.',
   keywords: [
     'section 8 notice checker',
     'section 8 grounds checker',

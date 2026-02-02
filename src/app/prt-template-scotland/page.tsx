@@ -8,7 +8,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'PRT Template Scotland 2026 | Private Residential Tenancy Agreement',
-  description: 'Download a PRT template for Scotland. Compliant with Private Housing (Tenancies) Act 2016. Includes landlord registration, Repairing Standard, and all 18 eviction grounds. From £14.99.',
+  description: 'Download a PRT template for Scotland. Private Housing (Tenancies) Act 2016 compliant with all 18 eviction grounds. From £14.99.',
   keywords: [
     'PRT template Scotland',
     'Scotland PRT download',

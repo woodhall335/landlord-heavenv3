@@ -41,7 +41,7 @@ const wizardLinkNoticeOnly = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template 2026 for Landlords | Free Form 3',
-  description: 'For landlords who need a grounds-based eviction notice fast, use this Section 8 template to avoid delays, costs, and compliance errors. Free Form 3 template included.',
+  description: 'Section 8 notice template for grounds-based eviction. Avoid delays and compliance errors. Free Form 3 template included.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',

@@ -5,7 +5,7 @@ import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Private Tenancy Agreement Northern Ireland 2026 | From £14.99',
-  description: 'Create a legally compliant Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022 and 2025 EICR rules. From £14.99.',
+  description: 'Create a Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022. From £14.99.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {
     title: 'Private Tenancy Agreement Northern Ireland 2026 | From £14.99',

@@ -31,7 +31,7 @@ const wizardLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Scotland Notice to Leave Template 2026 | PRT Eviction Landlords',
   description:
-    'For landlords needing a compliant Scotland Notice to Leave under the PRT. Generate notices citing the 18 eviction grounds with correct notice periods. Template for Scottish landlords.',
+    'Scotland Notice to Leave template under the PRT. Generate notices citing 18 eviction grounds with correct notice periods.',
   keywords: [
     'notice to leave template scotland',
     'scotland eviction notice template',

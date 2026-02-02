@@ -8,7 +8,7 @@ import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notices £49.99, Complete Eviction Pack £199.99 (England only), Money Claims £99.99 (England only), Tenancy Agreements £14.99-£24.99. All one-time payments.",
+  description: "Compare Landlord Heaven pricing. Eviction notices £49.99, tenancy agreements from £14.99. All one-time payments, no subscriptions.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",

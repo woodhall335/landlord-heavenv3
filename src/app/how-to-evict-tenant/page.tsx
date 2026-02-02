@@ -48,7 +48,7 @@ const complianceLinks = {
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
   description:
-    'For landlords who need a compliant eviction route without wasted time or court delays. Clear steps, notice periods, and templates for England, Wales, Scotland & Northern Ireland.',
+    'Eviction guide for UK landlords. Clear steps, notice periods, and templates for England, Wales, Scotland & Northern Ireland.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',

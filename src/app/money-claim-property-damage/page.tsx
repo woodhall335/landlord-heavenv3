@@ -20,7 +20,7 @@ import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 export const metadata: Metadata = {
   title: 'Claim for Property Damage from Tenant 2026 | Landlord Guide',
   description:
-    'Recover costs for property damage caused by tenants. Learn how to document damage, calculate claims, and use the courts to recover repair costs in England, Wales, and Scotland.',
+    'Recover costs for property damage from tenants. How to document damage, calculate claims, and use the courts to recover repair costs.',
   keywords: [
     'tenant property damage claim',
     'landlord damage claim',

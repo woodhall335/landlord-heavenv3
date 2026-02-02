@@ -46,7 +46,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Joint Occupation Contract Wales | Multiple Contract-Holders',
   description:
-    'Create a joint occupation contract for multiple contract-holders in Wales. Understand joint and several liability, adding and removing holders, and succession rights under Welsh law.',
+    'Create a joint occupation contract for multiple contract-holders in Wales. Joint and several liability, adding/removing holders under Welsh law.',
   keywords: [
     'joint occupation contract wales',
     'joint tenancy wales',

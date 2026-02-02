@@ -46,7 +46,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose',
   description:
-    'Understand the difference between fixed-term and periodic occupation contracts in Wales. Learn which contract type suits your letting situation under the Renting Homes Act 2016.',
+    'Fixed-term vs periodic occupation contracts in Wales. Which contract type suits your letting under the Renting Homes Act 2016.',
   keywords: [
     'fixed term occupation contract wales',
     'periodic occupation contract wales',

@@ -23,7 +23,7 @@ import { northernIrelandFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
-  description: 'Complete guide to Notice to Quit in Northern Ireland. Understand notice periods, valid grounds, correct service, and how to avoid invalid notices under the Private Tenancies Act 2022.',
+  description: 'Guide to Notice to Quit in Northern Ireland. Notice periods, valid grounds, and correct service under the Private Tenancies Act 2022.',
   keywords: [
     'notice to quit Northern Ireland',
     'NI eviction notice',

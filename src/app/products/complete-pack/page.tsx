@@ -41,7 +41,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
   description:
-    `Full eviction bundle for England landlords: Section 21/Section 8 notice, N5 + N119 court forms, AI witness statement, and filing guide. England only - ${price} one-time.`,
+    `Full eviction bundle for England landlords: Section 21/8 notice, N5/N119 court forms, and AI witness statement. ${price} one-time.`,
   openGraph: {
     title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
     description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",

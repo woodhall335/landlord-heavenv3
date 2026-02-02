@@ -9,7 +9,7 @@ import { mcolFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'MCOL Money Claim Online | How to Claim Rent Arrears 2026',
   description:
-    'Complete guide to MCOL (Money Claim Online) for UK landlords. Learn how to recover rent arrears through the county court. Step-by-step process and pre-action requirements.',
+    'Guide to MCOL (Money Claim Online) for UK landlords. Recover rent arrears through the county court. Step-by-step process.',
   keywords: [
     'MCOL',
     'money claim online',

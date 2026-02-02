@@ -55,7 +55,7 @@ const upsellConfig = {
 export const metadata: Metadata = {
   title: 'Free Section 21 Validity Checker (England) – Check My Notice',
   description:
-    'Free Section 21 notice checker for England. Upload your Form 6A for an instant validity report. Checks deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and notice periods.',
+    'Free Section 21 checker for England. Upload your Form 6A for instant validation. Checks deposits, gas safety, EPC, and notice periods.',
   keywords: [
     'section 21 validity checker',
     'section 21 notice checker',

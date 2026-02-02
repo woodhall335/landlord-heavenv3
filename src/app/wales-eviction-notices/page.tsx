@@ -18,7 +18,7 @@ import { walesEvictionFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
   description:
-    'For landlords needing compliant Welsh eviction notices without delays or wasted costs. Notice periods, occupation contracts, and possession routes under the Renting Homes (Wales) Act.',
+    'Welsh eviction notices for landlords. Notice periods, occupation contracts, and possession routes under the Renting Homes (Wales) Act.',
   keywords: [
     'eviction notice wales',
     'renting homes wales act',

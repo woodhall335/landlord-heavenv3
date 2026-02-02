@@ -61,7 +61,7 @@ const complianceLinks = {
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice Template 2026 for Landlords | Free Form 6A',
-  description: 'For landlords who need a compliant Section 21 notice fast, use our template or build a court-ready Form 6A to avoid delays, costs, and invalid notices. Try the template.',
+  description: 'Section 21 notice template for landlords. Build a court-ready Form 6A to avoid delays and invalid notices. Free template available.',
   keywords: [
     'section 21 notice template',
     'section 21 template',

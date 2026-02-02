@@ -8,7 +8,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
-  description: 'Compare the Scottish Government PRT model tenancy agreement with professionally drafted alternatives. Learn what the model agreement lacks and why landlords choose better options.',
+  description: 'Compare the Scottish Government PRT model agreement with professional alternatives. What the model lacks explained.',
   keywords: [
     'Scotland PRT model agreement',
     'Scottish Government tenancy agreement',

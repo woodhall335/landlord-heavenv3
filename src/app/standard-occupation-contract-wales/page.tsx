@@ -47,7 +47,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Standard Occupation Contract Wales | Create Welsh Tenancy Agreement',
   description:
-    'Create a legally valid Standard Occupation Contract for Wales. Compliant with the Renting Homes (Wales) Act 2016. Written statement included. Court-ready documentation.',
+    'Create a Standard Occupation Contract for Wales. Renting Homes Act 2016 compliant with written statement included.',
   keywords: [
     'standard occupation contract',
     'occupation contract wales',

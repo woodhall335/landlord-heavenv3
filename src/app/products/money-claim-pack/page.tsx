@@ -8,7 +8,7 @@ export { default } from '../money-claim/page';
 export const metadata: Metadata = {
   title: 'Money Claim Pack | Recover Unpaid Rent | Landlord Heaven',
   description:
-    'Complete money claim pack for UK landlords. Includes Letter Before Action, N1 claim form guidance, schedule of arrears, and evidence checklist. Recover rent arrears through the county court.',
+    'Complete money claim pack for UK landlords. Letter Before Action, N1 form guidance, and evidence checklist to recover rent arrears.',
   keywords: [
     'money claim pack',
     'rent arrears recovery pack',

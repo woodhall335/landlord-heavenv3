@@ -8,7 +8,7 @@ import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement Template UK 2026 | Multiple Tenants AST',
-  description: 'Create a joint tenancy agreement for multiple tenants in England. Includes joint and several liability, deposit handling, and rent responsibility clauses. From £14.99.',
+  description: 'Create a joint tenancy agreement for multiple tenants in England. Joint and several liability clauses included. From £14.99.',
   keywords: [
     'joint tenancy agreement template',
     'multiple tenants tenancy agreement',

@@ -9,7 +9,7 @@ import { preActionProtocolFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Pre-Action Protocol for Debt Claims | Landlord Guide 2026',
   description:
-    'Complete guide to the Pre-Action Protocol for Debt Claims. Required before starting money claims for rent arrears. Includes letter templates and timeline requirements.',
+    'Guide to the Pre-Action Protocol for Debt Claims. Required before money claims for rent arrears. Letter templates included.',
   keywords: [
     'pre action protocol debt',
     'pre action protocol rent arrears',
