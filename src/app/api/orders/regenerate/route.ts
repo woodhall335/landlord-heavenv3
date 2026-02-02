@@ -107,7 +107,7 @@ export async function POST(request: Request) {
 
     // Defense in depth: verify order belongs to this user
     if (order.user_id && order.user_id !== user.id) {
-      console.error(`Order user_id mismatch: order=${order.user_id}, user=${user.id}`);
+      console.error('[Order Regenerate] User ID mismatch - access denied');
       return NextResponse.json(
         { ok: false, error: 'You do not have permission to regenerate this order' },
         { status: 403 }

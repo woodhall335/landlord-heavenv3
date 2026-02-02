@@ -434,8 +434,8 @@ The Landlord Heaven Team
       text,
     });
 
-    console.log(`[Compliance Email] Sent ${daysUntilExpiry}-day reminder to ${user.email} for ${items.length} items`);
+    console.log(`[Compliance Email] Sent ${daysUntilExpiry}-day reminder to user ${user.id} for ${items.length} items`);
   } catch (error: any) {
-    console.error(`[Compliance Email] Failed to send reminder to ${user.email}:`, error);
+    console.error(`[Compliance Email] Failed to send reminder to user ${user.id}:`, error);
   }
 }

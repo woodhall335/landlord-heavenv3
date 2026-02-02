@@ -115,8 +115,48 @@ export async function GET(
       );
     }
 
-    const entitlementProduct = jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
-    await assertPaidEntitlement({ caseId, product: entitlementProduct });
+    // Wales money claims are not supported (England only product)
+    // Defense-in-depth: wizard start should block this, but enforce here too
+    if (jurisdiction === 'wales') {
+      return NextResponse.json(
+        {
+          code: 'WALES_MONEY_CLAIM_UNSUPPORTED',
+          error: 'WALES_MONEY_CLAIM_UNSUPPORTED',
+          user_message:
+            'Money claims are only available in England. For Wales, please use the Notice Only product.',
+          blocking_issues: [{
+            code: 'WALES_MONEY_CLAIM_UNSUPPORTED',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are only available in England. Please use the Notice Only product for Wales.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // Scotland money claims are not supported (England only product)
+    // Defense-in-depth: wizard start should block this, but enforce here too
+    if (jurisdiction === 'scotland') {
+      return NextResponse.json(
+        {
+          code: 'SCOTLAND_MONEY_CLAIM_UNSUPPORTED',
+          error: 'SCOTLAND_MONEY_CLAIM_UNSUPPORTED',
+          user_message:
+            'Money claims are only available in England. For Scotland, please use the Notice Only product.',
+          blocking_issues: [{
+            code: 'SCOTLAND_MONEY_CLAIM_UNSUPPORTED',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are only available in England. Please use the Notice Only product for Scotland.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // After Wales/Scotland/NI blocking above, only England reaches here
+    await assertPaidEntitlement({ caseId, product: 'money_claim' });
 
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
