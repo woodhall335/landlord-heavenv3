@@ -52,7 +52,9 @@ export { resend };
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Landlord Heaven <no-reply@landlordheaven.co.uk>';
 const REPLY_TO_EMAIL = process.env.RESEND_REPLY_TO_EMAIL || 'support@landlordheaven.co.uk';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
-const LOGO_URL = `${APP_URL}/headerlogo2.png`;
+// Using headerlogo.png (942x140, 9KB) instead of headerlogo2.png (1884x280, 30KB)
+// Smaller images load more reliably in email clients like Outlook
+const LOGO_URL = `${APP_URL}/headerlogo.png`;
 
 export interface SendEmailOptions {
   to: string | string[];
