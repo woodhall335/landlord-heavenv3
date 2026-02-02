@@ -45,8 +45,8 @@
 ## DEPOSIT DETAILS
 
 **Deposit Amount:** £{{deposit_amount}}
-**Date Received:** {{deposit_received_date}}
-**Date Protected:** {{deposit_protected_date}}
+**Date Received:** {{format_date deposit_received_date 'long'}}
+**Date Protected:** {{format_date deposit_protected_date 'long'}}
 **Deposit Reference:** {{deposit_reference}}
 **Scheme Membership Number:** {{scheme_membership_number}}
 
@@ -81,7 +81,7 @@ This deposit has been protected using a **{{protection_type}}** scheme:
 ## TENANCY DETAILS
 
 **Tenancy Type:** Private Residential Tenancy (PRT)
-**Tenancy Start Date:** {{tenancy_start_date}}
+**Tenancy Start Date:** {{format_date tenancy_start_date 'long'}}
 **Monthly Rent:** £{{monthly_rent}}
 
 ---
@@ -195,7 +195,7 @@ You cannot deduct for:
 
 This certificate confirms that:
 
-1. The deposit of £{{deposit_amount}} received on {{deposit_received_date}} has been protected
+1. The deposit of £{{deposit_amount}} received on {{format_date deposit_received_date 'long'}} has been protected
 2. The deposit is protected with {{deposit_scheme}}
 3. The deposit reference is: {{deposit_reference}}
 4. The tenant(s) have been provided with the prescribed information
@@ -204,7 +204,7 @@ This certificate confirms that:
 
 **Landlord Signature:** _________________________
 
-**Date:** {{certificate_date}}
+**Date:** {{format_date certificate_date 'long'}}
 
 ---
 
@@ -232,4 +232,4 @@ If you have any concerns about your deposit protection, you can contact:
 
 *This certificate complies with the Tenancy Deposit Schemes (Scotland) Regulations 2011*
 
-**Document generated:** {{generation_date}}
+**Document generated:** {{format_date generation_date 'long'}}

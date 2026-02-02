@@ -21,7 +21,7 @@
 
 **Includes HMO-specific clauses for multi-occupancy properties**
 
-This Agreement is dated: **{{agreement_date}}**
+This Agreement is dated: **{{format_date agreement_date 'long'}}**
 
 ---
 
@@ -113,7 +113,7 @@ This is a **PRIVATE RESIDENTIAL TENANCY (PRT)** under the Private Housing (Tenan
 
 ## THE TERM
 
-**Start Date:** {{tenancy_start_date}}
+**Start Date:** {{format_date tenancy_start_date 'long'}}
 
 This tenancy has **no fixed end date**. It will continue until it is ended by either:
 - The Tenant giving proper notice (at least 28 days)
@@ -133,7 +133,7 @@ The tenancy cannot be converted to any other type of tenancy.
 
 **Payment Details:** {{payment_details}}
 
-**First Payment:** £{{first_payment}} due on {{first_payment_date}}
+**First Payment:** £{{first_payment}} due on {{format_date first_payment_date 'long'}}
 
 {{#if rent_includes}}
 **The rent includes:** {{rent_includes}}
