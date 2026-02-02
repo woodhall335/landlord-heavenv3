@@ -716,3 +716,87 @@ describe('Tenant Fees Act 2019 Compliance', () => {
     }
   );
 });
+
+/**
+ * NORTHERN IRELAND SPECIFIC NOTES COMPLIANCE
+ * NI standard tenancy agreement must include NI-specific clarifications:
+ * 1. Rent book obligations (statutory requirement in certain cases)
+ * 2. Rates liability clarity (NI-specific risk area)
+ * 3. Fitness Standard enforcement mechanism (local council enforcement)
+ */
+describe('Northern Ireland Specific Notes', () => {
+  it('NI standard template should contain rent book statutory note', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+    const lowerTemplate = template.toLowerCase();
+
+    // Must mention rent book
+    expect(lowerTemplate).toContain('rent book');
+
+    // Must reference it as a statutory/legal obligation
+    expect(template).toMatch(/rent\s+book.*statutory\s+obligation|Northern\s+Ireland\s+law.*rent\s+book/i);
+  });
+
+  it('NI standard template should contain rates liability clarification', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+    const lowerTemplate = template.toLowerCase();
+
+    // Must mention rates liability
+    expect(lowerTemplate).toContain('rates');
+
+    // Must clarify that liability is determined by law
+    expect(template).toMatch(/rates.*determined\s+by.*law|responsibility\s+for\s+rates.*Northern\s+Ireland\s+law/i);
+  });
+
+  it('NI standard template should contain Fitness Standard enforcement note', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+    const lowerTemplate = template.toLowerCase();
+
+    // Must mention Fitness Standard
+    expect(lowerTemplate).toContain('fitness standard');
+
+    // Must mention local councils as enforcement body
+    expect(lowerTemplate).toContain('local councils');
+
+    // Must clarify it doesn't limit statutory enforcement powers
+    expect(template).toMatch(/statutory\s+enforcement\s+powers|enforced\s+by\s+local\s+councils/i);
+  });
+
+  it('NI standard template should have Northern Ireland Specific Notes section', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+
+    // Should have a dedicated section for NI-specific notes
+    expect(template).toContain('Northern Ireland Specific Notes');
+  });
+
+  it('NI standard template NI-specific notes should be informational only', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+
+    // Should clarify notes are for information only (not legal advice)
+    expect(template).toMatch(/information\s+only|do\s+not\s+constitute\s+legal\s+advice/i);
+  });
+
+  it('NI premium template should also contain NI-specific notes (if applicable)', () => {
+    // Premium may or may not include these - only check standard is required
+    // This test ensures premium doesn't contradict standard if it includes similar notes
+    const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES['northern-ireland']);
+    const lowerTemplate = premiumTemplate.toLowerCase();
+
+    // If premium includes NI-specific notes section, ensure consistency
+    if (lowerTemplate.includes('northern ireland specific notes')) {
+      expect(lowerTemplate).toContain('rent book');
+      expect(lowerTemplate).toContain('rates');
+      expect(lowerTemplate).toContain('fitness standard');
+    }
+  });
+
+  it('Non-NI templates should NOT contain NI-specific notes section', () => {
+    const englandTemplate = loadTemplate(STANDARD_TEMPLATES.england);
+    const walesTemplate = loadTemplate(STANDARD_TEMPLATES.wales);
+    const scotlandTemplate = loadTemplate(STANDARD_TEMPLATES.scotland);
+
+    // Should NOT have NI-specific notes section
+    expect(englandTemplate).not.toContain('Northern Ireland Specific Notes');
+    expect(walesTemplate).not.toContain('Northern Ireland Specific Notes');
+    expect(scotlandTemplate).not.toContain('Northern Ireland Specific Notes');
+  });
+});
