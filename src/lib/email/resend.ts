@@ -173,12 +173,23 @@ ${getEmailHead('Email from Landlord Heaven')}
 
 /**
  * Generate the logo header row
- * Logo sits on the light outer background (our logo has dark text + purple icon)
+ * Logo has explicit white background to prevent Outlook dark mode inversion
+ * Our logo has dark text + purple icon, so needs light background
  */
 const getLogoRow = (): string => `
   <tr>
-    <td align="center" style="padding: 25px 20px;">
-      <img src="${LOGO_URL}" alt="Landlord Heaven" width="280" style="display: block; max-width: 280px; width: 100%; height: auto;" />
+    <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 25px 20px; border-radius: 8px 8px 0 0;">
+      <!--[if mso]>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="280">
+        <tr>
+          <td>
+      <![endif]-->
+      <img src="${LOGO_URL}" alt="Landlord Heaven" width="280" height="70" border="0" style="display: block; max-width: 280px; width: 280px; height: auto;" />
+      <!--[if mso]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
     </td>
   </tr>
 `;
@@ -186,7 +197,7 @@ const getLogoRow = (): string => `
 /**
  * Generate the header banner with title
  * Uses MSO VML for background color support in Outlook
- * Has top border-radius since it's the first colored element after the logo
+ * No border-radius here - logo row above has it
  */
 const getHeaderBanner = (title: string, backgroundColor: string = COLORS.primary): string => `
   <tr>
@@ -198,7 +209,7 @@ const getHeaderBanner = (title: string, backgroundColor: string = COLORS.primary
       <![endif]-->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
         <tr>
-          <td align="center" bgcolor="${backgroundColor}" style="background-color: ${backgroundColor}; padding: 30px 20px; border-radius: 8px 8px 0 0;">
+          <td align="center" bgcolor="${backgroundColor}" style="background-color: ${backgroundColor}; padding: 30px 20px;">
             <h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: bold; color: ${COLORS.white}; line-height: 1.3;">${title}</h1>
           </td>
         </tr>
