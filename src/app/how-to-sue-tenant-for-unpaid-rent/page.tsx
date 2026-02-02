@@ -9,7 +9,7 @@ import { sueTenantUnpaidRentFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'How to Sue a Tenant for Unpaid Rent | Landlord Guide 2026',
   description:
-    'Step-by-step guide to suing a tenant for unpaid rent in England. Learn the County Court process, pre-action requirements, court fees, and how to enforce a judgment.',
+    'Guide to suing a tenant for unpaid rent in England. County Court process, pre-action requirements, court fees, and enforcement.',
   keywords: [
     'how to sue tenant for unpaid rent',
     'sue tenant for rent arrears',

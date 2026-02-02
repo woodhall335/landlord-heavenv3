@@ -9,7 +9,7 @@ import { eicrFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'EICR Landlord Requirements UK | Electrical Safety Guide 2026',
   description:
-    'Complete guide to EICR (Electrical Installation Condition Report) requirements for UK landlords. Learn about the 5-year rule, tenant notification, and penalties for non-compliance.',
+    'Guide to EICR requirements for UK landlords. The 5-year rule, tenant notification, and penalties for non-compliance explained.',
   keywords: [
     'EICR landlord',
     'EICR requirements',

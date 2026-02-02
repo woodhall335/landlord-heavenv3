@@ -44,7 +44,7 @@ const wizardLinkMoneyClaim = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Tenant Not Paying Rent? Your Options Explained (UK 2026)',
-  description: 'What to do when your tenant stops paying rent in England. Rent demand letters, Section 8 eviction for rent arrears, and money claims through court explained.',
+  description: 'What to do when your tenant stops paying rent. Rent demand letters, Section 8 eviction, and money claims through court explained.',
   keywords: [
     'tenant not paying rent',
     'tenant stopped paying rent',

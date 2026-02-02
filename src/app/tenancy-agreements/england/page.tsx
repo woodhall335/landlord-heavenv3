@@ -4,7 +4,7 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £14.99',
-  description: 'Create a legally compliant Assured Shorthold Tenancy Agreement (AST) for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £14.99.',
+  description: 'Create a legally compliant AST for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £14.99.',
   keywords: 'AST, Assured Shorthold Tenancy, tenancy agreement England, AST agreement, residential tenancy UK, landlord forms, rental agreement, housing act 1988, tenant fees act 2019',
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £14.99',

@@ -20,7 +20,7 @@ import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant',
-  description: 'Create a legally compliant Northern Ireland tenancy agreement template for 2026. Fully updated for the Private Tenancies Act (NI) 2022 with all prescribed terms and mandatory clauses.',
+  description: 'Create a legally compliant NI tenancy agreement for 2026. Updated for the Private Tenancies Act (NI) 2022 with all prescribed terms.',
   keywords: [
     'Northern Ireland tenancy agreement template',
     'NI tenancy agreement',

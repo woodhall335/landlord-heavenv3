@@ -59,7 +59,7 @@ const completePackLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Money Claim Guide | Landlord Heaven',
   description:
-    'How to claim unpaid rent from a tenant through the county court. Letter Before Action, MCOL process, and CCJ enforcement explained. Get court-ready forms from £99.99.',
+    'How to claim unpaid rent from a tenant through the county court. Letter Before Action, MCOL process, and CCJ enforcement.',
   keywords: [
     'claim rent arrears tenant',
     'money claim rent arrears',

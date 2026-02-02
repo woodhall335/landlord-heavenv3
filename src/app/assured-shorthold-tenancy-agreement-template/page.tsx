@@ -10,7 +10,7 @@ import { tenancyAgreementTemplateFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
-  description: 'Download a legally compliant Assured Shorthold Tenancy Agreement (AST) template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99 with instant delivery.',
+  description: 'Download an Assured Shorthold Tenancy Agreement (AST) template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'AST template',

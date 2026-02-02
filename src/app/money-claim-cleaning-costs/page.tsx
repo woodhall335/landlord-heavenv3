@@ -21,7 +21,7 @@ import { cleaningCostsFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Claim Cleaning Costs from Tenant 2026 | End of Tenancy Claims',
   description:
-    'Recover excessive cleaning and rubbish removal costs from tenants. Learn what qualifies as claimable cleaning beyond fair wear and tear, and how to make a successful court claim.',
+    'Recover cleaning and rubbish removal costs from tenants. What qualifies as claimable and how to make a successful court claim.',
   keywords: [
     'tenant cleaning costs',
     'end of tenancy cleaning claim',

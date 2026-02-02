@@ -9,7 +9,7 @@ import { howToRentGuideFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'How to Rent Guide | Landlord Requirements UK 2026',
   description:
-    'Everything landlords need to know about the How to Rent guide. When to provide it, which version to use, and what happens if you forget. Essential for valid Section 21 notices.',
+    'Guide to the How to Rent checklist for landlords. When to provide it, which version to use. Essential for valid Section 21 notices.',
   keywords: [
     'how to rent guide',
     'how to rent checklist',

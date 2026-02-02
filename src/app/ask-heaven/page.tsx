@@ -212,7 +212,7 @@ const faqItems = [
 export const metadata: Metadata = {
   title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
   description:
-    'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
+    'Free landlord Q&A for UK. Instant answers on evictions, rent arrears, tenancy agreements, and compliance across all jurisdictions.',
   keywords: [
     'landlord advice',
     'landlord Q&A',

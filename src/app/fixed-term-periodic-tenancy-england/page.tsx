@@ -46,7 +46,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Tenancy Agreement (England) | Which to Use',
   description:
-    'Understand the difference between fixed term and periodic tenancy agreements in England. Learn which type suits your letting situation and how to structure your AST.',
+    'Fixed term vs periodic tenancy agreements in England. Which type suits your letting situation and how to structure your AST.',
   keywords: [
     'fixed term tenancy agreement england',
     'periodic tenancy agreement england',

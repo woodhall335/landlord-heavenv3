@@ -30,7 +30,7 @@ const wizardLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice Template 2026 | Renting Homes Act Landlords',
   description:
-    'For landlords needing compliant Wales possession notices under the Renting Homes Act. Generate Section 173 or fault-based notices without costly delays. Template for Welsh landlords.',
+    'Wales eviction notice template under the Renting Homes Act. Generate Section 173 or fault-based possession notices for Welsh landlords.',
   keywords: [
     'wales eviction notice template',
     'renting homes act notice template',

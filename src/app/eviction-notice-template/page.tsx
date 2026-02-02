@@ -33,7 +33,7 @@ const wizardLinkNoticeOnly = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Possession Notice Download',
-  description: 'Download free UK eviction notice templates (also called possession notices). Section 21 and Section 8 notices. Court-ready documents trusted by 10,000+ landlords.',
+  description: 'Download free UK eviction notice templates. Section 21 and Section 8 notices. Court-ready documents trusted by 10,000+ landlords.',
   keywords: [
     'eviction notice template uk',
     'eviction notice template',

@@ -8,7 +8,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement Template Scotland 2026 | PRT Download',
-  description: 'Download a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Compliant with Private Housing (Tenancies) Act 2016. Open-ended tenancy. From £14.99.',
+  description: 'Download a Private Residential Tenancy (PRT) agreement for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
   keywords: [
     'private residential tenancy agreement template',
     'PRT agreement Scotland',

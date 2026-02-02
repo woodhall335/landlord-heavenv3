@@ -8,7 +8,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Scottish Tenancy Agreement Template 2026 | PRT Download for Landlords',
-  description: 'Download a legally compliant Scottish tenancy agreement template. Private Residential Tenancy (PRT) for Scotland. Includes landlord registration and Repairing Standard. From £14.99.',
+  description: 'Download a Scottish tenancy agreement template. Private Residential Tenancy (PRT) with landlord registration requirements. From £14.99.',
   keywords: [
     'Scottish tenancy agreement template',
     'Scotland tenancy agreement',

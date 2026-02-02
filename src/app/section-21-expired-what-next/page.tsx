@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 21 Expired What Next? | Tenant Ignored Notice | Landlord Heaven',
   description:
-    'Your Section 21 notice has expired but your tenant has not left. Learn the next steps: possession order, accelerated procedure, and bailiff enforcement. Get court forms from £199.99.',
+    'Section 21 expired but tenant won\'t leave? Next steps: possession order, accelerated procedure, and bailiff enforcement.',
   keywords: [
     'section 21 expired what next',
     'tenant ignored section 21',

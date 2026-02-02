@@ -5,7 +5,7 @@ import { FAQSection } from '@/components/marketing/FAQSection';
 
 export const metadata: Metadata = {
   title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
-  description: 'For Scotland landlords who need a compliant PRT fast, this private residential tenancy agreement is updated for 2026 and designed to avoid delays and mistakes. Start your agreement.',
+  description: 'Scotland PRT agreement for landlords. Private residential tenancy updated for 2026 with full compliance. Start your agreement.',
   keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
   openGraph: {
     title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',

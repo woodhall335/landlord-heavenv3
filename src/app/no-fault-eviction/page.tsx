@@ -9,7 +9,7 @@ import { noFaultEvictionFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'No Fault Eviction UK | Section 21 Guide for Landlords [2026]',
   description:
-    'Complete guide to no-fault evictions in the UK using Section 21. Learn the requirements, notice periods, and how to serve a valid notice. Includes free Section 21 generator.',
+    'Guide to no-fault evictions using Section 21 in England. Requirements, notice periods, and how to serve a valid notice.',
   keywords: [
     'no fault eviction',
     'no fault eviction UK',

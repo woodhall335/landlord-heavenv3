@@ -31,7 +31,7 @@ const wizardLinkAST = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement UK 2026 — AST Template & Guide',
-  description: 'Fixed term tenancy agreement template for UK landlords. Learn about 6, 12, and 24 month fixed terms, break clauses, what happens at the end, and how to renew or end a fixed term AST.',
+  description: 'Fixed term tenancy agreement template for UK landlords. 6, 12, and 24 month terms, break clauses, renewal, and end of term options.',
   keywords: [
     'fixed term tenancy agreement',
     'fixed term tenancy agreement template',

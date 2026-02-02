@@ -9,7 +9,7 @@ import { form3Section8FAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
   description:
-    'Form 3 is the prescribed Section 8 notice for England. Learn about eviction grounds, notice periods, and how to complete the form correctly. Free generator available.',
+    'Form 3 is the prescribed Section 8 notice for England. Eviction grounds, notice periods, and how to complete it correctly.',
   keywords: [
     'form 3 section 8',
     'section 8 form 3',

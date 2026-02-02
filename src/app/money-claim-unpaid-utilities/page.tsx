@@ -21,7 +21,7 @@ import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 export const metadata: Metadata = {
   title: 'Claim Unpaid Utilities from Tenant 2026 | Bills & Energy Recovery',
   description:
-    'Recover unpaid gas, electricity, water, and other utility bills from tenants. Learn when landlords are liable for tenant utilities and how to make a court claim for unpaid bills.',
+    'Recover unpaid gas, electricity, water bills from tenants. When landlords are liable and how to make a court claim.',
   keywords: [
     'tenant unpaid utilities',
     'landlord utility bills',

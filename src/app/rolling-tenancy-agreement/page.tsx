@@ -9,7 +9,7 @@ import { rollingTenancyFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Rolling Tenancy Agreement UK | Month-to-Month Guide 2026',
   description:
-    'Complete guide to rolling tenancy agreements (periodic tenancies) in the UK. Learn how they work, notice periods, rent increases, and how to end a rolling tenancy.',
+    'Guide to rolling tenancy agreements (periodic tenancies) in the UK. How they work, notice periods, rent increases, and ending them.',
   keywords: [
     'rolling tenancy agreement',
     'rolling contract tenancy',

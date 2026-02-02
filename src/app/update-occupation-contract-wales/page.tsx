@@ -46,7 +46,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Update Occupation Contract Wales | Changing Terms and Rent',
   description:
-    'Learn how to update an occupation contract in Wales. Understand rent increases, term variations, and updating written statements under the Renting Homes (Wales) Act 2016.',
+    'How to update an occupation contract in Wales. Rent increases, term variations, and written statements under the Renting Homes Act 2016.',
   keywords: [
     'update occupation contract wales',
     'change occupation contract wales',

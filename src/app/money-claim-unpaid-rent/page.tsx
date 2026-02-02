@@ -20,7 +20,7 @@ import { moneyClaimUnpaidRentFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
   description:
-    'For landlords reclaiming unpaid rent without costly delays. Follow the compliant money-claim process, understand fees and timelines, and use landlord-ready templates.',
+    'Reclaim unpaid rent without costly delays. Follow the compliant money-claim process, understand fees and timelines.',
   keywords: [
     'money claim online',
     'mcol',

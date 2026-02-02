@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Eviction Process Wales | Section 173 & 178 | Landlord Heaven',
   description:
-    'Complete guide to evicting a tenant in Wales. Section 173 (no-fault) and Section 178 (breach) notices under the Renting Homes Act 2016. Get documents from £49.99.',
+    'Guide to evicting a tenant in Wales. Section 173 and Section 178 notices under the Renting Homes Act 2016. From £49.99.',
   keywords: [
     'eviction process wales landlord',
     'section 173 eviction',

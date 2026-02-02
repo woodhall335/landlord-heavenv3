@@ -46,7 +46,7 @@ const wizardLinkPremium = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Occupation Contract Template Wales | Welsh Written Statement Template',
   description:
-    'Download a legally compliant occupation contract template for Wales. Renting Homes Act 2016 compliant written statement with all fundamental and supplementary terms included.',
+    'Download an occupation contract template for Wales. Renting Homes Act 2016 compliant with all fundamental and supplementary terms.',
   keywords: [
     'occupation contract template wales',
     'welsh tenancy agreement template',

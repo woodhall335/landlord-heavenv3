@@ -9,7 +9,7 @@ import { lodgerAgreementFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Lodger Agreement Template UK | Free Download 2026',
   description:
-    'Free lodger agreement template for UK landlords. Covers live-in landlords sharing their home with a lodger. Includes rent, notice periods, house rules, and more.',
+    'Free lodger agreement template for UK landlords. For live-in landlords sharing their home. Includes rent, notice periods, and house rules.',
   keywords: [
     'lodger agreement template',
     'lodger agreement UK',
