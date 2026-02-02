@@ -15,6 +15,32 @@ export const SEO_PRICES = {
   tenancyPremium: { amount: 24.99, display: '£24.99' },
 } as const;
 
+/**
+ * ALLOWED_SEO_PRICES - Set of valid price strings for regression testing
+ * Any price displayed on SEO landing pages must be in this set
+ */
+export const ALLOWED_SEO_PRICES = new Set([
+  SEO_PRICES.evictionNotice.display,
+  SEO_PRICES.evictionBundle.display,
+  SEO_PRICES.moneyClaim.display,
+  SEO_PRICES.tenancyStandard.display,
+  SEO_PRICES.tenancyPremium.display,
+]);
+
+/**
+ * SEO_LANDING_ROUTES - Clean canonical landing routes for products
+ *
+ * These are the SEO entry points. Internal links should point HERE,
+ * not to /wizard?product=X. The landing pages then CTA into the wizard.
+ */
+export const SEO_LANDING_ROUTES = {
+  notice_only: '/eviction-notice',
+  complete_pack: '/eviction-pack-england',
+  money_claim: '/money-claim',
+  ast_standard: '/tenancy-agreement',
+  ast_premium: '/premium-tenancy-agreement',
+} as const;
+
 export type ProductSku =
   | 'notice_only'
   | 'complete_pack'
@@ -51,7 +77,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.evictionNotice.amount,
     displayPrice: SEO_PRICES.evictionNotice.display,
     wizardHref: '/wizard?product=notice_only',
-    productPageHref: '/notice-only',
+    productPageHref: SEO_LANDING_ROUTES.notice_only,
   },
   complete_pack: {
     sku: 'complete_pack',
@@ -62,7 +88,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=complete_pack',
-    productPageHref: '/complete-pack',
+    productPageHref: SEO_LANDING_ROUTES.complete_pack,
   },
   money_claim: {
     sku: 'money_claim',
@@ -73,7 +99,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
-    productPageHref: '/money-claim-pack',
+    productPageHref: SEO_LANDING_ROUTES.money_claim,
   },
   sc_money_claim: {
     sku: 'sc_money_claim',
@@ -84,7 +110,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'Service discontinued - use Notice Only',
     wizardHref: '/wizard?product=notice_only&jurisdiction=scotland',
-    productPageHref: '/notice-only',
+    productPageHref: SEO_LANDING_ROUTES.notice_only,
   },
   ast_standard: {
     sku: 'ast_standard',
@@ -94,7 +120,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref: '/wizard?product=ast_standard',
-    productPageHref: '/ast',
+    productPageHref: SEO_LANDING_ROUTES.ast_standard,
   },
   ast_premium: {
     sku: 'ast_premium',
@@ -104,7 +130,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium',
-    productPageHref: '/ast',
+    productPageHref: SEO_LANDING_ROUTES.ast_premium,
   },
 };
 
@@ -245,3 +271,53 @@ export function getProductsForRegion(jurisdiction: string): ProductConfig[] {
 export function getRegionalBadge(sku: ProductSku): string | undefined {
   return REGIONAL_PRODUCT_AVAILABILITY[sku]?.badge;
 }
+
+/**
+ * Get the SEO landing page href for a product
+ *
+ * IMPORTANT: Use this for internal links instead of wizard URLs.
+ * The landing page CTAs into the wizard - external links should land on the
+ * clean SEO route first, not directly into the wizard.
+ *
+ * @param sku - Product SKU
+ * @param params - Optional URL search params to append (for analytics tracking)
+ * @returns Clean SEO landing route (e.g., '/eviction-notice')
+ *
+ * @example
+ * getProductLandingHref('notice_only') // '/eviction-notice'
+ * getProductLandingHref('notice_only', { src: 'blog' }) // '/eviction-notice?src=blog'
+ */
+export function getProductLandingHref(
+  sku: ProductSku,
+  params?: Record<string, string>
+): string {
+  const landingRoute =
+    SEO_LANDING_ROUTES[sku as keyof typeof SEO_LANDING_ROUTES] ||
+    PRODUCTS[sku]?.productPageHref ||
+    '/';
+
+  if (params && Object.keys(params).length > 0) {
+    const searchParams = new URLSearchParams(params).toString();
+    return `${landingRoute}?${searchParams}`;
+  }
+
+  return landingRoute;
+}
+
+/**
+ * Check if a href is a wizard entry link (should be migrated to clean landing route)
+ */
+export function isWizardEntryLink(href: string): boolean {
+  return href.startsWith('/wizard?product=');
+}
+
+/**
+ * Map of product SKUs that have dedicated SEO landing pages
+ */
+export const PRODUCTS_WITH_SEO_LANDING_PAGES = new Set<ProductSku>([
+  'notice_only',
+  'complete_pack',
+  'money_claim',
+  'ast_standard',
+  'ast_premium',
+]);

@@ -2,34 +2,46 @@
  * Centralized internal link definitions for consistent linking across the site
  *
  * Use these with the RelatedLinks component for SEO-optimized internal linking
+ *
+ * IMPORTANT: Product links should point to clean SEO landing routes, NOT wizard URLs
+ * or old /products/* paths. The landing pages handle CTA to wizard.
  */
+
+import { SEO_LANDING_ROUTES, SEO_PRICES } from '@/lib/pricing/products';
 
 export const productLinks = {
   noticeOnly: {
-    href: '/products/notice-only',
-    title: 'Notice Only Pack',
-    description: 'Court-ready eviction notice — £49.99',
+    href: SEO_LANDING_ROUTES.notice_only,
+    title: 'Eviction Notice Generator',
+    description: `Court-ready eviction notice — ${SEO_PRICES.evictionNotice.display}`,
     icon: 'document' as const,
     type: 'product' as const,
   },
   completePack: {
-    href: '/products/complete-pack',
-    title: 'Complete Eviction Pack',
-    description: 'Full eviction package with court forms — £199.99',
+    href: SEO_LANDING_ROUTES.complete_pack,
+    title: 'Complete Eviction Bundle',
+    description: `Full eviction package with court forms — ${SEO_PRICES.evictionBundle.display}`,
     icon: 'legal' as const,
     type: 'product' as const,
   },
   moneyClaim: {
-    href: '/products/money-claim',
+    href: SEO_LANDING_ROUTES.money_claim,
     title: 'Money Claim Pack',
-    description: 'Recover rent, damage, and other tenant debts — £99.99',
+    description: `Recover rent, damage, and other tenant debts — ${SEO_PRICES.moneyClaim.display}`,
     icon: 'document' as const,
     type: 'product' as const,
   },
   tenancyAgreement: {
-    href: '/products/ast',
-    title: 'Tenancy Agreement',
-    description: 'AST templates for all UK regions — from £14.99',
+    href: SEO_LANDING_ROUTES.ast_standard,
+    title: 'Tenancy Agreement Generator',
+    description: `Jurisdiction-specific agreements — from ${SEO_PRICES.tenancyStandard.display}`,
+    icon: 'document' as const,
+    type: 'product' as const,
+  },
+  premiumTenancyAgreement: {
+    href: SEO_LANDING_ROUTES.ast_premium,
+    title: 'Premium Tenancy Agreement',
+    description: `HMO clauses & guarantor provisions — ${SEO_PRICES.tenancyPremium.display}`,
     icon: 'document' as const,
     type: 'product' as const,
   },

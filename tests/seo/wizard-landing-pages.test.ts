@@ -19,7 +19,7 @@ import {
   WIZARD_LANDING_CONTENT,
   getAllLandingPageSlugs,
 } from '@/lib/seo/wizard-landing-content';
-import { SEO_PRICES } from '@/lib/pricing/products';
+import { SEO_PRICES, ALLOWED_SEO_PRICES, SEO_LANDING_ROUTES } from '@/lib/pricing/products';
 
 describe('Wizard Landing Pages - Content Configuration', () => {
   describe('Notice Only Content', () => {
@@ -194,12 +194,14 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(combinedText.toLowerCase()).toContain('cleaning');
     });
 
-    it('should explain where to file', () => {
+    it('should explain where to file (England county court)', () => {
       const faqAboutFiling = moneyClaimContent.faqs.find((f) =>
         f.question.toLowerCase().includes('file') || f.question.toLowerCase().includes('where')
       );
       expect(faqAboutFiling).toBeTruthy();
-      expect(faqAboutFiling?.answer).toContain('MCOL');
+      // Money claim is England only - should reference county court filing
+      expect(faqAboutFiling?.answer.toLowerCase()).toContain('england');
+      expect(faqAboutFiling?.answer.toLowerCase()).toContain('county court');
     });
 
     it('should have FAQ items', () => {
@@ -625,6 +627,294 @@ describe('Wizard Landing Pages - Legal Safety Block', () => {
       expect(
         content.legalValidationExplainer.disclaimer.toLowerCase()
       ).toContain('solicitor');
+    });
+  });
+});
+
+/**
+ * Price Regression Guard Tests
+ *
+ * These tests ensure no stray prices appear on landing pages.
+ * Any £ price must be one of the ALLOWED_SEO_PRICES.
+ */
+describe('Wizard Landing Pages - Price Regression Guard', () => {
+  /**
+   * Prices that are allowed as illustrative examples (not product prices).
+   * These appear in explanatory text like "e.g., £1.37 per day" for interest rates.
+   */
+  const ILLUSTRATIVE_EXAMPLE_PRICES = new Set(['£1.37', '£1.10']);
+
+  // Helper to extract all £ prices from text
+  const extractPrices = (text: string): string[] => {
+    const pricePattern = /£\d+\.\d{2}/g;
+    return text.match(pricePattern) || [];
+  };
+
+  // Helper to check if price is allowed (either SEO price or illustrative example)
+  const isPriceAllowed = (price: string): boolean => {
+    return ALLOWED_SEO_PRICES.has(price) || ILLUSTRATIVE_EXAMPLE_PRICES.has(price);
+  };
+
+  // Helper to get all text content from a landing page
+  const getAllTextContent = (content: typeof noticeOnlyContent): string => {
+    const textParts: string[] = [
+      content.title,
+      content.description,
+      content.h1,
+      content.subheading,
+      content.price,
+      ...content.whatYouGet,
+      ...content.howValidationWorks,
+      ...content.whoThisIsFor,
+      content.whyUseThis.heading,
+      content.whyUseThis.intro,
+      ...content.whyUseThis.benefits,
+      ...content.proceduralBenefits,
+      ...content.legalValidationExplainer.whatItMeans,
+      content.legalValidationExplainer.disclaimer,
+      ...content.faqs.flatMap((f) => [f.question, f.answer]),
+    ];
+
+    // Add notice types if present
+    if (content.noticeTypes) {
+      content.noticeTypes.forEach((n) => {
+        textParts.push(n.name, n.description, n.legalBasis || '');
+      });
+    }
+
+    // Add court forms if present
+    if (content.courtForms) {
+      content.courtForms.forEach((f) => {
+        textParts.push(f.name, f.description);
+      });
+    }
+
+    // Add jurisdiction coverage if present
+    if (content.jurisdictionCoverage) {
+      content.jurisdictionCoverage.forEach((j) => {
+        textParts.push(
+          j.name,
+          j.agreementType,
+          j.legalBasis,
+          ...j.keyFeatures,
+          j.notes || ''
+        );
+      });
+    }
+
+    return textParts.join(' ');
+  };
+
+  it('should only contain allowed SEO prices in Notice Only content', () => {
+    const allText = getAllTextContent(noticeOnlyContent);
+    const prices = extractPrices(allText);
+
+    prices.forEach((price) => {
+      expect(isPriceAllowed(price), `Unexpected price ${price} in Notice Only content`).toBe(true);
+    });
+  });
+
+  it('should only contain allowed SEO prices in Complete Pack content', () => {
+    const allText = getAllTextContent(completePackContent);
+    const prices = extractPrices(allText);
+
+    prices.forEach((price) => {
+      expect(isPriceAllowed(price), `Unexpected price ${price} in Complete Pack content`).toBe(true);
+    });
+  });
+
+  it('should only contain allowed SEO prices in Money Claim content', () => {
+    const allText = getAllTextContent(moneyClaimContent);
+    const prices = extractPrices(allText);
+
+    prices.forEach((price) => {
+      expect(isPriceAllowed(price), `Unexpected price ${price} in Money Claim content`).toBe(true);
+    });
+  });
+
+  it('should only contain allowed SEO prices in AST Standard content', () => {
+    const allText = getAllTextContent(astStandardContent);
+    const prices = extractPrices(allText);
+
+    prices.forEach((price) => {
+      expect(isPriceAllowed(price), `Unexpected price ${price} in AST Standard content`).toBe(true);
+    });
+  });
+
+  it('should only contain allowed SEO prices in AST Premium content', () => {
+    const allText = getAllTextContent(astPremiumContent);
+    const prices = extractPrices(allText);
+
+    prices.forEach((price) => {
+      expect(isPriceAllowed(price), `Unexpected price ${price} in AST Premium content`).toBe(true);
+    });
+  });
+
+  it('should have exactly 5 allowed SEO prices', () => {
+    expect(ALLOWED_SEO_PRICES.size).toBe(5);
+    expect(ALLOWED_SEO_PRICES.has('£49.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£199.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£99.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£14.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£24.99')).toBe(true);
+  });
+});
+
+/**
+ * Wales Eviction Notice Scope Tests
+ *
+ * Verify correct Welsh terminology and legislation for eviction notices.
+ * Wales uses Renting Homes (Wales) Act 2016, NOT Housing Act 1988.
+ */
+describe('Wizard Landing Pages - Wales Eviction Notice Scope', () => {
+  it('should mention Section 173 for Wales no-fault notices', () => {
+    const walesNotices = noticeOnlyContent.noticeTypes?.filter(
+      (n) => n.jurisdiction === 'Wales'
+    );
+    const section173Notice = walesNotices?.find((n) => n.name.includes('173'));
+    expect(section173Notice).toBeTruthy();
+    expect(section173Notice?.legalBasis).toContain('Renting Homes (Wales) Act 2016');
+  });
+
+  it('should mention Section 181 for Wales fault-based notices', () => {
+    const walesNotices = noticeOnlyContent.noticeTypes?.filter(
+      (n) => n.jurisdiction === 'Wales'
+    );
+    const section181Notice = walesNotices?.find((n) => n.name.includes('181'));
+    expect(section181Notice).toBeTruthy();
+    expect(section181Notice?.legalBasis).toContain('Renting Homes (Wales) Act 2016');
+  });
+
+  it('should NOT use Section 21/Section 8 terminology for Wales', () => {
+    const walesNotices = noticeOnlyContent.noticeTypes?.filter(
+      (n) => n.jurisdiction === 'Wales'
+    );
+    walesNotices?.forEach((notice) => {
+      expect(notice.name).not.toContain('Section 21');
+      expect(notice.name).not.toContain('Section 8');
+    });
+  });
+
+  it('should reference Renting Homes (Wales) Act 2016 for Wales notices', () => {
+    const walesNotices = noticeOnlyContent.noticeTypes?.filter(
+      (n) => n.jurisdiction === 'Wales'
+    );
+    walesNotices?.forEach((notice) => {
+      expect(notice.legalBasis).toContain('Renting Homes (Wales) Act 2016');
+    });
+  });
+
+  it('should mention 6-month notice period for Section 173', () => {
+    const section173Notice = noticeOnlyContent.noticeTypes?.find(
+      (n) => n.name.includes('173')
+    );
+    expect(section173Notice?.description).toContain('6 months');
+  });
+});
+
+/**
+ * Money Claim England-Only Scope Tests
+ *
+ * Money Claim is for England county courts only.
+ * Must NOT reference Wales, MCOL, "England & Wales", or "UK courts".
+ */
+describe('Wizard Landing Pages - Money Claim England-Only Scope', () => {
+  const getMoneyClaimFullText = (): string => {
+    return [
+      moneyClaimContent.title,
+      moneyClaimContent.description,
+      moneyClaimContent.h1,
+      moneyClaimContent.subheading,
+      ...moneyClaimContent.whatYouGet,
+      ...moneyClaimContent.howValidationWorks,
+      ...moneyClaimContent.whoThisIsFor,
+      moneyClaimContent.whyUseThis.intro,
+      ...moneyClaimContent.whyUseThis.benefits,
+      ...moneyClaimContent.proceduralBenefits,
+      ...moneyClaimContent.legalValidationExplainer.whatItMeans,
+      moneyClaimContent.legalValidationExplainer.disclaimer,
+      ...moneyClaimContent.faqs.flatMap((f) => [f.question, f.answer]),
+      ...(moneyClaimContent.courtForms?.map((f) => f.name + ' ' + f.description) || []),
+    ].join(' ');
+  };
+
+  it('should have jurisdictions set to England only', () => {
+    expect(moneyClaimContent.jurisdictions).toEqual(['England']);
+  });
+
+  it('should include "England only" or "England Only" in title or h1', () => {
+    const titleAndH1 = moneyClaimContent.title + ' ' + moneyClaimContent.h1;
+    expect(titleAndH1.toLowerCase()).toContain('england only');
+  });
+
+  it('should NOT contain "Wales" in content', () => {
+    const fullText = getMoneyClaimFullText();
+    // Allow "England & Wales" references for MCOL context to be excluded
+    // But check there's no "Wales" standing alone
+    const walesMatches = fullText.match(/\bWales\b/gi) || [];
+    const englandWalesMatches = fullText.match(/England\s*(&|and)\s*Wales/gi) || [];
+    // Standalone Wales mentions should be zero
+    expect(walesMatches.length - englandWalesMatches.length).toBe(0);
+  });
+
+  it('should NOT contain "MCOL" or "Money Claim Online" in content', () => {
+    const fullText = getMoneyClaimFullText();
+    expect(fullText).not.toContain('MCOL');
+    expect(fullText.toLowerCase()).not.toContain('money claim online');
+  });
+
+  it('should NOT contain "England & Wales" in content', () => {
+    const fullText = getMoneyClaimFullText();
+    expect(fullText).not.toMatch(/England\s*(&|and)\s*Wales/i);
+  });
+
+  it('should NOT contain "UK courts" in content', () => {
+    const fullText = getMoneyClaimFullText();
+    expect(fullText.toLowerCase()).not.toContain('uk courts');
+    expect(fullText.toLowerCase()).not.toContain('uk court');
+  });
+
+  it('should reference county court filing for England', () => {
+    const fullText = getMoneyClaimFullText();
+    expect(fullText.toLowerCase()).toContain('county court');
+    expect(fullText.toLowerCase()).toContain('england');
+  });
+
+  it('should describe England county court in where to file FAQ', () => {
+    const filingFaq = moneyClaimContent.faqs.find(
+      (f) => f.question.toLowerCase().includes('file') || f.question.toLowerCase().includes('where')
+    );
+    expect(filingFaq).toBeTruthy();
+    expect(filingFaq?.answer.toLowerCase()).toContain('england');
+    expect(filingFaq?.answer.toLowerCase()).toContain('county court');
+  });
+});
+
+/**
+ * SEO Route Configuration Tests
+ *
+ * Verify clean landing routes are correctly mapped.
+ */
+describe('Wizard Landing Pages - SEO Route Configuration', () => {
+  it('should have correct SEO landing routes defined', () => {
+    expect(SEO_LANDING_ROUTES.notice_only).toBe('/eviction-notice');
+    expect(SEO_LANDING_ROUTES.complete_pack).toBe('/eviction-pack-england');
+    expect(SEO_LANDING_ROUTES.money_claim).toBe('/money-claim');
+    expect(SEO_LANDING_ROUTES.ast_standard).toBe('/tenancy-agreement');
+    expect(SEO_LANDING_ROUTES.ast_premium).toBe('/premium-tenancy-agreement');
+  });
+
+  it('should have slugs matching SEO landing routes', () => {
+    expect(noticeOnlyContent.slug).toBe('eviction-notice');
+    expect(completePackContent.slug).toBe('eviction-pack-england');
+    expect(moneyClaimContent.slug).toBe('money-claim');
+    expect(astStandardContent.slug).toBe('tenancy-agreement');
+    expect(astPremiumContent.slug).toBe('premium-tenancy-agreement');
+  });
+
+  it('should have wizard URLs starting with /wizard?product=', () => {
+    Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
+      expect(content.wizardUrl).toMatch(/^\/wizard\?product=/);
     });
   });
 });
