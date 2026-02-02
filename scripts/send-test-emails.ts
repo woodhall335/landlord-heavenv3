@@ -6,22 +6,22 @@
  * Usage: npx tsx scripts/send-test-emails.ts
  */
 
-// Load environment variables from .env.local
-import { config } from 'dotenv';
-config({ path: '.env.local' });
-
-import {
-  sendPurchaseConfirmation,
-  sendWelcomeEmail,
-  sendPasswordResetEmail,
-  sendTrialReminderEmail,
-  sendComplianceReminderEmail,
-} from '../src/lib/email/resend';
-
-const TEST_EMAIL = process.env.TEST_EMAIL || 't_mohammed@msn.com';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
+// Load environment variables from .env.local BEFORE importing resend
+// (must use require to avoid ES module hoisting)
+require('dotenv').config({ path: '.env.local' });
 
 async function sendTestEmails() {
+  // Dynamic import after env is loaded
+  const {
+    sendPurchaseConfirmation,
+    sendWelcomeEmail,
+    sendPasswordResetEmail,
+    sendTrialReminderEmail,
+    sendComplianceReminderEmail,
+  } = await import('../src/lib/email/resend');
+
+  const TEST_EMAIL = process.env.TEST_EMAIL || 't_mohammed@msn.com';
+  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
   console.log('🚀 Sending test emails to:', TEST_EMAIL);
   console.log('='.repeat(50));
 
