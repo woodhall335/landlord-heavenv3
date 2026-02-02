@@ -259,7 +259,7 @@ export default function BillingPage() {
                         </td>
                         <td className="p-3 text-sm text-gray-700">{getProductName(order.product_type)}</td>
                         <td className="p-3 text-sm font-semibold text-charcoal">
-                          £{(order.total_amount / 100).toFixed(2)}
+                          £{order.total_amount.toFixed(2)}
                         </td>
                         <td className="p-3 text-sm">
                           <span
