@@ -246,4 +246,165 @@ describe('Sitemap Route Existence', () => {
       expect(entry?.priority, `Priority for ${page} should be 0.95`).toBe(0.95);
     }
   });
+
+  it('should NOT include /wizard URLs in sitemap', () => {
+    const wizardPaths = sitemapPaths.filter((p) => p.startsWith('/wizard'));
+    expect(
+      wizardPaths,
+      `Sitemap should not include /wizard URLs but found: ${wizardPaths.join(', ')}`
+    ).toEqual([]);
+  });
+
+  it('should NOT include /dashboard URLs in sitemap', () => {
+    const dashboardPaths = sitemapPaths.filter((p) => p.startsWith('/dashboard'));
+    expect(
+      dashboardPaths,
+      `Sitemap should not include /dashboard URLs but found: ${dashboardPaths.join(', ')}`
+    ).toEqual([]);
+  });
+
+  it('should NOT include /auth URLs in sitemap', () => {
+    const authPaths = sitemapPaths.filter((p) => p.startsWith('/auth'));
+    expect(
+      authPaths,
+      `Sitemap should not include /auth URLs but found: ${authPaths.join(', ')}`
+    ).toEqual([]);
+  });
+
+  it('should NOT include /api URLs in sitemap', () => {
+    const apiPaths = sitemapPaths.filter((p) => p.startsWith('/api'));
+    expect(
+      apiPaths,
+      `Sitemap should not include /api URLs but found: ${apiPaths.join(', ')}`
+    ).toEqual([]);
+  });
+});
+
+/**
+ * Robots.txt Configuration Tests
+ *
+ * Verify robots.txt properly disallows private routes in production mode.
+ */
+describe('Robots.txt Configuration', () => {
+  it('should disallow /wizard/ in production', async () => {
+    // Save original env
+    const originalVercelEnv = process.env.VERCEL_ENV;
+
+    // Set production mode
+    process.env.VERCEL_ENV = 'production';
+
+    // Import fresh
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    // Restore
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    // Check disallow rules
+    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
+    const disallowedPaths = rules.flatMap((rule) =>
+      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
+    );
+
+    expect(disallowedPaths).toContain('/wizard/');
+  });
+
+  it('should disallow /dashboard/ in production', async () => {
+    const originalVercelEnv = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = 'production';
+
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
+    const disallowedPaths = rules.flatMap((rule) =>
+      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
+    );
+
+    expect(disallowedPaths).toContain('/dashboard/');
+  });
+
+  it('should disallow /auth/ in production', async () => {
+    const originalVercelEnv = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = 'production';
+
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
+    const disallowedPaths = rules.flatMap((rule) =>
+      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
+    );
+
+    expect(disallowedPaths).toContain('/auth/');
+  });
+
+  it('should disallow /api/ in production', async () => {
+    const originalVercelEnv = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = 'production';
+
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
+    const disallowedPaths = rules.flatMap((rule) =>
+      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
+    );
+
+    expect(disallowedPaths).toContain('/api/');
+  });
+
+  it('should allow clean landing page routes in production', async () => {
+    const originalVercelEnv = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = 'production';
+
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    // Check that clean routes are not blocked
+    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
+    const disallowedPaths = rules.flatMap((rule) =>
+      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
+    );
+
+    // Clean landing pages should NOT be in disallow list
+    const cleanRoutes = [
+      '/eviction-notice',
+      '/eviction-pack-england',
+      '/money-claim',
+      '/tenancy-agreement',
+      '/premium-tenancy-agreement',
+    ];
+
+    for (const route of cleanRoutes) {
+      // None of the disallow patterns should match these clean routes
+      const isBlocked = disallowedPaths.some((pattern) => {
+        if (typeof pattern !== 'string') return false;
+        // Direct match or prefix match
+        return route === pattern || route.startsWith(pattern);
+      });
+      expect(isBlocked, `Clean route ${route} should not be blocked by robots.txt`).toBe(false);
+    }
+  });
+
+  it('should include sitemap URL in production', async () => {
+    const originalVercelEnv = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = 'production';
+
+    const robotsModule = await import('@/app/robots');
+    const robotsConfig = robotsModule.default();
+
+    process.env.VERCEL_ENV = originalVercelEnv;
+
+    expect(robotsConfig.sitemap).toBeTruthy();
+    expect(robotsConfig.sitemap).toContain('/sitemap.xml');
+  });
 });

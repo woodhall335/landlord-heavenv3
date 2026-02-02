@@ -447,16 +447,20 @@ export const completePackContent: WizardLandingContent = {
 };
 
 /**
- * MONEY CLAIM - N1 Form and Debt Recovery (England)
+ * MONEY CLAIM - N1 Form and Debt Recovery (England ONLY)
+ *
+ * SCOPE: This product is for England county courts only.
+ * Do NOT mention MCOL/Money Claim Online (which covers England & Wales).
+ * Always say "England only" explicitly.
  */
 export const moneyClaimContent: WizardLandingContent = {
   slug: 'money-claim',
-  title: `Money Claim Pack 2026 | Form N1 Generator | Daily Interest Rate Calculator | ${SEO_PRICES.moneyClaim.display}`,
+  title: `Money Claim Pack 2026 | Form N1 Generator | Daily Interest Rate | England Only | ${SEO_PRICES.moneyClaim.display}`,
   description:
-    'Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. Automatic interest calculation with daily rate. Figures consistent across all documents. MCOL/CCMCC filing guide included.',
-  h1: 'Money Claim Pack',
+    'Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. England only. Automatic interest calculation with daily rate. Figures consistent across all documents. County court filing guide included.',
+  h1: 'Money Claim Pack — England Only',
   subheading:
-    'Form N1 claim form with automatic interest calculation, daily rate breakdown, and PAP-compliant Letter Before Claim',
+    'Form N1 claim form with automatic interest calculation, daily rate breakdown, and PAP-compliant Letter Before Claim for English county courts',
 
   product: 'money_claim',
   wizardUrl: '/wizard?product=money_claim&src=product_page',
@@ -498,7 +502,7 @@ export const moneyClaimContent: WizardLandingContent = {
     'Automatic interest calculation at 8% statutory rate with daily rate shown (e.g., "£1.37 per day")',
     'Letter Before Claim (PAP-DEBT compliant) — required before issuing proceedings',
     'Defendant Information Sheet',
-    'Court filing guide — where to file (MCOL online vs CCMCC paper), court fees, and timelines',
+    'Court filing guide — England county court filing, court fees, and timelines',
     'Enforcement guide — bailiffs, attachment of earnings, charging orders',
     'Reply Form and Financial Statement templates',
     'Unlimited regenerations and 12+ months portal storage',
@@ -515,18 +519,18 @@ export const moneyClaimContent: WizardLandingContent = {
       'Daily rate shown clearly — courts and defendants expect this (e.g., "£1.37 per day continuing")',
       'All figures reconcile: Schedule of Debt totals match N1 claim amount and Particulars',
       'PAP-DEBT compliant Letter Before Claim — required before you can issue proceedings',
-      'Filing guidance: MCOL (online) for claims up to £100,000 or CCMCC (paper) — we explain which to use',
+      'Filing guidance: Where to file in England (County Court Money Claims Centre or local county court)',
     ],
   },
 
   // NEW: Procedural benefits
   proceduralBenefits: [
-    'Generates Form N1 (Claim Form) — the official county court form to start money claim proceedings',
+    'Generates Form N1 (Claim Form) — the official county court form to start money claim proceedings in England',
     'Calculates interest automatically at 8% statutory rate with daily rate breakdown',
     'Shows daily rate explicitly (e.g., "£1.37 per day") — required for judgment and enforcement',
     'Ensures figures are consistent across N1, Schedule of Debt, and Particulars of Claim',
     'Creates PAP-DEBT compliant Letter Before Claim with 30-day response period',
-    'Guides you on where to file: MCOL (online) or CCMCC (paper) based on claim type',
+    'England only: Guides you on where to file based on defendant address and claim type',
     'Validates dates are within 6-year limitation period',
   ],
 
@@ -554,17 +558,17 @@ export const moneyClaimContent: WizardLandingContent = {
   ],
 
   whoThisIsFor: [
-    'Landlords owed rent arrears by current or former tenants',
-    'Landlords claiming for property damage after tenancy ends',
-    'Landlords recovering cleaning costs, unpaid utilities, or other contractual expenses',
-    'Anyone who needs to file a county court money claim with correctly calculated interest',
+    'Landlords in England owed rent arrears by current or former tenants',
+    'Landlords claiming for property damage after tenancy ends (England properties)',
+    'Landlords recovering cleaning costs, unpaid utilities, or other contractual expenses through English county courts',
+    'Anyone in England who needs to file a county court money claim with correctly calculated interest',
   ],
 
   faqs: [
     {
       question: 'What is Form N1?',
       answer:
-        'Form N1 is the official county court claim form for money claims in England and Wales. It is the form you file to start legal proceedings to recover debts — including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement.',
+        'Form N1 is the official county court claim form for money claims in England. It is the form you file to start legal proceedings to recover debts — including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement.',
     },
     {
       question: 'What can I claim for?',
@@ -584,7 +588,7 @@ export const moneyClaimContent: WizardLandingContent = {
     {
       question: 'Where do I file the claim?',
       answer:
-        'File online via Money Claim Online (MCOL) at gov.uk for most claims up to £100,000, or submit paper forms to County Court Money Claims Centre (CCMCC) in Salford. MCOL is faster and cheaper for straightforward claims. Our guide explains both options step-by-step.',
+        'This pack is for England only. File paper forms at the County Court Money Claims Centre (CCMCC) in Salford, or submit electronically through the court portal. Our guide explains the filing process, court fees, and timelines for England county courts.',
     },
     {
       question: 'What is PAP-DEBT?',
@@ -608,7 +612,7 @@ export const moneyClaimContent: WizardLandingContent = {
   relatedBlogPosts: [
     'money-claim-unpaid-rent',
     'how-to-sue-tenant-for-unpaid-rent',
-    'mcol-money-claim-online',
+    'small-claims-court-tips-landlords',
   ],
 };
 
