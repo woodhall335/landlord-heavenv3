@@ -146,6 +146,27 @@ export default function BillingPage() {
     }
   }
 
+  async function handleViewReceipt(paymentIntentId: string) {
+    try {
+      const response = await fetch(`/api/stripe/invoice?payment_intent_id=${paymentIntentId}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch receipt");
+      }
+
+      const { receipt_url } = await response.json();
+
+      if (receipt_url) {
+        window.open(receipt_url, "_blank");
+      } else {
+        setMessage({ type: "error", text: "Receipt not available for this order" });
+      }
+    } catch (error: any) {
+      console.error("Error fetching receipt:", error);
+      setMessage({ type: "error", text: error.message || "Failed to view receipt" });
+    }
+  }
+
   function getTierPrice(tier: string, propertyCount: number): string {
     if (propertyCount <= 5) return "£19.99";
     if (propertyCount <= 10) return "£24.99";
@@ -238,7 +259,7 @@ export default function BillingPage() {
                         </td>
                         <td className="p-3 text-sm text-gray-700">{getProductName(order.product_type)}</td>
                         <td className="p-3 text-sm font-semibold text-charcoal">
-                          £{(order.total_amount / 100).toFixed(2)}
+                          £{order.total_amount.toFixed(2)}
                         </td>
                         <td className="p-3 text-sm">
                           <span
@@ -256,7 +277,7 @@ export default function BillingPage() {
                         <td className="p-3 text-sm">
                           {order.stripe_payment_intent_id && (
                             <button
-                              onClick={handleManagePaymentMethod}
+                              onClick={() => handleViewReceipt(order.stripe_payment_intent_id!)}
                               className="text-primary hover:underline"
                             >
                               View
@@ -277,10 +298,17 @@ export default function BillingPage() {
 
           {/* Payment Methods */}
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-gray-700">
-              💡 <strong>Tip:</strong> You can manage your payment methods, view detailed invoices, and update billing
-              information through the Stripe Customer Portal.
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-700">
+                Manage your payment methods and billing information through the Stripe Customer Portal.
+              </p>
+              <button
+                onClick={handleManagePaymentMethod}
+                className="ml-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark transition-colors whitespace-nowrap"
+              >
+                Manage Billing
+              </button>
+            </div>
           </div>
         </div>
       </Container>
