@@ -155,8 +155,8 @@ export async function GET(
       );
     }
 
-    const entitlementProduct = jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
-    await assertPaidEntitlement({ caseId, product: entitlementProduct });
+    // After Wales/Scotland/NI blocking above, only England reaches here
+    await assertPaidEntitlement({ caseId, product: 'money_claim' });
 
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
