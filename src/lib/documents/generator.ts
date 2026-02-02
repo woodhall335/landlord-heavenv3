@@ -11,6 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
+import { normalizeDatesForRender } from './date-normalizer';
 
 // Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
 type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
@@ -715,12 +716,20 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       console.log('[PDF_DEBUG] print_css first 200 chars:', printCssContent.substring(0, 200));
     }
 
+    // CRITICAL: Normalize all ISO date strings to UK format BEFORE template rendering
+    // This ensures human-facing documents never display raw ISO dates (YYYY-MM-DD)
+    // The normalizer:
+    // - Converts *_date fields from "2026-02-01" to "1 February 2026"
+    // - Preserves *_iso and machine-readable fields
+    // - Adds *_formatted variants for flexibility
+    const normalizedData = normalizeDatesForRender(data);
+
     // Add generation metadata + site config + print system
     // IMPORTANT: Only set generation_date as fallback if not already provided by the generator
     // Money claim generator passes pre-formatted UK legal dates that must not be overwritten
     const enrichedData = {
-      ...data,
-      generation_date: data.generation_date || new Date().toISOString().split('T')[0],
+      ...normalizedData,
+      generation_date: normalizedData.generation_date || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
       // Site configuration (for footer, domain, etc.)
