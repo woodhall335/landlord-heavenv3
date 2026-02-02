@@ -615,7 +615,7 @@ export async function POST(request: Request) {
     // Guard: NI only supports tenancy documents
     if (
       canonicalJurisdiction === 'northern-ireland' &&
-      !['private_tenancy', 'private_tenancy_premium'].includes(document_type)
+      !['private_tenancy', 'private_tenancy_premium', 'ast_standard', 'ast_premium'].includes(document_type)
     ) {
       return NextResponse.json(
         {
@@ -972,7 +972,7 @@ export async function POST(request: Request) {
          * AST
          */
         case 'ast_standard': {
-          const astData = mapWizardToASTData(wizardFacts);
+          const astData = mapWizardToASTData(wizardFacts, { canonicalJurisdiction });
 
           const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
           const suitabilityResult = validateASTSuitability(astData);
@@ -999,7 +999,7 @@ export async function POST(request: Request) {
         }
 
         case 'ast_premium': {
-          const astData = mapWizardToASTData(wizardFacts);
+          const astData = mapWizardToASTData(wizardFacts, { canonicalJurisdiction });
 
           const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
           const suitabilityResult = validateASTSuitability(astData);
