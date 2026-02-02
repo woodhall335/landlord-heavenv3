@@ -231,7 +231,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     checklistDocumentType: 'pre_tenancy_checklist_northern_ireland',
     templatePaths: {
       standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
-      premium: 'uk/northern-ireland/templates/private_tenancy_hmo.hbs',
+      premium: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
       modelClauses: 'uk/northern-ireland/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'uk/northern-ireland/templates/inventory_template.hbs', // Wizard-completed for premium
