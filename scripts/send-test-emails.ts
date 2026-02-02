@@ -14,7 +14,7 @@ import {
   sendComplianceReminderEmail,
 } from '../src/lib/email/resend';
 
-const TEST_EMAIL = 'woodhall335@gmail.com';
+const TEST_EMAIL = process.env.TEST_EMAIL || 't_mohammed@msn.com';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
 
 async function sendTestEmails() {

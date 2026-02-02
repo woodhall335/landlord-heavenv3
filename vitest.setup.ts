@@ -10,6 +10,12 @@ import '@testing-library/jest-dom/vitest';
 // Load environment variables from .env.local file for tests
 loadEnv({ path: path.resolve(__dirname, '.env.local') });
 
+// Set a dummy Resend API key for tests that import the email module
+// This prevents the Resend client from throwing during test imports
+if (!process.env.RESEND_API_KEY) {
+  process.env.RESEND_API_KEY = 're_test_dummy_key_for_testing';
+}
+
 // Mock 'server-only' package used by Next.js for server-only code
 // This package throws an error when imported in client code, but in tests
 // we need to mock it to allow testing server-side functions
