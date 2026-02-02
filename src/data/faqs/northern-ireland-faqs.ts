@@ -17,7 +17,7 @@ export const northernIrelandFAQs: FAQItem[] = [
   },
   {
     question: 'Is Section 21 available in Northern Ireland?',
-    answer: 'No. Section 21 only applies in England. Northern Ireland uses Notice to Quit under the Private Tenancies (Northern Ireland) Order 2006.',
+    answer: 'No. Section 21 only applies in England. Northern Ireland uses Notice to Quit under the Private Tenancies Act (Northern Ireland) 2022.',
   },
   {
     question: 'Do I need to protect deposits in Northern Ireland?',
