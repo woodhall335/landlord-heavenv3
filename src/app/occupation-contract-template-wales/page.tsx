@@ -668,7 +668,7 @@ export default function OccupationContractTemplateWalesPage() {
                   Section 173 notices.
                 </p>
 
-                <h3>Fundamental Terms</h3>
+                <h3>Mandatory Prescribed Terms</h3>
                 <p>
                   Welsh law prescribes mandatory terms that must be included exactly as stated.
                   English agreements have more flexibility. Using a template without Welsh

@@ -380,8 +380,8 @@ export default function ASTPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Standard */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="text-xl font-bold text-charcoal mb-2">Standard - {standardPrice}</h3>
-                <p className="text-sm text-gray-600 mb-4">For single households and standard residential lets</p>
+                <h3 className="text-xl font-bold text-charcoal mb-2">Standard Plan Features</h3>
+                <p className="text-sm text-gray-600 mb-4">For single households and standard residential lets — {standardPrice}</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
@@ -427,8 +427,8 @@ export default function ASTPage() {
                 <div className="absolute -top-3 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
                   HMO READY
                 </div>
-                <h3 className="text-xl font-bold text-charcoal mb-2">Premium - {premiumPrice}</h3>
-                <p className="text-sm text-gray-600 mb-4">For HMOs, student lets &amp; multi-tenant properties</p>
+                <h3 className="text-xl font-bold text-charcoal mb-2">Premium Plan Features</h3>
+                <p className="text-sm text-gray-600 mb-4">For HMOs, student lets &amp; multi-tenant properties — {premiumPrice}</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
