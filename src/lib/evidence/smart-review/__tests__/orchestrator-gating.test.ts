@@ -22,6 +22,7 @@ vi.mock('../classify', async () => {
 // Import after mocking
 import { checkEligibility } from '../orchestrator';
 import type { SmartReviewInput } from '../orchestrator';
+import { EvidenceCategory } from '../../schema';
 
 describe('Smart Review Orchestrator Gating', () => {
   // Helper to create minimal input for eligibility checks
@@ -34,18 +35,20 @@ describe('Smart Review Orchestrator Gating', () => {
     jurisdiction,
     wizardFacts: {},
     evidenceBundle: {
-      tenancy_agreement: [
-        {
-          id: 'doc-1',
-          filename: 'agreement.pdf',
-          original_filename: 'agreement.pdf',
-          content_type: 'application/pdf',
-          size: 100000,
-          url: 'https://example.com/doc.pdf',
-          created_at: new Date().toISOString(),
-          category: 'tenancy_agreement',
-        },
-      ],
+      byCategory: {
+        [EvidenceCategory.TENANCY_AGREEMENT]: [
+          {
+            id: 'doc-1',
+            filename: 'agreement.pdf',
+            mimeType: 'application/pdf',
+            sizeBytes: 100000,
+            uploadedAt: new Date().toISOString(),
+            storageKey: 'https://example.com/doc.pdf',
+            category: EvidenceCategory.TENANCY_AGREEMENT,
+          },
+        ],
+      },
+      legacy: [],
     },
   });
 
@@ -148,7 +151,10 @@ describe('Smart Review Orchestrator Gating', () => {
         product: 'notice_only',
         jurisdiction: 'england',
         wizardFacts: {},
-        evidenceBundle: {}, // Empty bundle
+        evidenceBundle: {
+          byCategory: {}, // Empty bundle
+          legacy: [],
+        },
       };
 
       const result = checkEligibility(input);
@@ -190,18 +196,20 @@ function createInput(product: string, jurisdiction: string): SmartReviewInput {
     jurisdiction,
     wizardFacts: {},
     evidenceBundle: {
-      tenancy_agreement: [
-        {
-          id: 'doc-1',
-          filename: 'agreement.pdf',
-          original_filename: 'agreement.pdf',
-          content_type: 'application/pdf',
-          size: 100000,
-          url: 'https://example.com/doc.pdf',
-          created_at: new Date().toISOString(),
-          category: 'tenancy_agreement',
-        },
-      ],
+      byCategory: {
+        [EvidenceCategory.TENANCY_AGREEMENT]: [
+          {
+            id: 'doc-1',
+            filename: 'agreement.pdf',
+            mimeType: 'application/pdf',
+            sizeBytes: 100000,
+            uploadedAt: new Date().toISOString(),
+            storageKey: 'https://example.com/doc.pdf',
+            category: EvidenceCategory.TENANCY_AGREEMENT,
+          },
+        ],
+      },
+      legacy: [],
     },
   };
 }
