@@ -5,24 +5,25 @@
  * Lists legal change events with filtering and pagination
  *
  * Phase 23: Admin Portal Cron Summary + One-Click "Push PR" Workflow
+ * Updated to use database persistence instead of in-memory storage
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import {
-  apiListEvents,
-  apiGetDashboard,
-  apiGetAttentionRequired,
-  ListEventsRequest,
-} from '@/lib/validation/legal-change-api';
+  dbListEvents,
+  dbGetEventSummaries,
+  dbCountEventsByState,
+  dbGetEventsRequiringAttention,
+  dbGetEventCount,
+} from '@/lib/validation/legal-change-db';
 import {
   EventState,
   EventFilter,
-  countEventsByState,
+  ChangeSeverity,
 } from '@/lib/validation/legal-change-events';
 import { Jurisdiction, LegalTopic } from '@/lib/validation/legal-source-registry';
-import { ChangeSeverity } from '@/lib/validation/legal-change-events';
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,17 +43,64 @@ export async function GET(request: NextRequest) {
 
     // Handle special views
     if (view === 'dashboard') {
-      const result = apiGetDashboard();
-      return NextResponse.json(result);
+      const [counts, recentEvents, totalEvents] = await Promise.all([
+        dbCountEventsByState(),
+        dbGetEventSummaries(),
+        dbGetEventCount(),
+      ]);
+
+      const requiresTriage = counts.new;
+      const requiresAction = counts.action_required;
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          summary: {
+            totalEvents,
+            byState: counts,
+            requiresTriage,
+            requiresAction,
+            avgTimeToTriage: null,
+            avgTimeToClose: null,
+          },
+          recentEvents: recentEvents.slice(0, 10),
+          sourceStats: {
+            totalSources: 0,
+            enabledSources: 0,
+            byJurisdiction: {},
+          },
+          recentActivity: [],
+        },
+        meta: { timestamp: new Date().toISOString() },
+      });
     }
 
     if (view === 'attention') {
-      const result = apiGetAttentionRequired();
-      return NextResponse.json(result);
+      const events = await dbGetEventsRequiringAttention();
+      const summaries = events.map((e) => ({
+        id: e.id,
+        title: e.title,
+        state: e.state,
+        severity: e.impactAssessment?.severity,
+        jurisdictions: e.jurisdictions,
+        sourceId: e.sourceId,
+        detectedAt: e.detectedAt,
+        impactedRuleCount: e.impactAssessment?.impactedRuleIds.length ?? 0,
+        assignedTo: e.assignedTo,
+      }));
+
+      return NextResponse.json({
+        success: true,
+        data: summaries,
+        meta: {
+          totalCount: summaries.length,
+          timestamp: new Date().toISOString(),
+        },
+      });
     }
 
     if (view === 'counts') {
-      const counts = countEventsByState();
+      const counts = await dbCountEventsByState();
       return NextResponse.json({
         success: true,
         data: counts,
@@ -75,8 +123,6 @@ export async function GET(request: NextRequest) {
     // Parse pagination parameters
     const page = parseInt(searchParams.get('page') || '1', 10);
     const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '20', 10), 100);
-    const sortBy = (searchParams.get('sortBy') as 'createdAt' | 'updatedAt' | 'severity') || 'createdAt';
-    const sortOrder = (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc';
 
     // Build filter
     const filter: EventFilter = {};
@@ -93,18 +139,39 @@ export async function GET(request: NextRequest) {
     }
     if (tags?.length) filter.tags = tags;
 
-    // Build request
-    const listRequest: ListEventsRequest = {
-      filter: Object.keys(filter).length > 0 ? filter : undefined,
-      page,
-      pageSize,
-      sortBy,
-      sortOrder,
-    };
+    // Get events from database
+    const allEvents = await dbListEvents(Object.keys(filter).length > 0 ? filter : undefined);
 
-    const result = apiListEvents(listRequest);
+    // Apply pagination
+    const totalCount = allEvents.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const start = (page - 1) * pageSize;
+    const events = allEvents.slice(start, start + pageSize);
 
-    return NextResponse.json(result);
+    // Convert to summaries
+    const summaries = events.map((e) => ({
+      id: e.id,
+      title: e.title,
+      state: e.state,
+      severity: e.impactAssessment?.severity,
+      jurisdictions: e.jurisdictions,
+      sourceId: e.sourceId,
+      detectedAt: e.detectedAt,
+      impactedRuleCount: e.impactAssessment?.impactedRuleIds.length ?? 0,
+      assignedTo: e.assignedTo,
+    }));
+
+    return NextResponse.json({
+      success: true,
+      data: summaries,
+      meta: {
+        totalCount,
+        page,
+        pageSize,
+        totalPages,
+        timestamp: new Date().toISOString(),
+      },
+    });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {
       return NextResponse.json(

@@ -5,13 +5,50 @@
  * Gets detailed information about a specific legal change event
  *
  * Phase 23: Admin Portal Cron Summary + One-Click "Push PR" Workflow
+ * Updated to use database persistence instead of in-memory storage
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
-import { apiGetEventDetails, apiGetEventAuditLog } from '@/lib/validation/legal-change-api';
+import { dbGetEvent } from '@/lib/validation/legal-change-db';
+import { getSourceById } from '@/lib/validation/legal-source-registry';
 import { getEventPRInfo, checkPushPREligibility } from '@/lib/validation/admin-push-pr';
+import { getAuditLogForEvent, WorkflowAction } from '@/lib/validation/legal-change-workflow';
+import { EventState } from '@/lib/validation/legal-change-events';
+
+/**
+ * Get allowed actions for a state.
+ */
+function getAllowedActionsForState(state: EventState): WorkflowAction[] {
+  const actions: WorkflowAction[] = ['assign', 'link_pr', 'link_rollout', 'link_incident'];
+
+  switch (state) {
+    case 'new':
+      actions.push('triage');
+      break;
+    case 'triaged':
+      actions.push('mark_action_required', 'mark_no_action');
+      break;
+    case 'action_required':
+      actions.push('mark_implemented');
+      break;
+    case 'no_action':
+      actions.push('close', 'reopen');
+      break;
+    case 'implemented':
+      actions.push('mark_rolled_out');
+      break;
+    case 'rolled_out':
+      actions.push('close');
+      break;
+    case 'closed':
+      actions.push('reopen');
+      break;
+  }
+
+  return actions;
+}
 
 export async function GET(
   request: NextRequest,
@@ -32,36 +69,47 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams;
     const include = searchParams.get('include')?.split(',') || [];
 
-    // Get event details
-    const result = apiGetEventDetails(eventId);
+    // Get event details from database
+    const event = await dbGetEvent(eventId);
 
-    if (!result.success) {
-      return NextResponse.json(result, { status: 404 });
+    if (!event) {
+      return NextResponse.json(
+        { success: false, error: `Event not found: ${eventId}` },
+        { status: 404 }
+      );
     }
 
-    // Build response with optional inclusions
+    const source = getSourceById(event.sourceId) ?? null;
+    const auditLog = getAuditLogForEvent(eventId);
+    const allowedActions = getAllowedActionsForState(event.state);
+
+    // Build response
     const response: Record<string, unknown> = {
-      ...result,
+      success: true,
+      data: {
+        event,
+        source,
+        auditLog,
+        allowedActions,
+      },
+      meta: { timestamp: new Date().toISOString() },
     };
 
     // Include PR info if requested
-    if (include.includes('prInfo') && result.data) {
+    if (include.includes('prInfo')) {
       const prInfo = await getEventPRInfo(eventId, user.id);
       response.prInfo = prInfo;
     }
 
     // Include Push PR eligibility if requested
-    if (include.includes('pushPREligibility') && result.data) {
-      const eligibility = checkPushPREligibility(result.data.event, user.id);
+    if (include.includes('pushPREligibility')) {
+      const eligibility = checkPushPREligibility(event, user.id);
       response.pushPREligibility = eligibility;
     }
 
     // Include full audit log if requested
     if (include.includes('fullAuditLog')) {
-      const auditResult = apiGetEventAuditLog(eventId);
-      if (auditResult.success) {
-        response.fullAuditLog = auditResult.data;
-      }
+      response.fullAuditLog = auditLog;
     }
 
     return NextResponse.json(response);
