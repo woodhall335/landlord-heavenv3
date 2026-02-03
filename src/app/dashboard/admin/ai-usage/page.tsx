@@ -6,6 +6,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+// Note: Admin access check now uses server-side /api/admin/check-access
+// which properly handles whitespace in ADMIN_USER_IDS env var
+
 interface AIUsageLog {
   id: string;
   operation_type: string;  // Correct field name from schema
@@ -35,17 +38,22 @@ export default function AdminAIUsagePage() {
   const [stats, setStats] = useState<AIUsageStats | null>(null);
 
   const checkAdminAccess = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      // Use server-side admin check for security (handles env var trimming)
+      const response = await fetch("/api/admin/check-access");
+
+      if (response.status === 401) {
         router.push("/auth/login");
         return;
       }
 
-      // Check if user is admin
-      const adminIds = process.env.NEXT_PUBLIC_ADMIN_USER_IDS?.split(",") || [];
-      if (!adminIds.includes(user.id)) {
+      if (response.status === 403) {
+        router.push("/dashboard");
+        return;
+      }
+
+      if (!response.ok) {
+        console.error("Error checking admin access:", response.statusText);
         router.push("/dashboard");
         return;
       }

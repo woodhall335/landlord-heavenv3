@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
+import { isAdmin as checkIsAdmin } from '@/lib/auth';
 import { z } from 'zod';
 
 // Get current user profile
@@ -32,9 +33,8 @@ export async function GET() {
       );
     }
 
-    // Check if user is admin by comparing against ADMIN_USER_IDS env var
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',').map((id) => id.trim()) || [];
-    const isAdmin = adminIds.includes(user.id);
+    // Check if user is admin using centralized helper (handles whitespace trimming)
+    const isAdmin = checkIsAdmin(user.id);
 
     return NextResponse.json({
       user: {

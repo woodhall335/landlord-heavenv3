@@ -6,16 +6,15 @@
  */
 
 import { requireServerAuth } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     const user = await requireServerAuth();
 
-    // Check if user is admin
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }

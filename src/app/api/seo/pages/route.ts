@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 
 // Get all SEO pages
 export async function GET(request: NextRequest) {
@@ -21,8 +22,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 

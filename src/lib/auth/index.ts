@@ -12,3 +12,5 @@ export type { RequireCaseOwnerInput, RequireCaseOwnerResult } from './requireCas
 
 export { logMutation, getMutationLogs } from './audit-log';
 export type { MutationLogEntry, LogMutationInput } from './audit-log';
+
+export { getAdminIdsFromEnv, isAdminUserId, isAdmin } from './admin-ids';
