@@ -17,7 +17,7 @@ import {
   updateCronRun,
 } from '@/lib/validation/cron-run-tracker';
 import { getEnabledSources } from '@/lib/validation/legal-source-registry';
-import { createEvent, listEvents } from '@/lib/validation/legal-change-events';
+import { dbCreateEvent, dbListEvents, dbSetImpactAssessment } from '@/lib/validation/legal-change-db';
 import { analyzeAndAssess } from '@/lib/validation/legal-impact-analyzer';
 
 interface CheckNowRequestBody {
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
           // and check for changes. For now, we simulate the check.
 
           // Check if there are any pending changes to simulate
-          const existingEvents = listEvents({
+          const existingEvents = await dbListEvents({
             sourceIds: [source.id],
           });
 
@@ -101,8 +101,8 @@ export async function POST(request: NextRequest) {
           const hasNewContent = Math.random() < 0.1; // 10% chance of finding something
 
           if (hasNewContent && !body.dryRun) {
-            // Create a new event for demonstration
-            const event = createEvent({
+            // Create a new event in the database
+            const event = await dbCreateEvent({
               sourceId: source.id,
               sourceName: source.name,
               sourceUrl: source.url,
@@ -118,8 +118,9 @@ export async function POST(request: NextRequest) {
               createdBy: user.id,
             });
 
-            // Auto-analyze the event
-            analyzeAndAssess(event, 'system');
+            // Auto-analyze the event and save to database
+            const assessment = analyzeAndAssess(event, 'system');
+            await dbSetImpactAssessment(event.id, assessment);
 
             eventsCreated++;
           }
