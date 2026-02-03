@@ -11,7 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
-import { normalizeDatesForRender, sanitizeISODatesInHTML } from './date-normalizer';
+import { normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
 
 // Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
 type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
@@ -805,11 +805,21 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     const normalizedData = normalizeDatesForRender(data);
 
     // Add generation metadata + site config + print system
-    // IMPORTANT: Only set generation_date as fallback if not already provided by the generator
+    // IMPORTANT: Only set generation_date/current_date as fallback if not already provided by the generator
     // Money claim generator passes pre-formatted UK legal dates that must not be overwritten
+    //
+    // CRITICAL FIX (Feb 2026): Templates use both 'current_date' and 'generation_date'.
+    // - Compliance checklist, audit reports use: {{format_date current_date "long"}}
+    // - Footer stamps use: {{generation_date}}
+    // Both must be set and formatted as UK dates to prevent blank fields in PDF text layer.
+    const ukFormattedNow = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     const enrichedData = {
       ...normalizedData,
-      generation_date: normalizedData.generation_date || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+      // 'current_date' - used by compliance checklist, audit reports, etc.
+      // If already provided and normalized, keep it; otherwise use UK-formatted now
+      current_date: normalizedData.current_date || ukFormattedNow,
+      // 'generation_date' - used by footer stamps, metadata
+      generation_date: normalizedData.generation_date || ukFormattedNow,
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
       // Site configuration (for footer, domain, etc.)
@@ -830,6 +840,8 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       'grounds',           // Used for grounds arrays: {{#each grounds}}
       'sections',          // Used for section-based templates
       'compliance',        // Used for compliance data display
+      'metadata',          // Used by service_instructions.hbs: {{format_date metadata.generated_at}}
+      'tenancy',           // Used by compliance_checklist.hbs: {{tenancy.start_date}}
     ];
 
     const safeData = Object.entries(enrichedData).reduce((acc, [key, value]) => {
@@ -1354,6 +1366,25 @@ export async function generateDocument(
       console.warn(
         `[generateDocument] ISO date sanitizer fixed ${replacements.length} date(s) in ${templatePath}. ` +
         `This indicates a normalization gap that should be fixed upstream.`
+      );
+    }
+
+    // =============================================================================
+    // PDF TEXT LAYER VALIDATION (Feb 2026)
+    // Ensure consistency between visual content and PDF text layer:
+    // - No ISO dates (YYYY-MM-DD) in visible text
+    // - No blank date fields where labels exist without values
+    // This prevents cases where "Generated:" appears visually but extracts as blank.
+    // =============================================================================
+    const validation = validateHtmlForPdfTextLayer(html, {
+      documentType: templatePath,
+    });
+
+    if (!validation.valid) {
+      // Log validation warnings but don't fail - the sanitizer already fixed ISO dates
+      console.warn(
+        `[generateDocument] PDF text layer validation warnings for ${templatePath}:`,
+        validation.warnings
       );
     }
   }

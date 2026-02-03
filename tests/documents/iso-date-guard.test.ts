@@ -16,7 +16,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { findISODatesInContent, sanitizeISODatesInHTML } from '@/lib/documents/date-normalizer';
+import {
+  findISODatesInContent,
+  sanitizeISODatesInHTML,
+  findBlankDateFields,
+  validateHtmlForPdfTextLayer,
+} from '@/lib/documents/date-normalizer';
 import { generateDocument } from '@/lib/documents/generator';
 
 // ISO date pattern for scanning
@@ -438,6 +443,225 @@ describe('ISO Date Guard - CI Validation', () => {
       }
 
       expect(isoMatches).toHaveLength(0);
+    });
+  });
+
+  // ===========================================================================
+  // BLANK DATE FIELD DETECTION TESTS (Feb 2026)
+  // Test the findBlankDateFields function for detecting empty date values
+  // Only detects STRUCTURED field patterns, not prose text
+  // ===========================================================================
+  describe('findBlankDateFields', () => {
+    it('detects blank Tenancy Start Date in definition list', () => {
+      const html = '<dt>Tenancy Start Date:</dt><dd></dd>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toContain('Tenancy Start Date');
+    });
+
+    it('detects blank Generated field in definition list', () => {
+      const html = '<dt>Generated:</dt><dd>   </dd>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toContain('Generated');
+    });
+
+    it('detects blank field with strong label at start of paragraph', () => {
+      const html = '<p><strong>Generated:</strong></p>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toContain('Generated');
+    });
+
+    it('returns empty array when date fields have values', () => {
+      const html = '<dt>Tenancy Start Date:</dt><dd>1 February 2026</dd>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toHaveLength(0);
+    });
+
+    it('detects multiple blank date fields', () => {
+      const html = `
+        <dt>Tenancy Start Date:</dt><dd></dd>
+        <dt>Service Date:</dt><dd></dd>
+        <dt>Generated:</dt><dd></dd>
+      `;
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toContain('Tenancy Start Date');
+      expect(blanks).toContain('Service Date');
+      expect(blanks).toContain('Generated');
+    });
+
+    it('does not flag non-date labels as blank', () => {
+      const html = '<dt>Name:</dt><dd></dd>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toHaveLength(0);
+    });
+
+    it('does not flag prose text that mentions date labels', () => {
+      // This is prose text, not a structured field
+      const html = '<p>After serving, wait until the expiry date:</p>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toHaveLength(0);
+    });
+
+    it('does not flag date labels in the middle of a paragraph', () => {
+      // "Generated:" in the middle of prose should not be flagged
+      const html = '<p>This document was Generated: 3 February 2026 by the system.</p>';
+      const blanks = findBlankDateFields(html);
+      expect(blanks).toHaveLength(0);
+    });
+  });
+
+  // ===========================================================================
+  // PDF TEXT LAYER VALIDATION TESTS (Feb 2026)
+  // Test the comprehensive validateHtmlForPdfTextLayer function
+  // ===========================================================================
+  describe('validateHtmlForPdfTextLayer', () => {
+    it('returns valid for clean HTML with UK dates', () => {
+      const html = `
+        <dt>Tenancy Start Date:</dt><dd>1 February 2026</dd>
+        <dt>Generated:</dt><dd>3 February 2026</dd>
+      `;
+      const result = validateHtmlForPdfTextLayer(html);
+      expect(result.valid).toBe(true);
+      expect(result.isoDateLeaks).toHaveLength(0);
+      expect(result.blankDateFields).toHaveLength(0);
+      expect(result.warnings).toHaveLength(0);
+    });
+
+    it('detects ISO date leaks', () => {
+      const html = '<p>Start date: 2026-01-15</p>';
+      const result = validateHtmlForPdfTextLayer(html);
+      expect(result.valid).toBe(false);
+      expect(result.isoDateLeaks).toContain('2026-01-15');
+      expect(result.warnings).toContainEqual(expect.stringContaining('ISO_DATE_LEAK'));
+    });
+
+    it('detects blank date fields', () => {
+      const html = '<dt>Tenancy Start Date:</dt><dd></dd>';
+      const result = validateHtmlForPdfTextLayer(html);
+      expect(result.valid).toBe(false);
+      expect(result.blankDateFields).toContain('Tenancy Start Date');
+      expect(result.warnings).toContainEqual(expect.stringContaining('BLANK_DATE_FIELD'));
+    });
+
+    it('detects both ISO leaks and blank fields', () => {
+      const html = `
+        <p>Notice date: 2026-02-01</p>
+        <dt>Generated:</dt><dd></dd>
+      `;
+      const result = validateHtmlForPdfTextLayer(html);
+      expect(result.valid).toBe(false);
+      expect(result.isoDateLeaks).toHaveLength(1);
+      expect(result.blankDateFields).toHaveLength(1);
+      expect(result.warnings).toHaveLength(2);
+    });
+
+    it('throws when throwOnCritical is true and issues found', () => {
+      const html = '<p>Date: 2026-01-15</p>';
+      expect(() => validateHtmlForPdfTextLayer(html, { throwOnCritical: true })).toThrow(
+        /PDF_TEXT_LAYER_VALIDATION_FAILED/
+      );
+    });
+
+    it('does not throw when valid even with throwOnCritical', () => {
+      const html = '<p>Date: 15 January 2026</p>';
+      expect(() => validateHtmlForPdfTextLayer(html, { throwOnCritical: true })).not.toThrow();
+    });
+  });
+
+  // ===========================================================================
+  // INTEGRATION TESTS - GENERATED DOCUMENTS (Feb 2026)
+  // Verify that generated documents pass PDF text layer validation
+  // ===========================================================================
+  describe('Generated documents - PDF text layer validation', () => {
+    const baseTestData = {
+      // Landlord
+      landlord_full_name: 'John Smith',
+      landlord_address: '1 High Street, London, SW1A 1AA',
+      landlord_email: 'john@example.com',
+      landlord_phone: '07700 900000',
+
+      // Tenant
+      tenant_full_name: 'Jane Doe',
+      property_address: '123 Test Street\nTestville\nTS1 2AB',
+      property_address_line1: '123 Test Street',
+      property_address_town: 'Testville',
+
+      // Tenancy
+      tenancy_start_date: '2024-06-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+
+      // Compliance
+      deposit_protected: true,
+      deposit_amount: 2400,
+      deposit_scheme_name: 'DPS',
+      prescribed_info_given: true,
+      gas_cert_provided: true,
+      epc_provided: true,
+      epc_rating: 'C',
+      how_to_rent_given: true,
+      selected_notice_route: 'section_21',
+      jurisdiction_display: 'England',
+    };
+
+    it('compliance_checklist.hbs passes PDF text layer validation', async () => {
+      const result = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+        data: baseTestData,
+        isPreview: true,
+        outputFormat: 'html',
+      });
+
+      const validation = validateHtmlForPdfTextLayer(result.html, {
+        documentType: 'compliance_checklist.hbs',
+      });
+
+      if (!validation.valid) {
+        console.error('PDF text layer validation failed:', validation.warnings);
+      }
+
+      expect(validation.valid).toBe(true);
+    });
+
+    it('compliance_checklist.hbs has current_date filled (not blank)', async () => {
+      const result = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+        data: baseTestData,
+        isPreview: true,
+        outputFormat: 'html',
+      });
+
+      // Check that Generated: field has a value
+      expect(result.html).toMatch(/<dt[^>]*>Generated:<\/dt>\s*<dd[^>]*>\d{1,2}\s+\w+\s+\d{4}<\/dd>/);
+    });
+
+    it('service_instructions.hbs passes PDF text layer validation', async () => {
+      // Service instructions template requires specific fields
+      const serviceInstructionsData = {
+        ...baseTestData,
+        notice_type: 'Section 21',
+        notice_service_date: '2026-02-01',
+        notice_expiry_date: '2026-04-01',
+        metadata: {
+          generated_at: '2026-02-03',
+        },
+      };
+
+      const result = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/service_instructions.hbs',
+        data: serviceInstructionsData,
+        isPreview: true,
+        outputFormat: 'html',
+      });
+
+      const validation = validateHtmlForPdfTextLayer(result.html, {
+        documentType: 'service_instructions.hbs',
+      });
+
+      if (!validation.valid) {
+        console.error('PDF text layer validation failed:', validation.warnings);
+      }
+
+      expect(validation.valid).toBe(true);
     });
   });
 });
