@@ -17,8 +17,9 @@ import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
+import { getQuestionRepository } from '@/lib/ask-heaven/questions';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
@@ -240,6 +241,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  // ==========================================================================
+  // Ask Heaven Q&A Pages
+  // ==========================================================================
+  // Only include approved questions that are canonical (not duplicates).
+  // Questions are noindex by default until approved.
+  // See /docs/ask-heaven-seo.md for the review workflow.
+  //
+  // Future scaling: When question count exceeds 1000, consider splitting
+  // into a sitemap index with separate files per topic/jurisdiction.
+  // ==========================================================================
+  let askHeavenPages: MetadataRoute.Sitemap = [];
+  try {
+    const questionRepository = getQuestionRepository();
+    const approvedQuestions = await questionRepository.getForSitemap();
+
+    askHeavenPages = approvedQuestions.map((q) => ({
+      url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,
+      lastModified: new Date(q.updated_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }));
+  } catch (error) {
+    // Log but don't fail sitemap generation if question repo is unavailable
+    console.warn('[Sitemap] Failed to load Ask Heaven questions:', error);
+  }
+
   // Pages that always get stable dates (products, tools, etc.)
   const datedPages = [
     ...productPages,
@@ -281,5 +308,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...marketingEntries,
     ...datedEntries,
     ...blogPostPages,
+    ...askHeavenPages,
   ];
 }

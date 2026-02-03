@@ -1,0 +1,147 @@
+/**
+ * Question Page Content Component
+ *
+ * Renders the main answer content with proper structure for SEO.
+ * Content is server-rendered for full indexability.
+ */
+
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import type { AskHeavenQuestion, QualityGateResult } from '@/lib/ask-heaven/questions';
+
+interface QuestionPageContentProps {
+  question: AskHeavenQuestion;
+  qualityResult: QualityGateResult;
+}
+
+/**
+ * Main content component for question pages.
+ *
+ * Renders:
+ * - Answer in markdown format
+ * - Placeholder sections for SEO structure
+ * - Quality warnings (if not passing gates)
+ */
+export function QuestionPageContent({
+  question,
+  qualityResult,
+}: QuestionPageContentProps) {
+  return (
+    <article className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Quality Warning Banner (for drafts/review) */}
+      {question.status !== 'approved' && (
+        <div className="bg-amber-50 border-b border-amber-200 px-6 py-3">
+          <div className="flex items-center gap-2 text-amber-800">
+            <svg
+              className="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="text-sm font-medium">
+              This content is pending review and may not be fully accurate.
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Answer Content */}
+      <div className="p-6 lg:p-8">
+        {/* Main Answer */}
+        <section className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Overview</h2>
+          <div className="prose prose-blue max-w-none">
+            <ReactMarkdown>{question.answer_md}</ReactMarkdown>
+          </div>
+        </section>
+
+        {/* Placeholder: What the Law Generally Says */}
+        <section className="mb-8 border-t border-gray-100 pt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            What the Law Generally Says
+          </h2>
+          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
+            <p className="text-sm italic">
+              [Placeholder: Legal framework summary will be added during editorial review]
+            </p>
+          </div>
+        </section>
+
+        {/* Placeholder: Jurisdiction Differences */}
+        {question.jurisdictions.length > 1 ||
+        question.jurisdictions.includes('uk-wide') ? (
+          <section className="mb-8 border-t border-gray-100 pt-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Jurisdiction Differences
+            </h2>
+            <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
+              <p className="text-sm italic">
+                [Placeholder: Jurisdiction-specific variations will be added during editorial review]
+              </p>
+              <ul className="mt-2 text-sm space-y-1">
+                {question.jurisdictions.includes('england') && (
+                  <li>• England: Section 21/Section 8 notices, AST framework</li>
+                )}
+                {question.jurisdictions.includes('wales') && (
+                  <li>• Wales: Renting Homes Act, Section 173 notices</li>
+                )}
+                {question.jurisdictions.includes('scotland') && (
+                  <li>• Scotland: Private Residential Tenancy, Notice to Leave</li>
+                )}
+                {question.jurisdictions.includes('northern-ireland') && (
+                  <li>• Northern Ireland: Notice to Quit process</li>
+                )}
+              </ul>
+            </div>
+          </section>
+        ) : null}
+
+        {/* Placeholder: What Landlords Should Do */}
+        <section className="mb-8 border-t border-gray-100 pt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            What Landlords Should Do
+          </h2>
+          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
+            <p className="text-sm italic">
+              [Placeholder: Actionable steps will be added during editorial review]
+            </p>
+          </div>
+        </section>
+
+        {/* Placeholder: Common Mistakes */}
+        <section className="mb-8 border-t border-gray-100 pt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            Common Mistakes to Avoid
+          </h2>
+          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
+            <p className="text-sm italic">
+              [Placeholder: Common pitfalls will be added during editorial review]
+            </p>
+          </div>
+        </section>
+
+        {/* Word Count Info (dev only) */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-8 border-t border-gray-100 pt-4">
+            <p className="text-xs text-gray-400">
+              Debug: {qualityResult.wordCount} words |{' '}
+              Status: {question.status} |{' '}
+              Indexable: {qualityResult.passed ? 'Yes' : 'No'}
+              {qualityResult.failures.length > 0 && (
+                <span className="text-red-500">
+                  {' '}
+                  | Issues: {qualityResult.failures.map((f) => f.gate).join(', ')}
+                </span>
+              )}
+            </p>
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
