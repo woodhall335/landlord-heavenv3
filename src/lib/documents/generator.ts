@@ -11,7 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
-import { normalizeDatesForRender } from './date-normalizer';
+import { normalizeDatesForRender, sanitizeISODatesInHTML } from './date-normalizer';
 
 // Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
 type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
@@ -227,26 +227,77 @@ function registerHandlebarsHelpers() {
     return amount.toFixed(2);
   });
 
-  // Format date (UK format: DD/MM/YYYY, using UTC to avoid DST issues)
+  // Format date (UK format: DD/MM/YYYY or "D Month YYYY" for long format)
+  // UPDATED: Now handles pre-normalized UK dates (e.g., "1 January 2026") gracefully
+  // If the date is already in UK long format, it passes through unchanged for "long" format
   Handlebars.registerHelper('format_date', function (date, format) {
     if (!date) return '';
 
-    // Parse as UTC date-only
-    const d = new Date(date + (typeof date === 'string' && !date.includes('T') ? 'T00:00:00.000Z' : ''));
+    const dateStr = String(date);
+
+    // Check if already in UK long format: "D Month YYYY" or "DD Month YYYY"
+    // Pattern: 1-2 digits + space + month name + space + 4 digits
+    const ukLongPattern = /^(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})$/i;
+    const ukLongMatch = dateStr.match(ukLongPattern);
+
+    if (ukLongMatch) {
+      // Already UK formatted - pass through for "long", convert for short
+      if (format === 'long') {
+        return dateStr;
+      }
+      // Convert to DD/MM/YYYY
+      const [, dayPart, monthName, yearPart] = ukLongMatch;
+      const monthNames = ['january', 'february', 'march', 'april', 'may', 'june',
+        'july', 'august', 'september', 'october', 'november', 'december'];
+      const monthNum = monthNames.indexOf(monthName.toLowerCase()) + 1;
+      return `${String(dayPart).padStart(2, '0')}/${String(monthNum).padStart(2, '0')}/${yearPart}`;
+    }
+
+    // Check if already in DD/MM/YYYY format
+    const ukShortPattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    const ukShortMatch = dateStr.match(ukShortPattern);
+
+    if (ukShortMatch) {
+      // Already UK short format
+      if (format === 'long') {
+        const [, dayPart, monthPart, yearPart] = ukShortMatch;
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthIdx = parseInt(monthPart, 10) - 1;
+        return `${parseInt(dayPart, 10)} ${monthNames[monthIdx]} ${yearPart}`;
+      }
+      return dateStr;
+    }
+
+    // Try parsing as ISO date (YYYY-MM-DD) - parse as local time to avoid timezone issues
+    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) {
+      const [, year, monthPart, dayPart] = isoMatch;
+      const dayNum = parseInt(dayPart, 10);
+      const monthIdx = parseInt(monthPart, 10) - 1;
+
+      if (format === 'long') {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'];
+        return `${dayNum} ${monthNames[monthIdx]} ${year}`;
+      }
+      return `${dayPart}/${monthPart}/${year}`;
+    }
+
+    // Last resort: try native Date parsing (may have timezone issues)
+    const d = new Date(dateStr + (!dateStr.includes('T') ? 'T00:00:00.000Z' : ''));
     if (isNaN(d.getTime())) return '';
 
-    // Always use DD/MM/YYYY for UK legal documents
     const day = String(d.getUTCDate()).padStart(2, '0');
     const month = String(d.getUTCMonth() + 1).padStart(2, '0');
     const year = d.getUTCFullYear();
 
     if (format === 'long') {
-      // "DD Month YYYY" format
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      return `${parseInt(day)} ${monthNames[d.getUTCMonth()]} ${year}`;
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${parseInt(day, 10)} ${monthNames[d.getUTCMonth()]} ${year}`;
     }
 
-    // Default: DD/MM/YYYY
     return `${day}/${month}/${year}`;
   });
 
@@ -280,6 +331,13 @@ function registerHandlebarsHelpers() {
     return left >= right;
   });
 
+  // Create an array from arguments (for use with contains/includes helpers)
+  // Usage: {{#if (contains (array "a" "b" "c") someValue)}}
+  Handlebars.registerHelper('array', function (...args) {
+    // Remove the last argument which is the Handlebars options object
+    return args.slice(0, -1);
+  });
+
   // Array contains
   Handlebars.registerHelper('contains', function (array, value) {
     return Array.isArray(array) && array.includes(value);
@@ -296,15 +354,37 @@ function registerHandlebarsHelpers() {
     return false;
   });
 
-  // Add days to a date (returns ISO format YYYY-MM-DD)
+  // Add days to a date (returns UK format "D Month YYYY")
+  // UPDATED: Now returns formatted UK date instead of ISO to prevent ISO date leakage
   Handlebars.registerHelper('add_days', function (dateString, days) {
     if (!dateString) return '';
     try {
-      const date = new Date(dateString);
+      // Handle both ISO dates and already-formatted UK dates
+      let date: Date;
+
+      // Check if it's an ISO date (YYYY-MM-DD)
+      const isoMatch = String(dateString).match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (isoMatch) {
+        // Parse as local date to avoid timezone issues
+        const [, year, month, day] = isoMatch;
+        date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
+      } else {
+        // Try parsing as-is (handles UK format like "1 January 2026")
+        date = new Date(dateString);
+      }
+
       if (isNaN(date.getTime())) return '';
 
       date.setDate(date.getDate() + Number(days));
-      return date.toISOString().split('T')[0];
+
+      // Return UK long format: "D Month YYYY"
+      const dayNum = date.getDate();
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+
+      return `${dayNum} ${month} ${year}`;
     } catch (error) {
       console.error('[add_days] Error adding days:', error);
       return '';
@@ -1252,6 +1332,30 @@ export async function generateDocument(
       templateFiles,
       caseId: debugStamp.caseId,
     });
+  }
+
+  // =============================================================================
+  // ISO DATE SANITIZATION SAFEGUARD (Feb 2026)
+  // Final check to catch any ISO dates (YYYY-MM-DD) that slip through normalization.
+  // IMPORTANT: Form 3 (Section 8) is EXCLUDED from this check per requirements.
+  // =============================================================================
+  const isForm3Section8 = templatePath.toLowerCase().includes('form_3') ||
+                          templatePath.toLowerCase().includes('section8') ||
+                          templatePath.toLowerCase().includes('section_8');
+
+  if (!isForm3Section8) {
+    const { html: sanitizedHtml, replacements } = sanitizeISODatesInHTML(html, {
+      documentType: templatePath,
+    });
+    html = sanitizedHtml;
+
+    // Log if we had to fix any dates (indicates a normalization gap that should be fixed upstream)
+    if (replacements.length > 0) {
+      console.warn(
+        `[generateDocument] ISO date sanitizer fixed ${replacements.length} date(s) in ${templatePath}. ` +
+        `This indicates a normalization gap that should be fixed upstream.`
+      );
+    }
   }
 
   const metadata = {

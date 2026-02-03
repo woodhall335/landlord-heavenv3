@@ -238,4 +238,132 @@ export function findISODatesInContent(content: string): string[] {
   return matches || [];
 }
 
+/**
+ * Patterns that should be EXCLUDED from ISO date replacement.
+ * These are machine-readable contexts where ISO format is expected.
+ */
+const ISO_EXCLUDE_PATTERNS = [
+  // JSON data blocks (e.g., <script type="application/json">)
+  /<script[^>]*type\s*=\s*["']application\/json["'][^>]*>[\s\S]*?<\/script>/gi,
+  // HTML data attributes (e.g., data-date="2026-01-15")
+  /data-[a-z-]+\s*=\s*["'][^"']*\d{4}-\d{2}-\d{2}[^"']*["']/gi,
+  // datetime attributes (e.g., datetime="2026-01-15")
+  /datetime\s*=\s*["']\d{4}-\d{2}-\d{2}[^"']*["']/gi,
+  // ISO timestamp attributes (e.g., data-timestamp="2026-01-15T10:30:00")
+  /data-timestamp\s*=\s*["'][^"']*["']/gi,
+];
+
+/**
+ * Sanitize HTML content by replacing visible ISO dates with UK formatted dates.
+ * This is a final safeguard to catch any ISO dates that slip through normalization.
+ *
+ * IMPORTANT: This function ONLY replaces ISO dates in visible text content.
+ * It preserves ISO dates in:
+ * - JSON script blocks
+ * - HTML data-* attributes
+ * - datetime attributes (accessibility)
+ *
+ * @param html - The HTML content to sanitize
+ * @param options - Options for the sanitizer
+ * @returns Sanitized HTML with ISO dates replaced
+ */
+export function sanitizeISODatesInHTML(
+  html: string,
+  options?: {
+    /** If true, throw an error when ISO dates are found instead of replacing */
+    throwOnFound?: boolean;
+    /** Document type identifier for error messages */
+    documentType?: string;
+  }
+): { html: string; replacements: Array<{ iso: string; uk: string; context: string }> } {
+  const replacements: Array<{ iso: string; uk: string; context: string }> = [];
+
+  // First, identify regions to exclude from replacement
+  const exclusionRanges: Array<{ start: number; end: number }> = [];
+
+  for (const pattern of ISO_EXCLUDE_PATTERNS) {
+    let match;
+    const regex = new RegExp(pattern.source, pattern.flags);
+    while ((match = regex.exec(html)) !== null) {
+      exclusionRanges.push({
+        start: match.index,
+        end: match.index + match[0].length,
+      });
+    }
+  }
+
+  // Function to check if a position is within an exclusion range
+  const isExcluded = (pos: number): boolean => {
+    return exclusionRanges.some(range => pos >= range.start && pos < range.end);
+  };
+
+  // Find all ISO dates and their positions
+  const isoPattern = /\b(19|20)(\d{2})-(\d{2})-(\d{2})\b/g;
+  let result = html;
+  let offset = 0;
+  let match;
+
+  // Reset regex
+  isoPattern.lastIndex = 0;
+
+  while ((match = isoPattern.exec(html)) !== null) {
+    // Check if this match is in an excluded region
+    if (isExcluded(match.index)) {
+      continue;
+    }
+
+    const isoDate = match[0];
+    const century = match[1];
+    const year = match[2];
+    const monthStr = match[3];
+    const dayStr = match[4];
+
+    // Parse and format to UK
+    const fullYear = century + year;
+    const monthNum = parseInt(monthStr, 10);
+    const dayNum = parseInt(dayStr, 10);
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const ukDate = `${dayNum} ${monthNames[monthNum - 1]} ${fullYear}`;
+
+    // Get context (surrounding text for logging)
+    const contextStart = Math.max(0, match.index - 20);
+    const contextEnd = Math.min(html.length, match.index + isoDate.length + 20);
+    const context = html.substring(contextStart, contextEnd).replace(/\n/g, ' ').trim();
+
+    replacements.push({ iso: isoDate, uk: ukDate, context });
+
+    // Replace in result (accounting for offset from previous replacements)
+    const posInResult = match.index + offset;
+    result = result.substring(0, posInResult) + ukDate + result.substring(posInResult + isoDate.length);
+
+    // Update offset for next replacement (UK date is longer than ISO date)
+    offset += ukDate.length - isoDate.length;
+  }
+
+  // If throwOnFound is true and we found ISO dates, throw an error
+  if (options?.throwOnFound && replacements.length > 0) {
+    const docType = options.documentType || 'unknown';
+    const examples = replacements.slice(0, 3).map(r => `${r.iso} → ${r.uk}`).join(', ');
+    throw new Error(
+      `ISO_DATE_LEAK_DETECTED: Found ${replacements.length} ISO date(s) in ${docType} document. ` +
+      `Examples: ${examples}. This indicates a date normalization gap.`
+    );
+  }
+
+  // Log replacements in development
+  if (replacements.length > 0 && (process.env.NODE_ENV === 'development' || process.env.DATE_SANITIZE_DEBUG === '1')) {
+    console.warn(
+      `[DATE_SANITIZER] Replaced ${replacements.length} ISO date(s) in HTML:`,
+      replacements.map(r => `${r.iso} → ${r.uk}`)
+    );
+  }
+
+  return { html: result, replacements };
+}
+
 export default normalizeDatesForRender;
