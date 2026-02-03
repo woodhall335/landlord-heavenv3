@@ -9,6 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import {
   apiExecuteWorkflowAction,
   apiPreviewGovernanceChecks,
@@ -32,11 +33,10 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Verify admin access
+    // Verify admin access (with proper trimming of env var)
     const user = await requireServerAuth();
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
 
-    if (!adminIds.includes(user.id)) {
+    if (!isAdmin(user.id)) {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
@@ -137,11 +137,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Verify admin access
+    // Verify admin access (with proper trimming of env var)
     const user = await requireServerAuth();
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
 
-    if (!adminIds.includes(user.id)) {
+    if (!isAdmin(user.id)) {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }

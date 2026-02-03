@@ -35,17 +35,22 @@ export default function AdminUsersPage() {
   const usersPerPage = 20;
 
   const checkAdminAccess = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      // Use server-side admin check for security (handles env var trimming)
+      const response = await fetch("/api/admin/check-access");
+
+      if (response.status === 401) {
         router.push("/auth/login");
         return;
       }
 
-      // Check if user is admin
-      const adminIds = process.env.NEXT_PUBLIC_ADMIN_USER_IDS?.split(",") || [];
-      if (!adminIds.includes(user.id)) {
+      if (response.status === 403) {
+        router.push("/dashboard");
+        return;
+      }
+
+      if (!response.ok) {
+        console.error("Error checking admin access:", response.statusText);
         router.push("/dashboard");
         return;
       }
