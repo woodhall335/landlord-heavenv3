@@ -139,33 +139,6 @@ export default function AdminUsersPage() {
     loadUsers();
   }, [loading, loadUsers]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function _handleBanUser(userId: string, isBanned: boolean) {
-    const confirmed = confirm(
-      isBanned ? "Are you sure you want to unban this user?" : "Are you sure you want to ban this user?"
-    );
-
-    if (!confirmed) return;
-
-    try {
-      const response = await fetch("/api/admin/users/ban", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, ban: !isBanned }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update user status");
-      }
-
-      alert(`User ${isBanned ? "unbanned" : "banned"} successfully`);
-      loadUsers();
-    } catch (error: any) {
-      console.error("Error updating user:", error);
-      alert(error.message || "Failed to update user");
-    }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
