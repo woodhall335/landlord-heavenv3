@@ -366,4 +366,151 @@ export function sanitizeISODatesInHTML(
   return { html: result, replacements };
 }
 
+/**
+ * Known date field labels that appear in document templates.
+ * Used to detect blank date fields in rendered HTML.
+ */
+const DATE_FIELD_LABELS = [
+  'Tenancy Start Date',
+  'Contract Start Date',
+  'Service Date',
+  'Notice Date',
+  'Expiry Date',
+  'Generated',
+  'Audit Date',
+  'Assessment Date',
+  'Date Signed',
+  'Protection Date',
+  'Gas Certificate Expiry',
+  'EPC Expires',
+];
+
+/**
+ * Detect blank date fields in rendered HTML.
+ * A blank date field is where a STRUCTURED label like "Tenancy Start Date:" exists
+ * but the corresponding value is empty or whitespace-only.
+ *
+ * This catches cases where:
+ * - <dt>Label:</dt><dd></dd> (empty definition list)
+ * - <p><strong>Label:</strong></p> (empty paragraph with strong label)
+ *
+ * IMPORTANT: Only detects STRUCTURED field patterns, not prose text.
+ * For example, "wait until the expiry date:" in a sentence is NOT a blank field.
+ *
+ * @param html - The rendered HTML to check
+ * @returns Array of blank field labels found
+ */
+export function findBlankDateFields(html: string): string[] {
+  const blankFields: string[] = [];
+
+  for (const label of DATE_FIELD_LABELS) {
+    // Pattern 1: <dt>Label:</dt><dd></dd> or <dt>Label:</dt><dd>   </dd>
+    // This is a structured definition list field
+    const dtDdPattern = new RegExp(
+      `<dt[^>]*>\\s*${escapeRegex(label)}[:\\s]*<\\/dt>\\s*<dd[^>]*>\\s*<\\/dd>`,
+      'gi'
+    );
+    if (dtDdPattern.test(html)) {
+      blankFields.push(label);
+      continue;
+    }
+
+    // Pattern 2: <p><strong>Label:</strong></p> or <p><strong>Label:</strong> </p>
+    // This is a structured paragraph with a strong label but no value
+    // Must be at the START of a paragraph to distinguish from prose text
+    const pStrongPattern = new RegExp(
+      `<p[^>]*>\\s*<strong[^>]*>\\s*${escapeRegex(label)}[:\\s]*<\\/strong>\\s*<\\/p>`,
+      'gi'
+    );
+    if (pStrongPattern.test(html)) {
+      blankFields.push(label);
+      continue;
+    }
+
+    // Pattern 3: <td><strong>Label:</strong></td><td></td> (empty table cell)
+    // This is a structured table field
+    const tablePattern = new RegExp(
+      `<td[^>]*>\\s*<strong[^>]*>\\s*${escapeRegex(label)}[:\\s]*<\\/strong>\\s*<\\/td>\\s*<td[^>]*>\\s*<\\/td>`,
+      'gi'
+    );
+    if (tablePattern.test(html)) {
+      blankFields.push(label);
+    }
+  }
+
+  return [...new Set(blankFields)]; // Deduplicate
+}
+
+/**
+ * Escape special regex characters in a string.
+ */
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Comprehensive validation of HTML content for PDF text layer consistency.
+ * Checks for both ISO date leaks and blank date fields.
+ *
+ * This is a final safeguard run before PDF generation (non-Form 3 only).
+ *
+ * @param html - The rendered HTML to validate
+ * @param options - Validation options
+ * @returns Validation result with any issues found
+ */
+export function validateHtmlForPdfTextLayer(
+  html: string,
+  options?: {
+    /** Document type for error messages */
+    documentType?: string;
+    /** Whether to throw on critical issues */
+    throwOnCritical?: boolean;
+  }
+): {
+  valid: boolean;
+  isoDateLeaks: string[];
+  blankDateFields: string[];
+  warnings: string[];
+} {
+  const isoDateLeaks = findISODatesInContent(html);
+  const blankDateFields = findBlankDateFields(html);
+  const warnings: string[] = [];
+
+  // Check for ISO date leaks
+  if (isoDateLeaks.length > 0) {
+    warnings.push(
+      `ISO_DATE_LEAK: Found ${isoDateLeaks.length} ISO date(s): ${isoDateLeaks.slice(0, 3).join(', ')}`
+    );
+  }
+
+  // Check for blank date fields
+  if (blankDateFields.length > 0) {
+    warnings.push(
+      `BLANK_DATE_FIELD: Found ${blankDateFields.length} empty date field(s): ${blankDateFields.join(', ')}`
+    );
+  }
+
+  const valid = isoDateLeaks.length === 0 && blankDateFields.length === 0;
+
+  // Log warnings in development
+  if (warnings.length > 0 && (process.env.NODE_ENV === 'development' || process.env.PDF_TEXT_LAYER_DEBUG === '1')) {
+    const docType = options?.documentType || 'unknown';
+    console.warn(`[PDF_TEXT_LAYER] Validation issues in ${docType}:`, warnings);
+  }
+
+  // Throw on critical issues if requested
+  if (options?.throwOnCritical && !valid) {
+    throw new Error(
+      `PDF_TEXT_LAYER_VALIDATION_FAILED: ${warnings.join('; ')}`
+    );
+  }
+
+  return {
+    valid,
+    isoDateLeaks,
+    blankDateFields,
+    warnings,
+  };
+}
+
 export default normalizeDatesForRender;
