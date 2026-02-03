@@ -39726,7 +39726,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
-          <h3 className="font-semibold text-gray-900 mb-2">Ready to Take Action?</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">Recover Your Unpaid Rent</h3>
           <p className="text-gray-700 mb-4">
             Our Money Claim Pack gives you everything needed to recover tenant debt:
             Letter Before Action, Particulars of Claim, and step-by-step guidance.

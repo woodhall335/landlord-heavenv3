@@ -289,7 +289,7 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
-              <h3 className="font-semibold text-charcoal mb-2">✅ What Landlords Say:</h3>
+              <h3 className="font-semibold text-charcoal mb-2">✅ Eviction Notice Testimonial</h3>
               <blockquote className="text-gray-700 italic">
                 "Saved me £350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
                 to generate. Absolutely brilliant service."
@@ -298,7 +298,7 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <h3 className="font-semibold text-charcoal mb-2">✅ What Landlords Say:</h3>
+              <h3 className="font-semibold text-charcoal mb-2">✅ HMO Compliance Testimonial</h3>
               <blockquote className="text-gray-700 italic">
                 "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
                 £30/month I spend."
@@ -328,7 +328,7 @@ export default function AboutPage() {
                   <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Sparkles className="w-4 h-4 text-primary" />
                   </div>
-                  Smart Document Generation
+                  AI-Powered Generation
                 </h4>
                 <p className="text-sm text-gray-700">
                   Advanced technology for legal reasoning. Analyzes your case, validates inputs, and generates
