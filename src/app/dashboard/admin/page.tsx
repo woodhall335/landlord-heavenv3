@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine, RiMailLine, RiAlertLine, RiCpuLine } from 'react-icons/ri';
+import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine, RiMailLine, RiAlertLine, RiCpuLine, RiScales3Line } from 'react-icons/ri';
 
 interface AdminStats {
   users: {
@@ -340,6 +340,13 @@ export default function AdminDashboardPage() {
             </div>
             <p className="font-medium text-charcoal">Failed Payments</p>
             <p className="text-xs text-gray-500">Review issues</p>
+          </Link>
+          <Link href="/dashboard/admin/legal-changes" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mb-3">
+              <RiScales3Line className="w-5 h-5 text-indigo-600" />
+            </div>
+            <p className="font-medium text-charcoal">Legal Changes</p>
+            <p className="text-xs text-gray-500">Monitor updates</p>
           </Link>
         </div>
 

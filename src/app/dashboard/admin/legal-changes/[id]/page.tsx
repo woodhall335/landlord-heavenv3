@@ -614,6 +614,16 @@ export default function LegalChangeEventDetailPage() {
                   </button>
                 )}
 
+                {details.allowedActions.includes('mark_implemented') && (
+                  <button
+                    onClick={() => executeAction('mark_implemented', 'Changes implemented')}
+                    disabled={actionLoading === 'mark_implemented'}
+                    className="w-full px-4 py-2 border border-blue-200 text-blue-600 rounded-lg text-sm hover:bg-blue-50 disabled:opacity-50"
+                  >
+                    {actionLoading === 'mark_implemented' ? 'Processing...' : 'Confirm Implementation'}
+                  </button>
+                )}
+
                 {details.allowedActions.includes('mark_rolled_out') && (
                   <button
                     onClick={() => executeAction('mark_rolled_out', 'Changes rolled out')}

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 interface Order {
@@ -17,9 +16,22 @@ interface Order {
   user_name?: string;
 }
 
+interface OrdersApiResponse {
+  success: boolean;
+  orders: Order[];
+  meta: {
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+  };
+  error?: string;
+}
+
 export default function AdminOrdersPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterProduct, setFilterProduct] = useState<string>("all");
@@ -27,6 +39,7 @@ export default function AdminOrdersPage() {
   const [sortBy, setSortBy] = useState<"date" | "amount">("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const ordersPerPage = 20;
 
@@ -59,65 +72,47 @@ export default function AdminOrdersPage() {
   }, [router]);
 
   const loadOrders = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
+    setOrdersLoading(true);
     try {
-      let query = supabase
-        .from("orders")
-        .select("*", { count: "exact" })
-        .range((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage - 1);
+      // Build query parameters for the admin API
+      const params = new URLSearchParams();
+      params.set("page", currentPage.toString());
+      params.set("pageSize", ordersPerPage.toString());
 
-      // Product filter
       if (filterProduct !== "all") {
-        query = query.eq("product_type", filterProduct);
+        params.set("productType", filterProduct);
       }
-
-      // Status filter - use payment_status from schema
       if (filterStatus !== "all") {
-        query = query.eq("payment_status", filterStatus);
+        params.set("paymentStatus", filterStatus);
       }
-
-      // Sort
-      if (sortBy === "date") {
-        query = query.order("created_at", { ascending: false });
-      } else if (sortBy === "amount") {
-        query = query.order("total_amount", { ascending: false });
-      }
-
-      const { data, error, count } = await query;
-
-      if (error) throw error;
-
-      // Load user info for each order
-      const ordersWithUsers: Order[] = await Promise.all(
-        (data || []).map(async (order: any) => {
-          const { data: userData } = await supabase
-            .from("users")
-            .select("email, full_name")
-            .eq("id", order.user_id)
-            .single<{ email: string; full_name: string | null }>();
-
-          return {
-            ...order,
-            user_email: userData?.email || undefined,
-            user_name: userData?.full_name || undefined,
-          };
-        })
-      );
-
-      // Apply search filter
-      let filteredOrders = ordersWithUsers;
+      params.set("sortBy", sortBy);
+      params.set("sortOrder", "desc");
       if (searchTerm) {
-        filteredOrders = ordersWithUsers.filter(
-          (order) =>
-            order.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.id.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        params.set("search", searchTerm);
       }
 
-      setOrders(filteredOrders);
-      setTotalPages(Math.ceil((count || 0) / ordersPerPage));
+      const response = await fetch(`/api/admin/orders?${params.toString()}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch orders");
+      }
+
+      const data: OrdersApiResponse = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to fetch orders");
+      }
+
+      setOrders(data.orders || []);
+      setTotalPages(data.meta?.totalPages || 1);
+      setTotalCount(data.meta?.totalCount || 0);
     } catch (error) {
       console.error("Error loading orders:", error);
+      setOrders([]);
+      setTotalPages(1);
+      setTotalCount(0);
+    } finally {
+      setOrdersLoading(false);
     }
   }, [searchTerm, filterProduct, filterStatus, sortBy, currentPage, ordersPerPage]);
 
@@ -318,6 +313,30 @@ export default function AdminOrdersPage() {
 
         {/* Orders Table */}
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          {ordersLoading ? (
+            <div className="p-8 text-center">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
+              </div>
+              <p className="text-gray-500 mt-4">Loading orders...</p>
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="p-8 text-center">
+              <div className="text-gray-400 mb-4">
+                <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-charcoal mb-2">No orders found</h3>
+              <p className="text-gray-500">
+                {searchTerm || filterProduct !== "all" || filterStatus !== "all"
+                  ? "Try adjusting your filters to find what you're looking for."
+                  : "Orders will appear here once customers make purchases."}
+              </p>
+            </div>
+          ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
@@ -398,12 +417,13 @@ export default function AdminOrdersPage() {
               </tbody>
             </table>
           </div>
+          )}
 
           {/* Pagination */}
-          {totalPages > 1 && (
+          {orders.length > 0 && totalPages > 1 && (
             <div className="border-t p-4 flex items-center justify-between">
               <p className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
+                Page {currentPage} of {totalPages} ({totalCount} total orders)
               </p>
               <div className="flex gap-2">
                 <button
@@ -429,22 +449,22 @@ export default function AdminOrdersPage() {
         <div className="grid md:grid-cols-4 gap-6 mt-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Total Orders</p>
-            <p className="text-3xl font-bold text-charcoal">{orders.length}</p>
+            <p className="text-3xl font-bold text-charcoal">{totalCount}</p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Paid</p>
+            <p className="text-sm text-gray-600 mb-1">Paid (on page)</p>
             <p className="text-3xl font-bold text-success">
               {orders.filter((o) => o.payment_status === "paid").length}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Refunded</p>
+            <p className="text-sm text-gray-600 mb-1">Refunded (on page)</p>
             <p className="text-3xl font-bold text-warning">
               {orders.filter((o) => o.payment_status === "refunded").length}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
+            <p className="text-sm text-gray-600 mb-1">Page Revenue</p>
             <p className="text-3xl font-bold text-success">
               £
               {(
