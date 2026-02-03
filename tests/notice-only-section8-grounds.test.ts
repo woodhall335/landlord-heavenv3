@@ -80,8 +80,8 @@ describe('Section 8 Notice Only - Grounds Rendering', () => {
     const ground8 = templateData.grounds.find((g: any) => g.code === 8);
     const ground11 = templateData.grounds.find((g: any) => g.code === 11);
 
-    expect(ground8?.particulars).toContain('Rent arrears at date of notice: £3000.00');
-    expect(ground11?.particulars).toContain('Rent arrears outstanding: £3000.00');
+    expect(ground8?.particulars).toContain('Rent arrears of £3000.00 are outstanding');
+    expect(ground11?.particulars).toContain('Rent arrears of £3000.00 are outstanding');
   });
 
   it('maps ground particulars for Section 4 from wizard facts', () => {
