@@ -601,7 +601,7 @@ export default function ASTPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Standard vs Premium: What&apos;s Included
+              Detailed Feature Comparison
             </h2>
             <p className="text-center text-gray-600 mb-4">
               Both are legally valid tenancy agreements. Premium includes clauses commonly required under the Housing Act 2004 for HMOs and multi-tenant properties.

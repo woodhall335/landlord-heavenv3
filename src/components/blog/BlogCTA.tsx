@@ -11,7 +11,7 @@ interface BlogCTAProps {
 
 export function BlogCTA({
   variant = 'default',
-  title = 'Ready to Take Action?',
+  title = 'Get Your Court-Ready Documents',
   description = 'Generate court-ready eviction notices in minutes. Our AI-powered system ensures your documents are legally compliant.',
 }: BlogCTAProps) {
   if (variant === 'urgency') {
