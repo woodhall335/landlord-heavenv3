@@ -98,6 +98,21 @@ export interface AskHeavenQuestionRepository {
 
 const QUESTIONS_TABLE = 'ask_heaven_questions';
 
+export class AskHeavenNoRowsUpdatedError extends Error {
+  readonly code = 'ASK_HEAVEN_NO_ROWS_UPDATED';
+  readonly context: {
+    action: 'update' | 'approve' | 'setCanonical';
+    id?: string;
+    slug?: string;
+  };
+
+  constructor(context: AskHeavenNoRowsUpdatedError['context']) {
+    super('No rows updated — likely RLS or slug not found');
+    this.name = 'AskHeavenNoRowsUpdatedError';
+    this.context = context;
+  }
+}
+
 /**
  * Supabase repository implementation for production.
  */
@@ -217,14 +232,18 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
   }
 
   async update(input: UpdateAskHeavenQuestionInput): Promise<AskHeavenQuestion> {
+    // RLS only allows SELECT on ask_heaven_questions. UPDATE requires service role.
     const { data, error } = await this.client
       .from(QUESTIONS_TABLE)
       .update(input)
       .eq('id', input.id)
       .select('*')
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) {
+      throw new AskHeavenNoRowsUpdatedError({ action: 'update', id: input.id });
+    }
     return data as unknown as AskHeavenQuestion;
   }
 
@@ -301,26 +320,34 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
   }
 
   async approve(slug: string): Promise<AskHeavenQuestion> {
+    // RLS only allows SELECT on ask_heaven_questions. UPDATE requires service role.
     const { data, error } = await this.client
       .from(QUESTIONS_TABLE)
       .update({ status: 'approved', reviewed_at: new Date().toISOString() })
       .eq('slug', slug)
       .select('*')
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) {
+      throw new AskHeavenNoRowsUpdatedError({ action: 'approve', slug });
+    }
     return data as unknown as AskHeavenQuestion;
   }
 
   async setCanonical(slug: string, canonicalSlug: string | null): Promise<AskHeavenQuestion> {
+    // RLS only allows SELECT on ask_heaven_questions. UPDATE requires service role.
     const { data, error } = await this.client
       .from(QUESTIONS_TABLE)
       .update({ canonical_slug: canonicalSlug })
       .eq('slug', slug)
       .select('*')
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) {
+      throw new AskHeavenNoRowsUpdatedError({ action: 'setCanonical', slug });
+    }
     return data as unknown as AskHeavenQuestion;
   }
 
