@@ -5,7 +5,12 @@ import {
   AskHeavenNoRowsUpdatedError,
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
-import { getSupabaseAdminEnvStatus } from '@/lib/supabase/admin';
+import {
+  createSupabaseAdminClient,
+  getSupabaseAdminEnvStatus,
+} from '@/lib/supabase/admin';
+
+export const runtime = 'nodejs';
 
 export async function GET(
   _request: Request,
@@ -19,6 +24,33 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
 
+    const admin = createSupabaseAdminClient();
+    const { data, error, count } = await admin
+      .from('ask_heaven_questions')
+      .select('id,slug', { count: 'exact' })
+      .eq('slug', params.slug);
+
+    if (error) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          debug: { slug: params.slug, env: getSupabaseAdminEnvStatus() },
+        },
+        { status: 500 }
+      );
+    }
+
+    const matchedCount = count ?? data?.length ?? 0;
+    if (matchedCount === 0) {
+      return NextResponse.json(
+        {
+          error: 'Not found',
+          debug: { slug: params.slug, count, env: getSupabaseAdminEnvStatus() },
+        },
+        { status: 404 }
+      );
+    }
+
     const repository = createSupabaseAdminQuestionRepository();
     const question = await repository.getBySlug(params.slug);
 
@@ -26,7 +58,18 @@ export async function GET(
       return NextResponse.json({ error: 'Not found', debug }, { status: 404 });
     }
 
-    return NextResponse.json({ question }, { status: 200 });
+    return NextResponse.json(
+      {
+        question,
+        debug: {
+          slug: params.slug,
+          count,
+          env: getSupabaseAdminEnvStatus(),
+          row: data?.[0],
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Admin Ask Heaven get error:', error);
     if (error instanceof Error && error.message.includes('Unauthorized')) {
