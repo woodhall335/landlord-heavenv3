@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import {
   AskHeavenNoRowsUpdatedError,
@@ -11,7 +11,9 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const debug = { env: getSupabaseAdminEnvStatus(), slug: params.slug };
+  console.info('Admin Ask Heaven canonical slug:', params.slug);
+  const envStatus = getSupabaseAdminEnvStatus();
+  const debug = { env: envStatus, slug: params.slug };
 
   try {
     const user = await requireServerAuth();
@@ -21,13 +23,35 @@ export async function POST(
 
     const payload = (await request.json()) as { canonical_slug?: string | null };
 
-    const repository = createSupabaseAdminQuestionRepository();
-    const existing = await repository.getBySlug(params.slug);
+    const adminClient = createAdminClient();
+    const {
+      data: canonicalRows,
+      error: canonicalError,
+      count,
+    } = await adminClient
+      .from('ask_heaven_questions')
+      .select('id,slug', { count: 'exact' })
+      .eq('slug', params.slug);
 
-    if (!existing) {
-      return NextResponse.json({ error: 'Not found', debug }, { status: 404 });
+    if (canonicalError) {
+      return NextResponse.json(
+        { error: canonicalError.message, debug },
+        { status: 500 }
+      );
     }
 
+    const canonicalCount = count ?? canonicalRows?.length ?? 0;
+    if (canonicalCount === 0) {
+      return NextResponse.json(
+        {
+          error: 'Not found',
+          debug: { slug: params.slug, count: canonicalCount, env: envStatus },
+        },
+        { status: 404 }
+      );
+    }
+
+    const repository = createSupabaseAdminQuestionRepository();
     const updated = await repository.setCanonical(
       params.slug,
       payload.canonical_slug ?? null
@@ -37,7 +61,7 @@ export async function POST(
   } catch (error) {
     console.error('Admin Ask Heaven canonical error:', error);
     if (error instanceof AskHeavenNoRowsUpdatedError) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json({ error: error.message, debug }, { status: 404 });
     }
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
