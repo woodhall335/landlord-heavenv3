@@ -48,8 +48,19 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
+      detectSessionInUrl: false,
     },
   });
+}
+
+export function getSupabaseAdminFingerprint() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  return {
+    supabaseUrlHost: supabaseUrl ? new URL(supabaseUrl).host : null,
+    serviceRoleKeyPrefix: serviceRoleKey ? serviceRoleKey.slice(0, 6) : null,
+  };
 }
 
 export function logSupabaseAdminDiagnostics({ route, writesUsingAdmin }: SupabaseAdminDiagnostics) {
