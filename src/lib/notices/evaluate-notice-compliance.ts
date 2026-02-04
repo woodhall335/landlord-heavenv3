@@ -8,7 +8,7 @@
  * @see config/legal-requirements/ for YAML rule definitions
  */
 
-import { evaluateEvictionRules } from '../validation/eviction-rules-engine';
+import { evaluateEvictionRules, buildRuleFactsView } from '../validation/eviction-rules-engine';
 import type { Jurisdiction, Product, EvictionRoute } from '../validation/eviction-rules-engine';
 import { normalizeRoute, type CanonicalRoute } from '../wizard/route-normalizer';
 
@@ -55,9 +55,12 @@ export interface NoticeComplianceResult {
  */
 const YAML_ID_TO_ISSUE_CODE: Record<string, string> = {
   // Section 21 (England)
+  's21_deposit_noncompliant': 'S21-DEPOSIT-NONCOMPLIANT',
   's21_deposit_not_protected': 'S21-DEPOSIT-NONCOMPLIANT',
   's21_prescribed_info_not_given': 'S21-PRESCRIBED-INFO-REQUIRED',
   's21_deposit_taken_not_protected': 'S21-DEPOSIT-NONCOMPLIANT',
+  's21_prescribed_info_unconfirmed': 'S21-PRESCRIBED-INFO-REQUIRED',
+  's21_deposit_unconfirmed': 'S21-DEPOSIT-NONCOMPLIANT',
   's21_epc_not_provided': 'S21-EPC',
   's21_how_to_rent_not_provided': 'S21-H2R',
   's21_gas_cert_not_provided': 'S21-GAS-CERT',
@@ -135,6 +138,16 @@ const ISSUE_CODE_TO_FIX_HINT: Record<string, string> = {
   'NTL-LANDLORD-REGISTRATION': 'The landlord must be registered with the Scottish Landlord Register.',
 };
 
+const NOTICE_ONLY_IGNORED_RULE_IDS = new Set([
+  'landlord_name_required',
+  'tenant_name_required',
+  'property_address_required',
+]);
+
+const NOTICE_ONLY_ALWAYS_HARD = new Set([
+  's21_deposit_cap_exceeded',
+]);
+
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
@@ -177,6 +190,59 @@ function getAffectedQuestionId(issueCode: string): string {
  */
 function getUserFixHint(issueCode: string, message: string): string {
   return ISSUE_CODE_TO_FIX_HINT[issueCode] || message;
+}
+
+function shouldDowngradeNoticeOnlyBlocker(blockerId: string, facts: Record<string, unknown>): boolean {
+  switch (blockerId) {
+    case 's21_prescribed_info_unconfirmed':
+    case 's21_deposit_unconfirmed':
+      return true;
+    case 's21_epc':
+      return facts.epc_provided === undefined;
+    case 's21_h2r':
+      return facts.how_to_rent_provided === undefined;
+    case 's21_gas_cert':
+      return facts.gas_certificate_provided === undefined;
+    case 's21_licensing':
+      return facts.property_licensing_status === undefined && !facts.licensing_required;
+    case 's21_notice_period_calculation_failed':
+      return facts.notice_expiry_date === undefined;
+    default:
+      return false;
+  }
+}
+
+function buildDepositCapReason(facts: Record<string, unknown>, fallback: string): string {
+  const depositAmount = Number.parseFloat(String(facts.deposit_amount ?? ''));
+  const rentAmount = Number.parseFloat(String(facts.rent_amount ?? ''));
+
+  if (!Number.isFinite(depositAmount) || !Number.isFinite(rentAmount) || rentAmount <= 0) {
+    return fallback;
+  }
+
+  const frequency = (facts.rent_frequency ?? 'monthly') as string;
+  let annualRent = rentAmount * 12;
+
+  switch (frequency) {
+    case 'weekly':
+      annualRent = rentAmount * 52;
+      break;
+    case 'fortnightly':
+      annualRent = rentAmount * 26;
+      break;
+    case 'quarterly':
+      annualRent = rentAmount * 4;
+      break;
+    case 'yearly':
+      annualRent = rentAmount;
+      break;
+  }
+
+  const weeklyRent = annualRent / 52;
+  const maxWeeks = annualRent > 50000 ? 6 : 5;
+  const maxDeposit = weeklyRent * maxWeeks;
+
+  return `Entered deposit £${depositAmount.toFixed(2)}. Maximum allowed (${maxWeeks} weeks) £${maxDeposit.toFixed(2)}. ${fallback}`;
 }
 
 // =============================================================================
@@ -223,13 +289,28 @@ export function evaluateNoticeCompliance(params: EvaluateNoticeComplianceParams)
   // At preview/generate stage, blockers are hard failures
   const hardFailures: ComplianceFailure[] = [];
   const warnings: ComplianceWarning[] = [];
+  const normalizedFacts = buildRuleFactsView(wizardFacts);
 
   for (const blocker of yamlResult.blockers) {
+    if (product === 'notice_only' && NOTICE_ONLY_IGNORED_RULE_IDS.has(blocker.id)) {
+      continue;
+    }
+
     const issueCode = toIssueCode(blocker.id);
     const affectedQuestionId = getAffectedQuestionId(issueCode);
     const userFixHint = getUserFixHint(issueCode, blocker.message);
 
-    if (stage === 'wizard') {
+    if (product === 'notice_only' && shouldDowngradeNoticeOnlyBlocker(blocker.id, normalizedFacts)) {
+      warnings.push({
+        code: issueCode,
+        message: blocker.message,
+        affected_question_id: affectedQuestionId,
+        user_fix_hint: userFixHint,
+      });
+      continue;
+    }
+
+    if (stage === 'wizard' && !(product === 'notice_only' && NOTICE_ONLY_ALWAYS_HARD.has(blocker.id))) {
       // At wizard stage, show as warning (non-blocking)
       warnings.push({
         code: issueCode,
@@ -239,10 +320,13 @@ export function evaluateNoticeCompliance(params: EvaluateNoticeComplianceParams)
       });
     } else {
       // At preview/generate stage, show as hard failure
+      const legalReason = issueCode === 'S21-DEPOSIT-CAP-EXCEEDED'
+        ? buildDepositCapReason(normalizedFacts, blocker.rationale || blocker.message)
+        : (blocker.rationale || blocker.message);
       hardFailures.push({
         code: issueCode,
         description: blocker.message,
-        legal_reason: blocker.rationale || blocker.message,
+        legal_reason: legalReason,
         affected_question_id: affectedQuestionId,
         user_fix_hint: userFixHint,
       });
@@ -251,6 +335,10 @@ export function evaluateNoticeCompliance(params: EvaluateNoticeComplianceParams)
 
   // Warnings are always warnings
   for (const warning of yamlResult.warnings) {
+    if (product === 'notice_only' && NOTICE_ONLY_IGNORED_RULE_IDS.has(warning.id)) {
+      continue;
+    }
+
     const issueCode = toIssueCode(warning.id);
     const affectedQuestionId = getAffectedQuestionId(issueCode);
     const userFixHint = getUserFixHint(issueCode, warning.message);
