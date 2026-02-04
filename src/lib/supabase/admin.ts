@@ -44,7 +44,13 @@ function assertAdminRuntime() {
 export function createSupabaseAdminClient(): SupabaseClient<Database> {
   assertAdminRuntime();
 
-  return createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const supabaseUrl = process.env.SUPABASE_URL!;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  const supabaseUrlHost = new URL(supabaseUrl).host;
+  const keyPrefix = serviceRoleKey.slice(0, 8);
+  console.info(`[supabase-admin-client] host=${supabaseUrlHost} keyPrefix=${keyPrefix}`);
+
+  return createClient<Database>(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
@@ -59,7 +65,7 @@ export function getSupabaseAdminFingerprint() {
 
   return {
     supabaseUrlHost: supabaseUrl ? new URL(supabaseUrl).host : null,
-    serviceRoleKeyPrefix: serviceRoleKey ? serviceRoleKey.slice(0, 6) : null,
+    serviceRoleKeyPrefix: serviceRoleKey ? serviceRoleKey.slice(0, 8) : null,
   };
 }
 
