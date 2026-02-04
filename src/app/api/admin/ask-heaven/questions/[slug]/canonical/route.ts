@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import {
   AskHeavenNoRowsUpdatedError,
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
-import { getSupabaseAdminEnvStatus } from '@/lib/supabase/admin';
+import { createSupabaseAdminClient, getSupabaseAdminEnvStatus } from '@/lib/supabase/admin';
 
 export async function POST(
   request: Request,
@@ -23,7 +23,7 @@ export async function POST(
 
     const payload = (await request.json()) as { canonical_slug?: string | null };
 
-    const adminClient = createAdminClient();
+    const adminClient = createSupabaseAdminClient();
     const {
       data: canonicalRows,
       error: canonicalError,
@@ -61,7 +61,13 @@ export async function POST(
   } catch (error) {
     console.error('Admin Ask Heaven canonical error:', error);
     if (error instanceof AskHeavenNoRowsUpdatedError) {
-      return NextResponse.json({ error: error.message, debug }, { status: 404 });
+      return NextResponse.json(
+        {
+          error: 'No rows updated — likely RLS or admin client not using service role',
+          debug,
+        },
+        { status: 500 }
+      );
     }
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });

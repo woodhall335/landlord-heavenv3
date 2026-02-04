@@ -24,6 +24,7 @@ import type {
 } from './types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/supabase/types';
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createAdminClient, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 
 /**
@@ -599,7 +600,7 @@ export async function getSupabaseQuestionRepository(): Promise<AskHeavenQuestion
 }
 
 export function createSupabaseAdminQuestionRepository(): SupabaseQuestionRepository {
-  return new SupabaseQuestionRepository(createAdminClient());
+  return new SupabaseQuestionRepository(createSupabaseAdminClient());
 }
 
 /**
