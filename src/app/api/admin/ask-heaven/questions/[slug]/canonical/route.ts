@@ -5,7 +5,13 @@ import {
   AskHeavenNoRowsUpdatedError,
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
-import { createSupabaseAdminClient, getSupabaseAdminEnvStatus } from '@/lib/supabase/admin';
+import {
+  createSupabaseAdminClient,
+  getSupabaseAdminEnvStatus,
+  getSupabaseAdminFingerprint,
+} from '@/lib/supabase/admin';
+
+export const runtime = 'nodejs';
 
 export async function POST(
   request: Request,
@@ -13,7 +19,11 @@ export async function POST(
 ) {
   console.info('Admin Ask Heaven canonical slug:', params.slug);
   const envStatus = getSupabaseAdminEnvStatus();
-  const debug = { env: envStatus, slug: params.slug };
+  const debug = {
+    env: envStatus,
+    fingerprint: getSupabaseAdminFingerprint(),
+    slug: params.slug,
+  };
 
   try {
     const user = await requireServerAuth();
@@ -45,7 +55,12 @@ export async function POST(
       return NextResponse.json(
         {
           error: 'Not found',
-          debug: { slug: params.slug, count: canonicalCount, env: envStatus },
+          debug: {
+            slug: params.slug,
+            count: canonicalCount,
+            env: envStatus,
+            fingerprint: getSupabaseAdminFingerprint(),
+          },
         },
         { status: 404 }
       );

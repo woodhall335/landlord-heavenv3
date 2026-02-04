@@ -8,6 +8,7 @@ import {
 import {
   createSupabaseAdminClient,
   getSupabaseAdminEnvStatus,
+  getSupabaseAdminFingerprint,
 } from '@/lib/supabase/admin';
 
 export const runtime = 'nodejs';
@@ -16,7 +17,11 @@ export async function GET(
   _request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const debug = { env: getSupabaseAdminEnvStatus(), slug: params.slug };
+  const debug = {
+    env: getSupabaseAdminEnvStatus(),
+    fingerprint: getSupabaseAdminFingerprint(),
+    slug: params.slug,
+  };
 
   try {
     const user = await requireServerAuth();
@@ -24,38 +29,47 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
 
-    const admin = createSupabaseAdminClient();
-    const { data, error, count } = await admin
-      .from('ask_heaven_questions')
-      .select('id,slug', { count: 'exact' })
-      .eq('slug', params.slug);
-
-    if (error) {
-      return NextResponse.json(
-        {
-          error: error.message,
-          debug: { slug: params.slug, env: getSupabaseAdminEnvStatus() },
-        },
-        { status: 500 }
-      );
-    }
-
-    const matchedCount = count ?? data?.length ?? 0;
-    if (matchedCount === 0) {
-      return NextResponse.json(
-        {
-          error: 'Not found',
-          debug: { slug: params.slug, count, env: getSupabaseAdminEnvStatus() },
-        },
-        { status: 404 }
-      );
-    }
-
     const repository = createSupabaseAdminQuestionRepository();
+    const adminClient = createSupabaseAdminClient();
     const question = await repository.getBySlug(params.slug);
 
     if (!question) {
-      return NextResponse.json({ error: 'Not found', debug }, { status: 404 });
+      const { count, error: countError } = await adminClient
+        .from('ask_heaven_questions')
+        .select('id', { count: 'exact', head: true });
+
+      if (countError) {
+        return NextResponse.json(
+          { error: countError.message, debug },
+          { status: 500 }
+        );
+      }
+
+      const { data: sample, error: sampleError } = await adminClient
+        .from('ask_heaven_questions')
+        .select('slug')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (sampleError) {
+        return NextResponse.json(
+          { error: sampleError.message, debug },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json(
+        {
+          error: 'Not found',
+          debug: {
+            slug: params.slug,
+            fingerprint: getSupabaseAdminFingerprint(),
+            visibleCount: count ?? 0,
+            sampleSlugs: (sample ?? []).map((row) => row.slug),
+          },
+        },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(
@@ -63,9 +77,8 @@ export async function GET(
         question,
         debug: {
           slug: params.slug,
-          count,
           env: getSupabaseAdminEnvStatus(),
-          row: data?.[0],
+          fingerprint: getSupabaseAdminFingerprint(),
         },
       },
       { status: 200 }

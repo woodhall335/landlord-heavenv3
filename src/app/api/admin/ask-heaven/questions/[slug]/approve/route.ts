@@ -5,13 +5,19 @@ import {
   AskHeavenNoRowsUpdatedError,
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
-import { getSupabaseAdminEnvStatus } from '@/lib/supabase/admin';
+import { getSupabaseAdminEnvStatus, getSupabaseAdminFingerprint } from '@/lib/supabase/admin';
+
+export const runtime = 'nodejs';
 
 export async function POST(
   _request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const debug = { env: getSupabaseAdminEnvStatus(), slug: params.slug };
+  const debug = {
+    env: getSupabaseAdminEnvStatus(),
+    fingerprint: getSupabaseAdminFingerprint(),
+    slug: params.slug,
+  };
 
   try {
     const user = await requireServerAuth();
