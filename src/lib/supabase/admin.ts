@@ -15,6 +15,7 @@ let hasWrappedFetch = false;
 type JwtPayloadPreview = {
   ref?: string;
   role?: string;
+  iss?: string;
   iat?: number;
   exp?: number;
 };
@@ -26,7 +27,18 @@ export function getSupabaseAdminEnvStatus() {
   };
 }
 
+function shouldLogAdminDebug(): boolean {
+  return process.env.NODE_ENV !== 'production' || process.env.ASK_HEAVEN_DEBUG === '1';
+}
+
+export function getSupabaseAdminJwtPreview(): JwtPayloadPreview | null {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceRoleKey) return null;
+  return decodeJwtPayload(serviceRoleKey);
+}
+
 function logSupabaseAdminEnvStatus() {
+  if (!shouldLogAdminDebug()) return;
   if (hasLoggedAdminEnvStatus) return;
   hasLoggedAdminEnvStatus = true;
   const env = getSupabaseAdminEnvStatus();
@@ -59,6 +71,7 @@ function decodeJwtPayload(token: string): JwtPayloadPreview | null {
     return {
       ref: parsed.ref,
       role: parsed.role,
+      iss: parsed.iss,
       iat: parsed.iat,
       exp: parsed.exp,
     };
@@ -85,16 +98,19 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
   const supabaseUrlHost = new URL(supabaseUrl).host;
   const keyPrefix = serviceRoleKey.slice(0, 8);
   const jwtPayload = decodeJwtPayload(serviceRoleKey);
-  console.info('[supabase-admin-client]', {
-    host: supabaseUrlHost,
-    keyPrefix,
-    jwt_ref: jwtPayload?.ref ?? null,
-    jwt_role: jwtPayload?.role ?? null,
-    jwt_iat: jwtPayload?.iat ?? null,
-    jwt_exp: jwtPayload?.exp ?? null,
-  });
+  if (shouldLogAdminDebug()) {
+    console.info(
+      `[supabase-admin-client] host=${supabaseUrlHost} role=${jwtPayload?.role ?? 'unknown'} ref=${jwtPayload?.ref ?? 'unknown'} iss=${jwtPayload?.iss ?? 'unknown'} keyPrefix=${keyPrefix}`
+    );
+  }
 
   return createClient<Database>(supabaseUrl, serviceRoleKey, {
+    global: {
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+      },
+    },
     auth: {
       autoRefreshToken: false,
       persistSession: false,
