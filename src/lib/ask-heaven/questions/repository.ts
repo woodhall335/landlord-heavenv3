@@ -286,7 +286,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .order('updated_at', { ascending: false });
 
     if (error) throw error;
-    return (data ?? []) as AskHeavenQuestion[];
+    return (data ?? []) as unknown as AskHeavenQuestion[];
   }
 
   async upsert(question: AskHeavenQuestion): Promise<AskHeavenQuestion> {
