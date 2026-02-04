@@ -18,6 +18,7 @@ type JwtPayloadPreview = {
   iss?: string;
   iat?: number;
   exp?: number;
+  error?: string;
 };
 
 export function getSupabaseAdminEnvStatus() {
@@ -62,10 +63,10 @@ function assertAdminRuntime() {
 }
 
 function decodeJwtPayload(token: string): JwtPayloadPreview | null {
-  const [, payload] = token.split('.');
-  if (!payload) return null;
-
   try {
+    const [, payload] = token.split('.');
+    if (!payload) return { error: 'jwt_preview_failed' };
+
     const decoded = Buffer.from(payload, 'base64url').toString('utf-8');
     const parsed = JSON.parse(decoded) as JwtPayloadPreview;
     return {
@@ -76,7 +77,7 @@ function decodeJwtPayload(token: string): JwtPayloadPreview | null {
       exp: parsed.exp,
     };
   } catch {
-    return null;
+    return { error: 'jwt_preview_failed' };
   }
 }
 
@@ -125,9 +126,18 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
 export function getSupabaseAdminFingerprint() {
   const supabaseUrl = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  let supabaseUrlHost: string | null = null;
+
+  if (supabaseUrl) {
+    try {
+      supabaseUrlHost = new URL(supabaseUrl).host;
+    } catch {
+      supabaseUrlHost = null;
+    }
+  }
 
   return {
-    supabaseUrlHost: supabaseUrl ? new URL(supabaseUrl).host : null,
+    supabaseUrlHost,
     serviceRoleKeyPrefix: serviceRoleKey ? serviceRoleKey.slice(0, 8) : null,
   };
 }

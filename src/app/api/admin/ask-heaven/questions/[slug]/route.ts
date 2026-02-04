@@ -11,6 +11,7 @@ import {
   getSupabaseAdminFingerprint,
   getSupabaseAdminJwtPreview,
 } from '@/lib/supabase/admin';
+import { serializeError } from '@/lib/errors/serializeError';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -69,6 +70,7 @@ export async function GET(
       const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(params.slug)}`;
       try {
         const restResponse = await fetch(restUrl, {
+          cache: 'no-store',
           headers: {
             apikey: serviceRoleKey,
             Authorization: `Bearer ${serviceRoleKey}`,
@@ -194,10 +196,13 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
     if (error instanceof Error && error.message.startsWith('Missing SUPABASE_')) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     return NextResponse.json(
-      { error: 'Internal server error', debug },
+      { error: 'Internal server error', debug, thrown: serializeError(error) },
       { status: 500 }
     );
   }
@@ -207,7 +212,11 @@ export async function PUT(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const debug = { env: getSupabaseAdminEnvStatus(), slug: params.slug };
+  const debug = {
+    env: getSupabaseAdminEnvStatus(),
+    fingerprint: getSupabaseAdminFingerprint(),
+    slug: params.slug,
+  };
 
   try {
     const user = await requireServerAuth();
@@ -245,16 +254,22 @@ export async function PUT(
   } catch (error) {
     console.error('Admin Ask Heaven update error:', error);
     if (error instanceof AskHeavenNoRowsUpdatedError) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
     if (error instanceof Error && error.message.startsWith('Missing SUPABASE_')) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     return NextResponse.json(
-      { error: 'Internal server error', debug },
+      { error: 'Internal server error', debug, thrown: serializeError(error) },
       { status: 500 }
     );
   }

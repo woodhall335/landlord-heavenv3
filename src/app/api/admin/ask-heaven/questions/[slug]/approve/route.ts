@@ -6,6 +6,7 @@ import {
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
 import { getSupabaseAdminEnvStatus, getSupabaseAdminFingerprint } from '@/lib/supabase/admin';
+import { serializeError } from '@/lib/errors/serializeError';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -38,16 +39,22 @@ export async function POST(
   } catch (error) {
     console.error('Admin Ask Heaven approve error:', error);
     if (error instanceof AskHeavenNoRowsUpdatedError) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
     if (error instanceof Error && error.message.startsWith('Missing SUPABASE_')) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     return NextResponse.json(
-      { error: 'Internal server error', debug },
+      { error: 'Internal server error', debug, thrown: serializeError(error) },
       { status: 500 }
     );
   }
