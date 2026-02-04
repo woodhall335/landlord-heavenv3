@@ -9,6 +9,7 @@ import {
   createSupabaseAdminClient,
   getSupabaseAdminEnvStatus,
   getSupabaseAdminFingerprint,
+  getSupabaseAdminJwtPreview,
 } from '@/lib/supabase/admin';
 
 export const runtime = 'nodejs';
@@ -30,36 +31,93 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
 
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const repository = createSupabaseAdminQuestionRepository();
     const adminClient = createSupabaseAdminClient();
+    const keyPrefix = serviceRoleKey?.slice(0, 8) ?? null;
+    const jwtPreview = getSupabaseAdminJwtPreview();
+    const slugBytes = {
+      length: params.slug.length,
+      hex: Buffer.from(params.slug).toString('hex'),
+    };
+    const authHeaderPreview = serviceRoleKey
+      ? {
+          apikeyPrefix: keyPrefix,
+          authorizationPrefix: `Bearer ${keyPrefix}`,
+        }
+      : null;
+    const directSupabaseJs = await adminClient
+      .from('ask_heaven_questions')
+      .select('id,slug,status')
+      .eq('slug', params.slug)
+      .maybeSingle();
+    const directSupabaseJsResult = {
+      found: Boolean(directSupabaseJs.data),
+      data: directSupabaseJs.data ?? undefined,
+      error: directSupabaseJs.error?.message ?? undefined,
+    };
+    let directRestFetchResult:
+      | {
+          status: number | 'error';
+          textPreview: string;
+          jsonPreview?: unknown;
+        }
+      | undefined;
+
+    if (supabaseUrl && serviceRoleKey) {
+      const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(params.slug)}`;
+      try {
+        const restResponse = await fetch(restUrl, {
+          headers: {
+            apikey: serviceRoleKey,
+            Authorization: `Bearer ${serviceRoleKey}`,
+          },
+        });
+        const responseText = await restResponse.text();
+        let jsonPreview: unknown;
+        try {
+          const parsed = JSON.parse(responseText);
+          jsonPreview = Array.isArray(parsed) ? parsed.slice(0, 5) : parsed;
+        } catch {
+          jsonPreview = undefined;
+        }
+        directRestFetchResult = {
+          status: restResponse.status,
+          textPreview: responseText.slice(0, 200),
+          jsonPreview,
+        };
+      } catch (restError) {
+        directRestFetchResult = {
+          status: 'error',
+          textPreview:
+            restError instanceof Error ? restError.message : String(restError),
+        };
+      }
+    }
+
+    const restFound =
+      directRestFetchResult?.jsonPreview &&
+      Array.isArray(directRestFetchResult.jsonPreview)
+        ? directRestFetchResult.jsonPreview.length > 0
+        : false;
+    if (!directSupabaseJs.data && !restFound && jwtPreview?.role !== 'service_role') {
+      return NextResponse.json(
+        {
+          error: 'Invalid service role key',
+          debug: {
+            ...debug,
+            jwtPreview,
+            env: getSupabaseAdminEnvStatus(),
+          },
+        },
+        { status: 500 }
+      );
+    }
+
     const question = await repository.getBySlug(params.slug);
 
     if (!question) {
-      const supabaseUrl = process.env.SUPABASE_URL;
-      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-      if (supabaseUrl && serviceRoleKey) {
-        const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(params.slug)}`;
-        try {
-          const restResponse = await fetch(restUrl, {
-            headers: {
-              apikey: serviceRoleKey,
-              Authorization: `Bearer ${serviceRoleKey}`,
-            },
-          });
-          const responseText = await restResponse.text();
-          console.info('[ask-heaven-rest-check]', {
-            status: restResponse.status,
-            responseText,
-          });
-        } catch (restError) {
-          console.info('[ask-heaven-rest-check]', {
-            status: 'error',
-            responseText:
-              restError instanceof Error ? restError.message : String(restError),
-          });
-        }
-      }
-
       const { count, error: countError } = await adminClient
         .from('ask_heaven_questions')
         .select('id', { count: 'exact', head: true });
@@ -84,6 +142,17 @@ export async function GET(
         );
       }
 
+      let ilikeCandidates: Array<{ id: string; slug: string; status: string }> =
+        [];
+      if (!directSupabaseJs.data) {
+        const { data: ilikeData } = await adminClient
+          .from('ask_heaven_questions')
+          .select('id,slug,status')
+          .ilike('slug', params.slug)
+          .limit(5);
+        ilikeCandidates = ilikeData ?? [];
+      }
+
       const fingerprint = getSupabaseAdminFingerprint();
 
       return NextResponse.json(
@@ -96,6 +165,12 @@ export async function GET(
             fingerprint,
             visibleCount: count ?? 0,
             sampleSlugs: (sample ?? []).map((row) => row.slug),
+            slugBytes,
+            directSupabaseJs: directSupabaseJsResult,
+            directRestFetch: directRestFetchResult,
+            authHeaders: authHeaderPreview,
+            jwtPreview,
+            ilikeCandidates,
           },
         },
         { status: 404 }
