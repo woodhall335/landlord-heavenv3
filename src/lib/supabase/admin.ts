@@ -9,7 +9,25 @@ type SupabaseAdminDiagnostics = {
   writesUsingAdmin: boolean;
 };
 
+let hasLoggedAdminEnvStatus = false;
+
+export function getSupabaseAdminEnvStatus() {
+  return {
+    hasUrl: Boolean(process.env.SUPABASE_URL),
+    hasServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+  };
+}
+
+function logSupabaseAdminEnvStatus() {
+  if (hasLoggedAdminEnvStatus) return;
+  hasLoggedAdminEnvStatus = true;
+  const env = getSupabaseAdminEnvStatus();
+  console.info('[supabase-admin-env]', env);
+}
+
 function assertAdminRuntime() {
+  logSupabaseAdminEnvStatus();
+
   if (process.env.NEXT_RUNTIME === 'edge') {
     throw new Error('Supabase admin client cannot run in Edge runtime.');
   }

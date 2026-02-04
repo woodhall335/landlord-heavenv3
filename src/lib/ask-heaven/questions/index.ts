@@ -30,11 +30,14 @@ export type { AskHeavenQuestionRepository } from './repository';
 export {
   InMemoryQuestionRepository,
   SupabaseQuestionRepository,
+  AskHeavenNoRowsUpdatedError,
   getQuestionRepository,
   getSupabaseQuestionRepository,
   createSupabaseAdminQuestionRepository,
   setQuestionRepository,
 } from './repository';
+
+export { checkAskHeavenAdminHealth } from './admin-health';
 
 // Quality Gates
 export {
