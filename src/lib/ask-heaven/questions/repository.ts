@@ -131,13 +131,16 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .from(QUESTIONS_TABLE)
       .select('*')
       .eq('slug', slug)
-      .single();
+      .maybeSingle();
 
     if (error) {
-      return this.handleNotFound(error);
+      if (error?.code === 'PGRST116') {
+        return null;
+      }
+      throw error;
     }
 
-    return data as unknown as AskHeavenQuestion;
+    return (data ?? null) as unknown as AskHeavenQuestion | null;
   }
 
   async getById(id: string): Promise<AskHeavenQuestion | null> {
