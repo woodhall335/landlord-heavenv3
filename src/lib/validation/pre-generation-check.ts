@@ -82,6 +82,10 @@ export interface PreGenerationCheckResult {
 // Flat wizard facts format (from getCaseFacts)
 export type WizardFactsFlat = Record<string, unknown>;
 
+function toLegacyIssueCode(ruleId: string): string {
+  return ruleId.toUpperCase();
+}
+
 // =============================================================================
 // Validation Functions (wrap YAML rules engine for backward compatibility)
 // =============================================================================
@@ -120,7 +124,7 @@ export function runRuleBasedChecks(
 
   for (const blocker of result.blockers) {
     issues.push({
-      code: blocker.id,
+      code: toLegacyIssueCode(blocker.id),
       severity: 'blocker',
       message: blocker.message,
       fields: [],
@@ -130,11 +134,27 @@ export function runRuleBasedChecks(
 
   for (const warning of result.warnings) {
     issues.push({
-      code: warning.id,
+      code: toLegacyIssueCode(warning.id),
       severity: 'warning',
       message: warning.message,
       fields: [],
       suggestion: warning.rationale,
+    });
+  }
+
+  if (
+    route === 'section_8' &&
+    issues.some((issue) => issue.code === 'S8_NO_GROUNDS') &&
+    !issues.some((issue) => issue.code === 'S8_NO_PARTICULARS') &&
+    !facts.section8_details &&
+    !facts.ground_particulars
+  ) {
+    issues.push({
+      code: 'S8_NO_PARTICULARS',
+      severity: 'blocker',
+      message: 'Section 8 requires particulars of each ground.',
+      fields: [],
+      suggestion: 'The notice and court forms require specific details for each ground.',
     });
   }
 
