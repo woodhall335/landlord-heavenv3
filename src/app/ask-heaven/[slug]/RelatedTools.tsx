@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Related Tools Component
  *
@@ -9,9 +11,11 @@ import React from 'react';
 import Link from 'next/link';
 import type { RelatedToolsConfig } from '@/lib/ask-heaven/questions/linking';
 import { buildProductUrl } from '@/lib/ask-heaven/questions/linking';
+import { trackAskHeavenPageCtaClick } from '@/lib/analytics';
 
 interface RelatedToolsProps {
   config: RelatedToolsConfig;
+  slug: string;
 }
 
 /**
@@ -22,7 +26,7 @@ interface RelatedToolsProps {
  * - Free tool links
  * - Info message for restricted jurisdictions
  */
-export function RelatedTools({ config }: RelatedToolsProps) {
+export function RelatedTools({ config, slug }: RelatedToolsProps) {
   const { products, tools, showProductCTAs, infoMessage } = config;
 
   // Nothing to show
@@ -45,6 +49,7 @@ export function RelatedTools({ config }: RelatedToolsProps) {
                 key={product.product}
                 product={product}
                 isPrimary={index === 0}
+                slug={slug}
               />
             ))}
           </div>
@@ -67,7 +72,14 @@ export function RelatedTools({ config }: RelatedToolsProps) {
               {tools.map((tool) => (
                 <li key={tool.tool}>
                   <Link
-                    href={tool.href}
+                    href={buildProductUrl(tool.href, slug)}
+                    onClick={() =>
+                      trackAskHeavenPageCtaClick({
+                        slug,
+                        cta_type: 'tool',
+                        destination: tool.href,
+                      })
+                    }
                     className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary"
                   >
                     <svg
@@ -104,11 +116,13 @@ export function RelatedTools({ config }: RelatedToolsProps) {
 function ProductCard({
   product,
   isPrimary,
+  slug,
 }: {
   product: RelatedToolsConfig['products'][0];
   isPrimary: boolean;
+  slug: string;
 }) {
-  const url = buildProductUrl(product.href, 'ask_heaven_qa');
+  const url = buildProductUrl(product.href, slug);
 
   return (
     <div
@@ -135,6 +149,13 @@ function ProductCard({
       <p className="text-xs text-gray-600 mb-3">{product.description}</p>
       <Link
         href={url}
+        onClick={() =>
+          trackAskHeavenPageCtaClick({
+            slug,
+            cta_type: 'product',
+            destination: product.href,
+          })
+        }
         className={`block w-full text-center text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
           isPrimary
             ? 'bg-primary text-white hover:bg-primary-700'

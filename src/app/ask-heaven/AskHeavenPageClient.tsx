@@ -115,11 +115,17 @@ const jurisdictionFlags: Record<Jurisdiction, string> = {
 // Email gate threshold
 const EMAIL_GATE_THRESHOLD = 3;
 
-export default function AskHeavenPageClient(): React.ReactElement {
+interface AskHeavenPageClientProps {
+  initialQuery?: string | null;
+}
+
+export default function AskHeavenPageClient({
+  initialQuery,
+}: AskHeavenPageClientProps): React.ReactElement {
   const router = useRouter();
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(initialQuery?.trim() ?? '');
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [caseContext, setCaseContext] = useState<CaseContext | null>(null);
@@ -138,7 +144,6 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const hasAutoSubmitted = useRef(false);
   const hasFiredView = useRef(false);
 
   useEffect(() => {
@@ -147,7 +152,7 @@ export default function AskHeavenPageClient(): React.ReactElement {
 
   const searchParams = useSearchParams();
   const caseId = searchParams.get('caseId');
-  const initialQuestion = searchParams.get('q');
+  const initialQuestion = initialQuery?.trim();
 
   // Initialize attribution on page load
   useEffect(() => {
@@ -213,144 +218,11 @@ export default function AskHeavenPageClient(): React.ReactElement {
     }
   }, [chatMessages]);
 
-  const submitInitialQuestion = useCallback(async (questionText: string) => {
-    const trimmed = questionText.trim();
-    if (!trimmed) return;
-
-    const currentCount = getQuestionCount();
-    const emailCaptured = hasEmailBeenCaptured();
-
-    if (currentCount >= EMAIL_GATE_THRESHOLD && !emailCaptured && !caseId) {
-      trackAskHeavenEmailGateShown(getTrackingParams());
-      setEmailGateOpen(true);
-      return;
-    }
-
-    setError(null);
-    setIsSending(true);
-
-    const newCount = incrementQuestionCount();
-    const trackingParams = getTrackingParams();
-    trackingParams.question_count = newCount;
-    trackAskHeavenQuestionSubmitted(trackingParams);
-
-    const topics = detectTopics(trimmed);
-    const primaryTopic = getPrimaryTopic(topics);
-    if (primaryTopic) {
-      setDetectedTopic(primaryTopic);
-      updateCurrentTopic(primaryTopic);
-    }
-
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content: trimmed,
-      createdAt: new Date().toISOString(),
-    };
-
-    setChatMessages([userMsg]);
-    setInput('');
-    setLastQuestion(trimmed);
-
-    try {
-      const res = await fetch('/api/ask-heaven/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId ?? undefined,
-          jurisdiction,
-          messages: [{ role: userMsg.role, content: userMsg.content }],
-          messageCount: newCount,
-          emailCaptured: hasEmailBeenCaptured(),
-        }),
-      });
-
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string; requires_email?: boolean } | null;
-        if (body?.requires_email) {
-          trackAskHeavenEmailGateShown(trackingParams);
-          setEmailGateOpen(true);
-          setIsSending(false);
-          return;
-        }
-        setError(body?.error ?? 'Ask Heaven could not reply right now. Please try again.');
-        return;
-      }
-
-      const body = (await res.json()) as {
-        reply: string;
-        suggested_product?: string | null;
-        suggested_next_step?: 'wizard' | 'checklist' | 'guide' | 'none' | null;
-        suggested_topic?: string | null;
-        follow_up_questions?: string[];
-        sources?: string[];
-        requires_email?: boolean;
-      };
-
-      if (body.requires_email) {
-        trackAskHeavenEmailGateShown(trackingParams);
-        setEmailGateOpen(true);
-        setIsSending(false);
-        return;
-      }
-
-      if (!body.reply) {
-        setError('Ask Heaven returned an empty response. Please try again.');
-        return;
-      }
-
-      const assistantMsg: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: body.reply,
-        createdAt: new Date().toISOString(),
-        suggestedProduct: body.suggested_product,
-        suggestedNextStep: body.suggested_next_step,
-        suggestedTopic: body.suggested_topic,
-        followUpQuestions: body.follow_up_questions,
-        sources: body.sources,
-      };
-
-      setChatMessages([userMsg, assistantMsg]);
-
-      if (body.suggested_next_step) {
-        setSuggestedNextStep(body.suggested_next_step);
-      }
-
-      const responseTopics = detectTopics(body.reply);
-      const responsePrimaryTopic = getPrimaryTopic(responseTopics);
-      if (responsePrimaryTopic && !primaryTopic) {
-        setDetectedTopic(responsePrimaryTopic);
-        updateCurrentTopic(responsePrimaryTopic);
-      }
-      if (body.suggested_topic && !responsePrimaryTopic && !primaryTopic) {
-        setDetectedTopic(body.suggested_topic as Topic);
-        updateCurrentTopic(body.suggested_topic);
-      }
-
-      trackAskHeavenAnswerReceived({
-        ...trackingParams,
-        suggested_product: body.suggested_product,
-        suggested_next_step: body.suggested_next_step,
-        suggested_topic: body.suggested_topic,
-      });
-    } catch (err) {
-      console.error('Ask Heaven error:', err);
-      setError('Unable to reach Ask Heaven. Please check your connection and try again.');
-    } finally {
-      setIsSending(false);
-    }
-  }, [caseId, jurisdiction, getTrackingParams]);
-
   useEffect(() => {
-    if (initialQuestion && !hasAutoSubmitted.current && chatMessages.length === 0) {
-      hasAutoSubmitted.current = true;
+    if (initialQuestion && chatMessages.length === 0 && input.trim().length === 0) {
       setInput(initialQuestion);
-      setTimeout(() => {
-        submitInitialQuestion(initialQuestion);
-      }, 100);
     }
-  }, [initialQuestion, chatMessages.length, submitInitialQuestion]);
+  }, [initialQuestion, chatMessages.length, input]);
 
   useEffect(() => {
     if (!caseId) return;
@@ -877,6 +749,11 @@ export default function AskHeavenPageClient(): React.ReactElement {
                     </button>
                   </div>
                 </div>
+                {initialQuestion && (
+                  <p className="mt-3 text-sm text-gray-500 text-center">
+                    We’ve prefilled your question — edit or submit.
+                  </p>
+                )}
               </form>
 
               {/* Popular Topics Section with Mascot */}

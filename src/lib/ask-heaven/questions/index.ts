@@ -29,7 +29,10 @@ export type {
 export type { AskHeavenQuestionRepository } from './repository';
 export {
   InMemoryQuestionRepository,
+  SupabaseQuestionRepository,
   getQuestionRepository,
+  getSupabaseQuestionRepository,
+  createSupabaseAdminQuestionRepository,
   setQuestionRepository,
 } from './repository';
 

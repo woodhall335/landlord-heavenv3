@@ -64,7 +64,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Eviction Notice Generator',
-      href: '/eviction-notice',
+      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Generate Section 21, Section 8, or jurisdiction-specific notices',
       price: '£49.99',
       ctaText: 'Create Notice',
@@ -72,7 +72,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'complete_pack',
       name: 'Complete Eviction Pack',
-      href: '/eviction-pack-england',
+      href: 'https://landlordheaven.co.uk/products/complete-pack',
       description: 'Full eviction bundle with court forms and guidance',
       price: '£199.99',
       ctaText: 'Get Full Pack',
@@ -82,7 +82,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'money_claim',
       name: 'Money Claim Generator',
-      href: '/money-claim',
+      href: 'https://landlordheaven.co.uk/products/money-claim',
       description: 'Create court-ready money claim documents for rent arrears',
       price: '£99.99',
       ctaText: 'Start Claim',
@@ -90,7 +90,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Section 8 Notice (Rent Arrears)',
-      href: '/eviction-notice',
+      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Serve notice for rent arrears under Ground 8, 10, or 11',
       price: '£49.99',
       ctaText: 'Create Notice',
@@ -100,7 +100,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'tenancy_agreement',
       name: 'Tenancy Agreement',
-      href: '/tenancy-agreement',
+      href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Compliant tenancy agreements with deposit protection clauses',
       price: 'From £14.99',
       ctaText: 'Create Agreement',
@@ -110,7 +110,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'tenancy_agreement',
       name: 'Tenancy Agreement Generator',
-      href: '/tenancy-agreement',
+      href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Create AST, PRT, or Occupation Contract for any UK jurisdiction',
       price: 'From £14.99',
       ctaText: 'Create Agreement',
@@ -120,7 +120,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'tenancy_agreement',
       name: 'Compliant Tenancy Agreement',
-      href: '/tenancy-agreement',
+      href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Agreements with built-in compliance clauses',
       price: 'From £14.99',
       ctaText: 'Create Agreement',
@@ -130,7 +130,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'money_claim',
       name: 'Property Damage Claim',
-      href: '/money-claim',
+      href: 'https://landlordheaven.co.uk/products/money-claim',
       description: 'Claim for property damage, cleaning costs, or unpaid bills',
       price: '£99.99',
       ctaText: 'Start Claim',
@@ -140,7 +140,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Notice Generator',
-      href: '/eviction-notice',
+      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Generate notices with correct notice periods',
       price: '£49.99',
       ctaText: 'Create Notice',
@@ -150,7 +150,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'complete_pack',
       name: 'Court-Ready Pack',
-      href: '/eviction-pack-england',
+      href: 'https://landlordheaven.co.uk/products/complete-pack',
       description: 'Complete documentation for possession proceedings',
       price: '£199.99',
       ctaText: 'Get Full Pack',
@@ -158,7 +158,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'money_claim',
       name: 'Money Claim Documents',
-      href: '/money-claim',
+      href: 'https://landlordheaven.co.uk/products/money-claim',
       description: 'MCOL-ready claim forms and evidence bundles',
       price: '£99.99',
       ctaText: 'Start Claim',
@@ -168,7 +168,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'tenancy_agreement',
       name: 'Fair Tenancy Agreement',
-      href: '/tenancy-agreement',
+      href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Balanced agreements that protect both parties',
       price: 'From £14.99',
       ctaText: 'Create Agreement',
@@ -178,7 +178,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'tenancy_agreement',
       name: 'Compliant Tenancy Agreement',
-      href: '/tenancy-agreement',
+      href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Meets all landlord obligations and compliance requirements',
       price: 'From £14.99',
       ctaText: 'Create Agreement',
@@ -196,16 +196,23 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
   eviction: [
     {
       tool: 'section-21-validator',
-      name: 'Section 21 Validity Checker',
-      href: '/tools/validators/section-21',
+      name: 'Free eviction notice checker',
+      href: 'https://landlordheaven.co.uk/tools/validators',
       description: 'Check if your Section 21 notice is valid',
       isFree: true,
     },
     {
       tool: 'section-8-validator',
-      name: 'Section 8 Grounds Checker',
-      href: '/tools/validators/section-8',
+      name: 'Free Section 8 generator',
+      href: 'https://landlordheaven.co.uk/tools/free-section-8-notice-generator',
       description: 'Verify Section 8 grounds and notice periods',
+      isFree: true,
+    },
+    {
+      tool: 'section-21-generator',
+      name: 'Free Section 21 generator',
+      href: 'https://landlordheaven.co.uk/tools/free-section-21-notice-generator',
+      description: 'Create a free Section 21 notice for England',
       isFree: true,
     },
   ],
@@ -213,8 +220,15 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
     {
       tool: 'rent-demand-letter',
       name: 'Rent Demand Letter',
-      href: '/tools/free-rent-demand-letter',
+      href: 'https://landlordheaven.co.uk/tools/free-rent-demand-letter',
       description: 'Free rent demand letter template',
+      isFree: true,
+    },
+    {
+      tool: 'rent-arrears-calculator',
+      name: 'Rent arrears calculator',
+      href: 'https://landlordheaven.co.uk/tools/rent-arrears-calculator',
+      description: 'Calculate arrears totals and missed payments',
       isFree: true,
     },
   ],
@@ -225,8 +239,8 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
   notice_periods: [
     {
       tool: 'section-21-validator',
-      name: 'Notice Period Calculator',
-      href: '/tools/validators/section-21',
+      name: 'Free eviction notice checker',
+      href: 'https://landlordheaven.co.uk/tools/validators',
       description: 'Calculate correct notice periods',
       isFree: true,
     },
@@ -342,20 +356,15 @@ export function getRelatedToolsConfig(
  */
 export function buildProductUrl(
   href: string,
-  source: string = 'ask_heaven_qa',
-  topic?: AskHeavenPrimaryTopic
+  slug: string
 ): string {
-  const params = new URLSearchParams({
-    utm_source: source,
-    utm_medium: 'internal_link',
-    utm_campaign: 'ask_heaven_qa',
-  });
+  const url = new URL(href, 'https://landlordheaven.co.uk');
+  url.searchParams.set('utm_source', 'ask_heaven');
+  url.searchParams.set('utm_medium', 'seo');
+  url.searchParams.set('utm_campaign', 'pilot');
+  url.searchParams.set('utm_content', slug);
 
-  if (topic) {
-    params.set('utm_content', topic);
-  }
-
-  return `${href}?${params.toString()}`;
+  return url.toString();
 }
 
 /**

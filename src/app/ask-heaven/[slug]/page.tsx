@@ -15,7 +15,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
   getQuestionRepository,
   validateQualityGates,
@@ -34,6 +34,7 @@ import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { QuestionPageContent } from './QuestionPageContent';
 import { RelatedTools } from './RelatedTools';
 import { RelatedQuestions } from './RelatedQuestions';
+import { FollowUpCta } from './FollowUpCta';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -108,7 +109,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
 
   // Redirect to canonical if this is a duplicate
   if (question.canonical_slug && question.canonical_slug !== slug) {
-    redirect(`/ask-heaven/${question.canonical_slug}`);
+    permanentRedirect(`/ask-heaven/${question.canonical_slug}`);
   }
 
   // Validate quality gates for display
@@ -241,6 +242,10 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
                 </div>
               </div>
 
+              <div className="mt-6">
+                <FollowUpCta slug={slug} question={question.question} />
+              </div>
+
               {/* Last reviewed date */}
               {question.reviewed_at && (
                 <p className="text-sm text-gray-500 mt-4">
@@ -262,6 +267,14 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
                   qualityResult={qualityResult}
                 />
 
+                <div className="mt-10 flex justify-center">
+                  <FollowUpCta
+                    slug={slug}
+                    question={question.question}
+                    className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow hover:bg-primary-700 transition-colors"
+                  />
+                </div>
+
                 {/* Disclaimer */}
                 <div className="mt-8">
                   <SeoDisclaimer />
@@ -271,7 +284,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
               {/* Sidebar (1 col) */}
               <aside className="space-y-6">
                 {/* Related Tools/Products */}
-                <RelatedTools config={relatedToolsConfig} />
+                <RelatedTools config={relatedToolsConfig} slug={slug} />
 
                 {/* Related Questions */}
                 {relatedQuestions.length > 0 && (
