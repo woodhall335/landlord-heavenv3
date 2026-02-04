@@ -180,6 +180,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/fixed-term-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
+  const extraIndexablePages = [
+    { path: '/apply-possession-order-landlord', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/claim-rent-arrears-tenant', priority: 0.8, changeFrequency: 'weekly' as const },
+  ];
+
   const pillarPages = [
     { path: '/eviction-process-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-scotland', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -272,15 +277,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...wizardLandingPages,
     ...tenancyPages,
     ...landingPages,
+    ...extraIndexablePages,
     ...pillarPages,
     ...toolPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
   ];
 
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
-  const noindexPaths = ['/tenancy-agreements/england-wales'];
+  const noindexPaths = ['/tenancy-agreements/england-wales', '/refunds'];
   const isIndexablePath = (path: string) =>
-    !excludedPrefixes.some((prefix) => path.startsWith(prefix)) && !noindexPaths.includes(path);
+    !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
+    !noindexPaths.includes(path);
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
