@@ -122,7 +122,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       return this.handleNotFound(error);
     }
 
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async getById(id: string): Promise<AskHeavenQuestion | null> {
@@ -136,7 +136,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       return this.handleNotFound(error);
     }
 
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async list(options?: {
@@ -213,7 +213,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .single();
 
     if (error) throw error;
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async update(input: UpdateAskHeavenQuestionInput): Promise<AskHeavenQuestion> {
@@ -225,7 +225,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .single();
 
     if (error) throw error;
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async delete(id: string): Promise<void> {
@@ -297,7 +297,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .single();
 
     if (error) throw error;
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async approve(slug: string): Promise<AskHeavenQuestion> {
@@ -309,7 +309,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .single();
 
     if (error) throw error;
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async setCanonical(slug: string, canonicalSlug: string | null): Promise<AskHeavenQuestion> {
@@ -321,7 +321,7 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
       .single();
 
     if (error) throw error;
-    return data as AskHeavenQuestion;
+    return data as unknown as AskHeavenQuestion;
   }
 
   async search(queryText: string): Promise<AskHeavenQuestionListItem[]> {
