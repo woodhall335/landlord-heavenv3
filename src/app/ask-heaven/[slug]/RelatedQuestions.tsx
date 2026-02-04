@@ -7,7 +7,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import type { AskHeavenQuestionListItem } from '@/lib/ask-heaven/questions';
+import type { AskHeavenQuestionListItem } from '@/lib/ask-heaven/questions/client';
 import type { RelatedQuestionsConfig } from '@/lib/ask-heaven/questions/linking';
 
 interface RelatedQuestionsProps {

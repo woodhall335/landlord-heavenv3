@@ -2,8 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { countWords, getIndexabilityStatus, validateQualityGates } from '@/lib/ask-heaven/questions';
-import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions';
+import {
+  countWords,
+  getIndexabilityStatus,
+  validateQualityGates,
+} from '@/lib/ask-heaven/questions/client';
+import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions/client';
 
 type StatusFilter = 'draft' | 'review' | 'approved';
 
