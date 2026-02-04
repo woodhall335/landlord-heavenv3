@@ -209,44 +209,65 @@ const faqItems = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
-  description:
-    'Free landlord Q&A for UK. Instant answers on evictions, rent arrears, tenancy agreements, and compliance across all jurisdictions.',
-  keywords: [
-    'landlord advice',
-    'landlord Q&A',
-    'tenant disputes',
-    'rent arrears advice',
-    'eviction advice',
-    'tenancy advice UK',
-    'landlord help',
-    'section 21 advice',
-    'section 8 advice',
-    'notice to leave scotland',
-    'occupation contract wales',
-    'landlord tenant law',
-    'deposit protection advice',
-    'EPC rules landlord',
-    'gas safety certificate landlord',
-    'EICR landlord requirements',
-    'smoke alarm regulations landlord',
-    'carbon monoxide alarm landlord',
-    'right to rent checks landlord',
-  ],
-  openGraph: {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ q?: string }> | { q?: string };
+}): Promise<Metadata> {
+  const resolvedSearchParams =
+    searchParams && typeof (searchParams as Promise<{ q?: string }>).then === 'function'
+      ? await (searchParams as Promise<{ q?: string }>)
+      : (searchParams as { q?: string } | undefined);
+  const hasPrefill = Boolean(resolvedSearchParams?.q);
+
+  return {
     title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
     description:
-      'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
-    type: 'website',
-    url: getCanonicalUrl('/ask-heaven'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/ask-heaven'),
-  },
-};
+      'Free landlord Q&A for UK. Instant answers on evictions, rent arrears, tenancy agreements, and compliance across all jurisdictions.',
+    keywords: [
+      'landlord advice',
+      'landlord Q&A',
+      'tenant disputes',
+      'rent arrears advice',
+      'eviction advice',
+      'tenancy advice UK',
+      'landlord help',
+      'section 21 advice',
+      'section 8 advice',
+      'notice to leave scotland',
+      'occupation contract wales',
+      'landlord tenant law',
+      'deposit protection advice',
+      'EPC rules landlord',
+      'gas safety certificate landlord',
+      'EICR landlord requirements',
+      'smoke alarm regulations landlord',
+      'carbon monoxide alarm landlord',
+      'right to rent checks landlord',
+    ],
+    robots: hasPrefill ? 'noindex, follow' : 'index, follow',
+    openGraph: {
+      title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
+      description:
+        'Free legal Q&A for UK landlords covering England, Wales, Scotland & Northern Ireland. Get instant answers on evictions, rent arrears, tenancy agreements, and compliance.',
+      type: 'website',
+      url: getCanonicalUrl('/ask-heaven'),
+    },
+    alternates: {
+      canonical: getCanonicalUrl('/ask-heaven'),
+    },
+  };
+}
 
-export default function AskHeavenPage(): React.ReactElement {
+export default async function AskHeavenPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ q?: string }> | { q?: string };
+}): Promise<React.ReactElement> {
+  const resolvedSearchParams =
+    searchParams && typeof (searchParams as Promise<{ q?: string }>).then === 'function'
+      ? await (searchParams as Promise<{ q?: string }>)
+      : (searchParams as { q?: string } | undefined);
   // Analyze page content for commercial linking
   // Ask Heaven discusses eviction, rent arrears, and tenancy agreements - all core products
   const commercialLinkingResult = analyzeContent({
@@ -274,7 +295,7 @@ export default function AskHeavenPage(): React.ReactElement {
       <h1 className="sr-only">Ask Heaven: Free UK Landlord Q&A Tool</h1>
 
       {/* Client-side interactive widget - now prominently placed first */}
-      <AskHeavenPageClient />
+      <AskHeavenPageClient initialQuery={resolvedSearchParams?.q ?? null} />
 
       {/* SSR Content Section - below the main chat for SEO */}
       <div className="bg-white py-16">

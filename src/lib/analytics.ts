@@ -965,6 +965,36 @@ export function trackAskHeavenFollowupClick(params: AskHeavenTrackingParams): vo
 }
 
 /**
+ * Track Ask Heaven page CTA clicks (slug pages)
+ */
+export function trackAskHeavenPageCtaClick(params: {
+  slug: string;
+  cta_type: 'product' | 'tool' | 'wizard' | 'other';
+  destination: string;
+}): void {
+  trackEvent('ask_heaven_page_cta_click', {
+    event_category: 'ask_heaven',
+    slug: params.slug,
+    cta_type: params.cta_type,
+    destination: params.destination,
+  });
+}
+
+/**
+ * Track follow-up CTA to Ask Heaven wizard from slug pages
+ */
+export function trackAskHeavenFollowupToWizard(params: {
+  slug: string;
+  destination: string;
+}): void {
+  trackEvent('ask_heaven_followup_to_wizard', {
+    event_category: 'ask_heaven',
+    slug: params.slug,
+    destination: params.destination,
+  });
+}
+
+/**
  * Track when email is captured in Ask Heaven
  */
 export function trackAskHeavenEmailCapture(params: AskHeavenTrackingParams): void {

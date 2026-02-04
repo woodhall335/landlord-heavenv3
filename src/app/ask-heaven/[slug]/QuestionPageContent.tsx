@@ -52,78 +52,9 @@ export function QuestionPageContent({
 
       {/* Answer Content */}
       <div className="p-6 lg:p-8">
-        {/* Main Answer */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Overview</h2>
-          <div className="prose prose-blue max-w-none">
-            <ReactMarkdown>{question.answer_md}</ReactMarkdown>
-          </div>
-        </section>
-
-        {/* Placeholder: What the Law Generally Says */}
-        <section className="mb-8 border-t border-gray-100 pt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            What the Law Generally Says
-          </h2>
-          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
-            <p className="text-sm italic">
-              [Placeholder: Legal framework summary will be added during editorial review]
-            </p>
-          </div>
-        </section>
-
-        {/* Placeholder: Jurisdiction Differences */}
-        {question.jurisdictions.length > 1 ||
-        question.jurisdictions.includes('uk-wide') ? (
-          <section className="mb-8 border-t border-gray-100 pt-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Jurisdiction Differences
-            </h2>
-            <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
-              <p className="text-sm italic">
-                [Placeholder: Jurisdiction-specific variations will be added during editorial review]
-              </p>
-              <ul className="mt-2 text-sm space-y-1">
-                {question.jurisdictions.includes('england') && (
-                  <li>• England: Section 21/Section 8 notices, AST framework</li>
-                )}
-                {question.jurisdictions.includes('wales') && (
-                  <li>• Wales: Renting Homes Act, Section 173 notices</li>
-                )}
-                {question.jurisdictions.includes('scotland') && (
-                  <li>• Scotland: Private Residential Tenancy, Notice to Leave</li>
-                )}
-                {question.jurisdictions.includes('northern-ireland') && (
-                  <li>• Northern Ireland: Notice to Quit process</li>
-                )}
-              </ul>
-            </div>
-          </section>
-        ) : null}
-
-        {/* Placeholder: What Landlords Should Do */}
-        <section className="mb-8 border-t border-gray-100 pt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            What Landlords Should Do
-          </h2>
-          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
-            <p className="text-sm italic">
-              [Placeholder: Actionable steps will be added during editorial review]
-            </p>
-          </div>
-        </section>
-
-        {/* Placeholder: Common Mistakes */}
-        <section className="mb-8 border-t border-gray-100 pt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Common Mistakes to Avoid
-          </h2>
-          <div className="bg-gray-50 rounded-lg p-4 text-gray-600">
-            <p className="text-sm italic">
-              [Placeholder: Common pitfalls will be added during editorial review]
-            </p>
-          </div>
-        </section>
+        <div className="prose prose-blue max-w-none">
+          <ReactMarkdown>{question.answer_md}</ReactMarkdown>
+        </div>
 
         {/* Word Count Info (dev only) */}
         {process.env.NODE_ENV === 'development' && (

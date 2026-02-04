@@ -22,6 +22,9 @@ import type {
   UpdateAskHeavenQuestionInput,
   DuplicateCheckResult,
 } from './types';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/lib/supabase/types';
+import { createAdminClient, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 
 /**
  * Repository interface for Ask Heaven questions.
@@ -91,6 +94,246 @@ export interface AskHeavenQuestionRepository {
    * Count questions by status.
    */
   countByStatus(): Promise<Record<AskHeavenQuestionStatus, number>>;
+}
+
+const QUESTIONS_TABLE = 'ask_heaven_questions';
+
+/**
+ * Supabase repository implementation for production.
+ */
+export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
+  constructor(private readonly client: SupabaseClient<Database>) {}
+
+  private handleNotFound(error: any): null | never {
+    if (error?.code === 'PGRST116') {
+      return null;
+    }
+    throw error;
+  }
+
+  async getBySlug(slug: string): Promise<AskHeavenQuestion | null> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      return this.handleNotFound(error);
+    }
+
+    return data as AskHeavenQuestion;
+  }
+
+  async getById(id: string): Promise<AskHeavenQuestion | null> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      return this.handleNotFound(error);
+    }
+
+    return data as AskHeavenQuestion;
+  }
+
+  async list(options?: {
+    status?: AskHeavenQuestionStatus;
+    topic?: AskHeavenPrimaryTopic;
+    jurisdiction?: AskHeavenJurisdiction;
+    limit?: number;
+    offset?: number;
+  }): Promise<AskHeavenQuestionListItem[]> {
+    let query = this.client
+      .from(QUESTIONS_TABLE)
+      .select(
+        'id, slug, question, summary, primary_topic, jurisdictions, status, updated_at'
+      )
+      .order('updated_at', { ascending: false });
+
+    if (options?.status) {
+      query = query.eq('status', options.status);
+    }
+    if (options?.topic) {
+      query = query.eq('primary_topic', options.topic);
+    }
+    if (options?.jurisdiction) {
+      query = query.contains('jurisdictions', [options.jurisdiction]);
+    }
+
+    const offset = options?.offset ?? 0;
+    const limit = options?.limit ?? 100;
+    query = query.range(offset, offset + limit - 1);
+
+    const { data, error } = await query;
+    if (error) throw error;
+
+    return (data ?? []) as AskHeavenQuestionListItem[];
+  }
+
+  async getForSitemap(): Promise<AskHeavenQuestionSitemapEntry[]> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('slug, updated_at, status, canonical_slug')
+      .eq('status', 'approved')
+      .is('canonical_slug', null);
+
+    if (error) throw error;
+    return (data ?? []) as AskHeavenQuestionSitemapEntry[];
+  }
+
+  async getRelatedQuestions(slugs: string[]): Promise<AskHeavenQuestionListItem[]> {
+    if (slugs.length === 0) return [];
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select(
+        'id, slug, question, summary, primary_topic, jurisdictions, status, updated_at'
+      )
+      .in('slug', slugs)
+      .eq('status', 'approved');
+
+    if (error) throw error;
+    return (data ?? []) as AskHeavenQuestionListItem[];
+  }
+
+  async create(input: CreateAskHeavenQuestionInput): Promise<AskHeavenQuestion> {
+    const payload = {
+      ...input,
+      status: 'draft' as AskHeavenQuestionStatus,
+      canonical_slug: input.canonical_slug ?? null,
+      related_slugs: input.related_slugs ?? [],
+    };
+
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .insert(payload)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return data as AskHeavenQuestion;
+  }
+
+  async update(input: UpdateAskHeavenQuestionInput): Promise<AskHeavenQuestion> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .update(input)
+      .eq('id', input.id)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return data as AskHeavenQuestion;
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+
+  async slugExists(slug: string): Promise<boolean> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('id')
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+
+    return Boolean(data?.id);
+  }
+
+  async countByStatus(): Promise<Record<AskHeavenQuestionStatus, number>> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('status');
+
+    if (error) throw error;
+
+    const counts: Record<AskHeavenQuestionStatus, number> = {
+      draft: 0,
+      review: 0,
+      approved: 0,
+    };
+
+    for (const row of data ?? []) {
+      const status = row.status as AskHeavenQuestionStatus;
+      if (counts[status] !== undefined) {
+        counts[status] += 1;
+      }
+    }
+
+    return counts;
+  }
+
+  async listApprovedCanonicals(): Promise<AskHeavenQuestionSitemapEntry[]> {
+    return this.getForSitemap();
+  }
+
+  async listByStatus(status: AskHeavenQuestionStatus): Promise<AskHeavenQuestion[]> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('*')
+      .eq('status', status)
+      .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []) as AskHeavenQuestion[];
+  }
+
+  async upsert(question: AskHeavenQuestion): Promise<AskHeavenQuestion> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .upsert(question, { onConflict: 'slug' })
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return data as AskHeavenQuestion;
+  }
+
+  async approve(slug: string): Promise<AskHeavenQuestion> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .update({ status: 'approved', reviewed_at: new Date().toISOString() })
+      .eq('slug', slug)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return data as AskHeavenQuestion;
+  }
+
+  async setCanonical(slug: string, canonicalSlug: string | null): Promise<AskHeavenQuestion> {
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .update({ canonical_slug: canonicalSlug })
+      .eq('slug', slug)
+      .select('*')
+      .single();
+
+    if (error) throw error;
+    return data as AskHeavenQuestion;
+  }
+
+  async search(queryText: string): Promise<AskHeavenQuestionListItem[]> {
+    const query = `%${queryText}%`;
+    const { data, error } = await this.client
+      .from(QUESTIONS_TABLE)
+      .select('*')
+      .or(`slug.ilike.${query},question.ilike.${query}`);
+
+    if (error) throw error;
+    return (data ?? []) as unknown as AskHeavenQuestionListItem[];
+  }
 }
 
 /**
@@ -304,11 +547,29 @@ let repositoryInstance: AskHeavenQuestionRepository | null = null;
  */
 export function getQuestionRepository(): AskHeavenQuestionRepository {
   if (!repositoryInstance) {
-    // TODO: In production, check for database config and use SupabaseQuestionRepository
-    // For now, use in-memory store
-    repositoryInstance = new InMemoryQuestionRepository();
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      repositoryInstance = new SupabaseQuestionRepository(createAdminClient());
+    } else {
+      repositoryInstance = new InMemoryQuestionRepository();
+    }
   }
+
   return repositoryInstance;
+}
+
+/**
+ * Get a Supabase-backed repository when server context is available.
+ */
+export async function getSupabaseQuestionRepository(): Promise<AskHeavenQuestionRepository> {
+  const supabase = await tryCreateServerSupabaseClient();
+  if (!supabase) {
+    return new InMemoryQuestionRepository();
+  }
+  return new SupabaseQuestionRepository(supabase);
+}
+
+export function createSupabaseAdminQuestionRepository(): SupabaseQuestionRepository {
+  return new SupabaseQuestionRepository(createAdminClient());
 }
 
 /**
