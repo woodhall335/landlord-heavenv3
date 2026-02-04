@@ -10,6 +10,7 @@ import {
   getSupabaseAdminEnvStatus,
   getSupabaseAdminFingerprint,
 } from '@/lib/supabase/admin';
+import { serializeError } from '@/lib/errors/serializeError';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -81,6 +82,7 @@ export async function POST(
         {
           error: 'No rows updated — likely RLS or admin client not using service role',
           debug,
+          thrown: serializeError(error),
         },
         { status: 500 }
       );
@@ -89,10 +91,13 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
     }
     if (error instanceof Error && error.message.startsWith('Missing SUPABASE_')) {
-      return NextResponse.json({ error: error.message, debug }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message, debug, thrown: serializeError(error) },
+        { status: 500 }
+      );
     }
     return NextResponse.json(
-      { error: 'Internal server error', debug },
+      { error: 'Internal server error', debug, thrown: serializeError(error) },
       { status: 500 }
     );
   }
