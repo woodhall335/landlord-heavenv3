@@ -10,6 +10,14 @@ type SupabaseAdminDiagnostics = {
 };
 
 let hasLoggedAdminEnvStatus = false;
+let hasWrappedFetch = false;
+
+type JwtPayloadPreview = {
+  ref?: string;
+  role?: string;
+  iat?: number;
+  exp?: number;
+};
 
 export function getSupabaseAdminEnvStatus() {
   return {
@@ -41,20 +49,59 @@ function assertAdminRuntime() {
   }
 }
 
+function decodeJwtPayload(token: string): JwtPayloadPreview | null {
+  const [, payload] = token.split('.');
+  if (!payload) return null;
+
+  try {
+    const decoded = Buffer.from(payload, 'base64url').toString('utf-8');
+    const parsed = JSON.parse(decoded) as JwtPayloadPreview;
+    return {
+      ref: parsed.ref,
+      role: parsed.role,
+      iat: parsed.iat,
+      exp: parsed.exp,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function ensureNoStoreFetch() {
+  if (hasWrappedFetch) return;
+  if (typeof globalThis.fetch !== 'function') return;
+  const originalFetch = globalThis.fetch.bind(globalThis);
+  globalThis.fetch = (input, init) =>
+    originalFetch(input, { ...init, cache: 'no-store' });
+  hasWrappedFetch = true;
+}
+
 export function createSupabaseAdminClient(): SupabaseClient<Database> {
   assertAdminRuntime();
+  ensureNoStoreFetch();
 
   const supabaseUrl = process.env.SUPABASE_URL!;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabaseUrlHost = new URL(supabaseUrl).host;
   const keyPrefix = serviceRoleKey.slice(0, 8);
-  console.info(`[supabase-admin-client] host=${supabaseUrlHost} keyPrefix=${keyPrefix}`);
+  const jwtPayload = decodeJwtPayload(serviceRoleKey);
+  console.info('[supabase-admin-client]', {
+    host: supabaseUrlHost,
+    keyPrefix,
+    jwt_ref: jwtPayload?.ref ?? null,
+    jwt_role: jwtPayload?.role ?? null,
+    jwt_iat: jwtPayload?.iat ?? null,
+    jwt_exp: jwtPayload?.exp ?? null,
+  });
 
   return createClient<Database>(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
       detectSessionInUrl: false,
+    },
+    db: {
+      schema: 'public',
     },
   });
 }
