@@ -12,6 +12,7 @@ import {
 } from '@/lib/supabase/admin';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   _request: Request,
@@ -34,6 +35,31 @@ export async function GET(
     const question = await repository.getBySlug(params.slug);
 
     if (!question) {
+      const supabaseUrl = process.env.SUPABASE_URL;
+      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (supabaseUrl && serviceRoleKey) {
+        const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(params.slug)}`;
+        try {
+          const restResponse = await fetch(restUrl, {
+            headers: {
+              apikey: serviceRoleKey,
+              Authorization: `Bearer ${serviceRoleKey}`,
+            },
+          });
+          const responseText = await restResponse.text();
+          console.info('[ask-heaven-rest-check]', {
+            status: restResponse.status,
+            responseText,
+          });
+        } catch (restError) {
+          console.info('[ask-heaven-rest-check]', {
+            status: 'error',
+            responseText:
+              restError instanceof Error ? restError.message : String(restError),
+          });
+        }
+      }
+
       const { count, error: countError } = await adminClient
         .from('ask_heaven_questions')
         .select('id', { count: 'exact', head: true });
