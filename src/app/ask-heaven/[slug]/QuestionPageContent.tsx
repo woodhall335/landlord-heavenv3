@@ -7,7 +7,10 @@
 
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import type { AskHeavenQuestion, QualityGateResult } from '@/lib/ask-heaven/questions';
+import type {
+  AskHeavenQuestion,
+  QualityGateResult,
+} from '@/lib/ask-heaven/questions/client';
 
 interface QuestionPageContentProps {
   question: AskHeavenQuestion;

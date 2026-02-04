@@ -8,8 +8,8 @@ import {
   getIndexabilityStatus,
   hasRequiredDisclaimer,
   validateQualityGates,
-} from '@/lib/ask-heaven/questions';
-import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions';
+} from '@/lib/ask-heaven/questions/client';
+import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions/client';
 
 export default function AskHeavenAdminDetailPage() {
   const params = useParams<{ slug: string }>();
