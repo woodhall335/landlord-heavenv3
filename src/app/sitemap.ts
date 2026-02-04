@@ -43,8 +43,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/ast', priority: 0.9, changeFrequency: 'weekly' as const },
-    // HMO Pro removed - parked for later review
-    // { path: '/hmo-pro', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
@@ -182,6 +180,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/fixed-term-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
+  const pillarPages = [
+    { path: '/eviction-process-england', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-scotland', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-wales', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-21-expired-what-next', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-8-rent-arrears-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-8-vs-section-21', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/periodic-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+  ];
+
   // Tool pages - Free tools for SEO traffic
   // Use a Set to prevent duplicate URLs
   const toolPaths = new Set<string>();
@@ -224,15 +232,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Auth entry points excluded - these pages are noindex
   // /auth/login and /auth/signup are not in sitemap
 
-  // Blog category pages for improved crawl paths
-  const blogCategoryPages = [
-    { path: '/blog/england', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/blog/scotland', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/blog/wales', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/blog/northern-ireland', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/blog/uk', priority: 0.85, changeFrequency: 'weekly' as const },
-  ];
-
   // Blog pages with explicit lastModified dates
   const blogPostPages = blogPosts.map((post) => ({
     url: `${SITE_ORIGIN}/blog/${post.slug}`,
@@ -273,10 +272,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...wizardLandingPages,
     ...tenancyPages,
     ...landingPages,
+    ...pillarPages,
     ...toolPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
-    ...blogCategoryPages,
   ];
+
+  const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
+  const noindexPaths = ['/tenancy-agreements/england-wales'];
+  const isIndexablePath = (path: string) =>
+    !excludedPrefixes.some((prefix) => path.startsWith(prefix)) && !noindexPaths.includes(path);
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
@@ -309,5 +313,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...datedEntries,
     ...blogPostPages,
     ...askHeavenPages,
-  ];
+  ].filter((entry) => isIndexablePath(new URL(entry.url).pathname));
 }
