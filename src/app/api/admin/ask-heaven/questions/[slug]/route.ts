@@ -58,12 +58,16 @@ export async function GET(
         );
       }
 
+      const fingerprint = getSupabaseAdminFingerprint();
+
       return NextResponse.json(
         {
           error: 'Not found',
           debug: {
             slug: params.slug,
-            fingerprint: getSupabaseAdminFingerprint(),
+            supabaseUrlHost: fingerprint.supabaseUrlHost,
+            serviceRoleKeyPrefix: fingerprint.serviceRoleKeyPrefix,
+            fingerprint,
             visibleCount: count ?? 0,
             sampleSlugs: (sample ?? []).map((row) => row.slug),
           },
