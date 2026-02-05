@@ -69,31 +69,85 @@ export async function GET(
     setStep('rest.fetch');
     const supabaseUrl = process.env.SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    let restStatus: number | null = null;
-    let restText: string | null = null;
-    let restJsonParsed: unknown | null = null;
+    let restUrlUsed: string | null = null;
+    let restUrlKnownGood: string | null = null;
+    let restHeadersPreview: {
+      hasApikey: boolean;
+      hasAuthorization: boolean;
+      authorizationPrefix: string | null;
+    } | null = null;
+    let restUsedStatus: number | null = null;
+    let restUsedText: string | null = null;
+    let restUsedJsonParsed: unknown | null = null;
+    let restKnownGoodStatus: number | null = null;
+    let restKnownGoodText: string | null = null;
+    let restKnownGoodJsonParsed: unknown | null = null;
 
     if (supabaseUrl && serviceRoleKey) {
-      const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
+      const restHeaders = {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+      };
+      restHeadersPreview = {
+        hasApikey: Boolean(restHeaders.apikey),
+        hasAuthorization: Boolean(restHeaders.Authorization),
+        authorizationPrefix: restHeaders.Authorization
+          ? `Bearer ${serviceRoleKey.slice(0, 8)}...`
+          : null,
+      };
+      restUrlUsed = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
         params.slug
       )}`;
+      let supabaseRef: string | null = null;
       try {
-        const restResponse = await fetch(restUrl, {
+        const host = new URL(supabaseUrl).host;
+        supabaseRef = host.split('.')[0] || null;
+      } catch {
+        supabaseRef = null;
+      }
+      if (supabaseRef) {
+        restUrlKnownGood = `https://${supabaseRef}.supabase.co/rest/v1/ask_heaven_questions?select=id,slug,status,canonical_slug&slug=eq.${encodeURIComponent(
+          params.slug
+        )}`;
+      }
+      try {
+        const restResponse = await fetch(restUrlUsed, {
+          cache: 'no-store',
           headers: {
             apikey: serviceRoleKey,
             Authorization: `Bearer ${serviceRoleKey}`,
           },
         });
-        restStatus = restResponse.status;
+        restUsedStatus = restResponse.status;
         const rawText = await restResponse.text();
-        restText = rawText.slice(0, 500);
+        restUsedText = rawText.slice(0, 500);
         try {
-          restJsonParsed = JSON.parse(rawText);
+          restUsedJsonParsed = JSON.parse(rawText);
         } catch {
-          restJsonParsed = null;
+          restUsedJsonParsed = null;
         }
       } catch (error) {
-        restText = error instanceof Error ? error.message : 'rest_fetch_failed';
+        restUsedText = error instanceof Error ? error.message : 'rest_fetch_failed';
+      }
+
+      if (restUrlKnownGood) {
+        try {
+          const restResponse = await fetch(restUrlKnownGood, {
+            cache: 'no-store',
+            headers: restHeaders,
+          });
+          restKnownGoodStatus = restResponse.status;
+          const rawText = await restResponse.text();
+          restKnownGoodText = rawText.slice(0, 500);
+          try {
+            restKnownGoodJsonParsed = JSON.parse(rawText);
+          } catch {
+            restKnownGoodJsonParsed = null;
+          }
+        } catch (error) {
+          restKnownGoodText =
+            error instanceof Error ? error.message : 'rest_fetch_failed';
+        }
       }
     }
 
@@ -112,9 +166,15 @@ export async function GET(
       fingerprint: getSupabaseAdminFingerprint(),
       env: getSupabaseAdminEnvStatus(),
       jwtPreview: getSupabaseAdminJwtPreview(),
-      restStatus,
-      restText,
-      restJsonParsed,
+      restUrlUsed,
+      restUrlKnownGood,
+      restHeadersPreview,
+      restUsedStatus,
+      restUsedText,
+      restUsedJsonParsed,
+      restKnownGoodStatus,
+      restKnownGoodText,
+      restKnownGoodJsonParsed,
     };
 
     if (repoRow || directRow) {
