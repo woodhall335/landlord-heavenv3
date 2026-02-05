@@ -20,11 +20,12 @@ export async function GET(
   _request: Request,
   { params }: { params: { slug: string } }
 ) {
+  const slug = params.slug;
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
     jwtPreview: getSupabaseAdminJwtPreview(),
-    slug: params.slug,
+    slug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -45,7 +46,7 @@ export async function GET(
     let repoRow = null;
     setStep('repo.getBySlug');
     try {
-      const repoQuestion = await repository.getBySlug(params.slug);
+      const repoQuestion = await repository.getBySlug(slug);
       repoRow = repoQuestion
         ? {
             id: repoQuestion.id,
@@ -63,7 +64,7 @@ export async function GET(
     const { data: directRow, error: directError } = await adminClient
       .from('ask_heaven_questions')
       .select('id,slug,status,canonical_slug')
-      .eq('slug', params.slug)
+      .eq('slug', slug)
       .maybeSingle();
 
     setStep('rest.fetch');
@@ -96,7 +97,7 @@ export async function GET(
           : null,
       };
       restUrlUsed = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
-        params.slug
+        slug
       )}`;
       let supabaseRef: string | null = null;
       try {
@@ -107,7 +108,7 @@ export async function GET(
       }
       if (supabaseRef) {
         restUrlKnownGood = `https://${supabaseRef}.supabase.co/rest/v1/ask_heaven_questions?select=id,slug,status,canonical_slug&slug=eq.${encodeURIComponent(
-          params.slug
+          slug
         )}`;
       }
       try {
@@ -152,7 +153,7 @@ export async function GET(
     }
 
     console.info('[ask-heaven-slug-parity]', {
-      slug: params.slug,
+      slug,
       repoHit: Boolean(repoRow),
       directHit: Boolean(directRow),
       directError: directError?.code,
@@ -162,7 +163,8 @@ export async function GET(
       repoRow,
       directRow,
       directError: directError?.message ?? null,
-      slug: params.slug,
+      slug,
+      routeSlug: slug,
       fingerprint: getSupabaseAdminFingerprint(),
       env: getSupabaseAdminEnvStatus(),
       jwtPreview: getSupabaseAdminJwtPreview(),
@@ -218,10 +220,11 @@ export async function PUT(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
+  const slug = params.slug;
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
-    slug: params.slug,
+    slug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -249,7 +252,7 @@ export async function PUT(
 
     const repository = createSupabaseAdminQuestionRepository();
     setStep('repo.getBySlug');
-    const existing = await repository.getBySlug(params.slug);
+    const existing = await repository.getBySlug(slug);
 
     if (!existing) {
       return NextResponse.json({ error: 'Not found', debug }, { status: 404 });
