@@ -118,14 +118,14 @@ export function UniversalHero({
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative min-[900px]:grid min-[900px]:grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] min-[900px]:items-center min-[900px]:gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="pointer-events-none absolute -right-6 top-1/2 z-0 w-[290px] -translate-y-[80%] min-[420px]:w-[320px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
+          <div className="pointer-events-none absolute -right-6 top-1/2 z-0 w-[220px] -translate-y-[80%] min-[420px]:w-[240px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
             <Image
               src={mascotSrc}
               alt=""
               width={620}
               height={620}
               priority
-              sizes="(max-width: 420px) 290px, (max-width: 899px) 320px"
+              sizes="(max-width: 420px) 220px, (max-width: 899px) 240px"
               className="h-auto w-full"
             />
           </div>
@@ -163,7 +163,7 @@ export function UniversalHero({
               </span>
             </h1>
 
-            <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 pr-24 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:pr-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
+            <p className="mt-4 w-full rounded-xl bg-[#fde8ff]/80 px-4 py-3 pr-24 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:px-0 sm:py-0 sm:pr-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
 
             <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <div className="w-full sm:w-auto">
