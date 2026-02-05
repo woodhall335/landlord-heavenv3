@@ -42,6 +42,8 @@ export function UniversalHero({
   mascotSrc,
   mascotAlt,
 }: UniversalHeroProps) {
+  const mobileTitleParts = title.split('Legal Documents');
+  const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
   const [usedTodayCount, setUsedTodayCount] = useState(DEFAULT_COUNTER);
   const animationFrameRef = useRef<number | null>(null);
   const currentCountRef = useRef(DEFAULT_COUNTER);
@@ -115,8 +117,8 @@ export function UniversalHero({
       />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-start gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-10">
-          <div className="relative z-10 text-[#1F1B2E]">
+        <div className="grid grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] items-start gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] sm:gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-10">
+          <div className="relative z-10 min-w-0 text-[#1F1B2E]">
             <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex sm:w-auto sm:justify-start sm:text-left">
               <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
               <span>{trustText}</span>
@@ -126,18 +128,36 @@ export function UniversalHero({
               <span className="font-medium text-[#2b253d]">Rated 4.8 / 5.0 from 247 reviews</span>
             </p>
 
-            <h1 className="mt-5 max-w-[18ch] text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-              {title}
-              <span className="block text-[#7c3aed]">{highlightTitle}</span>
+            <h1 className="mt-5 max-w-[18ch] text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+              <span className="sm:hidden">
+                {hasLegalDocumentsInTitle ? (
+                  <>
+                    {mobileTitleParts[0]}
+                    <span className="whitespace-nowrap">Legal Documents</span>
+                    {mobileTitleParts.slice(1).join('Legal Documents')}
+                  </>
+                ) : (
+                  title
+                )}
+              </span>
+              <span className="hidden sm:inline">{title}</span>
+              <span className="block text-[#7c3aed]">
+                <span className="sm:hidden">
+                  in Minutes, Not
+                  <br />
+                  Days
+                </span>
+                <span className="hidden sm:inline">{highlightTitle}</span>
+              </span>
             </h1>
 
-            <p className="mt-4 max-w-[52ch] text-lg leading-relaxed text-[#2b253d] sm:text-xl">{subtitle}</p>
+            <p className="mt-4 w-full text-lg leading-relaxed text-[#2b253d] sm:max-w-[52ch] sm:text-xl">{subtitle}</p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href={primaryCta.href} className="hero-btn-primary text-center">
+            <div className="mt-7 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+              <Link href={primaryCta.href} className="hero-btn-primary w-full text-center sm:w-auto">
                 {primaryCta.label}
               </Link>
-              <Link href={secondaryCta.href} className="hero-btn-secondary text-center">
+              <Link href={secondaryCta.href} className="hero-btn-secondary w-full text-center sm:w-auto">
                 {secondaryCta.label}
               </Link>
             </div>
@@ -176,7 +196,7 @@ export function UniversalHero({
               height={620}
               priority
               sizes="(max-width: 640px) 260px, (max-width: 1024px) 320px, (max-width: 1280px) 38vw, 620px"
-              className="h-auto w-full max-w-[200px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
+              className="h-auto w-full max-w-[260px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
             />
           </div>
         </div>
