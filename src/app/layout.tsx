@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
@@ -14,11 +13,6 @@ import { TrackingPixels } from "@/components/analytics/TrackingPixels";
 import { Section21HeaderBanner } from "@/components/ui/Section21HeaderBanner";
 import { Analytics } from "@vercel/analytics/next";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   ...defaultMetadata,
@@ -74,7 +68,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
       </head>
-      <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
+      <body className="font-sans antialiased flex flex-col min-h-screen">
         <Section21HeaderBanner />
         <PopupProvider>
           <Header user={headerUser} />

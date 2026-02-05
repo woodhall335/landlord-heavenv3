@@ -41,10 +41,19 @@
 
 import { Resend } from 'resend';
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendClient: Resend | null = null;
 
-export { resend };
+function getResendClient(): Resend | null {
+  if (resendClient) return resendClient;
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return null;
+  }
+
+  resendClient = new Resend(apiKey);
+  return resendClient;
+}
 
 /**
  * Email configuration
@@ -339,6 +348,12 @@ const getEmailFooter = (showUnsubscribe: boolean = true): string => `
  */
 export async function sendEmail(options: SendEmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
   try {
+    const resend = getResendClient();
+
+    if (!resend) {
+      return { success: false, error: 'Email service not configured (RESEND_API_KEY missing)' };
+    }
+
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: options.to,
