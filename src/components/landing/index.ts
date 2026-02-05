@@ -9,3 +9,5 @@ export { TrustBar } from './TrustBar';
 export { CostComparison } from './CostComparison';
 export { Testimonials } from './Testimonials';
 export { default as HomeContent } from './HomeContent';
+
+export { Hero } from './Hero';

@@ -15,10 +15,20 @@ import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
 
-// Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-15.clover',
-});
+let stripeClient: Stripe | null = null;
+
+function getStripeClient(): Stripe | null {
+  if (stripeClient) return stripeClient;
+
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) return null;
+
+  stripeClient = new Stripe(stripeKey, {
+    apiVersion: '2025-12-15.clover',
+  });
+
+  return stripeClient;
+}
 
 // Order type for proper TypeScript inference
 interface Order {
@@ -66,6 +76,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { orderId, reason, amount } = validationResult.data;
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe is not configured' },
+        { status: 500 }
+      );
+    }
+
 
     // Fetch order from database
     const { data: orderData, error: orderError } = await supabase

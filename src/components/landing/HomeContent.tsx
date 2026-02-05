@@ -12,8 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
-import { TrustBar, CostComparison, Testimonials } from "@/components/landing";
-import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
+import { Hero, TrustBar, CostComparison, Testimonials } from "@/components/landing";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill, RiAddLine, RiMicLine } from 'react-icons/ri';
 
 export default function HomeContent() {
@@ -30,72 +29,7 @@ export default function HomeContent() {
 
   return (
     <div className="bg-white">
-      {/* HERO — Two-column layout with mascot illustration */}
-      <section className="relative min-h-[600px] lg:min-h-[700px] pt-24 pb-12 md:pt-28 md:pb-16 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/herobg.png"
-            alt=""
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-              Legal Documents
-              <span className="block text-primary italic">in Minutes, Not Days</span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-lg md:text-xl mb-8 text-gray-700 max-w-2xl mx-auto">
-              Generate compliant eviction notices, court forms, and tenancy agreements —
-              <span className="font-semibold"> save 80%+ vs solicitor</span>
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-              <Link
-                href="/wizard?src=homepage"
-                className="hero-btn-primary"
-              >
-                Generate Your Documents →
-              </Link>
-              <Link
-                href="/pricing"
-                className="hero-btn-secondary bg-white/80 backdrop-blur-sm"
-              >
-                View Pricing →
-              </Link>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-700 mb-6">
-              <span className="flex items-center gap-2">
-                <RiCheckLine className="w-5 h-5 text-primary" />
-                Download instant UK notices & forms
-              </span>
-              <span className="flex items-center gap-2">
-                <RiCheckLine className="w-5 h-5 text-primary" />
-                Covers Section 21, Section 8,
-              </span>
-              <span className="flex items-center gap-2">
-                <RiCheckLine className="w-5 h-5 text-primary" />
-                England, Wales & Scotland
-              </span>
-            </div>
-
-            {/* Social Proof Counter */}
-            <div>
-              <SocialProofCounter variant="today" className="justify-center" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <Hero />
 
       {/* TRUST BAR */}
       <TrustBar />

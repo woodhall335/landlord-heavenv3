@@ -45,7 +45,7 @@
   --color-charcoal: #1A1A1A;
 
   /* Fonts */
-  --font-sans: var(--font-inter);
+  --font-sans: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* Light mode only - no dark mode for production SaaS */
