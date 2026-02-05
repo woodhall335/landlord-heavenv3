@@ -21,19 +21,30 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   const routeSlug = params?.slug ?? null;
+  const gitSha = process.env.VERCEL_GIT_COMMIT_SHA ?? null;
+  const deploymentId = process.env.VERCEL_DEPLOYMENT_ID ?? null;
   if (!routeSlug) {
     return NextResponse.json(
-      { error: 'Missing slug', debug: { routeSlug: null } },
+      {
+        error: 'Missing route slug',
+        debug: {
+          gitSha,
+          deploymentId,
+          routeSlug: null,
+          restUrlUsed: null,
+          restUrlKnownGood: null,
+        },
+      },
       { status: 500 }
     );
   }
-  const slug = routeSlug;
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
     jwtPreview: getSupabaseAdminJwtPreview(),
-    slug,
     routeSlug,
+    gitSha,
+    deploymentId,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -83,7 +94,6 @@ export async function GET(
     let restHeadersPreview: {
       hasApikey: boolean;
       hasAuthorization: boolean;
-      authorizationPrefix: string | null;
     } | null = null;
     let restUsedStatus: number | null = null;
     let restUsedText: string | null = null;
@@ -100,9 +110,6 @@ export async function GET(
       restHeadersPreview = {
         hasApikey: Boolean(restHeaders.apikey),
         hasAuthorization: Boolean(restHeaders.Authorization),
-        authorizationPrefix: restHeaders.Authorization
-          ? `Bearer ${serviceRoleKey.slice(0, 8)}...`
-          : null,
       };
       restUrlUsed = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
         routeSlug
@@ -171,11 +178,12 @@ export async function GET(
       repoRow,
       directRow,
       directError: directError?.message ?? null,
-      slug,
       routeSlug,
       fingerprint: getSupabaseAdminFingerprint(),
       env: getSupabaseAdminEnvStatus(),
       jwtPreview: getSupabaseAdminJwtPreview(),
+      gitSha,
+      deploymentId,
       restUrlUsed,
       restUrlKnownGood,
       restHeadersPreview,
