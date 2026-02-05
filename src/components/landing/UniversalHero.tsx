@@ -115,9 +115,9 @@ export function UniversalHero({
       />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="order-2 text-[#1F1B2E] lg:order-1">
-            <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:inline-flex sm:w-auto sm:justify-start sm:text-left">
+        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-start gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-10">
+          <div className="relative z-10 text-[#1F1B2E]">
+            <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex sm:w-auto sm:justify-start sm:text-left">
               <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
               <span>{trustText}</span>
               <span className="text-[#facc15]" aria-hidden="true">
@@ -142,7 +142,7 @@ export function UniversalHero({
               </Link>
             </div>
 
-            <div className="mt-6 flex w-full max-w-xl items-start gap-2 rounded-2xl border border-white/70 bg-white/75 px-4 py-3 text-base font-medium text-[#2b253d] shadow-sm backdrop-blur-sm sm:text-lg">
+            <div className="mt-6 flex items-start gap-2 text-base font-medium text-[#2b253d] sm:text-lg">
               <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-[#7c3aed]" aria-hidden="true" />
               <span>{feature}</span>
             </div>
@@ -168,7 +168,7 @@ export function UniversalHero({
             </div>
           </div>
 
-          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div className="relative z-0 flex justify-end -ml-3 sm:-ml-2 lg:ml-0 lg:justify-end">
             <Image
               src={mascotSrc}
               alt={mascotAlt}
@@ -176,7 +176,7 @@ export function UniversalHero({
               height={620}
               priority
               sizes="(max-width: 640px) 260px, (max-width: 1024px) 320px, (max-width: 1280px) 38vw, 620px"
-              className="h-auto w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[500px] xl:max-w-[560px]"
+              className="h-auto w-full max-w-[200px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
             />
           </div>
         </div>
