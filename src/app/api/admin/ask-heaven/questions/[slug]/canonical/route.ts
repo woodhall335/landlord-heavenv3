@@ -20,13 +20,21 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const slug = params.slug;
-  console.info('Admin Ask Heaven canonical slug:', slug);
+  const routeSlug = params?.slug ?? null;
+  if (!routeSlug) {
+    return NextResponse.json(
+      { error: 'Missing slug', debug: { routeSlug: null } },
+      { status: 500 }
+    );
+  }
+  const slug = routeSlug;
+  console.info('Admin Ask Heaven canonical slug:', routeSlug);
   const envStatus = getSupabaseAdminEnvStatus();
   const debug = {
     env: envStatus,
     fingerprint: getSupabaseAdminFingerprint(),
     slug,
+    routeSlug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -50,7 +58,7 @@ export async function POST(
     let repoError: unknown;
     setStep('repo.getBySlug');
     try {
-      existing = await repository.getBySlug(slug);
+      existing = await repository.getBySlug(routeSlug);
     } catch (error) {
       repoError = error;
     }
@@ -58,7 +66,7 @@ export async function POST(
     if (!existing) {
       const adminClient = createSupabaseAdminClient();
       const parity = await runAskHeavenParityCheck({
-        slug,
+        slug: routeSlug,
         adminClient,
         supabaseUrl: process.env.SUPABASE_URL,
         serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -109,7 +117,7 @@ export async function POST(
 
     setStep('repo.setCanonical');
     const updated = await repository.setCanonical(
-      slug,
+      routeSlug,
       payload.canonical_slug ?? null
     );
 
