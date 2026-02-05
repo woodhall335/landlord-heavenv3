@@ -9,6 +9,7 @@ import {
   createSupabaseAdminClient,
   getSupabaseAdminEnvStatus,
   getSupabaseAdminFingerprint,
+  getSupabaseAdminJwtPreview,
 } from '@/lib/supabase/admin';
 import { serializeError } from '@/lib/errors/serializeError';
 
@@ -22,6 +23,7 @@ export async function GET(
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
+    jwtPreview: getSupabaseAdminJwtPreview(),
     slug: params.slug,
     step: 'init',
   };
@@ -64,6 +66,37 @@ export async function GET(
       .eq('slug', params.slug)
       .maybeSingle();
 
+    setStep('rest.fetch');
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    let restStatus: number | null = null;
+    let restText: string | null = null;
+    let restJsonParsed: unknown | null = null;
+
+    if (supabaseUrl && serviceRoleKey) {
+      const restUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
+        params.slug
+      )}`;
+      try {
+        const restResponse = await fetch(restUrl, {
+          headers: {
+            apikey: serviceRoleKey,
+            Authorization: `Bearer ${serviceRoleKey}`,
+          },
+        });
+        restStatus = restResponse.status;
+        const rawText = await restResponse.text();
+        restText = rawText.slice(0, 500);
+        try {
+          restJsonParsed = JSON.parse(rawText);
+        } catch {
+          restJsonParsed = null;
+        }
+      } catch (error) {
+        restText = error instanceof Error ? error.message : 'rest_fetch_failed';
+      }
+    }
+
     console.info('[ask-heaven-slug-parity]', {
       slug: params.slug,
       repoHit: Boolean(repoRow),
@@ -78,6 +111,10 @@ export async function GET(
       slug: params.slug,
       fingerprint: getSupabaseAdminFingerprint(),
       env: getSupabaseAdminEnvStatus(),
+      jwtPreview: getSupabaseAdminJwtPreview(),
+      restStatus,
+      restText,
+      restJsonParsed,
     };
 
     if (repoRow || directRow) {

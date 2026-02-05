@@ -13,9 +13,9 @@ let hasLoggedAdminEnvStatus = false;
 let hasWrappedFetch = false;
 
 type JwtPayloadPreview = {
+  ok: boolean;
   ref?: string;
   role?: string;
-  iss?: string;
   iat?: number;
   exp?: number;
   error?: string;
@@ -32,10 +32,12 @@ function shouldLogAdminDebug(): boolean {
   return process.env.NODE_ENV !== 'production' || process.env.ASK_HEAVEN_DEBUG === '1';
 }
 
-export function getSupabaseAdminJwtPreview(): JwtPayloadPreview | null {
+export function getSupabaseAdminJwtPreview(): JwtPayloadPreview {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceRoleKey) return null;
-  return decodeJwtPayload(serviceRoleKey);
+  if (!serviceRoleKey) {
+    return { ok: false, error: 'missing_service_role_key' };
+  }
+  return decodeJwtPayloadSafe(serviceRoleKey);
 }
 
 function logSupabaseAdminEnvStatus() {
@@ -62,22 +64,22 @@ function assertAdminRuntime() {
   }
 }
 
-function decodeJwtPayload(token: string): JwtPayloadPreview | null {
+function decodeJwtPayloadSafe(token: string): JwtPayloadPreview {
   try {
     const [, payload] = token.split('.');
-    if (!payload) return { error: 'jwt_preview_failed' };
+    if (!payload) return { ok: false, error: 'jwt_preview_failed' };
 
     const decoded = Buffer.from(payload, 'base64url').toString('utf-8');
     const parsed = JSON.parse(decoded) as JwtPayloadPreview;
     return {
+      ok: true,
       ref: parsed.ref,
       role: parsed.role,
-      iss: parsed.iss,
       iat: parsed.iat,
       exp: parsed.exp,
     };
   } catch {
-    return { error: 'jwt_preview_failed' };
+    return { ok: false, error: 'jwt_preview_failed' };
   }
 }
 
@@ -103,24 +105,24 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
     supabaseUrlHost = 'unknown';
   }
   const keyPrefix = serviceRoleKey.slice(0, 8);
-  const jwtPayload = decodeJwtPayload(serviceRoleKey);
+  const jwtPayload = decodeJwtPayloadSafe(serviceRoleKey);
   if (shouldLogAdminDebug()) {
     console.info(
-      `[supabase-admin-client] host=${supabaseUrlHost} role=${jwtPayload?.role ?? 'unknown'} ref=${jwtPayload?.ref ?? 'unknown'} iss=${jwtPayload?.iss ?? 'unknown'} keyPrefix=${keyPrefix}`
+      `[supabase-admin-client] host=${supabaseUrlHost} role=${jwtPayload?.role ?? 'unknown'} ref=${jwtPayload?.ref ?? 'unknown'} keyPrefix=${keyPrefix}`
     );
   }
 
   return createClient<Database>(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
     global: {
       headers: {
         apikey: serviceRoleKey,
         Authorization: `Bearer ${serviceRoleKey}`,
       },
-    },
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-      detectSessionInUrl: false,
     },
     db: {
       schema: 'public',
