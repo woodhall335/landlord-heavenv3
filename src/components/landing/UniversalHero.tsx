@@ -17,7 +17,7 @@ type UniversalHeroProps = {
   subtitle: ReactNode;
   primaryCta: HeroCta;
   secondaryCta: HeroCta;
-  features: string[];
+  feature: string;
   mascotSrc: string;
   mascotAlt: string;
 };
@@ -38,7 +38,7 @@ export function UniversalHero({
   subtitle,
   primaryCta,
   secondaryCta,
-  features,
+  feature,
   mascotSrc,
   mascotAlt,
 }: UniversalHeroProps) {
@@ -116,8 +116,8 @@ export function UniversalHero({
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="text-[#1F1B2E]">
-            <p className="inline-flex w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:w-auto sm:justify-start sm:text-left">
+          <div className="order-2 text-[#1F1B2E] lg:order-1">
+            <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:inline-flex sm:w-auto sm:justify-start sm:text-left">
               <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
               <span>{trustText}</span>
               <span className="text-[#facc15]" aria-hidden="true">
@@ -142,14 +142,10 @@ export function UniversalHero({
               </Link>
             </div>
 
-            <ul className="mt-6 grid max-w-2xl gap-3 text-base font-medium sm:grid-cols-2 sm:text-lg">
-              {features.map((feature) => (
-                <li key={feature} className="inline-flex items-center gap-2">
-                  <RiCheckLine className="h-5 w-5 flex-none text-[#7c3aed]" aria-hidden="true" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-6 flex w-full max-w-xl items-start gap-2 rounded-2xl border border-white/70 bg-white/75 px-4 py-3 text-base font-medium text-[#2b253d] shadow-sm backdrop-blur-sm sm:text-lg">
+              <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-[#7c3aed]" aria-hidden="true" />
+              <span>{feature}</span>
+            </div>
 
             <div className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm text-green-700">
               <svg
@@ -172,7 +168,7 @@ export function UniversalHero({
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
+          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
             <Image
               src={mascotSrc}
               alt={mascotAlt}
