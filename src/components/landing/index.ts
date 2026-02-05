@@ -11,3 +11,5 @@ export { Testimonials } from './Testimonials';
 export { default as HomeContent } from './HomeContent';
 
 export { Hero } from './Hero';
+
+export { UniversalHero } from './UniversalHero';
