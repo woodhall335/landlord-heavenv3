@@ -163,7 +163,7 @@ export function UniversalHero({
               </span>
             </h1>
 
-            <p className="mt-4 w-full pr-24 text-lg leading-relaxed text-[#2b253d] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:text-xl">{subtitle}</p>
+            <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 pr-24 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:pr-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
 
             <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <div className="w-full sm:w-auto">
