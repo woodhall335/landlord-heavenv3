@@ -118,7 +118,7 @@ export function UniversalHero({
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative min-[900px]:grid min-[900px]:grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] min-[900px]:items-center min-[900px]:gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="pointer-events-none absolute -right-6 top-1/2 z-0 w-[290px] -translate-y-[80%] min-[420px]:w-[320px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
+          <div className="pointer-events-none absolute -right-6 top-[37.5%] z-0 w-[290px] -translate-y-[80%] min-[420px]:w-[320px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
             <Image
               src={mascotSrc}
               alt=""
