@@ -117,7 +117,7 @@ export function UniversalHero({
       />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] items-start gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] sm:gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-10">
+        <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] items-center gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] sm:items-start sm:gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-10">
           <div className="relative z-10 w-full min-w-0 text-[#1F1B2E]">
             <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex sm:w-auto sm:justify-start sm:text-left">
               <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
@@ -154,12 +154,16 @@ export function UniversalHero({
             <p className="mt-4 w-full text-lg leading-relaxed text-[#2b253d] sm:max-w-[52ch] sm:text-xl">{subtitle}</p>
 
             <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
-                {primaryCta.label}
-              </Link>
-              <Link href={secondaryCta.href} className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto">
-                {secondaryCta.label}
-              </Link>
+              <div className="w-full sm:w-auto">
+                <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
+                  {primaryCta.label}
+                </Link>
+              </div>
+              <div className="w-full sm:w-auto">
+                <Link href={secondaryCta.href} className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto">
+                  {secondaryCta.label}
+                </Link>
+              </div>
             </div>
 
             <div className="mt-6 flex items-start gap-2 text-base font-medium text-[#2b253d] sm:text-lg">
@@ -188,15 +192,15 @@ export function UniversalHero({
             </div>
           </div>
 
-          <div className="relative z-0 flex justify-end -ml-3 sm:-ml-2 lg:ml-0 lg:justify-end">
+          <div className="relative z-0 flex justify-center -ml-10 sm:-ml-2 sm:justify-end lg:ml-0 lg:justify-end">
             <Image
               src={mascotSrc}
               alt={mascotAlt}
               width={620}
               height={620}
               priority
-              sizes="(max-width: 640px) 260px, (max-width: 1024px) 320px, (max-width: 1280px) 38vw, 620px"
-              className="h-auto w-full max-w-[260px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
+              sizes="(max-width: 640px) 320px, (max-width: 1024px) 320px, (max-width: 1280px) 38vw, 620px"
+              className="h-auto w-full max-w-[320px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
             />
           </div>
         </div>
