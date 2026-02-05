@@ -5,7 +5,6 @@ import {
   AskHeavenNoRowsUpdatedError,
   createSupabaseAdminQuestionRepository,
 } from '@/lib/ask-heaven/questions';
-import { runAskHeavenParityCheck } from '@/lib/ask-heaven/admin-parity';
 import {
   createSupabaseAdminClient,
   getSupabaseAdminEnvStatus,
@@ -39,80 +38,58 @@ export async function GET(
     }
     isAdminUser = true;
 
+    // DEBUG: temporary parity check for repo vs direct admin client.
     const repository = createSupabaseAdminQuestionRepository();
-    let question = null;
-    let repoError: unknown;
+    let repoRow = null;
     setStep('repo.getBySlug');
     try {
-      question = await repository.getBySlug(params.slug);
-    } catch (error) {
-      repoError = error;
+      const repoQuestion = await repository.getBySlug(params.slug);
+      repoRow = repoQuestion
+        ? {
+            id: repoQuestion.id,
+            slug: repoQuestion.slug,
+            status: repoQuestion.status,
+            canonical_slug: repoQuestion.canonical_slug,
+          }
+        : null;
+    } catch {
+      repoRow = null;
     }
 
-    if (!question) {
-      const adminClient = createSupabaseAdminClient();
-      const supabaseUrl = process.env.SUPABASE_URL;
-      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-      const parity = await runAskHeavenParityCheck({
-        slug: params.slug,
-        adminClient,
-        supabaseUrl,
-        serviceRoleKey,
-        onStep: setStep,
-      });
-      const parityMismatch = parity.rest.found && !parity.supabaseJs.found;
+    setStep('direct.getBySlug');
+    const adminClient = createSupabaseAdminClient();
+    const { data: directRow, error: directError } = await adminClient
+      .from('ask_heaven_questions')
+      .select('id,slug,status,canonical_slug')
+      .eq('slug', params.slug)
+      .maybeSingle();
 
-      if (parityMismatch) {
-        return NextResponse.json(
-          {
-            error: 'Admin client parity failure: REST sees row, client does not',
-            debug: {
-              ...debug,
-              parity,
-              repoError: repoError ? serializeError(repoError) : undefined,
-            },
-          },
-          { status: 500 }
-        );
-      }
+    console.info('[ask-heaven-slug-parity]', {
+      slug: params.slug,
+      repoHit: Boolean(repoRow),
+      directHit: Boolean(directRow),
+      directError: directError?.code,
+    });
 
-      if (parity.rest.found || parity.supabaseJs.found) {
-        return NextResponse.json(
-          {
-            error: 'Admin lookup failed to resolve slug',
-            debug: {
-              ...debug,
-              parity,
-              repoError: repoError ? serializeError(repoError) : undefined,
-            },
-          },
-          { status: 500 }
-        );
-      }
+    const response = {
+      repoRow,
+      directRow,
+      directError: directError?.message ?? null,
+      slug: params.slug,
+      fingerprint: getSupabaseAdminFingerprint(),
+      env: getSupabaseAdminEnvStatus(),
+    };
 
-      return NextResponse.json(
-        {
-          error: 'Not found',
-          debug: {
-            ...debug,
-            parity,
-            repoError: repoError ? serializeError(repoError) : undefined,
-          },
-        },
-        { status: 404 }
-      );
+    if (repoRow || directRow) {
+      return NextResponse.json(response, { status: 200 });
     }
 
     return NextResponse.json(
       {
-        question,
-        debug: {
-          slug: params.slug,
-          env: getSupabaseAdminEnvStatus(),
-          fingerprint: getSupabaseAdminFingerprint(),
-        },
+        error: 'Not found',
+        debug: response,
       },
-      { status: 200 }
+      { status: 404 }
     );
   } catch (error) {
     console.error('Admin Ask Heaven get error:', error);
