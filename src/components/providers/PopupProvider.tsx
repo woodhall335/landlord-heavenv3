@@ -1,23 +1,15 @@
 /**
  * Popup Provider
  *
- * Manages global popup components like S21 urgency.
- * Wraps the application to provide popup context.
+ * Wraps the application and renders children.
  */
 
 'use client';
-
-import { Section21PopupModal } from '@/components/ui/Section21PopupModal';
 
 interface PopupProviderProps {
   children: React.ReactNode;
 }
 
 export function PopupProvider({ children }: PopupProviderProps) {
-  return (
-    <>
-      {children}
-      <Section21PopupModal />
-    </>
-  );
+  return <>{children}</>;
 }
