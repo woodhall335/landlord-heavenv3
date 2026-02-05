@@ -2,12 +2,6 @@
 
 import { UniversalHero } from './UniversalHero';
 
-const FEATURES = [
-  'Download instant UK notices & forms',
-  'Covers Section 21, Section 8',
-  'England, Wales & Scotland',
-];
-
 export function Hero() {
   return (
     <UniversalHero
@@ -22,7 +16,7 @@ export function Hero() {
       }
       primaryCta={{ label: 'Generate Your Documents →', href: '/generate' }}
       secondaryCta={{ label: 'View Pricing →', href: '/pricing' }}
-      features={FEATURES}
+      feature="Download instant UK notices & forms"
       mascotSrc="/images/mascots/landlord-heaven-owl-tenancy-tools.png"
       mascotAlt="Landlord Heaven owl mascot holding a pen and shield"
     />
