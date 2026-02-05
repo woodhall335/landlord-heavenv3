@@ -118,7 +118,7 @@ export function UniversalHero({
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative min-[900px]:grid min-[900px]:grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] min-[900px]:items-center min-[900px]:gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="pointer-events-none absolute -right-6 top-1/2 z-0 w-[290px] -translate-y-1/2 min-[420px]:w-[320px] min-[900px]:hidden" aria-hidden="true">
+          <div className="pointer-events-none absolute -right-6 top-1/2 z-0 w-[290px] -translate-y-[80%] min-[420px]:w-[320px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
             <Image
               src={mascotSrc}
               alt=""
@@ -155,9 +155,9 @@ export function UniversalHero({
               <span className="hidden sm:inline">{title}</span>
               <span className="block text-[#7c3aed]">
                 <span className="sm:hidden">
-                  in Minutes, Not
+                  in Minutes,
                   <br />
-                  Days
+                  Not Days
                 </span>
                 <span className="hidden sm:inline">{highlightTitle}</span>
               </span>
@@ -165,7 +165,7 @@ export function UniversalHero({
 
             <p className="mt-4 w-full pr-24 text-lg leading-relaxed text-[#2b253d] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:text-xl">{subtitle}</p>
 
-            <div className="mt-6 flex w-full flex-col gap-3 pr-24 min-[420px]:pr-28 min-[900px]:pr-0 sm:flex-row sm:items-center">
+            <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <div className="w-full sm:w-auto">
                 <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
                   {primaryCta.label}
