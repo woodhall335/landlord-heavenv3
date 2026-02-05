@@ -8,7 +8,7 @@ export type AskHeavenParityResult = {
   };
   rest: {
     found: boolean;
-    status: number | 'error' | 'missing_config' | 'invalid_url';
+    status: number | 'error' | 'missing_config' | 'invalid_url' | 'missing_slug';
     error?: string;
   };
 };
@@ -27,11 +27,14 @@ const MAX_ERROR_CHARS = 200;
 const truncate = (value?: string | null) =>
   value ? value.slice(0, MAX_ERROR_CHARS) : undefined;
 
-export function buildAskHeavenRestUrl(supabaseUrl: string, slug: string): string | null {
+export function buildAskHeavenRestUrl(
+  supabaseUrl: string,
+  slug: string
+): string | null {
   try {
     const url = new URL('/rest/v1/ask_heaven_questions', supabaseUrl);
     url.searchParams.set('select', 'id,slug,status');
-    url.searchParams.set('slug', `eq.${slug}`);
+    url.searchParams.set('slug', `eq.${encodeURIComponent(slug)}`);
     return url.toString();
   } catch {
     return null;
@@ -46,6 +49,20 @@ export async function runAskHeavenParityCheck({
   fetchImpl = fetch,
   onStep,
 }: ParityCheckOptions): Promise<AskHeavenParityResult> {
+  if (!slug) {
+    return {
+      supabaseJs: {
+        found: false,
+        error: 'Missing slug',
+      },
+      rest: {
+        found: false,
+        status: 'missing_slug',
+        error: 'Missing slug',
+      },
+    };
+  }
+
   onStep?.('parity.supabase_js');
   const supabaseResponse = await adminClient
     .from('ask_heaven_questions')

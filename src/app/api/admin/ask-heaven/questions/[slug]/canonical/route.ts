@@ -20,12 +20,13 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  console.info('Admin Ask Heaven canonical slug:', params.slug);
+  const slug = params.slug;
+  console.info('Admin Ask Heaven canonical slug:', slug);
   const envStatus = getSupabaseAdminEnvStatus();
   const debug = {
     env: envStatus,
     fingerprint: getSupabaseAdminFingerprint(),
-    slug: params.slug,
+    slug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -49,7 +50,7 @@ export async function POST(
     let repoError: unknown;
     setStep('repo.getBySlug');
     try {
-      existing = await repository.getBySlug(params.slug);
+      existing = await repository.getBySlug(slug);
     } catch (error) {
       repoError = error;
     }
@@ -57,7 +58,7 @@ export async function POST(
     if (!existing) {
       const adminClient = createSupabaseAdminClient();
       const parity = await runAskHeavenParityCheck({
-        slug: params.slug,
+        slug,
         adminClient,
         supabaseUrl: process.env.SUPABASE_URL,
         serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -108,7 +109,7 @@ export async function POST(
 
     setStep('repo.setCanonical');
     const updated = await repository.setCanonical(
-      params.slug,
+      slug,
       payload.canonical_slug ?? null
     );
 
