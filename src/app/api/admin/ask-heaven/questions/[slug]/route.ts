@@ -20,12 +20,20 @@ export async function GET(
   _request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const slug = params.slug;
+  const routeSlug = params?.slug ?? null;
+  if (!routeSlug) {
+    return NextResponse.json(
+      { error: 'Missing slug', debug: { routeSlug: null } },
+      { status: 500 }
+    );
+  }
+  const slug = routeSlug;
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
     jwtPreview: getSupabaseAdminJwtPreview(),
     slug,
+    routeSlug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -46,7 +54,7 @@ export async function GET(
     let repoRow = null;
     setStep('repo.getBySlug');
     try {
-      const repoQuestion = await repository.getBySlug(slug);
+      const repoQuestion = await repository.getBySlug(routeSlug);
       repoRow = repoQuestion
         ? {
             id: repoQuestion.id,
@@ -64,7 +72,7 @@ export async function GET(
     const { data: directRow, error: directError } = await adminClient
       .from('ask_heaven_questions')
       .select('id,slug,status,canonical_slug')
-      .eq('slug', slug)
+      .eq('slug', routeSlug)
       .maybeSingle();
 
     setStep('rest.fetch');
@@ -97,7 +105,7 @@ export async function GET(
           : null,
       };
       restUrlUsed = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(
-        slug
+        routeSlug
       )}`;
       let supabaseRef: string | null = null;
       try {
@@ -108,7 +116,7 @@ export async function GET(
       }
       if (supabaseRef) {
         restUrlKnownGood = `https://${supabaseRef}.supabase.co/rest/v1/ask_heaven_questions?select=id,slug,status,canonical_slug&slug=eq.${encodeURIComponent(
-          slug
+          routeSlug
         )}`;
       }
       try {
@@ -153,7 +161,7 @@ export async function GET(
     }
 
     console.info('[ask-heaven-slug-parity]', {
-      slug,
+      slug: routeSlug,
       repoHit: Boolean(repoRow),
       directHit: Boolean(directRow),
       directError: directError?.code,
@@ -164,7 +172,7 @@ export async function GET(
       directRow,
       directError: directError?.message ?? null,
       slug,
-      routeSlug: slug,
+      routeSlug,
       fingerprint: getSupabaseAdminFingerprint(),
       env: getSupabaseAdminEnvStatus(),
       jwtPreview: getSupabaseAdminJwtPreview(),

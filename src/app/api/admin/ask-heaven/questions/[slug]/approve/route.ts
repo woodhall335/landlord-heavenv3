@@ -20,11 +20,19 @@ export async function POST(
   _request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const slug = params.slug;
+  const routeSlug = params?.slug ?? null;
+  if (!routeSlug) {
+    return NextResponse.json(
+      { error: 'Missing slug', debug: { routeSlug: null } },
+      { status: 500 }
+    );
+  }
+  const slug = routeSlug;
   const debug = {
     env: getSupabaseAdminEnvStatus(),
     fingerprint: getSupabaseAdminFingerprint(),
     slug,
+    routeSlug,
     step: 'init',
   };
   const setStep = (step: string) => {
@@ -45,7 +53,7 @@ export async function POST(
     let repoError: unknown;
     setStep('repo.getBySlug');
     try {
-      existing = await repository.getBySlug(slug);
+      existing = await repository.getBySlug(routeSlug);
     } catch (error) {
       repoError = error;
     }
@@ -53,7 +61,7 @@ export async function POST(
     if (!existing) {
       const adminClient = createSupabaseAdminClient();
       const parity = await runAskHeavenParityCheck({
-        slug,
+        slug: routeSlug,
         adminClient,
         supabaseUrl: process.env.SUPABASE_URL,
         serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -102,7 +110,7 @@ export async function POST(
       );
     }
     setStep('repo.approve');
-    const updated = await repository.approve(slug);
+    const updated = await repository.approve(routeSlug);
 
     return NextResponse.json({ question: updated }, { status: 200 });
   } catch (error) {
