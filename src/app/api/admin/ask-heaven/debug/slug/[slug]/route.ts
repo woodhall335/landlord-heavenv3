@@ -3,6 +3,7 @@ import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   _request: Request,
@@ -10,7 +11,14 @@ export async function GET(
 ) {
   const supabaseUrl = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const supabaseUrlHost = supabaseUrl ? new URL(supabaseUrl).host : null;
+  let supabaseUrlHost: string | null = null;
+  if (supabaseUrl) {
+    try {
+      supabaseUrlHost = new URL(supabaseUrl).host;
+    } catch {
+      supabaseUrlHost = null;
+    }
+  }
   const hasUrl = Boolean(supabaseUrl);
   const hasServiceRoleKey = Boolean(serviceRoleKey);
 
@@ -35,6 +43,7 @@ export async function GET(
 
   const requestUrl = `${supabaseUrl}/rest/v1/ask_heaven_questions?select=id,slug,status&slug=eq.${encodeURIComponent(params.slug)}`;
   const response = await fetch(requestUrl, {
+    cache: 'no-store',
     headers: {
       apikey: serviceRoleKey,
       Authorization: `Bearer ${serviceRoleKey}`,

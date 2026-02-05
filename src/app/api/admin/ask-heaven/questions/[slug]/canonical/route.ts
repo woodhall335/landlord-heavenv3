@@ -10,6 +10,7 @@ import {
   getSupabaseAdminEnvStatus,
   getSupabaseAdminFingerprint,
 } from '@/lib/supabase/admin';
+import { runAskHeavenParityCheck } from '@/lib/ask-heaven/admin-parity';
 import { serializeError } from '@/lib/errors/serializeError';
 
 export const runtime = 'nodejs';
@@ -25,50 +26,87 @@ export async function POST(
     env: envStatus,
     fingerprint: getSupabaseAdminFingerprint(),
     slug: params.slug,
+    step: 'init',
   };
+  const setStep = (step: string) => {
+    debug.step = step;
+  };
+  let isAdminUser = false;
 
   try {
+    setStep('auth');
     const user = await requireServerAuth();
     if (!isAdmin(user.id)) {
-      return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
+    isAdminUser = true;
 
+    setStep('request.parse');
     const payload = (await request.json()) as { canonical_slug?: string | null };
 
-    const adminClient = createSupabaseAdminClient();
-    const {
-      data: canonicalRows,
-      error: canonicalError,
-      count,
-    } = await adminClient
-      .from('ask_heaven_questions')
-      .select('id,slug', { count: 'exact' })
-      .eq('slug', params.slug);
-
-    if (canonicalError) {
-      return NextResponse.json(
-        { error: canonicalError.message, debug },
-        { status: 500 }
-      );
+    const repository = createSupabaseAdminQuestionRepository();
+    let existing = null;
+    let repoError: unknown;
+    setStep('repo.getBySlug');
+    try {
+      existing = await repository.getBySlug(params.slug);
+    } catch (error) {
+      repoError = error;
     }
 
-    const canonicalCount = count ?? canonicalRows?.length ?? 0;
-    if (canonicalCount === 0) {
+    if (!existing) {
+      const adminClient = createSupabaseAdminClient();
+      const parity = await runAskHeavenParityCheck({
+        slug: params.slug,
+        adminClient,
+        supabaseUrl: process.env.SUPABASE_URL,
+        serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+        onStep: setStep,
+      });
+      const parityMismatch = parity.rest.found && !parity.supabaseJs.found;
+
+      if (parityMismatch) {
+        return NextResponse.json(
+          {
+            error: 'Admin client parity failure: REST sees row, client does not',
+            debug: {
+              ...debug,
+              parity,
+              repoError: repoError ? serializeError(repoError) : undefined,
+            },
+          },
+          { status: 500 }
+        );
+      }
+
+      if (parity.rest.found || parity.supabaseJs.found) {
+        return NextResponse.json(
+          {
+            error: 'Admin lookup failed to resolve slug',
+            debug: {
+              ...debug,
+              parity,
+              repoError: repoError ? serializeError(repoError) : undefined,
+            },
+          },
+          { status: 500 }
+        );
+      }
+
       return NextResponse.json(
         {
           error: 'Not found',
           debug: {
-            slug: params.slug,
-            count: canonicalCount,
-            env: envStatus,
-            fingerprint: getSupabaseAdminFingerprint(),
+            ...debug,
+            parity,
+            repoError: repoError ? serializeError(repoError) : undefined,
           },
         },
         { status: 404 }
       );
     }
 
-    const repository = createSupabaseAdminQuestionRepository();
+    setStep('repo.setCanonical');
     const updated = await repository.setCanonical(
       params.slug,
       payload.canonical_slug ?? null
@@ -81,23 +119,31 @@ export async function POST(
       return NextResponse.json(
         {
           error: 'No rows updated — likely RLS or admin client not using service role',
-          debug,
-          thrown: serializeError(error),
+          debug: isAdminUser ? debug : undefined,
+          thrown: isAdminUser ? serializeError(error) : undefined,
         },
         { status: 500 }
       );
     }
     if (error instanceof Error && error.message.includes('Unauthorized')) {
-      return NextResponse.json({ error: 'Unauthorized', debug }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
     if (error instanceof Error && error.message.startsWith('Missing SUPABASE_')) {
       return NextResponse.json(
-        { error: error.message, debug, thrown: serializeError(error) },
+        {
+          error: error.message,
+          debug: isAdminUser ? debug : undefined,
+          thrown: isAdminUser ? serializeError(error) : undefined,
+        },
         { status: 500 }
       );
     }
     return NextResponse.json(
-      { error: 'Internal server error', debug, thrown: serializeError(error) },
+      {
+        error: 'Internal server error',
+        debug: isAdminUser ? debug : undefined,
+        thrown: isAdminUser ? serializeError(error) : undefined,
+      },
       { status: 500 }
     );
   }

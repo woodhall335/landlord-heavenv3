@@ -96,7 +96,12 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
 
   const supabaseUrl = process.env.SUPABASE_URL!;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-  const supabaseUrlHost = new URL(supabaseUrl).host;
+  let supabaseUrlHost = 'unknown';
+  try {
+    supabaseUrlHost = new URL(supabaseUrl).host;
+  } catch {
+    supabaseUrlHost = 'unknown';
+  }
   const keyPrefix = serviceRoleKey.slice(0, 8);
   const jwtPayload = decodeJwtPayload(serviceRoleKey);
   if (shouldLogAdminDebug()) {
