@@ -24,6 +24,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
 
+  // Explicit legacy routes that have been retired and should never reappear in sitemap.
+  // These have previously generated 404 coverage issues in Google Search Console.
+  const retiredPaths = new Set([
+    '/tools/validators/money-claim',
+    '/tools/validators/scotland-notice-to-leave',
+    '/tools/validators/tenancy-agreement',
+    '/tenancy-agreements/premium',
+    '/$',
+  ]);
+
   // Core marketing pages - dynamic pages get stable date, legal pages omit lastModified
   const marketingPages = [
     { path: '/', priority: 1.0, changeFrequency: 'weekly' as const, hasDate: true },
@@ -260,12 +270,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const questionRepository = getQuestionRepository();
     const approvedQuestions = await questionRepository.getForSitemap();
 
-    askHeavenPages = approvedQuestions.map((q) => ({
-      url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,
-      lastModified: new Date(q.updated_at),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }));
+    askHeavenPages = approvedQuestions
+      .filter((q) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(q.slug))
+      .map((q) => ({
+        url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,
+        lastModified: new Date(q.updated_at),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      }));
   } catch (error) {
     // Log but don't fail sitemap generation if question repo is unavailable
     console.warn('[Sitemap] Failed to load Ask Heaven questions:', error);
@@ -287,7 +299,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const noindexPaths = ['/tenancy-agreements/england-wales', '/refunds'];
   const isIndexablePath = (path: string) =>
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
-    !noindexPaths.includes(path);
+    !noindexPaths.includes(path) &&
+    !retiredPaths.has(path);
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
