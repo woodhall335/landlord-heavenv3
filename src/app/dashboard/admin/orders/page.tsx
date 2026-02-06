@@ -127,7 +127,7 @@ export default function AdminOrdersPage() {
 
   async function handleIssueRefund(orderId: string, totalAmount: number) {
     const confirmed = confirm(
-      `Are you sure you want to issue a full refund of £${(totalAmount / 100).toFixed(2)}? This action cannot be undone.`
+      `Are you sure you want to issue a full refund of £${Number(totalAmount || 0).toFixed(2)}? This action cannot be undone.`
     );
 
     if (!confirmed) return;
@@ -179,7 +179,7 @@ export default function AdminOrdersPage() {
           new Date(order.created_at).toLocaleDateString(),
           order.user_email || "",
           getProductName(order.product_type),
-          (order.total_amount / 100).toFixed(2),
+          Number(order.total_amount || 0).toFixed(2),
           order.payment_status,
         ]),
       ];
@@ -375,7 +375,9 @@ export default function AdminOrdersPage() {
                       <span className="text-sm text-gray-700">{getProductName(order.product_type)}</span>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm font-semibold text-charcoal">£{(order.total_amount / 100).toFixed(2)}</span>
+                      <span className="text-sm font-semibold text-charcoal">
+                        £{Number(order.total_amount || 0).toFixed(2)}
+                      </span>
                     </td>
                     <td className="p-4">
                       <span
@@ -470,7 +472,7 @@ export default function AdminOrdersPage() {
               {(
                 orders
                   .filter((o) => o.payment_status === "paid")
-                  .reduce((sum, o) => sum + o.total_amount, 0) / 100
+                  .reduce((sum, o) => sum + (o.total_amount || 0), 0)
               ).toFixed(2)}
             </p>
           </div>
