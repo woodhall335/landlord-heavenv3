@@ -126,10 +126,7 @@ export default function AdminDashboardPage() {
   };
 
   const formatCurrency = (amount: number): string => {
-    return `£${(amount / 100).toLocaleString('en-GB', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+    return `£${Number(amount || 0).toFixed(2)}`;
   };
 
   const formatDate = (dateString: string) => {
