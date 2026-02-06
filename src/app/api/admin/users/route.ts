@@ -5,7 +5,7 @@
  * Returns recent users with subscription information
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
@@ -13,7 +13,8 @@ import { NextRequest } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const user = await requireServerAuth();
-    const supabase = await createServerSupabaseClient();
+    // Admin user metrics use service-role client to bypass RLS
+    const supabase = createAdminClient();
 
     // Check if user is admin (with proper trimming of env var)
     if (!isAdmin(user.id)) {

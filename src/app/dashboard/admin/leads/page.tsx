@@ -4,10 +4,8 @@
  * View and export email leads captured from free tools
  */
 
-'use client';
-
-import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -18,10 +16,11 @@ import {
   RiFilterLine,
   RiArrowLeftLine,
   RiRefreshLine,
-  RiLoader4Line,
   RiCalendarLine,
   RiPriceTag3Line,
 } from 'react-icons/ri';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 
 interface Lead {
   id: string;
@@ -52,127 +51,175 @@ interface LeadsResponse {
   };
 }
 
-export default function AdminLeadsPage() {
-  const [data, setData] = useState<LeadsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isExporting, setIsExporting] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false);
-  const [error, setError] = useState('');
+interface AdminLeadsPageProps {
+  searchParams?: Record<string, string | string[] | undefined>;
+}
 
-  // Filters
-  const [search, setSearch] = useState('');
-  const [sourceFilter, setSourceFilter] = useState('');
-  const [offset, setOffset] = useState(0);
-  const limit = 50;
+const LEADS_PER_PAGE = 50;
 
-  const fetchLeads = useCallback(async () => {
-    setIsLoading(true);
-    setError('');
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
 
-    try {
-      const params = new URLSearchParams();
-      params.set('limit', String(limit));
-      params.set('offset', String(offset));
-      if (search) params.set('search', search);
-      if (sourceFilter) params.set('source', sourceFilter);
+const formatSource = (source: string | null) => {
+  if (!source) return 'Unknown';
+  return source
+    .replace('tool:', '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+};
 
-      const response = await fetch(`/api/admin/leads?${params.toString()}`);
-
-      if (response.status === 403) {
-        setHasAccess(false);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch leads');
-      }
-
-      setHasAccess(true);
-      const json = await response.json();
-      setData(json);
-    } catch (err) {
-      console.error('Fetch error:', err);
-      setError('Failed to load leads. Please try again.');
-    } finally {
-      setIsLoading(false);
+function buildQueryString(params: Record<string, string | number | undefined>) {
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, String(value));
     }
-  }, [offset, search, sourceFilter]);
+  });
+  const query = searchParams.toString();
+  return query ? `?${query}` : '';
+}
 
-  useEffect(() => {
-    fetchLeads();
-  }, [fetchLeads]);
+function getStartOfTodayUTC(date: Date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
 
-  const handleExportCSV = async () => {
-    setIsExporting(true);
-    try {
-      const params = new URLSearchParams();
-      params.set('format', 'csv');
-      params.set('limit', '10000'); // Export all
-      if (search) params.set('search', search);
-      if (sourceFilter) params.set('source', sourceFilter);
+function getStartOfWeekUTC(date: Date) {
+  const startOfToday = getStartOfTodayUTC(date);
+  const dayOfWeek = startOfToday.getUTCDay();
+  const diffToMonday = (dayOfWeek + 6) % 7;
+  const startOfWeek = new Date(startOfToday);
+  startOfWeek.setUTCDate(startOfToday.getUTCDate() - diffToMonday);
+  return startOfWeek;
+}
 
-      const response = await fetch(`/api/admin/leads?${params.toString()}`);
-
-      if (!response.ok) {
-        throw new Error('Export failed');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `leads-${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('Export error:', err);
-      setError('Failed to export CSV. Please try again.');
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOffset(0);
-    fetchLeads();
-  };
-
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
-  const formatSource = (source: string | null) => {
-    if (!source) return 'Unknown';
-    return source
-      .replace('tool:', '')
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  };
-
-  if (!hasAccess && !isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="p-8 text-center max-w-md">
-          <RiMailLine className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-          <p className="text-gray-600 mb-4">You don&apos;t have permission to view this page.</p>
-          <Link href="/dashboard" className="text-primary hover:underline">
-            Return to Dashboard
-          </Link>
-        </Card>
-      </div>
-    );
+export default async function AdminLeadsPage({ searchParams }: AdminLeadsPageProps) {
+  let user;
+  try {
+    user = await requireServerAuth();
+  } catch {
+    redirect('/auth/login');
   }
+
+  if (!user || !isAdmin(user.id)) {
+    redirect('/dashboard');
+  }
+
+  const search = typeof searchParams?.search === 'string' ? searchParams.search : '';
+  const sourceFilter = typeof searchParams?.source === 'string' ? searchParams.source : '';
+  const offsetParam = typeof searchParams?.offset === 'string' ? searchParams.offset : '0';
+  const offsetValue = Number.parseInt(offsetParam, 10);
+  const offset = Number.isNaN(offsetValue) ? 0 : Math.max(0, offsetValue);
+  const limit = LEADS_PER_PAGE;
+
+  // Admin pages use service-role client to bypass RLS for platform-wide data
+  const adminClient = createAdminClient();
+
+  let leads: Lead[] = [];
+  let totalFiltered = 0;
+  let errorMessage = '';
+
+  let query = adminClient
+    .from('email_subscribers')
+    .select('id, email, source, jurisdiction, tags, last_seen_at, created_at', { count: 'exact' })
+    .order('created_at', { ascending: false });
+
+  if (sourceFilter) {
+    query = query.eq('source', sourceFilter);
+  }
+  if (search) {
+    query = query.ilike('email', `%${search}%`);
+  }
+
+  const { data: leadRows, count, error } = await query.range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error('Failed to load leads:', error);
+    errorMessage = 'Failed to load leads. Please try again.';
+  } else {
+    leads = leadRows || [];
+    totalFiltered = count || 0;
+  }
+
+  const { data: sources } = await adminClient
+    .from('email_subscribers')
+    .select('source')
+    .not('source', 'is', null);
+
+  const uniqueSources = Array.from(
+    new Set((sources || []).map((source) => source.source).filter(Boolean))
+  ) as string[];
+
+  const { count: totalCount } = await adminClient
+    .from('email_subscribers')
+    .select('*', { count: 'exact', head: true });
+
+  const now = new Date();
+  const startOfToday = getStartOfTodayUTC(now);
+  const startOfWeek = getStartOfWeekUTC(now);
+
+  const { count: todayCount } = await adminClient
+    .from('email_subscribers')
+    .select('*', { count: 'exact', head: true })
+    .gte('created_at', startOfToday.toISOString());
+
+  const { count: weekCount } = await adminClient
+    .from('email_subscribers')
+    .select('*', { count: 'exact', head: true })
+    .gte('created_at', startOfWeek.toISOString());
+
+  const data: LeadsResponse = {
+    success: !error,
+    leads,
+    pagination: {
+      total: totalFiltered,
+      limit,
+      offset,
+      hasMore: totalFiltered > offset + limit,
+    },
+    stats: {
+      total: totalCount || 0,
+      today: todayCount || 0,
+      thisWeek: weekCount || 0,
+    },
+    filters: {
+      sources: uniqueSources,
+    },
+  };
+
+  const refreshHref = buildQueryString({
+    search: search || undefined,
+    source: sourceFilter || undefined,
+    offset: offset || undefined,
+  });
+
+  const exportHref = `/api/admin/leads${buildQueryString({
+    format: 'csv',
+    limit: 10000,
+    search: search || undefined,
+    source: sourceFilter || undefined,
+  })}`;
+
+  const previousOffset = Math.max(0, offset - limit);
+  const nextOffset = offset + limit;
+
+  const previousHref = buildQueryString({
+    search: search || undefined,
+    source: sourceFilter || undefined,
+    offset: previousOffset || undefined,
+  });
+
+  const nextHref = buildQueryString({
+    search: search || undefined,
+    source: sourceFilter || undefined,
+    offset: nextOffset,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -193,26 +240,20 @@ export default function AdminLeadsPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => fetchLeads()}
-              disabled={isLoading}
-              className="p-2 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+            <Link
+              href={`/dashboard/admin/leads${refreshHref}`}
+              className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
               title="Refresh"
             >
-              <RiRefreshLine className={`w-5 h-5 text-gray-600 ${isLoading ? 'animate-spin' : ''}`} />
-            </button>
-            <button
-              onClick={handleExportCSV}
-              disabled={isExporting || isLoading}
-              className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+              <RiRefreshLine className="w-5 h-5 text-gray-600" />
+            </Link>
+            <Link
+              href={exportHref}
+              className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
             >
-              {isExporting ? (
-                <RiLoader4Line className="w-5 h-5 animate-spin" />
-              ) : (
-                <RiDownloadLine className="w-5 h-5" />
-              )}
+              <RiDownloadLine className="w-5 h-5" />
               Export CSV
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -259,13 +300,13 @@ export default function AdminLeadsPage() {
 
         {/* Filters */}
         <Card className="p-4 mb-6">
-          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
+          <form method="get" className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                name="search"
+                defaultValue={search}
                 placeholder="Search by email..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
@@ -274,11 +315,8 @@ export default function AdminLeadsPage() {
             <div className="relative">
               <RiFilterLine className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <select
-                value={sourceFilter}
-                onChange={(e) => {
-                  setSourceFilter(e.target.value);
-                  setOffset(0);
-                }}
+                name="source"
+                defaultValue={sourceFilter}
                 className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent appearance-none bg-white min-w-[200px]"
               >
                 <option value="">All Sources</option>
@@ -300,21 +338,14 @@ export default function AdminLeadsPage() {
         </Card>
 
         {/* Error State */}
-        {error && (
+        {errorMessage && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-700">
-            {error}
-          </div>
-        )}
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className="flex items-center justify-center py-12">
-            <RiLoader4Line className="w-8 h-8 text-primary animate-spin" />
+            {errorMessage}
           </div>
         )}
 
         {/* Leads Table */}
-        {!isLoading && data && (
+        {data && (
           <>
             <Card className="overflow-hidden">
               <div className="overflow-x-auto">
@@ -382,25 +413,30 @@ export default function AdminLeadsPage() {
             {/* Pagination */}
             <div className="flex items-center justify-between mt-6">
               <p className="text-sm text-gray-600">
-                Showing {offset + 1} to {Math.min(offset + limit, data.pagination.total)} of{' '}
+                Showing {data.pagination.total === 0 ? 0 : offset + 1} to{' '}
+                {Math.min(offset + limit, data.pagination.total)} of{' '}
                 {data.pagination.total.toLocaleString()} leads
               </p>
 
               <div className="flex gap-2">
-                <button
-                  onClick={() => setOffset(Math.max(0, offset - limit))}
-                  disabled={offset === 0}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                <Link
+                  href={`/dashboard/admin/leads${previousHref}`}
+                  aria-disabled={offset === 0}
+                  className={`px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
+                    offset === 0 ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                  }`}
                 >
                   Previous
-                </button>
-                <button
-                  onClick={() => setOffset(offset + limit)}
-                  disabled={!data.pagination.hasMore}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                </Link>
+                <Link
+                  href={`/dashboard/admin/leads${nextHref}`}
+                  aria-disabled={!data.pagination.hasMore}
+                  className={`px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
+                    !data.pagination.hasMore ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                  }`}
                 >
                   Next
-                </button>
+                </Link>
               </div>
             </div>
           </>

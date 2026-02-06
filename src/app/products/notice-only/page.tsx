@@ -8,23 +8,20 @@ import {
   CheckCircle2,
   ShieldCheck,
   BadgePoundSterling,
-  Cloud,
 } from "lucide-react";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
-import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  AskHeavenSection,
-  JurisdictionAccordion,
   VsSolicitorComparison,
   VsFreeTemplateComparison,
-  WhatYouGet,
+  WhatsIncludedInteractive,
 } from "@/components/value-proposition";
+import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 
 // Get price from single source of truth
 const product = PRODUCTS.notice_only;
@@ -43,6 +40,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/products/notice-only'),
   },
 };
+
+export const runtime = 'nodejs';
 
 // FAQ data for structured data
 const faqs = [
@@ -80,7 +79,9 @@ const faqs = [
   }
 ];
 
-export default function NoticeOnlyPage() {
+export default async function NoticeOnlyPage() {
+  const previews = await getNoticeOnlyPreviewData();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
@@ -100,26 +101,7 @@ export default function NoticeOnlyPage() {
       {/* Hero Section */}
       <UniversalHero {...noticeOnlyHeroConfig} />
 
-      {/* What You Get Section */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <WhatYouGet product="notice_only" />
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <JurisdictionAccordion product="notice_only" defaultExpanded={true} />
-          </div>
-        </Container>
-      </section>
-
-      {/* Ask Heaven Section */}
-      <AskHeavenSection variant="full" product="notice_only" />
+      <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
@@ -255,39 +237,6 @@ export default function NoticeOnlyPage() {
         showContactCTA={false}
         variant="white"
       />
-
-      {/* Retention Policy Notice */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-blue-50 rounded-lg p-6 flex items-start gap-4">
-              <Cloud className="w-6 h-6 text-primary shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-charcoal mb-1">Document Storage</h4>
-                <p className="text-gray-700 text-sm">
-                  Documents are stored in your portal for at least 12 months. You can download and save them any time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Ask Heaven Widget */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            <AskHeavenWidget
-              variant="banner"
-              source="product_page"
-              topic="eviction"
-              product="notice_only"
-              title="Have questions about eviction notices?"
-              description="Ask Heaven can help you understand Section 21, Section 8, Section 173, and Notice to Leave requirements."
-            />
-          </div>
-        </Container>
-      </section>
 
       {/* Related Resources */}
       <section className="py-16 md:py-20">

@@ -49,7 +49,7 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
   switch (product) {
     case 'notice_only':
       return {
-        title: 'Serve the Right Possession Notice',
+        title: 'Generate an Eviction Notice',
         subtitle: jurisdiction === 'scotland'
           ? 'Notice to Leave for Scottish Private Residential Tenancies'
           : jurisdiction === 'wales'

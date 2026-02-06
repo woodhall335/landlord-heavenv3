@@ -15,7 +15,7 @@
  *   - search: Search by email or order ID
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
@@ -32,7 +32,8 @@ const PRODUCT_NAMES: Record<string, string> = {
 export async function GET(request: NextRequest) {
   try {
     const user = await requireServerAuth();
-    const supabase = await createServerSupabaseClient();
+    // Admin routes use service-role client to bypass RLS for platform metrics.
+    const adminClient = createAdminClient();
 
     // Check if user is admin (with proper trimming of env var)
     if (!isAdmin(user.id)) {
@@ -56,7 +57,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     // Build query
-    let query = supabase
+    let query = adminClient
       .from('orders')
       .select('id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, created_at', { count: 'exact' });
 
@@ -93,7 +94,7 @@ export async function GET(request: NextRequest) {
     // Fetch user information for each order
     let ordersWithUsers = await Promise.all(
       (orders || []).map(async (order) => {
-        const { data: userData } = await supabase
+        const { data: userData } = await adminClient
           .from('users')
           .select('email, full_name')
           .eq('id', order.user_id)

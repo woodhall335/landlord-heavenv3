@@ -12,7 +12,7 @@
  * - format: 'json' | 'csv' (default json)
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -28,7 +28,7 @@ interface EmailSubscriber {
 export async function GET(request: NextRequest) {
   try {
     const user = await requireServerAuth();
-    const supabase = await createServerSupabaseClient();
+    const supabase = createAdminClient();
 
     // Check if user is admin (with proper trimming of env var)
     if (!isAdmin(user.id)) {

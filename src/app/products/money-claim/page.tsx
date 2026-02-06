@@ -7,7 +7,6 @@ import {
   Mail,
   Calculator,
   BookOpen,
-  Cloud,
   AlertTriangle,
 } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
@@ -16,12 +15,10 @@ import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
-import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  AskHeavenSection,
   JurisdictionAccordion,
   VsSolicitorComparison,
   WhatYouGet,
@@ -186,9 +183,6 @@ export default function MoneyClaimPage() {
           </div>
         </Container>
       </section>
-
-      {/* Ask Heaven Section */}
-      <AskHeavenSection variant="full" product="money_claim" />
 
       {/* AI-Drafted Documents Feature */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -541,39 +535,6 @@ export default function MoneyClaimPage() {
         showContactCTA={false}
         variant="white"
       />
-
-      {/* Retention Policy Notice */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-blue-50 rounded-lg p-6 flex items-start gap-4">
-              <Cloud className="w-6 h-6 text-primary shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-charcoal mb-1">Document Storage</h4>
-                <p className="text-gray-700 text-sm">
-                  Documents are stored in your portal for at least 12 months. You can download and save them any time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Ask Heaven Widget */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            <AskHeavenWidget
-              variant="banner"
-              source="product_page"
-              topic="money_claim"
-              product="money_claim"
-              title="Have questions about recovering money from tenants?"
-              description="Ask Heaven can help you understand what you can claim, PAP-DEBT requirements, court procedures, and enforcement options."
-            />
-          </div>
-        </Container>
-      </section>
 
       {/* Related Resources */}
       <section className="py-16 md:py-20">
