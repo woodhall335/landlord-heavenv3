@@ -231,14 +231,14 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
   if (hasError) {
     return (
       <div
-        className={`flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-purple-200 bg-purple-50/60 px-4 text-center ${
+        className={`flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-[#7c3aed]/20 bg-[#7c3aed]/10 px-4 text-center ${
           className ?? ''
         }`}
       >
         <div className="space-y-2">
-          <p className="text-sm font-semibold text-purple-700">Preview coming soon</p>
-          <p className="text-xs text-purple-500">{title}</p>
-          <p className="text-[11px] text-purple-400">{alt}</p>
+          <p className="text-sm font-semibold text-[#7c3aed]">Preview coming soon</p>
+          <p className="text-xs text-[#7c3aed]/90">{title}</p>
+          <p className="text-[11px] text-[#7c3aed]/70">{alt}</p>
         </div>
       </div>
     );
@@ -316,7 +316,7 @@ export const WhatsIncludedInteractive = ({
           </div>
 
           <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">
-            <div className="inline-flex rounded-full border border-purple-200 bg-white p-1 shadow-sm">
+            <div className="inline-flex rounded-full border border-[#7c3aed]/20 bg-white p-1 shadow-sm">
               {jurisdictionOrder.map((jurisdiction) => {
                 const isActive = selectedJurisdiction === jurisdiction;
                 return (
@@ -328,8 +328,8 @@ export const WhatsIncludedInteractive = ({
                     aria-controls={`jurisdiction-panel-${jurisdiction}`}
                     className={`px-5 py-2 text-sm font-semibold rounded-full transition-all ${
                       isActive
-                        ? 'bg-purple-600 text-white shadow'
-                        : 'text-purple-700 hover:bg-purple-50'
+                        ? 'bg-[#7c3aed] text-white shadow'
+                        : 'text-[#7c3aed] hover:bg-[#7c3aed]/10'
                     }`}
                     onClick={() => setSelectedJurisdiction(jurisdiction)}
                   >
@@ -358,8 +358,8 @@ export const WhatsIncludedInteractive = ({
                           type="button"
                           className={`rounded-2xl border px-4 py-4 text-left transition-all ${
                             isActive
-                              ? 'border-purple-400 bg-purple-50 shadow-sm'
-                              : 'border-gray-200 bg-white hover:border-purple-300'
+                              ? 'border-[#7c3aed]/60 bg-[#7c3aed]/10 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                           }`}
                           onClick={() => setSelectedNoticeVariant(variant.key)}
                         >
@@ -376,20 +376,20 @@ export const WhatsIncludedInteractive = ({
                     <h3 className="text-lg font-semibold text-charcoal">
                       {jurisdictionConfig.label} — What you receive
                     </h3>
-                    <span className="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
+                    <span className="inline-flex items-center rounded-full bg-[#7c3aed]/10 px-3 py-1 text-xs font-semibold text-[#7c3aed]">
                       {jurisdictionConfig.legalNote}
                     </span>
                   </div>
 
                   <div className="mt-5 space-y-4">
                     <div>
-                      <p className="text-sm font-semibold text-purple-700">Eviction Notices</p>
+                      <p className="text-sm font-semibold text-[#7c3aed]">Eviction Notices</p>
                       <ul className="mt-2 space-y-2 text-sm text-gray-700">
                         {activeVariant.documents
                           .filter((document) => document.isPrimary)
                           .map((document) => (
                             <li key={document.key} className="flex items-start gap-2">
-                              <span className="mt-1 h-2 w-2 rounded-full bg-purple-500" />
+                              <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
                               <span>{document.title}</span>
                             </li>
                           ))}
@@ -397,11 +397,11 @@ export const WhatsIncludedInteractive = ({
                     </div>
 
                     <div>
-                      <p className="text-sm font-semibold text-purple-700">Guidance Documents</p>
+                      <p className="text-sm font-semibold text-[#7c3aed]">Guidance Documents</p>
                       <ul className="mt-2 space-y-2 text-sm text-gray-700">
                         {guidanceDocuments.map((document) => (
                           <li key={document.key} className="flex items-start gap-2">
-                            <span className="mt-1 h-2 w-2 rounded-full bg-purple-300" />
+                            <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]/60" />
                             <span>{document.title}</span>
                           </li>
                         ))}
@@ -410,11 +410,11 @@ export const WhatsIncludedInteractive = ({
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-purple-100 bg-purple-50/40 p-5">
-                  <ul className="space-y-2 text-sm text-purple-900">
+                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#7c3aed]/10 p-5">
+                  <ul className="space-y-2 text-sm text-[#7c3aed]/90">
                     {differentiators.map((item) => (
                       <li key={item} className="flex items-center gap-2">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-purple-600 text-white text-xs">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#7c3aed] text-white text-xs">
                           ✓
                         </span>
                         <span>{item}</span>
@@ -425,11 +425,11 @@ export const WhatsIncludedInteractive = ({
               </div>
 
               <div className="order-1 md:order-2">
-                <div className="rounded-3xl border border-purple-100 bg-white p-6 shadow-lg">
+                <div className="rounded-3xl border border-[#7c3aed]/15 bg-white p-6 shadow-lg">
                   <div className="space-y-3">
-                    <p className="text-sm font-semibold text-purple-700">Active preview</p>
+                    <p className="text-sm font-semibold text-[#7c3aed]">Active preview</p>
                     <h4 className="text-xl font-semibold text-charcoal">{activeDoc.title}</h4>
-                    <div className="relative w-full overflow-hidden rounded-2xl border border-purple-100 bg-purple-50/30">
+                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#7c3aed]/15 bg-[#7c3aed]/5">
                       <PreviewImage
                         src={buildPreviewSrc(selectedJurisdiction, activeVariant.key, activeDoc.filename)}
                         alt={activeDoc.alt}
@@ -446,37 +446,51 @@ export const WhatsIncludedInteractive = ({
                       <p className="text-sm font-semibold text-charcoal">Preview stack</p>
                       <span className="text-xs text-gray-500">Click a document to preview</span>
                     </div>
-                    <div className="mt-3 flex gap-3 overflow-x-auto pb-2">
-                      {orderedDocuments.map((document, index) => {
-                        const isActive = document.key === activeDoc.key;
-                        return (
-                          <button
-                            key={document.key}
-                            type="button"
-                            onClick={() => setSelectedDocKey(document.key)}
-                            className={`relative flex w-28 shrink-0 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left transition-all ${
-                              isActive
-                                ? 'border-purple-400 bg-purple-50 shadow'
-                                : 'border-gray-200 bg-white hover:border-purple-300'
-                            }`}
-                            style={{ zIndex: orderedDocuments.length - index }}
-                          >
-                            <div className="w-full overflow-hidden rounded-xl border border-purple-100 bg-purple-50/30">
-                              <PreviewImage
-                                src={buildPreviewSrc(selectedJurisdiction, activeVariant.key, document.filename)}
-                                alt={document.alt}
-                                title={document.title}
-                                width={180}
-                                height={240}
-                                className="h-auto w-full object-cover"
-                              />
-                            </div>
-                            <p className="text-[11px] font-medium text-gray-700 text-center">
-                              {document.title}
-                            </p>
-                          </button>
-                        );
-                      })}
+                    <div className="mt-4">
+                      <div className="relative min-h-[240px] sm:min-h-[260px]">
+                        {orderedDocuments.map((document, index) => {
+                          const isActive = document.key === activeDoc.key;
+                          const stackIndex = Math.min(index, 4);
+                          const offsets = [
+                            { x: 0, y: 0, rotate: 0, scale: 1 },
+                            { x: 18, y: 10, rotate: -3, scale: 0.98 },
+                            { x: 32, y: 20, rotate: 2, scale: 0.96 },
+                            { x: 44, y: 30, rotate: -2, scale: 0.94 },
+                            { x: 56, y: 38, rotate: 3, scale: 0.92 },
+                          ];
+                          const { x, y, rotate, scale } = offsets[stackIndex];
+                          return (
+                            <button
+                              key={document.key}
+                              type="button"
+                              onClick={() => setSelectedDocKey(document.key)}
+                              className={`absolute left-1/2 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
+                                isActive
+                                  ? 'border-[#7c3aed]/60 bg-[#7c3aed]/10 shadow'
+                                  : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
+                              }`}
+                              style={{
+                                zIndex: orderedDocuments.length - index,
+                                transform: `translate(calc(-50% + ${x}px), ${y}px) rotate(${rotate}deg) scale(${scale})`,
+                              }}
+                            >
+                              <div className="w-full overflow-hidden rounded-xl border border-[#7c3aed]/15 bg-[#7c3aed]/5">
+                                <PreviewImage
+                                  src={buildPreviewSrc(selectedJurisdiction, activeVariant.key, document.filename)}
+                                  alt={document.alt}
+                                  title={document.title}
+                                  width={180}
+                                  height={240}
+                                  className="h-auto w-full object-cover"
+                                />
+                              </div>
+                              <p className="text-[11px] font-medium text-gray-700 text-center">
+                                {document.title}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
