@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
+import { UniversalHero } from "@/components/landing/UniversalHero";
+import { noticeOnlyHeroConfig } from "@/components/landing/heroConfigs";
 import { Container } from "@/components/ui";
-import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import {
-  Eye,
-  RefreshCw,
-  Cloud,
   Zap,
   CheckCircle2,
   ShieldCheck,
   BadgePoundSterling,
-  FileCheck,
+  Cloud,
 } from "lucide-react";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
@@ -100,50 +98,7 @@ export default function NoticeOnlyPage() {
       ])} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Eviction Notice Only
-            </h1>
-            <p className="text-xl md:text-2xl mb-4 text-gray-600">
-              Legally Valid Eviction Notices for England, Wales &amp; Scotland
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: Section 21 / Section 8</span>
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales: Section 173</span>
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: Notice to Leave</span>
-            </div>
-            <div className="flex items-baseline justify-center gap-2 mb-6">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
-              <span className="text-gray-500 text-lg">one-time</span>
-            </div>
-
-            {/* Key differentiators */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-              <span className="flex items-center gap-1 text-gray-700">
-                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
-              </span>
-            </div>
-
-            <Link
-              href="/wizard?product=notice_only&src=product_page&topic=eviction"
-              className="hero-btn-primary"
-            >
-              Get Your Notice Now →
-            </Link>
-            <div className="mt-4 mb-2">
-              <SocialProofCounter variant="today" className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero {...noticeOnlyHeroConfig} />
 
       {/* What You Get Section */}
       <section className="py-16 md:py-20">
