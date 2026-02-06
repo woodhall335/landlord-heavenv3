@@ -1,7 +1,8 @@
 /**
  * Stripe Webhook Handler
  *
- * POST /api/webhooks/stripe
+ * Canonical endpoint: POST /api/webhooks/stripe
+ * Alias: POST /api/stripe/webhook
  * Handles all Stripe webhook events
  */
 
@@ -72,6 +73,15 @@ function redactStripePayload(event: Stripe.Event) {
       },
     },
   };
+}
+
+function logMissingOrder(details: {
+  eventId: string | null;
+  eventType: string;
+  paymentIntentId?: string | null;
+  sessionId?: string | null;
+}) {
+  logger.warn('Stripe webhook received event without matching order', details);
 }
 
 async function updateCaseEntitlements(
@@ -263,7 +273,14 @@ export async function POST(request: Request) {
           const order = await findOrderForCheckoutSession(supabase, session);
 
           if (!order) {
-            throw new Error('Order not found for checkout session');
+            logMissingOrder({
+              eventId,
+              eventType: event.type,
+              paymentIntentId: session.payment_intent as string | null,
+              sessionId: session.id,
+            });
+            processingResult = 'order_not_found_for_session';
+            break;
           }
 
           if ((order as any).payment_status !== 'paid') {
@@ -527,6 +544,11 @@ export async function POST(request: Request) {
 
           processingResult = 'payment_intent_paid';
         } else {
+          logMissingOrder({
+            eventId,
+            eventType: event.type,
+            paymentIntentId: paymentIntent.id,
+          });
           processingResult = 'payment_intent_no_order';
         }
         break;
