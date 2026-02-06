@@ -10,7 +10,7 @@ type HeroCta = {
   href: string;
 };
 
-type UniversalHeroProps = {
+export type UniversalHeroProps = {
   trustText: string;
   title: string;
   highlightTitle: string;
@@ -42,6 +42,8 @@ export function UniversalHero({
   mascotSrc,
   mascotAlt,
 }: UniversalHeroProps) {
+  // LOCKED v1: Do not modify this component's layout/visual structure/behavior directly.
+  // For page-specific hero text, mascot, and CTA customization, pass values via props only.
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
   const [usedTodayCount, setUsedTodayCount] = useState(DEFAULT_COUNTER);

@@ -1,0 +1,78 @@
+import type { ReactNode } from 'react';
+import { PRODUCTS } from '@/lib/pricing/products';
+import type { UniversalHeroProps } from './UniversalHero';
+
+export type HeroConfig = Pick<
+  UniversalHeroProps,
+  | 'trustText'
+  | 'title'
+  | 'highlightTitle'
+  | 'subtitle'
+  | 'primaryCta'
+  | 'secondaryCta'
+  | 'feature'
+  | 'mascotSrc'
+  | 'mascotAlt'
+>;
+
+const astStandardPrice = PRODUCTS.ast_standard.displayPrice;
+const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
+
+const astSubtitle: ReactNode = (
+  <>
+    Generate compliant AST, Occupation Contract, PRT, and NI tenancy agreements in minutes —
+    <span className="font-semibold"> preview before paying and regenerate anytime</span>
+  </>
+);
+
+export const homeHeroConfig: HeroConfig = {
+  trustText: 'Trusted by UK Landlords',
+  title: 'Legal Documents',
+  highlightTitle: 'in Minutes, Not Days',
+  subtitle: (
+    <>
+      Generate compliant eviction notices, court forms, and tenancy agreements —
+      <span className="font-semibold"> save 80%+ vs solicitor</span>
+    </>
+  ),
+  primaryCta: { label: 'Generate Your Documents →', href: '/generate' },
+  secondaryCta: { label: 'View Pricing →', href: '/pricing' },
+  feature: 'Download instant UK notices & forms',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
+  mascotAlt: 'Landlord Heaven owl mascot holding a pen and shield',
+};
+
+export const astHeroConfig: HeroConfig = {
+  trustText: 'Trusted tenancy agreements for UK landlords',
+  title: 'Tenancy Agreements',
+  highlightTitle: 'for Every UK Jurisdiction',
+  subtitle: astSubtitle,
+  primaryCta: {
+    label: `Standard - ${astStandardPrice} →`,
+    href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
+  },
+  secondaryCta: {
+    label: `Premium (HMO-Ready) - ${astPremiumPrice} →`,
+    href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
+  },
+  feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI templates',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
+  mascotAlt: 'Landlord Heaven owl mascot with tenancy agreement documents',
+};
+
+export const section21HeroConfig: HeroConfig = {
+  trustText: 'Trusted by UK Landlords',
+  title: 'Section 21 Notice',
+  highlightTitle: 'Generated in Minutes',
+  subtitle: (
+    <>
+      Create compliant Section 21 paperwork with guided steps and instant downloads —
+      <span className="font-semibold"> no legal drafting required</span>
+    </>
+  ),
+  primaryCta: { label: 'Start Section 21 Notice →', href: '/wizard?product=notice_only' },
+  secondaryCta: { label: 'See Pricing →', href: '/pricing' },
+  feature: 'Court-ready notice pack with service guidance',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
+  mascotAlt: 'Landlord Heaven owl mascot with Section 21 notice',
+};

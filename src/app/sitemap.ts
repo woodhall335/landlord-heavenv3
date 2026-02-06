@@ -309,6 +309,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: typeof page.changeFrequency;
       priority: number;
       lastModified?: Date;
+      images?: string[];
     } = {
       url: `${SITE_ORIGIN}${page.path}`,
       changeFrequency: page.changeFrequency,
@@ -317,6 +318,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Only add lastModified for pages that should have it
     if (page.hasDate) {
       entry.lastModified = STABLE_PRODUCT_DATE;
+    }
+    if (page.path === '/') {
+      entry.images = [`${SITE_ORIGIN}/images/mascots/landlord-heaven-owl-tenancy-tools.png`];
     }
     return entry;
   });
