@@ -1,10 +1,8 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
-import { Container } from "@/components/ui";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Container } from "@/components/ui";
+import { createAdminClient, requireServerAuth } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/auth";
 
 interface FailedPayment {
   id: string;
@@ -18,91 +16,99 @@ interface FailedPayment {
   created_at: string;
 }
 
-export default function AdminFailedPaymentsPage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [failedPayments, setFailedPayments] = useState<FailedPayment[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+interface AdminFailedPaymentsPageProps {
+  searchParams?: Record<string, string | string[] | undefined>;
+}
+
+export default async function AdminFailedPaymentsPage({ searchParams }: AdminFailedPaymentsPageProps) {
+  let user;
+  try {
+    user = await requireServerAuth();
+  } catch {
+    redirect("/auth/login");
+  }
+
+  if (!user || !isAdmin(user.id)) {
+    redirect("/dashboard");
+  }
+
+  const searchTerm = typeof searchParams?.search === "string" ? searchParams.search : "";
+  const pageParam = typeof searchParams?.page === "string" ? searchParams.page : "1";
+  const parsedPage = Number.parseInt(pageParam, 10);
+  const currentPage = Number.isNaN(parsedPage) ? 1 : Math.max(1, parsedPage);
   const paymentsPerPage = 20;
 
-  const checkAdminAccess = useCallback(async () => {
-    try {
-      // Use server-side admin check for security (handles env var trimming)
-      const response = await fetch("/api/admin/check-access");
+  // Admin pages use service-role client to bypass RLS for platform-wide data
+  const adminClient = createAdminClient();
 
-      if (response.status === 401) {
-        router.push("/auth/login");
-        return;
+  let failedPayments: FailedPayment[] = [];
+
+  const { data: orders, error } = await adminClient
+    .from("orders")
+    .select("id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, created_at")
+    .in("payment_status", ["failed", "pending"])
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error loading failed payments:", error);
+  }
+
+  const userIds = Array.from(
+    new Set((orders || []).map((order) => order.user_id).filter(Boolean))
+  );
+
+  const { data: users } = userIds.length
+    ? await adminClient
+        .from("users")
+        .select("id, email, full_name")
+        .in("id", userIds)
+    : { data: [] };
+
+  const userMap = new Map(
+    (users || []).map((user) => [user.id, { email: user.email, full_name: user.full_name }])
+  );
+
+  failedPayments = (orders || []).map((order) => {
+    const userInfo = userMap.get(order.user_id);
+    return {
+      id: order.id,
+      user_id: order.user_id,
+      user_email: userInfo?.email || "Unknown",
+      user_name: userInfo?.full_name || null,
+      product_type: order.product_type,
+      total_amount: order.total_amount,
+      payment_status: order.payment_status,
+      stripe_payment_intent_id: order.stripe_payment_intent_id,
+      created_at: order.created_at,
+    };
+  });
+
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredPayments = normalizedSearch
+    ? failedPayments.filter(
+        (payment) =>
+          payment.user_email?.toLowerCase().includes(normalizedSearch) ||
+          payment.id.toLowerCase().includes(normalizedSearch)
+      )
+    : failedPayments;
+
+  const totalPages = Math.ceil(filteredPayments.length / paymentsPerPage);
+  const safePage = Math.min(currentPage, totalPages || 1);
+  const paginatedPayments = filteredPayments.slice(
+    (safePage - 1) * paymentsPerPage,
+    safePage * paymentsPerPage
+  );
+
+  const buildQueryString = (params: Record<string, string | number | undefined>) => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== "") {
+        query.set(key, String(value));
       }
-
-      if (response.status === 403) {
-        router.push("/dashboard");
-        return;
-      }
-
-      if (!response.ok) {
-        console.error("Error checking admin access:", response.statusText);
-        router.push("/dashboard");
-        return;
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error checking admin access:", error);
-      router.push("/dashboard");
-    }
-  }, [router]);
-
-  const loadFailedPayments = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
-    try {
-      // Fetch orders with failed or pending status - use payment_status from schema
-      const { data: orders, error } = await supabase
-        .from("orders")
-        .select("*")
-        .in("payment_status", ["failed", "pending"])
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      // Load user info for each failed payment
-      const paymentsWithUsers: FailedPayment[] = await Promise.all(
-        (orders || []).map(async (order: any) => {
-          const { data: userData } = await supabase
-            .from("users")
-            .select("email, full_name")
-            .eq("id", order.user_id)
-            .single<{ email: string; full_name: string | null }>();
-
-          return {
-            id: order.id,
-            user_id: order.user_id,
-            user_email: userData?.email || "Unknown",
-            user_name: userData?.full_name || null,
-            product_type: order.product_type,
-            total_amount: order.total_amount,
-            payment_status: order.payment_status,
-            stripe_payment_intent_id: order.stripe_payment_intent_id,
-            created_at: order.created_at,
-          };
-        })
-      );
-
-      setFailedPayments(paymentsWithUsers);
-    } catch (error) {
-      console.error("Error loading failed payments:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    checkAdminAccess();
-  }, [checkAdminAccess]);
-
-  useEffect(() => {
-    if (loading) return;
-    loadFailedPayments();
-  }, [loading, loadFailedPayments]);
+    });
+    const queryString = query.toString();
+    return queryString ? `?${queryString}` : "";
+  };
 
   function getProductName(productType: string): string {
     const names: Record<string, string> = {
@@ -126,33 +132,6 @@ export default function AdminFailedPaymentsPage() {
     }
   }
 
-  // Apply search filter
-  const filteredPayments = failedPayments.filter(
-    (payment) =>
-      payment.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      payment.id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Pagination
-  const totalPages = Math.ceil(filteredPayments.length / paymentsPerPage);
-  const paginatedPayments = filteredPayments.slice(
-    (currentPage - 1) * paymentsPerPage,
-    currentPage * paymentsPerPage
-  );
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <Container size="large">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
-            <div className="h-96 bg-gray-200 rounded"></div>
-          </div>
-        </Container>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <Container size="large">
@@ -169,16 +148,16 @@ export default function AdminFailedPaymentsPage() {
 
         {/* Search */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <div className="max-w-md">
+          <form className="max-w-md" method="get">
             <label className="block text-sm font-medium text-charcoal mb-2">Search</label>
             <input
               type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              name="search"
+              defaultValue={searchTerm}
               placeholder="Email or Order ID..."
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
-          </div>
+          </form>
         </div>
 
         {/* Failed Payments Table */}
@@ -255,23 +234,33 @@ export default function AdminFailedPaymentsPage() {
           {totalPages > 1 && (
             <div className="border-t p-4 flex items-center justify-between">
               <p className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
+                Page {safePage} of {totalPages}
               </p>
               <div className="flex gap-2">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                <Link
+                  href={`/dashboard/admin/failed-payments${buildQueryString({
+                    search: searchTerm || undefined,
+                    page: Math.max(1, safePage - 1),
+                  })}`}
+                  aria-disabled={safePage === 1}
+                  className={`px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 ${
+                    safePage === 1 ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                  }`}
                 >
                   Previous
-                </button>
-                <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                </Link>
+                <Link
+                  href={`/dashboard/admin/failed-payments${buildQueryString({
+                    search: searchTerm || undefined,
+                    page: Math.min(totalPages, safePage + 1),
+                  })}`}
+                  aria-disabled={safePage === totalPages}
+                  className={`px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 ${
+                    safePage === totalPages ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                  }`}
                 >
                   Next
-                </button>
+                </Link>
               </div>
             </div>
           )}
