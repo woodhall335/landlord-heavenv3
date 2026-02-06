@@ -17,10 +17,9 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  JurisdictionAccordion,
   VsSolicitorComparison,
   VsFreeTemplateComparison,
-  WhatYouGet,
+  WhatsIncludedInteractive,
 } from "@/components/value-proposition";
 
 // Get price from single source of truth
@@ -97,23 +96,7 @@ export default function NoticeOnlyPage() {
       {/* Hero Section */}
       <UniversalHero {...noticeOnlyHeroConfig} />
 
-      {/* What You Get Section */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <WhatYouGet product="notice_only" />
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <JurisdictionAccordion product="notice_only" defaultExpanded={true} />
-          </div>
-        </Container>
-      </section>
+      <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" />
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
