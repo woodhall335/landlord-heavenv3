@@ -7,7 +7,6 @@ import {
   GraduationCap,
   Briefcase,
   BadgePoundSterling,
-  Cloud,
   FileText,
   List,
   Shield,
@@ -17,12 +16,10 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
-import { AskHeavenWidget } from "@/components/ask-heaven/AskHeavenWidget";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  AskHeavenSection,
   JurisdictionAccordion,
   VsSolicitorComparison,
 } from "@/components/value-proposition";
@@ -527,9 +524,6 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* Ask Heaven Section */}
-      <AskHeavenSection variant="full" product="ast" />
-
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
@@ -668,39 +662,6 @@ export default function ASTPage() {
         showContactCTA={false}
         variant="white"
       />
-
-      {/* Retention Policy Notice */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-blue-50 rounded-lg p-6 flex items-start gap-4">
-              <Cloud className="w-6 h-6 text-primary shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-charcoal mb-1">Document Storage</h4>
-                <p className="text-gray-700 text-sm">
-                  Documents are stored in your portal for at least 12 months. You can download and save them any time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Ask Heaven Widget */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            <AskHeavenWidget
-              variant="banner"
-              source="product_page"
-              topic="tenancy_agreement"
-              product="tenancy_agreement"
-              title="Have questions about tenancy agreements?"
-              description="Ask Heaven can help you understand AST, PRT, and occupation contract requirements."
-            />
-          </div>
-        </Container>
-      </section>
 
       {/* Related Resources */}
       <section className="py-16 md:py-20">
