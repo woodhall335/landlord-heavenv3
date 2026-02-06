@@ -38,7 +38,7 @@ export const homeHeroConfig: HeroConfig = {
   primaryCta: { label: 'Generate Your Documents →', href: '/generate' },
   secondaryCta: { label: 'View Pricing →', href: '/pricing' },
   feature: 'Download instant UK notices & forms',
-  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-checklist-golden-coins.png',
   mascotAlt: 'Landlord Heaven owl mascot holding a pen and shield',
 };
 
@@ -56,7 +56,7 @@ export const astHeroConfig: HeroConfig = {
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI templates',
-  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-landlord-guide.png',
   mascotAlt: 'Landlord Heaven owl mascot with tenancy agreement documents',
 };
 
