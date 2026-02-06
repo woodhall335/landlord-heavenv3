@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
-import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
 import {
@@ -14,10 +13,10 @@ import {
   BadgePoundSterling,
   Package,
   Clock,
-  Eye,
-  RefreshCw,
   Cloud,
 } from "lucide-react";
+import { UniversalHero } from "@/components/landing/UniversalHero";
+import { completePackHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
@@ -106,48 +105,7 @@ export default function CompleteEvictionPackPage() {
       ])} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Complete Eviction Pack
-            </h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              7-9 court-ready documents for England
-            </p>
-            <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
-              England only
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-6">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">{price}</span>
-              <span className="text-gray-500 text-lg">one-time</span>
-            </div>
-
-            {/* Key differentiators */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-              <span className="flex items-center gap-1 text-gray-700">
-                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
-              </span>
-            </div>
-
-            <Link
-              href="/wizard?product=complete_pack&src=product_page&topic=eviction"
-              className="hero-btn-primary"
-            >
-              Start Your Eviction Pack →
-            </Link>
-            <div className="mt-4 mb-2">
-              <SocialProofCounter variant="today" className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero {...completePackHeroConfig} />
 
       {/* What You Get Section */}
       <section className="py-16 md:py-20">

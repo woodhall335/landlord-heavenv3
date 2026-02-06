@@ -56,7 +56,7 @@ export const astHeroConfig: HeroConfig = {
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI templates',
-  mascotSrc: '/images/mascots/landlord-heaven-owl-landlord-guide.png',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
   mascotAlt: 'Landlord Heaven owl mascot with tenancy agreement documents',
 };
 
@@ -81,7 +81,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   trustText: 'Eviction Notice Only',
   title: 'Eviction Notice',
   highlightTitle: 'served correctly, fast',
-  subtitle: 'Legally Valid Eviction Notices for England, Wales & Scotland',
+  subtitle: 'Legally Valid Eviction Notices for England, Wales & Scotland — £49.99 one-time',
   primaryCta: {
     label: 'Get Your Notice Now →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -93,4 +93,40 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   feature: 'England: Section 21 / Section 8 · Wales: Section 173 · Scotland: Notice to Leave',
   mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice.png',
   mascotAlt: 'Landlord Heaven owl mascot holding an eviction notice',
+};
+
+export const completePackHeroConfig: UniversalHeroProps = {
+  trustText: 'Complete eviction support for England landlords',
+  title: 'Complete Eviction Pack',
+  highlightTitle: 'ready for court in days',
+  subtitle: 'Complete eviction pack for England — £199.99 one-time',
+  primaryCta: {
+    label: 'Start Your Eviction Pack →',
+    href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
+  },
+  secondaryCta: {
+    label: 'Preview before you buy',
+    href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
+  },
+  feature: 'Notice, court forms, witness statement, and filing guidance in one pack',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice-keys.png',
+  mascotAlt: 'Landlord Heaven owl mascot with eviction notice and keys',
+};
+
+export const moneyClaimHeroConfig: UniversalHeroProps = {
+  trustText: 'Recover rent arrears with court-ready claims',
+  title: 'Money Claim Pack',
+  highlightTitle: 'recover rent arrears fast',
+  subtitle: 'Fast money claim support for landlords — £99.99 one-time',
+  primaryCta: {
+    label: 'Start Money Claim →',
+    href: '/wizard?product=money_claim&src=product_page',
+  },
+  secondaryCta: {
+    label: 'Preview before you buy',
+    href: '/wizard?product=money_claim&src=product_page',
+  },
+  feature: 'N1 claim form, PAP-DEBT letter, and interest calculator included',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-judge-court.png',
+  mascotAlt: 'Landlord Heaven owl mascot in court attire',
 };
