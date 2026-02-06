@@ -21,4 +21,4 @@ export { WhatYouGet } from './WhatYouGet';
 export type { WhatYouGetProps, ProductType as WhatYouGetProductType } from './WhatYouGet';
 
 export { WhatsIncludedInteractive } from './WhatsIncludedInteractive';
-export type { JurisdictionKey, NoticeVariantKey } from './WhatsIncludedInteractive';
+export type { JurisdictionKey, NoticeVariantKey } from '@/lib/previews/noticeOnlyPreviews';
