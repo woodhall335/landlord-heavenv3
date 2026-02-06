@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -63,50 +62,23 @@ export default function AdminUsersPage() {
   }, [router]);
 
   const loadUsers = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
     try {
-      let query = supabase
-        .from("users")
-        .select("*", { count: "exact" })
-        .range((currentPage - 1) * usersPerPage, currentPage * usersPerPage - 1);
+      const params = new URLSearchParams({
+        page: String(currentPage),
+        per_page: String(usersPerPage),
+        search: searchTerm,
+        sort: sortBy,
+      });
 
-      // Search filter
-      if (searchTerm) {
-        query = query.or(`email.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`);
+      const response = await fetch(`/api/admin/users/metrics?${params.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load users: ${response.statusText}`);
       }
 
-      // Sort
-      if (sortBy === "signup") {
-        query = query.order("created_at", { ascending: false });
-      } else if (sortBy === "email") {
-        query = query.order("email", { ascending: true });
-      }
-
-      const { data, error, count } = await query;
-
-      if (error) throw error;
-
-      // Load order stats for each user (subscription info is already in users table)
-      const usersWithStats: UserWithStats[] = await Promise.all(
-        (data || []).map(async (user: any) => {
-          // Get order stats - use payment_status field from schema
-          const { data: ordersData } = await supabase
-            .from("orders")
-            .select("total_amount")
-            .eq("user_id", user.id)
-            .eq("payment_status", "paid");
-
-          const orderCount = ordersData?.length || 0;
-          const totalRevenue = (ordersData as { total_amount: number }[] | null)?.reduce((sum, order) => sum + order.total_amount, 0) || 0;
-
-          return {
-            ...user,
-            subscription_tier: user.hmo_pro_tier,
-            order_count: orderCount,
-            total_revenue: totalRevenue,
-          };
-        })
-      );
+      const payload = await response.json();
+      const usersWithStats: UserWithStats[] = payload.users || [];
+      const count = payload.count || 0;
 
       // Apply tier filter
       let filteredUsers = usersWithStats;
@@ -248,7 +220,7 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="p-4">
                       <span className="font-semibold text-charcoal">
-                        £{((user.total_revenue || 0) / 100).toFixed(2)}
+                        £{(user.total_revenue || 0).toFixed(2)}
                       </span>
                     </td>
                     <td className="p-4">
@@ -319,7 +291,7 @@ export default function AdminUsersPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
             <p className="text-3xl font-bold text-success">
-              £{(users.reduce((sum, u) => sum + (u.total_revenue || 0), 0) / 100).toFixed(2)}
+              £{users.reduce((sum, u) => sum + (u.total_revenue || 0), 0).toFixed(2)}
             </p>
           </div>
         </div>
