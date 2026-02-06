@@ -17,7 +17,6 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  AskHeavenSection,
   JurisdictionAccordion,
   VsSolicitorComparison,
   VsFreeTemplateComparison,
@@ -115,9 +114,6 @@ export default function NoticeOnlyPage() {
           </div>
         </Container>
       </section>
-
-      {/* Ask Heaven Section */}
-      <AskHeavenSection variant="full" product="notice_only" />
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
