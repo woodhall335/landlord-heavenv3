@@ -21,6 +21,7 @@ import {
   VsFreeTemplateComparison,
   WhatsIncludedInteractive,
 } from "@/components/value-proposition";
+import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 
 // Get price from single source of truth
 const product = PRODUCTS.notice_only;
@@ -39,6 +40,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/products/notice-only'),
   },
 };
+
+export const runtime = 'nodejs';
 
 // FAQ data for structured data
 const faqs = [
@@ -76,7 +79,9 @@ const faqs = [
   }
 ];
 
-export default function NoticeOnlyPage() {
+export default async function NoticeOnlyPage() {
+  const previews = await getNoticeOnlyPreviewData();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
@@ -96,7 +101,7 @@ export default function NoticeOnlyPage() {
       {/* Hero Section */}
       <UniversalHero {...noticeOnlyHeroConfig} />
 
-      <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" />
+      <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
