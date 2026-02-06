@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
-import Image from "next/image";
-import { RiCheckboxCircleLine, RiCloseLine } from "react-icons/ri";
+import { RiCheckboxCircleLine } from "react-icons/ri";
 import {
   Home,
   GraduationCap,
   Briefcase,
   BadgePoundSterling,
-  Eye,
-  RefreshCw,
   Cloud,
   FileText,
   List,
@@ -31,13 +28,8 @@ import {
 } from "@/components/value-proposition";
 import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
 import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
-import {
-  getIncludedSummary,
-  JURISDICTION_AGREEMENT_INFO,
-  COMPLIANCE_CHECKLIST_INFO,
-  type TenancyJurisdiction,
-  type TenancyTier,
-} from "@/lib/tenancy/included-features";
+import { UniversalHero } from "@/components/landing/UniversalHero";
+import { astHeroConfig } from "@/components/landing/heroConfigs";
 
 // Get prices from single source of truth
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
@@ -113,56 +105,7 @@ export default function ASTPage() {
       ])} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Tenancy Agreements</h1>
-            <p className="text-xl md:text-2xl mb-4 text-gray-600">
-              Legally Compliant for All UK Regions
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: AST</span>
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales: Occupation Contract</span>
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: PRT</span>
-              <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full">🇬🇧 Northern Ireland</span>
-            </div>
-            <div className="flex items-baseline justify-center gap-2 mb-6">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">{standardPrice}</span>
-              <span className="text-gray-500 text-lg">standard</span>
-            </div>
-
-            {/* Key differentiators */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-              <span className="flex items-center gap-1 text-gray-700">
-                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
-              </span>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                className="hero-btn-primary"
-              >
-                Standard - {standardPrice} →
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                className="hero-btn-secondary"
-              >
-                Premium (HMO-Ready) - {premiumPrice} →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">One-time payment • Unlimited regenerations • No subscription</p>
-            <p className="mt-2 text-xs text-gray-500">Standard for single households • Premium for HMOs, students &amp; multi-tenant</p>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero {...astHeroConfig} />
 
       {/* What's Included in This Agreement - Integration Layer Disclosure */}
       <section className="py-16 md:py-20 bg-white">
