@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/ui';
 import type {
   JurisdictionKey,
@@ -193,6 +193,29 @@ export const WhatsIncludedInteractive = ({
   const documents = previews[selectedJurisdiction]?.[activeVariant.key] ?? [];
   const activeDoc = documents.find((document) => document.key === selectedDocKey) ?? documents[0];
 
+  const evictionNoticeDocuments = useMemo(() => {
+    const matchers = [
+      /section[-\s]?8/,
+      /section[-\s]?21/,
+      /section[-\s]?173/,
+      /rhw23/,
+      /notice[-\s]?to[-\s]?leave/,
+      /eviction[-\s]?notice/,
+      /form[-\s]?6a/,
+      /form[-\s]?3/,
+    ];
+
+    return documents.filter((document) => {
+      const haystack = `${document.title} ${document.key}`.toLowerCase();
+      return matchers.some((matcher) => matcher.test(haystack));
+    });
+  }, [documents]);
+
+  const guidanceDocuments = useMemo(
+    () => documents.filter((document) => !evictionNoticeDocuments.some((notice) => notice.key === document.key)),
+    [documents, evictionNoticeDocuments],
+  );
+
   const orderedDocuments = useMemo(() => {
     if (!activeDoc) {
       return [];
@@ -203,9 +226,31 @@ export const WhatsIncludedInteractive = ({
 
   const visibleDocuments = orderedDocuments.slice(0, 4);
   const extraDocumentCount = Math.max(0, orderedDocuments.length - visibleDocuments.length);
-  const primaryDocument = documents[0];
-  const guidanceDocuments = documents.slice(1);
   const hasDocuments = documents.length > 0;
+  const stackContainerRef = useRef<HTMLDivElement | null>(null);
+  const [stackWidth, setStackWidth] = useState(0);
+
+  useEffect(() => {
+    const container = stackContainerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const updateWidth = () => {
+      setStackWidth(container.getBoundingClientRect().width);
+    };
+
+    updateWidth();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateWidth);
+      return () => window.removeEventListener('resize', updateWidth);
+    }
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section className="py-16 md:py-20">
@@ -290,11 +335,13 @@ export const WhatsIncludedInteractive = ({
                     <div>
                       <p className="text-sm font-semibold text-[#7c3aed]">Eviction Notices</p>
                       <ul className="mt-2 space-y-2 text-sm text-gray-700">
-                        {primaryDocument ? (
-                          <li key={primaryDocument.key} className="flex items-start gap-2">
-                            <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
-                            <span>{primaryDocument.title}</span>
-                          </li>
+                        {evictionNoticeDocuments.length ? (
+                          evictionNoticeDocuments.map((document) => (
+                            <li key={document.key} className="flex items-start gap-2">
+                              <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
+                              <span>{document.title}</span>
+                            </li>
+                          ))
                         ) : (
                           <li className="text-sm text-gray-500">Previews coming soon.</li>
                         )}
@@ -369,7 +416,7 @@ export const WhatsIncludedInteractive = ({
                       <span className="text-xs text-gray-500">Click a document to preview</span>
                     </div>
                     <div className="mt-4">
-                      <div className="relative min-h-[240px] sm:min-h-[260px]">
+                      <div className="relative min-h-[240px] sm:min-h-[260px]" ref={stackContainerRef}>
                         {!hasDocuments ? (
                           <div className="flex h-full min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
                             Previews coming soon.
@@ -378,14 +425,18 @@ export const WhatsIncludedInteractive = ({
                         {visibleDocuments.map((document, index) => {
                           const isActive = document.key === activeDoc?.key;
                           const stackIndex = Math.min(index, 4);
-                          const offsets = [
-                            { x: 0, y: 0, rotate: 0, scale: 1 },
-                            { x: 18, y: 10, rotate: -3, scale: 0.98 },
-                            { x: 32, y: 20, rotate: 2, scale: 0.96 },
-                            { x: 44, y: 30, rotate: -2, scale: 0.94 },
-                            { x: 56, y: 38, rotate: 3, scale: 0.92 },
-                          ];
-                          const { x, y, rotate, scale } = offsets[stackIndex];
+                          const visibleCount = visibleDocuments.length;
+                          const usableWidth = Math.max(stackWidth - 160, 0);
+                          const overlapFactor = 0.7;
+                          const rawStep = visibleCount > 1 ? (usableWidth / (visibleCount - 1)) * overlapFactor : 0;
+                          const xStep = Math.min(Math.max(rawStep, 12), 44);
+                          const yStep = Math.min(Math.max(xStep * 0.6, 6), 30);
+                          const x = stackIndex * xStep;
+                          const y = stackIndex * yStep;
+                          const rotations = [0, -3, 2, -2, 3];
+                          const scales = [1, 0.98, 0.96, 0.94, 0.92];
+                          const rotate = rotations[stackIndex] ?? 0;
+                          const scale = scales[stackIndex] ?? 1;
                           return (
                             <button
                               key={document.key}
@@ -411,9 +462,7 @@ export const WhatsIncludedInteractive = ({
                                   className="h-auto w-full object-cover"
                                 />
                               </div>
-                              <p className="text-[11px] font-medium text-gray-700 text-center line-clamp-2">
-                                {document.title}
-                              </p>
+                              <span className="sr-only">{document.title}</span>
                             </button>
                           );
                         })}
