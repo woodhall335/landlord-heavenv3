@@ -91,6 +91,6 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   feature: 'England: Section 21 / Section 8 · Wales: Section 173 · Scotland: Notice to Leave',
-  mascotSrc: '/images/mascots/eviction-mascot-eviction-notice.png',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice.png',
   mascotAlt: 'Landlord Heaven owl mascot holding an eviction notice',
 };
