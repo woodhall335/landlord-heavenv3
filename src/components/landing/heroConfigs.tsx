@@ -98,7 +98,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 export const completePackHeroConfig: UniversalHeroProps = {
   trustText: 'Complete eviction support for England landlords',
   title: 'Complete Eviction Pack',
-  highlightTitle: 'ready for court in days',
+  highlightTitle: 'court ready',
   subtitle: 'Complete eviction pack for England — £199.99 one-time',
   primaryCta: {
     label: 'Start Your Eviction Pack →',
@@ -111,6 +111,18 @@ export const completePackHeroConfig: UniversalHeroProps = {
   feature: 'Notice, court forms, witness statement, and filing guidance in one pack',
   mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice-keys.png',
   mascotAlt: 'Landlord Heaven owl mascot with eviction notice and keys',
+};
+
+export const blogHeroConfig: UniversalHeroProps = {
+  trustText: 'Landlord Guides & Insights',
+  title: 'Landlord Guides',
+  highlightTitle: 'built for confident decisions',
+  subtitle: 'Practical advice on evictions, tenancy law, and property management for UK landlords.',
+  primaryCta: { label: 'Browse Guides →', href: '/blog' },
+  secondaryCta: { label: 'View Latest Posts →', href: '/blog?view=latest' },
+  feature: 'Step-by-step legal guidance updated for UK regulations',
+  mascotSrc: '/images/mascots/landlord-heaven-owl-landlord-guide.png',
+  mascotAlt: 'Landlord Heaven owl mascot with landlord guide',
 };
 
 export const moneyClaimHeroConfig: UniversalHeroProps = {

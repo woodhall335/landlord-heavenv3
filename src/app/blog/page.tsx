@@ -7,8 +7,9 @@ import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
-import { StandardHero } from '@/components/marketing/StandardHero';
-import { FileText, Scale, Clock, Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { blogHeroConfig } from '@/components/landing/heroConfigs';
+import { Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 
@@ -81,29 +82,7 @@ export default function BlogPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
-          badge="Free Landlord Resources"
-          badgeIcon={<FileText className="w-4 h-4" />}
-          title="Landlord Guides & Legal Resources"
-          subtitle="Expert advice on evictions, tenancy law, and property management. Written by legal professionals, trusted by thousands of UK landlords."
-          variant="pastel"
-        >
-          {/* Quick Stats */}
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <Scale className="w-4 h-4 text-primary" />
-              <span>Legally Accurate</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
-              <span>Updated for 2026</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
-              <span>{blogPosts.length} Guides Available</span>
-            </div>
-          </div>
-        </StandardHero>
+        <UniversalHero {...blogHeroConfig} />
 
         {/* Urgency Banner */}
         <section className="bg-primary py-6">
