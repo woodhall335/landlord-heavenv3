@@ -111,6 +111,58 @@ describe('Section 8 Notice Arrears Consistency', () => {
     };
   };
 
+  const createBelowThresholdMonthlyCase = () => {
+    const arrearsItems: ArrearsItem[] = [
+      {
+        period_start: '2025-11-01',
+        period_end: '2025-11-30',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+      {
+        period_start: '2025-12-01',
+        period_end: '2025-12-31',
+        rent_due: 967.74,
+        rent_paid: 0,
+        amount_owed: 967.74,
+      },
+    ];
+
+    return {
+      arrearsItems,
+      rentAmount: 1200,
+      rentFrequency: 'monthly' as const,
+      expectedTotal: 2167.74,
+    };
+  };
+
+  const createAboveThresholdMonthlyCase = () => {
+    const arrearsItems: ArrearsItem[] = [
+      {
+        period_start: '2025-11-01',
+        period_end: '2025-11-30',
+        rent_due: 1250,
+        rent_paid: 0,
+        amount_owed: 1250,
+      },
+      {
+        period_start: '2025-12-01',
+        period_end: '2025-12-31',
+        rent_due: 1250,
+        rent_paid: 0,
+        amount_owed: 1250,
+      },
+    ];
+
+    return {
+      arrearsItems,
+      rentAmount: 1200,
+      rentFrequency: 'monthly' as const,
+      expectedTotal: 2500,
+    };
+  };
+
   describe('Pro-rated final period', () => {
     test('Notice total arrears equals schedule total arrears', () => {
       const testCase = createProRatedTestCase();
@@ -287,6 +339,44 @@ describe('Section 8 Notice Arrears Consistency', () => {
 
       // Should use the legacy total
       expect(ground8.particulars).toContain('£4000.00');
+    });
+  });
+
+  describe('Ground 8 gating with canonical totals', () => {
+    test('Ground 8 omitted when arrears below threshold, Ground 10 remains', () => {
+      const testCase = createBelowThresholdMonthlyCase();
+
+      const wizardFacts = {
+        rent_amount: testCase.rentAmount,
+        rent_frequency: testCase.rentFrequency,
+        arrears_items: testCase.arrearsItems,
+        section8_grounds: ['8', '10'],
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+      const ground8 = templateData.grounds?.find((g: any) => g.code === 8);
+      const ground10 = templateData.grounds?.find((g: any) => g.code === 10);
+
+      expect(ground8).toBeUndefined();
+      expect(ground10).toBeDefined();
+      expect(ground10.particulars).toContain(`£${testCase.expectedTotal.toFixed(2)}`);
+    });
+
+    test('Ground 8 included when arrears meet threshold', () => {
+      const testCase = createAboveThresholdMonthlyCase();
+
+      const wizardFacts = {
+        rent_amount: testCase.rentAmount,
+        rent_frequency: testCase.rentFrequency,
+        arrears_items: testCase.arrearsItems,
+        section8_grounds: ['8', '10'],
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+      const ground8 = templateData.grounds?.find((g: any) => g.code === 8);
+
+      expect(ground8).toBeDefined();
+      expect(ground8.particulars).toContain(`£${testCase.expectedTotal.toFixed(2)}`);
     });
   });
 
