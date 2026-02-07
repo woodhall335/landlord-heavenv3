@@ -45,7 +45,7 @@ export async function POST() {
       documents: pack.documents,
       metadata: pack.metadata,
     });
-    const download = result.zipPath ? registerArtifactDownload(result.zipPath) : null;
+    const download = result.zipPath ? registerArtifactDownload(result.zipPath, result.outputDir) : null;
 
     return NextResponse.json({
       ok: true,

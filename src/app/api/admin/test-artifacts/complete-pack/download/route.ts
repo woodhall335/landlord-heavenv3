@@ -3,7 +3,7 @@ import path from 'path';
 import { NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
-import { consumeArtifactDownload } from '@/lib/test-artifacts/artifactDownloadStore';
+import { cleanupArtifactDownload, consumeArtifactDownload } from '@/lib/test-artifacts/artifactDownloadStore';
 
 export async function GET(request: Request) {
   try {
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ ok: false, error: 'Missing download token' }, { status: 400 });
     }
 
-    const entry = consumeArtifactDownload(token);
+    const entry = await consumeArtifactDownload(token);
 
     if (!entry) {
       return NextResponse.json({ ok: false, error: 'Download token expired or invalid' }, { status: 404 });
@@ -31,7 +31,12 @@ export async function GET(request: Request) {
 
     const zipData = await fs.readFile(entry.zipPath);
     const filename = path.basename(entry.zipPath);
-    await fs.rm(entry.zipPath, { force: true });
+
+    try {
+      await cleanupArtifactDownload(entry);
+    } catch (cleanupError) {
+      console.error('Admin test artifacts cleanup error:', cleanupError);
+    }
 
     return new NextResponse(zipData, {
       status: 200,
@@ -46,9 +51,6 @@ export async function GET(request: Request) {
     }
 
     console.error('Admin test artifacts download error:', error);
-    return NextResponse.json(
-      { ok: false, error: error?.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: 'Internal server error' }, { status: 500 });
   }
 }
