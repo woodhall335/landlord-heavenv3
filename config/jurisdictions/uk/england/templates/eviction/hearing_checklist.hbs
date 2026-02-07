@@ -150,7 +150,9 @@
 <!-- Header -->
 <div class="header">
   <h1>HEARING CHECKLIST</h1>
-  <h2>Section 8 Possession Proceedings - Ground 8 (Rent Arrears)</h2>
+  <h2>
+    Section 8 Possession Proceedings{{#if (contains groundsReliedUpon "Ground 8")}} - Ground 8 (Rent Arrears){{/if}}
+  </h2>
 </div>
 
 <!-- Case Summary -->
@@ -179,11 +181,20 @@
     </li>
     <li>
       Update Schedule of Arrears to current date
+      {{#if (contains groundsReliedUpon "Ground 8")}}
       <div class="notes">Ground 8 requires arrears at BOTH notice date AND hearing date</div>
+      {{else}}
+      <div class="notes">Ensure the schedule reflects the latest arrears position</div>
+      {{/if}}
     </li>
     <li>
+      {{#if (contains groundsReliedUpon "Ground 8")}}
       Confirm the arrears still meet Ground 8 threshold (2 months/8 weeks)
       <div class="notes">If arrears have fallen below threshold, Ground 8 may fail</div>
+      {{else}}
+      Confirm rent arrears remain outstanding and are fully evidenced
+      <div class="notes">The court will consider reasonableness for discretionary grounds</div>
+      {{/if}}
     </li>
     <li class="important">
       Check if tenant has filed a defence or made any payments
@@ -247,11 +258,16 @@
     </li>
     <li class="important">
       If tenant offers to pay or proposes a payment plan, be ready to respond
+      {{#if (contains groundsReliedUpon "Ground 8")}}
       <div class="notes">Ground 8 is mandatory IF threshold met, but judge may adjourn</div>
+      {{else}}
+      <div class="notes">The judge may adjourn or make a suspended order</div>
+      {{/if}}
     </li>
   </ul>
 </div>
 
+{{#if (contains groundsReliedUpon "Ground 8")}}
 <!-- Ground 8 Specific -->
 <div class="timeline-box">
   <h4>Ground 8 Key Points for the Hearing</h4>
@@ -272,6 +288,7 @@
     Ground 8 will fail. You should also rely on Ground 10 (discretionary arrears ground) as a backup.
   </p>
 </div>
+{{/if}}
 
 <!-- After the Hearing -->
 <div class="section">

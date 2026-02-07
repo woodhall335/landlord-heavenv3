@@ -817,6 +817,7 @@ export function extractWitnessStatementSectionsInput(
   // Section 8 / Grounds extraction
   const nestedSection8 = data.section8 || {};
   const section8Grounds =
+    data.groundsReliedUpon ||
     nestedSection8.grounds ||
     data.section8_grounds ||
     data.issues?.section8_grounds?.selected_grounds ||
