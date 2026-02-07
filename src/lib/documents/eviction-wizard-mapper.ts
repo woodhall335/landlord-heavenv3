@@ -9,6 +9,7 @@ import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 import {
@@ -234,12 +235,25 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
         particulars = facts.issues.section8_grounds.arrears_breakdown as string;
       } else {
         // Otherwise, generate from canonical arrears data
+        const noticeDate =
+          facts.notice.notice_date ||
+          facts.notice.served_date ||
+          undefined;
+        const canonicalArrears = computeEvictionArrears({
+          arrears_items: facts.issues.rent_arrears.arrears_items,
+          total_arrears: facts.issues.rent_arrears.total_arrears,
+          rent_amount: facts.tenancy.rent_amount || 0,
+          rent_frequency: facts.tenancy.rent_frequency,
+          rent_due_day: facts.tenancy.rent_due_day,
+          schedule_end_date: noticeDate,
+        });
         const arrearsParticulars = generateArrearsParticulars({
           arrears_items: facts.issues.rent_arrears.arrears_items,
           total_arrears: facts.issues.rent_arrears.total_arrears,
           rent_amount: facts.tenancy.rent_amount || 0,
           rent_frequency: facts.tenancy.rent_frequency,
           include_full_schedule: false, // Summary for notice, full schedule as separate PDF
+          schedule_data: canonicalArrears.scheduleData,
         });
         particulars = arrearsParticulars.particulars;
       }

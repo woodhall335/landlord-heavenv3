@@ -69,6 +69,7 @@ import {
 import { buildComplianceTimingDataWithFallback } from './compliance-timing-facts';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 import { calculateSection21ExpiryDate, type Section21DateParams, type ServiceMethod } from './notice-date-calculator';
+import { computeEvictionArrears, proRatePartialPeriods } from '@/lib/eviction/arrears/computeArrears';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -197,149 +198,6 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
 // ============================================================================
 
 /**
- * Calculate the number of days in a period (inclusive).
- */
-function daysBetween(startDate: string, endDate: string): number {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const diffTime = Math.abs(end.getTime() - start.getTime());
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 for inclusive
-}
-
-/**
- * Get the number of days in a month for a given date.
- */
-function daysInMonth(dateStr: string): number {
-  const date = new Date(dateStr);
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-}
-
-/**
- * Pro-rate partial periods in an arrears schedule.
- *
- * For monthly rent, if the last period is less than a full month (based on the
- * schedule end date), pro-rate the rent due amount.
- *
- * @param schedule - The arrears schedule entries
- * @param rentAmount - The full rent amount per period
- * @param rentFrequency - The rent frequency (monthly, weekly, etc.)
- * @param scheduleEndDate - The date up to which arrears are calculated (e.g., notice date)
- * @returns The schedule with the last period pro-rated if applicable
- */
-function proRatePartialPeriods(
-  schedule: Array<{
-    period: string;
-    due_date: string;
-    amount_due: number;
-    amount_paid: number;
-    arrears: number;
-    running_balance?: number;
-    notes?: string;
-  }>,
-  rentAmount: number,
-  rentFrequency: string,
-  scheduleEndDate?: string | null
-): Array<{
-  period: string;
-  due_date: string;
-  amount_due: number;
-  amount_paid: number;
-  arrears: number;
-  running_balance?: number;
-  notes?: string;
-}> {
-  if (!schedule || schedule.length === 0 || !scheduleEndDate) {
-    return schedule;
-  }
-
-  // Only handle monthly frequency for now (most common)
-  if (rentFrequency !== 'monthly') {
-    return schedule;
-  }
-
-  // Work on a copy
-  const result = [...schedule];
-  const lastIndex = result.length - 1;
-  const lastEntry = result[lastIndex];
-
-  // Parse period dates from the "X to Y" format
-  // Format is "D Month YYYY to D Month YYYY" (UK legal format)
-  const periodMatch = lastEntry.period.match(/^(.+?)\s+to\s+(.+)$/i);
-  if (!periodMatch) {
-    return schedule;
-  }
-
-  const periodStartStr = periodMatch[1].trim();
-  const periodEndStr = periodMatch[2].trim();
-
-  // Parse UK date format (e.g., "14 January 2026") to Date
-  const parseUKDate = (ukDateStr: string): Date | null => {
-    const months: Record<string, number> = {
-      january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
-      july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
-    };
-    const match = ukDateStr.match(/(\d+)\s+(\w+)\s+(\d{4})/);
-    if (!match) return null;
-    const day = parseInt(match[1], 10);
-    const month = months[match[2].toLowerCase()];
-    const year = parseInt(match[3], 10);
-    if (month === undefined) return null;
-    return new Date(year, month, day);
-  };
-
-  const periodStart = parseUKDate(periodStartStr);
-  const periodEnd = parseUKDate(periodEndStr);
-  const scheduleEnd = new Date(scheduleEndDate);
-
-  if (!periodStart || !periodEnd) {
-    return schedule;
-  }
-
-  // Calculate expected full period length (days in the month)
-  const fullPeriodDays = daysInMonth(periodStart.toISOString().split('T')[0]);
-
-  // Calculate actual period days
-  const actualDays = daysBetween(
-    periodStart.toISOString().split('T')[0],
-    periodEnd.toISOString().split('T')[0]
-  );
-
-  // Check if this is a partial period (less than full month)
-  // Allow 3 day tolerance (for months with 28-31 days)
-  if (actualDays >= fullPeriodDays - 3) {
-    return schedule; // Not a partial period
-  }
-
-  // Pro-rate the rent
-  const dailyRate = rentAmount / fullPeriodDays;
-  const proRatedAmount = Math.round(dailyRate * actualDays * 100) / 100;
-
-  // Calculate the difference from what was originally charged
-  const originalAmount = lastEntry.amount_due;
-  const adjustment = originalAmount - proRatedAmount;
-
-  // Update the last entry
-  result[lastIndex] = {
-    ...lastEntry,
-    amount_due: proRatedAmount,
-    arrears: Math.round((lastEntry.arrears - adjustment) * 100) / 100,
-    notes: `Pro-rated for ${actualDays} days (daily rate: £${dailyRate.toFixed(2)})`,
-  };
-
-  // Recalculate running balances
-  let runningBalance = 0;
-  for (let i = 0; i < result.length; i++) {
-    runningBalance += result[i].arrears;
-    result[i] = {
-      ...result[i],
-      running_balance: Math.round(runningBalance * 100) / 100,
-    };
-  }
-
-  return result;
-}
-
-/**
  * Build formatted date fields for Section 8 templates.
  * Ensures service_date_formatted, earliest_possession_date_formatted,
  * tenancy_start_date_formatted, and ground_descriptions are set.
@@ -410,6 +268,43 @@ function buildSection8TemplateData(
       generated_at: now,
     },
   };
+}
+
+function assertArrearsTotalsConsistent(params: {
+  canonicalTotal: number;
+  documents: EvictionPackDocument[];
+  enforce: boolean;
+}): void {
+  const { canonicalTotal, documents, enforce } = params;
+
+  if (!enforce || canonicalTotal <= 0) {
+    return;
+  }
+
+  const plainTotal = `£${canonicalTotal.toFixed(2)}`;
+  const witnessTotal = `£${canonicalTotal.toLocaleString('en-GB', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
+  const checks = [
+    { docType: 'arrears_schedule', expected: plainTotal },
+    { docType: 'section8_notice', expected: plainTotal },
+    { docType: 'witness_statement', expected: witnessTotal },
+    { docType: 'arrears_engagement_letter', expected: plainTotal },
+  ];
+
+  for (const check of checks) {
+    const doc = documents.find((item) => item.document_type === check.docType);
+    if (!doc?.html) {
+      continue;
+    }
+    if (!doc.html.includes(check.expected)) {
+      throw new Error(
+        `ARREARS_TOTAL_MISMATCH: ${check.docType} does not include canonical total ${check.expected}`
+      );
+    }
+  }
 }
 
 // ============================================================================
@@ -1613,6 +1508,50 @@ export async function generateCompleteEvictionPack(
     }
   }
 
+  const arrearsItemsInput: ArrearsItem[] = wizardFacts?.arrears_items ||
+    wizardFacts?.issues?.rent_arrears?.arrears_items || [];
+  const totalArrearsInput = wizardFacts?.total_arrears ||
+    wizardFacts?.arrears_total ||
+    wizardFacts?.issues?.rent_arrears?.total_arrears ||
+    wizardFacts?.rent_arrears_amount ||
+    wizardFacts?.arrears_amount ||
+    0;
+  const rentAmountInput = wizardFacts?.rent_amount ||
+    wizardFacts?.tenancy?.rent_amount ||
+    0;
+  const rentFrequencyInput = (wizardFacts?.rent_frequency ||
+    wizardFacts?.tenancy?.rent_frequency ||
+    'monthly') as TenancyFacts['rent_frequency'];
+  const rentDueDayInput = wizardFacts?.rent_due_day ||
+    wizardFacts?.tenancy?.rent_due_day ||
+    null;
+  const noticeDateInput = wizardFacts?.notice_served_date ||
+    wizardFacts?.notice?.service_date ||
+    wizardFacts?.notice?.served_date ||
+    wizardFacts?.notice_date ||
+    null;
+
+  const hasArrearsInputs = arrearsItemsInput.length > 0 || totalArrearsInput > 0;
+  const canonicalArrears = hasArrearsInputs ? computeEvictionArrears({
+    arrears_items: arrearsItemsInput,
+    total_arrears: totalArrearsInput,
+    rent_amount: rentAmountInput,
+    rent_frequency: rentFrequencyInput,
+    rent_due_day: rentDueDayInput,
+    schedule_end_date: noticeDateInput || new Date().toISOString().split('T')[0],
+  }) : null;
+
+  if (canonicalArrears) {
+    wizardFacts.arrears_items = canonicalArrears.items;
+    wizardFacts.total_arrears = canonicalArrears.total;
+    wizardFacts.arrears_total = canonicalArrears.total;
+    wizardFacts.rent_arrears_amount = canonicalArrears.total;
+    if (wizardFacts.issues?.rent_arrears) {
+      wizardFacts.issues.rent_arrears.arrears_items = canonicalArrears.items;
+      wizardFacts.issues.rent_arrears.total_arrears = canonicalArrears.total;
+    }
+  }
+
   // Initialize documents array
   const documents: EvictionPackDocument[] = [];
 
@@ -1641,23 +1580,13 @@ export async function generateCompleteEvictionPack(
   // 1.1 Generate Schedule of Arrears if arrears grounds selected
   if (hasArrearsGroundsSelected(selectedGroundCodes)) {
     try {
-      // Get arrears data from wizard facts using canonical engine
-      const arrearsItems: ArrearsItem[] = wizardFacts?.arrears_items ||
-                                           wizardFacts?.issues?.rent_arrears?.arrears_items || [];
-      const totalArrears = wizardFacts?.total_arrears ||
-                            wizardFacts?.arrears_total ||
-                            wizardFacts?.issues?.rent_arrears?.total_arrears || 0;
-      const rentAmount = wizardFacts?.rent_amount ||
-                          wizardFacts?.tenancy?.rent_amount || 0;
-      const rentFrequency = wizardFacts?.rent_frequency ||
-                              wizardFacts?.tenancy?.rent_frequency || 'monthly';
+      const rentAmount = rentAmountInput;
+      const rentFrequency = rentFrequencyInput;
+      const rentDueDay = rentDueDayInput;
 
-      const rentDueDay = wizardFacts?.rent_due_day ||
-                          wizardFacts?.tenancy?.rent_due_day || null;
-
-      const arrearsData = getArrearsScheduleData({
-        arrears_items: arrearsItems,
-        total_arrears: totalArrears,
+      const arrearsData = canonicalArrears?.scheduleData || getArrearsScheduleData({
+        arrears_items: arrearsItemsInput,
+        total_arrears: totalArrearsInput,
         rent_amount: rentAmount,
         rent_frequency: rentFrequency,
         rent_due_day: rentDueDay,
@@ -1671,7 +1600,7 @@ export async function generateCompleteEvictionPack(
         // Calculate Ground 8 threshold
         const ground8ThresholdAmount = rentAmount * 2; // 2 months' rent for Ground 8
         const arrearsAtScheduleDate = arrearsData.arrears_total;
-        const arrearsAtNoticeDate = arrearsData.arrears_at_notice_date ?? arrearsAtScheduleDate;
+        const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? arrearsAtScheduleDate;
         const meetsThresholdAtNotice = arrearsAtNoticeDate >= ground8ThresholdAmount;
         const meetsThresholdAtSchedule = arrearsAtScheduleDate >= ground8ThresholdAmount;
 
@@ -1690,18 +1619,6 @@ export async function generateCompleteEvictionPack(
                           wizardFacts?.notice?.served_date ||
                           null;
 
-        // Apply pro-rata to partial periods (if the last period is less than a full month)
-        const proRatedSchedule = proRatePartialPeriods(
-          arrearsData.arrears_schedule,
-          rentAmount,
-          rentFrequency,
-          noticeDate || today
-        );
-
-        // Recalculate total arrears from pro-rated schedule
-        const proRatedTotal = proRatedSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
-        const roundedProRatedTotal = Math.round(proRatedTotal * 100) / 100;
-
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
@@ -1713,8 +1630,8 @@ export async function generateCompleteEvictionPack(
             landlord_2_name: evictionCase.landlord_2_name,
             // Reference and arrears data
             claimant_reference: wizardFacts?.claimant_reference || evictionCase.case_id,
-            arrears_schedule: proRatedSchedule,
-            arrears_total: roundedProRatedTotal,
+            arrears_schedule: arrearsData.arrears_schedule,
+            arrears_total: arrearsData.arrears_total,
             // Schedule and notice dates
             schedule_date: today,
             notice_date: noticeDate,
@@ -1837,8 +1754,19 @@ export async function generateCompleteEvictionPack(
       const sectionsInput = extractWitnessStatementSectionsInput({
         ...wizardFacts,
         ...evictionCase,
+        ...(canonicalArrears
+          ? {
+            arrears: {
+              items: canonicalArrears.items,
+              total_arrears: canonicalArrears.total,
+              arrears_months: canonicalArrears.arrearsInMonths,
+            },
+            arrears_at_notice_date: canonicalArrears.arrearsAtNoticeDate,
+            arrearsAtNoticeDate: canonicalArrears.arrearsAtNoticeDate,
+          }
+          : {}),
         // Ensure arrears at notice date is passed explicitly
-        arrears_at_notice_date: evictionCase.arrears_at_notice_date,
+        arrears_at_notice_date: canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date,
       });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
@@ -2062,19 +1990,18 @@ export async function generateCompleteEvictionPack(
 
       // Get arrears data using the SAME method as Schedule of Arrears above
       const letterArrearsItems: ArrearsItem[] = wizardFacts?.arrears_items ||
-                                                  wizardFacts?.issues?.rent_arrears?.arrears_items || [];
+        wizardFacts?.issues?.rent_arrears?.arrears_items || [];
       const letterTotalArrearsFromFacts = wizardFacts?.total_arrears ||
-                                           wizardFacts?.arrears_total ||
-                                           wizardFacts?.issues?.rent_arrears?.total_arrears || null;
+        wizardFacts?.arrears_total ||
+        wizardFacts?.issues?.rent_arrears?.total_arrears || null;
       const letterRentAmount = wizardFacts?.rent_amount ||
-                                wizardFacts?.tenancy?.rent_amount || 0;
+        wizardFacts?.tenancy?.rent_amount || 0;
       const letterRentFrequency = wizardFacts?.rent_frequency ||
-                                   wizardFacts?.tenancy?.rent_frequency || 'monthly';
+        wizardFacts?.tenancy?.rent_frequency || 'monthly';
       const letterRentDueDay = wizardFacts?.rent_due_day ||
-                                wizardFacts?.tenancy?.rent_due_day || null;
+        wizardFacts?.tenancy?.rent_due_day || null;
 
-      // Use authoritative arrears calculation - SINGLE SOURCE OF TRUTH
-      const letterArrearsData = getArrearsScheduleData({
+      const letterArrearsData = canonicalArrears?.scheduleData || getArrearsScheduleData({
         arrears_items: letterArrearsItems,
         total_arrears: letterTotalArrearsFromFacts,
         rent_amount: letterRentAmount,
@@ -2084,7 +2011,7 @@ export async function generateCompleteEvictionPack(
       });
 
       // Use the authoritative total from the arrears engine
-      const letterTotalArrears = letterArrearsData.arrears_total;
+      const letterTotalArrears = canonicalArrears?.total ?? letterArrearsData.arrears_total;
 
       // DEBUG: Log all arrears paths for tracing (only in dev)
       if (process.env.NODE_ENV !== 'production' || process.env.DEBUG_ARREARS === '1') {
@@ -2094,7 +2021,7 @@ export async function generateCompleteEvictionPack(
           wizardFacts,
           evictionCase,
           arrearsScheduleData: {
-            total: letterArrearsData.arrears_total,
+            total: letterTotalArrears,
             itemCount: letterArrearsItems.length,
             isAuthoritative: letterArrearsData.is_authoritative,
           },
@@ -2198,6 +2125,18 @@ export async function generateCompleteEvictionPack(
     pdf: caseSummaryDoc.pdf,
     file_name: 'eviction_case_summary.pdf',
   });
+
+  const enforceArrearsConsistency =
+    process.env.NODE_ENV !== 'production' ||
+    process.env.ENFORCE_ARREARS_CONSISTENCY === 'true';
+
+  if (canonicalArrears && hasArrearsGroundsSelected(selectedGroundCodes)) {
+    assertArrearsTotalsConsistent({
+      canonicalTotal: canonicalArrears.total,
+      documents,
+      enforce: enforceArrearsConsistency,
+    });
+  }
 
   console.log(`✅ Generated ${documents.length} documents for complete eviction pack`);
 
