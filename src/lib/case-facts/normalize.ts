@@ -14,7 +14,7 @@ import {
   type Section8GroundDefinition,
 } from '../grounds/section8-ground-definitions';
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
-import { getArrearsScheduleData } from '../documents/arrears-schedule-mapper';
+import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/arrears-schedule-mapper';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 
 // =============================================================================
@@ -2861,7 +2861,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       const arrearsItems = templateData.arrears_items || [];
 
       // Get canonical arrears data (SINGLE SOURCE OF TRUTH)
-      const scheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
+      const scheduleData: ArrearsScheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
         arrears_items: arrearsItems,
         total_arrears: templateData.total_arrears,
         rent_amount: rentAmount,
