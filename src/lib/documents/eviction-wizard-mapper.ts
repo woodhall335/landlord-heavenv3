@@ -237,7 +237,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
         // Otherwise, generate from canonical arrears data
         const noticeDate =
           facts.notice.notice_date ||
-          facts.notice.served_date ||
+          facts.notice.service_date ||
           undefined;
         const canonicalArrears = computeEvictionArrears({
           arrears_items: facts.issues.rent_arrears.arrears_items,
