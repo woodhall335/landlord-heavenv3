@@ -15,6 +15,7 @@ import {
 } from '../grounds/section8-ground-definitions';
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
 import { getArrearsScheduleData } from '../documents/arrears-schedule-mapper';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -2859,8 +2860,8 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       const rentFreq = templateData.rent_frequency || 'monthly';
       const arrearsItems = templateData.arrears_items || [];
 
-      // Get canonical arrears data from the schedule mapper (SINGLE SOURCE OF TRUTH)
-      const scheduleData = getArrearsScheduleData({
+      // Get canonical arrears data (SINGLE SOURCE OF TRUTH)
+      const scheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
         arrears_items: arrearsItems,
         total_arrears: templateData.total_arrears,
         rent_amount: rentAmount,
@@ -3389,6 +3390,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
   const noticePeriodDays = getWizardValue(wizard, 'notice_period_days');
   templateData.notice_period_days = noticePeriodDays !== null ? Number(noticePeriodDays) || null : null;
+
 
   // =============================================================================
   // NOTICE SERVICE - Check nested paths from maps_to
@@ -4049,6 +4051,31 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     arrearsItems = (arrearsItemsRaw as any).arrears_items;
   }
   templateData.arrears_items = arrearsItems;
+
+  // =============================================================================
+  // CANONICAL ARREARS (NOTICE-ONLY)
+  // =============================================================================
+  const hasArrearsInputs =
+    (Array.isArray(templateData.arrears_items) && templateData.arrears_items.length > 0) ||
+    (templateData.total_arrears ?? 0) > 0;
+
+  if (hasArrearsInputs) {
+    const canonicalArrears = computeEvictionArrears({
+      arrears_items: templateData.arrears_items,
+      total_arrears: templateData.total_arrears,
+      rent_amount: templateData.rent_amount || 0,
+      rent_frequency: templateData.rent_frequency || 'monthly',
+      rent_due_day: templateData.payment_date,
+      schedule_end_date: templateData.notice_date || templateData.service_date || null,
+    });
+
+    templateData.arrears_items = canonicalArrears.items;
+    templateData.total_arrears = canonicalArrears.total;
+    templateData.arrears_at_notice_date =
+      canonicalArrears.arrearsAtNoticeDate ?? templateData.arrears_at_notice_date;
+    templateData.arrears_duration_months = canonicalArrears.arrearsInMonths;
+    templateData.arrears_schedule_data = canonicalArrears.scheduleData;
+  }
 
   // =============================================================================
   // ASB & BREACH DETAILS

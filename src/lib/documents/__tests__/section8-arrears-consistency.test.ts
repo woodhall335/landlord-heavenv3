@@ -195,6 +195,22 @@ describe('Section 8 Notice Arrears Consistency', () => {
       const expectedMonths = testCase.expectedTotal / testCase.rentAmount;
       expect(scheduleData.arrears_in_months).toBeCloseTo(expectedMonths, 1);
     });
+
+    test('Notice-only template uses canonical total when total_arrears disagrees', () => {
+      const testCase = createProRatedTestCase();
+
+      const wizardFacts = {
+        rent_amount: testCase.rentAmount,
+        rent_frequency: testCase.rentFrequency,
+        arrears_items: testCase.arrearsItems,
+        total_arrears: 4000,
+        section8_grounds: ['8'],
+      };
+
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      expect(templateData.total_arrears).toBeCloseTo(testCase.expectedTotal, 2);
+    });
   });
 
   describe('Partial payments with multiple part-paid periods', () => {
