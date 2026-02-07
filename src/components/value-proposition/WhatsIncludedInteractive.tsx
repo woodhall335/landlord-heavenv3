@@ -192,6 +192,29 @@ export const WhatsIncludedInteractive = ({
 
   const documents = previews[selectedJurisdiction]?.[activeVariant.key] ?? [];
   const activeDoc = documents.find((document) => document.key === selectedDocKey) ?? documents[0];
+  const activeIndex = useMemo(() => {
+    if (!documents.length) {
+      return -1;
+    }
+    const index = documents.findIndex((document) => document.key === selectedDocKey);
+    return index === -1 ? 0 : index;
+  }, [documents, selectedDocKey]);
+
+  const goPrev = () => {
+    if (documents.length < 2 || activeIndex === -1) {
+      return;
+    }
+    const nextIndex = (activeIndex - 1 + documents.length) % documents.length;
+    setSelectedDocKey(documents[nextIndex].key);
+  };
+
+  const goNext = () => {
+    if (documents.length < 2 || activeIndex === -1) {
+      return;
+    }
+    const nextIndex = (activeIndex + 1) % documents.length;
+    setSelectedDocKey(documents[nextIndex].key);
+  };
 
   const evictionNoticeDocuments = useMemo(() => {
     const matchers = [
@@ -425,8 +448,43 @@ export const WhatsIncludedInteractive = ({
 
               <div className="order-1 md:order-2">
                 <div className="rounded-3xl border border-[#7c3aed]/15 bg-white p-6 shadow-lg">
-                  <div className="space-y-3">
-                    <p className="text-sm font-semibold text-[#7c3aed]">Active preview</p>
+                  <div
+                    className="space-y-3 focus-visible:outline-none"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === 'ArrowLeft') {
+                        event.preventDefault();
+                        goPrev();
+                      }
+                      if (event.key === 'ArrowRight') {
+                        event.preventDefault();
+                        goNext();
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-semibold text-[#7c3aed]">Active preview</p>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={goPrev}
+                          disabled={documents.length < 2}
+                          aria-label="Previous preview"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#7c3aed]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                        >
+                          <span aria-hidden="true">←</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={goNext}
+                          disabled={documents.length < 2}
+                          aria-label="Next preview"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#7c3aed]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                        >
+                          <span aria-hidden="true">→</span>
+                        </button>
+                      </div>
+                    </div>
                     <h4 className="text-xl font-semibold text-charcoal">
                       {activeDoc?.title ?? 'Preview coming soon'}
                     </h4>
