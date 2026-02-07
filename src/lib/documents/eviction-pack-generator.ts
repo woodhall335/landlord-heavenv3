@@ -70,6 +70,7 @@ import { buildComplianceTimingDataWithFallback } from './compliance-timing-facts
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
 import { calculateSection21ExpiryDate, type Section21DateParams, type ServiceMethod } from './notice-date-calculator';
 import { computeEvictionArrears, proRatePartialPeriods } from '@/lib/eviction/arrears/computeArrears';
+import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 
 // ============================================================================
 // DATE FORMATTING HELPER - UK Legal Format
@@ -274,8 +275,10 @@ function assertArrearsTotalsConsistent(params: {
   canonicalTotal: number;
   documents: EvictionPackDocument[];
   enforce: boolean;
+  ground8Eligible?: boolean;
+  ground8Selected?: boolean;
 }): void {
-  const { canonicalTotal, documents, enforce } = params;
+  const { canonicalTotal, documents, enforce, ground8Eligible, ground8Selected } = params;
 
   if (!enforce || canonicalTotal <= 0) {
     return;
@@ -303,6 +306,19 @@ function assertArrearsTotalsConsistent(params: {
       throw new Error(
         `ARREARS_TOTAL_MISMATCH: ${check.docType} does not include canonical total ${check.expected}`
       );
+    }
+  }
+
+  if (typeof ground8Eligible === 'boolean' && ground8Selected) {
+    const section8Doc = documents.find((item) => item.document_type === 'section8_notice');
+    if (section8Doc?.html) {
+      const hasGround8 = /Ground 8\b/i.test(section8Doc.html);
+      if (ground8Eligible && !hasGround8) {
+        throw new Error('GROUND_8_MISSING: Ground 8 threshold met but not present in Section 8 notice');
+      }
+      if (!ground8Eligible && hasGround8) {
+        throw new Error('GROUND_8_PRESENT: Ground 8 threshold not met but appears in Section 8 notice');
+      }
     }
   }
 }
@@ -2135,10 +2151,19 @@ export async function generateCompleteEvictionPack(
     process.env.ENFORCE_ARREARS_CONSISTENCY === 'true';
 
   if (canonicalArrears && hasArrearsGroundsSelected(selectedGroundCodes)) {
+    const ground8Selected = selectedGroundCodes.includes(8);
+    const ground8Eligible = isGround8Eligible({
+      arrearsTotal: canonicalArrears.total,
+      rentAmount: rentAmountInput,
+      rentFrequency: rentFrequencyInput,
+    });
+
     assertArrearsTotalsConsistent({
       canonicalTotal: canonicalArrears.total,
       documents,
       enforce: enforceArrearsConsistency,
+      ground8Eligible,
+      ground8Selected,
     });
   }
 

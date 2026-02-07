@@ -10,6 +10,7 @@ import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
+import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 import {
@@ -217,6 +218,26 @@ function parseGround(option: string): { code: string; codeNum: number | '14A'; t
 
 function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   const selections = facts.issues.section8_grounds.selected_grounds || [];
+  const noticeDate =
+    facts.notice.notice_date ||
+    facts.notice.service_date ||
+    undefined;
+  const rentAmount = facts.tenancy.rent_amount || 0;
+  const rentFrequency = facts.tenancy.rent_frequency || 'monthly';
+  const canonicalArrears = computeEvictionArrears({
+    arrears_items: facts.issues.rent_arrears.arrears_items,
+    total_arrears: facts.issues.rent_arrears.total_arrears,
+    rent_amount: rentAmount,
+    rent_frequency: rentFrequency,
+    rent_due_day: facts.tenancy.rent_due_day,
+    schedule_end_date: noticeDate,
+  });
+  const ground8Eligible = isGround8Eligible({
+    arrearsTotal: canonicalArrears.total,
+    rentAmount,
+    rentFrequency,
+  });
+
   return selections.map((selection) => {
     const { code, codeNum, title } = parseGround(selection);
 
@@ -228,35 +249,21 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
+      if (codeNum === 8 && !ground8Eligible) {
+        return null;
+      }
+
       // Use canonical arrears mapper for arrears grounds particulars
       // This ensures particulars are generated from authoritative arrears_items
-      if (facts.issues.section8_grounds.arrears_breakdown) {
-        // If user has manually entered arrears breakdown, use that
-        particulars = facts.issues.section8_grounds.arrears_breakdown as string;
-      } else {
-        // Otherwise, generate from canonical arrears data
-        const noticeDate =
-          facts.notice.notice_date ||
-          facts.notice.service_date ||
-          undefined;
-        const canonicalArrears = computeEvictionArrears({
-          arrears_items: facts.issues.rent_arrears.arrears_items,
-          total_arrears: facts.issues.rent_arrears.total_arrears,
-          rent_amount: facts.tenancy.rent_amount || 0,
-          rent_frequency: facts.tenancy.rent_frequency,
-          rent_due_day: facts.tenancy.rent_due_day,
-          schedule_end_date: noticeDate,
-        });
-        const arrearsParticulars = generateArrearsParticulars({
-          arrears_items: facts.issues.rent_arrears.arrears_items,
-          total_arrears: facts.issues.rent_arrears.total_arrears,
-          rent_amount: facts.tenancy.rent_amount || 0,
-          rent_frequency: facts.tenancy.rent_frequency,
-          include_full_schedule: false, // Summary for notice, full schedule as separate PDF
-          schedule_data: canonicalArrears.scheduleData,
-        });
-        particulars = arrearsParticulars.particulars;
-      }
+      const arrearsParticulars = generateArrearsParticulars({
+        arrears_items: canonicalArrears.items,
+        total_arrears: canonicalArrears.total,
+        rent_amount: rentAmount,
+        rent_frequency: rentFrequency,
+        include_full_schedule: false, // Summary for notice, full schedule as separate PDF
+        schedule_data: canonicalArrears.scheduleData,
+      });
+      particulars = arrearsParticulars.particulars;
     } else if (code === 'Ground 12') {
       particulars = facts.issues.section8_grounds.breach_details || '';
     } else if (code === 'Ground 13' || code === 'Ground 15') {
@@ -274,7 +281,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
       particulars,
       mandatory,
     };
-  });
+  }).filter((ground): ground is GroundClaim => Boolean(ground));
 }
 
 function buildEvictionCaseFromFacts(

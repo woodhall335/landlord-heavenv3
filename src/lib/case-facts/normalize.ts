@@ -16,6 +16,7 @@ import {
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
 import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/arrears-schedule-mapper';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
+import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -2708,6 +2709,25 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
   }
 
   const groundParticulars = getWizardValue(wizard, 'ground_particulars');
+  const rentAmount = templateData.rent_amount || 0;
+  const rentFreq = templateData.rent_frequency || 'monthly';
+  const arrearsItems = templateData.arrears_items || [];
+
+  const scheduleData: ArrearsScheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
+    arrears_items: arrearsItems,
+    total_arrears: templateData.total_arrears,
+    rent_amount: rentAmount,
+    rent_frequency: rentFreq,
+    rent_due_day: templateData.rent_due_day,
+    include_schedule: true,
+  });
+
+  const ground8Threshold = getGround8Threshold(rentAmount, rentFreq);
+  const ground8Eligible = isGround8Eligible({
+    arrearsTotal: scheduleData.arrears_total,
+    rentAmount,
+    rentFrequency: rentFreq,
+  });
 
   const formatCurrency = (value: any): string | null => {
     if (value === null || value === undefined) return null;
@@ -2828,7 +2848,15 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
 
   const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : [selectedGrounds];
 
-  return groundsList.map((groundStr: string) => {
+  const filteredGrounds = groundsList.filter((groundStr: string) => {
+    const groundNumStr = normalizeGroundCode(groundStr) || '';
+    if (groundNumStr === '8') {
+      return ground8Eligible;
+    }
+    return true;
+  });
+
+  return filteredGrounds.map((groundStr: string) => {
     const groundNumStr = normalizeGroundCode(groundStr) || '';
     const groundKey = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr, 10);
     const groundDef = SECTION8_GROUND_DEFINITIONS[groundKey] || SECTION8_GROUND_DEFINITIONS[groundNumStr];
@@ -2856,43 +2884,16 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     if (groundDef.code === 8 || groundDef.code === 10 || groundDef.code === 11) {
       // USE CANONICAL ARREARS DATA from arrears-schedule-mapper
       // This ensures Notice figures match the Rent Schedule exactly
-      const rentAmount = templateData.rent_amount || 0;
-      const rentFreq = templateData.rent_frequency || 'monthly';
-      const arrearsItems = templateData.arrears_items || [];
-
-      // Get canonical arrears data (SINGLE SOURCE OF TRUTH)
-      const scheduleData: ArrearsScheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
-        arrears_items: arrearsItems,
-        total_arrears: templateData.total_arrears,
-        rent_amount: rentAmount,
-        rent_frequency: rentFreq,
-        rent_due_day: templateData.rent_due_day,
-        include_schedule: true,
-      });
-
       // Use computed total from schedule (or legacy total as fallback)
       const arrears = scheduleData.arrears_total;
       const arrearsInMonths = scheduleData.arrears_in_months;
 
       if (groundDef.code === 8) {
         // Ground 8 - Serious Rent Arrears (MANDATORY)
-        let threshold = 0;
-        let thresholdDescription = '';
-        if (rentFreq === 'weekly') {
-          threshold = rentAmount * 8;
-          thresholdDescription = '8 weeks';
-        } else if (rentFreq === 'fortnightly') {
-          threshold = rentAmount * 4;
-          thresholdDescription = '8 weeks (4 fortnightly payments)';
-        } else if (rentFreq === 'monthly') {
-          threshold = rentAmount * 2;
-          thresholdDescription = '2 months';
-        } else if (rentFreq === 'quarterly') {
-          threshold = rentAmount * 1;
-          thresholdDescription = '1 quarter';
-        }
+        const threshold = ground8Threshold.amount;
+        const thresholdDescription = ground8Threshold.description;
 
-        if (arrears >= threshold) {
+        if (ground8Eligible) {
           explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount.toFixed(2)} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
 
           // Build period-by-period breakdown from schedule (to match Rent Schedule)
@@ -2917,11 +2918,6 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
           particularLines.push(`Threshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})`);
           particularLines.push('Ground 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.');
           particularLines.push('A detailed schedule of arrears is attached.');
-        } else {
-          explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
-          particularLines.push(`Current arrears: £${arrears.toFixed(2)}`);
-          particularLines.push(`Required threshold: £${threshold.toFixed(2)} (${thresholdDescription})`);
-          particularLines.push('Ground 8 is NOT satisfied at this time.');
         }
       } else {
         // Ground 10 or 11 - Rent Arrears (DISCRETIONARY)
