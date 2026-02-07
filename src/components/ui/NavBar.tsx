@@ -41,8 +41,6 @@ export function NavBar({ user: serverUser }: NavBarProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [showMenu, setShowMenu] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Client-side auth state - starts with server prop, updates on auth changes
@@ -114,31 +112,9 @@ export function NavBar({ user: serverUser }: NavBarProps) {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      // Trigger sticky header and menu after 200px scroll
-      const isPastThreshold = scrollY >= 200;
-      setIsScrolled(isPastThreshold);
-      // Menu visible at top (0-10px) or after 200px scroll
-      setShowMenu(scrollY <= 10 || isPastThreshold);
-    };
-
-    // Check initial scroll position
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <header
-      className={clsx(
-        "site-header fixed left-0 right-0 z-50 transition-all duration-300",
-        isScrolled
-          ? "bg-white border-b border-gray-200 shadow-sm"
-          : "bg-transparent border-b border-transparent"
-      )}
+      className="site-header fixed left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
@@ -152,13 +128,7 @@ export function NavBar({ user: serverUser }: NavBarProps) {
           />
         </Link>
 
-        <nav className={clsx(
-          "items-center gap-9 lg:flex transition-all duration-300",
-          showMenu
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none",
-          "hidden"
-        )}>
+        <nav className="items-center gap-9 lg:flex hidden">
           {/* Free Tools Dropdown */}
           <div
             className="relative"
@@ -209,13 +179,7 @@ export function NavBar({ user: serverUser }: NavBarProps) {
           ))}
         </nav>
 
-        <div className={clsx(
-          "items-center gap-4 lg:flex transition-all duration-300",
-          showMenu
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none",
-          "hidden"
-        )}>
+        <div className="items-center gap-4 lg:flex hidden">
           {user ? (
             <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
