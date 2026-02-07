@@ -150,6 +150,9 @@ export function buildEnglandSection21CompletePackFacts(options: BuildSection21Op
     deposit_protected: true,
     deposit_protection_date: tenancyStartDateStr,
     deposit_scheme_name: 'TDS',
+    prescribed_info_served: true,
+    epc_served: true,
+    how_to_rent_served: true,
     arrears_breakdown: 'No rent arrears claimed; landlord requires possession at end of tenancy.',
     rent_arrears_amount: 0,
     case_facts: {

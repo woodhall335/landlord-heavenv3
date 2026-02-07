@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import JSZip from 'jszip';
 
 interface ArtifactDocument {
   title?: string;
@@ -30,6 +31,8 @@ interface SaveCompletePackArtifactsResult {
   runId: string;
   docs: SavedArtifactInfo[];
   skipped: Array<{ key: string; reason: string }>;
+  storage: 'local' | 'tmp';
+  zipPath?: string;
 }
 
 function normalisePdf(pdf: Buffer | Uint8Array | string): Buffer {
@@ -75,23 +78,26 @@ function sanitizeRunId(value: string): string {
   return value.replace(/[:.]/g, '-');
 }
 
+function isServerlessRuntime(): boolean {
+  return Boolean(
+    process.env.VERCEL ||
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.AWS_EXECUTION_ENV?.includes('AWS_Lambda')
+  );
+}
+
 export async function saveCompletePackArtifacts(
   input: SaveCompletePackArtifactsInput
 ): Promise<SaveCompletePackArtifactsResult> {
   const runId = sanitizeRunId(new Date().toISOString());
   const jurisdiction = input.jurisdiction ?? 'england';
-  const outputDir = path.join(
-    process.cwd(),
-    'artifacts',
-    'test',
-    'complete-pack',
-    jurisdiction,
-    input.variant,
-    runId
-  );
+  const serverlessRuntime = isServerlessRuntime();
+  const baseDir = serverlessRuntime ? path.join('/tmp', 'test-artifacts') : path.join(process.cwd(), 'artifacts');
+  const outputDir = path.join(baseDir, 'test', 'complete-pack', jurisdiction, input.variant, runId);
   const docs: SavedArtifactInfo[] = [];
   const skipped: Array<{ key: string; reason: string }> = [];
   const usedNames = new Map<string, number>();
+  const zip = serverlessRuntime ? new JSZip() : null;
 
   try {
     await fs.mkdir(outputDir, { recursive: true });
@@ -113,6 +119,9 @@ export async function saveCompletePackArtifacts(
       const targetPath = path.join(outputDir, filename);
 
       await fs.writeFile(targetPath, payload.data);
+      if (zip) {
+        zip.file(filename, payload.data);
+      }
       docs.push({
         key,
         filename,
@@ -137,10 +146,25 @@ export async function saveCompletePackArtifacts(
       JSON.stringify(manifest, null, 2),
       'utf-8'
     );
+    if (zip) {
+      zip.file('manifest.json', JSON.stringify(manifest, null, 2));
+    }
   } catch (error) {
     await fs.rm(outputDir, { recursive: true, force: true });
+    if (serverlessRuntime) {
+      throw new Error(
+        'Serverless storage unavailable: unable to write artifacts to /tmp. Check runtime filesystem permissions.'
+      );
+    }
     throw error;
   }
 
-  return { outputDir, runId, docs, skipped };
+  let zipPath: string | undefined;
+  if (zip) {
+    const zipBuffer = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
+    zipPath = path.join(outputDir, `${runId}.zip`);
+    await fs.writeFile(zipPath, zipBuffer);
+  }
+
+  return { outputDir, runId, docs, skipped, storage: serverlessRuntime ? 'tmp' : 'local', zipPath };
 }
