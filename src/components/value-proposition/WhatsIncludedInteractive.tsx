@@ -113,32 +113,39 @@ const COMPLETE_PACK_VARIANTS: VariantOption[] = [
   },
 ];
 
-const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): DocumentGroup[] => [
-  {
-    title: 'Notices (1)',
-    items: [
-      variant === 'section21'
-        ? 'Section 21 (Form 6A) — Court-ready eviction notice'
-        : 'Section 8 (Form 3) — Court-ready eviction notice',
-    ],
-  },
-  {
-    title: 'Court Forms (3)',
-    items: ['Form N5 — Claim for Possession', 'Form N119 — Particulars of Claim', 'Form N5B — Accelerated Possession'],
-  },
-  {
-    title: 'AI-Generated (1)',
-    items: ['AI Witness Statement'],
-  },
-  {
-    title: 'Guidance (3)',
-    items: ['Service Instructions', 'Service & Validity Checklist', 'Court Filing Guide'],
-  },
-  {
-    title: 'Evidence (2)',
-    items: ['Evidence Collection Checklist', 'Proof of Service Certificate'],
-  },
-];
+const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): DocumentGroup[] => {
+  const courtForms =
+    variant === 'section21'
+      ? ['Form N5B — Accelerated Possession']
+      : ['Form N5 — Claim for Possession', 'Form N119 — Particulars of Claim'];
+
+  return [
+    {
+      title: 'Notices (1)',
+      items: [
+        variant === 'section21'
+          ? 'Section 21 (Form 6A) — Court-ready eviction notice'
+          : 'Section 8 (Form 3) — Court-ready eviction notice',
+      ],
+    },
+    {
+      title: `Court Forms (${courtForms.length})`,
+      items: courtForms,
+    },
+    {
+      title: 'AI-Generated (1)',
+      items: ['AI Witness Statement'],
+    },
+    {
+      title: 'Guidance (3)',
+      items: ['Service Instructions', 'Service & Validity Checklist', 'Court Filing Guide'],
+    },
+    {
+      title: 'Evidence (2)',
+      items: ['Evidence Collection Checklist', 'Proof of Service Certificate'],
+    },
+  ];
+};
 
 type PreviewImageProps = {
   src: string;
